@@ -1,0 +1,260 @@
+{
+  "formatVersion": 1,
+  "capturedAt": "2026-10-16T08:07:02.726Z",
+  "git": {
+    "revision": "31c72ec04838ddcbc0d3b82d9fc0f93f63dcf0a3",
+    "workingTree": "M .agents/skills/building-emdash-site/SKILL.md\n M .agents/skills/building-emdash-site/references/querying-and-rendering.md\n M .agents/skills/emdash-content-modeling/SKILL.md\n M .agents/skills/wordpress-to-emdash-content/SKILL.md\n M AGENTS.md\n M README.md\n M docs/phase-3-certification.md\n M docs/starter-meta-review.md\n?? audit/editorial-canvas-notes/\n?? audit/certification-2026-10-16/\n?? audit/roadmap-review-2026-10-15/refined/issue-11.md\n?? docs/emdash-editorial-canvas.md",
+    "status": "observed"
+  },
+  "node": {
+    "running": "v24.21.0",
+    "declared": "^22.22.2 || ^24.15.0 || >=26.0.0"
+  },
+  "packages": [
+    {
+      "name": "@astrojs/check",
+      "declared": "^0.9.10",
+      "locked": "0.9.10",
+      "installed": "0.9.10",
+      "peerDependencies": {
+        "typescript": "^5.0.0 || ^6.0.0"
+      },
+      "engines": null,
+      "status": "observed-match"
+    },
+    {
+      "name": "@astrojs/node",
+      "declared": "11.1.8",
+      "locked": "11.1.8",
+      "installed": "11.1.8",
+      "peerDependencies": {
+        "astro": "^7.2.1"
+      },
+      "engines": null,
+      "status": "observed-match"
+    },
+    {
+      "name": "@astrojs/react",
+      "declared": "7.1.0",
+      "locked": "7.1.0",
+      "installed": "7.1.0",
+      "peerDependencies": {
+        "@types/react": "^17.0.50 || ^18.0.21 || ^19.0.0",
+        "@types/react-dom": "^17.0.17 || ^18.0.6 || ^19.0.0",
+        "oxc-transform-react": "^0.145.0",
+        "react": "^17.0.2 || ^18.0.0 || ^19.0.0",
+        "react-dom": "^17.0.2 || ^18.0.0 || ^19.0.0"
+      },
+      "engines": {
+        "node": ">=22.22.0"
+      },
+      "status": "observed-match"
+    },
+    {
+      "name": "@fontsource/noto-sans",
+      "declared": "5.3.0",
+      "locked": "5.3.0",
+      "installed": "5.3.0",
+      "peerDependencies": null,
+      "engines": null,
+      "status": "observed-match"
+    },
+    {
+      "name": "@google/design.md",
+      "declared": "0.4.0",
+      "locked": "0.4.0",
+      "installed": "0.4.0",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">=18.0.0"
+      },
+      "status": "observed-match"
+    },
+    {
+      "name": "@playwright/test",
+      "declared": "1.64.1",
+      "locked": "1.64.1",
+      "installed": "1.64.1",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">=20"
+      },
+      "status": "observed-match"
+    },
+    {
+      "name": "@tailwindcss/vite",
+      "declared": "^4.3.3",
+      "locked": "4.3.3",
+      "installed": "4.3.3",
+      "peerDependencies": {
+        "vite": "^5.2.0 || ^6 || ^7 || ^8"
+      },
+      "engines": null,
+      "status": "observed-match"
+    },
+    {
+      "name": "astro",
+      "declared": "7.4.0",
+      "locked": "7.4.0",
+      "installed": "7.4.0",
+      "peerDependencies": {
+        "@astrojs/markdown-remark": "^7.3.0"
+      },
+      "engines": {
+        "node": ">=22.22.0",
+        "npm": ">=9.6.5",
+        "pnpm": ">=7.1.0"
+      },
+      "status": "observed-match"
+    },
+    {
+      "name": "emdash",
+      "declared": "1.3.0",
+      "locked": "1.3.0",
+      "installed": "1.3.0",
+      "peerDependencies": {
+        "@astrojs/react": ">=5.0.0-beta.0",
+        "@emdash-cms/auth-atproto": ">=0.2.8",
+        "astro": ">=6.0.0-beta.0",
+        "react": ">=18.0.0",
+        "react-dom": ">=18.0.0"
+      },
+      "engines": {
+        "node": ">=22.16"
+      },
+      "status": "observed-match"
+    },
+    {
+      "name": "photoswipe",
+      "declared": "^5.4.4",
+      "locked": "5.4.4",
+      "installed": "5.4.4",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">= 0.12.0"
+      },
+      "status": "observed-match"
+    },
+    {
+      "name": "react",
+      "declared": "19.2.4",
+      "locked": "19.2.4",
+      "installed": "19.2.4",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">=0.10.0"
+      },
+      "status": "observed-match"
+    },
+    {
+      "name": "react-dom",
+      "declared": "19.2.4",
+      "locked": "19.2.4",
+      "installed": "19.2.4",
+      "peerDependencies": {
+        "react": "^19.2.4"
+      },
+      "engines": null,
+      "status": "observed-match"
+    },
+    {
+      "name": "sharp",
+      "declared": "0.35.4",
+      "locked": "0.35.4",
+      "installed": "0.35.4",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">=20.9.0"
+      },
+      "status": "observed-match"
+    },
+    {
+      "name": "tailwindcss",
+      "declared": "^4.3.3",
+      "locked": "4.3.3",
+      "installed": "4.3.3",
+      "peerDependencies": null,
+      "engines": null,
+      "status": "observed-match"
+    }
+  ],
+  "skills": [
+    {
+      "name": "building-emdash-site",
+      "status": "observed",
+      "sha256": "05ed0d6a90c221ac4ded5c8e456add9667d018b9dfc0b524d64b985d3d9c369d"
+    },
+    {
+      "name": "creating-plugins",
+      "status": "observed",
+      "sha256": "66fda54d0060e53d2b9ce448940e75a70a693ee11cc527d89e95ab48aac24709"
+    },
+    {
+      "name": "emdash-cli",
+      "status": "observed",
+      "sha256": "bb4a01fc0263a4b808b000edeeb1a5bcb0bf20809d8cc219e6aff7bf3664e037"
+    },
+    {
+      "name": "new-site-workflow",
+      "status": "observed",
+      "sha256": "b620b93222b5a70a37b2a700d175261487ea9a09f95992ea4e9bb517bd2f27d3"
+    },
+    {
+      "name": "site-art-direction",
+      "status": "observed",
+      "sha256": "1cc692dabb3750c2c604897d79e399b14d5ad819a73b47486878cd130ea3682c"
+    },
+    {
+      "name": "astro-site-design",
+      "status": "observed",
+      "sha256": "019e5fb227eeedd8b107b70ab124418ba74fcf601745a08cda43ad3cc577b4bc"
+    },
+    {
+      "name": "emdash-content-modeling",
+      "status": "observed",
+      "sha256": "f56b4013e5995c1ca66729b6c31b590535cd40c390c98d1c6ede58ea83cbd352"
+    },
+    {
+      "name": "impeccable",
+      "status": "observed",
+      "sha256": "5ce02fc8f353d7f659535fb80e453963dc047a07c4396adf098fe010b479e7c0"
+    },
+    {
+      "name": "emdash-site-setup",
+      "status": "observed",
+      "sha256": "7e7443a3cef598dbed8d7944c6339394b5ef1405b89820a03e8a56c459505f27"
+    },
+    {
+      "name": "wordpress-to-emdash-content",
+      "status": "observed",
+      "sha256": "f4adecc1d5df3183271434dd8bfb612ff09b8594d32bbd8f7c664d6ebb80033d"
+    },
+    {
+      "name": "emdash-production-cutover",
+      "status": "observed",
+      "sha256": "b3da2c6b90fe55a1641f959f2fc9b9db6c3ce21a5a55931042ea18a39b771d01"
+    }
+  ],
+  "skillSources": {
+    "emdash": {
+      "source": "https://github.com/emdash-cms/emdash/tree/main/skills",
+      "ref": "main",
+      "commitSha": "b74679528630a7ffc0f0f45e73bab4e7c5e61abb",
+      "skills": [
+        "building-emdash-site",
+        "creating-plugins",
+        "emdash-cli"
+      ],
+      "syncedAt": "2026-10-05T08:23:46.033Z"
+    },
+    "site": null
+  },
+  "verification": {
+    "compatibility": "unverified",
+    "upstreamCurrency": "unverified",
+    "databaseParity": "unverified",
+    "editorSaveReload": "unverified",
+    "cloudflare": "unverified"
+  },
+  "note": "Local read-only inventory. No secrets, database rows, synchronization, package updates or network requests. Matching versions/hashes do not prove upstream currency or runtime compatibility."
+}

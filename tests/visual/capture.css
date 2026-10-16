@@ -1,0 +1,6 @@
+/* Full-page stills must paint offscreen gallery items. Chromium may otherwise
+   skip content-visibility:auto after reflow. This changes paint scheduling only;
+   production CSS and browser behavior checks retain the optimization. */
+.photo-gallery-item {
+  content-visibility: visible !important;
+}

@@ -1,0 +1,9 @@
+{
+  "note": "Caption paint/reflow stable; source review exposed wrong RTL direction despite passing goldens. Superseded by final coverage assertions and rerun.",
+  "startTime": "2026-10-15T22:36:13.247Z",
+  "duration": 283742.826,
+  "expected": 153,
+  "skipped": 54,
+  "unexpected": 0,
+  "flaky": 0
+}

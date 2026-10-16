@@ -1,0 +1,14 @@
+{
+  "snapshot": ".emdash/backups/phase2-2026-10-15T17-42-14-210Z",
+  "files": [
+    "package.json",
+    "package-lock.json",
+    ".env",
+    ".emdash/migrations.json",
+    "data.db",
+    "uploads"
+  ],
+  "integrity": "ok",
+  "private": true,
+  "restore": "Stop all site processes. Restore matching database/media/key and old package+lock from private snapshot, remove only stale SQLite sidecars for that stopped database, npm ci, rebuild. Never restore packages alone after a migration."
+}

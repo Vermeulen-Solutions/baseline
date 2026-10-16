@@ -1,0 +1,26 @@
+{
+  "dev": {
+    "status": 200,
+    "specimens": true,
+    "images": 17,
+    "fakeEditBindings": false
+  },
+  "production": {
+    "GET": 404,
+    "GET?fixtures=1": 404,
+    "HEAD": 404,
+    "HEAD?fixtures=1": 404,
+    "publicStatus": 200,
+    "zodResolution": "Dependency-local validators bundled; no bare Zod imports in emitted server modules"
+  },
+  "isolation": "Fresh temporary root; no working database, media, env file or credentials copied.",
+  "fixtures": {
+    "status": 200,
+    "fixtureVersion": 2,
+    "tickerInstances": 2,
+    "emptyTickerOmitted": true,
+    "releaseRejected": true,
+    "HUD": false,
+    "images": "all successful"
+  }
+}

@@ -1,0 +1,79 @@
+---
+import '../../styles/global.css';
+import '../../dev/visual-fonts.css';
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import Grid from '../Grid.astro';
+import Card from '../Card.astro';
+import PartnersPanel from '../PartnersPanel.astro';
+import ResponsiveImage from '../ResponsiveImage.astro';
+import RichText from '../RichText.astro';
+import PhotoGallery from '../PhotoGallery.astro';
+import FormError from '../FormError.astro';
+import TweaksBar from '../TweaksBar.astro';
+import LogoTicker from '../LogoTicker.astro';
+import { fixtureVersion, smallImage, portraitImage, fixtureImage as image, specimenTokens, componentCoverage, proseFixture, editorialImageFixture, galleryFixture } from '../../dev/styleguide-fixtures';
+const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'editorial', 'coverage'];
+---
+<!doctype html>
+<html lang="en" data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
+  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex, nofollow" /><title>Starter component styleguide</title></head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to specimens</a>
+    <header class="site-header"><nav class="site-nav" aria-label="Styleguide sections"><a class="site-brand" href="#main-content">Component styleguide</a>{sections.map(name => <a href={`#${name}`}>{name[0].toUpperCase() + name.slice(1)}</a>)}</nav></header>
+    <main id="main-content" class="site-main" tabindex="-1" data-styleguide-ready data-fixture-version={fixtureVersion}>
+      <Container width="wide">
+        <div class="flow"><h1>Starter component styleguide</h1><p>Inspect the existing neutral tokens and public components. These synthetic examples do not define a client theme or prove CMS editing.</p><p>Development only: press T for token controls. With the panel open, G toggles a layout guide and B compares source styles. Reload clears all overrides.</p></div>
+        <Section labelledBy="typography"><div class="flow"><h2 id="typography">Typography</h2>
+          {['-1', '0', '1', '2'].map(step => <p style={`font-size:var(--text-step-${step})`}><code>--text-step-{step}</code> Reading at a fluid scale</p>)}
+          <h3>Nested heading</h3><h4>Fourth-level heading</h4><h5>Fifth-level heading</h5><h6>Sixth-level heading</h6>
+          <Container width="reading"><p class="stress">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789. Font specimens inherit the source family and weight; fixture builds use pinned Noto Sans. A longer heading or translated sentence should wrap naturally without forced line breaks.</p><p class="stress">OneUnbrokenIdentifierToCheckIntrinsicSizingAndWrappingAcrossTheNarrowestSupportedContainer</p></Container>
+        </div></Section>
+        <Section labelledBy="palette"><div class="flow"><h2 id="palette">Semantic palette</h2><p>{componentCoverage.surfaceModes}</p><ul class="swatches" role="list">{specimenTokens.map(token => <li><span class="swatch" style={`background:var(--color-${token})`} aria-hidden="true"></span><code>--color-{token}</code></li>)}</ul><p>Swatches expose roles; check actual text/control pairs and backgrounds separately.</p></div></Section>
+        <Section labelledBy="controls"><div class="flow"><h2 id="controls">Controls and errors</h2><div class="control-row"><button type="button">Native button</button><button type="button" disabled>Disabled button</button><a href="#editorial">Text link</a></div>
+          <fieldset class="specimen-fields"><legend>Native control specimens — no submissions</legend>
+            <label for="specimen-name">Name<input id="specimen-name" autocomplete="off" placeholder="Sample name" /></label>
+            <label for="specimen-invalid">Required sample<input id="specimen-invalid" aria-invalid="true" aria-describedby="specimen-field-error" required /><span id="specimen-field-error">Enter a value to resolve this illustrative error.</span></label>
+            <label for="specimen-note">Notes<textarea id="specimen-note" rows="3"></textarea></label>
+            <label for="specimen-select">Selection<select id="specimen-select"><option>First choice</option><option>A much longer choice to inspect narrow layouts</option></select></label>
+            <label class="choice"><input type="checkbox" /> Check this sample</label>
+            <label class="choice"><input type="radio" name="specimen-radio" /> First radio</label><label class="choice"><input type="radio" name="specimen-radio" /> Second radio</label>
+          </fieldset>
+          <FormError id="specimen-summary" message="Illustrative validation summary: check the required sample." fields={[{ id: 'specimen-invalid', label: 'Required sample' }]} />
+        </div></Section>
+        <Section labelledBy="layout"><div class="flow"><h2 id="layout">Containers, intrinsic grids and cards</h2><p>The compact/standard/wide Grid minimums control intrinsic wrapping. Card exposes stacked/horizontal layouts, not invented elevation variants.</p>
+          <Grid minimum="compact">{['stacked', 'horizontal'].map(layout => <Card title={layout === 'stacked' ? 'Stacked card specimen' : 'Horizontal card with a longer heading'} href="#coverage" layout={layout as 'stacked' | 'horizontal'} action="Inspect coverage"><ResponsiveImage slot="media" {...image} optimize={false} /><span slot="metadata">Synthetic metadata</span><p>Synthetic descriptive content. This whole-card link contains no independent controls.</p></Card>)}</Grid>
+          <Container width="reading"><Grid minimum="wide"><Card title="Missing media and narrow placement" href="#coverage"><p>No substitute image is invented when media is absent.</p></Card></Grid></Container>
+          <Section labelledBy="standard-grid" spacing="content"><Container width="content"><h3 id="standard-grid">Standard grid in a content container</h3><Grid minimum="standard"><Card href="#coverage" title="An intentionally long descriptive title to expose narrow card placement and natural wrapping"><p>This linked card has no media.</p></Card><Card href="#coverage" title="An empty body specimen" /></Grid></Container></Section>
+          <div dir="rtl"><Container width="reading"><p>Right-to-left container specimen — select this reading container in the grid guide to inspect direction and bounds.</p></Container></div>
+        </div></Section>
+        <Section labelledBy="media"><div class="flow"><h2 id="media">Images, galleries and partner artwork</h2><p>Local geometric assets demonstrate ratio, native dimensions and captions. This SVG is intentionally retained; runtime photographic optimization is a separate integration check.</p>
+          <Container width="reading"><div class="flow"><RichText value={[editorialImageFixture]} /></div></Container>
+          <div class="flow"><RichText value={[galleryFixture]} /></div>
+          <Grid minimum="compact"><ResponsiveImage {...smallImage} optimize={false} /><ResponsiveImage {...portraitImage} optimize={false} /></Grid>
+          <PartnersPanel partners={[{ name: 'Synthetic partner artwork with a deliberately long accessible name', image: image.src, alt: image.alt, href: '#coverage' }, { name: 'Unlinked specimen', image: image.src, alt: image.alt, ground: 'dark' }]} />
+          <PartnersPanel partners={[]} /><PhotoGallery node={{ _type: 'gallery', images: [] }} title="Empty gallery" />
+          <h3>Logo ticker</h3><p>Use the checkbox to stop or start optional motion. With reduced motion enabled, the full static list appears and the motion control is hidden.</p>
+          <LogoTicker id="specimen-logos" label="Synthetic partner ticker" animate>{['Example circle', 'Example outline', 'Example grid', 'Example shape'].map(name => <li><img src={smallImage.src} width="96" height="64" alt="" loading="lazy" /><span>{name}</span></li>)}</LogoTicker>
+          <div dir="rtl"><LogoTicker id="specimen-rtl-logos" label="Single static RTL logo"><li>Single synthetic partner</li></LogoTicker></div>
+          <LogoTicker id="specimen-empty-logos" label="Empty ticker" />
+        </div></Section>
+        <Section labelledBy="editorial"><div class="flow"><h2 id="editorial">Portable Text</h2><div class="flow"><RichText value={proseFixture} /></div></div></Section>
+        <Section labelledBy="coverage"><div class="flow"><h2 id="coverage">Coverage and limits</h2><ul>{componentCoverage.rendered.map(name => <li><code>{name}</code></li>)}</ul><dl>{Object.entries(componentCoverage.variants).map(([name, variants]) => <><dt>{name}</dt><dd>{variants.join('; ')}</dd></>)}</dl><p>{componentCoverage.stress.join('; ')}.</p><p>{componentCoverage.deferred.CMSPartnersPanel}</p><p>There are no writable CMS identities on this page. Verify registered fields, canonical values and save/reload separately on disposable entries.</p><p>Code blocks and tables intentionally scroll internally where needed. External embeds remain outside this verification scope.</p><ul>{componentCoverage.unsupported.map(item => <li>{item}</li>)}</ul></div></Section>
+      </Container>
+    </main>
+    <footer class="site-footer"><p>Development/test specimen route. Normal production builds return 404. Fixture builds must never be deployed.</p></footer>
+    {import.meta.env.DEV && <TweaksBar />}
+  </body>
+</html>
+<style>
+  .stress { overflow-wrap: anywhere; }
+  .swatches { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); gap:var(--spacing-content); padding:0; list-style:none; }
+  .swatch { display:block; block-size:4rem; border:1px solid var(--color-border); margin-block-end:.5rem; }
+  code { font-size:.875rem; }
+  .control-row { display:flex; flex-wrap:wrap; align-items:center; gap:var(--spacing-content); }
+  .specimen-fields { display:grid; gap:var(--spacing-content); padding:var(--spacing-content); border:1px solid var(--color-border); min-inline-size:0; }
+  .specimen-fields label { display:grid; gap:.5rem; }
+  .specimen-fields input:not([type=checkbox],[type=radio]), .specimen-fields textarea, .specimen-fields select { min-inline-size:0; inline-size:100%; padding:.5rem; border:1px solid var(--color-border); border-radius:var(--radius-control); color:var(--color-text); background:var(--color-surface); }
+  .specimen-fields .choice { display:flex; align-items:center; min-block-size:2.75rem; }
+</style>

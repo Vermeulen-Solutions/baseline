@@ -1,0 +1,43 @@
+{
+  "initialRepeat": {
+    "passed": 151,
+    "failed": 2,
+    "skipped": 54
+  },
+  "galleryPaint": {
+    "differencePixels": 12272,
+    "reason": "Intermittent blank offscreen content-visibility:auto paint after reflow",
+    "scrollOnlyFix": "Insufficient in repeated probes",
+    "resolution": "Screenshot-only content-visibility:visible, no masks or geometry overrides"
+  },
+  "captionBug": {
+    "differencePixels": 856,
+    "reason": "Fully painted captions extended beyond fixed-height justified items",
+    "resolution": "Keep fixed height on image links; allow item height to include caption flow",
+    "assertion": "Browser caption bottom <= owning item bottom + 1 at text spacing and actual zoom"
+  },
+  "typeSpecimen": {
+    "reason": "Unbroken alphabet at text spacing overflowed by 10px",
+    "resolution": "Use existing specimen stress wrapping class"
+  },
+  "pixelTolerance": {
+    "threshold": 0.1,
+    "maxDiffPixels": 0,
+    "ratioAllowance": false
+  },
+  "rtlBug": {
+    "reason": "Lower-specificity RTL animation-name lost to checked-state animation shorthand; adjacent groups moved left out of the viewport",
+    "resolution": "Inherited animation name selected at ticker root",
+    "assertion": "Both viewport edges covered and actual li content intersects viewport at start/mid/end in LTR/RTL"
+  },
+  "geometryPrecision": {
+    "observedWidthDifferenceCSSPixels": 0.0001220703125,
+    "maximumWidthDifferenceCSSPixels": 0.01,
+    "reason": "Float precision in transformed DOMRects, below CSS layout quantum; screenshot changed-pixel allowance remains zero"
+  },
+  "cancellation": {
+    "reason": "Windows child.kill bypasses JS teardown",
+    "resolution": "Runner-only IPC cancellation relay; leave inherited Playwright worker IPC untouched",
+    "verification": "Dedicated relay unit plus owned-bootstrap failure/abort cleanup probes"
+  }
+}

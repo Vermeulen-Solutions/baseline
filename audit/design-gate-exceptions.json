@@ -1,0 +1,228 @@
+[
+  {
+    "path": "src/components/TweaksBar.astro",
+    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
+    "sha256": "fb3f1d423fabd7b451813a1c3536789d9240c9d4fa0f52747b7613e1834cd2cd"
+  },
+  {
+    "path": "src/utils/design-tweaks.mjs",
+    "reason": "Pure development calibration mapping and CSS export shared by the starter controls.",
+    "sha256": "493fd343d80b96718e1b7086a2482419f7fa25efc221ad62e0b55acdd9970dd8"
+  },
+  {
+    "path": "src/styles/global.css",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "e24dde6934cac579d464e843194787f4d85d1c553b869751f35c67c44e983925"
+  },
+  {
+    "path": "src/layouts/Base.astro",
+    "reason": "Issue #7 neutral starter capture infrastructure: explicit fixture-only pinned font inputs; production public visual system preserved. Exact LF-normalized source; edits invalidate this exception.",
+    "sha256": "93a8385688f098ef6a0ca16b839aec393af864e4c777cc4f62b5618292406b0e"
+  },
+  {
+    "path": "src/components/Container.astro",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "fa27a75c2aae1a54f39a84a07bcdd98279b909554e92cf64252060d40e9bc0da"
+  },
+  {
+    "path": "src/components/Grid.astro",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "61480da4ff50aae485a982136fe77d8c881d9fceb8e1bc4980ffcd4cf2131f5e"
+  },
+  {
+    "path": "src/components/Section.astro",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "5f370d7cf6bb3b08b4e666f4f802458d4a94e1556a8c0531f367383711087ef3"
+  },
+  {
+    "path": "src/live.config.ts",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "bdaed9fd375339d5eb69cc015499d8b6d4aefcdd50049212c49a5ca22d1ce0de"
+  },
+  {
+    "path": "src/pages/404.astro",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "be83543a9cdadeec8e08aedfbd8e14579b154d2229ad8b8564e85bb8bbe4d966"
+  },
+  {
+    "path": "src/pages/category/[slug].astro",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "26648e9a30f23794820d215101269a353dd4f3d9de09942981c1bfd7f259f2b2"
+  },
+  {
+    "path": "src/pages/index.astro",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "d679d8ea1675e0b2b3a2437b395b19903ac5aa7c225d38527ec9b7a375e79f3e"
+  },
+  {
+    "path": "src/pages/posts/index.astro",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "ee5066f27167d0e7dd45f67ce86dbcda8c673355be67d0ec25646c6e1a8dac5c"
+  },
+  {
+    "path": "src/pages/posts/[slug].astro",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "6fb839d9103afdd565d612716e8544b5c09c80672f6e9f61f7ed8129ed515dba"
+  },
+  {
+    "path": "src/pages/tag/[slug].astro",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "fffa3909399eae45da6ec2df6ea5839b2bfbf84a13039ba0d2cb6f60bcb89eac"
+  },
+  {
+    "path": "src/pages/[slug].astro",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "40d3c7274a97389afcf7e3bab55caea874cc356e731195ceb0e5a96cb13f3f62"
+  },
+  {
+    "path": "src/utils/site-identity.ts",
+    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
+    "sha256": "1014ab7696ecdb5d7bc49f49979f6c4fdd6e98cc1233eb3a18c2261c055db0e0"
+  },
+  {
+    "path": "src/lib/photo-gallery.ts",
+    "reason": "Reusable neutral gallery infrastructure proven in legacy-migration; no client page, imagery, or invented brand direction. Any edit invalidates this exact exception.",
+    "sha256": "244558ab9cfd1b4372840aa6a132bab4bb5d977102a21cff9726893f84fab31e"
+  },
+  {
+    "path": "src/lib/justified-gallery.ts",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "3509b2ae0af6dab5dc72cf1a140d732bb84fc3f60e0a921216e9eeadb6fd32ac"
+  },
+  {
+    "path": "src/components/ResponsiveImage.astro",
+    "reason": "Reviewed fresh-root export of the existing neutral native image utility, including guarded dimensions and original-source recovery; no client theme/content or source modification. Exact LF-normalized hash; any edit invalidates this exception.",
+    "sha256": "c751f92b4f946b4cd37508793f95508e77af27975f00723d18fb238f44b44388"
+  },
+  {
+    "path": "src/components/EditorialImage.astro",
+    "reason": "Authorized neutral starter image infrastructure backport; preserves presentation, no client theme or content. Any edit invalidates this exact exception.",
+    "sha256": "67bd60215ed8ecf2da56bef15d2a3cfda3dd06017cf46d71550bc0d1578acf7a"
+  },
+  {
+    "path": "src/components/RichText.astro",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "ca48a2d4e6e7cca6dd281cf7a73c96e3941cc3823b3e1cc10b7856a032931421"
+  },
+  {
+    "path": "src/components/Card.astro",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "e88613dfcc3544968022ef694d11635a88018facc04d8ef7eb1a188d99ad4940"
+  },
+  {
+    "path": "src/components/PartnersPanel.astro",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "2747e95c20b781347daabe5894fb2a4450d25b1663b5adfbdc5e86315ebd66bd"
+  },
+  {
+    "path": "src/components/FormError.astro",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "8e5cf27a51dfe369fba3d5c1f7de6260437bbd992f727fa9126e1b7680ad7dca"
+  },
+  {
+    "path": "src/lib/partners.ts",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "e6f46e4eeb3a6fcc0f116bb6a680d0a8b81f30728d0c68f2fbb2da36a1d08420"
+  },
+  {
+    "path": "src/lib/form-recovery.ts",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "e6e56e289298b01da156a429137c9a6cf288375b26829eb2f13a019422ac00e2"
+  },
+  {
+    "path": "src/data/responsive-media.json",
+    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
+    "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "deleted": true
+  },
+  {
+    "path": "src/lib/public-link.ts",
+    "reason": "Neutral starter public-link validation utility; no client design or content.",
+    "sha256": "23f33e4c8314ff53236a98bf1380fb0ac1617eb02c140044734b64fc7ed96cfc"
+  },
+  {
+    "path": "src/components/CMSPartnersPanel.astro",
+    "reason": "Optional neutral CMS querying wrapper with published status, complete collection and cache hints; no client seed/content or visual direction.",
+    "sha256": "ed46ebc986f33666679004b10c287703fdacf8932566567e18d5d5c8663e0955"
+  },
+  {
+    "path": "src/lib/image-source.ts",
+    "reason": "Authorized neutral starter image infrastructure backport; preserves presentation, no client theme or content. Any edit invalidates this exact exception.",
+    "sha256": "35e1ccab9f3e4d1ffd572c80c337caee6976d2a5f39bdd9a61b5be928e1d080e"
+  },
+  {
+    "path": "src/assets/styleguide-grid.svg",
+    "reason": "Phase 1 neutral starter developer inspection infrastructure authorized by the reviewed roadmap; reuses existing tokens/components with synthetic fixtures and dev-only diagnostics, no client visual implementation. Any edit invalidates this exact exception.",
+    "sha256": "1628336b39d006ce410883ad6da90322f345a6b8d0c7caba76d9f541dcc33d91"
+  },
+  {
+    "path": "src/dev/styleguide-fixtures.ts",
+    "reason": "Issues #5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception.",
+    "sha256": "9eac401a5abaff2defb1b598c1fbe4f76ecd313874ee19e7c92ab0d6f843e54c"
+  },
+  {
+    "path": "src/pages/_styleguide.astro",
+    "reason": "Issues #5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception.",
+    "sha256": "519b98fd928ff6a788aafba53863088ba147abce63af856ba52a6fd35ff11b24"
+  },
+  {
+    "path": "src/components/dev/Styleguide.astro",
+    "reason": "Issue #7 neutral starter capture infrastructure: explicit fixture-only pinned font inputs; production public visual system preserved. Exact LF-normalized source; edits invalidate this exception.",
+    "sha256": "4eff30af2cb4d0ccefe83210edc0ba598642244f7747616fcacae7119143e26b"
+  },
+  {
+    "path": "src/utils/grid-guide.ts",
+    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
+    "sha256": "9f1d9109aa3c534e0cfdf5018ceb110f51f9c05f3318e42bc7619a3bf4460a04"
+  },
+  {
+    "path": "src/components/LogoTicker.astro",
+    "sha256": "af5233b66b4a965eeb73059c1b8298dd6336970954159496702018eb82e97f54",
+    "reason": "Issues #7/#10: correct RTL animation direction through inherited animation-name variable, preserving zero-JS source and neutral design. Browser review exposed specificity bug; viewport coverage/visible-content checks added. Exact LF-normalized source; edits invalidate this exception."
+  },
+  {
+    "path": "src/env.d.ts",
+    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
+    "sha256": "41d6ec9b7cbd1fa39600983f51c00791e9f41bce6f17c007ea2af8b7c3aef82c"
+  },
+  {
+    "path": "src/assets/styleguide-small.svg",
+    "sha256": "b402c2a2c9190d2c0c6f2936677db3f331a0d9b881910a31ad279d96190c8ff8",
+    "reason": "Issues #5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception."
+  },
+  {
+    "path": "src/assets/styleguide-portrait.svg",
+    "sha256": "6aa7873127edfb083d25e08256815804d82a935d586f3714c9bb35127f9787e8",
+    "reason": "Issues #5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception."
+  },
+  {
+    "path": "src/dev/visual-fonts.css",
+    "reason": "Issue #7 neutral starter capture infrastructure: explicit fixture-only pinned font inputs; production public visual system preserved. Exact LF-normalized source; edits invalidate this exception.",
+    "sha256": "e6f3ec1ec61600ccd0e94dfa6ef46d41000f2abc45f6aee05b5e45b719b78ba3"
+  },
+  {
+    "path": "src/components/PhotoGallery.astro",
+    "reason": "Issue #7 browser reflow verification found real caption overlap: preserve the justified image height while allowing captions to contribute to the item row height. Functional starter component correction; no client visual design. Exact LF-normalized bytes; edits invalidate this exception.",
+    "sha256": "05f964e56873437f0836dd3653092391ea418b0105870878710d2ec5c0330932"
+  },
+  {
+    "path": "src/utils/reference-overlay.ts",
+    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
+    "sha256": "9d35365a069fc8547e9ea53ab890d0a002d8c5dd2b43b7e5d5c5d978f400bb82"
+  },
+  {
+    "path": "src/utils/reference-image.mjs",
+    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
+    "sha256": "c3d5336366b5e54d3b56704d64dfdfb902ab5c3a015e45d01b00c5dad800dd14"
+  },
+  {
+    "path": "src/utils/ownership-inspector.ts",
+    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
+    "sha256": "a820068c82f70d98c5eca512f1f7b55a511e227f7085a386d006a15404fe65a3"
+  },
+  {
+    "path": "src/utils/emdash-ownership.mjs",
+    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
+    "sha256": "c52f3dbcaf511b35a372d34a2cad08ad43b9cc1b13a92a4a9f021b8efbf4f37d"
+  }
+]

@@ -1,0 +1,30 @@
+---
+import { publicLink } from '../lib/public-link';
+import ResponsiveImage from './ResponsiveImage.astro';
+import { PTImage } from 'emdash/ui';
+import { photo, photoUrl } from '../lib/photo-gallery';
+import { imageSource } from '../lib/image-source';
+const { node } = Astro.props;
+const p = photo(node);
+const src = p ? photoUrl(p, Astro.locals.emdash?.getPublicMediaUrl) : '';
+const metadata = await imageSource(src, Astro.url.origin, Astro.locals.emdash?.storage, p?.width, p?.height);
+const width = metadata.width;
+const height = metadata.height;
+const rawLink = typeof node?.link === 'string' ? node.link : node?.link?.href;
+const href = publicLink(rawLink);
+const blank = href && !href.startsWith('#') && node?.link?.blank === true;
+---
+{src ? <figure class:list={['emdash-image', 'editorial-image', node.alignment && `emdash-image--align-${node.alignment}`]} style={width ? `--image-limit: ${width}px` : undefined}>
+  {href ? <a href={href} target={blank ? '_blank' : undefined} rel={blank ? 'noopener noreferrer' : undefined}><ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" /></a> : <ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" />}
+  {node.caption && <figcaption>{node.caption}</figcaption>}
+</figure> : <PTImage node={node} />}
+<style>
+  .editorial-image { width: min(100%, var(--image-limit, 100%)); margin-block: var(--spacing-content); }
+  .editorial-image :global(img) { width: 100%; height: auto; }
+  figcaption { color: var(--color-muted); font-size: .875rem; margin-top: var(--spacing-content); }
+  .emdash-image--align-center { margin-inline: auto; }
+  .emdash-image--align-left, .emdash-image--align-right { max-width: 50%; }
+  .emdash-image--align-left { float: left; margin-right: var(--spacing-content); }
+  .emdash-image--align-right { float: right; margin-left: var(--spacing-content); }
+  @media (max-width: 40rem) { .emdash-image--align-left, .emdash-image--align-right { float: none; max-width: 100%; margin-inline: 0; } }
+</style>

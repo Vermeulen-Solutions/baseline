@@ -1,0 +1,93 @@
+{
+  "formatVersion": 1,
+  "recordedAt": "2026-10-15T17:08:30.780Z",
+  "purpose": "Exploratory Phase 1 / pre-upgrade evidence; not pinned CI golden baselines",
+  "requestedStyleguideViewports": {
+    "wide": {
+      "width": 1440,
+      "height": 900
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844
+    }
+  },
+  "actualLaterCmsViewport": {
+    "width": 1192,
+    "height": 1123,
+    "devicePixelRatio": 1.100000023841858,
+    "fonts": "loaded"
+  },
+  "cms": {
+    "public": "Seeded home visibly rendered",
+    "admin": "Dashboard visibly rendered after shared module Vite access corrected in temporary copy",
+    "editor": "About toolbar captured; automated checkbox activation failed, observed unchecked",
+    "saveReload": "unverified"
+  },
+  "images": [
+    {
+      "file": "grid-guide-preview.jpg",
+      "width": 1424,
+      "height": 899,
+      "format": "jpeg",
+      "sha256": "1cda8ea1b45ff1d1576674ea37c28478ff2491b2b94e555ce064498405855c7a"
+    },
+    {
+      "file": "pre-upgrade-admin.jpg",
+      "width": 1191,
+      "height": 1122,
+      "format": "jpeg",
+      "sha256": "858c12c6fb19d1ddb96177aa58d779628cc7ba76a12b54f0e98961dc41984413"
+    },
+    {
+      "file": "pre-upgrade-editor-entry.jpg",
+      "width": 1191,
+      "height": 1122,
+      "format": "jpeg",
+      "sha256": "0ffabd9062711707388444651a51297ed856bd96353c67f4660a0291b3ef1c12"
+    },
+    {
+      "file": "pre-upgrade-public.jpg",
+      "width": 1191,
+      "height": 1122,
+      "format": "jpeg",
+      "sha256": "1405868836677403f81f7a1c44f170b96f3e5e486d7a72c4879e4f693bc7b990"
+    },
+    {
+      "file": "styleguide-mobile-preview.jpg",
+      "width": 374,
+      "height": 844,
+      "format": "jpeg",
+      "sha256": "3d17b05391aaeb66c02dbb7f2353a6757653d2c434769dfdae9d310795cc967c"
+    },
+    {
+      "file": "styleguide-mobile.jpg",
+      "width": 374,
+      "height": 7589,
+      "format": "jpeg",
+      "sha256": "64a87295c09a6386c2d237cc3130c01b0e4a3585813cdbba94d63ad852f31a85"
+    },
+    {
+      "file": "styleguide-wide-preview.jpg",
+      "width": 1424,
+      "height": 900,
+      "format": "jpeg",
+      "sha256": "a5e945ab5ebacef87347d427eaa1eec5a24f5ac3f68f5d98e7812b918b061068"
+    },
+    {
+      "file": "styleguide-wide.jpg",
+      "width": 1424,
+      "height": 8017,
+      "format": "jpeg",
+      "sha256": "79c4fd97d213c849b688547e7a100b81f58202ab056bbf9fbfb79ba2565e6bef"
+    }
+  ],
+  "sourceHashesAtReceipt": {
+    "src/pages/_styleguide.astro": "12bab3f0717d9a7a798e9bbfbabeb22c0a136c582a78abd851433e6a3ff5c744",
+    "src/components/dev/Styleguide.astro": "919b828bacb3a4385cf6708045e895903033ce4f3c871eb9df3501b599dc94af",
+    "src/dev/styleguide-fixtures.ts": "50c0cadab7d376b616b2b7b7c1224c95049bfce0dbdd762cb16aea4ff0e850a2",
+    "src/utils/grid-guide.ts": "0a6b352a7938b175c915baf8e8f42005dce68116ce855a7898235b38a2bdd478",
+    "src/components/TweaksBar.astro": "ff2d13b1da9fb36a6c1d7e377f910982b39e2618a286086d6a1bdfba3c6dafbf",
+    "src/assets/styleguide-grid.svg": "1628336b39d006ce410883ad6da90322f345a6b8d0c7caba76d9f541dcc33d91"
+  }
+}

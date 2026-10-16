@@ -1,0 +1,4 @@
+/* Explicit fixture-build input only. No client theme or production font change. */
+@import '@fontsource/noto-sans/latin-400.css';
+@import '@fontsource/noto-sans/latin-700.css';
+:root[data-visual-fonts] { --font-body: 'Noto Sans', sans-serif; --font-display: 'Noto Sans', sans-serif; }

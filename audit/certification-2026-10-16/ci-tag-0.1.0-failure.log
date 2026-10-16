@@ -1,0 +1,18 @@
+verify	Check art direction for changed visual source	﻿2026-10-16T08:16:02.1441785Z ##[group]Run base="${PR_BASE:-$PUSH_BASE}"
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1442261Z [36;1mbase="${PR_BASE:-$PUSH_BASE}"[0m
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1442826Z [36;1mif [[ -z "$base" || "$base" =~ ^0+$ ]]; then[0m
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1443258Z [36;1m  base=$(git hash-object -t tree /dev/null)[0m
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1443626Z [36;1mfi[0m
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1443932Z [36;1mnpm run check:art-direction -- --base "$base"[0m
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1506904Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1507206Z env:
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1507379Z   PR_BASE: 
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1507577Z   PUSH_BASE: 0000000000000000000000000000000000000000
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.1507825Z ##[endgroup]
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.2569103Z 
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.2569794Z > emdash-site-starter@0.0.3 check:art-direction
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.2570473Z > node scripts/check-art-direction.mjs --changed --base 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.2570933Z 
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.3372329Z Art direction gate: checking record for src/components/ResponsiveImage.astro
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.3373561Z Expected exactly one real ## Art Direction Record section.
+verify	Check art direction for changed visual source	2026-10-16T08:16:02.3593675Z ##[error]Process completed with exit code 1.

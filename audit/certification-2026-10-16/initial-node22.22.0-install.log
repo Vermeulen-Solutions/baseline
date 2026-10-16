@@ -1,0 +1,16 @@
+npm WARN EBADENGINE Unsupported engine {
+npm WARN EBADENGINE   package: '@emdash-cms/registry-verification@0.3.4',
+npm WARN EBADENGINE   required: { node: '^22.22.2 || ^24.15.0 || >=26.0.0' },
+npm WARN EBADENGINE   current: { node: 'v22.22.0', npm: '10.5.0' }
+npm WARN EBADENGINE }
+npm WARN deprecated @oslojs/jwt@0.2.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+npm WARN deprecated @oslojs/asn1@1.0.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+npm WARN deprecated @oslojs/binary@1.0.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+npm WARN deprecated @oslojs/webauthn@1.0.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+npm WARN deprecated @oslojs/cbor@1.0.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+npm WARN deprecated node-domexception@1.0.0: Use your platform's native DOMException instead
+npm WARN deprecated @oslojs/crypto@1.0.1: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+npm WARN deprecated @oslojs/crypto@1.0.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+npm WARN deprecated arctic@3.7.0: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
+
+added 716 packages in 5m

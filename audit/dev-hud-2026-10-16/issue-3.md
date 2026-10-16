@@ -1,0 +1,85 @@
+# Starter meta-review, tested standards releases and downstream lifecycle
+
+## Outcome and evidence
+Establish the upstream → validated starter release → downstream audit lifecycle. Preserve the Node + SQLite default; Cloudflare Workers/D1/R2 remains a separately tested target profile.
+
+Verified 2026-10-15: package.json requests Astro ^7.3.2 and pins EmDash 1.1.0; lockfile/installed Astro is 7.3.5, Node adapter 11.1.6, Tailwind 4.3.3. npm and the upstream release API report EmDash 1.3.0, released today. Select an exact tested upgrade target after reviewing 1.2 and 1.3 changes; do not silently upgrade to latest or claim Astro 5 compatibility. Current EmDash peers require Astro >=6.0.0-beta.0.
+
+The forms package is @emdash-cms/plugin-forms (npm 0.2.10 at review time); @emdash/plugin-forms returns 404. Upstream source is not proof of compatibility or a reason to replace existing forms.
+
+## Deliverables
+1. docs/starter-meta-review.md and a versioned standards manifest recording supported runtime/dependency combinations, required/advisory rules, source commit/version evidence, test results, known limitations and upgrade/rollback instructions.
+2. scripts/check-upstream-updates.mjs for read-only dependency/release/skill-source comparison. Explicitly check Astro, official adapters/integrations, Node and EmDash independently; distinguish declared, locked, installed and available stable/patch versions. Handle auth/rate-limit/offline errors as unverified. Pin source commits for repeatable reviews. A newer Astro release must surface even when EmDash has not changed.
+3. Upgrade work in reviewable increments: evaluate Astro 7.4.0 and any newer stable candidate at execution time jointly with EmDash 1.2/1.3 and compatible adapters/Node; reproduce the old baseline; snapshot disposable database/media; review migration changes; upgrade locked packages and peers; exercise old-database upgrade and fresh setup; check existing public/editor contracts. The locked Astro 7.3.5 is a comparison baseline, not an upgrade ceiling.
+4. Harden both skill sync helpers: check/stage/apply workflow; normalized content hashes and ownership manifests; refusal to overwrite dirty/local additions without a preserved reviewed resolution; atomic replacement/rollback; immutable ref support. A matching commit manifest alone must not conceal local drift. --check performs no mutation. Keep project rules outside upstream mirrors.
+5. Register all maintained skills, including emdash-content-modeling, in the distribution allowlist and provenance inventory. Preserve upstream licenses and source/version metadata for Impeccable. Stage third-party updates independently from local policy.
+6. Add the downstream site registry requested in the existing issue comment. New-site workflow completion must create or update a starter registry entry through a reviewed change, or record a pending registration artifact when access is unavailable. Minimum fields: stable site ID, authorized repo reference, starter release/commit, runtime profile, owner/team identifier, lifecycle status and last audit/standards version. Repeated registration is idempotent; document rename/archive handling. Keep private clients/domains/contacts in an access-appropriate registry; do not expose them in this public template. Registry updates do not authorize contacting or modifying client sites.
+
+## Astro 7.4 and future framework-release evaluation
+
+Required input: [Astro 7.4 announcement](https://astro.build/blog/astro-740/), changelog and [Astro upgrade guidance](https://docs.astro.build/en/upgrade-astro/). The existing ^7.3.2 range admits 7.4.0; the lockfile resolves 7.3.5 for reproducibility. Installed EmDash 1.1.0 declares Astro >=6.0.0-beta.0 and @astrojs/node 11.1.6 declares ^7.2.1, both admitting 7.4. No documented intentional 7.3 hold was found in repository history. Declared compatibility does not prove runtime acceptance; selecting Astro as the framework is a separate architectural dependency of EmDash and the existing .astro routes/components.
+
+Evaluate these 7.4 changes and record adopt/defer/not-applicable outcomes:
+
+- **Node prerequisite:** minimum becomes 22.22.0, above the project's advertised >=22.16. Align engines, CI/build/runtime versions, setup docs/skills and downstream requirements before accepting 7.4. Local Node 24.21 satisfies this floor.
+- **Build/runtime image services:** high relevance to SSR media and optional Workers. Test dev/build/production services, native-width limits, public/editor rendering and fresh storage-backed uploads without rebuilding. Audit integrations reading image.service.entrypoint/config: those keys are absent when the split build/runtime shape is configured. Keep one service where sufficient.
+- **Cloudflare pipeline/adapter:** evaluate compatible adapter/Wrangler releases together; the registry candidate @astrojs/cloudflare 14.4.0 requires Astro ^7.4.0 and Wrangler ^4.125.0. Rehearse disposable Worker image delivery and any prerendered assets; do not replace the Node default as a side effect.
+- **Build timings:** evaluate astro build --timings for reproducible build/image/integration diagnostics in #3/#7. Build timings do not measure runtime CMS latency.
+- **Font warnings:** exercise real configured provider weights/styles/subsets where applicable; preserve local fonts and track the custom-provider getFontProperties requirement announced for Astro 8.
+- **notFound handler:** inspect custom astro/fetch or astro/hono entrypoints; test custom 404 status/content and fixture-route exclusion. All-in-one handlers already include this behavior.
+- **Experiments:** keep parallel prerendering and custom static redirect pages disabled by default. Benchmark prerender CPU/memory only where static routes justify it; the announcement says the Cloudflare adapter ignores parallelPrerender. Static redirect templates do not replace SSR HTTP redirects.
+
+Make framework evaluation mandatory at every meta-review and treat new stable Astro releases as review triggers. Compare the current lockfile with the latest stable release and relevant supported patches, inspect changelogs/migration guides, dependencies/Node/adapters, security/support changes, deprecations and useful features. For each candidate record date, owner, benefit/risk, compatibility/test evidence, affected code/docs/skills, adopt/defer reason and revisit trigger. Major versions require a migration spike; prereleases/experimental features remain opt-in. Release certification names the actual tested Astro version. This issue defines the process, not an automatic upgrade or a newly scheduled automation.
+
+## Capability decisions requiring proof
+- Forms: test native plugin registration/public rendering, validation, Turnstile failure paths, notifications/storage, accessibility, recovery of non-secret answers and retention. Default remains opt-in until Node and disposable Worker evidence supports a broader recommendation. FormError/form-recovery solve different concerns; delete them only after feature parity and migration evidence.
+- Galleries/images: keep PhotoSwipe/justified presentation if it still satisfies needs. Validate native CMS blocks, upload-after-build delivery, captions/order/native dimensions and editor save/reload before replacing utilities.
+- Caching: verify installed *WithCacheHint helpers for every route/shared query only when route caching is enabled; do not enable caching solely for this review.
+- Native CSS: test fallback and browser support for trim/container queries; an upstream feature is not a blanket requirement.
+
+## Verification and release contract
+Run existing design, gallery, utilities, schema-budget tests/checks where present, typecheck and build. The current schema-budget scripts are pre-existing uncommitted local work: review/land that prerequisite explicitly before treating it as a released standard. A missing database must be recorded as unmeasured, not schema certification.
+
+#5/#7/#8/#9 checks are included only after their capabilities ship. Never run media:migrate-wp as a test: use its fixture/dry-run tests. Cloud credentials are not required for ordinary CI; certify Cloudflare on disposable resources with explicit targets. Do not block the first meta-review runbook on all future tooling.
+
+Before broad downstream rollout, certify the release with #7 visual/behavior evidence, fresh setup and upgrade fixtures, public/editor tests and targeted Cloudflare evidence. A reversible local capture spike before upgrading can preserve the old visual baseline while #7 is still being built. Publish release notes, standards manifest, migration/rollback notes and a tag after review.
+
+## Acceptance criteria
+- [x] Read-only update report separates current lockfile facts from available releases and errors.
+- [x] Exact upgrade target/peer matrix is justified with release links and fresh/upgrade test evidence; restore instructions are rehearsed.
+- [x] Astro 7.4 evaluation records Node >=22.22 alignment, image-service/adapter behavior, build timings, font/404 applicability and experimental-feature decisions with targeted test evidence or explicit deferrals.
+- [x] Upstream checker fixtures detect an Astro/adapter update independently of EmDash; each future meta-review records dated adopt/defer decisions, evidence and revisit triggers, including major-version migration requirements.
+- [x] Forms adoption decision includes the tested package/version and feature-parity results; unsupported paths remain explicit.
+- [x] Staged sync detects a changed mirror, a local extra file and a missing managed skill; cancellation/error leaves the workspace intact; --check changes no files.
+- [x] New-site registry test covers duplicate registration, inaccessible starter repo, private metadata and archived sites.
+- [ ] Standards release lists shipped checks versus pending roadmap capabilities, with no Cloudflare deployment implied by a package update.
+- [ ] Downstream audit #2 can select a stable standards release rather than mutable main.
+
+## Dependencies and boundaries
+#1 defines skill policy. Initial runbook/version inventory/registry can start immediately; #4 informs design interchange. #5/#7 support later release certification; #8/#9 extend it after delivery. This issue owns starter standards, not automatic bulk upgrades of client sites.
+
+## Sources
+[EmDash 1.3 release](https://github.com/emdash-cms/emdash/releases/tag/emdash%401.3.0) · [forms source](https://github.com/emdash-cms/emdash/tree/main/packages/plugins/forms) · [site transfer](https://docs.emdashcms.com/guides/site-transfer/) · existing sync helpers and issue comment.
+
+## Implementation progress — Phase 2 (2026-10-15)
+
+Implemented check:upstream, staged/hash-aware sync with retained backups and killed-process recovery tests, content-modeling distribution, private registration/pending paths, optional DESIGN.md tooling and an explicit candidate standards manifest. Selected Astro 7.4.0 / EmDash 1.3.0 / @astrojs/node 11.1.8 / @astrojs/react 7.1.0; Node minimum 22.22.0. 30 tests pass on Node 22.22.0 and 24.21.0; typecheck, build/timings and disposable production HTTP checks pass. Rehearsed fresh setup, 1.1 DB upgrade, real field/rich-text save/reload/publish, native media after build and old-lock/database restore. Native forms 0.2.10 registration, anonymous render/submission/storage and failure probes support an opt-in decision; live providers/Workers and full accessibility/editor matrix remain unverified. Bundling dependency-local Zod fixes the observed production hoisting failure without a new direct runtime dependency. Dirty mirrors remain staged, not overwritten. This issue remains OPEN: Phase 3 broad certification, reviewed publication/tag and stable downstream selection are not complete.
+
+Local implementation/evidence: audit/phase-2/README.md, runtime receipts, tests and standards/manifest.json. Changes are uncommitted; no production deployment or stable release is implied.
+
+## Phase 3 progress and final certification — 16 October 2026
+
+The prior roadmap milestone (#5 fixtures, #10 LogoTicker/quarantine, #7 local Windows visual harness plus reviewed prerequisites) is committed locally as **6c1c412**. The schema-budget prerequisite is included in that commit. #5/#7/#10 are closed. The #6 G/O/P package is now implemented and verified for completion; its code remains **uncommitted for review**. No changes have been pushed and no standards release/tag/deployment has been published. Unrelated skill/editorial work remains preserved.
+
+Current verification: **15 HUD browser cases passed**; **35 unit tests passed**; Astro typecheck reports **41 files/zero diagnostics**; normal build/release checks and dev/fixture/normal HTTP/client JS+CSS isolation pass. The local visual suite passes **51 cases with 18 intentional suite-mode skips**, no failures and 51 unchanged goldens. Fast Node **22.22.0** CI command rehearsal is **20.152s**, excluding setup/install/network/queue. Browser checks remain strictly local Windows tools and never run on push/PR or as production/deployment dependencies. Receipts: local audit/dev-hud-2026-10-16/README.md and verification.json.
+
+Final certification sequence (expanded in local docs/phase-3-certification.md):
+
+1. Review/commit the HUD, reconcile skill-sync candidates/local drift without overwriting dirty mirrors and finalize shipped/pending/applicability inventories.
+2. Refresh audit:baseline/check:upstream and record dated Astro/adapters/EmDash/Node adopt/defer decisions; rerun affected evidence for any adopted update.
+3. Rehearse a clean npm-ci checkout on Node 22.22.0 and supported Node 24.21.0; run schema/unit/design/typecheck/build/release/HTTP checks and pinned Windows visual/HUD suites locally.
+4. Complete the outstanding content/editor matrix, reusing unchanged Phase 2 evidence where valid: registration/canonical values/save/reload/publish, gallery/table order/captions, applicable locale/menu/settings/cache contracts, upload after build and recoverable DB/media upgrade/restore. Annotation inspection alone is not editing certification.
+5. Bound release support to proven Node/SQLite/Windows behavior. Keep Workers/D1/R2 (#8/#9), real notification providers and other unavailable target evidence explicitly pending/deferred.
+6. After review, publish versioned release/migration/restore notes and an immutable standards reference; set stableReleaseRef to that exact reference and prove #2 can select it. Only then close #3.
+
+**Issue #3 remains OPEN; the standards candidate remains unreleased and stableReleaseRef is null.** The current request outlines certification and does not authorize publication or downstream rollout. This progress section supersedes earlier uncommitted/status counts while retaining the historical Phase 2 review.

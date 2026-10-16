@@ -1,0 +1,18 @@
+{
+  "command": "npm run typecheck",
+  "node": "24.21.0",
+  "files": 37,
+  "errors": 0,
+  "warnings": 0,
+  "hints": 0,
+  "schemaBudget": [
+    {
+      "table": "ec_pages",
+      "physicalColumns": 17
+    },
+    {
+      "table": "ec_posts",
+      "physicalColumns": 19
+    }
+  ]
+}

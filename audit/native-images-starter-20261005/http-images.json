@@ -1,0 +1,89 @@
+[
+  {
+    "label": "development",
+    "candidates": [
+      {
+        "width": 480,
+        "height": 320,
+        "format": "webp"
+      },
+      {
+        "width": 800,
+        "height": 533,
+        "format": "webp"
+      },
+      {
+        "width": 1280,
+        "height": 853,
+        "format": "webp"
+      },
+      {
+        "width": 1599,
+        "height": 1066,
+        "format": "webp"
+      },
+      {
+        "width": 1799,
+        "height": 1199,
+        "format": "webp"
+      }
+    ],
+    "rejectedRemote": 403
+  },
+  {
+    "label": "built-node-new-storage-image",
+    "candidates": [
+      {
+        "width": 480,
+        "height": 320,
+        "format": "webp"
+      },
+      {
+        "width": 800,
+        "height": 533,
+        "format": "webp"
+      },
+      {
+        "width": 1280,
+        "height": 853,
+        "format": "webp"
+      },
+      {
+        "width": 1599,
+        "height": 1066,
+        "format": "webp"
+      },
+      {
+        "width": 1799,
+        "height": 1199,
+        "format": "webp"
+      },
+      {
+        "width": 480,
+        "height": 320,
+        "format": "webp"
+      },
+      {
+        "width": 800,
+        "height": 533,
+        "format": "webp"
+      },
+      {
+        "width": 1280,
+        "height": 853,
+        "format": "webp"
+      },
+      {
+        "width": 1599,
+        "height": 1066,
+        "format": "webp"
+      },
+      {
+        "width": 1799,
+        "height": 1199,
+        "format": "webp"
+      }
+    ],
+    "rejectedRemote": 403
+  }
+]

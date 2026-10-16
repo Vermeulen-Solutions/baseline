@@ -1,0 +1,10 @@
+[
+  {
+    "table": "ec_pages",
+    "columns": 17
+  },
+  {
+    "table": "ec_posts",
+    "columns": 19
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "command": "npm run test:visual -- --update",
+  "startTime": "2026-10-15T22:44:46.202Z",
+  "duration": 123329.848,
+  "expected": 44,
+  "skipped": 25,
+  "unexpected": 0,
+  "flaky": 0
+}

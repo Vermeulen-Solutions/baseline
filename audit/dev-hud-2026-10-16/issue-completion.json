@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-16",
+  "issues": [
+    {
+      "number": 6,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/6",
+      "state": "CLOSED",
+      "stateReason": "COMPLETED",
+      "closedAt": "2026-10-16T07:39:48Z",
+      "bodyVerified": true
+    },
+    {
+      "number": 3,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/3",
+      "state": "OPEN",
+      "bodyVerified": true,
+      "stableReleaseRef": null
+    }
+  ],
+  "localMilestone": "6c1c412",
+  "newHudChanges": "uncommitted",
+  "pushed": false,
+  "deployed": false
+}

@@ -1,0 +1,44 @@
+# Local Windows visual regression capture and sensitivity
+
+## Outcome and maintainer policy (16 October 2026)
+
+Ship `npm run test:visual` as a local developer review tool. The maintainer explicitly superseded the original Linux/container/automatic-browser-CI proposal to protect the free account's 2,000 Actions minutes/month budget. Windows baselines are authoritative; no Linux, Docker, push/PR visual job or mandatory pre-commit browser hook is required. Production builds/deployments must have no visual dependency.
+
+## Implemented technical contract
+
+- Native Playwright Test 1.64.1 assertions/reporters, bundled full Chromium revision 1248, Windows, Node 24.21.0, en-US, UTC, light scheme, DPR 1 and pinned local Noto Sans latin 400/700. Renderer inputs and SHA-256 baseline manifests live beside reviewed PNGs under `tests/visual/baselines/win32`.
+- Bootstrap an owned disposable source copy with fresh SQLite via installed supported EmDash dev setup/seed. Copy no working database, uploads, environment files or cloud credentials. Fix server/browser Date without stopping animation clocks. Use bounded readiness and cleanup, loopback HOST and dynamically allocated PORT.
+- Test the actual Node standalone server. First prove normal `dist` serves real public content and rejects styleguide GET/HEAD despite runtime/query/cookie flags. Then build separate compile-time `ASTRO_TEST_FIXTURES=1` output in `dist-fixtures`; the release guard rejects that artifact. Never deploy it.
+- Capture home, about, posts, welcome post, category, tag, intentional 404 and version-2 styleguide at 390×844, 768×1024 and 1440×900. Assert HTTP status, fixture identity, local fonts, decoded images, runtime/network health and no HUD/fake write identities. Reject setup/login pages even when HTTP 200. Block external requests.
+- Add targeted controls/focus/gallery captures and real keyboard interactions. Cover reduced-motion/print, active ticker movement, native checkbox stop/resume, hover/focus pause, equal-track seam geometry, viewport coverage, visible logos and short-track RTL; disable motion only for ordinary stills after behavior checks. Visual review exposed the RTL animation rule losing to the checked-state shorthand; the source fix selects direction through an inherited animation-name variable.
+- Use a JavaScript-disabled browser context with a real document-script sentinel plus a positive control. Verify native controls, stopped ticker and original-image gallery navigation. Verify 320px text-spacing reflow and actual Chrome 200%/400% browser zoom using a repository-owned extension in an ephemeral profile; assert zoom API, CSS viewport and DPR.
+- Screenshot-only CSS forces gallery `content-visibility:visible` to prevent Chromium's intermittent blank offscreen paint. No masks, layout/spacing/color patches or relaxed allowed-pixel counts. Source behavior checks retain production CSS. This exposed a real fixed-height gallery caption bug, corrected in the production component with a containment assertion.
+- Separate pixelmatch threshold 0.1 from allowed changed pixels **0**; no page-area ratio allowance. Missing goldens fail without creation. Only explicit local `--update` writes candidates; raw update flags/CI execution are rejected. Review source, full captures, focused states and environment together.
+- Prove sensitivity through shared-token and small targeted defects: pristine match → real matcher failure with expected/actual/diff → clean revert match → unchanged baseline hash. Missing baseline/route/font/image and a fake setup response must fail for their specific reasons.
+- Keep local HTML/JSON reports, diagnostics, diff images and traces under ignored `.emdash/visual`. Cleanup stops the owned server, unlinks the dependency junction and validates the absolute owned temp directory before removing it. Graceful cancellation/failure probes are required; forced OS process-tree termination can bypass JS cleanup and is documented.
+
+## Low-overhead CI contract
+
+`.github/workflows/design-checks.yml` has one Node 22.22.0 job: changed-source art-direction validation, script syntax lint, schema-budget check, unit tests and normal Astro build/profile guard. No visual job, browser install, matrix or heavy container. Target under 60 seconds for command execution; queue/setup/install/network time is variable. Visual configuration rejects CI/GitHub Actions outright. Typecheck and heavier runtime/browser verification remain local maintainer checks.
+
+## Acceptance and receipts
+
+All acceptance criteria below passed on the supported local Windows renderer. Local implementation remains uncommitted as requested; completion does not imply merge, deployment, Cloudflare/editor certification or stable standards publication.
+
+Dependencies: #5 shared fixtures/production isolation and #3 tested runtime. #10 supplies the ticker before goldens; #6 overlays are independent. #2 can consume local reports; #8/#9 add later database/media integration coverage.
+
+Sources: [Playwright snapshots](https://playwright.dev/docs/test-snapshots), [Chrome extensions](https://playwright.dev/docs/chrome-extensions), [Astro Node adapter](https://docs.astro.build/en/guides/integrations-guide/node/).
+
+
+- [x] Disposable supported setup/seed captures without working DB/uploads/cloud credentials or remote fonts.
+- [x] Three unchanged comparison repetitions: 153 passed, 54 intentional skips, zero failures/flaky results; 51 baseline hashes unchanged.
+- [x] Shared-token (35,237 pixels) and small targeted defect (1,126 pixels) fail the native matcher with expected/actual/diff artifacts; clean reverts pass.
+- [x] Missing baseline/route/font/image and fake HTTP-200 setup page fail for their intended reasons.
+- [x] Explicit local --update creates reviewable PNG/manifest candidates; implicit creation, raw flags and CI execution are rejected.
+- [x] Active motion, no-JS, 320px text spacing, actual 200%/400% zoom, RTL viewport coverage and caption containment pass.
+- [x] Normal production styleguide GET/HEAD 404, healthy public content, separate fixture output and release rejection pass.
+- [x] Failure/abort cleanup and graceful Windows IPC relay checks pass; forced OS-kill limitation documented.
+- [x] One Node 22.22.0 fast CI job; no automatic visual job/browser download, Docker/Linux prerequisite or production screenshot dependency. Local fast command rehearsal: 14.701s, 33 unit tests; checkout/setup/install/network excluded.
+- [x] README/runbook, source hashes, environment/baseline manifests and dated native receipts retained. Typecheck: 37 files, zero errors/warnings/hints.
+
+Evidence: audit/visual-regression-2026-10-16/README.md and linked receipts; docs/visual-regression.md. Changes remain local/uncommitted as requested. Completion does not imply merge, deployment, Cloudflare/editor certification or stable standards publication.

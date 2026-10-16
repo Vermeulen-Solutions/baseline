@@ -1,0 +1,18 @@
+{
+  "dev": {
+    "status": 200,
+    "specimens": true,
+    "images": 7,
+    "fakeEditBindings": false
+  },
+  "production": {
+    "GET": 404,
+    "GET?fixtures=1": 404,
+    "HEAD": 404,
+    "HEAD?fixtures=1": 404,
+    "publicStatus": 200,
+    "zodResolution": "Dependency-local validators bundled; no bare Zod imports in emitted server modules"
+  },
+  "isolation": "Fresh temporary root; no working database, media, env file or credentials copied.",
+  "runtime": "Astro 7.4.0 / EmDash 1.3.0 / @astrojs/node 11.1.8 / @astrojs/react 7.1.0"
+}

@@ -1,0 +1,12 @@
+---
+interface Props {
+	minimum?: "compact" | "standard" | "wide";
+	class?: string;
+}
+
+const { minimum = "standard", class: className } = Astro.props;
+---
+
+<div class:list={["grid-auto", `grid-auto--${minimum}`, className]}>
+	<slot />
+</div>

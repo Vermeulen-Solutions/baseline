@@ -1,0 +1,1518 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "/workspace/starter\\.emdash\\checks\\certification-clean\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config=playwright.config.mjs",
+      "--repeat-each=1",
+      "--grep",
+      "sensitivity"
+    ],
+    "configFile": "/workspace/starter\\.emdash\\checks\\certification-clean\\playwright.config.mjs",
+    "rootDir": "/workspace/starter/.emdash/checks/certification-clean/tests/visual",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\setup.mjs",
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 3,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/starter/.emdash/checks/certification-clean/.emdash/visual/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-390",
+        "name": "chromium-390",
+        "testDir": "/workspace/starter/.emdash/checks/certification-clean/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.mjs"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/workspace/starter/.emdash/checks/certification-clean/.emdash/visual/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-768",
+        "name": "chromium-768",
+        "testDir": "/workspace/starter/.emdash/checks/certification-clean/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.mjs"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/workspace/starter/.emdash/checks/certification-clean/.emdash/visual/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-1440",
+        "name": "chromium-1440",
+        "testDir": "/workspace/starter/.emdash/checks/certification-clean/tests/visual",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.mjs"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\visual\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium-390",
+        "testDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual",
+        "snapshotDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual",
+        "testIgnore": [],
+        "testMatch": "**/*.spec.mjs",
+        "timeout": 45000,
+        "use": {
+          "browserName": "chromium",
+          "channel": "chromium",
+          "headless": true,
+          "locale": "en-US",
+          "timezoneId": "UTC",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "reducedMotion": "reduce",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-390"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\visual\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium-768",
+        "testDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual",
+        "snapshotDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual",
+        "testIgnore": [],
+        "testMatch": "**/*.spec.mjs",
+        "timeout": 45000,
+        "use": {
+          "browserName": "chromium",
+          "channel": "chromium",
+          "headless": true,
+          "locale": "en-US",
+          "timezoneId": "UTC",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "reducedMotion": "reduce",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-768"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\visual\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium-1440",
+        "testDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual",
+        "snapshotDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual",
+        "testIgnore": [],
+        "testMatch": "**/*.spec.mjs",
+        "timeout": 45000,
+        "use": {
+          "browserName": "chromium",
+          "channel": "chromium",
+          "headless": true,
+          "locale": "en-US",
+          "timezoneId": "UTC",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "reducedMotion": "reduce",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-1440"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": ".emdash/visual/report",
+          "open": "never"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": ".emdash/visual/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "none",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "sensitivity.spec.mjs",
+      "file": "sensitivity.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "capture sensitivity control",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2058,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:09:47.466Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MzkwLCJoZWlnaHQiOjg0NH19"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-317b45272bc817b0b452",
+          "file": "sensitivity.spec.mjs",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "sensitivity detects shared-token and clean revert",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2592,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:09:50.563Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "sensitivity-control-1-expected.png",
+                      "contentType": "image/png",
+                      "path": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\baselines\\win32\\chromium-390\\sensitivity-control.png"
+                    },
+                    {
+                      "name": "sensitivity-control-1-actual.png",
+                      "contentType": "image/png",
+                      "path": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\visual\\results\\sensitivity-sensitivity-de-86227-ared-token-and-clean-revert-chromium-390\\sensitivity-control-1-actual.png"
+                    },
+                    {
+                      "name": "sensitivity-control-1-diff.png",
+                      "contentType": "image/png",
+                      "path": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\visual\\results\\sensitivity-sensitivity-de-86227-ared-token-and-clean-revert-chromium-390\\sensitivity-control-1-diff.png"
+                    },
+                    {
+                      "name": "expected-defect-failure",
+                      "contentType": "text/plain",
+                      "body": "G1sybWV4cGVjdCgbWzIybRtbMzFtbG9jYXRvchtbMzltG1sybSkuG1syMm10b0hhdmVTY3JlZW5zaG90G1sybSgbWzIybRtbMzJtZXhwZWN0ZWQbWzM5bRtbMm0pG1syMm0gZmFpbGVkCgpMb2NhdG9yOiBsb2NhdG9yKCdzZWN0aW9uW2FyaWEtbGFiZWxsZWRieT0iY29udHJvbHMiXScpCiAgRXhwZWN0ZWQgYW4gaW1hZ2UgMzU2cHggYnkgMTExNHB4LCByZWNlaXZlZCAzNTZweCBieSAxNDY1cHguIDM1MjM3IHBpeGVscyAocmF0aW8gMC4wNyBvZiBhbGwgaW1hZ2UgcGl4ZWxzKSBhcmUgZGlmZmVyZW50LgoKICBTbmFwc2hvdDogc2Vuc2l0aXZpdHktY29udHJvbC5wbmcKCkNhbGwgbG9nOgobWzJtICAtIEV4cGVjdCAidG9IYXZlU2NyZWVuc2hvdChzZW5zaXRpdml0eS1jb250cm9sLnBuZykiIGxvY2F0b3IoJ3NlY3Rpb25bYXJpYS1sYWJlbGxlZGJ5PSJjb250cm9scyJdJykgd2l0aCB0aW1lb3V0IDE1MDBtcxtbMjJtChtbMm0gICAgLSB2ZXJpZnlpbmcgZ2l2ZW4gc2NyZWVuc2hvdCBleHBlY3RhdGlvbhtbMjJtChtbMm0gIC0gd2FpdGluZyBmb3IgbG9jYXRvcignc2VjdGlvblthcmlhLWxhYmVsbGVkYnk9ImNvbnRyb2xzIl0nKRtbMjJtChtbMm0gICAgLSBsb2NhdG9yIHJlc29sdmVkIHRvIDxzZWN0aW9uIGFyaWEtbGFiZWxsZWRieT0iY29udHJvbHMiIGRhdGEtYXN0cm8tY2lkLXc2eW12ZHRnPSIiIGNsYXNzPSJzZWN0aW9uIHNlY3Rpb24tLXNlY3Rpb24iPuKApjwvc2VjdGlvbj4bWzIybQobWzJtICAtIHRha2luZyBlbGVtZW50IHNjcmVlbnNob3QbWzIybQobWzJtICAgIC0gZGlzYWJsZWQgYWxsIENTUyBhbmltYXRpb25zG1syMm0KG1sybSAgLSB3YWl0aW5nIGZvciBmb250cyB0byBsb2FkLi4uG1syMm0KG1sybSAgLSBmb250cyBsb2FkZWQbWzIybQobWzJtICAtIGF0dGVtcHRpbmcgc2Nyb2xsIGludG8gdmlldyBhY3Rpb24bWzIybQobWzJtICAgIC0gd2FpdGluZyBmb3IgZWxlbWVudCB0byBiZSBzdGFibGUbWzIybQobWzJtICAtIEV4cGVjdGVkIGFuIGltYWdlIDM1NnB4IGJ5IDExMTRweCwgcmVjZWl2ZWQgMzU2cHggYnkgMTQ2NXB4LiAzNTIzNyBwaXhlbHMgKHJhdGlvIDAuMDcgb2YgYWxsIGltYWdlIHBpeGVscykgYXJlIGRpZmZlcmVudC4bWzIybQobWzJtICAtIHdhaXRpbmcgMTAwbXMgYmVmb3JlIHRha2luZyBzY3JlZW5zaG90G1syMm0KG1sybSAgLSB3YWl0aW5nIGZvciBsb2NhdG9yKCdzZWN0aW9uW2FyaWEtbGFiZWxsZWRieT0iY29udHJvbHMiXScpG1syMm0KG1sybSAgICAtIGxvY2F0b3IgcmVzb2x2ZWQgdG8gPHNlY3Rpb24gYXJpYS1sYWJlbGxlZGJ5PSJjb250cm9scyIgZGF0YS1hc3Ryby1jaWQtdzZ5bXZkdGc9IiIgY2xhc3M9InNlY3Rpb24gc2VjdGlvbi0tc2VjdGlvbiI+4oCmPC9zZWN0aW9uPhtbMjJtChtbMm0gIC0gdGFraW5nIGVsZW1lbnQgc2NyZWVuc2hvdBtbMjJtChtbMm0gICAgLSBkaXNhYmxlZCBhbGwgQ1NTIGFuaW1hdGlvbnMbWzIybQobWzJtICAtIHdhaXRpbmcgZm9yIGZvbnRzIHRvIGxvYWQuLi4bWzIybQobWzJtICAtIGZvbnRzIGxvYWRlZBtbMjJtChtbMm0gIC0gYXR0ZW1wdGluZyBzY3JvbGwgaW50byB2aWV3IGFjdGlvbhtbMjJtChtbMm0gICAgLSB3YWl0aW5nIGZvciBlbGVtZW50IHRvIGJlIHN0YWJsZRtbMjJtChtbMm0gIC0gY2FwdHVyZWQgYSBzdGFibGUgc2NyZWVuc2hvdBtbMjJtChtbMm0gIC0gRXhwZWN0ZWQgYW4gaW1hZ2UgMzU2cHggYnkgMTExNHB4LCByZWNlaXZlZCAzNTZweCBieSAxNDY1cHguIDM1MjM3IHBpeGVscyAocmF0aW8gMC4wNyBvZiBhbGwgaW1hZ2UgcGl4ZWxzKSBhcmUgZGlmZmVyZW50LhtbMjJtCg=="
+                    },
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MzkwLCJoZWlnaHQiOjg0NH19"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-ad0af95b2c157b9a7843",
+          "file": "sensitivity.spec.mjs",
+          "line": 13,
+          "column": 5
+        },
+        {
+          "title": "sensitivity detects small-target and clean revert",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1982,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:09:53.170Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "sensitivity-control-1-expected.png",
+                      "contentType": "image/png",
+                      "path": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\baselines\\win32\\chromium-390\\sensitivity-control.png"
+                    },
+                    {
+                      "name": "sensitivity-control-1-actual.png",
+                      "contentType": "image/png",
+                      "path": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\visual\\results\\sensitivity-sensitivity-de-32538-all-target-and-clean-revert-chromium-390\\sensitivity-control-1-actual.png"
+                    },
+                    {
+                      "name": "sensitivity-control-1-diff.png",
+                      "contentType": "image/png",
+                      "path": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\visual\\results\\sensitivity-sensitivity-de-32538-all-target-and-clean-revert-chromium-390\\sensitivity-control-1-diff.png"
+                    },
+                    {
+                      "name": "expected-defect-failure",
+                      "contentType": "text/plain",
+                      "body": "G1sybWV4cGVjdCgbWzIybRtbMzFtbG9jYXRvchtbMzltG1sybSkuG1syMm10b0hhdmVTY3JlZW5zaG90G1sybSgbWzIybRtbMzJtZXhwZWN0ZWQbWzM5bRtbMm0pG1syMm0gZmFpbGVkCgpMb2NhdG9yOiBsb2NhdG9yKCdzZWN0aW9uW2FyaWEtbGFiZWxsZWRieT0iY29udHJvbHMiXScpCiAgMTEyNiBwaXhlbHMgKHJhdGlvIDAuMDEgb2YgYWxsIGltYWdlIHBpeGVscykgYXJlIGRpZmZlcmVudC4KCiAgU25hcHNob3Q6IHNlbnNpdGl2aXR5LWNvbnRyb2wucG5nCgpDYWxsIGxvZzoKG1sybSAgLSBFeHBlY3QgInRvSGF2ZVNjcmVlbnNob3Qoc2Vuc2l0aXZpdHktY29udHJvbC5wbmcpIiBsb2NhdG9yKCdzZWN0aW9uW2FyaWEtbGFiZWxsZWRieT0iY29udHJvbHMiXScpIHdpdGggdGltZW91dCAxNTAwbXMbWzIybQobWzJtICAgIC0gdmVyaWZ5aW5nIGdpdmVuIHNjcmVlbnNob3QgZXhwZWN0YXRpb24bWzIybQobWzJtICAtIHdhaXRpbmcgZm9yIGxvY2F0b3IoJ3NlY3Rpb25bYXJpYS1sYWJlbGxlZGJ5PSJjb250cm9scyJdJykbWzIybQobWzJtICAgIC0gbG9jYXRvciByZXNvbHZlZCB0byA8c2VjdGlvbiBhcmlhLWxhYmVsbGVkYnk9ImNvbnRyb2xzIiBkYXRhLWFzdHJvLWNpZC13NnltdmR0Zz0iIiBjbGFzcz0ic2VjdGlvbiBzZWN0aW9uLS1zZWN0aW9uIj7igKY8L3NlY3Rpb24+G1syMm0KG1sybSAgLSB0YWtpbmcgZWxlbWVudCBzY3JlZW5zaG90G1syMm0KG1sybSAgICAtIGRpc2FibGVkIGFsbCBDU1MgYW5pbWF0aW9ucxtbMjJtChtbMm0gIC0gd2FpdGluZyBmb3IgZm9udHMgdG8gbG9hZC4uLhtbMjJtChtbMm0gIC0gZm9udHMgbG9hZGVkG1syMm0KG1sybSAgLSBhdHRlbXB0aW5nIHNjcm9sbCBpbnRvIHZpZXcgYWN0aW9uG1syMm0KG1sybSAgICAtIHdhaXRpbmcgZm9yIGVsZW1lbnQgdG8gYmUgc3RhYmxlG1syMm0KG1sybSAgLSAxMTI2IHBpeGVscyAocmF0aW8gMC4wMSBvZiBhbGwgaW1hZ2UgcGl4ZWxzKSBhcmUgZGlmZmVyZW50LhtbMjJtChtbMm0gIC0gd2FpdGluZyAxMDBtcyBiZWZvcmUgdGFraW5nIHNjcmVlbnNob3QbWzIybQobWzJtICAtIHdhaXRpbmcgZm9yIGxvY2F0b3IoJ3NlY3Rpb25bYXJpYS1sYWJlbGxlZGJ5PSJjb250cm9scyJdJykbWzIybQobWzJtICAgIC0gbG9jYXRvciByZXNvbHZlZCB0byA8c2VjdGlvbiBhcmlhLWxhYmVsbGVkYnk9ImNvbnRyb2xzIiBkYXRhLWFzdHJvLWNpZC13NnltdmR0Zz0iIiBjbGFzcz0ic2VjdGlvbiBzZWN0aW9uLS1zZWN0aW9uIj7igKY8L3NlY3Rpb24+G1syMm0KG1sybSAgLSB0YWtpbmcgZWxlbWVudCBzY3JlZW5zaG90G1syMm0KG1sybSAgICAtIGRpc2FibGVkIGFsbCBDU1MgYW5pbWF0aW9ucxtbMjJtChtbMm0gIC0gd2FpdGluZyBmb3IgZm9udHMgdG8gbG9hZC4uLhtbMjJtChtbMm0gIC0gZm9udHMgbG9hZGVkG1syMm0KG1sybSAgLSBhdHRlbXB0aW5nIHNjcm9sbCBpbnRvIHZpZXcgYWN0aW9uG1syMm0KG1sybSAgICAtIHdhaXRpbmcgZm9yIGVsZW1lbnQgdG8gYmUgc3RhYmxlG1syMm0KG1sybSAgLSBjYXB0dXJlZCBhIHN0YWJsZSBzY3JlZW5zaG90G1syMm0KG1sybSAgLSAxMTI2IHBpeGVscyAocmF0aW8gMC4wMSBvZiBhbGwgaW1hZ2UgcGl4ZWxzKSBhcmUgZGlmZmVyZW50LhtbMjJtCg=="
+                    },
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MzkwLCJoZWlnaHQiOjg0NH19"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-003875d442abe30d8500",
+          "file": "sensitivity.spec.mjs",
+          "line": 13,
+          "column": 5
+        },
+        {
+          "title": "sensitivity missing baseline fails without writing a golden",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1087,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:09:55.164Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MzkwLCJoZWlnaHQiOjg0NH19"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-e4b32f4beafa72868591",
+          "file": "sensitivity.spec.mjs",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "sensitivity readiness rejects missing route",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 255,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:09:56.260Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "expected-readiness-failure",
+                      "contentType": "text/plain",
+                      "body": "cm91dGUgc3RhdHVzIC9fc3R5bGVndWlkZQoKG1sybWV4cGVjdCgbWzIybRtbMzFtcmVjZWl2ZWQbWzM5bRtbMm0pLhtbMjJtdG9CZRtbMm0oG1syMm0bWzMybWV4cGVjdGVkG1szOW0bWzJtKSAvLyBPYmplY3QuaXMgZXF1YWxpdHkbWzIybQoKRXhwZWN0ZWQ6IBtbMzJtMjAwG1szOW0KUmVjZWl2ZWQ6IBtbMzFtNDA0G1szOW0="
+                    },
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MzkwLCJoZWlnaHQiOjg0NH19"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-287447336bb719749e36",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "sensitivity readiness rejects missing setup",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5259,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:09:56.526Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "expected-readiness-failure",
+                      "contentType": "text/plain",
+                      "body": "cm91dGUgaWRlbnRpdHkgL19zdHlsZWd1aWRlOiBzZXR1cC9sb2dpbiBwYWdlcyBhcmUgbm90IGZpeHR1cmVzCgobWzJtZXhwZWN0KBtbMjJtG1szMW1sb2NhdG9yG1szOW0bWzJtKS4bWzIybXRvSGF2ZVRleHQbWzJtKBtbMjJtG1szMm1leHBlY3RlZBtbMzltG1sybSkbWzIybSBmYWlsZWQKCkxvY2F0b3I6ICBsb2NhdG9yKCdoMScpCkV4cGVjdGVkOiAbWzMybSJTG1s3bXRhcnRlciBjb21wb25lbnQgc3R5bGVndWlkG1syN21lIhtbMzltClJlY2VpdmVkOiAbWzMxbSJTG1s3bWV0IHVwIHlvdXIgc2l0G1syN21lIhtbMzltClRpbWVvdXQ6ICA1MDAwbXMKCkNhbGwgbG9nOgobWzJtICAtIHJvdXRlIGlkZW50aXR5IC9fc3R5bGVndWlkZTogc2V0dXAvbG9naW4gcGFnZXMgYXJlIG5vdCBmaXh0dXJlcyBsb2NhdG9yKCdoMScpIHdpdGggdGltZW91dCA1MDAwbXMbWzIybQobWzJtICAtIHdhaXRpbmcgZm9yIGxvY2F0b3IoJ2gxJykbWzIybQobWzJtICAgIDE0IMOXIGxvY2F0b3IgcmVzb2x2ZWQgdG8gPGgxPlNldCB1cCB5b3VyIHNpdGU8L2gxPhtbMjJtChtbMm0gICAgICAgLSB1bmV4cGVjdGVkIHZhbHVlICJTZXQgdXAgeW91ciBzaXRlIhtbMjJtCg=="
+                    },
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MzkwLCJoZWlnaHQiOjg0NH19"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-0fc8e13f1ff2bbdb7f24",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "sensitivity readiness rejects missing image",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1041,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:01.794Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "expected-readiness-failure",
+                      "contentType": "text/plain",
+                      "body": "Y2FwdHVyZSBuZXR3b3JrL3J1bnRpbWUgcmVhZGluZXNzCgobWzJtZXhwZWN0KBtbMjJtG1szMW1yZWNlaXZlZBtbMzltG1sybSkuG1syMm10b0VxdWFsG1sybSgbWzIybRtbMzJtZXhwZWN0ZWQbWzM5bRtbMm0pIC8vIGRlZXAgZXF1YWxpdHkbWzIybQoKG1szMm0tIEV4cGVjdGVkICAtICAxG1szOW0KG1szMW0rIFJlY2VpdmVkICArIDEwG1szOW0KChtbMzJtLSBBcnJheSBbXRtbMzltChtbMzFtKyBBcnJheSBbG1szOW0KG1szMW0rICAgImltYWdlIEhUVFAgNDA0OiAvX2FzdHJvL3N0eWxlZ3VpZGUtZ3JpZC44YklUMXppTy5zdmciLBtbMzltChtbMzFtKyAgICJpbWFnZSBIVFRQIDQwNDogL19hc3Ryby9zdHlsZWd1aWRlLWdyaWQuOGJJVDF6aU8uc3ZnIiwbWzM5bQobWzMxbSsgICAiaW1hZ2UgSFRUUCA0MDQ6IC9fYXN0cm8vc3R5bGVndWlkZS1ncmlkLjhiSVQxemlPLnN2ZyIsG1szOW0KG1szMW0rICAgImltYWdlIEhUVFAgNDA0OiAvX2FzdHJvL3N0eWxlZ3VpZGUtZ3JpZC44YklUMXppTy5zdmciLBtbMzltChtbMzFtKyAgICJpbWFnZSBIVFRQIDQwNDogL19hc3Ryby9zdHlsZWd1aWRlLXNtYWxsLkRPOWVnSUw3LnN2ZyIsG1szOW0KG1szMW0rICAgImltYWdlIEhUVFAgNDA0OiAvX2FzdHJvL3N0eWxlZ3VpZGUtcG9ydHJhaXQuREU3U0JzMm0uc3ZnIiwbWzM5bQobWzMxbSsgICAiaW1hZ2UgSFRUUCA0MDQ6IC9fYXN0cm8vc3R5bGVndWlkZS1ncmlkLjhiSVQxemlPLnN2ZyIsG1szOW0KG1szMW0rICAgImltYWdlIEhUVFAgNDA0OiAvX2FzdHJvL3N0eWxlZ3VpZGUtc21hbGwuRE85ZWdJTDcuc3ZnIiwbWzM5bQobWzMxbSsgXRtbMzlt"
+                    },
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6WyJpbWFnZSBIVFRQIDQwNDogL19hc3Ryby9zdHlsZWd1aWRlLWdyaWQuOGJJVDF6aU8uc3ZnIiwiaW1hZ2UgSFRUUCA0MDQ6IC9fYXN0cm8vc3R5bGVndWlkZS1ncmlkLjhiSVQxemlPLnN2ZyIsImltYWdlIEhUVFAgNDA0OiAvX2FzdHJvL3N0eWxlZ3VpZGUtZ3JpZC44YklUMXppTy5zdmciLCJpbWFnZSBIVFRQIDQwNDogL19hc3Ryby9zdHlsZWd1aWRlLWdyaWQuOGJJVDF6aU8uc3ZnIiwiaW1hZ2UgSFRUUCA0MDQ6IC9fYXN0cm8vc3R5bGVndWlkZS1zbWFsbC5ETzllZ0lMNy5zdmciLCJpbWFnZSBIVFRQIDQwNDogL19hc3Ryby9zdHlsZWd1aWRlLXBvcnRyYWl0LkRFN1NCczJtLnN2ZyIsImltYWdlIEhUVFAgNDA0OiAvX2FzdHJvL3N0eWxlZ3VpZGUtZ3JpZC44YklUMXppTy5zdmciLCJpbWFnZSBIVFRQIDQwNDogL19hc3Ryby9zdHlsZWd1aWRlLXNtYWxsLkRPOWVnSUw3LnN2ZyJdLCJicm93c2VyIjoiMTU2LjAuODA3OC40Iiwidmlld3BvcnQiOnsid2lkdGgiOjM5MCwiaGVpZ2h0Ijo4NDR9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-3009c52e6bf23c34c50f",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "sensitivity readiness rejects missing font",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1064,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:02.844Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "expected-readiness-failure",
+                      "contentType": "text/plain",
+                      "body": "Y2FwdHVyZSBuZXR3b3JrL3J1bnRpbWUgcmVhZGluZXNzCgobWzJtZXhwZWN0KBtbMjJtG1szMW1yZWNlaXZlZBtbMzltG1sybSkuG1syMm10b0VxdWFsG1sybSgbWzIybRtbMzJtZXhwZWN0ZWQbWzM5bRtbMm0pIC8vIGRlZXAgZXF1YWxpdHkbWzIybQoKG1szMm0tIEV4cGVjdGVkICAtIDEbWzM5bQobWzMxbSsgUmVjZWl2ZWQgICsgNhtbMzltCgobWzMybS0gQXJyYXkgW10bWzM5bQobWzMxbSsgQXJyYXkgWxtbMzltChtbMzFtKyAgICJmb250IEhUVFAgNDA0OiAvX2FzdHJvL25vdG8tc2Fucy1sYXRpbi00MDAtbm9ybWFsLkJUa1VsampsLndvZmYyIiwbWzM5bQobWzMxbSsgICAiZm9udCByZXF1ZXN0IGZhaWxlZDogL19hc3Ryby9ub3RvLXNhbnMtbGF0aW4tNDAwLW5vcm1hbC5CVGtVbGpqbC53b2ZmMiIsG1szOW0KG1szMW0rICAgImZvbnQgSFRUUCA0MDQ6IC9fYXN0cm8vbm90by1zYW5zLWxhdGluLTcwMC1ub3JtYWwuQ3J2VEVXaHkud29mZjIiLBtbMzltChtbMzFtKyAgICJmb250IHJlcXVlc3QgZmFpbGVkOiAvX2FzdHJvL25vdG8tc2Fucy1sYXRpbi03MDAtbm9ybWFsLkNydlRFV2h5LndvZmYyIiwbWzM5bQobWzMxbSsgXRtbMzlt"
+                    },
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6WyJmb250IEhUVFAgNDA0OiAvX2FzdHJvL25vdG8tc2Fucy1sYXRpbi00MDAtbm9ybWFsLkJUa1VsampsLndvZmYyIiwiZm9udCByZXF1ZXN0IGZhaWxlZDogL19hc3Ryby9ub3RvLXNhbnMtbGF0aW4tNDAwLW5vcm1hbC5CVGtVbGpqbC53b2ZmMiIsImZvbnQgSFRUUCA0MDQ6IC9fYXN0cm8vbm90by1zYW5zLWxhdGluLTcwMC1ub3JtYWwuQ3J2VEVXaHkud29mZjIiLCJmb250IHJlcXVlc3QgZmFpbGVkOiAvX2FzdHJvL25vdG8tc2Fucy1sYXRpbi03MDAtbm9ybWFsLkNydlRFV2h5LndvZmYyIl0sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MzkwLCJoZWlnaHQiOjg0NH19"
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-dbf9b9c9efa0866f702b",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "capture sensitivity control",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1397,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:04.570Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6NzY4LCJoZWlnaHQiOjEwMjR9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-8fee27ad0fcf7b20d88b",
+          "file": "sensitivity.spec.mjs",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "sensitivity detects shared-token and clean revert",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "Sensitivity is verification-only, one renderer size",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 14,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 250,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:06.269Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Sensitivity is verification-only, one renderer size",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 14,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6NzY4LCJoZWlnaHQiOjEwMjR9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-98a3f5d0aa1970405d2a",
+          "file": "sensitivity.spec.mjs",
+          "line": 13,
+          "column": 5
+        },
+        {
+          "title": "sensitivity detects small-target and clean revert",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "Sensitivity is verification-only, one renderer size",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 14,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 206,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:06.530Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Sensitivity is verification-only, one renderer size",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 14,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6NzY4LCJoZWlnaHQiOjEwMjR9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-69b190da813276945fae",
+          "file": "sensitivity.spec.mjs",
+          "line": 13,
+          "column": 5
+        },
+        {
+          "title": "sensitivity missing baseline fails without writing a golden",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 33,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 215,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:06.747Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 33,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6NzY4LCJoZWlnaHQiOjEwMjR9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-43b160a3f505dfd54172",
+          "file": "sensitivity.spec.mjs",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "sensitivity readiness rejects missing route",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 41,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 222,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:06.974Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 41,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6NzY4LCJoZWlnaHQiOjEwMjR9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-abefabc58c9bbe1edd8b",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "sensitivity readiness rejects missing setup",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 41,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 211,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:07.208Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 41,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6NzY4LCJoZWlnaHQiOjEwMjR9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-0785b94364d2cd9eb5e0",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "sensitivity readiness rejects missing image",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 41,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 231,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:07.430Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 41,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6NzY4LCJoZWlnaHQiOjEwMjR9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-3d97901ec048ba4fa133",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "sensitivity readiness rejects missing font",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 41,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 231,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:07.682Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 41,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6NzY4LCJoZWlnaHQiOjEwMjR9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-50e5427211512f218581",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "capture sensitivity control",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1558,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:08.550Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-2d847611cbdd048b7fc8",
+          "file": "sensitivity.spec.mjs",
+          "line": 5,
+          "column": 1
+        },
+        {
+          "title": "sensitivity detects shared-token and clean revert",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "Sensitivity is verification-only, one renderer size",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 14,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 294,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:10.386Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Sensitivity is verification-only, one renderer size",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 14,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-cddc3f26be36f57259dd",
+          "file": "sensitivity.spec.mjs",
+          "line": 13,
+          "column": 5
+        },
+        {
+          "title": "sensitivity detects small-target and clean revert",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "Sensitivity is verification-only, one renderer size",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 14,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 272,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:10.691Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "Sensitivity is verification-only, one renderer size",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 14,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-c1728fdcf83b017ce22c",
+          "file": "sensitivity.spec.mjs",
+          "line": 13,
+          "column": 5
+        },
+        {
+          "title": "sensitivity missing baseline fails without writing a golden",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 33,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 245,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:10.976Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 33,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-b352b50aa9d330180e86",
+          "file": "sensitivity.spec.mjs",
+          "line": 32,
+          "column": 1
+        },
+        {
+          "title": "sensitivity readiness rejects missing route",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 41,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 242,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:11.243Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 41,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-a173b8b9ad5faf23502c",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "sensitivity readiness rejects missing setup",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 41,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 231,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:11.496Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 41,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-af4788f9e9b03ba61723",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "sensitivity readiness rejects missing image",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 41,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 236,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:11.742Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 41,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-2bbe168f301bfd8adb71",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        },
+        {
+          "title": "sensitivity readiness rejects missing font",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "location": {
+                    "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                    "line": 41,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "skipped",
+                  "duration": 278,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T08:10:11.993Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\visual\\sensitivity.spec.mjs",
+                        "line": 41,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": [
+                    {
+                      "name": "browser-diagnostics",
+                      "contentType": "application/json",
+                      "body": "eyJwcm9ibGVtcyI6W10sImJyb3dzZXIiOiIxNTYuMC44MDc4LjQiLCJ2aWV3cG9ydCI6eyJ3aWR0aCI6MTQ0MCwiaGVpZ2h0Ijo5MDB9fQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "adac03f032daf0d6d071-7e48439456778c3709e0",
+          "file": "sensitivity.spec.mjs",
+          "line": 40,
+          "column": 58
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-16T08:09:02.598Z",
+    "duration": 70013.597,
+    "expected": 10,
+    "skipped": 14,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

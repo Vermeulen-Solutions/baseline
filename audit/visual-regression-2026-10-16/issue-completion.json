@@ -1,0 +1,17 @@
+[
+  {
+    "number": 5,
+    "state": "CLOSED",
+    "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/5"
+  },
+  {
+    "number": 7,
+    "state": "CLOSED",
+    "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/7"
+  },
+  {
+    "number": 10,
+    "state": "CLOSED",
+    "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/10"
+  }
+]

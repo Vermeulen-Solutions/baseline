@@ -1,0 +1,11 @@
+{
+  "source": "https://github.com/emdash-cms/emdash/tree/main/skills",
+  "ref": "main",
+  "commitSha": "b74679528630a7ffc0f0f45e73bab4e7c5e61abb",
+  "skills": [
+    "building-emdash-site",
+    "creating-plugins",
+    "emdash-cli"
+  ],
+  "syncedAt": "2026-10-05T08:23:46.033Z"
+}

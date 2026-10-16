@@ -1,0 +1,258 @@
+---
+import { PTImage as Image } from 'emdash/ui';
+import ResponsiveImage from './ResponsiveImage.astro';
+import { albumPhotos, photoUrl, galleryJsonLd } from '../lib/photo-gallery';
+import { photoAspectRatio } from '../lib/justified-gallery';
+import 'photoswipe/style.css';
+
+interface Props {
+  value?: unknown;
+  node?: unknown;
+  locale?: 'fr' | 'en';
+  layout?: 'justified' | 'grid';
+  title?: string;
+}
+
+const {
+  value,
+  node,
+  layout = 'justified',
+  locale = Astro.currentLocale === 'fr' ? 'fr' : 'en',
+  title,
+} = Astro.props;
+
+const photos = albumPhotos(node ? [node] : value);
+const galleryNode = node || (Array.isArray(value) ? value.find(n => n?._type === 'gallery') : undefined);
+const requestedColumns = galleryNode && typeof galleryNode === 'object' && 'columns' in galleryNode ? Number(galleryNode.columns) : 3;
+const columns = Number.isInteger(requestedColumns) && requestedColumns >= 1 && requestedColumns <= 6 ? requestedColumns : 3;
+const labels = locale === 'fr'
+  ? { open: 'Agrandir la photo', close: 'Fermer', next: 'Photo suivante', previous: 'Photo précédente', zoom: 'Zoomer', error: 'Photo indisponible. Fermez la visionneuse et réessayez.' }
+  : { open: 'Enlarge photo', close: 'Close', next: 'Next photo', previous: 'Previous photo', zoom: 'Zoom', error: 'Photo unavailable. Close the viewer and try again.' };
+
+const galleryTitle = title || (galleryNode && typeof galleryNode === 'object' && 'title' in galleryNode && typeof galleryNode.title === 'string' ? galleryNode.title : undefined);
+const jsonLd = galleryJsonLd(photos, {
+  siteUrl: Astro.site || Astro.url.origin,
+  title: galleryTitle,
+  resolveUrl: Astro.locals.emdash?.getPublicMediaUrl,
+});
+---
+<div
+  class="photo-gallery"
+  role="group"
+  aria-label={locale === 'fr' ? 'Galerie de photographies' : 'Photo gallery'}
+  style={`--photo-columns: ${columns}`}
+  data-photo-gallery
+  data-layout={layout}
+  data-close={labels.close}
+  data-next={labels.next}
+  data-previous={labels.previous}
+  data-zoom={labels.zoom}
+  data-error={labels.error}
+>
+  {photos.map((p, i) => {
+    const href = photoUrl(p, Astro.locals.emdash?.getPublicMediaUrl);
+    const ratio = photoAspectRatio(p.width, p.height);
+    return (
+      <div
+        class="photo-gallery-item"
+        style={`--photo-ratio: ${ratio}`}
+        data-photo-ratio={ratio}
+      >
+        {href ? (
+          <a
+            href={href}
+            data-pswp-width={p.width}
+            data-pswp-height={p.height}
+            data-caption={p.caption}
+            data-lightbox={p.width && p.height ? '' : undefined}
+            aria-label={`${labels.open} ${i + 1}${p.alt ? ` : ${p.alt}` : ''}`}
+          >
+            <ResponsiveImage
+              src={href}
+              alt={p.alt}
+              width={p.width}
+              height={p.height}
+              loading={i < 2 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : 'auto'}
+              sizes="(max-width: 36rem) calc(100vw - 4rem), (max-width: 60rem) 50vw, 33vw"
+            />
+          </a>
+        ) : (
+          <Image node={{ ...p, caption: undefined }} />
+        )}
+        {p.caption && <p class="photo-caption">{p.caption}</p>}
+      </div>
+    );
+  })}
+</div>
+
+{jsonLd && (
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+)}
+
+<script>
+  import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+  const instances = new Map<HTMLElement, PhotoSwipeLightbox>();
+
+  function mount() {
+    document.querySelectorAll<HTMLElement>('[data-photo-gallery]').forEach(element => {
+      if (instances.has(element)) return;
+
+      const box = new PhotoSwipeLightbox({
+        gallery: element,
+        children: 'a[data-lightbox]',
+        pswpModule: () => import('photoswipe'),
+        closeTitle: element.dataset.close,
+        zoomTitle: element.dataset.zoom,
+        arrowPrevTitle: element.dataset.previous,
+        arrowNextTitle: element.dataset.next,
+        errorMsg: element.dataset.error,
+        returnFocus: true,
+        ...(window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          ? { showAnimationDuration: 0, hideAnimationDuration: 0, zoomAnimationDuration: 0 }
+          : {}),
+      });
+
+      box.on('uiRegister', () => {
+        box.pswp?.ui?.registerElement({
+          name: 'caption',
+          order: 9,
+          isButton: false,
+          appendTo: 'root',
+          onInit: (caption, pswp) => {
+            pswp.on('change', () => {
+              caption.textContent = pswp.currSlide?.data.element?.getAttribute('data-caption') || '';
+            });
+          },
+        });
+      });
+
+      box.init();
+      instances.set(element, box);
+    });
+  }
+
+  mount();
+  document.addEventListener('astro:page-load', mount);
+  document.addEventListener('astro:before-swap', () => {
+    instances.forEach(box => box.destroy());
+    instances.clear();
+  });
+</script>
+
+<style>
+  .photo-gallery {
+    container-type: inline-size;
+    gap: var(--spacing-grid, 1.5rem);
+    margin: 2rem 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+  }
+
+  /* Justified Layout (Pure CSS Flexbox) */
+  .photo-gallery[data-layout="justified"] {
+    --photo-row-h: 260px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .photo-gallery[data-layout="justified"] > .photo-gallery-item {
+    /* Captions remain in normal flow, including under text-spacing overrides. */
+    flex-grow: var(--photo-ratio, 1.3333);
+    flex-basis: calc(clamp(160px, 38vw, var(--photo-row-h)) * var(--photo-ratio, 1.3333));
+    min-width: 0;
+  }
+
+  /* Absorb leftover space on the last row so orphans do not stretch */
+  .photo-gallery[data-layout="justified"]::after {
+    content: '';
+    flex-grow: 10;
+    flex-basis: calc(var(--photo-row-h) * 3);
+  }
+
+  .photo-gallery[data-layout="justified"] a {
+    height: clamp(160px, 38vw, var(--photo-row-h));
+  }
+
+  .photo-gallery[data-layout="justified"] :global(img) {
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Grid Layout Fallback */
+  .photo-gallery[data-layout="grid"] {
+    display: grid;
+    grid-template-columns: repeat(var(--photo-columns, 3), minmax(0, 1fr));
+    align-items: start;
+  }
+
+  @media (max-width: 60rem) {
+    .photo-gallery[data-layout="grid"] {
+      grid-template-columns: repeat(min(var(--photo-columns, 3), 2), minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 36rem) {
+    .photo-gallery[data-layout="grid"] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* Rendering optimization for long collections */
+  .photo-gallery-item {
+    position: relative;
+    content-visibility: auto;
+    contain-intrinsic-size: auto var(--photo-row-h, 260px);
+  }
+
+  .photo-gallery a {
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+    border-radius: var(--radius-sm, 0.375rem);
+  }
+
+  .photo-gallery a:focus-visible {
+    outline: 2px solid var(--color-primary, currentColor);
+    outline-offset: 2px;
+  }
+
+  /* Neutralize .prose / host CSS margins and resets */
+  .photo-gallery :global(img) {
+    width: 100%;
+    margin: 0 !important;
+    max-width: none !important;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .photo-gallery a:hover :global(img) {
+    transform: scale(1.03);
+  }
+
+  .photo-gallery :global(.emdash-image) {
+    margin: 0;
+  }
+
+  .photo-caption {
+    margin-block: 0.5rem 0;
+    font-size: 0.875rem;
+    color: var(--color-muted, currentColor);
+  }
+
+  :global(.pswp__caption) {
+    position: absolute;
+    bottom: 0;
+    inset-inline: 0;
+    padding: 1rem;
+    color: white;
+    background: rgb(0 0 0 / 0.75);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  :global(.pswp__caption:empty) {
+    display: none;
+  }
+</style>

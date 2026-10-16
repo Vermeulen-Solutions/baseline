@@ -1,0 +1,40 @@
+{
+  "node": "22.22.0",
+  "platform": "win32",
+  "seconds": 14.701,
+  "under60Seconds": true,
+  "excludes": "GitHub checkout/setup/npm ci/queue time; actual Actions execution not claimed",
+  "browserTestsRun": false,
+  "receipts": [
+    {
+      "name": "art-direction",
+      "seconds": 0.225,
+      "exitCode": 0
+    },
+    {
+      "name": "syntax-lint",
+      "seconds": 0.789,
+      "exitCode": 0
+    },
+    {
+      "name": "schema-budget",
+      "seconds": 0.087,
+      "exitCode": 0
+    },
+    {
+      "name": "unit-tests",
+      "seconds": 1.944,
+      "exitCode": 0
+    },
+    {
+      "name": "normal-build",
+      "seconds": 11.59,
+      "exitCode": 0
+    },
+    {
+      "name": "release-profile",
+      "seconds": 0.066,
+      "exitCode": 0
+    }
+  ]
+}

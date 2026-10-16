@@ -1,0 +1,9 @@
+{
+  "isolation": "Owned temporary source + fresh DB; no working DB/media/env/credentials copied",
+  "fixtureVersion": 2,
+  "seed": "seed/seed.json via supported dev setup",
+  "date": "2026-01-15T12:00:00.000Z",
+  "normalStyleguide": 404,
+  "fixtureStyleguide": 200,
+  "fixtureReleaseRejected": true
+}

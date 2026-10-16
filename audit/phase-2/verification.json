@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-15T18:01:43.145Z",
+  "tests": {
+    "node24": "30 passed",
+    "node22": "30 passed; typecheck 35 files zero diagnostics",
+    "targetedAfterFinalEdits": "sync and registry suites passed"
+  },
+  "build": "passed with timings; existing admin chunk-size warning",
+  "http": "passed; seeded public route 200, styleguide GET/HEAD 404, no functional HUD, no bare Zod imports",
+  "nativeImages": "passed dev/built/new-storage-after-build",
+  "editor": "real title and canonical rich-text save/reload/publish on disposable upgraded DB",
+  "restore": "old lock/database recovered public original and pre-upgrade draft",
+  "artDirection": "passed with existing exact infrastructure exceptions",
+  "dependencyPeers": "npm ls --all: no invalid peers",
+  "upstreamMirrors": "Existing modified mirror/custom content skill byte hashes preserved",
+  "issues": "All nine read-back verified; #4 closed, others open",
+  "cloudflare": "unverified",
+  "stableRelease": "not published; candidate only",
+  "sourceSha256": {
+    "package.json": "6b0fa3c9fca5bdc8fb32d21bee1019e19e871bb9fe696098db4a5be9d10a86a3",
+    "package-lock.json": "9e339d89157e250f09e7177589637aa15f3325a08edd322a4329707b7663e629",
+    "astro.config.mjs": "16c439f9eb772d273129ef40f8c28c6f17ec43ef9519f38d394cff8344de7ce7",
+    "scripts/skill-sync.mjs": "982215cf9940241955f6f04deace44367e4ba6b372ff1b5dc4f24df4d1ddbe68",
+    "scripts/check-upstream-updates.mjs": "9b450a936b49c3f73e74a48de0930ecb5f961e3fb8eeecb82a0f0d222e802608",
+    "scripts/register-site.mjs": "4acfd48927edb20033ec30327dab7d5367467d67c69620c600bc78721db21b0b",
+    "scripts/design-interchange.mjs": "76d81a2271e79f6ab68c4722dad95ddd352582e6c4fb278fd24def25b194f13e",
+    "scripts/check-dev-tools.mjs": "6407c566922517ef5efb54d12d9d5a16afaaefd3b348fd582fc5085491008f6c",
+    "standards/manifest.json": "0b7def61c4a82d779df44c443e6c0d95e4a9403a74932c3ebe2cf7a7811430a3"
+  }
+}

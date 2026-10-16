@@ -1,0 +1,27 @@
+{
+  "recordedAt": "2026-10-15T17:09:14.943Z",
+  "unitTests": {
+    "command": "node --test tests/*.test.mjs",
+    "passed": 24,
+    "failed": 0
+  },
+  "typecheck": {
+    "files": 35,
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "build": {
+    "status": "passed",
+    "warning": "EmDash client chunks larger than 500 kB"
+  },
+  "artDirectionGate": "passed with exact reviewed infrastructure exceptions",
+  "http": "passed; see http-checks.json",
+  "browser": "bounded checks; see browser-checks.json and captures.json",
+  "editorSaveReload": "unverified; edit-mode checkbox activation unsuccessful",
+  "cloudflare": "unverified",
+  "lockfileChanged": false,
+  "temporaryBrowserWorkspace": "removed",
+  "preExistingSkillEdits": "Four pre-existing modified skill files match their original exact byte hashes",
+  "temporaryServer": "Stopped; no listener on port 4345"
+}

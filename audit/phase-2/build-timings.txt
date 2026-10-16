@@ -1,0 +1,68 @@
+
+> emdash-site-starter@0.0.3 build:timings
+> astro build --timings
+
+19:55:56 [@astrojs/node] Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+19:55:56 [types] Generated 142ms
+19:55:56 [build] output: "server"
+19:55:56 [build] mode: "server"
+19:55:56 [build] directory: /workspace/starter\dist\
+19:55:56 [build] adapter: @astrojs/node
+19:55:56 [build] Collecting build info...
+19:55:56 [build] ✓ Completed in 409ms.
+19:55:56 [build] Building server entrypoints...
+19:55:57 [assets] Copying fonts (16 files)...
+19:55:57 [vite] ✓ built in 1.03s
+19:56:03 [vite] ✓ built in 5.99s
+19:56:09 [WARN] [vite] [plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+19:56:09 [vite] ✓ built in 5.78s
+19:56:09 [build] Rearranging server assets...
+19:56:09 [build] ✓ Completed in 13.23s.
+19:56:09 [emdash] Build complete
+19:56:09 [build] Server built in 13.86s
+19:56:09 [build] Complete!
+
+ build timings 
+total 15.95s · 0 pages · output "server"
+
+Build phases
+  resolve config                       1.98s  12.4% ██▆···················
+  setup                                408ms   2.6% ··▁▄··················
+    route discovery                     72ms   0.5% ···▁··················
+    vite config                         95ms   0.6% ···▂··················
+    content sync                       143ms   0.9% ···▂··················
+  prerender bundle                     1.03s   6.4% ···▂█▂················
+  ssr bundle                           5.99s  37.6% ·····▇███████▅········
+  client bundle                        5.79s  36.3% ·············▄███████▅
+  manifest injection                    47ms   0.3% ·····················▁
+  generate pages                         1ms   0.0% ······················
+  rearrange assets                     132ms   0.8% ·····················▂
+
+Vite plugins (4.12s of the build)
+  @tailwindcss/vite:generate:build     1.57s        ······▁██▂············  33 calls · transform 1.57s
+  astro:assets:esm                     1.56s        ·······▇█▃············  1 call · load 1.56s
+  astro:markdown                       424ms        ····▁▁▁··▁····▁▁▁▁··▁·  34,100 calls · resolveId 424ms
+  astro:session-provider               420ms        ····▁▁▁··▁····▁▁▂▁····  34,311 calls · resolveId 420ms
+  vite:css-post                        348ms        ··········▄·······▁···  821 calls · renderChunk 341ms · generateBundle 4ms · transform 3ms
+  astro:routes                         262ms        ···▁▁▁▁▁▁▁············  2,030 calls · transform 262ms · load 1ms
+  astro:fonts                          203ms        ···▁▁▁·······▁········  14 calls · buildStart 187ms · buildEnd 15ms · load 1ms
+  vite:build-import-analysis           139ms        ··················▁·▂·  788 calls · generateBundle 123ms · renderChunk 16ms
+
+Slowest files to bundle (2.22s in load/transform)
+  …er/src/assets/styleguide-grid.svg   1.56s        ·······▇█▃············  astro:assets:esm 1.56s
+  …ite-starter/src/styles/global.css   1.37s        ·······██·············  @tailwindcss/vite:generate:build 1.37s
+  …in/dist/styles.css?transform-only    53ms        ·······▁··············  @tailwindcss/vite:generate:build 51ms · vite:css 1ms
+  …dash/src/astro/routes/admin.astro    52ms        ······▁···············  astro:build 52ms
+  …image-styles.css (astro internal)    36ms        ······▁···············  astro:image-styles 31ms · @tailwindcss/vite:generate:build 3ms
+  …astro&type=style&index=0&lang.css    33ms        ······▁···············  @tailwindcss/vite:generate:build 32ms · astro:build 1ms
+  …astro&type=style&index=0&lang.css    22ms        ·········▁············  @tailwindcss/vite:generate:build 22ms
+  emdash/dist/api-D-7BNHoz.mjs          19ms        ····▁▁················  astro:vite-plugin-env 19ms
+

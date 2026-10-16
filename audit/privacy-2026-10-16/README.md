@@ -1,0 +1,11 @@
+# Privacy sanitization receipt — 2026-10-16
+
+The requested client identifiers and client filesystem prefixes were removed from tracked working text, maintained guidance and nonignored candidate files. The client-specific gallery report was replaced by a neutral architectural case study; editorial notes were renamed and anonymized. Real album routes, editorial names and deployment identifiers were removed from historical gallery evidence. Personal machine paths were normalized in logs and JSON. Private originals are retained only in ignored local recovery storage.
+
+`scan.json` records the bounded text/path/credential scan and reachable history counts. `git grep -I` checks all requested identifier variants and both client path separator styles; zero text matches remain. Binary compressed bytes are excluded from text matching; a coincidental short byte sequence inside a PNG is not an identifier. Showcase images are neutral starter fixtures, separately inspected. Seed and registry documentation contain generic examples; no tracked runtime database, real registry or environment-secret file is included.
+
+Historical issue snapshots, baseline inventories and execution logs edited by this pass are **redacted historical copies**. Their timestamps describe original execution. Existing immutable release/receipt hashes refer to the original private bytes, not the sanitized copies. The standards manifest itself is unchanged. No tests were rerun at the original dates and no old release is represented as reissued.
+
+The private history contains identifier-bearing blobs. A high-confidence-pattern scan found no private-key headers, GitHub token formats or AWS access-key IDs in the scanned text; that does not prove absence of all possible secrets. Do not publish existing history. Follow [clean-history release](../../docs/public-release.md), including review of GitHub metadata and binaries before launch.
+
+Verification after text sanitization: 35 unit tests pass; physical schema preflight measures 17/19 columns; production build and release-profile guard pass. Typecheck and final packaging/diagnostic checks are recorded in the completion receipt. Production bundling still reports the existing large-client-chunk advisory.

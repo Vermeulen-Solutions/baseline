@@ -1,0 +1,161 @@
+[
+  {
+    "phase": 0,
+    "viewport": {
+      "left": 17.15625,
+      "right": 372.84375,
+      "top": 442.265625,
+      "bottom": 501.8125,
+      "width": 355.6875
+    },
+    "scroll": 0,
+    "groups": [
+      {
+        "rect": {
+          "left": 17.15625,
+          "right": 372.84375,
+          "top": 442.265625,
+          "bottom": 501.8125,
+          "width": 355.6875
+        },
+        "li": {
+          "left": 105.59375,
+          "right": 284.421875,
+          "top": 458.84375,
+          "bottom": 485.234375,
+          "width": 178.828125
+        },
+        "style": "",
+        "direction": "rtl",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)",
+        "display": "flex"
+      },
+      {
+        "rect": {
+          "left": -338.53125,
+          "right": 17.15625,
+          "top": 442.265625,
+          "bottom": 501.8125,
+          "width": 355.6875
+        },
+        "li": {
+          "left": -250.09375,
+          "right": -71.265625,
+          "top": 458.84375,
+          "bottom": 485.234375,
+          "width": 178.828125
+        },
+        "style": "",
+        "direction": "rtl",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)",
+        "display": "flex"
+      }
+    ]
+  },
+  {
+    "phase": 0.5,
+    "viewport": {
+      "left": 17.15625,
+      "right": 372.84375,
+      "top": 442.265625,
+      "bottom": 501.8125,
+      "width": 355.6875
+    },
+    "scroll": 0,
+    "groups": [
+      {
+        "rect": {
+          "left": -160.6875,
+          "right": 195,
+          "top": 442.265625,
+          "bottom": 501.8125,
+          "width": 355.6875
+        },
+        "li": {
+          "left": -72.25,
+          "right": 106.578125,
+          "top": 458.84375,
+          "bottom": 485.234375,
+          "width": 178.828125
+        },
+        "style": "",
+        "direction": "rtl",
+        "transform": "matrix(1, 0, 0, 1, -177.844, 0)",
+        "display": "flex"
+      },
+      {
+        "rect": {
+          "left": -516.375,
+          "right": -160.6875,
+          "top": 442.265625,
+          "bottom": 501.8125,
+          "width": 355.6875
+        },
+        "li": {
+          "left": -427.9375,
+          "right": -249.109375,
+          "top": 458.84375,
+          "bottom": 485.234375,
+          "width": 178.828125
+        },
+        "style": "",
+        "direction": "rtl",
+        "transform": "matrix(1, 0, 0, 1, -177.844, 0)",
+        "display": "flex"
+      }
+    ]
+  },
+  {
+    "phase": 0.999,
+    "viewport": {
+      "left": 17.15625,
+      "right": 372.84375,
+      "top": 442.265625,
+      "bottom": 501.8125,
+      "width": 355.6875
+    },
+    "scroll": 0,
+    "groups": [
+      {
+        "rect": {
+          "left": -338.17559814453125,
+          "right": 17.51190185546875,
+          "top": 442.265625,
+          "bottom": 501.8125,
+          "width": 355.6875
+        },
+        "li": {
+          "left": -249.73809814453125,
+          "right": -70.90997314453125,
+          "top": 458.84375,
+          "bottom": 485.234375,
+          "width": 178.828125
+        },
+        "style": "",
+        "direction": "rtl",
+        "transform": "matrix(1, 0, 0, 1, -355.332, 0)",
+        "display": "flex"
+      },
+      {
+        "rect": {
+          "left": -693.8630981445312,
+          "right": -338.17559814453125,
+          "top": 442.265625,
+          "bottom": 501.8125,
+          "width": 355.6875
+        },
+        "li": {
+          "left": -605.4255981445312,
+          "right": -426.59747314453125,
+          "top": 458.84375,
+          "bottom": 485.234375,
+          "width": 178.828125
+        },
+        "style": "",
+        "direction": "rtl",
+        "transform": "matrix(1, 0, 0, 1, -355.332, 0)",
+        "display": "flex"
+      }
+    ]
+  }
+]

@@ -1,0 +1,269 @@
+art-direction
+Art direction gate: no visual source changes.
+
+syntax-lint
+Syntax checked 50 JavaScript modules.
+
+schema-budget
+Schema budget not measured: local SQLite database not found at /workspace/starter\.emdash\checks\certification-minimum\data.db. Run this check after EmDash setup and before a schema migration or D1 release.
+
+unit-tests
+TAP version 13
+# Subtest: baseline separates declared/locked/installed versions without writing or claiming certification
+ok 1 - baseline separates declared/locked/installed versions without writing or claiming certification
+  ---
+  duration_ms: 408.1602
+  type: 'test'
+  ...
+# Subtest: pinned DESIGN.md bridge validates the neutral specimen and rejects typography/reference losses
+ok 2 - pinned DESIGN.md bridge validates the neutral specimen and rejects typography/reference losses
+  ---
+  duration_ms: 224.0911
+  type: 'test'
+  ...
+# Subtest: infrastructure deletions require explicit approval of exact previous bytes
+ok 3 - infrastructure deletions require explicit approval of exact previous bytes
+  ---
+  duration_ms: 3.3905
+  type: 'test'
+  ...
+# Subtest: gate accepts real standard and custom directions, including CRLF
+ok 4 - gate accepts real standard and custom directions, including CRLF
+  ---
+  duration_ms: 5.3488
+  type: 'test'
+  ...
+# Subtest: gate rejects absent, duplicate, placeholder, or fenced-only records
+ok 5 - gate rejects absent, duplicate, placeholder, or fenced-only records
+  ---
+  duration_ms: 0.5607
+  type: 'test'
+  ...
+# Subtest: gate requires each physics field inside its block and two or three bans
+ok 6 - gate requires each physics field inside its block and two or three bans
+  ---
+  duration_ms: 1.503
+  type: 'test'
+  ...
+# Subtest: infrastructure exceptions are exact, reasoned, hash-bound, and LF/CRLF portable
+ok 7 - infrastructure exceptions are exact, reasoned, hash-bound, and LF/CRLF portable
+  ---
+  duration_ms: 0.6689
+  type: 'test'
+  ...
+# Subtest: CLI catches untracked visual work, accepts a record, and expires changed infrastructure exceptions
+ok 8 - CLI catches untracked visual work, accepts a record, and expires changed infrastructure exceptions
+  ---
+  duration_ms: 2693.4057
+  type: 'test'
+  ...
+# Subtest: fresh state never overwrites source tokens and unit scaling preserves baseline
+ok 9 - fresh state never overwrites source tokens and unit scaling preserves baseline
+  ---
+  duration_ms: 0.5446
+  type: 'test'
+  ...
+# Subtest: preview and export reproduce every changed type, spacing, filter, color and pattern token
+ok 10 - preview and export reproduce every changed type, spacing, filter, color and pattern token
+  ---
+  duration_ms: 0.3561
+  type: 'test'
+  ...
+# Subtest: surface source restores baseline, solid clears a pattern, dark-safe ink follows text
+ok 11 - surface source restores baseline, solid clears a pattern, dark-safe ink follows text
+  ---
+  duration_ms: 0.5306
+  type: 'test'
+  ...
+# (node:16560) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: ownership adapter accepts actual installed field/entry proxies and fails unknown formats closed
+ok 12 - ownership adapter accepts actual installed field/entry proxies and fails unknown formats closed
+  ---
+  duration_ms: 115.7297
+  type: 'test'
+  ...
+# Subtest: local reference inspection handles actual PNG/JPEG/WebP headers and rejects decompression bounds before decode
+ok 13 - local reference inspection handles actual PNG/JPEG/WebP headers and rejects decompression bounds before decode
+  ---
+  duration_ms: 45.3383
+  type: 'test'
+  ...
+# Subtest: native/legacy dates agree and impossible or future birthdays are rejected
+ok 14 - native/legacy dates agree and impossible or future birthdays are rejected
+  ---
+  duration_ms: 11.5153
+  type: 'test'
+  ...
+# Subtest: recovery is bounded, allowlisted, expires and is consumed once per form
+ok 15 - recovery is bounded, allowlisted, expires and is consumed once per form
+  ---
+  duration_ms: 1.7249
+  type: 'test'
+  ...
+# Subtest: photoAspectRatio safely handles valid, missing, and invalid dimensions
+ok 16 - photoAspectRatio safely handles valid, missing, and invalid dimensions
+  ---
+  duration_ms: 1.396
+  type: 'test'
+  ...
+# Subtest: justifiedFlexStyle generates correct CSS flexbox layout properties
+ok 17 - justifiedFlexStyle generates correct CSS flexbox layout properties
+  ---
+  duration_ms: 0.3394
+  type: 'test'
+  ...
+# Subtest: pure CSS flexbox simulation preserves equal row height across mixed aspect ratios
+ok 18 - pure CSS flexbox simulation preserves equal row height across mixed aspect ratios
+  ---
+  duration_ms: 6.1379
+  type: 'test'
+  ...
+# Subtest: large albums with 400+ mixed items compute aspect ratios safely
+ok 19 - large albums with 400+ mixed items compute aspect ratios safely
+  ---
+  duration_ms: 1.8645
+  type: 'test'
+  ...
+# Subtest: Astro and adapter updates surface independently of unchanged EmDash; outages remain unverified and read-only
+ok 20 - Astro and adapter updates surface independently of unchanged EmDash; outages remain unverified and read-only
+  ---
+  duration_ms: 877.7324
+  type: 'test'
+  ...
+# warning: in the working copy of '.emdash/site-registry.private.json', LF will be replaced by CRLF the next time Git touches it
+# Subtest: private site registry is idempotent, preserves rename/archive history and records inaccessible central registration
+ok 21 - private site registry is idempotent, preserves rename/archive history and records inaccessible central registration
+  ---
+  duration_ms: 1718.9985
+  type: 'test'
+  ...
+# Subtest: partner records honor CMS order/activity and actual storage keys without record caps
+ok 22 - partner records honor CMS order/activity and actual storage keys without record caps
+  ---
+  duration_ms: 13.3154
+  type: 'test'
+  ...
+# Subtest: public links reject executable protocols, protocol-relative hosts and obfuscated URLs
+ok 23 - public links reject executable protocols, protocol-relative hosts and obfuscated URLs
+  ---
+  duration_ms: 0.4037
+  type: 'test'
+  ...
+# Subtest: native editor and seeded media shapes preserve ordered duplicates and context
+ok 24 - native editor and seeded media shapes preserve ordered duplicates and context
+  ---
+  duration_ms: 2.4469
+  type: 'test'
+  ...
+# Subtest: storage keys remain distinct from media IDs and can use the public media origin
+ok 25 - storage keys remain distinct from media IDs and can use the public media origin
+  ---
+  duration_ms: 0.4195
+  type: 'test'
+  ...
+# Subtest: malformed input and unsafe full-image links do not become substitute images
+ok 26 - malformed input and unsafe full-image links do not become substitute images
+  ---
+  duration_ms: 0.3655
+  type: 'test'
+  ...
+# Subtest: galleryJsonLd generates valid Schema.org ImageGallery structured data
+ok 27 - galleryJsonLd generates valid Schema.org ImageGallery structured data
+  ---
+  duration_ms: 0.675
+  type: 'test'
+  ...
+# Subtest: release gate rejects missing/fixture/unknown profiles and refuses a fixture command despite stale clean output
+ok 28 - release gate rejects missing/fixture/unknown profiles and refuses a fixture command despite stale clean output
+  ---
+  duration_ms: 284.8781
+  type: 'test'
+  ...
+# (node:9096) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: measures physical collection columns including generated columns
+ok 29 - measures physical collection columns including generated columns
+  ---
+  duration_ms: 35.3307
+  type: 'test'
+  ...
+# Subtest: accepts exactly 50 columns and rejects a collection above budget
+ok 30 - accepts exactly 50 columns and rejects a collection above budget
+  ---
+  duration_ms: 0.8335
+  type: 'test'
+  ...
+# Subtest: skill staging detects same-commit drift, extras and missing skills; failed apply restores originals
+ok 31 - skill staging detects same-commit drift, extras and missing skills; failed apply restores originals
+  ---
+  duration_ms: 552.7332
+  type: 'test'
+  ...
+# Subtest: a killed skill apply leaves a recoverable journal and binary corruption is detected
+ok 32 - a killed skill apply leaves a recoverable journal and binary corruption is detected
+  ---
+  duration_ms: 466.9835
+  type: 'test'
+  ...
+# Subtest: skill apply refuses post-review edits and symlinks; managed distribution includes content modeling
+ok 33 - skill apply refuses post-review edits and symlinks; managed distribution includes content modeling
+  ---
+  duration_ms: 40.329
+  type: 'test'
+  ...
+# Subtest: visual updates require the explicit local wrapper flag and are rejected in CI
+ok 34 - visual updates require the explicit local wrapper flag and are rejected in CI
+  ---
+  duration_ms: 1773.9853
+  type: 'test'
+  ...
+# Subtest: visual wrapper cancellation reaches graceful child handlers on Windows
+ok 35 - visual wrapper cancellation reaches graceful child handlers on Windows
+  ---
+  duration_ms: 100.1299
+  type: 'test'
+  ...
+1..35
+# tests 35
+# suites 0
+# pass 35
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3116.3914
+
+normal-build
+10:07:26 [@astrojs/node] Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+10:07:27 [vite] Re-optimizing dependencies because vite config has changed
+10:07:28 [vite] [optimizer] bundling dependencies...
+10:07:29 [types] Generated 2.90s
+10:07:29 [build] output: "server"
+10:07:29 [build] mode: "server"
+10:07:29 [build] directory: /workspace/starter\.emdash\checks\certification-minimum\dist\
+10:07:29 [build] adapter: @astrojs/node
+10:07:29 [build] Collecting build info...
+10:07:29 [build] ✓ Completed in 3.29s.
+10:07:29 [build] Building server entrypoints...
+10:07:30 [assets] Copying fonts (16 files)...
+10:07:31 [vite] ✓ built in 1.11s
+10:07:35 [vite] ✓ built in 4.16s
+10:07:38 [WARN] [vite] [plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+10:07:38 [vite] ✓ built in 3.57s
+10:07:38 [build] Rearranging server assets...
+10:07:39 [build] ✓ Completed in 9.10s.
+10:07:39 [emdash] Build complete
+10:07:39 [build] Server built in 12.56s
+10:07:39 [build] Complete!
+
+release-profile
+Release artifact profile verified. Also verify the actual production route via check:dev-tools.

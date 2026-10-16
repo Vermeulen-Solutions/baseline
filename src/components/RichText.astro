@@ -1,0 +1,8 @@
+---
+import { PortableText } from 'emdash/ui';
+import EditorialImage from './EditorialImage.astro';
+import PhotoGallery from './PhotoGallery.astro';
+interface Props { value: any; }
+const { value } = Astro.props;
+---
+<PortableText value={value} components={{ type: { image: EditorialImage, gallery: PhotoGallery } }} />

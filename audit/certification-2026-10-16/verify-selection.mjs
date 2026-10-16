@@ -1,0 +1,24 @@
+// Read-only downstream standards-selection rehearsal; no client repository is modified.
+import { execFileSync } from 'node:child_process';
+import fs from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+const repository='Vermeulen-Solutions/emdash-site-starter',tag='standards-v0.1.1';
+const api=route=>JSON.parse(execFileSync('gh',['api',`repos/${repository}/${route}`],{encoding:'utf8',maxBuffer:2*1024*1024}));
+const release=api(`releases/tags/${tag}`);
+assert.equal(release.draft,false);assert.equal(release.immutable,true);assert.equal(release.tag_name,tag);
+const ref=api(`git/ref/tags/${tag}`);
+const commit=ref.object.type==='tag'?api(`git/tags/${ref.object.sha}`).object.sha:ref.object.sha;
+assert.match(commit,/^[a-f0-9]{40}$/);assert.equal(commit,release.target_commitish);
+const blob=api(`contents/standards/manifest.json?ref=${commit}`);
+const bytes=Buffer.from(blob.content.replace(/\s/g,''),'base64'),manifest=JSON.parse(bytes);
+assert.equal(manifest.standardsVersion,'0.1.1');assert.equal(manifest.status,'certified-scoped');
+assert.equal(manifest.stableReleaseRef,`refs/tags/${tag}`);
+const local=JSON.parse(await fs.readFile('standards/manifest.json','utf8'));assert.deepEqual(manifest,local);
+const requireProfile=profile=>{assert.equal(manifest.runtimeProfiles[profile]?.status,'certified-scoped',`Unverified or unsupported profile: ${profile}`);};
+requireProfile('node-sqlite');assert.throws(()=>requireProfile('cloudflare-d1-r2'),/Unverified or unsupported/);
+const manifestSHA256=createHash('sha256').update(bytes).digest('hex');
+assert.equal(release.assets.find(asset=>asset.name==='manifest.json')?.digest,'sha256:'+manifestSHA256);
+const result={date:'2026-10-16',repository,tag,commit,manifestGitBlob:blob.sha,manifestSHA256,immutableRelease:true,draft:false,mutableMainUsed:false,acceptedProfile:'node-sqlite',rejectedProfile:'cloudflare-d1-r2',clientRepositoryModified:false,releaseURL:release.html_url};
+await fs.writeFile('audit/certification-2026-10-16/downstream-selection.json',JSON.stringify(result,null,2)+'\n');
+console.log(JSON.stringify(result));

@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "runtime": {
+    "emdash": "1.1.0",
+    "astro": "7.3.5"
+  },
+  "fixture": "Old installed lock plus pre-upgrade consistent SQLite backup; public original and saved pre-upgrade draft both recovered",
+  "workingDatabaseReplaced": false,
+  "keyScope": "Synthetic fixture has no encrypted plugin settings; real snapshot includes matching env/key privately"
+}

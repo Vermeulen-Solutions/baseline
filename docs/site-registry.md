@@ -1,0 +1,9 @@
+# Downstream site registration
+
+At new-site workflow completion, create or update a reviewed entry in an authorized private starter registry, or retain an explicit pending artifact when central access is unavailable. This public template contains no real client registry. Registration never contacts a client or modifies their site.
+
+Prepare private JSON with `siteId` and `ownerTeam` as stable lowercase identifier strings; `repository` as an authorized GitHub HTTPS repository reference; exact `starterCommit`; nullable `starterRelease`, `lastAudit` (YYYY-MM-DD) and `standardsVersion`; `runtimeProfile` (`node-sqlite` or `cloudflare-d1-r2`); and lifecycle `status` (`active`, `paused`, `archived`). Do not include contact details, domains, credentials or arbitrary metadata. An unreleased starter uses null release/standards values, never an invented stable tag.
+
+Run `npm run site:register -- --input <private-json> --registry <authorized-private-file>`. The output is a local proposal to review and land through the central private repository's normal process. A registry inside this checkout is restricted to ignored `.emdash/site-registry.private.json`; the helper verifies Git exclusion before writing. A central file outside this checkout must already be in storage appropriate for private metadata. No automatic GitHub commit/PR occurs.
+
+Without `--registry`, the command records `.emdash/pending-registration/<siteId>.json`, with an explicit pending reason. Use that path when access/configuration is absent; it is not completed central registration. Keep it out of Git and hand it to the authorized maintainer. Repeated identical registrations preserve the file. Repository renames retain `previousRepositories` under the same site ID; archive rather than deleting history. Reopening an archived site requires `--reactivate`. Writes use an exclusive lock and atomic file rename; stale locks after a process failure require verified local recovery.

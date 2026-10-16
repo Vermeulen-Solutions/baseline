@@ -1,0 +1,85 @@
+
+> emdash-site-starter@0.0.3 test:visual
+> node scripts/test-visual.mjs
+
+
+Running 69 tests using 1 worker
+
+(node:3304) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium-390] › tests\visual\behavior.spec.mjs:30:1 › behavior ticker active motion, native stop, pause, RTL seam (2.8s)
+  ok  2 [chromium-390] › tests\visual\behavior.spec.mjs:59:1 › behavior reduced motion and print preserve a single complete list (1.9s)
+  ok  3 [chromium-390] › tests\visual\behavior.spec.mjs:71:1 › behavior no-JS native controls, ticker and gallery fallback (4.0s)
+  ok  4 [chromium-390] › tests\visual\behavior.spec.mjs:103:1 › reflow 320px with text-spacing overrides and native keyboard controls (2.7s)
+  -   5 [chromium-390] › tests\visual\behavior.spec.mjs:119:1 › zoom actual Chromium page zoom at 200% and 400%
+  ok  6 [chromium-390] › tests\visual\captures.spec.mjs:4:38 › capture home (521ms)
+  ok  7 [chromium-390] › tests\visual\captures.spec.mjs:4:38 › capture page (491ms)
+  ok  8 [chromium-390] › tests\visual\captures.spec.mjs:4:38 › capture posts (531ms)
+  ok  9 [chromium-390] › tests\visual\captures.spec.mjs:4:38 › capture post (558ms)
+  ok 10 [chromium-390] › tests\visual\captures.spec.mjs:4:38 › capture category (564ms)
+  ok 11 [chromium-390] › tests\visual\captures.spec.mjs:4:38 › capture tag (541ms)
+  ok 12 [chromium-390] › tests\visual\captures.spec.mjs:4:38 › capture not-found (563ms)
+  ok 13 [chromium-390] › tests\visual\captures.spec.mjs:4:38 › capture styleguide (1.5s)
+  ok 14 [chromium-390] › tests\visual\captures.spec.mjs:10:1 › capture targeted controls and keyboard focus (1.4s)
+  ok 15 [chromium-390] › tests\visual\captures.spec.mjs:18:1 › behavior gallery opens, advances and restores keyboard focus (1.2s)
+  ok 16 [chromium-390] › tests\visual\sensitivity.spec.mjs:5:1 › capture sensitivity control (1.2s)
+  ok 17 [chromium-390] › tests\visual\sensitivity.spec.mjs:13:5 › sensitivity detects shared-token and clean revert (2.0s)
+  ok 18 [chromium-390] › tests\visual\sensitivity.spec.mjs:13:5 › sensitivity detects small-target and clean revert (1.9s)
+  ok 19 [chromium-390] › tests\visual\sensitivity.spec.mjs:32:1 › sensitivity missing baseline fails without writing a golden (1.1s)
+  ok 20 [chromium-390] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing route (253ms)
+  ok 21 [chromium-390] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing setup (5.3s)
+  ok 22 [chromium-390] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing image (987ms)
+  ok 23 [chromium-390] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing font (1.1s)
+(node:19960) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 24 [chromium-768] › tests\visual\behavior.spec.mjs:30:1 › behavior ticker active motion, native stop, pause, RTL seam (1.8s)
+  ok 25 [chromium-768] › tests\visual\behavior.spec.mjs:59:1 › behavior reduced motion and print preserve a single complete list (1.2s)
+  ok 26 [chromium-768] › tests\visual\behavior.spec.mjs:71:1 › behavior no-JS native controls, ticker and gallery fallback (2.9s)
+  -  27 [chromium-768] › tests\visual\behavior.spec.mjs:103:1 › reflow 320px with text-spacing overrides and native keyboard controls
+  -  28 [chromium-768] › tests\visual\behavior.spec.mjs:119:1 › zoom actual Chromium page zoom at 200% and 400%
+  ok 29 [chromium-768] › tests\visual\captures.spec.mjs:4:38 › capture home (532ms)
+  ok 30 [chromium-768] › tests\visual\captures.spec.mjs:4:38 › capture page (586ms)
+  ok 31 [chromium-768] › tests\visual\captures.spec.mjs:4:38 › capture posts (523ms)
+  ok 32 [chromium-768] › tests\visual\captures.spec.mjs:4:38 › capture post (588ms)
+  ok 33 [chromium-768] › tests\visual\captures.spec.mjs:4:38 › capture category (551ms)
+  ok 34 [chromium-768] › tests\visual\captures.spec.mjs:4:38 › capture tag (556ms)
+  ok 35 [chromium-768] › tests\visual\captures.spec.mjs:4:38 › capture not-found (544ms)
+  ok 36 [chromium-768] › tests\visual\captures.spec.mjs:4:38 › capture styleguide (1.7s)
+  ok 37 [chromium-768] › tests\visual\captures.spec.mjs:10:1 › capture targeted controls and keyboard focus (1.7s)
+  ok 38 [chromium-768] › tests\visual\captures.spec.mjs:18:1 › behavior gallery opens, advances and restores keyboard focus (1.3s)
+  ok 39 [chromium-768] › tests\visual\sensitivity.spec.mjs:5:1 › capture sensitivity control (1.2s)
+  -  40 [chromium-768] › tests\visual\sensitivity.spec.mjs:13:5 › sensitivity detects shared-token and clean revert
+  -  41 [chromium-768] › tests\visual\sensitivity.spec.mjs:13:5 › sensitivity detects small-target and clean revert
+  -  42 [chromium-768] › tests\visual\sensitivity.spec.mjs:32:1 › sensitivity missing baseline fails without writing a golden
+  -  43 [chromium-768] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing route
+  -  44 [chromium-768] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing setup
+  -  45 [chromium-768] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing image
+  -  46 [chromium-768] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing font
+(node:11184) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 47 [chromium-1440] › tests\visual\behavior.spec.mjs:30:1 › behavior ticker active motion, native stop, pause, RTL seam (2.1s)
+  ok 48 [chromium-1440] › tests\visual\behavior.spec.mjs:59:1 › behavior reduced motion and print preserve a single complete list (2.0s)
+  ok 49 [chromium-1440] › tests\visual\behavior.spec.mjs:71:1 › behavior no-JS native controls, ticker and gallery fallback (3.9s)
+  -  50 [chromium-1440] › tests\visual\behavior.spec.mjs:103:1 › reflow 320px with text-spacing overrides and native keyboard controls
+  ok 51 [chromium-1440] › tests\visual\behavior.spec.mjs:119:1 › zoom actual Chromium page zoom at 200% and 400% (5.3s)
+  ok 52 [chromium-1440] › tests\visual\captures.spec.mjs:4:38 › capture home (664ms)
+  ok 53 [chromium-1440] › tests\visual\captures.spec.mjs:4:38 › capture page (634ms)
+  ok 54 [chromium-1440] › tests\visual\captures.spec.mjs:4:38 › capture posts (695ms)
+  ok 55 [chromium-1440] › tests\visual\captures.spec.mjs:4:38 › capture post (677ms)
+  ok 56 [chromium-1440] › tests\visual\captures.spec.mjs:4:38 › capture category (668ms)
+  ok 57 [chromium-1440] › tests\visual\captures.spec.mjs:4:38 › capture tag (675ms)
+  ok 58 [chromium-1440] › tests\visual\captures.spec.mjs:4:38 › capture not-found (656ms)
+  ok 59 [chromium-1440] › tests\visual\captures.spec.mjs:4:38 › capture styleguide (2.4s)
+  ok 60 [chromium-1440] › tests\visual\captures.spec.mjs:10:1 › capture targeted controls and keyboard focus (1.6s)
+  ok 61 [chromium-1440] › tests\visual\captures.spec.mjs:18:1 › behavior gallery opens, advances and restores keyboard focus (1.3s)
+  ok 62 [chromium-1440] › tests\visual\sensitivity.spec.mjs:5:1 › capture sensitivity control (1.2s)
+  -  63 [chromium-1440] › tests\visual\sensitivity.spec.mjs:13:5 › sensitivity detects shared-token and clean revert
+  -  64 [chromium-1440] › tests\visual\sensitivity.spec.mjs:13:5 › sensitivity detects small-target and clean revert
+  -  65 [chromium-1440] › tests\visual\sensitivity.spec.mjs:32:1 › sensitivity missing baseline fails without writing a golden
+  -  66 [chromium-1440] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing route
+  -  67 [chromium-1440] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing setup
+  -  68 [chromium-1440] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing image
+  -  69 [chromium-1440] › tests\visual\sensitivity.spec.mjs:40:58 › sensitivity readiness rejects missing font
+
+  18 skipped
+  51 passed (2.5m)

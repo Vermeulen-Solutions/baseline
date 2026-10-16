@@ -1,0 +1,98 @@
+{
+  "reviewDate": "2026-10-15",
+  "issues": [
+    {
+      "number": 1,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/1",
+      "originalUpdatedAt": "2026-10-15T12:55:12Z",
+      "verifiedUpdatedAt": "2026-10-15T16:34:31Z",
+      "bodySha256": "f2392b76cff0299a368fc2f4e7409530e8f3f6085e28195ea53f8e7c399ccce7",
+      "titlePreserved": true,
+      "commentsPreserved": true,
+      "bodyVerified": true
+    },
+    {
+      "number": 2,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/2",
+      "originalUpdatedAt": "2026-10-15T12:54:13Z",
+      "verifiedUpdatedAt": "2026-10-15T16:34:35Z",
+      "bodySha256": "2763407b62f575e134e087ec1f4757950094de2ab54407e230183f4e4bbb1c42",
+      "titlePreserved": true,
+      "commentsPreserved": true,
+      "bodyVerified": true
+    },
+    {
+      "number": 3,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/3",
+      "originalUpdatedAt": "2026-10-15T12:56:04Z",
+      "verifiedUpdatedAt": "2026-10-15T16:43:14Z",
+      "bodySha256": "8203547dce313df0c4b29fd61c2887b4e7ed631394331872df4e98d82b3120c7",
+      "titlePreserved": true,
+      "commentsPreserved": true,
+      "bodyVerified": true
+    },
+    {
+      "number": 4,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/4",
+      "originalUpdatedAt": "2026-10-15T12:56:55Z",
+      "verifiedUpdatedAt": "2026-10-15T16:35:00Z",
+      "bodySha256": "c81e569dc4475515d30d8c54d56f58615716f0ec489be47dbf92b451b050c997",
+      "titlePreserved": true,
+      "commentsPreserved": true,
+      "bodyVerified": true
+    },
+    {
+      "number": 5,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/5",
+      "originalUpdatedAt": "2026-10-15T12:47:03Z",
+      "verifiedUpdatedAt": "2026-10-15T17:06:33Z",
+      "bodySha256": "f25aa3bc1b7d541c059b50bd54af728ca6dc4e2f599050188b92a8d2a8852e96",
+      "titlePreserved": true,
+      "commentsPreserved": true,
+      "bodyVerified": true
+    },
+    {
+      "number": 6,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/6",
+      "originalUpdatedAt": "2026-10-15T12:47:24Z",
+      "verifiedUpdatedAt": "2026-10-15T16:35:08Z",
+      "bodySha256": "2cab0a647e0b8a3cbd6def4dab82cbbcf2e766a353fccba254111c31e4c1bc87",
+      "titlePreserved": true,
+      "commentsPreserved": true,
+      "bodyVerified": true
+    },
+    {
+      "number": 7,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/7",
+      "originalUpdatedAt": "2026-10-15T12:47:38Z",
+      "verifiedUpdatedAt": "2026-10-15T16:36:30Z",
+      "bodySha256": "d3b9ef1c013d152ba2bf2124be9c8d97ed5ab48569eedf34be11591bf8d2c7dd",
+      "titlePreserved": true,
+      "commentsPreserved": true,
+      "bodyVerified": true
+    },
+    {
+      "number": 8,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/8",
+      "originalUpdatedAt": "2026-10-15T12:47:55Z",
+      "verifiedUpdatedAt": "2026-10-15T16:36:33Z",
+      "bodySha256": "e3a54d1a414459e209d95baf0746a049eb3d94d5b645d522d1ea808df9177693",
+      "titlePreserved": true,
+      "commentsPreserved": true,
+      "bodyVerified": true
+    },
+    {
+      "number": 9,
+      "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/9",
+      "originalUpdatedAt": "2026-10-15T12:48:12Z",
+      "verifiedUpdatedAt": "2026-10-15T16:36:37Z",
+      "bodySha256": "289c3bd6089d31c7c18a2cbdabf156eedde2057d724149c5e1dd23bf5d4d0c7f",
+      "titlePreserved": true,
+      "commentsPreserved": true,
+      "bodyVerified": true
+    }
+  ],
+  "implementationChanges": false,
+  "codeTestsRun": false,
+  "followUp": "Astro 7.4 review and issue #5 route-discovery correction; implementation progress is tracked in ../phase-1/README.md. The implementationChanges/codeTestsRun fields describe the original review stage."
+}

@@ -1,0 +1,710 @@
+[
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-390",
+    "name": "seam-geometry",
+    "data": {
+      "seam": [
+        {
+          "phase": 0,
+          "width": 525.703125,
+          "duplicateWidth": 525.703125,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": 0,
+          "coverageEnd": 695.71875,
+          "visibleItems": 3
+        },
+        {
+          "phase": 0.5,
+          "width": 525.703125,
+          "duplicateWidth": 525.703125,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -262.8515625,
+          "coverageEnd": 432.8671875,
+          "visibleItems": 3
+        },
+        {
+          "phase": 0.999,
+          "width": 525.703125,
+          "duplicateWidth": 525.703125,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -525.1774291992188,
+          "coverageEnd": 170.54132080078125,
+          "visibleItems": 3
+        }
+      ],
+      "rtlSeam": [
+        {
+          "phase": 0,
+          "width": 355.6875,
+          "duplicateWidth": 355.6875,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -355.6875,
+          "coverageEnd": 0,
+          "visibleItems": 1
+        },
+        {
+          "phase": 0.5,
+          "width": 355.6875,
+          "duplicateWidth": 355.6875,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -177.84375,
+          "coverageEnd": 177.84375,
+          "visibleItems": 2
+        },
+        {
+          "phase": 0.999,
+          "width": 355.6875,
+          "duplicateWidth": 355.6875,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -0.35565185546875,
+          "coverageEnd": 355.33184814453125,
+          "visibleItems": 1
+        }
+      ]
+    }
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-390",
+    "name": "seam-geometry",
+    "data": {
+      "seam": [
+        {
+          "phase": 0,
+          "width": 525.703125,
+          "duplicateWidth": 525.703125,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": 0,
+          "coverageEnd": 695.71875,
+          "visibleItems": 3
+        },
+        {
+          "phase": 0.5,
+          "width": 525.703125,
+          "duplicateWidth": 525.703125,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -262.8515625,
+          "coverageEnd": 432.8671875,
+          "visibleItems": 3
+        },
+        {
+          "phase": 0.999,
+          "width": 525.703125,
+          "duplicateWidth": 525.703125,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -525.1774291992188,
+          "coverageEnd": 170.54132080078125,
+          "visibleItems": 3
+        }
+      ],
+      "rtlSeam": [
+        {
+          "phase": 0,
+          "width": 355.6875,
+          "duplicateWidth": 355.6875,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -355.6875,
+          "coverageEnd": 0,
+          "visibleItems": 1
+        },
+        {
+          "phase": 0.5,
+          "width": 355.6875,
+          "duplicateWidth": 355.6875,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -177.84375,
+          "coverageEnd": 177.84375,
+          "visibleItems": 2
+        },
+        {
+          "phase": 0.999,
+          "width": 355.6875,
+          "duplicateWidth": 355.6875,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -0.35565185546875,
+          "coverageEnd": 355.33184814453125,
+          "visibleItems": 1
+        }
+      ]
+    }
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-390",
+    "name": "seam-geometry",
+    "data": {
+      "seam": [
+        {
+          "phase": 0,
+          "width": 525.703125,
+          "duplicateWidth": 525.703125,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": 0,
+          "coverageEnd": 695.71875,
+          "visibleItems": 3
+        },
+        {
+          "phase": 0.5,
+          "width": 525.703125,
+          "duplicateWidth": 525.703125,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -262.8515625,
+          "coverageEnd": 432.8671875,
+          "visibleItems": 3
+        },
+        {
+          "phase": 0.999,
+          "width": 525.703125,
+          "duplicateWidth": 525.703125,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -525.1774291992188,
+          "coverageEnd": 170.54132080078125,
+          "visibleItems": 3
+        }
+      ],
+      "rtlSeam": [
+        {
+          "phase": 0,
+          "width": 355.6875,
+          "duplicateWidth": 355.6875,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -355.6875,
+          "coverageEnd": 0,
+          "visibleItems": 1
+        },
+        {
+          "phase": 0.5,
+          "width": 355.6875,
+          "duplicateWidth": 355.6875,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -177.84375,
+          "coverageEnd": 177.84375,
+          "visibleItems": 2
+        },
+        {
+          "phase": 0.999,
+          "width": 355.6875,
+          "duplicateWidth": 355.6875,
+          "seam": 0,
+          "viewport": 355.6875,
+          "coverageStart": -0.35565185546875,
+          "coverageEnd": 355.33184814453125,
+          "visibleItems": 1
+        }
+      ]
+    }
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-768",
+    "name": "seam-geometry",
+    "data": {
+      "seam": [
+        {
+          "phase": 0,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": 0,
+          "coverageEnd": 721.09375,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.5,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -360.546875,
+          "coverageEnd": 360.546875,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.999,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -720.3726806640625,
+          "coverageEnd": 0.7210693359375,
+          "visibleItems": 4
+        }
+      ],
+      "rtlSeam": [
+        {
+          "phase": 0,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -721.09375,
+          "coverageEnd": 0,
+          "visibleItems": 1
+        },
+        {
+          "phase": 0.5,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -360.546875,
+          "coverageEnd": 360.546875,
+          "visibleItems": 2
+        },
+        {
+          "phase": 0.999,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -0.7210693359375,
+          "coverageEnd": 720.3726806640625,
+          "visibleItems": 1
+        }
+      ]
+    }
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-768",
+    "name": "seam-geometry",
+    "data": {
+      "seam": [
+        {
+          "phase": 0,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": 0,
+          "coverageEnd": 721.09375,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.5,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -360.546875,
+          "coverageEnd": 360.546875,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.999,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -720.3726806640625,
+          "coverageEnd": 0.7210693359375,
+          "visibleItems": 4
+        }
+      ],
+      "rtlSeam": [
+        {
+          "phase": 0,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -721.09375,
+          "coverageEnd": 0,
+          "visibleItems": 1
+        },
+        {
+          "phase": 0.5,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -360.546875,
+          "coverageEnd": 360.546875,
+          "visibleItems": 2
+        },
+        {
+          "phase": 0.999,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -0.7210693359375,
+          "coverageEnd": 720.3726806640625,
+          "visibleItems": 1
+        }
+      ]
+    }
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-768",
+    "name": "seam-geometry",
+    "data": {
+      "seam": [
+        {
+          "phase": 0,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": 0,
+          "coverageEnd": 721.09375,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.5,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -360.546875,
+          "coverageEnd": 360.546875,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.999,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -720.3726806640625,
+          "coverageEnd": 0.7210693359375,
+          "visibleItems": 4
+        }
+      ],
+      "rtlSeam": [
+        {
+          "phase": 0,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -721.09375,
+          "coverageEnd": 0,
+          "visibleItems": 1
+        },
+        {
+          "phase": 0.5,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -360.546875,
+          "coverageEnd": 360.546875,
+          "visibleItems": 2
+        },
+        {
+          "phase": 0.999,
+          "width": 721.09375,
+          "duplicateWidth": 721.09375,
+          "seam": 0,
+          "viewport": 721.09375,
+          "coverageStart": -0.7210693359375,
+          "coverageEnd": 720.3726806640625,
+          "visibleItems": 1
+        }
+      ]
+    }
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-1440",
+    "name": "seam-geometry",
+    "data": {
+      "seam": [
+        {
+          "phase": 0,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": 0,
+          "coverageEnd": 1344,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.5,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -672,
+          "coverageEnd": 672,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.999,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -1342.6561279296875,
+          "coverageEnd": 1.3438720703125,
+          "visibleItems": 4
+        }
+      ],
+      "rtlSeam": [
+        {
+          "phase": 0,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -1344,
+          "coverageEnd": 0,
+          "visibleItems": 1
+        },
+        {
+          "phase": 0.5,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -672,
+          "coverageEnd": 672,
+          "visibleItems": 2
+        },
+        {
+          "phase": 0.999,
+          "width": 1344.0001220703125,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -1.3438720703125,
+          "coverageEnd": 1342.65625,
+          "visibleItems": 1
+        }
+      ]
+    }
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-1440",
+    "name": "actual-page-zoom",
+    "data": [
+      {
+        "factor": 2,
+        "innerWidth": 640,
+        "dpr": 2,
+        "client": 640,
+        "scroll": 640,
+        "outliers": []
+      },
+      {
+        "factor": 4,
+        "innerWidth": 320,
+        "dpr": 4,
+        "client": 320,
+        "scroll": 320,
+        "outliers": []
+      }
+    ]
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-1440",
+    "name": "seam-geometry",
+    "data": {
+      "seam": [
+        {
+          "phase": 0,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": 0,
+          "coverageEnd": 1344,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.5,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -672,
+          "coverageEnd": 672,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.999,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -1342.6561279296875,
+          "coverageEnd": 1.3438720703125,
+          "visibleItems": 4
+        }
+      ],
+      "rtlSeam": [
+        {
+          "phase": 0,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -1344,
+          "coverageEnd": 0,
+          "visibleItems": 1
+        },
+        {
+          "phase": 0.5,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -672,
+          "coverageEnd": 672,
+          "visibleItems": 2
+        },
+        {
+          "phase": 0.999,
+          "width": 1344.0001220703125,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -1.3438720703125,
+          "coverageEnd": 1342.65625,
+          "visibleItems": 1
+        }
+      ]
+    }
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-1440",
+    "name": "actual-page-zoom",
+    "data": [
+      {
+        "factor": 2,
+        "innerWidth": 640,
+        "dpr": 2,
+        "client": 640,
+        "scroll": 640,
+        "outliers": []
+      },
+      {
+        "factor": 4,
+        "innerWidth": 320,
+        "dpr": 4,
+        "client": 320,
+        "scroll": 320,
+        "outliers": []
+      }
+    ]
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-1440",
+    "name": "seam-geometry",
+    "data": {
+      "seam": [
+        {
+          "phase": 0,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": 0,
+          "coverageEnd": 1344,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.5,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -672,
+          "coverageEnd": 672,
+          "visibleItems": 4
+        },
+        {
+          "phase": 0.999,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -1342.6561279296875,
+          "coverageEnd": 1.3438720703125,
+          "visibleItems": 4
+        }
+      ],
+      "rtlSeam": [
+        {
+          "phase": 0,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -1344,
+          "coverageEnd": 0,
+          "visibleItems": 1
+        },
+        {
+          "phase": 0.5,
+          "width": 1344,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -672,
+          "coverageEnd": 672,
+          "visibleItems": 2
+        },
+        {
+          "phase": 0.999,
+          "width": 1344.0001220703125,
+          "duplicateWidth": 1344,
+          "seam": 0,
+          "viewport": 1344,
+          "coverageStart": -1.3438720703125,
+          "coverageEnd": 1342.65625,
+          "visibleItems": 1
+        }
+      ]
+    }
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-1440",
+    "name": "actual-page-zoom",
+    "data": [
+      {
+        "factor": 2,
+        "innerWidth": 640,
+        "dpr": 2,
+        "client": 640,
+        "scroll": 640,
+        "outliers": []
+      },
+      {
+        "factor": 4,
+        "innerWidth": 320,
+        "dpr": 4,
+        "client": 320,
+        "scroll": 320,
+        "outliers": []
+      }
+    ]
+  }
+]

@@ -1,0 +1,395 @@
+{
+  "certifiedAt": "2026-10-16",
+  "standardsVersion": "0.1.1",
+  "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
+  "hudMilestone": "ac92dacb3d2a6a6d632b922d30929091da5e84e3",
+  "nodePolicyCommit": "6424ab5fcff3bf53f91c0b5fe097e55e3ae159fe",
+  "sourceProof": {
+    "runtimeSourceCommit": "31c72ec04838ddcbc0d3b82d9fc0f93f63dcf0a3",
+    "browserInputCommit": "ac92dacb3d2a6a6d632b922d30929091da5e84e3",
+    "browserSourceTree": "1afbc3990536e53e63eceeb12444c5ae275d67e1",
+    "currentSourceTree": "1afbc3990536e53e63eceeb12444c5ae275d67e1",
+    "dependencyGraphUnchangedExceptRootEngine": true,
+    "dependencyGraphSHA256": "6a3ffdadf0fc6e90aed75d05e4a9392ef842b502e7534dfd154eaca26889c4eb"
+  },
+  "cleanInstall": {
+    "checkout": "certification-minimum",
+    "node": "22.22.2",
+    "command": "npm ci --engine-strict --no-audit --no-fund",
+    "exitCode": 0,
+    "engineWarnings": 0,
+    "privateDataCopied": false
+  },
+  "runtimes": {
+    "floor": {
+      "node": "22.22.2",
+      "platform": "win32",
+      "seconds": 23.667,
+      "under60Seconds": true,
+      "excludes": "GitHub checkout/setup/npm ci/queue time; actual Actions execution not claimed",
+      "browserTestsRun": false,
+      "receipts": [
+        {
+          "name": "art-direction",
+          "seconds": 0.443,
+          "exitCode": 0
+        },
+        {
+          "name": "syntax-lint",
+          "seconds": 1.765,
+          "exitCode": 0
+        },
+        {
+          "name": "schema-budget",
+          "seconds": 0.119,
+          "exitCode": 0
+        },
+        {
+          "name": "unit-tests",
+          "seconds": 2.308,
+          "exitCode": 0
+        },
+        {
+          "name": "normal-build",
+          "seconds": 18.958,
+          "exitCode": 0
+        },
+        {
+          "name": "release-profile",
+          "seconds": 0.074,
+          "exitCode": 0
+        }
+      ]
+    },
+    "ci": {
+      "node": "22.23.3",
+      "platform": "win32",
+      "seconds": 21.593,
+      "under60Seconds": true,
+      "excludes": "GitHub checkout/setup/npm ci/queue time; actual Actions execution not claimed",
+      "browserTestsRun": false,
+      "receipts": [
+        {
+          "name": "art-direction",
+          "seconds": 0.374,
+          "exitCode": 0
+        },
+        {
+          "name": "syntax-lint",
+          "seconds": 2.348,
+          "exitCode": 0
+        },
+        {
+          "name": "schema-budget",
+          "seconds": 0.13,
+          "exitCode": 0
+        },
+        {
+          "name": "unit-tests",
+          "seconds": 3.236,
+          "exitCode": 0
+        },
+        {
+          "name": "normal-build",
+          "seconds": 15.415,
+          "exitCode": 0
+        },
+        {
+          "name": "release-profile",
+          "seconds": 0.088,
+          "exitCode": 0
+        }
+      ]
+    },
+    "node24": {
+      "node": "24.21.0",
+      "platform": "win32",
+      "seconds": 31.265,
+      "under60Seconds": true,
+      "excludes": "GitHub checkout/setup/npm ci/queue time; actual Actions execution not claimed",
+      "browserTestsRun": false,
+      "receipts": [
+        {
+          "name": "art-direction",
+          "seconds": 0.28,
+          "exitCode": 0
+        },
+        {
+          "name": "syntax-lint",
+          "seconds": 1.092,
+          "exitCode": 0
+        },
+        {
+          "name": "schema-budget",
+          "seconds": 0.078,
+          "exitCode": 0
+        },
+        {
+          "name": "unit-tests",
+          "seconds": 1.946,
+          "exitCode": 0
+        },
+        {
+          "name": "normal-build",
+          "seconds": 27.785,
+          "exitCode": 0
+        },
+        {
+          "name": "release-profile",
+          "seconds": 0.083,
+          "exitCode": 0
+        }
+      ]
+    }
+  },
+  "unitTestsPerRuntime": 35,
+  "typechecks": {
+    "minimum": {
+      "files": 41,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    },
+    "node24": {
+      "files": 41,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    }
+  },
+  "physicalSchema": [
+    {
+      "table": "ec_pages",
+      "columns": 17
+    },
+    {
+      "table": "ec_posts",
+      "columns": 19
+    }
+  ],
+  "visual": {
+    "startTime": "2026-10-16T07:50:47.892Z",
+    "duration": 147881.283,
+    "expected": 51,
+    "skipped": 18,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "hud": {
+    "startTime": "2026-10-16T07:50:58.475Z",
+    "duration": 65267.151,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "sensitivity": {
+    "startTime": "2026-10-16T08:09:02.598Z",
+    "duration": 70013.597,
+    "expected": 10,
+    "skipped": 14,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "baselines": {
+    "count": 51,
+    "allHashesUnchanged": true,
+    "updated": false
+  },
+  "cms": {
+    "node": "24.21.0",
+    "workingDatabaseCopied": false,
+    "rootKind": "clean-clone",
+    "route": "/certified-components-1792137859209",
+    "checks": [
+      {
+        "name": "registered-schema",
+        "collections": [
+          {
+            "slug": "pages",
+            "fields": [
+              "title",
+              "content"
+            ]
+          },
+          {
+            "slug": "posts",
+            "fields": [
+              "title",
+              "featured_image",
+              "content",
+              "excerpt"
+            ]
+          }
+        ]
+      },
+      {
+        "name": "public-canonical-table-gallery",
+        "passed": true,
+        "images": 2,
+        "tableHeaderAndBody": true,
+        "captionOrder": true
+      },
+      {
+        "name": "actual-inline-edit-save-reload-publish",
+        "passed": true,
+        "tableUnchanged": true,
+        "gallerySemanticDataUnchanged": true,
+        "galleryOuterKeyRegenerated": true,
+        "tableEditMode": "read-only placeholder; admin owns table editing"
+      },
+      {
+        "name": "built-node-cms-content",
+        "passed": true,
+        "styleguideStatus": 404,
+        "hud": false
+      }
+    ],
+    "schemaBudget": "[\n  {\n    \"table\": \"ec_pages\",\n    \"columns\": 17\n  },\n  {\n    \"table\": \"ec_posts\",\n    \"columns\": 19\n  }\n]\n",
+    "locales": {
+      "status": "not-applicable",
+      "reason": "Starter has no i18n configuration or translated collection fixture; multilingual readiness not certified."
+    },
+    "caching": {
+      "status": "not-applicable",
+      "reason": "Astro route caching is disabled; shared-query hint coverage requires its own opt-in review."
+    },
+    "passed": true,
+    "serverStopped": true
+  },
+  "nativeImages": [
+    {
+      "label": "development",
+      "candidates": [
+        {
+          "width": 480,
+          "height": 320,
+          "format": "webp"
+        },
+        {
+          "width": 800,
+          "height": 533,
+          "format": "webp"
+        },
+        {
+          "width": 1400,
+          "height": 933,
+          "format": "webp"
+        }
+      ],
+      "rejectedRemote": 403
+    },
+    {
+      "label": "built-node-new-storage-image",
+      "candidates": [
+        {
+          "width": 480,
+          "height": 320,
+          "format": "webp"
+        },
+        {
+          "width": 800,
+          "height": 533,
+          "format": "webp"
+        },
+        {
+          "width": 1400,
+          "height": 933,
+          "format": "webp"
+        },
+        {
+          "width": 480,
+          "height": 320,
+          "format": "webp"
+        },
+        {
+          "width": 800,
+          "height": 533,
+          "format": "webp"
+        },
+        {
+          "width": 1400,
+          "height": 933,
+          "format": "webp"
+        }
+      ],
+      "rejectedRemote": 403
+    }
+  ],
+  "productionIsolation": {
+    "dev": {
+      "status": 200,
+      "specimens": true,
+      "images": 17,
+      "fakeEditBindings": false
+    },
+    "production": {
+      "GET": 404,
+      "GET?fixtures=1": 404,
+      "HEAD": 404,
+      "HEAD?fixtures=1": 404,
+      "publicStatus": 200,
+      "zodResolution": "Dependency-local validators bundled; no bare Zod imports in emitted server modules",
+      "HUDClientIsolation": "All emitted client JS/CSS scanned: G/O/P identifiers, reference loading and ownership adapter diagnostics absent; empty script stubs allowed"
+    },
+    "isolation": "Fresh temporary root; no working database, media, env file or credentials copied.",
+    "fixtures": {
+      "status": 200,
+      "fixtureVersion": 2,
+      "tickerInstances": 2,
+      "emptyTickerOmitted": true,
+      "releaseRejected": true,
+      "HUD": false,
+      "images": "all successful"
+    }
+  },
+  "reusedEvidence": {
+    "upgradeAndRestore": "audit/phase-2/restore-check.json",
+    "fieldAndRichText": "audit/phase-2/verification.json",
+    "forms": "audit/phase-2/forms-integration.json",
+    "basis": "Same EmDash 1.3.0 migration target and Node 24.21.0; no database/storage/schema migration changes in this certification. Current clean setup, public/inline content and media checks rerun. Historical restore/provider limits remain explicit; no new production restore claimed."
+  },
+  "skills": {
+    "stagedRef": "c95804553d01deba84f2dfc0015e5a63cb4b90a2",
+    "applied": false,
+    "preservedLocalEdits": [
+      {
+        "path": ".agents/skills/building-emdash-site/SKILL.md",
+        "sha256": "05ed0d6a90c221ac4ded5c8e456add9667d018b9dfc0b524d64b985d3d9c369d",
+        "unchanged": true
+      },
+      {
+        "path": ".agents/skills/building-emdash-site/references/querying-and-rendering.md",
+        "sha256": "93c685ae965f8f95dd3e83b3f6709240ecea9f72d469323e40e6ff3ba1b3ea11",
+        "unchanged": true
+      },
+      {
+        "path": ".agents/skills/emdash-content-modeling/SKILL.md",
+        "sha256": "f56b4013e5995c1ca66729b6c31b590535cd40c390c98d1c6ede58ea83cbd352",
+        "unchanged": true
+      },
+      {
+        "path": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+        "sha256": "773b9ed335c06de565e10cd4003b3b64706ee46945a719444ea94b1385e72057",
+        "unchanged": true
+      }
+    ],
+    "decision": "Retain checked-in snapshots; reviewed staged locale/Cloudflare/plugin documentation changes. Pending refresh is separate from runtime certification."
+  },
+  "limits": [
+    "Windows Chromium only; no observed GitHub/Linux runtime receipt",
+    "Workers/D1/R2 and live providers unverified",
+    "Multilingual/cache scopes not enabled",
+    "Gallery outer block key regenerated by EmDash inline converter",
+    "Admin table/gallery editing and all plugin blocks not certified",
+    "Public history/license/community launch pending Issue #11"
+  ],
+  "publicationReceipt": "release-publication.json (written after the scoped private standards release is published and verified)",
+  "patch": {
+    "supersedes": "0.1.0",
+    "reason": "Exclude tag pushes from fast branch CI; immutable original retained",
+    "runtimeInputsChanged": false,
+    "observedBranchCI": "ci-branch-0.1.0.json",
+    "observedTagFailure": "ci-tag-0.1.0.json"
+  }
+}

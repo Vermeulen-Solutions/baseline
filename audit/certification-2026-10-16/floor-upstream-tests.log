@@ -1,0 +1,23 @@
+TAP version 13
+# Subtest: Astro and adapter updates surface independently of unchanged EmDash; outages remain unverified and read-only
+ok 1 - Astro and adapter updates surface independently of unchanged EmDash; outages remain unverified and read-only
+  ---
+  duration_ms: 365.999
+  type: 'test'
+  ...
+# warning: in the working copy of '.emdash/site-registry.private.json', LF will be replaced by CRLF the next time Git touches it
+# Subtest: private site registry is idempotent, preserves rename/archive history and records inaccessible central registration
+ok 2 - private site registry is idempotent, preserves rename/archive history and records inaccessible central registration
+  ---
+  duration_ms: 1256.573
+  type: 'test'
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 2
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1786.154

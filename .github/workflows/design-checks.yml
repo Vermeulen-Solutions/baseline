@@ -1,0 +1,36 @@
+name: Design and build checks
+on:
+  pull_request:
+  push:
+    branches:
+      - '**'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.3'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Check art direction for changed visual source
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PUSH_BASE: ${{ github.event.before }}
+        shell: bash
+        run: |
+          base="${PR_BASE:-$PUSH_BASE}"
+          if [[ -z "$base" || "$base" =~ ^0+$ ]]; then
+            base=$(git hash-object -t tree /dev/null)
+          fi
+          npm run check:art-direction -- --base "$base"
+      - run: npm run lint
+      - run: npm run check:schema-budget
+      - run: node --test tests/*.test.mjs
+      - run: npm run build

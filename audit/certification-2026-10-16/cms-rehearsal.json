@@ -1,0 +1,61 @@
+{
+  "node": "24.21.0",
+  "workingDatabaseCopied": false,
+  "rootKind": "clean-clone",
+  "route": "/certified-components-1792137859209",
+  "checks": [
+    {
+      "name": "registered-schema",
+      "collections": [
+        {
+          "slug": "pages",
+          "fields": [
+            "title",
+            "content"
+          ]
+        },
+        {
+          "slug": "posts",
+          "fields": [
+            "title",
+            "featured_image",
+            "content",
+            "excerpt"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "public-canonical-table-gallery",
+      "passed": true,
+      "images": 2,
+      "tableHeaderAndBody": true,
+      "captionOrder": true
+    },
+    {
+      "name": "actual-inline-edit-save-reload-publish",
+      "passed": true,
+      "tableUnchanged": true,
+      "gallerySemanticDataUnchanged": true,
+      "galleryOuterKeyRegenerated": true,
+      "tableEditMode": "read-only placeholder; admin owns table editing"
+    },
+    {
+      "name": "built-node-cms-content",
+      "passed": true,
+      "styleguideStatus": 404,
+      "hud": false
+    }
+  ],
+  "schemaBudget": "[\n  {\n    \"table\": \"ec_pages\",\n    \"columns\": 17\n  },\n  {\n    \"table\": \"ec_posts\",\n    \"columns\": 19\n  }\n]\n",
+  "locales": {
+    "status": "not-applicable",
+    "reason": "Starter has no i18n configuration or translated collection fixture; multilingual readiness not certified."
+  },
+  "caching": {
+    "status": "not-applicable",
+    "reason": "Astro route caching is disabled; shared-query hint coverage requires its own opt-in review."
+  },
+  "passed": true,
+  "serverStopped": true
+}

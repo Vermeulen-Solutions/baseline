@@ -1,0 +1,10 @@
+{
+  "formatVersion": 1,
+  "status": "redacted-historical-summary",
+  "originalReviewedAt": "2026-10-02",
+  "redactedAt": "2026-10-16",
+  "scope": "Historical gallery checks; real routes, editorial slugs and client counts removed.",
+  "reproducible": false,
+  "currentCloudflareCertification": "unverified",
+  "currentVerification": "docs/gallery-workflow.md"
+}

@@ -1,0 +1,89 @@
+art-direction
+Art direction gate: no visual source changes.
+
+syntax-lint
+Syntax checked 50 JavaScript modules.
+
+schema-budget
+Schema budget not measured: local SQLite database not found at /workspace/starter\.emdash\checks\certification-clean\data.db. Run this check after EmDash setup and before a schema migration or D1 release.
+
+unit-tests
+✔ baseline separates declared/locked/installed versions without writing or claiming certification (124.6702ms)
+✔ pinned DESIGN.md bridge validates the neutral specimen and rejects typography/reference losses (73.8765ms)
+✔ infrastructure deletions require explicit approval of exact previous bytes (3.4227ms)
+✔ gate accepts real standard and custom directions, including CRLF (4.3603ms)
+✔ gate rejects absent, duplicate, placeholder, or fenced-only records (0.4388ms)
+✔ gate requires each physics field inside its block and two or three bans (0.265ms)
+✔ infrastructure exceptions are exact, reasoned, hash-bound, and LF/CRLF portable (0.3937ms)
+✔ CLI catches untracked visual work, accepts a record, and expires changed infrastructure exceptions (1488.5306ms)
+✔ fresh state never overwrites source tokens and unit scaling preserves baseline (0.3626ms)
+✔ preview and export reproduce every changed type, spacing, filter, color and pattern token (0.2799ms)
+✔ surface source restores baseline, solid clears a pattern, dark-safe ink follows text (0.2276ms)
+(node:5968) ExperimentalWarning: stripTypeScriptTypes is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ ownership adapter accepts actual installed field/entry proxies and fails unknown formats closed (149.7012ms)
+✔ local reference inspection handles actual PNG/JPEG/WebP headers and rejects decompression bounds before decode (4.7685ms)
+✔ native/legacy dates agree and impossible or future birthdays are rejected (3.3175ms)
+✔ recovery is bounded, allowlisted, expires and is consumed once per form (1.9721ms)
+✔ photoAspectRatio safely handles valid, missing, and invalid dimensions (1.1248ms)
+✔ justifiedFlexStyle generates correct CSS flexbox layout properties (0.281ms)
+✔ pure CSS flexbox simulation preserves equal row height across mixed aspect ratios (0.3672ms)
+✔ large albums with 400+ mixed items compute aspect ratios safely (0.683ms)
+✔ Astro and adapter updates surface independently of unchanged EmDash; outages remain unverified and read-only (221.4748ms)
+warning: in the working copy of '.emdash/site-registry.private.json', LF will be replaced by CRLF the next time Git touches it
+✔ private site registry is idempotent, preserves rename/archive history and records inaccessible central registration (1106.0831ms)
+✔ partner records honor CMS order/activity and actual storage keys without record caps (1.796ms)
+✔ public links reject executable protocols, protocol-relative hosts and obfuscated URLs (0.4787ms)
+✔ native editor and seeded media shapes preserve ordered duplicates and context (2.9019ms)
+✔ storage keys remain distinct from media IDs and can use the public media origin (0.5087ms)
+✔ malformed input and unsafe full-image links do not become substitute images (0.6995ms)
+✔ galleryJsonLd generates valid Schema.org ImageGallery structured data (0.8581ms)
+✔ release gate rejects missing/fixture/unknown profiles and refuses a fixture command despite stale clean output (141.3209ms)
+✔ measures physical collection columns including generated columns (22.783ms)
+✔ accepts exactly 50 columns and rejects a collection above budget (0.7025ms)
+✔ skill staging detects same-commit drift, extras and missing skills; failed apply restores originals (220.8672ms)
+✔ a killed skill apply leaves a recoverable journal and binary corruption is detected (177.7651ms)
+✔ skill apply refuses post-review edits and symlinks; managed distribution includes content modeling (22.3126ms)
+✔ visual updates require the explicit local wrapper flag and are rejected in CI (1191.7638ms)
+✔ visual wrapper cancellation reaches graceful child handlers on Windows (76.0185ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1858.8133
+
+normal-build
+09:49:45 [@astrojs/node] Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+09:49:47 [vite] [optimizer] bundling dependencies...
+09:49:52 [types] Generated 6.73s
+09:49:52 [build] output: "server"
+09:49:52 [build] mode: "server"
+09:49:52 [build] directory: /workspace/starter\.emdash\checks\certification-clean\dist\
+09:49:52 [build] adapter: @astrojs/node
+09:49:52 [build] Collecting build info...
+09:49:52 [build] ✓ Completed in 7.21s.
+09:49:52 [build] Building server entrypoints...
+09:49:53 [assets] Copying fonts (16 files)...
+09:49:54 [vite] ✓ built in 1.65s
+09:49:58 [vite] ✓ built in 4.06s
+09:50:01 [WARN] [vite] [plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+09:50:01 [vite] ✓ built in 3.31s
+09:50:02 [build] Rearranging server assets...
+09:50:02 [build] ✓ Completed in 9.37s.
+09:50:02 [emdash] Build complete
+09:50:02 [build] Server built in 16.58s
+09:50:02 [build] Complete!
+
+release-profile
+Release artifact profile verified. Also verify the actual production route via check:dev-tools.

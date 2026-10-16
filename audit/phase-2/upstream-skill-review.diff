@@ -1,0 +1,56 @@
+diff --git a/.agents/skills/building-emdash-site/SKILL.md b/.emdash/skill-sync/e13fa39d-955f-421a-ba9c-c69693b95eb3/incoming/building-emdash-site/SKILL.md
+index 6c3cf13..f7e87c4 100644
+--- a/.agents/skills/building-emdash-site/SKILL.md
++++ b/.emdash/skill-sync/e13fa39d-955f-421a-ba9c-c69693b95eb3/incoming/building-emdash-site/SKILL.md
+@@ -13,7 +13,7 @@ These are the things that silently break sites. Know them before you start.
+ 
+ 1. **Image fields are objects, not strings.** `post.data.featured_image` is `{ id, src, alt }`. Writing `<img src={post.data.featured_image} />` renders `[object Object]`. Use `<Image image={post.data.featured_image} />` from `"emdash/ui"`.
+ 
+-2. **`entry.id` vs `entry.data.id` are different things.** `entry.id` is the slug (use in URLs). `entry.data.id` is the database ULID (use for `getEntryTerms`, `Comments`, and other API calls that need the real ID). Mixing them up causes silent empty results.
++2. **`entry.id` vs `entry.data.id` are different things.** `entry.id` is the slug, prefixed with the locale (`en/my-post`) for locales whose URLs are prefixed (use in URLs; `entry.data.slug` is the bare slug). `entry.data.id` is the database ULID (use for `getEntryTerms`, `Comments`, and other API calls that need the real ID). Mixing them up causes silent empty results.
+ 
+ 3. **Taxonomy names must match the seed exactly.** If your seed defines `"name": "category"`, you must query `getTerm("category", slug)` -- not `"categories"`. Wrong name = empty results, no error.
+ 
+@@ -21,9 +21,6 @@ These are the things that silently break sites. Know them before you start.
+ 
+ 5. **No `getStaticPaths` for CMS content.** EmDash content is dynamic. Pages must be server-rendered (`output: "server"` in `astro.config.mjs`).
+ 
+-6. **Keep D1-targeted collections narrow.** Cloudflare D1 documents a maximum of 100 columns per table; SQLite's default `SQLITE_MAX_COLUMN` is 2000, so local Node/SQLite success does not prove D1 compatibility. For this starter, keep every collection at or below 50 total physical columns, including system, hidden/generated and retained legacy columns. Measure real tables with SQLite introspection instead of counting seed/editor fields. Prefer Portable Text or compact reusable content entries to one column per paragraph or button. See [D1 limits](https://developers.cloudflare.com/d1/platform/limits/), [SQLite limits](https://www.sqlite.org/limits.html), and the project's [editorial canvas reference](../../../docs/emdash-editorial-canvas.md).
+-7. **Design canvas ownership with the first template.** Pass the page's EmDash identity through `Base`'s `content` prop and attach each field proxy to the element displaying that same stored value. Reusable components must accept and forward field-level edit attributes. Preserve canonical Portable Text metadata in edit mode; an annotation alone does not prove that a field is registered or saveable.
+-
+ ## File Structure
+ 
+ Every EmDash site has these key files:
+@@ -72,8 +69,6 @@ pnpm dev                # Start the Astro dev server
+ 
+ The runtime runs pending migrations on the first request and, before setup is completed, applies the seed's schema and structure once. Sample content needs an explicit step; see [Applying Seeds](references/schema-and-seed.md#applying-seeds). The Astro integration generates `emdash-env.d.ts` when the server starts. The admin UI is at `http://localhost:4321/_emdash/admin`.
+ 
+-Before accepting a CMS template or schema change, verify that required fields exist in the active schema, each rendered field proxy has the correct entry/field owner, both required locales are populated, and physical collection widths stay within the project's 50-column budget. Test actual editor save/reload behavior on the supported local or disposable surface. Build and deployment are separate; a build does not transfer CMS content.
+-
+ ## Quick API Cheat Sheet
+ 
+ ```typescript
+diff --git a/.agents/skills/building-emdash-site/references/querying-and-rendering.md b/.emdash/skill-sync/e13fa39d-955f-421a-ba9c-c69693b95eb3/incoming/building-emdash-site/references/querying-and-rendering.md
+index 9d2aa6e..3df4052 100644
+--- a/.agents/skills/building-emdash-site/references/querying-and-rendering.md
++++ b/.emdash/skill-sync/e13fa39d-955f-421a-ba9c-c69693b95eb3/incoming/building-emdash-site/references/querying-and-rendering.md
+@@ -214,7 +214,7 @@ const url = storageKey
+ 
+ ## Visual Editing Attributes
+ 
+-Entries include `edit` attributes for inline editing. Plan ownership as each template is introduced: pass the page identity through the layout's `content` prop, and spread each field proxy onto the element that displays that same stored value:
++Entries include `edit` attributes for inline editing. Spread them onto the element that displays the field:
+ 
+ ```astro
+ <h1 {...post.edit.title}>{post.data.title}</h1>
+@@ -224,9 +224,7 @@ Entries include `edit` attributes for inline editing. Plan ownership as each tem
+ </div>
+ ```
+ 
+-When an admin is logged in and views the site, these attributes enable click-to-edit functionality. The layout's content prop provides page context; it does not replace field-level bindings. A card's outer-entry annotation does not bind its title, description, image or CTA separately. Pass explicit edit props through reusable components and bind a CTA label to its text span, outside any decorative icon. The rendered value must come from the field being annotated, not a fallback, derived translation or composite string.
+-
+-Keep the canonical tagged Portable Text value in edit mode. Do not map, filter, clone or slice it before passing it to the native inline editor; presentation cleanup belongs to a separate public-only value. Verify how the installed release mounts empty rich-text fields. Confirm the field exists in the active schema and edit manifest and test save/reload; proxy markup alone is not editor acceptance. Images and structured fields may remain in their native admin forms when that better matches the editing workflow.
++When an admin is logged in and views the site, these attributes enable click-to-edit functionality.
+ 
+ ## Common Page Patterns
+ 

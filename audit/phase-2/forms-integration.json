@@ -1,0 +1,19 @@
+{
+  "package": "@emdash-cms/plugin-forms@0.2.10",
+  "runtime": "Astro 7.4.0 / EmDash 1.3.0 / React integration 7.1.0",
+  "registration": "passed: native formsPlugin in EmDash config",
+  "formCreation": "passed through authenticated plugin API",
+  "anonymousRendering": {
+    "status": 200,
+    "form": true,
+    "label": true
+  },
+  "liveProviders": "unverified; no notifications or Turnstile service contacted",
+  "worker": "unverified",
+  "realNodeStorage": {
+    "invalidRejected": true,
+    "validStored": true,
+    "honeypotSilentWithoutStorage": true,
+    "submissionDelta": 1
+  }
+}

@@ -1,0 +1,29 @@
+[2m10:05:03[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+[2m10:05:04[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m10:05:05[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m10:05:06[22m [34m[types][39m Generated [2m2.95s[22m
+[2m10:05:06[22m [34m[build][39m output: [34m"server"[39m
+[2m10:05:06[22m [34m[build][39m mode: [34m"server"[39m
+[2m10:05:06[22m [34m[build][39m directory: [34m/workspace/starter\.emdash\checks\certification-clean\dist\[39m
+[2m10:05:06[22m [34m[build][39m adapter: [32m@astrojs/node[39m
+[2m10:05:06[22m [34m[build][39m Collecting build info...
+[2m10:05:06[22m [34m[build][39m [32m✓ Completed in 3.24s.[39m
+[2m10:05:07[22m [34m[build][39m Building server entrypoints...
+[2m10:05:07[22m [34m[assets][39m Copying fonts (16 files)...
+[2m10:05:08[22m [34m[vite][39m [32m✓ built in 948ms[39m
+[2m10:05:11[22m [34m[vite][39m [32m✓ built in 3.86s[39m
+[33m[1m10:05:15[22m [WARN] [vite][39m [33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[2m10:05:15[22m [34m[vite][39m [32m✓ built in 3.29s[39m
+[2m10:05:15[22m [34m[build][39m Rearranging server assets...
+[2m10:05:15[22m [34m[build][39m [32m✓ Completed in 8.41s.[39m
+[2m10:05:15[22m [34m[emdash][39m Build complete
+[2m10:05:15[22m [34m[build][39m Server built in [1m11.78s[22m
+[2m10:05:15[22m [34m[build][39m [1mComplete![22m

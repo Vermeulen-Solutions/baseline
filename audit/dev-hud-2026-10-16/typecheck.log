@@ -1,0 +1,36 @@
+
+> emdash-site-starter@0.0.3 pretypecheck
+> npm run check:schema-budget
+
+
+> emdash-site-starter@0.0.3 check:schema-budget
+> node scripts/check-schema-budget.mjs
+
+[
+  {
+    "table": "ec_pages",
+    "columns": 17
+  },
+  {
+    "table": "ec_posts",
+    "columns": 19
+  }
+]
+
+> emdash-site-starter@0.0.3 typecheck
+> astro check
+
+09:36:52 [@astrojs/node] Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+09:36:53 [vite] Re-optimizing dependencies because vite config has changed
+09:36:54 [vite] [optimizer] bundling dependencies...
+09:36:57 [types] Generated 4.28s
+09:36:57 [check] Getting diagnostics for Astro files in /workspace/starter...
+Result (41 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+

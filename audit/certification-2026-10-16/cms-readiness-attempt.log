@@ -1,0 +1,9 @@
+file:////workspace/starter/audit/certification-2026-10-16/cms-rehearsal.mjs:33
+  throw Error('Owned server readiness timeout');
+        ^
+
+Error: Owned server readiness timeout
+    at launch (file:////workspace/starter/audit/certification-2026-10-16/cms-rehearsal.mjs:33:9)
+    at async file:////workspace/starter/audit/certification-2026-10-16/cms-rehearsal.mjs:37:3
+
+Node.js v24.21.0

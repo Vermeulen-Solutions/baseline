@@ -1,0 +1,30 @@
+
+> emdash-site-starter@0.0.3 test:dev-hud
+> playwright test --config=playwright.dev-tools.config.mjs
+
+
+Running 15 tests using 1 worker
+
+(node:23264) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium-390] › tests\dev-tools\hud.spec.mjs:29:1 › reference alignment, scrolling, DPR/scale, memory lifecycle and local-only requests (2.8s)
+  ok  2 [chromium-390] › tests\dev-tools\hud.spec.mjs:70:1 › reference rejects invalid/oversized headers, decoder failures and remote drops (3.3s)
+  ok  3 [chromium-390] › tests\dev-tools\hud.spec.mjs:92:1 › public ownership, unsupported markers, entry context and UI text stay read-only (1.7s)
+  ok  4 [chromium-390] › tests\dev-tools\hud.spec.mjs:108:1 › real disposable EmDash edit annotations can be inspected without claiming save verification (1.4s)
+  ok  5 [chromium-390] › tests\dev-tools\hud.spec.mjs:137:1 › T/B/G/O/P, modal/composition/input guards, reset, swap and reload lifecycle (2.8s)
+(node:19772) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  6 [chromium-768] › tests\dev-tools\hud.spec.mjs:29:1 › reference alignment, scrolling, DPR/scale, memory lifecycle and local-only requests (2.4s)
+  ok  7 [chromium-768] › tests\dev-tools\hud.spec.mjs:70:1 › reference rejects invalid/oversized headers, decoder failures and remote drops (3.1s)
+  ok  8 [chromium-768] › tests\dev-tools\hud.spec.mjs:92:1 › public ownership, unsupported markers, entry context and UI text stay read-only (2.0s)
+  ok  9 [chromium-768] › tests\dev-tools\hud.spec.mjs:108:1 › real disposable EmDash edit annotations can be inspected without claiming save verification (1.7s)
+  ok 10 [chromium-768] › tests\dev-tools\hud.spec.mjs:137:1 › T/B/G/O/P, modal/composition/input guards, reset, swap and reload lifecycle (3.0s)
+(node:17692) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 11 [chromium-1440] › tests\dev-tools\hud.spec.mjs:29:1 › reference alignment, scrolling, DPR/scale, memory lifecycle and local-only requests (2.8s)
+  ok 12 [chromium-1440] › tests\dev-tools\hud.spec.mjs:70:1 › reference rejects invalid/oversized headers, decoder failures and remote drops (3.0s)
+  ok 13 [chromium-1440] › tests\dev-tools\hud.spec.mjs:92:1 › public ownership, unsupported markers, entry context and UI text stay read-only (2.1s)
+  ok 14 [chromium-1440] › tests\dev-tools\hud.spec.mjs:108:1 › real disposable EmDash edit annotations can be inspected without claiming save verification (1.8s)
+  ok 15 [chromium-1440] › tests\dev-tools\hud.spec.mjs:137:1 › T/B/G/O/P, modal/composition/input guards, reset, swap and reload lifecycle (3.5s)
+
+  15 passed (1.1m)

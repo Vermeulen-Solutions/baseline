@@ -1,0 +1,11 @@
+{
+  "command": "npm run test:visual -- --repeat=3",
+  "startTime": "2026-10-15T22:47:44.758Z",
+  "duration": 269368.51200000005,
+  "expected": 153,
+  "skipped": 54,
+  "unexpected": 0,
+  "flaky": 0,
+  "baselineCount": 51,
+  "baselinesUnchanged": true
+}

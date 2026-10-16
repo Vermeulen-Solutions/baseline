@@ -1,0 +1,19 @@
+{
+  "package": "@emdash-cms/plugin-forms@0.2.10",
+  "mode": "Actual package validation/handler loaded by Vite in Node; storage/mail mocked; no external requests",
+  "checks": [
+    "invalid email and required file rejected",
+    "valid data accepted",
+    "submission storage invoked",
+    "missing Turnstile token rejected",
+    "unconfigured Turnstile rejected",
+    "honeypot returns silent success without storage",
+    "validation failure stores nothing",
+    "notification error logged while success remains"
+  ],
+  "registration": "not yet exercised",
+  "publicRendering": "unverified",
+  "liveTurnstile": "unverified",
+  "realEmail": "unverified",
+  "worker": "unverified"
+}

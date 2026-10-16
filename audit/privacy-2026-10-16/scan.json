@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "scope": "Tracked working files plus nonignored untracked candidate files; reachable local Git blobs up to 4 MiB; no ignored private backups, external systems, OCR or exhaustive secret detection.",
+  "candidateFiles": 569,
+  "parsedJSONFiles": 180,
+  "requestedIdentifiers": {
+    "matches": 0
+  },
+  "credentialPatterns": {
+    "workingFiles": 0,
+    "historicalBlobs": 0,
+    "scope": "Private-key headers, GitHub token formats and AWS access-key IDs; not proof of absence of all secrets."
+  },
+  "absoluteMachinePaths": {
+    "files": 0
+  },
+  "privateRuntimePaths": {
+    "files": 0
+  },
+  "history": {
+    "reachableObjects": 1081,
+    "clientIdentifierBlobs": 38,
+    "status": "unsafe-to-publish-existing-history"
+  },
+  "sourceTreeDigest": "695e62bc467f5260625f93d8099470cd1c739b6dbf32495369f67127696e883e"
+}

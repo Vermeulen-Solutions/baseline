@@ -1,0 +1,9 @@
+---
+interface Props { message: string; fields?: {id:string;label:string}[]; id?:string; }
+const { message, fields = [], id = 'form-errors' } = Astro.props;
+---
+<div class="form-error" role="alert" id={id} tabindex="-1"><p>{message}</p>{fields.length>0 && <ul>{fields.map(field=><li><a href={`#${field.id}`}>{field.label}</a></li>)}</ul>}</div>
+<style>
+.form-error { padding:var(--spacing-content); border:1px solid var(--color-border); border-radius:var(--radius-control); background:var(--color-surface); color:var(--color-text); }
+ul { margin-top:var(--spacing-content); padding-inline-start:1.5rem; }
+</style>

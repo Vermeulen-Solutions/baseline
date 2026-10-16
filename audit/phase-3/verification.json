@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-15",
+  "runtime": "Node 24.21.0 / Astro 7.4.0 / EmDash 1.3.0",
+  "checks": {
+    "unitTests": 31,
+    "typecheckFiles": 37,
+    "diagnostics": 0,
+    "normalBuildAndPostbuild": "passed",
+    "devFixtureCleanReleaseHTTP": "passed on final source",
+    "artDirectionGate": "passed exact infrastructure exceptions",
+    "gitDiffCheck": "passed"
+  },
+  "sourceLF_SHA256": {
+    "AGENTS.md": "eee3fc54efb6b41f21db43eec3e6615207814fb0164f26380ba1d5e73a02f9ff",
+    ".agent/rules/astro-composition.md": "6dbe855a3c02fe03836430240a2ae2e06c94e43869c4a8dc41d01f71213961bc",
+    ".agents/skills/new-site-workflow/SKILL.md": "b620b93222b5a70a37b2a700d175261487ea9a09f95992ea4e9bb517bd2f27d3",
+    ".agents/skills/astro-site-design/SKILL.md": "019e5fb227eeedd8b107b70ab124418ba74fcf601745a08cda43ad3cc577b4bc",
+    ".agents/skills/astro-site-design/references/component-quarantine.md": "e7bb46b798d1eaf479409ef464f5e748cf28458d86b71c0631286349455c395d",
+    "src/components/LogoTicker.astro": "def214ecc7e44a7d72c2a14448afac53cc12a2d10d9c906531f69f8ba68bc15a",
+    "src/components/dev/Styleguide.astro": "c6c92e4cde438318dc7243daf340a9ab0660d5fafcb1357771ad4bdcb7159aec",
+    "src/dev/styleguide-fixtures.ts": "9eac401a5abaff2defb1b598c1fbe4f76ecd313874ee19e7c92ab0d6f843e54c",
+    "scripts/dev-tools-integration.mjs": "f0b254d68e3d36b304eae3cc46bc60c77a010f27b30d634846d7f9c656a9e2fc",
+    "scripts/assert-release-artifact.mjs": "9ef63f303d24bc95f08c8ff7cb68fd8a938c02dd31cba1f90a2d6691ab38f1a2",
+    "scripts/check-dev-tools.mjs": "fdb6ce95063136c24d0141878b15e562f414246e0c54de6bee73fc70bb51602d",
+    "scripts/styleguide-fixtures.mjs": "25b6ab0a5d82c1fa46a4d93a872aa828e96c0b161a2ea23336ca30fe7e8ec2b5",
+    "tests/release-artifact.test.mjs": "6e32d5eeb5130bb977f88c30612f9ff74da8b4fa2707294f8d971ad14088d34f",
+    "astro.config.mjs": "f9213ed59412eff32b9038c43274be5a309e738813776a09338d6dec4ad2e638"
+  },
+  "unverified": [
+    "Active motion/pause/seam geometry",
+    "JavaScript-disabled browser",
+    "Actual browser zoom/text-spacing",
+    "Other browser engines",
+    "Worker profile"
+  ],
+  "issues": {
+    "5": "open: remaining manual acceptance",
+    "7": "open: capture harness next",
+    "10": "open: remaining ticker verification"
+  }
+}

@@ -1,0 +1,88 @@
+
+> emdash-site-starter@0.0.3 check:native-images
+> node scripts/check-native-images.mjs
+
+{"message":"Enabling sessions with filesystem storage","label":"@astrojs/node","level":"info"}
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"Generated 2ms","label":"types","level":"info"}
+{"message":"connected.","label":"vite","level":"info"}
+{"message":"Re-optimizing dependencies because vite config has changed","label":"vite","level":"info"}
+
+  [2m›[22m Admin UI    [36mhttp://127.0.0.1:4332/_emdash/admin[39m
+  [2m›[22m MCP server  [36mhttp://127.0.0.1:4332/_emdash/api/mcp[39m
+  [2m›[22m Dev bypass  [36mhttp://127.0.0.1:4332/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin[39m
+    [2mSkips passkey setup/auth and signs you in as a dev admin[22m
+
+{"message":" astro  v7.4.0 ready in 2551 ms\n┃ Local    http://127.0.0.1:4332/","label":"SKIP_FORMAT","level":"info"}
+{"message":"watching for file changes...","label":null,"level":"info"}
+{"message":"[optimizer] bundling dependencies...","label":"vite","level":"info"}
+{"message":"[200] POST /_emdash/api/typegen 5940ms","label":null,"level":"info"}
+{"message":"[200] /native-image-check/ 6561ms","label":null,"level":"info"}
+{"message":"[200] /native-image-check/ 6ms","label":null,"level":"info"}
+{"message":"[200] /_image 122ms","label":null,"level":"info"}
+{"message":"[200] /_image 35ms","label":null,"level":"info"}
+{"message":"[200] /_image 70ms","label":null,"level":"info"}
+{"message":"[403] /_image 1ms","label":null,"level":"info"}
+10:06:52 [@astrojs/node] Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+10:06:52 [vite] Re-optimizing dependencies because vite config has changed
+10:06:53 [vite] [optimizer] bundling dependencies...
+10:06:55 [types] Generated 2.76s
+10:06:55 [build] output: "server"
+10:06:55 [build] mode: "server"
+10:06:55 [build] directory: /workspace/starter\.emdash\checks\certification-clean\dist\
+10:06:55 [build] adapter: @astrojs/node
+10:06:55 [build] Collecting build info...
+10:06:55 [build] ✓ Completed in 3.05s.
+10:06:55 [build] Building server entrypoints...
+10:06:56 [assets] Copying fonts (16 files)...
+10:06:56 [vite] ✓ built in 761ms
+10:06:59 [vite] ✓ built in 3.40s
+10:07:04 [WARN] [vite] [plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+10:07:04 [vite] ✓ built in 4.91s
+10:07:04 [build] Rearranging server assets...
+10:07:05 [build] ✓ Completed in 9.38s.
+10:07:05 [emdash] Build complete
+10:07:05 [build] Server built in 12.56s
+10:07:05 [build] Complete!
+.env not found. Continuing without it.
+10:07:05 [@astrojs/node] Server listening on http://127.0.0.1:4332
+Native image checks passed in development and built Node, including media added after build.
+10:07:12 [@astrojs/node] Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+10:07:12 [types] Generated 207ms
+10:07:12 [build] output: "server"
+10:07:12 [build] mode: "server"
+10:07:12 [build] directory: /workspace/starter\.emdash\checks\certification-clean\dist\
+10:07:12 [build] adapter: @astrojs/node
+10:07:12 [build] Collecting build info...
+10:07:12 [build] ✓ Completed in 527ms.
+10:07:12 [build] Building server entrypoints...
+10:07:13 [assets] Copying fonts (16 files)...
+10:07:13 [vite] ✓ built in 965ms
+10:07:18 [vite] ✓ built in 4.33s
+10:07:22 [WARN] [vite] [plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+10:07:22 [vite] ✓ built in 4.47s
+10:07:22 [build] Rearranging server assets...
+10:07:22 [build] ✓ Completed in 10.11s.
+10:07:22 [emdash] Build complete
+10:07:22 [build] Server built in 10.76s
+10:07:22 [build] Complete!

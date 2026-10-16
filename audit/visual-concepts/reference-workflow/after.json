@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-16T08:48:21.915Z",
+  "scope": "Isolated static Astro build using production Container/Grid and global Tailwind v4 tokens; not a live CMS conversion.",
+  "results": [
+    {
+      "mode": "flat",
+      "width": 390,
+      "height": 900,
+      "dpr": 1,
+      "fullPage": true,
+      "locale": "en; German long-copy specimen",
+      "state": "clean reload; no HUD or storage overrides",
+      "overflow": false,
+      "semanticBreak": 1,
+      "headingBreak": 0,
+      "logoColors": [
+        "#176ca4",
+        "#d26935",
+        "#f9d976"
+      ],
+      "copy": "Gemeinsam gestalten wir zugängliche Werkzeuge für verantwortungsvolle Zusammenarbeit über Organisationsgrenzen hinweg.",
+      "grid": "355.688px",
+      "overrides": 0,
+      "storageKeys": 0,
+      "scripts": 0,
+      "file": "captures/flat-after-390.png",
+      "sha256": "68ce5185949f11164c1ddee0afec8d1e6d62ccf67cfbacec94924ca413e8c133"
+    },
+    {
+      "mode": "flat",
+      "width": 768,
+      "height": 900,
+      "dpr": 1,
+      "fullPage": true,
+      "locale": "en; German long-copy specimen",
+      "state": "clean reload; no HUD or storage overrides",
+      "overflow": false,
+      "semanticBreak": 1,
+      "headingBreak": 0,
+      "logoColors": [
+        "#176ca4",
+        "#d26935",
+        "#f9d976"
+      ],
+      "copy": "Gemeinsam gestalten wir zugängliche Werkzeuge für verantwortungsvolle Zusammenarbeit über Organisationsgrenzen hinweg.",
+      "grid": "346.812px 346.828px",
+      "overrides": 0,
+      "storageKeys": 0,
+      "scripts": 0,
+      "file": "captures/flat-after-768.png",
+      "sha256": "d2fc0d3e0c6dcd29224f6584140bd3ed2d7808be2d355d494b512eef6bad5ee6"
+    },
+    {
+      "mode": "flat",
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "fullPage": true,
+      "locale": "en; German long-copy specimen",
+      "state": "clean reload; no HUD or storage overrides",
+      "overflow": false,
+      "semanticBreak": 1,
+      "headingBreak": 0,
+      "logoColors": [
+        "#176ca4",
+        "#d26935",
+        "#f9d976"
+      ],
+      "copy": "Gemeinsam gestalten wir zugängliche Werkzeuge für verantwortungsvolle Zusammenarbeit über Organisationsgrenzen hinweg.",
+      "grid": "381.328px 381.328px 381.344px 0px",
+      "overrides": 0,
+      "storageKeys": 0,
+      "scripts": 0,
+      "file": "captures/flat-after-1440.png",
+      "sha256": "1cf9cfa63611f34db4969d3224fde2c1c9202c24446f5eff0d80168df85897b0"
+    },
+    {
+      "mode": "refine",
+      "width": 390,
+      "height": 900,
+      "dpr": 1,
+      "fullPage": true,
+      "locale": "en; German long-copy specimen",
+      "state": "clean reload; no HUD or storage overrides",
+      "overflow": false,
+      "semanticBreak": 1,
+      "headingBreak": 0,
+      "logoColors": [
+        "#176ca4",
+        "#d26935",
+        "#f9d976"
+      ],
+      "copy": "Gemeinsam gestalten wir zugängliche Werkzeuge für verantwortungsvolle Zusammenarbeit über Organisationsgrenzen hinweg.",
+      "grid": "355.688px",
+      "overrides": 0,
+      "storageKeys": 0,
+      "scripts": 0,
+      "file": "captures/refine-after-390.png",
+      "sha256": "68ce5185949f11164c1ddee0afec8d1e6d62ccf67cfbacec94924ca413e8c133"
+    },
+    {
+      "mode": "refine",
+      "width": 768,
+      "height": 900,
+      "dpr": 1,
+      "fullPage": true,
+      "locale": "en; German long-copy specimen",
+      "state": "clean reload; no HUD or storage overrides",
+      "overflow": false,
+      "semanticBreak": 1,
+      "headingBreak": 0,
+      "logoColors": [
+        "#176ca4",
+        "#d26935",
+        "#f9d976"
+      ],
+      "copy": "Gemeinsam gestalten wir zugängliche Werkzeuge für verantwortungsvolle Zusammenarbeit über Organisationsgrenzen hinweg.",
+      "grid": "346.812px 346.828px",
+      "overrides": 0,
+      "storageKeys": 0,
+      "scripts": 0,
+      "file": "captures/refine-after-768.png",
+      "sha256": "d2fc0d3e0c6dcd29224f6584140bd3ed2d7808be2d355d494b512eef6bad5ee6"
+    },
+    {
+      "mode": "refine",
+      "width": 1440,
+      "height": 900,
+      "dpr": 1,
+      "fullPage": true,
+      "locale": "en; German long-copy specimen",
+      "state": "clean reload; no HUD or storage overrides",
+      "overflow": false,
+      "semanticBreak": 1,
+      "headingBreak": 0,
+      "logoColors": [
+        "#176ca4",
+        "#d26935",
+        "#f9d976"
+      ],
+      "copy": "Gemeinsam gestalten wir zugängliche Werkzeuge für verantwortungsvolle Zusammenarbeit über Organisationsgrenzen hinweg.",
+      "grid": "381.328px 381.328px 381.344px 0px",
+      "overrides": 0,
+      "storageKeys": 0,
+      "scripts": 0,
+      "file": "captures/refine-after-1440.png",
+      "sha256": "1cf9cfa63611f34db4969d3224fde2c1c9202c24446f5eff0d80168df85897b0"
+    }
+  ]
+}

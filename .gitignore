@@ -1,0 +1,38 @@
+node_modules
+dist
+dist-fixtures
+.astro-fixtures
+.astro
+.emdash/migrations.json
+.emdash/skill-sync/
+.emdash/skill-sync.lock
+.emdash/site-registry.private.json*
+.emdash/pending-registration/
+.emdash/backups/
+.emdash/checks/
+uploads
+data.db
+data.db-*
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Recreated by the responsive-media prebuild
+public/media/responsive/
+
+# Disposable visual reports and captures; reviewed baselines stay tracked
+.emdash/visual/
+playwright-report/
+test-results/
+
+# Private local databases and diagnostic output
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+.emdash/site-audits/
+.emdash/runtime-logs/

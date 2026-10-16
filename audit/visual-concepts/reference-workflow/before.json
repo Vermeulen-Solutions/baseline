@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-16T08:47:06.061Z",
+  "scope": "Constructed neutral source fixtures, not a client conversion.",
+  "browser": "Pinned Playwright Chromium",
+  "dpr": 1,
+  "capture": "full-page",
+  "state": "static; no CMS; no external assets",
+  "observations": [
+    {
+      "width": 390,
+      "source": "source-legacy.html",
+      "overflow": true
+    },
+    {
+      "width": 768,
+      "source": "source-legacy.html",
+      "overflow": true
+    },
+    {
+      "width": 1440,
+      "source": "source-legacy.html",
+      "overflow": false
+    }
+  ],
+  "flatReference": {
+    "file": "captures/flat-reference-1440.png",
+    "cssViewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "sha256": "ff0205df20552e32df84b7f6984155a3140be8d5ac04c2f74ea697c0de4f1a0a"
+  }
+}

@@ -1,0 +1,31 @@
+warning: in the working copy of '.emdash/checks/certification-clean/.emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/incoming/building-emdash-site/SKILL.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.emdash/checks/certification-clean/.emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/incoming/building-emdash-site/references/configuration.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.emdash/checks/certification-clean/.emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/incoming/building-emdash-site/references/querying-and-rendering.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.emdash/checks/certification-clean/.emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/incoming/building-emdash-site/references/schema-and-seed.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.emdash/checks/certification-clean/.emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/incoming/building-emdash-site/references/site-features.md', LF will be replaced by CRLF the next time Git touches it
+diff --git a/.emdash/checks/certification-clean/.agents/skills/building-emdash-site/SKILL.md b/.emdash/checks/certification-clean/.emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/incoming/building-emdash-site/SKILL.md
+index 9b2d65d..f7e87c4 100644
+--- a/.emdash/checks/certification-clean/.agents/skills/building-emdash-site/SKILL.md
++++ b/.emdash/checks/certification-clean/.emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/incoming/building-emdash-site/SKILL.md
+@@ -13,7 +13,7 @@ These are the things that silently break sites. Know them before you start.
+ 
+ 1. **Image fields are objects, not strings.** `post.data.featured_image` is `{ id, src, alt }`. Writing `<img src={post.data.featured_image} />` renders `[object Object]`. Use `<Image image={post.data.featured_image} />` from `"emdash/ui"`.
+ 
+-2. **`entry.id` vs `entry.data.id` are different things.** `entry.id` is the slug (use in URLs). `entry.data.id` is the database ULID (use for `getEntryTerms`, `Comments`, and other API calls that need the real ID). Mixing them up causes silent empty results.
++2. **`entry.id` vs `entry.data.id` are different things.** `entry.id` is the slug, prefixed with the locale (`en/my-post`) for locales whose URLs are prefixed (use in URLs; `entry.data.slug` is the bare slug). `entry.data.id` is the database ULID (use for `getEntryTerms`, `Comments`, and other API calls that need the real ID). Mixing them up causes silent empty results.
+ 
+ 3. **Taxonomy names must match the seed exactly.** If your seed defines `"name": "category"`, you must query `getTerm("category", slug)` -- not `"categories"`. Wrong name = empty results, no error.
+ 
+diff --git a/.emdash/checks/certification-clean/.agents/skills/building-emdash-site/references/configuration.md b/.emdash/checks/certification-clean/.emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/incoming/building-emdash-site/references/configuration.md
+index a38b5db..e2e419a 100644
+--- a/.emdash/checks/certification-clean/.agents/skills/building-emdash-site/references/configuration.md
++++ b/.emdash/checks/certification-clean/.emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/incoming/building-emdash-site/references/configuration.md
+@@ -77,7 +77,7 @@ export default defineConfig({
+ 	integrations: [
+ 		react(),
+ 		emdash({
+-			database: d1({ binding: "DB", session: "auto" }),
++			database: d1({ binding: "DB", session: "auto", coalesce: true }),
+ 			storage: r2({ binding: "MEDIA" }),
+ 		}),
+ 	],

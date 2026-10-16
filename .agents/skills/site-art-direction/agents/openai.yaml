@@ -1,0 +1,4 @@
+interface:
+  display_name: "Site Art Direction"
+  short_description: "Define a distinct visual direction from the brief"
+  default_prompt: "Use $site-art-direction to define this site's visual direction before implementation."

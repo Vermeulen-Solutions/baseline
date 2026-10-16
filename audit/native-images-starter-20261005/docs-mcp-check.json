@@ -1,0 +1,48 @@
+[
+  {
+    "endpoint": "https://mcp.docs.astro.build/mcp",
+    "server": {
+      "name": "Astro Docs server",
+      "version": "1.0.0"
+    },
+    "tool": "search_astro_docs",
+    "arguments": {
+      "query": "Astro getImage responsive images with Cloudflare Images binding"
+    },
+    "isError": false,
+    "sources": [
+      "https://docs.astro.build/en/guides/images/#responsive-images-with-tailwind-4",
+      "https://docs.astro.build/en/guides/integrations-guide/cloudflare/#imagesbindingname",
+      "https://docs.astro.build/en/guides/images/#responsive-image-styles",
+      "https://docs.astro.build/en/guides/images/#responsive-image-behavior",
+      "https://docs.astro.build/en/guides/images/#generating-images-with-getimage",
+      "https://docs.astro.build/en/guides/images/#_top",
+      "https://docs.astro.build/en/guides/upgrade-to/v6/#changed-how-responsive-image-styles-are-emitted",
+      "https://docs.astro.build/en/guides/integrations-guide/cloudflare/#changed-imageservice-default",
+      "https://docs.astro.build/en/reference/configuration-reference/#imageresponsivestyles",
+      "https://docs.astro.build/en/guides/images/#images-in-markdown-files"
+    ]
+  },
+  {
+    "endpoint": "https://docs.emdashcms.com/mcp",
+    "server": {
+      "name": "emdash-docs",
+      "version": "1.0.0"
+    },
+    "tool": "search_docs",
+    "arguments": {
+      "query": "EmDash Astro image optimization and storage-backed image endpoint"
+    },
+    "isError": false,
+    "sources": [
+      "https://docs.emdashcms.com/reference/configuration/",
+      "https://docs.emdashcms.com/coming-from/astro/",
+      "https://docs.emdashcms.com/deployment/cloudflare/",
+      "https://docs.emdashcms.com/concepts/architecture/",
+      "https://docs.emdashcms.com/guides/seo/",
+      "https://docs.emdashcms.com/guides/ai-tools/",
+      "https://docs.emdashcms.com/plugins/overview/",
+      "https://docs.emdashcms.com/concepts/admin-panel/"
+    ]
+  }
+]

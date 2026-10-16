@@ -1,0 +1,1961 @@
+[
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1804,
+    "annotations": []
+  },
+  {
+    "test": "behavior reduced motion and print preserve a single complete list",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1206,
+    "annotations": []
+  },
+  {
+    "test": "behavior no-JS native controls, ticker and gallery fallback",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 2660,
+    "annotations": []
+  },
+  {
+    "test": "reflow 320px with text-spacing overrides and native keyboard controls",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 2551,
+    "annotations": []
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-390",
+    "status": "skipped",
+    "durationMs": 1,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Separate 1280px physical viewport for actual browser zoom",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 120,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1784,
+    "annotations": []
+  },
+  {
+    "test": "behavior reduced motion and print preserve a single complete list",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1312,
+    "annotations": []
+  },
+  {
+    "test": "behavior no-JS native controls, ticker and gallery fallback",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 2688,
+    "annotations": []
+  },
+  {
+    "test": "reflow 320px with text-spacing overrides and native keyboard controls",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 2582,
+    "annotations": []
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-390",
+    "status": "skipped",
+    "durationMs": 1,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Separate 1280px physical viewport for actual browser zoom",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 120,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1898,
+    "annotations": []
+  },
+  {
+    "test": "behavior reduced motion and print preserve a single complete list",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1406,
+    "annotations": []
+  },
+  {
+    "test": "behavior no-JS native controls, ticker and gallery fallback",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 2663,
+    "annotations": []
+  },
+  {
+    "test": "reflow 320px with text-spacing overrides and native keyboard controls",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 2524,
+    "annotations": []
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-390",
+    "status": "skipped",
+    "durationMs": 1,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Separate 1280px physical viewport for actual browser zoom",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 120,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1875,
+    "annotations": []
+  },
+  {
+    "test": "behavior reduced motion and print preserve a single complete list",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1212,
+    "annotations": []
+  },
+  {
+    "test": "behavior no-JS native controls, ticker and gallery fallback",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 2914,
+    "annotations": []
+  },
+  {
+    "test": "reflow 320px with text-spacing overrides and native keyboard controls",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 215,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "One explicit narrow placement",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 104,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 1,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Separate 1280px physical viewport for actual browser zoom",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 120,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1780,
+    "annotations": []
+  },
+  {
+    "test": "behavior reduced motion and print preserve a single complete list",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1317,
+    "annotations": []
+  },
+  {
+    "test": "behavior no-JS native controls, ticker and gallery fallback",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 3237,
+    "annotations": []
+  },
+  {
+    "test": "reflow 320px with text-spacing overrides and native keyboard controls",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 221,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "One explicit narrow placement",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 104,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 1,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Separate 1280px physical viewport for actual browser zoom",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 120,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1787,
+    "annotations": []
+  },
+  {
+    "test": "behavior reduced motion and print preserve a single complete list",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1182,
+    "annotations": []
+  },
+  {
+    "test": "behavior no-JS native controls, ticker and gallery fallback",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 3288,
+    "annotations": []
+  },
+  {
+    "test": "reflow 320px with text-spacing overrides and native keyboard controls",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 210,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "One explicit narrow placement",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 104,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 1,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Separate 1280px physical viewport for actual browser zoom",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 120,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1874,
+    "annotations": []
+  },
+  {
+    "test": "behavior reduced motion and print preserve a single complete list",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1229,
+    "annotations": []
+  },
+  {
+    "test": "behavior no-JS native controls, ticker and gallery fallback",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 4584,
+    "annotations": []
+  },
+  {
+    "test": "reflow 320px with text-spacing overrides and native keyboard controls",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 248,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "One explicit narrow placement",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 104,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 4658,
+    "annotations": []
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1836,
+    "annotations": []
+  },
+  {
+    "test": "behavior reduced motion and print preserve a single complete list",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1200,
+    "annotations": []
+  },
+  {
+    "test": "behavior no-JS native controls, ticker and gallery fallback",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 3602,
+    "annotations": []
+  },
+  {
+    "test": "reflow 320px with text-spacing overrides and native keyboard controls",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 239,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "One explicit narrow placement",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 104,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 4697,
+    "annotations": []
+  },
+  {
+    "test": "behavior ticker active motion, native stop, pause, RTL seam",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 2034,
+    "annotations": []
+  },
+  {
+    "test": "behavior reduced motion and print preserve a single complete list",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1351,
+    "annotations": []
+  },
+  {
+    "test": "behavior no-JS native controls, ticker and gallery fallback",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 3758,
+    "annotations": []
+  },
+  {
+    "test": "reflow 320px with text-spacing overrides and native keyboard controls",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 217,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "One explicit narrow placement",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\behavior.spec.mjs",
+          "line": 104,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "zoom actual Chromium page zoom at 200% and 400%",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 4600,
+    "annotations": []
+  },
+  {
+    "test": "capture home",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 683,
+    "annotations": []
+  },
+  {
+    "test": "capture page",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 569,
+    "annotations": []
+  },
+  {
+    "test": "capture posts",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 580,
+    "annotations": []
+  },
+  {
+    "test": "capture post",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 626,
+    "annotations": []
+  },
+  {
+    "test": "capture category",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 562,
+    "annotations": []
+  },
+  {
+    "test": "capture tag",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 557,
+    "annotations": []
+  },
+  {
+    "test": "capture not-found",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 546,
+    "annotations": []
+  },
+  {
+    "test": "capture styleguide",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1545,
+    "annotations": []
+  },
+  {
+    "test": "capture targeted controls and keyboard focus",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1392,
+    "annotations": []
+  },
+  {
+    "test": "behavior gallery opens, advances and restores keyboard focus",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1284,
+    "annotations": []
+  },
+  {
+    "test": "capture home",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 524,
+    "annotations": []
+  },
+  {
+    "test": "capture page",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 543,
+    "annotations": []
+  },
+  {
+    "test": "capture posts",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 534,
+    "annotations": []
+  },
+  {
+    "test": "capture post",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 562,
+    "annotations": []
+  },
+  {
+    "test": "capture category",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 528,
+    "annotations": []
+  },
+  {
+    "test": "capture tag",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 534,
+    "annotations": []
+  },
+  {
+    "test": "capture not-found",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 500,
+    "annotations": []
+  },
+  {
+    "test": "capture styleguide",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1566,
+    "annotations": []
+  },
+  {
+    "test": "capture targeted controls and keyboard focus",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1381,
+    "annotations": []
+  },
+  {
+    "test": "behavior gallery opens, advances and restores keyboard focus",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1267,
+    "annotations": []
+  },
+  {
+    "test": "capture home",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 518,
+    "annotations": []
+  },
+  {
+    "test": "capture page",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 485,
+    "annotations": []
+  },
+  {
+    "test": "capture posts",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 518,
+    "annotations": []
+  },
+  {
+    "test": "capture post",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 552,
+    "annotations": []
+  },
+  {
+    "test": "capture category",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 480,
+    "annotations": []
+  },
+  {
+    "test": "capture tag",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 535,
+    "annotations": []
+  },
+  {
+    "test": "capture not-found",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 531,
+    "annotations": []
+  },
+  {
+    "test": "capture styleguide",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1550,
+    "annotations": []
+  },
+  {
+    "test": "capture targeted controls and keyboard focus",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1395,
+    "annotations": []
+  },
+  {
+    "test": "behavior gallery opens, advances and restores keyboard focus",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1230,
+    "annotations": []
+  },
+  {
+    "test": "capture home",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 545,
+    "annotations": []
+  },
+  {
+    "test": "capture page",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 565,
+    "annotations": []
+  },
+  {
+    "test": "capture posts",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 539,
+    "annotations": []
+  },
+  {
+    "test": "capture post",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 577,
+    "annotations": []
+  },
+  {
+    "test": "capture category",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 536,
+    "annotations": []
+  },
+  {
+    "test": "capture tag",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 583,
+    "annotations": []
+  },
+  {
+    "test": "capture not-found",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 602,
+    "annotations": []
+  },
+  {
+    "test": "capture styleguide",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1699,
+    "annotations": []
+  },
+  {
+    "test": "capture targeted controls and keyboard focus",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1409,
+    "annotations": []
+  },
+  {
+    "test": "behavior gallery opens, advances and restores keyboard focus",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1146,
+    "annotations": []
+  },
+  {
+    "test": "capture home",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 578,
+    "annotations": []
+  },
+  {
+    "test": "capture page",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 574,
+    "annotations": []
+  },
+  {
+    "test": "capture posts",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 578,
+    "annotations": []
+  },
+  {
+    "test": "capture post",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 618,
+    "annotations": []
+  },
+  {
+    "test": "capture category",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 606,
+    "annotations": []
+  },
+  {
+    "test": "capture tag",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 732,
+    "annotations": []
+  },
+  {
+    "test": "capture not-found",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 830,
+    "annotations": []
+  },
+  {
+    "test": "capture styleguide",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1952,
+    "annotations": []
+  },
+  {
+    "test": "capture targeted controls and keyboard focus",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1533,
+    "annotations": []
+  },
+  {
+    "test": "behavior gallery opens, advances and restores keyboard focus",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1387,
+    "annotations": []
+  },
+  {
+    "test": "capture home",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 524,
+    "annotations": []
+  },
+  {
+    "test": "capture page",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 503,
+    "annotations": []
+  },
+  {
+    "test": "capture posts",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 538,
+    "annotations": []
+  },
+  {
+    "test": "capture post",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 617,
+    "annotations": []
+  },
+  {
+    "test": "capture category",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 596,
+    "annotations": []
+  },
+  {
+    "test": "capture tag",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 591,
+    "annotations": []
+  },
+  {
+    "test": "capture not-found",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 622,
+    "annotations": []
+  },
+  {
+    "test": "capture styleguide",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1617,
+    "annotations": []
+  },
+  {
+    "test": "capture targeted controls and keyboard focus",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1339,
+    "annotations": []
+  },
+  {
+    "test": "behavior gallery opens, advances and restores keyboard focus",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1112,
+    "annotations": []
+  },
+  {
+    "test": "capture home",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 551,
+    "annotations": []
+  },
+  {
+    "test": "capture page",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 525,
+    "annotations": []
+  },
+  {
+    "test": "capture posts",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 524,
+    "annotations": []
+  },
+  {
+    "test": "capture post",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 615,
+    "annotations": []
+  },
+  {
+    "test": "capture category",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 544,
+    "annotations": []
+  },
+  {
+    "test": "capture tag",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 549,
+    "annotations": []
+  },
+  {
+    "test": "capture not-found",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 584,
+    "annotations": []
+  },
+  {
+    "test": "capture styleguide",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 2260,
+    "annotations": []
+  },
+  {
+    "test": "capture targeted controls and keyboard focus",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1442,
+    "annotations": []
+  },
+  {
+    "test": "behavior gallery opens, advances and restores keyboard focus",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1225,
+    "annotations": []
+  },
+  {
+    "test": "capture home",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 587,
+    "annotations": []
+  },
+  {
+    "test": "capture page",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 618,
+    "annotations": []
+  },
+  {
+    "test": "capture posts",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 668,
+    "annotations": []
+  },
+  {
+    "test": "capture post",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 728,
+    "annotations": []
+  },
+  {
+    "test": "capture category",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 596,
+    "annotations": []
+  },
+  {
+    "test": "capture tag",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 620,
+    "annotations": []
+  },
+  {
+    "test": "capture not-found",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 615,
+    "annotations": []
+  },
+  {
+    "test": "capture styleguide",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 2177,
+    "annotations": []
+  },
+  {
+    "test": "capture targeted controls and keyboard focus",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1504,
+    "annotations": []
+  },
+  {
+    "test": "behavior gallery opens, advances and restores keyboard focus",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1254,
+    "annotations": []
+  },
+  {
+    "test": "capture home",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 549,
+    "annotations": []
+  },
+  {
+    "test": "capture page",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 558,
+    "annotations": []
+  },
+  {
+    "test": "capture posts",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 603,
+    "annotations": []
+  },
+  {
+    "test": "capture post",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 710,
+    "annotations": []
+  },
+  {
+    "test": "capture category",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 568,
+    "annotations": []
+  },
+  {
+    "test": "capture tag",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 534,
+    "annotations": []
+  },
+  {
+    "test": "capture not-found",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 558,
+    "annotations": []
+  },
+  {
+    "test": "capture styleguide",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 2102,
+    "annotations": []
+  },
+  {
+    "test": "capture targeted controls and keyboard focus",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1464,
+    "annotations": []
+  },
+  {
+    "test": "behavior gallery opens, advances and restores keyboard focus",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1332,
+    "annotations": []
+  },
+  {
+    "test": "capture sensitivity control",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1164,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects shared-token and clean revert",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1931,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects small-target and clean revert",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1787,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity missing baseline fails without writing a golden",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1043,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing route",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 257,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing setup",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 5250,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing image",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1039,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing font",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1104,
+    "annotations": []
+  },
+  {
+    "test": "capture sensitivity control",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1242,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects shared-token and clean revert",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1948,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects small-target and clean revert",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1821,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity missing baseline fails without writing a golden",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1053,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing route",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 262,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing setup",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 5270,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing image",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1020,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing font",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1054,
+    "annotations": []
+  },
+  {
+    "test": "capture sensitivity control",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1202,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects shared-token and clean revert",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 2073,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects small-target and clean revert",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1893,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity missing baseline fails without writing a golden",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1119,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing route",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 254,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing setup",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 5266,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing image",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1029,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity readiness rejects missing font",
+    "project": "chromium-390",
+    "status": "passed",
+    "durationMs": 1074,
+    "annotations": []
+  },
+  {
+    "test": "capture sensitivity control",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1105,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects shared-token and clean revert",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 200,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity detects small-target and clean revert",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 221,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity missing baseline fails without writing a golden",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 240,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 33,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing route",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 220,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing setup",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 243,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing image",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 264,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing font",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 282,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "capture sensitivity control",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1144,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects shared-token and clean revert",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 214,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity detects small-target and clean revert",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 204,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity missing baseline fails without writing a golden",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 233,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 33,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing route",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 249,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing setup",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 240,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing image",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 217,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing font",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 206,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "capture sensitivity control",
+    "project": "chromium-768",
+    "status": "passed",
+    "durationMs": 1148,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects shared-token and clean revert",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 208,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity detects small-target and clean revert",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 226,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity missing baseline fails without writing a golden",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 206,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 33,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing route",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 225,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing setup",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 226,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing image",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 222,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing font",
+    "project": "chromium-768",
+    "status": "skipped",
+    "durationMs": 227,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "capture sensitivity control",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1242,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects shared-token and clean revert",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 213,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity detects small-target and clean revert",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 202,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity missing baseline fails without writing a golden",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 208,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 33,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing route",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 219,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing setup",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 219,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing image",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 205,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing font",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 203,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "capture sensitivity control",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1228,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects shared-token and clean revert",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 224,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity detects small-target and clean revert",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 216,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity missing baseline fails without writing a golden",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 260,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 33,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing route",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 235,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing setup",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 328,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing image",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 314,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing font",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 260,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "capture sensitivity control",
+    "project": "chromium-1440",
+    "status": "passed",
+    "durationMs": 1234,
+    "annotations": []
+  },
+  {
+    "test": "sensitivity detects shared-token and clean revert",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 220,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity detects small-target and clean revert",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 195,
+    "annotations": [
+      {
+        "type": "skip",
+        "description": "Sensitivity is verification-only, one renderer size",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 14,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity missing baseline fails without writing a golden",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 208,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 33,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing route",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 211,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing setup",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 210,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing image",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 213,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  },
+  {
+    "test": "sensitivity readiness rejects missing font",
+    "project": "chromium-1440",
+    "status": "skipped",
+    "durationMs": 224,
+    "annotations": [
+      {
+        "type": "skip",
+        "location": {
+          "file": "C:\\dev\\emdash-site-starter\\tests\\visual\\sensitivity.spec.mjs",
+          "line": 41,
+          "column": 8
+        }
+      }
+    ]
+  }
+]

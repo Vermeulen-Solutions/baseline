@@ -1,0 +1,341 @@
+
+> emdash-site-starter@0.0.3 check:upstream
+> node scripts/check-upstream-updates.mjs
+
+{
+  "formatVersion": 1,
+  "reviewedAt": "2026-10-16T08:07:08.405Z",
+  "mutation": false,
+  "packages": [
+    {
+      "name": "@astrojs/check",
+      "declared": "^0.9.10",
+      "locked": "0.9.10",
+      "installed": "0.9.10",
+      "peerDependencies": {
+        "typescript": "^5.0.0 || ^6.0.0"
+      },
+      "engines": null,
+      "status": "observed-match",
+      "availableStable": "0.9.10",
+      "availablePatch": "0.9.10",
+      "availableEngines": null,
+      "availablePeers": {
+        "typescript": "^5.0.0 || ^6.0.0"
+      },
+      "releaseDate": "2026-07-27T13:10:17.800Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/@astrojs/check"
+    },
+    {
+      "name": "@astrojs/node",
+      "declared": "11.1.8",
+      "locked": "11.1.8",
+      "installed": "11.1.8",
+      "peerDependencies": {
+        "astro": "^7.2.1"
+      },
+      "engines": null,
+      "status": "observed-match",
+      "availableStable": "11.1.8",
+      "availablePatch": "11.1.8",
+      "availableEngines": null,
+      "availablePeers": {
+        "astro": "^7.2.1"
+      },
+      "releaseDate": "2026-10-15T14:46:22.804Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/@astrojs/node"
+    },
+    {
+      "name": "@astrojs/react",
+      "declared": "7.1.0",
+      "locked": "7.1.0",
+      "installed": "7.1.0",
+      "peerDependencies": {
+        "@types/react": "^17.0.50 || ^18.0.21 || ^19.0.0",
+        "@types/react-dom": "^17.0.17 || ^18.0.6 || ^19.0.0",
+        "oxc-transform-react": "^0.145.0",
+        "react": "^17.0.2 || ^18.0.0 || ^19.0.0",
+        "react-dom": "^17.0.2 || ^18.0.0 || ^19.0.0"
+      },
+      "engines": {
+        "node": ">=22.22.0"
+      },
+      "status": "observed-match",
+      "availableStable": "7.1.0",
+      "availablePatch": "7.1.0",
+      "availableEngines": {
+        "node": ">=22.22.0"
+      },
+      "availablePeers": {
+        "react": "^17.0.2 || ^18.0.0 || ^19.0.0",
+        "react-dom": "^17.0.2 || ^18.0.0 || ^19.0.0",
+        "@types/react": "^17.0.50 || ^18.0.21 || ^19.0.0",
+        "@types/react-dom": "^17.0.17 || ^18.0.6 || ^19.0.0",
+        "oxc-transform-react": "^0.145.0"
+      },
+      "releaseDate": "2026-10-15T14:46:22.969Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/@astrojs/react"
+    },
+    {
+      "name": "@fontsource/noto-sans",
+      "declared": "5.3.0",
+      "locked": "5.3.0",
+      "installed": "5.3.0",
+      "peerDependencies": null,
+      "engines": null,
+      "status": "observed-match",
+      "availableStable": "5.3.0",
+      "availablePatch": "5.3.0",
+      "availableEngines": null,
+      "availablePeers": null,
+      "releaseDate": "2026-07-19T03:42:38.065Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/@fontsource/noto-sans"
+    },
+    {
+      "name": "@google/design.md",
+      "declared": "0.4.0",
+      "locked": "0.4.0",
+      "installed": "0.4.0",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">=18.0.0"
+      },
+      "status": "observed-match",
+      "availableStable": "0.4.0",
+      "availablePatch": "0.4.0",
+      "availableEngines": {
+        "node": ">=18.0.0"
+      },
+      "availablePeers": null,
+      "releaseDate": "2026-07-27T21:14:49.092Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/@google/design.md"
+    },
+    {
+      "name": "@playwright/test",
+      "declared": "1.64.1",
+      "locked": "1.64.1",
+      "installed": "1.64.1",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">=20"
+      },
+      "status": "observed-match",
+      "availableStable": "1.64.1",
+      "availablePatch": "1.64.1",
+      "availableEngines": {
+        "node": ">=20"
+      },
+      "availablePeers": null,
+      "releaseDate": "2026-10-14T11:58:13.696Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/@playwright/test"
+    },
+    {
+      "name": "@tailwindcss/vite",
+      "declared": "^4.3.3",
+      "locked": "4.3.3",
+      "installed": "4.3.3",
+      "peerDependencies": {
+        "vite": "^5.2.0 || ^6 || ^7 || ^8"
+      },
+      "engines": null,
+      "status": "observed-match",
+      "availableStable": "4.3.3",
+      "availablePatch": "4.3.3",
+      "availableEngines": null,
+      "availablePeers": {
+        "vite": "^5.2.0 || ^6 || ^7 || ^8"
+      },
+      "releaseDate": "2026-07-16T12:04:06.316Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/@tailwindcss/vite"
+    },
+    {
+      "name": "astro",
+      "declared": "7.4.0",
+      "locked": "7.4.0",
+      "installed": "7.4.0",
+      "peerDependencies": {
+        "@astrojs/markdown-remark": "^7.3.0"
+      },
+      "engines": {
+        "node": ">=22.22.0",
+        "npm": ">=9.6.5",
+        "pnpm": ">=7.1.0"
+      },
+      "status": "observed-match",
+      "availableStable": "7.4.0",
+      "availablePatch": "7.4.0",
+      "availableEngines": {
+        "npm": ">=9.6.5",
+        "node": ">=22.22.0",
+        "pnpm": ">=7.1.0"
+      },
+      "availablePeers": {
+        "@astrojs/markdown-remark": "^7.3.0"
+      },
+      "releaseDate": "2026-10-15T14:49:24.327Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/astro"
+    },
+    {
+      "name": "emdash",
+      "declared": "1.3.0",
+      "locked": "1.3.0",
+      "installed": "1.3.0",
+      "peerDependencies": {
+        "@astrojs/react": ">=5.0.0-beta.0",
+        "@emdash-cms/auth-atproto": ">=0.2.8",
+        "astro": ">=6.0.0-beta.0",
+        "react": ">=18.0.0",
+        "react-dom": ">=18.0.0"
+      },
+      "engines": {
+        "node": ">=22.16"
+      },
+      "status": "observed-match",
+      "availableStable": "1.3.0",
+      "availablePatch": "1.3.0",
+      "availableEngines": {
+        "node": ">=22.16"
+      },
+      "availablePeers": {
+        "astro": ">=6.0.0-beta.0",
+        "react": ">=18.0.0",
+        "react-dom": ">=18.0.0",
+        "@astrojs/react": ">=5.0.0-beta.0",
+        "@emdash-cms/auth-atproto": ">=0.2.8"
+      },
+      "releaseDate": "2026-10-15T15:38:35.961Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/emdash"
+    },
+    {
+      "name": "photoswipe",
+      "declared": "^5.4.4",
+      "locked": "5.4.4",
+      "installed": "5.4.4",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">= 0.12.0"
+      },
+      "status": "observed-match",
+      "availableStable": "5.4.4",
+      "availablePatch": "5.4.4",
+      "availableEngines": {
+        "node": ">= 0.12.0"
+      },
+      "availablePeers": null,
+      "releaseDate": "2024-05-24T15:15:47.273Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/photoswipe"
+    },
+    {
+      "name": "react",
+      "declared": "19.2.4",
+      "locked": "19.2.4",
+      "installed": "19.2.4",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">=0.10.0"
+      },
+      "status": "observed-match",
+      "availableStable": "19.3.1",
+      "availablePatch": "19.2.9",
+      "availableEngines": {
+        "node": ">=0.10.0"
+      },
+      "availablePeers": null,
+      "releaseDate": "2026-10-14T16:47:15.290Z",
+      "upstreamStatus": "update-available",
+      "source": "https://www.npmjs.com/package/react"
+    },
+    {
+      "name": "react-dom",
+      "declared": "19.2.4",
+      "locked": "19.2.4",
+      "installed": "19.2.4",
+      "peerDependencies": {
+        "react": "^19.2.4"
+      },
+      "engines": null,
+      "status": "observed-match",
+      "availableStable": "19.3.1",
+      "availablePatch": "19.2.9",
+      "availableEngines": null,
+      "availablePeers": {
+        "react": "^19.3.1"
+      },
+      "releaseDate": "2026-10-14T16:49:10.081Z",
+      "upstreamStatus": "update-available",
+      "source": "https://www.npmjs.com/package/react-dom"
+    },
+    {
+      "name": "sharp",
+      "declared": "0.35.4",
+      "locked": "0.35.4",
+      "installed": "0.35.4",
+      "peerDependencies": null,
+      "engines": {
+        "node": ">=20.9.0"
+      },
+      "status": "observed-match",
+      "availableStable": "0.35.5",
+      "availablePatch": "0.35.5",
+      "availableEngines": {
+        "node": ">=20.9.0"
+      },
+      "availablePeers": null,
+      "releaseDate": "2026-09-27T13:46:24.509Z",
+      "upstreamStatus": "update-available",
+      "source": "https://www.npmjs.com/package/sharp"
+    },
+    {
+      "name": "tailwindcss",
+      "declared": "^4.3.3",
+      "locked": "4.3.3",
+      "installed": "4.3.3",
+      "peerDependencies": null,
+      "engines": null,
+      "status": "observed-match",
+      "availableStable": "4.3.3",
+      "availablePatch": "4.3.3",
+      "availableEngines": null,
+      "availablePeers": null,
+      "releaseDate": "2026-07-16T12:03:35.267Z",
+      "upstreamStatus": "current",
+      "source": "https://www.npmjs.com/package/tailwindcss"
+    }
+  ],
+  "node": {
+    "running": "v24.21.0",
+    "declared": "^22.22.2 || ^24.15.0 || >=26.0.0",
+    "latestStable": "v26.12.0",
+    "latestLts": "v24.22.0",
+    "runningMajorPatch": "v24.22.0",
+    "status": "observed",
+    "source": "https://nodejs.org/en/about/previous-releases"
+  },
+  "skills": [
+    {
+      "kind": "emdash",
+      "repository": "emdash-cms/emdash",
+      "availableCommit": "c95804553d01deba84f2dfc0015e5a63cb4b90a2",
+      "recordedCommit": "b74679528630a7ffc0f0f45e73bab4e7c5e61abb",
+      "status": "review-required"
+    },
+    {
+      "kind": "site",
+      "repository": "Vermeulen-Solutions/emdash-site-starter",
+      "availableCommit": "6c1c412e550621fb4f535a921c258af361e43a74",
+      "recordedCommit": null,
+      "status": "review-required"
+    }
+  ],
+  "decision": "Review current official changelogs/migration guides; record dated adopt/defer decisions and revisit triggers. Availability and declared peers do not certify compatibility."
+}

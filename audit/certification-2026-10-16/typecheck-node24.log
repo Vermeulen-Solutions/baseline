@@ -1,0 +1,25 @@
+
+> emdash-site-starter@0.0.3 pretypecheck
+> npm run check:schema-budget
+
+
+> emdash-site-starter@0.0.3 check:schema-budget
+> node scripts/check-schema-budget.mjs
+
+Schema budget not measured: local SQLite database not found at /workspace/starter\.emdash\checks\certification-clean\data.db. Run this check after EmDash setup and before a schema migration or D1 release.
+
+> emdash-site-starter@0.0.3 typecheck
+> astro check
+
+09:50:19 [@astrojs/node] Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+09:50:19 [types] Generated 252ms
+09:50:19 [check] Getting diagnostics for Astro files in /workspace/starter\.emdash\checks\certification-clean...
+Result (41 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+

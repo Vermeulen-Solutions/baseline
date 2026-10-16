@@ -1,0 +1,3 @@
+interface:
+  display_name: "WordPress Content Migration"
+  short_description: "Import and verify WordPress content in EmDash"

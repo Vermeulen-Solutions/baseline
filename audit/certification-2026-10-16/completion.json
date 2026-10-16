@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-16",
+  "phase3": "complete within Node/SQLite/Windows Chromium scope",
+  "hudCommit": "ac92dac",
+  "standardsVersion": "0.1.1",
+  "releaseURL": "https://github.com/Vermeulen-Solutions/emdash-site-starter/releases/tag/standards-v0.1.1",
+  "releaseCommit": "28ccf82b3047eb615cd57ca55141751e0d29af11",
+  "immutable": true,
+  "manifestSHA256": "a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4",
+  "issue3": {
+    "state": "CLOSED",
+    "stateReason": "COMPLETED",
+    "closedAt": "2026-10-16T08:23:05Z",
+    "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/3"
+  },
+  "issue6": {
+    "state": "CLOSED",
+    "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/issues/6"
+  },
+  "githubBranchCI": {
+    "conclusion": "success",
+    "seconds": 50,
+    "url": "https://github.com/Vermeulen-Solutions/emdash-site-starter/actions/runs/38873027269"
+  },
+  "tagDuplicateObserved": false,
+  "repositoryVisibility": "private",
+  "clientRepositoriesModified": false,
+  "productionDeployed": false,
+  "preExistingSkillsPreserved": 4,
+  "next": [
+    "#2 read-only client diagnostic engine",
+    "#11 sanitization/licensing/community packaging"
+  ],
+  "phase5Unverified": [
+    "Workers",
+    "D1",
+    "R2"
+  ]
+}

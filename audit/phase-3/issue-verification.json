@@ -1,0 +1,20 @@
+[
+  {
+    "number": 5,
+    "state": "OPEN",
+    "bodyVerified": true,
+    "titleAndCommentsPreserved": true
+  },
+  {
+    "number": 7,
+    "state": "OPEN",
+    "bodyVerified": true,
+    "titleAndCommentsPreserved": true
+  },
+  {
+    "number": 10,
+    "state": "OPEN",
+    "bodyVerified": true,
+    "titleAndCommentsPreserved": true
+  }
+]

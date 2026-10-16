@@ -1,0 +1,290 @@
+@import "tailwindcss";
+
+/*
+ * Neutral starting tokens, not a finished brand theme.
+ * Fluid values grow between 20rem and 80rem viewport widths.
+ */
+@theme {
+	--font-body: ui-sans-serif, system-ui, sans-serif;
+	--font-display: ui-sans-serif, system-ui, sans-serif;
+
+	--text-step--1: clamp(0.875rem, calc(0.8333rem + 0.2083vi), 1rem);
+	--text-step-0: clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem);
+	--text-step-1: clamp(1.25rem, calc(1rem + 1.25vi), 2rem);
+	--text-step-2: clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem);
+
+	--spacing-content: clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem);
+	--spacing-grid: clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem);
+	--spacing-container: clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem);
+	--spacing-section: clamp(3rem, calc(1rem + 10vi), 9rem);
+
+	--color-page: oklch(99% 0.004 250);
+	--color-surface: oklch(100% 0 0);
+	--color-text: oklch(24% 0.02 260);
+	--color-muted: oklch(46% 0.02 260);
+	--color-border: oklch(85% 0.015 260);
+	--color-action: oklch(43% 0.14 250);
+	--color-on-action: oklch(100% 0 0);
+	--color-focus: oklch(52% 0.18 250);
+	--color-focus-on-dark: oklch(76% 0.13 250);
+
+	--radius-control: 0.375rem;
+	--radius-card: 0.75rem;
+}
+
+:root {
+	color-scheme: light;
+	font-family: var(--font-body);
+	color: var(--color-text);
+	background: var(--color-page);
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	--measure-reading: 68ch;
+	--measure-content: 76rem;
+	--measure-wide: 88rem;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	min-block-size: 100vh;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	/* Exported surface tokens work without the development controls. */
+	background-image: var(--page-pattern, none);
+	background-size: var(--page-pattern-size, auto);
+}
+
+main {
+	flex: 1;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ul,
+ol,
+blockquote,
+figure {
+	margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: var(--font-display);
+	font-weight: var(--font-weight-display, 700);
+	letter-spacing: var(--letter-spacing-display, normal);
+	line-height: 1.15;
+	text-wrap: balance;
+}
+
+[data-hero-asset] {
+	/* Mark media itself, not a section containing text or controls. */
+	filter: var(--hero-filter, none);
+}
+
+h1 {
+	font-size: var(--text-step-2);
+}
+
+h2 {
+	font-size: var(--text-step-1);
+}
+
+p,
+li {
+	max-width: var(--measure-reading);
+	line-height: 1.65;
+}
+
+img,
+picture,
+video {
+	max-inline-size: 100%;
+	height: auto;
+}
+
+a {
+	color: var(--color-action);
+	text-underline-offset: 0.18em;
+}
+
+a:hover {
+	text-decoration-thickness: 0.12em;
+}
+
+:focus-visible {
+	outline: 0.2rem solid var(--color-focus);
+	outline-offset: 0.2rem;
+}
+
+button,
+input,
+select,
+textarea {
+	font: inherit;
+}
+
+button {
+	min-block-size: 2.75rem;
+	border: 1px solid var(--color-action);
+	border-radius: var(--radius-control);
+	padding-inline: 1rem;
+	color: var(--color-on-action);
+	background: var(--color-action);
+	cursor: pointer;
+}
+
+button:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+.skip-link {
+	position: absolute;
+	inset-block-start: 0.5rem;
+	inset-inline-start: 0.5rem;
+	z-index: 10;
+	transform: translateY(-150%);
+	border-radius: var(--radius-control);
+	padding: 0.75rem 1rem;
+	color: var(--color-on-action);
+	background: var(--color-action);
+}
+
+.skip-link:focus {
+	transform: translateY(0);
+}
+
+.site-header,
+.site-footer {
+	border-color: var(--color-border);
+	background: var(--color-surface);
+}
+
+.site-header {
+	border-block-end: 1px solid var(--color-border);
+}
+
+.site-nav {
+	width: min(100%, var(--measure-wide));
+	min-block-size: 4rem;
+	margin-inline: auto;
+	padding: 0.75rem var(--spacing-container);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--spacing-content);
+}
+
+.site-brand {
+	margin-inline-end: auto;
+	font-weight: 700;
+	text-decoration: none;
+}
+
+.site-logo {
+	display: block;
+	max-block-size: 3rem;
+	inline-size: auto;
+}
+
+.site-main {
+	width: min(100%, var(--measure-wide));
+	margin-inline: auto;
+	padding: var(--spacing-section) var(--spacing-container);
+}
+
+.site-main > :where(* + *) {
+	margin-block-start: var(--spacing-content);
+}
+
+.site-footer {
+	border-block-start: 1px solid var(--color-border);
+	padding: var(--spacing-content) var(--spacing-container);
+}
+
+/* Apply this wrapper to EmDash Portable Text and other editorial rich text. */
+.flow > :where(* + *) {
+	margin-block-start: var(--flow-space, var(--spacing-content));
+}
+
+.article-body {
+	margin-block-start: var(--spacing-content);
+}
+
+.flow :where(ul, ol) {
+	padding-inline-start: 1.5em;
+}
+
+.flow :where(img, figure, table, blockquote) {
+	margin-block: var(--spacing-grid);
+}
+
+.container-shell {
+	width: 100%;
+	margin-inline: auto;
+}
+
+.container-shell--reading {
+	max-width: var(--measure-reading);
+}
+
+.container-shell--content {
+	max-width: var(--measure-content);
+}
+
+.container-shell--wide {
+	max-width: var(--measure-wide);
+}
+
+.grid-auto {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
+	gap: var(--spacing-grid);
+}
+
+.grid-auto--compact {
+	--grid-min: 14rem;
+}
+
+.grid-auto--standard {
+	--grid-min: 17rem;
+}
+
+.grid-auto--wide {
+	--grid-min: 21rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		scroll-behavior: auto !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* Opt-in role for dark surfaces; site art direction supplies its own colors. */
+[data-surface="dark"] { --color-focus: var(--color-focus-on-dark); }

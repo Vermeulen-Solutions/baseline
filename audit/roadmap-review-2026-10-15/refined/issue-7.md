@@ -1,0 +1,39 @@
+# Deterministic browser captures and reviewed visual regression gates
+
+## Outcome and baseline correction
+Add a pinned Playwright Test screenshot harness using its built-in image assertions/reporting rather than building a parallel server/diff/report runner unless a measured gap requires it. Expose proposed npm run test:visual and an explicit baseline-update mode.
+
+Current routes use /posts/[slug], not /blog/sample-post; fixtures determine real slugs. CI currently lives in .github/workflows/design-checks.yml, not ci.yml. The styleguide is production-hidden; use #5's explicit loopback fixture build contract or a separate documented dev capture project, never silently open it in release builds.
+
+## Execution contract
+1. Pin Playwright and browser image/digest, Node version, Linux rendering environment, locale, timezone, color scheme, deviceScaleFactor and font files. npm ci and browser/system-dependency setup must be repeatable. Windows developers generate authoritative baselines in the same Linux environment; optionally keep separately named local baselines.
+2. Run against the actual built Node standalone server with deterministic HOST/PORT and a bounded readiness probe, isolated database and media directories, test encryption/auth configuration and no production credentials. Do not assume astro preview is a complete production emulator for every adapter. Start/cleanup processes on success, failure, timeout and cancellation; avoid arbitrary sleeps.
+3. Initialize a disposable EmDash DB through installed supported setup/seed APIs. Fixture manifest defines routes, published entries, fixed dates/IDs where supported, media, locales, expected status/content and states. Never read or modify the developer's ./data.db or uploads. Bound and document bootstrap/migration behavior.
+4. Minimum matrix: /, a fixture-backed /[slug], /posts plus /posts/[slug], category/tag archive and intentional 404; styleguide via fixture build if #5 is shipped. Full-page captures at 390x844, 768x1024 and 1440x900; add 320px/reflow checks and focused interaction captures for navigation, focus, forms, gallery/lightbox and long/missing-content fixtures as applicable.
+5. Before capture verify expected status and fixture-specific content (a 200 setup/login page is failure), font readiness via document.fonts, decoded images, explicit component readiness and enhancement state. Block unexpected external requests; surface missing images, page exceptions and relevant failed requests.
+6. Freeze dates/random fixture output and isolate browser storage. Disable animations/caret for stable still captures; test reduced-motion behavior and interactive enhancements separately. HUD/source overrides must be off. Do not mask layout regions merely to make tests pass; every mask needs a documented dynamic-data reason.
+7. Compare full-page shared layout plus targeted component/state captures so a large page does not dilute a small critical defect. Separate pixelmatch per-pixel color tolerance from maxDiffPixels/maxDiffPixelRatio. Calibrate tolerances from repeated unchanged runs; do not impose an unexplained universal 0.1%.
+8. Missing baselines, missing routes/assets and capture-readiness failures fail verification. Baseline update is explicit, local/reviewed, and never automatic in CI or from untrusted PR input. Record runtime/browser/fixture/viewport metadata beside baseline manifests.
+
+## CI and baseline governance
+Extend the existing workflow with a separate visual job when useful; keep required checks visible and time-bounded. Upload expected/actual/diff, HTML report, console/network diagnostics and trace on failure with explicit retention and no private data. Verify artifact upload still runs when capture fails. Reports and goldens use synthetic assets/content.
+
+Run the full suite on relevant PRs or initially all PRs; a smaller opt-in pre-commit smoke capture may follow measured timings. Do not install a slow full screenshot suite as a mandatory pre-commit dependency by default. Deployment rebuilds with fixture mode off, and a separate smoke check proves /_styleguide=404 and no active HUD. Never deploy the CI fixture artifact.
+
+Keep a small pre-upgrade capture spike for #3 if needed; the full harness can ship after modernization. A screenshot baseline of a defect does not establish design quality, accessibility, editor support or parity. Those checks stay distinct.
+
+## Acceptance criteria
+- [ ] Fresh Linux checkout bootstraps and captures without local DB, uploads, cloud credentials or public network fonts.
+- [ ] Three unchanged runs produce stable results; runtime and tolerance policy are documented.
+- [ ] Deliberate shared-token shift and a small targeted layout defect fail with useful artifacts; revert passes.
+- [ ] Missing baseline/route/font/image and a setup-page response fail for the correct reason.
+- [ ] Baseline update generates reviewable changes and cannot run implicitly in CI.
+- [ ] Production-hidden styleguide test and public/editor acceptance remain separate, with no deployment artifact reuse.
+- [ ] Interrupt/failure cleanup leaves no server/database contamination; fork PR CI requires no secrets.
+- [ ] README records local/container commands, baseline review, capture manifest and CI time/storage budget.
+
+## Dependencies
+#5's shared fixtures and production-isolation contract precede styleguide captures. #3 establishes the supported runtime matrix; neither its initial runbook nor #7 requires all infrastructure work to finish. No dependency on #6 overlays. #2 consumes reports; #8/#9 later add integration fixtures.
+
+## Sources
+[Playwright screenshots](https://playwright.dev/docs/test-snapshots) · [Playwright CI](https://playwright.dev/docs/ci) · [Astro Node adapter](https://docs.astro.build/en/guides/integrations-guide/node/).

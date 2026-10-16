@@ -1,0 +1,135 @@
+{
+  "fixtureChecks": [
+    {
+      "client": 305,
+      "duplicateIDs": [],
+      "intentionalScroll": [
+        "language-css",
+        "emdash-table-wrapper"
+      ],
+      "reduced": true,
+      "scroll": 305,
+      "tickers": [
+        {
+          "duplicate": "none",
+          "group": "none",
+          "label": "Synthetic partner ticker",
+          "visibleFirst": true,
+          "width": 273
+        },
+        {
+          "duplicate": "none",
+          "group": "none",
+          "label": "Single static RTL logo",
+          "visibleFirst": true,
+          "width": 273
+        }
+      ],
+      "width": 320
+    },
+    {
+      "client": 375,
+      "duplicateIDs": [],
+      "intentionalScroll": [],
+      "reduced": true,
+      "scroll": 375,
+      "tickers": [
+        {
+          "duplicate": "none",
+          "group": "none",
+          "label": "Synthetic partner ticker",
+          "visibleFirst": true,
+          "width": 340
+        },
+        {
+          "duplicate": "none",
+          "group": "none",
+          "label": "Single static RTL logo",
+          "visibleFirst": true,
+          "width": 340
+        }
+      ],
+      "width": 390
+    },
+    {
+      "client": 753,
+      "duplicateIDs": [],
+      "intentionalScroll": [],
+      "reduced": true,
+      "scroll": 753,
+      "tickers": [
+        {
+          "duplicate": "none",
+          "group": "none",
+          "label": "Synthetic partner ticker",
+          "visibleFirst": true,
+          "width": 706
+        },
+        {
+          "duplicate": "none",
+          "group": "none",
+          "label": "Single static RTL logo",
+          "visibleFirst": true,
+          "width": 706
+        }
+      ],
+      "width": 768
+    },
+    {
+      "client": 1425,
+      "duplicateIDs": [],
+      "intentionalScroll": [],
+      "reduced": true,
+      "scroll": 1425,
+      "tickers": [
+        {
+          "duplicate": "none",
+          "group": "none",
+          "label": "Synthetic partner ticker",
+          "visibleFirst": true,
+          "width": 1344
+        },
+        {
+          "duplicate": "none",
+          "group": "none",
+          "label": "Single static RTL logo",
+          "visibleFirst": true,
+          "width": 1344
+        }
+      ],
+      "width": 1440
+    }
+  ],
+  "keyboard": {
+    "focused": "specimen-invalid",
+    "outline": "solid"
+  },
+  "zoom": {
+    "zoomBefore": {
+      "dpr": 0.9999999859116286,
+      "font": "16px",
+      "width": 1440
+    },
+    "zoomAfter": {
+      "dpr": 0.9999999859116286,
+      "font": "16px",
+      "width": 1440
+    },
+    "verified": false
+  },
+  "unverified": [
+    "Non-reduced-motion animation and pause/seam geometry",
+    "Browser JavaScript-disabled mode",
+    "Other browser engines"
+  ],
+  "nativeControls": {
+    "checkbox": true,
+    "radios": [
+      false,
+      true
+    ],
+    "selection": "A much longer choice to inspect narrow layouts",
+    "errorSummaryLinkFocus": "specimen-invalid"
+  },
+  "fixtureSource": "Final copy confirmed after rebuild/reload"
+}

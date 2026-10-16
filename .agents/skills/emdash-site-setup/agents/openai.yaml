@@ -1,0 +1,3 @@
+interface:
+  display_name: "EmDash Site Setup"
+  short_description: "Scaffold and deploy EmDash Astro sites"

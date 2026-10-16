@@ -1,0 +1,77 @@
+{
+  "dimensions": [
+    {
+      "headings": 1,
+      "overflow": false,
+      "scrollWidth": 305,
+      "width": 320
+    },
+    {
+      "headings": 1,
+      "overflow": false,
+      "scrollWidth": 375,
+      "width": 390
+    },
+    {
+      "headings": 1,
+      "overflow": false,
+      "scrollWidth": 753,
+      "width": 768
+    },
+    {
+      "headings": 1,
+      "overflow": false,
+      "scrollWidth": 1425,
+      "width": 1440
+    }
+  ],
+  "keyboard": {
+    "sourceComparison": true,
+    "escapeHidesGridBeforePanel": true,
+    "typingDoesNotToggle": true,
+    "reloadClearsOverrides": true
+  },
+  "capture": {
+    "wide": {
+      "width": 1440,
+      "height": 900
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844
+    },
+    "fullPage": true
+  },
+  "grid": {
+    "viewports": [
+      {
+        "deltaLeft": 0,
+        "deltaWidth": -0.014190673828125,
+        "overflow": false,
+        "width": 320
+      },
+      {
+        "deltaLeft": 0,
+        "deltaWidth": 0,
+        "overflow": false,
+        "width": 390
+      },
+      {
+        "deltaLeft": 0,
+        "deltaWidth": -0.01416015625,
+        "overflow": false,
+        "width": 768
+      },
+      {
+        "deltaLeft": 0,
+        "deltaWidth": 0,
+        "overflow": false,
+        "width": 1440
+      }
+    ],
+    "rtl": {
+      "direction": "rtl",
+      "status": "586px content · 36px gaps · rtl"
+    }
+  }
+}

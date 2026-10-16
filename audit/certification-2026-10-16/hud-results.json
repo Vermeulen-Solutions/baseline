@@ -1,0 +1,756 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "/workspace/starter\\.emdash\\checks\\certification-clean\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config=playwright.dev-tools.config.mjs"
+    ],
+    "configFile": "/workspace/starter\\.emdash\\checks\\certification-clean\\playwright.dev-tools.config.mjs",
+    "rootDir": "/workspace/starter/.emdash/checks/certification-clean/tests/dev-tools",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\dev-tools\\setup.mjs",
+    "globalTeardown": null,
+    "globalTimeout": 600000,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 3,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/workspace/starter/.emdash/checks/certification-clean/.emdash/checks/dev-hud/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-390",
+        "name": "chromium-390",
+        "testDir": "/workspace/starter/.emdash/checks/certification-clean/tests/dev-tools",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.mjs"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/workspace/starter/.emdash/checks/certification-clean/.emdash/checks/dev-hud/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-768",
+        "name": "chromium-768",
+        "testDir": "/workspace/starter/.emdash/checks/certification-clean/tests/dev-tools",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.mjs"
+        ],
+        "timeout": 45000
+      },
+      {
+        "outputDir": "/workspace/starter/.emdash/checks/certification-clean/.emdash/checks/dev-hud/results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium-1440",
+        "name": "chromium-1440",
+        "testDir": "/workspace/starter/.emdash/checks/certification-clean/tests/dev-tools",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.spec.mjs"
+        ],
+        "timeout": 45000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\checks\\dev-hud\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium-390",
+        "testDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\dev-tools",
+        "snapshotDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\dev-tools",
+        "testIgnore": [],
+        "testMatch": "**/*.spec.mjs",
+        "timeout": 45000,
+        "use": {
+          "browserName": "chromium",
+          "channel": "chromium",
+          "headless": true,
+          "locale": "en-US",
+          "timezoneId": "UTC",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "reducedMotion": "reduce",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-390"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\checks\\dev-hud\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium-768",
+        "testDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\dev-tools",
+        "snapshotDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\dev-tools",
+        "testIgnore": [],
+        "testMatch": "**/*.spec.mjs",
+        "timeout": 45000,
+        "use": {
+          "browserName": "chromium",
+          "channel": "chromium",
+          "headless": true,
+          "locale": "en-US",
+          "timezoneId": "UTC",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "reducedMotion": "reduce",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "viewport": {
+            "width": 768,
+            "height": 1024
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-768"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\.emdash\\checks\\dev-hud\\results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium-1440",
+        "testDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\dev-tools",
+        "snapshotDir": "/workspace/starter\\.emdash\\checks\\certification-clean\\tests\\dev-tools",
+        "testIgnore": [],
+        "testMatch": "**/*.spec.mjs",
+        "timeout": 45000,
+        "use": {
+          "browserName": "chromium",
+          "channel": "chromium",
+          "headless": true,
+          "locale": "en-US",
+          "timezoneId": "UTC",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "reducedMotion": "reduce",
+          "serviceWorkers": "block",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium-1440"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": ".emdash/checks/dev-hud/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "none",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "hud.spec.mjs",
+      "file": "hud.spec.mjs",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "reference alignment, scrolling, DPR/scale, memory lifecycle and local-only requests",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2848,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:20.570Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "reference-audit",
+                      "contentType": "application/json",
+                      "body": "eyJuZXR3b3JrIjpbXSwidXJscyI6eyJjcmVhdGVkIjoyLCJyZXZva2VkIjoyfSwic3RvcmFnZVdyaXRlcyI6MH0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-351813341f072be91925",
+          "file": "hud.spec.mjs",
+          "line": 29,
+          "column": 1
+        },
+        {
+          "title": "reference rejects invalid/oversized headers, decoder failures and remote drops",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3329,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:24.925Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-f78add43b979e02545d7",
+          "file": "hud.spec.mjs",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "public ownership, unsupported markers, entry context and UI text stay read-only",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1697,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:28.267Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-1420eae9ea0e988ecd59",
+          "file": "hud.spec.mjs",
+          "line": 92,
+          "column": 1
+        },
+        {
+          "title": "real disposable EmDash edit annotations can be inspected without claiming save verification",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1424,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:29.977Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-5145d10b92525854a0ff",
+          "file": "hud.spec.mjs",
+          "line": 108,
+          "column": 1
+        },
+        {
+          "title": "T/B/G/O/P, modal/composition/input guards, reset, swap and reload lifecycle",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-390",
+              "projectName": "chromium-390",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2776,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:31.425Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-1617bd5f178226476aee",
+          "file": "hud.spec.mjs",
+          "line": 137,
+          "column": 1
+        },
+        {
+          "title": "reference alignment, scrolling, DPR/scale, memory lifecycle and local-only requests",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2365,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:35.163Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "reference-audit",
+                      "contentType": "application/json",
+                      "body": "eyJuZXR3b3JrIjpbXSwidXJscyI6eyJjcmVhdGVkIjoyLCJyZXZva2VkIjoyfSwic3RvcmFnZVdyaXRlcyI6MH0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-34e04f5e6796a381991d",
+          "file": "hud.spec.mjs",
+          "line": 29,
+          "column": 1
+        },
+        {
+          "title": "reference rejects invalid/oversized headers, decoder failures and remote drops",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3078,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:38.011Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-33883e636292d6300c3f",
+          "file": "hud.spec.mjs",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "public ownership, unsupported markers, entry context and UI text stay read-only",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1964,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:41.102Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-2b26202a911e5219e557",
+          "file": "hud.spec.mjs",
+          "line": 92,
+          "column": 1
+        },
+        {
+          "title": "real disposable EmDash edit annotations can be inspected without claiming save verification",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1666,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:43.088Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-4225e9118e24349a81a9",
+          "file": "hud.spec.mjs",
+          "line": 108,
+          "column": 1
+        },
+        {
+          "title": "T/B/G/O/P, modal/composition/input guards, reset, swap and reload lifecycle",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-768",
+              "projectName": "chromium-768",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2983,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:44.782Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-2cf6184b2271ec9b4293",
+          "file": "hud.spec.mjs",
+          "line": 137,
+          "column": 1
+        },
+        {
+          "title": "reference alignment, scrolling, DPR/scale, memory lifecycle and local-only requests",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2766,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:49.006Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "reference-audit",
+                      "contentType": "application/json",
+                      "body": "eyJuZXR3b3JrIjpbXSwidXJscyI6eyJjcmVhdGVkIjoyLCJyZXZva2VkIjoyfSwic3RvcmFnZVdyaXRlcyI6MH0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-0729e38eee21d87ea27c",
+          "file": "hud.spec.mjs",
+          "line": 29,
+          "column": 1
+        },
+        {
+          "title": "reference rejects invalid/oversized headers, decoder failures and remote drops",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3050,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:52.169Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-4e695ad98c92fd37d79f",
+          "file": "hud.spec.mjs",
+          "line": 70,
+          "column": 1
+        },
+        {
+          "title": "public ownership, unsupported markers, entry context and UI text stay read-only",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2119,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:55.237Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-8523c63be93e817b2c9f",
+          "file": "hud.spec.mjs",
+          "line": 92,
+          "column": 1
+        },
+        {
+          "title": "real disposable EmDash edit annotations can be inspected without claiming save verification",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1842,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:57.372Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-5e57b92ec7f3e7948a9e",
+          "file": "hud.spec.mjs",
+          "line": 108,
+          "column": 1
+        },
+        {
+          "title": "T/B/G/O/P, modal/composition/input guards, reset, swap and reload lifecycle",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 45000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium-1440",
+              "projectName": "chromium-1440",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3549,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-16T07:51:59.241Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "b3724c9833362fa951cb-dfff5b95065b5b1a737e",
+          "file": "hud.spec.mjs",
+          "line": 137,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-16T07:50:58.475Z",
+    "duration": 65267.151,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

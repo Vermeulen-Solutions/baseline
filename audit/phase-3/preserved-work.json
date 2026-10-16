@@ -1,0 +1,18 @@
+[
+  {
+    "path": ".agents/skills/building-emdash-site/SKILL.md",
+    "matches": true
+  },
+  {
+    "path": ".agents/skills/building-emdash-site/references/querying-and-rendering.md",
+    "matches": true
+  },
+  {
+    "path": ".agents/skills/emdash-content-modeling/SKILL.md",
+    "matches": true
+  },
+  {
+    "path": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+    "matches": true
+  }
+]

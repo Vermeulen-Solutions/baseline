@@ -1,0 +1,29 @@
+{
+  "revision": "7be19d11c04257bc60f92cb53e5697695f01d6e2",
+  "files": [
+    {
+      "path": ".agents/skills/building-emdash-site/SKILL.md",
+      "sha256": "05ed0d6a90c221ac4ded5c8e456add9667d018b9dfc0b524d64b985d3d9c369d"
+    },
+    {
+      "path": ".agents/skills/building-emdash-site/references/querying-and-rendering.md",
+      "sha256": "93c685ae965f8f95dd3e83b3f6709240ecea9f72d469323e40e6ff3ba1b3ea11"
+    },
+    {
+      "path": ".agents/skills/emdash-content-modeling/SKILL.md",
+      "sha256": "f56b4013e5995c1ca66729b6c31b590535cd40c390c98d1c6ede58ea83cbd352"
+    },
+    {
+      "path": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+      "sha256": "773b9ed335c06de565e10cd4003b3b64706ee46945a719444ea94b1385e72057"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "d714167bde16e24030eb90bbdd8e94e242a4ff60d64bb94cafba482cc177fc3b"
+    },
+    {
+      "path": "package.json",
+      "sha256": "5473f89b43cf529d9e2a48bae6fdfd07afa0d02f39e0cdcdd7a5c4427ce7a63f"
+    }
+  ]
+}

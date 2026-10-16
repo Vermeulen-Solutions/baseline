@@ -1,0 +1,267 @@
+{
+  "date": "2026-10-16",
+  "milestone": "6c1c412e550621fb4f535a921c258af361e43a74",
+  "newHudChanges": "uncommitted",
+  "pushed": false,
+  "releasePublished": false,
+  "deployed": false,
+  "runtime": {
+    "astro": "7.4.0",
+    "emdash": "1.3.0",
+    "localNode": "24.21.0",
+    "ciNode": "22.22.0",
+    "playwright": "1.64.1",
+    "chromiumRevision": "1248",
+    "platform": "win32"
+  },
+  "hud": {
+    "startTime": "2026-10-15T23:19:08.244Z",
+    "duration": 59965.469,
+    "expected": 15,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "visual": {
+    "startTime": "2026-10-15T23:16:38.692Z",
+    "duration": 173694.21899999998,
+    "expected": 51,
+    "skipped": 18,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "unitTests": {
+    "passed": 35,
+    "failed": 0,
+    "source": "ci-fast.log"
+  },
+  "typecheck": {
+    "files": 41,
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "referencePrivacy": [
+    {
+      "project": "chromium-390",
+      "network": [],
+      "urls": {
+        "created": 2,
+        "revoked": 2
+      },
+      "storageWrites": 0
+    },
+    {
+      "project": "chromium-768",
+      "network": [],
+      "urls": {
+        "created": 2,
+        "revoked": 2
+      },
+      "storageWrites": 0
+    },
+    {
+      "project": "chromium-1440",
+      "network": [],
+      "urls": {
+        "created": 2,
+        "revoked": 2
+      },
+      "storageWrites": 0
+    }
+  ],
+  "baselines": {
+    "count": 51,
+    "allHashesUnchanged": true,
+    "updateFlagUsed": false
+  },
+  "production": {
+    "dev": {
+      "status": 200,
+      "specimens": true,
+      "images": 17,
+      "fakeEditBindings": false
+    },
+    "production": {
+      "GET": 404,
+      "GET?fixtures=1": 404,
+      "HEAD": 404,
+      "HEAD?fixtures=1": 404,
+      "publicStatus": 200,
+      "zodResolution": "Dependency-local validators bundled; no bare Zod imports in emitted server modules",
+      "HUDClientIsolation": "All emitted client JS/CSS scanned: G/O/P identifiers, reference loading and ownership adapter diagnostics absent; empty script stubs allowed"
+    },
+    "isolation": "Fresh temporary root; no working database, media, env file or credentials copied.",
+    "fixtures": {
+      "status": 200,
+      "fixtureVersion": 2,
+      "tickerInstances": 2,
+      "emptyTickerOmitted": true,
+      "releaseRejected": true,
+      "HUD": false,
+      "images": "all successful"
+    }
+  },
+  "fastCI": {
+    "node": "22.22.0",
+    "platform": "win32",
+    "seconds": 20.152,
+    "under60Seconds": true,
+    "excludes": "GitHub checkout/setup/npm ci/queue time; actual Actions execution not claimed",
+    "browserTestsRun": false,
+    "receipts": [
+      {
+        "name": "art-direction",
+        "seconds": 0.263,
+        "exitCode": 0
+      },
+      {
+        "name": "syntax-lint",
+        "seconds": 1.226,
+        "exitCode": 0
+      },
+      {
+        "name": "schema-budget",
+        "seconds": 0.098,
+        "exitCode": 0
+      },
+      {
+        "name": "unit-tests",
+        "seconds": 2.248,
+        "exitCode": 0
+      },
+      {
+        "name": "normal-build",
+        "seconds": 16.245,
+        "exitCode": 0
+      },
+      {
+        "name": "release-profile",
+        "seconds": 0.071,
+        "exitCode": 0
+      }
+    ]
+  },
+  "upstreamAnnotation": {
+    "path": "node_modules/emdash/src/visual-editing/editable.ts",
+    "sha256LF": "fc012f8a5ec5e07ed6e9449037184f56a00dde7f71c629ebf4ac9ae7c22dd48a",
+    "version": "1.3.0",
+    "attribute": "data-emdash-ref",
+    "locale": "not supplied; no inference",
+    "verification": "Unit fixture executes installed createEditable/createNoopEditable; browser suite observes actual edit-mode field marker. No saving certification claimed."
+  },
+  "preservedSkillEdits": [
+    {
+      "path": ".agents/skills/building-emdash-site/SKILL.md",
+      "sha256": "05ed0d6a90c221ac4ded5c8e456add9667d018b9dfc0b524d64b985d3d9c369d",
+      "unchanged": true
+    },
+    {
+      "path": ".agents/skills/building-emdash-site/references/querying-and-rendering.md",
+      "sha256": "93c685ae965f8f95dd3e83b3f6709240ecea9f72d469323e40e6ff3ba1b3ea11",
+      "unchanged": true
+    },
+    {
+      "path": ".agents/skills/emdash-content-modeling/SKILL.md",
+      "sha256": "f56b4013e5995c1ca66729b6c31b590535cd40c390c98d1c6ede58ea83cbd352",
+      "unchanged": true
+    },
+    {
+      "path": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+      "sha256": "773b9ed335c06de565e10cd4003b3b64706ee46945a719444ea94b1385e72057",
+      "unchanged": true
+    }
+  ],
+  "sourceHashesLF": [
+    {
+      "path": "src/components/TweaksBar.astro",
+      "sha256LF": "fb3f1d423fabd7b451813a1c3536789d9240c9d4fa0f52747b7613e1834cd2cd"
+    },
+    {
+      "path": "src/utils/grid-guide.ts",
+      "sha256LF": "9f1d9109aa3c534e0cfdf5018ceb110f51f9c05f3318e42bc7619a3bf4460a04"
+    },
+    {
+      "path": "src/env.d.ts",
+      "sha256LF": "41d6ec9b7cbd1fa39600983f51c00791e9f41bce6f17c007ea2af8b7c3aef82c"
+    },
+    {
+      "path": "src/utils/reference-image.mjs",
+      "sha256LF": "c3d5336366b5e54d3b56704d64dfdfb902ab5c3a015e45d01b00c5dad800dd14"
+    },
+    {
+      "path": "src/utils/reference-overlay.ts",
+      "sha256LF": "9d35365a069fc8547e9ea53ab890d0a002d8c5dd2b43b7e5d5c5d978f400bb82"
+    },
+    {
+      "path": "src/utils/emdash-ownership.mjs",
+      "sha256LF": "c52f3dbcaf511b35a372d34a2cad08ad43b9cc1b13a92a4a9f021b8efbf4f37d"
+    },
+    {
+      "path": "src/utils/ownership-inspector.ts",
+      "sha256LF": "a820068c82f70d98c5eca512f1f7b55a511e227f7085a386d006a15404fe65a3"
+    },
+    {
+      "path": "scripts/dev-tools-integration.mjs",
+      "sha256LF": "3c0bd5504fbb738f628074b66e5e22102b0b90814d321f7a5d05cc2a12f66d7f"
+    },
+    {
+      "path": "scripts/check-dev-tools.mjs",
+      "sha256LF": "b4872545e652e90a5fc503ca9d04d5b6f8d07200a50e24629de2c63fa76d2397"
+    },
+    {
+      "path": "scripts/check-script-syntax.mjs",
+      "sha256LF": "83045c018fa11f739aa1d4bbf09228ef1fb5e907ce77b696f0bcf338a4832386"
+    },
+    {
+      "path": "tests/dev-hud.test.mjs",
+      "sha256LF": "2a374061a3ed7bc914da25553112e28f1bd35872131c8b06c7c69df9aad0a3ad"
+    },
+    {
+      "path": "tests/dev-tools/hud.spec.mjs",
+      "sha256LF": "2f6193196732798da14fe7d1d7a8c209f470ca85b9c7176f2f9543396a2454eb"
+    },
+    {
+      "path": "tests/dev-tools/setup.mjs",
+      "sha256LF": "8776d51b788210bb11ff70871c2d95b75aac8671f6f9f7760bedc98273c2826c"
+    },
+    {
+      "path": "tests/visual/site.mjs",
+      "sha256LF": "cc47d0568e19146dcf04a0b278df25cd30bb38ce3182dae4b3b11bb94f30336a"
+    },
+    {
+      "path": "tests/visual/helpers.mjs",
+      "sha256LF": "3a280df524dad679e0795546fea175fd38facf54a812ef48a66d7d8a33901e51"
+    },
+    {
+      "path": "playwright.dev-tools.config.mjs",
+      "sha256LF": "7979e43b5aeb48565bf6e47526357f54fc37e1c62ecb49b522a36ac5c85243f7"
+    },
+    {
+      "path": "package.json",
+      "sha256LF": "c1b49ab36869c7aeb7471d4f8c40d8e91236a8184e3364db19c6e8aa19dad2bd"
+    },
+    {
+      "path": "docs/dev-hud.md",
+      "sha256LF": "83b87d366d904b1cb1e1b3259a2a0c4acfb36905764735d7f3cffbd5194bf1ca"
+    },
+    {
+      "path": "docs/phase-3-certification.md",
+      "sha256LF": "6ec7dfdace7e1f595fe385f2473b404d35900e17962a8c9a179cfd3a662f5294"
+    },
+    {
+      "path": "standards/manifest.json",
+      "sha256LF": "1912d62a301ee25eb020b3d51f07b21e23ec3ad33fc32f67c8914168b363c085"
+    },
+    {
+      "path": "audit/design-gate-exceptions.json",
+      "sha256LF": "dc4d3cf8318727a81f3b259513cad84705413f9bf4fa9a7b6338f3135a0fa7a5"
+    }
+  ],
+  "limitations": [
+    "Windows Chromium only",
+    "Ownership annotations do not prove registration or saveability",
+    "No immutable standards release",
+    "Workers/D1/R2/providers/full editor matrix remain pending"
+  ]
+}

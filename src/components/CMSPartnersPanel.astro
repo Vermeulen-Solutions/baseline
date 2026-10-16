@@ -1,0 +1,14 @@
+---
+import { getEmDashCollection } from 'emdash';
+import PartnersPanel from './PartnersPanel.astro';
+import { partnersFromEntries } from '../lib/partners';
+interface Props { collection?: string; locale?: string; }
+const { collection = 'sponsors', locale = Astro.currentLocale } = Astro.props;
+const result = await getEmDashCollection(collection, {
+  status: 'published', locale, orderBy: { sort_order: 'asc' }
+});
+if (result.error) throw new Error(`Unable to query partner collection: ${collection}`);
+if (Astro.cache?.enabled) Astro.cache.set(result.cacheHint);
+const partners = partnersFromEntries(result.entries, Astro.locals.emdash?.getPublicMediaUrl);
+---
+<PartnersPanel partners={partners} />

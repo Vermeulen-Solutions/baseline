@@ -1,0 +1,4 @@
+interface:
+  display_name: "New Site Workflow"
+  short_description: "Sequence a complete Astro and EmDash site build"
+  default_prompt: "Use $new-site-workflow to adapt this starter into a complete site."

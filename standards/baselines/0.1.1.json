@@ -1,0 +1,162 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.1.1",
+  "status": "certified-scoped",
+  "reviewedAt": "2026-10-16",
+  "stableReleaseRef": "refs/tags/standards-v0.1.1",
+  "runtimeProfiles": {
+    "node-sqlite": {
+      "status": "certified-scoped",
+      "nodeMinimum": "22.22.2",
+      "nodeObserved": "24.21.0",
+      "dependencies": {
+        "astro": "7.4.0",
+        "emdash": "1.3.0",
+        "@astrojs/node": "11.1.8",
+        "@astrojs/react": "7.1.0",
+        "react": "19.2.4",
+        "react-dom": "19.2.4",
+        "tailwindcss": "^4.3.3"
+      },
+      "evidence": "audit/certification-2026-10-16/README.md",
+      "serverBundling": "Vite ssr.noExternal zod: resolve dependency-local versions before emitting server chunks",
+      "nodeTested": [
+        "22.22.2",
+        "22.23.3",
+        "24.21.0"
+      ],
+      "additionalEvidence": [
+        "audit/visual-regression-2026-10-16/README.md",
+        "audit/dev-hud-2026-10-16/README.md"
+      ],
+      "nodeRecommended": "24 LTS (current security patch)",
+      "nodeEngineRange": "^22.22.2 || ^24.15.0 || >=26.0.0",
+      "browser": {
+        "platform": "win32-x64",
+        "playwright": "1.64.1",
+        "chromiumRevision": "1248",
+        "node": "24.21.0",
+        "scope": "Local-only; not a cross-platform browser matrix"
+      },
+      "applicability": {
+        "i18n": "not enabled; opt-in locale matrix required",
+        "routeCaching": "disabled; opt-in shared cache-hint review required",
+        "forms": "optional; live provider delivery unverified",
+        "galleryOuterKey": "regenerated during observed inline conversion; semantic image data preserved"
+      }
+    },
+    "cloudflare-d1-r2": {
+      "status": "unverified",
+      "reason": "Optional adapter/resources and Worker delivery not certified",
+      "phase": "Phase 5 (#8/#9)"
+    }
+  },
+  "checks": [
+    {
+      "id": "art-direction",
+      "command": "npm run check:art-direction",
+      "level": "required",
+      "availability": "shipped"
+    },
+    {
+      "id": "unit",
+      "command": "node --test tests/*.test.mjs",
+      "level": "required",
+      "availability": "shipped"
+    },
+    {
+      "id": "typecheck",
+      "command": "npm run typecheck",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local; excluded from fast automated CI"
+    },
+    {
+      "id": "build",
+      "command": "npm run build",
+      "level": "required",
+      "availability": "shipped"
+    },
+    {
+      "id": "production-dev-tools-exclusion",
+      "command": "npm run check:dev-tools",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local; excluded from fast automated CI"
+    },
+    {
+      "id": "upstream-availability",
+      "command": "npm run check:upstream",
+      "level": "advisory",
+      "availability": "shipped",
+      "offline": "unverified"
+    },
+    {
+      "id": "design-interchange",
+      "command": "npm run design:check",
+      "level": "advisory",
+      "availability": "optional; absent DESIGN.md is not applicable"
+    },
+    {
+      "id": "schema-budget",
+      "command": "npm run check:schema-budget",
+      "level": "required-when-database-present",
+      "availability": "shipped; certified fresh SQLite physical widths 17/19; remote/missing DB remains unmeasured",
+      "offline": "missing database is unmeasured"
+    },
+    {
+      "id": "release-artifact-profile",
+      "command": "npm run check:release-artifact",
+      "level": "required-before-release",
+      "availability": "shipped; marker is packaging metadata, not authentication"
+    },
+    {
+      "id": "visual-regression",
+      "command": "npm run test:visual",
+      "level": "local-review-required-for-visual-changes",
+      "availability": "shipped",
+      "execution": "Windows only; Node 24.21.0 / Playwright 1.64.1 / Chromium revision 1248; prohibited in CI/build/deployment",
+      "evidence": "audit/visual-regression-2026-10-16/README.md"
+    },
+    {
+      "id": "developer-hud",
+      "command": "npm run test:dev-hud",
+      "level": "local-required-for-hud-changes",
+      "availability": "shipped",
+      "execution": "Local Windows Chromium only; excluded from automated CI/build/deployment",
+      "evidence": "audit/dev-hud-2026-10-16/README.md"
+    }
+  ],
+  "pending": [
+    "Workers/D1/R2 parity and R2/WordPress ingestion (#8/#9)",
+    "Native forms real notification/Turnstile providers",
+    "Opt-in multilingual/cache/full admin/plugin block matrix",
+    "Reviewed upstream skill snapshot refresh; existing drift preserved",
+    "Open-source legal/history/visibility/community packaging (#11)"
+  ],
+  "releasePolicy": "Scoped standards certification only. Downstream audits must resolve and pin the published immutable standards reference and manifest digest; unsupported scopes remain unverified. Latest supported security patches are recommended; declared engine compatibility is not certification of every admitted Node version.",
+  "automatedCI": {
+    "node": "22.23.3",
+    "matrix": false,
+    "checks": [
+      "art-direction",
+      "script-syntax-lint",
+      "schema-budget",
+      "unit",
+      "normal-build"
+    ],
+    "visual": false,
+    "targetSeconds": 60,
+    "timingScope": "Local command rehearsal excludes checkout, setup, install and network; not a GitHub runtime guarantee",
+    "localRehearsalSeconds": 21.593,
+    "pushBranchesOnly": true
+  },
+  "certification": {
+    "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
+    "sourceCommit": "31c72ec04838ddcbc0d3b82d9fc0f93f63dcf0a3",
+    "sourceTree": "1afbc3990536e53e63eceeb12444c5ae275d67e1",
+    "receipt": "audit/certification-2026-10-16/verification.json",
+    "releaseNotes": "standards/releases/0.1.1.md",
+    "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles."
+  }
+}

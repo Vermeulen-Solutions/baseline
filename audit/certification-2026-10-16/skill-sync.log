@@ -1,0 +1,7 @@
+{
+  "status": "update-available",
+  "stageId": "fcea652a-4d2e-4d8a-b2c8-36b6779f50a4",
+  "commitSha": "c95804553d01deba84f2dfc0015e5a63cb4b90a2",
+  "conflicts": [],
+  "next": "Review .emdash/skill-sync/fcea652a-4d2e-4d8a-b2c8-36b6779f50a4/review.json and incoming diff; then --apply fcea652a-4d2e-4d8a-b2c8-36b6779f50a4. Drift needs --resolution with reviewSha256 and exact replacePaths. Backups are retained."
+}

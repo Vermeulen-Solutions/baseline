@@ -1,0 +1,65 @@
+[2m10:04:21[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+[2m10:04:22[22m [34m[vite][39m connected.
+[2m10:04:22[22m [34m[types][39m Generated [2m2ms[22m
+[2m10:04:22[22m [34m[vite][39m connected.
+[2m10:04:22[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+
+  [2m›[22m Admin UI    [36mhttp://127.0.0.1:13885/_emdash/admin[39m
+  [2m›[22m MCP server  [36mhttp://127.0.0.1:13885/_emdash/api/mcp[39m
+  [2m›[22m Dev bypass  [36mhttp://127.0.0.1:13885/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin[39m
+    [2mSkips passkey setup/auth and signs you in as a dev admin[22m
+
+[42m[1m astro [22m[49m [32mv7.4.0[39m [2mready in[22m 2446 [2mms[22m
+[2m┃[22m Local    [36mhttp://127.0.0.1:13885/[39m
+[2m10:04:23[22m [32mwatching for file changes...[39m
+[2m10:04:24[22m [34m[vite][39m [optimizer] bundling dependencies...
+Auto-seeded default collections
+[2m10:04:34[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m6846ms[22m
+[2m10:04:34[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m3ms[22m
+[2m10:04:36[22m [34m[200][39m / [2m1439ms[22m
+[2m10:04:37[22m [34m[200][39m / [2m1498ms[22m
+[setup-dev-bypass] Seed applied: 0 collections, 0 fields
+[setup-dev-bypass] Created dev admin user: dev@emdash.local
+[2m10:04:37[22m [34m[200][39m /_emdash/api/setup/dev-bypass [2m40ms[22m
+[2m10:04:37[22m [34m[200][39m /_emdash/api/schema [2m3ms[22m
+[2m10:04:37[22m [34m[201][39m [34mPOST[39m /_emdash/api/media [2m45ms[22m
+[2m10:04:37[22m [34m[201][39m [34mPOST[39m /_emdash/api/media [2m16ms[22m
+[2m10:04:37[22m [34m[201][39m [34mPOST[39m /_emdash/api/content/pages [2m20ms[22m
+[2m10:04:37[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/pages/01M51VVNXZ5T0CXSX7VBJ6ZZ0G/publish [2m22ms[22m
+[2m10:04:37[22m [34m[200][39m /_emdash/api/content/pages/01M51VVNXZ5T0CXSX7VBJ6ZZ0G [2m3ms[22m
+[2m10:04:37[22m [34m[200][39m /certified-components-1792137859209 [2m35ms[22m
+[2m10:04:38[22m [34m[200][39m /_emdash/api/media/file/01M51VVNV7JHRC47SVMQG2ET4W.png [2m3ms[22m
+[2m10:04:38[22m [34m[200][39m /_emdash/api/media/file/01M51VVNWTT61PWRC9RWRSFYG4.png [2m3ms[22m
+[33m[1m10:04:38[22m [WARN] [cache][39m `cache.set()` was called but caching is not enabled. Configure a cache provider in your Astro config under `cache` to enable caching.
+[2m10:04:38[22m [34m[200][39m /certified-components-1792137859209 [2m33ms[22m
+[2m10:04:38[22m [34m[200][39m /_emdash/api/media/file/01M51VVNV7JHRC47SVMQG2ET4W.png [2m9ms[22m
+[2m10:04:38[22m [34m[200][39m /_emdash/api/media/file/01M51VVNWTT61PWRC9RWRSFYG4.png [2m4ms[22m
+[2m10:04:38[22m [34m[200][39m /certified-components-1792137859209 [2m36ms[22m
+[2m10:04:38[22m [34m[200][39m /_emdash/api/manifest [2m13ms[22m
+[2m10:04:39[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m10:04:44[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m10:04:48[22m [34m[vite][39m [32mdependencies optimized: [33m@emdash-cms/admin/html-block, use-sync-external-store/shim/index.js, use-sync-external-store/shim/with-selector.js[32m[39m
+[2m10:04:48[22m [34m[vite][39m [32moptimized dependencies changed. reloading[39m
+[2m10:04:48[22m [34m[200][39m /certified-components-1792137859209 [2m71ms[22m
+[2m10:04:48[22m [34m[200][39m /certified-components-1792137859209 [2m129ms[22m
+[2m10:04:48[22m [33m[304][39m /_emdash/api/media/file/01M51VVNV7JHRC47SVMQG2ET4W.png [2m5ms[22m
+[2m10:04:49[22m [33m[304][39m /_emdash/api/media/file/01M51VVNWTT61PWRC9RWRSFYG4.png [2m4ms[22m
+[2m10:04:49[22m [34m[200][39m /_emdash/api/manifest [2m7ms[22m
+[2m10:04:57[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/pages/01M51VVNXZ5T0CXSX7VBJ6ZZ0G [2m18ms[22m
+[2m10:04:57[22m [34m[200][39m /_emdash/api/content/pages/01M51VVNXZ5T0CXSX7VBJ6ZZ0G [2m3ms[22m
+[2m10:04:57[22m [34m[200][39m /_emdash/api/content/pages/01M51VVNXZ5T0CXSX7VBJ6ZZ0G [2m3ms[22m
+[2m10:04:57[22m [34m[200][39m /certified-components-1792137859209 [2m26ms[22m
+[2m10:04:57[22m [34m[200][39m /_emdash/api/manifest [2m10ms[22m
+[2m10:04:58[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/pages/01M51VVNXZ5T0CXSX7VBJ6ZZ0G/publish [2m13ms[22m
+[2m10:04:58[22m [34m[200][39m /certified-components-1792137859209 [2m14ms[22m
+[2m10:04:58[22m [33m[304][39m /_emdash/api/media/file/01M51VVNV7JHRC47SVMQG2ET4W.png [2m6ms[22m
+[2m10:04:58[22m [33m[304][39m /_emdash/api/media/file/01M51VVNWTT61PWRC9RWRSFYG4.png [2m5ms[22m
+[2m10:04:58[22m [34m[200][39m /certified-components-1792137859209 [2m14ms[22m
+[2m10:04:58[22m [33m[304][39m /_emdash/api/media/file/01M51VVNV7JHRC47SVMQG2ET4W.png [2m6ms[22m
+[2m10:04:58[22m [33m[304][39m /_emdash/api/media/file/01M51VVNWTT61PWRC9RWRSFYG4.png [2m4ms[22m
+[2m10:05:15[22m [34m[@astrojs/node][39m Server listening on http://127.0.0.1:13885
+[33m[1m10:05:17[22m [WARN] [cache][39m `cache.set()` was called but caching is not enabled. Configure a cache provider in your Astro config under `cache` to enable caching.

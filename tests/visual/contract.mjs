@@ -1,0 +1,26 @@
+export const visualContract = {
+  version: 1,
+  fixtureVersion: 2,
+  playwright: '1.64.1',
+  chromiumRevision: '1248',
+  node: '24.21.0',
+  platform: 'win32',
+  executionPolicy: 'Local developer verification only; no push/PR/build/deployment dependency',
+  font: '@fontsource/noto-sans@5.3.0 (latin 400/700)',
+  capturePaintPolicy: 'Screenshot-only gallery content-visibility:visible; no masks or production layout overrides',
+  date: '2026-01-15T12:00:00.000Z',
+  locale: 'en-US', timezoneId: 'UTC', colorScheme: 'light', deviceScaleFactor: 1,
+  // Identical runs must have no perceptibly different pixels. No page-size ratio allowance.
+  comparison: { threshold: 0.1, maxDiffPixels: 0, animations: 'disabled', caret: 'hide', scale: 'css' },
+  viewports: [{ width: 390, height: 844 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }],
+  routes: [
+    { name: 'home', path: '/', status: 200, heading: 'Recent Posts', text: 'Welcome' },
+    { name: 'page', path: '/about', status: 200, heading: 'About', text: 'This is the about page.' },
+    { name: 'posts', path: '/posts', status: 200, heading: 'Posts', text: 'Welcome' },
+    { name: 'post', path: '/posts/welcome', status: 200, heading: 'Welcome', text: 'What to do next' },
+    { name: 'category', path: '/category/general', status: 200, heading: 'General', text: 'Welcome' },
+    { name: 'tag', path: '/tag/starter', status: 200, heading: 'Tag: Starter', text: 'Welcome' },
+    { name: 'not-found', path: '/does-not-exist-visual-fixture', status: 404, heading: 'Page not found', text: 'Go home' },
+    { name: 'styleguide', path: '/_styleguide', status: 200, heading: 'Starter component styleguide', text: 'Coverage and limits' },
+  ],
+};

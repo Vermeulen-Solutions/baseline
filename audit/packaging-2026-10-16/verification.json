@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "node": "24.21.0",
+  "originalWorkingTree": {
+    "unitTestsPassed": 41,
+    "typecheck": { "files": 41, "errors": 0, "warnings": 0, "hints": 0 },
+    "physicalSchemaColumns": [17, 19],
+    "buildAndReleaseGuard": "passed",
+    "productionHUDIsolation": "passed",
+    "visualTestsPassed": 51,
+    "visualIntentionalSkips": 18,
+    "hudTestsPassed": 15,
+    "goldenPNGHashesUnchanged": 51,
+    "workflowReplayCapturesVerified": 6
+  },
+  "freshRootExport": {
+    "repository": "https://github.com/Vermeulen-Solutions/emdash-baseline",
+    "visibility": "private",
+    "cleanInstall": "npm ci --no-audit --no-fund: 716 packages installed",
+    "unitTestsPassed": 41,
+    "syntaxModulesChecked": 52,
+    "initialEmptyTreeArtDirectionGate": "passed with exact reviewed infrastructure exceptions",
+    "typecheck": { "files": 41, "errors": 0, "warnings": 0, "hints": 0 },
+    "buildAndReleaseGuard": "passed",
+    "physicalSchema": "unverified: no working database copied; preflight reports not measured",
+    "runtimeAndBrowserSourceFilesEquivalentAfterLFNormalization": 111,
+    "browserVerification": "Original working-root local runs plus verified exported source/golden equivalence; not rerun from the export",
+    "gitHistory": "New root snapshot; no original Git objects, tags or branches copied"
+  },
+  "privacy": "audit/privacy-2026-10-16/final-verification.json",
+  "warnings": [
+    "Existing large client-bundle advisory during production build",
+    "npm reports deprecated transitive dependencies; no dependency graph changes in this packaging pass",
+    "Local mirror drift remains preserved in the original tree and excluded from the root export"
+  ],
+  "boundaries": [
+    "No public visibility change or community announcements",
+    "No production deployment or downstream client modification",
+    "Worker/D1/R2 and live provider certification remains pending",
+    "Issue #2 remains open for complete adapters, reversible remediation and an authorized pilot"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "status": 200,
+    "specimens": true,
+    "images": 7,
+    "fakeEditBindings": false
+  },
+  "production": {
+    "GET": 404,
+    "GET?fixtures=1": 404,
+    "HEAD": 404,
+    "HEAD?fixtures=1": 404
+  },
+  "isolation": "Fresh temporary root; no working database, media, env file or credentials copied."
+}

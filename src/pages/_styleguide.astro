@@ -1,0 +1,8 @@
+---
+import Styleguide from '../components/dev/Styleguide.astro';
+// DEV is compiled into the artifact. Runtime env, query and cookies cannot enable it.
+if (!import.meta.env.DEV && !import.meta.env.STARTER_TEST_FIXTURES) return new Response(null, { status: 404, headers: { 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex, nofollow' } });
+Astro.response.headers.set('Cache-Control', 'no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+---
+<Styleguide />

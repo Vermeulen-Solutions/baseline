@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-16",
+  "repository": "Vermeulen-Solutions/emdash-site-starter",
+  "tag": "standards-v0.1.0",
+  "commit": "b1c52fb552c8f69d44bf2e9b6ab6172f4d5ff4cb",
+  "manifestGitBlob": "9c37cb9ad4817d786b2f72829531c983556164b9",
+  "manifestSHA256": "304d49ae5eae626ef67cd047bd6fd4bac62600ef6e0931e3d757ba646185b50e",
+  "immutableRelease": true,
+  "draft": false,
+  "mutableMainUsed": false,
+  "acceptedProfile": "node-sqlite",
+  "rejectedProfile": "cloudflare-d1-r2",
+  "clientRepositoryModified": false,
+  "releaseURL": "https://github.com/Vermeulen-Solutions/emdash-site-starter/releases/tag/standards-v0.1.0"
+}

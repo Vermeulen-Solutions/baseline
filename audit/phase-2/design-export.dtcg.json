@@ -1,0 +1,58 @@
+{
+  "$schema": "https://www.designtokens.org/schemas/2025.10/format.json",
+  "$description": "Documentation-only example; source CSS and AGENTS.md retain authority.",
+  "color": {
+    "$type": "color",
+    "primary": {
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0.318,
+          0.596
+        ],
+        "hex": "#005198"
+      }
+    },
+    "on-action": {
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "hex": "#ffffff"
+      }
+    },
+    "action-alias": {
+      "$value": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0.318,
+          0.596
+        ],
+        "hex": "#005198"
+      }
+    }
+  },
+  "rounded": {
+    "$type": "dimension",
+    "control": {
+      "$value": {
+        "value": 0.375,
+        "unit": "rem"
+      }
+    }
+  },
+  "typography": {
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "ui-sans-serif, system-ui, sans-serif",
+        "fontWeight": 400
+      }
+    }
+  }
+}

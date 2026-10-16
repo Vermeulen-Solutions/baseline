@@ -1,0 +1,43 @@
+---
+interface Props {
+  /** Unique page-local ID for the native motion control. */
+  id: string;
+  label: string;
+  toggleLabel?: string;
+  animate?: boolean;
+}
+const { id, label, toggleLabel = 'Animate logos', animate = false } = Astro.props;
+// Only trusted Astro-authored, noninteractive, ID-free <li> content. Not an HTML sanitizer.
+// No scripts/islands, raw CMS HTML, links, form controls, SVG IDs or edit proxies.
+const logos = await Astro.slots.render('default');
+---
+{logos?.trim() && <div class="logo-ticker" role="region" aria-label={label} data-logo-ticker>
+  <input class="logo-ticker__toggle" id={`${id}-motion`} type="checkbox" checked={animate} />
+  <label class="logo-ticker__control" for={`${id}-motion`}>{toggleLabel}</label>
+  <div class="logo-ticker__viewport">
+    <div class="logo-ticker__track">
+      <ul class="logo-ticker__group" role="list"><Fragment set:html={logos} /></ul>
+      <ul class="logo-ticker__group logo-ticker__duplicate" role="list" aria-hidden="true" inert><Fragment set:html={logos} /></ul>
+    </div>
+  </div>
+</div>}
+<style>
+  .logo-ticker { --logo-ticker-gap: var(--spacing-grid); min-inline-size: 0; }
+  .logo-ticker__toggle { inline-size: 1.25rem; block-size: 1.25rem; vertical-align: middle; accent-color: var(--color-action); }
+  .logo-ticker__control { display: inline-flex; align-items: center; min-block-size: 2.75rem; padding-inline: .5rem; cursor: pointer; }
+  .logo-ticker__viewport { overflow: hidden; }
+  .logo-ticker__track { display: flex; }
+  .logo-ticker__group { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-around; gap: var(--logo-ticker-gap); inline-size: 100%; margin: 0; padding: var(--spacing-content) 0; list-style: none; }
+  .logo-ticker__group :global(li) { flex: 0 0 auto; max-inline-size: 100%; overflow-wrap: anywhere; }
+  .logo-ticker__duplicate { display: none; }
+  @media screen and (prefers-reduced-motion: no-preference) {
+    .logo-ticker__toggle:checked ~ .logo-ticker__viewport .logo-ticker__group { display: flex; flex-wrap: nowrap; flex: 0 0 auto; inline-size: max-content; min-inline-size: 100%; padding-inline: calc(var(--logo-ticker-gap) / 2); animation: var(--logo-ticker-animation, logo-ticker-scroll) var(--logo-ticker-duration, 30s) linear infinite; animation-play-state: var(--logo-ticker-state, running); }
+    .logo-ticker:hover, .logo-ticker:focus-within { --logo-ticker-state: paused; }
+    .logo-ticker:dir(rtl) { --logo-ticker-animation: logo-ticker-scroll-rtl; }
+  }
+  @media (prefers-reduced-motion: reduce), print {
+    .logo-ticker__toggle, .logo-ticker__control { display: none; }
+  }
+  @keyframes logo-ticker-scroll { to { transform: translateX(-100%); } }
+  @keyframes logo-ticker-scroll-rtl { to { transform: translateX(100%); } }
+</style>

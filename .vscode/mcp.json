@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "emdash-docs": {
+      "type": "http",
+      "url": "https://docs.emdashcms.com/mcp"
+    },
+    "astro-docs": {
+      "type": "http",
+      "url": "https://mcp.docs.astro.build/mcp"
+    }
+  }
+}

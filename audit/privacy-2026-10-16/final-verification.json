@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "status": "bounded-scan-passed",
+  "reports": [
+    {
+      "tree": "sanitized-original-working-tree",
+      "files": 612,
+      "parsedJSON": 186,
+      "requestedTextAndFilenameMatches": 0,
+      "absoluteMachinePaths": 0,
+      "credentialPatternMatches": 0,
+      "gitGrepChecks": [
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        },
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        },
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        },
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        },
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        }
+      ]
+    },
+    {
+      "tree": "fresh-root-export",
+      "files": 610,
+      "parsedJSON": 186,
+      "requestedTextAndFilenameMatches": 0,
+      "absoluteMachinePaths": 0,
+      "credentialPatternMatches": 0,
+      "gitGrepChecks": [
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        },
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        },
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        },
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        },
+        {
+          "exitStatus": 1,
+          "meaning": "no matches"
+        }
+      ]
+    }
+  ],
+  "history": {
+    "originalReachableObjects": 1081,
+    "originalIdentifierBearingTextBlobs": 38,
+    "originalCredentialPatternMatches": 0,
+    "originalHistory": "retained private; not exported",
+    "scope": "Reachable original text blobs <=4 MiB; known credential formats only; no exhaustive secret/OCR claim"
+  },
+  "browserEvidence": {
+    "runtimeAndBrowserSourceFilesEquivalentAfterLFNormalization": 111,
+    "unchangedGoldenPNGHashes": 51,
+    "scope": "Current local visual/HUD runs used the original working root; exported source and goldens are equivalent. Clean export install/unit/typecheck/build are separate checks."
+  },
+  "limitations": [
+    "Not an exhaustive secret scanner or OCR/metadata audit",
+    "Public visibility and community launch remain separately tracked",
+    "Immutable historical evidence hashes refer to original private bytes; edited historical copies are redacted"
+  ]
+}

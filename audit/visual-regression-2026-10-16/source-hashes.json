@@ -1,0 +1,94 @@
+[
+  {
+    "file": "package.json",
+    "sha256LF": "5212610ce3b76bf1de6011ba1309ebc16e8dc1b24c191e41352c76d1a549ce33"
+  },
+  {
+    "file": "package-lock.json",
+    "sha256LF": "2463d95721b12be2ebf89658b0587348be1d51668dbfb518f70f320d92ae2620"
+  },
+  {
+    "file": "tests/visual-policy.test.mjs",
+    "sha256LF": "f6086a7c6bc70024e68c7aa64a065eb5387cf182511b91e5ca026caa48b02f63"
+  },
+  {
+    "file": "scripts/check-ci-fast.mjs",
+    "sha256LF": "de84f81f111baea7d9e65cb7ef62fa9e28814000ae4ac2a8a7ae93dcc49648d6"
+  },
+  {
+    "file": "playwright.config.mjs",
+    "sha256LF": "70a1ea62e69d7829cc4ab19223e92ef2519c35f547a6ccc200aff58ba99c3151"
+  },
+  {
+    "file": "tests/visual/contract.mjs",
+    "sha256LF": "ec51da7174337cd2b41506ac97b8bb0bb94bb443d695c5dfddf0190ccc4d9929"
+  },
+  {
+    "file": "tests/visual/helpers.mjs",
+    "sha256LF": "2f0d601f58d4aca36ddf7d7ad61bf89430f9ba38ab6efd5ff6c44e304a1c98a4"
+  },
+  {
+    "file": "tests/visual/behavior.spec.mjs",
+    "sha256LF": "b49cfdf8d9c35a0bf316f9f98ebdd6f3bba5e25839433f0996ee23526d3b0f5c"
+  },
+  {
+    "file": "tests/visual/captures.spec.mjs",
+    "sha256LF": "83ba4759f49c6b2e78ee5c9899b93b5fa7fe28ae2f93d26b2020429b6b2ea103"
+  },
+  {
+    "file": "tests/visual/sensitivity.spec.mjs",
+    "sha256LF": "5a932841fc1ca648f0dde62c816162600219cb27ea22a2db16144e7ce046108d"
+  },
+  {
+    "file": "tests/visual/site.mjs",
+    "sha256LF": "59958d4e355d9ec5bab632a85f74b9c4240d925fce602f5aa86e32859525469b"
+  },
+  {
+    "file": "tests/visual/setup.mjs",
+    "sha256LF": "4397c2cad6af4f3a84421aef6af180285972ad35508f17af8020c6178adbace7"
+  },
+  {
+    "file": "tests/visual/cancel-receiver.mjs",
+    "sha256LF": "f8fb3d335a234638bbb2775768f783ad9be92eee7958bc94a75a78f995daf62c"
+  },
+  {
+    "file": "tests/visual/capture.css",
+    "sha256LF": "19a70c4e0033ec7982fa2ab73cfc2a263012d5ae2632afc8c9454987bb04dfcf"
+  },
+  {
+    "file": "scripts/test-visual.mjs",
+    "sha256LF": "e751c783f5809069c1c2ebf49289c15ffcd3d5c0f5223ddb49c4b75b1520e2ea"
+  },
+  {
+    "file": "src/components/PhotoGallery.astro",
+    "sha256LF": "05f964e56873437f0836dd3653092391ea418b0105870878710d2ec5c0330932"
+  },
+  {
+    "file": "src/components/LogoTicker.astro",
+    "sha256LF": "af5233b66b4a965eeb73059c1b8298dd6336970954159496702018eb82e97f54"
+  },
+  {
+    "file": "src/components/dev/Styleguide.astro",
+    "sha256LF": "4eff30af2cb4d0ccefe83210edc0ba598642244f7747616fcacae7119143e26b"
+  },
+  {
+    "file": "src/layouts/Base.astro",
+    "sha256LF": "93a8385688f098ef6a0ca16b839aec393af864e4c777cc4f62b5618292406b0e"
+  },
+  {
+    "file": "src/dev/visual-fonts.css",
+    "sha256LF": "e6f3ec1ec61600ccd0e94dfa6ef46d41000f2abc45f6aee05b5e45b719b78ba3"
+  },
+  {
+    "file": ".github/workflows/design-checks.yml",
+    "sha256LF": "3f88e166d4a0f8404b0988c0789396d312639f7c3f61f7b7e7b8941fef1a6d29"
+  },
+  {
+    "file": "seed/seed.json",
+    "sha256LF": "8a1e21b5c47a750df394f79a544e31244690da7e5aeaada1a4628b3c52438543"
+  },
+  {
+    "file": "src/styles/global.css",
+    "sha256LF": "e24dde6934cac579d464e843194787f4d85d1c553b869751f35c67c44e983925"
+  }
+]
