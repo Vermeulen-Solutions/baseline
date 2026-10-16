@@ -89,7 +89,7 @@ Do not attempt to assemble twenty full pages at once. Source and calibrate your 
 Now assemble your public routes and wire up EmDash CMS editing:
 - **Compose with Primitives:** Build layouts using `<Section>`, `<Container>`, and `<Grid>` primitives ([Design Framework](design-framework.md)).
 - **Bind Editorial Canvas Proxies:** Pass page identity to `Base.astro` and spread field proxies (`{...entry.edit.title}`) onto the rendered elements so clients can visually edit content in the CMS ([Editorial Canvas](emdash-editorial-canvas.md)).
-- **Media Optimization:** Use native Astro image delivery for photographic assets ([Image Delivery](image-delivery.md)) and run `npm run media:organize` to tidy WordPress media imports into structured folders.
+- **Media Optimization:** Use native Astro image delivery for photographic assets ([Image Delivery](image-delivery.md)) and run `npm run media:migrate-wp` to normalize and ingest WordPress media imports via an auditable manifest.
 - **Zero-JS by Default:** Use pure CSS interactive primitives like `LogoTicker` and justified `PhotoGallery` ([Reusable Patterns](reusable-public-patterns.md)).
 
 ---

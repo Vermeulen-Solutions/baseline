@@ -95,21 +95,22 @@ Make the administrative CMS intuitive for non-technical client editors:
 
 ---
 
-## 5. Post-Import Media Cleanup & Hydration
+## 5. Post-Import Media Preparation & Ingestion
 
-WordPress imports deposit assets into an unfiled, flat media pool with messy filenames (e.g. `3206-Photo-team-scaled.jpg`) and leave custom fields storing raw string pointers (`wordpress-attachment:123`).
+WordPress imports often leave assets in an unfiled, flat media pool with messy filenames (e.g. `3206-Photo-team-scaled.jpg`) and unmigrated attachment references.
 
-Before handing off the site, run Baseline's automated media organizer:
+Instead of mutating raw SQLite tables in place, use Baseline's manifest-driven media preparation pipeline ([Native Image Delivery](image-delivery.md)):
 
 ```bash
-# Preview changes in dry-run mode:
-node scripts/organize-media.mjs --dry-run
+# 1. Prepare a normalized manifest and clean slugs (no CMS or R2 mutations):
+npm run media:migrate-wp -- --prepare --source ./wp-uploads --metadata ./wp-media.json --out ./audit/media-migration
 
-# Execute organization and database hydration:
-npm run media:organize
+# 2. After reviewing the generated plan.md and manifest.json, ingest into local EmDash CMS:
+npm run media:migrate-wp -- --apply-local --manifest ./audit/media-migration/manifest.json --uploads ./uploads
 ```
 
-This utility automatically:
-1. **Establishes Folders:** Organizes assets into standard categories (`Pages`, `Articles`, `Documents`, `Media`) and collection-specific folders (`Teams`, `Sponsors`, `Galleries`).
-2. **Slugifies Filenames:** Strips WordPress camera prefixes, numeric IDs, and resizing tags (`-scaled`, `-150x150`) into clean lowercase slugs (`photo-team.jpg`).
-3. **Hydrates Content Fields:** Updates renamed filenames across `ec_*` tables and converts raw attachment strings into full EmDash structured media objects (`{ id, provider: 'local', filename, url, width, height }`) so the CMS Media Picker can render thumbnails.
+This pipeline safely:
+1. **Normalizes & Deduplicates:** Strips WordPress camera prefixes, numeric IDs, and intermediate resizing suffixes (`-scaled`, `-150x150`) into deterministic lowercase slugs (`photo-team.jpg`) while tracking SHA-256 checksums.
+2. **Generates an Auditable Manifest:** Produces `manifest.json` and `plan.md` mapping legacy WordPress attachment IDs and URLs to clean target slugs before touching the CMS.
+3. **Uses Supported EmDash Ingestion:** Uploads verified assets through the supported EmDash Media Library / MCP pipeline and prepares explicit R2 staging manifests (`--stage-r2`) for Cloudflare cutover.
+

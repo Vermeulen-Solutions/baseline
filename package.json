@@ -1,6 +1,11 @@
 {
   "name": "emdash-baseline",
   "version": "0.0.3",
+  "description": "The visual-first Astro toolkit for EmDash CMS and AI-assisted developers: live Dev HUD, component quarantine, schema safeguards, and local visual regression.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Vermeulen-Solutions/emdash-baseline.git"
+  },
   "private": true,
   "type": "module",
   "engines": {

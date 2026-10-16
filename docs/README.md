@@ -37,7 +37,7 @@ Explore the documentation guides below, organized by workflow, design architectu
 *Relational modeling, schema safety, and client-friendly CMS administration.*
 
 - **[WordPress Content Modeling & Candidate Register](wordpress-content-modeling.md)**  
-  Methodology for migrating WordPress sites: hunting for implicit content entities buried in page builder blocks or ACF repeaters, relational normalization, `routable: false`, admin language strategy, and automated media cleanup (`npm run media:organize`).
+  Methodology for migrating WordPress sites: hunting for implicit content entities buried in page builder blocks or ACF repeaters, relational normalization, `routable: false`, admin language strategy, and manifest-driven media preparation (`npm run media:migrate-wp`).
 - **[Editorial Canvas & Content Binding](emdash-editorial-canvas.md)**  
   How to query EmDash collections in Astro templates and bind live editing field proxies (`entry.edit.title`) so clients can visually edit content. Also details the **50-column physical schema budget** for Cloudflare D1 safety.
 - **[Internationalization (i18n)](internationalization.md)**  

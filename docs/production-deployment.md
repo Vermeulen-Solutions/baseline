@@ -41,17 +41,21 @@ When deploying to Cloudflare Workers, Astro compiles templates for serverless ed
 
 ### Critical Edge Gotchas
 
-#### A. Cloudflare D1 100-Column Limit
+#### A. Cloudflare D1 100-Column Limit & Schema Parity
 Cloudflare D1 enforces a hard limit of **100 columns per database table**.
-* Always run `npm run check:schema-budget` before building.
+* Always run `npm run check:schema-budget` and `npm run db:diff` ([Database Workflow](database-workflow.md)) before building or migrating to compare your local SQLite schema against remote D1.
 * Baseline's strict **50-column physical schema budget** ensures tables stay well below D1's limit even with generated columns and metadata.
 
 #### B. The Media Deployment Disconnect (`wrangler deploy` ≠ Media Upload)
 Running `wrangler deploy` uploads compiled Astro application code and serverless functions, but **never uploads local media files**.
 * If you imported a WordPress site or uploaded photos locally, those files reside in `./uploads/`.
-* You must synchronize media to your remote R2 bucket before release:
+* Stage and synchronize media to your remote R2 bucket using explicit target flags ([Native Image Delivery](image-delivery.md)):
   ```bash
-  npm run media:sync-r2 -- --bucket=your-production-r2-bucket
+  # Dry-run R2 staging verification (default):
+  npm run media:sync-r2 -- --config ./wrangler.toml --env production --account <account-id> --bucket <r2-bucket> --uploads ./uploads --manifest ./audit/media-migration/manifest.json
+
+  # Execute upload after reviewing the dry-run plan:
+  npm run media:sync-r2 -- --apply --config ./wrangler.toml --env production --account <account-id> --bucket <r2-bucket> --uploads ./uploads --manifest ./audit/media-migration/manifest.json
   ```
 
 #### C. Persistent Session Storage for Forms
