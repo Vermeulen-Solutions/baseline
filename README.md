@@ -1,10 +1,14 @@
-# Baseline — The Visual-First Astro Toolkit for EmDash CMS & AI-Assisted Developers
+<p align="center">
+  <img src="docs/images/baseline-logo.svg" alt="Baseline — The Visual-First Astro Toolkit for EmDash CMS & AI-Assisted Developers" width="540" />
+</p>
 
-[![Astro 7.4.0](https://img.shields.io/badge/Astro-7.4.0-BC52EE)](https://astro.build/)
-[![EmDash 1.3.0](https://img.shields.io/badge/EmDash-1.3.0-2563EB)](https://docs.emdashcms.com/)
-[![Tailwind v4](https://img.shields.io/badge/Tailwind-v4-06B6D4)](https://tailwindcss.com/)
-[![Node LTS](https://img.shields.io/badge/Node-LTS-339933)](#60-second-quickstart)
-[![MIT License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
+<p align="center">
+  <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7.4.0-BC52EE" alt="Astro 7.4.0" /></a>
+  <a href="https://docs.emdashcms.com/"><img src="https://img.shields.io/badge/EmDash-1.3.0-2563EB" alt="EmDash 1.3.0" /></a>
+  <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind-v4-06B6D4" alt="Tailwind v4" /></a>
+  <a href="#60-second-quickstart"><img src="https://img.shields.io/badge/Node-LTS-339933" alt="Node LTS" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT License" /></a>
+</p>
 
 EmDash is a modern, lightweight headless CMS built ground-up for AI-native web development. Baseline provides the visual frontend foundation, development guardrails, and testing harness built specifically for developers pairing with AI coding assistants—whether using **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, or local LLM runners.
 

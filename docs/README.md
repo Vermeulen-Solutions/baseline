@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="images/baseline-logo.svg" alt="Baseline Logo" width="420" />
+</p>
+
 # Documentation Directory
 
 Welcome to the Baseline documentation. This repository provides an agency-grade, visual-first Astro foundation built specifically for **AI-assisted developers working with EmDash CMS**.
