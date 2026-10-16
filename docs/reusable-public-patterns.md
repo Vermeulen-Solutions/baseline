@@ -32,7 +32,7 @@ import CMSPartnersPanel from '../components/CMSPartnersPanel.astro';
 <CMSPartnersPanel collection="sponsors" locale={Astro.currentLocale} />
 ```
 
-CMSPartnersPanel explicitly queries published entries, registers cache hints and applies no limit. Installed EmDash 1.1.0 returns the complete collection when limit is omitted; recheck this contract during upgrades. Choose deliberate shared/translatable collection semantics, not duplicate page lists. Add/remove/unpublish/deactivate in CMS and verify all consuming pages stay in sync. `logo_ground="dark"` places a dark inset behind artwork inside the light tile. Logos keep original colors. Hover changes no layout geometry; motion respects reduced motion. URL fields should use CMS URL validation.
+CMSPartnersPanel explicitly queries published entries, registers cache hints and applies no limit. Installed EmDash 1.3.0 returns the complete collection when limit is omitted; recheck this contract during upgrades. Choose deliberate shared/translatable collection semantics, not duplicate page lists. Add/remove/unpublish/deactivate in CMS and verify all consuming pages stay in sync. `logo_ground="dark"` places a dark inset behind artwork inside the light tile. Logos keep original colors. Hover changes no layout geometry; motion respects reduced motion. URL fields should use CMS URL validation.
 
 ## Form recovery and error summaries
 

@@ -12,7 +12,7 @@ When converting a site to Cloudflare, verify the installed adapter and EmDash ve
 
 ## Acceptance
 
-Check actual HTTP responses: candidates decode in the requested format, dimensions stay within original width, intrinsic ratio is preserved, small/animated/selected originals remain original, and rejected remote sources are not fetched. Upload new Media Library photography after building and prove optimization without rebuilding. Inspect desktop/mobile, high-density candidates, captions, links, gallery enlargement, editor rendering and service-failure recovery. Run typecheck, build, design/gallery/utility tests. Remove disposable fixtures/uploads and retain bounded evidence. Historical client hosting checks are not starter certification. Worker/D1/R2 remains unverified pending Phase 5.
+Check actual HTTP responses: candidates decode in the requested format, dimensions stay within original width, intrinsic ratio is preserved, small/animated/selected originals remain original, and rejected remote sources are not fetched. Upload new Media Library photography after building and prove optimization without rebuilding. Inspect desktop/mobile, high-density candidates, captions, links, gallery enlargement, editor rendering and service-failure recovery. Run typecheck, build, design/gallery/utility tests. Remove disposable fixtures/uploads and retain bounded evidence. Historical client hosting checks are not starter certification. Worker/D1/R2 hosting targets remain unverified pending cloud infrastructure adapter work.
 
 `npm run check:native-images` creates guarded disposable fixtures, checks development and built Node responses, adds a source through the Storage API after the build, then removes its sources and rebuilds clean output. It does not create CMS records or modify editorial content. It uses port 4332 and writes bounded audit evidence.
 
@@ -41,6 +41,6 @@ npm run media:sync-r2
 npm run media:sync-r2 -- --bucket=my-site-media
 ```
 
-This legacy helper is not a certified synchronization pipeline. Phase 5 must repair nested-key traversal, target-independent mtime caching and failure handling before use on a real bucket. Prefer supported site transfer where applicable; no remote upload is part of the local diagnostic engine.
+This helper is an uncertified synchronization utility. Future updates will address nested-key traversal, target-independent mtime caching, and robust error handling before recommended use on production buckets. Prefer supported site transfer where applicable; no remote upload is part of the local diagnostic engine.
 
 Sources: [Astro images](https://docs.astro.build/en/guides/images/), [Cloudflare adapter images](https://docs.astro.build/en/guides/integrations-guide/cloudflare/#imageservice), [Cloudflare Images binding](https://developers.cloudflare.com/images/optimization/binding/).

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 140" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 490 140" fill="none">
   <style>
     .bg { fill: transparent; }
     .text-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 34px; font-weight: 800; letter-spacing: 0.12em; }
@@ -13,8 +13,6 @@
     .target-corner { stroke: #06b6d4; stroke-width: 1.5; }
     .text-primary { fill: #f8fafc; }
     .text-muted { fill: #94a3b8; }
-    .badge { fill: #1e293b; stroke: #334155; }
-    .badge-text { fill: #38bdf8; }
 
     @media (prefers-color-scheme: light) {
       .icon-tile { fill: #ffffff; stroke: #e2e8f0; }
@@ -25,15 +23,13 @@
       .target-corner { stroke: #0891b2; stroke-width: 1.5; }
       .text-primary { fill: #0f172a; }
       .text-muted { fill: #64748b; }
-      .badge { fill: #f8fafc; stroke: #e2e8f0; }
-      .badge-text { fill: #0284c7; }
     }
   </style>
 
-  <rect width="680" height="140" class="bg" />
+  <rect width="490" height="140" class="bg" />
 
   <!-- Icon Mark: The Precision Grid & Alignment Target -->
-  <g transform="translate(20, 20)">
+  <g transform="translate(24, 20)">
     <!-- Container Shell -->
     <rect x="0" y="0" width="100" height="100" rx="16" class="icon-tile" stroke-width="1.5" />
     
@@ -56,8 +52,8 @@
   </g>
 
   <!-- Wordmark & Subtitle -->
-  <g transform="translate(145, 62)">
+  <g transform="translate(148, 62)">
     <text x="0" y="0" class="text-title text-primary">BASELINE</text>
-    <text x="2" y="28" class="text-tag text-muted">VISUAL HARNESS · AI AGENT WORKFLOW</text>
+    <text x="2" y="26" class="text-tag text-muted">VISUAL HARNESS · AI AGENT WORKFLOW</text>
   </g>
 </svg>

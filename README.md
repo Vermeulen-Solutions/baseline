@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/baseline-logo.svg" alt="Baseline — The Visual-First Astro Toolkit for EmDash CMS & AI-Assisted Developers" width="540" />
+  <img src="docs/images/baseline-logo.svg" alt="Baseline — The Visual-First Astro Toolkit for EmDash CMS & AI-Assisted Developers" width="460" />
 </p>
 
 <p align="center">
@@ -10,7 +10,7 @@
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT License" /></a>
 </p>
 
-EmDash is a modern, lightweight headless CMS built ground-up for AI-native web development. Baseline provides the visual frontend foundation, development guardrails, and testing harness built specifically for developers pairing with AI coding assistants—whether using **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, or local LLM runners.
+EmDash is a modern, lightweight headless CMS built ground-up for AI-native web development. Baseline provides the visual frontend foundation, development guardrails, and testing harness built specifically for developers pairing with AI coding assistants—whether using **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, **Windsurf**, **Aider**, or local LLM runners.
 
 Spend your time building the site, not debugging agent hallucinations or wrestling with styling drift. Baseline gives your AI assistant clear architectural boundaries and provides you with in-browser visual inspection tools: tune design tokens live on the rendered page, align Figma mockups pixel-for-pixel, and stress-test reusable components in isolation before assembling templates. Start locally with Node and SQLite, catch schema-width problems early, and deploy with confidence.
 
@@ -67,13 +67,40 @@ Baseline includes a structured workflow designed to keep coding assistants disci
 
 Click any thumbnail to view the full-resolution screenshot.
 
-| <a href="docs/images/reference-overlay.png"><img src="docs/images/reference-overlay.png" width="280" alt="Mockup Reference Overlay" /></a> | <a href="docs/images/ownership-inspector.png"><img src="docs/images/ownership-inspector.png" width="280" alt="CMS Ownership Inspector" /></a> |
-| :--- | :--- |
-| **Mockup Overlay (`O`)**<br>Drop a Figma export or screenshot directly into the running browser. Tune opacity, CSS-pixel offsets, and scrolling modes to align spacing pixel-for-pixel without leaving the dev server. | **CMS Ownership Inspector (`P`)**<br>Inspect which page elements are bound to EmDash fields (green) versus hardcoded UI copy (amber). Catches missing editorial bindings before client handoff. |
-
-| <a href="docs/images/grid-guide.jpg"><img src="docs/images/grid-guide.jpg" width="280" alt="Container Grid Guide" /></a> | <a href="docs/images/styleguide.jpg"><img src="docs/images/styleguide-controls.png" width="280" alt="Living Component Styleguide" /></a> |
-| :--- | :--- |
-| **Container Grid Guide (`G`)**<br>Overlay real container bounds, padding, and 10/12-column responsive layout tracks over your live page to check alignment across viewports without adding CSS borders. | **Component Quarantine (`/_styleguide`)**<br>Calibrate components, galleries, and responsive stress-cases in isolation before building templates. Automatically returns 404 in production builds. |
+<table>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <a href="docs/images/reference-overlay.png"><img src="docs/images/reference-overlay.png" width="280" alt="Mockup Reference Overlay" /></a>
+      <br /><br />
+      <strong>Mockup Overlay (<code>O</code>)</strong>
+      <br />
+      <sub>Drop a Figma export or screenshot directly into the running browser. Tune opacity, CSS-pixel offsets, and scrolling modes to align spacing pixel-for-pixel without leaving the dev server.</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <a href="docs/images/ownership-inspector.png"><img src="docs/images/ownership-inspector.png" width="280" alt="CMS Ownership Inspector" /></a>
+      <br /><br />
+      <strong>CMS Ownership Inspector (<code>P</code>)</strong>
+      <br />
+      <sub>Inspect which page elements are bound to EmDash fields (green) versus hardcoded UI copy (amber). Catches missing editorial bindings before client handoff.</sub>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center" valign="top">
+      <a href="docs/images/grid-guide.jpg"><img src="docs/images/grid-guide.jpg" width="280" alt="Container Grid Guide" /></a>
+      <br /><br />
+      <strong>Container Grid Guide (<code>G</code>)</strong>
+      <br />
+      <sub>Overlay real container bounds, padding, and 10/12-column responsive layout tracks over your live page to check alignment across viewports without adding CSS borders.</sub>
+    </td>
+    <td width="50%" align="center" valign="top">
+      <a href="docs/images/styleguide.jpg"><img src="docs/images/styleguide-controls.png" width="280" alt="Living Component Styleguide" /></a>
+      <br /><br />
+      <strong>Component Quarantine (<code>/_styleguide</code>)</strong>
+      <br />
+      <sub>Calibrate components, galleries, and responsive stress-cases in isolation before building templates. Automatically returns 404 in production builds.</sub>
+    </td>
+  </tr>
+</table>
 
 ## Dev HUD cheat sheet
 
@@ -174,7 +201,7 @@ Use the neutral Tailwind v4 tokens and small `Section`, `Container` and `Grid` p
 
 [Component quarantine](.agents/skills/astro-site-design/references/component-quarantine.md) · [Editorial canvas](docs/emdash-editorial-canvas.md) · [Gallery workflow](docs/gallery-workflow.md) · [Image delivery](docs/image-delivery.md).
 
-The default runtime is **Node + SQLite + local media**, with no cloud account needed. Cloudflare Workers is an optional site-specific target; its adapter, D1/R2 bindings and image delivery need separate setup and verification. A code deployment does not transfer CMS content. Existing media scripts are legacy utilities awaiting Phase 5 hardening. [Hosting setup](.agents/skills/emdash-site-setup/SKILL.md) · [Supported standards and roadmap](standards/releases/0.1.1.md) · [Downstream audits](docs/site-standards-audit.md).
+The default runtime is **Node + SQLite + local media**, with no cloud account needed. Cloudflare Workers is an optional site-specific target; its adapter, D1/R2 bindings and image delivery need separate setup and verification. A code deployment does not transfer CMS content. Media sync and Cloudflare R2 migration scripts are available under `scripts/` for review and manual workflows. [Hosting setup](.agents/skills/emdash-site-setup/SKILL.md) · [Supported standards and roadmap](standards/releases/0.1.1.md) · [Downstream audits](docs/site-standards-audit.md).
 
 ## Contribute
 

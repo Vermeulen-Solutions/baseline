@@ -1,6 +1,6 @@
 # Starter meta-review (initial runbook)
 
-This is the #3 meta-review runbook. The scoped `0.1.0` standards baseline records upstream diagnostics, staged sync, private registration and the tested Node/SQLite/Windows browser profile. Use the exact release reference and scope in `standards/manifest.json`, not mutable main or historical candidate claims. Use npm and the lockfile. Run `npm run audit:baseline` for a read-only JSON observation of declared, locked and installed packages, Node, Git state and local skill hashes. Missing evidence is unverified; this command does not contact upstream, read CMS rows or certify compatibility.
+This is the starter meta-review runbook. The scoped `0.1.0` standards baseline records upstream diagnostics, staged sync, private registration and the tested Node/SQLite/Windows browser profile. Use the exact release reference and scope in `standards/manifest.json`, not mutable main or historical candidate claims. Use npm and the lockfile. Run `npm run audit:baseline` for a read-only JSON observation of declared, locked and installed packages, Node, Git state and local skill hashes. Missing evidence is unverified; this command does not contact upstream, read CMS rows or certify compatibility.
 
 ## Review sequence
 

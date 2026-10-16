@@ -16,4 +16,4 @@ Fixture version 2 covers actual Container/Section/Grid/Card variants, controls, 
 
 LogoTicker adds no script or hydration. Its trusted Astro slot contains only ID-free noninteractive li children; duplicate artwork is aria-hidden/inert. Do not put raw HTML, SVG IDs, links, forms, scripts/islands or CMS edit proxies in the slot. The checkbox toggles motion persistently without JS; hover/focus pauses, reduced motion and print show the complete first list. Test native checkbox keyboard/touch, RTL seam, short/wide tracks and static wrapping. Existing styleguide image/gallery modules may ship their own enhancement scripts; that does not change the ticker's contract.
 
-The #7 pinned Linux screenshot harness remains the next separate package. Browser geometry checks do not establish full accessibility conformance, and HTTP checks do not establish visual fidelity or CMS editing.
+A pinned Linux screenshot container harness is planned as an upcoming addition. Browser geometry checks do not establish full accessibility conformance, and HTTP checks do not establish visual fidelity or CMS editing.
