@@ -1,0 +1,155 @@
+{
+  "receiptVersion": 1,
+  "date": "2026-10-16T13:59:39.085Z",
+  "baseCommit": "0caf559f99efa1cdde4a83a77661564bb2e283c7",
+  "scope": "Offline tooling and fresh owned local EmDash only; no existing project or Cloudflare resources",
+  "protectedFiles": [
+    {
+      "file": "README.md",
+      "gitBlob": "f34157f531301fb7a24d30e2098978a7c3c056ba"
+    },
+    {
+      "file": "docs/README.md",
+      "gitBlob": "724ce1c6b59474ea723c733de3e6519d006dbba3"
+    },
+    {
+      "file": "docs/agent-documentation.md",
+      "gitBlob": "7a5d77a871712633756582b6050bca5069a98f85"
+    },
+    {
+      "file": "docs/art-direction-workflow.md",
+      "gitBlob": "b4be0818e2884f65f96de2a8d1d46ee165ccbbc9"
+    },
+    {
+      "file": "docs/design-framework.md",
+      "gitBlob": "79db501a807903eac92ffab3689080da9bb124b1"
+    },
+    {
+      "file": "docs/design-interchange.md",
+      "gitBlob": "05ed2d67d780e34be209ef9d6e55f5c37f8236a3"
+    },
+    {
+      "file": "docs/dev-hud.md",
+      "gitBlob": "957b2ae9d296dc8d7264153bf77fc27b6b1240ea"
+    },
+    {
+      "file": "docs/emdash-editorial-canvas.md",
+      "gitBlob": "5f7294f6e1d40efdfa99b8347e25e57290cc882c"
+    },
+    {
+      "file": "docs/forms-adoption.md",
+      "gitBlob": "54a1224c3d3dd96aa24aa748f840f8031e0a92a7"
+    },
+    {
+      "file": "docs/gallery-workflow.md",
+      "gitBlob": "d19f6a33c2611c5ffe6ff844509153d9242f9aa0"
+    },
+    {
+      "file": "docs/images/baseline-logo.svg",
+      "gitBlob": "77a06588818f67bd0dc9971a5ecad0e5a6138d74"
+    },
+    {
+      "file": "docs/images/grid-guide.jpg",
+      "gitBlob": "fa682ced959745929bb595c6e59c137d0c919b97"
+    },
+    {
+      "file": "docs/images/ownership-inspector.png",
+      "gitBlob": "cccf533ee3cdbf8cb7af859ce06f71e9b89824c8"
+    },
+    {
+      "file": "docs/images/prototype-1-typographic.svg",
+      "gitBlob": "dfe88b4140afe50edcff1c2906bd67d48209233a"
+    },
+    {
+      "file": "docs/images/prototype-2-precision-grid.svg",
+      "gitBlob": "f0d896240f418525a3494875db95cd70bde65dfb"
+    },
+    {
+      "file": "docs/images/prototype-3-geometric-monogram.svg",
+      "gitBlob": "ed5ecd909b9169bee81ffceb7d423cd87adea74f"
+    },
+    {
+      "file": "docs/images/reference-overlay.png",
+      "gitBlob": "dd82a1ecb91e704e3ab1c69b61ba42fc4fba75a4"
+    },
+    {
+      "file": "docs/images/styleguide-controls.png",
+      "gitBlob": "8df3f3b4ad1a4b6e650091ab43f8a998b5628538"
+    },
+    {
+      "file": "docs/images/styleguide.jpg",
+      "gitBlob": "eb230cb2980f69de9a56d652dcbdaa5903f77c6a"
+    },
+    {
+      "file": "docs/internationalization.md",
+      "gitBlob": "46f80a274d0c26289f68984541d86721a576138f"
+    },
+    {
+      "file": "docs/licenses/emdash-MIT.txt",
+      "gitBlob": "02cc4b8b0a5f883c5243927e683b00c10588bf4c"
+    },
+    {
+      "file": "docs/licenses/impeccable-Apache-2.0.txt",
+      "gitBlob": "bb3f6d23b1f8025514a62a12b51b47d73e3c9aa9"
+    },
+    {
+      "file": "docs/licenses/noto-sans-OFL.txt",
+      "gitBlob": "e5cab84f0cfeaf53b9fe57824a6f6129f57514b5"
+    },
+    {
+      "file": "docs/licenses/photoswipe-MIT.txt",
+      "gitBlob": "5e0ff4d6c825895d919e888b6985caef745bbb74"
+    },
+    {
+      "file": "docs/phase-3-certification.md",
+      "gitBlob": "6bf723da3d6ef4f4da4c0428bfd47cb070d1c735"
+    },
+    {
+      "file": "docs/production-deployment.md",
+      "gitBlob": "115c8a4616fe6b48a19170908aff30e8d757ab70"
+    },
+    {
+      "file": "docs/public-release.md",
+      "gitBlob": "51a2584f9163c32ffafc3ddde345e5cba36c5ac7"
+    },
+    {
+      "file": "docs/reusable-public-patterns.md",
+      "gitBlob": "47429b19bd5c72543aa21f955af6b15c5819c5dd"
+    },
+    {
+      "file": "docs/site-delivery-workflow.md",
+      "gitBlob": "9c3638dca8d70f1010de2a00a9ef475ae6363044"
+    },
+    {
+      "file": "docs/site-registry.md",
+      "gitBlob": "6b008a0ac331459e5b011104647b7126e12d6da6"
+    },
+    {
+      "file": "docs/site-standards-audit.md",
+      "gitBlob": "8026cd65c92ee160adda6b7ccc3e3094ab24ce07"
+    },
+    {
+      "file": "docs/skill-synchronization.md",
+      "gitBlob": "82953f9221c6868653c38240cdf70ea83de38600"
+    },
+    {
+      "file": "docs/starter-meta-review.md",
+      "gitBlob": "e55e7f3f3ed506db5db0169aa4184f45a1c549cc"
+    },
+    {
+      "file": "docs/styleguide-fixtures.md",
+      "gitBlob": "0aba9ed48310ceceb711dcf46dc03c4b6f8465cd"
+    },
+    {
+      "file": "docs/visual-regression.md",
+      "gitBlob": "873d4311f3699119250814cf17bd80fb7b1b6417"
+    },
+    {
+      "file": "docs/wordpress-content-modeling.md",
+      "gitBlob": "e6851f53c740f9f21bac2a99c8a73346320b5a7f"
+    }
+  ],
+  "protectedFilesVerified": 36,
+  "workingDatabasePresent": false,
+  "productionSourceWorkflowSkillsGoldensUnchanged": true
+}

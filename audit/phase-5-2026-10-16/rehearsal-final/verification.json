@@ -1,0 +1,64 @@
+{
+  "receiptVersion": 1,
+  "date": "2026-10-16T13:57:24.310Z",
+  "scope": "Synthetic offline tooling, owned local Node CMS and mocked Cloudflare transports only",
+  "externalCloudflareRequests": 0,
+  "liveD1R2": "unverified; no target configured or contacted",
+  "steps": [
+    "actual CLI seed, metadata parity, budget failure, privacy-aware seed round-trip, isolated SQL reconstruction and missing-target exits",
+    "actual local EmDash upload/get/storage hash, deduplication disabled, repeat ingestion, revision-bound gallery save/reload/public read/restore, native key staging and mocked R2 failure/resume"
+  ],
+  "database": {
+    "equalExit": 0,
+    "budgetDriftExit": 1,
+    "sourceUnchanged": true,
+    "sourcePhysicalWidths": [
+      17
+    ],
+    "seedCLIProjectionRoundtrip": true,
+    "privateFieldExcluded": true,
+    "reconstruction": {
+      "sqlSHA256": "704b7f9ca36680a7641f0417fea4d4f949f3063aa6868ce975662edcb7425df8",
+      "snapshotSHA256": "a72762ac4995ee6444b5c569221e7e0da95c3af2b2283b9659d74e71a7b5b36d",
+      "statements": 2
+    },
+    "absentTargetExits": {
+      "db-diff.mjs": 2,
+      "d1-snapshot.mjs": 2,
+      "sync-r2-media.mjs": 2
+    }
+  },
+  "media": {
+    "realLocalMediaRecords": 2,
+    "duplicateBytesDistinctMediaIDs": true,
+    "repeatedIngestionNoDuplicateRecords": true,
+    "storedBytesHashVerified": true,
+    "nativeDimensions": [
+      16,
+      12
+    ],
+    "galleryAPIRevisionBoundSaveReload": true,
+    "galleryOrderAndDuplicateOccurrences": 3,
+    "captionsAndDecorativeAltPreserved": true,
+    "anonymousPublicGalleryRendered": true,
+    "originalContentRestored": true,
+    "sourceSHA256": "1b29f3798dc82732dce2b13e7150b5966aaa0eac68df49acc99478b7b8601d61",
+    "originalSourceUnchanged": true,
+    "actualStorageKeysStaged": 2,
+    "mockedR2": {
+      "verified": true,
+      "repeatedNoDuplicateWrites": true,
+      "deletedObjectDetected": true,
+      "uploadFailureExit": 1,
+      "resumeVerified": true
+    },
+    "creditLocaleProvenanceScope": "Preserved in manifest/journal; not invented as CMS media fields"
+  },
+  "status": "passed",
+  "cleanup": {
+    "ownedServerStopped": true,
+    "dependencyJunctionRemoved": true,
+    "disposableDatabasesAndMediaRemoved": true,
+    "workingDatabaseCopied": false
+  }
+}

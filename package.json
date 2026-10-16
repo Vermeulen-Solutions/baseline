@@ -56,7 +56,13 @@
     "audit:site": "node scripts/audit-site.mjs",
     "test:site-audit": "node --test tests/site-standards-audit.test.mjs tests/audit-coverage.test.mjs tests/audit-modernize.test.mjs tests/audit-runtime-evidence.test.mjs",
     "audit:modernize": "node scripts/audit-modernize.mjs",
-    "audit:pilot": "node scripts/rehearse-site-audit.mjs"
+    "audit:pilot": "node scripts/rehearse-site-audit.mjs",
+    "db:diff": "node scripts/db-diff.mjs",
+    "db:export-seed": "node scripts/db-export-seed.mjs",
+    "db:pull-remote": "node scripts/d1-snapshot.mjs",
+    "test:database": "node --test tests/database-tooling.test.mjs",
+    "media:migrate-wp": "node scripts/media-migrate-wp.mjs",
+    "test:media-infrastructure": "node --test tests/media-infrastructure.test.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
@@ -74,7 +80,10 @@
     "@fontsource/noto-sans": "5.3.0",
     "@google/design.md": "0.4.0",
     "@playwright/test": "1.64.1",
+    "aws4fetch": "1.0.20",
+    "jsonc-parser": "3.3.1",
     "sharp": "0.35.4",
+    "smol-toml": "1.9.1",
     "typescript": "6.0.3"
   },
   "license": "MIT"

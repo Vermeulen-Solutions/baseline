@@ -1,0 +1,94 @@
+{
+  "receiptVersion": 1,
+  "date": "2026-10-16T14:01:26.783Z",
+  "baseCommit": "0caf559f99efa1cdde4a83a77661564bb2e283c7",
+  "definitionOfDone": "Owner-approved offline tooling and sanitized fixture coverage; live cloud target explicitly unavailable and forbidden for this run",
+  "runtime": {
+    "node": "v24.21.0",
+    "platform": "win32",
+    "sqlite": "3.53.4",
+    "astro": "7.4.0",
+    "emdash": "1.3.0",
+    "sharp": "0.35.4"
+  },
+  "checks": {
+    "unit": {
+      "command": "node --test tests/*.test.mjs",
+      "passed": 83,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 32647.1182
+    },
+    "finalDatabaseSafetyRetest": {
+      "command": "node --test tests/database-tooling.test.mjs",
+      "passed": 13,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 19637.3755
+    },
+    "typecheck": {
+      "passed": true,
+      "files": 41,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    },
+    "build": {
+      "passed": true,
+      "releaseArtifact": "normal Node production profile",
+      "advisory": "Existing EmDash admin chunk exceeds 500 kB"
+    },
+    "schemaBudgetRoot": {
+      "status": "not-measured",
+      "reason": "No root data.db; actual synthetic schemas are measured by database tests/rehearsal"
+    },
+    "devToolsIsolation": {
+      "passed": true,
+      "disposableOnly": true
+    },
+    "artDirection": {
+      "passed": true,
+      "visualSourceChanged": false
+    },
+    "syntax": {
+      "passed": true,
+      "modules": 74
+    },
+    "diffWhitespace": {
+      "passed": true
+    },
+    "privacyScan": {
+      "matches": 0,
+      "scope": "Implementation, tests, the two runbooks and Phase 5 receipts"
+    }
+  },
+  "externalCloudflareRequests": 0,
+  "liveCloudCertification": false,
+  "protectedFilesReceipt": "preservation.json",
+  "runtimeRehearsalReceipt": "rehearsal-final/verification.json",
+  "sourceHashes": {
+    "algorithm": "sha256",
+    "normalization": "UTF-8 CRLF normalized to LF",
+    "files": {
+      "docs/database-workflow.md": "67a8f3fb0b5088dcfbcea6f53a609e04c424e4a395735d598f17bcef53d459be",
+      "docs/image-delivery.md": "23ba0bf4449dcec19070fa751de6bb7f7326ea778dfb1c18a4cf6e4c167dd33f",
+      "package-lock.json": "58b1230d582c41cc28e4977290caafcd3a1840b5cbfb3ec7b74f5f2a28fa3706",
+      "package.json": "dff5d444574317b991b33fdfc738b9953ea99ff1722e2ef4e23cb9b3b5e48c97",
+      "scripts/d1-snapshot.mjs": "b928124a40e6656f58504001d816b90d5f59ac10827a1923177f50ac241dc3d7",
+      "scripts/db-diff.mjs": "031a5a199e171405b8a50fdc3279d7b61a6e7d88a3f7b884e8cea552bfec16b2",
+      "scripts/db-export-seed.mjs": "95deecf0a09197a3b8fb25f1b065f65574da80abce220054d8aecee87613e8e5",
+      "scripts/infrastructure-io.mjs": "9b07caf623140c4e0e74209eeb604145974dcb299f1cc2308292e0ec98401d2c",
+      "scripts/media-files.mjs": "12d7461011102cb070ebab33c4eb6ad6c797b42379b05334b9356ddad6f4e2ac",
+      "scripts/media-ingest.mjs": "f03f987d07ecae1775cb317ce8e4e1cdf462a69835f090ef16480a8c3b868a9f",
+      "scripts/media-migrate-wp.mjs": "f84d4d7d52d9984700420f766f1d428ea1316317463e71912b772f9e4694d6e4",
+      "scripts/media-probe.mjs": "d17d7c804c21b8e26676e32085bf0d0f6cb234eeb9c84731d43d12ef76396de8",
+      "scripts/organize-media.mjs": "e2ece9922e73f3929f20869f3b9fd9ec6733403a16df003def50901a1fdd2101",
+      "scripts/rehearse-infrastructure.mjs": "cf2b7fb7076d86a9b35f3f252675704393b6a74364c2a71c31c3faad85d97baf",
+      "scripts/sqlite-schema.mjs": "4e04f8524d88e905e5f7ab824e64b36f097d105f2016d7a65279e38d77be9452",
+      "scripts/sync-r2-media.mjs": "ef336a50732ef6514a53f822e5b02d9be13af7b917e0094158b1df9469cea0a4",
+      "standards/emdash-1.3.0-database-tables.json": "96647414d7d4d40e1f0a0b6f6b1a53aff35d8cb65c129394079b983ea9104cc2",
+      "tests/database-tooling.test.mjs": "a8f8267d2663e14267f4b3c1681e8ca88c0e685f9e2a5805296feb1ddaa3e319",
+      "tests/media-infrastructure.test.mjs": "82a7a0052b707b287f2633bad8dabef9722a6fbdc2f3902cb55edbac6c973104"
+    }
+  }
+}
