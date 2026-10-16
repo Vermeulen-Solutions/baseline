@@ -6,7 +6,7 @@
 [![Node LTS](https://img.shields.io/badge/Node-LTS-339933)](#60-second-quickstart)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
-Spend your time building the site, not rebuilding the tooling around it. Baseline connects EmDash content with polished Astro frontends: tune design tokens on the actual page, align mockups in your browser, and stress-test reusable components before assembling templates. Start locally with Node and SQLite, catch schema-width problems early, and approach Cloudflare deployment with explicit checks instead of assumptions. Built for developers and agencies who want a repeatable path from first reference to client handoff.
+Spend your time building the site, not rebuilding the tooling around it. Baseline connects EmDash content with polished Astro frontends: tune design tokens on the actual page, align mockups in your browser, and stress-test reusable components before assembling templates. It also provides a disciplined harness for pairing with AI coding agents (Claude Code, Antigravity, Cursor) so assistants respect your CMS contracts and design system instead of guessing. Start locally with Node and SQLite, catch schema-width problems early, and approach Cloudflare deployment with explicit checks instead of assumptions. Built for developers and agencies who want a repeatable path from first reference to client handoff.
 
 ## Why Baseline?
 
@@ -42,9 +42,20 @@ Open **`/_styleguide`** to calibrate components, controls, galleries and respons
 
 Compare mobile, tablet and desktop captures with pinned Windows Chromium. Exercise active motion, no-JS rendering, zoom and text spacing alongside screenshot diffs. No paid visual-testing SaaS or Docker setup is required, and browser tests consume **no GitHub Actions minutes**: they run locally, outside production builds and deployments. Baseline changes require an explicit, reviewed `--update`.
 
-### 🤖 Give coding assistants a working playbook
+### 🤖 Keep AI coding assistants disciplined and on rails
 
-Project-local skills and `AGENTS.md` describe idiomatic Astro/EmDash composition, content ownership, art direction and verification. Claude Code, Antigravity, Cursor and other assistants get concrete patterns and boundaries to work from. These guides reduce repeated setup and architectural guesswork; review and tests still matter. [Agent setup](docs/agent-documentation.md).
+Building client sites with tools like Claude Code, Cursor, or Antigravity is fast, but coding assistants often struggle with headless CMS architectures. Without clear constraints, they tend to invent unnecessary wrapper components, hardcode text that clients should be able to edit in the CMS, or introduce subtle layout breaks on mobile viewports.
+
+Baseline includes a structured workflow designed to keep coding assistants disciplined and aligned with the site's architecture:
+
+- **Art direction gates before implementation:** Before writing visual code, the agent is directed to record aesthetic decisions in `AGENTS.md` (typography pairings, spatial density, and anti-patterns). This prevents the assistant from defaulting to generic, unconsidered layouts.
+- **CMS editorial preservation:** Guidance in `.agents/skills/` explicitly defines EmDash's row-per-locale structure and field-proxy attributes (`data-emdash-ref`). The agent knows which content belongs to the CMS and avoids overwriting client-editable fields with static copy.
+- **Component quarantine (`/_styleguide`):** Instead of attempting to build ten full page templates at once, the workflow directs the agent to calibrate reusable primitives and responsive edge cases in isolation on `/_styleguide` first.
+- **Fast, self-verifying feedback loops:** The agent has access to deterministic local checks that run in seconds, allowing it to verify its own work without guessing:
+  - `npm run check:schema-budget` prevents table designs that will break on Cloudflare D1.
+  - `npm run test:visual` verifies that CSS refactors haven't broken mobile or RTL layouts.
+  - Fast unit tests and typechecking run locally without burning CI minutes.
+- **Maintainable specialist skills:** Guidance is modularized into specialist skills under `.agents/skills/` (content modeling, visual design, and migration) that can be kept up to date from upstream via `npm run sync:site-skills` without overwriting project-specific instructions. [Agent setup guide](docs/agent-documentation.md).
 
 ## Take a closer look
 
