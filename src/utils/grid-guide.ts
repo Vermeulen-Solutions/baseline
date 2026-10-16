@@ -4,7 +4,7 @@ export function createGridGuide(drawer: HTMLElement, signal: AbortSignal) {
   const targets = drawer.querySelector<HTMLSelectElement>('#tweaks-grid-target')!;
   const columns = drawer.querySelector<HTMLSelectElement>('#tweaks-grid-columns')!;
   const status = drawer.querySelector<HTMLElement>('#tweaks-grid-status')!;
-  const containers = [...document.querySelectorAll<HTMLElement>('.container-shell, .site-main')];
+  const containers = [...document.querySelectorAll<HTMLElement>('.container-shell, .content-grid, .site-main')];
   let active = false;
   let frame = 0;
   let selected: HTMLElement | undefined;
@@ -15,10 +15,11 @@ export function createGridGuide(drawer: HTMLElement, signal: AbortSignal) {
   targets.replaceChildren();
   for (const [index, container] of containers.entries()) {
     const width = ['reading', 'content', 'wide'].find(value => container.classList.contains(`container-shell--${value}`));
-    targets.add(new Option(width ? `${width} container ${index + 1}` : `main content ${index + 1}`, String(index)));
+    const label = width ? `${width} container ${index + 1}` : container.classList.contains('content-grid') ? `breakout grid ${index + 1}` : `main content ${index + 1}`;
+    targets.add(new Option(label, String(index)));
   }
   // Prefer the first actual Container over the surrounding padded site-main.
-  targets.value = String(Math.max(0, containers.findIndex(container => container.classList.contains('container-shell'))));
+  targets.value = String(Math.max(0, containers.findIndex(container => container.classList.contains('container-shell') || container.classList.contains('content-grid'))));
   function draw() {
     frame = 0;
     if (!active || !selected?.isConnected) { overlay.style.display = 'none'; return; }

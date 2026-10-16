@@ -24,6 +24,8 @@ Defined in `src/styles/global.css` under Tailwind v4's `@theme`:
 | `--text-step-0` | `clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)` | 16px | 24px | Body copy, default interface text |
 | `--text-step-1` | `clamp(1.25rem, calc(1rem + 1.25vi), 2rem)` | 20px | 32px | Section headings (`<h2>`), cards |
 | `--text-step-2` | `clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem)` | 28px | 52px | Page titles (`<h1>`), hero display |
+| `--text-step-2-to-0` | `clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem)` | 16px | 52px | High-contrast display bridge |
+| `--text-step-3-to-1` | `clamp(1.25rem, calc(0.25rem + 5vi), 4.25rem)` | 20px | 68px | Dramatic hero display bridge |
 
 All headings apply `text-wrap: balance` by default to prevent awkward single-word typographic orphans.
 
@@ -37,6 +39,8 @@ Spacing grows proportionally with the screen, maintaining balanced visual weight
 | `--spacing-grid` | `clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem)` | 20px | 36px | Column gaps, figure margins |
 | `--spacing-container`| `clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)` | 16px | 32px | Page horizontal gutter padding |
 | `--spacing-section` | `clamp(3rem, calc(1rem + 10vi), 9rem)` | 48px | 144px | Vertical section breathing room |
+| `--spacing-xl-to-sm` | `clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem)` | 12px | 64px | High-contrast padding/gap bridge |
+| `--spacing-2xl-to-md` | `clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem)` | 20px | 104px | Hero/spotlight padding bridge |
 
 Because `--spacing-section` expands from 48px to 144px naturally, you never need to write `@media (min-width: ...)` rules just to give desktop sections breathing room.
 
@@ -44,11 +48,12 @@ Because `--spacing-section` expands from 48px to 144px naturally, you never need
 
 ## 2. Typographic Measures (Line Lengths)
 
-Unconstrained line lengths make paragraphs exhausting to read on wide screens. Baseline enforces three typographic boundaries:
+Unconstrained line lengths make paragraphs exhausting to read on wide screens. Baseline enforces three typographic boundaries plus a gutter-safe content measure:
 
 ```css
 --measure-reading: 68ch;   /* Ideal line length for body prose (~60-75 characters) */
 --measure-content: 76rem;  /* Standard content container (~1216px) */
+--measure-content-safe: min(var(--measure-content), calc(100% - var(--spacing-container) * 2));
 --measure-wide:    88rem;  /* Wide layouts, navbars, and media galleries (~1408px) */
 ```
 
@@ -60,28 +65,29 @@ Paragraphs and list items automatically inherit `max-width: var(--measure-readin
 
 Baseline provides small, semantic Astro layout primitives located in `src/components/`. They accept standard slots and forward custom class names.
 
-### `<Container width="reading | content | wide" />`
+### `<Container width="reading | content | wide" breakout />`
 
-Constrains inner content to one of the three established measures and centers it with `margin-inline: auto`:
+For standard sections, `<Container>` constrains inner content to one of the three established measures and centers it with `margin-inline: auto`. When `breakout` is enabled (`<Container breakout>`), it renders `.content-grid`—a multi-track CSS Grid where default children remain constrained to `--measure-reading` while specific child blocks can break out to wider named tracks (`feature`, `wide`, `full`) without closing and reopening the container:
 
 ```astro
 ---
 import Container from '../components/Container.astro';
 ---
 
-<!-- Reading column for articles or long-form prose (max-width: 68ch) -->
-<Container width="reading">
-  <p>Editorial text that stays comfortable to read on any screen.</p>
-</Container>
-
 <!-- Standard content container (max-width: 76rem) -->
 <Container width="content">
   <Grid minimum="standard"> ... </Grid>
 </Container>
 
-<!-- Wide container for hero headers or full-width photo galleries (max-width: 88rem) -->
-<Container width="wide">
-  <PhotoGallery ... />
+<!-- Editorial breakout container (.content-grid) for long-form articles & case studies -->
+<Container breakout class="flow">
+  <p>Default children stay in the comfortable reading column (68ch).</p>
+  <figure class="content--feature">
+    <!-- Expands to --measure-content (76rem) -->
+  </figure>
+  <div class="content--wide">
+    <!-- Expands to --measure-wide (88rem) -->
+  </div>
 </Container>
 ```
 
@@ -116,9 +122,9 @@ import Card from '../components/Card.astro';
 ---
 
 <Grid minimum="standard">
-  <Card title="Article 1" ... />
-  <Card title="Article 2" ... />
-  <Card title="Article 3" ... />
+  <Card title="Article 1" href="/article-1" ... />
+  <Card title="Article 2" href="/article-2" ... />
+  <Card title="Article 3" href="/article-3" ... />
 </Grid>
 ```
 
@@ -136,9 +142,13 @@ Under the hood, `<Grid>` uses CSS `minmax()` and `auto-fit`:
 ```
 Columns wrap naturally when screen space narrows, with zero layout shift or overlapping cards.
 
+### `<Card />` (Turnkey Accessible Card & Concentric Radius)
+
+`<Card>` renders a semantic `<article class="card">` and uses `.clickable-parent` on the heading's `<a>` tag so the entire card is clickable while screen readers announce only the heading as the link name. Paired with `.focus-parent` (`:focus-within:has(:focus-visible)`), keyboard navigation draws a single focus ring on the card perimeter without sticky mouse outlines. Customize cards via `--card-bg`, `--card-text`, `--card-muted`, `--card-border-color`, `--card-radius`, `--card-padding`, `--card-frame-padding`, `--card-gap`, `--card-shadow`, and automatic concentric media radius (`--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))`).
+
 ---
 
-## 4. Editorial Flow (`.flow`)
+## 4. Editorial Smart Spacing (`.flow`)
 
 Wrap CMS Portable Text and editorial articles in the `.flow` utility class to automatically establish vertical rhythm:
 
@@ -148,20 +158,41 @@ Wrap CMS Portable Text and editorial articles in the `.flow` utility class to au
 </div>
 ```
 
-The flow utility applies the "lobotomized owl" selector to insert margins between sibling elements without adding unwanted top/bottom margins to the container:
+The flow utility differentiates rhythm across headings, lists, figures, and blockquotes via CSS custom properties while preventing duplicate margin stacking after block elements:
 ```css
 .flow > :where(* + *) {
   margin-block-start: var(--flow-space, var(--spacing-content));
 }
 
+.flow > :where(h2, h3, h4) {
+  --flow-space: var(--heading-spacing, 1.5em);
+}
+
+.flow :where(li + li) {
+  margin-block-start: var(--list-item-spacing, 0.35em);
+}
+
 .flow :where(img, figure, table, blockquote) {
   margin-block: var(--spacing-grid);
+}
+
+.flow > :where(img, figure, table, blockquote) + * {
+  margin-block-start: 0;
 }
 ```
 
 ---
 
-## 5. Live Calibration via the Dev HUD
+## 5. Elevation Shadows, Easing, Masks & Contextual Surfaces
+
+- **Multi-Layer OKLCH Shadows (`@theme`):** `--shadow-sm` (3-stop), `--shadow-md` (4-stop), and `--shadow-lg` (6-stop) derived from `oklch(from var(--color-text) l c h / alpha)`.
+- **Curated Easing Curves (`@theme`):** `--ease-smooth`, `--ease-snappy`, and physics-inspired `--ease-spring` (via CSS `linear()`).
+- **Background & Mask Helpers:** Mark background media with `.is-bg` (its parent automatically becomes `position: relative; isolation: isolate` via `:where(:has(> .is-bg))`), and apply `.fade--bottom`, `.fade--top`, `.fade--block`, or `.fade--inline` (`--fade-amount: 25%`) for surface-independent `mask-image` fades.
+- **Contextual Surface Scopes:** Apply `data-surface="dark"` or `data-surface="light"` to any section or card to remap `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, and `--color-focus` together.
+
+---
+
+## 6. Live Calibration via the Dev HUD
 
 Instead of manually editing pixel values and refreshing, calibrate your site's token physics live in the browser:
 1. Run `npm run dev`.

@@ -20,8 +20,8 @@ If a repository predates this helper, follow `new-site-workflow`'s bootstrap rul
 | `astro.config.mjs` | Node adapter, EmDash SQLite/local-media setup, Tailwind v4 |
 | `seed/seed.json` | Initial Posts/Pages schema and sample content; a seed is not a deploy-time content migration |
 | `src/live.config.ts` | EmDash live collection registration |
-| `src/styles/global.css` | Neutral `@theme` tokens, base rules, rich-text flow, and shared layout classes |
-| `src/components/` | `Section`, `Container`, and `Grid` layout primitives |
+| `src/styles/global.css` | Neutral `@theme` tokens, base rules, Smart Spacing `.flow`, `.content-grid`, and shared layout classes |
+| `src/components/` | `Section`, `Container` (including `breakout`), `Grid`, and `Card` layout primitives |
 | `src/layouts/Base.astro` | Site shell, EmDash page contributions, menu, and widgets |
 | `src/pages/` | Server-rendered public routes |
 | `.agents/skills/` | Project-local EmDash and Vermeulen Solutions workflows |

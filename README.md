@@ -92,10 +92,10 @@ Read the complete [Site Delivery Workflow runbook](docs/site-delivery-workflow.m
 
 ### 📐 Fluid design tokens, zero breakpoint soup
 Stop writing dozens of arbitrary responsive utility classes (`p-4 md:p-8 lg:p-12 xl:p-16`). Baseline uses continuous mathematical `clamp()` scales anchored between 320px and 1280px viewports:
-- **Continuous Typography:** `--text-step--1` through `--text-step-2` scale smoothly with viewport inline size (`vi`), eliminating jarring font jumps.
-- **Fluid Spatial Density:** Section padding (`--spacing-section`) automatically expands from 48px on mobile to 144px on ultrawide monitors.
-- **Typographic Measures:** Built-in line-length bounds (`--measure-reading: 68ch;`, `--measure-content: 76rem;`, `--measure-wide: 88rem;`) ensure comfortable readability.
-- **Self-Responsive Layout Primitives:** `<Section>`, `<Container>`, and auto-fit `<Grid>` adapt to any screen width without media queries. [Design Framework Guide](docs/design-framework.md).
+- **Continuous Typography:** `--text-step--1` through `--text-step-2` (plus high-contrast `--text-step-3-to-1` and `--text-step-2-to-0` bridges) scale smoothly with viewport inline size (`vi`), eliminating jarring font jumps.
+- **Fluid Spatial Density:** Section padding (`--spacing-section`) and bridge tokens (`--spacing-2xl-to-md`, `--spacing-xl-to-sm`) automatically expand from mobile to ultrawide monitors.
+- **Typographic Measures & Editorial Breakouts:** Built-in line-length bounds (`--measure-reading: 68ch;`, `--measure-content: 76rem;`, `--measure-wide: 88rem;`) and `<Container breakout>` (`.content-grid`) keep body prose readable while allowing figures, pull-quotes, and galleries to break out to wider tracks.
+- **Self-Responsive Layout Primitives:** `<Section>`, `<Container>`, auto-fit `<Grid>`, and accessible `<Card>` (`--card-*` tokens, concentric radii, and `.clickable-parent`/`.focus-parent`) adapt to any screen width without media queries. [Design Framework Guide](docs/design-framework.md).
 
 ### 🗄️ Intelligent content modeling & WordPress migration
 Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a structured methodology for converting legacy sites to EmDash:

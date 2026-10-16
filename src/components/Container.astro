@@ -1,12 +1,18 @@
 ---
 interface Props {
 	width?: "reading" | "content" | "wide";
+	breakout?: boolean;
 	class?: string;
 }
 
-const { width = "content", class: className } = Astro.props;
+const { width = "content", breakout = false, class: className } = Astro.props;
 ---
 
-<div class:list={["container-shell", `container-shell--${width}`, className]}>
+<div
+	class:list={[
+		breakout ? "content-grid" : ["container-shell", `container-shell--${width}`],
+		className,
+	]}
+>
 	<slot />
 </div>

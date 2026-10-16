@@ -11,8 +11,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "e24dde6934cac579d464e843194787f4d85d1c553b869751f35c67c44e983925"
+    "reason": "Issue #2 neutral starter curated token engine, Smart Spacing (.flow), .content-grid breakout tracks, .clickable-parent/.focus-parent, .is-bg/.fade--*, and contextual surface tokens; no client theme or art direction. Any edit invalidates this exact exception.",
+    "sha256": "dbb355fb50e0b13536a8cec13e177df7d62c78d5f855d6dd796a79feda328db0"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -21,8 +21,8 @@
   },
   {
     "path": "src/components/Container.astro",
-    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
-    "sha256": "fa27a75c2aae1a54f39a84a07bcdd98279b909554e92cf64252060d40e9bc0da"
+    "reason": "Issue #2 neutral starter Container breakout (.content-grid) opt-in prop; default .container-shell preserved. Client adaptation or any source edit invalidates this exception.",
+    "sha256": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32"
   },
   {
     "path": "src/components/Grid.astro",
@@ -106,8 +106,8 @@
   },
   {
     "path": "src/components/Card.astro",
-    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "e88613dfcc3544968022ef694d11635a88018facc04d8ef7eb1a188d99ad4940"
+    "reason": "Issue #2 neutral starter turnkey Card upgrade: semantic <article>, .clickable-parent/.focus-parent heading link, --card-* custom properties, and concentric radius math; no client theme. Any edit invalidates this exact exception.",
+    "sha256": "b4baa389893d36d5a599b91439a40e334d19876e98560356b2b79df27b51ceff"
   },
   {
     "path": "src/components/PartnersPanel.astro",
@@ -157,8 +157,8 @@
   },
   {
     "path": "src/dev/styleguide-fixtures.ts",
-    "reason": "Issues #5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception.",
-    "sha256": "9eac401a5abaff2defb1b598c1fbe4f76ecd313874ee19e7c92ab0d6f843e54c"
+    "reason": "Issues #2/#5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception.",
+    "sha256": "8620c72793b0a4323d87cebd02527ffaff9d5e625cc25adfd43dd61558dca157"
   },
   {
     "path": "src/pages/_styleguide.astro",
@@ -167,13 +167,13 @@
   },
   {
     "path": "src/components/dev/Styleguide.astro",
-    "reason": "Issue #7 neutral starter capture infrastructure: explicit fixture-only pinned font inputs; production public visual system preserved. Exact LF-normalized source; edits invalidate this exception.",
-    "sha256": "4eff30af2cb4d0ccefe83210edc0ba598642244f7747616fcacae7119143e26b"
+    "reason": "Issues #2/#7 neutral starter specimen infrastructure including Container breakout (.content-grid) and accessible Card specimen; no client theme. Exact LF-normalized source; edits invalidate this exception.",
+    "sha256": "739cfb6c33ba94edd6d7b276f4bbccf381f61085c78606efaa132bef1c131823"
   },
   {
     "path": "src/utils/grid-guide.ts",
-    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
-    "sha256": "9f1d9109aa3c534e0cfdf5018ceb110f51f9c05f3318e42bc7619a3bf4460a04"
+    "reason": "Issues #2/#6 neutral dev-only alignment guide including .content-grid breakout discovery; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
+    "sha256": "090322fdc5d66e3307296c7f809337658c39800a1596a736b8b298e3d6d7e184"
   },
   {
     "path": "src/components/LogoTicker.astro",

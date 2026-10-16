@@ -19,7 +19,17 @@ RichText wraps EmDash PortableText with shared image/gallery renderers. Use it i
 </Card>
 ```
 
-Use layout="horizontal" for wide rows, imageFit="contain" for full posters/artwork and imageAspect for an intentional frame. Slots support custom media, metadata and copy. This whole-link component must not contain links, buttons, inputs or other interactive descendants. For multi-action content compose a semantic article with independent links instead. Card actions align at the bottom of equal-height grid rows. Stress long/translated titles, absent media, uneven copy and odd final rows; don't force equal slots to fill empty space.
+`Card.astro` renders a semantic `<article class="card">` rather than wrapping the entire card in an `<a>` tag. When `href` is provided, the heading renders `<a href={href} class="card-link clickable-parent">` whose `::after` pseudo-element stretches across the card while keeping metadata and body copy out of the screen-reader link announcement, paired with `.focus-parent` (`:focus-within:has(:focus-visible)`) so keyboard focus draws a single perimeter outline on `.card` without double inner focus rings or sticky mouse-click outlines. Secondary interactive links or badges inside `.card` automatically sit above the stretched link via `z-index: 2`.
+
+Use `layout="horizontal"` for wide rows (which stacks automatically via `@container (max-width: 32rem)` and `@media (max-width: 40rem)`), `imageFit="contain"` for full posters/artwork, and `imageAspect` for an intentional frame. Customize appearance via CSS custom properties (`--card-bg`, `--card-text`, `--card-muted`, `--card-border-width`, `--card-border-color`, `--card-radius`, `--card-padding`, `--card-frame-padding`, `--card-gap`, `--card-shadow`) and concentric inner media radius (`--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))`). Card actions align at the bottom of equal-height grid rows. Stress long/translated titles, absent media, uneven copy and odd final rows; don't force equal slots to fill empty space.
+
+## Editorial breakout grid (`.content-grid`)
+
+Standard sections use `<Container width="reading" | "content" | "wide">` (`.container-shell`). When a long-form article, case study, or editorial page needs body copy constrained to `--measure-reading` (`68ch`) while allowing figures, pull-quotes, tables, or galleries to expand wider without closing and reopening containers, use `<Container breakout class="flow">` (`.content-grid`):
+- Unannotated children automatically occupy the `content` track (`--measure-reading`).
+- `.content--feature` spans `--measure-content` (`76rem`).
+- `.content--wide` spans `--measure-wide` (`88rem`).
+- `.content--full` spans edge-to-edge (`full`), and `.content--full-safe` spans edge-to-edge with `--spacing-container` inline padding.
 
 ## CMS-owned partners
 
@@ -61,6 +71,6 @@ Baseline emphasizes progressive enhancement: interactive widgets should remain f
 - **Progressive Enhancement:** PhotoSwipe 5 (MIT) is loaded only when a visitor clicks an image to open the full-screen touch lightbox. If JavaScript fails or is disabled, clicking simply navigates to the original image.
 - **Structured Data:** Generates Schema.org `ImageGallery` JSON-LD automatically for search engine rich results.
 
-## Focus and practical information
+## Focus and contextual surfaces
 
-`data-surface="dark"` switches the focus role to `color-focus-on-dark`; it does not install a dark theme or alter body text/background. Set both roles from the real site palette and verify them against their actual grounds. Tables, filters and count/status belong together; deduplicate contacts without hiding distinct roles. Calendar actions should represent a real dated appointment, not imply a recurring schedule from a programme period.
+`data-surface="dark"` and `data-surface="light"` establish contextual surface relationships (`color-scheme`, `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, and `--color-focus`) Customizable via `--surface-dark-*` and `--surface-light-*` tokens so a dark section inside a light page (or a light card inside a dark hero) automatically adapts its text, muted copy, border, and focus ring. Set surface tokens from the real site palette and verify contrast against their actual grounds. Tables, filters and count/status belong together; deduplicate contacts without hiding distinct roles. Calendar actions should represent a real dated appointment, not imply a recurring schedule from a programme period.

@@ -16,16 +16,40 @@ Example: grow from `1rem` at `20rem` viewport width to `2rem` at `80rem` viewpor
 
 This CSS-first interpolation avoids hand-picked unrelated clamps. Round coefficients enough to avoid visible discontinuity, then check the minimum, midpoint, maximum, browser zoom, and very narrow screens. `cqi` is appropriate when a component's own containing width should drive its size; establish `container-type: inline-size` on the intended ancestor. Without an eligible container, `cqi` falls back to a small viewport unit, so test the component in its real container and add a sensible fallback if that behavior is not intended. Do not use container units for global typography whose desired behavior follows the viewport.
 
-Create a compact type and space scale around the actual site's content and inspected visual reference. Example names can be `--text-step--1` through `--text-step-5` and `--spacing-content`, `--spacing-grid`, `--spacing-container`, and `--spacing-section`. These produce useful Tailwind utilities such as `text-step-1`, `gap-content`, and `px-container`; semantic Astro components may consume the same variables directly.
+Create a compact type and space scale around the actual site's content and inspected visual reference. Example names can be `--text-step--1` through `--text-step-5` and `--spacing-content`, `--spacing-grid`, `--spacing-container`, and `--spacing-section`. When a hero display heading or major section transition needs dramatic desktop scale that collapses more aggressively on mobile than a single standard step, use high-contrast fluid bridge (`-to-`) tokens (`--text-step-3-to-1`, `--text-step-2-to-0`, `--spacing-2xl-to-md`, `--spacing-xl-to-sm`). These produce useful Tailwind utilities such as `text-step-1`, `text-step-3-to-1`, `gap-content`, and `px-container`; semantic Astro components may consume the same variables directly.
 
 ## Token groups
 
-- **Type:** family, weight, line-height, tracking, measure, and fluid size steps. Include a readable body measure and avoid scaling every text role with viewport width.
-- **Space/layout:** content, grid, container, section, and rich-text flow gaps; narrow/wide content widths; page gutters; and any deliberate grid minimums.
-- **Color:** OKLCH palette primitives and semantic roles (`surface`, `surface-raised`, `text`, `text-muted`, `border`, `action`, `on-action`, `focus`, and status roles). Derive shades with care, and check actual combinations against contrast requirements instead of assuming OKLCH or a mathematically generated tint guarantees contrast.
-- **Interaction/shape:** radii, border widths, shadows, focus ring, motion durations/easing, and layer levels. Add dark/high-contrast themes only when required by the brief, but keep semantic roles as the seam for them.
+- **Type:** family, weight, line-height, tracking, measure, standard fluid size steps (`--text-step--1`..`--text-step-2`), and high-contrast bridge steps (`--text-step-3-to-1`, `--text-step-2-to-0`). Include a readable body measure and avoid scaling every text role with viewport width.
+- **Space/layout:** content, grid, container, section, high-contrast bridge tokens (`--spacing-2xl-to-md`, `--spacing-xl-to-sm`), and rich-text `.flow` variables (`--heading-spacing`, `--list-spacing`, `--list-item-spacing`, `--figure-spacing`, `--blockquote-spacing`); narrow/wide content widths (`--measure-reading`, `--measure-content`, `--measure-content-safe`, `--measure-wide`); and page gutters.
+- **Color & surfaces:** OKLCH palette primitives, semantic roles (`page`, `surface`, `text`, `muted`, `border`, `action`, `on-action`, `focus`), and contextual surface scopes (`[data-surface="dark"]` / `[data-surface="light"]`) that remap surface, text, muted, border, and focus tokens together. Check actual combinations against contrast requirements instead of assuming OKLCH or a mathematically generated tint guarantees contrast.
+- **Interaction, elevation & motion:** radii (`--radius-control`, `--radius-card` with concentric inner radius math), multi-layer OKLCH elevation shadows (`--shadow-sm` 3-stop, `--shadow-md` 4-stop, `--shadow-lg` 6-stop derived from `oklch(from var(--color-text) l c h / alpha)`), and curated easing presets (`--ease-smooth`, `--ease-snappy`, `--ease-spring` via CSS `linear()`).
 
-Use Tailwind's matching `@theme` namespace for values that should create utility classes (`--text-*`, `--spacing-*`, `--color-*`, `--radius-*`, `--shadow-*`, `--breakpoint-*`). Keep implementation-only aliases as ordinary custom properties. See the current [Tailwind theme variable documentation](https://tailwindcss.com/docs/theme).
+Use Tailwind's matching `@theme` namespace for values that should create utility classes (`--text-*`, `--spacing-*`, `--color-*`, `--radius-*`, `--shadow-*`, `--ease-*`, `--breakpoint-*`). Keep implementation-only aliases as ordinary custom properties. See the current [Tailwind theme variable documentation](https://tailwindcss.com/docs/theme).
+
+## Pure-CSS scroll-driven entrance recipe
+
+When an art direction calls for subtle scroll-triggered entrance reveals without client JavaScript, use a single parameterized `@keyframes` rule driven by CSS `animation-timeline: view()` (supported behind `@supports (animation-timeline: view())` and disabled automatically under `prefers-reduced-motion: reduce`):
+
+```css
+@keyframes enter-view {
+  from {
+    opacity: var(--enter-opacity, 0);
+    translate: var(--enter-x, 0) var(--enter-y, 1.5rem);
+    scale: var(--enter-scale, 1);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal-on-scroll {
+      animation: enter-view linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 28%;
+    }
+  }
+}
+```
 
 ## Responsive rules
 

@@ -9,10 +9,10 @@ export const fixtureImage = { src: specimen.src, width: 1200, height: 800, alt: 
 export const specimenTokens = ['page', 'surface', 'text', 'muted', 'border', 'action', 'on-action', 'focus'] as const;
 export const componentCoverage = {
   rendered: ['Section', 'Container', 'Grid', 'Card', 'PartnersPanel', 'ResponsiveImage', 'EditorialImage', 'RichText', 'PhotoGallery', 'FormError', 'LogoTicker'],
-  variants: { Section: ['content', 'section'], Container: ['reading', 'content', 'wide'], Grid: ['compact', 'standard', 'wide'], Card: ['stacked', 'horizontal'], PartnersPanel: ['linked', 'unlinked', 'empty', 'dark artwork ground'], LogoTicker: ['animated with native stop control', 'single static item', 'RTL', 'empty renders nothing', 'reduced motion/print static'] },
-  stress: ['long heading/name', 'unbroken identifier', 'missing media', 'portrait 1:3', 'small native 96x64', 'repeated ordered gallery asset', 'invalid/disabled/empty controls', 'narrow placement'],
+  variants: { Section: ['content', 'section'], Container: ['reading', 'content', 'wide', 'breakout (.content-grid)'], Grid: ['compact', 'standard', 'wide'], Card: ['stacked', 'horizontal'], PartnersPanel: ['linked', 'unlinked', 'empty', 'dark artwork ground'], LogoTicker: ['animated with native stop control', 'single static item', 'RTL', 'empty renders nothing', 'reduced motion/print static'] },
+  stress: ['long heading/name', 'unbroken identifier', 'missing media', 'portrait 1:3', 'small native 96x64', 'repeated ordered gallery asset', 'invalid/disabled/empty controls', 'narrow placement', 'editorial breakout zone'],
   deferred: { CMSPartnersPanel: 'Queries a real collection; verify separately on disposable CMS content, not fake writable records.' },
-  surfaceModes: 'Existing light palette only. data-surface=dark changes focus ink, not a complete theme.',
+  surfaceModes: 'Neutral light palette by default; data-surface="dark" and data-surface="light" remap surface, text, muted, border, and focus tokens.',
   unsupported: ['No invented Card elevation variants or full dark theme', 'No native loading-button variant', 'External video/iframe/html embeds deliberately omitted: no third-party requests or executable fixture HTML', 'Table editor placeholder/save is verified separately on real CMS entries; static specimens cover the public renderer'],
 };
 const block = (key: string, text: string, style = 'normal', extra = {}) => ({ _type: 'block', _key: key, style, markDefs: [], children: [{ _type: 'span', _key: `${key}-text`, text, marks: [] }], ...extra });

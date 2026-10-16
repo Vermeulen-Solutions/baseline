@@ -46,6 +46,7 @@ Model your editorial data structure *before* creating page templates:
 - **WordPress Migrations:** If migrating from an existing site, do not blindly replicate messy postmeta tables. Run the [WordPress Content Modeling & Candidate Register](wordpress-content-modeling.md) workflow.
 - **The Content Candidate Register:** Hunt for repeated operational entities trapped in page builder blocks or ACF repeaters (e.g., rosters, schedules, venues, sponsors) and promote them to first-class EmDash collections.
 - **Relational Integrity:** Model 1:N relations and master data lookups rather than bloating single collection rows.
+- **Container & Breakout Planning:** Identify which page archetypes use standard single-measure sections (`<Container width="reading|content|wide">`) versus long-form editorial articles and case studies that interleave reading prose with wider figures, galleries, or callouts (`<Container breakout>` / `.content-grid`).
 - **Multilingual Architecture:** Enforce EmDash's native row-per-locale model ([Internationalization](internationalization.md)). Never create language-suffixed columns (e.g. `title_en`).
 - **Slugs vs. Labels:** Keep database slugs in clean ASCII kebab-case (`training_sessions`) while authoring admin display labels in the client's working language.
 
@@ -73,12 +74,12 @@ Do not attempt to assemble twenty full pages at once. Source and calibrate your 
 - **Source High-Craft Patterns (Optional `21st.dev MCP`):** Fetch modern Tailwind component blueprints (bento grids, timelines, disclosures, spotlight cards) and transmute them through Baseline's **5-Step Quarantine Protocol**:
   1. Strip React/Framer Motion runtime down to **zero-JS `.astro` markup**.
   2. Replace hardcoded Tailwind palette classes (`bg-zinc-900`) with **semantic tokens** (`var(--color-surface)`).
-  3. Upgrade fixed pixel utilities to **fluid typographic steps** (`--text-step-*`) and `<Section>` / `<Container>` / `<Grid>`.
+  3. Upgrade fixed pixel utilities to **fluid typographic steps** (`--text-step-*`, `--text-step-3-to-1`) and `<Section>` / `<Container>` / `<Container breakout>` / `<Grid>`.
   4. Wire **EmDash CMS live edit proxies** (`{...entry.edit.title}`).
   5. Stress-test on `/_styleguide`.
 - **Calibrate Scalings & Tokens (`T` / `B`):** Open **`/_styleguide`**, press **`T`** to adjust typography scales, line-heights, and spatial density live in the browser, press **`B`** to A/B compare against source CSS, and copy tokens into `src/styles/global.css`.
 - **Align Mockups (`O`):** Press **`O`** to drop your Stitch/Claude concept screenshot onto the Reference Overlay and align spacing optically.
-- **Stress-Test Edge Cases:** Test long translated headings, missing images, uneven grid counts, RTL text, and `prefers-reduced-motion`.
+- **Stress-Test Edge Cases:** Test long translated headings, missing images, uneven grid counts, `<Card>` `.clickable-parent`/`.focus-parent` keyboard outlines and concentric radii, `.content-grid` editorial breakouts, RTL text, and `prefers-reduced-motion`.
 - **Production Guard:** `/_styleguide` automatically returns **404** in production builds.
 - **Guides:** [Component Quarantine & Styleguide Fixtures](styleguide-fixtures.md) · [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
@@ -87,7 +88,7 @@ Do not attempt to assemble twenty full pages at once. Source and calibrate your 
 ## Stage 5: Representative Public & Editor Implementation
 
 Now assemble your public routes and wire up EmDash CMS editing:
-- **Compose with Primitives:** Build layouts using `<Section>`, `<Container>`, and `<Grid>` primitives ([Design Framework](design-framework.md)).
+- **Compose with Primitives:** Build layouts using `<Section>`, `<Container>` (or `<Container breakout>` / `.content-grid` for editorial articles with wide callouts/media), `<Grid>`, and `<Card>` primitives ([Design Framework](design-framework.md)).
 - **Bind Editorial Canvas Proxies:** Pass page identity to `Base.astro` and spread field proxies (`{...entry.edit.title}`) onto the rendered elements so clients can visually edit content in the CMS ([Editorial Canvas](emdash-editorial-canvas.md)).
 - **Media Optimization:** Use native Astro image delivery for photographic assets ([Image Delivery](image-delivery.md)) and run `npm run media:migrate-wp` to normalize and ingest WordPress media imports via an auditable manifest.
 - **Zero-JS by Default:** Use pure CSS interactive primitives like `LogoTicker` and justified `PhotoGallery` ([Reusable Patterns](reusable-public-patterns.md)).

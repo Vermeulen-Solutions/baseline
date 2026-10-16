@@ -112,3 +112,31 @@ test('surface source restores baseline, solid clears a pattern, dark-safe ink fo
   assert.equal(createTokenMap(baseline, { surface: 'solid' })['--page-pattern'], 'none');
   for (const surface of ['grid', 'dots', 'noise']) assert.ok(createTokenMap(baseline, { surface })['--page-pattern'].includes('var(--color-text)'));
 });
+
+test('global.css, Container.astro, and Card.astro ship the curated token engine, breakout grid, and accessible card contract', () => {
+  const css = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/styles/global.css','utf8'))"], { encoding: 'utf8' });
+  for (const token of [
+    '--text-step-3-to-1', '--text-step-2-to-0',
+    '--spacing-2xl-to-md', '--spacing-xl-to-sm',
+    '--shadow-sm', '--shadow-md', '--shadow-lg',
+    '--ease-smooth', '--ease-snappy', '--ease-spring',
+    '--measure-content-safe',
+  ]) {
+    assert.ok(css.includes(token), `Missing curated token ${token}`);
+  }
+  for (const selector of [
+    '.content-grid', '.content--feature', '.content--wide', '.content--full', '.content--full-safe',
+    '.clickable-parent::after', '.focus-parent:focus-within:has(:focus-visible)',
+    ':where(:has(> .is-bg))', '.fade--bottom', '[data-surface="dark"]', '[data-surface="light"]',
+  ]) {
+    assert.ok(css.includes(selector), `Missing structural selector ${selector}`);
+  }
+  const container = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/components/Container.astro','utf8'))"], { encoding: 'utf8' });
+  assert.ok(container.includes('breakout?: boolean;'));
+  assert.ok(container.includes('breakout ? "content-grid" : ["container-shell", `container-shell--${width}`]'));
+
+  const card = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/components/Card.astro','utf8'))"], { encoding: 'utf8' });
+  assert.ok(card.includes('<article class:list='), 'Card must render a semantic <article> instead of wrapping the whole card in <a>');
+  assert.ok(card.includes('class="card-link clickable-parent"'), 'Card heading link must stretch via .clickable-parent');
+  assert.ok(card.includes('--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))'), 'Card must compute concentric inner media radius');
+});
