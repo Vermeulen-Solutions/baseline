@@ -10,8 +10,8 @@ By breaking work into explicit sequential stages—each gated by review and auto
 flowchart TD
     S1["1. Brief & Evidence"] --> S2["2. Platform & Hosting"]
     S2 --> S3["3. Content Architecture"]
-    S3 --> S4["4. Art Direction Gate"]
-    S4 --> S45["4.5 Component Quarantine (/_styleguide)"]
+    S3 --> S4["4. Art Direction & Visual Concepting"]
+    S4 --> S45["4.5 Component Sourcing & Quarantine (/_styleguide)"]
     S45 --> S5["5. Public & Editor Implementation"]
     S5 --> S6["6. Verification & Delivery"]
 ```
@@ -23,6 +23,7 @@ flowchart TD
 Never start by writing code or prompting an assistant to "make a homepage." Begin by gathering ground-truth evidence:
 - **Client Brief & Goals:** Target audience, business objectives, brand voice, and language requirements.
 - **Visual Evidence:** Brand assets (SVG logos, brand guidelines, color palettes, photography) and existing site screenshots (desktop and mobile).
+- **UX Flow Teardowns (Optional):** For complex user flows (filterable directories, registration journeys, schedules, or pricing models), inspect real-world production patterns using **Nicelydone MCP**, **Refero.design**, or **Kombai Gallery** to capture authentic UX anatomy and edge states.
 - **Functional Requirements:** Multilingual needs, forms, galleries, third-party embeds, or custom integrations.
 - **Deliverables:** Record findings in project notes before opening templates.
 
@@ -50,28 +51,36 @@ Model your editorial data structure *before* creating page templates:
 
 ---
 
-## Stage 4: Art Direction & Aesthetic Gate
+## Stage 4: Art Direction, Visual Concepting & The Design Gate
 
 Before writing a single line of site-specific CSS or template HTML, establish a distinct visual identity to prevent default "generic AI landing page" output:
-- **Select an Aesthetic Lane:** Choose a lane from [Aesthetic Lanes](../.agents/skills/site-art-direction/references/aesthetic-lanes.md) (e.g., *Minimal Editorial*, *Industrial Technical*, *Warm Heritage*, *Brutalist Precision*, *Kinetic Modern*).
-- **Define Token Physics:** Set typography pairings, canvas ground, action/accent contrast, border philosophy, and spatial density.
-- **Declare Anti-Patterns:** Write 2–3 explicit bans (e.g. *"No floating rounded cards; no decorative icon pills; no purple gradients"*).
-- **Save the Art Direction Record:** Write the `## Art Direction Record` block in `AGENTS.md`.
-- **The Gate:** Run `npm run check:art-direction -- --require-record`. If this record is absent, CI and build preflights will fail.
-- **Visual Prototyping (Optional):** If exploring concepts with Google Stitch, Claude Design, or OpenDesign, keep prototypes in `audit/visual-concepts/`, validate tokens via the `@google/design.md` bridge, and overlay mockups using Dev HUD (`O`). See [Visual Prototyping & DESIGN.md](design-interchange.md).
-- **Guide:** [Art Direction Workflow](art-direction-workflow.md).
+- **The Stage 4 Capability Prompt:** Your agent will briefly present four creative options—skip in one second to stay purely in-browser, or leverage connected MCP superpowers ([AI Agent & Harness Configuration](agent-documentation.md)):
+  1. *Code-First In-Browser (Default):* Curated Aesthetic Lanes + live Dev HUD token tuning (`/_styleguide`).
+  2. *UX Anatomy Research:* **Nicelydone MCP** / **Refero.design** flow teardowns.
+  3. *Community `DESIGN.md` Systems & Visual Concepting:* **[designmd.ai](https://designmd.ai/explore)** (`designmd-mcp`) + **Google Stitch**, **OpenDesign**, or **Claude Design** screen studies in `audit/visual-concepts/` bridged via `@google/design.md`.
+  4. *Component Sourcing:* **21st.dev MCP** Tailwind component blueprints transmuted in Stage 4.5.
+- **Select an Aesthetic Lane:** Choose a lane from [Aesthetic Lanes](../.agents/skills/site-art-direction/references/aesthetic-lanes.md) (*Technical Systems*, *Product-Led Minimalism*, *Editorial Paper*, *Luminous Futurism*, or *Custom / existing brand*).
+- **Define Token Physics & Pacing Variance:** Set typography pairings, canvas ground, action/accent contrast, border philosophy, spatial density, and a **Section Rhythm Map** (so consecutive sections never repeat the same layout).
+- **Declare Anti-Patterns:** Write 2–3 explicit semicolon-separated bans (e.g. *"No floating rounded cards; no decorative icon pills; no purple gradients"*).
+- **Save & Verify the Gate:** Write the `## Art Direction Record` block in `AGENTS.md` and run `npm run check:art-direction -- --require-record`.
+- **Guides:** [Art Direction Workflow](art-direction-workflow.md) · [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---
 
-## Stage 4.5: Component Quarantine (`/_styleguide`)
+## Stage 4.5: Component Sourcing & Quarantine (`/_styleguide`)
 
-Do not attempt to assemble twenty full pages at once. Calibrate your reusable components in isolation first:
-- Open **`/_styleguide`** in your browser.
-- **Calibrate Scalings & Tokens:** Press **`T`** to open TweaksBar. Adjust typography scales, line-heights, and spatial density live on the page. Press **`B`** to A/B compare against source CSS, then copy and merge the changed tokens into `src/styles/global.css`.
-- **Align Mockups:** Press **`O`** to drop your Figma mockup or reference screenshot onto the overlay and align spacing pixel-for-pixel.
-- **Stress-Test Edge Cases:** Test components against extreme conditions: long translated headings, missing images, uneven grid counts, right-to-left (RTL) text, and high-contrast zoom.
+Do not attempt to assemble twenty full pages at once. Source and calibrate your reusable components in isolation first:
+- **Source High-Craft Patterns (Optional `21st.dev MCP`):** Fetch modern Tailwind component blueprints (bento grids, timelines, disclosures, spotlight cards) and transmute them through Baseline's **5-Step Quarantine Protocol**:
+  1. Strip React/Framer Motion runtime down to **zero-JS `.astro` markup**.
+  2. Replace hardcoded Tailwind palette classes (`bg-zinc-900`) with **semantic tokens** (`var(--color-surface)`).
+  3. Upgrade fixed pixel utilities to **fluid typographic steps** (`--text-step-*`) and `<Section>` / `<Container>` / `<Grid>`.
+  4. Wire **EmDash CMS live edit proxies** (`{...entry.edit.title}`).
+  5. Stress-test on `/_styleguide`.
+- **Calibrate Scalings & Tokens (`T` / `B`):** Open **`/_styleguide`**, press **`T`** to adjust typography scales, line-heights, and spatial density live in the browser, press **`B`** to A/B compare against source CSS, and copy tokens into `src/styles/global.css`.
+- **Align Mockups (`O`):** Press **`O`** to drop your Stitch/Claude concept screenshot onto the Reference Overlay and align spacing optically.
+- **Stress-Test Edge Cases:** Test long translated headings, missing images, uneven grid counts, RTL text, and `prefers-reduced-motion`.
 - **Production Guard:** `/_styleguide` automatically returns **404** in production builds.
-- **Guide:** [Component Quarantine & Styleguide Fixtures](styleguide-fixtures.md).
+- **Guides:** [Component Quarantine & Styleguide Fixtures](styleguide-fixtures.md) · [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---
 

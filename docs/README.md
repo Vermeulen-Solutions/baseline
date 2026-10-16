@@ -61,8 +61,8 @@ Explore the documentation guides below, organized by workflow, design architectu
   How `/_styleguide` renders components and responsive stress cases in isolation before page assembly, and how the route is automatically excluded (404) from production builds.
 - **[Local Visual Regression Testing](visual-regression.md)**  
   Local-first Windows Chromium screenshot regression testing harness (`npm run test:visual`). Catch unintended layout reflows without Docker or consuming GitHub Actions runner quotas.
-- **[Visual Prototyping & DESIGN.md Bridge](design-interchange.md)**  
-  Prototyping with Google Stitch, Claude Design, OpenDesign, and Figma: the 4-step workflow, concept sandboxing in `audit/visual-concepts/`, token linting/export via `@google/design.md`, and Dev HUD overlay alignment.
+- **[AI-Native Visual Design, Component Sourcing & DESIGN.md Interchange](design-interchange.md)**  
+  The 5-stage design pipeline: UX flow teardowns (`Nicelydone` / `Refero`), 420+ community `DESIGN.md` systems ([designmd.ai](https://designmd.ai/explore)), visual screen prototyping (`Google Stitch` / `Claude Design` / `OpenDesign`), high-craft component sourcing (`21st.dev MCP` → `/_styleguide` zero-JS transmutation), and offline `@google/design.md` token validation.
 
 ---
 
@@ -71,7 +71,7 @@ Explore the documentation guides below, organized by workflow, design architectu
 *Performant, responsive image delivery and interactive galleries.*
 
 - **[Native Image Delivery](image-delivery.md)**  
-  Native Astro 7.4 image optimization backed by EmDash's storage endpoint. Covers responsive WebP/AVIF generation, aspect ratio preservation, and Cloudflare R2 staging.
+  Native Astro 7.4 image optimization backed by EmDash's storage endpoint. Covers responsive WebP/AVIF generation, aspect ratio preservation, resumable WordPress media preparation (`media:migrate-wp`), and Cloudflare R2 staging.
 - **[Gallery Workflow](gallery-workflow.md)**  
   Progressively enhanced PhotoSwipe lightboxes embedded directly within Portable Text and custom gallery sections.
 
@@ -82,7 +82,7 @@ Explore the documentation guides below, organized by workflow, design architectu
 *Harness-agnostic workflows for pairing with AI assistants (Claude Code, OpenAI Codex, Antigravity, OpenCode, Hermes, Cursor, Windsurf, Aider, and local LLM runners).*
 
 - **[Agent Documentation & MCP Setup](agent-documentation.md)**  
-  Connecting coding assistants to official Astro and EmDash documentation via Model Context Protocol (MCP), and generating site-level access tokens with `npm run mcp:token`.
+  Connecting coding assistants to official Astro/EmDash docs, optional design MCP superpowers (`designmd-mcp`, `21st.dev`, `Nicelydone`, `Stitch`), and generating site-level access tokens with `npm run mcp:token`.
 - **[Skill Synchronization](skill-synchronization.md)**  
   Managing staged updates for mirrored EmDash skills (`sync:emdash-skills`) and shared Vermeulen-maintained skills (`sync:site-skills`) while protecting local customizations.
 
@@ -92,6 +92,8 @@ Explore the documentation guides below, organized by workflow, design architectu
 
 *Tools to inspect, verify, deploy, and maintain site quality over time.*
 
+- **[Database Parity, Seed Export & Snapshot Workflow](database-workflow.md)**  
+  Read-only SQLite vs. Cloudflare D1 structural parity (`db:diff`), 50-column physical budget inspection, allowlisted privacy-aware seed export (`db:export-seed`), and isolated remote inspection snapshots (`db:pull-remote`).
 - **[Production Deployment & Cloudflare Cutover](production-deployment.md)**  
   Standalone Node.js deployment, Cloudflare Workers/D1/R2 setup, R2 media sync, serverless sessions, and the critical corporate mail DNS preservation checklist (protecting Google Workspace / Microsoft 365).
 - **[Site Standards Diagnostic Engine](site-standards-audit.md)**  

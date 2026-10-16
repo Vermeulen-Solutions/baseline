@@ -52,11 +52,21 @@ Use the content-candidate register to classify every repeated editorial element 
 
 ## Stage 4: set the art direction
 
-Use `site-art-direction` with the brief, source audit, content model, real assets, and relevant references. Select a primary lane from `references/aesthetic-lanes.md`, or Custom / existing brand with a rationale when those lanes do not fit. Define the narrative metaphor, typography, color physics, spatial density, and explicit anti-patterns.
+When entering Stage 4, present a brief, one-time **Design Superpowers Capability Prompt** before authoring visual styles (unless the user has already chosen a workflow):
+
+> **Stage 4: Visual Direction & Concepting**
+> How would you like to explore visual concepts and component patterns for this site?
+> 1. **(Default) Code-First & In-Browser:** Pick a curated Aesthetic Lane and tune tokens live on `/_styleguide` with the Dev HUD (`T` / `B` / `G`). *(Zero extra setup)*
+> 2. **UX Flow & Anatomy Teardowns (`Nicelydone` / `Refero` / `Kombai`):** Inspect real production web screens to extract authentic UX details and section pacing before styling.
+> 3. **Community `DESIGN.md` Systems & Visual Concepting (`designmd-mcp` + `Google Stitch` / `OpenDesign` / `Claude Design`):** Search 420+ free `DESIGN.md` design systems on [designmd.ai/explore](https://designmd.ai/explore), generate 2–3 screen concepts in `audit/visual-concepts/`, and bridge tokens via `@google/design.md`.
+> 4. **High-Craft Component Registry (`21st.dev MCP`):** Pull tested Tailwind component blueprints into `/_styleguide` for zero-JS Astro transmutation in Stage 4.5.
+> *(Reply with `1` or "skip" to proceed immediately in code, or ask for `.mcp.example.json` setup snippets.)*
+
+Use `site-art-direction` with the brief, source audit, content model, real assets, and relevant references. Select a primary lane from `references/aesthetic-lanes.md`, or Custom / existing brand with a rationale when those lanes do not fit. Define the narrative metaphor, typography, color physics, spatial density, section pacing rhythm, and explicit anti-patterns.
 
 Do not start broad visual implementation from the starter's neutral defaults. First record the approved direction or explicitly labeled working assumption in `AGENTS.md` following the mandatory Art Direction Record schema and canonical gate in `AGENTS.md`; use a linked project document when the direction needs substantial visual references or component detail.
 
-For Stackable, Elementor, Blocksy builder, or similar migrations, explicitly classify the source visual language as preserve, refine, or overhaul. If the source is visually weak or the new premise materially departs from it, run the visual concept pass in `site-art-direction` before broad implementation: develop two or three concepts for a representative archetype using real content shapes and known assets, compare them against the brief and source identity, and document the selected direction. Use the harness's available image-generation capability when useful; ensure any prompt embeds the narrative metaphor. Do not treat generated concepts as exact implementation specifications.
+For Stackable, Elementor, Blocksy builder, or similar migrations, explicitly classify the source visual language as preserve, refine, or overhaul. If the source is visually weak or the new premise materially departs from it, run the visual concept pass in `site-art-direction` before broad implementation: develop two or three concepts for a representative archetype using real content shapes and known assets, compare them against the brief and source identity, and document the selected direction. Use the harness's available image-generation or visual prototyping capability (such as `designmd-mcp`, Stitch, OpenDesign, or Claude Design) when useful; ensure any prompt embeds the narrative metaphor. Do not treat generated concepts as exact implementation specifications.
 
 > [!CAUTION]
 > **ART DIRECTION GATE:** Before Stage 5 site-specific visual implementation, save the complete record and pass `npm run check:art-direction -- --require-record`. Follow the scope and exceptions in `AGENTS.md`; route planning is permitted earlier, visual template implementation is not. Saving to disk does not require a Git commit. CLI/CI check outcomes, not pre-write prevention.
@@ -65,15 +75,15 @@ For Stackable, Elementor, Blocksy builder, or similar migrations, explicitly cla
 
 ## Stage 4.5: calibrate components before page assembly
 
-For URL/screenshot migrations, follow `astro-site-design/references/component-quarantine.md` after Stage 4 and its art-direction gate. Inspect representative source elements, then calibrate relevant tokens, states and production primitives on `/_styleguide` before creating client page templates or bespoke sections. For greenfield work, review the relevant primitive baseline against the brief and record inapplicable source comparisons.
+For URL/screenshot migrations or external component sourcing (such as `21st.dev MCP`), follow `astro-site-design/references/component-quarantine.md` after Stage 4 and its art-direction gate. Inspect representative source elements or candidate registry blueprints, then calibrate relevant tokens, states, and production primitives on `/_styleguide` before creating client page templates or bespoke sections. When sourcing external React/Tailwind components (e.g., from `21st.dev`), transmute them through the quarantine checklist: strip unnecessary React/Framer Motion runtime down to zero-JS Astro markup, replace hardcoded palette classes with semantic tokens, bind fluid typography/spacing steps, and wire EmDash live edit proxies. For greenfield work, review the relevant primitive baseline against the brief and record inapplicable source comparisons.
 
 Save `audit/component-calibration.md` with evidence, actual component APIs, supported surfaces/states, asset provenance, narrow/wide and keyboard/motion checks, unresolved gaps and ready/deferred decisions. Resolve material reusable-component gaps before broad assembly. Keep normal-build route exclusion and synthetic fixtures intact. Page findings may reopen calibration; this is not a permanent component freeze. Use written handoffs between passes; fork/archive chats only when the user requests it.
 
-**Gate:** the calibration record identifies which patterns are ready for representative pages and why; relevant checks pass. No source cloning, invented APIs, fake CMS edit identities or specimen-only CSS repairs.
+**Gate:** the calibration record identifies which patterns are ready for representative pages and why; relevant checks pass. No source cloning, un-quarantined React/palette bloat, invented APIs, fake CMS edit identities, or specimen-only CSS repairs.
 
 ## Stage 5: implement representative pages
 
-When references are screenshots/mockups or interaction recipes, route through astro-site-design/references/visual-mockup-workflow.md. Keep measured facts, responsive assumptions and editorial ownership explicit. AGENTS.md is the project instruction bridge; harness-specific rules are not universal enforcement.
+When references are screenshots/mockups or interaction recipes, route through `astro-site-design/references/visual-mockup-workflow.md`. Keep measured facts, responsive assumptions and editorial ownership explicit. `AGENTS.md` is the project instruction bridge; harness-specific rules are not universal enforcement.
 
 Use `astro-site-design` for the design system, Astro components, responsive behavior, accessibility, and browser review. Use `building-emdash-site` alongside it for EmDash queries, cache hints, media, Portable Text, menus, and editor integration.
 

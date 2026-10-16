@@ -6,7 +6,7 @@ Whether you pair-program with **Claude Code**, **OpenAI Codex**, **Google Antigr
 
 1. **Universal Instructions (`AGENTS.md`):** The single source of truth for repository rules, architectural boundaries, component APIs, and verification standards.
 2. **Open Skill Specification (`.agents/skills/`):** Standard `SKILL.md` files (YAML frontmatter + markdown instructions) covering site discovery, art direction, component quarantine, and CMS modeling.
-3. **Model Context Protocol (MCP):** Open JSON-RPC standard for documentation lookup and site content management.
+3. **Model Context Protocol (MCP):** Open JSON-RPC standard for live framework documentation, community `DESIGN.md` systems, UI component sourcing, visual prototyping, and site content management (see [`.mcp.example.json`](../.mcp.example.json)).
 4. **Deterministic Shell Tooling:** Standard npm commands (`npm run ...`) runnable in any bash, PowerShell, or automated execution environment.
 
 ---
@@ -30,16 +30,18 @@ Whether you pair-program with **Claude Code**, **OpenAI Codex**, **Google Antigr
 Allow your coding assistant to consult live, up-to-date Astro and EmDash documentation without hallucinating deprecated APIs. 
 
 ### Standard Project Configuration (`.mcp.json` / Cursor / Claude Code / OpenCode):
-Add this to `.mcp.json` in your project root or user configuration:
+Copy [`.mcp.example.json`](../.mcp.example.json) to `.mcp.json` in your project root, or add the documentation servers:
 
 ```json
 {
   "mcpServers": {
     "astro-docs": {
-      "serverUrl": "https://mcp.docs.astro.build/mcp"
+      "type": "http",
+      "url": "https://mcp.docs.astro.build/mcp"
     },
     "emdash-docs": {
-      "serverUrl": "https://docs.emdashcms.com/mcp"
+      "type": "http",
+      "url": "https://docs.emdashcms.com/mcp"
     }
   }
 }
@@ -65,7 +67,56 @@ npm run check:docs-mcp
 
 ---
 
-## 2. Site-Level EmDash CMS MCP Setup
+## 2. Optional Design & UI Superpowers via MCP
+
+During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, connecting optional design MCPs unlocks a major leap in visual quality while keeping your workflow 100% code-first (no manual Figma drawing required):
+
+| MCP / Reference Tool | Role in Baseline Workflow | Tier / Access |
+| :--- | :--- | :--- |
+| **[designmd.ai MCP](https://designmd.ai/mcp)** (`designmd-mcp`) | Search, browse, and download 420+ community `DESIGN.md` design systems ([designmd.ai/explore](https://designmd.ai/explore)) directly into `audit/visual-concepts/` or Google Stitch. | Free (Search requires no key; free key for download) |
+| **21st.dev MCP** (`@21st-dev/magic`) | Search, inspect, and fetch high-craft Tailwind component blueprints and micro-interactions directly into `/_styleguide` for zero-JS Astro transmutation. | Free / Open Registry |
+| **Google Stitch / OpenDesign** | Generate visual screen mockups from prompts and consume/emit `DESIGN.md` token files (`audit/visual-concepts/`). | Free / Built-in |
+| **Nicelydone MCP / Refero.design** | Inspect real-world web and SaaS UX screens, user flows, filter bars, and onboarding patterns during discovery. | Freemium / Web |
+| **Official Figma MCP** *(Optional)* | Inspect layers and layout tokens if a client happens to hand off an existing Figma file. | Free |
+
+### Enabling `designmd-mcp`, `21st-dev`, and `nicelydone` in `.mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "designmd": {
+      "command": "npx",
+      "args": ["-y", "designmd-mcp"],
+      "env": {
+        "DESIGNMD_API_KEY": "dk_your-key-here"
+      }
+    },
+    "21st-dev": {
+      "command": "npx",
+      "args": ["-y", "@21st-dev/magic@latest"],
+      "env": {
+        "API_KEY": "<YOUR_21ST_DEV_API_KEY>"
+      }
+    },
+    "nicelydone": {
+      "type": "http",
+      "url": "https://mcp.nicelydone.club/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_NICELYDONE_API_KEY>"
+      }
+    }
+  }
+}
+```
+
+> [!TIP]
+> **Graceful Fallback & Binary Guard:**
+> - All design MCPs are strictly optional. When entering Stage 4, your agent will briefly offer these paths—you can skip them in one second and work entirely in code using Baseline's curated Aesthetic Lanes and the live in-browser Dev HUD (`/_styleguide`).
+> - Baseline pins `@google/design.md@0.4.0` locally (`npm run design:check`) for offline frontmatter token linting. Always use `npx -y designmd-mcp` (or `npx --package=designmd designmd ...`) for the [designmd.ai](https://designmd.ai/explore) community registry so you do not overwrite the local `@google/design.md` binary. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
+
+---
+
+## 3. Site-Level EmDash CMS MCP Setup
 
 To allow your coding assistant to directly create, inspect, and update content, media, and taxonomies via EmDash's built-in MCP server (`/_emdash/api/mcp`), generate a Personal Access Token:
 
@@ -81,7 +132,7 @@ The script registers the token in `_emdash_api_tokens` and prints the exact conf
 
 ---
 
-## 3. Starting a Task With Any Agent
+## 4. Starting a Task With Any Agent
 
 When starting a new site or major feature, instruct your agent:
 

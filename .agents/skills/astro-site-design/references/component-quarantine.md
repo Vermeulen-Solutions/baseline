@@ -1,14 +1,24 @@
-# URL-to-Astro component quarantine
+# URL-to-Astro & external registry component quarantine
 
-Use for a URL/screenshot migration after source inspection, content ownership and the saved Art Direction Record. This is Stage 4.5 of `new-site-workflow`, before broad page assembly. A URL alone supplies neither complete content nor permission to reuse assets. The Issue #10 video is an inspiration supplied with the RFC, not a verified transcript or a promise of perfect conversion.
+Use for a URL/screenshot migration or when sourcing candidate UI patterns from an external component registry (such as `21st.dev MCP`) after source inspection, content ownership, and the saved Art Direction Record. This is Stage 4.5 of `new-site-workflow`, before broad page assembly. A URL or registry snippet alone supplies neither complete content nor permission to bypass project token physics. The Issue #10 video is an inspiration supplied with the RFC, not a verified transcript or a promise of perfect conversion.
 
 ## Calibrate before multiplying pages
 
-1. Inventory representative source elements at narrow/intermediate/wide widths, including states, surfaces, missing media and long/translated text. Record preserve/refine/replace decisions and asset provenance.
+1. Inventory representative source elements or candidate registry blueprints at narrow/intermediate/wide widths, including states, surfaces, missing media and long/translated text. Record preserve/refine/replace decisions and asset provenance.
 2. Map them to actual tokens and component APIs on `/_styleguide`: `Section labelledBy/spacing`, `Container width="reading|content|wide"`, intrinsic `Grid minimum`, and `Card layout="stacked|horizontal"`. Add a variant only for an evidenced repeated difference. Do not invent Heading/ButtonWrapper or theme APIs from a video example.
 3. Calibrate source tokens and production components through deterministic fixtures. No new client page templates or bespoke sections during this pass. Preserve the styleguide runtime guard, synthetic CMS identities and coverage manifest. Never fix component defects with specimen-only CSS.
 4. Save `audit/component-calibration.md`: source references/capture metadata, component/token mapping, supported states/surfaces, asset ownership, narrow/wide and keyboard/reduced-motion results, unresolved gaps, and ready/deferred decisions. For brief-led greenfield work, use the same review of relevant primitives; document inapplicable source comparisons.
 5. Pass the art-direction check and relevant component checks. Resolve material reusable-component gaps before Stage 5. This is a recorded engineering gate, not a claim that a filename prevents edits. Page implementation may reveal new needs: return to calibration, update evidence and recheck affected archetypes. Do not freeze every future component up front.
+
+## External registry & 21st.dev transmutation protocol
+
+When sourcing a component blueprint from `21st.dev MCP` or another external UI registry, never drop raw React/JSX or arbitrary Tailwind palette classes directly into `src/pages/`. Apply this 5-step transmutation inside `/_styleguide`:
+
+1. **De-Reactify to Zero-JS Astro:** Strip React state hooks, `framer-motion` wrappers, and `client:*` hydration unless interactive island state is genuinely required. Convert JSX into native `.astro` markup using pure CSS transitions, `@keyframes`, native `<details>/<summary>`, or CSS checkbox/`:has()` patterns.
+2. **Tokenize Hardcoded Palettes:** Replace raw Tailwind palette classes (`bg-zinc-900`, `text-slate-400`, `border-white/10`, `text-indigo-500`) with Baseline's semantic surface and ink tokens (`var(--color-page)`, `var(--color-surface)`, `var(--color-text)`, `var(--color-muted)`, `var(--color-border)`, `var(--color-action)`, and `data-surface="dark"`).
+3. **Fluidize Typography & Spacing:** Replace rigid pixel sizes (`text-4xl`, `p-8`) with Baseline's fluid typographic steps (`--text-step--1` through `--text-step-4`), spacing tokens (`--space-*`), and layout primitives (`<Section>`, `<Container>`, `<Grid>`, `.flow`).
+4. **Bind EmDash Live Edit Proxies:** Accept and forward CMS field edit attributes (`{...edit?.title}`) on editable text nodes so the transmuted component works natively inside the EmDash Visual Editor.
+5. **Verify Accessibility & Edge States:** Test keyboard focus order, `prefers-reduced-motion`, 320px/390px narrow reflow, and long localized strings on `/_styleguide` before promoting to page templates.
 
 ## Open structure, deliberate composites
 

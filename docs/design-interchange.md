@@ -1,61 +1,185 @@
-# Visual Prototyping & DESIGN.md Bridge (Stitch, Claude Design, OpenDesign)
+# AI-Native Visual Design, Component Sourcing & DESIGN.md Interchange
 
-When designing a new website or major page template, external visual AI tools—such as **Google Stitch**, **Claude Design / Artifacts**, **OpenDesign**, or **Figma**—offer rapid concept exploration.
+When an AI coding assistant is asked to "build a modern landing page" from a single text prompt, it almost always regresses to statistical averages: indigo-to-purple gradients, `Inter` everywhere, uniform `rounded-xl shadow-md` 3-column card rows, and thin, lifeless layouts lacking real-world UX details.
 
-Baseline provides a structured, account-free bridge to explore visual directions with these tools **without polluting your production codebase** or breaking your site's fluid responsive architecture with raw AI-generated markup.
+Baseline replaces one-shot prompt guesswork with a **code-first, 5-stage visual design pipeline**. You do not need to spend weeks drawing static rectangles in Figma—instead, you combine real-world UX teardowns, community `DESIGN.md` systems ([designmd.ai](https://designmd.ai/explore)), generative screen prototyping (**Google Stitch**, **Claude Design**, **OpenDesign**), open Tailwind component registries (**21st.dev**), and live in-browser optical calibration.
 
 ---
 
-## 1. The 4-Step Prototyping Workflow
+## 1. The 5-Stage Design Alchemy Pipeline
 
 ```mermaid
 flowchart LR
-    A["1. Explore in AI Tool<br/>(Stitch / Claude / OpenDesign)"] --> B["2. Concept Sandbox<br/>(audit/visual-concepts/)"]
-    B --> C["3. Token Bridge & Overlay<br/>(DESIGN.md + Dev HUD 'O' / 'T')"]
-    C --> D["4. Production Astro<br/>(Section / Container / EmDash)"]
+    S1["1. UX Flow Research<br/>(Nicelydone / Refero)"] --> S2["2. System & Concepting<br/>(designmd.ai + Stitch / Claude)"]
+    S2 --> S3["3. Token Bridge<br/>(DESIGN.md → OKLCH/Clamp)"]
+    S3 --> S4["4. Component Quarantine<br/>(21st.dev MCP → /_styleguide)"]
+    S4 --> S5["5. In-Browser Calibration<br/>(Dev HUD 'T' / 'O' / 'G' + Impeccable)"]
 ```
 
-### Step 1: Brainstorm Concepts Externally
-Use your preferred visual prototyping tool to generate page layouts, color schemes, and component compositions:
-- **Google Stitch:** Generates screen designs and structured `DESIGN.md` token specifications.
-- **Claude Design / Artifacts:** Rapidly mocks up HTML/CSS prototypes and visual layouts.
-- **OpenDesign / Figma:** Visual canvas tools exporting design tokens and high-resolution mockups.
+### How the Tools Fit Together (Zero Overlap)
 
-### Step 2: Keep Concepts in the Sandbox (`audit/visual-concepts/`)
-Never paste raw AI-generated HTML or arbitrary CSS utility classes directly into `src/pages/` or `src/styles/global.css`:
-- AI visual generators frequently output rigid, fixed-width layouts (`w-[1440px]`), hardcoded text strings, and flat color palettes that bypass EmDash CMS bindings.
-- Store exploratory HTML, CSS, and screenshots under `audit/visual-concepts/<concept-name>/` (e.g. `audit/visual-concepts/neutral-interchange/`).
-- Files in `audit/` are excluded from the Art Direction Gate, giving you full freedom to experiment without triggering CI or preflight errors.
+Each optional tool in the ecosystem solves a different layer of the design problem:
 
-### Step 3: Token Validation & Visual In-Browser Alignment
-Bridge the visual prototype into Baseline using the `DESIGN.md` token specification and the Dev HUD:
+| Layer | Tool / Service | What It Provides |
+| :--- | :--- | :--- |
+| **1. UX Flows & Anatomy** | **Nicelydone MCP** / **Refero.design** / **Kombai** | Real-world page flows, filter bars, secondary metadata, and empty states. |
+| **2. Macro Design System** | **[designmd.ai](https://designmd.ai/explore)** (`designmd-mcp`) | 420+ free community `DESIGN.md` design systems (colors, font pairings, elevation, guidelines). |
+| **3. Visual Screen Prototyping** | **Google Stitch** / **OpenDesign** / **Claude Design** | Generates visual screen mockups from prompts and consumes/emits `DESIGN.md` files. |
+| **4. Micro-Component Blueprints** | **21st.dev MCP** (`@21st-dev/magic`) | High-craft Tailwind component structures & micro-interactions (transmuted to zero-JS Astro). |
+| **5. Optical Calibration** | **Baseline `/_styleguide` + Dev HUD + `impeccable`** | Live in-browser token tuning (`T`), screenshot overlay (`O`), grid check (`G`), and critique. |
 
-1. **Token Interchange via `DESIGN.md`:**
-   If your tool exports or consumes the Google Labs `DESIGN.md` standard, validate and lint the document against Baseline's mapping sidecar:
+---
+
+### Step 1: Real-World UX & Flow Teardowns (`Nicelydone` / `Refero` / `Kombai`)
+Before inventing sections from scratch, ground your layout in real production UX anatomy:
+- **Nicelydone MCP & Refero.design:** Search real-world web and SaaS screens, onboarding flows, directories, pricing tables, and navigation shells.
+- **Kombai Gallery:** Browse curated web screens structured for AI coding prompts.
+- **What to extract:** Do not copy a brand's colors or logo. Extract **structural UX anatomy**:
+  - What secondary metadata makes a card or table row feel credible (timestamps, category tags, status dots, hairline dividers)?
+  - How does the page vary its **section pacing** (alternating dense multi-column index grids with spacious asymmetric feature spotlights)?
+  - What empty, filter, or mobile disclosure states are needed?
+
+### Step 2: Macro Design Systems (`designmd.ai`) & Visual Concepting (`audit/visual-concepts/`)
+When exploring visual mood, typography, and surface contrast, combine community `DESIGN.md` systems with generative screen studies inside the isolated `audit/visual-concepts/<concept-name>/` sandbox:
+- **Browse or Query [designmd.ai/explore](https://designmd.ai/explore) (`designmd-mcp`):**
+  Search 420+ curated community `DESIGN.md` files by tag (`minimal`, `dark`, `warm`, `landing-page`, `accessible`, `bold`) directly from your agent—searching works without an API key, and downloading uses a free key ([setup guide](agent-documentation.md)).
+- **Google Stitch + `DESIGN.md` Synergy:**
+  Google Stitch natively reads and emits `DESIGN.md`. Your agent can download a starting `DESIGN.md` from `designmd.ai` (or author one from Baseline's Aesthetic Lanes), pass it to Stitch (`create_design_system_from_design_md` / `generate_screen_from_text`) to generate 2–3 visual screen concepts anchored in your **Narrative Metaphor**, and save the captures in `audit/visual-concepts/<concept-name>/`.
+- **Claude Design / OpenDesign:** Rapidly prototype layout variations and typographic pairings.
+- **Why the Sandbox Matters:** Never paste raw AI-generated prototype HTML directly into `src/pages/`. AI visual generators frequently output fixed-width containers (`w-[1440px]`), hardcoded copy, and flat sRGB hex codes that bypass EmDash CMS bindings. Files in `audit/visual-concepts/` are exempt from the Art Direction Gate so you can iterate freely before committing to production code.
+
+### Step 3: The `DESIGN.md` Token Bridge & Fluid Upgrade
+In the wild, you will encounter two complementary forms of `DESIGN.md`:
+1. **Prose `DESIGN.md` (used by [designmd.ai](https://designmd.ai/what-is-design-md) & Google Stitch):** Pure markdown sections (`## Colors`, `## Typography`, `## Spacing`, `## Components`, `## Elevation`) that LLMs and Stitch read natively.
+2. **Frontmatter-Validated `DESIGN.md` (checked by `@google/design.md@0.4.0`):** Adds normative YAML token frontmatter (`colors`, `typography`, `rounded`) above the markdown prose so deterministic CLI scripts can lint and export tokens offline.
+
+To bridge a chosen concept into Baseline's stylesheet:
+1. **Validate & Export Normative `DESIGN.md` Tokens:**
+   When using YAML frontmatter with Baseline's mapping sidecar, validate offline via the lockfile-pinned `@google/design.md` CLI:
    ```sh
    npm run design:check -- --file audit/visual-concepts/neutral-interchange/DESIGN.md --mapping audit/visual-concepts/neutral-interchange/mapping.json
    ```
-   To export tokens to CSS custom properties:
+   Export candidate CSS custom properties for review:
    ```sh
    npm run design:export -- --file audit/visual-concepts/neutral-interchange/DESIGN.md --format css-vars
    ```
+2. **Upgrade Static Tokens to Fluid Physics:**
+   External `DESIGN.md` files specify static pixel sizes (`32px`) and sRGB hex codes (`#6366F1`). When merging into `src/styles/global.css`, upgrade colors into Baseline's **OKLCH gamut** and map font sizes/spacing into **mathematical fluid `clamp()` scales** (`320px` to `1280px` viewports).
 
-2. **Pixel-for-Pixel Mockup Overlay (`O`):**
-   - Export your concept as a PNG or JPEG screenshot from Stitch, Claude, or Figma.
-   - Run `npm run dev` and open `/_styleguide` or any public route.
-   - Press **`O`** to open the Reference Overlay in the Dev HUD drawer.
-   - Drop the screenshot into the browser, adjust opacity, and use the arrow-key offset pad to align padding and gutters pixel-for-pixel.
+> [!CAUTION]
+> **CLI Binary Distinction (`@google/design.md` vs. `designmd.ai`):**
+> Baseline pins `@google/design.md@0.4.0` in `package.json`, which provides the local `designmd` binary used by `npm run design:check` and `npm run design:export`. The community registry at [designmd.ai/cli](https://designmd.ai/cli) *also* names its npm CLI package `designmd`. Do **not** install `designmd` into `package.json` (which would overwrite the validator). To query `designmd.ai`, either connect **`designmd-mcp`** (`npx -y designmd-mcp`) or run `npx --package=designmd designmd search "<query>"`.
 
-3. **Live Token Calibration (`T` / `B`):**
-   - Press **`T`** to tune typography scales, line-heights, tracking, and spatial density live on the rendered page until it matches the concept.
-   - Press **`B`** to A/B toggle against your source CSS.
-   - Click **Copy Tokens** to export clean Tailwind `@theme` CSS and merge it into `src/styles/global.css`.
+### Step 4: Component Sourcing (`21st.dev MCP`) & The Zero-JS Quarantine (`/_styleguide`)
+Once your macro design tokens are set in `src/styles/global.css`, your agent can query the **21st.dev MCP** registry to fetch polished, high-craft Tailwind component blueprints (e.g., bento grids, editorial timelines, interactive accordions, subtle spotlight cards, or split-sticky sections) rather than hallucinating complex UI from scratch.
 
-### Step 4: Translate into Semantic Astro & EmDash CMS
-Once the visual concept is approved:
-1. Translate layout structures into Baseline's semantic primitives: `<Section>`, `<Container>`, and `<Grid>` (`docs/design-framework.md`).
-2. Bind EmDash CMS live editing field proxies (`{...entry.edit.title}`) so clients can edit copy visually (`docs/emdash-editorial-canvas.md`).
-3. Ensure photographic assets use Astro native image delivery (`docs/image-delivery.md`).
+> [!IMPORTANT]
+> **The Baseline Quarantine Rule:** Never drop raw external registry code directly into a public route. Every sourced component must pass through **`/_styleguide` Quarantine** using the **5-Step Transmutation Protocol**:
+
+1. **De-Reactify to Zero-JS Astro:** Strip unnecessary React state, `framer-motion` wrappers, and client hydration (`client:*`). Convert JSX into native `.astro` markup using pure CSS transitions, `@keyframes`, native `<details>/<summary>`, or CSS `:has()` / checkbox toggles wherever possible.
+2. **Map Hardcoded Palette Classes to Semantic Tokens:** Replace hardcoded Tailwind colors (`bg-zinc-900`, `text-slate-400`, `border-white/10`) with Baseline's surface-aware semantic tokens (`var(--color-surface)`, `var(--color-text)`, `var(--color-muted)`, `var(--color-border)`, and `data-surface="dark"`).
+3. **Fluidize Typography & Spacing:** Replace rigid pixel utilities (`text-4xl`, `p-10`) with Baseline's fluid typographic steps (`--text-step-2`, `--text-step-3`) and structural primitives (`<Section>`, `<Container>`, `<Grid>`, `.flow`).
+4. **Bind EmDash Live Edit Proxies:** Accept and forward CMS field attributes (`{...entry.edit.title}`) so the component is live-editable inside the EmDash Visual Editor (`docs/emdash-editorial-canvas.md`).
+5. **Stress-Test on `/_styleguide`:** Verify narrow (`320px`/`390px`), intermediate (`768px`), and wide (`1440px`) viewports, long translated strings, missing media, keyboard focus rings, and `prefers-reduced-motion`.
+
+#### Example: Transmuting a Raw Registry Snippet into Production Astro
+
+````carousel
+```tsx
+// ❌ BEFORE: Raw React/Tailwind snippet from external registry
+// Problems: Requires React runtime, hardcoded zinc/indigo hex colors,
+// rigid px sizes, and static uneditable strings.
+import { motion } from "framer-motion";
+
+export function FeatureSpotlight({ title, category, description }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="rounded-2xl bg-zinc-900 border border-zinc-800 p-8 shadow-xl"
+    >
+      <span className="text-xs font-mono uppercase tracking-widest text-indigo-400">
+        {category}
+      </span>
+      <h3 className="mt-3 text-3xl font-bold text-white">{title}</h3>
+      <p className="mt-4 text-base leading-relaxed text-zinc-400">{description}</p>
+    </motion.div>
+  );
+}
+```
+<!-- slide -->
+```astro
+---
+// ✅ AFTER: Transmuted Zero-JS Astro component calibrated on /_styleguide
+// Benefits: Zero client JS, semantic surface/ink tokens, fluid typography,
+// and live EmDash CMS visual editor bindings.
+interface Props {
+  title: string;
+  category?: string;
+  description: string;
+  edit?: {
+    title?: Record<string, unknown>;
+    category?: Record<string, unknown>;
+    description?: Record<string, unknown>;
+  };
+}
+
+const { title, category, description, edit } = Astro.props;
+---
+
+<article class="feature-spotlight flow" data-surface="dark">
+  {category && (
+    <p class="feature-spotlight__eyebrow" {...edit?.category}>{category}</p>
+  )}
+  <h3 class="feature-spotlight__title" {...edit?.title}>{title}</h3>
+  <p class="feature-spotlight__body" {...edit?.description}>{description}</p>
+</article>
+
+<style>
+  .feature-spotlight {
+    background: var(--color-surface);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: var(--space-l);
+    transition: border-color 180ms ease, transform 180ms ease;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .feature-spotlight:hover {
+      transform: translateY(-2px);
+    }
+  }
+  .feature-spotlight__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-step--1);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-action);
+  }
+  .feature-spotlight__title {
+    font-family: var(--font-display);
+    font-size: var(--text-step-2);
+    line-height: 1.15;
+  }
+  .feature-spotlight__body {
+    font-size: var(--text-step-0);
+    color: var(--color-muted);
+    max-width: 62ch;
+  }
+</style>
+```
+````
+
+### Step 5: Optical In-Browser Calibration (`Dev HUD` + `Impeccable`)
+Once your components are mounted on `/_styleguide` and representative routes:
+1. **Pixel-for-Pixel Reference Overlay (`O`):**
+   Drop a concept screenshot from Stitch, Claude, or a reference teardown directly into the browser overlay (`O`), adjust opacity, and align spacing and proportions optically.
+2. **Live Token Tuning (`T` / `B`):**
+   Press **`T`** to adjust font scale ratios, tracking, line-height, and surface contrast live on the rendered DOM. Press **`B`** to A/B compare against your baseline CSS, then click **Copy Tokens** to merge into `src/styles/global.css`.
+3. **Structural Grid Check (`G`) & Critique:**
+   Press **`G`** to verify column rhythm, and run a bounded **`impeccable`** critique pass to eliminate visual monotony before scaling across all routes.
+
+*(Note: If a client happens to supply an existing Figma file, you can optionally connect the official Figma MCP server to inspect layer tokens directly, then follow Steps 3–5 above.)*
 
 ---
 
@@ -82,6 +206,6 @@ External token schemas often flatten modern CSS features. Baseline's mapping sid
 
 ## 3. Guiding Rules
 
-- **Source Code is Authoritative:** `src/styles/global.css` and Astro component templates own production values. `DESIGN.md` acts as an external bridge, not a build dependency.
-- **No Direct Overwriting:** Never redirect `design:export` directly over `global.css`. Always review exported tokens and merge them deliberately.
-- **Account-Free:** No Google Stitch, Claude, or OpenDesign paid account is required. The local offline verification path (`npm run design:check`) works completely offline.
+- **Source Code is Authoritative:** `src/styles/global.css` and Astro component templates own production values. `DESIGN.md` and external registries act as bridges, never runtime dependencies.
+- **No Direct Overwriting:** Never redirect `design:export` directly over `global.css`, and never paste un-quarantined registry components directly into `src/pages/`.
+- **Graceful Degradation (Zero Lock-In):** Every external MCP (`designmd-mcp`, `21st.dev`, `Stitch`, `Nicelydone`) is 100% optional. Baseline's local verification path (`npm run design:check`, `/_styleguide`, and Dev HUD) works completely offline without paid accounts.

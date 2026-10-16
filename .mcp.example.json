@@ -1,0 +1,40 @@
+{
+  "mcpServers": {
+    "astro-docs": {
+      "type": "http",
+      "url": "https://mcp.docs.astro.build/mcp"
+    },
+    "emdash-docs": {
+      "type": "http",
+      "url": "https://docs.emdashcms.com/mcp"
+    },
+    "designmd": {
+      "command": "npx",
+      "args": ["-y", "designmd-mcp"],
+      "env": {
+        "DESIGNMD_API_KEY": "<YOUR_FREE_DESIGNMD_AI_KEY_OPTIONAL_FOR_SEARCH>"
+      }
+    },
+    "21st-dev": {
+      "command": "npx",
+      "args": ["-y", "@21st-dev/magic@latest"],
+      "env": {
+        "API_KEY": "<YOUR_21ST_DEV_API_KEY>"
+      }
+    },
+    "nicelydone": {
+      "type": "http",
+      "url": "https://mcp.nicelydone.club/mcp",
+      "headers": {
+        "Authorization": "Bearer <YOUR_NICELYDONE_API_KEY>"
+      }
+    },
+    "site-emdash-local": {
+      "type": "http",
+      "url": "http://localhost:4321/_emdash/api/mcp",
+      "headers": {
+        "Authorization": "Bearer <RUN_NPM_RUN_MCP_TOKEN>"
+      }
+    }
+  }
+}

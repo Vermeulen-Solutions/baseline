@@ -5,7 +5,7 @@ description: Turn a site brief, content structure, brand assets, and visual evid
 
 # Site art direction
 
-For optional DESIGN.md exchange use `docs/design-interchange.md` and the pinned local validation path. AGENTS.md retains the direction decision and mandatory record; shipped CSS retains implementation authority. Keep fluid/contextual values and authored rationale explicit when a prototype tool cannot represent them. External Stitch/OpenDesign access and compatibility require an actual recorded exchange.
+For optional DESIGN.md exchange and external visual tooling, use `docs/design-interchange.md` and the pinned local validation path (`npm run design:check` using `@google/design.md`). `AGENTS.md` retains the direction decision and mandatory record; shipped CSS retains implementation authority. Keep fluid/contextual values and authored rationale explicit when a prototype tool cannot represent them. External `designmd-mcp` ([designmd.ai/explore](https://designmd.ai/explore)), Stitch/OpenDesign, `21st.dev`, and `Nicelydone` access and compatibility are optional accelerators; never block when they are absent.
 
 Define what the site should look and feel like, and why, before applying the direction across templates. Produce decisions that `astro-site-design` can implement and test.
 
@@ -16,6 +16,14 @@ This skill is influenced by the brief-first and variance/motion/density ideas in
 Read the available brief, audience and task information, content model, route inventory, real copy and imagery, brand assets, and visual references. For a redesign or migration, use the source audit produced by `astro-site-design`; do not infer the source identity from a logo or homepage screenshot alone.
 
 When evidence is incomplete, make reversible working assumptions and label them. Ask only when plausible answers would lead to materially different identities or layouts.
+
+## Ground UX anatomy before styling
+
+When a site includes non-trivial interactive flows, directories, schedules, pricing structures, or multi-step forms, avoid inventing layouts from statistical LLM averages:
+
+- **UX Flow Teardowns (Optional):** If `Nicelydone MCP`, `Refero.design`, or `Kombai Gallery` is available (or via targeted web reference lookup), inspect real production web screens for the target archetype.
+- **Extract Structural Anatomy, Not Branding:** Note what secondary metadata (timestamps, status badges, tabular counts, hairline dividers), filter controls, empty states, and disclosure patterns make the interface credible and scannable.
+- **Plan Section Pacing Variance:** Map how consecutive sections on a primary route will vary in geometry and density (e.g., alternating an asymmetric split hero with a compact tabular index, a dark-surface editorial spotlight, and a variable-span bento grid) rather than repeating identical 3-column card rows.
 
 ## Read the design problem
 
@@ -50,7 +58,7 @@ Create one coherent direction covering:
 - **Aesthetic Lane:** Selected lane and specific site adaptations.
 - **Typography roles and rationale:** Display and body pairing from fonts the project can legally and reliably serve.
 - **Palette and physics:** Contrast hierarchy, surfaces, borders, shadows, and corner treatment.
-- **Grid and density:** Container behavior, alignment, spacing rhythm, and responsive composition.
+- **Grid, density, and section pacing:** Container behavior, alignment, spacing rhythm, compositional variance across consecutive sections, and responsive composition.
 - **Asset generation pre-flight rule:** Generated expressive imagery must embed the Narrative Metaphor and describe its visible application. Functional icons, factual diagrams, and faithful brand assets are exempt: preserve their meaning. Merely appending the metaphor to a generic prompt is not compliance. Avoid unsupported generic requests such as "modern clean tech", "AI network", or "glowing futuristic background".
 - **Interaction and motion character:** Feedback, transitions, and reduced-motion behavior.
 - **Navigation, hero, editorial flow, and calls to action:** Core page family layouts.
@@ -64,7 +72,7 @@ Do not invent facts, testimonials, clients, metrics, team members, or pseudo-rea
 
 When the brief supports substantially different directions, develop two or three compact concepts and compare them against audience fit, brand continuity, content fit, accessibility, maintainability, and distinctiveness. Select one direction or present the meaningful decision to the user.
 
-Use mood boards or generated visual studies when words cannot resolve composition, imagery, or material treatment. Treat generated images as design references until the user intends them as production assets. Record provenance and usage constraints for third-party assets.
+Use mood boards, community `DESIGN.md` references (`designmd-mcp` / [designmd.ai/explore](https://designmd.ai/explore)), generative prototyping tools (**Google Stitch**, **OpenDesign**, **Claude Design**), or generated visual studies when words cannot resolve composition, imagery, or material treatment. When a prototyping tool or `designmd.ai` emits a `DESIGN.md` file, store it under `audit/visual-concepts/<concept-name>/DESIGN.md` and validate normative token frontmatter via `npm run design:check` (`docs/design-interchange.md`) before translating into fluid CSS tokens. Do not install the npm `designmd` CLI package into `package.json` (which would shadow the pinned `@google/design.md` binary); use `designmd-mcp` or `npx --package=designmd` for community registry queries. Treat generated images as design references until the user intends them as production assets. Record provenance and usage constraints for third-party assets.
 
 ### Visual overhaul for builder migrations
 
@@ -73,7 +81,7 @@ For migrations from Stackable, Elementor, Blocksy builder templates, or similar 
 When the source design is weak or the new visual premise is materially different, make a visual concept pass before broad Astro implementation:
 
 1. Choose one representative page archetype and gather its real copy, source imagery, content shapes, and important states.
-2. Create two or three compact visual concepts that show composition, hierarchy, typography character, imagery treatment, density, and responsive intent. Use the harness's available image-generation capability when it can clarify the visual world; do not require a particular provider or model. If image generation is unavailable, use a mood board, annotated reference sheet, or small HTML/CSS prototype.
+2. Create two or three compact visual concepts that show composition, hierarchy, typography character, imagery treatment, density, and responsive intent. Use the harness's available visual prototyping or image-generation capability (`designmd-mcp`, Stitch, OpenDesign, Claude Design, or image generation) when it can clarify the visual world; do not require a particular provider or model. If external generation is unavailable, use a mood board, annotated reference sheet, or small HTML/CSS prototype in `audit/visual-concepts/`.
 3. Compare the concepts against the brief, source identity worth preserving, realistic content, accessibility, maintainability, and distinctiveness. Do not choose a concept solely because its generated copy or decorative details look impressive.
 4. Select one direction and translate it into implementation rules in the art-direction record before building the rest of the route inventory.
 
@@ -105,7 +113,7 @@ Write the Art Direction Record directly in `AGENTS.md` using this exact markdown
 When testing or refining the rendered design:
 1. In development mode, ensure `<TweaksBar />` is active in `src/layouts/Base.astro`.
 2. Use the bar for scalar adjustments; use source edits for layout, hierarchy, font sourcing, and responsive rules.
-3. Press `T` to open, `B` to toggle the actual source baseline, or Escape to close. Controls start without overrides; reload restores source styles. Hero sliders append to the baseline filter. Surface “Source” restores the stylesheet treatment.
+3. Press `T` to open, `B` to toggle the actual source baseline, `O` to align against a reference concept screenshot, or Escape to close. Controls start without overrides; reload restores source styles. Hero sliders append to the baseline filter. Surface “Source” restores the stylesheet treatment.
 4. Click **"Copy Tokens (CSS)"**, merge the exported overrides into `src/styles/global.css`, and reload. Preview and export share one token map, including fluid heading sizes, spacing, and surface declarations.
 5. Verify the result in a clean session at mobile and wide viewports. Check the full palette contrast, actual font faces/weights, and hero media treatment. Do not regard a live preview as delivery evidence.
 
