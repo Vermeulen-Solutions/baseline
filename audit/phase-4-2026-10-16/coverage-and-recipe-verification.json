@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-16",
+  "node": "24.21.0",
+  "readmeCommit": "f132745",
+  "implementationState": "README committed separately; Phase 4 changes uncommitted for review",
+  "checks": {
+    "fullUnitSuite": {
+      "passed": 54,
+      "failed": 0
+    },
+    "finalAffectedAuditAndRecipeSuite": {
+      "passed": 19,
+      "failed": 0
+    },
+    "syntaxModules": 59,
+    "typecheck": {
+      "files": 41,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    },
+    "productionBuild": "passed",
+    "releaseArtifactGuard": "passed",
+    "artDirectionGate": "passed; no visual source changes",
+    "workingDatabasePreflight": "unverified; no database present, not reported as a schema pass",
+    "requestedPrivateIdentifierAndPathMatches": 0,
+    "unchangedGoldenPNGHashes": 51,
+    "readmeLocalAssets": "present and linked as bounded thumbnails"
+  },
+  "diagnostics": {
+    "reportSchemaVersion": 2,
+    "completeSyntheticFixtureRequiredPolicy": "passed",
+    "currentSelfAudit": {
+      "pass": 15,
+      "fail": 0,
+      "warning": 0,
+      "unverified": 8,
+      "not-applicable": 2
+    },
+    "selfAuditStrictPolicy": "fails as intended for missing physical DB and complete reviewed skill hash receipts",
+    "mutationAndPrivacy": "Target byte/tree preservation, symlink/traversal refusal, env/path withholding and no target code evaluation covered by tests"
+  },
+  "recipe": {
+    "id": "schema-budget-prebuild@1",
+    "surface": "Disposable synthetic Git repositories only",
+    "checks": [
+      "Plan only is read-only; binds target, branch, revision and hashes",
+      "Apply twice makes no second target change",
+      "Rollback twice restores exact original package bytes; reapply works",
+      "Already-current hook is a zero-write no-op",
+      "Existing simple prebuild hook and lockfile preserved",
+      "Stale revision, staged/untracked edits, modified helpers and unsupported shell chains refused",
+      "Tampered plan/backup and post-apply edits refused",
+      "Prepared journal safely finalizes an interrupted update"
+    ],
+    "npmLifecycle": {
+      "schemaHelper": "Real supported helper",
+      "buildExecutable": "Synthetic test double; not an Astro rendering certification",
+      "beforeRecipe": "An over-budget fixture reaches its build without the missing preflight",
+      "afterRecipe51Columns": "Nonzero exit before preserved hook/build; no markers created",
+      "afterRecipeValidSchema": "Existing hook and build both execute",
+      "rollback": "Original package bytes restored"
+    }
+  },
+  "browserScope": "Not repeated: no src/public, visual contract or golden changes. Readme thumbnail copies a reviewed neutral existing capture.",
+  "ciScope": "No workflow/browser-job changes and no new remote CI timing claim. Unit tests remain in the existing single-Node job.",
+  "knownAdvisory": "Existing large client-bundle warning remains",
+  "remaining": [
+    "Route/state capture and actual editor evidence ingestion",
+    "Explicitly authorized downstream pilot with branch diff, before/after public/editor checks and rollback",
+    "Worker/D1/R2 and registry/media parity in Phase 5"
+  ]
+}

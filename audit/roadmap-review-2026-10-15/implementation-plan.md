@@ -173,3 +173,12 @@ Privacy sanitization removes requested client identifiers, client paths and depl
 #1 completes its missing rendered-reference evidence with the neutral isolated workflow replay under audit/visual-concepts/reference-workflow/: flat reference and source-site refinement, semantic address break, valid bounded 1fr, multicolor mark and full localized long copy, six clean-reload Astro captures at 390/768/1440. These are constructed examples; CMS save/reload is separate scoped Phase 3 evidence.
 
 #2 now starts with audit:site, an offline diagnostic scaffold consuming the digest-pinned standalone standards 0.1.1 manifest. Six focused tests cover current/degraded/missing evidence, no mutation/leaks, strict exits and explicit offline snapshot column limits. Complete capability/skill-membership adapters, reversible twice-safe recipe and an authorized downstream pilot remain scheduled. No client site has been modified. See docs/site-standards-audit.md and audit/phase-4-2026-10-16/.
+
+
+## Phase 4 coverage and first reversible recipe — 16 October 2026
+
+README milestone f132745 is committed separately. The current work package implements AST-based supported capabilities, complete managed skill membership/hash inventory comparison, physical schema metadata and report schema v2 validation. The self-audit preserves unknown DB/legacy receipt states; fixture passes are not full site certification.
+
+The first recipe, schema-budget-prebuild@1, supports the pinned source profile and exact schema helpers. It plans read-only, binds a clean feature-branch revision and bytes, preserves one simple prebuild hook, and supports explicit twice-safe apply/rollback through private outside-target artifacts. Disposable tests prove actual npm lifecycle gating with a synthetic build executable; no client scripts run as a diagnostic side effect.
+
+See docs/site-standards-audit.md and audit/phase-4-2026-10-16/coverage-and-recipe.md for receipts and limits. Phase 4 changes remain uncommitted for review. #2 stays open: implement route/editor evidence ingestion and select an authorized pilot before rollout. No workflow/browser-CI, src/public, visual-golden, client or remote data change was made.

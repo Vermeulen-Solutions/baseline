@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Vermeulen-Solutions/emdash-baseline/raw/main/standards/site-audit-report.schema.json",
+  "title": "Baseline site diagnosis report v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "generatedAt", "stage", "target", "standards", "runtime", "mutationPolicy", "rules", "summary"],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "generatedAt": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9:.]+Z$" },
+    "stage": { "const": "static-diagnosis" },
+    "target": {
+      "type": "object", "additionalProperties": false, "required": ["label", "git", "configurationSHA256"],
+      "properties": {
+        "label": { "const": "audited-repository" },
+        "git": {
+          "type": "object", "additionalProperties": false, "required": ["status"],
+          "properties": {
+            "status": { "enum": ["observed", "unverified"] },
+            "revision": { "type": ["string", "null"], "pattern": "^[a-f0-9]{40,64}$" },
+            "trackedDirty": { "type": "boolean" }, "note": { "type": "string" }
+          }
+        },
+        "configurationSHA256": {
+          "type": "object", "additionalProperties": false,
+          "required": ["astro.config.mjs", "src/live.config.ts", "src/styles/global.css", "package-lock.json"],
+          "properties": {
+            "astro.config.mjs": { "$ref": "#/$defs/hashOrNull" }, "src/live.config.ts": { "$ref": "#/$defs/hashOrNull" },
+            "src/styles/global.css": { "$ref": "#/$defs/hashOrNull" }, "package-lock.json": { "$ref": "#/$defs/hashOrNull" }
+          }
+        }
+      }
+    },
+    "standards": {
+      "type": "object", "additionalProperties": false, "required": ["version", "commit", "sha256", "source"],
+      "properties": {
+        "version": { "const": "0.1.1" }, "commit": { "const": "28ccf82b3047eb615cd57ca55141751e0d29af11" },
+        "sha256": { "const": "a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4" }, "source": { "type": "string" }
+      }
+    },
+    "runtime": { "enum": ["node-sqlite", "cloudflare-d1-r2"] },
+    "mutationPolicy": { "type": "string" },
+    "rules": {
+      "type": "array", "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "ruleVersion", "status", "severity", "expected", "observed", "evidence", "confidence", "applicability", "remediation", "verification"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9:@/.-]+$" }, "ruleVersion": { "type": "integer", "minimum": 1 },
+          "status": { "enum": ["pass", "fail", "warning", "unverified", "not-applicable"] },
+          "severity": { "enum": ["required", "recommendation"] },
+          "expected": { "type": "string" }, "observed": { "type": ["string", "object"] },
+          "evidence": { "type": "array", "items": { "type": "string", "pattern": "^(?![A-Za-z]:|/|\\\\|.*\\.\\.)[A-Za-z0-9_./:@-]+$" } },
+          "confidence": { "enum": ["high", "bounded-static", "none"] },
+          "applicability": { "type": "string" }, "remediation": { "type": "string" }, "verification": { "type": "string" }
+        }
+      }
+    },
+    "summary": {
+      "type": "object", "additionalProperties": false, "required": ["pass", "fail", "warning", "unverified", "not-applicable"],
+      "properties": {
+        "pass": { "type": "integer", "minimum": 0 }, "fail": { "type": "integer", "minimum": 0 },
+        "warning": { "type": "integer", "minimum": 0 }, "unverified": { "type": "integer", "minimum": 0 }, "not-applicable": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": { "hashOrNull": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" } }
+}

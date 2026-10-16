@@ -1,0 +1,428 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-16T09:32:39.885Z",
+  "stage": "static-diagnosis",
+  "target": {
+    "label": "audited-repository",
+    "git": {
+      "status": "observed",
+      "revision": "f1327454fdc3cfdb6e4abf38b1a8d36a2052c095",
+      "trackedDirty": true,
+      "note": "Untracked paths and repository remotes withheld"
+    },
+    "configurationSHA256": {
+      "astro.config.mjs": "f9213ed59412eff32b9038c43274be5a309e738813776a09338d6dec4ad2e638",
+      "src/live.config.ts": "bdaed9fd375339d5eb69cc015499d8b6d4aefcdd50049212c49a5ca22d1ce0de",
+      "src/styles/global.css": "e24dde6934cac579d464e843194787f4d85d1c553b869751f35c67c44e983925",
+      "package-lock.json": "a84be13f7d053bb74ecd93120cde60982baf31c0fb8ab72b7e8603cccce8f999"
+    }
+  },
+  "standards": {
+    "version": "0.1.1",
+    "commit": "28ccf82b3047eb615cd57ca55141751e0d29af11",
+    "sha256": "a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4",
+    "source": "Digest-verified offline manifest; original private Git history not required"
+  },
+  "runtime": "node-sqlite",
+  "mutationPolicy": "No target writes, target script/config execution or network; explicit reports outside target and isolated temporary snapshot copy only",
+  "rules": [
+    {
+      "id": "package-evidence",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Readable package object and npm package inventory",
+      "observed": "Observed; contents withheld",
+      "evidence": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "runtime-profile",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "A certified source standards profile",
+      "observed": "certified-scoped",
+      "evidence": [
+        "standards/baselines/0.1.1.json"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:astro",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 7.4.0",
+      "observed": "7.4.0",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:emdash",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 1.3.0",
+      "observed": "1.3.0",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:@astrojs/node",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 11.1.8",
+      "observed": "11.1.8",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:@astrojs/react",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 7.1.0",
+      "observed": "7.1.0",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:react",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 19.2.4",
+      "observed": "19.2.4",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:react-dom",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 19.2.4",
+      "observed": "19.2.4",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:tailwindcss",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 4.3.3",
+      "observed": "4.3.3",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "node-policy",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Minimum 22.22.2; recommend current Node 24 LTS patch",
+      "observed": "Declared ^22.22.2 || ^24.15.0 || >=26.0.0; executing audit on v24.21.0",
+      "evidence": [
+        "package.json"
+      ],
+      "confidence": "high",
+      "applicability": "Exact declared baseline policy comparison only; not deployment runtime or general semver evaluation",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:server",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "EmDash server output",
+      "observed": "server",
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:adapter",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Adapter matches requested runtime; standalone for Node",
+      "observed": "node",
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:cms",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "EmDash and React integration calls",
+      "observed": {
+        "emdash": true,
+        "react": true,
+        "dynamic": false
+      },
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:storage",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Explicit supported database/storage wiring",
+      "observed": {
+        "sqlite": true,
+        "local": true
+      },
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:i18n",
+      "ruleVersion": 1,
+      "status": "not-applicable",
+      "severity": "required",
+      "expected": "If configured, default locale unprefixed for EmDash admin",
+      "observed": "absent",
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:cache-hints",
+      "ruleVersion": 1,
+      "status": "not-applicable",
+      "severity": "recommendation",
+      "expected": "If cache configured, runtime evidence for every query hint",
+      "observed": "absent",
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "bounded-static",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "schema-prebuild",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Schema preflight before the existing build hook",
+      "observed": "Command presence is static evidence; missing DB still needs measurement",
+      "evidence": [
+        "package.json"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "schema-budget-prebuild@1",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "skills:emdash",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "required",
+      "expected": "Complete managed membership and normalized hashes versus recorded snapshot",
+      "observed": {
+        "presentSkills": 3,
+        "missingSkills": 0,
+        "measuredFiles": 20,
+        "missingFiles": 0,
+        "extraFiles": 0,
+        "changedFiles": 0,
+        "refusedEntries": 0,
+        "manifestMembership": "unverified",
+        "sourceCurrency": "unverified"
+      },
+      "evidence": [
+        ".emdash/upstream-skills.json"
+      ],
+      "confidence": "bounded-static",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "skills:site",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "required",
+      "expected": "Complete managed membership and normalized hashes versus recorded snapshot",
+      "observed": {
+        "presentSkills": 8,
+        "missingSkills": 0,
+        "measuredFiles": 83,
+        "missingFiles": 0,
+        "extraFiles": 0,
+        "changedFiles": 0,
+        "refusedEntries": 0,
+        "manifestMembership": "unverified",
+        "sourceCurrency": "unverified"
+      },
+      "evidence": [
+        ".emdash/site-skills.json"
+      ],
+      "confidence": "bounded-static",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "upstream-currency",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "recommendation",
+      "expected": "Dated upstream version/source decisions",
+      "observed": "Offline inventory is not an upstream freshness check",
+      "evidence": [],
+      "confidence": "none",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "physical-schema",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "required",
+      "expected": "Actual physical collection widths <= 50",
+      "observed": "No explicit offline SQLite snapshot supplied",
+      "evidence": [],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "public-editor-runtime",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "recommendation",
+      "expected": "Explicit runtime/editor/visual or named remote evidence",
+      "observed": "Not executed by static diagnosis",
+      "evidence": [],
+      "confidence": "none",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "visual-accessibility",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "recommendation",
+      "expected": "Explicit runtime/editor/visual or named remote evidence",
+      "observed": "Not executed by static diagnosis",
+      "evidence": [],
+      "confidence": "none",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "forms-provider-delivery",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "recommendation",
+      "expected": "Explicit runtime/editor/visual or named remote evidence",
+      "observed": "Not executed by static diagnosis",
+      "evidence": [],
+      "confidence": "none",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "cloudflare-d1-r2",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "recommendation",
+      "expected": "Explicit runtime/editor/visual or named remote evidence",
+      "observed": "Not executed by static diagnosis",
+      "evidence": [],
+      "confidence": "none",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    }
+  ],
+  "summary": {
+    "pass": 15,
+    "fail": 0,
+    "warning": 0,
+    "unverified": 8,
+    "not-applicable": 2
+  }
+}

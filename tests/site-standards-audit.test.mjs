@@ -72,7 +72,7 @@ test('normalized skill drift never becomes an upstream/membership pass and linke
   fs.writeFileSync(path.join(root, '.emdash/site-skills.json'), JSON.stringify({ files: { 'new-site-workflow/SKILL.md': expected } }));
   assert.equal(rule(auditSite({ root }), 'skills:site').status, 'unverified');
   fs.writeFileSync(path.join(root, '.agents/skills/new-site-workflow/SKILL.md'), '# Different\n');
-  assert.equal(rule(auditSite({ root }), 'skills:site').status, 'warning');
+  assert.equal(rule(auditSite({ root }), 'skills:site').status, 'unverified'); // Incomplete legacy manifest cannot establish membership.
   const external = path.join(parent, 'external'); fs.mkdirSync(external); fs.writeFileSync(path.join(external, 'site-skills.json'), '{}');
   fs.renameSync(path.join(root, '.emdash'), path.join(root, 'old-metadata')); fs.symlinkSync(external, path.join(root, '.emdash'), process.platform === 'win32' ? 'junction' : 'dir');
   assert.equal(rule(auditSite({ root }), 'skills:site').status, 'unverified');
