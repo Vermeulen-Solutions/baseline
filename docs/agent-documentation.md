@@ -1,34 +1,90 @@
-# Framework documentation connections
+# AI Agent & Harness Configuration
 
-Codex project connections are in `.codex/config.toml`. VS Code and Cursor use their existing MCP configuration files. Trust the project and reload/restart the client if its server inventory has not refreshed. Verify an actual Astro and EmDash documentation query before reporting the connection as working.
+Baseline is engineered to be **completely agent- and harness-agnostic**. It does not lock you into any proprietary IDE, agent runtime, or cloud service. 
 
-During each new-site setup, configure these required documentation connections for both Codex and Google Antigravity, preserving existing servers. Ask both clients to perform an Astro and an EmDash documentation lookup. `npm run check:docs-mcp` proves the server endpoints answer real queries; it does not prove either client's inventory has refreshed. CMS content-management MCP is separate and requires that site's authorization.
+Whether you pair-program with **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, **Windsurf**, **Aider**, or a custom local LLM runner, Baseline provides the open, standard protocol files they all understand:
 
-Google Antigravity currently documents user-level configuration in `~/.gemini/antigravity/mcp_config.json`, not automatic project-level MCP inheritance. Preserve existing servers and merge:
+1. **Universal Instructions (`AGENTS.md`):** The single source of truth for repository rules, architectural boundaries, component APIs, and verification standards.
+2. **Open Skill Specification (`.agents/skills/`):** Standard `SKILL.md` files (YAML frontmatter + markdown instructions) covering site discovery, art direction, component quarantine, and CMS modeling.
+3. **Model Context Protocol (MCP):** Open JSON-RPC standard for documentation lookup and site content management.
+4. **Deterministic Shell Tooling:** Standard npm commands (`npm run ...`) runnable in any bash, PowerShell, or automated execution environment.
+
+---
+
+## Harness Integration Quick-Reference
+
+| Agent / Harness | Instruction File | Skills / Rules Directory | MCP Configuration |
+| :--- | :--- | :--- | :--- |
+| **Claude Code** | `AGENTS.md` (or symlink to `CLAUDE.md`) | `.claude/skills/` or `.agents/skills/` | `.mcp.json` |
+| **OpenAI Codex** | `AGENTS.md` | `.codex/config.toml` | `.codex/config.toml` |
+| **Google Antigravity** | `AGENTS.md` | `.agents/skills/` & `.agent/rules/` | `~/.gemini/antigravity/mcp_config.json` |
+| **OpenCode / OMP** | `AGENTS.md` | `.agents/skills/` | `.mcp.json` |
+| **Hermes / Local LLMs** | `AGENTS.md` (as system prompt) | `.agents/skills/` | Standard stdio / SSE MCP |
+| **Cursor / Windsurf** | `AGENTS.md` | `.cursor/rules/` | `.cursor/mcp.json` |
+| **Aider** | `AGENTS.md` (`--read AGENTS.md`) | Terminal CLI tools | CLI execution |
+
+---
+
+## 1. Connecting Official Documentation via MCP
+
+Allow your coding assistant to consult live, up-to-date Astro and EmDash documentation without hallucinating deprecated APIs. 
+
+### Standard Project Configuration (`.mcp.json` / Cursor / Claude Code / OpenCode):
+Add this to `.mcp.json` in your project root or user configuration:
 
 ```json
 {
   "mcpServers": {
-    "astro-docs": { "serverUrl": "https://mcp.docs.astro.build/mcp" },
-    "emdash-docs": { "serverUrl": "https://docs.emdashcms.com/mcp" }
+    "astro-docs": {
+      "serverUrl": "https://mcp.docs.astro.build/mcp"
+    },
+    "emdash-docs": {
+      "serverUrl": "https://docs.emdashcms.com/mcp"
+    }
   }
 }
 ```
 
-Click Refresh in Manage MCPs, enable the servers if required, and ask each for a documentation lookup. Repository rules live in `.agent/rules/framework-docs.md`; user-level connections do not travel with a cloned repository.
+### Google Antigravity Configuration:
+Antigravity uses user-level configuration in `~/.gemini/antigravity/mcp_config.json`. Add the two servers above to your `mcpServers` object and refresh in Manage MCPs.
 
-## Site-level EmDash MCP setup
+### OpenAI Codex Configuration:
+Project connections live in `.codex/config.toml`:
+```toml
+[mcp.astro-docs]
+url = "https://mcp.docs.astro.build/mcp"
 
-To enable AI assistants to manage content, media, and taxonomies directly via EmDash's built-in MCP server (`/_emdash/api/mcp`), generate a Personal Access Token:
+[mcp.emdash-docs]
+url = "https://docs.emdashcms.com/mcp"
+```
+
+Verify the connection by running:
+```sh
+npm run check:docs-mcp
+```
+
+---
+
+## 2. Site-Level EmDash CMS MCP Setup
+
+To allow your coding assistant to directly create, inspect, and update content, media, and taxonomies via EmDash's built-in MCP server (`/_emdash/api/mcp`), generate a Personal Access Token:
 
 ```bash
 npm run mcp:token
-# or specify a custom agent name or target URL:
-npm run mcp:token -- --name="Antigravity MCP" --url="https://my-site.example"
-# or output SQL for Cloudflare D1:
+# Or specify a custom agent name or target URL:
+npm run mcp:token -- --name="Agent Assistant" --url="http://localhost:4321"
+# Or generate SQL for Cloudflare D1:
 npm run mcp:token -- --d1=my-site-db
 ```
 
-The script registers the token in `_emdash_api_tokens` and prints the exact configuration block ready to paste into `.mcp.json`, Cursor, or `mcp_config.json`.
+The script registers the token in `_emdash_api_tokens` and prints the exact configuration block ready to paste into your harness's MCP settings.
 
-Sources: [Astro AI tooling](https://docs.astro.build/en/guides/build-with-ai/), [Codex MCP](https://developers.openai.com/codex/mcp/), [EmDash MCP](https://docs.emdashcms.com/reference/mcp-server/). Current instructions must be checked against installed framework/client versions.
+---
+
+## 3. Starting a Task With Any Agent
+
+When starting a new site or major feature, instruct your agent:
+
+> *"Read AGENTS.md. For new sites, follow new-site-workflow in .agents/skills/ and record an Art Direction Record in AGENTS.md before writing visual styles under src/."*
+
+Because all verification commands (`npm run check:schema-budget`, `npm run typecheck`, `npm run test:visual`) are standard npm scripts, any agent with terminal execution capabilities can run them in a tight feedback loop to verify its own work.

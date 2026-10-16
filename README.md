@@ -6,7 +6,7 @@
 [![Node LTS](https://img.shields.io/badge/Node-LTS-339933)](#60-second-quickstart)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
-EmDash is a modern, lightweight headless CMS built ground-up for AI-native web development. Baseline provides the visual frontend foundation, development guardrails, and testing harness built specifically for developers pairing with AI coding assistants (Claude Code, Antigravity, Cursor).
+EmDash is a modern, lightweight headless CMS built ground-up for AI-native web development. Baseline provides the visual frontend foundation, development guardrails, and testing harness built specifically for developers pairing with AI coding assistants—whether using **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, or local LLM runners.
 
 Spend your time building the site, not debugging agent hallucinations or wrestling with styling drift. Baseline gives your AI assistant clear architectural boundaries and provides you with in-browser visual inspection tools: tune design tokens live on the rendered page, align Figma mockups pixel-for-pixel, and stress-test reusable components in isolation before assembling templates. Start locally with Node and SQLite, catch schema-width problems early, and deploy with confidence.
 
@@ -46,7 +46,7 @@ Compare mobile, tablet and desktop captures with pinned Windows Chromium. Exerci
 
 ### 🤖 Keep AI coding assistants disciplined and on rails
 
-Building client sites with tools like Claude Code, Cursor, or Antigravity is fast, but coding assistants often struggle with headless CMS architectures. Without clear constraints, they tend to invent unnecessary wrapper components, hardcode text that clients should be able to edit in the CMS, or introduce subtle layout breaks on mobile viewports.
+Building client sites with AI coding assistants—across any harness or tool runner—is fast, but assistants often struggle with headless CMS architectures. Without clear constraints, they tend to invent unnecessary wrapper components, hardcode text that clients should be able to edit in the CMS, or introduce subtle layout breaks on mobile viewports.
 
 Baseline includes a structured workflow designed to keep coding assistants disciplined and aligned with the site's architecture:
 
@@ -101,14 +101,14 @@ Before adapting a site, rename the package, read [AGENTS.md](AGENTS.md), review 
 
 ### Starting a site with an AI assistant
 
-When pairing with Claude Code, Antigravity, or Cursor on this repo, prompt your assistant:
+Baseline is completely agent- and harness-agnostic. Whether pairing with Claude Code, OpenAI Codex, Google Antigravity, OpenCode / OMP, Hermes, Cursor, Windsurf, or Aider, prompt your assistant:
 > *"Read AGENTS.md, follow new-site-workflow under .agents/skills/, and record the site's Art Direction Record before implementing templates."*
 
 To connect your coding assistant directly to EmDash's built-in Model Context Protocol (MCP) server for managing content and schema, generate a token in one step:
 ```sh
 npm run mcp:token
 ```
-See [agent documentation](docs/agent-documentation.md) for Cursor, Claude Code, and Antigravity MCP setup.
+See [agent documentation](docs/agent-documentation.md) for harness integration and MCP setup across all major tools.
 
 ## How EmDash & Astro connect
 

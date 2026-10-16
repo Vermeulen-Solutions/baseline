@@ -53,7 +53,7 @@ Explore the documentation guides below, organized by task and domain:
 
 ## 🤖 4. AI Coding Agent Workflows
 
-*Harnesses and tools for pairing with AI assistants (Claude Code, Antigravity, Cursor).*
+*Harness-agnostic workflows for pairing with AI assistants (Claude Code, OpenAI Codex, Antigravity, OpenCode, Hermes, Cursor, Windsurf, Aider, and local LLM runners).*
 
 - **[Agent Documentation & MCP Setup](agent-documentation.md)**  
   Connecting coding assistants to official Astro and EmDash documentation via Model Context Protocol (MCP), and generating site-level access tokens with `npm run mcp:token`.
