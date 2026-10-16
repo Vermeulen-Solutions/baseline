@@ -4,7 +4,26 @@ In `astro dev`, open TweaksBar with **T** or its tab. **B** compares source styl
 
 The drawer keeps token calibration until Reset/reload. Closing it clears the reference and active diagnostic layers. Reset restores source tokens and clears every tool. Navigation/pagehide restores original inline tokens, aborts listeners/observers/frames and releases references; page-load and persisted pageshow initialize once. Nothing is restored from persistent browser storage.
 
+## G: container grid guide
+
+Press **G** while the TweaksBar drawer is open to toggle the diagnostic layout guide.
+
+<a href="images/grid-guide.jpg"><img src="images/grid-guide.jpg" width="480" alt="Container grid guide showing 12-column tracks and container bounds" /></a>
+
+*The grid guide overlays the container's computed bounds, padding, and column tracks directly over your layout.*
+
+The guide reads the selected `Container` element's computed padding, max-width bounds, and inner grid gap directly from the DOM:
+- **Configurable column presets:** Switch between 12-column and 10-column diagnostic overlays to inspect content alignment.
+- **Surface & RTL aware:** Adapts dynamically to viewport resizes, zoom, and right-to-left document directions without adding intrusive layout borders or horizontal overflow.
+- **Zero layout interference:** The overlay is pointer-events inert and does not alter underlying layout geometry.
+
 ## O: reference overlay
+
+Press **O** while the TweaksBar drawer is open to toggle the mockup reference overlay.
+
+<a href="images/reference-overlay.png"><img src="images/reference-overlay.png" width="360" alt="Reference overlay controls for opacity, offsets, and scroll mode" /></a>
+
+*The reference overlay controls allow adjusting opacity, X/Y pixel offsets, and document-scrolling vs fixed viewport modes.*
 
 Choose one local PNG, JPEG or WebP through the labelled picker or drop it on the Reference overlay fieldset. V1 accepts no remote URL, SVG or other file types. Limits: 10 MiB, 32 megapixels, width ≤16000 and height ≤60000 bitmap pixels. Headers are checked before decode; damaged files, MIME mismatches and orientation/dimension inconsistencies are rejected. Re-export rotated imagery with orientation applied if its decoded dimensions differ from its header.
 
@@ -18,6 +37,12 @@ Bitmap dimensions divided by **Reference capture DPR** establish CSS-pixel dimen
 The inert, pointer-transparent layer is clipped to the viewport and creates no document overflow. Opacity and alignment are visual aids, not a numerical diff or fidelity result. Token export contains only token changes, never the reference bytes, object URL or inspector metadata.
 
 ## P: EmDash ownership inspection
+
+Press **P** while the TweaksBar drawer is open to toggle CMS ownership diagnostics.
+
+<a href="images/ownership-inspector.png"><img src="images/ownership-inspector.png" width="360" alt="EmDash ownership inspector highlighting observed field annotations vs unknown text" /></a>
+
+*Visual diagnostics outline observed CMS field bindings (green), entry context (blue), and unannotated UI text (amber).*
 
 The adapter is bounded to the installed **EmDash 1.3.0** JSON `data-emdash-ref` format: collection, id, optional field/status/hasDraft. The integration supplies the actual installed package version. A different version or unsupported shape produces an explicit unsupported result; the unit fixture exercises the installed upstream proxy implementation. Review the adapter when upgrading EmDash.
 

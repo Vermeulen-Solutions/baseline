@@ -2,6 +2,10 @@
 
 `/_styleguide` explicitly injects the underscore page through the starter integration. It composes production modules with versioned synthetic fixtures from `src/dev/styleguide-fixtures.ts`; it queries no collections and submits no forms. No fake edit identities are attached. Separate real disposable CMS entries are needed for ownership/save/reload checks.
 
+<a href="images/styleguide.jpg"><img src="images/styleguide.jpg" width="560" alt="Living styleguide showing component quarantine and stress cases" /></a>
+
+*The living styleguide (`/_styleguide`) renders all components, typographic scales, and stress states in isolation before page assembly. In production builds, this entire route automatically returns 404.*
+
 - `npm run dev`: specimens plus DEV-only TweaksBar.
 - `npm run fixtures:build`: explicit build-time `ASTRO_TEST_FIXTURES=1`, separate `dist-fixtures/` and `.astro-fixtures/`, no HUD. `npm run fixtures:serve` binds 127.0.0.1:4349 (PORT can change). Use a disposable project/database for capture work; building code does not clone the CMS.
 - `npm run build`: normal `dist/`, fixture flag defaults off. Postbuild requires `.starter-build.json` with release/deployable profile. GET/HEAD specimens return 404 even if runtime flags, query parameters or cookies request fixtures.

@@ -1,4 +1,4 @@
-# Baseline — The Visual-First, Agency-Grade Astro Starter for EmDash CMS
+# Baseline — The Visual-First Astro Toolkit for EmDash CMS & AI-Assisted Developers
 
 [![Astro 7.4.0](https://img.shields.io/badge/Astro-7.4.0-BC52EE)](https://astro.build/)
 [![EmDash 1.3.0](https://img.shields.io/badge/EmDash-1.3.0-2563EB)](https://docs.emdashcms.com/)
@@ -6,7 +6,9 @@
 [![Node LTS](https://img.shields.io/badge/Node-LTS-339933)](#60-second-quickstart)
 [![MIT License](https://img.shields.io/badge/License-MIT-blue)](LICENSE)
 
-Spend your time building the site, not rebuilding the tooling around it. Baseline connects EmDash content with polished Astro frontends: tune design tokens on the actual page, align mockups in your browser, and stress-test reusable components before assembling templates. It also provides a disciplined harness for pairing with AI coding agents (Claude Code, Antigravity, Cursor) so assistants respect your CMS contracts and design system instead of guessing. Start locally with Node and SQLite, catch schema-width problems early, and approach Cloudflare deployment with explicit checks instead of assumptions. Built for developers and agencies who want a repeatable path from first reference to client handoff.
+EmDash is a modern, lightweight headless CMS built ground-up for AI-native web development. Baseline provides the visual frontend foundation, development guardrails, and testing harness built specifically for developers pairing with AI coding assistants (Claude Code, Antigravity, Cursor).
+
+Spend your time building the site, not debugging agent hallucinations or wrestling with styling drift. Baseline gives your AI assistant clear architectural boundaries and provides you with in-browser visual inspection tools: tune design tokens live on the rendered page, align Figma mockups pixel-for-pixel, and stress-test reusable components in isolation before assembling templates. Start locally with Node and SQLite, catch schema-width problems early, and deploy with confidence.
 
 ## Why Baseline?
 
@@ -57,13 +59,17 @@ Baseline includes a structured workflow designed to keep coding assistants disci
   - Fast unit tests and typechecking run locally without burning CI minutes.
 - **Maintainable specialist skills:** Guidance is modularized into specialist skills under `.agents/skills/` (content modeling, visual design, and migration) that can be kept up to date from upstream via `npm run sync:site-skills` without overwriting project-specific instructions. [Agent setup guide](docs/agent-documentation.md).
 
-## Take a closer look
+## In-browser visual developer tools
 
-Click a thumbnail for the full-resolution image. These are neutral development fixtures.
+Click any thumbnail to view the full-resolution screenshot.
 
-<a href="docs/images/reference-overlay.png"><img src="docs/images/reference-overlay.png" width="240" alt="Local mockup overlay controls: opacity, offsets and scroll mode" /></a>
-<a href="docs/images/ownership-inspector.png"><img src="docs/images/ownership-inspector.png" width="240" alt="CMS ownership inspector showing annotated versus unknown content" /></a>
-<a href="docs/images/styleguide.jpg"><img src="docs/images/styleguide-controls.png" width="320" alt="Living styleguide controls; click for the complete styleguide" /></a>
+| <a href="docs/images/reference-overlay.png"><img src="docs/images/reference-overlay.png" width="280" alt="Mockup Reference Overlay" /></a> | <a href="docs/images/ownership-inspector.png"><img src="docs/images/ownership-inspector.png" width="280" alt="CMS Ownership Inspector" /></a> |
+| :--- | :--- |
+| **Mockup Overlay (`O`)**<br>Drop a Figma export or screenshot directly into the running browser. Tune opacity, CSS-pixel offsets, and scrolling modes to align spacing pixel-for-pixel without leaving the dev server. | **CMS Ownership Inspector (`P`)**<br>Inspect which page elements are bound to EmDash fields (green) versus hardcoded UI copy (amber). Catches missing editorial bindings before client handoff. |
+
+| <a href="docs/images/grid-guide.jpg"><img src="docs/images/grid-guide.jpg" width="280" alt="Container Grid Guide" /></a> | <a href="docs/images/styleguide.jpg"><img src="docs/images/styleguide-controls.png" width="280" alt="Living Component Styleguide" /></a> |
+| :--- | :--- |
+| **Container Grid Guide (`G`)**<br>Overlay real container bounds, padding, and 10/12-column responsive layout tracks over your live page to check alignment across viewports without adding CSS borders. | **Component Quarantine (`/_styleguide`)**<br>Calibrate components, galleries, and responsive stress-cases in isolation before building templates. Automatically returns 404 in production builds. |
 
 ## Dev HUD cheat sheet
 
@@ -92,6 +98,53 @@ npm run dev
 Open the URL printed by Astro, then visit **`/_emdash/admin`** to complete setup and create your administrator account. There are no shared default credentials. Keep `.env`, databases, uploads and encryption-key backups private.
 
 Before adapting a site, rename the package, read [AGENTS.md](AGENTS.md), review [staged skill updates](docs/skill-synchronization.md), and follow [new-site-workflow](.agents/skills/new-site-workflow/SKILL.md). Replace sample content and record the site's actual brief and art direction.
+
+### Starting a site with an AI assistant
+
+When pairing with Claude Code, Antigravity, or Cursor on this repo, prompt your assistant:
+> *"Read AGENTS.md, follow new-site-workflow under .agents/skills/, and record the site's Art Direction Record before implementing templates."*
+
+To connect your coding assistant directly to EmDash's built-in Model Context Protocol (MCP) server for managing content and schema, generate a token in one step:
+```sh
+npm run mcp:token
+```
+See [agent documentation](docs/agent-documentation.md) for Cursor, Claude Code, and Antigravity MCP setup.
+
+## How EmDash & Astro connect
+
+EmDash stores your structured content in local SQLite; Astro renders your server-rendered pages. Binding an entry's data and visual editing proxies takes only a few lines in your `.astro` template:
+
+```astro
+---
+import Base from '../layouts/Base.astro';
+
+// 1. Receive or query the content entry
+const { entry } = Astro.props;
+---
+
+<!-- 2. Pass collection identity to Base layout for live editing overlay -->
+<Base title={entry.data.title} content={{ collection: 'pages', id: entry.data.id, slug: entry.data.slug }}>
+  <!-- 3. Spread field proxies so clients can edit visually in EmDash -->
+  <h1 {...(entry.edit.title || {})}>{entry.data.title}</h1>
+  <p {...(entry.edit.excerpt || {})}>{entry.data.excerpt}</p>
+</Base>
+```
+
+See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field proxy and schema budget rules.
+
+## Where to work (project layout)
+
+| Path | Purpose |
+| --- | --- |
+| `src/pages/` | Server-rendered public routes (`/`, `/about`, `/posts/[slug]`, `/_styleguide`) |
+| `src/layouts/Base.astro` | Core layout shell, EmDash live-editing script, and header/footer |
+| `src/components/` | Reusable layout primitives (`Section`, `Container`, `Grid`, `Card`, `LogoTicker`) |
+| `src/styles/global.css` | Neutral Tailwind v4 `@theme` tokens, typography, and base rules |
+| `seed/seed.json` | Initial Posts/Pages schema and starter content |
+| `src/live.config.ts` | EmDash live collection registration |
+| `astro.config.mjs` | Astro configuration (Node adapter, EmDash SQLite setup, Tailwind v4) |
+| `.agents/skills/` | Modular specialist skills for AI coding agents |
+| `docs/` | Complete documentation guides (see [docs/README.md](docs/README.md)) |
 
 ## Daily commands
 
