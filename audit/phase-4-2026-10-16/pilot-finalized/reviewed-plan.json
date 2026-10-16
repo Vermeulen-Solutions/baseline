@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "recipe": "schema-budget-prebuild@1",
+  "targetId": "1d76ecdd72f0469d81e49b197054a1deb615d65aac8256af39dea161559acb43",
+  "revision": "839d50935f90d77c713dad5d858f00ecad5ace1f",
+  "branchSHA256": "d16bffef4ec4926d9bdc9459d7805b6ba3258a3ea548b4e405ea0111134293c5",
+  "helperHashes": {
+    "scripts/check-schema-budget.mjs": "61b11cbff6f811012b9971d567f60c126d2984ad05fba9985b3c4af2d29ef1b9",
+    "scripts/schema-column-budget.mjs": "bcd92f121f6dca1a3997a28a36fab4157e5f0ab81f845ab9496621101cd8799b"
+  },
+  "packageBeforeSHA256": "41f9b24f174dcdcc01f80158cf89a6b6bfbe283ba19119551de812cc0ff2e5fb",
+  "packageAfterSHA256": "9bb78415bf465d2222d7cbedbe8e3da80430f49dadce310eb629622889d1eb67",
+  "prebuildBefore": "node scripts/pilot-prepare.mjs",
+  "prebuildAfter": "npm run check:schema-budget && node scripts/pilot-prepare.mjs",
+  "operation": "change",
+  "planId": "c23eb946da724f5d4bef6c252774ce9f2e8123cbd9206a1517b0264a77b25db0"
+}

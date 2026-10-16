@@ -1,0 +1,242 @@
+{
+  "date": "2026-10-16T12:58:49.508Z",
+  "milestone1Commit": "4b955e2f3ff9fa52f04980225c2ea17191894977",
+  "scope": "Offline diagnosis, imported scoped attestations and synthetic older-workflow clone; no client or Cloudflare certification",
+  "verification": {
+    "unit": {
+      "command": "node --test tests/*.test.mjs",
+      "passed": 60,
+      "failed": 0,
+      "skipped": 0
+    },
+    "lintModules": 62,
+    "typecheck": {
+      "files": 41,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    },
+    "normalBuild": "passed with release artifact guard",
+    "devToolsIsolation": "passed dev/fixture/release rejection and clean production GET/HEAD/HUD",
+    "artDirection": "no visual source changes"
+  },
+  "pilot": {
+    "status": "passed",
+    "receiptSHA256": "14e76a1779862ce604caf2abb5ebf17fb9c88904f6e5dbced69b8fed3f7915c2",
+    "identicalBeforeAfterCaptures": 12,
+    "rollback": {
+      "byteExactPackage": true,
+      "packageSHA256": "41f9b24f174dcdcc01f80158cf89a6b6bfbe283ba19119551de812cc0ff2e5fb",
+      "sourceInventoryRestored": true,
+      "cleanFeatureBranch": true
+    },
+    "pendingRecommendations": [
+      "upstream-currency",
+      "visual-accessibility",
+      "forms-provider-delivery",
+      "cloudflare-d1-r2"
+    ]
+  },
+  "toolingSHA256": {
+    "scripts/audit-runtime-evidence.mjs": "0ec51817ab4b71b48f0a44bf51696d4a65940d4683d06b9cba35b20ebb93a71b",
+    "scripts/audit-site.mjs": "6db1596d437ed136923eb0e0333c8788e13f0f2765b76ad3be62677d84f8377b",
+    "scripts/rehearse-site-audit.mjs": "bbc9c11a42bf085731d5d0050c4f4970df14db9549ef6645d48ddc1ac9b5aceb",
+    "tests/audit-runtime-evidence.test.mjs": "0f7ea708874614d6724cf5366cf44145316b7ffd64f115413fbcddf3f9e889f1",
+    "standards/site-audit-report.schema.json": "8a62856c66a40bec2cf44abd5122ece05c445c6403c47f0e45b71fa65bfab04f"
+  },
+  "documentation": {
+    "baselineCommit": "71b79ab",
+    "onlyAllowedChange": "docs/site-standards-audit.md",
+    "protectedFiles": [
+      {
+        "path": "README.md",
+        "expectedGitBlob": "f34157f531301fb7a24d30e2098978a7c3c056ba",
+        "currentGitBlob": "f34157f531301fb7a24d30e2098978a7c3c056ba"
+      },
+      {
+        "path": "docs/README.md",
+        "expectedGitBlob": "724ce1c6b59474ea723c733de3e6519d006dbba3",
+        "currentGitBlob": "724ce1c6b59474ea723c733de3e6519d006dbba3"
+      },
+      {
+        "path": "docs/agent-documentation.md",
+        "expectedGitBlob": "7a5d77a871712633756582b6050bca5069a98f85",
+        "currentGitBlob": "7a5d77a871712633756582b6050bca5069a98f85"
+      },
+      {
+        "path": "docs/art-direction-workflow.md",
+        "expectedGitBlob": "b4be0818e2884f65f96de2a8d1d46ee165ccbbc9",
+        "currentGitBlob": "b4be0818e2884f65f96de2a8d1d46ee165ccbbc9"
+      },
+      {
+        "path": "docs/design-framework.md",
+        "expectedGitBlob": "79db501a807903eac92ffab3689080da9bb124b1",
+        "currentGitBlob": "79db501a807903eac92ffab3689080da9bb124b1"
+      },
+      {
+        "path": "docs/design-interchange.md",
+        "expectedGitBlob": "05ed2d67d780e34be209ef9d6e55f5c37f8236a3",
+        "currentGitBlob": "05ed2d67d780e34be209ef9d6e55f5c37f8236a3"
+      },
+      {
+        "path": "docs/dev-hud.md",
+        "expectedGitBlob": "957b2ae9d296dc8d7264153bf77fc27b6b1240ea",
+        "currentGitBlob": "957b2ae9d296dc8d7264153bf77fc27b6b1240ea"
+      },
+      {
+        "path": "docs/emdash-editorial-canvas.md",
+        "expectedGitBlob": "5f7294f6e1d40efdfa99b8347e25e57290cc882c",
+        "currentGitBlob": "5f7294f6e1d40efdfa99b8347e25e57290cc882c"
+      },
+      {
+        "path": "docs/forms-adoption.md",
+        "expectedGitBlob": "54a1224c3d3dd96aa24aa748f840f8031e0a92a7",
+        "currentGitBlob": "54a1224c3d3dd96aa24aa748f840f8031e0a92a7"
+      },
+      {
+        "path": "docs/gallery-workflow.md",
+        "expectedGitBlob": "d19f6a33c2611c5ffe6ff844509153d9242f9aa0",
+        "currentGitBlob": "d19f6a33c2611c5ffe6ff844509153d9242f9aa0"
+      },
+      {
+        "path": "docs/image-delivery.md",
+        "expectedGitBlob": "7160e2a6198e22515340988c9c9e5c032a3407f1",
+        "currentGitBlob": "7160e2a6198e22515340988c9c9e5c032a3407f1"
+      },
+      {
+        "path": "docs/images/baseline-logo.svg",
+        "expectedGitBlob": "77a06588818f67bd0dc9971a5ecad0e5a6138d74",
+        "currentGitBlob": "77a06588818f67bd0dc9971a5ecad0e5a6138d74"
+      },
+      {
+        "path": "docs/images/grid-guide.jpg",
+        "expectedGitBlob": "fa682ced959745929bb595c6e59c137d0c919b97",
+        "currentGitBlob": "fa682ced959745929bb595c6e59c137d0c919b97"
+      },
+      {
+        "path": "docs/images/ownership-inspector.png",
+        "expectedGitBlob": "cccf533ee3cdbf8cb7af859ce06f71e9b89824c8",
+        "currentGitBlob": "cccf533ee3cdbf8cb7af859ce06f71e9b89824c8"
+      },
+      {
+        "path": "docs/images/prototype-1-typographic.svg",
+        "expectedGitBlob": "dfe88b4140afe50edcff1c2906bd67d48209233a",
+        "currentGitBlob": "dfe88b4140afe50edcff1c2906bd67d48209233a"
+      },
+      {
+        "path": "docs/images/prototype-2-precision-grid.svg",
+        "expectedGitBlob": "f0d896240f418525a3494875db95cd70bde65dfb",
+        "currentGitBlob": "f0d896240f418525a3494875db95cd70bde65dfb"
+      },
+      {
+        "path": "docs/images/prototype-3-geometric-monogram.svg",
+        "expectedGitBlob": "ed5ecd909b9169bee81ffceb7d423cd87adea74f",
+        "currentGitBlob": "ed5ecd909b9169bee81ffceb7d423cd87adea74f"
+      },
+      {
+        "path": "docs/images/reference-overlay.png",
+        "expectedGitBlob": "dd82a1ecb91e704e3ab1c69b61ba42fc4fba75a4",
+        "currentGitBlob": "dd82a1ecb91e704e3ab1c69b61ba42fc4fba75a4"
+      },
+      {
+        "path": "docs/images/styleguide-controls.png",
+        "expectedGitBlob": "8df3f3b4ad1a4b6e650091ab43f8a998b5628538",
+        "currentGitBlob": "8df3f3b4ad1a4b6e650091ab43f8a998b5628538"
+      },
+      {
+        "path": "docs/images/styleguide.jpg",
+        "expectedGitBlob": "eb230cb2980f69de9a56d652dcbdaa5903f77c6a",
+        "currentGitBlob": "eb230cb2980f69de9a56d652dcbdaa5903f77c6a"
+      },
+      {
+        "path": "docs/internationalization.md",
+        "expectedGitBlob": "46f80a274d0c26289f68984541d86721a576138f",
+        "currentGitBlob": "46f80a274d0c26289f68984541d86721a576138f"
+      },
+      {
+        "path": "docs/licenses/emdash-MIT.txt",
+        "expectedGitBlob": "02cc4b8b0a5f883c5243927e683b00c10588bf4c",
+        "currentGitBlob": "02cc4b8b0a5f883c5243927e683b00c10588bf4c"
+      },
+      {
+        "path": "docs/licenses/impeccable-Apache-2.0.txt",
+        "expectedGitBlob": "bb3f6d23b1f8025514a62a12b51b47d73e3c9aa9",
+        "currentGitBlob": "bb3f6d23b1f8025514a62a12b51b47d73e3c9aa9"
+      },
+      {
+        "path": "docs/licenses/noto-sans-OFL.txt",
+        "expectedGitBlob": "e5cab84f0cfeaf53b9fe57824a6f6129f57514b5",
+        "currentGitBlob": "e5cab84f0cfeaf53b9fe57824a6f6129f57514b5"
+      },
+      {
+        "path": "docs/licenses/photoswipe-MIT.txt",
+        "expectedGitBlob": "5e0ff4d6c825895d919e888b6985caef745bbb74",
+        "currentGitBlob": "5e0ff4d6c825895d919e888b6985caef745bbb74"
+      },
+      {
+        "path": "docs/phase-3-certification.md",
+        "expectedGitBlob": "6bf723da3d6ef4f4da4c0428bfd47cb070d1c735",
+        "currentGitBlob": "6bf723da3d6ef4f4da4c0428bfd47cb070d1c735"
+      },
+      {
+        "path": "docs/production-deployment.md",
+        "expectedGitBlob": "115c8a4616fe6b48a19170908aff30e8d757ab70",
+        "currentGitBlob": "115c8a4616fe6b48a19170908aff30e8d757ab70"
+      },
+      {
+        "path": "docs/public-release.md",
+        "expectedGitBlob": "51a2584f9163c32ffafc3ddde345e5cba36c5ac7",
+        "currentGitBlob": "51a2584f9163c32ffafc3ddde345e5cba36c5ac7"
+      },
+      {
+        "path": "docs/reusable-public-patterns.md",
+        "expectedGitBlob": "47429b19bd5c72543aa21f955af6b15c5819c5dd",
+        "currentGitBlob": "47429b19bd5c72543aa21f955af6b15c5819c5dd"
+      },
+      {
+        "path": "docs/site-delivery-workflow.md",
+        "expectedGitBlob": "9c3638dca8d70f1010de2a00a9ef475ae6363044",
+        "currentGitBlob": "9c3638dca8d70f1010de2a00a9ef475ae6363044"
+      },
+      {
+        "path": "docs/site-registry.md",
+        "expectedGitBlob": "6b008a0ac331459e5b011104647b7126e12d6da6",
+        "currentGitBlob": "6b008a0ac331459e5b011104647b7126e12d6da6"
+      },
+      {
+        "path": "docs/skill-synchronization.md",
+        "expectedGitBlob": "82953f9221c6868653c38240cdf70ea83de38600",
+        "currentGitBlob": "82953f9221c6868653c38240cdf70ea83de38600"
+      },
+      {
+        "path": "docs/starter-meta-review.md",
+        "expectedGitBlob": "e55e7f3f3ed506db5db0169aa4184f45a1c549cc",
+        "currentGitBlob": "e55e7f3f3ed506db5db0169aa4184f45a1c549cc"
+      },
+      {
+        "path": "docs/styleguide-fixtures.md",
+        "expectedGitBlob": "0aba9ed48310ceceb711dcf46dc03c4b6f8465cd",
+        "currentGitBlob": "0aba9ed48310ceceb711dcf46dc03c4b6f8465cd"
+      },
+      {
+        "path": "docs/visual-regression.md",
+        "expectedGitBlob": "873d4311f3699119250814cf17bd80fb7b1b6417",
+        "currentGitBlob": "873d4311f3699119250814cf17bd80fb7b1b6417"
+      },
+      {
+        "path": "docs/wordpress-content-modeling.md",
+        "expectedGitBlob": "e6851f53c740f9f21bac2a99c8a73346320b5a7f",
+        "currentGitBlob": "e6851f53c740f9f21bac2a99c8a73346320b5a7f"
+      }
+    ]
+  },
+  "unchangedScopes": [
+    "README.md",
+    "other docs",
+    "src/public",
+    "skills",
+    "visual goldens",
+    "GitHub Actions"
+  ],
+  "visibility": "PRIVATE"
+}

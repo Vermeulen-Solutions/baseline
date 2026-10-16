@@ -8,6 +8,7 @@ Start with a read-only diagnosis, review the findings, then select a supported r
 npm run audit:site -- --root ../my-site
 npm run audit:site -- --root ../my-site --out ../private-reports/run-001
 npm run audit:site -- --root ../my-site --db-snapshot ../private-backups/closed.sqlite --strict
+npm run audit:site -- --root ../my-site --evidence ../private-reports/capture/bundle.json --out ../private-reports/run-002 --strict
 ```
 
 JSON goes to stdout unless `--out` names a **new directory outside the target**, including through symlinks. That directory receives JSON and Markdown. Keep real site reports private; never commit them to this template. No scheduler, network check or Actions job is installed.
@@ -82,8 +83,44 @@ A prepared journal can finalize safely after an interrupted package rename. If a
 
 The tests use disposable repositories to apply twice, roll back twice, reject stale/tampered plans and recover prepared journals. A real npm lifecycle test uses the real schema helper with a **synthetic build executable**: 51 columns prevents both the preserved hook and build; a valid schema allows both. This proves ordering/gating, not a second Astro runtime certification. The normal starter production build is checked separately.
 
-Next: import route/state capture evidence and actual editor acceptance, then choose one explicitly authorized downstream pilot. Record its brief, runtime, languages, source revision, snapshot provenance and outstanding integrations. Diagnose first, select a supported recipe, preserve the before report/captures, review the branch diff, run local visual and real public/editor checks, and rehearse rollback before rollout. Do not update visual goldens to hide a finding. Preserve the original design/content requirements.
+For a downstream pilot, record its brief, runtime, languages, source revision, snapshot provenance and outstanding integrations. Diagnose first, select a supported recipe, preserve the before report/captures, review the branch diff, run local visual and real public/editor checks, and rehearse rollback before rollout. Do not update visual goldens to hide a finding. Preserve the original design/content requirements.
 
-Downstream pilot validation and editor evidence remain ongoing before general rollout. Cloudflare Worker/D1/R2 and registry/media adapters remain planned for subsequent milestones; no production data or deployment follows from diagnosis or this recipe. Browser verification stays local, outside push/PR CI and build/deployment dependencies.
+The local synthetic pilot exercises this flow; individual client acceptance is still required before general rollout. Cloudflare Worker/D1/R2 and registry/media adapters remain planned for subsequent milestones; no production data or deployment follows from diagnosis or this recipe. Browser verification stays local, outside push/PR CI and build/deployment dependencies.
+
+## Import route and editor observations
+
+`--evidence` reads a caller-supplied **evidenceVersion 1** bundle and its relative artifacts. It never starts a browser, fetches URLs, executes target code or contacts a CMS. Report schema remains v2. The new `route-capture-evidence` and `editor-save-reload` rules are recommendations when evidence is absent and required when explicitly supplied. Missing, stale or refused evidence therefore fails opted-in strict verification. Captures never turn the separate accessibility/provider/Cloudflare findings into passes.
+
+The bundle has exactly these fields:
+
+| Field | Contract |
+| --- | --- |
+| `evidenceVersion` | `1` |
+| `capturedAt` | ISO timestamp within 30 days, no more than five minutes in the future |
+| `runtime` | Same explicit audit runtime profile |
+| `binding` | `targetId`, Git `revision`, and `workingTreeSHA256` from `evidenceBinding(root)` in `scripts/audit-runtime-evidence.mjs` |
+| `expected` | Nonempty array of declared `{route, state, locale, viewport: {width, height}}` scopes; state is `public` or `editor` |
+| `captures` | One fact per expected scope, plus `httpStatus`, `ready`, `overflow`, `consoleErrors`, `annotationCount`, and `screenshot: {path, sha256}` |
+| `editors` | Array of `{route, locale, field, surface, receipt: {path, sha256}}`; an empty array cannot verify saving |
+
+Each artifact path is relative to the bundle directory. Absolute/traversing/linked paths, missing files, changed hashes and files over 8 MiB are refused. The bundle is limited to 1 MiB, each list to 200 items, and total artifact reads to 64 MiB. Screenshots are PNG viewport captures whose header dimensions match the declared viewport; ingestion checks bytes/hash/header, not image quality or perceptual differences. Preserve full-page captures and visual diffs separately when needed. Declared coverage is explicit evidence scope, not discovery or proof that every route/state/locale was tested. Report observations retain the declared matrix, capture facts and tested field scopes without editorial values. Ingestion trusts the supplied observations as attestations; file hashes establish integrity and binding, not independent truth or source authenticity.
+
+The binding includes exact bytes of all tracked and unignored files (bounded to 10,000 files, 8 MiB each and 256 MiB total), and a hashed checkout identity. HEAD alone cannot conceal uncommitted changes. Ignored databases, media and environment settings are outside this source binding. Collect new evidence after applying the recipe; an old bundle becomes unverified even if HEAD is unchanged. Moving to another clone requires its own binding and reviewed capture run.
+
+Editor receipt JSON has exactly `route`, `locale`, `field`, `surface`, `beforeSHA256`, `submittedSHA256`, `reloadedSHA256`, `publicSHA256`, `saveHTTPStatus` and `restored`. The changed value must differ from the original; submitted, editor-reloaded and anonymous-public value hashes must agree; save must return 2xx; the fixture must be restored. Use `emdash-inline` or `emdash-admin` only for an actual supported editor interaction. `cms-api` receipts are counted separately and never verify editor UI saving. The declared matrix must include public and editor captures for each tested route/locale. Markers and dictionary/unannotated text remain observations only. Registration, other fields/locales, permissions, Portable Text/media fidelity and provider delivery need their own acceptance evidence. Real editorial changes must be explicitly authorized; do not perform synthetic write/restore probes against production.
+
+## Repeat the disposable fixture pilot
+
+On the pinned local Windows renderer, run:
+
+```sh
+npm run audit:pilot -- --out audit/phase-4-2026-10-16/pilot-new-run
+```
+
+Choose a new output directory. This manual command refuses CI, creates and clones an older-workflow fixture on `codex/phase4-pilot`, seeds a fresh disposable EmDash database and never copies a working DB, uploads or environment credentials. Its framework profile is deliberately unchanged: Astro 7.4.0 / EmDash 1.3.0. The older behavior is the missing schema guard before an existing prebuild hook. Fixture skill receipts describe local inventory equality, not an upstream refresh.
+
+The runner uses development setup only to seed/authenticate the isolated instance, then runs the normal built Node server for captures and real inline title save, publish, reload, anonymous read and restoration. It captures public home/about/post and editor about at 390, 768 and 1440 pixels before and after remediation. It supplies a closed offline seeded DB snapshot to the audit, inspects the plan, applies twice, runs measured preflight and the normal build, compares route screenshots, rolls back twice and checks exact package/source restoration and clean branch state. Both JSON and Markdown v2 reports are retained. Servers, dependency junction, disposable repositories and private DB are removed; failed server logs stay ignored locally.
+
+Review the report findings, `reviewed-plan.json`, capture bundles/PNGs, field receipts and `verification.json`. Only synthetic/permission-cleared evidence belongs in this repository. A passed fixture rehearsal supports the bounded recipe and ingestion pipeline; it is not certification of a client site, arbitrary legacy frameworks or Cloudflare infrastructure.
 
 Sources: [Astro cache configuration](https://docs.astro.build/en/reference/configuration-reference/#cache), [EmDash architecture/configuration](https://docs.emdashcms.com/concepts/architecture/), [Cloudflare D1 limits](https://developers.cloudflare.com/d1/platform/limits/).

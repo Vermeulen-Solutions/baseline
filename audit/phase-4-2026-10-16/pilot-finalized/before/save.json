@@ -1,0 +1,12 @@
+{
+  "route": "/about",
+  "locale": "en",
+  "field": "title",
+  "surface": "emdash-inline",
+  "beforeSHA256": "4efca0d10c5feb8e9b35eb1d994f2905bb71714e6a271f511d713b539ea5faa1",
+  "submittedSHA256": "7b36b0c5372c9fb977f4061041ee1ae51142b55267a54e13b99960902791ed8d",
+  "reloadedSHA256": "7b36b0c5372c9fb977f4061041ee1ae51142b55267a54e13b99960902791ed8d",
+  "publicSHA256": "7b36b0c5372c9fb977f4061041ee1ae51142b55267a54e13b99960902791ed8d",
+  "saveHTTPStatus": 200,
+  "restored": true
+}

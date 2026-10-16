@@ -1,0 +1,134 @@
+{
+  "date": "2026-10-16T12:55:00.732Z",
+  "scope": "Synthetic older-workflow fixture, not a real client or older-framework upgrade",
+  "sourceCommit": "4b955e2f3ff9fa52f04980225c2ea17191894977",
+  "node": "24.21.0",
+  "playwright": "1.64.1",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 1440,
+      "height": 900
+    }
+  ],
+  "commands": [
+    {
+      "command": "npm run build (before)",
+      "exitCode": 0,
+      "outputSHA256": "3e77678315935c538640ed81d88754fbfd0a78d3504493096cb4408e9c92421a"
+    },
+    {
+      "command": "audit:site (before)",
+      "exitCode": 0,
+      "outputSHA256": "e280d24bb559aa67106acb3aa23691d806c0a441ccbe3d225bebd25f4e245534"
+    },
+    {
+      "command": "audit:modernize --plan",
+      "exitCode": 0,
+      "outputSHA256": "6345ab35960e9f454e51335d676b4b73339d32ae8fc9eb42c60af5851f271d64"
+    },
+    {
+      "command": "audit:modernize --apply",
+      "exitCode": 0,
+      "outputSHA256": "e3dbbb2ba32a48fd78ecc05b5b0534345f6bc7ab98991b71bab95e3b7b6293f7"
+    },
+    {
+      "command": "audit:modernize --apply (repeat)",
+      "exitCode": 0,
+      "outputSHA256": "e3dbbb2ba32a48fd78ecc05b5b0534345f6bc7ab98991b71bab95e3b7b6293f7"
+    },
+    {
+      "command": "check:schema-budget (real seeded DB)",
+      "exitCode": 0,
+      "outputSHA256": "ce9b53e4fee2368518c54b23e201137206c3363e74d03902818b65bbf9983001"
+    },
+    {
+      "command": "npm run build (after)",
+      "exitCode": 0,
+      "outputSHA256": "a9d34c2f1d2820a5c47ed3192d776cfbf8abe69efa1b02b4fe002de0ddfe10a6"
+    },
+    {
+      "command": "audit:site (after)",
+      "exitCode": 0,
+      "outputSHA256": "e5f7beca205dc0d2df7197b34dd916007bef40abe2b9e6b3e633e79306a7d4b8"
+    },
+    {
+      "command": "audit:modernize --rollback",
+      "exitCode": 0,
+      "outputSHA256": "6ac4c95adf8a03de5b06f70ec2dfbbc42f51c8d6a15364992c510ef1efeced74"
+    },
+    {
+      "command": "audit:modernize --rollback (repeat)",
+      "exitCode": 0,
+      "outputSHA256": "6ac4c95adf8a03de5b06f70ec2dfbbc42f51c8d6a15364992c510ef1efeced74"
+    }
+  ],
+  "browser": "156.0.8078.4",
+  "fixturePreparation": {
+    "generatedSeedTypesSettledBeforeEvidence": true,
+    "generatedTypeCommit": false,
+    "branch": "codex/phase4-pilot"
+  },
+  "snapshotAcquisition": "node:sqlite.backup from stopped disposable seeded fixture; new offline output without sidecars",
+  "before": {
+    "summary": {
+      "pass": 19,
+      "fail": 0,
+      "warning": 1,
+      "unverified": 4,
+      "not-applicable": 2
+    },
+    "reportSHA256": "1fa5fcde2e1cb413510effbf81f1a5c0ff4eb9bc03d02eaac6a308854008341a",
+    "sourceBinding": {
+      "targetId": "1d76ecdd72f0469d81e49b197054a1deb615d65aac8256af39dea161559acb43",
+      "revision": "839d50935f90d77c713dad5d858f00ecad5ace1f",
+      "workingTreeSHA256": "688a8dd37e850577b8cf174a45517b000fcc356b028b6f04b7cd24ddff8135b8"
+    },
+    "schemaWidths": [
+      17,
+      19
+    ]
+  },
+  "reviewedPlanId": "c23eb946da724f5d4bef6c252774ce9f2e8123cbd9206a1517b0264a77b25db0",
+  "after": {
+    "summary": {
+      "pass": 20,
+      "fail": 0,
+      "warning": 0,
+      "unverified": 4,
+      "not-applicable": 2
+    },
+    "reportSHA256": "75e0db27cfc6827ee00e9d26cd974230cc9fd4c632e8a4766df31c995cf16692",
+    "sourceBinding": {
+      "targetId": "1d76ecdd72f0469d81e49b197054a1deb615d65aac8256af39dea161559acb43",
+      "revision": "839d50935f90d77c713dad5d858f00ecad5ace1f",
+      "workingTreeSHA256": "5d2e7d201fd504738e0e76e30ca6315e210706a779f99a3aba21ca499d2f909c"
+    },
+    "schemaWidths": [
+      17,
+      19
+    ]
+  },
+  "identicalBeforeAfterCaptures": 12,
+  "rollback": {
+    "byteExactPackage": true,
+    "packageSHA256": "41f9b24f174dcdcc01f80158cf89a6b6bfbe283ba19119551de812cc0ff2e5fb",
+    "sourceInventoryRestored": true,
+    "cleanFeatureBranch": true
+  },
+  "status": "passed",
+  "cleanup": {
+    "serverStopped": true,
+    "dependencyJunctionRemoved": true,
+    "disposableRepositoriesRemoved": true,
+    "privateDatabaseRemoved": true
+  },
+  "serverLogSHA256": "ba9d7d693dd8d2efad9f15a9211fb2a71fd1657748776a145ff61af4c7927f77"
+}

@@ -1,0 +1,350 @@
+{
+  "evidenceVersion": 1,
+  "capturedAt": "2026-10-16T12:56:04.680Z",
+  "runtime": "node-sqlite",
+  "binding": {
+    "targetId": "1d76ecdd72f0469d81e49b197054a1deb615d65aac8256af39dea161559acb43",
+    "revision": "839d50935f90d77c713dad5d858f00ecad5ace1f",
+    "workingTreeSHA256": "5d2e7d201fd504738e0e76e30ca6315e210706a779f99a3aba21ca499d2f909c"
+  },
+  "expected": [
+    {
+      "route": "/",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "route": "/about",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "route": "/posts/welcome",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "route": "/about",
+      "state": "editor",
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "route": "/",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      }
+    },
+    {
+      "route": "/about",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      }
+    },
+    {
+      "route": "/posts/welcome",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      }
+    },
+    {
+      "route": "/about",
+      "state": "editor",
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      }
+    },
+    {
+      "route": "/",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "route": "/about",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "route": "/posts/welcome",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "route": "/about",
+      "state": "editor",
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      }
+    }
+  ],
+  "captures": [
+    {
+      "route": "/",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 0,
+      "screenshot": {
+        "path": "0-public-390.png",
+        "sha256": "f3b21611f2eeb1373b992b3bbdea7d7ce0d3f8a9155b83903b42c15888ec44c3"
+      }
+    },
+    {
+      "route": "/about",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 0,
+      "screenshot": {
+        "path": "1-public-390.png",
+        "sha256": "c0632c26b55fefc61dfdefc575539bf302f0b4692173f9cf680aec6481c6dbdd"
+      }
+    },
+    {
+      "route": "/posts/welcome",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 0,
+      "screenshot": {
+        "path": "2-public-390.png",
+        "sha256": "cfd5936e05dc43d6ecd017896ac38651ccc407f71be8b7f94d44085ae1d9485d"
+      }
+    },
+    {
+      "route": "/about",
+      "state": "editor",
+      "locale": "en",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 1,
+      "screenshot": {
+        "path": "3-editor-390.png",
+        "sha256": "99dff5fdeb7b6376ee0a7a7c1f4ba46fdebef8a0644164f7c1faa5b766492fa5"
+      }
+    },
+    {
+      "route": "/",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 0,
+      "screenshot": {
+        "path": "4-public-768.png",
+        "sha256": "e6a439b72a815dce1c0d886d9229e7dd1188163d31762062e2178faf077d884f"
+      }
+    },
+    {
+      "route": "/about",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 0,
+      "screenshot": {
+        "path": "5-public-768.png",
+        "sha256": "29160cb88a2fd521e346d0f0e4994d71f6749f27b5765b73d80134abe9f18d19"
+      }
+    },
+    {
+      "route": "/posts/welcome",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 0,
+      "screenshot": {
+        "path": "6-public-768.png",
+        "sha256": "36d64d97b26fbdfb780898e22b926238b90babd71016c8093f1b6be16ca5c07b"
+      }
+    },
+    {
+      "route": "/about",
+      "state": "editor",
+      "locale": "en",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 1,
+      "screenshot": {
+        "path": "7-editor-768.png",
+        "sha256": "87431628c16f46176cbfe98abb3f6f80be2f0e359e611e7c7e4b842413bbfcf2"
+      }
+    },
+    {
+      "route": "/",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 0,
+      "screenshot": {
+        "path": "8-public-1440.png",
+        "sha256": "0ec9e2422cb08926332167fb464881e57b3f7b97683d85e6900c4874bea6d99e"
+      }
+    },
+    {
+      "route": "/about",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 0,
+      "screenshot": {
+        "path": "9-public-1440.png",
+        "sha256": "14fe365a283ee2bdf85bd25b0f6e9dba7ecd583572b3168164bd4bca381db793"
+      }
+    },
+    {
+      "route": "/posts/welcome",
+      "state": "public",
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 0,
+      "screenshot": {
+        "path": "10-public-1440.png",
+        "sha256": "781856f9ac512ad013ff9bbc72945fa2e08061221eb8cb75b13f19ac7621e658"
+      }
+    },
+    {
+      "route": "/about",
+      "state": "editor",
+      "locale": "en",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "httpStatus": 200,
+      "ready": true,
+      "overflow": false,
+      "consoleErrors": 0,
+      "annotationCount": 1,
+      "screenshot": {
+        "path": "11-editor-1440.png",
+        "sha256": "67f80e6d0f69f14432c91eecad73ac1a83357165c292eb8dbc77fcec1ccd48d6"
+      }
+    }
+  ],
+  "editors": [
+    {
+      "route": "/about",
+      "locale": "en",
+      "field": "title",
+      "surface": "emdash-inline",
+      "receipt": {
+        "path": "save.json",
+        "sha256": "c84588d9a4cb3a4d9c36b61e4018c906fddc4f51437898b1ddfef9e1666a6b93"
+      }
+    }
+  ]
+}

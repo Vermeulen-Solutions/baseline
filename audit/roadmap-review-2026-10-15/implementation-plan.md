@@ -182,3 +182,13 @@ README milestone f132745 is committed separately. The current work package imple
 The first recipe, schema-budget-prebuild@1, supports the pinned source profile and exact schema helpers. It plans read-only, binds a clean feature-branch revision and bytes, preserves one simple prebuild hook, and supports explicit twice-safe apply/rollback through private outside-target artifacts. Disposable tests prove actual npm lifecycle gating with a synthetic build executable; no client scripts run as a diagnostic side effect.
 
 See docs/site-standards-audit.md and audit/phase-4-2026-10-16/coverage-and-recipe.md for receipts and limits. Phase 4 changes remain uncommitted for review. #2 stays open: implement route/editor evidence ingestion and select an authorized pilot before rollout. No workflow/browser-CI, src/public, visual-golden, client or remote data change was made.
+
+## Phase 4 completion and Phase 5 handoff — 16 October 2026
+
+Milestone 1 is committed as `4b955e2`. Route/state/locale/viewport captures and supported editor save/reload/public-read receipts now enter validated v2 reports through `--evidence`. Hashes bind the checkout, revision, actual source bytes and bounded external artifacts; missing, stale or partial evidence cannot pass. Marker counts remain observations, not save verification.
+
+The maintainer authorized an older-site or fixture-repository pilot. The completed synthetic older-workflow clone stays on `codex/phase4-pilot`, retains the supported 7.4.0/1.3.0 framework profile and demonstrates the missing schema prebuild guard. Both strict diagnoses pass within implemented scope; apply twice preserves the existing hook, measured 17/19-column schema and real Astro builds pass, and all 12 route/editor captures remain identical. Real inline title save/publish/reload/anonymous-read/restoration passes before and after. Rollback twice restores exact package bytes and source inventory on a clean branch. No real client or production certification is implied.
+
+Completion receipts: `audit/phase-4-2026-10-16/pilot-and-evidence.md`, `completion-verification.json` and `pilot-finalized/`. Final verification has 60 passing unit tests, syntax/typecheck/build/release isolation success. README and the documentation pass through `71b79ab` are preserved; only the allowed audit runbook changes. #2 can close for this bounded pipeline and authorized fixture scope.
+
+Next scheduled: Phase 5 / #8 read-only SQLite/D1 schema/registry parity, safe seed export and isolated snapshots, followed by #9 provenance-based media ingestion and named-target R2 staging. Local fixtures/inventory can start now. Worker/D1/R2, providers, real site acceptance and public launch retain their explicit gates; no browser CI or automatic migration is introduced.

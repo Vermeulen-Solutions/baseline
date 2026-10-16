@@ -7,6 +7,7 @@ import { collectionColumnCounts, COLLECTION_COLUMN_BUDGET } from './schema-colum
 import { capabilityRules } from './audit-capabilities.mjs';
 import { skillFinding } from './audit-skills.mjs';
 import { assertReport } from './audit-report.mjs';
+import { runtimeEvidenceRules } from './audit-runtime-evidence.mjs';
 import { readTarget, readJSON, within, canonicalOutput, sha256 as digest, gitRead } from './audit-evidence.mjs';
 
 export const STANDARD = Object.freeze({ version: '0.1.1', commit: '28ccf82b3047eb615cd57ca55141751e0d29af11', sha256: 'a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4' });
@@ -20,7 +21,7 @@ function loadStandard(file) {
 }
 const version = value => typeof value === 'string' && /^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(value) ? value : null;
 
-export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnapshot } = {}) {
+export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnapshot, evidence } = {}) {
   const target = fs.realpathSync(path.resolve(root ?? '.'));
   if (!fs.statSync(target).isDirectory()) throw Error('Target must be a directory');
   const manifest = loadStandard(standardsFile);
@@ -80,7 +81,8 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
       finally { db?.close(); if (path.dirname(scratch) !== fs.realpathSync(os.tmpdir()) && path.dirname(scratch) !== path.resolve(os.tmpdir())) throw Error('Unsafe scratch cleanup'); fs.rmSync(scratch, { recursive: true, force: true }); }
     }
   }
-  for (const id of ['public-editor-runtime', 'visual-accessibility', 'forms-provider-delivery', 'cloudflare-d1-r2']) add(id, 'unverified', 'Explicit runtime/editor/visual or named remote evidence', 'Not executed by static diagnosis', { required: false, confidence: 'none' });
+  runtimeEvidenceRules(target, evidence, runtime, add);
+  for (const id of ['visual-accessibility', 'forms-provider-delivery', 'cloudflare-d1-r2']) add(id, 'unverified', 'Explicit runtime/editor/visual or named remote evidence', 'Not executed by static diagnosis; captures cannot establish conformance', { required: false, confidence: 'none' });
   let git = { status: 'unverified' };
   try {
     const command = (...args) => gitRead(target, ...args);
@@ -109,8 +111,8 @@ export function writeReports(report, out, target) {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
     const values = {}; let strict = false;
-    const names = { '--root': 'root', '--runtime': 'runtime', '--standards-file': 'standardsFile', '--db-snapshot': 'dbSnapshot', '--out': 'out' };
-    for (let i = 2; i < process.argv.length; i++) { const arg = process.argv[i]; if (arg === '--strict') { strict = true; continue; } if (!names[arg] || !process.argv[i + 1] || process.argv[i + 1].startsWith('--')) throw Error('Usage: audit:site -- --root <repo> [--runtime node-sqlite|cloudflare-d1-r2] [--standards-file <pinned-manifest>] [--db-snapshot <offline-snapshot>] [--out <new-directory-outside-target>] [--strict]'); values[names[arg]] = process.argv[++i]; }
+    const names = { '--root': 'root', '--runtime': 'runtime', '--standards-file': 'standardsFile', '--db-snapshot': 'dbSnapshot', '--evidence': 'evidence', '--out': 'out' };
+    for (let i = 2; i < process.argv.length; i++) { const arg = process.argv[i]; if (arg === '--strict' && !strict) { strict = true; continue; } if (!names[arg] || Object.hasOwn(values, names[arg]) || !process.argv[i + 1] || process.argv[i + 1].startsWith('--')) throw Error('Usage: audit:site -- --root <repo> [--runtime node-sqlite|cloudflare-d1-r2] [--standards-file <pinned-manifest>] [--db-snapshot <offline-snapshot>] [--evidence <bundle.json>] [--out <new-directory-outside-target>] [--strict]'); values[names[arg]] = process.argv[++i]; }
     const report = auditSite(values);
     if (values.out) writeReports(report, values.out, path.resolve(values.root ?? '.'));
     else console.log(JSON.stringify(report, null, 2));

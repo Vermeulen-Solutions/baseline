@@ -1,0 +1,763 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-16T12:55:46.915Z",
+  "stage": "static-diagnosis",
+  "target": {
+    "label": "audited-repository",
+    "git": {
+      "status": "observed",
+      "revision": "839d50935f90d77c713dad5d858f00ecad5ace1f",
+      "trackedDirty": false,
+      "note": "Untracked paths and repository remotes withheld"
+    },
+    "configurationSHA256": {
+      "astro.config.mjs": "89bffa822a118b975c0f3e59009ed7af62dafb823274a68ef9514a3f6aabe569",
+      "src/live.config.ts": "3a738326c0e1b1a9f9f18d0205a7c3f8c9c4144093e6794a5d38c02978bb4553",
+      "src/styles/global.css": "92d3516d1cc1d625ea37ca344146a4cc25f71020718de2031a37cefae4f35b6a",
+      "package-lock.json": "b6daa503b3c4e7eac29138a934d9a729acb4603ba1fc52a95cd104e86ca13b57"
+    }
+  },
+  "standards": {
+    "version": "0.1.1",
+    "commit": "28ccf82b3047eb615cd57ca55141751e0d29af11",
+    "sha256": "a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4",
+    "source": "Digest-verified offline manifest; original private Git history not required"
+  },
+  "runtime": "node-sqlite",
+  "mutationPolicy": "No target writes, target script/config execution or network; explicit reports outside target and isolated temporary snapshot copy only",
+  "rules": [
+    {
+      "id": "package-evidence",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Readable package object and npm package inventory",
+      "observed": "Observed; contents withheld",
+      "evidence": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "runtime-profile",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "A certified source standards profile",
+      "observed": "certified-scoped",
+      "evidence": [
+        "standards/baselines/0.1.1.json"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:astro",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 7.4.0",
+      "observed": "7.4.0",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:emdash",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 1.3.0",
+      "observed": "1.3.0",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:@astrojs/node",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 11.1.8",
+      "observed": "11.1.8",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:@astrojs/react",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 7.1.0",
+      "observed": "7.1.0",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:react",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 19.2.4",
+      "observed": "19.2.4",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:react-dom",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 19.2.4",
+      "observed": "19.2.4",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "dependency:tailwindcss",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Certified comparison version 4.3.3",
+      "observed": "4.3.3",
+      "evidence": [
+        "package-lock.json"
+      ],
+      "confidence": "high",
+      "applicability": "Static lockfile comparison, not runtime compatibility or an upgrade ceiling",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "node-policy",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "recommendation",
+      "expected": "Minimum 22.22.2; recommend current Node 24 LTS patch",
+      "observed": "Declared ^22.22.2 || ^24.15.0 || >=26.0.0; executing audit on v24.21.0",
+      "evidence": [
+        "package.json"
+      ],
+      "confidence": "high",
+      "applicability": "Exact declared baseline policy comparison only; not deployment runtime or general semver evaluation",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:server",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "EmDash server output",
+      "observed": "server",
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:adapter",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Adapter matches requested runtime; standalone for Node",
+      "observed": "node",
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:cms",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "EmDash and React integration calls",
+      "observed": {
+        "emdash": true,
+        "react": true,
+        "dynamic": false
+      },
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:storage",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Explicit supported database/storage wiring",
+      "observed": {
+        "sqlite": true,
+        "local": true
+      },
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:i18n",
+      "ruleVersion": 1,
+      "status": "not-applicable",
+      "severity": "required",
+      "expected": "If configured, default locale unprefixed for EmDash admin",
+      "observed": "absent",
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "capability:cache-hints",
+      "ruleVersion": 1,
+      "status": "not-applicable",
+      "severity": "recommendation",
+      "expected": "If cache configured, runtime evidence for every query hint",
+      "observed": "absent",
+      "evidence": [
+        "astro.config.mjs"
+      ],
+      "confidence": "bounded-static",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "schema-prebuild",
+      "ruleVersion": 1,
+      "status": "warning",
+      "severity": "recommendation",
+      "expected": "Schema preflight before the existing build hook",
+      "observed": "Command presence is static evidence; missing DB still needs measurement",
+      "evidence": [
+        "package.json"
+      ],
+      "confidence": "high",
+      "applicability": "node-sqlite",
+      "remediation": "schema-budget-prebuild@1",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "skills:emdash",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Complete managed membership and normalized hashes versus recorded snapshot",
+      "observed": {
+        "presentSkills": 3,
+        "missingSkills": 0,
+        "measuredFiles": 20,
+        "missingFiles": 0,
+        "extraFiles": 0,
+        "changedFiles": 0,
+        "refusedEntries": 0,
+        "manifestMembership": "match",
+        "sourceCurrency": "unverified",
+        "localOverrides": "none versus recorded inventory"
+      },
+      "evidence": [
+        ".emdash/upstream-skills.json"
+      ],
+      "confidence": "bounded-static",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "skills:site",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Complete managed membership and normalized hashes versus recorded snapshot",
+      "observed": {
+        "presentSkills": 8,
+        "missingSkills": 0,
+        "measuredFiles": 83,
+        "missingFiles": 0,
+        "extraFiles": 0,
+        "changedFiles": 0,
+        "refusedEntries": 0,
+        "manifestMembership": "match",
+        "sourceCurrency": "unverified",
+        "localOverrides": "none versus recorded inventory"
+      },
+      "evidence": [
+        ".emdash/site-skills.json"
+      ],
+      "confidence": "bounded-static",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "upstream-currency",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "recommendation",
+      "expected": "Dated upstream version/source decisions",
+      "observed": "Offline inventory is not an upstream freshness check",
+      "evidence": [],
+      "confidence": "none",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "physical-schema",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Actual physical collection widths <= 50",
+      "observed": {
+        "collections": 2,
+        "physicalWidths": [
+          17,
+          19
+        ],
+        "generatedOrHiddenColumns": 0,
+        "schemaSHA256": "1350147cfa02183be5268065b85de1623e04645db87a5d396684e78a348e9ed7",
+        "snapshotSHA256": "abbf692cd5b30fa294ae0f4b0bd5238223735b5ff6484a038c6f5ea13bbf4aff"
+      },
+      "evidence": [],
+      "confidence": "high",
+      "applicability": "Explicit offline snapshot only; no seed inference, D1 or content row reads",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "route-capture-evidence",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Complete declared capture matrix, HTTP 200, ready, no reported overflow/errors",
+      "observed": {
+        "expected": 12,
+        "captured": 12,
+        "declaredScopes": [
+          {
+            "route": "/",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          {
+            "route": "/about",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          {
+            "route": "/posts/welcome",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          {
+            "route": "/about",
+            "state": "editor",
+            "locale": "en",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          },
+          {
+            "route": "/",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          },
+          {
+            "route": "/about",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          },
+          {
+            "route": "/posts/welcome",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          },
+          {
+            "route": "/about",
+            "state": "editor",
+            "locale": "en",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          },
+          {
+            "route": "/",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          {
+            "route": "/about",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          {
+            "route": "/posts/welcome",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          },
+          {
+            "route": "/about",
+            "state": "editor",
+            "locale": "en",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        ],
+        "captureFacts": [
+          {
+            "route": "/",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 0,
+            "screenshotSHA256": "f3b21611f2eeb1373b992b3bbdea7d7ce0d3f8a9155b83903b42c15888ec44c3"
+          },
+          {
+            "route": "/about",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 0,
+            "screenshotSHA256": "c0632c26b55fefc61dfdefc575539bf302f0b4692173f9cf680aec6481c6dbdd"
+          },
+          {
+            "route": "/posts/welcome",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 0,
+            "screenshotSHA256": "cfd5936e05dc43d6ecd017896ac38651ccc407f71be8b7f94d44085ae1d9485d"
+          },
+          {
+            "route": "/about",
+            "state": "editor",
+            "locale": "en",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 1,
+            "screenshotSHA256": "99dff5fdeb7b6376ee0a7a7c1f4ba46fdebef8a0644164f7c1faa5b766492fa5"
+          },
+          {
+            "route": "/",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 0,
+            "screenshotSHA256": "e6a439b72a815dce1c0d886d9229e7dd1188163d31762062e2178faf077d884f"
+          },
+          {
+            "route": "/about",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 0,
+            "screenshotSHA256": "29160cb88a2fd521e346d0f0e4994d71f6749f27b5765b73d80134abe9f18d19"
+          },
+          {
+            "route": "/posts/welcome",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 0,
+            "screenshotSHA256": "36d64d97b26fbdfb780898e22b926238b90babd71016c8093f1b6be16ca5c07b"
+          },
+          {
+            "route": "/about",
+            "state": "editor",
+            "locale": "en",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 1,
+            "screenshotSHA256": "87431628c16f46176cbfe98abb3f6f80be2f0e359e611e7c7e4b842413bbfcf2"
+          },
+          {
+            "route": "/",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 0,
+            "screenshotSHA256": "0ec9e2422cb08926332167fb464881e57b3f7b97683d85e6900c4874bea6d99e"
+          },
+          {
+            "route": "/about",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 0,
+            "screenshotSHA256": "14fe365a283ee2bdf85bd25b0f6e9dba7ecd583572b3168164bd4bca381db793"
+          },
+          {
+            "route": "/posts/welcome",
+            "state": "public",
+            "locale": "en",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 0,
+            "screenshotSHA256": "781856f9ac512ad013ff9bbc72945fa2e08061221eb8cb75b13f19ac7621e658"
+          },
+          {
+            "route": "/about",
+            "state": "editor",
+            "locale": "en",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "httpStatus": 200,
+            "ready": true,
+            "overflow": false,
+            "consoleErrors": 0,
+            "annotationCount": 1,
+            "screenshotSHA256": "67f80e6d0f69f14432c91eecad73ac1a83357165c292eb8dbc77fcec1ccd48d6"
+          }
+        ],
+        "annotatedCaptures": 3,
+        "bundleSHA256": "7397c7e2b01fa2d48f9430b7693b843212e0bddb14d276dd17ae2f89d9ca74b8",
+        "note": "Hash-checked supplied observations; markers do not prove registration, saving or visual/accessibility quality"
+      },
+      "evidence": [],
+      "confidence": "bounded-static",
+      "applicability": "Caller-declared route/field scope only; supplied attestations are not independent certification",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "editor-save-reload",
+      "ruleVersion": 1,
+      "status": "pass",
+      "severity": "required",
+      "expected": "Changed field survives supported editor save/reload and anonymous public read; fixture restored",
+      "observed": {
+        "supportedEditorReceipts": 1,
+        "apiOnlyReceipts": 0,
+        "fieldScopes": [
+          {
+            "route": "/about",
+            "locale": "en",
+            "field": "title",
+            "surface": "emdash-inline",
+            "receiptSHA256": "c84588d9a4cb3a4d9c36b61e4018c906fddc4f51437898b1ddfef9e1666a6b93"
+          }
+        ],
+        "note": "Supplied field-level round-trip attestation only; no inference for other fields, locales, permissions, media or providers"
+      },
+      "evidence": [],
+      "confidence": "bounded-static",
+      "applicability": "Caller-declared route/field scope only; supplied attestations are not independent certification",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "visual-accessibility",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "recommendation",
+      "expected": "Explicit runtime/editor/visual or named remote evidence",
+      "observed": "Not executed by static diagnosis; captures cannot establish conformance",
+      "evidence": [],
+      "confidence": "none",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "forms-provider-delivery",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "recommendation",
+      "expected": "Explicit runtime/editor/visual or named remote evidence",
+      "observed": "Not executed by static diagnosis; captures cannot establish conformance",
+      "evidence": [],
+      "confidence": "none",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    },
+    {
+      "id": "cloudflare-d1-r2",
+      "ruleVersion": 1,
+      "status": "unverified",
+      "severity": "recommendation",
+      "expected": "Explicit runtime/editor/visual or named remote evidence",
+      "observed": "Not executed by static diagnosis; captures cannot establish conformance",
+      "evidence": [],
+      "confidence": "none",
+      "applicability": "node-sqlite",
+      "remediation": "docs/site-standards-audit.md",
+      "verification": "Static diagnosis only; no target scripts, network, CMS, installs or deployments"
+    }
+  ],
+  "summary": {
+    "pass": 19,
+    "fail": 0,
+    "warning": 1,
+    "unverified": 4,
+    "not-applicable": 2
+  }
+}

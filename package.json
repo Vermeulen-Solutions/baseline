@@ -54,8 +54,9 @@
     "lint": "node scripts/check-script-syntax.mjs",
     "test:dev-hud": "playwright test --config=playwright.dev-tools.config.mjs",
     "audit:site": "node scripts/audit-site.mjs",
-    "test:site-audit": "node --test tests/site-standards-audit.test.mjs tests/audit-coverage.test.mjs tests/audit-modernize.test.mjs",
-    "audit:modernize": "node scripts/audit-modernize.mjs"
+    "test:site-audit": "node --test tests/site-standards-audit.test.mjs tests/audit-coverage.test.mjs tests/audit-modernize.test.mjs tests/audit-runtime-evidence.test.mjs",
+    "audit:modernize": "node scripts/audit-modernize.mjs",
+    "audit:pilot": "node scripts/rehearse-site-audit.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
