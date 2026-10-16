@@ -8,10 +8,17 @@ Start with a read-only diagnosis, review the findings, then select a supported r
 npm run audit:site -- --root ../my-site
 npm run audit:site -- --root ../my-site --out ../private-reports/run-001
 npm run audit:site -- --root ../my-site --db-snapshot ../private-backups/closed.sqlite --strict
+npm run audit:site -- --root ../my-site --d1-dump ../private-backups/d1-export.sql --strict-fails
 npm run audit:site -- --root ../my-site --evidence ../private-reports/capture/bundle.json --out ../private-reports/run-002 --strict
 ```
 
 JSON goes to stdout unless `--out` names a **new directory outside the target**, including through symlinks. That directory receives JSON and Markdown. Keep real site reports private; never commit them to this template. No scheduler, network check or Actions job is installed.
+
+For Cloudflare D1 databases, use the turnkey exporter:
+```sh
+npm run db:export-d1 -- --database <db-name> --out ../private-backups/d1-export.sql
+```
+Baseline accepts either a closed binary SQLite database or a raw D1 SQL export via `--db-snapshot <file>` or `--d1-dump <dump.sql>`. When a SQL dump is supplied, schema DDL is ingested into an isolated scratch SQLite database to measure physical collection widths without requiring manual conversion or loading row data.
 
 The source is the exact standalone `standards/baselines/0.1.1.json` artifact. Its digest must be `a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4`, corresponding to the original immutable commit recorded in it. `--standards-file` accepts only an identical offline artifact. Missing or changed bytes abort. Mutable main or an identical version label is insufficient; another standards version needs a reviewed resolver extension.
 
@@ -20,18 +27,18 @@ The source is the exact standalone `standards/baselines/0.1.1.json` artifact. It
 | Scope | What is established | What is not established |
 | --- | --- | --- |
 | Package/Node | Bounded JSON objects; baseline lockfile versions and exact declared Node policy | Deployment runtime, general semver compatibility or a reason to downgrade newer packages |
-| Astro configuration | TypeScript AST reads literal `defineConfig` output/adapter, aliased imports, React/EmDash calls and explicit Node SQLite/local-storage wiring | Execution of arbitrary helpers, computed/spread/function configs, deployment or provider behavior |
+| Astro configuration | TypeScript AST reads literal and dual-target ternary `defineConfig` output/adapter, aliased imports, React/EmDash calls and Node/Cloudflare wiring | Execution of arbitrary helpers, computed/spread/function configs, deployment or provider behavior |
 | Locales/cache | Literal locale registration and unprefixed default; absent root cache config is inapplicable on the supported profile | Real translated rendering; cache hint completeness when caching is configured, which stays required/unverified |
-| Managed skills | Version-2 receipt membership, required SKILL.md files, complete bounded managed-directory inventory, normalized hashes, missing/extra/changed files | Upstream currency or authenticity of a self-supplied receipt; unmanaged skills remain project-owned |
-| SQLite schema | Explicit offline snapshot, actual physical widths including hidden/generated columns, definition and snapshot digests | Width inferred from seed fields, D1 parity, collection registry/reference integrity or content correctness |
+| Managed skills | Version-2 receipt membership, required SKILL.md files, complete bounded managed-directory inventory, normalized hashes, missing/extra/changed files, and declared local overrides | Upstream currency or authenticity of a self-supplied receipt; unmanaged skills remain project-owned |
+| SQLite / D1 schema | Explicit offline SQLite snapshot or D1 SQL dump, actual physical widths including hidden/generated columns, definition and snapshot digests | Width inferred from seed fields, collection registry/reference integrity or content correctness |
 | Build preflight | A supported schema command at the beginning of the npm prebuild hook | Proof that a database exists or that a modified helper behaves correctly |
 | Runtime/visual/providers | Explicit unverified findings | Successful editing/saving, accessibility conformance, form delivery, Worker/D1/R2 certification |
 
-Dynamic/unsupported configuration is **unverified**, never a successful guess based on comments or matching text. The parser never imports a target module. The pinned TypeScript parser is an explicit development dependency; install development tooling to use the audit commands.
+Dynamic/unsupported configuration is **unverified**, never a successful guess based on comments or matching text. The parser never imports a target module. Dual-runtime configurations using conditionals (e.g., `onCloudflare ? cloudflare() : node(...)` and `onCloudflare ? d1() : sqlite()`) are statically resolved against the audited `--runtime` profile. The pinned TypeScript parser is an explicit development dependency; install development tooling to use the audit commands.
 
-Skill passes mean equality to the recorded managed snapshot, not equality to today's upstream. Legacy commit-only receipts and incomplete/malformed inventories stay unverified. Drift is a required failure with counts; local file names/content and overrides are withheld and preserved for review. Do not resolve a finding by overwriting dirty skills. Current Baseline itself still has a legacy upstream receipt and no reviewed site-skill hash receipt; its strict self-audit therefore remains incomplete.
+Skill passes mean equality to the recorded managed snapshot, not equality to today's upstream. Legacy commit-only receipts and incomplete/malformed inventories stay unverified. Intentional site customizations can be documented under `overrides` in `.emdash/site-skills.json` or `.emdash/skill-overrides.json`, reporting declared overrides rather than unexpected drift. Drift without declared overrides is a required failure with counts; local file names/content are withheld and preserved for review.
 
-Schema measurement accepts only a caller-supplied **closed, consistent offline SQLite snapshot**, without WAL/SHM/journal sidecars and at most 64 MiB. A temporary private copy is opened read-only/query-only and removed afterward. The engine reads metadata, not content rows; table/column names and raw SQL are withheld. Missing DB/tables/refused evidence stays unverified; 51 physical columns fails the 50-column budget. Acquire snapshots using supported backup/export procedures; copying a live DB file alone does not establish consistency. Target-specific Cloudflare D1 and registry parity tooling are planned for future roadmap milestones.
+Schema measurement accepts a caller-supplied **closed, consistent offline SQLite snapshot** or a **D1 SQL export dump** (`.sql`), without WAL/SHM/journal sidecars and at most 64 MiB. A temporary private copy is opened read-only/query-only and removed afterward. The engine reads metadata, not content rows; table/column names and raw SQL are withheld. Missing DB/tables/refused evidence stays unverified; 51 physical columns fails the 50-column budget.
 
 ## Stable report contract
 
@@ -39,7 +46,7 @@ Reports use **schemaVersion 2**, documented in [the JSON Schema](../standards/si
 
 Each rule carries version, required/recommendation severity, expected/observed facts, evidence, confidence, applicability, remediation and verification bounds. Sensitive configuration, env, content rows, private Git paths/remotes and arbitrary package names are withheld. A rule pass proves only its stated static observation.
 
-Ordinary invocation exits 0 after producing findings. `--strict` exits 1 for implemented required fail/unverified rules, including unsupported configuration, managed skill inventories, physical schema and opted-in caching. Usage, standards or unsafe-output errors exit 2. Recommendations can remain unverified without failing strict mode. This is a bounded diagnostic policy, not full site acceptance.
+Ordinary invocation exits 0 after producing findings. `--strict` exits 1 for implemented required fail/unverified rules, including unsupported configuration, managed skill inventories, physical schema and opted-in caching. `--strict-fails` exits 1 only if a rule evaluates to `fail` (ideal for CI pipelines targeting profiles with unverified platform status). Usage, standards or unsafe-output errors exit 2. Recommendations can remain unverified without failing strict mode.
 
 ## First recipe: schema-budget-prebuild@1
 

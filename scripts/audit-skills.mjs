@@ -27,13 +27,24 @@ export function skillFinding(root, group) {
   if (!validManifest) return { status: 'unverified', observed: result };
   result.manifestMembership = Array.isArray(manifest.skills) && JSON.stringify([...manifest.skills].sort()) === JSON.stringify([...config.skills].sort()) ? 'match' : 'mismatch';
   let invalid = false;
+  const overrides = (manifest?.overrides && typeof manifest.overrides === 'object' && !Array.isArray(manifest.overrides)) ? manifest.overrides : (readJSON(root, '.emdash/skill-overrides.json').data?.overrides ?? {});
+  result.declaredOverrides = 0;
   for (const [file, hash] of Object.entries(expected)) {
     if (!safeRelative(file) || !config.skills.includes(file.split('/')[0]) || !/^[a-f0-9]{64}$/.test(hash)) { invalid = true; continue; }
     if (!local.has(file)) result.missingFiles++;
-    else if (local.get(file) !== hash) result.changedFiles++;
+    else if (local.get(file) !== hash) {
+      if (Object.hasOwn(overrides, file)) result.declaredOverrides++;
+      else result.changedFiles++;
+    }
   }
-  for (const file of local.keys()) if (!Object.hasOwn(expected, file)) result.extraFiles++;
+  for (const file of local.keys()) {
+    if (!Object.hasOwn(expected, file)) {
+      if (Object.hasOwn(overrides, file)) result.declaredOverrides++;
+      else result.extraFiles++;
+    }
+  }
   const complete = config.skills.every(skill => Object.hasOwn(expected, skill + '/SKILL.md'));
   const drift = result.manifestMembership === 'mismatch' || result.missingSkills || result.missingFiles || result.extraFiles || result.changedFiles;
-  return { status: invalid || !complete || result.refusedEntries ? 'unverified' : drift ? 'fail' : 'pass', observed: { ...result, localOverrides: drift ? 'observed drift; preserve for review' : 'none versus recorded inventory' } };
+  return { status: invalid || !complete || result.refusedEntries ? 'unverified' : drift ? 'fail' : 'pass', observed: { ...result, localOverrides: result.declaredOverrides > 0 ? `${result.declaredOverrides} declared local override(s) documented` : drift ? 'observed drift; preserve for review' : 'none versus recorded inventory' } };
 }
+

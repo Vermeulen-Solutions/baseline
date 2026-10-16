@@ -64,6 +64,7 @@
     "audit:pilot": "node scripts/rehearse-site-audit.mjs",
     "db:diff": "node scripts/db-diff.mjs",
     "db:export-seed": "node scripts/db-export-seed.mjs",
+    "db:export-d1": "node scripts/d1-export.mjs",
     "db:pull-remote": "node scripts/d1-snapshot.mjs",
     "test:database": "node --test tests/database-tooling.test.mjs",
     "media:migrate-wp": "node scripts/media-migrate-wp.mjs",

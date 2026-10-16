@@ -21,6 +21,24 @@ function loadStandard(file) {
 }
 const version = value => typeof value === 'string' && /^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(value) ? value : null;
 
+import { splitSQL } from './d1-snapshot.mjs';
+
+export function ingestSQLSchema(db, text) {
+  db.exec('PRAGMA foreign_keys = OFF;');
+  const statements = splitSQL(text);
+  for (const stmt of statements) {
+    const trimmed = stmt.trim();
+    if (!trimmed) continue;
+    if (/^CREATE\s+(?:TABLE|UNIQUE\s+INDEX|INDEX)\b/i.test(trimmed) || /^ALTER\s+TABLE\b/i.test(trimmed)) {
+      try {
+        db.exec(trimmed);
+      } catch {
+        // Skip statements that cannot be executed in embedded SQLite (e.g. unsupported virtual table modules)
+      }
+    }
+  }
+}
+
 export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnapshot, evidence } = {}) {
   const target = fs.realpathSync(path.resolve(root ?? '.'));
   if (!fs.statSync(target).isDirectory()) throw Error('Target must be a directory');
@@ -70,8 +88,26 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
       const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-schema-'));
       let db;
       try {
-        const copy = path.join(scratch, 'snapshot.sqlite'); fs.copyFileSync(source, copy);
-        db = new DatabaseSync(copy, { readOnly: true }); db.exec('PRAGMA query_only=ON');
+        const copy = path.join(scratch, 'snapshot.sqlite');
+        const isSqlDump = source.endsWith('.sql') || (() => {
+          try {
+            const header = Buffer.alloc(16);
+            const fd = fs.openSync(source, 'r');
+            fs.readSync(fd, header, 0, 16, 0);
+            fs.closeSync(fd);
+            return header.toString('utf8', 0, 15) !== 'SQLite format 3';
+          } catch { return false; }
+        })();
+
+        if (isSqlDump) {
+          db = new DatabaseSync(copy);
+          ingestSQLSchema(db, fs.readFileSync(source, 'utf8'));
+          db.exec('PRAGMA query_only=ON');
+        } else {
+          fs.copyFileSync(source, copy);
+          db = new DatabaseSync(copy, { readOnly: true });
+          db.exec('PRAGMA query_only=ON');
+        }
         const measured = collectionColumnCounts(db);
         const counts = measured.map(({ columns }) => columns);
         const generated = measured.reduce((sum, { table }) => sum + db.prepare(`PRAGMA table_xinfo("${table.replaceAll('"', '""')}")`).all().filter(column => column.hidden !== 0).length, 0);
@@ -93,7 +129,10 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
   return assertReport({ schemaVersion: 2, generatedAt: new Date().toISOString(), stage: 'static-diagnosis', target: { label: 'audited-repository', git, configurationSHA256: hashes }, standards: { ...STANDARD, source: 'Digest-verified offline manifest; original private Git history not required' }, runtime, mutationPolicy: 'No target writes, target script/config execution or network; explicit reports outside target and isolated temporary snapshot copy only', rules, summary: Object.fromEntries(['pass', 'fail', 'warning', 'unverified', 'not-applicable'].map(status => [status, rules.filter(rule => rule.status === status).length])) });
 }
 
-export function strictFailure(report) { return report.rules.some(rule => rule.severity === 'required' && ['fail', 'unverified'].includes(rule.status)); }
+export function strictFailure(report, { failsOnly = false } = {}) {
+  if (failsOnly) return report.rules.some(rule => rule.status === 'fail');
+  return report.rules.some(rule => rule.severity === 'required' && ['fail', 'unverified'].includes(rule.status));
+}
 export function markdownReport(report) {
   assertReport(report);
   const cell = value => String(typeof value === 'object' ? JSON.stringify(value) : value).replaceAll('|', '\\|').replaceAll('\n', ' ');
@@ -110,12 +149,19 @@ export function writeReports(report, out, target) {
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    const values = {}; let strict = false;
-    const names = { '--root': 'root', '--runtime': 'runtime', '--standards-file': 'standardsFile', '--db-snapshot': 'dbSnapshot', '--evidence': 'evidence', '--out': 'out' };
-    for (let i = 2; i < process.argv.length; i++) { const arg = process.argv[i]; if (arg === '--strict' && !strict) { strict = true; continue; } if (!names[arg] || Object.hasOwn(values, names[arg]) || !process.argv[i + 1] || process.argv[i + 1].startsWith('--')) throw Error('Usage: audit:site -- --root <repo> [--runtime node-sqlite|cloudflare-d1-r2] [--standards-file <pinned-manifest>] [--db-snapshot <offline-snapshot>] [--evidence <bundle.json>] [--out <new-directory-outside-target>] [--strict]'); values[names[arg]] = process.argv[++i]; }
+    const values = {}; let strict = false, strictFails = false;
+    const names = { '--root': 'root', '--runtime': 'runtime', '--standards-file': 'standardsFile', '--db-snapshot': 'dbSnapshot', '--d1-dump': 'dbSnapshot', '--evidence': 'evidence', '--out': 'out' };
+    for (let i = 2; i < process.argv.length; i++) {
+      const arg = process.argv[i];
+      if (arg === '--strict' && !strict) { strict = true; continue; }
+      if (arg === '--strict-fails' && !strictFails) { strictFails = true; continue; }
+      if (!names[arg] || Object.hasOwn(values, names[arg]) || !process.argv[i + 1] || process.argv[i + 1].startsWith('--')) throw Error('Usage: audit:site -- --root <repo> [--runtime node-sqlite|cloudflare-d1-r2] [--standards-file <pinned-manifest>] [--db-snapshot <offline-snapshot>] [--d1-dump <sql-dump>] [--evidence <bundle.json>] [--out <new-directory-outside-target>] [--strict] [--strict-fails]');
+      values[names[arg]] = process.argv[++i];
+    }
     const report = auditSite(values);
     if (values.out) writeReports(report, values.out, path.resolve(values.root ?? '.'));
     else console.log(JSON.stringify(report, null, 2));
     if (strict && strictFailure(report)) process.exitCode = 1;
+    else if (strictFails && strictFailure(report, { failsOnly: true })) process.exitCode = 1;
   } catch (error) { console.error(/^(?:Usage:|Standards artifact digest mismatch; diagnosis refused$|Unsupported standards artifact$|Unknown runtime profile$|Report output must be outside the audited target$|Report output already exists; choose a new directory$)/.test(error.message) ? error.message : 'Audit unavailable; no target scripts or remediation were executed.'); process.exitCode = 2; }
 }

@@ -86,3 +86,110 @@ test('CLI strict policy fails required unknowns, rejects malformed flags and rec
   assert.equal(result.status, 1, result.stderr); assert.equal(JSON.parse(result.stdout).target.git.trackedDirty, true); assert.deepEqual(tree(root), before);
   assert.equal(spawnSync(process.execPath, [fileURLToPath(script), '--root'], { encoding: 'utf8' }).status, 2);
 }));
+
+test('D1 SQL dump ingestion measures physical schema directly without requiring binary SQLite snapshot', () => fixture((root) => {
+  current(root);
+  const sqlDump = path.join(root, 'd1-export.sql');
+  fs.writeFileSync(sqlDump, [
+    'PRAGMA foreign_keys = OFF;',
+    'CREATE TABLE "ec_pages" (id TEXT PRIMARY KEY, title TEXT, generated TEXT AS (title) VIRTUAL);',
+    'CREATE TABLE "ec_events" (id TEXT PRIMARY KEY, name TEXT);',
+    'CREATE VIRTUAL TABLE "_emdash_fts_pages" USING fts5(title);',
+    "INSERT INTO \"ec_pages\" VALUES ('1', 'Test', 'Test');",
+    'CREATE TRIGGER trg_test AFTER INSERT ON ec_pages BEGIN SELECT 1; END;'
+  ].join('\n'));
+
+  // Test passing .sql via dbSnapshot
+  const report1 = auditSite({ root, dbSnapshot: sqlDump });
+  assert.equal(rule(report1, 'physical-schema').status, 'pass');
+  assert.deepEqual(rule(report1, 'physical-schema').observed.physicalWidths.sort(), [2, 3]);
+
+  // Test via CLI with --d1-dump
+  const cliResult = spawnSync(process.execPath, [fileURLToPath(script), '--root', root, '--d1-dump', sqlDump], { encoding: 'utf8' });
+  assert.equal(cliResult.status, 0, cliResult.stderr);
+  const parsed = JSON.parse(cliResult.stdout);
+  assert.equal(rule(parsed, 'physical-schema').status, 'pass');
+
+  // Test --strict-fails exits 0 when no rules fail (even if required unknowns exist)
+  const strictFailsResult = spawnSync(process.execPath, [fileURLToPath(script), '--root', root, '--d1-dump', sqlDump, '--strict-fails'], { encoding: 'utf8' });
+  assert.equal(strictFailsResult.status, 0, strictFailsResult.stderr);
+}));
+
+test('AST analyzer supports dual-runtime ternaries for adapter and database/storage', () => fixture((root) => {
+  current(root);
+  const dualConfig = [
+    'import { defineConfig } from "astro/config";',
+    'import node from "@astrojs/node";',
+    'import cloudflare from "@astrojs/cloudflare";',
+    'import react from "@astrojs/react";',
+    'import emdash, { local } from "emdash/astro";',
+    'import { sqlite } from "emdash/db";',
+    'import { d1, r2 } from "@emdash-cms/cloudflare";',
+    'const onCloudflare = process.env.EMDASH_TARGET === "cloudflare";',
+    'export default defineConfig({',
+    '  output: "server",',
+    '  adapter: onCloudflare ? cloudflare() : node({ mode: "standalone" }),',
+    '  integrations: [',
+    '    react(),',
+    '    emdash({',
+    '      database: onCloudflare ? d1({ binding: "DB" }) : sqlite({ url: "file:./data.db" }),',
+    '      storage: onCloudflare ? r2({ binding: "MEDIA" }) : local({ directory: "./uploads" })',
+    '    })',
+    '  ]',
+    '});'
+  ].join('\n');
+  fs.writeFileSync(path.join(root, 'astro.config.mjs'), dualConfig);
+
+  // Auditing for node-sqlite profile
+  const nodeReport = auditSite({ root, runtime: 'node-sqlite' });
+  assert.equal(rule(nodeReport, 'capability:adapter').status, 'pass');
+  assert.equal(rule(nodeReport, 'capability:adapter').observed, 'node');
+  assert.equal(rule(nodeReport, 'capability:storage').status, 'pass');
+
+  // Auditing for cloudflare-d1-r2 profile
+  const cfReport = auditSite({ root, runtime: 'cloudflare-d1-r2' });
+  assert.equal(rule(cfReport, 'capability:adapter').status, 'pass');
+  assert.equal(rule(cfReport, 'capability:adapter').observed, 'cloudflare');
+  assert.equal(rule(cfReport, 'capability:storage').status, 'pass');
+}));
+
+test('declared skill overrides are documented rather than reporting unexpected drift', () => fixture((root) => {
+  current(root);
+  fs.mkdirSync(path.join(root, '.agents/skills/new-site-workflow'), { recursive: true });
+  fs.mkdirSync(path.join(root, '.emdash'));
+  fs.writeFileSync(path.join(root, '.agents/skills/new-site-workflow/SKILL.md'), '# Local Customized\n');
+  const manifest = {
+    formatVersion: 2,
+    commitSha: 'a'.repeat(40),
+    skills: [
+      'new-site-workflow',
+      'site-art-direction',
+      'impeccable',
+      'emdash-site-setup',
+      'wordpress-to-emdash-content',
+      'astro-site-design',
+      'emdash-content-modeling',
+      'emdash-production-cutover'
+    ],
+    files: {
+      'new-site-workflow/SKILL.md': 'b'.repeat(64),
+      'site-art-direction/SKILL.md': 'c'.repeat(64),
+      'impeccable/SKILL.md': 'd'.repeat(64),
+      'emdash-site-setup/SKILL.md': 'e'.repeat(64),
+      'wordpress-to-emdash-content/SKILL.md': 'f'.repeat(64),
+      'astro-site-design/SKILL.md': '0'.repeat(64),
+      'emdash-content-modeling/SKILL.md': '1'.repeat(64),
+      'emdash-production-cutover/SKILL.md': '2'.repeat(64)
+    },
+    overrides: {
+      'new-site-workflow/SKILL.md': 'Site-specific workflow adjustments'
+    }
+  };
+  fs.writeFileSync(path.join(root, '.emdash/site-skills.json'), JSON.stringify(manifest));
+
+  // Without the required skills present, missingSkills is reported
+  const finding = rule(auditSite({ root }), 'skills:site');
+  assert.equal(finding.observed.declaredOverrides, 1);
+  assert.match(finding.observed.localOverrides, /1 declared local override\(s\) documented/);
+}));
+
