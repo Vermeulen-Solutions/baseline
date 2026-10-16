@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 140" fill="none">
+  <style>
+    .bg { fill: transparent; }
+    .text-title { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 34px; font-weight: 800; letter-spacing: 0.16em; }
+    .text-tag { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; }
+    
+    /* Default / Dark Mode */
+    .icon-tile { fill: #0f172a; stroke: #334155; }
+    .guide-line { stroke: #334155; stroke-dasharray: 4 3; }
+    .baseline-solid { stroke: #0284c7; stroke-width: 2.5; }
+    .em-dash { fill: #38bdf8; }
+    .tick { stroke: #475569; stroke-width: 1.5; }
+    .text-primary { fill: #f8fafc; }
+    .text-muted { fill: #94a3b8; }
+    .dot-accent { fill: #38bdf8; }
+
+    @media (prefers-color-scheme: light) {
+      .icon-tile { fill: #f8fafc; stroke: #cbd5e1; }
+      .guide-line { stroke: #cbd5e1; stroke-dasharray: 4 3; }
+      .baseline-solid { stroke: #0284c7; stroke-width: 2.5; }
+      .em-dash { fill: #0284c7; }
+      .tick { stroke: #94a3b8; stroke-width: 1.5; }
+      .text-primary { fill: #0f172a; }
+      .text-muted { fill: #64748b; }
+      .dot-accent { fill: #0284c7; }
+    }
+  </style>
+
+  <rect width="680" height="140" class="bg" />
+
+  <!-- Icon Mark: The Typographic Baseline -->
+  <g transform="translate(20, 20)">
+    <!-- Rounded Container Tile -->
+    <rect x="0" y="0" width="100" height="100" rx="16" class="icon-tile" stroke-width="1.5" />
+    
+    <!-- Typographic Guidelines (Cap height, X height, Baseline) -->
+    <!-- Cap Height Guideline -->
+    <line x1="16" y1="34" x2="84" y2="34" class="guide-line" stroke-width="1" />
+    <!-- X-Height Guideline -->
+    <line x1="16" y1="50" x2="84" y2="50" class="guide-line" stroke-width="1" />
+    
+    <!-- The Em Dash resting firmly on the baseline -->
+    <rect x="22" y="52" width="56" height="16" rx="4" class="em-dash" />
+    
+    <!-- The Authoritative Typographic Baseline -->
+    <line x1="12" y1="70" x2="88" y2="70" class="baseline-solid" />
+    
+    <!-- Measurement Ticks along the baseline -->
+    <line x1="12" y1="67" x2="12" y2="73" class="tick" />
+    <line x1="50" y1="67" x2="50" y2="73" class="tick" />
+    <line x1="88" y1="67" x2="88" y2="73" class="tick" />
+    
+    <!-- Accent indicator dot -->
+    <circle cx="88" cy="34" r="2.5" class="dot-accent" />
+  </g>
+
+  <!-- Wordmark & Subtitle -->
+  <g transform="translate(145, 62)">
+    <text x="0" y="0" class="text-title text-primary">BASELINE</text>
+    <circle cx="270" cy="-10" r="4.5" class="dot-accent" />
+    <text x="2" y="28" class="text-tag text-muted">Astro &amp; EmDash Toolkit</text>
+  </g>
+</svg>
