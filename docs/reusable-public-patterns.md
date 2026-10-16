@@ -42,6 +42,25 @@ On GET, `await readFormRecovery(session, formName)` consumes the 10-minute state
 
 Use native date inputs; birthDate accepts ISO and legacy dates, rejects impossible/future calendar values. Pass the site's current ISO date explicitly if its timezone differs from UTC. Put required fees/documents/process details before the form on mobile. Optional fields may use a native disclosure that opens when recovered answers exist. Preserve factual/consent copy. Provider selection, submission storage and email remain separate decisions.
 
+## Zero-JS interactive primitives
+
+Baseline emphasizes progressive enhancement: interactive widgets should remain functional and performant even without client JavaScript.
+
+### `LogoTicker` (0 KB Client JavaScript)
+
+`LogoTicker.astro` delivers a continuous, smooth infinite marquee animation using pure CSS:
+- **Zero Script Hydration:** Requires 0 KB of client JavaScript.
+- **Accessible Native Pause Toggle:** Uses a native `<input type="checkbox">` styled as a pause button. Users can pause and resume motion using keyboard (`Space` / `Enter`) or touch, without a single line of script.
+- **RTL & Reduced Motion:** Automatically reverses track direction for right-to-left document directions (`dir="rtl"`), pauses on `:hover` and `:focus-within`, and collapses into a static, wrapped grid when `prefers-reduced-motion: reduce` is detected or during printing.
+- **Accessible Inert Duplication:** Cloned items needed for seamless infinite looping are marked `aria-hidden="true"` and `inert`, preventing screen readers or keyboard tabbing from encountering duplicate links or images.
+
+### Justified `PhotoGallery` (CSS Flexbox Engine)
+
+`PhotoGallery.astro` renders fluid, uncropped justified photo rows without relying on JavaScript Masonry or Isotope libraries:
+- **Pure CSS Flexbox Sizing:** Computes proportional `flex-grow` and aspect ratios on the server. Images share equal heights within each row, with leftover space absorbed cleanly by a trailing flex spacer.
+- **Progressive Enhancement:** PhotoSwipe 5 (MIT) is loaded only when a visitor clicks an image to open the full-screen touch lightbox. If JavaScript fails or is disabled, clicking simply navigates to the original image.
+- **Structured Data:** Generates Schema.org `ImageGallery` JSON-LD automatically for search engine rich results.
+
 ## Focus and practical information
 
-`data-surface="dark"` switches the focus role to color-focus-on-dark; it does not install a dark theme or alter body text/background. Set both roles from the real site palette and verify them against their actual grounds. Tables, filters and count/status belong together; deduplicate contacts without hiding distinct roles. Calendar actions should represent a real dated appointment, not imply a recurring schedule from a programme period.
+`data-surface="dark"` switches the focus role to `color-focus-on-dark`; it does not install a dark theme or alter body text/background. Set both roles from the real site palette and verify them against their actual grounds. Tables, filters and count/status belong together; deduplicate contacts without hiding distinct roles. Calendar actions should represent a real dated appointment, not imply a recurring schedule from a programme period.

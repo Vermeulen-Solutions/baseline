@@ -6,18 +6,40 @@
 
 Welcome to the Baseline documentation. This repository provides an agency-grade, visual-first Astro foundation built specifically for **AI-assisted developers working with EmDash CMS**.
 
-Explore the documentation guides below, organized by task and domain:
+Explore the documentation guides below, organized by workflow, design architecture, and tooling:
 
 ---
 
-## 🚀 1. Site Building & Core Architecture
+## 🚀 1. The Site Delivery Workflow
 
-*Core concepts for querying content, structuring templates, and composing reusable components.*
+*The structured process for building client sites with AI coding assistants without chaos or drift.*
 
+- **[Site Delivery Workflow](site-delivery-workflow.md)**  
+  The core 6-stage agency build process: Brief & Evidence → Platform Decisions → Content Architecture → Art Direction Gate → Component Quarantine (`/_styleguide`) → Public Implementation & Verification.
+- **[Art Direction Workflow & The Design Gate](art-direction-workflow.md)**  
+  Establishing distinct visual identities (aesthetic lanes, narrative metaphors, typography pairings, and anti-patterns) before writing code, enforced automatically via `npm run check:art-direction`.
+
+---
+
+## 📐 2. Design System & Layout Architecture
+
+*Mathematical consistency over arbitrary utility classes.*
+
+- **[Design Framework & Token Physics](design-framework.md)**  
+  Continuous mathematical fluid typography scales (`clamp()`) between 320px and 1280px, fluid spatial density, typographic reading measures (`68ch`), and self-responsive layout primitives (`<Section>`, `<Container>`, `<Grid>`, `.flow`).
+- **[Reusable Public Patterns & Primitives](reusable-public-patterns.md)**  
+  Production-tested components: `Card`, `CMSPartnersPanel`, `ResponsiveImage`, `EditorialImage`, and zero-JS interactive primitives (`LogoTicker` CSS infinite marquee, pure CSS flexbox `PhotoGallery`, and surface-aware focus).
+
+---
+
+## 🗄️ 3. Content Architecture & WordPress Migration
+
+*Relational modeling, schema safety, and client-friendly CMS administration.*
+
+- **[WordPress Content Modeling & Candidate Register](wordpress-content-modeling.md)**  
+  Methodology for migrating WordPress sites: hunting for implicit content entities buried in page builder blocks or ACF repeaters, relational normalization, `routable: false`, admin language strategy, and automated media cleanup (`npm run media:organize`).
 - **[Editorial Canvas & Content Binding](emdash-editorial-canvas.md)**  
   How to query EmDash collections in Astro templates and bind live editing field proxies (`entry.edit.title`) so clients can visually edit content. Also details the **50-column physical schema budget** for Cloudflare D1 safety.
-- **[Reusable Public Patterns](reusable-public-patterns.md)**  
-  Production-tested primitives included out of the box: `Card`, `CMSPartnersPanel`, `ResponsiveImage`, `EditorialImage`, `RichText` (Portable Text flow), and form recovery utilities.
 - **[Internationalization (i18n)](internationalization.md)**  
   Native row-per-locale multilingual architecture linked by translation groups, avoiding anti-pattern duplicate language columns (e.g. `title_en`).
 - **[Forms & Verification](forms-adoption.md)**  
@@ -25,7 +47,7 @@ Explore the documentation guides below, organized by task and domain:
 
 ---
 
-## 🎨 2. Visual Development & The Dev HUD
+## 🎨 4. Visual Development & The Dev HUD
 
 *In-browser tools for fast, pixel-perfect visual calibration and component quarantine.*
 
@@ -44,7 +66,7 @@ Explore the documentation guides below, organized by task and domain:
 
 ---
 
-## 🖼️ 3. Media & Galleries
+## 🖼️ 5. Media & Galleries
 
 *Performant, responsive image delivery and interactive galleries.*
 
@@ -55,7 +77,7 @@ Explore the documentation guides below, organized by task and domain:
 
 ---
 
-## 🤖 4. AI Coding Agent Workflows
+## 🤖 6. AI Coding Agent Workflows
 
 *Harness-agnostic workflows for pairing with AI assistants (Claude Code, OpenAI Codex, Antigravity, OpenCode, Hermes, Cursor, Windsurf, Aider, and local LLM runners).*
 
@@ -66,7 +88,7 @@ Explore the documentation guides below, organized by task and domain:
 
 ---
 
-## 🛡️ 5. Standards, Preflights & Auditing
+## 🛡️ 7. Standards, Preflights & Auditing
 
 *Tools to inspect, verify, and maintain site quality over time.*
 
@@ -79,7 +101,7 @@ Explore the documentation guides below, organized by task and domain:
 
 ---
 
-## 📦 6. Starter Provenance & Historical Receipts
+## 📦 8. Starter Provenance & Historical Receipts
 
 *Background records for maintainers and auditors.*
 

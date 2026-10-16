@@ -14,42 +14,65 @@ EmDash is a modern, lightweight headless CMS built ground-up for AI-native web d
 
 Spend your time building the site, not debugging agent hallucinations or wrestling with styling drift. Baseline gives your AI assistant clear architectural boundaries and provides you with in-browser visual inspection tools: tune design tokens live on the rendered page, align Figma mockups pixel-for-pixel, and stress-test reusable components in isolation before assembling templates. Start locally with Node and SQLite, catch schema-width problems early, and deploy with confidence.
 
+## The 6-stage site delivery workflow
+
+Pairing with an AI coding assistant without a structured process usually results in "one-shot prompt chaos"—where an assistant attempts to do discovery, database schema, responsive layouts, and copy all at once, resulting in broken schemas and generic styling. 
+
+Baseline organizes projects into an explicit 6-stage agency workflow:
+
+1. **Brief & Evidence:** Gather real brand assets, photography, client requirements, and existing site screenshots before touching code.
+2. **Platform & Hosting:** Choose Node/SQLite or Cloudflare Workers/D1/R2, keeping Cloudflare's 100-column table limits in mind.
+3. **Content Architecture & Candidate Discovery:** Model EmDash collections before writing templates. Hunt for implicit entities trapped in page bodies or ACF repeaters using the [Content Candidate Register](docs/wordpress-content-modeling.md).
+4. **The Art Direction Gate:** Establish an aesthetic lane, typography pairings, token physics, and explicit anti-patterns in `AGENTS.md` before writing CSS (`npm run check:art-direction`). [Art Direction Guide](docs/art-direction-workflow.md).
+5. **Component Quarantine (`/_styleguide`):** Calibrate reusable components, fluid typography, and responsive edge cases in isolation before page assembly (`docs/styleguide-fixtures.md`).
+6. **Representative Implementation & Verification:** Build public routes, bind CMS visual edit proxies (`{...entry.edit.title}`), and verify with local visual tests and schema preflights.
+
+Read the complete [Site Delivery Workflow runbook](docs/site-delivery-workflow.md).
+
 ## Why Baseline?
 
-### ⚡ Tune the page, skip the guesswork — `T` / `B`
+### 📐 Fluid design tokens, zero breakpoint soup
+Stop writing dozens of arbitrary responsive utility classes (`p-4 md:p-8 lg:p-12 xl:p-16`). Baseline uses continuous mathematical `clamp()` scales anchored between 320px and 1280px viewports:
+- **Continuous Typography:** `--text-step--1` through `--text-step-2` scale smoothly with viewport inline size (`vi`), eliminating jarring font jumps.
+- **Fluid Spatial Density:** Section padding (`--spacing-section`) automatically expands from 48px on mobile to 144px on ultrawide monitors.
+- **Typographic Measures:** Built-in line-length bounds (`--measure-reading: 68ch;`, `--measure-content: 76rem;`, `--measure-wide: 88rem;`) ensure comfortable readability.
+- **Self-Responsive Layout Primitives:** `<Section>`, `<Container>`, and auto-fit `<Grid>` adapt to any screen width without media queries. [Design Framework Guide](docs/design-framework.md).
 
+### 🗄️ Intelligent content modeling & WordPress migration
+Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a structured methodology for converting legacy sites to EmDash:
+- **The Content Candidate Register:** Uncover implicit operational entities trapped in page builder accordions or ACF repeaters (e.g. rosters, schedules, venues, sponsors) and elevate them to first-class collections.
+- **Relational Normalization vs 50-Column Budget:** Model 1:N relations and shared master data instead of bloated JSON dumps, staying comfortably within Cloudflare D1's 100-column limits.
+- **Admin Polish & Non-Routable Collections:** Designate `routable: false` for internal entities, use standardized ASCII slugs in code, and author display labels in the client's working language.
+- **Automated Media Cleanup:** Run `npm run media:organize` to automatically file messy WordPress imports into folders, strip camera IDs and `-scaled` suffixes into clean slugs, and hydrate attachment strings into structured CMS media objects. [Content Modeling Guide](docs/wordpress-content-modeling.md).
+
+### 🎨 The Art Direction Gate — Stop generic AI slop
+AI coding assistants notoriously default to the same generic "SaaS template" aesthetic (purple gradients, Inter font, oversized floating cards). Baseline enforces an automated pre-implementation check (`npm run check:art-direction`): before writing visual CSS, the assistant must record a distinct **Aesthetic Lane**, **Typography Pairing**, **Token Physics**, and 2–3 explicit **Site Anti-Patterns** in `AGENTS.md`. [Art Direction Workflow](docs/art-direction-workflow.md).
+
+### ⚡ Tune the page, skip the guesswork — `T` / `B`
 Stop bouncing between Figma, CSS edits and browser refreshes to find the right spacing. Adjust fluid typography scales, letter tracking, spatial density and OKLCH palettes directly in the browser. Press **B** to A/B compare with your source CSS, then copy the changed tokens in one click. The export separates Tailwind `@theme` tokens from ordinary `:root` properties; merge it into your stylesheet and reload to verify the result.
 
 ### 🎯 Bring the mockup into the browser — `O`
-
 Choose or drop a local screenshot or exported Figma mockup onto the overlay controls. Tune opacity, CSS-pixel offsets, capture DPR and scale; switch between scrolling full-page and fixed-viewport comparisons. Align details without leaving the dev server. References stay in memory, with no uploads or persistent storage. The overlay helps you judge alignment; it does not claim an automated pixel-perfect result.
 
 ### 📐 See the real layout tracks — `G`
-
 Overlay the selected container's actual bounds and 10/12-column diagnostic tracks. Check gutters and alignment as the viewport changes, without adding temporary CSS borders or rebuilding a grid in your design tool.
 
 ### 🔍 Make CMS ownership visible — `P`
-
 Spot observed EmDash field annotations, entry context and unannotated text before handoff. Use that map to investigate editorial wiring early. Missing markers mean **unknown**, not automatically hardcoded or broken; actual editing and saving still need a real editor check.
 
 ### 🛡️ Catch wide schemas before they reach production
-
 Local SQLite can accept models that exceed Cloudflare D1's [100-column table limit](https://developers.cloudflare.com/d1/platform/limits/). Baseline's automatic `check:schema-budget` preflight measures physical collection columns, including generated and retained legacy columns, against a conservative **50-column budget** before build/typecheck. Catch this class of failure earlier; a missing database is reported as not measured. Full D1/R2 parity tooling remains on the roadmap.
 
 ### 🧪 Fix components once, before building twenty pages
-
 Open **`/_styleguide`** to calibrate components, controls, galleries and responsive stress cases in isolation. Stage 4.5 component quarantine makes shared problems visible before page assembly multiplies them. Normal production builds return **404** for the route and exclude the development HUD; explicit test fixtures use a separate build profile.
 
-### 🚀 Ship less JavaScript
-
-`LogoTicker` renders on the server and animates with CSS: **0 KB of component client JavaScript**, a native pause toggle, reduced-motion fallback and RTL support. Use trusted, noninteractive logo items; linked or editor-owned partners belong in an unduplicated list. Native Astro images and progressively enhanced galleries round out the reusable primitives.
+### 🚀 Ship less JavaScript (Progressive Enhancement)
+`LogoTicker` renders on the server and animates with CSS: **0 KB of component client JavaScript**, an accessible native checkbox pause toggle, reduced-motion fallback and RTL support. `PhotoGallery` uses pure CSS flexbox to compute proportional justified photo rows without JS Masonry, loading PhotoSwipe only when a user clicks for a lightbox.
 
 ### 📸 Catch regressions locally, keep CI lean
-
 Compare mobile, tablet and desktop captures with pinned Windows Chromium. Exercise active motion, no-JS rendering, zoom and text spacing alongside screenshot diffs. No paid visual-testing SaaS or Docker setup is required, and browser tests consume **no GitHub Actions minutes**: they run locally, outside production builds and deployments. Baseline changes require an explicit, reviewed `--update`.
 
 ### 🤖 Keep AI coding assistants disciplined and on rails
-
 Building client sites with AI coding assistants—across any harness or tool runner—is fast, but assistants often struggle with headless CMS architectures. Without clear constraints, they tend to invent unnecessary wrapper components, hardcode text that clients should be able to edit in the CMS, or introduce subtle layout breaks on mobile viewports.
 
 Baseline includes a structured workflow designed to keep coding assistants disciplined and aligned with the site's architecture:
