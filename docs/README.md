@@ -61,8 +61,8 @@ Explore the documentation guides below, organized by workflow, design architectu
   How `/_styleguide` renders components and responsive stress cases in isolation before page assembly, and how the route is automatically excluded (404) from production builds.
 - **[Local Visual Regression Testing](visual-regression.md)**  
   Local-first Windows Chromium screenshot regression testing harness (`npm run test:visual`). Catch unintended layout reflows without Docker or consuming GitHub Actions runner quotas.
-- **[Design Interchange (DESIGN.md)](design-interchange.md)**  
-  Optional token bridge connecting Google Stitch, OpenDesign, and `DESIGN.md` tokens with Tailwind v4.
+- **[Visual Prototyping & DESIGN.md Bridge](design-interchange.md)**  
+  Prototyping with Google Stitch, Claude Design, OpenDesign, and Figma: the 4-step workflow, concept sandboxing in `audit/visual-concepts/`, token linting/export via `@google/design.md`, and Dev HUD overlay alignment.
 
 ---
 
@@ -88,10 +88,12 @@ Explore the documentation guides below, organized by workflow, design architectu
 
 ---
 
-## 🛡️ 7. Standards, Preflights & Auditing
+## 🛡️ 7. Standards, Deployment & Auditing
 
-*Tools to inspect, verify, and maintain site quality over time.*
+*Tools to inspect, verify, deploy, and maintain site quality over time.*
 
+- **[Production Deployment & Cloudflare Cutover](production-deployment.md)**  
+  Standalone Node.js deployment, Cloudflare Workers/D1/R2 setup, R2 media sync, serverless sessions, and the critical corporate mail DNS preservation checklist (protecting Google Workspace / Microsoft 365).
 - **[Site Standards Diagnostic Engine](site-standards-audit.md)**  
   Using `npm run audit:site` to diagnose existing sites against the certified `standards-v0.1.1` baseline, and applying deterministic modernization recipes.
 - **[Starter Meta-Review Process](starter-meta-review.md)**  

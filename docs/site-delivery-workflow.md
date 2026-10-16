@@ -35,7 +35,7 @@ Establish your runtime and hosting boundaries before modeling content:
 - **Cloudflare Profile (Optional):** Cloudflare Workers + D1 (SQLite) + R2 (media storage).
   - *Hard Limit Awareness:* Cloudflare D1 enforces a [100-column table maximum](https://developers.cloudflare.com/d1/platform/limits/). Baseline enforces a stricter **50-column physical schema budget** (`npm run check:schema-budget`) to ensure long-term stability.
   - *Session Storage:* Multi-instance serverless workers require persistent storage for form recovery ([Forms & Verification](forms-adoption.md)).
-- **Guide:** [Hosting Setup](../.agents/skills/emdash-site-setup/SKILL.md).
+- **Guides:** [Hosting Setup](../.agents/skills/emdash-site-setup/SKILL.md) · [Production Deployment & Cloudflare Cutover](production-deployment.md).
 
 ---
 
@@ -58,6 +58,7 @@ Before writing a single line of site-specific CSS or template HTML, establish a 
 - **Declare Anti-Patterns:** Write 2–3 explicit bans (e.g. *"No floating rounded cards; no decorative icon pills; no purple gradients"*).
 - **Save the Art Direction Record:** Write the `## Art Direction Record` block in `AGENTS.md`.
 - **The Gate:** Run `npm run check:art-direction -- --require-record`. If this record is absent, CI and build preflights will fail.
+- **Visual Prototyping (Optional):** If exploring concepts with Google Stitch, Claude Design, or OpenDesign, keep prototypes in `audit/visual-concepts/`, validate tokens via the `@google/design.md` bridge, and overlay mockups using Dev HUD (`O`). See [Visual Prototyping & DESIGN.md](design-interchange.md).
 - **Guide:** [Art Direction Workflow](art-direction-workflow.md).
 
 ---
@@ -92,4 +93,6 @@ Run deterministic local checks to verify the build before client handoff or depl
 - `node --test tests/*.test.mjs`: Run unit and tooling test suites.
 - `npm run test:visual`: Compare local Windows screenshots against reviewed baselines across mobile, tablet, and desktop viewports ([Visual Regression](visual-regression.md)).
 - `npm run check:dev-tools`: Confirm the Dev HUD and `/_styleguide` are completely stripped from the production build.
+- **Visual Critique & Polish (Optional):** Use the bundled `impeccable` skill for an automated UI critique pass on rendered pages before final signoff.
 - **Client Verification:** Log in to `/_emdash/admin`, test editing live content, publish drafts, and verify updates on the public site.
+- **Production Deployment:** Follow the [Production Deployment & DNS Cutover Checklist](production-deployment.md) to preserve client corporate email and deploy clean artifacts.

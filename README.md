@@ -46,7 +46,7 @@ Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a stru
 - **Automated Media Cleanup:** Run `npm run media:organize` to automatically file messy WordPress imports into folders, strip camera IDs and `-scaled` suffixes into clean slugs, and hydrate attachment strings into structured CMS media objects. [Content Modeling Guide](docs/wordpress-content-modeling.md).
 
 ### 🎨 The Art Direction Gate — Stop generic AI slop
-AI coding assistants notoriously default to the same generic "SaaS template" aesthetic (purple gradients, Inter font, oversized floating cards). Baseline enforces an automated pre-implementation check (`npm run check:art-direction`): before writing visual CSS, the assistant must record a distinct **Aesthetic Lane**, **Typography Pairing**, **Token Physics**, and 2–3 explicit **Site Anti-Patterns** in `AGENTS.md`. [Art Direction Workflow](docs/art-direction-workflow.md).
+AI coding assistants notoriously default to the same generic "SaaS template" aesthetic (purple gradients, Inter font, oversized floating cards). Baseline enforces an automated pre-implementation check (`npm run check:art-direction`): before writing visual CSS, the assistant must record a distinct **Aesthetic Lane**, **Typography Pairing**, **Token Physics**, and 2–3 explicit **Site Anti-Patterns** in `AGENTS.md`. Explore external concepts with Google Stitch, Claude Design, or OpenDesign safely using the [DESIGN.md Prototyping Bridge](docs/design-interchange.md). [Art Direction Workflow](docs/art-direction-workflow.md).
 
 ### ⚡ Tune the page, skip the guesswork — `T` / `B`
 Stop bouncing between Figma, CSS edits and browser refreshes to find the right spacing. Adjust fluid typography scales, letter tracking, spatial density and OKLCH palettes directly in the browser. Press **B** to A/B compare with your source CSS, then copy the changed tokens in one click. The export separates Tailwind `@theme` tokens from ordinary `:root` properties; merge it into your stylesheet and reload to verify the result.
@@ -224,7 +224,7 @@ Use the neutral Tailwind v4 tokens and small `Section`, `Container` and `Grid` p
 
 [Component quarantine](.agents/skills/astro-site-design/references/component-quarantine.md) · [Editorial canvas](docs/emdash-editorial-canvas.md) · [Gallery workflow](docs/gallery-workflow.md) · [Image delivery](docs/image-delivery.md).
 
-The default runtime is **Node + SQLite + local media**, with no cloud account needed. Cloudflare Workers is an optional site-specific target; its adapter, D1/R2 bindings and image delivery need separate setup and verification. A code deployment does not transfer CMS content. Media sync and Cloudflare R2 migration scripts are available under `scripts/` for review and manual workflows. [Hosting setup](.agents/skills/emdash-site-setup/SKILL.md) · [Supported standards and roadmap](standards/releases/0.1.1.md) · [Downstream audits](docs/site-standards-audit.md).
+The default runtime is **Node + SQLite + local media**, with no cloud account needed. Cloudflare Workers is an optional site-specific target; its adapter, D1/R2 bindings and image delivery need separate setup and verification. When deploying to Cloudflare or switching nameservers, always follow the DNS checklist to preserve client corporate email. [Production Deployment & DNS Checklist](docs/production-deployment.md) · [Hosting setup](.agents/skills/emdash-site-setup/SKILL.md) · [Supported standards and roadmap](standards/releases/0.1.1.md) · [Downstream audits](docs/site-standards-audit.md).
 
 ## Contribute
 
