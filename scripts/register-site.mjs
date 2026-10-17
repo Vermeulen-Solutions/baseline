@@ -49,6 +49,15 @@ export async function registerSite(root, site, registry, { reactivate = false } 
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const option = key => process.argv[process.argv.indexOf(key) + 1];
-  try { if (!process.argv.includes('--input')) throw Error('Use --input <private JSON> [--registry <private path>] [--reactivate]'); console.log(JSON.stringify(await registerSite(process.cwd(), JSON.parse(await fs.readFile(option('--input'), 'utf8')), process.argv.includes('--registry') ? option('--registry') : null, { reactivate: process.argv.includes('--reactivate') }), null, 2)); }
-  catch (error) { console.error(error.message); process.exitCode = 1; }
+  try {
+    if (!process.argv.includes('--input')) throw Error('Use --input <private JSON> [--registry <private path>] [--reactivate]');
+    const result = await registerSite(process.cwd(), JSON.parse(await fs.readFile(option('--input'), 'utf8')), process.argv.includes('--registry') ? option('--registry') : null, { reactivate: process.argv.includes('--reactivate') });
+    console.log(JSON.stringify(result, null, 2));
+    if (result.status === 'pending-reviewed-registration') {
+      console.log('\n✔ Pending registration recorded: ' + result.destination);
+      console.log('👉 Next Step: Review and submit private registry PR, or proceed to Stage 7 (Production Cutover).');
+    } else {
+      console.log('\n✔ Site registration proposal updated: ' + result.destination);
+    }
+  } catch (error) { console.error(error.message); process.exitCode = 1; }
 }

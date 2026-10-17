@@ -121,3 +121,14 @@ For diagnosis, use `npx wrangler tail` with the selected project/environment and
 ## Post-audit release checks
 
 Audit fixes may include local CMS/media edits as well as code. Inventory these before release; a code deployment does not transfer them. Read production records, back them up, detect drafts/unseen edits and apply targeted patches with current revisions through supported APIs. Upload required official media and retain actual storage-key URLs; local media IDs may differ from production. Preserve unrelated fields, captions/order and publication state. Verify both locales and every shared consuming page. Retry HEAD=405 media with GET and keep query URLs in evidence; inspect actual admin state rather than matching embedded translation strings. Record working-tree versus committed release state explicitly.
+
+## Post-Cutover Completion Prompt
+
+When cutover verification is complete and production traffic is serving cleanly, present this final prompt:
+> **Production Cutover Complete & Verified!**
+> The site is live on its custom production domain with valid TLS, verified admin logins, and protected corporate mail DNS.
+>
+> **Recommended Final Actions:**
+> 1. **(Recommended) Update Site Registry:** Run `npm run site:register` with status `active` to record the live production repository.
+> 2. **Confirm Backup Schedule:** Verify automated daily Cloudflare D1/R2 or SQLite backups.
+> 3. **Archive Cutover Log:** Record the finalized deployment notes and rollback procedure in `audit/production-cutover.md`.

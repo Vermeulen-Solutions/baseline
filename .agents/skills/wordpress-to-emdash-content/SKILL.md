@@ -94,7 +94,7 @@ Run content import, then media copy and URL rewrite. Use the optimized media map
 WordPress imports deposit media in a flat, unfiled pool with messy legacy slugs (e.g. `3206-Photo-team-scaled.jpg`), and custom fields may store raw string attachment markers (`wordpress-attachment:123` or raw URLs). These prevent EmDash's Media Picker UI from functioning and make editorial management difficult.
 
 Before public handoff:
-1. Run `npm run media:organize` (or `node scripts/organize-media.mjs --dry-run`).
+1. Run `npm run media:migrate-wp -- --source <uploads-path> --source-id <id>` (or `--out <dest> --prepare`) to generate and inspect the media migration plan through supported EmDash APIs. (The legacy raw-SQL `media:organize` helper is retired).
 2. Verify standard folders (`Pages`, `Articles`, `Documents`, `Media`) and collection-matching folders (`Teams`, `People`, `Sponsors`, etc.) are established in `media_folders`.
 3. Verify that raw numeric IDs, `-scaled`, `-150x150`, and camera prefixes are stripped from `media.filename` in favor of clean kebab-case slugs.
 4. Verify that raw attachment strings in content collection tables (`ec_*`) are hydrated into full EmDash structured media objects (`{ id, provider: 'local', filename, url, width, height, ... }`) so the Admin UI renders thumbnails properly.
@@ -120,6 +120,23 @@ Compare counts by source post type and proposed collection, locale, and status; 
 For a partial retry, inspect the import results and slugs. Existing entries match on collection, slug, and locale, not WordPress ID, so a changed slug can create a duplicate. Keep the source and backup until the migrated site is verified and rollback is no longer needed.
 
 The importer transfers content, not the WordPress theme, PHP templates, public URL routing, form behavior, widgets, or plugin workflows. Do not call a selective manual reconstruction a complete migration. Report the content-candidate register, import counts by source and target type, skipped/failed items, unresolved fields or candidates, media work, source-to-target identifiers, and behavioral replacements before handing off to Astro implementation. Include the route inventory, repeatable content types, and verified purpose of meaningful media/links in that handoff; the Astro design skill uses these alongside full-page visual references to build and check every route.
+
+### Post-Import Handoff Prompt
+
+After importing content and preparing media, present this prompt:
+> **WordPress Content Import Complete!**
+> We have successfully imported your WordPress content and images.
+>
+> **What would you like to do next?**
+> 1. **(Recommended) Full Post-Import Preparation (Clean Admin Forms + Verify Media):**
+>    - *Step A:* Clean up messy WordPress custom fields and repeaters into clear, friendly EmDash admin forms (`emdash-content-modeling`).
+>    - *Step B:* Verify image dimensions, alt text, and captions, and organize them into clean folders (`media:migrate-wp`).
+> 2. **Clean up admin forms only for now:**
+>    - Normalize schema and fields first; defer media preparation.
+> 3. **Proceed directly to visual styling (Stage 4 Art Direction):**
+>    - Start styling the front end right away using the raw imported data.
+>
+> *(Reply `1` for the complete recommended preparation.)*
 
 ## Forms: classify before replacing
 

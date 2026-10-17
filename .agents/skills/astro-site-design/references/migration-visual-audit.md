@@ -76,3 +76,10 @@ When repeated items have per-instance IDs or divergent builder styles, compare s
 5. Run the project's relevant checks and build. Record routes or states that remain unverified, and do not report those as complete.
 
 The acceptance bar is not pixel identity. It is complete route coverage, correct content and asset meaning, retained brand character, visible improvement on the source's documented design problems, functional interactions, responsive rendering, and maintainable templates for repeated content. A technically clean but generic or less compelling result fails this bar even when its content and routes are correct.
+
+## Actionable Audit Handoff
+
+Once the visual audit and Preserve / Improve / Replace table are completed, do not leave the findings as an isolated document. Formulate them into immediate next actions:
+1. **Translate repeated content into `audit/content-candidate-register.md` (Stage 3):** Repeated card grids, team rosters, or project sections become structured EmDash collections.
+2. **Translate visual cues into the Art Direction Record (Stage 4):** Anchored brand colors, typography pairings, and spatial density feed directly into the `AGENTS.md` Art Direction Record.
+3. **Present the next step prompt to the user:** Nudge the user to either review content candidates in Stage 3 or proceed to Stage 4 visual direction.

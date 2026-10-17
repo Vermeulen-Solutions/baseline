@@ -53,6 +53,16 @@ When modifying content models on an active site with existing content in SQLite 
    - Ambiguous free-text fields where editors type inconsistent strings.
    - Orphaned, confusing, or unused legacy fields (e.g. "sous groupe", "lieu libre").
 3. Create a snapshot backup before running schema modifications.
+4. **Present the Schema Evolution Plan to the user:**
+   Do not modify tables immediately without presenting a plain-English proposal:
+   > **Content Model Audit Findings**
+   > We identified the following areas to improve in your database:
+   > - *[Smell]*: E.g., Team training schedules are crammed inside free-text fields.
+   > - *[Proposal]*: Extract into a dedicated `training_sessions` collection linked to `teams`.
+   >
+   > **Recommended Action:**
+   > 1. **(Recommended) Execute the zero-downtime migration:** Register new collections, run the migration script, and update templates with dual-read fallbacks.
+   > 2. **Adjust schema proposals:** Modify proposed collection names or fields before migrating.
 
 ### Step 2: Schema Registration
 1. Register new collections in `_emdash_collections`.
@@ -123,3 +133,16 @@ Once new structures are verified live:
 - [ ] Remote D1 has all relational rows and junction references (`_emdash_content_references`).
 - [ ] `seed/seed.json` reflects the evolved schema and content items.
 - [ ] Cloudflare Worker is built and deployed (`build:cloudflare` + `deploy:cloudflare`).
+
+---
+
+## 4. Schema Evolution Handoff Prompt
+
+When the schema migration and verification checklist pass:
+> **Content Modeling Complete & Verified!**
+> All normalized collections, relations, and dual-read templates have been tested across local and remote databases.
+>
+> **Recommended Next Step:**
+> - Return to `new-site-workflow`:
+>   - If in a greenfield build: proceed to **Stage 4: Visual Direction & Art Direction**.
+>   - If in brownfield modernization: run `npm run typecheck` and `npm run test:site-audit` to confirm all standards pass.

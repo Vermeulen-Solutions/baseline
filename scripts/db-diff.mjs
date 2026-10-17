@@ -36,6 +36,21 @@ export async function diffDatabase(options) {
   return report;
 }
 if (isMain(import.meta.url)) {
-  try { const options = argumentsOf(process.argv.slice(2), ['--local', '--snapshot', '--config', '--env', '--account', '--database', '--out', '--remote-out', '--seed'], ['--capture']); const report = await diffDatabase(options); console.log(JSON.stringify(report, null, 2)); process.exitCode = report.exitCode; }
+  try {
+    const options = argumentsOf(process.argv.slice(2), ['--local', '--snapshot', '--config', '--env', '--account', '--database', '--out', '--remote-out', '--seed'], ['--capture']);
+    const report = await diffDatabase(options);
+    console.log(JSON.stringify(report, null, 2));
+    if (report.status === 'drift') {
+      console.log('\n## Recommended Follow-Up Actions');
+      console.log('1. **Reconcile Schema Drift:** If changes were made locally, write a zero-downtime migration via `emdash-content-modeling`.');
+      if (report.seedExpectations?.status === 'drift') {
+        console.log('2. **Synchronize Seed:** Run `npm run db:export-seed` to update `seed/seed.json` with the current schema.');
+      }
+      console.log('3. **Deploy to Remote Database:** Run `npm run db:export-d1` or apply the SQL migration via Wrangler.');
+    } else if (report.status === 'equal') {
+      console.log('\n✔ Database schemas are in parity.');
+    }
+    process.exitCode = report.exitCode;
+  }
   catch (error) { failure(error); }
 }

@@ -88,7 +88,10 @@ function main() {
   }
   const errors = validateRecord(readFileSync('AGENTS.md', 'utf8'));
   if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
-  else console.log('Art direction record is structurally valid. Evidence and design quality still require review.');
+  else {
+    console.log('Art direction record is structurally valid.');
+    console.log('👉 Next Step (Stage 4.5): Calibrate building blocks on /_styleguide (press "T" for Dev HUD) and record findings in audit/component-calibration.md before implementing pages.');
+  }
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

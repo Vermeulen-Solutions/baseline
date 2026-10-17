@@ -96,3 +96,13 @@ After a first site is proven, the user may want a clean GitHub template reposito
 ## Agent documentation and image setup
 
 For this starter, verify Astro and EmDash docs MCP queries in Codex and Google Antigravity during setup; follow docs/agent-documentation.md. Repository configuration does not imply client activation or Antigravity user-level inheritance. For images follow docs/image-delivery.md: Node uses native Sharp; Cloudflare needs its supported image service/binding for runtime CMS uploads. Do not copy client domains, bindings or billing choices.
+
+## Post-Setup Handoff Prompt
+
+When scaffolding and platform configuration are complete:
+> **Platform Setup Complete!**
+> The project structure, hosting adapter, and localization configurations are established.
+>
+> **Recommended Next Step:**
+> - Return to `new-site-workflow` and proceed to **Stage 3: Content Structure & Admin Setup**.
+>   *Shall we begin setting up the editing forms and collections in your EmDash admin?*

@@ -34,6 +34,30 @@ For WordPress migrations, the evidence inventory must include a content-candidat
 
 **Gate:** the repository contains a brief, an evidence inventory, and—when migration is in scope—a content-candidate register sufficient to distinguish facts, user decisions, and open assumptions.
 
+**Stage 1 Completion Handoff Prompt:**
+When Stage 1 is complete, present this prompt with plain-English options and a clear recommendation:
+> **Stage 1 Complete: Site Content & Goals Established**
+> We have documented the pages, content, and goals for the site.
+>
+> Next is **Stage 2: Platform & Hosting Setup**.
+> *In plain terms:* We choose where your website lives and whether it needs multiple languages.
+>
+> **Which setup best matches your project?**
+> 1. **(Recommended) Standard Hosting, Single Language:**
+>    - *Hosting:* Node.js + SQLite on a standard server, VPS, or Docker container. Simple, reliable, and easiest to manage; all data and images live in one place.
+>    - *Languages:* 1 primary language.
+> 2. **Standard Hosting, Multilingual:**
+>    - *Hosting:* Node.js + SQLite on a standard server or container.
+>    - *Languages:* 2+ languages (e.g., English and French) with an automatic language-switcher.
+> 3. **Global Edge Hosting, Single Language:**
+>    - *Hosting:* Cloudflare Workers + D1 database. Ultra-fast serverless hosting with zero server maintenance.
+>    - *Languages:* 1 primary language.
+> 4. **Global Edge Hosting, Multilingual:**
+>    - *Hosting:* Cloudflare Workers + D1 database.
+>    - *Languages:* 2+ languages (e.g., English and French) with global edge delivery.
+>
+> *(Reply with `1` for the standard setup, or `2`–`4` for your preferred combination.)*
+
 ## Stage 2: decide the platform shape
 
 Use `emdash-site-setup` for runtime, hosting, storage, localization, deployment, and site-transfer decisions. Decide these independently from plugin needs. Use `creating-plugins` only when requirements demonstrate that a plugin is needed.
@@ -42,6 +66,24 @@ Record decisions that constrain later stages, especially locale URL behavior, de
 
 **Gate:** later work has a known runtime and localization model. Deferred deployment details are explicitly marked and do not block local design work unless they affect architecture.
 
+**Stage 2 Completion Handoff Prompt:**
+When Stage 2 is complete, present this prompt:
+> **Stage 2 Complete: Hosting & Language Setup Configured**
+> Your platform configuration is saved.
+>
+> Next is **Stage 3: Content Structure & Admin Setup**.
+> *In plain terms:* This sets up the editing forms and sections in your EmDash admin dashboard (called "collections") so you and your team can create, edit, and organize content (e.g. Articles, Team Members, Projects, or Services) without touching code.
+>
+> **How would you like to set up your content?**
+> 1. **(Recommended) Let me automatically draft your content types and admin forms:**
+>    - I will analyze the content gathered in Stage 1, create clean entry types in your admin dashboard, connect related items (like assigning team members to projects), and ensure forms are easy for non-technical editors.
+> 2. **Review proposed content types together first:**
+>    - I'll list the suggested content types and fields, and you can tweak field names, add categories, or remove anything before I write them.
+> 3. **Start with standard basic pages only:**
+>    - Set up simple Pages and Articles for now; we can add specialized custom sections later as needed.
+>
+> *(Reply `1` to generate the recommended structure, or `2` to review together.)*
+
 ## Stage 3: model content and routes
 
 Use `emdash-content-modeling` to design normalized collections, select enums, relationships, native row-per-locale structures, and squad/team architecture. Use `building-emdash-site` for schema registration syntax, Portable Text rendering, live collection configs, and queries. Use `wordpress-to-emdash-content` first for import mappings when applicable. Use `emdash-cli` only for operations against the local or remote EmDash instance.
@@ -49,6 +91,24 @@ Use `emdash-content-modeling` to design normalized collections, select enums, re
 Use the content-candidate register to classify every repeated editorial element as an EmDash collection, page/Portable Text content, a site setting, plugin or integration data, or deliberately excluded content. Model collection candidates with fields, relationships, ordering, taxonomies, locale behavior, and route ownership rather than hardcoding page markup. If a candidate is only raw HTML, a builder repeater, or opaque plugin data, document the extraction or mapping needed instead of assuming the importer will infer it. Identify which page archetypes are standard single-measure sections (`<Container width="reading|content|wide">`) versus long-form editorial articles, case studies, or landing pages that interleave reading prose with wider callouts, figures, or galleries (`<Container breakout>` / `.content-grid`). Use representative real content, source content, or clearly identified editorial drafts to expose layout needs. Keep the seed useful for a fresh installation; do not treat it as a deployment migration.
 
 **Gate:** every planned page archetype and content candidate has a source, target representation, migration method, route or placement, container/breakout model, and editorial ownership model. No repeated editorial material remains unclassified. The art-direction stage has realistic content shapes and known imagery to design around.
+
+**Stage 3 Completion Handoff Prompt:**
+When Stage 3 is complete, present this prompt to transition into Stage 4:
+> **Stage 3 Complete: Content Structure & Admin Dashboard Ready**
+> Your database and admin editing screens are structured.
+>
+> Next is **Stage 4: Visual Direction & Art Direction**.
+> *In plain terms:* Before we build full website pages, we decide the visual identity—the fonts, brand colors, spacing, and overall personality (clean & minimalist, bold & editorial, or technical).
+>
+> **How would you like to establish the visual design?**
+> 1. **(Recommended) Code-First with Curated Aesthetic Lanes:**
+>    - Pick a curated design mood (*Product-Led Minimalism*, *Editorial Paper*, *Technical Systems*, or *Luminous Futurism*) and tune colors, fonts, and spacing live in your browser using our built-in design toolbar (press `T` to test).
+> 2. **Match an Existing Brand or Website:**
+>    - Provide your company's logo, brand guidelines, or reference website URL, and I will extract the exact colors, fonts, and styling rules into the system.
+> 3. **Explore 2–3 Visual Concepts First:**
+>    - I will generate 2 or 3 visual layout options for a representative page so you can compare directions before deciding.
+>
+> *(Reply `1` for the recommended in-browser tuning, or `2` if you have brand guidelines to match.)*
 
 ## Stage 4: set the art direction
 
@@ -73,6 +133,22 @@ For Stackable, Elementor, Blocksy builder, or similar migrations, explicitly cla
 
 **Gate:** `AGENTS.md` contains the saved `## Art Direction Record` with all required fields (Aesthetic Lane selected from `references/aesthetic-lanes.md` or Custom / existing brand with rationale, Narrative Metaphor, Typography Pairing, Token Physics, and Site Anti-Patterns). For an overhaul migration, the concept pass is complete, the selected direction is recorded, and the preserved source identity and deliberate changes are explicit.
 
+**Stage 4 Completion Handoff Prompt:**
+When Stage 4 passes `check:art-direction`, present this prompt:
+> **Stage 4 Complete: Visual Style & Brand Rules Approved**
+> The design system rules (fonts, palette, spacing, and buttons) are saved in `AGENTS.md`.
+>
+> Next is **Stage 4.5: Component Calibration**.
+> *In plain terms:* Instead of assembling whole pages all at once, we first preview and test individual building blocks—cards, buttons, banners, text rhythm, and dark/light section backgrounds—on a private preview page (`/_styleguide`). This guarantees they look sharp on phones, tablets, and laptops before we build full pages.
+>
+> **What would you like to do?**
+> 1. **(Recommended) Calibrate building blocks on `/_styleguide`:**
+>    - We will preview cards, containers, and headings on the private styleguide, check contrast and mobile sizing, and record verification in `audit/component-calibration.md`.
+> 2. **Proceed directly to page assembly:**
+>    - Skip isolated component testing and calibrate building blocks directly within full page templates.
+>
+> *(Reply `1` to run the calibration pass, or `2` to start page assembly.)*
+
 ## Stage 4.5: calibrate components before page assembly
 
 For URL/screenshot migrations or external component sourcing (such as `21st.dev MCP`), follow `astro-site-design/references/component-quarantine.md` after Stage 4 and its art-direction gate. Inspect representative source elements or candidate registry blueprints, then calibrate relevant tokens, states, and production primitives on `/_styleguide` before creating client page templates or bespoke sections — including `<Container width="reading|content|wide">` versus `<Container breakout>` (`.content-grid` with `.content--feature|wide|full|full-safe`), `<Card>` (`--card-*` custom properties, concentric radius math, and `.clickable-parent`/`.focus-parent` accessibility), and Smart Spacing (`.flow`). When sourcing external React/Tailwind components (e.g., from `21st.dev`), transmute them through the quarantine checklist: strip unnecessary React/Framer Motion runtime down to zero-JS Astro markup, replace hardcoded palette classes with semantic tokens, bind fluid typography/spacing steps, and wire EmDash live edit proxies. For greenfield work, review the relevant primitive baseline against the brief and record inapplicable source comparisons.
@@ -80,6 +156,24 @@ For URL/screenshot migrations or external component sourcing (such as `21st.dev 
 Save `audit/component-calibration.md` with evidence, actual component APIs, supported surfaces/states, asset provenance, narrow/wide and keyboard/motion checks, unresolved gaps and ready/deferred decisions. Resolve material reusable-component gaps before broad assembly. Keep normal-build route exclusion and synthetic fixtures intact. Page findings may reopen calibration; this is not a permanent component freeze. Use written handoffs between passes; fork/archive chats only when the user requests it.
 
 **Gate:** the calibration record identifies which patterns are ready for representative pages and why; relevant checks pass. No source cloning, un-quarantined React/palette bloat, invented APIs, fake CMS edit identities, or specimen-only CSS repairs.
+
+**Stage 4.5 Completion Handoff Prompt:**
+When `audit/component-calibration.md` is saved, present this prompt:
+> **Stage 4.5 Complete: Building Blocks Tested & Verified**
+> All core cards, containers, and buttons are responsive and accessible.
+>
+> Next is **Stage 5: Implement Representative Pages**.
+> *In plain terms:* We build 1 or 2 key "archetype" pages first to make sure the full layout, navigation bar, and footer look and feel great in the browser before expanding across every route.
+>
+> **Which representative page should we build and review first?**
+> 1. **(Recommended) Global Header/Footer + Homepage:**
+>    - Builds the navigation bar, mobile menu drawer, homepage hero, featured content cards, and footer. This sets the foundation for the entire site.
+> 2. **Long-Form Editorial Template (Article / Case Study):**
+>    - Builds a detailed reading layout with rich text, pull quotes, images, and author details.
+> 3. **Directory / Listing Page:**
+>    - Builds a filterable list of items (e.g. Teams, Projects, or Services) with card grids.
+>
+> *(Reply `1` to build the shell and homepage first, or tell me which page you prefer.)*
 
 ## Stage 5: implement representative pages
 
@@ -95,6 +189,22 @@ Once representative pages render, load `impeccable` for a bounded visual critiqu
 
 **Gate:** representative pages work with real content at mobile, intermediate, and wide viewports, and establish reusable patterns for the remaining routes. The main visual findings from the Impeccable pass are resolved or recorded.
 
+**Stage 5 Completion Handoff Prompt:**
+When representative pages are refined, present this prompt:
+> **Stage 5 Complete: Core Page Templates Proven & Polished**
+> The homepage and shell have been built and refined with the Impeccable critique pass.
+>
+> Next is **Stage 6: Complete & Verify the Full Site**.
+> *In plain terms:* Now that the design patterns are proven, we build all remaining pages from our inventory and perform comprehensive quality checks (making sure links work, mobile layouts don't break, and editors can edit pages in the admin).
+>
+> **Ready to complete the site?**
+> 1. **(Recommended) Build all remaining routes and run full quality checks:**
+>    - Build the rest of the pages, verify browser accessibility/mobile views, test admin editing round-trips, and run the automated test suite.
+> 2. **Review the current pages in your browser first:**
+>    - Take time to click through the homepage and shell locally before generating the remaining pages.
+>
+> *(Reply `1` to generate and verify all routes, or `2` to inspect the current pages.)*
+
 ## Stage 6: complete and verify
 
 Finish the route inventory, content states, interactions, metadata, and accessibility behavior. Follow the visual review and repair passes in `astro-site-design`, and run one final Impeccable critique or audit when the full route set is available. Fix material cross-route findings in shared styles or components, then stop once the review is coherent. Run the repository's requested checks and build. Verify public and editor modes for CMS-rendered content.
@@ -105,11 +215,56 @@ Use `emdash-site-setup` again for deployment and site transfer. Treat deployment
 
 Before declaring a new-site workflow complete, use `npm run site:register` with the actual stable site/repository/runtime/owner and starter version metadata. Follow `docs/site-registry.md`: submit a reviewed private registry change, or retain the ignored pending-registration artifact and record its reason when central access is unavailable. Reuse the same site ID for renames; do not publish private client details in the starter or invent a stable release for an unreleased checkout.
 
+**Stage 6 Completion Handoff Prompt:**
+When Stage 6 finishes, present the prompt matching the hosting platform selected in Stage 2:
+*If Node.js hosting:*
+> **Stage 6 Complete: Site is Built and Fully Verified!**
+> All pages, admin features, and visual checks have passed with zero errors.
+>
+> Next is **Stage 7: Production Deployment & Domain Setup**.
+> *In plain terms:* Connecting your custom domain name (e.g., `yourbrand.com`), configuring SSL certificates, and preparing production startup services.
+>
+> **What is your launch plan?**
+> 1. **(Recommended) Prepare production deployment configuration:**
+>    - Generate production environment variable templates, systemd or Docker compose startup files, and reverse-proxy instructions (e.g. Nginx / Caddy with automated SSL).
+> 2. **Keep the site in local development mode for now:**
+>    - Keep testing locally while editors populate initial content before deploying.
+>
+> *(Reply `1` to prepare production deployment files, or `2` to keep in local mode.)*
+
+*If Cloudflare Workers hosting:*
+> **Stage 6 Complete: Site is Built and Fully Verified!**
+> All pages, admin features, and visual checks have passed with zero errors.
+>
+> Next is **Stage 7: Production Cutover (Going Live on Cloudflare)**.
+> *In plain terms:* Connecting your custom web address (e.g., `yourbrand.com`), ensuring secure HTTPS locks work, verifying admin passkey/email logins, and ensuring company email DNS is untouched.
+>
+> **What is your launch plan?**
+> 1. **(Recommended) Guide me through connecting my custom domain (`emdash-production-cutover`):**
+>    - Safely attach your custom domain via Wrangler, verify SSL certificates, test admin passkey/email login, and verify corporate mail records.
+> 2. **Keep the site on the Cloudflare preview / `workers.dev` URL for now:**
+>    - Keep the preview URL active so your team can review and populate content before switching the public domain.
+>
+> *(Reply `1` to begin custom domain cutover, or `2` to keep on preview.)*
+
 ## Stage 7: production cutover, email & forms
 
 Use `emdash-production-cutover` when moving a Cloudflare Workers site from preview/`workers.dev` to its production custom domain. Establish and test admin recovery before changing the authentication origin, configure the canonical hostname and alias redirects, and verify fresh production login. Preserve working email providers and form integrations; configure Cloudflare Email Sending or replace forms only when requested or required by established site requirements.
 
 **Gate:** production custom domain resolves with valid TLS; required aliases preserve paths and queries; fresh admin login works through the configured authentication mode; corporate mail DNS remains intact; applicable email/form delivery checks pass; rollback configuration and observed verification results are recorded.
+
+**Stage 7 Completion Handoff Prompt:**
+When Stage 7 cutover or production configuration is verified:
+> **Stage 7 Complete: Site is Live & Protected!**
+> Production domain resolution, SSL certificates, admin access, and mail delivery checks have succeeded.
+>
+> **Recommended Post-Launch Actions:**
+> 1. **(Recommended) Finalize Site Registry & Backups:**
+>    - Record the active production status via `npm run site:register`, verify automated database backup schedules, and archive deployment notes.
+> 2. **Monitor Live Production Traffic:**
+>    - Keep monitoring error logs (`npx wrangler tail` or server logs) and test the public contact form live.
+>
+> *(Reply `1` to record the registry entry and wrap up the deployment workflow.)*
 
 ## Working with partial requests and ongoing evolution
 

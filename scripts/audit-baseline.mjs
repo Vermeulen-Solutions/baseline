@@ -40,7 +40,26 @@ export function collectBaseline(root, now = new Date()) {
     note: 'Local read-only inventory. No secrets, database rows, synchronization, package updates or network requests. Matching versions/hashes do not prove upstream currency or runtime compatibility.' };
 }
 
+export function baselineSummary(report) {
+  const drifts = report.packages.filter(p => p.status === 'drift');
+  const unverified = report.packages.filter(p => p.status === 'unverified');
+  const skillDrifts = report.skills.filter(s => s.status !== 'observed');
+  const actions = [];
+  if (skillDrifts.length) {
+    actions.push(`1. **Synchronize skills (${skillDrifts.length} unverified/drifted):** Run \`npm run sync:site-skills\` or \`npm run sync:emdash-skills\`.`);
+  }
+  if (drifts.length) {
+    actions.push(`2. **Review package lockfile drift (${drifts.map(p => p.name).join(', ')}):** Run \`npm run check:upstream\` to compare against certified baselines.`);
+  }
+  actions.push(`3. **Proceed to Next Workflow Stage:** If starting a new site, proceed to Stage 1 in \`new-site-workflow\`. If auditing a live site, run \`npm run audit:site\`.`);
+  return `\n## Baseline Inventory Summary\n- Node: running ${report.node.running} (declared: ${report.node.declared ?? 'none'})\n- Packages: ${report.packages.length} total (${drifts.length} drifted, ${unverified.length} unverified)\n- Skills: ${report.skills.filter(s => s.status === 'observed').length}/${report.skills.length} observed\n\n### Recommended Next Steps\n${actions.join('\n')}\n`;
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  try { console.log(JSON.stringify(collectBaseline(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')), null, 2)); }
+  try {
+    const report = collectBaseline(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'));
+    console.log(JSON.stringify(report, null, 2));
+    console.log(baselineSummary(report));
+  }
   catch (error) { console.error(error.message); process.exitCode = 1; }
 }

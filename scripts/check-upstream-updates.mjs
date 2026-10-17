@@ -30,6 +30,29 @@ export async function collectUpdates(root, lookup = {}) {
   catch (error) { node = { status: 'unverified', reason: error.message }; }
   return { formatVersion: 1, reviewedAt: new Date().toISOString(), mutation: false, packages, node, skills, decision: 'Review current official changelogs/migration guides; record dated adopt/defer decisions and revisit triggers. Availability and declared peers do not certify compatibility.' };
 }
+export function upstreamSummary(report) {
+  const updates = report.packages.filter(p => p.upstreamStatus === 'update-available');
+  const skillReviews = report.skills.filter(s => s.status === 'review-required');
+  const actions = [];
+  if (updates.length) {
+    actions.push(`1. **Evaluate package updates (${updates.map(p => `${p.name} -> ${p.availableStable}`).join(', ')}):** Review changelogs against docs/starter-meta-review.md.`);
+  }
+  if (skillReviews.length) {
+    actions.push(`2. **Review skill updates (${skillReviews.map(s => s.kind).join(', ')}):** Run \`npm run sync:site-skills -- --check\` to preview staged updates.`);
+  }
+  if (report.node.latestLts && report.node.running !== report.node.latestLts) {
+    actions.push(`3. **Node Runtime Alignment:** Running ${report.node.running}; latest LTS is ${report.node.latestLts}. Verify engines.node in package.json.`);
+  }
+  if (!actions.length) {
+    actions.push(`✔ All packages, skills, and runtimes are currently up to date.`);
+  }
+  return `\n## Upstream Updates Summary\n- Packages: ${report.packages.length} checked (${updates.length} updates available)\n- Skills: ${report.skills.length} sources (${skillReviews.length} updates available)\n- Node: ${report.node.running ?? 'unknown'}\n\n### Recommended Next Steps\n${actions.join('\n')}\n`;
+}
+
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  try { console.log(JSON.stringify(await collectUpdates(process.cwd()), null, 2)); } catch (error) { console.error(error.message); process.exitCode = 1; }
+  try {
+    const report = await collectUpdates(process.cwd());
+    console.log(JSON.stringify(report, null, 2));
+    console.log(upstreamSummary(report));
+  } catch (error) { console.error(error.message); process.exitCode = 1; }
 }
