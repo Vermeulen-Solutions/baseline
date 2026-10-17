@@ -55,13 +55,13 @@ so the plan lives beside its evidence instead.
 | P4 | Calibration I/O + staleness check | `scripts/check-token-calibration.mjs` + npm scripts | M | none | **Mostly done with W-B** — export and the staleness verdict are covered; import/reset were not built |
 | W-A | `## Token Calibration` section in the Stage 4.5 record | `audit/component-calibration.md` + an `AGENTS.md` line | S | docs only | Backlog — needs `audit/component-calibration.md` to exist first |
 | W-B | Deterministic calibration receipt (tokens + `globalCssSha256`) plus the checker that reads it | `src/utils/design-tweaks.mjs`, `src/components/TweaksBar.astro`, `scripts/check-token-calibration.mjs` | M | refreshed exceptions for both `src/` files | **Done 2026-10-17** — see Task 3 |
-| W-C | Coverage-driven calibration surfaced in the panel | `TweaksBar.astro`, `styleguide-fixtures.ts` | M | **blocked by H1** | Backlog — extends T1's exemption lists |
-| W-C2 | Extend coverage beyond `--color-*` | decide authority: fixtures vs `Styleguide.astro` sections | S–M | **blocked by H1** | Backlog — needs a decision, not code |
+| W-C | Coverage-driven calibration surfaced in the panel | `TweaksBar.astro`, `styleguide-fixtures.ts` | M | open (H1 resolved) | Backlog — extends T1's exemption lists |
+| W-C2 | Extend coverage beyond `--color-*` | decide authority: fixtures vs `Styleguide.astro` sections | S–M | open (H1 resolved) | Backlog — needs a decision, not code |
 | P2 | One declarative source for UI + docs + search | generated catalogue module | M | none | **Done 2026-10-17 as T2** — see Task 2 |
-| P3 | Base value + ratio families with derived steps | `src/utils/design-tweaks.mjs` family scaling | M | **blocked by H1** | Backlog |
+| P3 | Base value + ratio families with derived steps | `src/utils/design-tweaks.mjs` family scaling | M | open (H1 resolved) | Backlog |
 | P5 | Conditional availability of output blocks | route/feature-scoped token sets | M | unknown | Backlog |
 | P6 | Critical token CSS inlined | `src/layouts/Base.astro` head | M | `src/` → gate | Backlog |
-| P7 | Group headings that follow a name field | `TweaksBar.astro` | S | **blocked by H1** | Backlog |
+| P7 | Group headings that follow a name field | `TweaksBar.astro` | S | open (H1 resolved) | Backlog |
 | P8 | In-browser stylesheet compiler | — | L | — | **Rejected** |
 
 ## Hazards and gates
@@ -109,7 +109,7 @@ audit/design-gate-exceptions.json      (refreshed hashes for the edited `src/` f
 **Must NOT be staged, for any reason** (Writing constraints 4 and H5, H8):
 
 ```
-automatic-css/                                  the local reference directory — never committed
+the local reference directory — never committed
 audit/settings-to-output-patterns-2026-10-17/   this study's documents — recorded separately, after T1
 tests/token-coverage.test.mjs                   T1's guard — recorded as the next change, not this one
 ```
@@ -142,7 +142,7 @@ edited files and document the panel in docs/dev-hud.md.
 **Post-commit acceptance:**
 
 1. `git show --name-only HEAD` lists exactly the seven paths above.
-2. `git ls-files automatic-css | Measure-Object` is 0, and `git status --porcelain` shows no `src/**` or
+2. the local reference directory has 0 tracked files, and `git status --porcelain` shows no `src/**` or
    `docs/**` modification remaining (the tree is clean apart from the deliberately unrecorded T1 guard and the
    study documents).
 3. The recorded tree is green on its own: the guard is *not* in this commit, so the suite at this commit is the
@@ -151,7 +151,7 @@ edited files and document the panel in docs/dev-hud.md.
    the T1 guard, and the local reference directory.
 
 **Recorded 2026-10-17 — commit `a134205`.** Staged set confirmed as exactly the seven paths above;
-`automatic-css/` remained untracked (0 tracked files) and the guard and study documents were not included; the
+the local reference directory remained untracked (0 tracked files) and the guard and study documents were not included; the
 commit message contains no product name. Post-commit checks: `git show --name-only` lists only those seven
 paths, and the recorded tree passes 91/91 node tests with the guard held aside (proving the commit is green
 without it), with `check:art-direction` reporting no visual source change at HEAD.
