@@ -24,7 +24,7 @@ export function evidenceBinding(root) {
   let total = 0;
   const inventory = files.map(file => {
     const bytes = readTarget(target, file).bytes;
-    if (!bytes || (total += bytes.length) > 256 * 1024 * 1024) throw Error('Refused source inventory');
+    if (!bytes || (total += bytes.length) > 1024 * 1024 * 1024) throw Error('Refused source inventory');
     return [file, sha256(bytes)];
   });
   return { targetId: sha256(process.platform === 'win32' ? target.toLowerCase() : target), revision, workingTreeSHA256: sha256(JSON.stringify(inventory)) };
