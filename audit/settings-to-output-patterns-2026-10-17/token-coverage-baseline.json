@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-17",
+  "task": "T1",
+  "authoredTokens": 37,
+  "catalogueTokens": 42,
+  "optionalWrite": [
+    {
+      "token": "--font-weight-display",
+      "reason": "Written by the \"Header Weight\" control (#tweak-type-weight) and createTokenMap at src/utils/design-tweaks.mjs:53; consumed as font-weight: var(--font-weight-display, 700) at src/styles/global.css:136."
+    },
+    {
+      "token": "--letter-spacing-display",
+      "reason": "Written by the \"Letter Spacing\" control (#tweak-tracking) and createTokenMap at src/utils/design-tweaks.mjs:54; consumed as letter-spacing: var(--letter-spacing-display, normal) at src/styles/global.css:137."
+    },
+    {
+      "token": "--hero-filter",
+      "reason": "Written by the hero Brightness/Contrast/Saturation controls (#tweak-hero-*) and createTokenMap at src/utils/design-tweaks.mjs:59-61; consumed as filter: var(--hero-filter, none) at src/styles/global.css:144, scoped to [data-hero-asset]."
+    },
+    {
+      "token": "--page-pattern",
+      "reason": "Written by the Surface pattern radios (Solid/Grid/Dots/Grain, name=tweak-surface) and createTokenMap at src/utils/design-tweaks.mjs:70-71; consumed as background-image: var(--page-pattern, none) at src/styles/global.css:107."
+    },
+    {
+      "token": "--page-pattern-size",
+      "reason": "Written together with --page-pattern by the Surface pattern radios and createTokenMap at src/utils/design-tweaks.mjs:71; consumed as background-size: var(--page-pattern-size, auto) at src/styles/global.css:108."
+    }
+  ],
+  "colorSpecimenExempt": [
+    {
+      "role": "focus-on-dark",
+      "reason": "Authored at src/styles/global.css:33 and consumed only as the focus-ring replacement inside [data-surface=\"dark\"] (src/styles/global.css:466). The palette section renders one swatch per specimenTokens entry (src/components/dev/Styleguide.astro:32) and no src/** markup uses data-surface, so the role has no specimen surface yet; adding that swatch is a src/** change deliberately out of scope here."
+    }
+  ],
+  "escalated": [],
+  "command": "node --test tests/token-coverage.test.mjs",
+  "result": "pass"
+}
