@@ -25,6 +25,23 @@ export async function collectUpdates(root, lookup = {}) {
     try { const ref = await (lookup.skill ?? (c => get(`https://api.github.com/repos/${c.repository}/git/ref/heads/main`)))(config); const sha = ref.object?.sha ?? ref.sha; if (!/^[a-f0-9]{40}$/.test(sha)) throw Error('Missing immutable commit'); const previous = baseline.skillSources[kind]; return { kind, repository: config.repository, availableCommit: sha, recordedCommit: previous?.commitSha ?? null, status: previous?.commitSha === sha ? 'same-source-commit-local-drift-not-checked' : 'review-required' }; }
     catch (error) { return { kind, status: 'unverified', reason: error.message }; }
   }));
+  try {
+    let sourceMeta = {};
+    try { sourceMeta = JSON.parse(await readFile(path.join(root, '.emdash', 'impeccable-source.json'), 'utf8')); } catch {}
+    const declaredVersion = sourceMeta.declaredSkillVersion ?? '4.3.1';
+    const ref = await (lookup.skill ?? (c => get(`https://api.github.com/repos/pbakaus/impeccable/git/ref/heads/main`)))({ repository: 'pbakaus/impeccable' });
+    const sha = ref.object?.sha ?? ref.sha;
+    if (!/^[a-f0-9]{40}$/.test(sha)) throw Error('Missing immutable commit');
+    let latestVersion = declaredVersion;
+    try {
+      const npmMeta = await packageLookup('impeccable');
+      latestVersion = npmMeta['dist-tags']?.latest ?? latestVersion;
+    } catch {}
+    const isUpdate = compare(latestVersion, declaredVersion) > 0 || (sourceMeta.upstreamCommitSha && sourceMeta.upstreamCommitSha !== sha);
+    skills.push({ kind: 'impeccable', repository: 'pbakaus/impeccable', availableCommit: sha, recordedCommit: sourceMeta.upstreamCommitSha ?? null, recordedVersion: declaredVersion, availableVersion: latestVersion, status: isUpdate ? 'review-required' : 'same-source-commit-local-drift-not-checked', source: 'https://github.com/pbakaus/impeccable' });
+  } catch (error) {
+    skills.push({ kind: 'impeccable', status: 'unverified', reason: error.message });
+  }
   let node;
   try { const releases = await (lookup.node ?? (() => get('https://nodejs.org/dist/index.json')))(); const stable = releases.filter(r => tuple(r.version.replace(/^v/, ''))).sort((a, b) => compare(a.version.slice(1), b.version.slice(1))); node = { running: process.version, declared: baseline.node.declared, latestStable: stable.at(-1)?.version, latestLts: stable.filter(r => r.lts).at(-1)?.version, runningMajorPatch: stable.filter(r => tuple(r.version.slice(1))[0] === tuple(process.version.slice(1))[0]).at(-1)?.version, status: 'observed', source: 'https://nodejs.org/en/about/previous-releases' }; }
   catch (error) { node = { status: 'unverified', reason: error.message }; }
@@ -38,7 +55,7 @@ export function upstreamSummary(report) {
     actions.push(`1. **Evaluate package updates (${updates.map(p => `${p.name} -> ${p.availableStable}`).join(', ')}):** Review changelogs against docs/starter-meta-review.md.`);
   }
   if (skillReviews.length) {
-    actions.push(`2. **Review skill updates (${skillReviews.map(s => s.kind).join(', ')}):** Run \`npm run sync:site-skills -- --check\` to preview staged updates.`);
+    actions.push(`2. **Review skill updates (${skillReviews.map(s => `${s.kind}${s.availableVersion ? ` (${s.recordedVersion} -> ${s.availableVersion})` : ''}`).join(', ')}):** Run skill sync helpers or preview staged updates.`);
   }
   if (report.node.latestLts && report.node.running !== report.node.latestLts) {
     actions.push(`3. **Node Runtime Alignment:** Running ${report.node.running}; latest LTS is ${report.node.latestLts}. Verify engines.node in package.json.`);

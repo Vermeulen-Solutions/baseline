@@ -63,6 +63,8 @@
     "test:site-audit": "node --test tests/site-standards-audit.test.mjs tests/audit-coverage.test.mjs tests/audit-modernize.test.mjs tests/audit-runtime-evidence.test.mjs",
     "sync:emdash-skills": "node scripts/sync-emdash-skills.mjs",
     "sync:site-skills": "node scripts/sync-site-skills.mjs",
+    "sync:impeccable": "node scripts/sync-impeccable-skill.mjs",
+    "update:all": "node scripts/auto-update.mjs",
     "site:register": "node scripts/register-site.mjs",
     "mcp:token": "node scripts/create-mcp-token.mjs"
   },

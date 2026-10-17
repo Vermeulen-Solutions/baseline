@@ -1,16 +1,17 @@
 {
   "formatVersion": 1,
-  "declaredSkillVersion": "4.3.1",
+  "declaredSkillVersion": "4.6.0",
   "launcherVersion": "0.1.5",
-  "distribution": "Codex curated Impeccable 4.3.1",
-  "skillSha256": "5ce02fc8f353d7f659535fb80e453963dc047a07c4396adf098fe010b479e7c0",
+  "distribution": "Codex curated Impeccable 4.6.0",
+  "skillSha256": "5fb0d412928c03e62d2536adfd878ad6aad6f9ce343956aa4f7164da06da3459",
   "matchesInstalledCuratedSkill": true,
   "upstreamRepository": "https://github.com/pbakaus/impeccable",
+  "upstreamCommitSha": "08d5b470495d242ca0470f4aeae1956c3a074f83",
   "license": {
     "spdx": "Apache-2.0",
     "source": "https://github.com/pbakaus/impeccable/blob/main/LICENSE",
     "blob": "bb3f6d23b1f8025514a62a12b51b47d73e3c9aa9",
     "saved": "docs/licenses/impeccable-Apache-2.0.txt"
   },
-  "upstreamCommitForBundledSnapshot": "unverified; do not infer release from launcher version"
+  "syncedAt": "2026-10-17T22:56:06.756Z"
 }

@@ -11,7 +11,7 @@
 </p>
 
 <p align="center">
-  <a href="#-60-second-quickstart"><strong>Quickstart</strong></a> ·
+  <a href="#-quickstart"><strong>Quickstart</strong></a> ·
   <a href="docs/prompt-library.md"><strong>Prompt Library</strong></a> ·
   <a href="#-where-to-look-in-your-browser"><strong>Browser Dev URLs</strong></a> ·
   <a href="#the-7-stage-site-delivery-workflow"><strong>7-Stage Workflow</strong></a> ·
@@ -27,19 +27,42 @@ Spend your time building the site, not debugging agent hallucinations or wrestli
 
 ---
 
-## ⚡ 60-Second Quickstart
+## ⚡ Quickstart
 
 **Requirements:** Node 22.22.2 minimum (Node 24 LTS recommended) and `npm`.
 
-```sh
-# 1. Clone the repository and install dependencies
-git clone https://github.com/Vermeulen-Solutions/emdash-baseline.git my-site
-cd my-site
-npm install
+### 🚀 Starting a New Site Project (Recommended)
 
-# 2. Generate initial encryption secrets and start local dev server
-npx emdash secrets generate --write .env
-npm run dev
+This repository is a **GitHub Template**. To build a new website:
+
+1. Click the green **[Use this template](https://github.com/new?template_name=emdash-baseline&template_owner=Vermeulen-Solutions)** button at the top of this repository (or use the GitHub CLI):
+   ```sh
+   gh repo create my-site --template Vermeulen-Solutions/emdash-baseline --private --clone
+   cd my-site
+   ```
+2. Install dependencies & initialize secrets:
+   ```sh
+   npm install
+   npx emdash secrets generate --write .env
+   npm run dev
+   ```
+3. Initialize client tokens and seed your aesthetic lane:
+   ```sh
+   # Seed an aesthetic lane (e.g. editorial-paper, product-minimalism, technical-data, warm-editorial)
+   npm run design:tokens -- --init-client --lane editorial-paper
+   ```
+
+---
+
+### 🛠️ Contributing to the Baseline Starter Itself
+
+If you are developing or maintaining the Baseline template engine, specialist skills, or testing suites:
+
+```sh
+git clone https://github.com/Vermeulen-Solutions/emdash-baseline.git
+cd emdash-baseline
+npm install
+npm run verify
 ```
 
 ### 🖥️ Where to look in your browser
