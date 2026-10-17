@@ -2,7 +2,12 @@
   {
     "path": "src/components/TweaksBar.astro",
     "reason": "Neutral dev-only token dashboard maintenance: current theme/layout catalog, category/search navigation, source values, validation, per-token reset and existing G/O/P diagnostics. No client page or theme changes; exact UTF-8/LF content reviewed. Any edit invalidates this exception.",
-    "sha256": "090cd2eb6817b6666ed28741868bd606d9bc5d41eebce065e12624f3b1c9412b"
+    "sha256": "41948d6441b3efa9d42df957a15c72ea439d1be9889cfd087f5c3ab17135a828"
+  },
+  {
+    "path": "src/utils/clipboard.mjs",
+    "reason": "Neutral dev-only clipboard helper: tries the Clipboard API and degrades to the legacy selection copy when the document is not focused, so the panel copy buttons work with DevTools focused or the window inactive. Takes an injectable environment for tests; no client design. Any edit invalidates this exception.",
+    "sha256": "1422f80dcda3c4b92c0bc4029df51696e48b2ceac8e154fb408d257e7e7fb5ef"
   },
   {
     "path": "src/utils/design-tweaks.mjs",

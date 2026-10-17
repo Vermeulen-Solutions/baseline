@@ -50,6 +50,7 @@ so the plan lives beside its evidence instead.
 | T0 | **Land the in-flight Design Tweaks refactor** (record only — no new implementation) | the seven explicit paths listed in Task 0 | S | outside the gate; refreshes its own exception | **Done 2026-10-17** — commit `a134205`; recorded tree verified green on its own (91/91) |
 | T1 | Catalogue ↔ `global.css` ↔ specimen coverage guard | `tests/token-coverage.test.mjs` | S | none (outside `src/`/`public/`) | **Done, then superseded the same day** — recorded as `d39cb31`, then rewritten by P2 as a derivation + staleness guard |
 | T2 | Derive the catalogue from the stylesheet | `scripts/generate-token-catalog.mjs`, `scripts/token-catalog-overrides.mjs`, `src/utils/token-catalog.generated.mjs` | M | refreshed exceptions for both `src/` files | **Done 2026-10-17** — 37 tokens derived; labels/roles/flag seeded; see Task 2 |
+| B1 | Copy buttons did nothing when the document was not focused | `src/utils/clipboard.mjs`, `src/components/TweaksBar.astro` | S | refreshed exception + one new entry | **Done 2026-10-17** — see Fix 1 |
 | P1 | Output-derived availability, fail open | generalise T1 later to built CSS if a build-time catalogue appears | S–M | none | Partial (T1 is the v0) |
 | P4 | Calibration I/O + staleness check | `scripts/check-token-calibration.mjs` + npm scripts | M | none | **Mostly done with W-B** — export and the staleness verdict are covered; import/reset were not built |
 | W-A | `## Token Calibration` section in the Stage 4.5 record | `audit/component-calibration.md` + an `AGENTS.md` line | S | docs only | Backlog — needs `audit/component-calibration.md` to exist first |
@@ -77,6 +78,8 @@ so the plan lives beside its evidence instead.
 | H8 | **A local-only evidence file sits inside `audit/`.** `reference-notes.local.md` is not git-ignored, so an unqualified `git add audit/` would commit it with the implementation's name and paths — and the same broad pathspec would also sweep in the local reference directory, violating constraint 4. | Either add ignore rules, or always stage the committed files by explicit path. Recommended (not applied): a `*.local.md` rule plus a rule for the local reference directory in `.gitignore` would make both mistakes impossible rather than merely unlikely. |
 
 | H9 | **The dev server must not be running while the full node suite runs.** With `npm run dev` active, a media-infrastructure test fails intermittently with `EPERM ... rename .emdash/backups/...` because the server holds a file handle. | Stop the dev server before running `node --test tests/*.test.mjs`. A real failure and this one look identical in the summary line, so check for a listening port first. |
+
+| H10 | **A scripted `element.click()` is not a trusted user gesture, and a populated fallback field is not proof the clipboard was written.** The first version of the receipt button was reported "verified" because a scripted click made the fallback field appear; the real behaviour was a rejected copy. | Verify clipboard behaviour with a trusted interaction and an out-of-band oracle (the operating-system clipboard), not by reading the panel's own fallback UI. |
 
 **No Art Direction Record is required for this plan's tasks, and none should be invented for them.**
 
@@ -277,6 +280,37 @@ back to a derived name, so nothing must be hand-written — decide per token whe
 - That receipt then checked as `pending-merge` against the real stylesheet, `applied` against a stylesheet with
   the value merged, and passed with `--require-applied`.
 - `check:art-direction`, `lint`, `typecheck` and the full node suite (97 tests) pass.
+
+---
+
+**Fix 1 (B1): copy buttons and the focused-document dependency**
+
+**Root cause found before any change was made.** The buttons used a single copy strategy:
+`navigator.clipboard.writeText()`. Chrome rejects that with
+`NotAllowedError: Failed to execute 'writeText' on 'Clipboard': Document is not focused.` whenever the
+document lacks focus - DevTools focused, the browser window not the active window, or an embedded frame. It is
+not a permission or secure-context problem: `isSecureContext` was true, `navigator.clipboard` existed, and no
+response header restricted clipboard access. The rejection is silent to the user, so the button looked dead.
+
+**Evidence, gathered before fixing:**
+
+- Response headers on `/_styleguide` carry only `permissions-policy: camera=(), microphone=(), geolocation=(), payment=()`.
+- The button is genuinely reachable in that state: `elementFromPoint` at its centre returns the button itself,
+  `pointer-events: auto`, visible, 350x32, inside the viewport.
+- `document.execCommand('copy')` on a selected field wrote 297 characters to the **operating-system** clipboard
+  (`Get-Clipboard`) in the same unfocused state, which is what made a fallback viable.
+
+**The bug was shared, not new.** The pre-existing `Copy Tokens (CSS)` button used the same single strategy, so
+it failed identically; the receipt button only made it visible.
+
+**Fix:** a shared `copyText()` in `src/utils/clipboard.mjs` tries the Clipboard API, then the legacy selection
+route, and reports which strategy worked. Both handlers now reveal the text field only when neither route
+reaches the clipboard, and claim success only when one did. The helper takes an injectable environment, so the
+strategy order is unit-tested without a browser (`tests/clipboard.test.mjs`, four cases).
+
+**Verified with the bug still reproducible:** in the same unfocused state that broke it, a click produced a real
+319-character receipt on the OS clipboard, and `Copy Tokens (CSS)` produced its 138-character CSS export.
+`lint`, `typecheck`, the gate and the full node suite (101 tests) pass. See H10 for the verification lesson.
 
 ---
 

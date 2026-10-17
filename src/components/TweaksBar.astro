@@ -437,6 +437,7 @@ const sourceHash = await stylesheetDigest(sourceCSS);
 
 <script>
   import { baselineTokens, createTokenMap, exportTokens, buildReceipt } from '../utils/design-tweaks.mjs';
+  import { copyText } from '../utils/clipboard.mjs';
   import { createGridGuide } from '../utils/grid-guide';
   import { createReferenceOverlay } from '../utils/reference-overlay';
   import { createOwnershipInspector } from '../utils/ownership-inspector';
@@ -618,8 +619,8 @@ const sourceHash = await stylesheetDigest(sourceCSS);
       const tokens = createTokenMap(baseline, changes);
       if (!Object.keys(tokens).length) { feedback.textContent = 'No overrides to export.'; return; }
       const css = exportTokens(tokens);
-      try { await navigator.clipboard.writeText(css); feedback.textContent = 'Copied. Merge, reload, and verify contrast.'; }
-      catch { fallback.value = css; fallback.hidden = false; fallback.focus(); fallback.select(); feedback.textContent = 'Select and copy the CSS below.'; }
+      if (await copyText(css) === 'manual') { fallback.value = css; fallback.hidden = false; fallback.focus(); fallback.select(); feedback.textContent = 'Select and copy the CSS below.'; }
+      else feedback.textContent = 'Copied. Merge, reload, and verify contrast.';
     }, options);
     document.getElementById('tweaks-receipt-btn')!.addEventListener('click', async () => {
       if (drawer!.querySelector('[aria-invalid="true"]')) { feedback.textContent = 'Fix invalid token values before exporting (search or choose All to find them).'; return; }
@@ -631,8 +632,8 @@ const sourceHash = await stylesheetDigest(sourceCSS);
         globalCssSha256: drawer!.dataset.sourceHash ?? '',
         exportedAt: new Date().toISOString(),
       });
-      try { await navigator.clipboard.writeText(receipt); feedback.textContent = 'Receipt copied. Save it under audit/ and check it with npm run check:token-calibration.'; }
-      catch { fallback.value = receipt; fallback.hidden = false; fallback.focus(); fallback.select(); feedback.textContent = 'Select and copy the receipt below.'; }
+      if (await copyText(receipt) === 'manual') { fallback.value = receipt; fallback.hidden = false; fallback.focus(); fallback.select(); feedback.textContent = 'Select and copy the receipt below.'; }
+      else feedback.textContent = 'Receipt copied. Save it under audit/ and check it with npm run check:token-calibration.';
     }, options);
     syncInputs();
     render();
