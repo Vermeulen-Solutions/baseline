@@ -14,8 +14,8 @@
   <a href="#-60-second-quickstart"><strong>Quickstart</strong></a> ·
   <a href="docs/prompt-library.md"><strong>Prompt Library</strong></a> ·
   <a href="#-where-to-look-in-your-browser"><strong>Browser Dev URLs</strong></a> ·
-  <a href="#agent-first-design-system--component-quarantine"><strong>Design System & Styleguide</strong></a> ·
   <a href="#the-7-stage-site-delivery-workflow"><strong>7-Stage Workflow</strong></a> ·
+  <a href="#why-baseline"><strong>Why Baseline?</strong></a> ·
   <a href="docs/README.md"><strong>Documentation</strong></a>
 </p>
 
@@ -92,38 +92,20 @@ To connect your coding assistant directly to EmDash's built-in Model Context Pro
 ```sh
 npm run mcp:token
 ```
-See [agent documentation](docs/agent-documentation.md) for harness integration and MCP setup across all major tools.
-
----
-
-## Agent-First Design System & Component Quarantine
-
-Instead of manual browser sliders or disconnected GUI overrides, Baseline treats `AGENTS.md`, `DESIGN.md`, and `src/styles/global.css` as a single, code-first pipeline verified automatically by CLI and live on `/_styleguide`:
-
-<p align="center">
-  <a href="docs/images/styleguide.jpg"><img src="docs/images/styleguide-controls.png" width="520" alt="Living Component Styleguide (/_styleguide)" /></a>
-</p>
-
-| Capability | Command / Route | How your AI agent uses it |
-| --- | --- | --- |
-| **Aesthetic Lane Presets** | `npm run design:tokens -- --list-lanes` | Seed any canonical Aesthetic Lane (`technical-systems`, `product-led-minimalism`, `editorial-paper`, `luminous-futurism`, `neutral`) into `src/styles/global.css` via `--lane <id> --write` before customizing brand hues and fonts |
-| **WCAG Contrast & Fluid Audit** | `npm run design:tokens` | Parses `src/styles/global.css` directly and verifies 10 WCAG AA perceptual contrast pairs across default and `[data-surface="dark"]` contexts, fluid `clamp()` bounds, and styleguide specimen coverage |
-| **DESIGN.md Interchange** | `npm run design:check` / `design:export` | Import or export portable `DESIGN.md` specifications compatible with Google Stitch, Claude Design, OpenDesign, and [designmd.ai](https://designmd.ai/explore) |
-| **Component Quarantine** | `http://localhost:4321/_styleguide` | Stress-test typography, OKLCH swatches, native controls, `<Container breakout>`, `<Card>`, and galleries with instant Vite HMR (automatically returns 404 in production) |
-| **Optional Visual Page Builder** | `@perkyzz/emvb` + `@perkyzz/emvb-mcp` | For sites that need editor-built drag-and-drop campaign landing pages or popups alongside structured Astro templates, connect EmVB with `canvasStyles` bridged to `src/styles/global.css` ([Design Framework Guide](docs/design-framework.md)) |
+See [agent documentation](docs/agent-documentation.md) for harness integration, specialist skill syncing (`npm run sync:site-skills`), and MCP setup across all major tools.
 
 ---
 
 ## The 7-stage site delivery workflow
 
-Pairing with an AI coding assistant without a structured process usually results in "one-shot prompt chaos"—where an assistant attempts to do discovery, database schema, responsive layouts, and copy all at once, resulting in broken schemas and generic styling. 
+Pairing with an AI coding assistant without a structured process usually results in "one-shot prompt chaos"—where an assistant attempts to do discovery, database schema, responsive layouts, and copy all at once, resulting in broken schemas and generic styling.
 
 Baseline organizes projects into an explicit 7-stage agency workflow:
 
 1. **Brief & Evidence:** Gather real brand assets, photography, client requirements, and existing site screenshots before touching code.
 2. **Platform, Plugins & Hosting:** Choose Node/SQLite or Cloudflare Workers/D1/R2 (keeping Cloudflare's 100-column table limits in mind) and evaluate optional native EmDash plugins (`@eventual/emdash`, `@linguadash/emdash`, `@perkyzz/emvb`).
 3. **Content Architecture & Candidate Discovery:** Model EmDash collections before writing templates. Hunt for implicit entities trapped in page bodies or ACF repeaters using the [Content Candidate Register](docs/wordpress-content-modeling.md).
-4. **The Art Direction Gate:** Establish an aesthetic lane, typography pairings, token physics, section pacing, and explicit anti-patterns in `AGENTS.md` before writing CSS (`npm run check:art-direction`), then seed and audit tokens in `src/styles/global.css` (`npm run design:tokens`). [Art Direction Guide](docs/art-direction-workflow.md).
+4. **The Art Direction Gate:** Record an aesthetic lane, typography pairings, token physics, section pacing, and explicit anti-patterns in `AGENTS.md` before writing CSS (`npm run check:art-direction`), then seed and audit tokens in `src/styles/global.css` (`npm run design:tokens`). [Art Direction Guide](docs/art-direction-workflow.md).
 5. **Component Sourcing & Quarantine (`/_styleguide`):** Calibrate reusable components—or transmute external Tailwind blueprints from `21st.dev MCP` into zero-JS, token-bound Astro—in isolation before page assembly (`docs/styleguide-fixtures.md`).
 6. **Representative Implementation & Verification:** Build public routes, bind CMS visual edit proxies (`{...entry.edit.title}`), and verify with local visual tests and schema preflights.
 7. **Production Cutover, Email & Launch:** Connect custom domains, verify HTTPS/TLS certificates, test admin passkey/email authentication, and preserve corporate mail DNS (Google Workspace / Microsoft 365).
@@ -158,45 +140,29 @@ See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field pro
 
 ## Why Baseline?
 
-### 📐 Fluid design tokens, zero breakpoint soup
-Stop writing dozens of arbitrary responsive utility classes (`p-4 md:p-8 lg:p-12 xl:p-16`). Baseline uses continuous mathematical `clamp()` scales anchored between 320px and 1280px viewports:
-- **Continuous Typography:** `--text-step--1` through `--text-step-2` (plus high-contrast `--text-step-3-to-1` and `--text-step-2-to-0` bridges) scale smoothly with viewport inline size (`vi`), eliminating jarring font jumps.
-- **Fluid Spatial Density:** Section padding (`--spacing-section`) and bridge tokens (`--spacing-2xl-to-md`, `--spacing-xl-to-sm`) automatically expand from mobile to ultrawide monitors.
-- **Typographic Measures & Editorial Breakouts:** Built-in line-length bounds (`--measure-reading: 68ch;`, `--measure-content: 76rem;`, `--measure-wide: 88rem;`) and `<Container breakout>` (`.content-grid`) keep body prose readable while allowing figures, pull-quotes, and galleries to break out to wider tracks.
+### 📐 Fluid design tokens & automated WCAG contrast (`npm run design:tokens`)
+Stop writing dozens of arbitrary responsive utility classes (`p-4 md:p-8 lg:p-12 xl:p-16`). Baseline uses continuous mathematical `clamp()` scales anchored between 320px and 1280px viewports in `src/styles/global.css`:
+- **Agent-First Token Engine:** Seed canonical Aesthetic Lane presets (`--lane`), generate parametric fluid type/space scales (`--type-scale`, `--space-scale`), or synthesize WCAG-compliant light and `[data-surface="dark"]` OKLCH palettes from brand hex colors (`--seed-accent`), verified across 10 WCAG AA contrast pairs (`npm run design:tokens`).
+- **Continuous Typography & Spatial Density:** `--text-step--1` through `--text-step-2` (plus `--text-step-3-to-1` and `--text-step-2-to-0` bridges) and section spacing (`--spacing-section`) scale smoothly with viewport inline size (`vi`).
+- **Typographic Measures & Editorial Breakouts:** Built-in line-length bounds (`--measure-reading: 68ch`, `--measure-content: 76rem`, `--measure-wide: 88rem`) and `<Container breakout>` (`.content-grid`) keep body prose readable while allowing figures, pull-quotes, and galleries to break out to wider tracks.
 - **Self-Responsive Layout Primitives:** `<Section>`, `<Container>`, auto-fit `<Grid>`, and accessible `<Card>` (`--card-*` tokens, concentric radii, and `.clickable-parent`/`.focus-parent`) adapt to any screen width without media queries. [Design Framework Guide](docs/design-framework.md).
+
+### 🎨 The Art Direction Gate & `/_styleguide` Quarantine
+AI coding assistants notoriously default to generic "SaaS template" aesthetics. Baseline enforces an automated pre-implementation check (`npm run check:art-direction`): before writing visual CSS, the assistant must record a distinct **Aesthetic Lane**, **Typography Pairing**, **Token Physics**, and 2–3 explicit **Site Anti-Patterns** in `AGENTS.md`. Reusable primitives, controls, and responsive stress cases are calibrated in isolation on **`/_styleguide`** (which returns **404** in production builds) before page assembly multiplies defects. Pair with `DESIGN.md` interchange (`npm run design:check` / `design:export`) or optional `@perkyzz/emvb` visual landing pages as needed ([Design Interchange Guide](docs/design-interchange.md) · [Art Direction Workflow](docs/art-direction-workflow.md)).
 
 ### 🗄️ Intelligent content modeling & WordPress migration
 Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a structured methodology for converting legacy sites to EmDash:
 - **The Content Candidate Register:** Uncover implicit operational entities trapped in page builder accordions or ACF repeaters (e.g. rosters, schedules, venues, sponsors) and elevate them to first-class collections.
 - **Relational Normalization vs 50-Column Budget:** Model 1:N relations and shared master data instead of bloated JSON dumps, staying comfortably within Cloudflare D1's 100-column limits.
 - **Admin Polish & Non-Routable Collections:** Designate `routable: false` for internal entities, use standardized ASCII slugs in code, and author display labels in the client's working language.
-- **Automated Media Migration:** Use `npm run media:migrate-wp` for manifest-driven WordPress attachment preparation, EmDash ingestion, and Cloudflare R2 staging ([Image Delivery Guide](docs/image-delivery.md)). [Content Modeling Guide](docs/wordpress-content-modeling.md).
-
-### 🎨 The Art Direction Gate — Stop generic AI slop
-AI coding assistants notoriously default to the same generic "SaaS template" aesthetic (purple gradients, Inter font, oversized floating cards). Baseline enforces an automated pre-implementation check (`npm run check:art-direction`): before writing visual CSS, the assistant must record a distinct **Aesthetic Lane**, **Typography Pairing**, **Token Physics**, and 2–3 explicit **Site Anti-Patterns** in `AGENTS.md`. Pair code-first tuning (`npm run design:tokens`) with community `DESIGN.md` systems ([designmd.ai](https://designmd.ai/explore)), visual prototyping (**Google Stitch**, **Claude Design**, **OpenDesign**), UX flow teardowns (**Nicelydone**), and **21st.dev** component quarantine via the [AI-Native Design & DESIGN.md Interchange Guide](docs/design-interchange.md). [Art Direction Workflow](docs/art-direction-workflow.md).
+- **Automated Media Migration:** Use `npm run media:migrate-wp` for manifest-driven WordPress attachment preparation, EmDash ingestion, and Cloudflare R2 staging ([Image Delivery Guide](docs/image-delivery.md) · [Content Modeling Guide](docs/wordpress-content-modeling.md)).
 
 ### 🛡️ Catch wide schemas before they reach production
 Local SQLite can accept models that exceed Cloudflare D1's [100-column table limit](https://developers.cloudflare.com/d1/platform/limits/). Baseline's automatic `check:schema-budget` preflight measures physical collection columns, including generated and retained legacy columns, against a conservative **50-column budget** before build/typecheck. For offline structural diffing, allowlisted seed exports, and isolated D1 snapshot reconstruction, use `npm run db:diff`, `npm run db:export-seed`, and `npm run db:pull-remote` ([Database parity workflow](docs/database-workflow.md)).
 
-### 🧪 Fix components once, before building twenty pages
-Open **`/_styleguide`** to calibrate components, controls, galleries and responsive stress cases in isolation. Stage 4.5 component quarantine makes shared problems visible before page assembly multiplies them. Normal production builds return **404** for the route; explicit test fixtures use a separate build profile.
-
-### 🚀 Ship less JavaScript (Progressive Enhancement)
-`LogoTicker` renders on the server and animates with CSS: **0 KB of component client JavaScript**, an accessible native checkbox pause toggle, reduced-motion fallback and RTL support. `PhotoGallery` uses pure CSS flexbox to compute proportional justified photo rows without JS Masonry, loading PhotoSwipe only when a user clicks for a lightbox.
-
-### 📸 Catch regressions locally, keep CI lean
-Compare mobile, tablet and desktop captures with pinned Windows Chromium. Exercise active motion, no-JS rendering, zoom and text spacing alongside screenshot diffs. No paid visual-testing SaaS or Docker setup is required, and browser tests consume **no GitHub Actions minutes**: they run locally, outside production builds and deployments. Baseline changes require an explicit, reviewed `--update`.
-
-### 🤖 Keep AI coding assistants disciplined and on rails
-Building client sites with AI coding assistants—across any harness or tool runner—is fast, but assistants often struggle with headless CMS architectures. Without clear constraints, they tend to invent unnecessary wrapper components, hardcode text that clients should be able to edit in the CMS, or introduce subtle layout breaks on mobile viewports.
-
-Baseline includes a structured workflow designed to keep coding assistants disciplined and aligned with the site's architecture:
-- **Art direction gates before implementation:** Before writing visual code, the agent is directed to record aesthetic decisions in `AGENTS.md` (typography pairings, spatial density, and anti-patterns).
-- **Automated token & WCAG contrast verification:** `npm run design:tokens` checks semantic token completeness, OKLCH/hex contrast ratios across light and dark surfaces, and fluid `clamp()` scales.
-- **CMS editorial preservation:** Guidance in `.agents/skills/` explicitly defines EmDash's row-per-locale structure and field-proxy attributes (`data-emdash-ref`).
-- **Component quarantine (`/_styleguide`):** The workflow directs the agent to calibrate reusable primitives and responsive edge cases in isolation on `/_styleguide` first.
-- **Fast, self-verifying feedback loops:** `check:schema-budget`, `design:tokens`, `test:visual`, fast unit tests, and typechecking run locally in seconds.
-- **Maintainable specialist skills:** Guidance is modularized into specialist skills under `.agents/skills/` that can be updated from upstream via `npm run sync:site-skills` without overwriting project instructions. [Agent setup guide](docs/agent-documentation.md).
+### 🚀 Zero-JS progressive enhancement & local visual regression
+- **Ship Less JavaScript:** `LogoTicker` renders on the server and animates with CSS (**0 KB of component client JS**, native checkbox pause toggle, reduced-motion fallback, and RTL support). `PhotoGallery` uses pure CSS flexbox to compute proportional justified photo rows without JS Masonry, loading PhotoSwipe only on click.
+- **Keep CI Lean:** `npm run test:visual` compares mobile, tablet, and desktop captures with pinned Windows Chromium—exercising active motion, no-JS rendering, zoom, and text spacing locally so browser tests consume **zero GitHub Actions minutes**.
 
 ---
 
@@ -221,7 +187,7 @@ Baseline includes a structured workflow designed to keep coding assistants disci
 | Command | Use it for |
 | --- | --- |
 | `npm run dev` | Develop the site and open `/_styleguide` |
-| `npm run design:tokens` | Audit tokens, WCAG contrast pairs, and fluid scales in `src/styles/global.css` (or apply a lane preset) |
+| `npm run design:tokens` | Audit tokens, WCAG contrast pairs, and fluid scales in `src/styles/global.css` (or apply a lane/scale/palette) |
 | `npm run test:design` | Validate art direction record, token coverage, and `DESIGN.md` interchange |
 | `npm run typecheck` | Astro/TypeScript diagnostics and schema preflight |
 | `npm run check:schema-budget` | Measure the local database's physical collection widths |
