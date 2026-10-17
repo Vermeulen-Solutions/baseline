@@ -1,7 +1,7 @@
 {
   "name": "emdash-baseline",
   "version": "0.0.3",
-  "description": "The visual-first Astro toolkit for EmDash CMS and AI-assisted developers: live Dev HUD, component quarantine, schema safeguards, and local visual regression.",
+  "description": "The visual-first Astro toolkit for EmDash CMS and AI-assisted developers: agent-first design tokens, component quarantine, schema safeguards, and local visual regression.",
   "repository": {
     "type": "git",
     "url": "https://github.com/Vermeulen-Solutions/emdash-baseline.git"
@@ -29,9 +29,8 @@
     "test:baseline": "node --test tests/audit-baseline.test.mjs",
     "check:dev-tools": "node scripts/check-dev-tools.mjs",
     "check:art-direction": "node scripts/check-art-direction.mjs --changed",
-    "test:design": "node --test tests/design-workflow.test.mjs",
-    "tokens:generate": "node scripts/generate-token-catalog.mjs",
-    "check:token-calibration": "node scripts/check-token-calibration.mjs",
+    "test:design": "node --test tests/design-workflow.test.mjs tests/design-interchange.test.mjs tests/token-coverage.test.mjs",
+    "design:tokens": "node scripts/design-system.mjs",
     "test:schema-budget": "node --test tests/schema-column-budget.test.mjs",
     "sync:emdash-skills": "node scripts/sync-emdash-skills.mjs",
     "sync:site-skills": "node scripts/sync-site-skills.mjs",
@@ -59,7 +58,6 @@
     "test:visual:functional": "node scripts/test-visual.mjs --functional",
     "check:visual-cleanup": "node tests/visual/cleanup-check.mjs",
     "lint": "node scripts/check-script-syntax.mjs",
-    "test:dev-hud": "playwright test --config=playwright.dev-tools.config.mjs",
     "audit:site": "node scripts/audit-site.mjs",
     "test:site-audit": "node --test tests/site-standards-audit.test.mjs tests/audit-coverage.test.mjs tests/audit-modernize.test.mjs tests/audit-runtime-evidence.test.mjs",
     "audit:modernize": "node scripts/audit-modernize.mjs",

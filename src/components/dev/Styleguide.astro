@@ -10,7 +10,6 @@ import ResponsiveImage from '../ResponsiveImage.astro';
 import RichText from '../RichText.astro';
 import PhotoGallery from '../PhotoGallery.astro';
 import FormError from '../FormError.astro';
-import TweaksBar from '../TweaksBar.astro';
 import LogoTicker from '../LogoTicker.astro';
 import { fixtureVersion, smallImage, portraitImage, fixtureImage as image, specimenTokens, componentCoverage, proseFixture, editorialImageFixture, galleryFixture } from '../../dev/styleguide-fixtures';
 const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'editorial', 'coverage'];
@@ -23,7 +22,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
     <header class="site-header"><nav class="site-nav" aria-label="Styleguide sections"><a class="site-brand" href="#main-content">Component styleguide</a>{sections.map(name => <a href={`#${name}`}>{name[0].toUpperCase() + name.slice(1)}</a>)}</nav></header>
     <main id="main-content" class="site-main" tabindex="-1" data-styleguide-ready data-fixture-version={fixtureVersion}>
       <Container width="wide">
-        <div class="flow"><h1>Starter component styleguide</h1><p>Inspect the existing neutral tokens and public components. These synthetic examples do not define a client theme or prove CMS editing.</p><p>Development only: press T for token controls. With the panel open, G toggles a layout guide and B compares source styles. Reload clears all overrides.</p></div>
+        <div class="flow"><h1>Starter component styleguide</h1><p>Inspect the existing neutral tokens and public components. These synthetic examples do not define a client theme or prove CMS editing.</p><p>Development only: edit tokens in <code>src/styles/global.css</code> and run <code>npm run design:tokens</code> to audit contrast, fluid scales, and specimen coverage.</p></div>
         <Section labelledBy="typography"><div class="flow"><h2 id="typography">Typography</h2>
           {['-1', '0', '1', '2'].map(step => <p style={`font-size:var(--text-step-${step})`}><code>--text-step-{step}</code> Reading at a fluid scale</p>)}
           <h3>Nested heading</h3><h4>Fourth-level heading</h4><h5>Fifth-level heading</h5><h6>Sixth-level heading</h6>
@@ -46,7 +45,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
           <Container width="reading"><Grid minimum="wide"><Card title="Missing media and narrow placement" href="#coverage"><p>No substitute image is invented when media is absent.</p></Card></Grid></Container>
           <Section labelledBy="standard-grid" spacing="content"><Container width="content"><h3 id="standard-grid">Standard grid in a content container</h3><Grid minimum="standard"><Card href="#coverage" title="An intentionally long descriptive title to expose narrow card placement and natural wrapping"><p>This linked card has no media.</p></Card><Card href="#coverage" title="An empty body specimen" /></Grid></Container></Section>
           <Container breakout class="flow"><h3 id="breakout-grid">Editorial breakout container (<code>.content-grid</code>)</h3><p>Default children stay in the reading track while breakout children expand to named feature, wide, or full tracks without closing the container.</p><div class="content--feature breakout-specimen"><code>.content--feature</code> spans the content measure while prose stays within reading width.</div></Container>
-          <div dir="rtl"><Container width="reading"><p>Right-to-left container specimen — select this reading container in the grid guide to inspect direction and bounds.</p></Container></div>
+          <div dir="rtl"><Container width="reading"><p>Right-to-left container specimen — inspect logical inline bounds and reading direction across viewports.</p></Container></div>
         </div></Section>
         <Section labelledBy="media"><div class="flow"><h2 id="media">Images, galleries and partner artwork</h2><p>Local geometric assets demonstrate ratio, native dimensions and captions. This SVG is intentionally retained; runtime photographic optimization is a separate integration check.</p>
           <Container width="reading"><div class="flow"><RichText value={[editorialImageFixture]} /></div></Container>
@@ -64,7 +63,6 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
       </Container>
     </main>
     <footer class="site-footer"><p>Development/test specimen route. Normal production builds return 404. Fixture builds must never be deployed.</p></footer>
-    {import.meta.env.DEV && <TweaksBar />}
   </body>
 </html>
 <style>

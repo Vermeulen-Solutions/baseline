@@ -192,11 +192,66 @@ The flow utility differentiates rhythm across headings, lists, figures, and bloc
 
 ---
 
-## 6. Live Calibration via the Dev HUD
+## 6. Agent-First Token Calibration & WCAG Contrast Audit (`npm run design:tokens`)
 
-Instead of manually editing pixel values and refreshing, calibrate your site's token physics live in the browser:
-1. Run `npm run dev`.
-2. Press **`T`** to open the TweaksBar drawer.
-3. Adjust fluid typography steps, line-heights, tracking, and spatial density with real-time feedback on your actual content.
-4. Press **`B`** to A/B toggle against your source CSS baseline.
-5. Click **Copy Tokens** to export clean Tailwind `@theme` CSS, paste it into `src/styles/global.css`, and reload.
+Baseline treats `src/styles/global.css` as the single source of truth for tokens, backed by an automated CLI engine (`scripts/design-system.mjs`) and live Vite HMR on `/_styleguide`:
+
+1. **List or seed a canonical Aesthetic Lane preset:**
+   ```sh
+   npm run design:tokens -- --list-lanes
+   npm run design:tokens -- --lane editorial-paper --write
+   ```
+   Available presets: `neutral`, `technical-systems`, `product-led-minimalism`, `editorial-paper`, and `luminous-futurism`.
+2. **Generate parametric fluid scales or WCAG-safe OKLCH brand palettes:**
+   ```sh
+   # Derive all --text-step-* and --spacing-* fluid clamp() tokens from mathematical ratios
+   npm run design:tokens -- --type-scale major-third --space-scale 1.5 --write
+
+   # Synthesize a complete light + [data-surface="dark"] OKLCH palette from brand hex/OKLCH seeds
+   npm run design:tokens -- --seed-accent "#1B4332" --seed-canvas "#FAF8F5" --write
+
+   # Set individual @theme, :root (--root:...), or dark-surface (--dark:...) tokens
+   npm run design:tokens -- --set "--radius-card=0.5rem" --set "--root:--measure-reading=64ch" --write
+   ```
+3. **Run the automated token & WCAG contrast audit and record Stage 4.5 evidence:**
+   ```sh
+   npm run design:tokens
+   npm run design:tokens -- --write-calibration
+   npm run test:design
+   ```
+   This directly parses `src/styles/global.css`, verifies all 10 perceptual WCAG AA contrast pairs across default and `[data-surface="dark"]` contexts, checks fluid `clamp()` bounds, confirms `/_styleguide` swatch and `src/` consumer coverage, and writes a deterministic `## Token Calibration` section (bound to the LF-normalised SHA-256 of `src/styles/global.css`) into `audit/component-calibration.md`.
+
+---
+
+## 7. Optional Visual Page Builder Integration (`@perkyzz/emvb`)
+
+Core routes, collections, and long-form articles should use Baseline's zero-JS Astro primitives (`<Section>`, `<Container>`, `<Grid>`, `<Card>`, `.flow`). When a client also needs a drag-and-drop visual editor for bespoke marketing landing pages or popups, integrate **[EmVB](https://emvb.dev/)** (`@perkyzz/emvb`) as an optional Stage 2 native plugin:
+
+1. **Install EmVB (and optional MCP server):**
+   ```sh
+   npm install @perkyzz/emvb
+   ```
+2. **Register in `astro.config.mjs` and pass `canvasStyles`:**
+   Pass your global stylesheet so the EmVB editor iframe and rendered blocks inherit Baseline's typography and CSS custom properties:
+   ```js
+   import { emvb } from "@perkyzz/emvb";
+
+   // Inside emdash({ plugins: [...] }):
+   emvb({
+     canvasStyles: ["/src/styles/global.css"],
+   })
+   ```
+3. **Resolve EmVB pages in `src/pages/[slug].astro`:**
+   ```astro
+   ---
+   import { resolveEmVBPage } from "@perkyzz/emvb/runtime";
+   import EmVBPage from "@perkyzz/emvb/astro/EmVBPage.astro";
+
+   const emvb = await resolveEmVBPage(Astro);
+   ---
+   {emvb ? <EmVBPage page={emvb} /> : (
+     <!-- Standard Astro template fallback -->
+   )}
+   ```
+4. **Synchronize tokens via MCP (`@perkyzz/emvb-mcp`):**
+   Agents can use `emvb_get_styles` and `emvb_update_styles` to align EmVB's site-styles palette and fluid typography scale with the OKLCH and `clamp()` tokens defined in `src/styles/global.css`.

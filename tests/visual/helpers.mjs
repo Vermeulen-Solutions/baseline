@@ -42,7 +42,7 @@ export async function prepare(page, route, problems = [], { scripts = true } = {
   });
   expect(problems, 'capture network/runtime readiness').toEqual([]);
   expect(broken, 'decoded image readiness').toEqual([]);
-  await expect(page.locator('#tweaks-panel, #tweaks-grid-overlay, #tweaks-reference-overlay, #tweaks-ownership-overlay, [data-emdash-ref]')).toHaveCount(0);
+  await expect(page.locator('[data-emdash-ref]')).toHaveCount(0);
   await page.evaluate(() => scrollTo(0, 0));
 }
 export async function noOverflow(page) {

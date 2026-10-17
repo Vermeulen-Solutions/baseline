@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createTokenMap, exportTokens } from '../src/utils/design-tweaks.mjs';
+import { AESTHETIC_LANES, parseDesignTokens, auditDesignTokens, applyTokenOverrides } from '../scripts/design-system.mjs';
 import { validateRecord, matchesException, matchesDeletionException, isVisualPath } from '../scripts/check-art-direction.mjs';
 import { createHash } from 'node:crypto';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
@@ -84,33 +84,20 @@ test('CLI catches untracked visual work, accepts a record, and expires changed i
   }
 });
 
-const baseline = {
-  '--text-step-1': 'clamp(1rem, 2vi, 2rem)',
-  '--text-step-2': 'clamp(2rem, 4vi, 4rem)',
-  '--spacing-content': 'clamp(1rem, 2vi, 2rem)',
-  '--spacing-grid': '2rem', '--spacing-section': '6rem',
-  '--hero-filter': 'sepia(20%)', '--color-action': 'oklch(43% 0.14 250)',
-};
-test('fresh state never overwrites source tokens and unit scaling preserves baseline', () => {
-  assert.deepEqual(createTokenMap(baseline, {}), {});
-  assert.deepEqual(createTokenMap(baseline, { typeScale: '1', densityScale: '1', surface: 'baseline' }), {});
+test('applyTokenOverrides updates @theme, :root, and [data-surface="dark"] tokens non-destructively while preserving comments', () => {
+  const css = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/styles/global.css','utf8'))"], { encoding: 'utf8' });
+  const editorial = applyTokenOverrides(css, 'editorial-paper');
+  const parsed = parseDesignTokens(editorial);
+  assert.equal(parsed.theme['--color-page'], AESTHETIC_LANES['editorial-paper'].theme['--color-page']);
+  assert.equal(parsed.theme['--radius-card'], '0.25rem');
+  assert.equal(parsed.root['--measure-reading'], '64ch');
+  assert.ok(editorial.includes('Neutral starting tokens, not a finished brand theme.'), 'comments must be preserved');
+  assert.equal(auditDesignTokens(editorial).valid, true);
 });
-test('preview and export reproduce every changed type, spacing, filter, color and pattern token', () => {
-  const tokens = createTokenMap(baseline, { typeScale: '1.2', densityScale: '0.8', surface: 'grid', heroBrightness: '80', '--color-action': 'oklch(60% 0.12 240)' });
-  assert.equal(tokens['--text-step-2'], 'calc(clamp(2rem, 4vi, 4rem) * 1.2)');
-  assert.equal(tokens['--text-step-1'], 'calc(clamp(1rem, 2vi, 2rem) * 1.2)');
-  assert.equal(tokens['--spacing-section'], 'calc(6rem * 0.8)');
-  assert.equal(tokens['--hero-filter'], 'sepia(20%) brightness(80%) contrast(100%) saturate(100%)');
-  const css = exportTokens(tokens);
-  for (const [key, value] of Object.entries(tokens)) assert.ok(css.includes(`${key}: ${value};`));
-  assert.ok(css.includes('@theme {'));
-  assert.ok(css.includes(':root {'));
-  assert.ok(css.includes('--page-pattern-size: 28px 28px;'));
-});
-test('surface source restores baseline, solid clears a pattern, dark-safe ink follows text', () => {
-  assert.deepEqual(createTokenMap(baseline, { surface: 'baseline' }), {});
-  assert.equal(createTokenMap(baseline, { surface: 'solid' })['--page-pattern'], 'none');
-  for (const surface of ['grid', 'dots', 'noise']) assert.ok(createTokenMap(baseline, { surface })['--page-pattern'].includes('var(--color-text)'));
+
+test('applyTokenOverrides rejects unknown aesthetic lane identifiers', () => {
+  const css = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/styles/global.css','utf8'))"], { encoding: 'utf8' });
+  assert.throws(() => applyTokenOverrides(css, 'non-existent-lane'), /Unknown aesthetic lane preset/);
 });
 
 test('global.css, Container.astro, and Card.astro ship the curated token engine, breakout grid, and accessible card contract', () => {

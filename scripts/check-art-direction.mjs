@@ -90,7 +90,7 @@ function main() {
   if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
   else {
     console.log('Art direction record is structurally valid.');
-    console.log('👉 Next Step (Stage 4.5): Calibrate building blocks on /_styleguide (press "T" for Dev HUD) and record findings in audit/component-calibration.md before implementing pages.');
+    console.log('👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.');
   }
 }
 

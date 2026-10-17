@@ -1,23 +1,27 @@
 [
   {
     "path": "src/components/TweaksBar.astro",
-    "reason": "Neutral dev-only token dashboard maintenance: current theme/layout catalog, category/search navigation, source values, validation, per-token reset and existing G/O/P diagnostics. No client page or theme changes; exact UTF-8/LF content reviewed. Any edit invalidates this exception.",
-    "sha256": "41948d6441b3efa9d42df957a15c72ea439d1be9889cfd087f5c3ab17135a828"
+    "reason": "Removed TweaksBar Dev HUD component in favor of the streamlined agent-first design system workflow.",
+    "sha256": "41948d6441b3efa9d42df957a15c72ea439d1be9889cfd087f5c3ab17135a828",
+    "deleted": true
   },
   {
     "path": "src/utils/clipboard.mjs",
-    "reason": "Neutral dev-only clipboard helper: tries the Clipboard API and degrades to the legacy selection copy when the document is not focused, so the panel copy buttons work with DevTools focused or the window inactive. Takes an injectable environment for tests; no client design. Any edit invalidates this exception.",
-    "sha256": "1422f80dcda3c4b92c0bc4029df51696e48b2ceac8e154fb408d257e7e7fb5ef"
+    "reason": "Removed TweaksBar-only clipboard helper.",
+    "sha256": "1422f80dcda3c4b92c0bc4029df51696e48b2ceac8e154fb408d257e7e7fb5ef",
+    "deleted": true
   },
   {
     "path": "src/utils/design-tweaks.mjs",
-    "reason": "Neutral development token catalog and calibration/export infrastructure: complete current theme coverage, fluid-family scaling and source reset precedence. Catalog membership is imported from the generated file rather than hand-maintained; the maths and write-only list live here. No client design; exact UTF-8/LF content reviewed. Any edit invalidates this exception.",
-    "sha256": "5ec209fd724f9c8974572146338f0b9129b5d0bfa707fe526dfcf11f5c2534ea"
+    "reason": "Removed TweaksBar runtime token calibration module in favor of scripts/design-system.mjs.",
+    "sha256": "5ec209fd724f9c8974572146338f0b9129b5d0bfa707fe526dfcf11f5c2534ea",
+    "deleted": true
   },
   {
     "path": "src/utils/token-catalog.generated.mjs",
-    "reason": "Neutral development token catalogue generated from the authored stylesheet by scripts/generate-token-catalog.mjs: token names, friendly labels and CSS roles only, no client design. Regenerate with npm run tokens:generate rather than editing. Any edit invalidates this exception.",
-    "sha256": "812c8602d16d3a812f2feabaaa600ba98ea1b9b083e78c85e05819607c9586dd"
+    "reason": "Removed generated TweaksBar token catalog; scripts/design-system.mjs parses src/styles/global.css directly.",
+    "sha256": "812c8602d16d3a812f2feabaaa600ba98ea1b9b083e78c85e05819607c9586dd",
+    "deleted": true
   },
   {
     "path": "src/styles/global.css",
@@ -26,8 +30,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Issue #7 neutral starter capture infrastructure: explicit fixture-only pinned font inputs; production public visual system preserved. Exact LF-normalized source; edits invalidate this exception.",
-    "sha256": "93a8385688f098ef6a0ca16b839aec393af864e4c777cc4f62b5618292406b0e"
+    "reason": "Neutral starter layout shell with TweaksBar removed; production public visual system preserved. Exact LF-normalized source; edits invalidate this exception.",
+    "sha256": "231253f610303af75cb84204f4752b6a669fce45f5a38a29d6a6f56cc625fe4b"
   },
   {
     "path": "src/components/Container.astro",
@@ -177,13 +181,14 @@
   },
   {
     "path": "src/components/dev/Styleguide.astro",
-    "reason": "Issues #2/#7 neutral starter specimen infrastructure including Container breakout (.content-grid) and accessible Card specimen; no client theme. Exact LF-normalized source; edits invalidate this exception.",
-    "sha256": "739cfb6c33ba94edd6d7b276f4bbccf381f61085c78606efaa132bef1c131823"
+    "reason": "Neutral starter specimen infrastructure including Container breakout (.content-grid) and accessible Card specimen without TweaksBar; no client theme. Exact LF-normalized source; edits invalidate this exception.",
+    "sha256": "e0cb5d2a4bedbe7d29f5e42251b591965f023cc84c2781c56b6c6d91d9303046"
   },
   {
     "path": "src/utils/grid-guide.ts",
-    "reason": "Issues #2/#6 neutral dev-only alignment guide including .content-grid breakout discovery; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
-    "sha256": "090322fdc5d66e3307296c7f809337658c39800a1596a736b8b298e3d6d7e184"
+    "reason": "Removed TweaksBar alignment guide overlay.",
+    "sha256": "090322fdc5d66e3307296c7f809337658c39800a1596a736b8b298e3d6d7e184",
+    "deleted": true
   },
   {
     "path": "src/components/LogoTicker.astro",
@@ -217,22 +222,26 @@
   },
   {
     "path": "src/utils/reference-overlay.ts",
-    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
-    "sha256": "9d35365a069fc8547e9ea53ab890d0a002d8c5dd2b43b7e5d5c5d978f400bb82"
+    "reason": "Removed TweaksBar reference overlay module.",
+    "sha256": "9d35365a069fc8547e9ea53ab890d0a002d8c5dd2b43b7e5d5c5d978f400bb82",
+    "deleted": true
   },
   {
     "path": "src/utils/reference-image.mjs",
-    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
-    "sha256": "c3d5336366b5e54d3b56704d64dfdfb902ab5c3a015e45d01b00c5dad800dd14"
+    "reason": "Removed TweaksBar reference image header parser.",
+    "sha256": "c3d5336366b5e54d3b56704d64dfdfb902ab5c3a015e45d01b00c5dad800dd14",
+    "deleted": true
   },
   {
     "path": "src/utils/ownership-inspector.ts",
-    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
-    "sha256": "a820068c82f70d98c5eca512f1f7b55a511e227f7085a386d006a15404fe65a3"
+    "reason": "Removed TweaksBar EmDash ownership overlay module.",
+    "sha256": "a820068c82f70d98c5eca512f1f7b55a511e227f7085a386d006a15404fe65a3",
+    "deleted": true
   },
   {
     "path": "src/utils/emdash-ownership.mjs",
-    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
-    "sha256": "c52f3dbcaf511b35a372d34a2cad08ad43b9cc1b13a92a4a9f021b8efbf4f37d"
+    "reason": "Removed TweaksBar EmDash ownership decoder module.",
+    "sha256": "c52f3dbcaf511b35a372d34a2cad08ad43b9cc1b13a92a4a9f021b8efbf4f37d",
+    "deleted": true
   }
 ]

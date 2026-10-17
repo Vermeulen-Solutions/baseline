@@ -1,104 +1,176 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
-import { baselineTokens, tokenDefinitions, writeOnlyTokens } from '../src/utils/design-tweaks.mjs';
-import { buildCatalog, renderCatalog } from '../scripts/generate-token-catalog.mjs';
+import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import {
+  AESTHETIC_LANES,
+  TYPE_SCALE_RATIOS,
+  REQUIRED_THEME_TOKENS,
+  REQUIRED_ROOT_TOKENS,
+  REQUIRED_DARK_SURFACE_TOKENS,
+  parseDesignTokens,
+  auditDesignTokens,
+  applyTokenOverrides,
+  contrastRatio,
+  generateTypeScale,
+  generateSpaceScale,
+  generateSeededPalette,
+  stylesheetDigest,
+  formatCalibrationMarkdown,
+  upsertCalibrationRecord,
+} from '../scripts/design-system.mjs';
 
-const GENERATED_FILE = 'src/utils/token-catalog.generated.mjs';
-const REASON_MIN_LENGTH = 40;
-const REASON_PLACEHOLDER = /todo|fixme|tbd|n\/a|placeholder/i;
+const GLOBAL_CSS_PATH = 'src/styles/global.css';
+const FIXTURES_PATH = 'src/dev/styleguide-fixtures.ts';
 
-/**
- * Palette roles deliberately not exercised on /_styleguide.
- * Keyed by the role suffix, i.e. `focus-on-dark` for `--color-focus-on-dark`.
- */
-const COLOR_SPECIMEN_EXEMPT = new Map([
-  ['focus-on-dark', 'Authored in src/styles/global.css and consumed only as the focus-ring replacement inside [data-surface="dark"]. The palette section renders one swatch per specimenTokens entry (src/components/dev/Styleguide.astro), and no src/ markup uses data-surface, so the role has no specimen surface yet.'],
+// Tokens that are part of the public Tailwind v4 / CSS utility contract for downstream client templates
+// even when the minimal starter routes only consume a subset of elevation/easing steps directly.
+const PUBLIC_CONTRACT_TOKENS = new Set([
+  '--text-step-3-to-1',
+  '--text-step-2-to-0',
+  '--spacing-2xl-to-md',
+  '--spacing-xl-to-sm',
+  '--shadow-sm',
+  '--shadow-md',
+  '--shadow-lg',
+  '--ease-smooth',
+  '--ease-snappy',
+  '--ease-spring',
+  '--measure-content-safe',
 ]);
 
-/** Read the palette roles the styleguide actually renders, tolerating either quote style and comments. */
-async function specimenRoles() {
-  const fixtures = await readFile('src/dev/styleguide-fixtures.ts', 'utf8');
-  const array = fixtures.match(/export const specimenTokens = \[([^\]]*)\]/);
-  assert.ok(array, 'Could not recognise the specimenTokens array in src/dev/styleguide-fixtures.ts, so specimen coverage could not be checked. Update this guard to match that file.');
-  const roles = [...array[1].matchAll(/['"]([a-z0-9-]+)['"]/g)].map(match => match[1]);
-  assert.ok(roles.length > 0, 'specimenTokens parsed empty from src/dev/styleguide-fixtures.ts.');
-  return new Set(roles);
+function readSpecimenColors() {
+  const source = readFileSync(FIXTURES_PATH, 'utf8');
+  const match = source.match(/specimenTokens\s*=\s*\[([^\]]+)\]/);
+  assert.ok(match, 'specimenTokens array must exist in src/dev/styleguide-fixtures.ts');
+  return [...match[1].matchAll(/['"]([^'"]+)['"]/g)].map(([, role]) => `--color-${role}`);
 }
 
-test('the generated token catalogue is current', async () => {
-  const expected = renderCatalog(buildCatalog());
-  const actual = (await readFile(GENERATED_FILE, 'utf8')).replace(/\r\n/g, '\n');
-  assert.equal(
-    actual,
-    expected.replace(/\r\n/g, '\n'),
-    `${GENERATED_FILE} is stale or was edited by hand. Run: npm run tokens:generate`,
+function collectSourceFiles(dir) {
+  const results = [];
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry);
+    const stat = statSync(full);
+    if (stat.isDirectory()) {
+      results.push(...collectSourceFiles(full));
+    } else if (/\.(astro|css|ts|mjs|js)$/.test(entry)) {
+      results.push(full);
+    }
+  }
+  return results;
+}
+
+test('global.css declares all required semantic tokens, valid fluid clamps, and WCAG AA contrast pairs', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const audit = auditDesignTokens(css);
+  assert.equal(audit.valid, true, audit.errors.join('\n'));
+  assert.equal(Object.keys(audit.tokens.theme).length, REQUIRED_THEME_TOKENS.length);
+  assert.equal(Object.keys(audit.tokens.root).length, REQUIRED_ROOT_TOKENS.length);
+  assert.equal(Object.keys(audit.tokens.dark).length, REQUIRED_DARK_SURFACE_TOKENS.length);
+});
+
+test('every @theme color token is represented on the styleguide palette specimen', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const { theme } = parseDesignTokens(css);
+  const authoredColors = Object.keys(theme)
+    .filter(token => token.startsWith('--color-') && token !== '--color-focus-on-dark')
+    .sort();
+  const specimenColors = readSpecimenColors().sort();
+
+  assert.deepEqual(
+    specimenColors,
+    authoredColors,
+    'src/dev/styleguide-fixtures.ts specimenTokens must match @theme --color-* tokens in src/styles/global.css',
   );
 });
 
-test('every authored token is addressable and every write-only token is documented', () => {
-  const { authored } = buildCatalog();
-  const problems = [];
+test('every authored token in global.css is either consumed in src/ or part of the documented public contract', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const { theme, root } = parseDesignTokens(css);
+  const allAuthored = [...Object.keys(theme), ...Object.keys(root)];
+  const sourceFiles = collectSourceFiles('src');
+  const combinedSource = sourceFiles.map(file => readFileSync(file, 'utf8')).join('\n');
 
-  const addressable = new Set(baselineTokens);
-  for (const token of authored) {
-    if (!addressable.has(token)) {
-      problems.push(`Authored token is missing from the catalogue: ${token}. Check the group/role rules in scripts/generate-token-catalog.mjs.`);
-    }
+  for (const token of allAuthored) {
+    if (PUBLIC_CONTRACT_TOKENS.has(token)) continue;
+    const varUsage = new RegExp(`var\\(\\s*${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`);
+    const dynamicUsage = token.startsWith('--color-') && combinedSource.includes('--color-${');
+    const stepUsage = token.startsWith('--text-step-') && combinedSource.includes('--text-step-${');
+    assert.ok(
+      varUsage.test(combinedSource) || dynamicUsage || stepUsage,
+      `Authored token ${token} has no consumer in src/ and is not listed in PUBLIC_CONTRACT_TOKENS`,
+    );
   }
-
-  for (const definition of tokenDefinitions) {
-    if (!definition.property || definition.property.trim() === '') {
-      problems.push(`Catalogued token has no CSS role: ${definition.key}, so the panel cannot validate input for it.`);
-    }
-  }
-
-  const authoredSet = new Set(authored);
-  for (const { token, reason } of writeOnlyTokens) {
-    if (authoredSet.has(token)) {
-      problems.push(`Token is listed as write-only but is now authored in src/styles/global.css: ${token}. Remove it from the writeOnly list in scripts/token-catalog-overrides.mjs.`);
-    }
-    if (!reason || reason.trim().length < REASON_MIN_LENGTH || REASON_PLACEHOLDER.test(reason)) {
-      problems.push(`Write-only token needs a real reason of at least ${REASON_MIN_LENGTH} characters and no placeholders: ${token}. Say which control writes it and how the stylesheet consumes it.`);
-    }
-  }
-
-  assert.deepEqual(problems, [], problems.join('\n'));
 });
 
-test('every palette role is exercised by a specimen or exempted with a reason', async () => {
-  const { authored } = buildCatalog();
-  const specimens = await specimenRoles();
-  const problems = [];
+test('every canonical Aesthetic Lane preset applies cleanly and passes WCAG AA contrast and fluid checks', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  for (const laneId of Object.keys(AESTHETIC_LANES)) {
+    const applied = applyTokenOverrides(css, laneId);
+    const audit = auditDesignTokens(applied);
+    assert.equal(audit.valid, true, `Lane ${laneId} failed validation:\n${audit.errors.join('\n')}`);
+  }
+});
 
-  const authoredRoles = new Map(
-    authored.filter(token => token.startsWith('--color-')).map(token => [token.replace('--color-', ''), token]),
-  );
-
-  for (const role of specimens) {
-    if (!authoredRoles.has(role)) {
-      problems.push(`Styleguide renders a palette role that is not authored in src/styles/global.css: ${role}. Remove it from specimenTokens in src/dev/styleguide-fixtures.ts.`);
-    }
+test('parametric fluid type/space scales and WCAG-safe OKLCH palette generator pass all audits', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  for (const ratioName of Object.keys(TYPE_SCALE_RATIOS)) {
+    const typeOverrides = generateTypeScale({ ratio: ratioName });
+    const spaceOverrides = generateSpaceScale({ ratio: 1.45 });
+    const seededPalette = generateSeededPalette({ accent: '#1B4332', canvas: '#FAF8F5' });
+    const updated = applyTokenOverrides(css, {
+      theme: { ...typeOverrides, ...spaceOverrides, ...seededPalette.theme },
+      dark: seededPalette.dark,
+    });
+    const audit = auditDesignTokens(updated);
+    assert.equal(audit.valid, true, `Parametric scale (${ratioName}) failed:\n${audit.errors.join('\n')}`);
   }
 
-  for (const [role, token] of authoredRoles) {
-    const exempt = COLOR_SPECIMEN_EXEMPT.has(role);
-    if (!specimens.has(role) && !exempt) {
-      problems.push(`Palette role has no styleguide specimen: ${token}. Add it to specimenTokens in src/dev/styleguide-fixtures.ts, or record it in COLOR_SPECIMEN_EXEMPT with a reason.`);
-    }
-    if (specimens.has(role) && exempt) {
-      problems.push(`COLOR_SPECIMEN_EXEMPT is stale because specimenTokens already covers ${token}. Remove it from the exemption list.`);
-    }
+  for (const seed of ['#7C2D12', '#1E3A8A', '#F59E0B', 'oklch(62% 0.19 310)']) {
+    const seeded = generateSeededPalette({ accent: seed });
+    const updated = applyTokenOverrides(css, seeded);
+    const audit = auditDesignTokens(updated);
+    assert.equal(audit.valid, true, `Seeded palette (${seed}) failed WCAG audit:\n${audit.errors.join('\n')}`);
   }
+});
 
-  for (const [role, reason] of COLOR_SPECIMEN_EXEMPT) {
-    if (!authoredRoles.has(role)) {
-      problems.push(`COLOR_SPECIMEN_EXEMPT names a role that is not authored in src/styles/global.css: ${role}. Remove it from the exemption list.`);
-    }
-    if (!reason || reason.trim().length < REASON_MIN_LENGTH || REASON_PLACEHOLDER.test(reason)) {
-      problems.push(`Exemption needs a real reason of at least ${REASON_MIN_LENGTH} characters and no placeholders: ${role}. Say why the gap is deliberate and cite the consumer in src/.`);
-    }
+test('formatCalibrationMarkdown and upsertCalibrationRecord bind Stage 4.5 token evidence to LF SHA-256', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const digest = stylesheetDigest(css);
+  assert.equal(stylesheetDigest(css.replace(/\n/g, '\r\n')), digest);
+
+  const dir = mkdtempSync(join(tmpdir(), 'emdash-cal-'));
+  try {
+    const target = join(dir, 'component-calibration.md');
+    upsertCalibrationRecord(target, css);
+    const first = readFileSync(target, 'utf8');
+    assert.ok(first.includes('## Token Calibration'));
+    assert.ok(first.includes(digest));
+    assert.ok(first.includes('## Component Specimens Verified'));
+
+    // Updating in place preserves surrounding sections
+    upsertCalibrationRecord(target, css);
+    const second = readFileSync(target, 'utf8');
+    assert.equal(second.match(/## Token Calibration/g)?.length, 1);
+    assert.ok(second.includes('## Component Specimens Verified'));
+    assert.ok(formatCalibrationMarkdown(css).includes('WCAG AA Perceptual Contrast Matrix'));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
+});
 
-  assert.deepEqual(problems, [], problems.join('\n'));
+test('auditDesignTokens catches insufficient WCAG contrast and invalid fluid clamp bounds', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const lowContrast = applyTokenOverrides(css, {
+    theme: {
+      '--color-text': 'oklch(82% 0.01 250)',
+      '--spacing-section': 'clamp(6rem, 5vi, 2rem)',
+    },
+  });
+  const audit = auditDesignTokens(lowContrast);
+  assert.equal(audit.valid, false);
+  assert.ok(audit.errors.some(err => err.includes('default:text-on-page')));
+  assert.ok(audit.errors.some(err => err.includes('--spacing-section')));
+  assert.ok(contrastRatio('#ffffff', '#000000') >= 20.9);
 });

@@ -9,7 +9,6 @@ import {
 import { createPublicPageContext } from "emdash/page";
 import LiveSearch from "emdash/ui/search";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
-import TweaksBar from "../components/TweaksBar.astro";
 import "../styles/global.css";
 
 interface Props {
@@ -90,6 +89,5 @@ const pageCtx = createPublicPageContext({
 		</footer>
 
 		<EmDashBodyEnd page={pageCtx} />
-		{import.meta.env.DEV && <TweaksBar />}
 	</body>
 </html>

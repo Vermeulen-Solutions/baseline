@@ -60,15 +60,13 @@ try {
   const html = await response.text();
   assert.equal(response.status, 200);
   assert.ok(html.includes('data-styleguide-ready'), 'Expected specimens, not a setup/login response');
-  assert.ok(html.includes('tweaks-grid-btn'));
-  assert.ok(html.includes('tweaks-reference-file') && html.includes('tweaks-ownership-target'));
   assert.ok(!html.includes('data-emdash-ref='), 'Synthetic fixtures must not pretend to be editable records');
   const imagePaths = [...html.matchAll(/<img\b[^>]*\ssrc="([^"]+)"/g)].map(match => match[1]);
   assert.ok(imagePaths.length >= 5);
   for (const image of new Set(imagePaths)) assert.equal((await fetch(new URL(image, origin))).status, 200, image);
   report.dev = { status: response.status, specimens: true, images: imagePaths.length, fakeEditBindings: false };
   // Complete only this disposable site's supported dev setup so production health
-  // cannot accidentally pass on an error/setup response with no HUD strings.
+  // cannot accidentally pass on an error/setup response.
   const setup = await fetch(origin + '/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin');
   assert.equal(setup.status, 200, 'Disposable dev setup must succeed');
   assert.ok((await (await fetch(origin + '/')).text()).includes('Welcome'), 'Expected seeded public content');
@@ -83,7 +81,6 @@ try {
   const fixtureHtml = await fixtureResponse.text();
   assert.equal(fixtureResponse.status, 200);
   assert.ok(fixtureHtml.includes('data-fixture-version="2"'));
-  assert.ok(!/tweaks-(?:panel|grid-btn|reference-file|ownership-target)/.test(fixtureHtml));
   assert.equal(fixtureResponse.headers.get('cache-control'), 'no-store');
   const tickerMarkup = [...fixtureHtml.matchAll(/<div[^>]*data-logo-ticker[^>]*>([\s\S]*?)<\/ul>\s*<\/div>\s*<\/div>\s*<\/div>/g)];
   assert.equal(tickerMarkup.length, 2, 'Empty ticker renders nothing');
@@ -92,7 +89,7 @@ try {
     assert.ok(/aria-hidden="true"[^>]*inert/.test(markup), 'Duplicate track must be hidden and inert');
   }
   for (const image of new Set([...fixtureHtml.matchAll(/<img\b[^>]*\ssrc="([^"]+)"/g)].map(match => match[1]))) assert.equal((await fetch(new URL(image, origin))).status, 200, image);
-  report.fixtures = { status: 200, fixtureVersion: 2, tickerInstances: tickerMarkup.length, emptyTickerOmitted: true, releaseRejected: true, HUD: false, images: 'all successful' };
+  report.fixtures = { status: 200, fixtureVersion: 2, tickerInstances: tickerMarkup.length, emptyTickerOmitted: true, releaseRejected: true, images: 'all successful' };
   await stop();
   const build = launch(['node_modules/astro/bin/astro.mjs', 'build']);
   const [code] = await once(build, 'exit'); child = undefined;
@@ -106,7 +103,7 @@ try {
       const result = await fetch(origin + '/_styleguide' + suffix, { method, headers: { cookie: 'fixtures=1' } });
       const body = await result.text();
       assert.equal(result.status, 404);
-      assert.ok(!body.includes('data-styleguide-ready') && !body.includes('tweaks-panel'));
+      assert.ok(!body.includes('data-styleguide-ready'));
       report.production[method + suffix] = result.status;
     }
   }
@@ -115,8 +112,6 @@ try {
   const index = await publicResponse.text();
   assert.ok(index.includes('Welcome') && index.includes('Recent Posts'), 'Built public content must render, not setup/error markup');
   report.production.publicStatus = publicResponse.status;
-  assert.ok(!/tweaks-(?:panel|grid-overlay|reference-overlay|ownership-overlay)/.test(index));
-  const client = path.join(stage, 'dist', 'client');
   const { readdir } = await import('node:fs/promises');
   const serverOutput = path.join(stage, 'dist', 'server');
   for (const name of await readdir(serverOutput, { recursive: true })) {
@@ -125,15 +120,9 @@ try {
     assert.ok(!/(?:from\s*|import\s*\()\s*["']zod(?:\/[^"']*)?["']/.test(source), `Server chunk relies on hoisted Zod: ${name}`);
   }
   report.production.zodResolution = 'Dependency-local validators bundled; no bare Zod imports in emitted server modules';
-  for (const name of await readdir(client, { recursive: true })) {
-    if (!/\.(m?js|css)$/.test(name)) continue;
-    const source = await readFile(path.join(client, name), 'utf8');
-    assert.ok(!/tweaks-(?:grid-overlay|grid-btn|reference-overlay|reference-file|ownership-overlay|ownership-target)|Viewport\/DPR mismatch|Unsupported annotation format/.test(source), `Functional HUD code leaked into ${name}`);
-  }
-  report.production.HUDClientIsolation = 'All emitted client JS/CSS scanned: G/O/P identifiers, reference loading and ownership adapter diagnostics absent; empty script stubs allowed';
   await mkdir(path.join(root, '.emdash', 'checks'), { recursive: true });
   await writeFile(path.join(root, '.emdash', 'checks', 'dev-tools.json'), JSON.stringify(report, null, 2) + '\n');
-  console.log('Dev/fixture specimens/assets, fixture release rejection and clean production GET/HEAD/HUD isolation passed.');
+  console.log('Dev/fixture specimens/assets, fixture release rejection and clean production GET/HEAD isolation passed.');
   if (process.argv.includes('--inspect')) {
     await stop();
     launch(['dist-fixtures/server/entry.mjs'], { NODE_ENV: 'production' }); await ready();

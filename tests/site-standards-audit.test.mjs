@@ -227,12 +227,11 @@ test('design-system drift rules detect brownfield CSS/Card gaps and pass on base
   const hudRule = rule(brownfield, 'design-system:quarantine-hud');
   assert.equal(hudRule.status, 'warning');
   assert.equal(hudRule.observed.styleguideRoute, false);
-  assert.equal(hudRule.observed.tweaksBar, false);
-  assert.equal(hudRule.observed.tweaksBarMounted, false);
+  assert.equal(hudRule.observed.styleguideComponent, false);
 
   const md = markdownReport(brownfield);
   assert.match(md, /## Recommended follow-up plan/);
-  assert.match(md, /Modernize design-system primitives & Dev HUD/);
+  assert.match(md, /Modernize design-system primitives & component quarantine/);
 
   // Verify baseline itself passes all three design-system rules
   const starterRoot = fileURLToPath(new URL('../', import.meta.url));

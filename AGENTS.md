@@ -50,8 +50,8 @@ Use the live [EmDash docs](https://docs.emdashcms.com/) or configured docs MCP t
 - The gate applies to site visual work regardless of file extension or directory relocation. Functional fixes that preserve the visual system, backend/platform setup, starter infrastructure maintenance, and isolated concept studies under `audit/visual-concepts/` are scoped exceptions. Document source-file exceptions in `audit/design-gate-exceptions.json` with an exact path, concrete reason, and SHA-256 of UTF-8 content normalized to LF; an edit invalidates its exception. Never exempt a directory or client page implementation. Exception changes require the same review as code changes.
 - `npm run check:art-direction` checks changed visual source against HEAD (or `--base <revision>`) and validates the record unless exact infrastructure exceptions cover it. CI runs this check. This is structural outcome validation, not prevention of writes, proof of decision chronology, human approval, or design quality. True pre-write enforcement requires a guard in the agent tool runner. Keep evidence and approved versus assumed decisions explicit; revisit the record when the brief changes.
 - The reusable starter intentionally has no invented client Art Direction Record. When adapting it to a client site, create the real record and retain only applicable exceptions.
-- Use the dev-mode `<TweaksBar />` (press `T` to open, `B` to toggle the source baseline, Escape to close) for scalar calibration. It starts without overrides and does not persist browser settings. Merge exported tokens into `src/styles/global.css`, reload without overrides, and verify mobile/wide layouts, contrast, and available font weights. Layout and hierarchy changes still belong in source. Apply `[data-hero-asset]` to media itself.
-- Keep CMS routes server-rendered. Use EmDash's content and media APIs rather than assuming database table shapes or string image fields.
+- Use `npm run design:tokens` (`scripts/design-system.mjs`) for agent-first token calibration and validation. Seed a canonical Aesthetic Lane preset (`npm run design:tokens -- --lane <lane> --write` or `--list-lanes`), refine brand tokens in `src/styles/global.css`, and run `npm run design:tokens` + `npm run test:design` to verify WCAG AA perceptual contrast across default and `[data-surface="dark"]` contexts, fluid `clamp()` bounds, and `/_styleguide` specimen coverage. Apply `[data-hero-asset]` to media itself.
+- Keep CMS routes server-rendered. Use EmDash's content and media APIs rather than assuming database table shapes or string image fields. When a site requires drag-and-drop visual landing pages or popups, evaluate the optional native EmVB plugin (`@perkyzz/emvb` + `@perkyzz/emvb-mcp`) during Stage 2 and pass `canvasStyles` so the visual builder inherits `src/styles/global.css`.
 - When Astro route caching is enabled, register cache hints for every EmDash query used to render a route, including shared settings and menus. Check the installed EmDash version for the current `*WithCacheHint` helpers.
 - Render editorial Portable Text inside the `.flow` wrapper and inspect the output in public and editor modes.
 - Use the existing neutral tokens and structural components as a starting API; derive brand values from the site's actual brief and visual evidence. Keep repeated content types in collections and reusable Astro templates when editors need to add entries.
@@ -69,6 +69,7 @@ The scoped certified baseline is Astro 7.4.0 / EmDash 1.3.0 with Node 22.22.2+ o
 ```bash
 npm run dev
 npm run check:art-direction
+npm run design:tokens
 npm run test:design
 npm run typecheck
 npm run build
@@ -91,8 +92,3 @@ Consult Astro Docs MCP for framework/image/adapter APIs and EmDash Docs MCP for 
 ## Local visual regression policy
 
 Run `npm run test:visual` locally on Windows with the pinned renderer in docs/visual-regression.md. Goldens under tests/visual/baselines/win32 are authoritative; updates require explicit local `--update` and reviewed PNG/manifest diffs. Visual tests must never run automatically on push/PR or be dependencies of production builds/deployments. CI stays on Node 22.23.3 LTS with fast lint/schema/unit checks and a normal build, targeting <60 seconds and protecting the 2,000 minute/month budget. Actual browser zoom, no-JS, text spacing and active-motion behavior remain distinct from still-image comparison.
-
-
-## Developer reference and ownership modes
-
-With TweaksBar open, O compares one local raster reference and P inspects observed EmDash annotations; see docs/dev-hud.md. References stay in memory through revocable object URLs, with explicit DPR/scale and CSS-pixel alignment. Never add uploads, URL fetching or persistent storage to this tool. Ownership is read-only and version-aware: data-emdash-ref indicates an observed annotation, not registration or successful editing/saving; missing markers and UI text remain unannotated/unknown. Keep G/O/P state, shortcut exclusions and abort/navigation cleanup intact. Use test:dev-hud locally; no browser Actions dependency.

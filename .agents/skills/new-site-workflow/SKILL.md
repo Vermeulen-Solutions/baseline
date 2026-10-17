@@ -62,11 +62,12 @@ When Stage 1 is complete, present this prompt with plain-English options and a c
 
 Use `emdash-site-setup` for runtime, hosting, storage, localization, deployment, and site-transfer decisions.
 
-**Curated Sandbox Plugins Check:**
-Before modeling custom collections or writing custom JavaScript for complex capabilities, check the [EmDash Plugin Registry](https://plugins.emdashcms.com/) for curated, secure sandboxed plugins:
+**Curated Sandbox & Native Plugins Check:**
+Before modeling custom collections or writing custom JavaScript for complex capabilities, check the [EmDash Plugin Registry](https://plugins.emdashcms.com/) and ecosystem plugins:
 - For **Event Management & Ticketing**: consider [`@vermeulen.solutions/eventual`](https://plugins.emdashcms.com/plugins/@vermeulen.solutions/eventual) instead of building custom event/schedule schemas from scratch.
 - For **Multilingual Translation Dashboards**: consider [`@swiss.ky/linguadash`](https://plugins.emdashcms.com/plugins/@swiss.ky/linguadash) for side-by-side editing and AI translation drafting.
-- If a registry plugin is chosen, configure its sandbox runner during Stage 2 setup (`workerd` on Node or `LOADER` on Cloudflare Workers Paid) and query its published data endpoints. Use `creating-plugins` only when requirements demonstrate that a bespoke plugin must be authored.
+- For **Drag-and-Drop Visual Landing Pages & Popups (Optional)**: consider [`@perkyzz/emvb`](https://emvb.dev/) (`npm i @perkyzz/emvb`, native EmDash plugin + `@perkyzz/emvb-mcp`) when editors need to assemble bespoke campaign landing pages or popups without developer intervention. Pass `canvasStyles` into `emvb({ canvasStyles: [...] })` in `astro.config.mjs` so the builder canvas inherits `src/styles/global.css`, and resolve pages in `src/pages/[slug].astro` via `resolveEmVBPage(Astro)` + `<EmVBPage />`. Keep core structured collections and primary routes in native Astro templates.
+- If a registry sandbox plugin is chosen, configure its sandbox runner during Stage 2 setup (`workerd` on Node or `LOADER` on Cloudflare Workers Paid) and query its published data endpoints. Use `creating-plugins` only when requirements demonstrate that a bespoke plugin must be authored.
 
 Record decisions that constrain later stages, especially locale URL behavior, deployment target, media storage, plugin sandbox runners, and whether content will be imported or authored fresh.
 
@@ -108,13 +109,13 @@ When Stage 3 is complete, present this prompt to transition into Stage 4:
 >
 > **How would you like to establish the visual design?**
 > 1. **(Recommended) Code-First with Curated Aesthetic Lanes:**
->    - Pick a curated design mood (*Product-Led Minimalism*, *Editorial Paper*, *Technical Systems*, or *Luminous Futurism*) and tune colors, fonts, and spacing live in your browser using our built-in design toolbar (press `T` to test).
+>    - Pick a curated design mood (*Product-Led Minimalism*, *Editorial Paper*, *Technical Systems*, or *Luminous Futurism*), seed and customize tokens in `src/styles/global.css` (`npm run design:tokens`), and preview live on `/_styleguide`.
 > 2. **Match an Existing Brand or Website:**
 >    - Provide your company's logo, brand guidelines, or reference website URL, and I will extract the exact colors, fonts, and styling rules into the system.
 > 3. **Explore 2–3 Visual Concepts First:**
 >    - I will generate 2 or 3 visual layout options for a representative page so you can compare directions before deciding.
 >
-> *(Reply `1` for the recommended in-browser tuning, or `2` if you have brand guidelines to match.)*
+> *(Reply `1` for the recommended code-first lane setup, or `2` if you have brand guidelines to match.)*
 
 ## Stage 4: set the art direction
 
@@ -122,7 +123,7 @@ When entering Stage 4, present a brief, one-time **Design Superpowers Capability
 
 > **Stage 4: Visual Direction & Concepting**
 > How would you like to explore visual concepts and component patterns for this site?
-> 1. **(Default) Code-First & In-Browser:** Pick a curated Aesthetic Lane and tune tokens live on `/_styleguide` with the Dev HUD (`T` / `B` / `G`). *(Zero extra setup)*
+> 1. **(Default) Code-First & Aesthetic Lane Presets:** Pick a curated Aesthetic Lane, apply and customize tokens in `src/styles/global.css` with `npm run design:tokens`, and inspect live on `/_styleguide`. *(Zero extra setup)*
 > 2. **UX Flow & Anatomy Teardowns (`Nicelydone` / `Refero` / `Kombai`):** Inspect real production web screens to extract authentic UX details and section pacing before styling.
 > 3. **Community `DESIGN.md` Systems & Visual Concepting (`designmd-mcp` + `Google Stitch` / `OpenDesign` / `Claude Design`):** Search 420+ free `DESIGN.md` design systems on [designmd.ai/explore](https://designmd.ai/explore), generate 2–3 screen concepts in `audit/visual-concepts/`, and bridge tokens via `@google/design.md`.
 > 4. **High-Craft Component Registry (`21st.dev MCP`):** Pull tested Tailwind component blueprints into `/_styleguide` for zero-JS Astro transmutation in Stage 4.5.
@@ -159,7 +160,7 @@ When Stage 4 passes `check:art-direction`, present this prompt:
 
 For URL/screenshot migrations or external component sourcing (such as `21st.dev MCP`), follow `astro-site-design/references/component-quarantine.md` after Stage 4 and its art-direction gate. Inspect representative source elements or candidate registry blueprints, then calibrate relevant tokens, states, and production primitives on `/_styleguide` before creating client page templates or bespoke sections — including `<Container width="reading|content|wide">` versus `<Container breakout>` (`.content-grid` with `.content--feature|wide|full|full-safe`), `<Card>` (`--card-*` custom properties, concentric radius math, and `.clickable-parent`/`.focus-parent` accessibility), and Smart Spacing (`.flow`). When sourcing external React/Tailwind components (e.g., from `21st.dev`), transmute them through the quarantine checklist: strip unnecessary React/Framer Motion runtime down to zero-JS Astro markup, replace hardcoded palette classes with semantic tokens, bind fluid typography/spacing steps, and wire EmDash live edit proxies. For greenfield work, review the relevant primitive baseline against the brief and record inapplicable source comparisons.
 
-Save `audit/component-calibration.md` with evidence, actual component APIs, supported surfaces/states, asset provenance, narrow/wide and keyboard/motion checks, unresolved gaps and ready/deferred decisions. Resolve material reusable-component gaps before broad assembly. Keep normal-build route exclusion and synthetic fixtures intact. Page findings may reopen calibration; this is not a permanent component freeze. Use written handoffs between passes; fork/archive chats only when the user requests it.
+Save `audit/component-calibration.md` (you can scaffold or refresh the verified `## Token Calibration` table and SHA-256 digest via `npm run design:tokens -- --write-calibration`) with evidence, actual component APIs, supported surfaces/states, asset provenance, narrow/wide and keyboard/motion checks, unresolved gaps and ready/deferred decisions. Resolve material reusable-component gaps before broad assembly. Keep normal-build route exclusion and synthetic fixtures intact. Page findings may reopen calibration; this is not a permanent component freeze. Use written handoffs between passes; fork/archive chats only when the user requests it.
 
 **Gate:** the calibration record identifies which patterns are ready for representative pages and why; relevant checks pass. No source cloning, un-quarantined React/palette bloat, invented APIs, fake CMS edit identities, or specimen-only CSS repairs.
 
@@ -187,7 +188,7 @@ When references are screenshots/mockups or interaction recipes, route through `a
 
 Use `astro-site-design` for the design system, Astro components, responsive behavior, accessibility, and browser review. Use `building-emdash-site` alongside it for EmDash queries, cache hints, media, Portable Text, menus, and editor integration.
 
-Mount `<TweaksBar />` in `src/layouts/Base.astro` during development. Use it to calibrate display font scale, weights, density, and colors live in the browser rather than generating multi-turn CSS prompt churn. Merge exported CSS tokens into `src/styles/global.css`, reload to clear preview overrides, and verify typography, contrast, and responsiveness against source styles. The bar is optional when unavailable and does not replace layout or hierarchy work.
+Calibrate tokens in `src/styles/global.css` using `npm run design:tokens` (`scripts/design-system.mjs`) and inspect live updates via Vite HMR on `/_styleguide` and representative routes. Verify WCAG AA perceptual contrast across default and `[data-surface="dark"]` contexts, fluid `clamp()` bounds, and actual font faces/weights with `npm run design:tokens` and `npm run test:design`. If `@perkyzz/emvb` was enabled in Stage 2 for visual landing pages, wire `resolveEmVBPage(Astro)` and `<EmVBPage />` in `src/pages/[slug].astro` and sync EmVB site styles with the project's OKLCH palette via `@perkyzz/emvb-mcp`.
 
 Build the shell and one representative page from each materially different archetype before expanding across every route. Feed implementation findings back to the content model or art direction when real content exposes a weak assumption; update the site record when a decision changes.
 

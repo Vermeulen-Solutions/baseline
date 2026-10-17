@@ -24,7 +24,7 @@ Record component/recipe source, license, and behavior. Route external component 
 
 ## Verification and handoff
 
-Use `/_styleguide` in development for existing component/token calibration, then inspect representative real routes. `T` opens TweaksBar, `B` compares source styles, `O` opens the Reference Overlay for pixel alignment against concept screenshots; the grid guide is `G` when the panel is open. Merge reviewed CSS exports into source, reload without overrides and inspect mobile/intermediate/wide widths. Record each capture's metadata. A manual overlay is not an automated numerical diff.
+Use `/_styleguide` in development and `npm run design:tokens` for component/token calibration, then inspect representative real routes across mobile, intermediate, and wide viewports. Record each capture's metadata and verify WCAG contrast and fluid `clamp()` bounds via `npm run test:design`.
 
 Example: a supplied 1440px screenshot establishes an image/text composition and visible hierarchy, not a 12-column mobile layout. Record the guessed stacking rule, implement with actual content, then test 320/390/768/1440px and a long title. Example: a dated WordPress source establishes URLs, content and recognizable assets; a refine/overhaul decision can improve composition while retaining those facts. Do not call either example faithful or editor-ready without rendered evidence and actual supported editor tests.
 

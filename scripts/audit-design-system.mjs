@@ -175,10 +175,7 @@ export function designSystemRules(target, add) {
   }
 
   const styleguideBytes = readTarget(target, 'src/pages/_styleguide.astro').bytes;
-  const tweaksBytes =
-    readTarget(target, 'src/components/TweaksBar.astro').bytes ??
-    readTarget(target, 'src/components/dev/TweaksBar.astro').bytes;
-  const baseLayoutBytes = readTarget(target, 'src/layouts/Base.astro').bytes;
+  const styleguideCompBytes = readTarget(target, 'src/components/dev/Styleguide.astro').bytes;
   const calibrationBytes = readTarget(target, 'audit/component-calibration.md').bytes;
   const pagesDirExists = (() => {
     try {
@@ -193,21 +190,20 @@ export function designSystemRules(target, add) {
     add(
       'design-system:quarantine-hud',
       'unverified',
-      'Component quarantine route (/_styleguide) and Dev HUD (TweaksBar.astro mounted in Base.astro) present',
+      'Component quarantine route (/_styleguide) and Styleguide.astro specimen present',
       'src/pages and src/components not observed',
-      { required: false, evidence: ['src/pages/_styleguide.astro', 'src/components/TweaksBar.astro', 'src/layouts/Base.astro'], confidence: 'bounded-static', remediation: 'docs/dev-hud.md' }
+      { required: false, evidence: ['src/pages/_styleguide.astro', 'src/components/dev/Styleguide.astro'], confidence: 'bounded-static', remediation: 'docs/styleguide-fixtures.md' }
     );
   } else {
     const styleguideRoute = Boolean(styleguideBytes);
-    const tweaksBar = Boolean(tweaksBytes);
-    const tweaksBarMounted = Boolean(baseLayoutBytes && /<TweaksBar\b/.test(baseLayoutBytes.toString('utf8')));
+    const styleguideComponent = Boolean(styleguideCompBytes);
     const calibrationRecord = Boolean(calibrationBytes);
     add(
       'design-system:quarantine-hud',
-      styleguideRoute && tweaksBar && tweaksBarMounted ? 'pass' : 'warning',
-      'Component quarantine route (/_styleguide) and Dev HUD (TweaksBar.astro mounted in Base.astro) present',
-      { styleguideRoute, tweaksBar, tweaksBarMounted, calibrationRecord },
-      { required: false, evidence: ['src/pages/_styleguide.astro', 'src/components/TweaksBar.astro', 'src/layouts/Base.astro'], confidence: 'bounded-static', remediation: 'docs/dev-hud.md' }
+      styleguideRoute && styleguideComponent ? 'pass' : 'warning',
+      'Component quarantine route (/_styleguide) and Styleguide.astro specimen present',
+      { styleguideRoute, styleguideComponent, calibrationRecord },
+      { required: false, evidence: ['src/pages/_styleguide.astro', 'src/components/dev/Styleguide.astro'], confidence: 'bounded-static', remediation: 'docs/styleguide-fixtures.md' }
     );
   }
 }

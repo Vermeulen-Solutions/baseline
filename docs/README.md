@@ -49,16 +49,12 @@ Explore the documentation guides below, organized by workflow, design architectu
 
 ---
 
-## 🎨 4. Visual Development & The Dev HUD
+## 🎨 4. Agent-First Design Calibration & Visual Testing
 
-*In-browser tools for fast, pixel-perfect visual calibration and component quarantine.*
+*Code-first token calibration, component quarantine, and local visual verification.*
 
-- **[Local Visual Dev Tools (Dev HUD)](dev-hud.md)**  
-  Complete runbook for the development-mode `<TweaksBar />`:
-  - **`T` / `B`:** Live design token calibration and A/B source baseline comparison.
-  - **`G`:** Container grid guide showing computed bounds and 10/12-column responsive tracks.
-  - **`O`:** Mockup reference overlay with opacity, X/Y offsets, and scroll modes.
-  - **`P`:** Read-only EmDash CMS ownership and field-binding inspector.
+- **[Design Framework, Token Presets & Optional EmVB](design-framework.md)**  
+  How `npm run design:tokens` seeds canonical Aesthetic Lane presets, audits 10 WCAG AA perceptual contrast pairs across default and `[data-surface="dark"]` contexts, validates fluid `clamp()` bounds, and bridges optional `@perkyzz/emvb` visual landing pages.
 - **[Component Quarantine & Styleguide Fixtures](styleguide-fixtures.md)**  
   How `/_styleguide` renders components and responsive stress cases in isolation before page assembly, and how the route is automatically excluded (404) from production builds.
 - **[Local Visual Regression Testing](visual-regression.md)**  

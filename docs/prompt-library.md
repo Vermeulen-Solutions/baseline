@@ -123,16 +123,15 @@ Please:
 5. Add a test specimen to src/pages/_styleguide.astro and verify it across viewports.
 ```
 
-### Live In-Browser Token Calibration
-Use this prompt when you have tuned tokens using the in-browser Dev HUD (`T` / `B` keys) and want to merge them.
+### Agent-First Token Calibration & WCAG Contrast Audit
+Use this prompt to seed an Aesthetic Lane preset, customize brand tokens in `src/styles/global.css`, and verify WCAG AA contrast and fluid scales.
 
 ```markdown
-I have calibrated our design tokens using the in-browser TweaksBar (T key) on /_styleguide. 
+Let's calibrate our design tokens in src/styles/global.css to match our Art Direction Record in AGENTS.md:
 
-Here is the exported CSS snippet from the HUD:
-[Paste exported CSS from TweaksBar]
-
-Please merge these tokens into src/styles/global.css, ensure no existing tokens are accidentally clobbered, and verify that `npm run test:design` passes.
+1. Start from the closest Aesthetic Lane preset (`npm run design:tokens -- --list-lanes` / `--lane <lane-id> --write`).
+2. Customize the `@theme`, `:root`, and `[data-surface="dark"]` tokens in `src/styles/global.css` for our brand palette, typography pairing, and spatial density.
+3. Run `npm run design:tokens` and `npm run test:design` to verify all 10 WCAG AA contrast pairs across light and dark surfaces, fluid `clamp()` bounds, and `/_styleguide` swatch coverage.
 ```
 
 ---

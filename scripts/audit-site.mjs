@@ -151,13 +151,13 @@ export function followUpPlan(report) {
     items.push(`1. **Measure physical schema (${schemaRule.status})**: Supply \`--db-snapshot <file.sqlite>\` or \`--d1-dump <export.sql>\` (via \`npm run db:export-d1\`) to verify all collection tables stay within the 50-column budget.`);
   }
 
-  // Track 2: Design-system primitives, Card accessibility & Dev HUD
+  // Track 2: Design-system primitives, Card accessibility & component quarantine
   const dsRules = ['design-system:tokens-and-rhythm', 'design-system:card-and-breakout', 'design-system:quarantine-hud']
     .map(id => byId[id])
     .filter(r => r && r.status !== 'pass');
   if (dsRules.length) {
     const details = dsRules.map(r => `${r.id} (${r.status})`).join(', ');
-    items.push(`2. **Modernize design-system primitives & Dev HUD (${details})**: Align \`src/styles/global.css\` (\`interpolate-size\`, single \`.flow\` with duplicate-margin guard, \`.content-grid\` subgrid, \`[data-surface]\`, tokenized \`clamp()\` in \`@theme\`), refactor whole-card \`<a>\` wrappers into semantic \`<article>\` + \`.clickable-parent\`, add \`/_styleguide\`, and mount \`<TweaksBar />\` in \`src/layouts/Base.astro\`.`);
+    items.push(`2. **Modernize design-system primitives & component quarantine (${details})**: Align \`src/styles/global.css\` (\`interpolate-size\`, single \`.flow\` with duplicate-margin guard, \`.content-grid\` subgrid, \`[data-surface]\`, tokenized \`clamp()\` in \`@theme\`), refactor whole-card \`<a>\` wrappers into semantic \`<article>\` + \`.clickable-parent\`, and add \`/_styleguide\` (\`src/pages/_styleguide.astro\` + \`src/components/dev/Styleguide.astro\`).`);
   }
 
   // Track 3: Template adoption & component calibration

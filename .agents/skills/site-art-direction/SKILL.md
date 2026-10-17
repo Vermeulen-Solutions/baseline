@@ -108,14 +108,12 @@ Write the Art Direction Record directly in `AGENTS.md` using this exact markdown
 - **Site Anti-Patterns:** [First concrete ban; second concrete ban; optional third ban]
 ```
 
-### Micro-Refinement Protocol (In-Browser Tweaks Bar)
+### Agent-First Token Calibration Protocol (`npm run design:tokens` & `/_styleguide`)
 
-When testing or refining the rendered design:
-1. In development mode, ensure `<TweaksBar />` is active in `src/layouts/Base.astro`.
-2. Use the bar for scalar adjustments; use source edits for layout, hierarchy, font sourcing, and responsive rules.
-3. Press `T` to open, `B` to toggle the actual source baseline, `O` to align against a reference concept screenshot, or Escape to close. Controls start without overrides; reload restores source styles. Hero sliders append to the baseline filter. Surface “Source” restores the stylesheet treatment.
-4. Click **"Copy Tokens (CSS)"**, merge the exported overrides into `src/styles/global.css`, and reload. Preview and export share one token map, including fluid heading sizes, spacing, and surface declarations.
-5. Verify the result in a clean session at mobile and wide viewports. Check the full palette contrast, actual font faces/weights, and hero media treatment. Do not regard a live preview as delivery evidence.
+When translating the Art Direction Record into `src/styles/global.css`:
+1. Seed the closest canonical Aesthetic Lane preset with `npm run design:tokens -- --lane <lane-id> --write` (or inspect available lanes via `npm run design:tokens -- --list-lanes`), then customize brand hues, typography stacks, and spatial density directly in `src/styles/global.css`.
+2. Run `npm run design:tokens` (and `npm run test:design`) to verify that all required `@theme`, `:root`, and `[data-surface="dark"]` tokens are present, fluid `clamp()` scales have valid min/max bounds, and all 10 WCAG AA perceptual contrast pairs pass across light and dark surfaces.
+3. Open `/_styleguide` in development (`npm run dev`) to inspect typography, semantic color swatches, native controls, `<Container breakout>`, `<Card>`, and galleries across mobile and wide viewports via Vite HMR.
 
 The record should constrain implementation without prescribing every CSS value. `astro-site-design` turns it into tokens, components, responsive rules, and reviewed pages.
 

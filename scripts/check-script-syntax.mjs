@@ -3,7 +3,7 @@ import { spawn } from 'node:child_process';
 import path from 'node:path';
 
 // Fast parser check, not a claim of TypeScript/ESLint semantic analysis.
-const files = ['playwright.config.mjs', 'playwright.dev-tools.config.mjs'];
+const files = ['playwright.config.mjs'];
 async function collect(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     if (entry.name === 'baselines') continue;
