@@ -51,9 +51,9 @@ so the plan lives beside its evidence instead.
 | T1 | Catalogue ↔ `global.css` ↔ specimen coverage guard | `tests/token-coverage.test.mjs` | S | none (outside `src/`/`public/`) | **Done, then superseded the same day** — recorded as `d39cb31`, then rewritten by P2 as a derivation + staleness guard |
 | T2 | Derive the catalogue from the stylesheet | `scripts/generate-token-catalog.mjs`, `scripts/token-catalog-overrides.mjs`, `src/utils/token-catalog.generated.mjs` | M | refreshed exceptions for both `src/` files | **Done 2026-10-17** — 37 tokens derived; labels/roles/flag seeded; see Task 2 |
 | P1 | Output-derived availability, fail open | generalise T1 later to built CSS if a build-time catalogue appears | S–M | none | Partial (T1 is the v0) |
-| P4 | Calibration I/O + staleness check | `scripts/` reader + an npm script | M | none | Backlog (depends on W-B) |
+| P4 | Calibration I/O + staleness check | `scripts/check-token-calibration.mjs` + npm scripts | M | none | **Mostly done with W-B** — export and the staleness verdict are covered; import/reset were not built |
 | W-A | `## Token Calibration` section in the Stage 4.5 record | `audit/component-calibration.md` + an `AGENTS.md` line | S | docs only | Backlog — needs `audit/component-calibration.md` to exist first |
-| W-B | Deterministic calibration receipt (tokens + `globalCssSha256`) | `src/utils/design-tweaks.mjs`, `src/components/TweaksBar.astro` | M | **blocked by H1** | Backlog |
+| W-B | Deterministic calibration receipt (tokens + `globalCssSha256`) plus the checker that reads it | `src/utils/design-tweaks.mjs`, `src/components/TweaksBar.astro`, `scripts/check-token-calibration.mjs` | M | refreshed exceptions for both `src/` files | **Done 2026-10-17** — see Task 3 |
 | W-C | Coverage-driven calibration surfaced in the panel | `TweaksBar.astro`, `styleguide-fixtures.ts` | M | **blocked by H1** | Backlog — extends T1's exemption lists |
 | W-C2 | Extend coverage beyond `--color-*` | decide authority: fixtures vs `Styleguide.astro` sections | S–M | **blocked by H1** | Backlog — needs a decision, not code |
 | P2 | One declarative source for UI + docs + search | generated catalogue module | M | none | **Done 2026-10-17 as T2** — see Task 2 |
@@ -75,6 +75,8 @@ so the plan lives beside its evidence instead.
 | H6 | **T1 is logically stacked on the in-flight token-list refactor.** The guard reads the catalogue (`baselineTokens`) and depends on the refactored 42-token catalogue existing. Verified on 2026-10-17 by extracting the T1 snapshot into a clean directory: with the catalogue absent the test fails, and with the import removed it fails on `Authored token has no catalogue entry and no recorded exemption: --font-body`. | T1 must be recorded **after** the in-flight token-list refactor is recorded — ideally in the same change, or immediately after it. Do not record T1 alone. |
 | H7 | **`docs/dev-hud.md:21` named the studied implementation** in an in-flight change. | **Resolved 2026-10-17**: rephrased to describe the organisation as coming from research into how dashboard-style settings interfaces are structured. Any in-flight copy of that file must not reintroduce the name. |
 | H8 | **A local-only evidence file sits inside `audit/`.** `reference-notes.local.md` is not git-ignored, so an unqualified `git add audit/` would commit it with the implementation's name and paths — and the same broad pathspec would also sweep in the local reference directory, violating constraint 4. | Either add ignore rules, or always stage the committed files by explicit path. Recommended (not applied): a `*.local.md` rule plus a rule for the local reference directory in `.gitignore` would make both mistakes impossible rather than merely unlikely. |
+
+| H9 | **The dev server must not be running while the full node suite runs.** With `npm run dev` active, a media-infrastructure test fails intermittently with `EPERM ... rename .emdash/backups/...` because the server holds a file handle. | Stop the dev server before running `node --test tests/*.test.mjs`. A real failure and this one look identical in the summary line, so check for a listening port first. |
 
 **No Art Direction Record is required for this plan's tasks, and none should be invented for them.**
 
@@ -243,6 +245,38 @@ allow-list checks, removed a dead import, and made parsing tolerant and its fail
 
 **Open judgement for review:** the label seed preserves the panel's current wording. Deleting any entry falls
 back to a derived name, so nothing must be hand-written — decide per token whether that is wanted.
+
+---
+
+## Task 3 (W-B): calibration receipt and checker
+
+**Decision it implements:** a calibration must leave an artefact a reviewer can check, not a clipboard string.
+
+**Files:**
+
+- Modify `src/utils/design-tweaks.mjs` — adds `stylesheetDigest()` (WebCrypto, LF-normalised, so it works in
+  the browser, in Node and in Astro frontmatter) and `buildReceipt()` (sorted keys, so two identical
+  calibrations produce byte-identical receipts).
+- Modify `src/components/TweaksBar.astro` — computes the stylesheet digest at build time, exposes it as
+  `data-source-hash` on the panel, and adds **Copy Receipt (JSON)** beside **Copy Tokens (CSS)**.
+- Create `scripts/check-token-calibration.mjs` — reports `applied`, `pending-merge`, `stale` or `invalid`,
+  naming the tokens that are missing; `--require-applied` turns an unmerged calibration into a failure.
+- Create `tests/token-calibration.test.mjs` — receipt determinism and content, digest stability across line
+  endings, and all four checker outcomes.
+- Modify `package.json` — adds `check:token-calibration`. Modify `docs/dev-hud.md` — corrects the catalogue
+  description for both T2 and this task, and documents the generation step and the receipt.
+
+**Evidence:**
+
+- The panel's computed digest is `c1ddf3f3…`, byte-identical to the gate's entry for `src/styles/global.css` in
+  `audit/design-gate-exceptions.json`, so a receipt binds to the same LF-normalised SHA-256 primitive the
+  repository already uses.
+- End-to-end against the running dev server: with no overrides the button refuses ("No overrides to record.");
+  after calibrating `--color-action` it produced a receipt whose `from` is the authored source value and whose
+  `to` is the calibration, with the digest matching the panel.
+- That receipt then checked as `pending-merge` against the real stylesheet, `applied` against a stylesheet with
+  the value merged, and passed with `--require-applied`.
+- `check:art-direction`, `lint`, `typecheck` and the full node suite (97 tests) pass.
 
 ---
 

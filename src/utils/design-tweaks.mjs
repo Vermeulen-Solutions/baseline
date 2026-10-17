@@ -64,11 +64,47 @@ export function createTokenMap(baseline, changes) {
   if (changes.surface && patterns[changes.surface]) {
     [tokens['--page-pattern'], tokens['--page-pattern-size']] = patterns[changes.surface];
   }
-  // Returning a control to its source value removes it from preview and export.
+    // Returning a control to its source value removes it from preview and export.
   for (const [key, value] of Object.entries(tokens)) {
     if (String(value).trim() === baseline[key]?.trim()) delete tokens[key];
   }
   return tokens;
+}
+
+/**
+ * SHA-256 of a stylesheet, normalised to LF so the same digest can be produced by the
+ * development panel, this repository's gate scripts, and any reviewer's machine.
+ * Uses WebCrypto, which is available in the browser, in Node, and in Astro frontmatter.
+ */
+export async function stylesheetDigest(stylesheet) {
+  const normalised = String(stylesheet).replaceAll('\r\n', '\n');
+  const digest = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(normalised));
+  return [...new Uint8Array(digest)].map(byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * Deterministic calibration receipt.
+ *
+ * Records what was calibrated, the authored value each override replaces, and the exact
+ * stylesheet the calibration was made against. Keys are sorted so two identical
+ * calibrations produce byte-identical receipts and a review diff shows only real changes.
+ *
+ * @param {{tokens: Record<string, string>, baseline?: Record<string, string>, globalCssSha256: string, exportedAt: string}} input
+ * @returns {string} the receipt as pretty-printed JSON
+ */
+export function buildReceipt({ tokens, baseline = {}, globalCssSha256, exportedAt }) {
+  const overrides = {};
+  for (const key of Object.keys(tokens).sort()) {
+    const source = baseline[key];
+    overrides[key] = { from: source === undefined ? null : source, to: tokens[key] };
+  }
+  return JSON.stringify({
+    tool: 'design-tweaks',
+    receiptVersion: 1,
+    exportedAt,
+    globalCssSha256,
+    overrides,
+  }, null, 2);
 }
 
 export function exportTokens(tokens) {

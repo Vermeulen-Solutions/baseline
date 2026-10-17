@@ -2,12 +2,12 @@
   {
     "path": "src/components/TweaksBar.astro",
     "reason": "Neutral dev-only token dashboard maintenance: current theme/layout catalog, category/search navigation, source values, validation, per-token reset and existing G/O/P diagnostics. No client page or theme changes; exact UTF-8/LF content reviewed. Any edit invalidates this exception.",
-    "sha256": "4c14215bedc604c2e4e4e54e4cb60d269f74c52b90991088a6227cc194adb638"
+    "sha256": "090cd2eb6817b6666ed28741868bd606d9bc5d41eebce065e12624f3b1c9412b"
   },
   {
     "path": "src/utils/design-tweaks.mjs",
     "reason": "Neutral development token catalog and calibration/export infrastructure: complete current theme coverage, fluid-family scaling and source reset precedence. Catalog membership is imported from the generated file rather than hand-maintained; the maths and write-only list live here. No client design; exact UTF-8/LF content reviewed. Any edit invalidates this exception.",
-    "sha256": "a835e409a8b8c053618347f35b9eb8d8a97d5f9af7f23a794ea122d73bcbbb20"
+    "sha256": "5ec209fd724f9c8974572146338f0b9129b5d0bfa707fe526dfcf11f5c2534ea"
   },
   {
     "path": "src/utils/token-catalog.generated.mjs",

@@ -1,18 +1,20 @@
 ---
-import { tokenGroups } from '../utils/design-tweaks.mjs';
+import { tokenGroups, stylesheetDigest } from '../utils/design-tweaks.mjs';
 import sourceCSS from '../styles/global.css?raw';
 // Authored fallback keeps unused Tailwind tokens inspectable without changing public CSS.
 const sourceTokens = new Map<string, string>();
 for (const match of sourceCSS.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
   if (!sourceTokens.has(match[1])) sourceTokens.set(match[1], match[2].trim());
 }
+// Digest of the authored stylesheet, so a calibration receipt can be tied to exact bytes.
+const sourceHash = await stylesheetDigest(sourceCSS);
 /**
  * TweaksBar: In-browser live design token inspector and visual calibration tool.
  * Only rendered in development mode (import.meta.env.DEV).
  */
 ---
 
-<aside id="tweaks-panel" aria-label="Design Tweaks" class="tweaks-drawer tweaks-closed">
+<aside id="tweaks-panel" aria-label="Design Tweaks" class="tweaks-drawer tweaks-closed" data-source-hash={sourceHash}>
 	<button id="tweaks-toggle-btn" class="tweaks-tab-handle" aria-expanded="false" aria-controls="tweaks-content" title="Toggle Live Design Controls (Press 'T')">
 		<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 			<circle cx="12" cy="12" r="3"></circle>
@@ -155,7 +157,8 @@ for (const match of sourceCSS.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
 				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
 				Copy Tokens (CSS)
 			</button>
-			<textarea id="tweaks-export-fallback" aria-label="Exported CSS; select and copy" readonly hidden></textarea>
+			<button id="tweaks-receipt-btn" class="tweaks-mini-btn">Copy Receipt (JSON)</button>
+			<textarea id="tweaks-export-fallback" aria-label="Exported CSS or receipt; select and copy" readonly hidden></textarea>
 			<span id="tweaks-export-feedback" class="tweaks-feedback" aria-live="polite"></span>
 		</footer>
 	</div>
@@ -433,7 +436,7 @@ for (const match of sourceCSS.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
 </style>
 
 <script>
-  import { baselineTokens, createTokenMap, exportTokens } from '../utils/design-tweaks.mjs';
+  import { baselineTokens, createTokenMap, exportTokens, buildReceipt } from '../utils/design-tweaks.mjs';
   import { createGridGuide } from '../utils/grid-guide';
   import { createReferenceOverlay } from '../utils/reference-overlay';
   import { createOwnershipInspector } from '../utils/ownership-inspector';
@@ -617,6 +620,19 @@ for (const match of sourceCSS.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
       const css = exportTokens(tokens);
       try { await navigator.clipboard.writeText(css); feedback.textContent = 'Copied. Merge, reload, and verify contrast.'; }
       catch { fallback.value = css; fallback.hidden = false; fallback.focus(); fallback.select(); feedback.textContent = 'Select and copy the CSS below.'; }
+    }, options);
+    document.getElementById('tweaks-receipt-btn')!.addEventListener('click', async () => {
+      if (drawer!.querySelector('[aria-invalid="true"]')) { feedback.textContent = 'Fix invalid token values before exporting (search or choose All to find them).'; return; }
+      const tokens = createTokenMap(baseline, changes);
+      if (!Object.keys(tokens).length) { feedback.textContent = 'No overrides to record.'; return; }
+      const receipt = buildReceipt({
+        tokens,
+        baseline,
+        globalCssSha256: drawer!.dataset.sourceHash ?? '',
+        exportedAt: new Date().toISOString(),
+      });
+      try { await navigator.clipboard.writeText(receipt); feedback.textContent = 'Receipt copied. Save it under audit/ and check it with npm run check:token-calibration.'; }
+      catch { fallback.value = receipt; fallback.hidden = false; fallback.focus(); fallback.select(); feedback.textContent = 'Select and copy the receipt below.'; }
     }, options);
     syncInputs();
     render();
