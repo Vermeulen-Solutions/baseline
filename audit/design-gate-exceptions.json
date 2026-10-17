@@ -1,13 +1,13 @@
 [
   {
     "path": "src/components/TweaksBar.astro",
-    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
-    "sha256": "fb3f1d423fabd7b451813a1c3536789d9240c9d4fa0f52747b7613e1834cd2cd"
+    "reason": "Neutral dev-only token dashboard maintenance: current theme/layout catalog, category/search navigation, source values, validation, per-token reset and existing G/O/P diagnostics. No client page or theme changes; exact UTF-8/LF content reviewed. Any edit invalidates this exception.",
+    "sha256": "4c14215bedc604c2e4e4e54e4cb60d269f74c52b90991088a6227cc194adb638"
   },
   {
     "path": "src/utils/design-tweaks.mjs",
-    "reason": "Pure development calibration mapping and CSS export shared by the starter controls.",
-    "sha256": "493fd343d80b96718e1b7086a2482419f7fa25efc221ad62e0b55acdd9970dd8"
+    "reason": "Neutral development token catalog and calibration/export infrastructure: complete current theme coverage, fluid-family scaling and source reset precedence. No client design; exact UTF-8/LF content reviewed. Any edit invalidates this exception.",
+    "sha256": "f7951fae95ed3eed1c5a468cbac4a738204e8115d1afd5de92aeeec6c1801703"
   },
   {
     "path": "src/styles/global.css",

@@ -4,6 +4,25 @@ In `astro dev`, open TweaksBar with **T** or its tab. **B** compares source styl
 
 The drawer keeps token calibration until Reset/reload. Closing it clears the reference and active diagnostic layers. Reset restores source tokens and clears every tool. Navigation/pagehide restores original inline tokens, aborts listeners/observers/frames and releases references; page-load and persisted pageshow initialize once. Nothing is restored from persistent browser storage.
 
+## T: design token dashboard
+
+<a href="images/design-tweaks.png"><img src="images/design-tweaks.png" width="640" alt="Design Tweaks color controls with category navigation, search, source values and individual reset buttons" /></a>
+
+Use **All**, **Typography**, **Spacing & layout**, **Colors**, **Shape & effects**, or **Inspect** to narrow the drawer. Search matches setting labels, CSS variable names and tool descriptions within the selected category. A no-results message explains how to recover. All diagnostic buttons and G/O/P shortcuts remain available; filtering does not deactivate a running layer.
+
+The catalog follows the public tokens in `src/styles/global.css`: both font families, all six fluid text sizes/pairs, all six spacing values, nine semantic colors (including focus on dark), radii, layered shadows, easing curves, reading/content/wide measures and scroll offsets. Safe content width is derived and read-only. Source values come from the loaded stylesheet, with authored defaults for unused Tailwind tokens. The catalog-coverage test fails when an authored theme token is missing, so future system additions cannot silently leave the inspector behind.
+
+Heading scale includes both fluid display pairs. Spatial density includes container gutters and both fluid spacing pairs. An explicit token edit takes precedence over its family slider. **Reset** beside a token returns just that token to its captured source value, even while a family scale is active; the header Reset clears all calibration and diagnostic tools. Returning a field to its source value removes its override from preview/export.
+
+Each token shows its CSS name and an expandable source value; colors include a swatch. The status distinguishes unchanged source, live override count and paused baseline comparison. Invalid CSS values retain the last valid preview, show an inline error and block export, including when filtered out. Font family controls select fonts already available to the site; they do not load fonts or verify weights. Color validity is not contrast certification.
+
+**Copy Tokens (CSS)** exports changed values to the matching `@theme` or `:root` block. Merge them into `src/styles/global.css`, reload without overrides, and verify narrow/wide layouts, contrast and font weights. Clipboard failure exposes a selectable CSS field. The drawer uses its own fixed control styles so calibrating the site does not recolor or resize its controls.
+
+The category, search and contextual-help organization came from research into how existing dashboard-style
+settings interfaces are structured for browsing and searching settings. This is a native Baseline inspector
+using Baseline token names and existing in-memory preview/export behavior; it adds no runtime dependency on
+any other plugin.
+
 ## G: container grid guide
 
 Press **G** while the TweaksBar drawer is open to toggle the diagnostic layout guide.
@@ -54,6 +73,6 @@ Inspection is read-only: no CMS requests, registration, field repair, content mu
 
 ## Verification and production isolation
 
-`npm run test:dev-hud` runs a local-only pinned Windows Chromium suite on a disposable dev app and fresh seed. It verifies file/drop/mismatch/scrolling/URL cleanup, unsupported inputs, real EmDash annotations, unknown UI text, keyboard guards, token export/reset, grid geometry/RTL and lifecycle reinitialization. It shares the visual renderer contract and rejects CI. No browser job or mandatory hook is added to Actions.
+`npm run test:dev-hud` runs a local-only pinned Windows Chromium suite on a disposable dev app and fresh seed. It verifies file/drop/mismatch/scrolling/URL cleanup, unsupported inputs, real EmDash annotations, unknown UI text, keyboard guards, catalog search/category filters, invalid-value recovery, per-token and global reset, preview/export parity, grid geometry/RTL and lifecycle reinitialization. It shares the visual renderer contract and rejects CI. No browser job or mandatory hook is added to Actions.
 
 Run `node --test tests/*.test.mjs`, `npm run typecheck`, `npm run build`, `npm run check:dev-tools` and `npm run test:visual` as appropriate for tool changes. `check:dev-tools` verifies normal versus fixture HTTP behavior and scans emitted client JS/CSS for functional G/O/P code. The component's `import.meta.env.DEV` guard removes imports/listeners/adapter/reference logic from production. Normally built styleguide GET/HEAD remains 404; fixture output is separate and rejected by the release guard. Harmless empty script stubs are allowed. Client visual comparison uses unchanged source goldens with no HUD layers or token overrides.

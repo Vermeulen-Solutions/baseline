@@ -30,3 +30,34 @@ test('local reference inspection handles actual PNG/JPEG/WebP headers and reject
   const bomb = png.slice(0,24); new DataView(bomb.buffer).setUint32(16,16000); new DataView(bomb.buffer).setUint32(20,60000);
   assert.throws(()=>inspectReference(bomb,'image/png'),/32 megapixels/);
 });
+
+import { tokenDefinitions, createTokenMap, exportTokens } from '../src/utils/design-tweaks.mjs';
+
+test('inspector covers every authored theme token and keeps derived layout source-owned', async () => {
+  const css = await readFile('src/styles/global.css', 'utf8');
+  const theme = css.slice(css.indexOf('@theme {'), css.indexOf(':root {'));
+  const declared = [...theme.matchAll(/(--[\w-]+)\s*:/g)].map(match => match[1]);
+  const keys = tokenDefinitions.map(token => token.key);
+  assert.equal(new Set(keys).size, keys.length);
+  for (const key of declared) assert.ok(keys.includes(key), 'Missing inspector setting: ' + key);
+  assert.equal(tokenDefinitions.find(token => token.key === '--measure-content-safe').readonly, true);
+  assert.deepEqual(createTokenMap({}, { '--measure-content-safe': '10px' }), {});
+});
+
+test('family calibration covers fluid pairs and gutters; individual edits and resets take precedence', () => {
+  const source = { '--text-step-3-to-1': 'clamp(1rem, 4vi, 4rem)', '--spacing-container': '2rem', '--spacing-xl-to-sm': '3rem' };
+  const tokens = createTokenMap(source, { typeScale: '1.2', densityScale: '.8', '--spacing-container': '2rem' });
+  assert.equal(tokens['--text-step-3-to-1'], 'calc(clamp(1rem, 4vi, 4rem) * 1.2)');
+  assert.equal(tokens['--spacing-xl-to-sm'], 'calc(3rem * 0.8)');
+  assert.equal(tokens['--spacing-container'], undefined, 'Reset to source must override density without exporting a no-op');
+  const changed = createTokenMap(source, { densityScale: '.8', '--spacing-container': '4rem' });
+  assert.equal(changed['--spacing-container'], '4rem');
+});
+
+test('new token families export to their owning theme/root blocks', () => {
+  const tokens = { '--font-body': 'serif', '--radius-card': '1rem', '--shadow-sm': 'none', '--ease-smooth': 'ease', '--measure-content': '80rem', '--font-weight-display': '600' };
+  const css = exportTokens(tokens);
+  const [theme, root] = css.split(':root {');
+  for (const key of ['--font-body', '--radius-card', '--shadow-sm', '--ease-smooth']) assert.ok(theme.includes(key + ':'));
+  for (const key of ['--measure-content', '--font-weight-display']) { assert.ok(root.includes(key + ':')); assert.ok(!theme.includes(key + ':')); }
+});

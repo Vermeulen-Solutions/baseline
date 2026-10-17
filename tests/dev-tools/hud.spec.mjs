@@ -140,7 +140,7 @@ test('T/B/G/O/P, modal/composition/input guards, reset, swap and reload lifecycl
   await page.keyboard.press('g'); await expect(page.locator('#tweaks-grid-btn')).toHaveAttribute('aria-pressed','true');
   const checkGrid=async()=>{
     await expect.poll(()=>page.evaluate(()=>{
-      const index=Number(document.querySelector('#tweaks-grid-target').value), target=[...document.querySelectorAll('.container-shell, .site-main')][index];
+      const index=Number(document.querySelector('#tweaks-grid-target').value), target=[...document.querySelectorAll('.container-shell, .content-grid, .site-main')][index];
       const rect=target.getBoundingClientRect(),style=getComputedStyle(target),overlay=document.querySelector('#tweaks-grid-overlay').getBoundingClientRect();
       const left=rect.left+(parseFloat(style.paddingLeft)||0)+(parseFloat(style.borderLeftWidth)||0);
       const width=rect.width-(parseFloat(style.paddingLeft)||0)-(parseFloat(style.paddingRight)||0)-(parseFloat(style.borderLeftWidth)||0)-(parseFloat(style.borderRightWidth)||0);
@@ -148,7 +148,7 @@ test('T/B/G/O/P, modal/composition/input guards, reset, swap and reload lifecycl
     })).toBeLessThan(.02);
   };
   await checkGrid(); await page.locator('#tweaks-grid-columns').selectOption('10'); await expect(page.locator('#tweaks-grid-overlay span')).toHaveCount(10);
-  const rtl=await page.evaluate(()=>[...document.querySelectorAll('.container-shell, .site-main')].findIndex(e=>getComputedStyle(e).direction==='rtl'));
+  const rtl=await page.evaluate(()=>[...document.querySelectorAll('.container-shell, .content-grid, .site-main')].findIndex(e=>getComputedStyle(e).direction==='rtl'));
   expect(rtl).toBeGreaterThanOrEqual(0); await page.locator('#tweaks-grid-target').selectOption(String(rtl)); await checkGrid();
   await expect(page.locator('#tweaks-grid-status')).toContainText('rtl');
   const viewport=page.viewportSize(); await page.setViewportSize({width:320,height:900}); await checkGrid(); await page.setViewportSize(viewport); await checkGrid();
@@ -178,11 +178,74 @@ test('T/B/G/O/P, modal/composition/input guards, reset, swap and reload lifecycl
   await expect(page.locator('#tweaks-reference-overlay, #tweaks-grid-overlay, #tweaks-ownership-overlay')).toHaveCount(0);
   expect(await page.evaluate(()=>window.__hudAudit.created.every(url=>window.__hudAudit.revoked.includes(url)))).toBe(true);
   await page.evaluate(()=>{document.dispatchEvent(new Event('astro:page-load'));document.dispatchEvent(new Event('astro:page-load'));});
-  await expect(page.locator('#tweaks-grid-target option')).toHaveCount(await page.locator('.container-shell, .site-main').count());
+  await expect(page.locator('#tweaks-grid-target option')).toHaveCount(await page.locator('.container-shell, .content-grid, .site-main').count());
   await page.locator('#tweaks-toggle-btn').click(); // New initialization must have one toggle handler.
   await page.keyboard.press('g'); await expect(page.locator('#tweaks-grid-btn')).toHaveAttribute('aria-pressed','true');
   await page.reload(); await expect(page.locator('#tweaks-toggle-btn')).toHaveAttribute('aria-expanded','false');
   await expect(page.locator('#tweaks-grid-overlay, #tweaks-reference-overlay, #tweaks-ownership-overlay')).toHaveCount(0);
   await page.evaluate(()=>{window.dispatchEvent(new PageTransitionEvent('pagehide'));window.dispatchEvent(new PageTransitionEvent('pageshow',{persisted:true}));});
   await page.locator('#tweaks-toggle-btn').click(); await expect(page.locator('#tweaks-toggle-btn')).toHaveAttribute('aria-expanded','true');
+});
+
+
+test('token dashboard filters, validates, compares, resets and exports the current design system', async ({page}, info) => {
+  const errors=[]; page.on('pageerror', error => errors.push(error.message));
+  await open(page);
+  await expect(page.locator('[data-token]')).toHaveCount(37);
+  await expect(page.locator('#tweaks-preview-status')).toContainText('no overrides');
+  expect(await page.evaluate(() => document.documentElement.style.length)).toBe(0);
+  await page.locator('[data-category="colors"]').click();
+  await expect(page.locator('[data-setting-category="typography"]').first()).toBeHidden();
+  await page.screenshot({path: info.outputPath('design-tweaks-colors.png')});
+  const action=page.locator('#tweak-color-action');
+  const source=await action.inputValue();
+  await action.fill('not-a-color');
+  await expect(action).toHaveAttribute('aria-invalid','true');
+  await expect(page.locator('[data-reset-token="--color-action"]')).toBeEnabled();
+  await page.locator('#tweaks-export-btn').click();
+  await expect(page.locator('#tweaks-export-feedback')).toContainText('Fix invalid token values');
+  await page.locator('[data-reset-token="--color-action"]').click();
+  await expect(action).toHaveValue(source);
+  await expect(page.locator('[data-reset-token="--color-action"]')).toBeDisabled();
+  await action.fill('oklch(55% 0.14 250)');
+  await expect(page.locator('#tweaks-preview-status')).toContainText('1 token override');
+  await page.locator('#tweaks-compare-btn').click();
+  expect(await page.evaluate(() => document.documentElement.style.getPropertyValue('--color-action'))).toBe('');
+  await expect(page.locator('#tweaks-preview-status')).toContainText('Showing source');
+  await page.locator('#tweaks-compare-btn').click();
+  expect(await page.evaluate(() => document.documentElement.style.getPropertyValue('--color-action'))).toBe('oklch(55% 0.14 250)');
+  await page.locator('[data-category="all"]').click();
+  await page.locator('#tweaks-search').fill('--radius-card');
+  await expect(page.locator('[data-token-row]:visible')).toHaveCount(1);
+  const radius=page.locator('#tweak-token-radius-card');
+  await radius.fill('1.25rem');
+  await page.locator('#tweaks-search').fill('no-such-setting');
+  await expect(page.locator('#tweaks-no-results')).toBeVisible();
+  await page.locator('#tweaks-search').fill('');
+  await page.locator('[data-category="spacing"]').click();
+  await page.locator('#tweak-density-scale').fill('1.1');
+  expect(await page.evaluate(() => document.documentElement.style.getPropertyValue('--spacing-container'))).toContain('* 1.1');
+  await expect(page.locator('#tweak-token-measure-content-safe')).toHaveAttribute('readonly','');
+  await page.locator('[data-reset-token="--spacing-container"]').click();
+  expect(await page.evaluate(() => document.documentElement.style.getPropertyValue('--spacing-container'))).toBe('');
+  await page.locator('#tweaks-search').fill('--spacing-container');
+  await expect(page.locator('[data-token-row]:visible')).toHaveCount(1);
+  await page.evaluate(() => { navigator.clipboard.writeText=async css => { window.__dashboardCSS=css; }; });
+  await page.locator('#tweaks-export-btn').click();
+  await expect.poll(() => page.evaluate(() => window.__dashboardCSS || '')).toContain('--radius-card: 1.25rem;');
+  const exported=await page.evaluate(() => window.__dashboardCSS);
+  expect(exported).not.toContain('--spacing-container:');
+  expect(exported).not.toContain('--measure-content-safe:');
+  await page.locator('#tweaks-reset-btn').click();
+  await expect(page.locator('#tweaks-preview-status')).toContainText('no overrides');
+  expect(await page.evaluate(() => document.documentElement.style.length)).toBe(0);
+  await page.locator('#tweaks-search').fill('');
+  await page.locator('[data-category="typography"]').click();
+  await page.screenshot({path: info.outputPath('design-tweaks-typography.png')});
+  expect(await page.locator('#tweaks-content').evaluate(e => e.scrollWidth <= e.clientWidth + 1)).toBe(true);
+  await page.setViewportSize({width:320,height:700});
+  expect(await page.locator('#tweaks-content').evaluate(e => e.scrollWidth <= e.clientWidth + 1)).toBe(true);
+  await page.locator('#tweaks-close-btn').click();
+  await expect(page.locator('#tweaks-toggle-btn')).toHaveAttribute('aria-expanded','false');
+  expect(errors).toEqual([]);
 });
