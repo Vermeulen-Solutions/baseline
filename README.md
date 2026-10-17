@@ -13,7 +13,8 @@
 <p align="center">
   <a href="#60-second-quickstart"><strong>Quickstart</strong></a> ·
   <a href="#in-browser-visual-developer-tools"><strong>Visual Dev HUD</strong></a> ·
-  <a href="#the-6-stage-site-delivery-workflow"><strong>6-Stage Workflow</strong></a> ·
+  <a href="#the-7-stage-site-delivery-workflow"><strong>7-Stage Workflow</strong></a> ·
+  <a href="docs/prompt-library.md"><strong>Prompt Library</strong></a> ·
   <a href="docs/design-interchange.md"><strong>AI Design Pipeline</strong></a> ·
   <a href="docs/README.md"><strong>Documentation</strong></a>
 </p>
@@ -73,11 +74,11 @@ Click any thumbnail to view the full-resolution screenshot.
 
 Open the drawer before using G/O/P. Shortcuts yield to inputs and editor dialogs; Escape dismisses the active tool before closing the drawer. Changes start without overrides and do not persist across reloads. [Full HUD guide](docs/dev-hud.md).
 
-## The 6-stage site delivery workflow
+## The 7-stage site delivery workflow
 
 Pairing with an AI coding assistant without a structured process usually results in "one-shot prompt chaos"—where an assistant attempts to do discovery, database schema, responsive layouts, and copy all at once, resulting in broken schemas and generic styling. 
 
-Baseline organizes projects into an explicit 6-stage agency workflow:
+Baseline organizes projects into an explicit 7-stage agency workflow:
 
 1. **Brief & Evidence:** Gather real brand assets, photography, client requirements, and existing site screenshots before touching code.
 2. **Platform & Hosting:** Choose Node/SQLite or Cloudflare Workers/D1/R2, keeping Cloudflare's 100-column table limits in mind.
@@ -85,8 +86,9 @@ Baseline organizes projects into an explicit 6-stage agency workflow:
 4. **The Art Direction Gate:** Establish an aesthetic lane, typography pairings, token physics, section pacing, and explicit anti-patterns in `AGENTS.md` before writing CSS (`npm run check:art-direction`). Optionally explore UX flows (`Nicelydone` / `Refero`), 420+ community `DESIGN.md` systems ([designmd.ai](https://designmd.ai/explore)), or visual concepts (`Google Stitch` / `Claude Design` / `OpenDesign`). [Art Direction Guide](docs/art-direction-workflow.md).
 5. **Component Sourcing & Quarantine (`/_styleguide`):** Calibrate reusable components—or transmute external Tailwind blueprints from `21st.dev MCP` into zero-JS, token-bound Astro—in isolation before page assembly (`docs/styleguide-fixtures.md`).
 6. **Representative Implementation & Verification:** Build public routes, bind CMS visual edit proxies (`{...entry.edit.title}`), and verify with local visual tests and schema preflights.
+7. **Production Cutover, Email & Launch:** Connect custom domains, verify HTTPS/TLS certificates, test admin passkey/email authentication, and preserve corporate mail DNS (Google Workspace / Microsoft 365).
 
-Read the complete [Site Delivery Workflow runbook](docs/site-delivery-workflow.md).
+Read the complete [Site Delivery Workflow runbook](docs/site-delivery-workflow.md) and explore the copy-pasteable [AI Developer Prompt Library](docs/prompt-library.md).
 
 ## Why Baseline?
 

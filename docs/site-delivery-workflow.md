@@ -1,10 +1,10 @@
 # Site Delivery Workflow
 
-Baseline uses a structured **6-stage delivery workflow** designed to keep developers and AI coding assistants disciplined. 
+Baseline uses a structured **7-stage delivery workflow** designed to keep developers and AI coding assistants disciplined. 
 
 When building client websites with AI coding assistants, the most common failure mode is **"one-shot prompt chaos"**: asking the agent to generate discovery, content models, templates, and styles all at once. This leads to hallucinated schemas, generic styling, broken responsive layouts, and hardcoded UI copy that clients cannot edit.
 
-By breaking work into explicit sequential stages—each gated by review and automated checks—you get agency-grade results every time.
+By breaking work into explicit sequential stages—each gated by review and automated checks—you get agency-grade results every time. For copy-pasteable prompts to trigger each stage with any agent, see the **[AI Developer Prompt Library](prompt-library.md)**.
 
 ```mermaid
 flowchart TD
@@ -13,7 +13,8 @@ flowchart TD
     S3 --> S4["4. Art Direction & Visual Concepting"]
     S4 --> S45["4.5 Component Sourcing & Quarantine (/_styleguide)"]
     S45 --> S5["5. Public & Editor Implementation"]
-    S5 --> S6["6. Verification & Delivery"]
+    S5 --> S6["6. Verification & Route Completion"]
+    S6 --> S7["7. Production Cutover, Email & Launch"]
 ```
 
 ---
@@ -95,7 +96,7 @@ Now assemble your public routes and wire up EmDash CMS editing:
 
 ---
 
-## Stage 6: Verification & Delivery
+## Stage 6: Verification & Route Completion
 
 Run deterministic local checks to verify the build before client handoff or deployment:
 - `npm run check:schema-budget`: Verify no collection exceeds the 50-column physical limit.
@@ -105,4 +106,15 @@ Run deterministic local checks to verify the build before client handoff or depl
 - `npm run check:dev-tools`: Confirm the Dev HUD and `/_styleguide` are completely stripped from the production build.
 - **Visual Critique & Polish (Optional):** Use the bundled `impeccable` skill for an automated UI critique pass on rendered pages before final signoff.
 - **Client Verification:** Log in to `/_emdash/admin`, test editing live content, publish drafts, and verify updates on the public site.
-- **Production Deployment:** Follow the [Production Deployment & DNS Cutover Checklist](production-deployment.md) to preserve client corporate email and deploy clean artifacts.
+- **Site Registration:** Run `npm run site:register` to register the site metadata ([Site Registry](site-registry.md)).
+
+---
+
+## Stage 7: Production Cutover, Email & Launch
+
+Take the verified site live on its production custom domain:
+- **Node.js Target:** Generate production environment variables, configure reverse proxy (Nginx, Caddy with automatic TLS), and set up process supervision (Docker, systemd).
+- **Cloudflare Target (`emdash-production-cutover`):** Connect custom production domain via Cloudflare Wrangler, issue TLS certificates, and configure apex/www canonical redirects.
+- **Corporate Mail DNS Preservation:** Protect existing client email (Google Workspace / Microsoft 365) by auditing MX, SPF, DKIM, and DMARC records before modifying DNS.
+- **Admin Authentication Origin:** Verify admin passkey/email login on the live production domain origin.
+- **Guides:** [Production Deployment & Cloudflare Cutover](production-deployment.md) · [Hosting Setup](../.agents/skills/emdash-site-setup/SKILL.md).

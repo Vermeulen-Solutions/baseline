@@ -15,7 +15,9 @@ Explore the documentation guides below, organized by workflow, design architectu
 *The structured process for building client sites with AI coding assistants without chaos or drift.*
 
 - **[Site Delivery Workflow](site-delivery-workflow.md)**  
-  The core 6-stage agency build process: Brief & Evidence → Platform Decisions → Content Architecture → Art Direction Gate → Component Quarantine (`/_styleguide`) → Public Implementation & Verification.
+  The core 7-stage agency build process: Brief & Evidence → Platform Decisions → Content Architecture → Art Direction Gate → Component Quarantine (`/_styleguide`) → Public Implementation & Verification → Production Cutover & Launch.
+- **[AI Developer Prompt Library](prompt-library.md)**  
+  Copy-pasteable prompt recipes for AI coding assistants to execute each workflow stage, quarantine components, bind CMS data, run local visual tests, and execute domain cutovers safely.
 - **[Art Direction Workflow & The Design Gate](art-direction-workflow.md)**  
   Establishing distinct visual identities (aesthetic lanes, narrative metaphors, typography pairings, and anti-patterns) before writing code, enforced automatically via `npm run check:art-direction`.
 
@@ -81,6 +83,8 @@ Explore the documentation guides below, organized by workflow, design architectu
 
 *Harness-agnostic workflows for pairing with AI assistants (Claude Code, OpenAI Codex, Antigravity, OpenCode, Hermes, Cursor, Windsurf, Aider, and local LLM runners).*
 
+- **[AI Developer Prompt Library](prompt-library.md)**  
+  Curated prompts for new sites, component quarantine, WP migrations, live token tuning, and domain cutovers.
 - **[Agent Documentation & MCP Setup](agent-documentation.md)**  
   Connecting coding assistants to official Astro/EmDash docs, optional design MCP superpowers (`designmd-mcp`, `21st.dev`, `Nicelydone`, `Stitch`), and generating site-level access tokens with `npm run mcp:token`.
 - **[Skill Synchronization](skill-synchronization.md)**  
