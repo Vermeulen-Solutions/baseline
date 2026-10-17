@@ -6,6 +6,13 @@ When building client websites with AI coding assistants, the most common failure
 
 By breaking work into explicit sequential stages—each gated by review and automated checks—you get agency-grade results every time. For copy-pasteable prompts to trigger each stage with any agent, see the **[AI Developer Prompt Library](prompt-library.md)**.
 
+### Choosing Your Track: Standard (7 Stages) vs. Express (3 Checkpoints)
+
+| Track | Best For | Human Checkpoints | CLI Gates Enforced |
+| --- | --- | --- | --- |
+| **Standard Track (7 Stages)** | Complex migrations, multi-collection architectures, or multi-locale sites | Pauses at each stage handoff (`1` → `2` → `3` → `4` → `4.5` → `5` → `6`) | All (`check:schema-budget`, `check:art-direction`, `design:tokens`, `verify`) |
+| **Express Track (3 Checkpoints)** | Smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale) | **Checkpoint A** (Stages 1–3) → **Checkpoint B** (Stages 4–4.5) → **Checkpoint C** (Stages 5–6) | All (`check:schema-budget`, `check:art-direction`, `design:tokens`, `verify`) |
+
 ```mermaid
 flowchart TD
     S1["1. Brief & Evidence"] --> S2["2. Platform & Hosting"]
@@ -61,15 +68,11 @@ Model your editorial data structure *before* creating page templates:
 ## Stage 4: Art Direction, Visual Concepting & The Design Gate
 
 Before writing a single line of site-specific CSS or template HTML, establish a distinct visual identity to prevent default "generic AI landing page" output:
-- **The Stage 4 Capability Prompt:** Your agent will briefly present four creative options—skip in one second to stay purely code-first, or leverage connected MCP superpowers ([AI Agent & Harness Configuration](agent-documentation.md)):
-  1. *Code-First & Aesthetic Lane Presets (Default):* Curated Aesthetic Lanes + `npm run design:tokens` calibration and `/_styleguide` inspection.
-  2. *UX Anatomy Research:* **Nicelydone MCP** / **Refero.design** flow teardowns.
-  3. *Community `DESIGN.md` Systems & Visual Concepting:* **[designmd.ai](https://designmd.ai/explore)** (`designmd-mcp`) + **Google Stitch**, **OpenDesign**, or **Claude Design** screen studies in `audit/visual-concepts/` bridged via `@google/design.md`.
-  4. *Component Sourcing:* **21st.dev MCP** Tailwind component blueprints transmuted in Stage 4.5.
+- **Unified Stage 3 → Stage 4 Capability Prompt:** Your agent presents a single transition prompt offering Code-First Aesthetic Lanes, Brand Seed Palettes (`--seed-accent`), or optional MCP superpowers ([AI Agent & Harness Configuration](agent-documentation.md)).
 - **Select an Aesthetic Lane:** Choose a lane from [Aesthetic Lanes](../.agents/skills/site-art-direction/references/aesthetic-lanes.md) (*Technical Systems*, *Product-Led Minimalism*, *Editorial Paper*, *Luminous Futurism*, or *Custom / existing brand*).
 - **Define Token Physics & Pacing Variance:** Set typography pairings, canvas ground, action/accent contrast, border philosophy, spatial density, and a **Section Rhythm Map** (so consecutive sections never repeat the same layout).
 - **Declare Anti-Patterns:** Write 2–3 explicit semicolon-separated bans (e.g. *"No floating rounded cards; no decorative icon pills; no purple gradients"*).
-- **Save & Verify the Gate:** Write the `## Art Direction Record` block in `AGENTS.md`, run `npm run check:art-direction -- --require-record`, and seed/audit `src/styles/global.css` via `npm run design:tokens`.
+- **Initialize & Verify the Gate:** Run `npm run design:tokens -- --init-client --lane <lane>` (which seeds `src/styles/global.css`, writes `## Art Direction Record` in `AGENTS.md`, writes `audit/component-calibration.md`, and prunes starter sample-page exceptions from `audit/design-gate-exceptions.json`), then verify with `npm run check:art-direction -- --require-record`.
 - **Guides:** [Art Direction Workflow](art-direction-workflow.md) · [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---
@@ -103,11 +106,9 @@ Now assemble your public routes and wire up EmDash CMS editing:
 ## Stage 6: Verification & Route Completion
 
 Run deterministic local checks to verify the build before client handoff or deployment:
-- `npm run check:schema-budget`: Verify no collection exceeds the 50-column physical limit.
-- `npm run typecheck`: Full Astro check, TypeScript diagnostics, and schema preflight.
-- `node --test tests/*.test.mjs`: Run unit and tooling test suites.
+- `npm run verify`: Run syntax lint, Art Direction Gate, token/font/edit-proxy audit, all unit tests (`npm test`), physical schema budget preflight (`check:schema-budget`), and Astro/TypeScript checks (`typecheck`) in one command.
 - `npm run test:visual`: Compare local Windows screenshots against reviewed baselines across mobile, tablet, and desktop viewports ([Visual Regression](visual-regression.md)).
-- `npm run check:dev-tools`: Confirm `/_styleguide` and fixture markers are completely stripped from the production build.
+- `npm run check:dev-tools`: Confirm `/_styleguide` and synthetic fixture markers are completely stripped from the production build.
 - **Visual Critique & Polish (Optional):** Use the bundled `impeccable` skill for an automated UI critique pass on rendered pages before final signoff.
 - **Client Verification:** Log in to `/_emdash/admin`, test editing live content, publish drafts, and verify updates on the public site.
 - **Site Registration:** Run `npm run site:register` to register the site metadata ([Site Registry](site-registry.md)).

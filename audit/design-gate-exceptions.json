@@ -182,7 +182,7 @@
   {
     "path": "src/components/dev/Styleguide.astro",
     "reason": "Neutral starter specimen infrastructure including Container breakout (.content-grid) and accessible Card specimen without TweaksBar; no client theme. Exact LF-normalized source; edits invalidate this exception.",
-    "sha256": "e0cb5d2a4bedbe7d29f5e42251b591965f023cc84c2781c56b6c6d91d9303046"
+    "sha256": "4d64493548d7cdb95365d87ef451ab843185257efc0d98c8426f9d7bc5b65911"
   },
   {
     "path": "src/utils/grid-guide.ts",

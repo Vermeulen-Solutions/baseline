@@ -28,7 +28,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
           <h3>Nested heading</h3><h4>Fourth-level heading</h4><h5>Fifth-level heading</h5><h6>Sixth-level heading</h6>
           <Container width="reading"><p class="stress">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789. Font specimens inherit the source family and weight; fixture builds use pinned Noto Sans. A longer heading or translated sentence should wrap naturally without forced line breaks.</p><p class="stress">OneUnbrokenIdentifierToCheckIntrinsicSizingAndWrappingAcrossTheNarrowestSupportedContainer</p></Container>
         </div></Section>
-        <Section labelledBy="palette"><div class="flow"><h2 id="palette">Semantic palette</h2><p>{componentCoverage.surfaceModes}</p><ul class="swatches" role="list">{specimenTokens.map(token => <li><span class="swatch" style={`background:var(--color-${token})`} aria-hidden="true"></span><code>--color-{token}</code></li>)}</ul><p>Swatches expose roles; check actual text/control pairs and backgrounds separately.</p></div></Section>
+        <Section labelledBy="palette"><div class="flow"><h2 id="palette">Semantic palette</h2><p>{componentCoverage.surfaceModes}</p><ul class="swatches" role="list">{specimenTokens.map(token => <li><span class="swatch" style={`background:var(--color-${token})`} aria-hidden="true"></span><code>--color-{token}</code></li>)}</ul><p>Swatches expose roles; check actual text/control pairs and backgrounds separately.</p><div class="surface-dark-specimen flow" data-surface="dark"><h3>Dark surface context (<code>data-surface="dark"</code>)</h3><p>Remaps <code>--color-surface</code>, <code>--color-text</code>, <code>--color-muted</code>, <code>--color-border</code>, and <code>--color-focus</code> for high-contrast inverted bands.</p></div></div></Section>
         <Section labelledBy="controls"><div class="flow"><h2 id="controls">Controls and errors</h2><div class="control-row"><button type="button">Native button</button><button type="button" disabled>Disabled button</button><a href="#editorial">Text link</a></div>
           <fieldset class="specimen-fields"><legend>Native control specimens — no submissions</legend>
             <label for="specimen-name">Name<input id="specimen-name" autocomplete="off" placeholder="Sample name" /></label>
@@ -69,6 +69,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
   .stress { overflow-wrap: anywhere; }
   .swatches { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); gap:var(--spacing-content); padding:0; list-style:none; }
   .swatch { display:block; block-size:4rem; border:1px solid var(--color-border); margin-block-end:.5rem; }
+  .surface-dark-specimen { padding:var(--spacing-content); border:1px solid var(--color-border); border-radius:var(--radius-card); }
   code { font-size:.875rem; }
   .control-row { display:flex; flex-wrap:wrap; align-items:center; gap:var(--spacing-content); }
   .specimen-fields { display:grid; gap:var(--spacing-content); padding:var(--spacing-content); border:1px solid var(--color-border); min-inline-size:0; }

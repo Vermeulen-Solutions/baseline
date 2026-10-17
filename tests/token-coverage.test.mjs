@@ -23,8 +23,9 @@ import {
   upsertArtDirectionRecord,
   auditFontLoading,
   auditEditProxies,
+  pruneStarterExceptions,
 } from '../scripts/design-system.mjs';
-import { validateRecord } from '../scripts/check-art-direction.mjs';
+import { validateRecord, validateCssAlignment } from '../scripts/check-art-direction.mjs';
 
 const GLOBAL_CSS_PATH = 'src/styles/global.css';
 const FIXTURES_PATH = 'src/dev/styleguide-fixtures.ts';
@@ -228,11 +229,12 @@ test('auditFontLoading passes for system fonts and catches unloaded custom font 
   assert.equal(loadedAudit.valid, true);
 });
 
-test('auditEditProxies verifies starter single-entry routes and catches missing Base content or edit proxies', () => {
+test('auditEditProxies verifies starter single-entry and collection routes and catches missing Base content or field edit proxies', () => {
   const repoAudit = auditEditProxies('.');
   assert.equal(repoAudit.valid, true, repoAudit.issues.join('\n'));
   assert.ok(repoAudit.checkedRoutes.includes('src/pages/[slug].astro'));
   assert.ok(repoAudit.checkedRoutes.includes('src/pages/posts/[slug].astro'));
+  assert.ok(repoAudit.collectionRoutes.includes('src/pages/index.astro'));
 
   const dir = mkdtempSync(join(tmpdir(), 'emdash-proxies-'));
   try {
@@ -240,14 +242,43 @@ test('auditEditProxies verifies starter single-entry routes and catches missing 
     mkdirSync(pagesDir, { recursive: true });
     writeFileSync(
       join(pagesDir, '[slug].astro'),
-      `---\nconst { entry } = await getEmDashEntry('pages', slug);\n---\n<Base title={entry.data.title}><h1>{entry.data.title}</h1></Base>\n`,
+      `---\nconst { entry } = await getEmDashEntry('pages', slug);\n---\n<Base title={entry.data.title} content={{ collection: 'pages', id: entry.data.id }}><h1 {...entry.edit.title}>{entry.data.title}</h1><p>{entry.data.excerpt}</p></Base>\n`,
       'utf8',
     );
     const brokenAudit = auditEditProxies(dir);
     assert.equal(brokenAudit.valid, false);
-    assert.equal(brokenAudit.issues.length, 2);
+    assert.ok(brokenAudit.issues.some(msg => msg.includes('.data.excerpt')));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test('validateCssAlignment catches untouched neutral starter global.css when a named lane is declared and passes once lane tokens are applied', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const editorialRecord = formatArtDirectionRecord('editorial-paper');
+  const unalignedErrors = validateCssAlignment(editorialRecord, css);
+  assert.equal(unalignedErrors.length, 1);
+  assert.ok(unalignedErrors[0].includes('untouched neutral starter palette'));
+
+  const alignedCss = applyTokenOverrides(css, 'editorial-paper');
+  assert.deepEqual(validateCssAlignment(editorialRecord, alignedCss), []);
+  assert.deepEqual(validateCssAlignment(formatArtDirectionRecord('neutral'), css), []);
+});
+
+test('pruneStarterExceptions strips sample-page and deleted entries while retaining dev/styleguide infrastructure', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'emdash-prune-'));
+  try {
+    const exFile = join(dir, 'design-gate-exceptions.json');
+    const source = JSON.parse(readFileSync('audit/design-gate-exceptions.json', 'utf8'));
+    writeFileSync(exFile, JSON.stringify(source, null, 2), 'utf8');
+    const result = pruneStarterExceptions(exFile);
+    assert.ok(result.before > result.after);
+    assert.equal(result.after, 7);
+    const kept = JSON.parse(readFileSync(exFile, 'utf8'));
+    assert.ok(kept.every(item => !item.deleted && /^src\/(?:pages\/_styleguide\.astro|components\/dev\/|dev\/|assets\/styleguide-)/.test(item.path)));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 

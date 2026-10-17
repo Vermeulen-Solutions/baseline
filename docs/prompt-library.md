@@ -22,8 +22,23 @@ Use these prompts to invoke specific Baseline features and workflows without hav
 
 ## 1. Starting a New Site Project
 
-### Full New Site Kickoff
-Use this prompt when starting from the baseline repository with a client brief or asset folder.
+### Express / Autonomous Mode Kickoff (3 Checkpoints — For Smaller Sites)
+Use this prompt when building a straightforward greenfield site (`<= 6` routes, `<= 3` collections, single locale) and you want the agent to move through discovery, platform setup, and content modeling in one consolidated pass before pausing.
+
+```markdown
+Read AGENTS.md, follow new-site-workflow under .agents/skills/ in **Express Track (3 Checkpoints)**, and build this site using consolidated checkpoints:
+
+- Client / Brand: [Insert Brand Name]
+- Purpose & Routes: [E.g., 5-page architecture studio site: Home, Projects, Studio, Journal, Contact]
+- Primary Audience: [E.g., Residential and cultural architecture clients]
+- Aesthetic Lane / Palette: [E.g., Editorial Paper / Product-Led Minimalism, or seed accent #1B4332]
+- Hosting & Locale: [E.g., Node.js + SQLite, single language (en)]
+
+Please complete **Checkpoint A (Stages 1–3: Brief, Platform & Content Schema)** and present the Checkpoint A handoff.
+```
+
+### Standard Agency Mode Kickoff (Full 7 Stages — For Complex Sites & Migrations)
+Use this prompt when starting a complex multi-collection build, multi-locale site, or legacy migration with step-by-step stage approvals.
 
 ```markdown
 Read AGENTS.md, follow new-site-workflow under .agents/skills/, and guide me through the staged delivery workflow.
@@ -99,7 +114,7 @@ Please:
 1. Review .agents/skills/site-art-direction/references/aesthetic-lanes.md and propose 2-3 suitable Aesthetic Lanes.
 2. Formulate a Narrative Metaphor, Typography Pairing, and Token Physics (Canvas ground, Action/Accent colors, Borders, and Spatial Density).
 3. Propose 2-3 explicit Site Anti-Patterns (e.g., "No floating cards; no generic purple gradients; no icon pills").
-4. Once we agree, write the `## Art Direction Record` to AGENTS.md and verify with `npm run check:art-direction -- --require-record`.
+4. Once we agree, initialize the client site record and tokens via `npm run design:tokens -- --init-client --lane <lane>`, customize `AGENTS.md` and `src/styles/global.css` for our brief, and verify with `npm run check:art-direction -- --require-record`.
 ```
 
 ---
@@ -124,14 +139,14 @@ Please:
 ```
 
 ### Agent-First Token Calibration & WCAG Contrast Audit
-Use this prompt to seed an Aesthetic Lane preset, customize brand tokens in `src/styles/global.css`, and verify WCAG AA contrast and fluid scales.
+Use this prompt to seed an Aesthetic Lane preset or brand hex color, customize tokens in `src/styles/global.css`, and verify WCAG AA contrast, font loading, and edit proxies.
 
 ```markdown
 Let's calibrate our design tokens in src/styles/global.css to match our Art Direction Record in AGENTS.md:
 
-1. Start from the closest Aesthetic Lane preset (`npm run design:tokens -- --list-lanes` / `--lane <lane-id> --write`).
-2. Customize the `@theme`, `:root`, and `[data-surface="dark"]` tokens in `src/styles/global.css` for our brand palette, typography pairing, and spatial density.
-3. Run `npm run design:tokens` and `npm run test:design` to verify all 10 WCAG AA contrast pairs across light and dark surfaces, fluid `clamp()` bounds, and `/_styleguide` swatch coverage.
+1. Initialize or update from the closest Aesthetic Lane preset or brand seed (`npm run design:tokens -- --init-client --lane <lane-id>` or `--seed-accent <hex> --type-scale <ratio> --write`).
+2. Customize the `@theme`, `:root`, and `[data-surface="dark"]` tokens in `src/styles/global.css` for our brand palette, loaded font families, and spatial density.
+3. Run `npm run design:tokens -- --write-calibration` and `npm run verify` to verify all 10 WCAG AA contrast pairs across light and dark surfaces, fluid `clamp()` bounds, custom font loading, EmDash edit proxies, and `/_styleguide` swatch coverage.
 ```
 
 ---

@@ -22,6 +22,36 @@ Turn the neutral starter into a coherent, content-backed site by sequencing the 
 
 Keep a concise site record in `AGENTS.md`: purpose, audiences, languages, content sources, routes and content types, hosting/runtime choices, visual direction, and material deviations from this starter. For a large site, put detailed inventories in a focused project document and link it from `AGENTS.md`.
 
+## Express Track (3-Checkpoint Autonomous Mode)
+
+When the user requests **Express Mode** (or when building a straightforward greenfield site with `<= 6` routes, `<= 3` collections, and a single locale), execute the same specialist skills and CLI gates across **3 consolidated checkpoints** instead of pausing 7 times:
+
+1. **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):**
+   - Document the brief and route inventory in `AGENTS.md`, configure runtime/plugins (`emdash-site-setup`), and model collections (`emdash-content-modeling` + `building-emdash-site`) within the 50-column budget (`npm run check:schema-budget`).
+   - **Checkpoint A Handoff Prompt:**
+     > **Express Checkpoint A Complete: Brief, Platform & Content Schema Ready**
+     > - **Runtime & Plugins:** [Node.js + SQLite / Cloudflare Workers + D1]
+     > - **Collections & Routes:** [List collections and routes]
+     >
+     > Next is **Checkpoint B (Stages 4–4.5: Art Direction & Component Calibration)**.
+     > **Which visual direction should I initialize (`npm run design:tokens -- --init-client`)?**
+     > 1. **(Recommended) Curated Aesthetic Lane:** (*Product-Led Minimalism*, *Editorial Paper*, *Technical Systems*, or *Luminous Futurism*)
+     > 2. **Brand Seed Palette:** Provide a primary hex color or reference URL (`--seed-accent`).
+     > *(Reply `1` + lane name, or `2` + your brand color/URL.)*
+
+2. **Checkpoint B (Stages 4–4.5 — Art Direction & `/_styleguide` Calibration):**
+   - Run `npm run design:tokens -- --init-client --lane <lane>` (or `--seed-accent <hex>`), refine `## Art Direction Record` in `AGENTS.md` and tokens in `src/styles/global.css`, pass `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide` (`audit/component-calibration.md`).
+   - **Checkpoint B Handoff Prompt:**
+     > **Express Checkpoint B Complete: Art Direction & `/_styleguide` Calibrated**
+     > - **Art Direction Gate:** `PASS` (`AGENTS.md` + `src/styles/global.css` + `audit/component-calibration.md`)
+     > - **WCAG Contrast & Tokens:** 10/10 light & `[data-surface="dark"]` pairs verified.
+     >
+     > Next is **Checkpoint C (Stages 5–6: Full Route Assembly, Impeccable Critique & Verification)**.
+     > *(Reply `1` to build all routes, run the `impeccable` critique pass, and run `npm run verify`, or `2` to inspect `/_styleguide` first.)*
+
+3. **Checkpoint C (Stages 5–6 — Route Implementation, Critique & Full Verification):**
+   - Implement public routes and `<Base content={{...}}>` + `{...entry.edit.*}` bindings, run the `impeccable` visual critique pass, run `npm run verify` + `npm run build`, and present the Stage 6 launch/deployment prompt.
+
 ## Stage 1: establish the brief and evidence
 
 Determine what is being built before changing the starter:

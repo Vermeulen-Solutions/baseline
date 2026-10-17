@@ -5,13 +5,10 @@ This repository is a reusable **Node.js + SQLite** Astro/EmDash starting point. 
 ## First steps in a new site repository
 
 1. Read `README.md`, inspect the installed tooling and existing files, and use the package manager matching the lockfile (`npm`).
-2. Run `npm run sync:emdash-skills` and review the diff before relying on the mirrored EmDash guidance. That command stages an immutable candidate by default; review and explicitly apply it under `docs/skill-synchronization.md`, preserving local drift and backups. Its ownership scope includes only `building-emdash-site`, `creating-plugins`, and `emdash-cli` under `.agents/skills/`.
-3. Use `new-site-workflow` as the entry point when adapting this starter into a site or carrying out a full rebuild. Follow its stage gates and load each specialist skill when that stage begins; do not collapse discovery, platform setup, content architecture, art direction, implementation, and final review into one undifferentiated pass.
-4. Record site-specific content types, routes, design decisions, hosting, and localization here as they become known. Do not carry the starter's sample content or English text into a client site by default.
+2. Use `new-site-workflow` as the entry point when adapting this starter into a site or carrying out a full rebuild. Choose either the **Standard Track (7 Stages)** for complex migrations/multi-locale builds or the **Express Track (3 Checkpoints)** for smaller greenfield sites (`<= 6` routes, single locale), and load each specialist skill when its stage begins.
+3. Record site-specific content types, routes, design decisions, hosting, and localization here as they become known. Do not carry the starter's sample content or English text into a client site by default; use `npm run design:tokens -- --init-client --lane <lane>` when initializing a client site to seed tokens, write the `## Art Direction Record`, and prune starter sample-page gate exceptions.
+4. Only run `npm run sync:emdash-skills` or `npm run sync:site-skills -- --check` when explicitly checking for upstream skill updates or refreshing an older checkout (`docs/skill-synchronization.md`). On a fresh clone, use the checked-in skills under `.agents/skills/` directly without a blocking sync detour.
 
-`sync:site-skills` stages reviewed updates to the shared Vermeulen-maintained skills from the canonical starter repository. It does not modify this file, site content, or the mirrored EmDash skills. Run it with the package manager matching the lockfile; use `sync:site-skills -- --check` to check for an update without changing files.
-
-If a repository predates this helper, follow `new-site-workflow`'s bootstrap rule: use the checked-in skill snapshot for the current task, record that synchronization is pending, and repair the helper before treating future shared-skill updates as synchronized.
 
 ## Where to work
 

@@ -932,23 +932,30 @@ export function auditFontLoading(css, rootDir = '.') {
   };
 }
 
+const EDITABLE_ENTRY_FIELDS = ['title', 'featured_image', 'excerpt', 'subtitle', 'heading', 'summary'];
+
 /**
- * Statically audits single-entry CMS routes under `src/pages/` that call `getEmDashEntry(...)`
- * to verify `<Base content={{...}}>` and `.edit.` in-place editor bindings are present.
+ * Statically audits CMS routes under `src/pages/` that call `getEmDashEntry(...)` or `getEmDashCollection(...)`
+ * to verify `<Base content={{...}}>` and field-level `.edit.` in-place editor bindings are present.
  */
 export function auditEditProxies(rootDir = '.') {
   const pagesDir = join(resolve(rootDir), 'src/pages');
   const files = walkFiles(pagesDir, '.astro');
   const checkedRoutes = [];
+  const collectionRoutes = [];
   const issues = [];
 
   for (const file of files) {
     const normalized = file.replaceAll('\\', '/');
     if (normalized.endsWith('/_styleguide.astro') || normalized.endsWith('/404.astro')) continue;
     const source = readFileSync(file, 'utf8');
-    if (!/\bgetEmDashEntry\s*\(/.test(source)) continue;
-
     const rel = normalized.slice(resolve(rootDir).replaceAll('\\', '/').length + 1);
+
+    if (/\bgetEmDashCollection\s*\(/.test(source)) {
+      collectionRoutes.push(rel);
+    }
+
+    if (!/\bgetEmDashEntry\s*\(/.test(source)) continue;
     checkedRoutes.push(rel);
 
     const hasBaseContent = /<Base\b[\s\S]*?\bcontent=\{/.test(source);
@@ -960,13 +967,39 @@ export function auditEditProxies(rootDir = '.') {
     if (!hasEditProxy) {
       issues.push(`${rel}: calls getEmDashEntry() but does not bind any {...edit.field} proxy attributes.`);
     }
+
+    const parts = source.split(/^---\s*$/m);
+    const templateBody = parts.length >= 3 ? parts.slice(2).join('\n') : source;
+    for (const field of EDITABLE_ENTRY_FIELDS) {
+      const dataRegex = new RegExp(`\\.data\\.${field}\\b`);
+      const editRegex = new RegExp(`\\.edit\\.${field}\\b`);
+      if (dataRegex.test(templateBody) && !editRegex.test(templateBody)) {
+        issues.push(`${rel}: renders .data.${field} in template markup without binding .edit.${field}.`);
+      }
+    }
   }
 
   return {
     valid: issues.length === 0,
     checkedRoutes,
+    collectionRoutes,
     issues,
   };
+}
+
+/**
+ * Prunes starter-only sample page exceptions and retired `deleted: true` entries from
+ * `audit/design-gate-exceptions.json`, retaining only active `/_styleguide` dev infrastructure exceptions.
+ */
+export function pruneStarterExceptions(exceptionsPath = 'audit/design-gate-exceptions.json') {
+  const resolved = resolve(exceptionsPath);
+  if (!existsSync(resolved)) return { path: resolved, before: 0, after: 0 };
+  const raw = JSON.parse(readFileSync(resolved, 'utf8'));
+  const kept = raw.filter(
+    item => !item.deleted && /^src\/(?:pages\/_styleguide\.astro|components\/dev\/|dev\/|assets\/styleguide-)/.test(item.path),
+  );
+  writeFileSync(resolved, `${JSON.stringify(kept, null, 2)}\n`, 'utf8');
+  return { path: resolved, before: raw.length, after: kept.length };
 }
 
 /**
@@ -1024,6 +1057,7 @@ function main() {
   const args = process.argv.slice(2);
   const cssIndex = args.indexOf('--css');
   const cssPath = resolve(cssIndex >= 0 ? args[cssIndex + 1] : 'src/styles/global.css');
+  const initClient = args.includes('--init-client');
 
   if (args.includes('--list-lanes')) {
     for (const [id, lane] of Object.entries(AESTHETIC_LANES)) {
@@ -1083,13 +1117,23 @@ function main() {
     hasMutationRequest = true;
   }
 
+  if (initClient && !hasMutationRequest) {
+    combinedOverrides = mergeOverrides(combinedOverrides, AESTHETIC_LANES[selectedLaneId]);
+    hasMutationRequest = true;
+  }
+
   const recordIndex = args.indexOf('--write-record');
-  if (recordIndex >= 0) {
-    const nextArg = args[recordIndex + 1];
+  if (recordIndex >= 0 || initClient) {
+    const nextArg = recordIndex >= 0 ? args[recordIndex + 1] : null;
     const agentsTarget = nextArg && !nextArg.startsWith('--') ? nextArg : 'AGENTS.md';
     const writtenRecord = upsertArtDirectionRecord(agentsTarget, selectedLaneId);
     console.log(`Wrote ## Art Direction Record (${selectedLaneId}) to ${writtenRecord}`);
-    if (!hasMutationRequest && !args.includes('--write-calibration')) return;
+    if (!hasMutationRequest && !args.includes('--write-calibration') && !initClient) return;
+  }
+
+  if (initClient) {
+    const pruned = pruneStarterExceptions('audit/design-gate-exceptions.json');
+    console.log(`Pruned starter sample exceptions in ${pruned.path} (${pruned.before} -> ${pruned.after} dev/styleguide infrastructure entries).`);
   }
 
   if (hasMutationRequest) {
@@ -1101,13 +1145,13 @@ function main() {
       process.exitCode = 1;
       return;
     }
-    if (args.includes('--write')) {
+    if (args.includes('--write') || initClient) {
       writeFileSync(cssPath, updated, 'utf8');
       console.log(`Updated ${cssPath} (${audit.contrast.length} WCAG contrast pairs verified, SHA-256 ${stylesheetDigest(updated).slice(0, 12)}).`);
     } else {
       console.log(JSON.stringify(combinedOverrides, null, 2));
     }
-    if (!args.includes('--write-calibration')) return;
+    if (!args.includes('--write-calibration') && !initClient) return;
   }
 
   const css = readFileSync(cssPath, 'utf8');
@@ -1116,13 +1160,13 @@ function main() {
   const proxyAudit = auditEditProxies();
 
   const calIndex = args.indexOf('--write-calibration');
-  if (calIndex >= 0) {
+  if (calIndex >= 0 || initClient) {
     if (!report.valid) {
       console.error('Refusing to write calibration report while token audit has errors:\n' + report.errors.join('\n'));
       process.exitCode = 1;
       return;
     }
-    const nextArg = args[calIndex + 1];
+    const nextArg = calIndex >= 0 ? args[calIndex + 1] : null;
     const targetPath = nextArg && !nextArg.startsWith('--') ? nextArg : 'audit/component-calibration.md';
     const written = upsertCalibrationRecord(targetPath, css, 'src/styles/global.css');
     console.log(`Wrote Stage 4.5 token calibration report to ${written}`);
@@ -1146,7 +1190,7 @@ function main() {
     console.log(`- :root tokens: ${Object.keys(report.tokens.root).length}`);
     console.log(`- [data-surface="dark"] tokens: ${Object.keys(report.tokens.dark).length}`);
     console.log(`- Font loading: ${fontAudit.valid ? 'PASS' : 'FAIL'} (${fontAudit.checkedFamilies.length ? fontAudit.checkedFamilies.join(', ') : 'system fonts'})`);
-    console.log(`- EmDash edit proxies: ${proxyAudit.valid ? 'PASS' : 'FAIL'} (${proxyAudit.checkedRoutes.length} single-entry routes checked)`);
+    console.log(`- EmDash edit proxies: ${proxyAudit.valid ? 'PASS' : 'FAIL'} (${proxyAudit.checkedRoutes.length} single-entry routes, ${proxyAudit.collectionRoutes.length} collection routes)`);
     console.log('- WCAG Contrast Pairs:');
     for (const item of report.contrast) {
       console.log(`  [${item.status.toUpperCase()}] ${item.id}: ${item.ratio}:1 (min ${item.minimum}:1)`);

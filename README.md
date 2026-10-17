@@ -58,9 +58,21 @@ Once `npm run dev` is running, open these local URLs:
 
 Baseline is harness-agnostic. Whether pairing with **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **Cursor**, **Windsurf**, or **Aider**, you never have to guess what to prompt.
 
-### 📋 Starter Prompt: Kick Off a New Site
-Paste this exact prompt into your AI assistant to start:
+### 📋 Starter Prompts: Kick Off a New Site
 
+Choose **Standard Mode (7 Stages)** for complex migrations and multi-locale sites, or **Express Mode (3 Checkpoints)** for smaller greenfield builds (`<= 6` routes):
+
+**Option A — Express / Autonomous Mode (3 Checkpoints):**
+```markdown
+Read AGENTS.md, follow new-site-workflow under .agents/skills/ in **Express Track (3 Checkpoints)**, and build this site with consolidated checkpoints:
+- Client / Brand: [Brand Name]
+- Purpose & Routes: [E.g., 5-page B2B studio site: Home, Work, About, Blog, Contact]
+- Aesthetic Lane / Palette: [E.g., Editorial Paper / Product-Led Minimalism, or seed accent #1B4332]
+
+Complete Checkpoint A (Brief, Platform & Content Schema) and present the Checkpoint A handoff.
+```
+
+**Option B — Standard Agency Mode (Full 7 Stages):**
 ```markdown
 Read AGENTS.md, follow new-site-workflow under .agents/skills/, and guide me through the staged delivery workflow.
 
@@ -78,7 +90,7 @@ Need to run a specific task? Copy battle-tested prompt templates directly from o
 
 👉 **[Open the AI Developer Prompt Library (`docs/prompt-library.md`)](docs/prompt-library.md)**
 
-- 🚀 [Kickstarting a Greenfield Site](docs/prompt-library.md#1-starting-a-new-site-project)
+- 🚀 [Kickstarting a Greenfield Site (Express 3-Checkpoint or Full 7-Stage)](docs/prompt-library.md#1-starting-a-new-site-project)
 - 🗄️ [Auditing WordPress Content & Finding Hidden Entities](docs/prompt-library.md#2-wordpress-migration--content-modeling)
 - 🖼️ [Manifest-Driven WordPress Media Ingestion](docs/prompt-library.md#2-wordpress-migration--content-modeling)
 - 🎨 [Art Direction & The Design Gate](docs/prompt-library.md#3-art-direction--the-design-gate)
@@ -100,14 +112,14 @@ See [agent documentation](docs/agent-documentation.md) for harness integration, 
 
 Pairing with an AI coding assistant without a structured process usually results in "one-shot prompt chaos"—where an assistant attempts to do discovery, database schema, responsive layouts, and copy all at once, resulting in broken schemas and generic styling.
 
-Baseline organizes projects into an explicit 7-stage agency workflow:
+Baseline organizes projects into an explicit 7-stage agency workflow (available as the **Standard 7-Stage Track** for complex migrations or the **Express 3-Checkpoint Track** for smaller greenfield builds):
 
 1. **Brief & Evidence:** Gather real brand assets, photography, client requirements, and existing site screenshots before touching code.
 2. **Platform, Plugins & Hosting:** Choose Node/SQLite or Cloudflare Workers/D1/R2 (keeping Cloudflare's 100-column table limits in mind) and evaluate optional native EmDash plugins (`@eventual/emdash`, `@linguadash/emdash`, `@perkyzz/emvb`).
 3. **Content Architecture & Candidate Discovery:** Model EmDash collections before writing templates. Hunt for implicit entities trapped in page bodies or ACF repeaters using the [Content Candidate Register](docs/wordpress-content-modeling.md).
-4. **The Art Direction Gate:** Record an aesthetic lane, typography pairings, token physics, section pacing, and explicit anti-patterns in `AGENTS.md` before writing CSS (`npm run check:art-direction`), then seed and audit tokens in `src/styles/global.css` (`npm run design:tokens`). [Art Direction Guide](docs/art-direction-workflow.md).
+4. **The Art Direction Gate:** Initialize a client site in one command (`npm run design:tokens -- --init-client --lane <lane>`) to record an aesthetic lane, typography pairings, token physics, and explicit anti-patterns in `AGENTS.md` (`npm run check:art-direction`) and calibrate tokens in `src/styles/global.css`. [Art Direction Guide](docs/art-direction-workflow.md).
 5. **Component Sourcing & Quarantine (`/_styleguide`):** Calibrate reusable components—or transmute external Tailwind blueprints from `21st.dev MCP` into zero-JS, token-bound Astro—in isolation before page assembly (`docs/styleguide-fixtures.md`).
-6. **Representative Implementation & Verification:** Build public routes, bind CMS visual edit proxies (`{...entry.edit.title}`), and verify with local visual tests and schema preflights.
+6. **Representative Implementation & Verification:** Build public routes, bind CMS visual edit proxies (`{...entry.edit.title}`), and verify with `npm run verify` and local visual tests.
 7. **Production Cutover, Email & Launch:** Connect custom domains, verify HTTPS/TLS certificates, test admin passkey/email authentication, and preserve corporate mail DNS (Google Workspace / Microsoft 365).
 
 Read the complete [Site Delivery Workflow runbook](docs/site-delivery-workflow.md).
@@ -187,13 +199,14 @@ Local SQLite can accept models that exceed Cloudflare D1's [100-column table lim
 | Command | Use it for |
 | --- | --- |
 | `npm run dev` | Develop the site and open `/_styleguide` |
-| `npm run design:tokens` | Audit tokens, WCAG contrast pairs, and fluid scales in `src/styles/global.css` (or apply a lane/scale/palette) |
+| `npm run verify` | Run all fast local checks in one command (`lint`, `check:art-direction`, `design:tokens`, `test`, `typecheck`) |
+| `npm run design:tokens` | Audit tokens, WCAG contrast, font loading & edit proxies (or pass `--init-client --lane <lane>` to initialize a client site) |
+| `npm test` | Run the full unit and tooling test suite (`tests/*.test.mjs`) |
 | `npm run test:design` | Validate art direction record, token coverage, and `DESIGN.md` interchange |
 | `npm run typecheck` | Astro/TypeScript diagnostics and schema preflight |
 | `npm run check:schema-budget` | Measure the local database's physical collection widths |
 | `npm run db:diff` | Compare offline SQLite/D1 schema parity and column budgets |
 | `npm run media:migrate-wp` | Manifest-driven WordPress media preparation, CMS ingestion, and R2 staging |
-| `node --test tests/*.test.mjs` | Run the unit and tooling tests |
 | `npm run test:visual` | Compare local Windows captures with reviewed baselines |
 | `npm run check:dev-tools` | Verify `/_styleguide` and fixture markers stay out of production |
 | `npm run build` | Build the Node production artifact |

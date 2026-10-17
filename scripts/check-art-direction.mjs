@@ -48,6 +48,19 @@ export function validateRecord(markdown) {
   return errors;
 }
 
+export function validateCssAlignment(markdown, css) {
+  if (!css) return [];
+  const laneMatch = String(markdown ?? '').match(/^\s*- \*\*Aesthetic Lane:\*\*[ \t]*(Technical Systems|Product-Led Minimalism|Editorial Paper|Luminous Futurism)\b/m);
+  if (!laneMatch) return [];
+  const isUntouchedNeutralPage = /--color-page\s*:\s*oklch\(\s*99%\s+0\.004\s+250\s*\)/i.test(css);
+  const isUntouchedNeutralAction = /--color-action\s*:\s*oklch\(\s*43%\s+0\.14\s+250\s*\)/i.test(css);
+  if (isUntouchedNeutralPage && isUntouchedNeutralAction) {
+    const slug = laneMatch[1].toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    return [`src/styles/global.css still has the untouched neutral starter palette while AGENTS.md declares "${laneMatch[1]}". Run: npm run design:tokens -- --lane ${slug} --write`];
+  }
+  return [];
+}
+
 export function isVisualPath(file) {
   return /^(src|public)\//.test(file.replaceAll('\\', '/'));
 }
@@ -86,7 +99,9 @@ function main() {
     if (!uncovered.length) { console.log('Art direction gate: exact infrastructure exceptions cover these changes.'); return; }
     console.log(`Art direction gate: checking record for ${uncovered.join(', ')}`);
   }
-  const errors = validateRecord(readFileSync('AGENTS.md', 'utf8'));
+  const agentsMd = readFileSync('AGENTS.md', 'utf8');
+  const css = existsSync('src/styles/global.css') ? readFileSync('src/styles/global.css', 'utf8') : null;
+  const errors = [...validateRecord(agentsMd), ...validateCssAlignment(agentsMd, css)];
   if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
   else {
     console.log('Art direction record is structurally valid.');
