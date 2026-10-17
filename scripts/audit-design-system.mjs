@@ -68,6 +68,29 @@ export function designSystemRules(target, add) {
   let clickableParentCardCount = 0;
   let concentricMediaRadius = false;
   let cmsEditForwarding = false;
+  let breakoutPageCount = 0;
+  let surfaceUsageCount = 0;
+
+  function scanAstroDir(relDir, depth = 0) {
+    if (depth > 3) return [];
+    const absDir = path.join(target, relDir);
+    try {
+      if (!fs.existsSync(absDir) || fs.lstatSync(absDir).isSymbolicLink() || !fs.statSync(absDir).isDirectory()) return [];
+      const results = [];
+      for (const entry of fs.readdirSync(absDir, { withFileTypes: true })) {
+        if (!safeRelative(entry.name)) continue;
+        const childRel = `${relDir}/${entry.name}`;
+        if (entry.isDirectory()) {
+          results.push(...scanAstroDir(childRel, depth + 1));
+        } else if (entry.isFile() && entry.name.endsWith('.astro')) {
+          results.push(childRel);
+        }
+      }
+      return results;
+    } catch {
+      return [];
+    }
+  }
 
   try {
     const srcPath = path.join(target, 'src');
@@ -104,6 +127,14 @@ export function designSystemRules(target, add) {
           cmsEditForwarding = true;
         }
       }
+      for (const relFile of scanAstroDir('src/pages')) {
+        if (relFile === 'src/pages/_styleguide.astro') continue;
+        const pageBytes = readTarget(target, relFile).bytes;
+        if (!pageBytes) continue;
+        const pageText = pageBytes.toString('utf8');
+        if (/<Container\b[^>]*\bbreakout\b|\bcontent-grid\b/.test(pageText)) breakoutPageCount++;
+        if (/\bdata-surface=/.test(pageText)) surfaceUsageCount++;
+      }
     }
   } catch {
     componentsObserved = false;
@@ -136,6 +167,8 @@ export function designSystemRules(target, add) {
         clickableParentCardCount,
         concentricMediaRadius,
         cmsEditForwarding,
+        breakoutPageCount,
+        surfaceUsageCount,
       },
       { required: false, evidence: ['src/components'], confidence: 'bounded-static', remediation: 'docs/reusable-public-patterns.md' }
     );
@@ -145,6 +178,8 @@ export function designSystemRules(target, add) {
   const tweaksBytes =
     readTarget(target, 'src/components/TweaksBar.astro').bytes ??
     readTarget(target, 'src/components/dev/TweaksBar.astro').bytes;
+  const baseLayoutBytes = readTarget(target, 'src/layouts/Base.astro').bytes;
+  const calibrationBytes = readTarget(target, 'audit/component-calibration.md').bytes;
   const pagesDirExists = (() => {
     try {
       const p = path.join(target, 'src/pages');
@@ -158,19 +193,22 @@ export function designSystemRules(target, add) {
     add(
       'design-system:quarantine-hud',
       'unverified',
-      'Component quarantine route (/_styleguide) and Dev HUD (TweaksBar.astro) present',
+      'Component quarantine route (/_styleguide) and Dev HUD (TweaksBar.astro mounted in Base.astro) present',
       'src/pages and src/components not observed',
-      { required: false, evidence: ['src/pages/_styleguide.astro', 'src/components/TweaksBar.astro'], confidence: 'bounded-static', remediation: 'docs/dev-hud.md' }
+      { required: false, evidence: ['src/pages/_styleguide.astro', 'src/components/TweaksBar.astro', 'src/layouts/Base.astro'], confidence: 'bounded-static', remediation: 'docs/dev-hud.md' }
     );
   } else {
     const styleguideRoute = Boolean(styleguideBytes);
     const tweaksBar = Boolean(tweaksBytes);
+    const tweaksBarMounted = Boolean(baseLayoutBytes && /<TweaksBar\b/.test(baseLayoutBytes.toString('utf8')));
+    const calibrationRecord = Boolean(calibrationBytes);
     add(
       'design-system:quarantine-hud',
-      styleguideRoute && tweaksBar ? 'pass' : 'warning',
-      'Component quarantine route (/_styleguide) and Dev HUD (TweaksBar.astro) present',
-      { styleguideRoute, tweaksBar },
-      { required: false, evidence: ['src/pages/_styleguide.astro', 'src/components/TweaksBar.astro'], confidence: 'bounded-static', remediation: 'docs/dev-hud.md' }
+      styleguideRoute && tweaksBar && tweaksBarMounted ? 'pass' : 'warning',
+      'Component quarantine route (/_styleguide) and Dev HUD (TweaksBar.astro mounted in Base.astro) present',
+      { styleguideRoute, tweaksBar, tweaksBarMounted, calibrationRecord },
+      { required: false, evidence: ['src/pages/_styleguide.astro', 'src/components/TweaksBar.astro', 'src/layouts/Base.astro'], confidence: 'bounded-static', remediation: 'docs/dev-hud.md' }
     );
   }
 }
+

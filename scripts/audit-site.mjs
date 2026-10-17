@@ -135,10 +135,60 @@ export function strictFailure(report, { failsOnly = false } = {}) {
   if (failsOnly) return report.rules.some(rule => rule.status === 'fail');
   return report.rules.some(rule => rule.severity === 'required' && ['fail', 'unverified'].includes(rule.status));
 }
+export function followUpPlan(report) {
+  assertReport(report);
+  const byId = Object.fromEntries(report.rules.map(r => [r.id, r]));
+  const items = [];
+
+  // Track 1: Required blockers & skill provenance
+  const skillFindings = ['skills:site', 'skills:emdash'].map(id => byId[id]).filter(r => r && r.status !== 'pass');
+  if (skillFindings.length) {
+    const hints = skillFindings.map(r => `${r.id} (${r.status}${r.observed?.missingSkillNames?.length ? `: missing ${r.observed.missingSkillNames.join(', ')}` : ''})`).join('; ');
+    items.push(`1. **Synchronize skills & provenance manifests (${hints})**: Run \`npm run sync:site-skills\` and \`npm run sync:emdash-skills\` on a feature branch, review staged diffs, and apply.`);
+  }
+  const schemaRule = byId['physical-schema'];
+  if (schemaRule && schemaRule.status !== 'pass') {
+    items.push(`1. **Measure physical schema (${schemaRule.status})**: Supply \`--db-snapshot <file.sqlite>\` or \`--d1-dump <export.sql>\` (via \`npm run db:export-d1\`) to verify all collection tables stay within the 50-column budget.`);
+  }
+
+  // Track 2: Design-system primitives, Card accessibility & Dev HUD
+  const dsRules = ['design-system:tokens-and-rhythm', 'design-system:card-and-breakout', 'design-system:quarantine-hud']
+    .map(id => byId[id])
+    .filter(r => r && r.status !== 'pass');
+  if (dsRules.length) {
+    const details = dsRules.map(r => `${r.id} (${r.status})`).join(', ');
+    items.push(`2. **Modernize design-system primitives & Dev HUD (${details})**: Align \`src/styles/global.css\` (\`interpolate-size\`, single \`.flow\` with duplicate-margin guard, \`.content-grid\` subgrid, \`[data-surface]\`, tokenized \`clamp()\` in \`@theme\`), refactor whole-card \`<a>\` wrappers into semantic \`<article>\` + \`.clickable-parent\`, add \`/_styleguide\`, and mount \`<TweaksBar />\` in \`src/layouts/Base.astro\`.`);
+  }
+
+  // Track 3: Template adoption & component calibration
+  const cardObs = byId['design-system:card-and-breakout']?.observed;
+  const hudObs = byId['design-system:quarantine-hud']?.observed;
+  if (cardObs && typeof cardObs === 'object') {
+    if ((cardObs.breakoutPageCount ?? 0) === 0 || (cardObs.surfaceUsageCount ?? 0) === 0 || (hudObs && !hudObs.calibrationRecord)) {
+      items.push(`3. **Adopt breakout/surface primitives in route templates & calibrate on \`/_styleguide\`** (\`breakoutPageCount: ${cardObs.breakoutPageCount ?? 0}\`, \`surfaceUsageCount: ${cardObs.surfaceUsageCount ?? 0}\`, \`calibrationRecord: ${Boolean(hudObs?.calibrationRecord)}\`): Opt long-form editorial routes into \`<Container breakout>\` (\`.content-grid\`), apply \`data-surface="dark|muted|brand"\` to contrasting sections, and record browser verification in \`audit/component-calibration.md\`.`);
+    }
+  }
+
+  // Track 4: Dependencies, Node policy & prebuild guard
+  const depWarnings = report.rules.filter(r => (r.id.startsWith('dependency:') || r.id === 'node-policy' || r.id === 'schema-prebuild') && r.status !== 'pass');
+  if (depWarnings.length) {
+    const summary = depWarnings.map(r => `${r.id}=${typeof r.observed === 'string' ? r.observed : r.status}`).join(', ');
+    items.push(`4. **Evaluate framework, Node policy & prebuild alignment (${summary})**: Review \`engines.node\` and lockfile versions against the certified baseline profile, and apply \`schema-budget-prebuild@1\` if missing.`);
+  }
+
+  // Track 5: Runtime, visual & editor verification
+  const runtimeUnverified = ['route-capture-evidence', 'editor-save-reload', 'visual-accessibility'].map(id => byId[id]).filter(r => r && r.status !== 'pass');
+  if (runtimeUnverified.length) {
+    items.push(`5. **Execute live browser & EmDash editor verification**: Inspect \`/_styleguide\` and representative public/editor routes across mobile and wide viewports, verify inline/admin editing round-trips, and run the site test suite before merging the modernization branch.`);
+  }
+
+  return items.length ? `\n## Recommended follow-up plan\n\n${items.join('\n')}\n` : '';
+}
+
 export function markdownReport(report) {
   assertReport(report);
   const cell = value => String(typeof value === 'object' ? JSON.stringify(value) : value).replaceAll('|', '\\|').replaceAll('\n', ' ');
-  return `# Site standards diagnosis\n\nStandards ${report.standards.version}; manifest SHA-256 ${report.standards.sha256}.\n\nDiagnostic scaffold; static passes do not certify the site. Missing evidence remains unverified.\n\n| Rule | Status | Severity | Observation |\n| --- | --- | --- | --- |\n${report.rules.map(rule => `| ${cell(rule.id)} | ${rule.status} | ${rule.severity} | ${cell(rule.observed)} |`).join('\n')}\n`;
+  return `# Site standards diagnosis\n\nStandards ${report.standards.version}; manifest SHA-256 ${report.standards.sha256}.\n\nDiagnostic scaffold; static passes do not certify the site. Missing evidence remains unverified.\n\n| Rule | Status | Severity | Observation |\n| --- | --- | --- | --- |\n${report.rules.map(rule => `| ${cell(rule.id)} | ${rule.status} | ${rule.severity} | ${cell(rule.observed)} |`).join('\n')}\n${followUpPlan(report)}`;
 }
 export function writeReports(report, out, target) {
   assertReport(report);

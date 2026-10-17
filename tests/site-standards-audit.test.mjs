@@ -7,7 +7,7 @@ import { spawnSync, execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
-import { auditSite, strictFailure, writeReports, STANDARD } from '../scripts/audit-site.mjs';
+import { auditSite, strictFailure, writeReports, markdownReport, STANDARD } from '../scripts/audit-site.mjs';
 const script = new URL('../scripts/audit-site.mjs', import.meta.url);
 const baselineFile = new URL('../standards/baselines/0.1.1.json', import.meta.url);
 function fixture(fn) {
@@ -228,6 +228,11 @@ test('design-system drift rules detect brownfield CSS/Card gaps and pass on base
   assert.equal(hudRule.status, 'warning');
   assert.equal(hudRule.observed.styleguideRoute, false);
   assert.equal(hudRule.observed.tweaksBar, false);
+  assert.equal(hudRule.observed.tweaksBarMounted, false);
+
+  const md = markdownReport(brownfield);
+  assert.match(md, /## Recommended follow-up plan/);
+  assert.match(md, /Modernize design-system primitives & Dev HUD/);
 
   // Verify baseline itself passes all three design-system rules
   const starterRoot = fileURLToPath(new URL('../', import.meta.url));

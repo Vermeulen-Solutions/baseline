@@ -119,3 +119,15 @@ If the user requests only one stage, perform that stage without forcing a comple
 When modifying, normalizing, or pruning content models on a site that already has content:
 - Do not restart from Stage 1 or wipe existing databases.
 - Use `emdash-content-modeling` in brownfield evolution mode to perform schema audits, write zero-downtime data migration scripts, implement dual-read template fallbacks, maintain 3-way parity (local SQLite, remote D1, seed), and synchronize menus.
+
+### Brownfield site audit and modernization (`Audit -> Propose Follow-Up -> Execute -> Re-Audit`)
+When auditing an existing EmDash site to adopt newer starter standards or design-system practices, **never treat a diagnostic report or a single primitive-backport pass as the end of the workflow**:
+1. **Run Read-Only Diagnosis**: Execute `npm run audit:site -- --root <site-path> [--runtime node-sqlite|cloudflare-d1-r2] [--db-snapshot <file>|--d1-dump <file.sql>] --out <private-report-dir>`.
+2. **Present Findings & Propose a Phased Follow-Up Plan**: Always synthesize the report's `Recommended follow-up plan` into concrete, user-selectable tracks rather than stopping after printing the table:
+   - **Track 1 — Skills & Provenance Sync**: Stage, review, and apply `sync:site-skills` and `sync:emdash-skills` on a feature branch; record intentional drift under `overrides` in `.emdash/site-skills.json`.
+   - **Track 2 — Design-System Primitives, Card Accessibility & Dev HUD**: Backport `global.css` rhythm/token architecture (`interpolate-size`, consolidated `.flow` with duplicate-margin guard, `.content-grid` subgrid, `[data-surface]`, `.clickable-parent`/`.focus-parent`, tokenized `@theme` `clamp()` scales), semantic `<article>` Card primitives with CMS edit forwarding, `/_styleguide`, and mount `<TweaksBar />` in `src/layouts/Base.astro`.
+   - **Track 3 — Route Template Adoption & `/_styleguide` Calibration**: Inspect actual routes in `src/pages/` to opt long-form editorial templates into `<Container breakout>` (`.content-grid`), apply `data-surface="dark|muted|brand"` to contrasting sections, and save `audit/component-calibration.md`.
+   - **Track 4 — Framework, Adapter & Node Policy Alignment**: Evaluate lockfile versions (`astro`, `emdash`, `@astrojs/*`), `engines.node`, and apply `npm run audit:modernize -- --recipe schema-budget-prebuild@1` when needed.
+   - **Track 5 — Live Browser, Visual & Editor Verification**: Run the site's test suites, `typecheck`, and `build`, verify `/_styleguide` and key public/editor routes across viewports, and propose branch merge/PR when verified.
+3. **Iterate with Explicit Follow-Up Proposals**: After completing any approved track and re-running `audit:site`, always present the before/after delta **and immediately propose the remaining follow-up tracks** so the user can choose what to execute next or explicitly defer.
+

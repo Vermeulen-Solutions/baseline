@@ -49,6 +49,15 @@ Each rule carries version, required/recommendation severity, expected/observed f
 
 Ordinary invocation exits 0 after producing findings. `--strict` exits 1 for implemented required fail/unverified rules, including unsupported configuration, managed skill inventories, physical schema and opted-in caching. `--strict-fails` exits 1 only if a rule evaluates to `fail` (ideal for CI pipelines targeting profiles with unverified platform status). Usage, standards or unsafe-output errors exit 2. Recommendations can remain unverified without failing strict mode.
 
+Markdown reports (`report.md`) automatically append a prioritized **`## Recommended follow-up plan`** grouping open findings into 5 actionable tracks:
+1. **Track 1 — Synchronize skills & physical schema** (`skills:site`, `skills:emdash`, `physical-schema`)
+2. **Track 2 — Modernize design-system primitives & Dev HUD** (`design-system:tokens-and-rhythm`, `design-system:card-and-breakout`, `design-system:quarantine-hud`, including mounting `<TweaksBar />` in `src/layouts/Base.astro`)
+3. **Track 3 — Adopt breakout/surface primitives in route templates & calibrate on `/_styleguide`** (`breakoutPageCount`, `surfaceUsageCount`, `calibrationRecord` in `audit/component-calibration.md`)
+4. **Track 4 — Evaluate framework, Node policy & prebuild alignment** (`dependency:*`, `node-policy`, `schema-prebuild`)
+5. **Track 5 — Execute live browser & EmDash editor verification** (`route-capture-evidence`, `editor-save-reload`, `visual-accessibility`)
+
+When running an audit or completing a modernization pass, agents must follow the `new-site-workflow` brownfield loop (**Audit → Propose Follow-Up Plan → Execute Approved Track → Re-Audit & Propose Next Track**) rather than stopping after a static report or primitive drop-in.
+
 ## First recipe: schema-budget-prebuild@1
 
 This deterministic code recipe adds the schema check before an existing simple prebuild hook. It changes **only package.json**. It never executes the hook, installs packages, commits, deploys or touches CMS data/media.
