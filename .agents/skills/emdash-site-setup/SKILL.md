@@ -31,6 +31,22 @@ Keep hosting and plugin sandboxing as separate decisions:
 
 A Cloudflare-hosted site without registry sandbox plugins does **not** need Worker Loader just because it runs on Workers. Conversely, a Node-hosted site that needs registry plugins still needs a sandbox runner (`workerd`). Do not use `sandbox: false` in production.
 
+### Curated Registry Sandbox Plugins Evaluation
+
+Before spending days building bespoke schemas, complex interactive admin dashboards, or custom backend services from scratch, always evaluate whether an official, curated sandbox plugin exists on the [EmDash Plugin Registry](https://plugins.emdashcms.com/). 
+
+Because EmDash sandbox plugins run in an isolated WebAssembly/V8 worker sandbox (`workerd`), they provide safe, turnkey capabilities without threatening the host application.
+
+| Capability | Recommended Plugin | What it Provides | Registry URL |
+|---|---|---|---|
+| **Event Management & Ticketing** | `@vermeulen.solutions/eventual` | Comprehensive event lifecycle management, multi-session schedules, venues, speaker profiles, registrations, and calendar exports. Avoids writing custom event schemas and complex datetime logic. | [Eventual on EmDash Registry](https://plugins.emdashcms.com/plugins/@vermeulen.solutions/eventual) |
+| **Translation Dashboards & AI Translation** | `@swiss.ky/linguadash` | Multilingual progress overview, side-by-side translation comparison editor, and automated translation drafting (DeepL/OpenAI) using EmDash's native row-per-locale model. | [LinguaDash on EmDash Registry](https://plugins.emdashcms.com/plugins/@swiss.ky/linguadash) |
+
+When an official registry plugin matches the site requirements:
+1. Enable the sandbox runner according to the hosting matrix above.
+2. Install the plugin via `npx emdash plugins add <plugin-name>`.
+3. Query its exposed data endpoints directly in Astro templates rather than reinventing redundant collection schemas.
+
 ## Check current documentation
 
 EmDash and Cloudflare interfaces change. Before using commands or configuration, consult the current official docs relevant to the chosen path:

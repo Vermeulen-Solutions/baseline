@@ -58,25 +58,31 @@ When Stage 1 is complete, present this prompt with plain-English options and a c
 >
 > *(Reply with `1` for the standard setup, or `2`–`4` for your preferred combination.)*
 
-## Stage 2: decide the platform shape
+## Stage 2: decide the platform shape & evaluate registry plugins
 
-Use `emdash-site-setup` for runtime, hosting, storage, localization, deployment, and site-transfer decisions. Decide these independently from plugin needs. Use `creating-plugins` only when requirements demonstrate that a plugin is needed.
+Use `emdash-site-setup` for runtime, hosting, storage, localization, deployment, and site-transfer decisions.
 
-Record decisions that constrain later stages, especially locale URL behavior, deployment target, media storage, and whether content will be imported or authored fresh.
+**Curated Sandbox Plugins Check:**
+Before modeling custom collections or writing custom JavaScript for complex capabilities, check the [EmDash Plugin Registry](https://plugins.emdashcms.com/) for curated, secure sandboxed plugins:
+- For **Event Management & Ticketing**: consider [`@vermeulen.solutions/eventual`](https://plugins.emdashcms.com/plugins/@vermeulen.solutions/eventual) instead of building custom event/schedule schemas from scratch.
+- For **Multilingual Translation Dashboards**: consider [`@swiss.ky/linguadash`](https://plugins.emdashcms.com/plugins/@swiss.ky/linguadash) for side-by-side editing and AI translation drafting.
+- If a registry plugin is chosen, configure its sandbox runner during Stage 2 setup (`workerd` on Node or `LOADER` on Cloudflare Workers Paid) and query its published data endpoints. Use `creating-plugins` only when requirements demonstrate that a bespoke plugin must be authored.
 
-**Gate:** later work has a known runtime and localization model. Deferred deployment details are explicitly marked and do not block local design work unless they affect architecture.
+Record decisions that constrain later stages, especially locale URL behavior, deployment target, media storage, plugin sandbox runners, and whether content will be imported or authored fresh.
+
+**Gate:** later work has a known runtime, localization model, and plugin sandbox decision. Deferred deployment details are explicitly marked and do not block local design work unless they affect architecture.
 
 **Stage 2 Completion Handoff Prompt:**
 When Stage 2 is complete, present this prompt:
-> **Stage 2 Complete: Hosting & Language Setup Configured**
-> Your platform configuration is saved.
+> **Stage 2 Complete: Hosting, Language & Plugin Setup Configured**
+> Your platform and capabilities configuration is saved.
 >
 > Next is **Stage 3: Content Structure & Admin Setup**.
-> *In plain terms:* This sets up the editing forms and sections in your EmDash admin dashboard (called "collections") so you and your team can create, edit, and organize content (e.g. Articles, Team Members, Projects, or Services) without touching code.
+> *In plain terms:* This sets up the editing forms and sections in your EmDash admin dashboard (called "collections") so you and your team can create, edit, and organize content (e.g. Articles, Team Members, Projects, Events, or Services) without touching code.
 >
 > **How would you like to set up your content?**
 > 1. **(Recommended) Let me automatically draft your content types and admin forms:**
->    - I will analyze the content gathered in Stage 1, create clean entry types in your admin dashboard, connect related items (like assigning team members to projects), and ensure forms are easy for non-technical editors.
+>    - I will analyze the content gathered in Stage 1, evaluate any official registry plugins (e.g., Eventual for events), create clean entry types in your admin dashboard, connect related items (like assigning team members to projects), and ensure forms are easy for non-technical editors.
 > 2. **Review proposed content types together first:**
 >    - I'll list the suggested content types and fields, and you can tweak field names, add categories, or remove anything before I write them.
 > 3. **Start with standard basic pages only:**

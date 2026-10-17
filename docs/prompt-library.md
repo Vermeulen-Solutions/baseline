@@ -38,6 +38,20 @@ Here is the context for this project:
 Please begin with Stage 1 (Brief & Evidence Discovery) and present the Stage 1 handoff choices once complete.
 ```
 
+### Evaluating & Installing Sandboxed Registry Plugins (Stage 2)
+Use this prompt when your site requires specialized functionality (e.g. event management, registration, or translation dashboards) before writing custom code.
+
+```markdown
+We are planning specialized site capabilities. Before we build custom code or relational schemas from scratch, check the curated EmDash Plugin Registry (https://plugins.emdashcms.com/) for official sandboxed plugins.
+
+Desired capability: [E.g., Event management & ticketing / Multilingual translation dashboard]
+
+Please:
+1. Check whether an existing registry plugin matches (e.g. @vermeulen.solutions/eventual for events or @swiss.ky/linguadash for translations).
+2. Advise whether our hosting target (Node.js vs Cloudflare Workers) needs a sandbox runner configured (workerd or LOADER).
+3. Guide me through installing the plugin via `npx emdash plugins add <name>` and integrating its published data into our Astro pages.
+```
+
 ---
 
 ## 2. WordPress Migration & Content Modeling

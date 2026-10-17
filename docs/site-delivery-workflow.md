@@ -30,13 +30,17 @@ Never start by writing code or prompting an assistant to "make a homepage." Begi
 
 ---
 
-## Stage 2: Platform & Hosting Decisions
+## Stage 2: Platform, Hosting & Plugin Decisions
 
-Establish your runtime and hosting boundaries before modeling content:
+Establish your runtime, hosting boundaries, and plugin needs before modeling content:
 - **Default Profile:** Node.js + SQLite + local media storage. Zero cloud dependencies, fast local development, perfectly reproducible.
 - **Cloudflare Profile (Optional):** Cloudflare Workers + D1 (SQLite) + R2 (media storage).
   - *Hard Limit Awareness:* Cloudflare D1 enforces a [100-column table maximum](https://developers.cloudflare.com/d1/platform/limits/). Baseline enforces a stricter **50-column physical schema budget** (`npm run check:schema-budget`) to ensure long-term stability.
   - *Session Storage:* Multi-instance serverless workers require persistent storage for form recovery ([Forms & Verification](forms-adoption.md)).
+- **Curated Registry Plugins Evaluation:** Before writing custom backend code or complex relational schemas, check the official [EmDash Plugin Registry](https://plugins.emdashcms.com/) for secure, sandboxed plugins:
+  - **Event Management & Ticketing:** [`@vermeulen.solutions/eventual`](https://plugins.emdashcms.com/plugins/@vermeulen.solutions/eventual) provides turnkey event schedules, session agendas, speaker profiles, and calendar exports.
+  - **Translation Dashboards:** [`@swiss.ky/linguadash`](https://plugins.emdashcms.com/plugins/@swiss.ky/linguadash) provides side-by-side editing and AI translation drafting.
+  - *Sandbox Runner Setup:* If using registry plugins, configure the sandbox runner (`workerd` on Node or `LOADER` on Cloudflare Workers Paid) in Stage 2 before installing the plugin.
 - **Guides:** [Hosting Setup](../.agents/skills/emdash-site-setup/SKILL.md) · [Production Deployment & Cloudflare Cutover](production-deployment.md).
 
 ---
