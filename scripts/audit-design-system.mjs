@@ -23,7 +23,9 @@ export function designSystemRules(target, add) {
     const flowDuplicateMarginGuard =
       /\.flow\s*>\s*:where\([^)]*\)\s*\+\s*\*\s*\{[^}]*margin-block-start\s*:\s*0/.test(css) ||
       /\.flow\s*>\s*:where\(\*\s*\+\s*\*\)\s*\{[^}]*margin-block-end\s*:\s*0/.test(css);
-    const flowRuleCount = (css.match(/^\s*\.flow\s*>\s*(?:\*\s*\+\s*\*|:where\(\*\s*\+\s*\*\))\s*\{/gm) ?? []).length;
+    const rawFlowRules = (css.match(/^\s*\.flow\s*>\s*(?:\*\s*\+\s*\*|:where\(\*\s*\+\s*\*\)|:where\(\*\)\s*\+\s*:where\(\*\))\s*\{/gm) ?? []).length;
+    const duplicateFlowBase = (css.match(/^\s*\.flow\s*\{/gm) ?? []).length > 1;
+    const flowRuleCount = duplicateFlowBase ? Math.max(2, rawFlowRules) : rawFlowRules;
     const contentGrid = /\.content-grid\b/.test(css);
     const contentGridSubgrid = /grid-template-columns\s*:\s*subgrid\b/.test(css);
     const surfaceTokens = /\[data-surface=/.test(css);
