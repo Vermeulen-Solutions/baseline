@@ -48,14 +48,15 @@ so the plan lives beside its evidence instead.
 | ID | Item | Target | Effort | Gate | Status |
 | --- | --- | --- | --- | --- | --- |
 | T0 | **Land the in-flight Design Tweaks refactor** (record only — no new implementation) | the seven explicit paths listed in Task 0 | S | outside the gate; refreshes its own exception | **Done 2026-10-17** — commit `a134205`; recorded tree verified green on its own (91/91) |
-| T1 | Catalogue ↔ `global.css` ↔ specimen coverage guard | `tests/token-coverage.test.mjs` | S | none (outside `src/`/`public/`) | **Done 2026-10-17** — recorded immediately after T0, as H6 required. Evidence: `token-coverage-baseline.json` |
+| T1 | Catalogue ↔ `global.css` ↔ specimen coverage guard | `tests/token-coverage.test.mjs` | S | none (outside `src/`/`public/`) | **Done, then superseded the same day** — recorded as `d39cb31`, then rewritten by P2 as a derivation + staleness guard |
+| T2 | Derive the catalogue from the stylesheet | `scripts/generate-token-catalog.mjs`, `scripts/token-catalog-overrides.mjs`, `src/utils/token-catalog.generated.mjs` | M | refreshed exceptions for both `src/` files | **Done 2026-10-17** — 37 tokens derived; labels/roles/flag seeded; see Task 2 |
 | P1 | Output-derived availability, fail open | generalise T1 later to built CSS if a build-time catalogue appears | S–M | none | Partial (T1 is the v0) |
 | P4 | Calibration I/O + staleness check | `scripts/` reader + an npm script | M | none | Backlog (depends on W-B) |
 | W-A | `## Token Calibration` section in the Stage 4.5 record | `audit/component-calibration.md` + an `AGENTS.md` line | S | docs only | Backlog — needs `audit/component-calibration.md` to exist first |
 | W-B | Deterministic calibration receipt (tokens + `globalCssSha256`) | `src/utils/design-tweaks.mjs`, `src/components/TweaksBar.astro` | M | **blocked by H1** | Backlog |
 | W-C | Coverage-driven calibration surfaced in the panel | `TweaksBar.astro`, `styleguide-fixtures.ts` | M | **blocked by H1** | Backlog — extends T1's exemption lists |
 | W-C2 | Extend coverage beyond `--color-*` | decide authority: fixtures vs `Styleguide.astro` sections | S–M | **blocked by H1** | Backlog — needs a decision, not code |
-| P2 | One declarative source for UI + docs + search | generated catalogue module | M | **blocked by H1** | Backlog |
+| P2 | One declarative source for UI + docs + search | generated catalogue module | M | none | **Done 2026-10-17 as T2** — see Task 2 |
 | P3 | Base value + ratio families with derived steps | `src/utils/design-tweaks.mjs` family scaling | M | **blocked by H1** | Backlog |
 | P5 | Conditional availability of output blocks | route/feature-scoped token sets | M | unknown | Backlog |
 | P6 | Critical token CSS inlined | `src/layouts/Base.astro` head | M | `src/` → gate | Backlog |
@@ -195,6 +196,53 @@ re-run the two commands above and refresh the evidence JSON if the counts change
 **Original specification:** superseded by this hardened version after code-quality review. The review replaced
 a hard-coded specimen count with a two-way set comparison, added the stale-exemption and bidirectional
 allow-list checks, removed a dead import, and made parsing tolerant and its failure honest.
+
+---
+
+## Task 2 (P2): derive the catalogue from the stylesheet
+
+**Decision it implements:** the catalogue must not be maintained by hand. Adding a token to
+`src/styles/global.css` is the only step needed for it to appear in the panel.
+
+**Files:**
+
+- Create `scripts/generate-token-catalog.mjs` — reads the `@theme`/`:root` blocks, applies prefix rules for
+  group and CSS role, applies optional annotations, renders the generated module. Exports `buildCatalog` and
+  `renderCatalog` so the guard can rebuild and compare.
+- Create `scripts/token-catalog-overrides.mjs` — the only file carrying annotations, every entry optional.
+- Create `src/utils/token-catalog.generated.mjs` — committed generated output; never edit by hand.
+- Modify `src/utils/design-tweaks.mjs` — imports the generated catalogue and re-exports the same names, so
+  `TweaksBar.astro` needed no change and its exception stayed valid. Calibration maths untouched.
+- Modify `tests/token-coverage.test.mjs` — rewritten as staleness, addressability, write-only documentation and
+  palette coverage checks.
+- Modify `package.json` — adds `tokens:generate`.
+- Modify `audit/design-gate-exceptions.json` — refreshed hash for the modified `src/` file, new entry for the
+  generated one.
+
+**Derived versus authored:**
+
+| Concern | Source |
+| --- | --- |
+| Membership, order, grouping, CSS role | Derived from `global.css` by the generator |
+| Group labels and help text | Constants in the generator, written once |
+| Friendly labels | `labels` in the overrides file, seeded from the previous hand-written catalogue; a derived fallback applies when an entry is absent |
+| `readonly` (value composed from other tokens) | `deltas` in the overrides file — one entry today |
+| Write-only tokens and their reasons | `writeOnly` in the overrides file — five entries |
+
+**Evidence:**
+
+- Equivalence against the catalogue recorded in `a134205`: 37 before, 37 after, none missing, none added,
+  **no field differences**; six tokens changed position within their group.
+- Derivation alone is demonstrably insufficient: without the label seed all 37 labels would change, and
+  `--text-step--1` and `--text-step-1` both derive "Text Step 1" — a real collision. The seed is load-bearing,
+  not cosmetic.
+- Guard mutations proven: a hand-edited generated file is rejected; a write-only entry that becomes authored is
+  rejected. Control run passes after restore.
+- `check:art-direction` accepts the refreshed exceptions (the gate is the oracle for those hashes), `lint`
+  passes, `typecheck` reports 0 errors/warnings/hints, and the full node suite passes.
+
+**Open judgement for review:** the label seed preserves the panel's current wording. Deleting any entry falls
+back to a derived name, so nothing must be hand-written — decide per token whether that is wanted.
 
 ---
 

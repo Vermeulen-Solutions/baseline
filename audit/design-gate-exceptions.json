@@ -6,8 +6,13 @@
   },
   {
     "path": "src/utils/design-tweaks.mjs",
-    "reason": "Neutral development token catalog and calibration/export infrastructure: complete current theme coverage, fluid-family scaling and source reset precedence. No client design; exact UTF-8/LF content reviewed. Any edit invalidates this exception.",
-    "sha256": "f7951fae95ed3eed1c5a468cbac4a738204e8115d1afd5de92aeeec6c1801703"
+    "reason": "Neutral development token catalog and calibration/export infrastructure: complete current theme coverage, fluid-family scaling and source reset precedence. Catalog membership is imported from the generated file rather than hand-maintained; the maths and write-only list live here. No client design; exact UTF-8/LF content reviewed. Any edit invalidates this exception.",
+    "sha256": "a835e409a8b8c053618347f35b9eb8d8a97d5f9af7f23a794ea122d73bcbbb20"
+  },
+  {
+    "path": "src/utils/token-catalog.generated.mjs",
+    "reason": "Neutral development token catalogue generated from the authored stylesheet by scripts/generate-token-catalog.mjs: token names, friendly labels and CSS roles only, no client design. Regenerate with npm run tokens:generate rather than editing. Any edit invalidates this exception.",
+    "sha256": "812c8602d16d3a812f2feabaaa600ba98ea1b9b083e78c85e05819607c9586dd"
   },
   {
     "path": "src/styles/global.css",

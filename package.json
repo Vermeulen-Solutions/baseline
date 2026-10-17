@@ -30,6 +30,7 @@
     "check:dev-tools": "node scripts/check-dev-tools.mjs",
     "check:art-direction": "node scripts/check-art-direction.mjs --changed",
     "test:design": "node --test tests/design-workflow.test.mjs",
+    "tokens:generate": "node scripts/generate-token-catalog.mjs",
     "test:schema-budget": "node --test tests/schema-column-budget.test.mjs",
     "sync:emdash-skills": "node scripts/sync-emdash-skills.mjs",
     "sync:site-skills": "node scripts/sync-site-skills.mjs",

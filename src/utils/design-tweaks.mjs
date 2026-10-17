@@ -1,41 +1,35 @@
-/** Curated public token catalog shared by the inspector, preview and export. */
-/** @type {Array<{id: string, label: string, help: string, tokens: Array<[string, string, string, boolean?]>}>} */
-export const tokenGroups = [
-  { id: 'typography', label: 'Typography', help: 'Fluid sizes keep their clamp expressions. Fonts must already be available on the site.', tokens: [
-    ['--font-body', 'Body font', 'font-family'], ['--font-display', 'Display font', 'font-family'],
-    ['--text-step--1', 'Small text', 'font-size'], ['--text-step-0', 'Body text', 'font-size'],
-    ['--text-step-1', 'Heading 2', 'font-size'], ['--text-step-2', 'Heading 1', 'font-size'],
-    ['--text-step-3-to-1', 'Fluid display pair', 'font-size'], ['--text-step-2-to-0', 'Fluid text pair', 'font-size'],
-  ]},
-  { id: 'spacing', label: 'Spacing & layout', help: 'Tune rhythm, container gutters and reading widths. Density scales the entire spacing family.', tokens: [
-    ['--spacing-content', 'Content rhythm', 'gap'], ['--spacing-grid', 'Grid gap', 'gap'],
-    ['--spacing-container', 'Container gutter', 'padding'], ['--spacing-section', 'Section space', 'padding'],
-    ['--spacing-2xl-to-md', 'Fluid space 2XL → MD', 'gap'], ['--spacing-xl-to-sm', 'Fluid space XL → SM', 'gap'],
-    ['--measure-reading', 'Reading width', 'max-width'], ['--measure-content', 'Content width', 'max-width'],
-    ['--measure-wide', 'Wide width', 'max-width'], ['--measure-content-safe', 'Safe content width (derived)', 'max-width', true],
-    ['--header-height', 'Header offset', 'height'], ['--scroll-offset', 'Scroll clearance', 'scroll-margin-top'],
-  ]},
-  { id: 'colors', label: 'Colors', help: 'Semantic roles accept CSS colors, including OKLCH. Check text and focus contrast on light and dark surfaces.', tokens: [
-    ['--color-action', 'Action / Accent', 'color'], ['--color-page', 'Page background', 'color'],
-    ['--color-text', 'Text', 'color'], ['--color-muted', 'Secondary text', 'color'],
-    ['--color-surface', 'Surface', 'color'], ['--color-border', 'Border', 'color'],
-    ['--color-on-action', 'Text on action', 'color'], ['--color-focus', 'Focus ring', 'color'],
-    ['--color-focus-on-dark', 'Focus on dark', 'color'],
-  ]},
-  { id: 'effects', label: 'Shape & effects', help: 'Shared radii, layered shadows and motion curves. Hero adjustments affect media marked data-hero-asset.', tokens: [
-    ['--radius-control', 'Control radius', 'border-radius'], ['--radius-card', 'Card radius', 'border-radius'],
-    ['--shadow-sm', 'Small shadow', 'box-shadow'], ['--shadow-md', 'Medium shadow', 'box-shadow'],
-    ['--shadow-lg', 'Large shadow', 'box-shadow'], ['--ease-smooth', 'Smooth easing', 'transition-timing-function'],
-    ['--ease-snappy', 'Snappy easing', 'transition-timing-function'], ['--ease-spring', 'Spring easing', 'transition-timing-function'],
-  ]},
-];
+/**
+ * Token catalogue and calibration maths for the development panel.
+ *
+ * The catalogue itself is NOT written here. Membership, grouping, roles and the
+ * derived-value flag come from `src/utils/token-catalog.generated.mjs`, which is
+ * generated from the authored stylesheet by `scripts/generate-token-catalog.mjs`.
+ * Adding a token to `src/styles/global.css` is the only step needed for the panel
+ * to pick it up; run `npm run tokens:generate` to refresh the generated file.
+ *
+ * This module owns only what a stylesheet cannot supply: the calibration maths,
+ * the fluid family lists, and the tokens the panel can write without an authored value.
+ */
+import { tokenGroups, writeOnlyTokens } from './token-catalog.generated.mjs';
+
+export { tokenGroups, writeOnlyTokens };
+
+/** Flat view of the catalogue: one entry per token, carrying its group. */
 export const tokenDefinitions = tokenGroups.flatMap(group => group.tokens.map(([key, label, property, readonly]) => ({ key, label, property, readonly: !!readonly, group: group.id })));
+
+/** Colour-role tokens, used for swatches and contrast checks. */
 export const paletteTokens = tokenDefinitions.filter(token => token.property === 'color').map(token => token.key);
+
+/** Fluid display sizes scaled by the heading calibration control. */
 export const headingTokens = ['--text-step-1', '--text-step-2', '--text-step-3-to-1', '--text-step-2-to-0'];
+
+/** Fluid spacing sizes scaled by the density calibration control. */
 export const spacingTokens = tokenDefinitions.filter(token => token.key.startsWith('--spacing-')).map(token => token.key);
+
+/** Every token the panel can read a baseline for or write an override to. */
 export const baselineTokens = [
-  ...tokenDefinitions.map(token => token.key), '--font-weight-display',
-  '--letter-spacing-display', '--hero-filter', '--page-pattern', '--page-pattern-size',
+  ...tokenDefinitions.map(token => token.key),
+  ...writeOnlyTokens.map(({ token }) => token),
 ];
 
 export function createTokenMap(baseline, changes) {
