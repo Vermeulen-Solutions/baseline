@@ -111,7 +111,7 @@ During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, con
 
 > [!TIP]
 > **Graceful Fallback & Binary Guard:**
-> - All design MCPs are strictly optional. When entering Stage 4, your agent will briefly offer these paths—you can skip them in one second and work entirely in code using Baseline's curated Aesthetic Lanes and the live in-browser Dev HUD (`/_styleguide`).
+> - All design MCPs are strictly optional. When entering Stage 4, your agent will briefly offer these paths—you can skip them in one second and work entirely in code using Baseline's curated Aesthetic Lanes (`npm run design:tokens`) and live Vite HMR on `/_styleguide`.
 > - Baseline pins `@google/design.md@0.4.0` locally (`npm run design:check`) for offline frontmatter token linting. Always use `npx -y designmd-mcp` (or `npx --package=designmd designmd ...`) for the [designmd.ai](https://designmd.ai/explore) community registry so you do not overwrite the local `@google/design.md` binary. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---

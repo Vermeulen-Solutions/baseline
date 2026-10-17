@@ -13,7 +13,7 @@ flowchart LR
     S1["1. UX Flow Research<br/>(Nicelydone / Refero)"] --> S2["2. System & Concepting<br/>(designmd.ai + Stitch / Claude)"]
     S2 --> S3["3. Token Bridge<br/>(DESIGN.md → OKLCH/Clamp)"]
     S3 --> S4["4. Component Quarantine<br/>(21st.dev MCP → /_styleguide)"]
-    S4 --> S5["5. In-Browser Calibration<br/>(Dev HUD 'T' / 'O' / 'G' + Impeccable)"]
+    S4 --> S5["5. Token & Optical Calibration<br/>(design:tokens + /_styleguide + Impeccable)"]
 ```
 
 ### How the Tools Fit Together (Zero Overlap)
@@ -26,7 +26,7 @@ Each optional tool in the ecosystem solves a different layer of the design probl
 | **2. Macro Design System** | **[designmd.ai](https://designmd.ai/explore)** (`designmd-mcp`) | 420+ free community `DESIGN.md` design systems (colors, font pairings, elevation, guidelines). |
 | **3. Visual Screen Prototyping** | **Google Stitch** / **OpenDesign** / **Claude Design** | Generates visual screen mockups from prompts and consumes/emits `DESIGN.md` files. |
 | **4. Micro-Component Blueprints** | **21st.dev MCP** (`@21st-dev/magic`) | High-craft Tailwind component structures & micro-interactions (transmuted to zero-JS Astro). |
-| **5. Optical Calibration** | **Baseline `/_styleguide` + Dev HUD + `impeccable`** | Live in-browser token tuning (`T`), screenshot overlay (`O`), grid check (`G`), and critique. |
+| **5. Token & Optical Calibration** | **`npm run design:tokens` + `/_styleguide` + `impeccable`** | Automated WCAG contrast & fluid scale verification, `/_styleguide` specimen checks, and UI critique. |
 
 ---
 
@@ -170,14 +170,14 @@ const { title, category, description, edit } = Astro.props;
 ```
 ````
 
-### Step 5: Optical In-Browser Calibration (`Dev HUD` + `Impeccable`)
+### Step 5: Automated Token Calibration & Optical Critique (`design:tokens` + `Impeccable`)
 Once your components are mounted on `/_styleguide` and representative routes:
-1. **Pixel-for-Pixel Reference Overlay (`O`):**
-   Drop a concept screenshot from Stitch, Claude, or a reference teardown directly into the browser overlay (`O`), adjust opacity, and align spacing and proportions optically.
-2. **Live Token Tuning (`T` / `B`):**
-   Press **`T`** to adjust font scale ratios, tracking, line-height, and surface contrast live on the rendered DOM. Press **`B`** to A/B compare against your baseline CSS, then click **Copy Tokens** to merge into `src/styles/global.css`.
-3. **Structural Grid Check (`G`) & Critique:**
-   Press **`G`** to verify column rhythm, and run a bounded **`impeccable`** critique pass to eliminate visual monotony before scaling across all routes.
+1. **Parametric Scale & WCAG Contrast Audit (`npm run design:tokens`):**
+   Generate or refine fluid typography/spacing scales (`--type-scale`, `--space-scale`) and OKLCH brand palettes (`--seed-accent`), verify all 10 WCAG AA contrast pairs across default and `[data-surface="dark"]` contexts, and export the Stage 4.5 calibration table (`npm run design:tokens -- --write-calibration`).
+2. **Responsive & Edge-Case Inspection (`/_styleguide`):**
+   Inspect typography measures, `<Container breakout>` tracks, and `<Card>` states across `390px`, `768px`, and `1440px` viewports with live Vite HMR.
+3. **Bounded Visual Critique (`impeccable`):**
+   Run a bounded **`impeccable`** critique pass on rendered routes to eliminate visual monotony before scaling across all routes.
 
 *(Note: If a client happens to supply an existing Figma file, you can optionally connect the official Figma MCP server to inspect layer tokens directly, then follow Steps 3–5 above.)*
 
@@ -208,4 +208,4 @@ External token schemas often flatten modern CSS features. Baseline's mapping sid
 
 - **Source Code is Authoritative:** `src/styles/global.css` and Astro component templates own production values. `DESIGN.md` and external registries act as bridges, never runtime dependencies.
 - **No Direct Overwriting:** Never redirect `design:export` directly over `global.css`, and never paste un-quarantined registry components directly into `src/pages/`.
-- **Graceful Degradation (Zero Lock-In):** Every external MCP (`designmd-mcp`, `21st.dev`, `Stitch`, `Nicelydone`) is 100% optional. Baseline's local verification path (`npm run design:check`, `/_styleguide`, and Dev HUD) works completely offline without paid accounts.
+- **Graceful Degradation (Zero Lock-In):** Every external MCP (`designmd-mcp`, `21st.dev`, `Stitch`, `Nicelydone`) is 100% optional. Baseline's local verification path (`npm run design:tokens`, `npm run design:check`, and `/_styleguide`) works completely offline without paid accounts.

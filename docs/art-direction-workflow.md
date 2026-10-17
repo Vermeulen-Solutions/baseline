@@ -16,9 +16,9 @@ Baseline prevents this by instituting an automated **Art Direction Gate** (`npm 
 
 When transitioning from **Stage 3 (Content Architecture)** into **Stage 4 (Art Direction)**, the agent presents a one-time, non-blocking capability prompt so you can choose your preferred creative path:
 
-1. **Code-First & In-Browser (Default — Zero Setup):** Pick an Aesthetic Lane below, record the Art Direction Record in `AGENTS.md`, and calibrate typography and surface physics live in the browser on `/_styleguide` using the Dev HUD (`T` / `B` / `G`).
+1. **Code-First & Aesthetic Lane Presets (Default — Zero Setup):** Pick an Aesthetic Lane below, record the Art Direction Record in `AGENTS.md`, apply and audit tokens in `src/styles/global.css` via `npm run design:tokens`, and inspect live on `/_styleguide`.
 2. **UX Flow & Anatomy Teardowns (`Nicelydone MCP` / `Refero.design`):** Inspect real production web screens to extract authentic UX details (secondary metadata, filter bars, dense tables, and varied section pacing) before styling.
-3. **Community `DESIGN.md` Systems & Visual Concepting (`designmd-mcp` + `Google Stitch` / `OpenDesign` / `Claude Design`):** Search 420+ free community `DESIGN.md` design systems on [designmd.ai/explore](https://designmd.ai/explore), generate 2–3 visual screen concepts in `audit/visual-concepts/`, validate tokens via `@google/design.md`, and align layouts pixel-for-pixel with the Reference Overlay (`O`).
+3. **Community `DESIGN.md` Systems & Visual Concepting (`designmd-mcp` + `Google Stitch` / `OpenDesign` / `Claude Design`):** Search 420+ free community `DESIGN.md` design systems on [designmd.ai/explore](https://designmd.ai/explore), generate 2–3 visual screen concepts in `audit/visual-concepts/`, and validate tokens via `@google/design.md`.
 4. **High-Craft Component Sourcing (`21st.dev MCP`):** Pull battle-tested Tailwind component architectures and micro-interactions into `/_styleguide` for zero-JS Astro transmutation.
 
 See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md) and [AI Agent & Harness Configuration](agent-documentation.md) for 30-second MCP setup snippets.
