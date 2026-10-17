@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/baseline-logo.svg" alt="Baseline — The Visual-First Astro Toolkit for EmDash CMS & AI-Assisted Developers" width="460" />
+  <img src="docs/images/baseline-logo.svg" alt="Baseline — Agent-First Astro & EmDash CMS Starter" width="468" />
 </p>
 
 <p align="center">
