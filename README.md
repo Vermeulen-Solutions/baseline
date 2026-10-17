@@ -6,16 +6,16 @@
   <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7.4.0-BC52EE" alt="Astro 7.4.0" /></a>
   <a href="https://docs.emdashcms.com/"><img src="https://img.shields.io/badge/EmDash-1.3.0-2563EB" alt="EmDash 1.3.0" /></a>
   <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind-v4-06B6D4" alt="Tailwind v4" /></a>
-  <a href="#60-second-quickstart"><img src="https://img.shields.io/badge/Node-LTS-339933" alt="Node LTS" /></a>
+  <a href="#-60-second-quickstart"><img src="https://img.shields.io/badge/Node-LTS-339933" alt="Node LTS" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT License" /></a>
 </p>
 
 <p align="center">
-  <a href="#60-second-quickstart"><strong>Quickstart</strong></a> ·
+  <a href="#-60-second-quickstart"><strong>Quickstart</strong></a> ·
+  <a href="docs/prompt-library.md"><strong>Prompt Library</strong></a> ·
+  <a href="#-where-to-look-in-your-browser"><strong>Browser Dev URLs</strong></a> ·
   <a href="#in-browser-visual-developer-tools"><strong>Visual Dev HUD</strong></a> ·
   <a href="#the-7-stage-site-delivery-workflow"><strong>7-Stage Workflow</strong></a> ·
-  <a href="docs/prompt-library.md"><strong>Prompt Library</strong></a> ·
-  <a href="docs/design-interchange.md"><strong>AI Design Pipeline</strong></a> ·
   <a href="docs/README.md"><strong>Documentation</strong></a>
 </p>
 
@@ -24,6 +24,77 @@
 EmDash is a modern, lightweight headless CMS built ground-up for AI-native web development. Baseline provides the visual frontend foundation, development guardrails, and testing harness built specifically for developers pairing with AI coding assistants—whether using **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, **Windsurf**, **Aider**, or local LLM runners.
 
 Spend your time building the site, not debugging agent hallucinations or wrestling with styling drift. Baseline gives your AI assistant clear architectural boundaries and provides you with in-browser visual inspection tools: tune design tokens live on the rendered page, align visual concepts or reference screenshots pixel-for-pixel, and stress-test reusable components in isolation before assembling templates. Start locally with Node and SQLite, catch schema-width problems early, and deploy with confidence.
+
+---
+
+## ⚡ 60-Second Quickstart
+
+**Requirements:** Node 22.22.2 minimum (Node 24 LTS recommended) and `npm`.
+
+```sh
+# 1. Clone the repository and install dependencies
+git clone https://github.com/Vermeulen-Solutions/emdash-baseline.git my-site
+cd my-site
+npm install
+
+# 2. Generate initial encryption secrets and start local dev server
+npx emdash secrets generate --write .env
+npm run dev
+```
+
+### 🖥️ Where to look in your browser
+
+Once `npm run dev` is running, open these local URLs:
+
+| Destination | Local URL | What it's for |
+| --- | --- | --- |
+| 🌐 **Public Site** | [`http://localhost:4321/`](http://localhost:4321/) | Live website rendered by Astro |
+| ✏️ **CMS Admin** | [`http://localhost:4321/_emdash/admin`](http://localhost:4321/_emdash/admin) | Create your admin account, manage collections, and edit content |
+| 🧪 **Component Styleguide** | [`http://localhost:4321/_styleguide`](http://localhost:4321/_styleguide) | Stress-test layout primitives and calibrate typography/spacing (404 in production) |
+
+---
+
+## 🤖 Pairing with Your AI Assistant
+
+Baseline is harness-agnostic. Whether pairing with **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **Cursor**, **Windsurf**, or **Aider**, you never have to guess what to prompt.
+
+### 📋 Starter Prompt: Kick Off a New Site
+Paste this exact prompt into your AI assistant to start:
+
+```markdown
+Read AGENTS.md, follow new-site-workflow under .agents/skills/, and guide me through the staged delivery workflow.
+
+Here is the context for this project:
+- Client / Brand: [Brand Name]
+- Purpose: [E.g., B2B marketing site / Portfolio / Directory]
+- Target Audience: [E.g., Enterprise buyers / General public]
+- Locales: [E.g., Single language (en) or Multilingual (en, fr)]
+
+Please begin with Stage 1 (Brief & Evidence Discovery) and present the Stage 1 handoff choices once complete.
+```
+
+### 📚 Ready-to-Copy Prompt Recipes
+Need to run a specific task? Copy battle-tested prompt templates directly from our prompt playbook:
+
+👉 **[Open the AI Developer Prompt Library (`docs/prompt-library.md`)](docs/prompt-library.md)**
+
+- 🚀 [Kickstarting a Greenfield Site](docs/prompt-library.md#1-starting-a-new-site-project)
+- 🗄️ [Auditing WordPress Content & Finding Hidden Entities](docs/prompt-library.md#2-wordpress-migration--content-modeling)
+- 🖼️ [Manifest-Driven WordPress Media Ingestion](docs/prompt-library.md#2-wordpress-migration--content-modeling)
+- 🎨 [Art Direction & The Design Gate](docs/prompt-library.md#3-art-direction--the-design-gate)
+- 📦 [Quarantining Tailwind Blueprints (21st.dev to Zero-JS Astro)](docs/prompt-library.md#4-component-sourcing--styleguide-quarantine)
+- ✏️ [Wiring EmDash Live Edit Proxies](docs/prompt-library.md#5-public-pages--emdash-editorial-canvas)
+- 🔍 [Bounded UI/UX Polish with Impeccable Critique](docs/prompt-library.md#6-visual-polish--the-impeccable-critique)
+- 📸 [Local Visual Regression Testing (`npm run test:visual`)](docs/prompt-library.md#7-local-visual-regression--pre-launch-checks)
+- 🛡️ [Cloudflare Cutover & Corporate Email DNS Safety](docs/prompt-library.md#8-production-cutover--corporate-email-safety)
+
+To connect your coding assistant directly to EmDash's built-in Model Context Protocol (MCP) server for managing content and schema, generate a token in one step:
+```sh
+npm run mcp:token
+```
+See [agent documentation](docs/agent-documentation.md) for harness integration and MCP setup across all major tools.
+
+---
 
 ## In-browser visual developer tools
 
@@ -74,6 +145,8 @@ Click any thumbnail to view the full-resolution screenshot.
 
 Open the drawer before using G/O/P. Shortcuts yield to inputs and editor dialogs; Escape dismisses the active tool before closing the drawer. Changes start without overrides and do not persist across reloads. [Full HUD guide](docs/dev-hud.md).
 
+---
+
 ## The 7-stage site delivery workflow
 
 Pairing with an AI coding assistant without a structured process usually results in "one-shot prompt chaos"—where an assistant attempts to do discovery, database schema, responsive layouts, and copy all at once, resulting in broken schemas and generic styling. 
@@ -88,7 +161,33 @@ Baseline organizes projects into an explicit 7-stage agency workflow:
 6. **Representative Implementation & Verification:** Build public routes, bind CMS visual edit proxies (`{...entry.edit.title}`), and verify with local visual tests and schema preflights.
 7. **Production Cutover, Email & Launch:** Connect custom domains, verify HTTPS/TLS certificates, test admin passkey/email authentication, and preserve corporate mail DNS (Google Workspace / Microsoft 365).
 
-Read the complete [Site Delivery Workflow runbook](docs/site-delivery-workflow.md) and explore the copy-pasteable [AI Developer Prompt Library](docs/prompt-library.md).
+Read the complete [Site Delivery Workflow runbook](docs/site-delivery-workflow.md).
+
+---
+
+## How EmDash & Astro connect
+
+EmDash stores your structured content in local SQLite; Astro renders your server-rendered pages. Binding an entry's data and visual editing proxies takes only a few lines in your `.astro` template:
+
+```astro
+---
+import Base from '../layouts/Base.astro';
+
+// 1. Receive or query the content entry
+const { entry } = Astro.props;
+---
+
+<!-- 2. Pass collection identity to Base layout for live editing overlay -->
+<Base title={entry.data.title} content={{ collection: 'pages', id: entry.data.id, slug: entry.data.slug }}>
+  <!-- 3. Spread field proxies so clients can edit visually in EmDash -->
+  <h1 {...(entry.edit.title || {})}>{entry.data.title}</h1>
+  <p {...(entry.edit.excerpt || {})}>{entry.data.excerpt}</p>
+</Base>
+```
+
+See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field proxy and schema budget rules.
+
+---
 
 ## Why Baseline?
 
@@ -125,64 +224,13 @@ Compare mobile, tablet and desktop captures with pinned Windows Chromium. Exerci
 Building client sites with AI coding assistants—across any harness or tool runner—is fast, but assistants often struggle with headless CMS architectures. Without clear constraints, they tend to invent unnecessary wrapper components, hardcode text that clients should be able to edit in the CMS, or introduce subtle layout breaks on mobile viewports.
 
 Baseline includes a structured workflow designed to keep coding assistants disciplined and aligned with the site's architecture:
+- **Art direction gates before implementation:** Before writing visual code, the agent is directed to record aesthetic decisions in `AGENTS.md` (typography pairings, spatial density, and anti-patterns).
+- **CMS editorial preservation:** Guidance in `.agents/skills/` explicitly defines EmDash's row-per-locale structure and field-proxy attributes (`data-emdash-ref`).
+- **Component quarantine (`/_styleguide`):** The workflow directs the agent to calibrate reusable primitives and responsive edge cases in isolation on `/_styleguide` first.
+- **Fast, self-verifying feedback loops:** `check:schema-budget`, `test:visual`, fast unit tests, and typechecking run locally in seconds.
+- **Maintainable specialist skills:** Guidance is modularized into specialist skills under `.agents/skills/` that can be updated from upstream via `npm run sync:site-skills` without overwriting project instructions. [Agent setup guide](docs/agent-documentation.md).
 
-- **Art direction gates before implementation:** Before writing visual code, the agent is directed to record aesthetic decisions in `AGENTS.md` (typography pairings, spatial density, and anti-patterns). This prevents the assistant from defaulting to generic, unconsidered layouts.
-- **CMS editorial preservation:** Guidance in `.agents/skills/` explicitly defines EmDash's row-per-locale structure and field-proxy attributes (`data-emdash-ref`). The agent knows which content belongs to the CMS and avoids overwriting client-editable fields with static copy.
-- **Component quarantine (`/_styleguide`):** Instead of attempting to build ten full page templates at once, the workflow directs the agent to calibrate reusable primitives and responsive edge cases in isolation on `/_styleguide` first.
-- **Fast, self-verifying feedback loops:** The agent has access to deterministic local checks that run in seconds, allowing it to verify its own work without guessing:
-  - `npm run check:schema-budget` prevents table designs that will break on Cloudflare D1.
-  - `npm run test:visual` verifies that CSS refactors haven't broken mobile or RTL layouts.
-  - Fast unit tests and typechecking run locally without burning CI minutes.
-- **Maintainable specialist skills:** Guidance is modularized into specialist skills under `.agents/skills/` (content modeling, visual design, and migration) that can be kept up to date from upstream via `npm run sync:site-skills` without overwriting project-specific instructions. [Agent setup guide](docs/agent-documentation.md).
-
-## 60-second quickstart
-
-**Node 22.22.2 minimum; Node 24 LTS recommended.** Use npm and the checked-in lockfile. Run these commands to begin; install and first-build time depend on your machine.
-
-```sh
-git clone https://github.com/Vermeulen-Solutions/emdash-baseline.git my-site
-cd my-site
-npm install
-npx emdash secrets generate --write .env
-npm run dev
-```
-
-Open the URL printed by Astro, then visit **`/_emdash/admin`** to complete setup and create your administrator account. There are no shared default credentials. Keep `.env`, databases, uploads and encryption-key backups private.
-
-Before adapting a site, rename the package, read [AGENTS.md](AGENTS.md), review [staged skill updates](docs/skill-synchronization.md), and follow [new-site-workflow](.agents/skills/new-site-workflow/SKILL.md). Replace sample content and record the site's actual brief and art direction.
-
-### Starting a site with an AI assistant
-
-Baseline is completely agent- and harness-agnostic. Whether pairing with Claude Code, OpenAI Codex, Google Antigravity, OpenCode / OMP, Hermes, Cursor, Windsurf, or Aider, prompt your assistant:
-> *"Read AGENTS.md, follow new-site-workflow under .agents/skills/, and record the site's Art Direction Record before implementing templates."*
-
-To connect your coding assistant directly to EmDash's built-in Model Context Protocol (MCP) server for managing content and schema, generate a token in one step:
-```sh
-npm run mcp:token
-```
-See [agent documentation](docs/agent-documentation.md) for harness integration and MCP setup across all major tools.
-
-## How EmDash & Astro connect
-
-EmDash stores your structured content in local SQLite; Astro renders your server-rendered pages. Binding an entry's data and visual editing proxies takes only a few lines in your `.astro` template:
-
-```astro
 ---
-import Base from '../layouts/Base.astro';
-
-// 1. Receive or query the content entry
-const { entry } = Astro.props;
----
-
-<!-- 2. Pass collection identity to Base layout for live editing overlay -->
-<Base title={entry.data.title} content={{ collection: 'pages', id: entry.data.id, slug: entry.data.slug }}>
-  <!-- 3. Spread field proxies so clients can edit visually in EmDash -->
-  <h1 {...(entry.edit.title || {})}>{entry.data.title}</h1>
-  <p {...(entry.edit.excerpt || {})}>{entry.data.excerpt}</p>
-</Base>
-```
-
-See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field proxy and schema budget rules.
 
 ## Where to work (project layout)
 
@@ -197,6 +245,8 @@ See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field pro
 | `astro.config.mjs` | Astro configuration (Node adapter, EmDash SQLite setup, Tailwind v4) |
 | `.agents/skills/` | Modular specialist skills for AI coding agents |
 | `docs/` | Complete documentation guides (see [docs/README.md](docs/README.md)) |
+
+---
 
 ## Daily commands
 
@@ -218,6 +268,8 @@ See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field pro
 
 Browser tests need the exact renderer described in [visual regression setup](docs/visual-regression.md). CI uses one Node version for fast checks and a normal build; screenshot comparisons remain local.
 
+---
+
 ## Build with content, not around it
 
 Use the neutral Tailwind v4 tokens and small `Section`, `Container` and `Grid` primitives as your starting API. Keep editorial content in EmDash, forward field attributes to the stored value being rendered, and verify save/reload before handoff. Put site imagery in `src/assets/` or EmDash Media Library so native processing and ownership stay clear.
@@ -225,6 +277,8 @@ Use the neutral Tailwind v4 tokens and small `Section`, `Container` and `Grid` p
 [Component quarantine](.agents/skills/astro-site-design/references/component-quarantine.md) · [Editorial canvas](docs/emdash-editorial-canvas.md) · [Gallery workflow](docs/gallery-workflow.md) · [Image delivery](docs/image-delivery.md).
 
 The default runtime is **Node + SQLite + local media**, with no cloud account needed. Cloudflare Workers is an optional site-specific target; its adapter, D1/R2 bindings and image delivery need separate setup and verification. When deploying to Cloudflare or switching nameservers, always follow the DNS checklist to preserve client corporate email. [Production Deployment & DNS Checklist](docs/production-deployment.md) · [Hosting setup](.agents/skills/emdash-site-setup/SKILL.md) · [Supported standards and roadmap](standards/releases/0.1.1.md) · [Downstream audits](docs/site-standards-audit.md).
+
+---
 
 ## Contribute
 
