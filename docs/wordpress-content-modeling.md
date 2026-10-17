@@ -55,18 +55,18 @@ Avoid the anti-pattern of creating 40 custom fields on a single page or dumping 
 
 ```text
 ┌──────────────────────────┐          ┌──────────────────────────┐
-│      ec_teams            │          │   ec_training_sessions   │
+│      ec_events           │          │       ec_sessions        │
 ├──────────────────────────┤          ├──────────────────────────┤
-│ id                       │◄─────────│ team_id (reference)      │
+│ id                       │◄─────────│ event_id (reference)     │
 │ title                    │          │ day_of_week (enum)       │
-│ head_coach (reference)   │          │ start_time               │
-│ roster (reference array) │          │ venue_id (reference)     │
+│ lead_speaker (reference) │          │ start_time               │
+│ speakers (ref array)     │          │ venue_id (reference)     │
 └──────────────────────────┘          └──────────────────────────┘
 ```
 
-* **1:N Operational Child Collections:** E.g. `teams` → `training_sessions`. The parent holds references to children, or children reference the parent.
-* **Shared Master Data:** E.g. `venues`. Bind child records via a `reference` field rather than re-typing venue names as free-text strings across fifty entries.
-* **Cross-Locale Automatic Binding:** EmDash relations (`_emdash_content_references`) store `parent_group` and `child_group`. A relationship linked in French resolves automatically on the English version of the page without manual re-linking.
+* **1:N Operational Child Collections:** E.g. `events` → `sessions`. The parent holds references to children, or children reference the parent.
+* **Shared Master Data:** E.g. `venues` or `locations`. Bind child records via a `reference` field rather than re-typing venue names as free-text strings across fifty entries.
+* **Cross-Locale Automatic Binding:** EmDash relations (`_emdash_content_references`) store `parent_group` and `child_group`. A relationship linked in the default locale resolves automatically on secondary locale versions without manual re-linking.
 
 ---
 

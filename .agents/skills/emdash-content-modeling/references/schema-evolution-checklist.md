@@ -4,23 +4,22 @@ This reference provides concrete patterns for evolving an EmDash content model o
 
 ## 1. Relational Junction Queries in EmDash
 
-When querying parent entries with child references (e.g. `teams` with child `training_sessions`, `coaches`, `managers`):
+When querying parent entries with child references (e.g. `events` with child `sessions`, `speakers`, `documents`):
 
 ```typescript
 // Querying an entry with expanded relational references
-const result = await getEmDashEntry("teams", slugOrId, {
+const result = await getEmDashEntry("events", slugOrId, {
   references: {
-    coaches: { limit: 100 },
-    managers: { limit: 100 },
-    training_sessions: { limit: 100 },
+    speakers: { limit: 100 },
+    sessions: { limit: 100 },
     documents: { limit: 100 }
   },
   locale
 });
 
-const coaches = (result.entry?.references?.coaches?.entries || []) as Entry[];
-const managers = (result.entry?.references?.managers?.entries || []) as Entry[];
-const sessions = (result.entry?.references?.training_sessions?.entries || []) as Entry[];
+const speakers = (result.entry?.references?.speakers?.entries || []) as Entry[];
+const sessions = (result.entry?.references?.sessions?.entries || []) as Entry[];
+const documents = (result.entry?.references?.documents?.entries || []) as Entry[];
 ```
 
 ## 2. Safe SQLite & D1 Data Migration Template
@@ -39,25 +38,25 @@ function generateId() {
 }
 
 // 1. Fetch parent rows containing legacy embedded data
-const parents = db.prepare("SELECT id, slug, translation_group, locale, training_schedule FROM ec_teams WHERE training_schedule IS NOT NULL").all();
+const parents = db.prepare("SELECT id, slug, translation_group, locale, legacy_sessions FROM ec_events WHERE legacy_sessions IS NOT NULL").all();
 
 for (const parent of parents) {
-  const schedule = JSON.parse(parent.training_schedule || "[]");
-  for (const session of schedule) {
+  const sessions = JSON.parse(parent.legacy_sessions || "[]");
+  for (const session of sessions) {
     const childId = generateId();
     const childGroup = generateId();
 
     // 2. Insert normalized child entry
     db.prepare(`
-      INSERT INTO ec_training_sessions (id, translation_group, locale, status, title, season, day, time, location_text, created_at, updated_at)
+      INSERT INTO ec_sessions (id, translation_group, locale, status, title, format, day, start_time, location_text, created_at, updated_at)
       VALUES (?, ?, ?, 'published', ?, ?, ?, ?, ?, datetime('now'), datetime('now'))
-    `).run(childId, childGroup, parent.locale, `${parent.slug} ${session.day}`, session.season, session.day, session.time, session.location);
+    `).run(childId, childGroup, parent.locale, `${parent.slug} - ${session.title}`, session.format, session.day, session.start_time, session.location);
 
     // 3. Link via _emdash_content_references
     db.prepare(`
       INSERT INTO _emdash_content_references (id, relation_id, parent_group, child_group, sort_order, created_at)
       VALUES (?, ?, ?, ?, 0, datetime('now'))
-    `).run(generateId(), "teams_training_sessions_relation_id", parent.translation_group, childGroup);
+    `).run(generateId(), "events_sessions_relation_id", parent.translation_group, childGroup);
   }
 }
 ```
@@ -77,7 +76,7 @@ To prevent editors from entering stale data into deprecated fields without dropp
 
 ```sql
 -- Remove field registration so it disappears from the EmDash editor
-DELETE FROM _emdash_fields WHERE collection_id = 'teams_collection_id' AND slug IN ('old_field_slug_1', 'old_field_slug_2');
+DELETE FROM _emdash_fields WHERE collection_id = 'events_collection_id' AND slug IN ('old_field_slug_1', 'old_field_slug_2');
 ```
 
 Always back up the existing rows from `_emdash_fields` before deletion.

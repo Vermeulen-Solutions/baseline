@@ -1,6 +1,6 @@
 ---
 name: emdash-content-modeling
-description: Architect, normalize, refine, and migrate EmDash content models for both greenfield builds and active brownfield sites. Covers relational design vs embedded fields, enum constraints, squad decomposition, schema migration scripts, dual-read template compatibility, multi-database parity (SQLite, D1, seed), field pruning, and menu synchronization.
+description: Architect, normalize, refine, and migrate EmDash content models for both greenfield builds and active brownfield sites. Covers relational design vs embedded fields, enum constraints, entity variant decomposition, schema migration scripts, dual-read template compatibility, multi-database parity (SQLite, D1, seed), field pruning, and menu synchronization.
 ---
 
 # EmDash Content Modeling & Schema Evolution
@@ -16,27 +16,27 @@ This skill operates in two distinct situations:
 ## 1. Core Architectural Principles
 
 ### Relational vs. Embedded Decision Tree
-Do not bury entities in unstructured JSON repeaters, ad-hoc text fields, or delimiter-separated strings (e.g. `"Josefina · Céline"`) if those entities require independent lifecycle management.
+Do not bury entities in unstructured JSON repeaters, ad-hoc text fields, or delimiter-separated strings (e.g. `"Lead Designer · Product Manager"`) if those entities require independent lifecycle management.
 
 | Pattern | When to Use | EmDash Implementation |
 |---|---|---|
-| **Dedicated Collection + Relation** | Entity is shared, cross-linked, filtered, or has its own metadata (e.g. Venues, Training Sessions, People/Coaches, Documents). | Distinct collection + `_emdash_relations` + `_emdash_content_references` |
-| **Strict Select / Enum Field** | Value belongs to a closed, predictable set (e.g. Seasons: `outdoor`/`indoor`; Days: `Lundi`, `Mercredi`, `Vendredi`; Squad Genders: `Hommes`, `Dames`, `Filles`, `Mixte`). | Field `type: "select"` with explicit `options: [...]` |
+| **Dedicated Collection + Relation** | Entity is shared, cross-linked, filtered, or has its own metadata (e.g. Locations/Venues, Schedule Sessions, People/Team Members, Documents, Partners). | Distinct collection + `_emdash_relations` + `_emdash_content_references` |
+| **Strict Select / Enum Field** | Value belongs to a closed, predictable set (e.g. Status: `draft`/`published`/`archived`; Tiers: `platinum`/`gold`/`community`; Days: `monday`–`sunday`; Categories: `article`/`case-study`/`announcement`). | Field `type: "select"` with explicit `options: [...]` |
 | **Repeater Field** | Lightweight, strictly private sub-items that never need to be linked elsewhere or shared between parents. | Field `type: "repeater"` |
 | **Rich Text / Portable Text** | Unstructured narrative copy, long-form editorial content. | Field `type: "rich_text"` |
 
-### Squad & Team Decomposition (First-Class Squads)
-When an athletic club or organization has multiple squads within a category (e.g. Juniors U15 Mixte vs. Juniors U15 Filles, or multiple competitive age cohorts):
-- **Avoid:** Cramming multiple squads into a single team record using confusing "subgroup" strings or messy repeater exceptions.
-- **Adopt:** Create distinct first-class `teams` entries for each squad. Each entry owns its own:
-  - Distinct team managers and coaches (via relations to `people`).
-  - Distinct squad photo and display name.
-  - Distinct training sessions (via relations to `training_sessions`).
-  - Distinct league, results, and fixtures URLs (e.g. Clubee, Swiss Hockey).
-- **Navigation & ordering:** Keep squads grouped logically in navigation menus and team directories (e.g. U15 Mixte immediately followed by U15 Filles before U12).
+### Entity Variant & Sub-Category Decomposition (First-Class Records)
+When an organization has multiple distinct variants, sub-teams, or cohorts within a high-level category (e.g. specialized departments within an agency, distinct squad age-cohorts in a sports club, or distinct service packages):
+- **Avoid:** Cramming multiple variants into a single parent record using confusing "subgroup" strings or messy repeater exceptions.
+- **Adopt:** Create distinct first-class collection entries for each variant. Each entry owns its own:
+  - Distinct leads, managers, or contacts (via relations to `people`).
+  - Distinct media assets (photos, logos, badges) and display title.
+  - Distinct schedule sessions or operational times (via relations to a child collection such as `sessions` or `schedules`).
+  - Distinct external link endpoints (e.g. external booking links, portal URLs, partner sites).
+- **Navigation & ordering:** Keep entity variants grouped logically in navigation menus and directories (e.g. sub-departments ordered under their parent division).
 
 ### Native Row-per-Locale Multilingual Architecture
-- Every editorial collection must use native row-per-locale architecture: each record has a `locale` (`fr` or `en`) and a shared `translation_group` ULID.
+- Every editorial collection must use native row-per-locale architecture: each record has a `locale` (matching the site's configured locales, e.g. `defaultLocale` and secondary locales) and a shared `translation_group` ULID.
 - Cross-collection relations link parents and children via `translation_group`s so that referencing an item automatically resolves to the matching locale row in public queries.
 - Never duplicate fields with language suffixes (avoid `title_en`, `description_en` columns).
 
@@ -44,21 +44,21 @@ When an athletic club or organization has multiple squads within a category (e.g
 
 ## 2. Brownfield Evolution Protocol (Existing Live Sites)
 
-When modifying content models on an active site with existing content in SQLite (`data.db`) and Cloudflare D1 (`legacy WordPress migration`), follow this zero-downtime, non-destructive sequence:
+When modifying content models on an active site with existing content in SQLite (`data.db`) and Cloudflare D1 (or a legacy CMS migration), follow this zero-downtime, non-destructive sequence:
 
 ### Step 1: Audit & Backup
 1. Inspect existing table schemas (`PRAGMA table_info(...)`).
 2. Identify smells:
    - Repeated JSON arrays that should be relational rows.
    - Ambiguous free-text fields where editors type inconsistent strings.
-   - Orphaned, confusing, or unused legacy fields (e.g. "sous groupe", "lieu libre").
+   - Orphaned, confusing, or unused legacy fields (e.g. free-text location notes, scratch marker columns).
 3. Create a snapshot backup before running schema modifications.
 4. **Present the Schema Evolution Plan to the user:**
    Do not modify tables immediately without presenting a plain-English proposal:
    > **Content Model Audit Findings**
    > We identified the following areas to improve in your database:
-   > - *[Smell]*: E.g., Team training schedules are crammed inside free-text fields.
-   > - *[Proposal]*: Extract into a dedicated `training_sessions` collection linked to `teams`.
+   > - *[Smell]*: E.g., Event schedule sessions are crammed inside free-text fields.
+   > - *[Proposal]*: Extract into a dedicated `sessions` collection linked to `events`.
    >
    > **Recommended Action:**
    > 1. **(Recommended) Execute the zero-downtime migration:** Register new collections, run the migration script, and update templates with dual-read fallbacks.
@@ -67,7 +67,7 @@ When modifying content models on an active site with existing content in SQLite 
 ### Step 2: Schema Registration
 1. Register new collections in `_emdash_collections`.
 2. Register new or modified fields in `_emdash_fields` (including `options` for select enums).
-3. Register new relations in `_emdash_relations` (e.g. `teams_training_sessions`, `training_sessions_locations`).
+3. Register new relations in `_emdash_relations` (e.g. `events_sessions`, `sessions_locations`).
 4. Update `.emdash/schema.json` and project types (`npm run build` or `npm run typecheck`).
 
 ### Step 3: Data Migration Scripting
@@ -83,7 +83,7 @@ Never break existing page rendering while migrating. Components must accept both
 ```astro
 ---
 // Dual-read fallback pattern
-const rawRelational = Astro.props.trainingSessions || item.training_sessions;
+const rawRelational = Astro.props.sessions || item.sessions;
 const relationalRows = Array.isArray(rawRelational) && rawRelational.length
   ? rawRelational.map((s: any) => ({
       ...(s.data || s),
@@ -91,7 +91,7 @@ const relationalRows = Array.isArray(rawRelational) && rawRelational.length
     }))
   : [];
 
-const legacySchedule = Array.isArray(data.training_schedule) ? data.training_schedule : [];
+const legacySchedule = Array.isArray(data.schedule) ? data.schedule : [];
 // Prefer relational rows if populated; fall back to legacy array
 const scheduleRows = relationalRows.length ? relationalRows : legacySchedule;
 ---
@@ -111,10 +111,10 @@ Every schema and data change must be applied and verified across all three envir
    - Ensures fresh clones or team checkouts reproduce the exact evolved data model.
 
 ### Step 6: Navigation & Menu Synchronization
-When splitting entities, adding new teams, or reordering items:
-1. Update database menus (`_emdash_menus` and `_emdash_menu_items`) in both locales.
+When splitting entities, adding new categories, or reordering items:
+1. Update database menus (`_emdash_menus` and `_emdash_menu_items`) across all configured locales.
    - Set explicit `sort_order` and matching `parent_id`.
-2. Update template fallback orders (e.g. `teamOrder` arrays in `Base.astro` and `TeamsPage.astro`).
+2. Update template fallback order arrays (e.g. category or directory sort order lists in layout shells).
 3. Verify mobile submenus, disclosure dropdowns, and breadcrumbs.
 
 ### Step 7: Safe Field Pruning & Deprecation
@@ -128,11 +128,11 @@ Once new structures are verified live:
 ## 3. Verification Checklist
 
 - [ ] `npm run typecheck` passes with 0 errors across all files.
-- [ ] Both locales (`fr` and `en`) render complete records without missing fields or broken links.
+- [ ] All configured site locales render complete records without missing fields or broken links.
 - [ ] Primary navigation and mobile disclosures display items in the correct designated order.
 - [ ] Remote D1 has all relational rows and junction references (`_emdash_content_references`).
 - [ ] `seed/seed.json` reflects the evolved schema and content items.
-- [ ] Cloudflare Worker is built and deployed (`build:cloudflare` + `deploy:cloudflare`).
+- [ ] Cloudflare Worker is built and deployed (`build:cloudflare` + `deploy:cloudflare`) when Cloudflare hosting is used.
 
 ---
 

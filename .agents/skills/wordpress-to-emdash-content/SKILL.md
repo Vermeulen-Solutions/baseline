@@ -52,29 +52,29 @@ Classify every repeated editorial element as an EmDash collection, page/Portable
 A successful migration does not merely copy raw WordPress postmeta shapes; it provides a clean, maintainable content model and an intuitive editing environment for the client's team.
 
 1. **Semantic Field Typing over Stringly-Typed Dumping:**
-   - **Enums & Choices:** Never leave fixed categories, partner types, tiers, statuses, or genders as free-text strings. Convert them to `select` or `multiSelect` fields with explicit options, labels, and sensible defaults (e.g. `partner` vs `public-funder`).
-   - **Routable vs Non-Routable:** Explicitly designate `routable: false` on collections that do not have their own public URLs (e.g. `training_sessions`, `membership_submissions`, `contact_messages`, `slider_items`). This avoids forcing editors to fill in meaningless URL slugs for internal or embedded records.
+   - **Enums & Choices:** Never leave fixed categories, partner types, tiers, statuses, or roles as free-text strings. Convert them to `select` or `multiSelect` fields with explicit options, labels, and sensible defaults (e.g. `partner` vs `sponsor`, or `full-time` vs `contract`).
+   - **Routable vs Non-Routable:** Explicitly designate `routable: false` on collections that do not have their own public URLs (e.g. `sessions`, `membership_submissions`, `contact_messages`, `slider_items`). This avoids forcing editors to fill in meaningless URL slugs for internal or embedded records.
    - **Rich Text vs Plain Text:** Strip legacy WordPress shortcodes and HTML wrapper markup when mapping to `portableText` or plain `text`.
 
 2. **First-Class Relational Modeling (EmDash Relations & References):**
-   - **Stop Embedding Repeated Operational Entities:** Do NOT dump repeated schedules, sessions, shifts, linked venues, team rosters, or documents into raw JSON textareas or bloated repeaters inside the parent record.
+   - **Stop Embedding Repeated Operational Entities:** Do NOT dump repeated schedules, sessions, shifts, linked venues, rosters, or documents into raw JSON textareas or bloated repeaters inside the parent record.
    - **Extract and Relate:**
-     - **1:N Operational Child Collections:** E.g. `teams` -> `training_sessions`. The parent collection (`teams`) holds a multi-entry reference field (`relationSide: "parent"`), and the child (`training_sessions`) references the parent (`relationSide: "child"`, single entry).
-     - **Shared Master Data / Lookups:** E.g. `locations` (stadiums, pitches, offices) or `venues`. Never hardcode repeated venue names as free-text strings across child rows. Create a master data collection and bind child records via a `reference` field.
-     - **N:M Cross-Entity Relations:** E.g. `people` (coaches, managers, speakers) <-> `teams` / `projects`. Use bidirectional relations where each side reflects its role cleanly.
+     - **1:N Operational Child Collections:** E.g. `events` -> `sessions` or `departments` -> `teams`. The parent collection holds a multi-entry reference field (`relationSide: "parent"`), and the child references the parent (`relationSide: "child"`, single entry).
+     - **Shared Master Data / Lookups:** E.g. `locations` (offices, venues, facilities) or `categories`. Never hardcode repeated venue names as free-text strings across child rows. Create a master data collection and bind child records via a `reference` field.
+     - **N:M Cross-Entity Relations:** E.g. `people` (speakers, leads, contributors) <-> `projects` / `events`. Use bidirectional relations where each side reflects its role cleanly.
    - **Automatic Cross-Locale Resolution:** EmDash relations (`_emdash_content_references`) link entries using translation groups (`parent_group` and `child_group`). A relationship established in one language binds automatically across all locales without manual re-linking or duplicate arrays.
 
 3. **Admin Audience, Language Strategy & Form Polish:**
-   - **Identify the Client's Working Language:** Determine the primary administrative language of the client's editors (e.g., French for a Geneva club, Dutch for a Dutch business).
+   - **Identify the Client's Working Language:** Determine the primary administrative language of the client's editors (e.g., French for a Swiss or French client, Dutch for a Netherlands business, or English for a global agency).
    - **Programmatic Slugs vs Display Labels:**
-     - **Slugs** MUST remain clean, standardized ASCII / kebab-case / English conventions (`training_sessions`, `title`, `phone`, `kind`, `sort_order`, `url`) for API stability, frontend queries, and database column consistency.
+     - **Slugs** MUST remain clean, standardized ASCII / kebab-case / English conventions (`sessions`, `title`, `phone`, `kind`, `sort_order`, `url`) for API stability, frontend queries, and database column consistency.
      - **Display Labels** (`label`, `label_singular`), **field labels** (`field.label`), **select option labels**, and **admin group folders** (`nav_group`) MUST be authored in the client's working language.
    - **Admin Organization & Polish:**
-     - Group collections into 2–4 logical collapsible sidebar folders (`nav_group`), e.g. *Contenu éditorial*, *Club & Équipes*, *Formulaires & Messages*.
-     - Assign appropriate Phosphor icons and helpful descriptions so non-technical client volunteers immediately understand what each content type represents.
+     - Group collections into 2–4 logical collapsible sidebar folders (`nav_group`), e.g. *Editorial Content*, *Organization & Teams*, *Forms & Submissions* (translated into the client's working language).
+     - Assign appropriate Phosphor icons and helpful descriptions so non-technical client team members immediately understand what each content type represents.
    - **Post-Import Form Hygiene & Schema Pruning:**
      - WordPress imports inevitably leave scratch columns and legacy markers (e.g. `asset` holding `wordpress-attachment:123`, `legacy_id`, serialized JSON dumps, raw HTML blocks).
-     - Once structured fields and relations are hydrated (e.g. image hydrated to structured `team_image`, sessions migrated to `training_sessions`), **prune or retire legacy fields from `_emdash_fields`**.
+     - Once structured fields and relations are hydrated (e.g. raw attachments hydrated to structured media objects, legacy sessions migrated to child collections), **prune or retire legacy fields from `_emdash_fields`**.
      - Editors must NEVER be confronted with intimidating raw JSON textareas containing legacy multilingual fields (`period_en`, `day_en`) or obsolete WordPress markers.
 
 ### Theme and page-builder audit
