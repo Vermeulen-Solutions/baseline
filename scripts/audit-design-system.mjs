@@ -127,8 +127,8 @@ export function designSystemRules(target, add) {
           cmsEditForwarding = true;
         }
       }
-      for (const relFile of scanAstroDir('src/pages')) {
-        if (relFile === 'src/pages/_styleguide.astro') continue;
+      for (const relFile of [...scanAstroDir('src/pages'), ...scanAstroDir('src/components')]) {
+        if (relFile === 'src/pages/_styleguide.astro' || relFile === 'src/components/Container.astro') continue;
         const pageBytes = readTarget(target, relFile).bytes;
         if (!pageBytes) continue;
         const pageText = pageBytes.toString('utf8');
