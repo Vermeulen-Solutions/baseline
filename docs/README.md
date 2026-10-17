@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="images/baseline-logo.svg" alt="Baseline — Agent-First Astro & EmDash CMS Starter" width="420" />
+  <img src="images/baseline-logo.svg?v=2" alt="Baseline — Agent-First Astro & EmDash CMS Starter" width="420" />
 </p>
 
 # Documentation Directory
