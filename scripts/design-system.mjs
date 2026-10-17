@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const REQUIRED_THEME_TOKENS = [
@@ -58,6 +58,16 @@ export const AESTHETIC_LANES = {
   neutral: {
     name: 'Neutral Baseline',
     description: 'Clean, unopinionated starter tokens ready for brand adaptation.',
+    record: {
+      lane: 'Custom / existing brand — neutral baseline foundation adapted to client brand requirements',
+      metaphor: 'Architectural drafting paper and balanced structural grid lines',
+      typography: 'Display: System Sans, Body: System Sans (clean neo-grotesque hierarchy)',
+      canvas: 'Crisp daylight page ground (oklch(99% 0.004 250)) with pure white surface cards',
+      action: 'High-contrast cobalt action (oklch(43% 0.14 250)) with pure white on-action label ink',
+      borders: 'Subtle 1px structural borders (oklch(85% 0.015 260)) with 0.75rem card radius',
+      density: 'Balanced section rhythm (clamp(3rem, calc(1rem + 10vi), 9rem)) and 68ch reading measure',
+      antiPatterns: 'No unverified low-contrast gray text; no consecutive identical 3-column card grids; no unquarantined client-side animation bloat',
+    },
     theme: {
       '--font-body': 'ui-sans-serif, system-ui, sans-serif',
       '--font-display': 'ui-sans-serif, system-ui, sans-serif',
@@ -90,6 +100,16 @@ export const AESTHETIC_LANES = {
   'technical-systems': {
     name: 'Technical Systems',
     description: 'Precision slate canvas, crisp 1px borders, high-contrast cobalt action, and compact structural density.',
+    record: {
+      lane: 'Technical Systems — precision engineering grid and high-density operational clarity',
+      metaphor: 'Calibrated laboratory instrumentation and anodized aluminum blueprints',
+      typography: 'Display: System Sans, Body: System Sans (tight display tracking with tabular numeral discipline)',
+      canvas: 'Cool technical slate ground (oklch(98.5% 0.004 250)) paired with deep carbon dark surfaces (oklch(16% 0.02 250))',
+      action: 'Signal cobalt action (oklch(44% 0.17 255)) with crisp focus rings',
+      borders: 'Exposed 1px structural hairlines (oklch(84% 0.012 250)) with sharp 0.375rem card corners',
+      density: 'Compact, information-rich section pacing (clamp(2.5rem, calc(1rem + 7.5vi), 7rem)) and 66ch measure',
+      antiPatterns: 'No soft pastel gradients or blurred blobs; no oversized pill buttons; no decorative illustrations without technical meaning',
+    },
     theme: {
       '--font-body': 'ui-sans-serif, system-ui, sans-serif',
       '--font-display': 'ui-sans-serif, system-ui, sans-serif',
@@ -122,6 +142,16 @@ export const AESTHETIC_LANES = {
   'product-led-minimalism': {
     name: 'Product-Led Minimalism',
     description: 'Airy warm-alabaster canvas, charcoal ink, confident brand action, concentric card radii, and generous section rhythm.',
+    record: {
+      lane: 'Product-Led Minimalism — daylight-first clarity, generous whitespace, and tactile card geometry',
+      metaphor: 'Architectural gallery daylight on matte alabaster surfaces',
+      typography: 'Display: System Sans, Body: System Sans (confident display proportions over calm reading prose)',
+      canvas: 'Warm alabaster page ground (oklch(99% 0.003 95)) with crisp elevated surface cards',
+      action: 'Deep indigo-violet action (oklch(42% 0.18 272)) with high-contrast alabaster ink',
+      borders: 'Refined warm borders (oklch(88% 0.008 95)) with concentric 0.875rem card and 0.5rem control radii',
+      density: 'Airy, spacious section rhythm (clamp(3.25rem, calc(1.25rem + 10vi), 9.5rem)) and 65ch reading measure',
+      antiPatterns: 'No cluttered multi-sidebar layouts; no heavy dark-mode neon glows; no consecutive identical 3-column feature grids',
+    },
     theme: {
       '--font-body': 'ui-sans-serif, system-ui, sans-serif',
       '--font-display': 'ui-sans-serif, system-ui, sans-serif',
@@ -154,6 +184,16 @@ export const AESTHETIC_LANES = {
   'editorial-paper': {
     name: 'Editorial Paper',
     description: 'Tactile warm paper canvas, deep espresso ink, editorial terracotta accent, crisp rules, and high typographic contrast.',
+    record: {
+      lane: 'Editorial Paper — warm archival print craft with high serif/sans typographic contrast',
+      metaphor: 'Archival cotton bond paper, deep espresso letterpress ink, and engraved column rules',
+      typography: 'Display: Georgia, Body: System Sans (high-contrast editorial serif headlines paired with clean humanist sans body)',
+      canvas: 'Warm archival paper ground (oklch(97.5% 0.012 82)) with cream card surfaces (oklch(99.2% 0.006 85))',
+      action: 'Editorial terracotta action (oklch(42% 0.15 28)) with warm ivory label ink',
+      borders: 'Crisp 1px editorial rules (oklch(86% 0.018 78)) and tailored 0.25rem card corners without drop shadows',
+      density: 'Generous editorial pacing (clamp(3.25rem, calc(1.25rem + 10vi), 9.25rem)) and 64ch reading measure',
+      antiPatterns: 'No floating SaaS card shadows; no neon or purple gradients; no uncaptioned decorative stock widgets',
+    },
     theme: {
       '--font-body': 'ui-sans-serif, system-ui, sans-serif',
       '--font-display': 'Georgia, Cambria, "Times New Roman", Times, serif',
@@ -186,6 +226,16 @@ export const AESTHETIC_LANES = {
   'luminous-futurism': {
     name: 'Luminous Futurism',
     description: 'Atmospheric cool canvas paired with deep obsidian dark surfaces, electric indigo/cyan accents, and smooth motion.',
+    record: {
+      lane: 'Luminous Futurism — atmospheric precision with deep obsidian dark surfaces and disciplined luminous accents',
+      metaphor: 'Optical glass prisms and precision telemetry over deep obsidian slate',
+      typography: 'Display: System Sans, Body: System Sans (geometric display headlines with high-clarity body copy)',
+      canvas: 'Cool atmospheric daylight ground (oklch(98.2% 0.008 265)) paired with deep obsidian dark sections (oklch(14.5% 0.025 265))',
+      action: 'Electric indigo action (oklch(42% 0.19 262)) and luminous cyan dark-surface focus rings (oklch(82% 0.14 215))',
+      borders: 'Subtle luminous hairline borders (oklch(86% 0.016 265) light, oklch(29% 0.028 265) dark) with 0.75rem card radius',
+      density: 'Dynamic section rhythm (clamp(3rem, calc(1rem + 9.5vi), 8.75rem)) alternating light and dark surface bands',
+      antiPatterns: 'No muddy low-contrast text on dark backgrounds; no rainbow gradient text; no un-throttled background canvas animations',
+    },
     theme: {
       '--font-body': 'ui-sans-serif, system-ui, sans-serif',
       '--font-display': 'ui-sans-serif, system-ui, sans-serif',
@@ -721,6 +771,205 @@ export function upsertCalibrationRecord(targetPath, css, cssPath = 'src/styles/g
 }
 
 /**
+ * Formats a structurally valid `## Art Direction Record` Markdown section for `AGENTS.md`.
+ */
+export function formatArtDirectionRecord(laneId = 'neutral', custom = {}) {
+  const lane = AESTHETIC_LANES[laneId] || AESTHETIC_LANES.neutral;
+  const rec = { ...lane.record, ...custom };
+  return [
+    '## Art Direction Record',
+    '',
+    `- **Aesthetic Lane:** ${rec.lane}`,
+    `- **Narrative Metaphor:** ${rec.metaphor}`,
+    `- **Typography Pairing:** ${rec.typography}`,
+    '- **Token Physics:**',
+    `  - Canvas: ${rec.canvas}`,
+    `  - Action/Accent: ${rec.action}`,
+    `  - Borders: ${rec.borders}`,
+    `  - Spatial Density: ${rec.density}`,
+    `- **Site Anti-Patterns:** ${rec.antiPatterns}`,
+  ].join('\n');
+}
+
+/**
+ * Writes or updates the `## Art Direction Record` section inside `AGENTS.md` (or a specified Markdown file).
+ */
+export function upsertArtDirectionRecord(agentsPath = 'AGENTS.md', laneId = 'neutral', custom = {}) {
+  const section = formatArtDirectionRecord(laneId, custom);
+  const resolved = resolve(agentsPath);
+  const existing = existsSync(resolved) ? readFileSync(resolved, 'utf8').replace(/\r\n/g, '\n') : '# Site Instructions\n';
+  const headingRegex = /^## Art Direction Record\b[\s\S]*?(?=^## |\Z)/m;
+  if (headingRegex.test(existing)) {
+    const updated = existing.replace(headingRegex, `${section}\n\n`).replace(/\n{3,}/g, '\n\n');
+    writeFileSync(resolved, updated, 'utf8');
+    return resolved;
+  }
+  const implMatch = /^## Implementation rules\b/m.exec(existing);
+  if (implMatch) {
+    const updated = `${existing.slice(0, implMatch.index)}${section}\n\n${existing.slice(implMatch.index)}`;
+    writeFileSync(resolved, updated, 'utf8');
+    return resolved;
+  }
+  writeFileSync(resolved, `${existing.trimEnd()}\n\n${section}\n`, 'utf8');
+  return resolved;
+}
+
+const SYSTEM_AND_GENERIC_FONTS = new Set([
+  'ui-sans-serif',
+  'ui-serif',
+  'ui-monospace',
+  'ui-rounded',
+  'system-ui',
+  '-apple-system',
+  'blinkmacsystemfont',
+  'sans-serif',
+  'serif',
+  'monospace',
+  'cursive',
+  'fantasy',
+  'emoji',
+  'math',
+  'fangsong',
+  'segoe ui',
+  'roboto',
+  'helvetica neue',
+  'helvetica',
+  'arial',
+  'noto sans',
+  'apple color emoji',
+  'segoe ui emoji',
+  'segoe ui symbol',
+  'noto color emoji',
+  'georgia',
+  'cambria',
+  'times new roman',
+  'times',
+  'courier new',
+  'courier',
+  'consolas',
+  'liberation mono',
+  'menlo',
+  'monaco',
+]);
+
+function walkFiles(dir, extFilter) {
+  if (!existsSync(dir)) return [];
+  const results = [];
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry);
+    const stat = statSync(full);
+    if (stat.isDirectory()) {
+      results.push(...walkFiles(full, extFilter));
+    } else if (!extFilter || full.endsWith(extFilter)) {
+      results.push(full);
+    }
+  }
+  return results;
+}
+
+/**
+ * Checks whether custom font families declared in `--font-body` or `--font-display` are loaded
+ * in `package.json`, `astro.config.*`, `@font-face`/`@import` in `src/styles/`, or `src/layouts/`.
+ */
+export function auditFontLoading(css, rootDir = '.') {
+  const tokens = parseDesignTokens(css);
+  const stacks = [tokens.theme['--font-body'], tokens.theme['--font-display']].filter(Boolean);
+  const customFamilies = new Set();
+
+  for (const stack of stacks) {
+    for (const part of stack.split(',')) {
+      const cleaned = part.trim().replace(/^['"]|['"]$/g, '').trim();
+      if (!cleaned || cleaned.startsWith('var(')) continue;
+      if (!SYSTEM_AND_GENERIC_FONTS.has(cleaned.toLowerCase())) {
+        customFamilies.add(cleaned);
+      }
+    }
+  }
+
+  if (customFamilies.size === 0) {
+    return { valid: true, checkedFamilies: [], missingFamilies: [], warnings: [] };
+  }
+
+  const root = resolve(rootDir);
+  const searchblobs = [];
+  for (const rel of ['package.json', 'astro.config.mjs', 'astro.config.ts']) {
+    const p = join(root, rel);
+    if (existsSync(p)) searchblobs.push(readFileSync(p, 'utf8'));
+  }
+  for (const f of walkFiles(join(root, 'src/layouts'), '.astro')) {
+    searchblobs.push(readFileSync(f, 'utf8'));
+  }
+  const cssWithoutFontVars = String(css ?? '')
+    .replace(/--font-(?:body|display)\s*:[^;]+;/g, '');
+  searchblobs.push(cssWithoutFontVars);
+  for (const f of walkFiles(join(root, 'src/styles'), '.css')) {
+    if (resolve(f) !== resolve(join(root, 'src/styles/global.css'))) {
+      searchblobs.push(readFileSync(f, 'utf8'));
+    }
+  }
+
+  const haystack = searchblobs.join('\n').toLowerCase();
+  const missingFamilies = [];
+  const warnings = [];
+
+  for (const family of customFamilies) {
+    const lower = family.toLowerCase();
+    const slug = lower.replace(/\s+/g, '-');
+    const plus = lower.replace(/\s+/g, '+');
+    if (!haystack.includes(lower) && !haystack.includes(slug) && !haystack.includes(plus)) {
+      missingFamilies.push(family);
+      warnings.push(
+        `Custom font family "${family}" is declared in @theme but not loaded in package.json, astro.config.mjs, @font-face, or src/layouts/.`,
+      );
+    }
+  }
+
+  return {
+    valid: missingFamilies.length === 0,
+    checkedFamilies: [...customFamilies],
+    missingFamilies,
+    warnings,
+  };
+}
+
+/**
+ * Statically audits single-entry CMS routes under `src/pages/` that call `getEmDashEntry(...)`
+ * to verify `<Base content={{...}}>` and `.edit.` in-place editor bindings are present.
+ */
+export function auditEditProxies(rootDir = '.') {
+  const pagesDir = join(resolve(rootDir), 'src/pages');
+  const files = walkFiles(pagesDir, '.astro');
+  const checkedRoutes = [];
+  const issues = [];
+
+  for (const file of files) {
+    const normalized = file.replaceAll('\\', '/');
+    if (normalized.endsWith('/_styleguide.astro') || normalized.endsWith('/404.astro')) continue;
+    const source = readFileSync(file, 'utf8');
+    if (!/\bgetEmDashEntry\s*\(/.test(source)) continue;
+
+    const rel = normalized.slice(resolve(rootDir).replaceAll('\\', '/').length + 1);
+    checkedRoutes.push(rel);
+
+    const hasBaseContent = /<Base\b[\s\S]*?\bcontent=\{/.test(source);
+    const hasEditProxy = /\.edit\.[a-zA-Z0-9_]+/.test(source);
+
+    if (!hasBaseContent) {
+      issues.push(`${rel}: calls getEmDashEntry() but does not pass content={{ collection, id }} to <Base>.`);
+    }
+    if (!hasEditProxy) {
+      issues.push(`${rel}: calls getEmDashEntry() but does not bind any {...edit.field} proxy attributes.`);
+    }
+  }
+
+  return {
+    valid: issues.length === 0,
+    checkedRoutes,
+    issues,
+  };
+}
+
+/**
  * Applies structured token overrides (`{ theme, root, dark }`) or a named Aesthetic Lane preset
  * directly to a `global.css` string while preserving comments and formatting.
  */
@@ -785,6 +1034,7 @@ function main() {
 
   let combinedOverrides = { theme: {}, root: {}, dark: {} };
   let hasMutationRequest = false;
+  let selectedLaneId = 'neutral';
 
   const laneIndex = args.indexOf('--lane');
   if (laneIndex >= 0) {
@@ -792,6 +1042,7 @@ function main() {
     if (!AESTHETIC_LANES[laneId]) {
       throw new Error(`Unknown aesthetic lane preset: ${String(laneId)}. Available lanes: ${Object.keys(AESTHETIC_LANES).join(', ')}`);
     }
+    selectedLaneId = laneId;
     combinedOverrides = mergeOverrides(combinedOverrides, AESTHETIC_LANES[laneId]);
     hasMutationRequest = true;
   }
@@ -832,6 +1083,15 @@ function main() {
     hasMutationRequest = true;
   }
 
+  const recordIndex = args.indexOf('--write-record');
+  if (recordIndex >= 0) {
+    const nextArg = args[recordIndex + 1];
+    const agentsTarget = nextArg && !nextArg.startsWith('--') ? nextArg : 'AGENTS.md';
+    const writtenRecord = upsertArtDirectionRecord(agentsTarget, selectedLaneId);
+    console.log(`Wrote ## Art Direction Record (${selectedLaneId}) to ${writtenRecord}`);
+    if (!hasMutationRequest && !args.includes('--write-calibration')) return;
+  }
+
   if (hasMutationRequest) {
     const source = readFileSync(cssPath, 'utf8');
     const updated = applyTokenOverrides(source, combinedOverrides);
@@ -852,6 +1112,8 @@ function main() {
 
   const css = readFileSync(cssPath, 'utf8');
   const report = auditDesignTokens(css);
+  const fontAudit = auditFontLoading(css);
+  const proxyAudit = auditEditProxies();
 
   const calIndex = args.indexOf('--write-calibration');
   if (calIndex >= 0) {
@@ -867,24 +1129,35 @@ function main() {
     return;
   }
 
+  const allValid = report.valid && fontAudit.valid && proxyAudit.valid;
+
   if (args.includes('--json')) {
-    console.log(JSON.stringify({ ...report, sha256: stylesheetDigest(css) }, null, 2));
+    console.log(JSON.stringify({
+      ...report,
+      valid: allValid,
+      fontLoading: fontAudit,
+      editProxies: proxyAudit,
+      sha256: stylesheetDigest(css),
+    }, null, 2));
   } else {
-    console.log(`Design System Audit (${cssPath}): ${report.valid ? 'PASS' : 'FAIL'}`);
+    console.log(`Design System Audit (${cssPath}): ${allValid ? 'PASS' : 'FAIL'}`);
     console.log(`- LF SHA-256: ${stylesheetDigest(css)}`);
     console.log(`- @theme tokens: ${Object.keys(report.tokens.theme).length}`);
     console.log(`- :root tokens: ${Object.keys(report.tokens.root).length}`);
     console.log(`- [data-surface="dark"] tokens: ${Object.keys(report.tokens.dark).length}`);
+    console.log(`- Font loading: ${fontAudit.valid ? 'PASS' : 'FAIL'} (${fontAudit.checkedFamilies.length ? fontAudit.checkedFamilies.join(', ') : 'system fonts'})`);
+    console.log(`- EmDash edit proxies: ${proxyAudit.valid ? 'PASS' : 'FAIL'} (${proxyAudit.checkedRoutes.length} single-entry routes checked)`);
     console.log('- WCAG Contrast Pairs:');
     for (const item of report.contrast) {
       console.log(`  [${item.status.toUpperCase()}] ${item.id}: ${item.ratio}:1 (min ${item.minimum}:1)`);
     }
-    if (report.errors.length) {
-      console.error('\nErrors:\n' + report.errors.map(e => `- ${e}`).join('\n'));
+    const allErrors = [...report.errors, ...fontAudit.warnings, ...proxyAudit.issues];
+    if (allErrors.length) {
+      console.error('\nErrors:\n' + allErrors.map(e => `- ${e}`).join('\n'));
     }
   }
 
-  if (!report.valid) process.exitCode = 1;
+  if (!allValid) process.exitCode = 1;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

@@ -24,6 +24,8 @@
     "build": "astro build",
     "pretypecheck": "npm run check:schema-budget",
     "typecheck": "astro check",
+    "test": "node --test tests/*.test.mjs",
+    "verify": "npm run lint && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck",
     "check:schema-budget": "node scripts/check-schema-budget.mjs",
     "audit:baseline": "node scripts/audit-baseline.mjs",
     "test:baseline": "node --test tests/audit-baseline.test.mjs",

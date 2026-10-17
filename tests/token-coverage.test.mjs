@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import {
@@ -19,7 +19,12 @@ import {
   stylesheetDigest,
   formatCalibrationMarkdown,
   upsertCalibrationRecord,
+  formatArtDirectionRecord,
+  upsertArtDirectionRecord,
+  auditFontLoading,
+  auditEditProxies,
 } from '../scripts/design-system.mjs';
+import { validateRecord } from '../scripts/check-art-direction.mjs';
 
 const GLOBAL_CSS_PATH = 'src/styles/global.css';
 const FIXTURES_PATH = 'src/dev/styleguide-fixtures.ts';
@@ -174,3 +179,75 @@ test('auditDesignTokens catches insufficient WCAG contrast and invalid fluid cla
   assert.ok(audit.errors.some(err => err.includes('--spacing-section')));
   assert.ok(contrastRatio('#ffffff', '#000000') >= 20.9);
 });
+
+test('formatArtDirectionRecord and upsertArtDirectionRecord generate records that pass check-art-direction validateRecord', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'emdash-agents-'));
+  try {
+    const agentsFile = join(dir, 'AGENTS.md');
+    writeFileSync(agentsFile, '# Client Site\n\n## Implementation rules\n\nKeep routes server-rendered.\n', 'utf8');
+
+    for (const laneId of Object.keys(AESTHETIC_LANES)) {
+      const recordMd = formatArtDirectionRecord(laneId);
+      assert.deepEqual(
+        validateRecord(`# Site\n\n${recordMd}\n`),
+        [],
+        `Generated record for ${laneId} must pass validateRecord`,
+      );
+
+      upsertArtDirectionRecord(agentsFile, laneId);
+      const saved = readFileSync(agentsFile, 'utf8');
+      assert.deepEqual(
+        validateRecord(saved),
+        [],
+        `Upserted AGENTS.md record for ${laneId} must pass validateRecord`,
+      );
+      assert.equal(saved.match(/^## Art Direction Record\b/gm)?.length, 1);
+      assert.ok(saved.includes('## Implementation rules'));
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('auditFontLoading passes for system fonts and catches unloaded custom font families', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const systemAudit = auditFontLoading(css, '.');
+  assert.equal(systemAudit.valid, true);
+
+  const unloadedCustomCss = applyTokenOverrides(css, {
+    theme: {
+      '--font-display': '"Unloaded Custom Display", ui-sans-serif, system-ui, sans-serif',
+    },
+  });
+  const failedAudit = auditFontLoading(unloadedCustomCss, '.');
+  assert.equal(failedAudit.valid, false);
+  assert.deepEqual(failedAudit.missingFamilies, ['Unloaded Custom Display']);
+
+  const cssWithFontFace = `${unloadedCustomCss}\n@font-face { font-family: "Unloaded Custom Display"; src: local("Arial"); }\n`;
+  const loadedAudit = auditFontLoading(cssWithFontFace, '.');
+  assert.equal(loadedAudit.valid, true);
+});
+
+test('auditEditProxies verifies starter single-entry routes and catches missing Base content or edit proxies', () => {
+  const repoAudit = auditEditProxies('.');
+  assert.equal(repoAudit.valid, true, repoAudit.issues.join('\n'));
+  assert.ok(repoAudit.checkedRoutes.includes('src/pages/[slug].astro'));
+  assert.ok(repoAudit.checkedRoutes.includes('src/pages/posts/[slug].astro'));
+
+  const dir = mkdtempSync(join(tmpdir(), 'emdash-proxies-'));
+  try {
+    const pagesDir = join(dir, 'src/pages');
+    mkdirSync(pagesDir, { recursive: true });
+    writeFileSync(
+      join(pagesDir, '[slug].astro'),
+      `---\nconst { entry } = await getEmDashEntry('pages', slug);\n---\n<Base title={entry.data.title}><h1>{entry.data.title}</h1></Base>\n`,
+      'utf8',
+    );
+    const brokenAudit = auditEditProxies(dir);
+    assert.equal(brokenAudit.valid, false);
+    assert.equal(brokenAudit.issues.length, 2);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+

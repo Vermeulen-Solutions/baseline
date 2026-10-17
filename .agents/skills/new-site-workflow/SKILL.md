@@ -10,8 +10,13 @@ Turn the neutral starter into a coherent, content-backed site by sequencing the 
 ## Start here
 
 1. Read `README.md`, `AGENTS.md`, the installed tooling, and the current repository state.
-2. Use the package manager matching the lockfile to run `sync:emdash-skills` (defaults to staging), and review the staged diff before relying on the mirrored `building-emdash-site`, `creating-plugins`, or `emdash-cli` skills. Follow `docs/skill-synchronization.md`: check/stage/apply, preserve local drift and licenses, and never replace dirty mirrors merely to satisfy a refresh. Use the checked-in snapshot with an explicit pending-sync note when resolution is not yet reviewed.
-3. Check that the shared skill sync is available before relying on it. If `sync:site-skills` exists in `package.json`, run it when the starter's shared Vermeulen-maintained skills need updating. If the package script is absent but `scripts/sync-site-skills.mjs` exists, run that helper directly and repair the package script. If both are absent, this repository predates the sync mechanism: use the checked-in skill snapshot for the current task, record that the repository needs bootstrapping from the canonical starter, and do not claim that the shared skills are synchronized.
+2. Choose the appropriate workflow track based on project scope:
+   - **Standard Track (7 Stages):** Default for complex migrations, multi-collection architectures, or multi-locale sites. Pause at each stage handoff below.
+   - **Express Track (3 Checkpoints):** Recommended for smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale). Consolidates user confirmations into three checkpoints while still enforcing every automated CLI gate (`check:art-direction`, `design:tokens`, `audit/component-calibration.md`, `verify`):
+     1. **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):** Gather brief, confirm hosting/runtime, and model collections/routes in one pass.
+     2. **Checkpoint B (Stages 4–4.5 — Art Direction & Component Calibration):** Seed tokens and `## Art Direction Record` (`npm run design:tokens -- --lane <lane> --write --write-record --write-calibration`), verify `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide`.
+     3. **Checkpoint C (Stages 5–6 — Representative Pages, Critique & Verification):** Build routes, run the `impeccable` critique pass, and verify with `npm run verify` and `npm run build`.
+3. Only run `sync:emdash-skills` or `sync:site-skills -- --check` when explicitly checking for upstream skill updates or refreshing an older repository checkout (see `docs/skill-synchronization.md`). On a fresh clone, use the checked-in skills directly without a blocking sync detour.
 4. Identify the earliest unfinished stage below. Preserve valid decisions and completed work from earlier stages rather than restarting automatically.
 5. Load each specialist skill when its stage begins. Do not load every skill up front.
 
@@ -99,39 +104,29 @@ Use the content-candidate register to classify every repeated editorial element 
 
 **Gate:** every planned page archetype and content candidate has a source, target representation, migration method, route or placement, container/breakout model, and editorial ownership model. No repeated editorial material remains unclassified. The art-direction stage has realistic content shapes and known imagery to design around.
 
-**Stage 3 Completion Handoff Prompt:**
-When Stage 3 is complete, present this prompt to transition into Stage 4:
+**Stage 3 → Stage 4 Handoff & Design Capability Prompt:**
+When Stage 3 is complete, present this unified prompt once to transition into Stage 4 (do not repeat a second capability prompt upon entering Stage 4):
 > **Stage 3 Complete: Content Structure & Admin Dashboard Ready**
 > Your database and admin editing screens are structured.
 >
 > Next is **Stage 4: Visual Direction & Art Direction**.
-> *In plain terms:* Before we build full website pages, we decide the visual identity—the fonts, brand colors, spacing, and overall personality (clean & minimalist, bold & editorial, or technical).
+> *In plain terms:* Before we build full website pages, we establish the visual identity—fonts, brand colors, fluid spacing, and overall personality.
 >
 > **How would you like to establish the visual design?**
 > 1. **(Recommended) Code-First with Curated Aesthetic Lanes:**
->    - Pick a curated design mood (*Product-Led Minimalism*, *Editorial Paper*, *Technical Systems*, or *Luminous Futurism*), seed and customize tokens in `src/styles/global.css` (`npm run design:tokens`), and preview live on `/_styleguide`.
-> 2. **Match an Existing Brand or Website:**
->    - Provide your company's logo, brand guidelines, or reference website URL, and I will extract the exact colors, fonts, and styling rules into the system.
-> 3. **Explore 2–3 Visual Concepts First:**
->    - I will generate 2 or 3 visual layout options for a representative page so you can compare directions before deciding.
+>    - Pick a curated design mood (*Product-Led Minimalism*, *Editorial Paper*, *Technical Systems*, or *Luminous Futurism*), seed and customize tokens + the `AGENTS.md` record in one step (`npm run design:tokens -- --lane <lane> --write --write-record`), and preview live on `/_styleguide`.
+> 2. **Match an Existing Brand or Seed Palette:**
+>    - Provide your brand's primary hex color, logo, or reference URL, and I will synthesize a WCAG AA-verified OKLCH palette (`--seed-accent`), typography pairing, and `AGENTS.md` record.
+> 3. **Explore `DESIGN.md` Systems, UX Teardowns, or Component Registries (`designmd-mcp` / `Stitch` / `21st.dev`):**
+>    - Compare 2–3 visual concepts in `audit/visual-concepts/`, bridge a community `DESIGN.md` system, or pull `21st.dev` component blueprints for zero-JS Astro quarantine.
 >
-> *(Reply `1` for the recommended code-first lane setup, or `2` if you have brand guidelines to match.)*
+> *(Reply `1` for the recommended code-first lane setup, `2` to match your brand colors/URL, or `3` for visual concepting.)*
 
 ## Stage 4: set the art direction
 
-When entering Stage 4, present a brief, one-time **Design Superpowers Capability Prompt** before authoring visual styles (unless the user has already chosen a workflow):
-
-> **Stage 4: Visual Direction & Concepting**
-> How would you like to explore visual concepts and component patterns for this site?
-> 1. **(Default) Code-First & Aesthetic Lane Presets:** Pick a curated Aesthetic Lane, apply and customize tokens in `src/styles/global.css` with `npm run design:tokens`, and inspect live on `/_styleguide`. *(Zero extra setup)*
-> 2. **UX Flow & Anatomy Teardowns (`Nicelydone` / `Refero` / `Kombai`):** Inspect real production web screens to extract authentic UX details and section pacing before styling.
-> 3. **Community `DESIGN.md` Systems & Visual Concepting (`designmd-mcp` + `Google Stitch` / `OpenDesign` / `Claude Design`):** Search 420+ free `DESIGN.md` design systems on [designmd.ai/explore](https://designmd.ai/explore), generate 2–3 screen concepts in `audit/visual-concepts/`, and bridge tokens via `@google/design.md`.
-> 4. **High-Craft Component Registry (`21st.dev MCP`):** Pull tested Tailwind component blueprints into `/_styleguide` for zero-JS Astro transmutation in Stage 4.5.
-> *(Reply with `1` or "skip" to proceed immediately in code, or ask for `.mcp.example.json` setup snippets.)*
-
 Use `site-art-direction` with the brief, source audit, content model, real assets, and relevant references. Select a primary lane from `references/aesthetic-lanes.md`, or Custom / existing brand with a rationale when those lanes do not fit. Define the narrative metaphor, typography, color physics, spatial density, section pacing rhythm, and explicit anti-patterns.
 
-Do not start broad visual implementation from the starter's neutral defaults. First record the approved direction or explicitly labeled working assumption in `AGENTS.md` following the mandatory Art Direction Record schema and canonical gate in `AGENTS.md`; use a linked project document when the direction needs substantial visual references or component detail.
+Do not start broad visual implementation from the starter's neutral defaults. First record the approved direction or explicitly labeled working assumption in `AGENTS.md` following the mandatory Art Direction Record schema and canonical gate in `AGENTS.md` (you can scaffold a structurally valid record directly via `npm run design:tokens -- --lane <lane> --write-record` and refine its prose for the client brief); use a linked project document when the direction needs substantial visual references or component detail.
 
 For Stackable, Elementor, Blocksy builder, or similar migrations, explicitly classify the source visual language as preserve, refine, or overhaul. If the source is visually weak or the new premise materially departs from it, run the visual concept pass in `site-art-direction` before broad implementation: develop two or three concepts for a representative archetype using real content shapes and known assets, compare them against the brief and source identity, and document the selected direction. Use the harness's available image-generation or visual prototyping capability (such as `designmd-mcp`, Stitch, OpenDesign, or Claude Design) when useful; ensure any prompt embeds the narrative metaphor. Do not treat generated concepts as exact implementation specifications.
 
