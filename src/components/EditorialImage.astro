@@ -13,8 +13,9 @@ const height = metadata.height;
 const rawLink = typeof node?.link === 'string' ? node.link : node?.link?.href;
 const href = publicLink(rawLink);
 const blank = href && !href.startsWith('#') && node?.link?.blank === true;
+const breakoutClass = node?.alignment === 'wide' ? 'content--feature' : node?.alignment === 'full' ? 'content--full-safe' : undefined;
 ---
-{src ? <figure class:list={['emdash-image', 'editorial-image', node.alignment && `emdash-image--align-${node.alignment}`]} style={width ? `--image-limit: ${width}px` : undefined}>
+{src ? <figure class:list={['emdash-image', 'editorial-image', node.alignment && `emdash-image--align-${node.alignment}`, breakoutClass]} style={width ? `--image-limit: ${width}px` : undefined}>
   {href ? <a href={href} target={blank ? '_blank' : undefined} rel={blank ? 'noopener noreferrer' : undefined}><ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" /></a> : <ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" />}
   {node.caption && <figcaption>{node.caption}</figcaption>}
 </figure> : <PTImage node={node} />}
@@ -23,6 +24,7 @@ const blank = href && !href.startsWith('#') && node?.link?.blank === true;
   .editorial-image :global(img) { width: 100%; height: auto; }
   figcaption { color: var(--color-muted); font-size: .875rem; margin-top: var(--spacing-content); }
   .emdash-image--align-center { margin-inline: auto; }
+  .emdash-image--align-wide, .emdash-image--align-full { width: 100%; }
   .emdash-image--align-left, .emdash-image--align-right { max-width: 50%; }
   .emdash-image--align-left { float: left; margin-right: var(--spacing-content); }
   .emdash-image--align-right { float: right; margin-left: var(--spacing-content); }

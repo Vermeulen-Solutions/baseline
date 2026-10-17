@@ -139,4 +139,18 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   assert.ok(card.includes('<article class:list='), 'Card must render a semantic <article> instead of wrapping the whole card in <a>');
   assert.ok(card.includes('class="card-link clickable-parent"'), 'Card heading link must stretch via .clickable-parent');
   assert.ok(card.includes('--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))'), 'Card must compute concentric inner media radius');
+  assert.ok(card.includes('titleEdit?: Partial<FieldAnnotation>'), 'Card must accept EmDash titleEdit annotations');
+  assert.ok(card.includes('descriptionEdit?: Partial<FieldAnnotation>'), 'Card must accept EmDash descriptionEdit annotations');
+  assert.ok(card.includes('actionEdit?: Partial<FieldAnnotation>'), 'Card must accept EmDash actionEdit annotations');
+  assert.ok(card.includes('[data-emdash-field]'), 'Card must elevate EmDash field annotations above .clickable-parent');
+  assert.ok(css.includes('grid-template-columns: subgrid'), 'global.css must propagate .content-grid tracks into .flow / [data-emdash-field] via subgrid');
+
+  const editorialImage = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/components/EditorialImage.astro','utf8'))"], { encoding: 'utf8' });
+  assert.ok(editorialImage.includes("node?.alignment === 'wide' ? 'content--feature'"));
+  assert.ok(editorialImage.includes("node?.alignment === 'full' ? 'content--full-safe'"));
+
+  const photoGallery = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/components/PhotoGallery.astro','utf8'))"], { encoding: 'utf8' });
+  assert.ok(photoGallery.includes("breakout = 'feature'"));
+  assert.ok(photoGallery.includes('breakout && `content--${breakout}`'));
 });
+

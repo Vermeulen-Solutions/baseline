@@ -1,24 +1,34 @@
 ---
+import type { FieldAnnotation } from 'emdash';
 import { publicLink } from '../lib/public-link';
 import ResponsiveImage from './ResponsiveImage.astro';
 interface Props {
-  title: string; href?: string; action?: string; image?: string; imageAlt?: string;
+  title: string; href?: string; action?: string; description?: string;
+  image?: string; imageAlt?: string;
   headingLevel?: 2 | 3 | 4; layout?: 'stacked' | 'horizontal';
   imageFit?: 'cover' | 'contain'; imageAspect?: string; sizes?: string;
+  titleEdit?: Partial<FieldAnnotation>;
+  descriptionEdit?: Partial<FieldAnnotation>;
+  actionEdit?: Partial<FieldAnnotation>;
+  class?: string;
+  [key: string]: any;
 }
-const { title, href, action, image, imageAlt = '', headingLevel = 3,
-  layout = 'stacked', imageFit = 'cover', imageAspect = '3 / 2', sizes } = Astro.props;
+const { title, href, action, description, image, imageAlt = '', headingLevel = 3,
+  layout = 'stacked', imageFit = 'cover', imageAspect = '3 / 2', sizes,
+  titleEdit, descriptionEdit, actionEdit, class: className, ...rest } = Astro.props;
 const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
 if (href !== undefined && !publicLink(href)) throw new Error('Card href must use a supported public URL');
 const hasMedia = image || Astro.slots.has('media');
+const hasTitleExtra = Astro.slots.has('title-extra');
+const hasDescription = Boolean(description || Astro.slots.has('default') || descriptionEdit?.['data-emdash-ref']);
 ---
-<article class:list={['card', { 'card--horizontal': layout === 'horizontal' && hasMedia, 'card--clickable': Boolean(href), 'focus-parent': Boolean(href) }]}>
+<article class:list={['card', { 'card--horizontal': layout === 'horizontal' && hasMedia, 'card--clickable': Boolean(href), 'focus-parent': Boolean(href) }, className]} {...rest}>
   {hasMedia && <div class="card-media" style={{'--card-aspect':imageAspect,'--card-fit':imageFit}}><slot name="media">{image && <ResponsiveImage src={image} alt={imageAlt} sizes={sizes} />}</slot></div>}
   <div class="card-body">
-    <Heading class="card-title">{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading>
+    {hasTitleExtra ? <div class="card-title-row"><Heading class="card-title" {...(titleEdit || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading><slot name="title-extra" /></div> : <Heading class="card-title" {...(titleEdit || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading>}
     {Astro.slots.has('metadata') && <div class="card-metadata"><slot name="metadata" /></div>}
-    {Astro.slots.has('default') && <div class="card-description"><slot /></div>}
-    {action && <span class="card-action">{action}</span>}
+    {hasDescription && <div class="card-description">{description && <p {...(descriptionEdit || {})}>{description}</p>}<slot /></div>}
+    {action && <span class="card-action" {...(actionEdit || {})}>{action}<slot name="action-icon" /></span>}
   </div>
 </article>
 <style>
@@ -52,7 +62,7 @@ const hasMedia = image || Astro.slots.has('media');
 .card-link { color: inherit; text-decoration: none; }
 .card-link:hover { text-decoration: none; }
 .card-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
-.card :global(a:not(.card-link), button) { position: relative; z-index: 2; }
+.card :global(a:not(.card-link), button, [data-emdash-field]) { position: relative; z-index: 2; }
 .card--clickable:focus-within:has(:focus-visible) { border-color: var(--color-action); }
 .card--clickable:focus-within:has(:focus-visible) .card-action { text-decoration: underline; }
 @media (hover: hover) and (pointer: fine) {
@@ -62,6 +72,7 @@ const hasMedia = image || Astro.slots.has('media');
 .card-media { aspect-ratio: var(--card-aspect); border-radius: var(--card-media-radius); overflow: hidden; }
 .card-media :global(img), .card-media :global(picture) { width: 100%; height: 100%; object-fit: var(--card-fit); display: block; }
 .card-body { display: flex; flex: 1; flex-direction: column; gap: var(--card-gap); padding: var(--card-padding); min-width: 0; }
+.card-title-row { display: flex; justify-content: space-between; align-items: center; gap: var(--card-gap); }
 .card h2, .card h3, .card h4 { font-size: var(--text-step-0); overflow-wrap: anywhere; }
 .card-metadata, .card-description { color: var(--card-muted); }
 .card-action { margin-top: auto; font-weight: 700; color: var(--color-action); }

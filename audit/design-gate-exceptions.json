@@ -12,7 +12,7 @@
   {
     "path": "src/styles/global.css",
     "reason": "Issue #2 neutral starter curated token engine, Smart Spacing (.flow), .content-grid breakout tracks, .clickable-parent/.focus-parent, .is-bg/.fade--*, and contextual surface tokens; no client theme or art direction. Any edit invalidates this exact exception.",
-    "sha256": "dbb355fb50e0b13536a8cec13e177df7d62c78d5f855d6dd796a79feda328db0"
+    "sha256": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -97,17 +97,17 @@
   {
     "path": "src/components/EditorialImage.astro",
     "reason": "Authorized neutral starter image infrastructure backport; preserves presentation, no client theme or content. Any edit invalidates this exact exception.",
-    "sha256": "67bd60215ed8ecf2da56bef15d2a3cfda3dd06017cf46d71550bc0d1578acf7a"
+    "sha256": "2c8a18045786930fcea1d6ec503b12d6f15f607d81fdc0042ba247a95e409917"
   },
   {
     "path": "src/components/RichText.astro",
     "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "ca48a2d4e6e7cca6dd281cf7a73c96e3941cc3823b3e1cc10b7856a032931421"
+    "sha256": "afc40e544a8b805a2fb5161267ce239db34e8619fd5a1b98b11c9d90773d156d"
   },
   {
     "path": "src/components/Card.astro",
     "reason": "Issue #2 neutral starter turnkey Card upgrade: semantic <article>, .clickable-parent/.focus-parent heading link, --card-* custom properties, and concentric radius math; no client theme. Any edit invalidates this exact exception.",
-    "sha256": "b4baa389893d36d5a599b91439a40e334d19876e98560356b2b79df27b51ceff"
+    "sha256": "862241b563cdf6a1ed2b693a642818c365f27a49147fca1fd8e8895934f7912b"
   },
   {
     "path": "src/components/PartnersPanel.astro",
@@ -203,7 +203,7 @@
   {
     "path": "src/components/PhotoGallery.astro",
     "reason": "Issue #7 browser reflow verification found real caption overlap: preserve the justified image height while allowing captions to contribute to the item row height. Functional starter component correction; no client visual design. Exact LF-normalized bytes; edits invalidate this exception.",
-    "sha256": "05f964e56873437f0836dd3653092391ea418b0105870878710d2ec5c0330932"
+    "sha256": "ad4b730eee890a72c17e4eb3889475e04a79bab4f98dec5935fb4800e966cd94"
   },
   {
     "path": "src/utils/reference-overlay.ts",

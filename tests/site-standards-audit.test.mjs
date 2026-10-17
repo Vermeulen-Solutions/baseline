@@ -191,5 +191,50 @@ test('declared skill overrides are documented rather than reporting unexpected d
   const finding = rule(auditSite({ root }), 'skills:site');
   assert.equal(finding.observed.declaredOverrides, 1);
   assert.match(finding.observed.localOverrides, /1 declared local override\(s\) documented/);
+  assert.ok(Array.isArray(finding.observed.missingSkillNames));
+  assert.ok(finding.observed.missingSkillNames.includes('emdash-production-cutover'));
+  assert.equal(finding.observed.manifestFormatVersion, 2);
 }));
+
+test('design-system drift rules detect brownfield CSS/Card gaps and pass on baseline primitives', () => fixture((root) => {
+  current(root);
+  fs.mkdirSync(path.join(root, 'src/styles'), { recursive: true });
+  fs.mkdirSync(path.join(root, 'src/components'), { recursive: true });
+  fs.mkdirSync(path.join(root, 'src/pages'), { recursive: true });
+
+  // Simulate brownfield CSS and whole-card anchor anti-pattern
+  fs.writeFileSync(path.join(root, 'src/styles/global.css'), [
+    ':root { --color-ink: #111; }',
+    '.flow > * + * { margin-top: 1rem; }',
+    '.flow > * + * { margin-top: 1rem; }',
+    '.hero { padding: clamp(1rem, 3vw, 2rem); }'
+  ].join('\n'));
+  fs.writeFileSync(path.join(root, 'src/components/Container.astro'), '<div class="container-shell"><slot /></div>\n');
+  fs.writeFileSync(path.join(root, 'src/components/EditorialCard.astro'), '<a class="editorial-card" href={href}><h3>{title}</h3></a>\n');
+
+  const brownfield = auditSite({ root });
+  const tokensRule = rule(brownfield, 'design-system:tokens-and-rhythm');
+  assert.equal(tokensRule.status, 'warning');
+  assert.equal(tokensRule.observed.interpolateSize, false);
+  assert.equal(tokensRule.observed.flowRuleCount, 2);
+  assert.equal(tokensRule.observed.adHocClampCount, 1);
+
+  const cardRule = rule(brownfield, 'design-system:card-and-breakout');
+  assert.equal(cardRule.status, 'warning');
+  assert.equal(cardRule.observed.containerBreakout, false);
+  assert.equal(cardRule.observed.wholeCardAnchorCount, 1);
+
+  const hudRule = rule(brownfield, 'design-system:quarantine-hud');
+  assert.equal(hudRule.status, 'warning');
+  assert.equal(hudRule.observed.styleguideRoute, false);
+  assert.equal(hudRule.observed.tweaksBar, false);
+
+  // Verify baseline itself passes all three design-system rules
+  const starterRoot = fileURLToPath(new URL('../', import.meta.url));
+  const baselineReport = auditSite({ root: starterRoot });
+  assert.equal(rule(baselineReport, 'design-system:tokens-and-rhythm').status, 'pass');
+  assert.equal(rule(baselineReport, 'design-system:card-and-breakout').status, 'pass');
+  assert.equal(rule(baselineReport, 'design-system:quarantine-hud').status, 'pass');
+}));
+
 

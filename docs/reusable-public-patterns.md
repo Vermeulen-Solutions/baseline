@@ -19,7 +19,9 @@ RichText wraps EmDash PortableText with shared image/gallery renderers. Use it i
 </Card>
 ```
 
-`Card.astro` renders a semantic `<article class="card">` rather than wrapping the entire card in an `<a>` tag. When `href` is provided, the heading renders `<a href={href} class="card-link clickable-parent">` whose `::after` pseudo-element stretches across the card while keeping metadata and body copy out of the screen-reader link announcement, paired with `.focus-parent` (`:focus-within:has(:focus-visible)`) so keyboard focus draws a single perimeter outline on `.card` without double inner focus rings or sticky mouse-click outlines. Secondary interactive links or badges inside `.card` automatically sit above the stretched link via `z-index: 2`.
+`Card.astro` renders a semantic `<article class="card">` rather than wrapping the entire card in an `<a>` tag. When `href` is provided, the heading renders `<a href={href} class="card-link clickable-parent">` whose `::after` pseudo-element stretches across the card while keeping metadata and body copy out of the screen-reader link announcement, paired with `.focus-parent` (`:focus-within:has(:focus-visible)`) so keyboard focus draws a single perimeter outline on `.card` without double inner focus rings or sticky mouse-click outlines. Secondary interactive links, buttons, or EmDash live-edit annotations (`[data-emdash-field]`) inside `.card` automatically sit above the stretched link via `z-index: 2`.
+
+`Card.astro` also supports optional EmDash visual-editor field annotations (`titleEdit`, `descriptionEdit`, `actionEdit`), a `description` string prop alongside the default slot, `<slot name="title-extra" />` and `<slot name="action-icon" />`, and root attribute forwarding (`...rest`) so domain cards (`NewsCard`, `TeamCard`, `GalleryCard`) can compose `<Card>` directly without forking its accessible HTML structure.
 
 Use `layout="horizontal"` for wide rows (which stacks automatically via `@container (max-width: 32rem)` and `@media (max-width: 40rem)`), `imageFit="contain"` for full posters/artwork, and `imageAspect` for an intentional frame. Customize appearance via CSS custom properties (`--card-bg`, `--card-text`, `--card-muted`, `--card-border-width`, `--card-border-color`, `--card-radius`, `--card-padding`, `--card-frame-padding`, `--card-gap`, `--card-shadow`) and concentric inner media radius (`--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))`). Card actions align at the bottom of equal-height grid rows. Stress long/translated titles, absent media, uneven copy and odd final rows; don't force equal slots to fill empty space.
 
@@ -27,9 +29,18 @@ Use `layout="horizontal"` for wide rows (which stacks automatically via `@contai
 
 Standard sections use `<Container width="reading" | "content" | "wide">` (`.container-shell`). When a long-form article, case study, or editorial page needs body copy constrained to `--measure-reading` (`68ch`) while allowing figures, pull-quotes, tables, or galleries to expand wider without closing and reopening containers, use `<Container breakout class="flow">` (`.content-grid`):
 - Unannotated children automatically occupy the `content` track (`--measure-reading`).
-- `.content--feature` spans `--measure-content` (`76rem`).
+- Intermediate `.flow` or `[data-emdash-field]` wrappers inside `.content-grid` automatically propagate named tracks via `grid-template-columns: subgrid`, so rich-text blocks inside `<RichText />` participate in breakout tracks seamlessly.
+- `.content--feature` spans `--measure-content` (`76rem`). `PhotoGallery.astro` (`breakout="feature"` by default) and `EditorialImage.astro` (`alignment="wide"`) automatically opt into `.content--feature` when rendered inside `.content-grid`.
 - `.content--wide` spans `--measure-wide` (`88rem`).
-- `.content--full` spans edge-to-edge (`full`), and `.content--full-safe` spans edge-to-edge with `--spacing-container` inline padding.
+- `.content--full` spans edge-to-edge (`full`), and `.content--full-safe` (`EditorialImage.astro` with `alignment="full"`) spans edge-to-edge with `--spacing-container` inline padding.
+
+## Upgrading brownfield sites
+
+To audit and modernize a downstream site built on an earlier baseline snapshot:
+1. Run `npm run audit:site -- --root ../site --out ../private-reports/site-audit` and inspect `design-system:tokens-and-rhythm`, `design-system:card-and-breakout`, `design-system:quarantine-hud`, and `skills:site` / `skills:emdash`.
+2. Synchronize skills (`npm run sync:site-skills` and `npm run sync:emdash-skills`) to upgrade legacy v1 manifests to v2 and pull updated specialist skills.
+3. Merge the additive token/reset/rhythm/layout primitives (`interpolate-size: allow-keywords`, cross-step fluid tokens, duplicate-margin `.flow` guards, `.content-grid` + `subgrid`, `.clickable-parent` / `.focus-parent`, `.is-bg` / `.fade--*`, and `[data-surface]`) into `src/styles/global.css` while preserving the site's brand tokens and Art Direction Record.
+4. Upgrade `Container.astro` (`breakout` prop), `EditorialImage.astro` / `PhotoGallery.astro` / `RichText.astro`, and refactor whole-card `<a>` components (`EditorialCard.astro`, `*Card.astro`) to semantic `<article>` + `.clickable-parent` + `.focus-parent` + `--card-media-radius`.
 
 ## CMS-owned partners
 

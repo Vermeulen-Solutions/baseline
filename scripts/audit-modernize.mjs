@@ -25,7 +25,7 @@ function candidate(root) {
   const input = readJSON(root, 'package.json');
   const lock = readJSON(root, 'package-lock.json').data;
   if (!input.bytes || !input.data || !input.data.scripts || typeof input.data.scripts !== 'object' || Array.isArray(input.data.scripts)) throw new RecipeError('Readable package scripts required');
-  if (lock?.packages?.['node_modules/astro']?.version !== '7.4.0' || lock?.packages?.['node_modules/emdash']?.version !== '1.3.0') throw new RecipeError('Recipe v1 supports the Astro 7.4.0 / EmDash 1.3.0 source profile only');
+  if (!/^7\.\d+\.\d+$/.test(lock?.packages?.['node_modules/astro']?.version ?? '') || !/^1\.\d+\.\d+$/.test(lock?.packages?.['node_modules/emdash']?.version ?? '')) throw new RecipeError('Recipe v1 supports Astro 7.x / EmDash 1.x source profiles only');
   const scripts = input.data.scripts;
   if (scripts.build !== 'astro build' || scripts['check:schema-budget'] !== 'node scripts/check-schema-budget.mjs') throw new RecipeError('Recipe requires the supported build and schema commands');
   for (const [file, hash] of Object.entries(helperHashes)) {

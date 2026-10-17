@@ -369,19 +369,29 @@ button:disabled {
 	grid-column: content;
 }
 
-.content--feature {
+.content-grid > :where(.flow, [data-emdash-field]):not(.content--feature, .content--wide, .content--full, .content--full-safe) {
+	grid-column: full;
+	display: grid;
+	grid-template-columns: subgrid;
+}
+
+.content-grid > :where(.flow, [data-emdash-field]) > :not(.content--feature, .content--wide, .content--full, .content--full-safe) {
+	grid-column: content;
+}
+
+.content-grid :where(.content--feature) {
 	grid-column: feature;
 }
 
-.content--wide {
+.content-grid :where(.content--wide) {
 	grid-column: wide;
 }
 
-.content--full {
+.content-grid :where(.content--full) {
 	grid-column: full;
 }
 
-.content--full-safe {
+.content-grid :where(.content--full-safe) {
 	grid-column: full;
 	padding-inline: var(--spacing-container);
 }

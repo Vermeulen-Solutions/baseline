@@ -5,6 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 import { collectionColumnCounts, COLLECTION_COLUMN_BUDGET } from './schema-column-budget.mjs';
 import { capabilityRules } from './audit-capabilities.mjs';
+import { designSystemRules } from './audit-design-system.mjs';
 import { skillFinding } from './audit-skills.mjs';
 import { assertReport } from './audit-report.mjs';
 import { runtimeEvidenceRules } from './audit-runtime-evidence.mjs';
@@ -67,6 +68,7 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
     hashes[relative] = result.bytes ? digest(result.bytes) : null;
   }
   capabilityRules(readTarget(target, 'astro.config.mjs').bytes?.toString('utf8'), runtime, add);
+  designSystemRules(target, add);
   const scripts = pkg.data?.scripts;
   add('schema-prebuild', scripts?.['check:schema-budget'] === 'node scripts/check-schema-budget.mjs' && /^(?:npm run check:schema-budget)(?:$| && )/.test(scripts?.prebuild ?? '') ? 'pass' : scripts && typeof scripts === 'object' ? 'warning' : 'unverified', 'Schema preflight before the existing build hook', 'Command presence is static evidence; missing DB still needs measurement', { required: false, evidence: ['package.json'], remediation: 'schema-budget-prebuild@1' });
   for (const group of ['emdash', 'site']) {

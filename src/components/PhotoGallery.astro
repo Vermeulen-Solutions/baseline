@@ -10,6 +10,7 @@ interface Props {
   node?: unknown;
   locale?: 'fr' | 'en';
   layout?: 'justified' | 'grid';
+  breakout?: 'feature' | 'wide' | 'full-safe' | false;
   title?: string;
 }
 
@@ -17,6 +18,7 @@ const {
   value,
   node,
   layout = 'justified',
+  breakout = 'feature',
   locale = Astro.currentLocale === 'fr' ? 'fr' : 'en',
   title,
 } = Astro.props;
@@ -37,7 +39,7 @@ const jsonLd = galleryJsonLd(photos, {
 });
 ---
 <div
-  class="photo-gallery"
+  class:list={['photo-gallery', breakout && `content--${breakout}`]}
   role="group"
   aria-label={locale === 'fr' ? 'Galerie de photographies' : 'Photo gallery'}
   style={`--photo-columns: ${columns}`}
