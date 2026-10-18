@@ -59,32 +59,47 @@ hosting and external providers require separate acceptance. See
 
 ## ⚡ Quickstart
 
+Baseline is designed ground-up for an **agent-first workflow** pairing with **Claude Code**, **Google Antigravity**, **Cursor**, **Windsurf**, **OpenAI Codex**, **Aider**, or local LLM runners. Instead of manually typing setup commands, you hand off initialization and build steps to your coding assistant. The agent reads `AGENTS.md`, installs dependencies, generates `.env` secrets, seeds design tokens, and guides or executes the build.
+
 **Requirements:** Node 22.22.2 minimum (Node 24 LTS recommended) and `npm`.
 
-### 🚀 Starting a New Site (EmDash CMS)
+### 🚀 Starting a New Site (Agent-First Workflow)
 
-This repository is configured by default with the **EmDash Node.js + SQLite** foundation. To build a new website:
-
-1. Click the green **[Use this template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions)** button at the top of this repository (or use the GitHub CLI):
+1. **Create your repository** from this **GitHub Template**:
    ```sh
    gh repo create my-site --template Vermeulen-Solutions/baseline --private --clone
    cd my-site
    ```
-2. Install dependencies & initialize secrets:
-   ```sh
-   npm install
-   npx emdash secrets generate --write .env
-   npm run dev
-   ```
-3. Initialize client tokens and seed your aesthetic lane:
-   ```sh
-   # Seed an aesthetic lane (e.g. editorial-paper, product-minimalism, technical-data, warm-editorial)
-   npm run design:tokens -- --init-client --lane editorial-paper
+   *(Or click the green **[Use this template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions)** button on GitHub).*
+
+2. **Open your coding assistant in the repository and paste a kickoff prompt:**
+
+   **Option A — Express Track (Consolidated 3 Checkpoints, recommended for greenfield sites <= 6 routes):**
+   ```markdown
+   Read AGENTS.md, follow new-site-workflow under .agents/skills/ in **Express Track (3 Checkpoints)**, and build this site with consolidated checkpoints:
+   - Client / Brand: [Brand Name]
+   - Purpose & Routes: [E.g., 5-page studio site: Home, Work, About, Blog, Contact]
+   - Aesthetic Lane / Palette: [E.g., Editorial Paper / Product-Led Minimalism, or seed accent #1B4332]
+
+   Install dependencies, generate .env secrets, complete Checkpoint A (Brief, Platform & Content Schema), and present the Checkpoint A handoff.
    ```
 
-#### 🖥️ Where to look in your browser
+   **Option B — Standard Agency Track (Full 7 Stages, for migrations or complex multi-locale sites):**
+   ```markdown
+   Read AGENTS.md, follow new-site-workflow under .agents/skills/, and guide me through the staged delivery workflow.
 
-Once `npm run dev` is running, open these local URLs:
+   Here is the context for this project:
+   - Client / Brand: [Brand Name]
+   - Purpose: [E.g., B2B marketing site / Portfolio / Directory]
+   - Target Audience: [E.g., Enterprise buyers / General public]
+   - Locales: [E.g., Single language (en) or Multilingual (en, fr)]
+
+   Install dependencies, generate .env secrets, begin with Stage 1 (Brief & Evidence Discovery), and present the Stage 1 handoff choices once complete.
+   ```
+
+### 🖥️ Where to look in your browser
+
+Once the assistant runs `npm run dev`, open these local URLs:
 
 | Destination | Local URL | What it's for |
 | --- | --- | --- |
@@ -94,7 +109,49 @@ Once `npm run dev` is running, open these local URLs:
 
 ---
 
-### 📦 Alternative: Static Profiles (`static` / `static-sveltia`)
+### 📚 Ready-to-Copy Prompt Recipes & MCP Server
+
+Need a prompt for a specific task? Adapt the documented workflow recipes to your site's scope and evidence:
+
+👉 **[Open the AI Developer Prompt Library (`docs/prompt-library.md`)](docs/prompt-library.md)**
+
+- 🚀 [Kickstarting a Greenfield Site (Express 3-Checkpoint or Full 7-Stage)](docs/prompt-library.md#1-starting-a-new-site-project)
+- 🗄️ [Auditing WordPress Content & Finding Hidden Entities](docs/prompt-library.md#2-wordpress-migration--content-modeling)
+- 🖼️ [Manifest-Driven WordPress Media Ingestion](docs/prompt-library.md#2-wordpress-migration--content-modeling)
+- 🎨 [Art Direction & The Design Gate](docs/prompt-library.md#3-art-direction--the-design-gate)
+- 📦 [Quarantining Tailwind Blueprints (21st.dev to Zero-JS Astro)](docs/prompt-library.md#4-component-sourcing--styleguide-quarantine)
+- ✏️ [Wiring EmDash Live Edit Proxies](docs/prompt-library.md#5-public-pages--emdash-editorial-canvas)
+- 🔍 [Bounded UI/UX Polish with Impeccable Critique](docs/prompt-library.md#6-visual-polish--the-impeccable-critique)
+- 📸 [Local Visual Regression Testing (`npm run test:visual`)](docs/prompt-library.md#7-local-visual-regression--pre-launch-checks)
+- 🛡️ [Cloudflare Cutover & Corporate Email DNS Safety](docs/prompt-library.md#8-production-cutover--corporate-email-safety)
+
+To connect your coding assistant directly to EmDash's built-in Model Context Protocol (MCP) server for managing content and schema, generate a token in one step:
+```sh
+npm run mcp:token
+```
+See [agent documentation](docs/agent-documentation.md) for harness integration, specialist skill syncing (`npm run sync:site-skills`), and MCP setup across all major tools.
+
+---
+
+### 💻 Manual CLI Setup (Alternative)
+
+If you are setting up without an AI assistant or scripting a CI pipeline, you can run the commands directly:
+
+```sh
+# 1. Install dependencies & initialize secrets
+npm install
+npx emdash secrets generate --write .env
+
+# 2. Seed brand tokens and an aesthetic lane
+npm run design:tokens -- --init-client --lane editorial-paper
+
+# 3. Start the dev server
+npm run dev
+```
+
+---
+
+### 📦 Static Profiles (Alternative)
 
 If your project does not need a relational CMS database or server adapter, generate an unencumbered static Astro project from this checkout:
 
@@ -121,60 +178,6 @@ cd baseline
 npm install
 npm run verify
 ```
-
----
-
-## 🤖 Pairing with Your AI Assistant
-
-Baseline provides staged prompt recipes for pairing with **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **Cursor**, **Windsurf**, **Aider**, and other coding assistants.
-
-### 📋 Starter Prompts: Kick Off a New Site
-
-Choose **Standard Mode (7 Stages)** for complex migrations and multi-locale sites, or **Express Mode (3 Checkpoints)** for smaller greenfield builds (`<= 6` routes):
-
-**Option A — Express / Autonomous Mode (3 Checkpoints):**
-```markdown
-Read AGENTS.md, follow new-site-workflow under .agents/skills/ in **Express Track (3 Checkpoints)**, and build this site with consolidated checkpoints:
-- Client / Brand: [Brand Name]
-- Purpose & Routes: [E.g., 5-page B2B studio site: Home, Work, About, Blog, Contact]
-- Aesthetic Lane / Palette: [E.g., Editorial Paper / Product-Led Minimalism, or seed accent #1B4332]
-
-Complete Checkpoint A (Brief, Platform & Content Schema) and present the Checkpoint A handoff.
-```
-
-**Option B — Standard Agency Mode (Full 7 Stages):**
-```markdown
-Read AGENTS.md, follow new-site-workflow under .agents/skills/, and guide me through the staged delivery workflow.
-
-Here is the context for this project:
-- Client / Brand: [Brand Name]
-- Purpose: [E.g., B2B marketing site / Portfolio / Directory]
-- Target Audience: [E.g., Enterprise buyers / General public]
-- Locales: [E.g., Single language (en) or Multilingual (en, fr)]
-
-Please begin with Stage 1 (Brief & Evidence Discovery) and present the Stage 1 handoff choices once complete.
-```
-
-### 📚 Ready-to-Copy Prompt Recipes
-Need to run a specific task? Adapt the documented workflow prompts to your site's scope and available evidence:
-
-👉 **[Open the AI Developer Prompt Library (`docs/prompt-library.md`)](docs/prompt-library.md)**
-
-- 🚀 [Kickstarting a Greenfield Site (Express 3-Checkpoint or Full 7-Stage)](docs/prompt-library.md#1-starting-a-new-site-project)
-- 🗄️ [Auditing WordPress Content & Finding Hidden Entities](docs/prompt-library.md#2-wordpress-migration--content-modeling)
-- 🖼️ [Manifest-Driven WordPress Media Ingestion](docs/prompt-library.md#2-wordpress-migration--content-modeling)
-- 🎨 [Art Direction & The Design Gate](docs/prompt-library.md#3-art-direction--the-design-gate)
-- 📦 [Quarantining Tailwind Blueprints (21st.dev to Zero-JS Astro)](docs/prompt-library.md#4-component-sourcing--styleguide-quarantine)
-- ✏️ [Wiring EmDash Live Edit Proxies](docs/prompt-library.md#5-public-pages--emdash-editorial-canvas)
-- 🔍 [Bounded UI/UX Polish with Impeccable Critique](docs/prompt-library.md#6-visual-polish--the-impeccable-critique)
-- 📸 [Local Visual Regression Testing (`npm run test:visual`)](docs/prompt-library.md#7-local-visual-regression--pre-launch-checks)
-- 🛡️ [Cloudflare Cutover & Corporate Email DNS Safety](docs/prompt-library.md#8-production-cutover--corporate-email-safety)
-
-To connect your coding assistant directly to EmDash's built-in Model Context Protocol (MCP) server for managing content and schema, generate a token in one step:
-```sh
-npm run mcp:token
-```
-See [agent documentation](docs/agent-documentation.md) for harness integration, specialist skill syncing (`npm run sync:site-skills`), and MCP setup across all major tools.
 
 ---
 
