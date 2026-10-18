@@ -1,0 +1,13 @@
+{
+  "src/config/site.ts": "6e81091dfcdd638ff1634f33d4a876c8c6f043607364fde5198ba22360a45a21",
+  "src/content/posts/welcome.md": "40a2e5639325fb4c0e96706b03583c8b5958f5635d4a94e947f489ea6926ad26",
+  "src/layouts/Base.astro": "2a0835104278e8d01faf0ceda5087ba8de0ee50ace06e71682219f5696fb6674",
+  "src/pages/404.astro": "2a55629652e0827d86b3b1f4587a1bfa3ea8d7d1595c0bb67ba70b663e049558",
+  "src/pages/index.astro": "39307619deb2951726f00f77d0e1bdbb5f7fd6d7f4c68740bf1349dacdcce3c0",
+  "src/pages/posts/index.astro": "47152e91bcef805d610adb05d12ecf8b68fa427617f19cc85fed15bdb57ad778",
+  "src/pages/posts/[...id].astro": "9887721665a00753dfb3eb06d7af351cace0d25d9346de80ab4f4ee14a6671ab",
+  "src/pages/_styleguide.astro": "d85529584052c8cb934d1b16e4153ed632f58ba3ead53bcb42fe2adfee2b6494",
+  "package.json": "f75c567bf0bac64911f97c4941dc2cedc628c5beaf8e703a692c99aff70f4515",
+  "baseline.config.json": "e9a4eca0615ed3430ecb8dd46d714796709d1e175e27681327daac3ae671ae2a",
+  "audit/design-gate-exceptions.json": "2be3a7ed40f687d5e352de175f4b544c41efdcfdf3f6671696f9352bc6dc72ab"
+}

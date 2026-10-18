@@ -1,0 +1,23 @@
+diff --git a/src/components/Container.astro b/.baseline/updates/19aed5db4a5119f488f41f0d571dbcbb50f81f47/files/src/components/Container.astro
+index 3a90f99..dfca6e6 100644
+--- a/src/components/Container.astro
++++ b/.baseline/updates/19aed5db4a5119f488f41f0d571dbcbb50f81f47/files/src/components/Container.astro
+@@ -1,15 +1,16 @@
+ ---
+ interface Props {
++	id?: string;
+ 	width?: "reading" | "content" | "wide";
+ 	breakout?: boolean;
+ 	class?: string;
+ }
+ 
+-const { width = "content", breakout = false, class: className } = Astro.props;
++const { id, width = "content", breakout = false, class: className } = Astro.props;
+ ---
+ 
+ <div
+-	data-brand-container="rehearsal"
++	id={id}
+ 	class:list={[
+ 		breakout ? "content-grid" : ["container-shell", `container-shell--${width}`],
+ 		className,

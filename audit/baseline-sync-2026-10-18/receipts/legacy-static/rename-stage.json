@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "commit": "24ea16fa2144c8691605082aec0c36f18fd282e5",
+  "platformProfile": "static",
+  "managedHash": "fbf9835bb30ba914aae12625fdb491c505663718b8c64c3a1b8ee94448cecc91",
+  "configHash": "5d6add1cdd0dd787cbab304b8c777b382c03436521f3535945d44e9d6f1d360c",
+  "exceptionsHash": "2be3a7ed40f687d5e352de175f4b544c41efdcfdf3f6671696f9352bc6dc72ab",
+  "entries": [
+    {
+      "target": "scripts/sync-baseline.mjs",
+      "source": "scripts/sync-baseline.mjs",
+      "baseHash": "29092f1b22dc6bf128ef06ae6b4f099a48faa52178e17b44a29b855c475eeec3",
+      "currentHash": "29092f1b22dc6bf128ef06ae6b4f099a48faa52178e17b44a29b855c475eeec3",
+      "incomingHash": "58fbc1df038f10b27206115fe95f5d11e9d818f04b73d77c3cbc7eab141af4ed",
+      "conflict": false
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+---
+interface Props {
+	labelledBy: string;
+	spacing?: "content" | "section";
+	class?: string;
+}
+
+const { labelledBy, spacing = "section", class: className } = Astro.props;
+---
+
+<section aria-labelledby={labelledBy} class:list={["section", `section--${spacing}`, className]}>
+	<slot />
+</section>
+
+<style>
+	.section--content {
+		padding-block: var(--spacing-content);
+	}
+
+	.section--section {
+		padding-block: var(--spacing-section);
+	}
+</style>

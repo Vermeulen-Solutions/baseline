@@ -1,0 +1,13 @@
+
+> legacy-static@0.0.0 sync:baseline
+> node scripts/sync-baseline.mjs --apply 19aed5db4a5119f488f41f0d571dbcbb50f81f47
+
+{
+  "commit": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+  "applied": [],
+  "conflicts": [
+    "src/styles/global.css",
+    "src/components/Container.astro"
+  ]
+}
+

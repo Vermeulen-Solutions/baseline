@@ -1,0 +1,6 @@
+
+> canonical-static@0.0.0 check:art-direction
+> node scripts/check-art-direction.mjs --changed --require-record
+
+Art direction record is structurally valid.
+👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "commit": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+  "platformProfile": "static",
+  "managedHash": "892efb702ec3b58f9822829c36fb8a675de28b19ea2fa73bcd7d7f7dbb97f584",
+  "configHash": "e9a4eca0615ed3430ecb8dd46d714796709d1e175e27681327daac3ae671ae2a",
+  "exceptionsHash": "2be3a7ed40f687d5e352de175f4b544c41efdcfdf3f6671696f9352bc6dc72ab",
+  "entries": [
+    {
+      "target": "src/styles/global.css",
+      "source": "src/styles/global.css",
+      "baseHash": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832",
+      "currentHash": "2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1",
+      "incomingHash": "24540a933c679ea7f85b9dadf38d7ffaf800fb41af969af3be8901647882cd48",
+      "conflict": true
+    },
+    {
+      "target": "src/components/Section.astro",
+      "source": "src/components/Section.astro",
+      "baseHash": "5f370d7cf6bb3b08b4e666f4f802458d4a94e1556a8c0531f367383711087ef3",
+      "currentHash": "5f370d7cf6bb3b08b4e666f4f802458d4a94e1556a8c0531f367383711087ef3",
+      "incomingHash": "a21cc7c82e9abb9ad137b07fbf7b23c2a55858aa723fc1990db7a9de73f6ee50",
+      "conflict": false
+    },
+    {
+      "target": "src/components/Container.astro",
+      "source": "src/components/Container.astro",
+      "baseHash": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32",
+      "currentHash": "3c81160c8c180493808d4d6ff2359e0a0c7969e1d710366bd81b14957575895f",
+      "incomingHash": "dc5be9c71888ff4dd783d23126f99cd614a9f04405ff293c305c3c4f85f69fc0",
+      "conflict": true
+    }
+  ]
+}

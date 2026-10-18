@@ -1,0 +1,16 @@
+[
+  {
+    "requested": "https://raw.githubusercontent.com/Vermeulen-Solutions/emdash-baseline/24ea16fa2144c8691605082aec0c36f18fd282e5/scripts/sync-baseline.mjs",
+    "finalURL": "https://raw.githubusercontent.com/Vermeulen-Solutions/emdash-baseline/24ea16fa2144c8691605082aec0c36f18fd282e5/scripts/sync-baseline.mjs",
+    "status": 200,
+    "redirected": false,
+    "sha256": "58fbc1df038f10b27206115fe95f5d11e9d818f04b73d77c3cbc7eab141af4ed"
+  },
+  {
+    "requested": "https://raw.githubusercontent.com/Vermeulen-Solutions/baseline/24ea16fa2144c8691605082aec0c36f18fd282e5/scripts/sync-baseline.mjs",
+    "finalURL": "https://raw.githubusercontent.com/Vermeulen-Solutions/baseline/24ea16fa2144c8691605082aec0c36f18fd282e5/scripts/sync-baseline.mjs",
+    "status": 200,
+    "redirected": false,
+    "sha256": "58fbc1df038f10b27206115fe95f5d11e9d818f04b73d77c3cbc7eab141af4ed"
+  }
+]

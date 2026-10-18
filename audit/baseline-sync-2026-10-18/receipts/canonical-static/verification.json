@@ -1,0 +1,26 @@
+{
+  "name": "canonical-static",
+  "passed": true,
+  "independentInstall": true,
+  "cleanInstall": true,
+  "node": "v24.21.0",
+  "lockfileSHA256": "02f2b0d4fc010e79de3795269505a434142387ea57c841fa078094234895fea3",
+  "packageCount": 443,
+  "forbiddenPackages": [],
+  "verify": true,
+  "production": true,
+  "fixtures": true,
+  "httpAndBrowser": true,
+  "viewports": [
+    390,
+    768,
+    1440
+  ],
+  "protectedFilesUnchanged": true,
+  "skills": [
+    "astro-site-design",
+    "impeccable",
+    "new-site-workflow",
+    "site-art-direction"
+  ]
+}

@@ -1,0 +1,727 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "2fc9774ba30a4d38defbf2ce92270628993d2750",
+  "sourceTreeDirty": false,
+  "generatorVersion": "0.3.0",
+  "manifestSHA256": "9b080d1a093789dee51340cc614a6ac6fc9197266e121f9006025b2d36927e5c",
+  "files": {
+    "src/styles/global.css": {
+      "source": "src/styles/global.css",
+      "sha256": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832",
+      "ownership": "client-calibrated"
+    },
+    "src/layouts/SiteShell.astro": {
+      "source": "src/layouts/SiteShell.astro",
+      "sha256": "80afe1f381fd8c58517f199884146f4abdbdf498d6240bc22b3a0cafa0c11b50",
+      "ownership": "shared"
+    },
+    "src/components/Section.astro": {
+      "source": "src/components/Section.astro",
+      "sha256": "a21cc7c82e9abb9ad137b07fbf7b23c2a55858aa723fc1990db7a9de73f6ee50",
+      "ownership": "shared",
+      "lastUpdateCommit": "19aed5db4a5119f488f41f0d571dbcbb50f81f47"
+    },
+    "src/components/Container.astro": {
+      "source": "src/components/Container.astro",
+      "sha256": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32",
+      "ownership": "shared"
+    },
+    "src/components/Grid.astro": {
+      "source": "src/components/Grid.astro",
+      "sha256": "61480da4ff50aae485a982136fe77d8c881d9fceb8e1bc4980ffcd4cf2131f5e",
+      "ownership": "shared"
+    },
+    "src/components/Card.astro": {
+      "source": "src/components/Card.astro",
+      "sha256": "d03714812d5bcee0d9d90ed7b6bf456ae2307ceca9681eb1fd0b37129e8562f1",
+      "ownership": "shared"
+    },
+    "src/components/ResponsiveImage.astro": {
+      "source": "src/components/ResponsiveImage.astro",
+      "sha256": "cbdd316ec092276fff54f3933a32e55b32dc6fa13d736d9bcc2d8ccbd2833369",
+      "ownership": "shared"
+    },
+    "src/components/PartnersPanel.astro": {
+      "source": "src/components/PartnersPanel.astro",
+      "sha256": "31030c421b78250b55328e976e3058336bd0a6183d6441770f86555e55b9d122",
+      "ownership": "shared"
+    },
+    "src/components/LogoTicker.astro": {
+      "source": "src/components/LogoTicker.astro",
+      "sha256": "af5233b66b4a965eeb73059c1b8298dd6336970954159496702018eb82e97f54",
+      "ownership": "shared"
+    },
+    "src/components/FormError.astro": {
+      "source": "src/components/FormError.astro",
+      "sha256": "8e5cf27a51dfe369fba3d5c1f7de6260437bbd992f727fa9126e1b7680ad7dca",
+      "ownership": "shared"
+    },
+    "src/lib/public-link.ts": {
+      "source": "src/lib/public-link.ts",
+      "sha256": "23f33e4c8314ff53236a98bf1380fb0ac1617eb02c140044734b64fc7ed96cfc",
+      "ownership": "shared"
+    },
+    "src/lib/responsive-image.ts": {
+      "source": "src/lib/responsive-image.ts",
+      "sha256": "b3a8c20ea4bd4400b4db0e25f232e66f127d2394e780078dd043458af812108e",
+      "ownership": "shared"
+    },
+    "src/lib/partner.ts": {
+      "source": "src/lib/partner.ts",
+      "sha256": "e228316e1cc7d3ba05961942b73e863b85558369b5c2753a13c64d52e79c468a",
+      "ownership": "shared"
+    },
+    "scripts/check-art-direction.mjs": {
+      "source": "scripts/check-art-direction.mjs",
+      "sha256": "3f2382bb8676c0b5f0e769e22697eb5ebe6a8d0da23d06af98d4795ea029eb7e",
+      "ownership": "shared"
+    },
+    "scripts/check-script-syntax.mjs": {
+      "source": "scripts/check-script-syntax.mjs",
+      "sha256": "f507e401beb06f1a86220c183cc867402ce324f97e7288c1db3da0851f16171c",
+      "ownership": "shared"
+    },
+    "scripts/design-interchange.mjs": {
+      "source": "scripts/design-interchange.mjs",
+      "sha256": "76d81a2271e79f6ab68c4722dad95ddd352582e6c4fb278fd24def25b194f13e",
+      "ownership": "shared"
+    },
+    "scripts/assert-release-artifact.mjs": {
+      "source": "scripts/assert-release-artifact.mjs",
+      "sha256": "9ef63f303d24bc95f08c8ff7cb68fd8a938c02dd31cba1f90a2d6691ab38f1a2",
+      "ownership": "shared"
+    },
+    "scripts/design-system.mjs": {
+      "source": "scripts/design-system.mjs",
+      "sha256": "8b0f65d9b7beb38ef23c4de6882878642cd85a51eb71f30d1a4a00955c122e00",
+      "ownership": "shared"
+    },
+    "scripts/dev-tools-integration.mjs": {
+      "source": "scripts/dev-tools-integration.mjs",
+      "sha256": "57ebf228291e760dcd4655685702e02a6924422745b6783eaeb4121b59811709",
+      "ownership": "shared"
+    },
+    "scripts/styleguide-fixtures.mjs": {
+      "source": "scripts/styleguide-fixtures.mjs",
+      "sha256": "a8d5a77c5f7ea5c1f1c04afbbce67b7a071219f770671e86d9ba89f9bd36165a",
+      "ownership": "shared"
+    },
+    "src/components/dev/Styleguide.astro": {
+      "source": "src/components/dev/Styleguide.astro",
+      "sha256": "c4650309946133e248e9a8b5d2db6fe8988f6d5801992961206784ddb1948ee9",
+      "ownership": "shared"
+    },
+    "src/dev/styleguide-fixtures.ts": {
+      "source": "src/dev/styleguide-fixtures.ts",
+      "sha256": "751912a45b821cf5713c0d66edbbb239ea69c505a91d5882710c35e42de9a151",
+      "ownership": "shared"
+    },
+    "src/dev/styleguide-prose.md": {
+      "source": "src/dev/styleguide-prose.md",
+      "sha256": "00a948f64598d6cb2dfbd7f37b27c39582e9e7deb0f8639d5531f656b3168122",
+      "ownership": "shared"
+    },
+    "src/dev/visual-fonts.css": {
+      "source": "src/dev/visual-fonts.css",
+      "sha256": "e6f3ec1ec61600ccd0e94dfa6ef46d41000f2abc45f6aee05b5e45b719b78ba3",
+      "ownership": "shared"
+    },
+    "src/assets/styleguide-grid.svg": {
+      "source": "src/assets/styleguide-grid.svg",
+      "sha256": "1628336b39d006ce410883ad6da90322f345a6b8d0c7caba76d9f541dcc33d91",
+      "ownership": "shared"
+    },
+    "src/assets/styleguide-small.svg": {
+      "source": "src/assets/styleguide-small.svg",
+      "sha256": "b402c2a2c9190d2c0c6f2936677db3f331a0d9b881910a31ad279d96190c8ff8",
+      "ownership": "shared"
+    },
+    "src/assets/styleguide-portrait.svg": {
+      "source": "src/assets/styleguide-portrait.svg",
+      "sha256": "6aa7873127edfb083d25e08256815804d82a935d586f3714c9bb35127f9787e8",
+      "ownership": "shared"
+    },
+    "LICENSE": {
+      "source": "LICENSE",
+      "sha256": "b1690b923216e66d5c380919f00b0ac414adb89a54a0a585d2b6a5d66c23c3bb",
+      "ownership": "shared"
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "source": "THIRD_PARTY_NOTICES.md",
+      "sha256": "8a8be63f2c36213710589fcebcf97153763af9efb83cb996a2228c785618d977",
+      "ownership": "shared"
+    },
+    "docs/licenses/noto-sans-OFL.txt": {
+      "source": "docs/licenses/noto-sans-OFL.txt",
+      "sha256": "54ec7b5a35310ad66f9f3091426f7028484cbf9ae1ab5da30122ee412a3009e1",
+      "ownership": "shared"
+    },
+    "docs/licenses/impeccable-Apache-2.0.txt": {
+      "source": "docs/licenses/impeccable-Apache-2.0.txt",
+      "sha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
+      "ownership": "shared"
+    },
+    "scripts/sync-baseline.mjs": {
+      "source": "scripts/sync-baseline.mjs",
+      "sha256": "58fbc1df038f10b27206115fe95f5d11e9d818f04b73d77c3cbc7eab141af4ed",
+      "ownership": "shared",
+      "lastUpdateCommit": "24ea16fa2144c8691605082aec0c36f18fd282e5"
+    },
+    "docs/platform-profiles.md": {
+      "source": "docs/platform-profiles.md",
+      "sha256": "3ada411032713c1c4a8b8fc40d7ee8a3d18b41fc04d7cd6b5964bbec441d9be8",
+      "ownership": "shared"
+    },
+    "docs/baseline-updates.md": {
+      "source": "docs/baseline-updates.md",
+      "sha256": "c2ae644e46ddad486c483166dadeba66540fd55a106000d2f0b198a28c742b9c",
+      "ownership": "shared"
+    },
+    ".env.example": {
+      "source": "profiles/static/project/.env.example",
+      "sha256": "37ca3b8a90c5db367b39422184569c7172d12a5ba2b43638ec4e5bec9994d0de",
+      "ownership": "shared"
+    },
+    ".gitignore": {
+      "source": "profiles/static/project/.gitignore",
+      "sha256": "692ca41416ada6c43e98d3a35e2f1da538fb40519ed8d2c82ac32b5b98b59cc3",
+      "ownership": "shared"
+    },
+    ".mcp.example.json": {
+      "source": "profiles/static/project/.mcp.example.json",
+      "sha256": "db2cbc3785806cf99d387ead333119dea680c2fa3bf3273b3b122e77b80cfed9",
+      "ownership": "shared"
+    },
+    "AGENTS.md": {
+      "source": "profiles/static/project/AGENTS.md",
+      "sha256": "2af7134f4edcd8098350928a73456eaddc0729ca96814ca840a8bbf263acf510",
+      "ownership": "shared"
+    },
+    "astro.config.mjs": {
+      "source": "profiles/static/project/astro.config.mjs",
+      "sha256": "430725e20a274511a351170857822045b75a158e749faed87dae29f6beebdb02",
+      "ownership": "shared"
+    },
+    "README.md": {
+      "source": "profiles/static/project/README.md",
+      "sha256": "d078c1747c93022e073b5c44715537dcffa81643344a1ea398ec1c3b282a58d4",
+      "ownership": "shared"
+    },
+    "scripts/check-dev-tools.mjs": {
+      "source": "profiles/static/project/scripts/check-dev-tools.mjs",
+      "sha256": "d7f00d40fdb2b707990e63211a492e6aa126e9374d53de2e7e803dc6f4cac9ca",
+      "ownership": "shared"
+    },
+    "src/assets/pilot-grid.jpg": {
+      "source": "profiles/static/project/src/assets/pilot-grid.jpg",
+      "sha256": "074765f7f90bc1655bde34056064de95b9172ce15a806a3ac058c7821e5ed00c",
+      "ownership": "shared"
+    },
+    "src/components/RichText.astro": {
+      "source": "profiles/static/project/src/components/RichText.astro",
+      "sha256": "117021e6f226e1f850dd5d17e536910480717ece244bcaeef9ca1828bbdc96b8",
+      "ownership": "shared"
+    },
+    "src/config/site.ts": {
+      "source": "profiles/static/project/src/config/site.ts",
+      "sha256": "6e81091dfcdd638ff1634f33d4a876c8c6f043607364fde5198ba22360a45a21",
+      "ownership": "client"
+    },
+    "src/content/posts/welcome.md": {
+      "source": "profiles/static/project/src/content/posts/welcome.md",
+      "sha256": "40a2e5639325fb4c0e96706b03583c8b5958f5635d4a94e947f489ea6926ad26",
+      "ownership": "client"
+    },
+    "src/content.config.ts": {
+      "source": "profiles/static/project/src/content.config.ts",
+      "sha256": "0494e62c9ed4ec64b0711acc50732041b496873277a9d81ccf816039e3bbb66c",
+      "ownership": "shared"
+    },
+    "src/env.d.ts": {
+      "source": "profiles/static/project/src/env.d.ts",
+      "sha256": "3217e756d741ef07df03521cc0aefa82d93915349e4b95adaf15e2d4d692b0c6",
+      "ownership": "shared"
+    },
+    "src/layouts/Base.astro": {
+      "source": "profiles/static/project/src/layouts/Base.astro",
+      "sha256": "2a0835104278e8d01faf0ceda5087ba8de0ee50ace06e71682219f5696fb6674",
+      "ownership": "client"
+    },
+    "src/lib/posts.ts": {
+      "source": "profiles/static/project/src/lib/posts.ts",
+      "sha256": "5c421282f8fab536f3dcb2ea74aa4cfd3e1b8247547fdb7b67f4da5b47ceea2c",
+      "ownership": "shared"
+    },
+    "src/pages/404.astro": {
+      "source": "profiles/static/project/src/pages/404.astro",
+      "sha256": "2a55629652e0827d86b3b1f4587a1bfa3ea8d7d1595c0bb67ba70b663e049558",
+      "ownership": "client"
+    },
+    "src/pages/index.astro": {
+      "source": "profiles/static/project/src/pages/index.astro",
+      "sha256": "39307619deb2951726f00f77d0e1bdbb5f7fd6d7f4c68740bf1349dacdcce3c0",
+      "ownership": "client"
+    },
+    "src/pages/posts/index.astro": {
+      "source": "profiles/static/project/src/pages/posts/index.astro",
+      "sha256": "47152e91bcef805d610adb05d12ecf8b68fa427617f19cc85fed15bdb57ad778",
+      "ownership": "client"
+    },
+    "src/pages/posts/[...id].astro": {
+      "source": "profiles/static/project/src/pages/posts/[...id].astro",
+      "sha256": "9887721665a00753dfb3eb06d7af351cace0d25d9346de80ab4f4ee14a6671ab",
+      "ownership": "client"
+    },
+    "src/pages/_styleguide.astro": {
+      "source": "profiles/static/project/src/pages/_styleguide.astro",
+      "sha256": "d85529584052c8cb934d1b16e4153ed632f58ba3ead53bcb42fe2adfee2b6494",
+      "ownership": "shared"
+    },
+    "tests/static-foundation.test.mjs": {
+      "source": "profiles/static/project/tests/static-foundation.test.mjs",
+      "sha256": "a937612c23eeba9a8abd6d508941755fd5814064b6d74bc90655f26a13cab722",
+      "ownership": "shared"
+    },
+    "tsconfig.json": {
+      "source": "profiles/static/project/tsconfig.json",
+      "sha256": "aa4c7753c76c9fb0e0e2ddfaeca71465ca1f296d5d61420e48e55e5748279ca4",
+      "ownership": "shared"
+    },
+    ".github/workflows/design-checks.yml": {
+      "source": "profiles/static/project/.github/workflows/design-checks.yml",
+      "sha256": "840e40b9aaf4618f29788195168e8640397f2bad32455406620bef7855db396d",
+      "ownership": "shared"
+    },
+    ".github/workflows/upstream-update.yml": {
+      "source": "profiles/static/project/.github/workflows/upstream-update.yml",
+      "sha256": "1e3a54df73ac4217aa10aee4950d21925d4a592bc401794e5440d87f9ea3ee2f",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/SKILL.md": {
+      "source": ".agents/skills/astro-site-design/SKILL.md",
+      "sha256": "0ad60fa640693da584cd552f07a5e2ff9ede299e143211dca72a6b46af546321",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/agents/openai.yaml": {
+      "source": ".agents/skills/astro-site-design/agents/openai.yaml",
+      "sha256": "38bc5c95af2af69bff60872fb61cf7aa80383c507ec1c90013854f4728bb1564",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/references/accessibility.md": {
+      "source": ".agents/skills/astro-site-design/references/accessibility.md",
+      "sha256": "f9d26c20e734f86c4cc8dce437cf1caa36f847bd5a3971ee1175034a83d7f4e2",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/references/astro-primitives.md": {
+      "source": ".agents/skills/astro-site-design/references/astro-primitives.md",
+      "sha256": "b30102d23a78d9d7c4ae19a3d7cfdc5069325ab2752cb02cfe8e902323d443f1",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/references/component-quarantine.md": {
+      "source": ".agents/skills/astro-site-design/references/component-quarantine.md",
+      "sha256": "75d47d01d67c5b43b81ce4ea0d4e3f217b4bc6ad32130ee7979fb8a939cabfea",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/references/emdash-content.md": {
+      "source": ".agents/skills/astro-site-design/references/emdash-content.md",
+      "sha256": "0f341cb44ca189bb95634573e04c0728bd9e4cb2e99ec53dcf9aeb55394cd0c5",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/references/fluid-tokens.md": {
+      "source": ".agents/skills/astro-site-design/references/fluid-tokens.md",
+      "sha256": "fc74ef5e1ec4fbd32699730e9187bbd336eda2c60c296cedc62088fb5a9d5af7",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/references/migration-visual-audit.md": {
+      "source": ".agents/skills/astro-site-design/references/migration-visual-audit.md",
+      "sha256": "9b9553e412810892c631136fd56147618587b5a66ead71851be88e31510ff7a7",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/references/responsive-architecture.md": {
+      "source": ".agents/skills/astro-site-design/references/responsive-architecture.md",
+      "sha256": "f69014d4685a559a6e2f4d956bd18e88866270daac6eb96b559e40c2cb9d05ae",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/references/rollout-verification.md": {
+      "source": ".agents/skills/astro-site-design/references/rollout-verification.md",
+      "sha256": "56041b8ace15f164f79e0383a35a92ddea87289c112856550310f054895851d7",
+      "ownership": "shared"
+    },
+    ".agents/skills/astro-site-design/references/visual-mockup-workflow.md": {
+      "source": ".agents/skills/astro-site-design/references/visual-mockup-workflow.md",
+      "sha256": "c7c1832cecf3522cd247d8077e467c86f860f441ef03e463872402d3a72ea40b",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/LICENSE": {
+      "source": ".agents/skills/impeccable/LICENSE",
+      "sha256": "02bb8c3b4e70190e3986c0404ad2fd8d639b4f534252d82379cc1b502b6d1812",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/PROVENANCE.json": {
+      "source": ".agents/skills/impeccable/PROVENANCE.json",
+      "sha256": "ac1a59d2ae01223c48a5af44a3358f580a52e3b627ecbc9ce37d8d2f17b0fd90",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/SKILL.md": {
+      "source": ".agents/skills/impeccable/SKILL.md",
+      "sha256": "5fb0d412928c03e62d2536adfd878ad6aad6f9ce343956aa4f7164da06da3459",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/agents/impeccable_asset_producer.toml": {
+      "source": ".agents/skills/impeccable/agents/impeccable_asset_producer.toml",
+      "sha256": "4dbdb0cfdc2466961da6b22d200f3ec7bf8bb47c27448a2e6e3c03cdbf589831",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/agents/impeccable_documenter.toml": {
+      "source": ".agents/skills/impeccable/agents/impeccable_documenter.toml",
+      "sha256": "2feb3768125ba6469c92a50d516727e6d42f44579165ddfd33409948e2a3803d",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/agents/impeccable_finish_reviewer.toml": {
+      "source": ".agents/skills/impeccable/agents/impeccable_finish_reviewer.toml",
+      "sha256": "1b80232e22d52b06a7278b9ca1f24f871a181c62cd91f4b18728807e7cf49dbd",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/agents/impeccable_manual_edit_applier.toml": {
+      "source": ".agents/skills/impeccable/agents/impeccable_manual_edit_applier.toml",
+      "sha256": "6c9ce3e27ec4520ead001da3aad2a2ebba481c4e5cd22873db8890259ee579fe",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/agents/openai.yaml": {
+      "source": ".agents/skills/impeccable/agents/openai.yaml",
+      "sha256": "ce9967ad70f99cf04456f3347c266723c2fbbb600267d10a822b7cd20562c321",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/adapt.md": {
+      "source": ".agents/skills/impeccable/reference/adapt.md",
+      "sha256": "9807cdc112b8bcbdeff9cd2516cda4d07129f1d47f29df4d57645344f34950c1",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/adapt.native.md": {
+      "source": ".agents/skills/impeccable/reference/adapt.native.md",
+      "sha256": "2455a2613e1fa29b986521c73cbad9424ccda70ef6cbe505779dbca5e16272a2",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/android.md": {
+      "source": ".agents/skills/impeccable/reference/android.md",
+      "sha256": "058f81f256134841875fd3183e06b37a023de0c877fd2b9eecd97011640791fe",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/animate.md": {
+      "source": ".agents/skills/impeccable/reference/animate.md",
+      "sha256": "d658c48ffbe0031e8e3b318996cad6ceafe29e40aa50d5bb25e4bf1d6839dc7c",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/audit.md": {
+      "source": ".agents/skills/impeccable/reference/audit.md",
+      "sha256": "4b726d8f13ca1dbb82ca8179cbfefca8c53c13766fef4d7b8870f5d4324da2d6",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/audit.native.md": {
+      "source": ".agents/skills/impeccable/reference/audit.native.md",
+      "sha256": "2898eff507738f9102107809e671df3e69f889dee30073030fe96fb2483d8ea3",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/bolder.md": {
+      "source": ".agents/skills/impeccable/reference/bolder.md",
+      "sha256": "05b78fb0595e4d5afbf5f17470c84e89cf82f205fea3a6e9b6d8d779b7c4aab1",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/clarify.md": {
+      "source": ".agents/skills/impeccable/reference/clarify.md",
+      "sha256": "173dd66abe65633910dcb04a51f40d6ff2a793f87088f022a02fc4cad24dd133",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/colorize.md": {
+      "source": ".agents/skills/impeccable/reference/colorize.md",
+      "sha256": "bc5f71f1129d0f2c310d913d07c8dc609a1d25644121bd78c308f42d52a0b9e9",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/component-review.md": {
+      "source": ".agents/skills/impeccable/reference/component-review.md",
+      "sha256": "10489e5265e49a4ef2737cd0e674c149ed41e1f703efe922e53ea3c91e833427",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/craft-floor.md": {
+      "source": ".agents/skills/impeccable/reference/craft-floor.md",
+      "sha256": "52b523e92b76daff71be2ec8c732c374c670f8d03e1296388738e581479ec1bb",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/craft.md": {
+      "source": ".agents/skills/impeccable/reference/craft.md",
+      "sha256": "9205e222bc6565b37fb504ceec93233c2d2a456802b69d16e6b1c44723907c4c",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/critique.md": {
+      "source": ".agents/skills/impeccable/reference/critique.md",
+      "sha256": "c210c9506877c6c8d88880a337fddd95d4315daf70ed6bc631ee6520481f1a0c",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/degraded/asset-producer.md": {
+      "source": ".agents/skills/impeccable/reference/degraded/asset-producer.md",
+      "sha256": "877d274f41500c780bad25b2bca7fa95eff1a32a7b95397dd388c72848e86a6c",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/degraded/documenter.md": {
+      "source": ".agents/skills/impeccable/reference/degraded/documenter.md",
+      "sha256": "bcc05ea92faebb5c74037a9d4263a5ce9a56f5ab07c8ab3c59ee704d8cade745",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/degraded/finish-reviewer.md": {
+      "source": ".agents/skills/impeccable/reference/degraded/finish-reviewer.md",
+      "sha256": "c33c4cfa7f0ce0bedde80d4fc3b595e747d0e9b43a77f06cacb8e899802f709d",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/degraded/manual-edit-applier.md": {
+      "source": ".agents/skills/impeccable/reference/degraded/manual-edit-applier.md",
+      "sha256": "5fae7f8a2fc3ddd49ad0a413446dc44daedef5b6b7de5eb935bd2fbfad646d58",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/delight.md": {
+      "source": ".agents/skills/impeccable/reference/delight.md",
+      "sha256": "098a891028ce59c212b747d3c70468dd750aff7053a703d1336045ed31e0da7c",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/distill.md": {
+      "source": ".agents/skills/impeccable/reference/distill.md",
+      "sha256": "56ca75d680eb8b61ca3a298d18e895cd4a0dcc520c31d7938a4807ff8dcf18ea",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/doctor.md": {
+      "source": ".agents/skills/impeccable/reference/doctor.md",
+      "sha256": "3dbef3fe606de4de0f1b5cab5f19902799e05cf566eb8223e9aa1632eeb04698",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/document.md": {
+      "source": ".agents/skills/impeccable/reference/document.md",
+      "sha256": "531d2b6c8c9affc7b794de7904905ff9b73962b986968fd1e90273eb26930b6e",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/extract.md": {
+      "source": ".agents/skills/impeccable/reference/extract.md",
+      "sha256": "5477ae97189e5c1236cee71a25a5ae50014429a5a2e6da28355c8021a6cdeddd",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/generate.md": {
+      "source": ".agents/skills/impeccable/reference/generate.md",
+      "sha256": "11385badfb532196cec249e73bac2b7f58ada033ed8c4b02b9f0d64ddb46f0dc",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/harden.md": {
+      "source": ".agents/skills/impeccable/reference/harden.md",
+      "sha256": "f69f1f0b3f97c194795ece67131b533e951130eeb8f202cf40e364b7a6badb7c",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/hooks.md": {
+      "source": ".agents/skills/impeccable/reference/hooks.md",
+      "sha256": "3c623f602043dcbdad8c043491e57ece96f699106f8378cc8a720e6b39c0ddcd",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/init.md": {
+      "source": ".agents/skills/impeccable/reference/init.md",
+      "sha256": "51349b3a32c7f907102dd680d8e2df9da27082caf46ee15c673be7ce14a5363b",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/ios.md": {
+      "source": ".agents/skills/impeccable/reference/ios.md",
+      "sha256": "40c87038b5f75147a5952a96237acf312a327bf70c1bcd8e0a5f064625ae9668",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/layout.md": {
+      "source": ".agents/skills/impeccable/reference/layout.md",
+      "sha256": "0bc7d7971b3edf2acd0580e847458dc6d84129d90715b452799ace3bed815c7c",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/live-setup.md": {
+      "source": ".agents/skills/impeccable/reference/live-setup.md",
+      "sha256": "2b5b2fbf5f658f34ea1997fb1aeebe01604d05187f75c6a4f1f55a5bc78520a4",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/live.md": {
+      "source": ".agents/skills/impeccable/reference/live.md",
+      "sha256": "7caeecefe54d68bc915a7f2978cba5e88eda69a239cb09dcce78c6d94e93df84",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/mode-operate.md": {
+      "source": ".agents/skills/impeccable/reference/mode-operate.md",
+      "sha256": "7a52dd7a94ee75f6ae89542c86a1b6e1d306812b16e0d9dbf12d4acad44d148b",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/mode-persuade.md": {
+      "source": ".agents/skills/impeccable/reference/mode-persuade.md",
+      "sha256": "21e78c8a77badb3f83290cd4577ed3b24bd4dd3b57136d7da75733d4f3ee9ac0",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/mode-read.md": {
+      "source": ".agents/skills/impeccable/reference/mode-read.md",
+      "sha256": "a569989e6a3d6453b4c45e9474e162a15cc54e11732ac6baa7990a6e7cccc0b5",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/new-work.md": {
+      "source": ".agents/skills/impeccable/reference/new-work.md",
+      "sha256": "c2eb99db2f30598ef0d2e2f7163bb8a62ca2e5524de42a784b0d1f7117b1800f",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/onboard.md": {
+      "source": ".agents/skills/impeccable/reference/onboard.md",
+      "sha256": "a2b8fd01ea12139b39b3285393f805bb8c326e11b2234dbff4c26c17b4e9c280",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/operate.md": {
+      "source": ".agents/skills/impeccable/reference/operate.md",
+      "sha256": "a9d2203acd45ca33a13d5c68b02b23ed512425ac15f0e8438318ed124b43729d",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/optimize.md": {
+      "source": ".agents/skills/impeccable/reference/optimize.md",
+      "sha256": "89d679ec08e55fe7661d54addc950c2ff77cf574aa97e593ec6da089fd1efedf",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/overdrive.md": {
+      "source": ".agents/skills/impeccable/reference/overdrive.md",
+      "sha256": "0a0d4ae6eea720c6d6e1c073fc77192d7c2100f78a44d9a8d262ddf22270cf4d",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/polish.md": {
+      "source": ".agents/skills/impeccable/reference/polish.md",
+      "sha256": "81666fc7f783b4e3514db6554e713dc0479bd9cdedb06e93d15f8b579aae869a",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/quieter.md": {
+      "source": ".agents/skills/impeccable/reference/quieter.md",
+      "sha256": "9e03b55c6bbdd4acba28cfa9c3b74ba1a4448cdbd35a7200990ab460c6eecaa0",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/region-map.md": {
+      "source": ".agents/skills/impeccable/reference/region-map.md",
+      "sha256": "778cedc9199b407d3e23fa1041e38d548b00b1101a33517aa2a2eb299f9d0edc",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/routing.md": {
+      "source": ".agents/skills/impeccable/reference/routing.md",
+      "sha256": "77ae09542fbc10aa4e8b119d6fd19359908a47c13c30068d6a150bfdb50e3e10",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/shape.md": {
+      "source": ".agents/skills/impeccable/reference/shape.md",
+      "sha256": "a55f016c046cb6a27c55bd7f346375aeb506a755c4fbca19a5f92dbd42309c23",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/typeset.md": {
+      "source": ".agents/skills/impeccable/reference/typeset.md",
+      "sha256": "442749aed338f51c1a3ccfb182c6ade9b74b90590b67984062ac94a5b100e914",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/reference/visualize.md": {
+      "source": ".agents/skills/impeccable/reference/visualize.md",
+      "sha256": "1c81a831f9dd28b908306fa06e2f2944ca4595ff3df6570750c10bf806465f00",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/VERSION": {
+      "source": ".agents/skills/impeccable/scripts/VERSION",
+      "sha256": "e0a25b3b7adde370a854cb1b4866bdc4b565236f0ee65dcdb1b7cd1bc3b6f071",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/command-metadata.json": {
+      "source": ".agents/skills/impeccable/scripts/command-metadata.json",
+      "sha256": "e8720f3aa41135211cc58cc299a39eeda86c75651f4279cc1ede8db10dcc0584",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/data/font-index-failures.json": {
+      "source": ".agents/skills/impeccable/scripts/data/font-index-failures.json",
+      "sha256": "835f19a0a3812f3652dd6979a2ce5597f654fd01f26e1b420b92d5f42b997ce4",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/data/font-index.json": {
+      "source": ".agents/skills/impeccable/scripts/data/font-index.json",
+      "sha256": "47edbdfaf27073c47033d1ac7dfee881be49e2dcbda7671d1157300481dde6da",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/impeccable": {
+      "source": ".agents/skills/impeccable/scripts/impeccable",
+      "sha256": "39d9600489073e227e4f4d55c451ce4252a6632ed7ae37923efbbcbc91f16d07",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/impeccable.cmd": {
+      "source": ".agents/skills/impeccable/scripts/impeccable.cmd",
+      "sha256": "e0dcc4cd739c8a6ac9e8ce637c216cf8bd4ddae36a8bac458345bdb5a5d7e252",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/live-browser-dom.js": {
+      "source": ".agents/skills/impeccable/scripts/live-browser-dom.js",
+      "sha256": "24f09f2597b9b55a1e2c4acd2ae5c95db5c8615cfc20aa07d1a3950538ad5c4a",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/live-browser-ignores.js": {
+      "source": ".agents/skills/impeccable/scripts/live-browser-ignores.js",
+      "sha256": "c1cb6877ca99a0c1b38ba0c7d59f32702d3022f6821d8045f7133f7c40b6362f",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/live-browser-session.js": {
+      "source": ".agents/skills/impeccable/scripts/live-browser-session.js",
+      "sha256": "42831c3cd874346d8e7f120808d91e6ed3cda5c3eca6eefd76b126659536bc87",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/live-browser.js": {
+      "source": ".agents/skills/impeccable/scripts/live-browser.js",
+      "sha256": "8108fbc5607e6a4b471641f25ca2b5d5776751abae99421d1f7c9306e1dd083c",
+      "ownership": "shared"
+    },
+    ".agents/skills/impeccable/scripts/modern-screenshot.umd.js": {
+      "source": ".agents/skills/impeccable/scripts/modern-screenshot.umd.js",
+      "sha256": "bb36665889124a0b6e15f16045265737449c3bdcf2712cdb08af3cfa01563e2b",
+      "ownership": "shared"
+    },
+    ".agents/skills/new-site-workflow/SKILL.md": {
+      "source": ".agents/skills/new-site-workflow/SKILL.md",
+      "sha256": "1befa1748d9ac6e1caf80deed7b4051d4a2760aaf14b0a0694ca328a4c87cddd",
+      "ownership": "shared"
+    },
+    ".agents/skills/new-site-workflow/agents/openai.yaml": {
+      "source": ".agents/skills/new-site-workflow/agents/openai.yaml",
+      "sha256": "f7a97280d80ef86821e8ca99542d97b7ba15f20a98e381540846a3240c6d7af2",
+      "ownership": "shared"
+    },
+    ".agents/skills/site-art-direction/SKILL.md": {
+      "source": ".agents/skills/site-art-direction/SKILL.md",
+      "sha256": "bc52b99f5be73b46ea9effb7769f4ce06b83e8b9b153e13a3cc68f913ecd629f",
+      "ownership": "shared"
+    },
+    ".agents/skills/site-art-direction/agents/openai.yaml": {
+      "source": ".agents/skills/site-art-direction/agents/openai.yaml",
+      "sha256": "0871375e58991e26ca9c406ace48c622c54d3405b4fabd8dad0ff7bd492b18e8",
+      "ownership": "shared"
+    },
+    ".agents/skills/site-art-direction/references/aesthetic-lanes.md": {
+      "source": ".agents/skills/site-art-direction/references/aesthetic-lanes.md",
+      "sha256": "c820cc1d1558b72331f9538e9b9c55786064cc3f55cc711f3defe8112e671c13",
+      "ownership": "shared"
+    },
+    "package.json": {
+      "source": null,
+      "sha256": "983afa7dddb9df7ba0f0af77e861a8672668ef24ff1b38bb523fd5a1557f2123",
+      "ownership": "generated"
+    },
+    "baseline.config.json": {
+      "source": null,
+      "sha256": "5d6add1cdd0dd787cbab304b8c777b382c03436521f3535945d44e9d6f1d360c",
+      "ownership": "generated"
+    },
+    "audit/design-gate-exceptions.json": {
+      "source": null,
+      "sha256": "0d25d3172a8aac7d91652aa7004e9c7588b6096ee4ecd456aea287aa48456102",
+      "ownership": "generated"
+    }
+  },
+  "note": "Commit records the base revision. Exact file hashes identify assembled working-tree bytes, including uncommitted sources. No downstream certification or automatic update claim.",
+  "lastSync": {
+    "commit": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+    "applied": [
+      "src/components/Section.astro"
+    ],
+    "conflicts": [
+      "src/components/Container.astro",
+      "src/styles/global.css"
+    ]
+  }
+}

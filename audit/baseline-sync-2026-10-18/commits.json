@@ -1,0 +1,12 @@
+{
+  "old": "2fc9774ba30a4d38defbf2ce92270628993d2750",
+  "released": "24ea16fa2144c8691605082aec0c36f18fd282e5",
+  "candidate": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+  "branch": "codex/baseline-sync-rehearsal-20261018",
+  "cases": [
+    "legacy-static",
+    "legacy-static-sveltia",
+    "canonical-static",
+    "canonical-static-sveltia"
+  ]
+}

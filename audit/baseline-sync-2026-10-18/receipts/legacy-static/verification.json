@@ -1,0 +1,26 @@
+{
+  "name": "legacy-static",
+  "passed": true,
+  "independentInstall": true,
+  "cleanInstall": true,
+  "node": "v24.21.0",
+  "lockfileSHA256": "d67ba0bccdd1f5769ce871e23a679767872df4d521b8b70e5daf5a023d01f0e5",
+  "packageCount": 443,
+  "forbiddenPackages": [],
+  "verify": true,
+  "production": true,
+  "fixtures": true,
+  "httpAndBrowser": true,
+  "viewports": [
+    390,
+    768,
+    1440
+  ],
+  "protectedFilesUnchanged": true,
+  "skills": [
+    "astro-site-design",
+    "impeccable",
+    "new-site-workflow",
+    "site-art-direction"
+  ]
+}

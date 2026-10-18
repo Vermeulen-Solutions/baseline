@@ -1,0 +1,90 @@
+{
+  "platform": "win32",
+  "independentDependencies": true,
+  "development": {
+    "styleguide": 200,
+    "images": 3,
+    "nativeMarkdown": true,
+    "writableCMSIdentities": false
+  },
+  "production": {
+    "/": {
+      "status": 200,
+      "images": 1
+    },
+    "/posts/": {
+      "status": 200,
+      "images": 1
+    },
+    "/posts/welcome/": {
+      "status": 200,
+      "images": 1
+    },
+    "styleguide": "404 for GET/HEAD, slash, query and cookie attempts"
+  },
+  "fixtures": {
+    "styleguide": 200,
+    "images": 3,
+    "releaseRejected": true
+  },
+  "browser": {
+    "observations": [
+      {
+        "width": 390,
+        "route": "/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 390,
+        "route": "/posts/welcome/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 390,
+        "route": "/_styleguide/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 768,
+        "route": "/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 768,
+        "route": "/posts/welcome/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 768,
+        "route": "/_styleguide/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 1440,
+        "route": "/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 1440,
+        "route": "/posts/welcome/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 1440,
+        "route": "/_styleguide/",
+        "overflow": false,
+        "brokenImages": 0
+      }
+    ],
+    "pageErrors": 0,
+    "keyboardFocus": "passed"
+  }
+}

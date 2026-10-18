@@ -1,0 +1,15 @@
+{
+  "src/config/site.ts": "6e81091dfcdd638ff1634f33d4a876c8c6f043607364fde5198ba22360a45a21",
+  "src/content/posts/welcome.md": "40a2e5639325fb4c0e96706b03583c8b5958f5635d4a94e947f489ea6926ad26",
+  "src/layouts/Base.astro": "2a0835104278e8d01faf0ceda5087ba8de0ee50ace06e71682219f5696fb6674",
+  "src/pages/404.astro": "2a55629652e0827d86b3b1f4587a1bfa3ea8d7d1595c0bb67ba70b663e049558",
+  "src/pages/index.astro": "39307619deb2951726f00f77d0e1bdbb5f7fd6d7f4c68740bf1349dacdcce3c0",
+  "src/pages/posts/index.astro": "47152e91bcef805d610adb05d12ecf8b68fa427617f19cc85fed15bdb57ad778",
+  "src/pages/posts/[...id].astro": "9887721665a00753dfb3eb06d7af351cace0d25d9346de80ab4f4ee14a6671ab",
+  "src/pages/_styleguide.astro": "d85529584052c8cb934d1b16e4153ed632f58ba3ead53bcb42fe2adfee2b6494",
+  "public/admin/index.html": "a85614f9cefb636d6a36fc0ee018933e8cc91384b9c8ea0cbd84e058f36c96ae",
+  "public/admin/config.yml": "bc20a3d62d516123dbe3377dd006d552ac95c63051f8f3760155d822e078bcb4",
+  "package.json": "0d17d0114c245f26a9e95aad9e1531a7e81a6a3a28b153feafec5ca207f0e633",
+  "baseline.config.json": "5a52353269803a3897e888ea40d1f8dc187f638ca198b74ed6ff8398df525081",
+  "audit/design-gate-exceptions.json": "4179a3b99b0ca3256b7cb63a4a52c32f2d0707f113490d252a27a5b5af82f28f"
+}

@@ -50,6 +50,12 @@ Other eligible files can apply. There is no force-overwrite or automatic text
 merge. Keep your calibrated `global.css`; merge only relevant upstream changes
 and run token audits. A deleted local file is also a conflict, not resurrected.
 
+The comparison is whole-file base/local/incoming hashes, not a textual three-way
+merge: even edits on different lines of the same shared component are proposed
+for manual review. These proposals live in `.baseline/updates/<SHA>/`, not the Git
+index. Apply can exit successfully with conflicts preserved; check the returned
+conflict list before treating an update as fully adopted.
+
 The tracked managed-file receipt records per-file update commits and `lastSync`
 with applied/conflicting paths. The original generation source remains intact in
 `baseline.config.json`. Exact starter art-gate exceptions are advanced only for
@@ -61,6 +67,9 @@ verification. `.baseline/updates/` is ignored local review material; it contains
 no credentials. To retry a revision after manual reconciliation, remove only its
 specific staging directory and stage again; unchanged conflicts continue to be
 reported because their recorded base hash is intentionally preserved.
+`lastSync` records the latest operation, not cumulative adoption: a repeated sync
+can have no newly applied files while earlier per-file update commits remain
+recorded. Retain the original proposal/review evidence when restaging.
 
 The generated `upstream-update.yml` is a manual, read-only workflow: supply a SHA,
 then download the proposed patch and stage/conflict report. It applies eligible

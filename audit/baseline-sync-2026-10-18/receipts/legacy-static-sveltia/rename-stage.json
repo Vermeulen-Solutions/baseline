@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "commit": "24ea16fa2144c8691605082aec0c36f18fd282e5",
+  "platformProfile": "static-sveltia",
+  "managedHash": "3ae8676aec9908b3cb83a73323e50c033f08f7ec986f5831ef757115ec7ef6dd",
+  "configHash": "5a52353269803a3897e888ea40d1f8dc187f638ca198b74ed6ff8398df525081",
+  "exceptionsHash": "4179a3b99b0ca3256b7cb63a4a52c32f2d0707f113490d252a27a5b5af82f28f",
+  "entries": [
+    {
+      "target": "scripts/sync-baseline.mjs",
+      "source": "scripts/sync-baseline.mjs",
+      "baseHash": "29092f1b22dc6bf128ef06ae6b4f099a48faa52178e17b44a29b855c475eeec3",
+      "currentHash": "29092f1b22dc6bf128ef06ae6b4f099a48faa52178e17b44a29b855c475eeec3",
+      "incomingHash": "58fbc1df038f10b27206115fe95f5d11e9d818f04b73d77c3cbc7eab141af4ed",
+      "conflict": false
+    }
+  ]
+}

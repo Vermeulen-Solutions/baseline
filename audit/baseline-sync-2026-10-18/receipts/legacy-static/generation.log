@@ -1,0 +1,13 @@
+
+> emdash-baseline@0.0.3 init:profile
+> node scripts/init-profile.mjs --profile static --out C:\dev\baseline-sync-rehearsal-20261018\legacy-static
+
+{
+  "profile": "static",
+  "destination": "C:\\dev\\baseline-sync-rehearsal-20261018\\legacy-static",
+  "files": 142,
+  "sourceCommit": "2fc9774ba30a4d38defbf2ce92270628993d2750",
+  "sourceTreeDirty": false,
+  "dryRun": false
+}
+Next: run npm install in the generated directory to create its independent lockfile, then npm run verify && npm run build && npm run check:dev-tools.

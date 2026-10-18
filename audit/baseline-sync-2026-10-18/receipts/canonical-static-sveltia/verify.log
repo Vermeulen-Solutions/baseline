@@ -1,0 +1,66 @@
+
+> canonical-static-sveltia@0.0.0 verify
+> npm run lint && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck
+
+
+> canonical-static-sveltia@0.0.0 lint
+> node scripts/check-script-syntax.mjs
+
+Syntax checked 11 JavaScript modules.
+
+> canonical-static-sveltia@0.0.0 check:art-direction
+> node scripts/check-art-direction.mjs --changed
+
+Art direction gate: checking record for src/components/Container.astro, src/styles/global.css
+Art direction record is structurally valid.
+👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.
+
+> canonical-static-sveltia@0.0.0 design:tokens
+> node scripts/design-system.mjs
+
+Design System Audit (C:\dev\baseline-sync-rehearsal-20261018\canonical-static-sveltia\src\styles\global.css): PASS
+- LF SHA-256: 2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1
+- @theme tokens: 31
+- :root tokens: 6
+- [data-surface="dark"] tokens: 5
+- Font loading: PASS (system fonts)
+- EmDash edit proxies: NOT APPLICABLE (static foundation)
+- WCAG Contrast Pairs:
+  [PASS] default:text-on-page: 15.99:1 (min 4.5:1)
+  [PASS] default:text-on-surface: 16.45:1 (min 4.5:1)
+  [PASS] default:muted-on-page: 6.92:1 (min 4.5:1)
+  [PASS] default:muted-on-surface: 7.12:1 (min 4.5:1)
+  [PASS] default:on-action-on-action: 8.96:1 (min 4.5:1)
+  [PASS] default:action-on-page: 8.71:1 (min 3:1)
+  [PASS] default:focus-on-page: 5.26:1 (min 3:1)
+  [PASS] dark:text-on-surface: 16.75:1 (min 4.5:1)
+  [PASS] dark:muted-on-surface: 7.58:1 (min 4.5:1)
+  [PASS] dark:focus-on-surface: 8.79:1 (min 3:1)
+
+> canonical-static-sveltia@0.0.0 test
+> node --test tests/*.test.mjs
+
+✔ shared tokens pass and CMS proxy checks are explicitly inapplicable (6.0982ms)
+✔ static dependencies and scripts have no CMS, database bootstrap or server adapter (0.8926ms)
+✔ Sveltia form, frontmatter and native image paths match the Astro collection (6.3813ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 137.9582
+
+> canonical-static-sveltia@0.0.0 typecheck
+> astro check
+
+17:56:55 [content] Syncing content
+17:56:55 [content] Synced content
+17:56:55 [types] Generated 942ms
+17:56:55 [check] Getting diagnostics for Astro files in C:\dev\baseline-sync-rehearsal-20261018\canonical-static-sveltia...
+Result (26 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+

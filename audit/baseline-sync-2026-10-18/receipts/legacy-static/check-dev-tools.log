@@ -1,0 +1,5 @@
+
+> legacy-static@0.0.0 check:dev-tools
+> node scripts/check-dev-tools.mjs
+
+Static release contains no styleguide route, fixture specimens or server entrypoint.

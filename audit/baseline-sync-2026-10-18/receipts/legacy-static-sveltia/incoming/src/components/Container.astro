@@ -1,0 +1,20 @@
+---
+interface Props {
+	id?: string;
+	width?: "reading" | "content" | "wide";
+	breakout?: boolean;
+	class?: string;
+}
+
+const { id, width = "content", breakout = false, class: className } = Astro.props;
+---
+
+<div
+	id={id}
+	class:list={[
+		breakout ? "content-grid" : ["container-shell", `container-shell--${width}`],
+		className,
+	]}
+>
+	<slot />
+</div>

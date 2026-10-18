@@ -1,0 +1,26 @@
+{
+  "name": "canonical-static-sveltia",
+  "passed": true,
+  "independentInstall": true,
+  "cleanInstall": true,
+  "node": "v24.21.0",
+  "lockfileSHA256": "cad621f415db4df105a08f2f69e45ce58813427de9d69d4c91ae214e356d3b7b",
+  "packageCount": 443,
+  "forbiddenPackages": [],
+  "verify": true,
+  "production": true,
+  "fixtures": true,
+  "httpAndBrowser": true,
+  "viewports": [
+    390,
+    768,
+    1440
+  ],
+  "protectedFilesUnchanged": true,
+  "skills": [
+    "astro-site-design",
+    "impeccable",
+    "new-site-workflow",
+    "site-art-direction"
+  ]
+}

@@ -1,0 +1,19 @@
+---
+interface Props {
+	width?: "reading" | "content" | "wide";
+	breakout?: boolean;
+	class?: string;
+}
+
+const { width = "content", breakout = false, class: className } = Astro.props;
+---
+
+<div
+	data-brand-container="rehearsal"
+	class:list={[
+		breakout ? "content-grid" : ["container-shell", `container-shell--${width}`],
+		className,
+	]}
+>
+	<slot />
+</div>

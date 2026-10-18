@@ -1,0 +1,666 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "scope": "Disposable Git downstreams, actual npm CLI and GitHub raw immutable bytes; controlled upstream candidate is not a production release",
+  "commits": {
+    "old": "2fc9774ba30a4d38defbf2ce92270628993d2750",
+    "released": "24ea16fa2144c8691605082aec0c36f18fd282e5",
+    "candidate": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+    "branch": "codex/baseline-sync-rehearsal-20261018",
+    "cases": [
+      "legacy-static",
+      "legacy-static-sveltia",
+      "canonical-static",
+      "canonical-static-sveltia"
+    ]
+  },
+  "ci": {
+    "url": "https://github.com/Vermeulen-Solutions/baseline/actions/runs/39142437250",
+    "headSha": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+    "conclusion": "success",
+    "jobs": [
+      {
+        "name": "generated-profiles (static-sveltia)",
+        "conclusion": "success",
+        "url": "https://github.com/Vermeulen-Solutions/baseline/actions/runs/39142437250/job/117719419841"
+      },
+      {
+        "name": "generated-profiles (static)",
+        "conclusion": "success",
+        "url": "https://github.com/Vermeulen-Solutions/baseline/actions/runs/39142437250/job/117719420045"
+      },
+      {
+        "name": "verify",
+        "conclusion": "success",
+        "url": "https://github.com/Vermeulen-Solutions/baseline/actions/runs/39142437250/job/117719420114"
+      }
+    ]
+  },
+  "rootUnitTests": {
+    "passed": 117,
+    "failed": 0
+  },
+  "cases": [
+    {
+      "name": "legacy-static",
+      "profile": "static",
+      "source": {
+        "repository": "https://github.com/Vermeulen-Solutions/emdash-baseline",
+        "commit": "2fc9774ba30a4d38defbf2ce92270628993d2750",
+        "release": null
+      },
+      "sourceTreeDirty": false,
+      "installedFiles": 141,
+      "staged": [
+        {
+          "target": "src/styles/global.css",
+          "conflict": true
+        },
+        {
+          "target": "src/components/Section.astro",
+          "conflict": false
+        },
+        {
+          "target": "src/components/Container.astro",
+          "conflict": true
+        }
+      ],
+      "applied": [
+        "src/components/Section.astro"
+      ],
+      "preservedConflicts": [
+        "src/styles/global.css",
+        "src/components/Container.astro"
+      ],
+      "verification": {
+        "name": "legacy-static",
+        "passed": true,
+        "independentInstall": true,
+        "cleanInstall": true,
+        "node": "v24.21.0",
+        "lockfileSHA256": "d67ba0bccdd1f5769ce871e23a679767872df4d521b8b70e5daf5a023d01f0e5",
+        "packageCount": 443,
+        "forbiddenPackages": [],
+        "verify": true,
+        "production": true,
+        "fixtures": true,
+        "httpAndBrowser": true,
+        "viewports": [
+          390,
+          768,
+          1440
+        ],
+        "protectedFilesUnchanged": true,
+        "skills": [
+          "astro-site-design",
+          "impeccable",
+          "new-site-workflow",
+          "site-art-direction"
+        ]
+      },
+      "browser": {
+        "platform": "win32",
+        "independentDependencies": true,
+        "development": {
+          "styleguide": 200,
+          "images": 3,
+          "nativeMarkdown": true,
+          "writableCMSIdentities": false
+        },
+        "production": {
+          "/": {
+            "status": 200,
+            "images": 1
+          },
+          "/posts/": {
+            "status": 200,
+            "images": 1
+          },
+          "/posts/welcome/": {
+            "status": 200,
+            "images": 1
+          },
+          "styleguide": "404 for GET/HEAD, slash, query and cookie attempts"
+        },
+        "fixtures": {
+          "styleguide": 200,
+          "images": 3,
+          "releaseRejected": true
+        },
+        "browser": {
+          "observations": [
+            {
+              "width": 390,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 390,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 390,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            }
+          ],
+          "pageErrors": 0,
+          "keyboardFocus": "passed"
+        }
+      },
+      "restagePassed": true,
+      "packageAndLockUnchangedAcrossRepeatSync": true
+    },
+    {
+      "name": "legacy-static-sveltia",
+      "profile": "static-sveltia",
+      "source": {
+        "repository": "https://github.com/Vermeulen-Solutions/emdash-baseline",
+        "commit": "2fc9774ba30a4d38defbf2ce92270628993d2750",
+        "release": null
+      },
+      "sourceTreeDirty": false,
+      "installedFiles": 145,
+      "staged": [
+        {
+          "target": "src/styles/global.css",
+          "conflict": true
+        },
+        {
+          "target": "src/components/Section.astro",
+          "conflict": false
+        },
+        {
+          "target": "src/components/Container.astro",
+          "conflict": true
+        }
+      ],
+      "applied": [
+        "src/components/Section.astro"
+      ],
+      "preservedConflicts": [
+        "src/styles/global.css",
+        "src/components/Container.astro"
+      ],
+      "verification": {
+        "name": "legacy-static-sveltia",
+        "passed": true,
+        "independentInstall": true,
+        "cleanInstall": true,
+        "node": "v24.21.0",
+        "lockfileSHA256": "f01c311e91e0fae61351a7ef562ae0e761112bd09cf6beea4e113dbfbf575a56",
+        "packageCount": 443,
+        "forbiddenPackages": [],
+        "verify": true,
+        "production": true,
+        "fixtures": true,
+        "httpAndBrowser": true,
+        "viewports": [
+          390,
+          768,
+          1440
+        ],
+        "protectedFilesUnchanged": true,
+        "skills": [
+          "astro-site-design",
+          "impeccable",
+          "new-site-workflow",
+          "site-art-direction"
+        ]
+      },
+      "browser": {
+        "platform": "win32",
+        "independentDependencies": true,
+        "development": {
+          "styleguide": 200,
+          "images": 3,
+          "nativeMarkdown": true,
+          "writableCMSIdentities": false
+        },
+        "production": {
+          "/": {
+            "status": 200,
+            "images": 1
+          },
+          "/posts/": {
+            "status": 200,
+            "images": 1
+          },
+          "/posts/welcome/": {
+            "status": 200,
+            "images": 1
+          },
+          "styleguide": "404 for GET/HEAD, slash, query and cookie attempts",
+          "admin": "HTML and form config served unchanged"
+        },
+        "fixtures": {
+          "styleguide": 200,
+          "images": 3,
+          "releaseRejected": true
+        },
+        "browser": {
+          "observations": [
+            {
+              "width": 390,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 390,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 390,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            }
+          ],
+          "pageErrors": 0,
+          "keyboardFocus": "passed"
+        },
+        "adminBrowser": {
+          "pinnedBundleAndConfigLoaded": true,
+          "tokenSignInOffered": true,
+          "runtimeErrors": 0,
+          "credentialedPublishing": "not tested"
+        }
+      },
+      "restagePassed": true,
+      "packageAndLockUnchangedAcrossRepeatSync": true
+    },
+    {
+      "name": "canonical-static",
+      "profile": "static",
+      "source": {
+        "repository": "https://github.com/Vermeulen-Solutions/baseline",
+        "commit": "24ea16fa2144c8691605082aec0c36f18fd282e5",
+        "release": null
+      },
+      "sourceTreeDirty": false,
+      "installedFiles": 141,
+      "staged": [
+        {
+          "target": "src/styles/global.css",
+          "conflict": true
+        },
+        {
+          "target": "src/components/Section.astro",
+          "conflict": false
+        },
+        {
+          "target": "src/components/Container.astro",
+          "conflict": true
+        }
+      ],
+      "applied": [
+        "src/components/Section.astro"
+      ],
+      "preservedConflicts": [
+        "src/styles/global.css",
+        "src/components/Container.astro"
+      ],
+      "verification": {
+        "name": "canonical-static",
+        "passed": true,
+        "independentInstall": true,
+        "cleanInstall": true,
+        "node": "v24.21.0",
+        "lockfileSHA256": "02f2b0d4fc010e79de3795269505a434142387ea57c841fa078094234895fea3",
+        "packageCount": 443,
+        "forbiddenPackages": [],
+        "verify": true,
+        "production": true,
+        "fixtures": true,
+        "httpAndBrowser": true,
+        "viewports": [
+          390,
+          768,
+          1440
+        ],
+        "protectedFilesUnchanged": true,
+        "skills": [
+          "astro-site-design",
+          "impeccable",
+          "new-site-workflow",
+          "site-art-direction"
+        ]
+      },
+      "browser": {
+        "platform": "win32",
+        "independentDependencies": true,
+        "development": {
+          "styleguide": 200,
+          "images": 3,
+          "nativeMarkdown": true,
+          "writableCMSIdentities": false
+        },
+        "production": {
+          "/": {
+            "status": 200,
+            "images": 1
+          },
+          "/posts/": {
+            "status": 200,
+            "images": 1
+          },
+          "/posts/welcome/": {
+            "status": 200,
+            "images": 1
+          },
+          "styleguide": "404 for GET/HEAD, slash, query and cookie attempts"
+        },
+        "fixtures": {
+          "styleguide": 200,
+          "images": 3,
+          "releaseRejected": true
+        },
+        "browser": {
+          "observations": [
+            {
+              "width": 390,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 390,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 390,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            }
+          ],
+          "pageErrors": 0,
+          "keyboardFocus": "passed"
+        }
+      },
+      "restagePassed": true,
+      "packageAndLockUnchangedAcrossRepeatSync": true
+    },
+    {
+      "name": "canonical-static-sveltia",
+      "profile": "static-sveltia",
+      "source": {
+        "repository": "https://github.com/Vermeulen-Solutions/baseline",
+        "commit": "24ea16fa2144c8691605082aec0c36f18fd282e5",
+        "release": null
+      },
+      "sourceTreeDirty": false,
+      "installedFiles": 145,
+      "staged": [
+        {
+          "target": "src/styles/global.css",
+          "conflict": true
+        },
+        {
+          "target": "src/components/Section.astro",
+          "conflict": false
+        },
+        {
+          "target": "src/components/Container.astro",
+          "conflict": true
+        }
+      ],
+      "applied": [
+        "src/components/Section.astro"
+      ],
+      "preservedConflicts": [
+        "src/styles/global.css",
+        "src/components/Container.astro"
+      ],
+      "verification": {
+        "name": "canonical-static-sveltia",
+        "passed": true,
+        "independentInstall": true,
+        "cleanInstall": true,
+        "node": "v24.21.0",
+        "lockfileSHA256": "cad621f415db4df105a08f2f69e45ce58813427de9d69d4c91ae214e356d3b7b",
+        "packageCount": 443,
+        "forbiddenPackages": [],
+        "verify": true,
+        "production": true,
+        "fixtures": true,
+        "httpAndBrowser": true,
+        "viewports": [
+          390,
+          768,
+          1440
+        ],
+        "protectedFilesUnchanged": true,
+        "skills": [
+          "astro-site-design",
+          "impeccable",
+          "new-site-workflow",
+          "site-art-direction"
+        ]
+      },
+      "browser": {
+        "platform": "win32",
+        "independentDependencies": true,
+        "development": {
+          "styleguide": 200,
+          "images": 3,
+          "nativeMarkdown": true,
+          "writableCMSIdentities": false
+        },
+        "production": {
+          "/": {
+            "status": 200,
+            "images": 1
+          },
+          "/posts/": {
+            "status": 200,
+            "images": 1
+          },
+          "/posts/welcome/": {
+            "status": 200,
+            "images": 1
+          },
+          "styleguide": "404 for GET/HEAD, slash, query and cookie attempts",
+          "admin": "HTML and form config served unchanged"
+        },
+        "fixtures": {
+          "styleguide": 200,
+          "images": 3,
+          "releaseRejected": true
+        },
+        "browser": {
+          "observations": [
+            {
+              "width": 390,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 390,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 390,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 768,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/posts/welcome/",
+              "overflow": false,
+              "brokenImages": 0
+            },
+            {
+              "width": 1440,
+              "route": "/_styleguide/",
+              "overflow": false,
+              "brokenImages": 0
+            }
+          ],
+          "pageErrors": 0,
+          "keyboardFocus": "passed"
+        },
+        "adminBrowser": {
+          "pinnedBundleAndConfigLoaded": true,
+          "tokenSignInOffered": true,
+          "runtimeErrors": 0,
+          "credentialedPublishing": "not tested"
+        }
+      },
+      "restagePassed": true,
+      "packageAndLockUnchangedAcrossRepeatSync": true
+    }
+  ],
+  "limitations": [
+    "Controlled design candidate on a disposable branch; released history has no design changes after profile introduction.",
+    "Three-hash comparison stages whole-file conflicts; no automatic text merge.",
+    "Local Windows Node 24.21.0, LF checkouts, npm; cross-platform line-ending conversion is not certified.",
+    "No new production deployment or authenticated publishing performed; Phase 2 covers publishing.",
+    "Two conflicts remain intentionally unresolved in each disposable downstream."
+  ]
+}

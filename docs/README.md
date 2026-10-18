@@ -8,6 +8,7 @@ Baseline provides two Astro foundations and three Platform Profiles: **`static`*
 
 - **[Platform Profiles](platform-profiles.md):** choose editing personas, hosting, infrastructure costs and the generation path.
 - **[Baseline Updates](baseline-updates.md):** stage profile-filtered shared source/skill updates while preserving client changes.
+- **[Real Downstream Update Rehearsal](verification/baseline-sync-rehearsal.md):** immutable GitHub updates, rename bridging and preserved design conflicts across both static profiles and provenance forms.
 - **[Generation Manifests](../profiles/README.md):** explicit file/dependency inventories and independent profile verification.
 - **[Platform Profile Verification](verification/platform-profiles.md):** milestone test results, reproduction commands and verification scope.
 

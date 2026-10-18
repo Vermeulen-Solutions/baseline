@@ -1,0 +1,35 @@
+
+> legacy-static@0.0.0 fixtures:build
+> node scripts/styleguide-fixtures.mjs build
+
+17:56:39 [content] Syncing content
+17:56:39 [content] Synced content
+17:56:39 [types] Generated 2.41s
+17:56:39 [build] output: "static"
+17:56:39 [build] mode: "static"
+17:56:39 [build] directory: C:\dev\baseline-sync-rehearsal-20261018\legacy-static\dist-fixtures\
+17:56:39 [build] Collecting build info...
+17:56:39 [build] ✓ Completed in 2.49s.
+17:56:39 [build] Building static entrypoints...
+17:56:41 [vite] ✓ built in 1.16s
+17:56:41 [vite] ✓ built in 51ms
+17:56:41 [build] Rearranging server assets...
+
+ generating static routes 
+17:56:41   ├─ /_styleguide/index.html (+440ms) 
+17:56:41   ├─ /404.html (+10ms) 
+17:56:41   ├─ /posts/index.html (+19ms) 
+17:56:41   ├─ /posts/welcome/index.html (+10ms) 
+17:56:41   ├─ /index.html (+11ms) 
+17:56:41 ✓ Completed in 717ms.
+
+ generating optimized images 
+17:56:41 [vite] ✓ built in 41ms
+17:56:42   ▶ /_astro/pilot-grid.C18fp0m6_1ChCCy.webp (before: 42kB, after: 2kB) (+312ms) (1/3)
+17:56:42   ▶ /_astro/pilot-grid.C18fp0m6_DL58u.webp (before: 42kB, after: 4kB) (+49ms) (2/3)
+17:56:42   ▶ /_astro/pilot-grid.C18fp0m6_HP8Dr.webp (before: 42kB, after: 8kB) (+129ms) (3/3)
+17:56:42 ✓ Completed in 493ms.
+
+17:56:42 [build] ✓ Completed in 2.59s.
+17:56:42 [build] 5 page(s) built in 5.09s
+17:56:42 [build] Complete!

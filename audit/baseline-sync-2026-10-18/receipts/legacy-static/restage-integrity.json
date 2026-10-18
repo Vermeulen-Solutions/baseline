@@ -1,0 +1,56 @@
+{
+  "candidate": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+  "stage": {
+    "schemaVersion": 1,
+    "commit": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+    "platformProfile": "static",
+    "managedHash": "627c210d57a06c363da277977e3970c9e27014cb731643d46ddccb6e1676b514",
+    "configHash": "5d6add1cdd0dd787cbab304b8c777b382c03436521f3535945d44e9d6f1d360c",
+    "exceptionsHash": "0d25d3172a8aac7d91652aa7004e9c7588b6096ee4ecd456aea287aa48456102",
+    "entries": [
+      {
+        "target": "src/styles/global.css",
+        "source": "src/styles/global.css",
+        "baseHash": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832",
+        "currentHash": "2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1",
+        "incomingHash": "24540a933c679ea7f85b9dadf38d7ffaf800fb41af969af3be8901647882cd48",
+        "conflict": true
+      },
+      {
+        "target": "src/components/Container.astro",
+        "source": "src/components/Container.astro",
+        "baseHash": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32",
+        "currentHash": "3c81160c8c180493808d4d6ff2359e0a0c7969e1d710366bd81b14957575895f",
+        "incomingHash": "dc5be9c71888ff4dd783d23126f99cd614a9f04405ff293c305c3c4f85f69fc0",
+        "conflict": true
+      }
+    ]
+  },
+  "lockfileAndSourcesUnchanged": true,
+  "before": {
+    "package.json": "983afa7dddb9df7ba0f0af77e861a8672668ef24ff1b38bb523fd5a1557f2123",
+    "package-lock.json": "d67ba0bccdd1f5769ce871e23a679767872df4d521b8b70e5daf5a023d01f0e5",
+    "src/styles/global.css": "2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1",
+    "src/components/Container.astro": "3c81160c8c180493808d4d6ff2359e0a0c7969e1d710366bd81b14957575895f",
+    "src/components/Section.astro": "a21cc7c82e9abb9ad137b07fbf7b23c2a55858aa723fc1990db7a9de73f6ee50",
+    "baseline.config.json": "5d6add1cdd0dd787cbab304b8c777b382c03436521f3535945d44e9d6f1d360c",
+    "audit/design-gate-exceptions.json": "0d25d3172a8aac7d91652aa7004e9c7588b6096ee4ecd456aea287aa48456102"
+  },
+  "after": {
+    "package.json": "983afa7dddb9df7ba0f0af77e861a8672668ef24ff1b38bb523fd5a1557f2123",
+    "package-lock.json": "d67ba0bccdd1f5769ce871e23a679767872df4d521b8b70e5daf5a023d01f0e5",
+    "src/styles/global.css": "2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1",
+    "src/components/Container.astro": "3c81160c8c180493808d4d6ff2359e0a0c7969e1d710366bd81b14957575895f",
+    "src/components/Section.astro": "a21cc7c82e9abb9ad137b07fbf7b23c2a55858aa723fc1990db7a9de73f6ee50",
+    "baseline.config.json": "5d6add1cdd0dd787cbab304b8c777b382c03436521f3535945d44e9d6f1d360c",
+    "audit/design-gate-exceptions.json": "0d25d3172a8aac7d91652aa7004e9c7588b6096ee4ecd456aea287aa48456102"
+  },
+  "lastSync": {
+    "commit": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+    "applied": [],
+    "conflicts": [
+      "src/components/Container.astro",
+      "src/styles/global.css"
+    ]
+  }
+}

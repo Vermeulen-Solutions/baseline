@@ -1,0 +1,31 @@
+
+> legacy-static-sveltia@0.0.0 sync:baseline
+> node scripts/sync-baseline.mjs --ref 19aed5db4a5119f488f41f0d571dbcbb50f81f47
+
+{
+  "schemaVersion": 1,
+  "commit": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+  "platformProfile": "static-sveltia",
+  "managedHash": "d6d8ae0b2ab9ec5df18e75936387c98c14c6958d2e44185cdf89b78f7adfdc63",
+  "configHash": "5a52353269803a3897e888ea40d1f8dc187f638ca198b74ed6ff8398df525081",
+  "exceptionsHash": "98ced9adb660f80929c016b96b5a3891c5d5f70c4e146be4f92bc4dcbd8d7e10",
+  "entries": [
+    {
+      "target": "src/styles/global.css",
+      "source": "src/styles/global.css",
+      "baseHash": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832",
+      "currentHash": "2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1",
+      "incomingHash": "24540a933c679ea7f85b9dadf38d7ffaf800fb41af969af3be8901647882cd48",
+      "conflict": true
+    },
+    {
+      "target": "src/components/Container.astro",
+      "source": "src/components/Container.astro",
+      "baseHash": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32",
+      "currentHash": "3c81160c8c180493808d4d6ff2359e0a0c7969e1d710366bd81b14957575895f",
+      "incomingHash": "dc5be9c71888ff4dd783d23126f99cd614a9f04405ff293c305c3c4f85f69fc0",
+      "conflict": true
+    }
+  ]
+}
+

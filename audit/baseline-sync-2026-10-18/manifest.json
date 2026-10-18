@@ -1,0 +1,711 @@
+{
+  "schemaVersion": 1,
+  "algorithm": "SHA-256",
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 2380,
+      "sha256": "7cf7f3aa0fc0c6a909f14308477896062d2adb8441f794fe72582799a1138531"
+    },
+    {
+      "path": "candidate.bundle",
+      "bytes": 1407,
+      "sha256": "082f72a0947f09585dbdf5eec3d139cb286a1ff15d92e401ec1136f76547beb3"
+    },
+    {
+      "path": "commits.json",
+      "bytes": 350,
+      "sha256": "4f8e107148ecaf3bafbbf40ffe4eced7fbff6a774e8261feae3079b46a2d41fe"
+    },
+    {
+      "path": "harness/probes.mjs",
+      "bytes": 3906,
+      "sha256": "5aa06d978c1427d40ac1ccf2aeec6a3fa42e71b64158a9ac787028f6d90b0eef"
+    },
+    {
+      "path": "harness/restage.mjs",
+      "bytes": 3003,
+      "sha256": "c2a7f8d1a2bbc0b1e61d767a5c2fb8a8c423c19047e7c52f976fd42fd3b762a1"
+    },
+    {
+      "path": "harness/run.mjs",
+      "bytes": 13734,
+      "sha256": "5d868d77ffcf2a47e5311d4b9edd247d36c37b371bc889e2872e1057d2fc51f6"
+    },
+    {
+      "path": "receipts/baseline-unit-tests.log",
+      "bytes": 14523,
+      "sha256": "bbf053f1dddc0198ec3abc894373cc3a4ca775769bd5abff105a065a8db1021d"
+    },
+    {
+      "path": "receipts/candidate-ci.json",
+      "bytes": 5992,
+      "sha256": "846c6624f77106e9720dc15284f7b29ba09826fb8bfb960f3be05285d7f2476e"
+    },
+    {
+      "path": "receipts/candidate-push.log",
+      "bytes": 364,
+      "sha256": "d4272c776bda641fd93c3e3ced5cea433ecc3bf08fafe4abb9e2bce1dd6d011e"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/Container.astro-proposal.log",
+      "bytes": 788,
+      "sha256": "c7267de434ff6a2733d95c13d878e4517ec97f7874291ec4e32268e4923e2185"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/base/src/components/Container.astro",
+      "bytes": 324,
+      "sha256": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/base/src/components/Section.astro",
+      "bytes": 445,
+      "sha256": "5f370d7cf6bb3b08b4e666f4f802458d4a94e1556a8c0531f367383711087ef3"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/base/src/styles/global.css",
+      "bytes": 11453,
+      "sha256": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/build.log",
+      "bytes": 1481,
+      "sha256": "3be39f3a32567074aa671722926389d9fa6994c4d67ba48fa78b73778281122f"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/check-dev-tools.log",
+      "bytes": 171,
+      "sha256": "e7850812f1291d265f0f022bfa2c6f7fd1a69bd3cf460fa96eceeb766942b7b1"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/ci.log",
+      "bytes": 26,
+      "sha256": "869e79ce214831d564d4badb2c8922fdb7e993a926eae86a7b4d04fe2f083541"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/design-apply.log",
+      "bytes": 334,
+      "sha256": "6d2cb4b746a9e42938c3b4acecc4a29939681b68e11863a86b08d9dd22675310"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/design-stage.json",
+      "bytes": 1578,
+      "sha256": "be874b42e4a95d0d8d8449f92935ff265970b47353ca8cd5f2c636dc0044f310"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/design-stage.log",
+      "bytes": 1708,
+      "sha256": "89a93ac7de6646418774fde849c613e0d73b3331211fa9785505495b15f09cd4"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/fixtures-build.log",
+      "bytes": 1396,
+      "sha256": "8ecb9177c4b2c5f2dae44cfa913c5ab80395293faa5f56b3122c7583ee14126b"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/generation.log",
+      "bytes": 564,
+      "sha256": "1064e4270364707185af9591c9724dc59c2168696240baff34d0487dc31e07ee"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/global.css-proposal.log",
+      "bytes": 775,
+      "sha256": "88485f46d4fd901c609336cf91860fe9c7e957fd4cc7084a1a7329edaf2a2d01"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/http-browser.log",
+      "bytes": 1987,
+      "sha256": "2e17e8f5a7cc1b2493b3eae29a16b0558818e7b4e1b096df0a9d898484ce2ddc"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/incoming/src/components/Container.astro",
+      "bytes": 351,
+      "sha256": "dc5be9c71888ff4dd783d23126f99cd614a9f04405ff293c305c3c4f85f69fc0"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/incoming/src/components/Section.astro",
+      "bytes": 496,
+      "sha256": "a21cc7c82e9abb9ad137b07fbf7b23c2a55858aa723fc1990db7a9de73f6ee50"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/incoming/src/styles/global.css",
+      "bytes": 11454,
+      "sha256": "24540a933c679ea7f85b9dadf38d7ffaf800fb41af969af3be8901647882cd48"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/install.log",
+      "bytes": 26,
+      "sha256": "869e79ce214831d564d4badb2c8922fdb7e993a926eae86a7b4d04fe2f083541"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/integrity.json",
+      "bytes": 1872,
+      "sha256": "ea57b36617a37146b6f0a0cb0233233b6b75171404604051c9d923f2f10b459c"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/local-Container.astro",
+      "bytes": 358,
+      "sha256": "3c81160c8c180493808d4d6ff2359e0a0c7969e1d710366bd81b14957575895f"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/local-global.css",
+      "bytes": 11454,
+      "sha256": "2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/managed-after.json",
+      "bytes": 34412,
+      "sha256": "c1d0c5d4fc62a9aca329b9fe09be20524a5689b0fc289ec52bbc3d2c83a82094"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/original-managed.json",
+      "bytes": 34107,
+      "sha256": "83d46afe2f99cd89eb78c636d955711908b22ab4a103bbe1b2bc5f2c4c432944"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/original-provenance.json",
+      "bytes": 613,
+      "sha256": "f2581c8f33e93a80bfcffbb1982a140e71f720d9f9cba3c2799b23eb27cc79a9"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/pre-edit-design-gate.log",
+      "bytes": 358,
+      "sha256": "5719c752dbf3cc46b8b5eb6da623de4d8ce5fcfa93565a26bf42b81e0a2b7304"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/protected-before.json",
+      "bytes": 1267,
+      "sha256": "29f6cb6b44f35bf8e454b2a83acfcc480940518d4a3330716fe19e5d69997bd9"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/restage-apply.log",
+      "bytes": 296,
+      "sha256": "b1287d40621357a9b74938039dd2a866f4e69c94008d17943c6f3dbdcb1c7367"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/restage-integrity.json",
+      "bytes": 2957,
+      "sha256": "fb8e14a7efbf640a19c54789820415f79c3a73b2b8601f5d53969c8340c4cd41"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/restage-ref.log",
+      "bytes": 1310,
+      "sha256": "9730517450c002317ac94aefa3e1428430146bf5c4014ded9165744ce5693abb"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/verification.json",
+      "bytes": 555,
+      "sha256": "deaf3488ae0ce38d0bd0a9c9b45ce605d5e933aee42cab347d55449ed8d2d06c"
+    },
+    {
+      "path": "receipts/canonical-static-sveltia/verify.log",
+      "bytes": 2475,
+      "sha256": "f830c212a06c3b2b23a39b149b9da5103affbaa1de1659ee3598cc8b076cd9de"
+    },
+    {
+      "path": "receipts/canonical-static/Container.astro-proposal.log",
+      "bytes": 788,
+      "sha256": "c7267de434ff6a2733d95c13d878e4517ec97f7874291ec4e32268e4923e2185"
+    },
+    {
+      "path": "receipts/canonical-static/base/src/components/Container.astro",
+      "bytes": 324,
+      "sha256": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32"
+    },
+    {
+      "path": "receipts/canonical-static/base/src/components/Section.astro",
+      "bytes": 445,
+      "sha256": "5f370d7cf6bb3b08b4e666f4f802458d4a94e1556a8c0531f367383711087ef3"
+    },
+    {
+      "path": "receipts/canonical-static/base/src/styles/global.css",
+      "bytes": 11453,
+      "sha256": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832"
+    },
+    {
+      "path": "receipts/canonical-static/build.log",
+      "bytes": 1458,
+      "sha256": "9ba19a6dc80db9f68e722f421c90fd4d008254d29b9d5eb8a7535c8fdac556d5"
+    },
+    {
+      "path": "receipts/canonical-static/check-dev-tools.log",
+      "bytes": 163,
+      "sha256": "a2e70bd3ce39019d2d68cb20787e5f8563adde15de2720c8b199552200246e3b"
+    },
+    {
+      "path": "receipts/canonical-static/ci.log",
+      "bytes": 26,
+      "sha256": "869e79ce214831d564d4badb2c8922fdb7e993a926eae86a7b4d04fe2f083541"
+    },
+    {
+      "path": "receipts/canonical-static/design-apply.log",
+      "bytes": 326,
+      "sha256": "b4e65b3930d83fe31abe567d4f810635d7e1b5f36421c847aa7f9fa95472f2f8"
+    },
+    {
+      "path": "receipts/canonical-static/design-stage.json",
+      "bytes": 1570,
+      "sha256": "b9651f8fb629f7d035ff4257d9339752937841bb1e737ed861444760473b35a2"
+    },
+    {
+      "path": "receipts/canonical-static/design-stage.log",
+      "bytes": 1692,
+      "sha256": "ee355706f31330be5f783b1cc44dbc2192e952a62b81230b14bdc4428eba6874"
+    },
+    {
+      "path": "receipts/canonical-static/fixtures-build.log",
+      "bytes": 1379,
+      "sha256": "5dec1b761d202e22648f262a23ced89d38032562e1b857dc81a75473e655fffc"
+    },
+    {
+      "path": "receipts/canonical-static/generation.log",
+      "bytes": 532,
+      "sha256": "b9eb88fc95c1533258396f4d54328d01d5b0924d2355a4eb409a18c0da364b66"
+    },
+    {
+      "path": "receipts/canonical-static/global.css-proposal.log",
+      "bytes": 775,
+      "sha256": "88485f46d4fd901c609336cf91860fe9c7e957fd4cc7084a1a7329edaf2a2d01"
+    },
+    {
+      "path": "receipts/canonical-static/http-browser.log",
+      "bytes": 1768,
+      "sha256": "fa4e0d442ee803b5895b2b8cdbb39ae98b53f64fb27e475f0cbdaf8f9322945f"
+    },
+    {
+      "path": "receipts/canonical-static/incoming/src/components/Container.astro",
+      "bytes": 351,
+      "sha256": "dc5be9c71888ff4dd783d23126f99cd614a9f04405ff293c305c3c4f85f69fc0"
+    },
+    {
+      "path": "receipts/canonical-static/incoming/src/components/Section.astro",
+      "bytes": 496,
+      "sha256": "a21cc7c82e9abb9ad137b07fbf7b23c2a55858aa723fc1990db7a9de73f6ee50"
+    },
+    {
+      "path": "receipts/canonical-static/incoming/src/styles/global.css",
+      "bytes": 11454,
+      "sha256": "24540a933c679ea7f85b9dadf38d7ffaf800fb41af969af3be8901647882cd48"
+    },
+    {
+      "path": "receipts/canonical-static/install.log",
+      "bytes": 26,
+      "sha256": "869e79ce214831d564d4badb2c8922fdb7e993a926eae86a7b4d04fe2f083541"
+    },
+    {
+      "path": "receipts/canonical-static/integrity.json",
+      "bytes": 1872,
+      "sha256": "82a401bd093bb22c9d55fa7338707406642ada0930e406f72ead5ef4d59e5e91"
+    },
+    {
+      "path": "receipts/canonical-static/local-Container.astro",
+      "bytes": 358,
+      "sha256": "3c81160c8c180493808d4d6ff2359e0a0c7969e1d710366bd81b14957575895f"
+    },
+    {
+      "path": "receipts/canonical-static/local-global.css",
+      "bytes": 11454,
+      "sha256": "2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1"
+    },
+    {
+      "path": "receipts/canonical-static/managed-after.json",
+      "bytes": 33500,
+      "sha256": "91d49ad146ceb37d683820386adc73aebb0ce60e800724ad8491de660439513c"
+    },
+    {
+      "path": "receipts/canonical-static/original-managed.json",
+      "bytes": 33195,
+      "sha256": "892efb702ec3b58f9822829c36fb8a675de28b19ea2fa73bcd7d7f7dbb97f584"
+    },
+    {
+      "path": "receipts/canonical-static/original-provenance.json",
+      "bytes": 605,
+      "sha256": "e9a4eca0615ed3430ecb8dd46d714796709d1e175e27681327daac3ae671ae2a"
+    },
+    {
+      "path": "receipts/canonical-static/pre-edit-design-gate.log",
+      "bytes": 350,
+      "sha256": "32b937f7cf7cd13f482823a0ff975ec352c7be7bcd0f0925231da13c9a0070c1"
+    },
+    {
+      "path": "receipts/canonical-static/protected-before.json",
+      "bytes": 1073,
+      "sha256": "ae74a034ca9edabccf749dac9fd544c32b898148259b849afc27f1f7de4f50a3"
+    },
+    {
+      "path": "receipts/canonical-static/restage-apply.log",
+      "bytes": 288,
+      "sha256": "f14955721b9b3845039b18ae82843246a0a0980e95f0eb835a9fe2ccc3f3f963"
+    },
+    {
+      "path": "receipts/canonical-static/restage-integrity.json",
+      "bytes": 2949,
+      "sha256": "5231808f4ad3c5007b61d39feee63d66e74235dbcfcd90c71e822e86853aaad2"
+    },
+    {
+      "path": "receipts/canonical-static/restage-ref.log",
+      "bytes": 1294,
+      "sha256": "31280cc06b26fca274d81c100eb36d9adc401c564510f4a64f33f32e9e0715ba"
+    },
+    {
+      "path": "receipts/canonical-static/verification.json",
+      "bytes": 547,
+      "sha256": "c2760cea10395ca83891e773182b76c4848a9c22191b93a6b8b120b6b2bae54b"
+    },
+    {
+      "path": "receipts/canonical-static/verify.log",
+      "bytes": 2320,
+      "sha256": "1b690509cf1181ac75dba05813849254beb902e90728bea8a8c503d59690109d"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/Container.astro-proposal.log",
+      "bytes": 788,
+      "sha256": "c7267de434ff6a2733d95c13d878e4517ec97f7874291ec4e32268e4923e2185"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/base/src/components/Container.astro",
+      "bytes": 324,
+      "sha256": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/base/src/components/Section.astro",
+      "bytes": 445,
+      "sha256": "5f370d7cf6bb3b08b4e666f4f802458d4a94e1556a8c0531f367383711087ef3"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/base/src/styles/global.css",
+      "bytes": 11453,
+      "sha256": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/build.log",
+      "bytes": 1472,
+      "sha256": "c8bfa0e14561770f1320abd583a9b5b5f2c7b5ec874c6184e8f2857cd8a2eb5b"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/check-dev-tools.log",
+      "bytes": 168,
+      "sha256": "451376f22ee3ff62d780a653c51709b69936ff148417e3c5ffecb9a91d88f346"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/ci.log",
+      "bytes": 26,
+      "sha256": "869e79ce214831d564d4badb2c8922fdb7e993a926eae86a7b4d04fe2f083541"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/design-apply.log",
+      "bytes": 331,
+      "sha256": "adce4a09c3c9dc77aaf9bcf6ef3a010e7e1cb9a696724fd4c75af4cfdda808cd"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/design-stage.json",
+      "bytes": 1578,
+      "sha256": "a4a029bbadbf559a17e69ea477a00739b08003a08880ad0ce9a04d2580b57a39"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/design-stage.log",
+      "bytes": 1705,
+      "sha256": "6e83e2803b13b7fbefcc1134902d0179f6579f175524e903f13f11cc5ce20277"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/fixtures-build.log",
+      "bytes": 1389,
+      "sha256": "f868dc9ea6c7b17c5149192693b96cad43cdfda84bd00f44a61542ef2793f33a"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/generation.log",
+      "bytes": 558,
+      "sha256": "7e6db5de98779e0522de5a8ec4200de5e598fa058b5b94022d55df54a047bdcc"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/global.css-proposal.log",
+      "bytes": 775,
+      "sha256": "88485f46d4fd901c609336cf91860fe9c7e957fd4cc7084a1a7329edaf2a2d01"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/http-browser.log",
+      "bytes": 1987,
+      "sha256": "2e17e8f5a7cc1b2493b3eae29a16b0558818e7b4e1b096df0a9d898484ce2ddc"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/incoming/src/components/Container.astro",
+      "bytes": 351,
+      "sha256": "dc5be9c71888ff4dd783d23126f99cd614a9f04405ff293c305c3c4f85f69fc0"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/incoming/src/components/Section.astro",
+      "bytes": 496,
+      "sha256": "a21cc7c82e9abb9ad137b07fbf7b23c2a55858aa723fc1990db7a9de73f6ee50"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/incoming/src/styles/global.css",
+      "bytes": 11454,
+      "sha256": "24540a933c679ea7f85b9dadf38d7ffaf800fb41af969af3be8901647882cd48"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/install.log",
+      "bytes": 26,
+      "sha256": "869e79ce214831d564d4badb2c8922fdb7e993a926eae86a7b4d04fe2f083541"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/integrity.json",
+      "bytes": 1879,
+      "sha256": "b45979cdf79600ec389b716998df2c76316628c671773874ac5f8055d8f87238"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/local-Container.astro",
+      "bytes": 358,
+      "sha256": "3c81160c8c180493808d4d6ff2359e0a0c7969e1d710366bd81b14957575895f"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/local-global.css",
+      "bytes": 11454,
+      "sha256": "2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/managed-after.json",
+      "bytes": 34482,
+      "sha256": "e82c4b7f3e64faedf03bc7599851a4ae6487033dfeabe5622c958aa87590544a"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/original-managed.json",
+      "bytes": 34107,
+      "sha256": "3ae8676aec9908b3cb83a73323e50c033f08f7ec986f5831ef757115ec7ef6dd"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/original-provenance.json",
+      "bytes": 620,
+      "sha256": "5a52353269803a3897e888ea40d1f8dc187f638ca198b74ed6ff8398df525081"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/pre-edit-design-gate.log",
+      "bytes": 355,
+      "sha256": "0f38dfb52666a3aa97e23d19e51f746900ef9eb6eeb949f90bc9c8ccbc6aa2a1"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/protected-before.json",
+      "bytes": 1267,
+      "sha256": "6e7513bff92ce9736bbe958677f974ade2b2822427190384a8fe52ba5a6e894c"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/rename-apply.log",
+      "bytes": 259,
+      "sha256": "5843a25a25d1339704d5b6b0c7de82af70b36e2e994c8ee86bb185190ce71066"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/rename-stage.json",
+      "bytes": 788,
+      "sha256": "ffc9267316652ae8af4bba411dad71627747d9de80ada6a85fafd2e265d484b0"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/rename-stage.log",
+      "bytes": 915,
+      "sha256": "f63100970478d393cf460b91369c7f3706e5d932cf5b8d0147e7a86dea9ad0ee"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/restage-apply.log",
+      "bytes": 293,
+      "sha256": "25e3d36f6ac2f7492349fd513cdaefe901336e3f6c2ec139c7f63dba69046858"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/restage-integrity.json",
+      "bytes": 2957,
+      "sha256": "08c8ebd36e2cbbb9090a48daddac29b7906b85774b18e74ee7448ad993dd2258"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/restage-ref.log",
+      "bytes": 1307,
+      "sha256": "a6339eb58267e19df7bff94713394c059e3a09e21a763818d48e7f6de18d39dd"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/verification.json",
+      "bytes": 552,
+      "sha256": "38922a83e44867b071e1c8d8ae383798308d0956c09e8270fe4eca90c00476b4"
+    },
+    {
+      "path": "receipts/legacy-static-sveltia/verify.log",
+      "bytes": 2450,
+      "sha256": "08531eca439a03b5884a771c0966d1935fb5e517e64b765b26433a6153e8ee4f"
+    },
+    {
+      "path": "receipts/legacy-static/Container.astro-proposal.log",
+      "bytes": 788,
+      "sha256": "c7267de434ff6a2733d95c13d878e4517ec97f7874291ec4e32268e4923e2185"
+    },
+    {
+      "path": "receipts/legacy-static/base/src/components/Container.astro",
+      "bytes": 324,
+      "sha256": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32"
+    },
+    {
+      "path": "receipts/legacy-static/base/src/components/Section.astro",
+      "bytes": 445,
+      "sha256": "5f370d7cf6bb3b08b4e666f4f802458d4a94e1556a8c0531f367383711087ef3"
+    },
+    {
+      "path": "receipts/legacy-static/base/src/styles/global.css",
+      "bytes": 11453,
+      "sha256": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832"
+    },
+    {
+      "path": "receipts/legacy-static/build.log",
+      "bytes": 1456,
+      "sha256": "1adf5dfc5b01bd93eb22da2edc34d9ffd0edd4ec2aecbb17a90d01a67d577625"
+    },
+    {
+      "path": "receipts/legacy-static/check-dev-tools.log",
+      "bytes": 160,
+      "sha256": "d053d5bb012057e5b0906b6aef22c7d9ba8c38364b18645ce2f584c03588c248"
+    },
+    {
+      "path": "receipts/legacy-static/ci.log",
+      "bytes": 27,
+      "sha256": "f5632bfae1982ac21491ec4f1064723941b983215e551ae5469bbe4abed53d94"
+    },
+    {
+      "path": "receipts/legacy-static/design-apply.log",
+      "bytes": 323,
+      "sha256": "c6989eb3ef20df90be957b7ea0d6f09ee1654ce900eadb3c08269f6271c07b92"
+    },
+    {
+      "path": "receipts/legacy-static/design-stage.json",
+      "bytes": 1570,
+      "sha256": "c3b30cf6806d14c121109956fefb8170708bec69eb41e72d99019a984cf08161"
+    },
+    {
+      "path": "receipts/legacy-static/design-stage.log",
+      "bytes": 1689,
+      "sha256": "84f32ba26f1edd1531882522c6cf0783f760bc3fb6e189466498bbe18871ae90"
+    },
+    {
+      "path": "receipts/legacy-static/fixtures-build.log",
+      "bytes": 1379,
+      "sha256": "2efffb64e3c081296f4a58a020da357469032511ee1e2370adb4a8103cdab78c"
+    },
+    {
+      "path": "receipts/legacy-static/generation.log",
+      "bytes": 526,
+      "sha256": "fc5440bb8e4f4a7ff99d3020226af7522df94da964cc36433d826980cc0b6e82"
+    },
+    {
+      "path": "receipts/legacy-static/global.css-proposal.log",
+      "bytes": 775,
+      "sha256": "88485f46d4fd901c609336cf91860fe9c7e957fd4cc7084a1a7329edaf2a2d01"
+    },
+    {
+      "path": "receipts/legacy-static/http-browser.log",
+      "bytes": 1768,
+      "sha256": "fa4e0d442ee803b5895b2b8cdbb39ae98b53f64fb27e475f0cbdaf8f9322945f"
+    },
+    {
+      "path": "receipts/legacy-static/incoming/src/components/Container.astro",
+      "bytes": 351,
+      "sha256": "dc5be9c71888ff4dd783d23126f99cd614a9f04405ff293c305c3c4f85f69fc0"
+    },
+    {
+      "path": "receipts/legacy-static/incoming/src/components/Section.astro",
+      "bytes": 496,
+      "sha256": "a21cc7c82e9abb9ad137b07fbf7b23c2a55858aa723fc1990db7a9de73f6ee50"
+    },
+    {
+      "path": "receipts/legacy-static/incoming/src/styles/global.css",
+      "bytes": 11454,
+      "sha256": "24540a933c679ea7f85b9dadf38d7ffaf800fb41af969af3be8901647882cd48"
+    },
+    {
+      "path": "receipts/legacy-static/install.log",
+      "bytes": 27,
+      "sha256": "ac23d90639a5e6226bb9f0a80085d7eb8fceb5586d2179f6e206889c20ff9b55"
+    },
+    {
+      "path": "receipts/legacy-static/integrity.json",
+      "bytes": 1879,
+      "sha256": "1bb46583348e7a15fc3b72198220f5c22fe16cf50170a1e7e663b7f36765bb3f"
+    },
+    {
+      "path": "receipts/legacy-static/local-Container.astro",
+      "bytes": 358,
+      "sha256": "3c81160c8c180493808d4d6ff2359e0a0c7969e1d710366bd81b14957575895f"
+    },
+    {
+      "path": "receipts/legacy-static/local-global.css",
+      "bytes": 11454,
+      "sha256": "2ce407cf62734716582637de0512004e4c8caa63548fa79d490b2f4a289b1ff1"
+    },
+    {
+      "path": "receipts/legacy-static/managed-after.json",
+      "bytes": 33570,
+      "sha256": "cb747f645803b2cb9d0152cc30870b88cf9d273a36559b413c307b4fb0a873a4"
+    },
+    {
+      "path": "receipts/legacy-static/original-managed.json",
+      "bytes": 33195,
+      "sha256": "fbf9835bb30ba914aae12625fdb491c505663718b8c64c3a1b8ee94448cecc91"
+    },
+    {
+      "path": "receipts/legacy-static/original-provenance.json",
+      "bytes": 612,
+      "sha256": "5d6add1cdd0dd787cbab304b8c777b382c03436521f3535945d44e9d6f1d360c"
+    },
+    {
+      "path": "receipts/legacy-static/pre-edit-design-gate.log",
+      "bytes": 347,
+      "sha256": "3a0206f23c18a605fc95734967a3560b5f686dbcec78890a3198fe6a72cdeb96"
+    },
+    {
+      "path": "receipts/legacy-static/protected-before.json",
+      "bytes": 1073,
+      "sha256": "03127e09684c13334298f55b1fb34e9215170cfa73c7b6d0f343d0a5c0c15732"
+    },
+    {
+      "path": "receipts/legacy-static/rename-apply.log",
+      "bytes": 251,
+      "sha256": "83cda1126bc82b785ef8b352941fad8e5da2821c4473ab106c366d90eff8a9f4"
+    },
+    {
+      "path": "receipts/legacy-static/rename-stage.json",
+      "bytes": 780,
+      "sha256": "474ea2cfe460ac8cd0ba7b72eb655f75396a17979d964854d172d5c7a9e0ea16"
+    },
+    {
+      "path": "receipts/legacy-static/rename-stage.log",
+      "bytes": 899,
+      "sha256": "e04867fb9808023341071b2aaae0f842a02bddfd1781cadc22d404d5e619cfe3"
+    },
+    {
+      "path": "receipts/legacy-static/restage-apply.log",
+      "bytes": 285,
+      "sha256": "920e1d8dcffee7cc029a3496375925264f40154c74ca2be8ed64c0f7547455c3"
+    },
+    {
+      "path": "receipts/legacy-static/restage-integrity.json",
+      "bytes": 2949,
+      "sha256": "ef9b95000b2c59fdbb63e18a4fa2794c69870bdf1eb5e890cff4a214feca89a8"
+    },
+    {
+      "path": "receipts/legacy-static/restage-ref.log",
+      "bytes": 1291,
+      "sha256": "d45e55ea0d8b2d8b71dcb9897c1390555c0dca4ec209a9a3db66a66d9202fc27"
+    },
+    {
+      "path": "receipts/legacy-static/verification.json",
+      "bytes": 544,
+      "sha256": "cbe4b0be6e120424b3827f1fb7292cd48c714340747f9bc0590da4522a4a17a4"
+    },
+    {
+      "path": "receipts/legacy-static/verify.log",
+      "bytes": 2297,
+      "sha256": "6d096704323a80adbe634060ec395af5db4dbc78fd28f8c512c6eafef4a64b0f"
+    },
+    {
+      "path": "receipts/network-probes.json",
+      "bytes": 883,
+      "sha256": "55cafe38487b6237f2b67a2924a4f0b731777459cf31c3b395eafcc7784f6140"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 18352,
+      "sha256": "56f1498be20aa093ba690f0851ce2be46910111e7ce267a06e8e3576e0b0dded"
+    }
+  ]
+}
