@@ -158,6 +158,8 @@
     "devDependencies": [
       "aws4fetch",
       "jsonc-parser",
+      "parse5",
+      "parse-srcset",
       "smol-toml"
     ]
   },

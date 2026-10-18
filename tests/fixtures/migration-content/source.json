@@ -1,0 +1,76 @@
+{
+  "inventoryVersion": 1,
+  "side": "source",
+  "binding": "9e4d2e1e22ce33fa7c7da190414ed754ece1be1654ca36fe514a28ee06067cc7",
+  "complete": true,
+  "coverage": [
+    {
+      "entityType": "page",
+      "locale": "en",
+      "status": "publish",
+      "total": 1
+    },
+    {
+      "entityType": "page",
+      "locale": "nl",
+      "status": "publish",
+      "total": 1
+    }
+  ],
+  "entities": [
+    {
+      "id": "wp-101",
+      "entityType": "page",
+      "status": "publish",
+      "locale": "en",
+      "slug": "example",
+      "title": "Synthetic private editorial title",
+      "fields": {
+        "content": "07d5b3fd41b2a301d5f85c99ad4929130c7cd7e41bede1fa5655d2b1ae4431e2"
+      },
+      "requiredFields": [
+        "content"
+      ],
+      "parentId": null,
+      "translationGroup": "wp-group-1",
+      "mediaIds": [
+        "wp-media-1"
+      ],
+      "seo": {
+        "title": "Example SEO",
+        "description": "Example description",
+        "canonical": "https://legacy.example.test/en/example/",
+        "noindex": false
+      }
+    },
+    {
+      "id": "wp-102",
+      "entityType": "page",
+      "status": "publish",
+      "locale": "nl",
+      "slug": "voorbeeld",
+      "title": "Synthetic private editorial title",
+      "fields": {
+        "content": "07d5b3fd41b2a301d5f85c99ad4929130c7cd7e41bede1fa5655d2b1ae4431e2"
+      },
+      "requiredFields": [
+        "content"
+      ],
+      "parentId": "wp-101",
+      "translationGroup": "wp-group-1",
+      "mediaIds": [],
+      "seo": {
+        "title": "Example SEO",
+        "description": "Example description",
+        "canonical": "https://legacy.example.test/nl/voorbeeld/",
+        "noindex": false
+      }
+    }
+  ],
+  "media": [
+    {
+      "id": "wp-media-1",
+      "resolved": true
+    }
+  ]
+}

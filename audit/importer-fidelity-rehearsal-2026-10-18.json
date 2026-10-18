@@ -1,0 +1,464 @@
+{
+  "rehearsalVersion": 1,
+  "versions": {
+    "astro": "7.4.0",
+    "emdash": "1.3.0",
+    "@emdash-cms/gutenberg-to-portable-text": "1.3.0"
+  },
+  "executableHashes": {
+    "dist/astro/routes/api/import/wordpress/execute.mjs": "c80cba54abcb59515c90645a87e084ca3e4d45c21c64ef7353d3b2001d506ca5",
+    "dist/astro/routes/api/import/wordpress-plugin/execute.mjs": "d677bc69406f63770eee12b2a1d3776d74443526ed8d0359715d7077614c103a",
+    "dist/astro/routes/api/import/wordpress/rewrite-urls.mjs": "0362b25ce87980bf0a23ee44df50102690c57e1de940e7dfc8ae6dd8b28d7ff7",
+    "dist/index.mjs": "37346afc2096bb3f9736c4dff47f6b063b9362dd8dbce8317d3822abc8335578",
+    "@emdash-cms/gutenberg-to-portable-text/dist/index.mjs": "1579f6f6430675ade3e6b6d5b685a92b5a4b3d4c01b11e4519ebb9038cb9eb35"
+  },
+  "fixtureHashes": {
+    "wordpress.json": "5676e0a29148612cf74488f1850b8a5071e8747c07b0ccb092f24275e69332de",
+    "wordpress.xml": "b610a425802339307e84ea411511304364338204cac0707300cbb3cfc5c9909d",
+    "expected-content.json": "238115c342855b01457f46fbb39bb4d22afe1947f38bda8bf856962fc90b1188",
+    "fixture-tools.mjs": "44c56256f06d1abb324e2f9d7135d269b6e11037c8ec046aa2230849795313a5",
+    "acceptance.mjs": "6dc602bee015011a306193c1320ebe05b7c120ca56023e61c9810e0124a033a9",
+    "site/astro.config.mjs": "0700f42e30f4fdac1468548bb87a84e03ef52c398047acd0c369a686593e366d",
+    "site/preload.mjs": "2f844a4a052518fb4a06085e974b689a5111e6ed0b9522f02841ff61eb656edf",
+    "site/src/pages/view/[...path].astro": "997daea9fc0ef9be898b13fe30e0aea21b808c5c210d5d2ad489cd01aae5f718"
+  },
+  "harnessSHA256": "36360442f3a5c2998cf4a211eee0e8ec7bab7c5a59dd08fcfa1363ee91c68ac0",
+  "node": "24.21.0",
+  "status": "passed",
+  "scope": "Owned disposable Node/SQLite Astro dev instance; synthetic WXR and Exporter protocol fixture; anonymous public reads, no browser/editor certification",
+  "externalNetworkRequests": 0,
+  "observations": {
+    "wxrPartial": {
+      "imported": 3,
+      "skipped": 0,
+      "sections": {
+        "created": 0,
+        "skipped": 0
+      }
+    },
+    "wxrResume": {
+      "imported": 10,
+      "skipped": 3,
+      "sections": {
+        "created": 1,
+        "skipped": 0
+      }
+    },
+    "pluginPartial": {
+      "success": true,
+      "imported": 3,
+      "skipped": 0,
+      "errors": [],
+      "byCollection": {
+        "plugin_posts": 3
+      }
+    },
+    "pluginResume": {
+      "imported": 10,
+      "skipped": 3,
+      "idMap": {
+        "113": {
+          "id": "01M58CXAAAJZ6QE4X4MZTE7JGY",
+          "collection": "plugin_pages"
+        }
+      },
+      "menus": {
+        "created": 1,
+        "items": 1
+      }
+    },
+    "statuses": {
+      "wxr": [
+        [
+          "scheduled",
+          "en",
+          "scheduled"
+        ],
+        [
+          "pending",
+          "en",
+          "draft"
+        ],
+        [
+          "trashed",
+          "en",
+          "draft"
+        ],
+        [
+          "draft",
+          "en",
+          "draft"
+        ],
+        [
+          "vertaling",
+          "nl",
+          "draft"
+        ],
+        [
+          "translation",
+          "en",
+          "published"
+        ],
+        [
+          "rankmath",
+          "en",
+          "published"
+        ],
+        [
+          "yoast",
+          "en",
+          "published"
+        ],
+        [
+          "gallery",
+          "en",
+          "published"
+        ],
+        [
+          "unsupported",
+          "en",
+          "published"
+        ],
+        [
+          "gutenberg",
+          "en",
+          "published"
+        ],
+        [
+          "classic",
+          "en",
+          "published"
+        ],
+        [
+          "child",
+          "en",
+          "published"
+        ]
+      ],
+      "plugin": [
+        [
+          "scheduled",
+          "en",
+          "scheduled"
+        ],
+        [
+          "pending",
+          "en",
+          "draft"
+        ],
+        [
+          "trashed",
+          "en",
+          "draft"
+        ],
+        [
+          "draft",
+          "en",
+          "draft"
+        ],
+        [
+          "vertaling",
+          "nl",
+          "draft"
+        ],
+        [
+          "translation",
+          "en",
+          "published"
+        ],
+        [
+          "rankmath",
+          "en",
+          "published"
+        ],
+        [
+          "yoast",
+          "en",
+          "published"
+        ],
+        [
+          "gallery",
+          "en",
+          "published"
+        ],
+        [
+          "unsupported",
+          "en",
+          "published"
+        ],
+        [
+          "gutenberg",
+          "en",
+          "published"
+        ],
+        [
+          "classic",
+          "en",
+          "published"
+        ],
+        [
+          "child",
+          "en",
+          "published"
+        ]
+      ]
+    },
+    "seo": {
+      "wxr": [
+        {
+          "slug": "rankmath",
+          "data": {
+            "title": "Rank Math fixture",
+            "content": [
+              {
+                "_type": "block",
+                "_key": "key-2-fb5wz",
+                "style": "normal",
+                "children": [
+                  {
+                    "_type": "span",
+                    "_key": "key-1-orl41",
+                    "text": "Rank Math prose"
+                  }
+                ]
+              }
+            ],
+            "excerpt": "Synthetic excerpt"
+          },
+          "seo": {
+            "title": null,
+            "description": null,
+            "image": null,
+            "canonical": null,
+            "noIndex": false
+          }
+        },
+        {
+          "slug": "yoast",
+          "data": {
+            "title": "Yoast fixture",
+            "content": [
+              {
+                "_type": "block",
+                "_key": "key-2-ddeou",
+                "style": "normal",
+                "children": [
+                  {
+                    "_type": "span",
+                    "_key": "key-1-pba2o",
+                    "text": "Yoast prose"
+                  }
+                ]
+              }
+            ],
+            "excerpt": "Synthetic excerpt"
+          },
+          "seo": {
+            "title": null,
+            "description": null,
+            "image": null,
+            "canonical": null,
+            "noIndex": false
+          }
+        }
+      ],
+      "plugin": [
+        {
+          "slug": "rankmath",
+          "data": {
+            "title": "Rank Math fixture",
+            "content": [
+              {
+                "_type": "block",
+                "_key": "key-2-b0y3h",
+                "style": "normal",
+                "children": [
+                  {
+                    "_type": "span",
+                    "_key": "key-1-mnpa5",
+                    "text": "Rank Math prose"
+                  }
+                ]
+              }
+            ],
+            "excerpt": "Synthetic excerpt",
+            "seo_title": "Rank Math %title%",
+            "seo_description": "Rank Math %sitename% description"
+          },
+          "seo": {
+            "title": null,
+            "description": null,
+            "image": null,
+            "canonical": null,
+            "noIndex": false
+          }
+        },
+        {
+          "slug": "yoast",
+          "data": {
+            "title": "Yoast fixture",
+            "content": [
+              {
+                "_type": "block",
+                "_key": "key-2-nl0j5",
+                "style": "normal",
+                "children": [
+                  {
+                    "_type": "span",
+                    "_key": "key-1-43kti",
+                    "text": "Yoast prose"
+                  }
+                ]
+              }
+            ],
+            "excerpt": "Synthetic excerpt",
+            "seo_title": "Yoast %%title%%",
+            "seo_description": "Yoast %%sitename%% description"
+          },
+          "seo": {
+            "title": null,
+            "description": null,
+            "image": null,
+            "canonical": null,
+            "noIndex": false
+          }
+        }
+      ]
+    },
+    "media": {
+      "imported": [
+        {
+          "wpId": 201,
+          "originalUrl": "https://wordpress.example.test/uploads/201.png",
+          "newUrl": "/_emdash/api/media/file/01M58CXAFCWQ7B1VZ3ZDQHRBNW.png",
+          "mediaId": "01M58CXAH29Y1C7BMER9VY8B48"
+        },
+        {
+          "wpId": 202,
+          "originalUrl": "https://wordpress.example.test/uploads/202.png",
+          "newUrl": "/_emdash/api/media/file/01M58CXAH5HZKA81J7RVJ3SC56.png",
+          "mediaId": "01M58CXAH7HMKQAACXS6Z4NENA"
+        }
+      ],
+      "failed": [],
+      "urlMap": {
+        "https://wordpress.example.test/uploads/201.png": "/_emdash/api/media/file/01M58CXAFCWQ7B1VZ3ZDQHRBNW.png",
+        "https://wordpress.example.test/uploads/202.png": "/_emdash/api/media/file/01M58CXAH5HZKA81J7RVJ3SC56.png"
+      }
+    },
+    "rewrite": {
+      "updated": 2,
+      "byCollection": {
+        "plugin_posts": 1,
+        "wxr_posts": 1
+      },
+      "urlsRewritten": 6,
+      "errors": []
+    },
+    "authorIDsPerSingleSource": {
+      "wxr": 2,
+      "plugin": 5
+    },
+    "public": {
+      "wxrClassic": 200,
+      "pluginClassic": 200
+    },
+    "renderedFidelity": {
+      "wxr": {
+        "orderedImageIDs": [
+          202,
+          201,
+          202
+        ],
+        "customNestedLinkPreserved": false,
+        "unresolvedTemplateValuesOnlyInGenericFields": true,
+        "nativeSeoOverridesBeforeRepair": false,
+        "unpublishedFixturesAnonymous": 404,
+        "localizedBylineMissing": "nl"
+      },
+      "plugin": {
+        "orderedImageIDs": [
+          202,
+          201,
+          202
+        ],
+        "customNestedLinkPreserved": false,
+        "unresolvedTemplateValuesOnlyInGenericFields": true,
+        "nativeSeoOverridesBeforeRepair": false,
+        "unpublishedFixturesAnonymous": 404,
+        "localizedBylineMissing": "nl"
+      }
+    },
+    "acceptance": {
+      "initialInventory": 1,
+      "initialHTTP": 1,
+      "repairedHTTP": 0,
+      "repairedInventories": 0,
+      "deliberateLossHTTP": 2,
+      "deliberateLossInventory": 1,
+      "restorationHTTP": 0,
+      "restorationInventory": 0,
+      "parentPreservation": "fails; explicitly scoped unsupported relationship",
+      "editorAndProviderParity": "unverified"
+    },
+    "wxrRepeat": {
+      "imported": 0,
+      "skipped": 13,
+      "sections": {
+        "created": 0,
+        "skipped": 1
+      }
+    },
+    "pluginRepeat": {
+      "imported": 0,
+      "skipped": 13,
+      "idMap": {
+        "113": {
+          "id": "01M58CXAAAJZ6QE4X4MZTE7JGY",
+          "collection": "plugin_pages"
+        }
+      },
+      "menus": {
+        "created": 0,
+        "items": 0
+      }
+    },
+    "retrySemantics": {
+      "partialResumeSkips": 3,
+      "repeatImports": 0,
+      "sourceEditOverwritten": false,
+      "sameSlugDifferentSourceSkipped": true,
+      "changedSlugCreatesExtraEntity": true,
+      "deletedSourceRemovesTarget": false
+    },
+    "dispositions": {
+      "classicAndGutenberg": "Imported",
+      "galleryOrderAndMediaIdentity": "Imported",
+      "unsupportedSavedHTML": "Preserved for repair",
+      "dynamicQueryFixtureReplacement": "Deliberately rebuilt",
+      "shortcodeExecution": "Unsupported",
+      "nativeSEO": "Preserved for repair",
+      "customNestedImageLinks": "Unsupported",
+      "automaticParentRelationsAndPermalinkRedirects": "Unsupported"
+    }
+  },
+  "cleanup": {
+    "ownedServerStopped": true,
+    "dependencyLinkRemoved": true,
+    "disposableDatabaseAndMediaRemoved": true,
+    "workingDatabaseCopied": false
+  },
+  "protocol": {
+    "requests": 38,
+    "paths": [
+      "/wp-json/emdash/v1/analyze",
+      "/wp-json/emdash/v1/media",
+      "/wp-json/emdash/v1/taxonomies",
+      "/wp-json/emdash/v1/content",
+      "/wp-json/emdash/v1/menus",
+      "/uploads/201.png",
+      "/uploads/202.png"
+    ],
+    "authenticatedAPIRequests": 36
+  }
+}

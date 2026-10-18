@@ -1,0 +1,112 @@
+{
+  "mappingVersion": 1,
+  "rules": [
+    {
+      "id": "rule-0",
+      "kind": "one-to-one",
+      "sources": [
+        "wp-101"
+      ],
+      "targets": [
+        {
+          "id": "emdash-private-101",
+          "entityType": "pages",
+          "status": "published",
+          "locale": "en",
+          "slug": "example",
+          "fields": {
+            "content": "07d5b3fd41b2a301d5f85c99ad4929130c7cd7e41bede1fa5655d2b1ae4431e2"
+          },
+          "parentId": null,
+          "translationGroup": "emdash-group-1",
+          "mediaIds": [
+            "emdash-media-1"
+          ],
+          "seo": {
+            "title": "Example SEO",
+            "description": "Example description",
+            "canonical": "https://www.example.test/en/example/",
+            "noindex": false
+          },
+          "titleSHA256": "9afd36bed3f93bcae947c6587901717946ed8fea28bf606ebdc04f48d8b172e3"
+        }
+      ],
+      "reason": "Synthetic reviewed type/status/identity conversion.",
+      "relationships": "preserve",
+      "fieldLinks": [
+        {
+          "sourceId": "wp-101",
+          "sourceField": "content",
+          "targetId": "emdash-private-101",
+          "targetField": "content",
+          "mode": "preserve",
+          "reason": "Synthetic digest preservation."
+        }
+      ]
+    },
+    {
+      "id": "rule-1",
+      "kind": "one-to-one",
+      "sources": [
+        "wp-102"
+      ],
+      "targets": [
+        {
+          "id": "emdash-private-102",
+          "entityType": "pages",
+          "status": "published",
+          "locale": "nl",
+          "slug": "voorbeeld",
+          "fields": {
+            "content": "07d5b3fd41b2a301d5f85c99ad4929130c7cd7e41bede1fa5655d2b1ae4431e2"
+          },
+          "parentId": "emdash-private-101",
+          "translationGroup": "emdash-group-1",
+          "mediaIds": [],
+          "seo": {
+            "title": "Example SEO",
+            "description": "Example description",
+            "canonical": "https://www.example.test/nl/voorbeeld/",
+            "noindex": false
+          },
+          "titleSHA256": "9afd36bed3f93bcae947c6587901717946ed8fea28bf606ebdc04f48d8b172e3"
+        }
+      ],
+      "reason": "Synthetic reviewed type/status/identity conversion.",
+      "relationships": "preserve",
+      "fieldLinks": [
+        {
+          "sourceId": "wp-102",
+          "sourceField": "content",
+          "targetId": "emdash-private-102",
+          "targetField": "content",
+          "mode": "preserve",
+          "reason": "Synthetic digest preservation."
+        }
+      ]
+    }
+  ],
+  "media": [
+    {
+      "sourceId": "wp-media-1",
+      "targetId": "emdash-media-1",
+      "reason": "Synthetic media import identity."
+    }
+  ],
+  "translationGroups": [
+    {
+      "sourceId": "wp-group-1",
+      "targetId": "emdash-group-1",
+      "reason": "Synthetic translation group mapping."
+    }
+  ],
+  "seoPolicy": {
+    "fields": [
+      "title",
+      "description",
+      "canonical",
+      "noindex"
+    ],
+    "canonical": "map-production-origin"
+  }
+}

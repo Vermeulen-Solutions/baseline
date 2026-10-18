@@ -1,0 +1,16 @@
+---
+import { getEmDashEntry, getSeoMeta } from 'emdash';
+import { PortableText } from 'emdash/ui';
+const [collection, locale, slug] = (Astro.params.path ?? '').split('/');
+if (!collection || !locale || !slug) return new Response('Not found', { status: 404 });
+const { entry } = await getEmDashEntry(collection, slug, { locale });
+if (!entry) return new Response('Not found', { status: 404 });
+const seo = getSeoMeta(entry, { siteUrl: 'https://production.example.test', path: Astro.url.pathname });
+---
+<!doctype html><html lang={locale}><head><title>{seo.title}</title>
+{seo.description && <meta name="description" content={seo.description} />}
+{seo.canonical && <link rel="canonical" href={seo.canonical} />}
+{seo.robots && <meta name="robots" content={seo.robots} />}
+{seo.ogTitle && <meta property="og:title" content={seo.ogTitle} />}
+{seo.ogImage && <meta property="og:image" content={seo.ogImage} />}
+</head><body><main><h1>{entry.data.title}</h1><PortableText value={entry.data.content} /></main></body></html>

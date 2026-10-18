@@ -56,6 +56,7 @@
     "media:migrate-wp": "node scripts/media-migrate-wp.mjs",
     "media:organize": "node scripts/organize-media.mjs",
     "media:sync-r2": "node scripts/sync-r2-media.mjs",
+    "migration:verify": "node scripts/migration-verify.mjs",
     "audit:baseline": "node scripts/audit-baseline.mjs",
     "audit:site": "node scripts/audit-site.mjs",
     "audit:modernize": "node scripts/audit-modernize.mjs",
@@ -70,7 +71,8 @@
     "init:profile": "node scripts/init-profile.mjs",
     "sync:baseline": "node scripts/sync-baseline.mjs",
     "test:profiles": "node scripts/verify-profiles.mjs",
-    "check:emdash13": "node scripts/check-emdash13.mjs"
+    "check:emdash13": "node scripts/check-emdash13.mjs",
+    "rehearse:importer": "node scripts/rehearse-importer.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
@@ -90,6 +92,8 @@
     "@playwright/test": "1.64.1",
     "aws4fetch": "1.0.20",
     "jsonc-parser": "3.3.1",
+    "parse-srcset": "1.0.2",
+    "parse5": "7.3.0",
     "sharp": "0.35.4",
     "smol-toml": "1.9.1",
     "typescript": "6.0.3"

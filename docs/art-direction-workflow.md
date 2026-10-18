@@ -8,7 +8,7 @@ One of the most persistent frustrations when building websites with AI coding as
 - Low-contrast light gray body text on white backgrounds
 - Monotonous page pacing (repeating the same 3-column card grid four times down the page)
 
-Baseline prevents this by instituting an automated **Art Direction Gate** (`npm run check:art-direction`) paired with an optional **Design Superpowers Ecosystem** ([designmd.ai](https://designmd.ai/explore), `Nicelydone`, `Google Stitch / OpenDesign`, and `21st.dev MCP`). Before an assistant or developer writes visual code under `src/`, they must establish and record a deliberate aesthetic identity.
+Baseline addresses this with an **Art Direction Gate** (`npm run check:art-direction`) and optional design tools ([designmd.ai](https://designmd.ai/explore), `Nicelydone`, `Google Stitch / OpenDesign`, and `21st.dev MCP`). `AGENTS.md` requires saving a complete Art Direction Record before site-specific visual implementation, then checking it with `--require-record`. The command validates the record and changed visual source; it does not enforce the timing of writes or certify design quality.
 
 ---
 
@@ -19,7 +19,7 @@ When transitioning from **Stage 3 (Content Architecture)** into **Stage 4 (Art D
 1. **Code-First & Aesthetic Lane Presets (Default — Zero Setup):** Pick an Aesthetic Lane below, record the Art Direction Record in `AGENTS.md`, apply and audit tokens in `src/styles/global.css` via `npm run design:tokens`, and inspect live on `/_styleguide`.
 2. **UX Flow & Anatomy Teardowns (`Nicelydone MCP` / `Refero.design`):** Inspect real production web screens to extract authentic UX details (secondary metadata, filter bars, dense tables, and varied section pacing) before styling.
 3. **Community `DESIGN.md` Systems & Visual Concepting (`designmd-mcp` + `Google Stitch` / `OpenDesign` / `Claude Design`):** Search 420+ free community `DESIGN.md` design systems on [designmd.ai/explore](https://designmd.ai/explore), generate 2–3 visual screen concepts in `audit/visual-concepts/`, and validate tokens via `@google/design.md`.
-4. **High-Craft Component Sourcing (`21st.dev MCP`):** Pull battle-tested Tailwind component architectures and micro-interactions into `/_styleguide` for zero-JS Astro transmutation.
+4. **Component Sourcing (`21st.dev MCP`):** Evaluate external Tailwind patterns on `/_styleguide` and adapt suitable ones to token-bound Astro components.
 
 See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md) and [AI Agent & Harness Configuration](agent-documentation.md) for 30-second MCP setup snippets.
 
@@ -86,9 +86,9 @@ Explicitly defining what **not** to do is often more effective with AI assistant
 
 ---
 
-## 6. Automated Gate Enforcement
+## 6. Automated Gate Validation
 
-Baseline provides automated checking to ensure the art direction record exists and visual code isn't written blindly:
+Baseline validates the required record and checks changed visual source against Git, subject to exact hash-bound infrastructure exceptions:
 
 ```sh
 # Verify the art direction record:
@@ -98,3 +98,8 @@ npm run check:art-direction -- --require-record
 - **In Local Development:** Run this command before implementing new templates or when onboarding a new AI assistant.
 - **In CI Pipelines:** Automated CI runs `check:art-direction` against git commits. Commits that add visual CSS or templates under `src/` or `public/` without a valid Art Direction Record in `AGENTS.md` are automatically flagged.
 - **Exceptions:** Pure infrastructure changes or starter maintenance can be registered as hash-bound exceptions in `audit/design-gate-exceptions.json`.
+
+The pre-implementation order is an agent/developer instruction in `AGENTS.md`.
+CLI and CI inspect outcomes; they cannot prove the record existed before an
+edit, prevent writes, or establish human approval or visual quality. Saving the
+record means writing it to disk and does not require a commit.

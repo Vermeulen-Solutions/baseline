@@ -108,10 +108,16 @@ Recursive traversal retains nested/Unicode storage keys and rejects symlinks/tra
 Writes use atomic `If-None-Match: *`, then read back bytes and MIME/cache headers. Existing conflicting bytes/metadata cause failure; there is no force overwrite. A concurrent matching creation can be verified after 412. Three bounded retries cover selected transient HTTP responses; redirects are refused and secrets never enter reports. Any required failure exits **1**, retains verified progress and can be retried without duplicate writes. Empty apply input is unverified, not a successful remote check. Journals remain ignored/private. No browser CI, production-build dependency, deployment or remote deletion is introduced.
 
 ```sh
-npm run test:database
-npm run test:media-infrastructure
+node --test tests/database-tooling.test.mjs
+node --test tests/media-infrastructure.test.mjs
 node scripts/rehearse-infrastructure.mjs --out audit/phase-5-2026-10-16/new-rehearsal
 ```
+
+The media wrappers reject unknown arguments and do not implement `--help`.
+Use the explicit modes/flags above; `--apply-local` takes `--stage` and `--url`,
+not the inventory's `--manifest` or an `--uploads` path. Preparation/staging
+outputs stay under ignored `.emdash/backups/`; only identical preparation can
+resume into an existing stage.
 
 The runtime rehearsal is local-only and refuses CI. All Cloudflare transports are simulated; only a newly created loopback CMS is contacted. Run the full unit suite, typecheck and normal build before rollout. Real Worker/D1/R2 quotas, endpoint access, custom storage and post-build hosted media optimization still need separately authorized cloud acceptance.
 

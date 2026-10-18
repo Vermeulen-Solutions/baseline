@@ -7,6 +7,7 @@
 Baseline provides two Astro foundations and three Platform Profiles: **`static`** (developer/agent edits files), **`static-sveltia`** (browser editing of the same files), and **`emdash`** (relational CMS, live canvas and MCP). Shared tokens, layout primitives and component quarantine serve all three.
 
 - **[Platform Profiles](platform-profiles.md):** choose editing personas, hosting, infrastructure costs and the generation path.
+- **[Capability and Support Boundaries](support-boundaries.md):** upstream versus Baseline responsibilities, runtime expectations, tested scopes and site-specific acceptance.
 - **[Baseline Updates](baseline-updates.md):** stage profile-filtered shared source/skill updates while preserving client changes.
 - **[Real Downstream Update Rehearsal](verification/baseline-sync-rehearsal.md):** immutable GitHub updates, rename bridging and preserved design conflicts across both static profiles and provenance forms.
 - **[Generation Manifests](../profiles/README.md):** explicit file/dependency inventories and independent profile verification.
@@ -27,7 +28,7 @@ Explore the documentation guides below, organized by workflow, design architectu
 - **[AI Developer Prompt Library](prompt-library.md)**  
   Copy-pasteable prompt recipes for AI coding assistants to execute each workflow stage, quarantine components, bind CMS data, run local visual tests, and execute domain cutovers safely.
 - **[Art Direction Workflow & The Design Gate](art-direction-workflow.md)**  
-  Establishing distinct visual identities (aesthetic lanes, narrative metaphors, typography pairings, and anti-patterns) before writing code, enforced automatically via `npm run check:art-direction`.
+  Agent instructions require saving the art-direction record before visual implementation; `npm run check:art-direction` validates changed source and the record, without proving write order.
 
 ---
 
@@ -56,6 +57,16 @@ Explore the documentation guides below, organized by workflow, design architectu
   Native row-per-locale multilingual architecture linked by translation groups, avoiding anti-pattern duplicate language columns (e.g. `title_en`).
 - **[Forms & Verification](forms-adoption.md)**  
   Form handling, server-side recovery validation, and Cloudflare Turnstile spam protection.
+- **[Migration Acceptance Contract](migration-acceptance.md)**
+  Versioned schemas, bounded live HTTP checks and offline replay.
+- **[Offline Content Inventory Contracts](migration-content-inventories.md)**
+  Explicit entity mappings, private offline snapshots and count-only reconciliation reports; editor acceptance remains separate.
+- **[WordPress Importer Fidelity Matrix](importer-fidelity-matrix.md)**
+  Runtime-tested behavior for WXR and Exporter paths across blocks, galleries, SEO, bylines, and retry non-synchronization.
+- **[Migration Cutover: Content Freeze & Delta Reconciliation](migration-cutover.md)**
+  Pre-cutover editorial freeze, snapshot-driven delta classification, slug-shift redirects, DNS switchover and rollback safety.
+- **[Client and Editor Handoff Guide](editor-handoff.md)**
+  CMS roles/permissions, Portable Text daily publishing workflows, form submission handling, and peripheral service inventory checklist.
 
 ---
 
@@ -108,6 +119,8 @@ Explore the documentation guides below, organized by workflow, design architectu
   Read-only SQLite vs. Cloudflare D1 structural parity (`db:diff`), 50-column physical budget inspection, allowlisted privacy-aware seed export (`db:export-seed`), and isolated remote inspection snapshots (`db:pull-remote`).
 - **[Production Deployment & Cloudflare Cutover](production-deployment.md)**  
   Standalone Node.js deployment, Cloudflare Workers/D1/R2 setup, R2 media sync, serverless sessions, and the critical corporate mail DNS preservation checklist (protecting Google Workspace / Microsoft 365).
+- **[Node.js + SQLite Production Backup & Disaster Recovery](node-backup-restore.md)**
+  Consistent SQLite acquisition (.backup / VACUUM INTO), synchronized media/secret bundles, retention schedules, and isolated restore drills.
 - **[Site Standards Diagnostic Engine](site-standards-audit.md)**  
   Using `npm run audit:site` to diagnose existing sites against the certified `standards-v0.1.1` baseline, and applying deterministic modernization recipes.
 - **[Starter Meta-Review Process](starter-meta-review.md)**  

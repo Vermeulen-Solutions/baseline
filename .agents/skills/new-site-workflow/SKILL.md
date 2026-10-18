@@ -159,7 +159,7 @@ When Stage 4 passes `check:art-direction`, present this prompt:
 > The design system rules (fonts, palette, spacing, and buttons) are saved in `AGENTS.md`.
 >
 > Next is **Stage 4.5: Component Calibration**.
-> *In plain terms:* Instead of assembling whole pages all at once, we first preview and test individual building blocks—cards, buttons, banners, text rhythm, and dark/light section backgrounds—on a private preview page (`/_styleguide`). This guarantees they look sharp on phones, tablets, and laptops before we build full pages.
+> *In plain terms:* We first preview individual building blocks—cards, buttons, banners, text rhythm, and dark/light section backgrounds—on the development styleguide (`/_styleguide`). We check representative narrow and wide layouts and record the findings before assembling full pages; the rendered pages still need verification.
 >
 > **What would you like to do?**
 > 1. **(Recommended) Calibrate building blocks on `/_styleguide`:**
@@ -237,7 +237,7 @@ Finish the route inventory, content states, interactions, metadata, and accessib
 
 Use `emdash-site-setup` again for deployment and site transfer. Treat deployment of code and transfer of CMS data as separate operations.
 
-**Gate:** every required route and distinct state is accounted for; material visual, content, responsive, accessibility, and editor-mode findings are resolved or explicitly documented.
+**Gate:** every required route and distinct state is accounted for; material visual, content, responsive, accessibility, and editor-mode findings are resolved or explicitly documented. For migrations, run `npm run migration:verify -- --scope full --manifest audit/url-inventory.json` to verify HTTP statuses, 301 redirect chains without loops, SEO tags, link/image integrity, and content inventory reconciliation (`docs/migration-acceptance.md`).
 
 Before declaring a new-site workflow complete, use `npm run site:register` with the actual stable site/repository/runtime/owner and starter version metadata. Follow `docs/site-registry.md`: submit a reviewed private registry change, or retain the ignored pending-registration artifact and record its reason when central access is unavailable. Reuse the same site ID for renames; do not publish private client details in the starter or invent a stable release for an unreleased checkout.
 
@@ -276,6 +276,8 @@ When Stage 6 finishes, present the prompt matching the hosting platform selected
 ## Stage 7: production cutover, email & forms
 
 **Static branch:** deploy verified `dist/`, configure canonical URLs, TLS and 404 status, verify rebuild-on-commit and rollback to the last successful build. For Sveltia verify admin assets, OAuth origins/callbacks or PAT access and fresh sign-in, upload, draft behavior and publication with real accounts. Record static deployment ownership, browser evidence and source/asset backup policy in project notes. Do not run EmDash registry, database backup or CMS cutover commands. Only use external form/mail services required by the brief; preserve existing mail DNS. The remaining cutover instructions are EmDash-only.
+
+For migrations, follow `docs/migration-cutover.md` to enforce the pre-cutover content freeze (`T_freeze`), reconcile late source edits/deletions/slug shifts, and establish rollback triggers. For Node.js targets, acquire a consistent SQLite backup via `.backup` or `VACUUM INTO` paired with media and `.env` secrets per `docs/node-backup-restore.md` (naive copying during active WAL is prohibited). Complete the `docs/editor-handoff.md` guide covering editor roles and the peripheral integrations checklist.
 
 Use `emdash-production-cutover` when moving a Cloudflare Workers site from preview/`workers.dev` to its production custom domain. Establish and test admin recovery before changing the authentication origin, configure the canonical hostname and alias redirects, and verify fresh production login. Preserve working email providers and form integrations; configure Cloudflare Email Sending or replace forms only when requested or required by established site requirements.
 

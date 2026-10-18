@@ -1,6 +1,6 @@
 # AI Developer Prompt Library
 
-This prompt library provides ready-to-copy, battle-tested prompt recipes for developers pairing with AI coding assistants (Google Antigravity, Claude Code, OpenAI Codex, Cursor, Windsurf, Aider, OpenCode, or local LLMs).
+This prompt library provides adaptable recipes for the documented Baseline workflows when pairing with AI coding assistants (Google Antigravity, Claude Code, OpenAI Codex, Cursor, Windsurf, Aider, OpenCode, or local LLMs). See [Support Boundaries](support-boundaries.md) for scoped evidence and site-specific acceptance.
 
 Use these prompts to invoke specific Baseline features and workflows without having to remember internal commands or skill names.
 
@@ -93,9 +93,27 @@ Use this prompt to prepare and ingest legacy media attachments.
 Help me migrate our WordPress media uploads to EmDash using npm run media:migrate-wp.
 
 - Uploads directory: [Insert path, e.g., ../wp-content/uploads]
-- Target storage: [Local SQLite / Cloudflare R2]
+- Stable source ID: [Identifier retained across retries]
+- Reviewed attachment metadata: [Path to metadataVersion: 1 JSON per docs/image-delivery.md]
+- Local EmDash URL: [Actual loopback URL printed by Astro]
+- Eventual storage: [Local media / Cloudflare R2]
 
-Please run the migration helper in prepare mode first, verify the generated JSON manifest and image dimensions, and then guide me through running ingestion through supported EmDash APIs.
+Please follow docs/image-delivery.md: run read-only inventory with --source, --source-id and --metadata first. Review manifest.json, then prepare into a new ignored --out directory and inspect plan.json/prepared.json and dimensions. Use --apply-local with --stage and --url only for the selected local ingestion, with credentials supplied securely. Preserve source identity and originals; do not rename or drop files based on WordPress suffixes. Content-reference updates and --stage-r2 / media:sync-r2 plan/apply are distinct operations; retain their verification results separately.
+```
+
+### Running Migration Acceptance Verification
+Use this prompt to verify that all legacy URLs, redirects, SEO tags, links, and content inventories were preserved without error.
+
+```markdown
+Run the automated migration acceptance verifier against our target site:
+`npm run migration:verify -- --manifest audit/url-inventory.json --scope full`
+
+Please:
+1. Review the generated report in `.emdash/migration-acceptance/`.
+2. Verify that all 301 redirects resolve without loops and preserve trailing slash / query parameters.
+3. Check that canonical tags, meta descriptions, and robots tags match manifest expectations.
+4. Flag any broken internal links, missing images, unrendered Gutenberg comments (`<!-- wp:... -->`), or raw shortcodes.
+5. Review content inventory reconciliation totals (by type, status, and locale). If there are any missing mappings or target conflicts, explain the resolution steps before cutover.
 ```
 
 ---
@@ -219,6 +237,20 @@ Critical Constraints:
 2. Audit existing DNS records (MX, SPF, DKIM, DMARC) before changing any nameservers or root records.
 3. Guide me through attaching the custom domain in Cloudflare Wrangler.
 4. Verify HTTPS/TLS certificate issuance, canonical redirects (www vs apex), and test fresh admin login at /_emdash/admin.
+```
+
+### Pre-Cutover Content Freeze, Delta Reconciliation & Disaster Recovery
+Use this prompt to execute the final pre-launch content synchronization and safe backup before domain DNS switch.
+
+```markdown
+We are preparing for final DNS cutover. Follow docs/migration-cutover.md and docs/node-backup-restore.md.
+
+Please:
+1. Announce the content freeze (T_freeze) and compare our final source export against the initial baseline capture.
+2. Identify any added, modified, deleted, or slug-shifted posts/pages. Reconcile them deliberately into EmDash without blindly re-running the importer (since retries skip existing records).
+3. If deploying Node.js + SQLite: acquire a verified SQLite backup snapshot using `.backup` or `VACUUM INTO` (never copy live WAL files directly) and ensure media and `.env` secrets are bundled.
+4. Run `npm run migration:verify -- --manifest audit/url-inventory.json --scope full` to ensure clean exit 0 before we switch DNS.
+5. Review the rollback plan and lower DNS TTL to 300 seconds.
 ```
 
 ---

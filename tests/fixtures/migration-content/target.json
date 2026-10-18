@@ -1,0 +1,76 @@
+{
+  "inventoryVersion": 1,
+  "side": "target",
+  "binding": "synthetic-preview-revision-001",
+  "complete": true,
+  "coverage": [
+    {
+      "entityType": "pages",
+      "locale": "en",
+      "status": "published",
+      "total": 1
+    },
+    {
+      "entityType": "pages",
+      "locale": "nl",
+      "status": "published",
+      "total": 1
+    }
+  ],
+  "entities": [
+    {
+      "id": "emdash-private-101",
+      "entityType": "pages",
+      "status": "published",
+      "locale": "en",
+      "slug": "example",
+      "title": "Synthetic private editorial title",
+      "fields": {
+        "content": "07d5b3fd41b2a301d5f85c99ad4929130c7cd7e41bede1fa5655d2b1ae4431e2"
+      },
+      "requiredFields": [
+        "content"
+      ],
+      "parentId": null,
+      "translationGroup": "emdash-group-1",
+      "mediaIds": [
+        "emdash-media-1"
+      ],
+      "seo": {
+        "title": "Example SEO",
+        "description": "Example description",
+        "canonical": "https://www.example.test/en/example/",
+        "noindex": false
+      }
+    },
+    {
+      "id": "emdash-private-102",
+      "entityType": "pages",
+      "status": "published",
+      "locale": "nl",
+      "slug": "voorbeeld",
+      "title": "Synthetic private editorial title",
+      "fields": {
+        "content": "07d5b3fd41b2a301d5f85c99ad4929130c7cd7e41bede1fa5655d2b1ae4431e2"
+      },
+      "requiredFields": [
+        "content"
+      ],
+      "parentId": "emdash-private-101",
+      "translationGroup": "emdash-group-1",
+      "mediaIds": [],
+      "seo": {
+        "title": "Example SEO",
+        "description": "Example description",
+        "canonical": "https://www.example.test/nl/voorbeeld/",
+        "noindex": false
+      }
+    }
+  ],
+  "media": [
+    {
+      "id": "emdash-media-1",
+      "resolved": true
+    }
+  ]
+}

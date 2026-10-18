@@ -1,0 +1,307 @@
+{
+  "scheduled": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Scheduled text"
+        }
+      ]
+    }
+  ],
+  "pending": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Pending text"
+        }
+      ]
+    }
+  ],
+  "trashed": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Trashed text"
+        }
+      ]
+    }
+  ],
+  "draft": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Draft text"
+        }
+      ]
+    }
+  ],
+  "vertaling": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Nederlandse tekst"
+        }
+      ]
+    }
+  ],
+  "translation": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "English text"
+        }
+      ]
+    }
+  ],
+  "rankmath": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Rank Math prose"
+        }
+      ]
+    }
+  ],
+  "yoast": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Yoast prose"
+        }
+      ]
+    }
+  ],
+  "gallery": [
+    {
+      "_type": "gallery",
+      "images": [
+        {
+          "_type": "image",
+          "asset": {
+            "_type": "reference",
+            "_ref": "attachment:202",
+            "url": "attachment:202"
+          },
+          "alt": "Image 202",
+          "caption": "Caption 202"
+        },
+        {
+          "_type": "image",
+          "asset": {
+            "_type": "reference",
+            "_ref": "attachment:201",
+            "url": "attachment:201"
+          },
+          "alt": "Image 201",
+          "caption": "Caption 201"
+        },
+        {
+          "_type": "image",
+          "asset": {
+            "_type": "reference",
+            "_ref": "attachment:202",
+            "url": "attachment:202"
+          },
+          "alt": "Image 202",
+          "caption": "Caption 202"
+        }
+      ]
+    }
+  ],
+  "unsupported": [
+    {
+      "_type": "htmlBlock",
+      "html": "<div class=\"builder\"><p>Saved builder fallback</p></div>",
+      "originalBlockName": "vendor/carousel"
+    },
+    {
+      "_type": "htmlBlock",
+      "html": "<!-- wp:vendor/live-query /-->",
+      "originalBlockName": "vendor/live-query"
+    },
+    {
+      "_type": "htmlBlock",
+      "html": "<p>[contact-form-7 id=\"7\"] [gallery ids=\"202,201\"]</p>",
+      "originalBlockName": null
+    }
+  ],
+  "gutenberg": [
+    {
+      "_type": "block",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Gutenberg heading"
+        }
+      ]
+    },
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Gutenberg prose "
+        },
+        {
+          "_type": "span",
+          "text": "external inline link",
+          "marks": [
+            {
+              "_type": "link",
+              "href": "https://external.example.test/reference"
+            }
+          ]
+        },
+        {
+          "_type": "span",
+          "text": "."
+        }
+      ],
+      "markDefs": [
+        {
+          "_type": "link",
+          "href": "https://external.example.test/reference"
+        }
+      ]
+    },
+    {
+      "_type": "block",
+      "style": "normal",
+      "listItem": "bullet",
+      "level": 1,
+      "children": [
+        {
+          "_type": "span",
+          "text": "First Gutenberg item"
+        }
+      ]
+    },
+    {
+      "_type": "block",
+      "style": "normal",
+      "listItem": "bullet",
+      "level": 1,
+      "children": [
+        {
+          "_type": "span",
+          "text": "Second Gutenberg item"
+        }
+      ]
+    }
+  ],
+  "classic": [
+    {
+      "_type": "block",
+      "style": "h2",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Classic heading"
+        }
+      ]
+    },
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Classic prose "
+        },
+        {
+          "_type": "span",
+          "text": "bold",
+          "marks": [
+            "strong"
+          ]
+        },
+        {
+          "_type": "span",
+          "text": " and "
+        },
+        {
+          "_type": "span",
+          "text": "legacy inline link",
+          "marks": [
+            {
+              "_type": "link",
+              "href": "/2020/old/permalink/"
+            }
+          ]
+        },
+        {
+          "_type": "span",
+          "text": "."
+        }
+      ],
+      "markDefs": [
+        {
+          "_type": "link",
+          "href": "/2020/old/permalink/"
+        }
+      ]
+    },
+    {
+      "_type": "block",
+      "style": "normal",
+      "listItem": "bullet",
+      "level": 1,
+      "children": [
+        {
+          "_type": "span",
+          "text": "First classic item"
+        }
+      ]
+    },
+    {
+      "_type": "block",
+      "style": "normal",
+      "listItem": "bullet",
+      "level": 1,
+      "children": [
+        {
+          "_type": "span",
+          "text": "Second classic item"
+        }
+      ]
+    }
+  ],
+  "child": [
+    {
+      "_type": "block",
+      "style": "normal",
+      "children": [
+        {
+          "_type": "span",
+          "text": "Child page"
+        }
+      ]
+    }
+  ]
+}

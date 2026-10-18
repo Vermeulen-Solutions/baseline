@@ -1,0 +1,86 @@
+{
+  "kind": "synthetic-authored-observations",
+  "note": "No HTTP collector or browser was run. These are contract examples.",
+  "facts": [
+    {
+      "id": "url:home:status",
+      "expectation": "{\"path\":\"/\",\"terminalStatus\":200}",
+      "result": "pass"
+    },
+    {
+      "id": "url:home:title",
+      "expectation": "\"Example community\"",
+      "result": "pass"
+    },
+    {
+      "id": "url:home:description",
+      "expectation": "\"A synthetic migration fixture.\"",
+      "result": "pass"
+    },
+    {
+      "id": "url:home:canonical",
+      "expectation": "\"https://www.example.test/\"",
+      "result": "pass"
+    },
+    {
+      "id": "url:home:robots",
+      "expectation": "[\"index\",\"follow\"]",
+      "result": "pass"
+    },
+    {
+      "id": "url:old-news:status",
+      "expectation": "{\"path\":\"/old-news/\",\"terminalStatus\":200}",
+      "result": "pass"
+    },
+    {
+      "id": "url:old-news:redirects",
+      "expectation": "{\"hops\":[{\"status\":301,\"path\":\"/news/\"},{\"status\":301,\"path\":\"/news/welcome/\"}],\"loops\":false}",
+      "result": "pass"
+    },
+    {
+      "id": "url:old-news:canonical",
+      "expectation": "\"https://www.example.test/news/welcome/\"",
+      "result": "pass"
+    },
+    {
+      "id": "url:retired-event:status",
+      "expectation": "{\"path\":\"/retired-event/\",\"terminalStatus\":410}",
+      "result": "pass"
+    },
+    {
+      "id": "url:about-fr:status",
+      "expectation": "{\"path\":\"/fr/a-propos/\",\"terminalStatus\":200}",
+      "result": "pass"
+    },
+    {
+      "id": "url:about-fr:title",
+      "expectation": "\"À propos\"",
+      "result": "pass"
+    },
+    {
+      "id": "url:about-fr:canonical",
+      "expectation": "\"https://www.example.test/fr/a-propos/\"",
+      "result": "pass"
+    },
+    {
+      "id": "url:query-search:status",
+      "expectation": "{\"path\":\"/search/?q=alpha%20beta&sort=recent\",\"terminalStatus\":200}",
+      "result": "pass"
+    },
+    {
+      "id": "url:query-search:robots",
+      "expectation": "[\"noindex\",\"follow\"]",
+      "result": "pass"
+    },
+    {
+      "id": "url:guide-fragment:status",
+      "expectation": "{\"path\":\"/guide/\",\"terminalStatus\":200}",
+      "result": "pass"
+    },
+    {
+      "id": "url:guide-fragment:fragments",
+      "expectation": "[\"installation\",\"détails\"]",
+      "result": "pass"
+    }
+  ]
+}

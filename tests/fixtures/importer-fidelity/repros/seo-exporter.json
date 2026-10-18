@@ -1,0 +1,32 @@
+{
+  "id": 105,
+  "post_type": "post",
+  "status": "publish",
+  "slug": "yoast",
+  "title": "Yoast fixture",
+  "content": "<p>Yoast prose</p>",
+  "excerpt": "Synthetic excerpt",
+  "date": "2026-01-01T10:00:00",
+  "date_gmt": "2026-01-01T10:00:00",
+  "modified": "2026-01-01T10:00:00",
+  "modified_gmt": "2026-01-01T10:00:00",
+  "author": {
+    "id": 7,
+    "login": "fixture-author",
+    "email": "fixture@example.test",
+    "display_name": "Fixture Author"
+  },
+  "parent": null,
+  "menu_order": 0,
+  "taxonomies": {},
+  "meta": {},
+  "locale": "en",
+  "yoast": {
+    "title": "Yoast %%title%%",
+    "description": "Yoast %%sitename%% description",
+    "canonical": "https://wordpress.example.test/custom-canonical/",
+    "noindex": "1",
+    "og_title": "Custom OG title",
+    "og_image": "https://wordpress.example.test/uploads/201.png"
+  }
+}

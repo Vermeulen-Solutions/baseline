@@ -136,6 +136,18 @@
       "versionSource": "package.json#/devDependencies/jsonc-parser",
       "reason": "EmDash runtime or infrastructure/audit tooling"
     },
+    "parse5": {
+      "section": "devDependencies",
+      "profiles": ["emdash"],
+      "versionSource": "package.json#/devDependencies/parse5",
+      "reason": "Root migration HTTP tooling; structural HTML parser, not shipped to generated static projects"
+    },
+    "parse-srcset": {
+      "section": "devDependencies",
+      "profiles": ["emdash"],
+      "versionSource": "package.json#/devDependencies/parse-srcset",
+      "reason": "Root migration HTTP tooling; responsive candidate parsing, not shipped to generated static projects"
+    },
     "sharp": {
       "section": "devDependencies",
       "profiles": [

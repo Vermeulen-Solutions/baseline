@@ -1,0 +1,159 @@
+{
+  "manifestVersion": 1,
+  "id": "example-migration",
+  "sourceOrigin": "https://legacy.example.test",
+  "targetOrigin": "https://preview.example.test",
+  "productionOrigin": "https://www.example.test",
+  "allowedAssetOrigins": [
+    "https://preview.example.test",
+    "https://www.example.test",
+    "https://assets.example.test"
+  ],
+  "sourceCapture": {
+    "id": "synthetic-wordpress-export-001",
+    "sha256": "9e4d2e1e22ce33fa7c7da190414ed754ece1be1654ca36fe514a28ee06067cc7"
+  },
+  "targetRevision": "synthetic-preview-revision-001",
+  "policies": {
+    "trailingSlash": "always",
+    "query": "exact"
+  },
+  "urls": [
+    {
+      "id": "home",
+      "sourceUrl": "https://legacy.example.test/",
+      "locale": "en",
+      "disposition": "retained",
+      "requestPath": "/",
+      "expected": {
+        "status": 200,
+        "title": {
+          "value": "Example community",
+          "required": true
+        },
+        "description": {
+          "value": "A synthetic migration fixture.",
+          "required": true
+        },
+        "canonical": {
+          "value": "https://www.example.test/",
+          "required": true
+        },
+        "robots": {
+          "value": [
+            "index",
+            "follow"
+          ],
+          "required": true
+        }
+      }
+    },
+    {
+      "id": "old-news",
+      "sourceUrl": "https://legacy.example.test/old-news/",
+      "locale": "en",
+      "disposition": "redirected",
+      "requestPath": "/old-news/",
+      "expected": {
+        "status": 200,
+        "redirects": [
+          {
+            "status": 301,
+            "path": "/news/"
+          },
+          {
+            "status": 301,
+            "path": "/news/welcome/"
+          }
+        ],
+        "canonical": {
+          "value": "https://www.example.test/news/welcome/",
+          "required": true
+        }
+      }
+    },
+    {
+      "id": "retired-event",
+      "sourceUrl": "https://legacy.example.test/retired-event/",
+      "locale": "en",
+      "disposition": "removed",
+      "requestPath": "/retired-event/",
+      "expected": {
+        "status": 410
+      }
+    },
+    {
+      "id": "private-preview",
+      "sourceUrl": "https://legacy.example.test/private-preview/",
+      "locale": "en",
+      "disposition": "excluded",
+      "reason": "Synthetic private preview deliberately excluded from public migration scope."
+    },
+    {
+      "id": "about-fr",
+      "sourceUrl": "https://legacy.example.test/fr/a-propos/",
+      "locale": "fr",
+      "disposition": "retained",
+      "requestPath": "/fr/a-propos/",
+      "expected": {
+        "status": 200,
+        "title": {
+          "value": "À propos",
+          "required": true
+        },
+        "canonical": {
+          "value": "https://www.example.test/fr/a-propos/",
+          "required": true
+        }
+      }
+    },
+    {
+      "id": "query-search",
+      "sourceUrl": "https://legacy.example.test/search/?q=alpha%20beta&sort=recent",
+      "locale": "en",
+      "disposition": "retained",
+      "requestPath": "/search/?q=alpha%20beta&sort=recent",
+      "expected": {
+        "status": 200,
+        "robots": {
+          "value": [
+            "noindex",
+            "follow"
+          ],
+          "required": true
+        }
+      }
+    },
+    {
+      "id": "guide-fragment",
+      "sourceUrl": "https://legacy.example.test/guide/",
+      "locale": "en",
+      "disposition": "retained",
+      "requestPath": "/guide/",
+      "expected": {
+        "status": 200,
+        "fragments": {
+          "value": [
+            "installation",
+            "détails"
+          ],
+          "required": true
+        }
+      }
+    }
+  ],
+  "acceptanceChecks": [
+    {
+      "id": "content-parity",
+      "category": "content",
+      "required": true,
+      "expectation": "Reviewed source/target inventories and mappings reconcile by type, locale and status."
+    },
+    {
+      "id": "editor-parity",
+      "category": "editor",
+      "required": true,
+      "expectation": "Representative editor save/publish and anonymous read have scoped evidence."
+    }
+  ]
+}

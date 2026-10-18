@@ -1,0 +1,404 @@
+{
+  "observationsVersion": 3,
+  "manifestSHA256": "e1fe1a576e7a1450b6c517664dbb57b2fd9e737d9cb9ccb25181e8775f2a0505",
+  "sourceCaptureSHA256": "9e4d2e1e22ce33fa7c7da190414ed754ece1be1654ca36fe514a28ee06067cc7",
+  "targetRevision": "synthetic-preview-revision-001",
+  "capturedAt": "2026-10-18T18:00:00.000Z",
+  "content": {
+    "contentVersion": 1,
+    "source": [
+      {
+        "entityType": "page",
+        "locale": "en",
+        "status": "publish",
+        "total": 1
+      },
+      {
+        "entityType": "page",
+        "locale": "nl",
+        "status": "publish",
+        "total": 1
+      }
+    ],
+    "target": [
+      {
+        "entityType": "pages",
+        "locale": "en",
+        "status": "published",
+        "total": 1
+      },
+      {
+        "entityType": "pages",
+        "locale": "nl",
+        "status": "published",
+        "total": 1
+      }
+    ],
+    "expectedTarget": [
+      {
+        "entityType": "pages",
+        "locale": "en",
+        "status": "published",
+        "total": 1
+      },
+      {
+        "entityType": "pages",
+        "locale": "nl",
+        "status": "published",
+        "total": 1
+      }
+    ],
+    "rules": 2,
+    "findings": []
+  },
+  "checks": [
+    {
+      "id": "url:home:status",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:home:collection",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:home:title",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:home:description",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:home:canonical",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:home:robots",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:old-news:status",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:old-news:collection",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:old-news:redirects",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:old-news:canonical",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:retired-event:status",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:retired-event:collection",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:about-fr:status",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:about-fr:collection",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:about-fr:title",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:about-fr:canonical",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:query-search:status",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:query-search:collection",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:query-search:robots",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:guide-fragment:status",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:guide-fragment:collection",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "url:guide-fragment:fragments",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "acceptance:editor-parity",
+      "status": "pass",
+      "reason": "Synthetic offline evidence.",
+      "observed": "Synthetic check passed.",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "content:inputs",
+      "status": "pass",
+      "reason": "Offline content inputs checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "content:coverage",
+      "status": "pass",
+      "reason": "Offline content coverage checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "content:identity",
+      "status": "pass",
+      "reason": "Offline content identity checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "content:fields",
+      "status": "pass",
+      "reason": "Offline content fields checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "content:relationships",
+      "status": "pass",
+      "reason": "Offline content relationships checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    },
+    {
+      "id": "content:media",
+      "status": "pass",
+      "reason": "Offline content media checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": [
+        {
+          "path": "artifacts/reconciliation.json",
+          "sha256": "099c051bbf6a4e27b78804a3d6949a06776b9972f00e0167619744bff197559e"
+        }
+      ]
+    }
+  ]
+}

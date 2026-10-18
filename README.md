@@ -16,6 +16,7 @@
   <a href="#-where-to-look-in-your-browser"><strong>Browser Dev URLs</strong></a> ·
   <a href="#the-7-stage-site-delivery-workflow"><strong>7-Stage Workflow</strong></a> ·
   <a href="#why-baseline"><strong>Why Baseline?</strong></a> ·
+  <a href="#capability-and-support-boundaries"><strong>Support Boundaries</strong></a> ·
   <a href="docs/README.md"><strong>Documentation</strong></a>
 </p>
 
@@ -39,6 +40,22 @@ All profiles share tokens, layout primitives, `SiteShell.astro`, native image
 presentation and `/_styleguide` calibration. Choose the editing and operational
 model independently from the Standard/Express delivery track. See
 [Platform Profiles](docs/platform-profiles.md) and [staged updates](docs/baseline-updates.md).
+
+## Capability and support boundaries
+
+| Capability | Supplied by | Site-specific acceptance |
+| --- | --- | --- |
+| Static rendering, typed file collections and native image processing | Astro; Baseline generates `static` / `static-sveltia` projects | Static hosting of `dist/`, real 404 responses and rebuild triggers; Sveltia also needs GitHub authentication and publication verification |
+| Relational content, editor, WordPress import, redirects, sitemap/robots and SEO APIs | EmDash in the `emdash` profile; Baseline wires public templates and contributions | Content/URL/SEO fidelity, editor roles and saves, media and required plugin behavior |
+| Tokens, layout primitives, staged workflows, schema/media tooling and reviewed update proposals | Baseline | Brand calibration, rendered accessibility, complete migration inventory and operational ownership |
+| Runtime and integrations | Node/SQLite/local media by default for `emdash`; Workers/D1/R2 is separately configured | Persistent data/media, recovery, authentication and actual email/form delivery on the selected host |
+
+The scoped standards evidence covers Node/SQLite and local Windows Chromium;
+fast CI runs on Ubuntu and also checks both generated static profiles. Generated
+static sites have no EmDash database or server adapter. Sveltia's editor commits
+files to Git; its published site still needs a static build. Cloudflare EmDash
+hosting and external providers require separate acceptance. See
+[tested scope, evidence and limitations](docs/support-boundaries.md).
 
 ## ⚡ Quickstart
 
@@ -102,7 +119,7 @@ Once `npm run dev` is running, open these local URLs:
 
 ## 🤖 Pairing with Your AI Assistant
 
-Baseline is harness-agnostic. Whether pairing with **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **Cursor**, **Windsurf**, or **Aider**, you never have to guess what to prompt.
+Baseline provides staged prompt recipes for pairing with **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **Cursor**, **Windsurf**, **Aider**, and other coding assistants.
 
 ### 📋 Starter Prompts: Kick Off a New Site
 
@@ -132,7 +149,7 @@ Please begin with Stage 1 (Brief & Evidence Discovery) and present the Stage 1 h
 ```
 
 ### 📚 Ready-to-Copy Prompt Recipes
-Need to run a specific task? Copy battle-tested prompt templates directly from our prompt playbook:
+Need to run a specific task? Adapt the documented workflow prompts to your site's scope and available evidence:
 
 👉 **[Open the AI Developer Prompt Library (`docs/prompt-library.md`)](docs/prompt-library.md)**
 
@@ -206,7 +223,7 @@ Stop writing dozens of arbitrary responsive utility classes (`p-4 md:p-8 lg:p-12
 - **Self-Responsive Layout Primitives:** `<Section>`, `<Container>`, auto-fit `<Grid>`, and accessible `<Card>` (`--card-*` tokens, concentric radii, and `.clickable-parent`/`.focus-parent`) adapt to any screen width without media queries. [Design Framework Guide](docs/design-framework.md).
 
 ### 🎨 The Art Direction Gate & `/_styleguide` Quarantine
-AI coding assistants notoriously default to generic "SaaS template" aesthetics. Baseline enforces an automated pre-implementation check (`npm run check:art-direction`): before writing visual CSS, the assistant must record a distinct **Aesthetic Lane**, **Typography Pairing**, **Token Physics**, and 2–3 explicit **Site Anti-Patterns** in `AGENTS.md`. Reusable primitives, controls, and responsive stress cases are calibrated in isolation on **`/_styleguide`** (which returns **404** in production builds) before page assembly multiplies defects. Pair with `DESIGN.md` interchange (`npm run design:check` / `design:export`) or optional `@perkyzz/emvb` visual landing pages as needed ([Design Interchange Guide](docs/design-interchange.md) · [Art Direction Workflow](docs/art-direction-workflow.md)).
+`AGENTS.md` requires the assistant to save a complete **Art Direction Record** to disk before site-specific visual implementation, then run `npm run check:art-direction -- --require-record`. The record defines the aesthetic lane, narrative metaphor, typography, token physics and site anti-patterns. The normal `npm run check:art-direction` validates changed visual source and the required record against Git, subject to exact hash-bound infrastructure exceptions. It does not prevent writes or prove when the record was saved. Reusable primitives and responsive stress cases are calibrated on **`/_styleguide`** (which returns **404** in production builds) before broad page assembly. Pair with `DESIGN.md` interchange (`npm run design:check` / `design:export`) or optional `@perkyzz/emvb` visual landing pages as needed ([Design Interchange Guide](docs/design-interchange.md) · [Art Direction Workflow](docs/art-direction-workflow.md)).
 
 ### 🗄️ Intelligent content modeling & WordPress migration
 Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a structured methodology for converting legacy sites to EmDash:
@@ -214,6 +231,12 @@ Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a stru
 - **Relational Normalization vs 50-Column Budget:** Model 1:N relations and shared master data instead of bloated JSON dumps, staying comfortably within Cloudflare D1's 100-column limits.
 - **Admin Polish & Non-Routable Collections:** Designate `routable: false` for internal entities, use standardized ASCII slugs in code, and author display labels in the client's working language.
 - **Automated Media Migration:** Use `npm run media:migrate-wp` for manifest-driven WordPress attachment preparation, EmDash ingestion, and Cloudflare R2 staging ([Image Delivery Guide](docs/image-delivery.md) · [Content Modeling Guide](docs/wordpress-content-modeling.md)).
+
+The [privacy-edited gallery migration case study](audit/gallery-migration-case-study.md)
+records the distinction between copied files and editable Media Library ownership.
+The [local infrastructure rehearsal](audit/phase-5-2026-10-16/README.md) records
+synthetic Node API round trips and simulated cloud transports. These examples
+do not establish fidelity for every WordPress plugin or production host.
 
 ### 🛡️ Catch wide schemas before they reach production
 Local SQLite can accept models that exceed Cloudflare D1's [100-column table limit](https://developers.cloudflare.com/d1/platform/limits/). Baseline's automatic `check:schema-budget` preflight measures physical collection columns, including generated and retained legacy columns, against a conservative **50-column budget** before build/typecheck. For offline structural diffing, allowlisted seed exports, and isolated D1 snapshot reconstruction, use `npm run db:diff`, `npm run db:export-seed`, and `npm run db:pull-remote` ([Database parity workflow](docs/database-workflow.md)).
@@ -253,6 +276,7 @@ Local SQLite can accept models that exceed Cloudflare D1's [100-column table lim
 | `npm run check:schema-budget` | Measure the local database's physical collection widths |
 | `npm run db:diff` | Compare offline SQLite/D1 schema parity and column budgets |
 | `npm run media:migrate-wp` | Manifest-driven WordPress media preparation, CMS ingestion, and R2 staging |
+| `npm run migration:verify -- --manifest <file>` | Collect bounded HTTP evidence and reconcile v3 offline inventories, or replay with `--observations`; [declared scope and acceptance contract](docs/migration-acceptance.md) |
 | `npm run test:visual` | Compare local Windows captures with reviewed baselines |
 | `npm run check:dev-tools` | Verify `/_styleguide` and fixture markers stay out of production |
 | `npm run build` | Build the Node production artifact |
@@ -260,10 +284,15 @@ Local SQLite can accept models that exceed Cloudflare D1's [100-column table lim
 | `npm run audit:site -- --root ../my-site` | Diagnose a downstream repository without changing it |
 | `npm run check:upstream` | Review Astro, adapters, EmDash and Node version updates |
 
-Browser tests need the exact renderer described in [visual regression setup](docs/visual-regression.md). CI uses one Node version for fast checks and a normal build; screenshot comparisons remain local.
+Browser tests need the exact renderer described in [visual regression setup](docs/visual-regression.md). CI runs root fast checks and a normal build on Ubuntu, plus separate generated-profile jobs; screenshot comparisons remain local.
 
-### 🔄 Automated Weekly Upstream Updates
-Every site template includes [`.github/workflows/upstream-update.yml`](docs/automated-upstream-updates.md), which runs every Monday at 08:00 UTC (and on-demand). It syncs official EmDash and Impeccable skills, applies safe in-range dependency updates, executes tests and production builds, and safely auto-merges to `main` with alert issues on test failure. See [Automated Upstream Updates](docs/automated-upstream-updates.md).
+### 🔄 Reviewed upstream updates
+
+- **Root dependency proposals:** [`.github/workflows/upstream-update.yml`](.github/workflows/upstream-update.yml) runs Mondays at 08:00 UTC and on manual dispatch with `contents: read`. It proposes in-range dependency updates in the runner checkout, verifies clean installation, runs verification/build/profile checks, and attempts to upload `upstream-dependency-review` containing `upstream-update.patch`, including on failure. It does not push commits, open or merge PRs, or create alert issues. Review the run results and patch before applying; an artifact alone is not a passing check.
+- **Generated static-site source updates:** the `static` and `static-sveltia` workflow is manual, takes an immutable Baseline commit SHA, and stages bounded shared-source/selected-skill updates for review in `baseline-update-review`. It preserves local conflicts and does not update dependencies or client content. See [Baseline updates](docs/baseline-updates.md).
+- **Explicit skill synchronization:** root dependency proposals do not refresh skills. Use checked-in skills until intentionally reviewing an update; `sync:emdash-skills -- --check` and `sync:site-skills -- --check` diagnose drift, while their stage/apply flow requires reviewing the candidate. Impeccable has its own explicit refresh procedure. See [Skill synchronization](docs/skill-synchronization.md).
+
+[Reviewed maintenance details](docs/automated-upstream-updates.md) explain artifacts, conflicts and local adoption.
 
 ---
 

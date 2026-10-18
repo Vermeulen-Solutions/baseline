@@ -1,0 +1,201 @@
+{
+  "observationsVersion": 1,
+  "manifestSHA256": "3a06755aaecf006bd3f87444e0fe9eb1afd69b35d13d880868f247ce61c55b6c",
+  "sourceCaptureSHA256": "9e4d2e1e22ce33fa7c7da190414ed754ece1be1654ca36fe514a28ee06067cc7",
+  "targetRevision": "synthetic-preview-revision-001",
+  "capturedAt": "2026-10-18T15:00:00.000Z",
+  "checks": [
+    {
+      "id": "url:home:status",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "{\"path\":\"/\",\"terminalStatus\":200}"
+    },
+    {
+      "id": "url:home:title",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "\"Example community\""
+    },
+    {
+      "id": "url:home:description",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "\"A synthetic migration fixture.\""
+    },
+    {
+      "id": "url:home:canonical",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "\"https://www.example.test/\""
+    },
+    {
+      "id": "url:home:robots",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "[\"index\",\"follow\"]"
+    },
+    {
+      "id": "url:old-news:status",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "{\"path\":\"/old-news/\",\"terminalStatus\":200}"
+    },
+    {
+      "id": "url:old-news:redirects",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "{\"hops\":[{\"status\":301,\"path\":\"/news/\"},{\"status\":301,\"path\":\"/news/welcome/\"}],\"loops\":false}"
+    },
+    {
+      "id": "url:old-news:canonical",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "\"https://www.example.test/news/welcome/\""
+    },
+    {
+      "id": "url:retired-event:status",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "{\"path\":\"/retired-event/\",\"terminalStatus\":410}"
+    },
+    {
+      "id": "url:about-fr:status",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "{\"path\":\"/fr/a-propos/\",\"terminalStatus\":200}"
+    },
+    {
+      "id": "url:about-fr:title",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "\"À propos\""
+    },
+    {
+      "id": "url:about-fr:canonical",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "\"https://www.example.test/fr/a-propos/\""
+    },
+    {
+      "id": "url:query-search:status",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "{\"path\":\"/search/?q=alpha%20beta&sort=recent\",\"terminalStatus\":200}"
+    },
+    {
+      "id": "url:query-search:robots",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "[\"noindex\",\"follow\"]"
+    },
+    {
+      "id": "url:guide-fragment:status",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "{\"path\":\"/guide/\",\"terminalStatus\":200}"
+    },
+    {
+      "id": "url:guide-fragment:fragments",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ],
+      "observed": "[\"installation\",\"détails\"]"
+    }
+  ]
+}

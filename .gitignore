@@ -37,3 +37,4 @@ test-results/
 *.local.md
 .emdash/site-audits/
 .emdash/runtime-logs/
+.emdash/migration-acceptance/

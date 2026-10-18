@@ -111,8 +111,9 @@ Workers Paid permits arbitrary recipients subject to quotas, suppression rules, 
 Run appropriate repository typecheck/build and existing relevant checks before deploying changed code. Record observed results, unresolved limitations, and rollback instructions. Complete only applicable checks:
 
 - Production serves the expected site with valid TLS; aliases preserve paths/queries without loops.
-- Effective canonical URL sources, magic links, canonical tags, sitemap, and robots references use the intended domain.
-- Fresh admin login works through the configured mode; replacement passkey login works when required.
+- Effective canonical URL sources, magic links, canonical tags, sitemap, and robots references use the intended domain. Run `npm run migration:verify -- --scope url --manifest audit/url-inventory.json` against production to verify response statuses, canonicals, and image assets.
+- For WordPress migrations, follow `docs/migration-cutover.md` for the content freeze (`T_freeze`), delta reconciliation, and rollback procedures. For Node deployments, follow `docs/node-backup-restore.md` for consistent SQLite backup acquisition.
+- Fresh admin login works through the configured mode; replacement passkey login works when required. Complete `docs/editor-handoff.md` for client roles and peripheral checklist signoff.
 - Corporate mail DNS remains intact; any changed provider passes actual inbox-delivery testing.
 - Existing forms retain required behavior; changed forms pass [Native contact forms](references/contact-forms.md) acceptance checks.
 

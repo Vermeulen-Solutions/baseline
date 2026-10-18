@@ -32,6 +32,7 @@ Ensure your production host has:
 - `EMDASH_SECRET`: Generated via `npx emdash secrets generate`.
 - `PORT`: Server port (default 4321).
 - Persistent storage for the SQLite database (`data.db`) and uploaded media (`./uploads/`).
+- **Backup & Disaster Recovery:** Follow [Node.js + SQLite Backup & Recovery](node-backup-restore.md) to establish automated SQLite `.backup` / `VACUUM INTO` snapshots, media synchronization, and isolated restore drills. Naive copying of `data.db` while WAL is active is strictly prohibited.
 
 ---
 
@@ -43,20 +44,24 @@ When deploying to Cloudflare Workers, Astro compiles templates for serverless ed
 
 #### A. Cloudflare D1 100-Column Limit & Schema Parity
 Cloudflare D1 enforces a hard limit of **100 columns per database table**.
-* Always run `npm run check:schema-budget` and `npm run db:diff` ([Database Workflow](database-workflow.md)) before building or migrating to compare your local SQLite schema against remote D1.
+* Run `npm run check:schema-budget` against the local database before building or migrating; a missing database is **not measured**. `db:diff` requires an explicit closed SQLite snapshot and saved reference, or a fully identified remote target. It does not select D1 automatically, synchronize content or apply migrations. See [Database Workflow](database-workflow.md) for capture/compare commands and the separate remote-export availability considerations.
 * Baseline's strict **50-column physical schema budget** ensures tables stay well below D1's limit even with generated columns and metadata.
 
 #### B. The Media Deployment Disconnect (`wrangler deploy` ≠ Media Upload)
 Running `wrangler deploy` uploads compiled Astro application code and serverless functions, but **never uploads local media files**.
 * If you imported a WordPress site or uploaded photos locally, those files reside in `./uploads/`.
-* Stage and synchronize media to your remote R2 bucket using explicit target flags ([Native Image Delivery](image-delivery.md)):
+* After verified local ingestion, stage the actual CMS storage keys and synchronize that object tree using explicit target flags ([Native Image Delivery](image-delivery.md)):
   ```bash
-  # Dry-run R2 staging verification (default):
-  npm run media:sync-r2 -- --config ./wrangler.toml --env production --account <account-id> --bucket <r2-bucket> --uploads ./uploads --manifest ./audit/media-migration/manifest.json
+  # Create objects/ and staging.json from a verified prepared/ingested stage; no cloud upload:
+  npm run media:migrate-wp -- --stage-r2 --stage .emdash/backups/wp-prepared-001 --out .emdash/backups/r2-stage-001
 
-  # Execute upload after reviewing the dry-run plan:
-  npm run media:sync-r2 -- --apply --config ./wrangler.toml --env production --account <account-id> --bucket <r2-bucket> --uploads ./uploads --manifest ./audit/media-migration/manifest.json
+  # Offline plan (default):
+  npm run media:sync-r2 -- --config ./wrangler.toml --env production --account <account-id> --bucket <r2-bucket> --uploads .emdash/backups/r2-stage-001/objects --manifest .emdash/backups/r2-stage-001/staging.json
+
+  # Execute the reviewed create-only upload with R2 credentials supplied securely:
+  npm run media:sync-r2 -- --apply --config ./wrangler.toml --env production --account <account-id> --bucket <r2-bucket> --uploads .emdash/backups/r2-stage-001/objects --manifest .emdash/backups/r2-stage-001/staging.json --journal .emdash/backups/r2-sync-001/journal.json
   ```
+* The offline plan makes no R2 requests. Apply requires `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY`; it verifies bytes/headers and refuses conflicting existing objects. Uploading objects does not transfer CMS records or establish production content parity.
 
 #### C. Persistent Session Storage for Forms
 Serverless worker isolates do not share memory across requests.
@@ -115,7 +120,11 @@ Add all existing mail, DKIM, DMARC, and verification records to Cloudflare's DNS
 - Configure root (`@`) and `www` CNAME records pointing to your Worker deployment.
 
 ### Step 3: Switch Nameservers & Verify
-1. Update nameservers at the registrar to point to Cloudflare.
+1. Update nameservers at the registrar to point to Cloudflare (or update A/CNAME records with TTL lowered to 300s per [Migration Cutover](migration-cutover.md)).
 2. Immediately send test emails to and from a corporate address (e.g., `contact@your-domain.com`) to verify that inbound and outbound mail flows without rejection or bouncebacks.
 3. Verify SSL certificate issuance and HTTPS connectivity on the custom domain.
-4. Log in to `/_emdash/admin` on the production URL to verify CMS administration.
+4. Run live verification against the production URL:
+   ```sh
+   npm run migration:verify -- --manifest audit/url-inventory.json --scope url
+   ```
+5. Log in to `/_emdash/admin` on the production URL to verify CMS administration, and complete the [Client & Editor Handoff](editor-handoff.md).

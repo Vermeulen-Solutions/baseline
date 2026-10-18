@@ -89,16 +89,17 @@ For each distinct page archetype, separate global tokens and shared components f
 
 Run content import, then media copy and URL rewrite. Use the optimized media mapping if assets were prepared separately. Review failed media downloads and broken references; byte-identical retries are deduplicated.
 
-### Media Library organization, renaming & hydration
+### Media Library preparation, ingestion & reference verification
 
-WordPress imports deposit media in a flat, unfiled pool with messy legacy slugs (e.g. `3206-Photo-team-scaled.jpg`), and custom fields may store raw string attachment markers (`wordpress-attachment:123` or raw URLs). These prevent EmDash's Media Picker UI from functioning and make editorial management difficult.
+Audit imported assets and unresolved attachment markers separately from filenames. A WordPress suffix such as `-scaled` is not evidence that an original can be renamed or deleted. A copied public URL does not by itself establish Media Library ownership or an editable native field reference.
 
 Before public handoff:
-1. Run `npm run media:migrate-wp -- --source <uploads-path> --source-id <id>` (or `--out <dest> --prepare`) to generate and inspect the media migration plan through supported EmDash APIs. (The legacy raw-SQL `media:organize` helper is retired).
-2. Verify standard folders (`Pages`, `Articles`, `Documents`, `Media`) and collection-matching folders (`Teams`, `People`, `Sponsors`, etc.) are established in `media_folders`.
-3. Verify that raw numeric IDs, `-scaled`, `-150x150`, and camera prefixes are stripped from `media.filename` in favor of clean kebab-case slugs.
-4. Verify that raw attachment strings in content collection tables (`ec_*`) are hydrated into full EmDash structured media objects (`{ id, provider: 'local', filename, url, width, height, ... }`) so the Admin UI renders thumbnails properly.
-5. If deploying to Cloudflare, run `npm run media:sync-r2` to ensure local `./uploads/` are synchronized with remote R2 storage.
+
+1. Follow `docs/image-delivery.md`: inventory with `npm run media:migrate-wp -- --source <uploads-path> --source-id <stable-id> --metadata <reviewed-attachments.json> --out .emdash/backups/wp-plan-001`. Metadata uses the version-1 attachment projection, not raw WXR/REST payloads. Review `manifest.json`; planning performs no CMS requests.
+2. Prepare with the same source/ID/metadata plus `--prepare --out .emdash/backups/wp-prepared-001`. Review `plan.json`, `prepared.json`, quarantines and archived originals. Do not infer renames/deletions from suffixes; equal bytes do not collapse distinct attachment/locale metadata. Use a new destination except for an explicit identical `--prepare --resume`.
+3. Ingest only into the selected local instance with `--apply-local --stage .emdash/backups/wp-prepared-001 --url <loopback-url>` and securely supplied `EMDASH_TOKEN`. Verify actual returned media IDs, storage keys, metadata and bytes. The retired `media:organize` helper exits 2 without mutation; folder creation and filename cleanup are not supplied by this pipeline.
+4. Map source attachments to native references through supported content APIs with fresh revisions, preserving field/locale, captions and order. Verify the real Media Picker and public rendering; do not write internal CMS tables or invent media object shapes.
+5. For Cloudflare, `--stage-r2 --stage .emdash/backups/wp-prepared-001 --out .emdash/backups/r2-stage-001` creates `objects/` and `staging.json` after verified ingestion. Use the image-delivery runbook's explicit config/environment/account/bucket `media:sync-r2` plan/apply commands with that receipt and a private apply journal. R2 upload does not transfer CMS records; cloud acceptance remains separate.
 
 ## Verify and hand off
 
@@ -117,7 +118,15 @@ See the starter's `audit/gallery-evaluation-and-repair-plan.md` and `audit/galle
 
 Compare counts by source post type and proposed collection, locale, and status; inspect representative translation groups across every source language as well as Gutenberg, Classic Editor, shortcode, and page-builder content. For each content candidate, verify required fields, ordering, relationships, taxonomy assignments, source identifiers, and intended routes. Create or edit representative entries in EmDash and confirm the public Astro loop renders the updated data. Check images, rewritten URLs, alt text, authors/bylines, taxonomies and their translations, locale-specific menus/settings where applicable, and every old URL that needs a redirect. Confirm translations are linked in EmDash, keep their intended per-language publication states, and verify fallback behavior. WordPress `pending`, `private`, `future`, `trash`, and unknown statuses may import as drafts; review before publishing. WordPress scheduled dates and visibility rules are not reconstructed.
 
-For a partial retry, inspect the import results and slugs. Existing entries match on collection, slug, and locale, not WordPress ID, so a changed slug can create a duplicate. Keep the source and backup until the migrated site is verified and rollback is no longer needed.
+For a partial retry, inspect the import results and slugs. Existing entries match on collection, slug, and locale, not WordPress ID, so a changed slug can create a duplicate. Consult `docs/importer-fidelity-matrix.md` for runtime-verified behavior on blocks, SEO overrides, and retry non-synchronization. Keep the source and backup until the migrated site is verified and rollback is no longer needed.
+
+### Automated Migration Acceptance & Content Reconciliation
+Run `npm run migration:verify -- --scope full --manifest audit/url-inventory.json` to verify:
+1. Every legacy URL disposition (200 retained, 301 redirected without loops, or 410 removed).
+2. Canonical URLs, robots tags, and `<title>`/description metadata.
+3. Zero broken internal links, missing images, unrendered Gutenberg comments, or raw shortcodes.
+4. Content inventory reconciliation: proving that source vs target entity counts match by type, locale, and status, and relationships are preserved (`docs/migration-content-inventories.md`).
+5. Before final DNS switchover, execute the pre-cutover content freeze and snapshot delta reconciliation per `docs/migration-cutover.md`.
 
 The importer transfers content, not the WordPress theme, PHP templates, public URL routing, form behavior, widgets, or plugin workflows. Do not call a selective manual reconstruction a complete migration. Report the content-candidate register, import counts by source and target type, skipped/failed items, unresolved fields or candidates, media work, source-to-target identifiers, and behavioral replacements before handing off to Astro implementation. Include the route inventory, repeatable content types, and verified purpose of meaningful media/links in that handoff; the Astro design skill uses these alongside full-page visual references to build and check every route.
 
@@ -130,7 +139,7 @@ After importing content and preparing media, present this prompt:
 > **What would you like to do next?**
 > 1. **(Recommended) Full Post-Import Preparation (Clean Admin Forms + Verify Media):**
 >    - *Step A:* Clean up messy WordPress custom fields and repeaters into clear, friendly EmDash admin forms (`emdash-content-modeling`).
->    - *Step B:* Verify image dimensions, alt text, and captions, and organize them into clean folders (`media:migrate-wp`).
+>    - *Step B:* Verify image dimensions, alt text, captions and native media references; use the manifest-driven preparation/ingestion workflow where needed (`media:migrate-wp`).
 > 2. **Clean up admin forms only for now:**
 >    - Normalize schema and fields first; defer media preparation.
 > 3. **Proceed directly to visual styling (Stage 4 Art Direction):**

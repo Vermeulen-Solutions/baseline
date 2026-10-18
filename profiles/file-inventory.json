@@ -183,6 +183,26 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/migration-report.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-html.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-http.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-verify.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "standards/schemas/migration-acceptance.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/organize-media.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -447,6 +467,14 @@
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "tests/migration-acceptance.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-http.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "tests/partners.test.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -701,6 +729,42 @@
     },
     "scripts/check-emdash13.mjs": {
       "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-content.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "standards/schemas/migration-content.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-content.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/rehearse-importer.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/importer-fidelity.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/pilot-migration.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-cutover.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-pilot.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-cutover.mjs": {
+      "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     }
   }

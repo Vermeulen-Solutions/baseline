@@ -35,6 +35,10 @@ following behavior is supplied by EmDash 1.3, not a custom Baseline migration:
 - **Dynamic blocks:** unsupported server-rendered blocks can survive as HTML
   placeholders containing the original block comments. They render no public
   content until deliberately rebuilt; count and classify them during acceptance.
+- **Fidelity & Acceptance Matrix:** Consult the [WordPress Importer Fidelity Matrix](importer-fidelity-matrix.md)
+  for runtime-verified behavior on blocks, galleries, SEO overrides, and guest bylines.
+  Verify migrations programmatically with [Migration Acceptance](migration-acceptance.md),
+  [Content Inventories](migration-content-inventories.md), and the [Migration Cutover Runbook](migration-cutover.md).
 
 See the [1.3 release notes](https://github.com/emdash-cms/emdash/releases/tag/emdash%401.3.0)
 and [official migration guide](https://docs.emdashcms.com/migration/from-wordpress/).
@@ -122,7 +126,7 @@ Never leave raw, stringly-typed WordPress meta values in your clean CMS.
 Make the administrative CMS intuitive for non-technical client editors:
 
 * **Slugs vs. Display Labels:**
-  * **Database Slugs:** Always keep collection and field slugs in clean, standardized **ASCII kebab-case / English** (`training_sessions`, `phone_number`, `sort_order`). This guarantees stable API queries and clean database columns.
+  * **Database Slugs:** Keep collection and field slugs in consistent **ASCII / English** (`training_sessions`, `phone_number`, `sort_order`) and use localized display labels. Stable identifiers make API mappings easier to maintain; schema and query acceptance remain separate checks.
   * **Admin Display Labels:** Author all human-facing labels (`label`, `label_singular`, `field.label`, select options) in the **client's primary working language** (e.g., French or Dutch).
 * **Sidebar Grouping (`nav_group`):** Group collections into 2–4 logical collapsible folders in `live.config.ts`:
   * *Contenu éditorial* (Pages, Articles, Actualités)
@@ -139,15 +143,23 @@ WordPress imports often leave assets in an unfiled, flat media pool with messy f
 Instead of mutating raw SQLite tables in place, use Baseline's manifest-driven media preparation pipeline ([Native Image Delivery](image-delivery.md)):
 
 ```bash
-# 1. Prepare a normalized manifest and clean slugs (no CMS or R2 mutations):
-npm run media:migrate-wp -- --prepare --source ./wp-uploads --metadata ./wp-media.json --out ./audit/media-migration
+# 1. Inventory reviewed attachment metadata; no source, CMS or R2 mutations:
+npm run media:migrate-wp -- --source ./wp-uploads --source-id legacy-site --metadata ./wp-media.json --out .emdash/backups/wp-plan-001
 
-# 2. After reviewing the generated plan.md and manifest.json, ingest into local EmDash CMS:
-npm run media:migrate-wp -- --apply-local --manifest ./audit/media-migration/manifest.json --uploads ./uploads
+# 2. After reviewing manifest.json, prepare bytes into a new private stage:
+npm run media:migrate-wp -- --prepare --source ./wp-uploads --source-id legacy-site --metadata ./wp-media.json --out .emdash/backups/wp-prepared-001
+
+# 3. Review plan.json / prepared.json; supply EMDASH_TOKEN securely for this local target:
+npm run media:migrate-wp -- --apply-local --stage .emdash/backups/wp-prepared-001 --url http://127.0.0.1:4321
 ```
 
-This pipeline safely:
-1. **Normalizes & Deduplicates:** Strips WordPress camera prefixes, numeric IDs, and intermediate resizing suffixes (`-scaled`, `-150x150`) into deterministic lowercase slugs (`photo-team.jpg`) while tracking SHA-256 checksums.
-2. **Generates an Auditable Manifest:** Produces `manifest.json` and `plan.md` mapping legacy WordPress attachment IDs and URLs to clean target slugs before touching the CMS.
-3. **Uses Supported EmDash Ingestion:** Uploads verified assets through the supported EmDash Media Library / MCP pipeline and prepares explicit R2 staging manifests (`--stage-r2`) for Cloudflare cutover.
+The metadata file must use the reviewed `metadataVersion: 1` attachment format
+in [Native Image Delivery](image-delivery.md), not an arbitrary WordPress export.
+Use the actual local URL printed by Astro. Every output directory must be new;
+`--resume` applies only to an identical preparation stage.
+
+1. **Preserves originals and identity:** hashes bytes, records attachment/locale/crop relationships and quarantines unresolved inputs. Filename suffixes do not authorize renaming or deleting originals; distinct metadata identities are not collapsed by equal bytes.
+2. **Separates artifacts:** inventory produces `manifest.json`; preparation produces `plan.json`, `prepared.json`, archived originals and prepared bytes. There is no generated `plan.md` or automatic clean-slug rewrite.
+3. **Uses supported ingestion:** uploads to an explicitly selected loopback EmDash instance through the REST media API and verifies returned IDs, metadata, storage keys and bytes. Updating content references is a separate revision-bound API operation.
+4. **Stages cloud objects separately:** `--stage-r2` consumes the verified prepared stage and writes an object tree plus `staging.json`; it does not upload to R2. Use the explicit `media:sync-r2` plan/apply commands in the image-delivery runbook for that step.
 

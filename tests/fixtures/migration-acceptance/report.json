@@ -1,0 +1,331 @@
+{
+  "reportVersion": 1,
+  "toolVersion": "migration-acceptance/1",
+  "run": {
+    "id": "reference-run",
+    "generatedAt": "2026-10-18T16:00:00.000Z"
+  },
+  "scope": "url",
+  "mode": "supplied-observations",
+  "binding": {
+    "manifestId": "example-migration",
+    "manifestSHA256": "3a06755aaecf006bd3f87444e0fe9eb1afd69b35d13d880868f247ce61c55b6c",
+    "sourceCaptureSHA256": "9e4d2e1e22ce33fa7c7da190414ed754ece1be1654ca36fe514a28ee06067cc7",
+    "targetRevision": "synthetic-preview-revision-001",
+    "sourceOrigin": "https://legacy.example.test",
+    "targetOrigin": "https://preview.example.test",
+    "productionOrigin": "https://www.example.test"
+  },
+  "observationsSHA256": "8b64e353f869d4ad3da909415e40b0b5b55e69cc5c2be2628de9a405e2bbf738",
+  "coverage": {
+    "urls": {
+      "total": 7,
+      "retained": 4,
+      "redirected": 1,
+      "removed": 1,
+      "excluded": 1
+    },
+    "checks": {
+      "total": 19,
+      "required": 16,
+      "pass": 16,
+      "fail": 0,
+      "advisory": 0,
+      "unverified": 0,
+      "not-applicable": 3
+    }
+  },
+  "checks": [
+    {
+      "id": "url:home:status",
+      "urlId": "home",
+      "category": "url",
+      "required": true,
+      "expectation": "{\"path\":\"/\",\"terminalStatus\":200}",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "{\"path\":\"/\",\"terminalStatus\":200}",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:home:title",
+      "urlId": "home",
+      "category": "url",
+      "required": true,
+      "expectation": "\"Example community\"",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "\"Example community\"",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:home:description",
+      "urlId": "home",
+      "category": "url",
+      "required": true,
+      "expectation": "\"A synthetic migration fixture.\"",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "\"A synthetic migration fixture.\"",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:home:canonical",
+      "urlId": "home",
+      "category": "url",
+      "required": true,
+      "expectation": "\"https://www.example.test/\"",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "\"https://www.example.test/\"",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:home:robots",
+      "urlId": "home",
+      "category": "url",
+      "required": true,
+      "expectation": "[\"index\",\"follow\"]",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "[\"index\",\"follow\"]",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:old-news:status",
+      "urlId": "old-news",
+      "category": "url",
+      "required": true,
+      "expectation": "{\"path\":\"/old-news/\",\"terminalStatus\":200}",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "{\"path\":\"/old-news/\",\"terminalStatus\":200}",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:old-news:redirects",
+      "urlId": "old-news",
+      "category": "url",
+      "required": true,
+      "expectation": "{\"hops\":[{\"status\":301,\"path\":\"/news/\"},{\"status\":301,\"path\":\"/news/welcome/\"}],\"loops\":false}",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "{\"hops\":[{\"status\":301,\"path\":\"/news/\"},{\"status\":301,\"path\":\"/news/welcome/\"}],\"loops\":false}",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:old-news:canonical",
+      "urlId": "old-news",
+      "category": "url",
+      "required": true,
+      "expectation": "\"https://www.example.test/news/welcome/\"",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "\"https://www.example.test/news/welcome/\"",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:retired-event:status",
+      "urlId": "retired-event",
+      "category": "url",
+      "required": true,
+      "expectation": "{\"path\":\"/retired-event/\",\"terminalStatus\":410}",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "{\"path\":\"/retired-event/\",\"terminalStatus\":410}",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:private-preview:excluded",
+      "urlId": "private-preview",
+      "category": "url",
+      "required": false,
+      "expectation": "{\"reason\":\"Synthetic private preview deliberately excluded from public migration scope.\"}",
+      "status": "not-applicable",
+      "reason": "Explicit manifest exclusion; retained in URL coverage.",
+      "observed": null,
+      "evidence": []
+    },
+    {
+      "id": "url:about-fr:status",
+      "urlId": "about-fr",
+      "category": "url",
+      "required": true,
+      "expectation": "{\"path\":\"/fr/a-propos/\",\"terminalStatus\":200}",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "{\"path\":\"/fr/a-propos/\",\"terminalStatus\":200}",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:about-fr:title",
+      "urlId": "about-fr",
+      "category": "url",
+      "required": true,
+      "expectation": "\"À propos\"",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "\"À propos\"",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:about-fr:canonical",
+      "urlId": "about-fr",
+      "category": "url",
+      "required": true,
+      "expectation": "\"https://www.example.test/fr/a-propos/\"",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "\"https://www.example.test/fr/a-propos/\"",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:query-search:status",
+      "urlId": "query-search",
+      "category": "url",
+      "required": true,
+      "expectation": "{\"path\":\"/search/?q=alpha%20beta&sort=recent\",\"terminalStatus\":200}",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "{\"path\":\"/search/?q=alpha%20beta&sort=recent\",\"terminalStatus\":200}",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:query-search:robots",
+      "urlId": "query-search",
+      "category": "url",
+      "required": true,
+      "expectation": "[\"noindex\",\"follow\"]",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "[\"noindex\",\"follow\"]",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:guide-fragment:status",
+      "urlId": "guide-fragment",
+      "category": "url",
+      "required": true,
+      "expectation": "{\"path\":\"/guide/\",\"terminalStatus\":200}",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "{\"path\":\"/guide/\",\"terminalStatus\":200}",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "url:guide-fragment:fragments",
+      "urlId": "guide-fragment",
+      "category": "url",
+      "required": true,
+      "expectation": "[\"installation\",\"détails\"]",
+      "status": "pass",
+      "reason": "Synthetic authored fixture observation; no network request was made.",
+      "observed": "[\"installation\",\"détails\"]",
+      "evidence": [
+        {
+          "path": "artifacts/url-observations.json",
+          "sha256": "a796c14d27562c5b95f7f4d1eeb9112836f7d592e49c9c675af7ed42675bba08"
+        }
+      ]
+    },
+    {
+      "id": "acceptance:content-parity",
+      "urlId": null,
+      "category": "content",
+      "required": false,
+      "expectation": "Reviewed source/target inventories and mappings reconcile by type, locale and status.",
+      "status": "not-applicable",
+      "reason": "Outside URL-only scope; content/editor parity is not certified.",
+      "observed": null,
+      "evidence": []
+    },
+    {
+      "id": "acceptance:editor-parity",
+      "urlId": null,
+      "category": "editor",
+      "required": false,
+      "expectation": "Representative editor save/publish and anonymous read have scoped evidence.",
+      "status": "not-applicable",
+      "reason": "Outside URL-only scope; content/editor parity is not certified.",
+      "observed": null,
+      "evidence": []
+    }
+  ],
+  "result": "pass",
+  "exitCode": 0
+}

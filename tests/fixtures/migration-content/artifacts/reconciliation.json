@@ -1,0 +1,94 @@
+{
+  "producer": "baseline-content-reconciliation/1",
+  "summary": {
+    "contentVersion": 1,
+    "source": [
+      {
+        "entityType": "page",
+        "locale": "en",
+        "status": "publish",
+        "total": 1
+      },
+      {
+        "entityType": "page",
+        "locale": "nl",
+        "status": "publish",
+        "total": 1
+      }
+    ],
+    "target": [
+      {
+        "entityType": "pages",
+        "locale": "en",
+        "status": "published",
+        "total": 1
+      },
+      {
+        "entityType": "pages",
+        "locale": "nl",
+        "status": "published",
+        "total": 1
+      }
+    ],
+    "expectedTarget": [
+      {
+        "entityType": "pages",
+        "locale": "en",
+        "status": "published",
+        "total": 1
+      },
+      {
+        "entityType": "pages",
+        "locale": "nl",
+        "status": "published",
+        "total": 1
+      }
+    ],
+    "rules": 2,
+    "findings": []
+  },
+  "checks": [
+    {
+      "id": "content:inputs",
+      "status": "pass",
+      "reason": "Offline content inputs checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": []
+    },
+    {
+      "id": "content:coverage",
+      "status": "pass",
+      "reason": "Offline content coverage checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": []
+    },
+    {
+      "id": "content:identity",
+      "status": "pass",
+      "reason": "Offline content identity checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": []
+    },
+    {
+      "id": "content:fields",
+      "status": "pass",
+      "reason": "Offline content fields checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": []
+    },
+    {
+      "id": "content:relationships",
+      "status": "pass",
+      "reason": "Offline content relationships checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": []
+    },
+    {
+      "id": "content:media",
+      "status": "pass",
+      "reason": "Offline content media checks passed against the explicit mapping.",
+      "observed": "source 2; target 2; expected target 2; rules 2",
+      "evidence": []
+    }
+  ]
+}

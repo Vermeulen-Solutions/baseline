@@ -4,7 +4,7 @@ Baseline uses a structured **7-stage delivery workflow** designed to keep develo
 
 When building client websites with AI coding assistants, the most common failure mode is **"one-shot prompt chaos"**: asking the agent to generate discovery, content models, templates, and styles all at once. This leads to hallucinated schemas, generic styling, broken responsive layouts, and hardcoded UI copy that clients cannot edit.
 
-By breaking work into explicit sequential stages—each gated by review and automated checks—you get agency-grade results every time. For copy-pasteable prompts to trigger each stage with any agent, see the **[AI Developer Prompt Library](prompt-library.md)**.
+The stages separate discovery, modeling, design and implementation, with written handoffs and profile-appropriate checks for art direction, tokens, script syntax, tests and Astro types. These checks support review; rendered behavior, migration fidelity and host/provider acceptance still need site-specific evidence. See [Capability and Support Boundaries](support-boundaries.md) and the **[AI Developer Prompt Library](prompt-library.md)**.
 
 Platform Profile (`static`, `static-sveltia`, `emdash`) selects content/editing/runtime; Standard/Express selects delivery sequencing. Read [Platform Profiles](platform-profiles.md) before choosing a track. SQL budget, live-editor, registry and database deployment instructions below apply only to EmDash.
 
@@ -13,7 +13,7 @@ Platform Profile (`static`, `static-sveltia`, `emdash`) selects content/editing/
 | Track | Best For | Human Checkpoints | CLI Gates Enforced |
 | --- | --- | --- | --- |
 | **Standard Track (7 Stages)** | Complex migrations, multi-collection architectures, or multi-locale sites | Pauses at each stage handoff (`1` → `2` → `3` → `4` → `4.5` → `5` → `6`) | Profile-appropriate (`check:art-direction`, `design:tokens`, `verify`; SQL budget only on EmDash) |
-| **Express Track (3 Checkpoints)** | Smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale) | **Checkpoint A** (Stages 1–3) → **Checkpoint B** (Stages 4–4.5) → **Checkpoint C** (Stages 5–6) | All (`check:schema-budget`, `check:art-direction`, `design:tokens`, `verify`) |
+| **Express Track (3 Checkpoints)** | Smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale) | **Checkpoint A** (Stages 1–3) → **Checkpoint B** (Stages 4–4.5) → **Checkpoint C** (Stages 5–6) | Profile-appropriate (`check:art-direction`, `design:tokens`, `verify`; SQL budget only on EmDash) |
 
 ```mermaid
 flowchart TD
@@ -54,9 +54,9 @@ Record the selected profile independently of track and locale count. Generate st
 **The following runtime/plugin decisions are EmDash-only.**
 
 Establish your runtime, hosting boundaries, and plugin needs before modeling content:
-- **Default Profile:** Node.js + SQLite + local media storage. Zero cloud dependencies, fast local development, perfectly reproducible.
+- **Default Profile:** Node.js + SQLite + local media storage. No cloud account is required for local development; deployed data/media need persistent storage and recovery procedures.
 - **Cloudflare Profile (Optional):** Cloudflare Workers + D1 (SQLite) + R2 (media storage).
-  - *Hard Limit Awareness:* Cloudflare D1 enforces a [100-column table maximum](https://developers.cloudflare.com/d1/platform/limits/). Baseline enforces a stricter **50-column physical schema budget** (`npm run check:schema-budget`) to ensure long-term stability.
+  - *Hard Limit Awareness:* Cloudflare D1 enforces a [100-column table maximum](https://developers.cloudflare.com/d1/platform/limits/). Baseline checks a stricter **50-column physical schema budget** (`npm run check:schema-budget`); passing this check does not certify other D1 limits or query behavior.
   - *Session Storage:* Multi-instance serverless workers require persistent storage for form recovery ([Forms & Verification](forms-adoption.md)).
 - **Curated Registry & Native Plugins Evaluation:** Before writing custom backend code or complex relational schemas, check the official [EmDash Plugin Registry](https://plugins.emdashcms.com/) and ecosystem:
   - **Event Management & Ticketing:** [`@vermeulen.solutions/eventual`](https://plugins.emdashcms.com/plugins/@vermeulen.solutions/eventual) provides turnkey event schedules, session agendas, speaker profiles, and calendar exports.
@@ -89,6 +89,7 @@ Before writing a single line of site-specific CSS or template HTML, establish a 
 - **Define Token Physics & Pacing Variance:** Set typography pairings, canvas ground, action/accent contrast, border philosophy, spatial density, and a **Section Rhythm Map** (so consecutive sections never repeat the same layout).
 - **Declare Anti-Patterns:** Write 2–3 explicit semicolon-separated bans (e.g. *"No floating rounded cards; no decorative icon pills; no purple gradients"*).
 - **Initialize & Verify the Gate:** Run `npm run design:tokens -- --init-client --lane <lane>` (which seeds `src/styles/global.css`, writes `## Art Direction Record` in `AGENTS.md`, writes `audit/component-calibration.md`, and prunes starter sample-page exceptions from `audit/design-gate-exceptions.json`), then verify with `npm run check:art-direction -- --require-record`.
+- **Ordering & Validation:** `AGENTS.md` requires the saved record before site-specific visual implementation. The normal gate validates changed visual source and the record against Git; CLI/CI cannot prove when it was saved or prevent earlier writes. Follow the exact exception policy in `AGENTS.md`.
 - **Guides:** [Art Direction Workflow](art-direction-workflow.md) · [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---
@@ -130,6 +131,7 @@ Run deterministic local checks to verify the build before client handoff or depl
 - `npm run check:dev-tools`: Confirm `/_styleguide` and synthetic fixture markers are completely stripped from the production build.
 - **Visual Critique & Polish (Optional):** Use the bundled `impeccable` skill for an automated UI critique pass on rendered pages before final signoff.
 - **EmDash Client Verification:** Log in to `/_emdash/admin`, test editing live content, publish drafts, and verify updates on the public site.
+- **Migration Acceptance Verification (If Migrating):** Run `npm run migration:verify -- --scope full --manifest audit/url-inventory.json` to verify HTTP status codes, 301 redirect chains without loops, canonicals, robots tags, link/image integrity, and content inventory reconciliation ([Migration Acceptance Contract](migration-acceptance.md)).
 - **EmDash Site Registration:** Run `npm run site:register` to register the site metadata ([Site Registry](site-registry.md)).
 
 ---
@@ -137,11 +139,13 @@ Run deterministic local checks to verify the build before client handoff or depl
 ## Stage 7: Production Cutover, Email & Launch
 
 Take the verified site live on its production custom domain:
+- **Pre-Cutover Content Freeze & Delta Reconciliation:** Follow the [Migration Cutover Runbook](migration-cutover.md) to enforce `T_freeze`, reconcile late WordPress edits/deletions, map slug-shift 301 redirects, and set up rollback triggers.
+- **Disaster Recovery Backup (Node.js Target):** Acquire a consistent SQLite snapshot via `.backup` or `VACUUM INTO` alongside media and secrets per [Node.js Backup & Recovery](node-backup-restore.md).
 - **EmDash Node.js Target:** Generate production environment variables, configure reverse proxy (Nginx, Caddy with automatic TLS), and set up process supervision (Docker, systemd).
 - **EmDash Cloudflare Target (`emdash-production-cutover`):** Connect custom production domain via Cloudflare Wrangler, issue TLS certificates, and configure apex/www canonical redirects.
 - **Corporate Mail DNS Preservation:** Protect existing client email (Google Workspace / Microsoft 365) by auditing MX, SPF, DKIM, and DMARC records before modifying DNS.
-- **Admin Authentication Origin:** Verify admin passkey/email login on the live production domain origin.
-- **Guides:** [Production Deployment & Cloudflare Cutover](production-deployment.md) · [Hosting Setup](../.agents/skills/emdash-site-setup/SKILL.md).
+- **Admin Authentication Origin & Editor Handoff:** Verify admin login on the production domain origin, and complete the [Client & Editor Handoff Guide](editor-handoff.md) covering roles, daily Portable Text publishing, and the peripheral integrations checklist.
+- **Guides:** [Migration Cutover](migration-cutover.md) · [Node Backup & Recovery](node-backup-restore.md) · [Editor Handoff](editor-handoff.md) · [Production Deployment & Cloudflare Cutover](production-deployment.md) · [Hosting Setup](../.agents/skills/emdash-site-setup/SKILL.md).
 
 ## Static verification, updates and handoff
 
