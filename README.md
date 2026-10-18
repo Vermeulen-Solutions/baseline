@@ -11,13 +11,13 @@
 </p>
 
 <p align="center">
-  <a href="#-quickstart"><strong>Quickstart</strong></a> ·
-  <a href="docs/prompt-library.md"><strong>Prompt Library</strong></a> ·
-  <a href="#-where-to-look-in-your-browser"><strong>Browser Dev URLs</strong></a> ·
-  <a href="#the-7-stage-site-delivery-workflow"><strong>7-Stage Workflow</strong></a> ·
-  <a href="#platform-profiles"><strong>Platform Profiles</strong></a> ·
-  <a href="#capability-and-support-boundaries"><strong>Support Boundaries</strong></a> ·
   <a href="#why-baseline"><strong>Why Baseline?</strong></a> ·
+  <a href="#-quickstart"><strong>Quickstart</strong></a> ·
+  <a href="#platform-profiles"><strong>Platform Profiles</strong></a> ·
+  <a href="#the-7-stage-site-delivery-workflow"><strong>7-Stage Workflow</strong></a> ·
+  <a href="docs/prompt-library.md"><strong>Prompt Library</strong></a> ·
+  <a href="#where-to-work-project-layout"><strong>Where to Work</strong></a> ·
+  <a href="#daily-commands"><strong>Commands</strong></a> ·
   <a href="docs/README.md"><strong>Documentation</strong></a>
 </p>
 
@@ -26,6 +26,37 @@
 **Baseline is the agent-first frontend foundation and development guardrail system for Astro**, designed ground-up for developers pairing with AI coding assistants—whether using **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, **Windsurf**, **Aider**, or local LLM runners.
 
 By default, Baseline powers full-scale applications with **EmDash CMS**—a lightweight headless CMS featuring live visual page editing, relational SQLite/D1, and native Model Context Protocol (MCP) server integration. When a database or server runtime isn't required, Baseline's **Platform Profiles** let you output pure static Astro sites or Git-backed Sveltia CMS sites while sharing the exact same fluid design tokens, WCAG contrast checks, layout primitives, and component quarantine (`/_styleguide`).
+
+---
+
+## Why Baseline?
+
+Pairing with an AI coding assistant without structural guardrails usually leads to "prompt drift"—generic styling, arbitrary responsive breakpoint soup (`p-4 md:p-8 lg:p-12`), broken CMS schemas, and bloated client JavaScript. Baseline provides **five architectural guardrails**:
+
+### 📐 1. Fluid design tokens & automated WCAG contrast (`npm run design:tokens`)
+Stop writing dozens of arbitrary responsive utility classes. Baseline uses continuous mathematical `clamp()` scales anchored between 320px and 1280px viewports in `src/styles/global.css`:
+- **Agent-First Token Engine:** Seed canonical Aesthetic Lane presets (`--lane`), generate parametric fluid type/space scales (`--type-scale`, `--space-scale`), or synthesize WCAG-compliant light and `[data-surface="dark"]` OKLCH palettes from brand hex colors (`--seed-accent`), verified across 10 WCAG AA contrast pairs (`npm run design:tokens`).
+- **Continuous Typography & Spatial Density:** `--text-step--1` through `--text-step-2` (plus `--text-step-3-to-1` and `--text-step-2-to-0` bridges) and section spacing (`--spacing-section`) scale smoothly with viewport inline size (`vi`).
+- **Typographic Measures & Editorial Breakouts:** Built-in line-length bounds (`--measure-reading: 68ch`, `--measure-content: 76rem`, `--measure-wide: 88rem`) and `<Container breakout>` (`.content-grid`) keep body prose readable while allowing figures, pull-quotes, and galleries to break out to wider tracks.
+- **Self-Responsive Layout Primitives:** `<Section>`, `<Container>`, auto-fit `<Grid>`, and accessible `<Card>` (`--card-*` tokens, concentric radii, and `.clickable-parent`/`.focus-parent`) adapt to any screen width without media queries. [Design Framework Guide](docs/design-framework.md).
+
+### 🎨 2. The Art Direction Gate & `/_styleguide` Quarantine
+`AGENTS.md` requires the assistant to save a complete **Art Direction Record** to disk before site-specific visual implementation, then run `npm run check:art-direction -- --require-record`. The record defines the aesthetic lane, narrative metaphor, typography, token physics and site anti-patterns. The normal `npm run check:art-direction` validates changed visual source and the required record against Git, subject to exact hash-bound infrastructure exceptions. Reusable primitives and responsive stress cases are calibrated on **`/_styleguide`** (which returns **404** in production builds) before broad page assembly. Pair with `DESIGN.md` interchange (`npm run design:check` / `design:export`) or optional `@perkyzz/emvb` visual landing pages as needed ([Design Interchange Guide](docs/design-interchange.md) · [Art Direction Workflow](docs/art-direction-workflow.md)).
+
+### 🗄️ 3. Intelligent content modeling & WordPress migration
+Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a structured methodology for converting legacy sites to EmDash:
+- **The Content Candidate Register:** Uncover implicit operational entities trapped in page builder accordions or ACF repeaters (e.g. rosters, schedules, venues, sponsors) and elevate them to first-class collections.
+- **Relational Normalization vs 50-Column Budget:** Model 1:N relations and shared master data instead of bloated JSON dumps, staying comfortably within Cloudflare D1's 100-column limits.
+- **Admin Polish & Non-Routable Collections:** Designate `routable: false` for internal entities, use standardized ASCII slugs in code, and author display labels in the client's working language.
+- **Automated Media Migration:** Use `npm run media:migrate-wp` for manifest-driven WordPress attachment preparation, EmDash ingestion, and Cloudflare R2 staging ([Image Delivery Guide](docs/image-delivery.md) · [Content Modeling Guide](docs/wordpress-content-modeling.md)).
+- **Acceptance-Driven Verification & Cutover Safety:** Run `npm run migration:verify -- --manifest <file>` for bounded HTTP structural audits (status, redirects, canonicals, headings, links, media) and inventory reconciliation. Rehearse importer fidelity with synthetic fixtures (`npm run rehearse:importer` · [Importer Fidelity Matrix](docs/importer-fidelity-matrix.md)), execute cutover with pre-freeze delta reconciliation ([Migration Cutover Runbook](docs/migration-cutover.md)), and protect production data with atomic SQLite backups ([Node Backup & Restore](docs/node-backup-restore.md)).
+
+### 🛡️ 4. Catch wide schemas before they reach production
+Local SQLite can accept models that exceed Cloudflare D1's [100-column table limit](https://developers.cloudflare.com/d1/platform/limits/). Baseline's automatic `check:schema-budget` preflight measures physical collection columns, including generated and retained legacy columns, against a conservative **50-column budget** before build/typecheck. For offline structural diffing, allowlisted seed exports, and isolated D1 snapshot reconstruction, use `npm run db:diff`, `npm run db:export-seed`, and `npm run db:pull-remote` ([Database parity workflow](docs/database-workflow.md)).
+
+### 🚀 5. Zero-JS progressive enhancement & local visual regression
+- **Ship Less JavaScript:** `LogoTicker` renders on the server and animates with CSS (**0 KB of component client JS**, native checkbox pause toggle, reduced-motion fallback, and RTL support). `PhotoGallery` uses pure CSS flexbox to compute proportional justified photo rows without JS Masonry, loading PhotoSwipe only on click.
+- **Keep CI Lean:** `npm run test:visual` compares mobile, tablet, and desktop captures with pinned Windows Chromium—exercising active motion, no-JS rendering, zoom, and text spacing locally so browser tests consume **zero GitHub Actions minutes**.
 
 ---
 
@@ -83,30 +114,6 @@ Once the assistant runs `npm run dev`, open these local URLs:
 
 ---
 
-### 📚 Ready-to-Copy Prompt Recipes & MCP Server
-
-Need a prompt for a specific task? Adapt the documented workflow recipes to your site's scope and evidence:
-
-👉 **[Open the AI Developer Prompt Library (`docs/prompt-library.md`)](docs/prompt-library.md)**
-
-- 🚀 [Kickstarting a Greenfield Site (Express 3-Checkpoint or Full 7-Stage)](docs/prompt-library.md#1-starting-a-new-site-project)
-- 🗄️ [Auditing WordPress Content & Finding Hidden Entities](docs/prompt-library.md#2-wordpress-migration--content-modeling)
-- 🖼️ [Manifest-Driven WordPress Media Ingestion](docs/prompt-library.md#2-wordpress-migration--content-modeling)
-- 🎨 [Art Direction & The Design Gate](docs/prompt-library.md#3-art-direction--the-design-gate)
-- 📦 [Quarantining Tailwind Blueprints (21st.dev to Zero-JS Astro)](docs/prompt-library.md#4-component-sourcing--styleguide-quarantine)
-- ✏️ [Wiring EmDash Live Edit Proxies](docs/prompt-library.md#5-public-pages--emdash-editorial-canvas)
-- 🔍 [Bounded UI/UX Polish with Impeccable Critique](docs/prompt-library.md#6-visual-polish--the-impeccable-critique)
-- 📸 [Local Visual Regression Testing (`npm run test:visual`)](docs/prompt-library.md#7-local-visual-regression--pre-launch-checks)
-- 🛡️ [Cloudflare Cutover & Corporate Email DNS Safety](docs/prompt-library.md#8-production-cutover--corporate-email-safety)
-
-To connect your coding assistant directly to EmDash's built-in Model Context Protocol (MCP) server for managing content and schema, generate a token in one step:
-```sh
-npm run mcp:token
-```
-See [agent documentation](docs/agent-documentation.md) for harness integration, specialist skill syncing (`npm run sync:site-skills`), and MCP setup across all major tools.
-
----
-
 ### 💻 Manual CLI Setup (Alternative)
 
 If you are setting up without an AI assistant or scripting a CI pipeline, you can run the commands directly:
@@ -123,35 +130,37 @@ npm run design:tokens -- --init-client --lane editorial-paper
 npm run dev
 ```
 
+> [!TIP]
+> **Need prompt templates or MCP tools?**
+> Adapt ready-to-copy recipes for day-2 maintenance, migrations, and layout polish from the **[AI Developer Prompt Library (`docs/prompt-library.md`)](docs/prompt-library.md)**.
+> To connect your assistant directly to EmDash's Model Context Protocol server, run `npm run mcp:token` (see [agent documentation](docs/agent-documentation.md)).
+
 ---
 
-### 📦 Static Profiles (Alternative)
+## Platform Profiles
 
+Baseline supports three foundation profiles to match your editing and operational needs:
+
+| Profile | Editing | Foundation |
+| --- | --- | --- |
+| `emdash` (default) | Relational CMS, live edit canvas and MCP | Existing Node/SQLite or configured Workers/D1/R2 |
+| `static` | Developer/agent edits typed Markdown collections | Native Astro static output |
+| `static-sveltia` | Sveltia browser editor commits the same files | Same static output plus `/admin/`; OAuth proxy or PAT |
+
+All profiles share fluid tokens, layout primitives, `SiteShell.astro`, native image delivery, and `/_styleguide` calibration. Choose the editing and operational model independently from the Standard/Express delivery track.
+
+### Generating a static project
 If your project does not need a relational CMS database or server adapter, generate an unencumbered static Astro project from this checkout:
 
-- **Pure Static (Markdown / Content Collections):**
-  ```sh
-  npm run init:profile -- --profile static --out ../my-static-site
-  ```
-- **Static + Sveltia CMS (Git-backed browser editor):**
-  ```sh
-  npm run init:profile -- --profile static-sveltia --out ../my-static-site
-  ```
-
-After generating, `cd` into the new directory, run `npm install`, and commit the generated lockfile (`generated CI uses npm ci`). Sveltia sites follow the generated `docs/sveltia-cms.md` to configure repository and GitHub authentication. See the [Platform Profiles guide](profiles/README.md) for details.
-
----
-
-### 🛠️ Contributing to the Baseline Starter Itself
-
-If you are developing or maintaining the Baseline template engine, specialist skills, or testing suites:
-
 ```sh
-git clone https://github.com/Vermeulen-Solutions/baseline.git
-cd baseline
-npm install
-npm run verify
+# Pure static (Markdown / Content Collections)
+npm run init:profile -- --profile static --out ../my-static-site
+
+# Static + Sveltia CMS (Git-backed browser editor)
+npm run init:profile -- --profile static-sveltia --out ../my-static-site
 ```
+
+After generating, `cd` into the new directory, run `npm install`, and commit the generated lockfile (`generated CI uses npm ci`). Sveltia sites follow the generated `docs/sveltia-cms.md` to configure repository and GitHub authentication. See [Platform Profiles](docs/platform-profiles.md) and [staged updates](docs/baseline-updates.md).
 
 ---
 
@@ -194,74 +203,6 @@ const { entry } = Astro.props;
 ```
 
 See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field proxy and schema budget rules.
-
----
-
-## Platform Profiles
-
-| Profile | Editing | Foundation |
-| --- | --- | --- |
-| `static` | Developer/agent edits typed Markdown collections | Native Astro static output |
-| `static-sveltia` | Sveltia browser editor commits the same files | Same static output plus `/admin/`; OAuth proxy or PAT |
-| `emdash` | Relational CMS, live edit canvas and MCP | Existing Node/SQLite or configured Workers/D1/R2 |
-
-All profiles share tokens, layout primitives, `SiteShell.astro`, native image
-presentation and `/_styleguide` calibration. Choose the editing and operational
-model independently from the Standard/Express delivery track. See
-[Platform Profiles](docs/platform-profiles.md) and [staged updates](docs/baseline-updates.md).
-
----
-
-## Capability and support boundaries
-
-| Capability | Supplied by | Site-specific acceptance |
-| --- | --- | --- |
-| Static rendering, typed file collections and native image processing | Astro; Baseline generates `static` / `static-sveltia` projects | Static hosting of `dist/`, real 404 responses and rebuild triggers; Sveltia also needs GitHub authentication and publication verification |
-| Relational content, editor, WordPress import, redirects, sitemap/robots and SEO APIs | EmDash in the `emdash` profile; Baseline wires public templates and contributions | Content/URL/SEO fidelity, editor roles and saves, media and required plugin behavior |
-| Tokens, layout primitives, staged workflows, schema/media tooling and reviewed update proposals | Baseline | Brand calibration, rendered accessibility, complete migration inventory and operational ownership |
-| Runtime and integrations | Node/SQLite/local media by default for `emdash`; Workers/D1/R2 is separately configured | Persistent data/media, recovery, authentication and actual email/form delivery on the selected host |
-
-The scoped standards evidence covers Node/SQLite and local Windows Chromium;
-fast CI runs on Ubuntu and also checks both generated static profiles. Generated
-static sites have no EmDash database or server adapter. Sveltia's editor commits
-files to Git; its published site still needs a static build. Cloudflare EmDash
-hosting and external providers require separate acceptance. See
-[tested scope, evidence and limitations](docs/support-boundaries.md).
-
----
-
-## Why Baseline?
-
-### 📐 Fluid design tokens & automated WCAG contrast (`npm run design:tokens`)
-Stop writing dozens of arbitrary responsive utility classes (`p-4 md:p-8 lg:p-12 xl:p-16`). Baseline uses continuous mathematical `clamp()` scales anchored between 320px and 1280px viewports in `src/styles/global.css`:
-- **Agent-First Token Engine:** Seed canonical Aesthetic Lane presets (`--lane`), generate parametric fluid type/space scales (`--type-scale`, `--space-scale`), or synthesize WCAG-compliant light and `[data-surface="dark"]` OKLCH palettes from brand hex colors (`--seed-accent`), verified across 10 WCAG AA contrast pairs (`npm run design:tokens`).
-- **Continuous Typography & Spatial Density:** `--text-step--1` through `--text-step-2` (plus `--text-step-3-to-1` and `--text-step-2-to-0` bridges) and section spacing (`--spacing-section`) scale smoothly with viewport inline size (`vi`).
-- **Typographic Measures & Editorial Breakouts:** Built-in line-length bounds (`--measure-reading: 68ch`, `--measure-content: 76rem`, `--measure-wide: 88rem`) and `<Container breakout>` (`.content-grid`) keep body prose readable while allowing figures, pull-quotes, and galleries to break out to wider tracks.
-- **Self-Responsive Layout Primitives:** `<Section>`, `<Container>`, auto-fit `<Grid>`, and accessible `<Card>` (`--card-*` tokens, concentric radii, and `.clickable-parent`/`.focus-parent`) adapt to any screen width without media queries. [Design Framework Guide](docs/design-framework.md).
-
-### 🎨 The Art Direction Gate & `/_styleguide` Quarantine
-`AGENTS.md` requires the assistant to save a complete **Art Direction Record** to disk before site-specific visual implementation, then run `npm run check:art-direction -- --require-record`. The record defines the aesthetic lane, narrative metaphor, typography, token physics and site anti-patterns. The normal `npm run check:art-direction` validates changed visual source and the required record against Git, subject to exact hash-bound infrastructure exceptions. It does not prevent writes or prove when the record was saved. Reusable primitives and responsive stress cases are calibrated on **`/_styleguide`** (which returns **404** in production builds) before broad page assembly. Pair with `DESIGN.md` interchange (`npm run design:check` / `design:export`) or optional `@perkyzz/emvb` visual landing pages as needed ([Design Interchange Guide](docs/design-interchange.md) · [Art Direction Workflow](docs/art-direction-workflow.md)).
-
-### 🗄️ Intelligent content modeling & WordPress migration
-Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a structured methodology for converting legacy sites to EmDash:
-- **The Content Candidate Register:** Uncover implicit operational entities trapped in page builder accordions or ACF repeaters (e.g. rosters, schedules, venues, sponsors) and elevate them to first-class collections.
-- **Relational Normalization vs 50-Column Budget:** Model 1:N relations and shared master data instead of bloated JSON dumps, staying comfortably within Cloudflare D1's 100-column limits.
-- **Admin Polish & Non-Routable Collections:** Designate `routable: false` for internal entities, use standardized ASCII slugs in code, and author display labels in the client's working language.
-- **Automated Media Migration:** Use `npm run media:migrate-wp` for manifest-driven WordPress attachment preparation, EmDash ingestion, and Cloudflare R2 staging ([Image Delivery Guide](docs/image-delivery.md) · [Content Modeling Guide](docs/wordpress-content-modeling.md)).
-- **Acceptance-Driven Verification & Cutover Safety:** Run `npm run migration:verify -- --manifest <file>` for bounded HTTP structural audits (status, redirects, canonicals, headings, links, media) and inventory reconciliation. Rehearse importer fidelity with synthetic fixtures (`npm run rehearse:importer` · [Importer Fidelity Matrix](docs/importer-fidelity-matrix.md)), execute cutover with pre-freeze delta reconciliation ([Migration Cutover Runbook](docs/migration-cutover.md)), and protect production data with atomic SQLite backups ([Node Backup & Restore](docs/node-backup-restore.md)).
-
-The [privacy-edited gallery migration case study](audit/gallery-migration-case-study.md)
-records the distinction between copied files and editable Media Library ownership.
-The [local infrastructure rehearsal](audit/phase-5-2026-10-16/README.md) records
-synthetic Node API round trips and simulated cloud transports. These examples
-do not establish fidelity for every WordPress plugin or production host.
-
-### 🛡️ Catch wide schemas before they reach production
-Local SQLite can accept models that exceed Cloudflare D1's [100-column table limit](https://developers.cloudflare.com/d1/platform/limits/). Baseline's automatic `check:schema-budget` preflight measures physical collection columns, including generated and retained legacy columns, against a conservative **50-column budget** before build/typecheck. For offline structural diffing, allowlisted seed exports, and isolated D1 snapshot reconstruction, use `npm run db:diff`, `npm run db:export-seed`, and `npm run db:pull-remote` ([Database parity workflow](docs/database-workflow.md)).
-
-### 🚀 Zero-JS progressive enhancement & local visual regression
-- **Ship Less JavaScript:** `LogoTicker` renders on the server and animates with CSS (**0 KB of component client JS**, native checkbox pause toggle, reduced-motion fallback, and RTL support). `PhotoGallery` uses pure CSS flexbox to compute proportional justified photo rows without JS Masonry, loading PhotoSwipe only on click.
-- **Keep CI Lean:** `npm run test:visual` compares mobile, tablet, and desktop captures with pinned Windows Chromium—exercising active motion, no-JS rendering, zoom, and text spacing locally so browser tests consume **zero GitHub Actions minutes**.
 
 ---
 
@@ -325,6 +266,23 @@ The default runtime is **Node + SQLite + local media**, with no cloud account ne
 
 ---
 
+## Capability and support boundaries
+
+Baseline supplies Astro foundations, fluid design tokens, layout primitives, and agent guardrails. Scoped evidence covers Node/SQLite and local Windows Chromium; fast CI runs on Ubuntu and verifies both generated static profiles (`static` and `static-sveltia`).
+
+Production hosting (Cloudflare Workers/D1/R2, email delivery, static CDN caching) and migration inventory reconciliation require site-specific acceptance. Code deployment does not transfer remote database records or media. See the complete [tested scope, evidence and limitations](docs/support-boundaries.md), [production deployment runbook](docs/production-deployment.md), and [database parity workflow](docs/database-workflow.md).
+
+---
+
 ## Contribute
+
+If you are developing or maintaining the Baseline template engine, specialist skills, or test suites:
+
+```sh
+git clone https://github.com/Vermeulen-Solutions/baseline.git
+cd baseline
+npm install
+npm run verify
+```
 
 [Contributing](CONTRIBUTING.md) explains verification and upstream skill ownership. Baseline's own contributions use the [MIT license](LICENSE); bundled materials retain their [third-party notices](THIRD_PARTY_NOTICES.md). Participation follows the [Code of Conduct](CODE_OF_CONDUCT.md).
