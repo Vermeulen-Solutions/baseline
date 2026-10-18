@@ -70,6 +70,7 @@ test('allowlisted assembly is dry-run safe, records exact provenance and keeps t
     assert.equal(receipt.profile, 'static');
     const readJSON = async file => JSON.parse(await fs.readFile(path.join(options.out, file), 'utf8'));
     const pkg = await readJSON('package.json');
+    assert.equal((await readJSON('baseline.config.json')).source.repository, 'https://github.com/Vermeulen-Solutions/baseline');
     assert.equal(pkg.name, 'project-with-spaces');
     assert.ok(!JSON.stringify(pkg).includes('schema-budget'));
     assert.ok(!Object.keys({ ...pkg.dependencies, ...pkg.devDependencies }).some(name => /emdash|react|sqlite|@astrojs\/(node|cloudflare)/.test(name)));

@@ -66,6 +66,7 @@ test('a killed skill apply leaves a recoverable journal and binary corruption is
 });
 
 test('skill apply refuses post-review edits and symlinks; managed distribution includes content modeling', async () => {
+  assert.equal(sources.site.repository, 'Vermeulen-Solutions/baseline');
   assert.ok(sources.site.skills.includes('emdash-content-modeling'));
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-sync-test-'));
   try {

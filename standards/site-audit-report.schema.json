@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/Vermeulen-Solutions/emdash-baseline/raw/main/standards/site-audit-report.schema.json",
+  "$id": "https://github.com/Vermeulen-Solutions/baseline/raw/main/standards/site-audit-report.schema.json",
   "title": "Baseline site diagnosis report v2",
   "type": "object",
   "additionalProperties": false,

@@ -14,7 +14,7 @@
       "additionalProperties": false,
       "required": ["repository", "commit", "release"],
       "properties": {
-        "repository": { "const": "https://github.com/Vermeulen-Solutions/emdash-baseline" },
+        "repository": { "enum": ["https://github.com/Vermeulen-Solutions/baseline", "https://github.com/Vermeulen-Solutions/emdash-baseline"] },
         "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
         "release": { "anyOf": [{ "type": "null" }, { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$" }] }
       }

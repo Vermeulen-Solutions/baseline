@@ -8,6 +8,22 @@ remote scripts during synchronization. The root EmDash source checkout continues
 using its existing CMS skill synchronization tools; it has no generated static
 managed-file receipt.
 
+New projects record `https://github.com/Vermeulen-Solutions/baseline` as their
+source. The current generator contract and synchronization helper also accept
+the exact historical URL `https://github.com/Vermeulen-Solutions/emdash-baseline`.
+These are two names for the same trusted upstream, not configurable repositories;
+forks, other owners/hosts, URL suffixes and query strings are not accepted.
+Downloads always use the canonical `baseline` path at the requested immutable
+commit, regardless of the recorded name. Validation and updates preserve the
+original provenance record rather than rewriting generation history.
+
+Existing sites should review and adopt the updated self-contained
+`scripts/sync-baseline.mjs` through their normal staged update process. The helper
+adds no new module/file requirement. Older helper copies still use the historical
+download path; if that path is unavailable, a reviewed manual helper update is
+needed first. Do not change an older site's provenance URL alone and expect its
+older validator to understand the new name.
+
 ```sh
 npm run sync:baseline -- --ref <40-character-Baseline-commit-SHA>
 # Review .baseline/updates/<SHA>/stage.json and files/ against your working tree.

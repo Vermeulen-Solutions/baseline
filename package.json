@@ -4,7 +4,7 @@
   "description": "The visual-first Astro toolkit for EmDash CMS and AI-assisted developers: agent-first design tokens, component quarantine, schema safeguards, and local visual regression.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Vermeulen-Solutions/emdash-baseline.git"
+    "url": "https://github.com/Vermeulen-Solutions/baseline.git"
   },
   "private": true,
   "type": "module",

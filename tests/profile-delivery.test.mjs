@@ -31,6 +31,7 @@ test('Sveltia is an additive dependency-free overlay with paired forms and stati
     for (const file of ['public/admin/config.yml', 'public/admin/index.html', 'src/layouts/Base.astro']) assert.equal(receipt.files[file].ownership, 'client');
     const config = JSON.parse(await read('baseline.config.json'));
     assert.equal(config.platformProfile, 'static-sveltia');
+    assert.equal(config.source.repository, 'https://github.com/Vermeulen-Solutions/baseline');
     assert.deepEqual(config.skills, ['new-site-workflow', 'site-art-direction', 'astro-site-design', 'impeccable']);
   } finally {
     assert.equal(path.dirname(temp), path.resolve(os.tmpdir()));

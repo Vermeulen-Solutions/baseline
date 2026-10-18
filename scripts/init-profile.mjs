@@ -3,10 +3,10 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
+import { BASELINE_REPOSITORY, profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
-export const GENERATOR_VERSION = '0.3.0';
+export const GENERATOR_VERSION = '0.3.1';
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const gateHash = bytes => sha256(String(bytes).replaceAll('\r\n', '\n'));
 const json = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
@@ -86,7 +86,7 @@ export async function planProfile({ profile, out, sourceRoot = ROOT }) {
   const git = args => execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
   const commit = git(['rev-parse', 'HEAD']);
   const sourceTreeDirty = Boolean(git(['status', '--porcelain']));
-  const config = validateProfileConfig({ schemaVersion: 1, platformProfile: profile, foundation: manifest.foundation, runtime: 'static', source: { repository: 'https://github.com/Vermeulen-Solutions/emdash-baseline', commit, release: null }, generatorVersion: GENERATOR_VERSION, features: [], checks: manifest.checks, skills: manifest.skills });
+  const config = validateProfileConfig({ schemaVersion: 1, platformProfile: profile, foundation: manifest.foundation, runtime: 'static', source: { repository: BASELINE_REPOSITORY, commit, release: null }, generatorVersion: GENERATOR_VERSION, features: [], checks: manifest.checks, skills: manifest.skills });
   outputs.set('package.json', json(projectPackage));
   outputs.set('baseline.config.json', json(config));
   outputs.set('audit/design-gate-exceptions.json', json(gateExceptions));

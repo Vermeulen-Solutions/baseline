@@ -6,7 +6,10 @@ import { pathToFileURL } from 'node:url';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, null, 2) + '\n';
 const skills = ['new-site-workflow', 'site-art-direction', 'astro-site-design', 'impeccable'];
-const repository = 'https://github.com/Vermeulen-Solutions/emdash-baseline';
+// Keep this script self-contained: older generated sites cannot acquire new
+// module paths through bounded sync. Both provenance URLs identify this one repo;
+// downloads always use its canonical name, never a URL supplied by the site.
+const repositories = ['https://github.com/Vermeulen-Solutions/baseline', 'https://github.com/Vermeulen-Solutions/emdash-baseline'];
 const digest = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value);
 function safe(relative) {
   if (typeof relative !== 'string' || /[\\:\0]/.test(relative) || relative.split('/').some(p => !p || p === '.' || p === '..') || path.isAbsolute(relative)) throw new Error('Unsafe update path');
@@ -36,7 +39,7 @@ function selected(target, record) {
 }
 async function context(root) {
   const config = await readJSON(root, 'baseline.config.json');
-  if (config.schemaVersion !== 1 || !['static', 'static-sveltia'].includes(config.platformProfile) || config.foundation !== 'static' || config.runtime !== 'static' || config.source?.repository !== repository || !/^[a-f0-9]{40}$/.test(config.source.commit ?? '') || !Array.isArray(config.skills) || config.skills.length !== skills.length || new Set(config.skills).size !== skills.length || config.skills.some(s => !skills.includes(s))) throw new Error('sync:baseline requires a generated static Platform Profile');
+  if (config.schemaVersion !== 1 || !['static', 'static-sveltia'].includes(config.platformProfile) || config.foundation !== 'static' || config.runtime !== 'static' || !repositories.includes(config.source?.repository) || !/^[a-f0-9]{40}$/.test(config.source.commit ?? '') || !Array.isArray(config.skills) || config.skills.length !== skills.length || new Set(config.skills).size !== skills.length || config.skills.some(s => !skills.includes(s))) throw new Error('sync:baseline requires a generated static Platform Profile');
   const managed = await readJSON(root, '.baseline/managed-files.json');
   if (managed.schemaVersion !== 1 || !managed.files) throw new Error('Unsupported managed-file contract');
   for (const [target, record] of Object.entries(managed.files)) {
@@ -53,7 +56,7 @@ export async function stageBaseline({ root = process.cwd(), commit, readSource }
   const stagedFile = `.baseline/updates/${commit}/stage.json`;
   if (await bytes(root, stagedFile)) throw new Error('This revision is already staged; review or remove its update directory first');
   const fetchSource = readSource ?? (async source => {
-    const response = await fetch(`https://raw.githubusercontent.com/Vermeulen-Solutions/emdash-baseline/${commit}/${source}`, { signal: AbortSignal.timeout(30000) });
+    const response = await fetch(`https://raw.githubusercontent.com/Vermeulen-Solutions/baseline/${commit}/${source}`, { signal: AbortSignal.timeout(30000) });
     if (!response.ok) throw new Error(`Upstream ${source}: HTTP ${response.status}`);
     return Buffer.from(await response.arrayBuffer());
   });

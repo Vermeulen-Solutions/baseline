@@ -95,7 +95,7 @@ Explore the documentation guides below, organized by workflow, design architectu
 - **[Skill Synchronization](skill-synchronization.md)**  
   Managing staged updates for mirrored EmDash skills (`sync:emdash-skills`) and shared Vermeulen-maintained skills (`sync:site-skills`) while protecting local customizations.
 - **[Automated Upstream Updates & CI Maintenance](automated-upstream-updates.md)**  
-  Weekly GitHub Actions auto-update workflow (`upstream-update.yml`): synchronizing EmDash and Impeccable skills, in-range dependencies, schema budget preflight, and verified auto-merge with issue alerting.
+  Reviewed maintenance patches: weekly root dependency proposals, manual profile-filtered static source proposals, verification artifacts and explicit skill updates.
 
 ---
 

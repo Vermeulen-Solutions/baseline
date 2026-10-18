@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { PROFILE_IDS, profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
+import { BASELINE_REPOSITORY, BASELINE_PROVENANCE_REPOSITORIES, PROFILE_IDS, profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const json = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
@@ -11,7 +11,7 @@ const pkg = json('package.json');
 const safe = file => typeof file === 'string' && !file.includes('\\') && !file.includes(':') && !file.split('/').some(part => !part || part === '.' || part === '..');
 const config = profile => {
   const manifest = profileManifest(profile);
-  return { schemaVersion: 1, platformProfile: profile, foundation: manifest.foundation, runtime: manifest.runtimes[0], source: { repository: 'https://github.com/Vermeulen-Solutions/emdash-baseline', commit: 'a'.repeat(40), release: null }, generatorVersion: '0.1.0', features: [], checks: [...manifest.checks], skills: [...manifest.skills] };
+  return { schemaVersion: 1, platformProfile: profile, foundation: manifest.foundation, runtime: manifest.runtimes[0], source: { repository: BASELINE_REPOSITORY, commit: 'a'.repeat(40), release: null }, generatorVersion: '0.1.0', features: [], checks: [...manifest.checks], skills: [...manifest.skills] };
 };
 
 test('profile contract binds foundation/runtime, immutable provenance and exact applicable skills/checks', () => {
@@ -28,6 +28,25 @@ test('profile contract binds foundation/runtime, immutable provenance and exact 
     c => { c.checks.push(c.checks[0]); }, c => { c.secret = 'not permitted'; },
   ]) { const value = config('static'); mutate(value); assert.throws(() => validateProfileConfig(value)); }
   assert.throws(() => validateProfileConfig(null));
+});
+
+test('provenance accepts only the canonical repository and its exact historical name without rewriting history', () => {
+  const repositories = ['https://github.com/Vermeulen-Solutions/baseline', 'https://github.com/Vermeulen-Solutions/emdash-baseline'];
+  assert.equal(BASELINE_REPOSITORY, repositories[0]);
+  assert.deepEqual(BASELINE_PROVENANCE_REPOSITORIES, repositories);
+  assert.deepEqual(json('profiles/baseline.config.schema.json').properties.source.properties.repository.enum, repositories);
+  for (const profile of PROFILE_IDS) {
+    for (const repository of repositories) {
+      const value = config(profile); value.source.repository = repository;
+      const before = structuredClone(value);
+      validateProfileConfig(value);
+      assert.deepEqual(value, before);
+    }
+  }
+  for (const repository of ['https://github.com/other/baseline', 'https://example.invalid/Vermeulen-Solutions/baseline', ...repositories.flatMap(url => [url + '.git', url + '/', url + '?ref=main', url + '#main', url + '-fork', url.replace('https:', 'http:')])]) {
+    const value = config('static'); value.source.repository = repository;
+    assert.throws(() => validateProfileConfig(value), /provenance/);
+  }
 });
 
 test('profile allowlists contain only explicit existing sources and correctly declare generation readiness', () => {
