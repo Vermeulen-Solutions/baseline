@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-10-18",
+  "phase4FinalizedCommit": "a67af20f20ef0f6f767e5fa1c964dfb214fb8c4f",
+  "phase4FinalizedCI": {
+    "run": 39143751696,
+    "jobsPassed": 3,
+    "jobsFailed": 0
+  },
+  "controlledCandidate": {
+    "commit": "19aed5db4a5119f488f41f0d571dbcbb50f81f47",
+    "branch": "codex/baseline-sync-rehearsal-20261018",
+    "branchDeleted": true,
+    "bundle": "audit/baseline-sync-2026-10-18/candidate.bundle",
+    "bundleVerified": true
+  },
+  "sveltiaPilot": {
+    "pagesProject": "baseline-sveltia-pilot-20261018-3496a2",
+    "pagesProjectAndDeploymentsDeleted": true,
+    "afterDeletionLookupStatus": 404,
+    "githubRepository": "jacoplane/baseline-sveltia-pilot-20261018-3496a2",
+    "githubDeletionStatus": 403,
+    "githubRepositoryDeleted": false,
+    "githubRepositoryArchived": true,
+    "syntheticGitHistoryPreservedPrivately": true
+  },
+  "localCleanup": {
+    "directoriesRemoved": 16,
+    "taskOwnedHelperFilesRemoved": 3,
+    "baselineDependencyJunctionsDetached": 12,
+    "exactResolvedPathsValidated": true,
+    "baselineDependenciesPreserved": true,
+    "retainedPriorArtifactHashesVerified": 235,
+    "privateEvidencePreserved": true,
+    "olderWindowsTempDirectoriesUntouched": true
+  },
+  "newCredentialsOrOAuthPermissions": false,
+  "remainingCleanup": [
+    "Optional owner deletion of the archived private Sveltia pilot repository; existing CLI credential cannot delete it."
+  ],
+  "clientDetails": "Downstream readiness reports, inventories and local diffs retained privately outside site and Baseline repositories."
+}

@@ -50,6 +50,8 @@ images, draft exclusion, logout and failure protection on a disposable Cloudflar
 Pages project. That rehearsal used explicit local Direct Upload promotion; OAuth
 proxy sign-in, fine-grained PAT boundaries and automatic Git hosting integration
 remain outside its scope. Read its setup findings before editor handoff.
+The disposable deployment has since been retired; its historical acceptance
+receipts remain available. See the [cleanup record](../../audit/rehearsal-cleanup-2026-10-18/README.md).
 
 See [Platform Profiles](../platform-profiles.md),
 [generation inventories](../../profiles/README.md) and

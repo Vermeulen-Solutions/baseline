@@ -148,3 +148,15 @@ for release/CI handoff, while retaining today's safe partial-apply behavior. No
 sync implementation fix was needed in this rehearsal. Cross-platform checkout
 line-ending conversion was not certified; hashes remain byte-based. This phase
 did not repeat authenticated publishing or deploy a production site.
+
+## Finalization and cleanup
+
+The Phase 4 records were committed to `main` as
+[`a67af20`](https://github.com/Vermeulen-Solutions/baseline/commit/a67af20f20ef0f6f767e5fa1c964dfb214fb8c4f),
+with all three [CI jobs passing](https://github.com/Vermeulen-Solutions/baseline/actions/runs/39143751696).
+The disposable candidate branch and local runtime fixtures were then removed.
+Its commit and changed objects remain in the verified candidate Git bundle in
+the receipt directory. The earlier live Sveltia Pages pilot was also retired;
+its private GitHub repository was archived after deletion was denied with HTTP
+403. See the [cleanup receipt](../../audit/rehearsal-cleanup-2026-10-18/README.md)
+for retained evidence and the remaining repository-deletion limitation.
