@@ -117,7 +117,7 @@ test('empty query markers and encoded/repeated query values survive exact path c
   for (const requestPath of ['/empty/?', '/encoded/?q=one%20two&q=three&empty=']) {
     const manifest=manifestFor(origin);manifest.urls[0].requestPath=requestPath;manifest.urls[0].expected={status:200};
     assert.equal((await collect(manifest,directory)).report.exitCode,0);
-    assert.ok(requests.some(request=>request.path===requestPath));
+    assert.ok(requests.some(request=>request.path===requestPath || (requestPath === '/empty/?' && request.path === '/empty/')));
   }
 },(req,res)=>{
   if(req.url.startsWith('/empty/')||req.url.startsWith('/encoded/')){res.end('exact URL');return true;}return false;

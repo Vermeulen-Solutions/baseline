@@ -142,7 +142,7 @@ export async function rehearseImporter({ out, signal } = {}) {
     }
     const html = await (await fetchLocal('/view/wxr_posts/en/classic')).text(); fs.writeFileSync(path.join(out, 'classic.html'), html);
     result.public = { wxrClassic: (await fetchLocal('/view/wxr_posts/en/classic')).status, pluginClassic: (await fetchLocal('/view/plugin_posts/en/classic')).status };
-    assert.deepEqual(result.public, { wxrClassic: 200, pluginClassic: 200 });
+    assert.deepEqual(result.public, { wxrClassic: 200, pluginClassic: 200 }, 'Public render failed: ' + JSON.stringify(result.public) + '\nClassic HTML:\n' + html.slice(0, 500) + '\nServer logs:\n' + logs.slice(-20).join(''));
     assert.match(html, /Classic heading/); assert.match(html, /First classic item/); assert.match(html, /legacy inline link/);
     const publicFacts = {};
     for (const lane of ['wxr', 'plugin']) {
