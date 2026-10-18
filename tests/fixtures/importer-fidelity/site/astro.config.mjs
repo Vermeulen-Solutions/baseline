@@ -9,5 +9,5 @@ export default defineConfig({
   site: 'https://production.example.test',
   i18n: { defaultLocale: 'en', locales: ['en', 'nl'], routing: 'manual' },
   integrations: [react(), emdash({ fonts: false, database: sqlite({ url: 'file:./rehearsal.db' }), storage: local({ directory: './uploads', baseUrl: '/_emdash/api/media/file' }) })],
-  devToolbar: { enabled: false }, vite: { cacheDir: './.vite', ssr: { noExternal: ['zod', /^emdash(?:\/|$)/, /^@astrojs\/react(?:\/|$)/] } },
+  devToolbar: { enabled: false }, vite: { cacheDir: './.vite', resolve: { preserveSymlinks: true }, server: { fs: { strict: false } }, ssr: { noExternal: ['zod', /^emdash(?:\/|$)/, /^@astrojs\/react(?:\/|$)/] } },
 });
