@@ -1,0 +1,16 @@
+---
+import Styleguide from './Styleguide.astro';
+import Container from '../Container.astro';
+import RichText from '../RichText.astro';
+import PhotoGallery from '../PhotoGallery.astro';
+import { emdashCoverage, proseFixture, editorialImageFixture, galleryFixture } from '../../dev/emdash-styleguide-fixtures';
+---
+<Styleguide coverage={emdashCoverage} editorialLabel="Portable Text">
+  <Fragment slot="platform-media">
+    <Container width="reading"><div class="flow"><RichText value={[editorialImageFixture]} /></div></Container>
+    <div class="flow"><RichText value={[galleryFixture]} /></div>
+  </Fragment>
+  <Fragment slot="platform-empty-media"><PhotoGallery node={{ _type: 'gallery', images: [] }} title="Empty gallery" /></Fragment>
+  <Fragment slot="editorial"><RichText value={proseFixture} /></Fragment>
+  <p slot="platform-notes">There are no writable CMS identities on this page. Verify registered fields, canonical values and save/reload separately on disposable entries.</p>
+</Styleguide>

@@ -1,0 +1,20 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Grid from '../components/Grid.astro';
+import Card from '../components/Card.astro';
+import { publishedPosts, postUrl } from '../lib/posts';
+const posts = await publishedPosts();
+---
+<Base title="Welcome">
+  <Section labelledBy="welcome"><Container width="reading" class="flow">
+    <h1 id="welcome">Welcome</h1>
+    <p>This static starter uses native Astro content and the shared Baseline design system.</p>
+  </Container></Section>
+  <Section labelledBy="recent-posts"><Container width="wide" class="flow">
+    <h2 id="recent-posts">Recent Posts</h2>
+    <Grid>{posts.slice(0, 3).map(post => <Card title={post.data.title} href={postUrl(post.id)} description={post.data.description} image={post.data.hero} imageAlt={post.data.heroAlt} />)}</Grid>
+    <a href="/posts/">View all posts</a>
+  </Container></Section>
+</Base>

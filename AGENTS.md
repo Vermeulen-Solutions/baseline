@@ -1,6 +1,20 @@
-# EmDash site starter
+# Baseline Platform Profiles
 
-This repository is a reusable **Node.js + SQLite** Astro/EmDash starting point. It uses npm, Tailwind CSS v4, a neutral token system in `src/styles/global.css`, and small Astro layout components. Adapt the content model, visual language, and this file for each new site; the starter is not a finished theme.
+This repository maintains two technical foundations with one shared design system. The root application is the **EmDash Node.js + SQLite** foundation. Generated static projects use native Astro Content Collections and static output. All profiles use npm, Tailwind CSS v4, `src/styles/global.css`, token checks, layout primitives and `/_styleguide` calibration. Adapt the content model, visual language and this file for each real site.
+
+## Platform Profile routing
+
+| Profile ID | Editing | Hosting/runtime |
+| --- | --- | --- |
+| `static` | Developer/agent edits typed Markdown files | Astro static build; no database or server adapter |
+| `static-sveltia` | Sveltia SPA edits the same Git-owned files | Same static build; OAuth proxy or PAT for GitHub authentication |
+| `emdash` | Relational CMS, Portable Text, live canvas and MCP | Node/SQLite/local media, or separately configured Workers/D1/R2 |
+
+Read `baseline.config.json` in generated sites; absence in this root means the existing EmDash application. Profile is independent of Standard/Express track. Generate static sites with `npm run init:profile -- --profile static|static-sveltia --out <new-directory>`; do not prune a cloned CMS project in place. EmDash uses the existing full repository template. See `docs/platform-profiles.md`.
+
+Static profiles use `new-site-workflow`, `site-art-direction`, `astro-site-design` and `impeccable`; skip EmDash setup, modeling, building, CLI and plugin specialists. Do not add CMS dependencies to satisfy an inapplicable check. Generated CI and `sync:baseline` use the installed profile's bounded inventory. Review staged updates before applying, preserve locally calibrated tokens, and verify afterward (`docs/baseline-updates.md`). EmDash-specific commands and rules below apply only to `emdash`.
+
+`SiteShell.astro` is the shared document/landmark shell; platform `Base.astro` wrappers supply navigation and contributions. `ResponsiveImage.astro` is native Astro presentation; `EmDashImage.astro` alone resolves CMS storage. Common styleguide specimens run on both foundations, with EmDash extensions kept separate. Static routes use native `getStaticPaths()`/`render()` and the typed schema in `src/content.config.ts`. Sveltia's paired admin form must match that schema.
 
 ## First steps in a new site repository
 

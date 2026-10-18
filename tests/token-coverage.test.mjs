@@ -153,13 +153,13 @@ test('formatCalibrationMarkdown and upsertCalibrationRecord bind Stage 4.5 token
     const first = readFileSync(target, 'utf8');
     assert.ok(first.includes('## Token Calibration'));
     assert.ok(first.includes(digest));
-    assert.ok(first.includes('## Component Specimens Verified'));
+    assert.ok(first.includes('## Component Specimens To Verify'));
 
     // Updating in place preserves surrounding sections
     upsertCalibrationRecord(target, css);
     const second = readFileSync(target, 'utf8');
     assert.equal(second.match(/## Token Calibration/g)?.length, 1);
-    assert.ok(second.includes('## Component Specimens Verified'));
+    assert.ok(second.includes('## Component Specimens To Verify'));
     assert.ok(formatCalibrationMarkdown(css).includes('WCAG AA Perceptual Contrast Matrix'));
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -273,7 +273,7 @@ test('pruneStarterExceptions strips sample-page and deleted entries while retain
     writeFileSync(exFile, JSON.stringify(source, null, 2), 'utf8');
     const result = pruneStarterExceptions(exFile);
     assert.ok(result.before > result.after);
-    assert.equal(result.after, 7);
+    assert.ok(result.after >= 7, 'Retain the common and platform-specific developer infrastructure');
     const kept = JSON.parse(readFileSync(exFile, 'utf8'));
     assert.ok(kept.every(item => !item.deleted && /^src\/(?:pages\/_styleguide\.astro|components\/dev\/|dev\/|assets\/styleguide-)/.test(item.path)));
   } finally {

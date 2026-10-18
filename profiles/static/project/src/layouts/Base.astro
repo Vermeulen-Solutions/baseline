@@ -1,0 +1,17 @@
+---
+import SiteShell from './SiteShell.astro';
+import { site } from '../config/site';
+interface Props { title: string; description?: string; }
+const { title, description = site.description } = Astro.props;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+---
+<SiteShell title={`${title} — ${site.title}`} description={description} canonical={canonical} lang={site.language}>
+  <header slot="header" class="site-header">
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a class="site-brand" href="/">{site.title}</a>
+      {site.navigation.map(item => <a href={item.href}>{item.label}</a>)}
+    </nav>
+  </header>
+  <slot />
+  <footer slot="footer" class="site-footer"><p>Built with Astro and Baseline.</p></footer>
+</SiteShell>

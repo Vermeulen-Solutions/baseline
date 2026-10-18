@@ -9,7 +9,7 @@ permissions:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,6 +31,26 @@ jobs:
           fi
           npm run check:art-direction -- --base "$base"
       - run: npm run lint
+      - run: npm run design:tokens
       - run: npm run check:schema-budget
       - run: node --test tests/*.test.mjs
+      - run: npm run typecheck
       - run: npm run build
+  generated-profiles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        profile: [static, static-sveltia]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.15.0'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Generate, independently install and verify the selected profile
+        env:
+          PLATFORM_PROFILE: ${{ matrix.profile }}
+        run: npm run test:profiles -- --profile "$PLATFORM_PROFILE"

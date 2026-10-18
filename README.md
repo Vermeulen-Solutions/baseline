@@ -23,11 +23,34 @@
 
 EmDash is a modern, lightweight headless CMS built ground-up for AI-native web development. Baseline provides the visual frontend foundation, development guardrails, and testing harness built specifically for developers pairing with AI coding assistants—whether using **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, **Windsurf**, **Aider**, or local LLM runners.
 
-Spend your time building the site, not debugging agent hallucinations or wrestling with styling drift. Baseline gives your AI assistant clear architectural boundaries, an agent-first token & WCAG contrast engine (`npm run design:tokens`), and a living component quarantine canvas (`/_styleguide`) to stress-test reusable components in isolation before assembling templates. Start locally with Node and SQLite, catch schema-width problems early, and deploy with confidence.
+Spend your time building the site, not debugging agent hallucinations or wrestling with styling drift. Baseline gives your AI assistant clear architectural boundaries, an agent-first token & WCAG contrast engine (`npm run design:tokens`), and a living component quarantine canvas (`/_styleguide`) to stress-test reusable components in isolation before assembling templates. Choose static file-owned content, Sveltia browser editing, or the relational EmDash CMS while sharing one design system.
 
 ---
 
+## Platform Profiles
+
+| Profile | Editing | Foundation |
+| --- | --- | --- |
+| `static` | Developer/agent edits typed Markdown collections | Native Astro static output |
+| `static-sveltia` | Sveltia browser editor commits the same files | Same static output plus `/admin/`; OAuth proxy or PAT |
+| `emdash` | Relational CMS, live edit canvas and MCP | Existing Node/SQLite or configured Workers/D1/R2 |
+
+All profiles share tokens, layout primitives, `SiteShell.astro`, native image
+presentation and `/_styleguide` calibration. Choose the editing and operational
+model independently from the Standard/Express delivery track. See
+[Platform Profiles](docs/platform-profiles.md) and [staged updates](docs/baseline-updates.md).
+
 ## ⚡ Quickstart
+
+For a pure static project without a CMS, run
+`npm run init:profile -- --profile static --out C:/dev/my-static-site` from this
+checkout, then install and verify in the generated directory. See the
+[Platform Profiles guide](profiles/README.md) for the allowlists, provenance,
+static and Sveltia generation. Use `--profile static-sveltia` for the browser editor,
+then follow its generated `docs/sveltia-cms.md` to configure the site's repository
+and authentication. Commit the new lockfile after the first `npm install`;
+generated CI uses `npm ci`. The root quickstart below continues
+to use EmDash.
 
 **Requirements:** Node 22.22.2 minimum (Node 24 LTS recommended) and `npm`.
 

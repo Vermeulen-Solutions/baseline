@@ -1,0 +1,25 @@
+name: Static profile verification
+on:
+  pull_request:
+  push:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.15.0'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Check all visual source against the art direction
+        shell: bash
+        run: npm run check:art-direction -- --base "$(git hash-object -t tree /dev/null)"
+      - run: npm run verify
+      - run: npm run build
+      - run: npm run check:dev-tools

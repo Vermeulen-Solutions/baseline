@@ -4,7 +4,14 @@
 
 # Documentation Directory
 
-Welcome to the Baseline documentation. This repository provides an agency-grade, agent-first Astro foundation built specifically for **AI-assisted developers working with EmDash CMS**.
+Baseline provides two Astro foundations and three Platform Profiles: **`static`** (developer/agent edits files), **`static-sveltia`** (browser editing of the same files), and **`emdash`** (relational CMS, live canvas and MCP). Shared tokens, layout primitives and component quarantine serve all three.
+
+- **[Platform Profiles](platform-profiles.md):** choose editing personas, hosting, infrastructure costs and the generation path.
+- **[Baseline Updates](baseline-updates.md):** stage profile-filtered shared source/skill updates while preserving client changes.
+- **[Generation Manifests](../profiles/README.md):** explicit file/dependency inventories and independent profile verification.
+- **[Platform Profile Verification](verification/platform-profiles.md):** milestone test results, reproduction commands and verification scope.
+
+CMS modeling, deployment, registry and migration guides below apply to `emdash` unless stated otherwise. Static Sveltia projects include their own `docs/sveltia-cms.md` for repository configuration, OAuth proxy/PAT options and native media paths.
 
 Explore the documentation guides below, organized by workflow, design architecture, and tooling:
 

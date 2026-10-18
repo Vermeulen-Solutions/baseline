@@ -1,0 +1,10 @@
+---
+import ResponsiveImage from './ResponsiveImage.astro';
+import type { ResponsiveImageProps } from '../lib/responsive-image';
+import { imageSource } from '../lib/image-source';
+
+type Props = Omit<ResponsiveImageProps, 'src'> & { src: string };
+const { src, width, height, ...presentation } = Astro.props;
+const image = await imageSource(src, Astro.url.origin, Astro.locals.emdash?.storage, width, height);
+---
+<ResponsiveImage {...presentation} src={image.src} originalSrc={src} width={image.width} height={image.height} />

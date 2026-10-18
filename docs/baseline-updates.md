@@ -1,0 +1,60 @@
+# Updating generated static sites
+
+`npm run sync:baseline` updates shared primitives, tokens, verification tools and
+the four selected shared skills in generated `static` and `static-sveltia` sites.
+It reads upstream files as data from Baseline's fixed GitHub repository at an
+explicit immutable commit. It never executes an upstream generator or imports
+remote scripts during synchronization. The root EmDash source checkout continues
+using its existing CMS skill synchronization tools; it has no generated static
+managed-file receipt.
+
+```sh
+npm run sync:baseline -- --ref <40-character-Baseline-commit-SHA>
+# Review .baseline/updates/<SHA>/stage.json and files/ against your working tree.
+npm run sync:baseline -- --apply <same-SHA>
+npm run verify
+npm run build
+npm run check:dev-tools
+```
+
+Stage before applying. Files are eligible only if present in the site's installed
+managed-file inventory and classified as shared or client-calibrated. New upstream
+paths, packages, npm scripts, profile IDs and specialist skills cannot enter via
+this command. Routes, content, site settings, the site-owned Base layout and
+Sveltia's repository/auth configuration are excluded. Structural additions require
+a reviewed generator migration; dependency changes require a separate package and
+lockfile review. This ceiling intentionally favors bounded updates over silently
+adopting future upstream capabilities.
+
+Apply preflights all paths and hashes. Symlinks, traversal, altered staged bytes,
+metadata drift or local edits made after staging stop the apply. A file changed
+locally since generation or its last successful update is a conflict: the local
+file remains, and the incoming version stays under `files/` for manual comparison.
+Other eligible files can apply. There is no force-overwrite or automatic text
+merge. Keep your calibrated `global.css`; merge only relevant upstream changes
+and run token audits. A deleted local file is also a conflict, not resurrected.
+
+The tracked managed-file receipt records per-file update commits and `lastSync`
+with applied/conflicting paths. The original generation source remains intact in
+`baseline.config.json`. Exact starter art-gate exceptions are advanced only for
+unchanged infrastructure files whose old hashes matched; local client changes
+never receive new exemptions. Review those exception changes alongside source.
+
+Commit the source changes, managed receipt and applicable exception updates after
+verification. `.baseline/updates/` is ignored local review material; it contains
+no credentials. To retry a revision after manual reconciliation, remove only its
+specific staging directory and stage again; unchanged conflicts continue to be
+reported because their recorded base hash is intentionally preserved.
+
+The generated `upstream-update.yml` is a manual, read-only workflow: supply a SHA,
+then download the proposed patch and stage/conflict report. It applies eligible
+files only in its disposable checkout and runs full verification. It never pushes
+or opens a PR automatically. Review conflicts even when the verified subset passes;
+a green run does not imply every proposed file was applied. Run local synchronization
+to reproduce and inspect the proposal before committing. Normal CI checks all visual
+source so newly committed visual work cannot bypass the Art Direction Record.
+
+The root Baseline weekly update workflow similarly produces a dependency patch
+after verification, rather than directly pushing to `main` or suppressing failures.
+CMS skill updates remain explicit, staged operations documented in
+`docs/skill-synchronization.md` in the full EmDash repository.

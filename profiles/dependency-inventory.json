@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 1,
+  "versionPolicy": "Resolve versions from the canonical root package.json; generate a fresh profile lockfile later.",
+  "packages": {
+    "@astrojs/node": {
+      "section": "dependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/@astrojs/node",
+      "reason": "EmDash runtime or infrastructure/audit tooling"
+    },
+    "@astrojs/react": {
+      "section": "dependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/@astrojs/react",
+      "reason": "EmDash runtime or infrastructure/audit tooling"
+    },
+    "@tailwindcss/vite": {
+      "section": "dependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/@tailwindcss/vite",
+      "reason": "Shared Astro presentation, design or verification tooling"
+    },
+    "astro": {
+      "section": "dependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/astro",
+      "reason": "Shared Astro presentation, design or verification tooling"
+    },
+    "emdash": {
+      "section": "dependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/emdash",
+      "reason": "EmDash runtime or infrastructure/audit tooling"
+    },
+    "photoswipe": {
+      "section": "dependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/photoswipe",
+      "reason": "Existing EmDash gallery feature; omitted from static pilot"
+    },
+    "react": {
+      "section": "dependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/react",
+      "reason": "EmDash runtime or infrastructure/audit tooling"
+    },
+    "react-dom": {
+      "section": "dependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/react-dom",
+      "reason": "EmDash runtime or infrastructure/audit tooling"
+    },
+    "tailwindcss": {
+      "section": "dependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/tailwindcss",
+      "reason": "Shared Astro presentation, design or verification tooling"
+    },
+    "@astrojs/check": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/@astrojs/check",
+      "reason": "Shared Astro presentation, design or verification tooling"
+    },
+    "@fontsource/noto-sans": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/@fontsource/noto-sans",
+      "reason": "Shared Astro presentation, design or verification tooling"
+    },
+    "@google/design.md": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/@google/design.md",
+      "reason": "Shared Astro presentation, design or verification tooling"
+    },
+    "@playwright/test": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/@playwright/test",
+      "reason": "Shared Astro presentation, design or verification tooling"
+    },
+    "aws4fetch": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/aws4fetch",
+      "reason": "EmDash runtime or infrastructure/audit tooling"
+    },
+    "jsonc-parser": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/jsonc-parser",
+      "reason": "EmDash runtime or infrastructure/audit tooling"
+    },
+    "sharp": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/sharp",
+      "reason": "Shared Astro presentation, design or verification tooling"
+    },
+    "smol-toml": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/smol-toml",
+      "reason": "EmDash runtime or infrastructure/audit tooling"
+    },
+    "typescript": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/typescript",
+      "reason": "Shared Astro presentation, design or verification tooling"
+    }
+  }
+}

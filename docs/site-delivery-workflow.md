@@ -6,11 +6,13 @@ When building client websites with AI coding assistants, the most common failure
 
 By breaking work into explicit sequential stages—each gated by review and automated checks—you get agency-grade results every time. For copy-pasteable prompts to trigger each stage with any agent, see the **[AI Developer Prompt Library](prompt-library.md)**.
 
+Platform Profile (`static`, `static-sveltia`, `emdash`) selects content/editing/runtime; Standard/Express selects delivery sequencing. Read [Platform Profiles](platform-profiles.md) before choosing a track. SQL budget, live-editor, registry and database deployment instructions below apply only to EmDash.
+
 ### Choosing Your Track: Standard (7 Stages) vs. Express (3 Checkpoints)
 
 | Track | Best For | Human Checkpoints | CLI Gates Enforced |
 | --- | --- | --- | --- |
-| **Standard Track (7 Stages)** | Complex migrations, multi-collection architectures, or multi-locale sites | Pauses at each stage handoff (`1` → `2` → `3` → `4` → `4.5` → `5` → `6`) | All (`check:schema-budget`, `check:art-direction`, `design:tokens`, `verify`) |
+| **Standard Track (7 Stages)** | Complex migrations, multi-collection architectures, or multi-locale sites | Pauses at each stage handoff (`1` → `2` → `3` → `4` → `4.5` → `5` → `6`) | Profile-appropriate (`check:art-direction`, `design:tokens`, `verify`; SQL budget only on EmDash) |
 | **Express Track (3 Checkpoints)** | Smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale) | **Checkpoint A** (Stages 1–3) → **Checkpoint B** (Stages 4–4.5) → **Checkpoint C** (Stages 5–6) | All (`check:schema-budget`, `check:art-direction`, `design:tokens`, `verify`) |
 
 ```mermaid
@@ -37,7 +39,19 @@ Never start by writing code or prompting an assistant to "make a homepage." Begi
 
 ---
 
-## Stage 2: Platform, Hosting & Plugin Decisions
+## Stage 2: Platform, Hosting & Architecture Decisions
+
+Ask who edits, whether changes may wait for a build, what relational/live capabilities are needed, and what hosting/operations the client can maintain. Offer all three profiles and explain the infrastructure costs:
+
+| Profile | Editing persona | Hosting and ongoing costs |
+| --- | --- | --- |
+| `static` | Developer/agent edits typed files | Static hosting/build minutes; optional external services |
+| `static-sveltia` | Non-technical browser editors, Git commits | Same builds plus OAuth proxy hosting/maintenance or PAT administration |
+| `emdash` | Relational CMS editors, live canvas/MCP | Node/SQLite or Workers/D1/R2, storage, auth and backups |
+
+Record the selected profile independently of track and locale count. Generate static projects via `init:profile` into an empty destination; use the full repository template for EmDash. Static branches skip EmDash specialist skills, plugin registry evaluation, SQL budgeting and database fixtures. Configure real 404 behavior and commit-triggered builds; Sveltia also requires repository/branch/auth decisions. Refer to the generated Sveltia guide for OAuth proxy vs PAT setup. Prices and provider limits must be checked for the actual hosting decision.
+
+**The following runtime/plugin decisions are EmDash-only.**
 
 Establish your runtime, hosting boundaries, and plugin needs before modeling content:
 - **Default Profile:** Node.js + SQLite + local media storage. Zero cloud dependencies, fast local development, perfectly reproducible.
@@ -55,7 +69,9 @@ Establish your runtime, hosting boundaries, and plugin needs before modeling con
 
 ## Stage 3: Content Architecture & Candidate Discovery
 
-Model your editorial data structure *before* creating page templates:
+On static profiles, define native Zod schemas in `src/content.config.ts`, Markdown files in `src/content`, file-owned navigation, draft filtering and `getStaticPaths()`/`render()`. Sveltia adds a paired form, date/optional-field serialization and native upload paths. Verify those contracts with the build. Load `building-emdash-site` and other CMS specialists only for EmDash.
+
+For EmDash, model your editorial data structure *before* creating page templates:
 - **WordPress Migrations:** If migrating from an existing site, do not blindly replicate messy postmeta tables. Run the [WordPress Content Modeling & Candidate Register](wordpress-content-modeling.md) workflow.
 - **The Content Candidate Register:** Hunt for repeated operational entities trapped in page builder blocks or ACF repeaters (e.g., rosters, schedules, venues, sponsors) and promote them to first-class EmDash collections.
 - **Relational Integrity:** Model 1:N relations and master data lookups rather than bloating single collection rows.
@@ -84,7 +100,7 @@ Do not attempt to assemble twenty full pages at once. Source and calibrate your 
   1. Strip React/Framer Motion runtime down to **zero-JS `.astro` markup**.
   2. Replace hardcoded Tailwind palette classes (`bg-zinc-900`) with **semantic tokens** (`var(--color-surface)`).
   3. Upgrade fixed pixel utilities to **fluid typographic steps** (`--text-step-*`, `--text-step-3-to-1`) and `<Section>` / `<Container>` / `<Container breakout>` / `<Grid>`.
-  4. Wire **EmDash CMS live edit proxies** (`{...entry.edit.title}`).
+  4. On EmDash only, wire **CMS live edit proxies** (`{...entry.edit.title}`).
   5. Stress-test on `/_styleguide`.
 - **Audit & Record Token Calibration (`npm run design:tokens`):** Verify fluid typography/spacing scales and all 10 WCAG AA perceptual contrast pairs across default and `[data-surface="dark"]` contexts, and generate the `## Token Calibration` section in `audit/component-calibration.md` via `npm run design:tokens -- --write-calibration`.
 - **Stress-Test Edge Cases:** Test long translated headings, missing images, uneven grid counts, `<Card>` `.clickable-parent`/`.focus-parent` keyboard outlines and concentric radii, `.content-grid` editorial breakouts, RTL text, and `prefers-reduced-motion`.
@@ -95,7 +111,10 @@ Do not attempt to assemble twenty full pages at once. Source and calibrate your 
 
 ## Stage 5: Representative Public & Editor Implementation
 
-Now assemble your public routes and wire up EmDash CMS editing:
+Both foundations compose the shared `SiteShell.astro`, tokens and primitives. Static uses the file-owned Base wrapper, native `ResponsiveImage` and Markdown RichText; EmDash keeps queries, edit annotations and storage in platform adapters. Common `/_styleguide` calibration is identical; Portable Text/storage specimens are EmDash extensions.
+
+
+Now assemble your public routes; the CMS editing and media-import steps below apply only to EmDash.
 - **Compose with Primitives:** Build layouts using `<Section>`, `<Container>` (or `<Container breakout>` / `.content-grid` for editorial articles with wide callouts/media), `<Grid>`, and `<Card>` primitives ([Design Framework](design-framework.md)).
 - **Bind Editorial Canvas Proxies:** Pass page identity to `Base.astro` and spread field proxies (`{...entry.edit.title}`) onto the rendered elements so clients can visually edit content in the CMS ([Editorial Canvas](emdash-editorial-canvas.md)).
 - **Media Optimization:** Use native Astro image delivery for photographic assets ([Image Delivery](image-delivery.md)) and run `npm run media:migrate-wp` to normalize and ingest WordPress media imports via an auditable manifest.
@@ -107,19 +126,25 @@ Now assemble your public routes and wire up EmDash CMS editing:
 
 Run deterministic local checks to verify the build before client handoff or deployment:
 - `npm run verify`: Run syntax lint, Art Direction Gate, token/font/edit-proxy audit, all unit tests (`npm test`), physical schema budget preflight (`check:schema-budget`), and Astro/TypeScript checks (`typecheck`) in one command.
-- `npm run test:visual`: Compare local Windows screenshots against reviewed baselines across mobile, tablet, and desktop viewports ([Visual Regression](visual-regression.md)).
+- EmDash only — `npm run test:visual`: Compare local Windows screenshots against reviewed baselines across mobile, tablet, and desktop viewports ([Visual Regression](visual-regression.md)).
 - `npm run check:dev-tools`: Confirm `/_styleguide` and synthetic fixture markers are completely stripped from the production build.
 - **Visual Critique & Polish (Optional):** Use the bundled `impeccable` skill for an automated UI critique pass on rendered pages before final signoff.
-- **Client Verification:** Log in to `/_emdash/admin`, test editing live content, publish drafts, and verify updates on the public site.
-- **Site Registration:** Run `npm run site:register` to register the site metadata ([Site Registry](site-registry.md)).
+- **EmDash Client Verification:** Log in to `/_emdash/admin`, test editing live content, publish drafts, and verify updates on the public site.
+- **EmDash Site Registration:** Run `npm run site:register` to register the site metadata ([Site Registry](site-registry.md)).
 
 ---
 
 ## Stage 7: Production Cutover, Email & Launch
 
 Take the verified site live on its production custom domain:
-- **Node.js Target:** Generate production environment variables, configure reverse proxy (Nginx, Caddy with automatic TLS), and set up process supervision (Docker, systemd).
-- **Cloudflare Target (`emdash-production-cutover`):** Connect custom production domain via Cloudflare Wrangler, issue TLS certificates, and configure apex/www canonical redirects.
+- **EmDash Node.js Target:** Generate production environment variables, configure reverse proxy (Nginx, Caddy with automatic TLS), and set up process supervision (Docker, systemd).
+- **EmDash Cloudflare Target (`emdash-production-cutover`):** Connect custom production domain via Cloudflare Wrangler, issue TLS certificates, and configure apex/www canonical redirects.
 - **Corporate Mail DNS Preservation:** Protect existing client email (Google Workspace / Microsoft 365) by auditing MX, SPF, DKIM, and DMARC records before modifying DNS.
 - **Admin Authentication Origin:** Verify admin passkey/email login on the live production domain origin.
 - **Guides:** [Production Deployment & Cloudflare Cutover](production-deployment.md) · [Hosting Setup](../.agents/skills/emdash-site-setup/SKILL.md).
+
+## Static verification, updates and handoff
+
+Generated CI runs `npm ci`, the art gate, token audits, tests, Astro typecheck, static build and release/styleguide checks. Static content edits must rebuild successfully; deploy only `dist/` with missing paths returning 404. Verify Sveltia sign-in, media upload, save and publication on the actual deployment before editor handoff. Local generation does not certify credentialed OAuth/PAT flows.
+
+Use [staged Baseline updates](baseline-updates.md) to update shared primitives and selected skills without CMS dependencies. Locally changed tokens remain conflicts for review. Record static deployment/browser evidence in project notes; the existing database audit, registry and Windows screenshot regression tooling remains EmDash-specific.

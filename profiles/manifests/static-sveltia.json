@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "static-sveltia",
+  "extends": "static",
+  "label": "Static + Sveltia CMS",
+  "foundation": "static",
+  "runtimes": [
+    "static"
+  ],
+  "output": "static",
+  "adapter": null,
+  "generationReady": true,
+  "features": [],
+  "files": [],
+  "scripts": [],
+  "checks": [],
+  "skills": [],
+  "packages": {
+    "dependencies": [],
+    "devDependencies": []
+  },
+  "pending": [],
+  "overrides": [
+    {
+      "source": "profiles/static-sveltia/project/public/admin/index.html",
+      "target": "public/admin/index.html"
+    },
+    {
+      "source": "profiles/static-sveltia/project/public/admin/config.yml",
+      "target": "public/admin/config.yml"
+    },
+    {
+      "source": "profiles/static-sveltia/project/docs/sveltia-cms.md",
+      "target": "docs/sveltia-cms.md"
+    },
+    {
+      "source": "profiles/static-sveltia/project/tests/sveltia-config.test.mjs",
+      "target": "tests/sveltia-config.test.mjs"
+    }
+  ]
+}

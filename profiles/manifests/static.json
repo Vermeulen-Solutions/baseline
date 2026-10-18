@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "id": "static",
+  "extends": "shared",
+  "label": "Static (No CMS)",
+  "foundation": "static",
+  "runtimes": [
+    "static"
+  ],
+  "output": "static",
+  "adapter": null,
+  "generationReady": true,
+  "features": [],
+  "files": [],
+  "scripts": [
+    "postbuild",
+    "check:dev-tools",
+    "test:design"
+  ],
+  "checks": [],
+  "skills": [],
+  "packages": {
+    "dependencies": [],
+    "devDependencies": []
+  },
+  "pending": [],
+  "scriptOverrides": {
+    "test:design": "node --test tests/static-foundation.test.mjs"
+  },
+  "overrides": [
+    {
+      "source": "profiles/static/project/.env.example",
+      "target": ".env.example"
+    },
+    {
+      "source": "profiles/static/project/.gitignore",
+      "target": ".gitignore"
+    },
+    {
+      "source": "profiles/static/project/.mcp.example.json",
+      "target": ".mcp.example.json"
+    },
+    {
+      "source": "profiles/static/project/AGENTS.md",
+      "target": "AGENTS.md"
+    },
+    {
+      "source": "profiles/static/project/astro.config.mjs",
+      "target": "astro.config.mjs"
+    },
+    {
+      "source": "profiles/static/project/README.md",
+      "target": "README.md"
+    },
+    {
+      "source": "profiles/static/project/scripts/check-dev-tools.mjs",
+      "target": "scripts/check-dev-tools.mjs"
+    },
+    {
+      "source": "profiles/static/project/src/assets/pilot-grid.jpg",
+      "target": "src/assets/pilot-grid.jpg"
+    },
+    {
+      "source": "profiles/static/project/src/components/RichText.astro",
+      "target": "src/components/RichText.astro"
+    },
+    {
+      "source": "profiles/static/project/src/config/site.ts",
+      "target": "src/config/site.ts"
+    },
+    {
+      "source": "profiles/static/project/src/content/posts/welcome.md",
+      "target": "src/content/posts/welcome.md"
+    },
+    {
+      "source": "profiles/static/project/src/content.config.ts",
+      "target": "src/content.config.ts"
+    },
+    {
+      "source": "profiles/static/project/src/env.d.ts",
+      "target": "src/env.d.ts"
+    },
+    {
+      "source": "profiles/static/project/src/layouts/Base.astro",
+      "target": "src/layouts/Base.astro"
+    },
+    {
+      "source": "profiles/static/project/src/lib/posts.ts",
+      "target": "src/lib/posts.ts"
+    },
+    {
+      "source": "profiles/static/project/src/pages/404.astro",
+      "target": "src/pages/404.astro"
+    },
+    {
+      "source": "profiles/static/project/src/pages/index.astro",
+      "target": "src/pages/index.astro"
+    },
+    {
+      "source": "profiles/static/project/src/pages/posts/index.astro",
+      "target": "src/pages/posts/index.astro"
+    },
+    {
+      "source": "profiles/static/project/src/pages/posts/[...id].astro",
+      "target": "src/pages/posts/[...id].astro"
+    },
+    {
+      "source": "profiles/static/project/src/pages/_styleguide.astro",
+      "target": "src/pages/_styleguide.astro"
+    },
+    {
+      "source": "profiles/static/project/tests/static-foundation.test.mjs",
+      "target": "tests/static-foundation.test.mjs"
+    },
+    {
+      "source": "profiles/static/project/tsconfig.json",
+      "target": "tsconfig.json"
+    },
+    {
+      "source": "profiles/static/project/.github/workflows/design-checks.yml",
+      "target": ".github/workflows/design-checks.yml"
+    },
+    {
+      "source": "profiles/static/project/.github/workflows/upstream-update.yml",
+      "target": ".github/workflows/upstream-update.yml"
+    }
+  ]
+}

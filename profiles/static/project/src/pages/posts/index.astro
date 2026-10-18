@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Grid from '../../components/Grid.astro';
+import Card from '../../components/Card.astro';
+import { publishedPosts, postUrl } from '../../lib/posts';
+const posts = await publishedPosts();
+---
+<Base title="Posts"><Section labelledBy="posts"><Container width="wide" class="flow">
+  <h1 id="posts">Posts</h1>
+  {posts.length ? <Grid>{posts.map(post => <Card title={post.data.title} href={postUrl(post.id)} description={post.data.description} image={post.data.hero} imageAlt={post.data.heroAlt} />)}</Grid> : <p>No posts have been published yet.</p>}
+</Container></Section></Base>

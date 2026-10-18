@@ -757,12 +757,13 @@ export function upsertCalibrationRecord(targetPath, css, cssPath = 'src/styles/g
     '',
     section,
     '',
-    '## Component Specimens Verified',
+    '## Component Specimens To Verify',
     '',
-    '- **Typography & Measure:** Verified fluid steps and `--measure-reading` line lengths on `/_styleguide#typography`.',
-    '- **Controls & Focus States:** Verified primary, disabled, invalid, and `:focus-visible` states on `/_styleguide#controls`.',
-    '- **Layout & Cards:** Verified `Section`, `Container` (`reading`, `content`, `wide`, `breakout`), `Grid`, and `Card` (`stacked`, `horizontal`) on `/_styleguide#layout`.',
-    '- **Media & Editorial Flow:** Verified `ResponsiveImage`, `EditorialImage`, `PhotoGallery`, `PartnersPanel`, `LogoTicker`, and `.flow` Portable Text on `/_styleguide#media` and `/_styleguide#editorial`.',
+    '- **Typography & Measure:** Check fluid steps and `--measure-reading` line lengths on `/_styleguide#typography`.',
+    '- **Controls & Focus States:** Check primary, disabled, invalid, and `:focus-visible` states on `/_styleguide#controls`.',
+    '- **Layout & Cards:** Check `Section`, `Container` (`reading`, `content`, `wide`, `breakout`), `Grid`, and `Card` (`stacked`, `horizontal`) on `/_styleguide#layout`.',
+    '- **Media & Editorial Flow:** Check native `ResponsiveImage`, `PartnersPanel`, `LogoTicker`, and `.flow` Markdown on the common specimens. For EmDash, also check `EditorialImage`, `PhotoGallery` and Portable Text in the platform extension.',
+    '- **Evidence:** Record captures and observed results before marking component specimens verified. Token calculations alone do not verify rendered components.',
     '',
   ].join('\n');
 
@@ -939,6 +940,12 @@ const EDITABLE_ENTRY_FIELDS = ['title', 'featured_image', 'excerpt', 'subtitle',
  * to verify `<Base content={{...}}>` and field-level `.edit.` in-place editor bindings are present.
  */
 export function auditEditProxies(rootDir = '.') {
+  const profileFile = join(resolve(rootDir), 'baseline.config.json');
+  if (existsSync(profileFile)) {
+    const { foundation } = JSON.parse(readFileSync(profileFile, 'utf8'));
+    if (!['static', 'emdash'].includes(foundation)) throw new Error('Unknown Baseline foundation');
+    if (foundation === 'static') return { valid: true, applicability: 'not-applicable', checkedRoutes: [], collectionRoutes: [], issues: [] };
+  }
   const pagesDir = join(resolve(rootDir), 'src/pages');
   const files = walkFiles(pagesDir, '.astro');
   const checkedRoutes = [];
@@ -1190,7 +1197,9 @@ function main() {
     console.log(`- :root tokens: ${Object.keys(report.tokens.root).length}`);
     console.log(`- [data-surface="dark"] tokens: ${Object.keys(report.tokens.dark).length}`);
     console.log(`- Font loading: ${fontAudit.valid ? 'PASS' : 'FAIL'} (${fontAudit.checkedFamilies.length ? fontAudit.checkedFamilies.join(', ') : 'system fonts'})`);
-    console.log(`- EmDash edit proxies: ${proxyAudit.valid ? 'PASS' : 'FAIL'} (${proxyAudit.checkedRoutes.length} single-entry routes, ${proxyAudit.collectionRoutes.length} collection routes)`);
+    console.log(proxyAudit.applicability === 'not-applicable'
+      ? '- EmDash edit proxies: NOT APPLICABLE (static foundation)'
+      : `- EmDash edit proxies: ${proxyAudit.valid ? 'PASS' : 'FAIL'} (${proxyAudit.checkedRoutes.length} single-entry routes, ${proxyAudit.collectionRoutes.length} collection routes)`);
     console.log('- WCAG Contrast Pairs:');
     for (const item of report.contrast) {
       console.log(`  [${item.status.toUpperCase()}] ${item.id}: ${item.ratio}:1 (min ${item.minimum}:1)`);

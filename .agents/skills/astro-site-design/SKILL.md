@@ -5,9 +5,19 @@ description: Design, improve, or rebuild public pages and reusable components in
 
 # Astro site design and implementation
 
-Use `docs/design-interchange.md` for optional DESIGN.md proposals/exports. Lint and inspect mapped-token drift before exporting; preserve fluid expressions and contextual aliases in linked evidence when lossy. Reconcile proposals with AGENTS.md and shipped CSS rather than automatically replacing either. External tool markup still needs real EmDash ownership and native image integration.
+Use `docs/design-interchange.md` for optional DESIGN.md proposals/exports. Lint and inspect mapped-token drift before exporting; preserve fluid expressions and contextual aliases in linked evidence when lossy. Reconcile proposals with AGENTS.md and shipped CSS rather than automatically replacing either. External tool markup still needs the selected profile's content ownership and native image integration.
 
 Build maintainable, accessible Astro pages and components. When a source site or visual reference exists, inspect its actual rendered appearance before implementation; do not substitute a vague textual approximation for visual review.
+
+## Platform presentation boundary
+
+Read `baseline.config.json` first. `static` and `static-sveltia` use native Content Collections, `getStaticPaths()` and Markdown `render()`; skip `building-emdash-site` and all CMS binding/modeling specialists. Existing EmDash API/editor/cache instructions below apply only to `emdash`. Localized static routes follow the project's file/URL model rather than assuming CMS translation groups.
+
+Use shared `src/layouts/SiteShell.astro` for document metadata, global styles, skip link and landmarks. Platform `Base.astro` wrappers supply file-owned settings/navigation or EmDash contributions. Keep queries, widgets and storage out of shared primitives. `Card.astro` accepts ordinary HTML attribute bags; pass edit annotations only from an EmDash caller.
+
+`ResponsiveImage.astro` accepts native Astro ImageMetadata (from `src/assets`) or a resolved URL with dimensions and uses Astro image processing. Do not add a storage endpoint to static sites. EmDash callers resolve storage with `EmDashImage.astro` before presentation. Static RichText wraps native Markdown in `.flow`; Portable Text is a platform extension.
+
+Calibrate tokens, typography, layout, cards, ticker and native images on the same common `/_styleguide` on both foundations. EmDash adds Portable Text/storage specimens separately. Static editor-proxy checks explicitly report inapplicable; this is not an editor verification pass. Production builds must exclude the route and fixture artifacts must remain nondeployable. Generated static sites support manual browser acceptance, not the EmDash-specific screenshot/registry harness. Follow the generated README's actual commands.
 
 ## Inspect before implementing
 

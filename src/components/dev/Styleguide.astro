@@ -7,11 +7,22 @@ import Grid from '../Grid.astro';
 import Card from '../Card.astro';
 import PartnersPanel from '../PartnersPanel.astro';
 import ResponsiveImage from '../ResponsiveImage.astro';
-import RichText from '../RichText.astro';
-import PhotoGallery from '../PhotoGallery.astro';
+import MarkdownProse from '../../dev/styleguide-prose.md';
 import FormError from '../FormError.astro';
 import LogoTicker from '../LogoTicker.astro';
-import { fixtureVersion, smallImage, portraitImage, fixtureImage as image, specimenTokens, componentCoverage, proseFixture, editorialImageFixture, galleryFixture } from '../../dev/styleguide-fixtures';
+import { fixtureVersion, smallImage, portraitImage, fixtureImage as image, specimenTokens, componentCoverage } from '../../dev/styleguide-fixtures';
+interface Props {
+  coverage?: {
+    rendered: string[];
+    variants: Record<string, string[]>;
+    stress: string[];
+    deferred: Record<string, string>;
+    surfaceModes: string;
+    unsupported: string[];
+  };
+  editorialLabel?: string;
+}
+const { coverage = componentCoverage, editorialLabel = 'Markdown' } = Astro.props;
 const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'editorial', 'coverage'];
 ---
 <!doctype html>
@@ -28,7 +39,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
           <h3>Nested heading</h3><h4>Fourth-level heading</h4><h5>Fifth-level heading</h5><h6>Sixth-level heading</h6>
           <Container width="reading"><p class="stress">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789. Font specimens inherit the source family and weight; fixture builds use pinned Noto Sans. A longer heading or translated sentence should wrap naturally without forced line breaks.</p><p class="stress">OneUnbrokenIdentifierToCheckIntrinsicSizingAndWrappingAcrossTheNarrowestSupportedContainer</p></Container>
         </div></Section>
-        <Section labelledBy="palette"><div class="flow"><h2 id="palette">Semantic palette</h2><p>{componentCoverage.surfaceModes}</p><ul class="swatches" role="list">{specimenTokens.map(token => <li><span class="swatch" style={`background:var(--color-${token})`} aria-hidden="true"></span><code>--color-{token}</code></li>)}</ul><p>Swatches expose roles; check actual text/control pairs and backgrounds separately.</p><div class="surface-dark-specimen flow" data-surface="dark"><h3>Dark surface context (<code>data-surface="dark"</code>)</h3><p>Remaps <code>--color-surface</code>, <code>--color-text</code>, <code>--color-muted</code>, <code>--color-border</code>, and <code>--color-focus</code> for high-contrast inverted bands.</p></div></div></Section>
+        <Section labelledBy="palette"><div class="flow"><h2 id="palette">Semantic palette</h2><p>{coverage.surfaceModes}</p><ul class="swatches" role="list">{specimenTokens.map(token => <li><span class="swatch" style={`background:var(--color-${token})`} aria-hidden="true"></span><code>--color-{token}</code></li>)}</ul><p>Swatches expose roles; check actual text/control pairs and backgrounds separately.</p><div class="surface-dark-specimen flow" data-surface="dark"><h3>Dark surface context (<code>data-surface="dark"</code>)</h3><p>Remaps <code>--color-surface</code>, <code>--color-text</code>, <code>--color-muted</code>, <code>--color-border</code>, and <code>--color-focus</code> for high-contrast inverted bands.</p></div></div></Section>
         <Section labelledBy="controls"><div class="flow"><h2 id="controls">Controls and errors</h2><div class="control-row"><button type="button">Native button</button><button type="button" disabled>Disabled button</button><a href="#editorial">Text link</a></div>
           <fieldset class="specimen-fields"><legend>Native control specimens — no submissions</legend>
             <label for="specimen-name">Name<input id="specimen-name" autocomplete="off" placeholder="Sample name" /></label>
@@ -48,18 +59,17 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
           <div dir="rtl"><Container width="reading"><p>Right-to-left container specimen — inspect logical inline bounds and reading direction across viewports.</p></Container></div>
         </div></Section>
         <Section labelledBy="media"><div class="flow"><h2 id="media">Images, galleries and partner artwork</h2><p>Local geometric assets demonstrate ratio, native dimensions and captions. This SVG is intentionally retained; runtime photographic optimization is a separate integration check.</p>
-          <Container width="reading"><div class="flow"><RichText value={[editorialImageFixture]} /></div></Container>
-          <div class="flow"><RichText value={[galleryFixture]} /></div>
+          <slot name="platform-media" />
           <Grid minimum="compact"><ResponsiveImage {...smallImage} optimize={false} /><ResponsiveImage {...portraitImage} optimize={false} /></Grid>
           <PartnersPanel partners={[{ name: 'Synthetic partner artwork with a deliberately long accessible name', image: image.src, alt: image.alt, href: '#coverage' }, { name: 'Unlinked specimen', image: image.src, alt: image.alt, ground: 'dark' }]} />
-          <PartnersPanel partners={[]} /><PhotoGallery node={{ _type: 'gallery', images: [] }} title="Empty gallery" />
+          <PartnersPanel partners={[]} /><slot name="platform-empty-media" />
           <h3>Logo ticker</h3><p>Use the checkbox to stop or start optional motion. With reduced motion enabled, the full static list appears and the motion control is hidden.</p>
           <LogoTicker id="specimen-logos" label="Synthetic partner ticker" animate>{['Example circle', 'Example outline', 'Example grid', 'Example shape'].map(name => <li><img src={smallImage.src} width="96" height="64" alt="" loading="lazy" /><span>{name}</span></li>)}</LogoTicker>
           <div dir="rtl"><LogoTicker id="specimen-rtl-logos" label="Single static RTL logo"><li>Single synthetic partner</li></LogoTicker></div>
           <LogoTicker id="specimen-empty-logos" label="Empty ticker" />
         </div></Section>
-        <Section labelledBy="editorial"><div class="flow"><h2 id="editorial">Portable Text</h2><div class="flow"><RichText value={proseFixture} /></div></div></Section>
-        <Section labelledBy="coverage"><div class="flow"><h2 id="coverage">Coverage and limits</h2><ul>{componentCoverage.rendered.map(name => <li><code>{name}</code></li>)}</ul><dl>{Object.entries(componentCoverage.variants).map(([name, variants]) => <><dt>{name}</dt><dd>{variants.join('; ')}</dd></>)}</dl><p>{componentCoverage.stress.join('; ')}.</p><p>{componentCoverage.deferred.CMSPartnersPanel}</p><p>There are no writable CMS identities on this page. Verify registered fields, canonical values and save/reload separately on disposable entries.</p><p>Code blocks and tables intentionally scroll internally where needed. External embeds remain outside this verification scope.</p><ul>{componentCoverage.unsupported.map(item => <li>{item}</li>)}</ul></div></Section>
+        <Section labelledBy="editorial"><div class="flow"><h2 id="editorial">{editorialLabel}</h2><div class="flow"><slot name="editorial"><MarkdownProse /></slot></div></div></Section>
+        <Section labelledBy="coverage"><div class="flow"><h2 id="coverage">Coverage and limits</h2><ul>{coverage.rendered.map(name => <li><code>{name}</code></li>)}</ul><dl>{Object.entries(coverage.variants).map(([name, variants]) => <><dt>{name}</dt><dd>{variants.join('; ')}</dd></>)}</dl><p>{coverage.stress.join('; ')}.</p>{Object.values(coverage.deferred).map(note => <p>{note}</p>)}<slot name="platform-notes" /><p>Code blocks and tables intentionally scroll internally where needed. External embeds remain outside this verification scope.</p><ul>{coverage.unsupported.map(item => <li>{item}</li>)}</ul></div></Section>
       </Container>
     </main>
     <footer class="site-footer"><p>Development/test specimen route. Normal production builds return 404. Fixture builds must never be deployed.</p></footer>

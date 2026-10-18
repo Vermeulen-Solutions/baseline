@@ -59,7 +59,7 @@ try {
   await fs.mkdir(path.join(root, 'public'), { recursive: true });
   await sharp({create:{width:1800,height:1200,channels:3,background:'#486b83'}}).jpeg().toFile(originals[0]);
   await sharp({create:{width:640,height:400,channels:3,background:'#486b83'}}).png().toFile(originals[1]);
-  await fs.writeFile(fixture, `---\nimport ResponsiveImage from '../components/ResponsiveImage.astro';\n---\n<main><ResponsiveImage src="/native-image-check-large.jpg" alt="large"/><ResponsiveImage src="/native-image-check-small.png" alt="small"/><ResponsiveImage src="/native-image-check-large.jpg" alt="preserved" optimize={false}/><ResponsiveImage src="/_emdash/api/media/file/${key}" alt="fresh"/></main>\n`);
+  await fs.writeFile(fixture, `---\nimport ResponsiveImage from '../components/EmDashImage.astro';\n---\n<main><ResponsiveImage src="/native-image-check-large.jpg" alt="large"/><ResponsiveImage src="/native-image-check-small.png" alt="small"/><ResponsiveImage src="/native-image-check-large.jpg" alt="preserved" optimize={false}/><ResponsiveImage src="/_emdash/api/media/file/${key}" alt="fresh"/></main>\n`);
   await start(['node_modules/astro/bin/astro.mjs','dev','--host','127.0.0.1','--port','4332']);results.push(await check('development'));await stop();
   await run(['node_modules/astro/bin/astro.mjs','build']);
   built = true;

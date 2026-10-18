@@ -1,7 +1,8 @@
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
+import { join } from 'node:path';
 
 export function validateRecord(markdown) {
   // A schema example inside a fenced block does not count as a decision.
@@ -82,10 +83,23 @@ function main() {
   if (!base || base.startsWith('-')) throw new Error('--base requires a Git revision.');
   const git = (...gitArgs) => execFileSync('git', gitArgs, { encoding: 'utf8' }).split('\0').filter(Boolean);
   if (args.includes('--changed') && !args.includes('--require-record')) {
-    const changed = [...new Set([
-      ...git('diff', '--name-only', '-z', base, '--'),
-      ...git('ls-files', '--others', '--exclude-standard', '-z'),
-    ])].filter(isVisualPath);
+    let gitReady = true;
+    try { execFileSync('git', ['rev-parse', '--verify', base], { stdio: 'pipe' }); }
+    catch (error) {
+      if (baseIndex >= 0) throw error;
+      gitReady = false;
+    }
+    const walk = directory => existsSync(directory) ? readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
+      const file = join(directory, entry.name).replaceAll('\\', '/');
+      if (entry.isSymbolicLink()) throw new Error('Visual source may not be symlinked: ' + file);
+      return entry.isDirectory() ? walk(file) : [file];
+    }) : [];
+    // Fresh generated projects have no Git history yet. Check every visual file
+    // against exact starter exceptions rather than silently skipping the gate.
+    const changed = [...new Set(gitReady ? [
+      ...git('diff', '--relative', '--name-only', '-z', base, '--', '.'),
+      ...git('ls-files', '--others', '--exclude-standard', '-z', '--', '.'),
+    ] : [...walk('src'), ...walk('public')])].filter(isVisualPath);
     if (!changed.length) { console.log('Art direction gate: no visual source changes.'); return; }
     const exceptionsPath = 'audit/design-gate-exceptions.json';
     const exceptions = existsSync(exceptionsPath) ? JSON.parse(readFileSync(exceptionsPath, 'utf8')) : [];

@@ -1,6 +1,7 @@
 import { publicLink } from './public-link.ts';
 import { photo, photoUrl } from './photo-gallery.ts';
-export interface Partner { name: string; href?: string; image: string; alt: string; ground?: 'light'|'dark'; }
+import type { Partner } from './partner';
+export type { Partner } from './partner';
 /** Caller owns the published collection query and cache hints. No arbitrary cap. */
 export function partnersFromEntries(entries: {data: Record<string, any>}[], resolve?: (key:string)=>string): Partner[] {
   return entries.filter(e=>e.data.active!==false && e.data.active!==0)

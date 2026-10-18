@@ -1,0 +1,15 @@
+node_modules/
+dist/
+dist-fixtures/
+.astro/
+.astro-fixtures/
+.env
+.env.*
+!.env.example
+.baseline/checks/
+.baseline/skill-sync/
+.baseline/backups/
+.baseline/site-registry.private.json*
+
+# Staged upstream proposals are local; commit managed-file provenance.
+.baseline/updates/

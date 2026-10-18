@@ -74,6 +74,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, dev
     for (const name of ['astro.config.mjs', 'package.json', 'tsconfig.json']) await copyFile(path.join(root, name), path.join(stage, name));
     await mkdir(path.join(stage, 'scripts'), { recursive: true });
     await copyFile(path.join(root, 'scripts/dev-tools-integration.mjs'), path.join(stage, 'scripts/dev-tools-integration.mjs'));
+    await copyFile(path.join(root, 'scripts/dev-tools-middleware.mjs'), path.join(stage, 'scripts/dev-tools-middleware.mjs'));
     await symlink(path.join(root, 'node_modules'), path.join(stage, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
     // Seed is the checked-in public starter fixture; supported dev setup applies its sample content.
     launch(['--import', clock, 'node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', String(port)]);

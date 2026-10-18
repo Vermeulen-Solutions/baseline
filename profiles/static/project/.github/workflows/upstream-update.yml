@@ -1,0 +1,49 @@
+name: Review Baseline source updates
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Immutable 40-character Baseline commit SHA to stage for review
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  stage-and-verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.15.0'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Stage the requested source revision
+        env:
+          BASELINE_REVISION: ${{ inputs.revision }}
+        run: npm run sync:baseline -- --ref "$BASELINE_REVISION"
+      - name: Apply eligible files in the disposable checkout
+        env:
+          BASELINE_REVISION: ${{ inputs.revision }}
+        run: npm run sync:baseline -- --apply "$BASELINE_REVISION"
+      - run: npm run verify
+      - run: npm run build
+      - run: npm run check:dev-tools
+      - name: Save proposed changes and conflict report
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p .baseline/checks
+          git diff --binary > .baseline/checks/proposed-update.patch
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: baseline-update-review
+          include-hidden-files: true
+          path: |
+            .baseline/updates/
+            .baseline/checks/proposed-update.patch
+            .baseline/managed-files.json

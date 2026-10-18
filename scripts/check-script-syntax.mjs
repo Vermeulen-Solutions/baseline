@@ -1,9 +1,10 @@
 import { readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import path from 'node:path';
 
 // Fast parser check, not a claim of TypeScript/ESLint semantic analysis.
-const files = ['playwright.config.mjs'];
+const files = existsSync('playwright.config.mjs') ? ['playwright.config.mjs'] : [];
 async function collect(directory) {
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     if (entry.name === 'baselines') continue;
@@ -13,6 +14,7 @@ async function collect(directory) {
   }
 }
 await collect('scripts'); await collect('tests');
+if (existsSync('profiles')) await collect('profiles');
 let cursor = 0, failures = 0;
 await Promise.all(Array.from({ length: 4 }, async () => {
   while (cursor < files.length) {

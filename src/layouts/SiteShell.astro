@@ -1,0 +1,32 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string | null;
+  canonical?: string | null;
+  lang?: string;
+  skipLinkLabel?: string;
+}
+
+const { title, description, canonical, lang = 'en', skipLinkLabel = 'Skip to content' } = Astro.props;
+---
+<!doctype html>
+<html lang={lang} data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <slot name="body-start" />
+    <a class="skip-link" href="#main-content">{skipLinkLabel}</a>
+    <slot name="header" />
+    <main id="main-content" class="site-main" tabindex="-1"><slot /></main>
+    <slot name="footer" />
+    <slot name="body-end" />
+  </body>
+</html>

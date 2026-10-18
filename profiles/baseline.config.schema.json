@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Baseline Platform Profile and provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "platformProfile", "foundation", "runtime", "source", "generatorVersion", "features", "checks", "skills"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "platformProfile": { "enum": ["static", "static-sveltia", "emdash"] },
+    "foundation": { "enum": ["static", "emdash"] },
+    "runtime": { "enum": ["static", "node-sqlite", "cloudflare-d1-r2"] },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "commit", "release"],
+      "properties": {
+        "repository": { "const": "https://github.com/Vermeulen-Solutions/emdash-baseline" },
+        "commit": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+        "release": { "anyOf": [{ "type": "null" }, { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$" }] }
+      }
+    },
+    "generatorVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[A-Za-z0-9.-]+)?$" },
+    "features": { "type": "array", "maxItems": 0, "uniqueItems": true },
+    "checks": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "skills": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "platformProfile": { "enum": ["static", "static-sveltia"] } } },
+      "then": { "properties": { "foundation": { "const": "static" }, "runtime": { "const": "static" } } },
+      "else": { "properties": { "foundation": { "const": "emdash" }, "runtime": { "enum": ["node-sqlite", "cloudflare-d1-r2"] } } }
+    }
+  ]
+}

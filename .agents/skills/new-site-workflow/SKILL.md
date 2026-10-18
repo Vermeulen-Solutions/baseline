@@ -7,6 +7,16 @@ description: Coordinate the staged conversion of this Astro and EmDash starter i
 
 Turn the neutral starter into a coherent, content-backed site by sequencing the specialist skills. This skill owns the order, decisions, and handoffs. It does not duplicate their implementation guidance.
 
+## Profile routing applies to every stage
+
+Read `baseline.config.json` before loading specialists. In the Baseline root, no generated receipt means the existing `emdash` application. Profile and Standard/Express track are independent decisions. Use established user decisions and approvals; ask only for missing choices. A scoped authorized maintenance task does not require replaying site handoff prompts.
+
+- **static:** native typed Content Collections, Markdown `render()`, `getStaticPaths()`, `src/assets` and static hosting. Skip `building-emdash-site`, `emdash-content-modeling`, `emdash-site-setup`, `emdash-cli`, plugin and CMS cutover skills at every stage. No SQL budget, editor proxies, CMS registry or database backups apply.
+- **static-sveltia:** same static branch, plus paired `public/admin/config.yml` and pinned admin SPA. Configure the site's GitHub repository, branch, build trigger and OAuth proxy or PAT. CMS form changes must match the Astro schema. Never add EmDash packages or specialists for browser editing.
+- **emdash:** use the CMS specialists and runtime-specific instructions below. SQL, cache hints, Portable Text, `entry.edit.*`, registry and database operations in this workflow apply only here.
+
+Shared on all profiles: `site-art-direction`, `astro-site-design`, `impeccable`, tokens, Art Direction Record, component quarantine and browser acceptance. Consult `docs/platform-profiles.md` and `docs/baseline-updates.md`. Generated static updates use `sync:baseline`; do not invoke unavailable CMS sync commands.
+
 ## Start here
 
 1. Read `README.md`, `AGENTS.md`, the installed tooling, and the current repository state.
@@ -16,7 +26,7 @@ Turn the neutral starter into a coherent, content-backed site by sequencing the 
      1. **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):** Gather brief, confirm hosting/runtime, and model collections/routes in one pass.
      2. **Checkpoint B (Stages 4–4.5 — Art Direction & Component Calibration):** Seed tokens and `## Art Direction Record` (`npm run design:tokens -- --lane <lane> --write --write-record --write-calibration`), verify `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide`.
      3. **Checkpoint C (Stages 5–6 — Representative Pages, Critique & Verification):** Build routes, run the `impeccable` critique pass, and verify with `npm run verify` and `npm run build`.
-3. Only run `sync:emdash-skills` or `sync:site-skills -- --check` when explicitly checking for upstream skill updates or refreshing an older repository checkout (see `docs/skill-synchronization.md`). On a fresh clone, use the checked-in skills directly without a blocking sync detour.
+3. On `emdash`, only run `sync:emdash-skills` or `sync:site-skills -- --check` when explicitly checking for upstream skill updates or refreshing an older repository checkout (see `docs/skill-synchronization.md`). On a fresh clone, use the checked-in skills directly without a blocking sync detour.
 4. Identify the earliest unfinished stage below. Preserve valid decisions and completed work from earlier stages rather than restarting automatically.
 5. Load each specialist skill when its stage begins. Do not load every skill up front.
 
@@ -27,10 +37,10 @@ Keep a concise site record in `AGENTS.md`: purpose, audiences, languages, conten
 When the user requests **Express Mode** (or when building a straightforward greenfield site with `<= 6` routes, `<= 3` collections, and a single locale), execute the same specialist skills and CLI gates across **3 consolidated checkpoints** instead of pausing 7 times:
 
 1. **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):**
-   - Document the brief and route inventory in `AGENTS.md`, configure runtime/plugins (`emdash-site-setup`), and model collections (`emdash-content-modeling` + `building-emdash-site`) within the 50-column budget (`npm run check:schema-budget`).
+   - Document the brief and routes in `AGENTS.md`, choose the Platform Profile in Stage 2, then follow its Stage 3 content branch. On static profiles define native Zod schemas and routes; only EmDash uses CMS specialists and the SQL budget.
    - **Checkpoint A Handoff Prompt:**
      > **Express Checkpoint A Complete: Brief, Platform & Content Schema Ready**
-     > - **Runtime & Plugins:** [Node.js + SQLite / Cloudflare Workers + D1]
+     > - **Platform Profile & Hosting:** [static / static-sveltia / emdash; chosen host]
      > - **Collections & Routes:** [List collections and routes]
      >
      > Next is **Checkpoint B (Stages 4–4.5: Art Direction & Component Calibration)**.
@@ -50,7 +60,7 @@ When the user requests **Express Mode** (or when building a straightforward gree
      > *(Reply `1` to build all routes, run the `impeccable` critique pass, and run `npm run verify`, or `2` to inspect `/_styleguide` first.)*
 
 3. **Checkpoint C (Stages 5–6 — Route Implementation, Critique & Full Verification):**
-   - Implement public routes and `<Base content={{...}}>` + `{...entry.edit.*}` bindings, run the `impeccable` visual critique pass, run `npm run verify` + `npm run build`, and present the Stage 6 launch/deployment prompt.
+   - Implement public routes using the selected profile (native `getStaticPaths()`/`render()` for static; `<Base content={{...}}>` + `{...entry.edit.*}` for EmDash), run the `impeccable` visual critique pass, run `npm run verify` + `npm run build`, and present the Stage 6 launch/deployment prompt.
 
 ## Stage 1: establish the brief and evidence
 
@@ -69,31 +79,21 @@ For WordPress migrations, the evidence inventory must include a content-candidat
 
 **Gate:** the repository contains a brief, an evidence inventory, and—when migration is in scope—a content-candidate register sufficient to distinguish facts, user decisions, and open assumptions.
 
-**Stage 1 Completion Handoff Prompt:**
-When Stage 1 is complete, present this prompt with plain-English options and a clear recommendation:
-> **Stage 1 Complete: Site Content & Goals Established**
-> We have documented the pages, content, and goals for the site.
->
-> Next is **Stage 2: Platform & Hosting Setup**.
-> *In plain terms:* We choose where your website lives and whether it needs multiple languages.
->
-> **Which setup best matches your project?**
-> 1. **(Recommended) Standard Hosting, Single Language:**
->    - *Hosting:* Node.js + SQLite on a standard server, VPS, or Docker container. Simple, reliable, and easiest to manage; all data and images live in one place.
->    - *Languages:* 1 primary language.
-> 2. **Standard Hosting, Multilingual:**
->    - *Hosting:* Node.js + SQLite on a standard server or container.
->    - *Languages:* 2+ languages (e.g., English and French) with an automatic language-switcher.
-> 3. **Global Edge Hosting, Single Language:**
->    - *Hosting:* Cloudflare Workers + D1 database. Ultra-fast serverless hosting with zero server maintenance.
->    - *Languages:* 1 primary language.
-> 4. **Global Edge Hosting, Multilingual:**
->    - *Hosting:* Cloudflare Workers + D1 database.
->    - *Languages:* 2+ languages (e.g., English and French) with global edge delivery.
->
-> *(Reply with `1` for the standard setup, or `2`–`4` for your preferred combination.)*
+**Stage 1 completion:** Summarize the brief and evidence. If platform is undecided, present the Stage 2 profile choices below with a recommendation based on editing needs; do not assume Node/SQLite as the only default.
 
-## Stage 2: decide the platform shape & evaluate registry plugins
+## Stage 2: Platform, Hosting & Architecture Decisions
+
+When undecided, ask: **Who will edit the site, and how quickly must changes publish?** Present these three choices with a context-specific recommendation:
+
+1. **Static (No CMS)** — developer/agent edits Markdown files; static host, build minutes and optional external form/search services. Lowest infrastructure needs for file-owned sites.
+2. **Static + Sveltia CMS** — non-technical editors use a browser, changes commit to Git then rebuild. Budget for static builds and an OAuth proxy service (or PAT administration); no live canvas or relational CMS.
+3. **Full EmDash CMS** — relational editorial workflows, live edit canvas or MCP server. Choose Node/SQLite/persistent media or Workers/D1/R2 and budget hosting, storage, auth, backups and optional sandbox runners.
+
+Record profile, editing personas, content complexity, build latency, hosting restrictions, recurring infrastructure costs and locale/URL decisions in `AGENTS.md`. Use existing answers without asking again. For a new static site, run `npm run init:profile -- --profile static|static-sveltia --out <new-empty-directory>` from Baseline; work in the generated destination afterward. Initial `npm install` creates its independent lockfile, then use `npm ci`. EmDash uses the full repository template. Profile selection does not change the design system or delivery track.
+
+**Static branch:** configure static host deployment of `dist/`, missing-route 404 behavior without an SPA rewrite, `SITE_URL`, file-owned settings and rebuild triggers. For Sveltia also choose OAuth proxy vs PAT, editor GitHub permissions and publishing branch. Load no CMS specialists. Continue to the static Stage 3 branch.
+
+**EmDash branch only — runtime and registry:**
 
 Use `emdash-site-setup` for runtime, hosting, storage, localization, deployment, and site-transfer decisions.
 
@@ -108,25 +108,13 @@ Record decisions that constrain later stages, especially locale URL behavior, de
 
 **Gate:** later work has a known runtime, localization model, and plugin sandbox decision. Deferred deployment details are explicitly marked and do not block local design work unless they affect architecture.
 
-**Stage 2 Completion Handoff Prompt:**
-When Stage 2 is complete, present this prompt:
-> **Stage 2 Complete: Hosting, Language & Plugin Setup Configured**
-> Your platform and capabilities configuration is saved.
->
-> Next is **Stage 3: Content Structure & Admin Setup**.
-> *In plain terms:* This sets up the editing forms and sections in your EmDash admin dashboard (called "collections") so you and your team can create, edit, and organize content (e.g. Articles, Team Members, Projects, Events, or Services) without touching code.
->
-> **How would you like to set up your content?**
-> 1. **(Recommended) Let me automatically draft your content types and admin forms:**
->    - I will analyze the content gathered in Stage 1, evaluate any official registry plugins (e.g., Eventual for events), create clean entry types in your admin dashboard, connect related items (like assigning team members to projects), and ensure forms are easy for non-technical editors.
-> 2. **Review proposed content types together first:**
->    - I'll list the suggested content types and fields, and you can tweak field names, add categories, or remove anything before I write them.
-> 3. **Start with standard basic pages only:**
->    - Set up simple Pages and Articles for now; we can add specialized custom sections later as needed.
->
-> *(Reply `1` to generate the recommended structure, or `2` to review together.)*
+**Stage 2 completion:** Report the selected profile, editing owner, hosting, locale policy, publishing latency and infrastructure costs. Explain the next content step in that profile's terms: typed files for static, paired file/forms for Sveltia, or relational collections/admin for EmDash. Ask about schema choices only when still unresolved.
 
 ## Stage 3: model content and routes
+
+**Static profiles:** define collections in `src/content.config.ts` with typed Zod schemas and native `glob` loaders. Use Markdown files in `src/content/`, file-owned settings/navigation and draft-filtered `getStaticPaths()`/`render()`. Keep native images in `src/assets`; require descriptive alt text for meaningful hero images. For Sveltia keep form names, required/optional semantics, date serialization and media-relative paths aligned with that schema; verify a CMS-shaped content file in an Astro build. Record content candidates, routes, ordering, locale and editorial ownership, then continue to Stage 4. Do not apply SQL modeling or seed instructions below.
+
+**EmDash branch:**
 
 Use `emdash-content-modeling` to design normalized collections, select enums, relationships, native row-per-locale structures, and squad/team architecture. Use `building-emdash-site` for schema registration syntax, Portable Text rendering, live collection configs, and queries. Use `wordpress-to-emdash-content` first for import mappings when applicable. Use `emdash-cli` only for operations against the local or remote EmDash instance.
 
@@ -137,7 +125,7 @@ Use the content-candidate register to classify every repeated editorial element 
 **Stage 3 → Stage 4 Handoff & Design Capability Prompt:**
 When Stage 3 is complete, present this unified prompt once to transition into Stage 4 (do not repeat a second capability prompt upon entering Stage 4):
 > **Stage 3 Complete: Content Structure & Admin Dashboard Ready**
-> Your database and admin editing screens are structured.
+> Your content model and routes are structured for the selected profile; only EmDash includes database/admin setup.
 >
 > Next is **Stage 4: Visual Direction & Art Direction**.
 > *In plain terms:* Before we build full website pages, we establish the visual identity—fonts, brand colors, fluid spacing, and overall personality.
@@ -183,7 +171,7 @@ When Stage 4 passes `check:art-direction`, present this prompt:
 
 ## Stage 4.5: calibrate components before page assembly
 
-For URL/screenshot migrations or external component sourcing (such as `21st.dev MCP`), follow `astro-site-design/references/component-quarantine.md` after Stage 4 and its art-direction gate. Inspect representative source elements or candidate registry blueprints, then calibrate relevant tokens, states, and production primitives on `/_styleguide` before creating client page templates or bespoke sections — including `<Container width="reading|content|wide">` versus `<Container breakout>` (`.content-grid` with `.content--feature|wide|full|full-safe`), `<Card>` (`--card-*` custom properties, concentric radius math, and `.clickable-parent`/`.focus-parent` accessibility), and Smart Spacing (`.flow`). When sourcing external React/Tailwind components (e.g., from `21st.dev`), transmute them through the quarantine checklist: strip unnecessary React/Framer Motion runtime down to zero-JS Astro markup, replace hardcoded palette classes with semantic tokens, bind fluid typography/spacing steps, and wire EmDash live edit proxies. For greenfield work, review the relevant primitive baseline against the brief and record inapplicable source comparisons.
+For URL/screenshot migrations or external component sourcing (such as `21st.dev MCP`), follow `astro-site-design/references/component-quarantine.md` after Stage 4 and its art-direction gate. Inspect representative source elements or candidate registry blueprints, then calibrate relevant tokens, states, and production primitives on `/_styleguide` before creating client page templates or bespoke sections — including `<Container width="reading|content|wide">` versus `<Container breakout>` (`.content-grid` with `.content--feature|wide|full|full-safe`), `<Card>` (`--card-*` custom properties, concentric radius math, and `.clickable-parent`/`.focus-parent` accessibility), and Smart Spacing (`.flow`). When sourcing external React/Tailwind components (e.g., from `21st.dev`), transmute them through the quarantine checklist: strip unnecessary React/Framer Motion runtime down to zero-JS Astro markup, replace hardcoded palette classes with semantic tokens, bind fluid typography/spacing steps, and wire EmDash live edit proxies only on the `emdash` profile. For greenfield work, review the relevant primitive baseline against the brief and record inapplicable source comparisons.
 
 Save `audit/component-calibration.md` (you can scaffold or refresh the verified `## Token Calibration` table and SHA-256 digest via `npm run design:tokens -- --write-calibration`) with evidence, actual component APIs, supported surfaces/states, asset provenance, narrow/wide and keyboard/motion checks, unresolved gaps and ready/deferred decisions. Resolve material reusable-component gaps before broad assembly. Keep normal-build route exclusion and synthetic fixtures intact. Page findings may reopen calibration; this is not a permanent component freeze. Use written handoffs between passes; fork/archive chats only when the user requests it.
 
@@ -208,6 +196,9 @@ When `audit/component-calibration.md` is saved, present this prompt:
 > *(Reply `1` to build the shell and homepage first, or tell me which page you prefer.)*
 
 ## Stage 5: implement representative pages
+
+**Static branch:** use the file-owned Base layout around shared `SiteShell.astro`, native `ResponsiveImage` metadata, Markdown RichText and static routes. Shared `Card` attribute bags need no edit proxies. Do not use CMS queries, cache hints or `Base content` bindings. Verify common styleguide specimens identically to EmDash; CMS-only specimens are inapplicable. The remaining CMS implementation instructions apply only to EmDash.
+
 
 When references are screenshots/mockups or interaction recipes, route through `astro-site-design/references/visual-mockup-workflow.md`. Keep measured facts, responsive assumptions and editorial ownership explicit. `AGENTS.md` is the project instruction bridge; harness-specific rules are not universal enforcement.
 
@@ -238,6 +229,9 @@ When representative pages are refined, present this prompt:
 > *(Reply `1` to generate and verify all routes, or `2` to inspect the current pages.)*
 
 ## Stage 6: complete and verify
+
+**All profiles:** run `npm run verify`, `npm run build` and `npm run check:dev-tools`, inspect routes, responsive images, focus and 404 behavior. Static builds must contain no server adapter/database and exclude `/_styleguide`; never deploy fixture output. Sveltia also needs real-account auth/upload/save/rebuild/logout checks before editorial handoff; a local build does not prove those. Existing Windows screenshot baselines and CMS registry commands are EmDash-only; static projects record browser evidence directly.
+
 
 Finish the route inventory, content states, interactions, metadata, and accessibility behavior. Follow the visual review and repair passes in `astro-site-design`, and run one final Impeccable critique or audit when the full route set is available. Fix material cross-route findings in shared styles or components, then stop once the review is coherent. Run the repository's requested checks and build. Verify public and editor modes for CMS-rendered content.
 
@@ -281,6 +275,8 @@ When Stage 6 finishes, present the prompt matching the hosting platform selected
 
 ## Stage 7: production cutover, email & forms
 
+**Static branch:** deploy verified `dist/`, configure canonical URLs, TLS and 404 status, verify rebuild-on-commit and rollback to the last successful build. For Sveltia verify admin assets, OAuth origins/callbacks or PAT access and fresh sign-in, upload, draft behavior and publication with real accounts. Record static deployment ownership, browser evidence and source/asset backup policy in project notes. Do not run EmDash registry, database backup or CMS cutover commands. Only use external form/mail services required by the brief; preserve existing mail DNS. The remaining cutover instructions are EmDash-only.
+
 Use `emdash-production-cutover` when moving a Cloudflare Workers site from preview/`workers.dev` to its production custom domain. Establish and test admin recovery before changing the authentication origin, configure the canonical hostname and alias redirects, and verify fresh production login. Preserve working email providers and form integrations; configure Cloudflare Email Sending or replace forms only when requested or required by established site requirements.
 
 **Gate:** production custom domain resolves with valid TLS; required aliases preserve paths and queries; fresh admin login works through the configured authentication mode; corporate mail DNS remains intact; applicable email/form delivery checks pass; rollback configuration and observed verification results are recorded.
@@ -303,6 +299,8 @@ When Stage 7 cutover or production configuration is verified:
 If the user requests only one stage, perform that stage without forcing a complete site build. Check its upstream inputs, state any consequential assumptions, and revisit downstream stages only when the change invalidates them. A later-stage request does not authorize inventing missing brand, content, or deployment decisions.
 
 ### Evolving content on an existing site
+
+For static profiles, evolve file schemas and content together, validate real Markdown and Sveltia output, and keep published URLs stable. The SQL audit/migration and modernization tracks below are EmDash-only.
 When modifying, normalizing, or pruning content models on a site that already has content:
 - Do not restart from Stage 1 or wipe existing databases.
 - Use `emdash-content-modeling` in brownfield evolution mode to perform schema audits, write zero-downtime data migration scripts, implement dual-read template fallbacks, maintain 3-way parity (local SQLite, remote D1, seed), and synchronize menus.

@@ -30,8 +30,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Neutral starter layout shell with TweaksBar removed; production public visual system preserved. Exact LF-normalized source; edits invalidate this exception.",
-    "sha256": "231253f610303af75cb84204f4752b6a669fce45f5a38a29d6a6f56cc625fe4b"
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Extract document landmarks and metadata into SiteShell while retaining EmDash queries, cache hints and contribution slots. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "eb13b22ec0dc3e0122514c02328522b8ea95062ed00c6a4b0afecae86ae88989"
   },
   {
     "path": "src/components/Container.astro",
@@ -105,13 +105,13 @@
   },
   {
     "path": "src/components/ResponsiveImage.astro",
-    "reason": "Reviewed fresh-root export of the existing neutral native image utility, including guarded dimensions and original-source recovery; no client theme/content or source modification. Exact LF-normalized hash; any edit invalidates this exception.",
-    "sha256": "c751f92b4f946b4cd37508793f95508e77af27975f00723d18fb238f44b44388"
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Separate native Astro image presentation from storage resolution; preserve bounded candidates, small-image passthrough and original-source recovery. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "cbdd316ec092276fff54f3933a32e55b32dc6fa13d736d9bcc2d8ccbd2833369"
   },
   {
     "path": "src/components/EditorialImage.astro",
-    "reason": "Authorized neutral starter image infrastructure backport; preserves presentation, no client theme or content. Any edit invalidates this exact exception.",
-    "sha256": "2c8a18045786930fcea1d6ec503b12d6f15f607d81fdc0042ba247a95e409917"
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Route existing editorial image presentation through the extracted EmDash storage adapter; retain figure styling and captions. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "edd2db4e778436f6e45578088cffe0edb4777b4351a37b456c24102bdc34fec5"
   },
   {
     "path": "src/components/RichText.astro",
@@ -120,13 +120,13 @@
   },
   {
     "path": "src/components/Card.astro",
-    "reason": "Issue #2 neutral starter turnkey Card upgrade: semantic <article>, .clickable-parent/.focus-parent heading link, --card-* custom properties, and concentric radius math; no client theme. Any edit invalidates this exact exception.",
-    "sha256": "862241b563cdf6a1ed2b693a642818c365f27a49147fca1fd8e8895934f7912b"
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Replace EmDash FieldAnnotation imports with Astro attribute bags and native image inputs while retaining annotation forwarding and existing card styles. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "d03714812d5bcee0d9d90ed7b6bf456ae2307ceca9681eb1fd0b37129e8562f1"
   },
   {
     "path": "src/components/PartnersPanel.astro",
-    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "2747e95c20b781347daabe5894fb2a4450d25b1663b5adfbdc5e86315ebd66bd"
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Use a standalone presentation-data type rather than importing the collection mapper; retain panel markup and styles. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "31030c421b78250b55328e976e3058336bd0a6183d6441770f86555e55b9d122"
   },
   {
     "path": "src/components/FormError.astro",
@@ -135,8 +135,8 @@
   },
   {
     "path": "src/lib/partners.ts",
-    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "e6f46e4eeb3a6fcc0f116bb6a680d0a8b81f30728d0c68f2fbb2da36a1d08420"
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Re-export the extracted Partner type while retaining EmDash collection mapping behavior. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "3c425ed8614a031aa7ee53543de4f36b0de4483f3a2943d0ad6998b3e2dd11a3"
   },
   {
     "path": "src/lib/form-recovery.ts",
@@ -171,18 +171,18 @@
   },
   {
     "path": "src/dev/styleguide-fixtures.ts",
-    "reason": "Issues #2/#5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception.",
-    "sha256": "8620c72793b0a4323d87cebd02527ffaff9d5e625cc25adfd43dd61558dca157"
+    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "751912a45b821cf5713c0d66edbbb239ea69c505a91d5882710c35e42de9a151"
   },
   {
     "path": "src/pages/_styleguide.astro",
-    "reason": "Issues #5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception.",
-    "sha256": "519b98fd928ff6a788aafba53863088ba147abce63af856ba52a6fd35ff11b24"
+    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "eb460967bebb3419ece90a5c3a7c499bd929d19dc336366b50cffb315bd045fc"
   },
   {
     "path": "src/components/dev/Styleguide.astro",
-    "reason": "Neutral starter specimen infrastructure including Container breakout (.content-grid) and accessible Card specimen without TweaksBar; no client theme. Exact LF-normalized source; edits invalidate this exception.",
-    "sha256": "4d64493548d7cdb95365d87ef451ab843185257efc0d98c8426f9d7bc5b65911"
+    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "c4650309946133e248e9a8b5d2db6fe8988f6d5801992961206784ddb1948ee9"
   },
   {
     "path": "src/utils/grid-guide.ts",
@@ -217,8 +217,8 @@
   },
   {
     "path": "src/components/PhotoGallery.astro",
-    "reason": "Issue #7 browser reflow verification found real caption overlap: preserve the justified image height while allowing captions to contribute to the item row height. Functional starter component correction; no client visual design. Exact LF-normalized bytes; edits invalidate this exception.",
-    "sha256": "ad4b730eee890a72c17e4eb3889475e04a79bab4f98dec5935fb4800e966cd94"
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Route existing gallery image presentation through the extracted EmDash storage adapter; retain gallery markup, styles and lightbox behavior. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "f5a196f6df1bb2261570fff6aa0f21f78e718001dd7b50b472d1912bed3ae7ba"
   },
   {
     "path": "src/utils/reference-overlay.ts",
@@ -243,5 +243,115 @@
     "reason": "Removed TweaksBar EmDash ownership decoder module.",
     "sha256": "c52f3dbcaf511b35a372d34a2cad08ad43b9cc1b13a92a4a9f021b8efbf4f37d",
     "deleted": true
+  },
+  {
+    "path": "src/layouts/SiteShell.astro",
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Shared CMS-free document, metadata and landmark shell extracted without changing the neutral visual system. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "80afe1f381fd8c58517f199884146f4abdbdf498d6240bc22b3a0cafa0c11b50"
+  },
+  {
+    "path": "src/components/EmDashImage.astro",
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Explicit EmDash storage adapter around shared native image presentation, preserving legacy public URLs and fresh-upload resolution. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "19855db8f0b2de36b11220f25de574435da6f9dc39a72e1577a5eeafc6474959"
+  },
+  {
+    "path": "src/lib/partner.ts",
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Platform-neutral resolved partner presentation contract extracted for shared panel typing. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "e228316e1cc7d3ba05961942b73e863b85558369b5c2753a13c64d52e79c468a"
+  },
+  {
+    "path": "src/lib/responsive-image.ts",
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Pure native image presentation inputs and bounded candidate calculation with no CMS or storage access. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "b3a8c20ea4bd4400b4db0e25f232e66f127d2394e780078dd043458af812108e"
+  },
+  {
+    "path": "src/components/dev/EmDashStyleguide.astro",
+    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "40f635b0f4578636a7a578299703dda826cbb9366e3f77ef0f632cbfd05ae534"
+  },
+  {
+    "path": "src/dev/emdash-styleguide-fixtures.ts",
+    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "d5a87e5de2f1977ba5b390085d7648aa9e5b4d22d7e3ee8f851ff41e7b46090b"
+  },
+  {
+    "path": "src/dev/styleguide-prose.md",
+    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "00a948f64598d6cb2dfbd7f37b27c39582e9e7deb0f8639d5531f656b3168122"
+  },
+  {
+    "path": "profiles/static/project/src/assets/pilot-grid.jpg",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "98f38ba69d0be2f6a3024b0cf8ec975c21a0358fdd12c0b6d102b0a55fe56c1f"
+  },
+  {
+    "path": "profiles/static/project/src/components/RichText.astro",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "117021e6f226e1f850dd5d17e536910480717ece244bcaeef9ca1828bbdc96b8"
+  },
+  {
+    "path": "profiles/static/project/src/config/site.ts",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "6e81091dfcdd638ff1634f33d4a876c8c6f043607364fde5198ba22360a45a21"
+  },
+  {
+    "path": "profiles/static/project/src/content/posts/welcome.md",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "40a2e5639325fb4c0e96706b03583c8b5958f5635d4a94e947f489ea6926ad26"
+  },
+  {
+    "path": "profiles/static/project/src/content.config.ts",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "0494e62c9ed4ec64b0711acc50732041b496873277a9d81ccf816039e3bbb66c"
+  },
+  {
+    "path": "profiles/static/project/src/env.d.ts",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "3217e756d741ef07df03521cc0aefa82d93915349e4b95adaf15e2d4d692b0c6"
+  },
+  {
+    "path": "profiles/static/project/src/layouts/Base.astro",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "2a0835104278e8d01faf0ceda5087ba8de0ee50ace06e71682219f5696fb6674"
+  },
+  {
+    "path": "profiles/static/project/src/lib/posts.ts",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "5c421282f8fab536f3dcb2ea74aa4cfd3e1b8247547fdb7b67f4da5b47ceea2c"
+  },
+  {
+    "path": "profiles/static/project/src/pages/404.astro",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "2a55629652e0827d86b3b1f4587a1bfa3ea8d7d1595c0bb67ba70b663e049558"
+  },
+  {
+    "path": "profiles/static/project/src/pages/index.astro",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "39307619deb2951726f00f77d0e1bdbb5f7fd6d7f4c68740bf1349dacdcce3c0"
+  },
+  {
+    "path": "profiles/static/project/src/pages/posts/index.astro",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "47152e91bcef805d610adb05d12ecf8b68fa427617f19cc85fed15bdb57ad778"
+  },
+  {
+    "path": "profiles/static/project/src/pages/posts/[...id].astro",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "9887721665a00753dfb3eb06d7af351cace0d25d9346de80ab4f4ee14a6671ab"
+  },
+  {
+    "path": "profiles/static/project/src/pages/_styleguide.astro",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "d85529584052c8cb934d1b16e4153ed632f58ba3ead53bcb42fe2adfee2b6494"
+  },
+  {
+    "path": "profiles/static-sveltia/project/public/admin/index.html",
+    "reason": "Static Sveltia admin infrastructure: pinned editor entry and paired collection form, no client art direction.",
+    "sha256": "a85614f9cefb636d6a36fc0ee018933e8cc91384b9c8ea0cbd84e058f36c96ae"
+  },
+  {
+    "path": "profiles/static-sveltia/project/public/admin/config.yml",
+    "reason": "Static Sveltia admin infrastructure: pinned editor entry and paired collection form, no client art direction.",
+    "sha256": "bc20a3d62d516123dbe3377dd006d552ac95c63051f8f3760155d822e078bcb4"
   }
 ]
