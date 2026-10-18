@@ -15,8 +15,9 @@
   <a href="docs/prompt-library.md"><strong>Prompt Library</strong></a> ·
   <a href="#-where-to-look-in-your-browser"><strong>Browser Dev URLs</strong></a> ·
   <a href="#the-7-stage-site-delivery-workflow"><strong>7-Stage Workflow</strong></a> ·
-  <a href="#why-baseline"><strong>Why Baseline?</strong></a> ·
+  <a href="#platform-profiles"><strong>Platform Profiles</strong></a> ·
   <a href="#capability-and-support-boundaries"><strong>Support Boundaries</strong></a> ·
+  <a href="#why-baseline"><strong>Why Baseline?</strong></a> ·
   <a href="docs/README.md"><strong>Documentation</strong></a>
 </p>
 
@@ -27,35 +28,6 @@
 By default, Baseline powers full-scale applications with **EmDash CMS**—a lightweight headless CMS featuring live visual page editing, relational SQLite/D1, and native Model Context Protocol (MCP) server integration. When a database or server runtime isn't required, Baseline's **Platform Profiles** let you output pure static Astro sites or Git-backed Sveltia CMS sites while sharing the exact same fluid design tokens, WCAG contrast checks, layout primitives, and component quarantine (`/_styleguide`).
 
 ---
-
-## Platform Profiles
-
-| Profile | Editing | Foundation |
-| --- | --- | --- |
-| `static` | Developer/agent edits typed Markdown collections | Native Astro static output |
-| `static-sveltia` | Sveltia browser editor commits the same files | Same static output plus `/admin/`; OAuth proxy or PAT |
-| `emdash` | Relational CMS, live edit canvas and MCP | Existing Node/SQLite or configured Workers/D1/R2 |
-
-All profiles share tokens, layout primitives, `SiteShell.astro`, native image
-presentation and `/_styleguide` calibration. Choose the editing and operational
-model independently from the Standard/Express delivery track. See
-[Platform Profiles](docs/platform-profiles.md) and [staged updates](docs/baseline-updates.md).
-
-## Capability and support boundaries
-
-| Capability | Supplied by | Site-specific acceptance |
-| --- | --- | --- |
-| Static rendering, typed file collections and native image processing | Astro; Baseline generates `static` / `static-sveltia` projects | Static hosting of `dist/`, real 404 responses and rebuild triggers; Sveltia also needs GitHub authentication and publication verification |
-| Relational content, editor, WordPress import, redirects, sitemap/robots and SEO APIs | EmDash in the `emdash` profile; Baseline wires public templates and contributions | Content/URL/SEO fidelity, editor roles and saves, media and required plugin behavior |
-| Tokens, layout primitives, staged workflows, schema/media tooling and reviewed update proposals | Baseline | Brand calibration, rendered accessibility, complete migration inventory and operational ownership |
-| Runtime and integrations | Node/SQLite/local media by default for `emdash`; Workers/D1/R2 is separately configured | Persistent data/media, recovery, authentication and actual email/form delivery on the selected host |
-
-The scoped standards evidence covers Node/SQLite and local Windows Chromium;
-fast CI runs on Ubuntu and also checks both generated static profiles. Generated
-static sites have no EmDash database or server adapter. Sveltia's editor commits
-files to Git; its published site still needs a static build. Cloudflare EmDash
-hosting and external providers require separate acceptance. See
-[tested scope, evidence and limitations](docs/support-boundaries.md).
 
 ## ⚡ Quickstart
 
@@ -222,6 +194,39 @@ const { entry } = Astro.props;
 ```
 
 See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field proxy and schema budget rules.
+
+---
+
+## Platform Profiles
+
+| Profile | Editing | Foundation |
+| --- | --- | --- |
+| `static` | Developer/agent edits typed Markdown collections | Native Astro static output |
+| `static-sveltia` | Sveltia browser editor commits the same files | Same static output plus `/admin/`; OAuth proxy or PAT |
+| `emdash` | Relational CMS, live edit canvas and MCP | Existing Node/SQLite or configured Workers/D1/R2 |
+
+All profiles share tokens, layout primitives, `SiteShell.astro`, native image
+presentation and `/_styleguide` calibration. Choose the editing and operational
+model independently from the Standard/Express delivery track. See
+[Platform Profiles](docs/platform-profiles.md) and [staged updates](docs/baseline-updates.md).
+
+---
+
+## Capability and support boundaries
+
+| Capability | Supplied by | Site-specific acceptance |
+| --- | --- | --- |
+| Static rendering, typed file collections and native image processing | Astro; Baseline generates `static` / `static-sveltia` projects | Static hosting of `dist/`, real 404 responses and rebuild triggers; Sveltia also needs GitHub authentication and publication verification |
+| Relational content, editor, WordPress import, redirects, sitemap/robots and SEO APIs | EmDash in the `emdash` profile; Baseline wires public templates and contributions | Content/URL/SEO fidelity, editor roles and saves, media and required plugin behavior |
+| Tokens, layout primitives, staged workflows, schema/media tooling and reviewed update proposals | Baseline | Brand calibration, rendered accessibility, complete migration inventory and operational ownership |
+| Runtime and integrations | Node/SQLite/local media by default for `emdash`; Workers/D1/R2 is separately configured | Persistent data/media, recovery, authentication and actual email/form delivery on the selected host |
+
+The scoped standards evidence covers Node/SQLite and local Windows Chromium;
+fast CI runs on Ubuntu and also checks both generated static profiles. Generated
+static sites have no EmDash database or server adapter. Sveltia's editor commits
+files to Git; its published site still needs a static build. Cloudflare EmDash
+hosting and external providers require separate acceptance. See
+[tested scope, evidence and limitations](docs/support-boundaries.md).
 
 ---
 
