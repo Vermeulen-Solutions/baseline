@@ -44,6 +44,13 @@ OAuth proxy or PAT and real editor accounts; it was not certified by these local
 checks. The existing EmDash Node/SQLite application remains supported; this work
 does not certify a new Cloudflare deployment or enable EmDash profile generation.
 
+A subsequent [authenticated Sveltia publishing pilot](../../audit/sveltia-pilot-2026-10-18-3496a2/README.md)
+verified real GitHub token sign-in, draft/image commits, publication, optimized
+images, draft exclusion, logout and failure protection on a disposable Cloudflare
+Pages project. That rehearsal used explicit local Direct Upload promotion; OAuth
+proxy sign-in, fine-grained PAT boundaries and automatic Git hosting integration
+remain outside its scope. Read its setup findings before editor handoff.
+
 See [Platform Profiles](../platform-profiles.md),
 [generation inventories](../../profiles/README.md) and
 [staged Baseline updates](../baseline-updates.md).

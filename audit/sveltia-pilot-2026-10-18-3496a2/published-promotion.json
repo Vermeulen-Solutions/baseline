@@ -1,0 +1,20 @@
+{
+  "label": "published",
+  "commit": "e5fa8a96b836e0f04c63de40bcb5b770e8de618e",
+  "startedAt": "2026-10-18T15:03:42.019Z",
+  "checks": [
+    {
+      "command": "npm run verify",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    }
+  ],
+  "deploymentAttempted": true,
+  "deploymentSucceeded": true,
+  "trigger": "Explicit local promotion from checked-out GitHub commit, not automatic Git integration",
+  "deploymentExitCode": 0,
+  "completedAt": "2026-10-18T15:04:07.334Z"
+}

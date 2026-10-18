@@ -1,0 +1,28 @@
+{
+  "label": "recovered",
+  "commit": "085fe25878d241fc73857c7aebd1c921d1d9197e",
+  "startedAt": "2026-10-18T15:07:59.435Z",
+  "checks": [
+    {
+      "command": "npm run check:art-direction -- --base 4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run verify",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run check:dev-tools",
+      "exitCode": 0
+    }
+  ],
+  "deploymentAttempted": true,
+  "deploymentSucceeded": true,
+  "trigger": "Explicit local promotion from checked-out GitHub commit, not automatic Git integration",
+  "deploymentExitCode": 0,
+  "completedAt": "2026-10-18T15:08:27.351Z"
+}

@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "platformProfile": "static-sveltia",
+  "foundation": "static",
+  "runtime": "static",
+  "source": {
+    "repository": "https://github.com/Vermeulen-Solutions/baseline",
+    "commit": "30b2e08bd0292d52b1f9ade2cba8af142e474e09",
+    "release": null
+  },
+  "generatorVersion": "0.3.1",
+  "features": [],
+  "checks": [
+    "lint",
+    "check:art-direction",
+    "design:tokens",
+    "test",
+    "typecheck",
+    "build",
+    "check:release-artifact",
+    "check:dev-tools"
+  ],
+  "skills": [
+    "new-site-workflow",
+    "site-art-direction",
+    "astro-site-design",
+    "impeccable"
+  ]
+}

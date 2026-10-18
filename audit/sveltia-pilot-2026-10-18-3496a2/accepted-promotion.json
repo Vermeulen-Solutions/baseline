@@ -1,0 +1,28 @@
+{
+  "label": "accepted",
+  "commit": "7c22f659f3057d0c3be40d7b5f74d037e5d9b12f",
+  "startedAt": "2026-10-18T15:05:15.837Z",
+  "checks": [
+    {
+      "command": "npm run check:art-direction -- --base 4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run verify",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run check:dev-tools",
+      "exitCode": 0
+    }
+  ],
+  "deploymentAttempted": true,
+  "deploymentSucceeded": true,
+  "trigger": "Explicit local promotion from checked-out GitHub commit, not automatic Git integration",
+  "deploymentExitCode": 0,
+  "completedAt": "2026-10-18T15:05:41.568Z"
+}

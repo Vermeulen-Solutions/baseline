@@ -1,0 +1,7 @@
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 check:art-direction
+> node scripts/check-art-direction.mjs --changed --base 4b825dc642cb6eb9a060e54bf8d69288fbee4904
+
+Art direction gate: checking record for src/assets/sveltia-pilot-hero.jpg, src/content/posts/authenticated-sveltia-pilot-3496a2.md, src/content/posts/unpublished-control-3496a2.md
+Art direction record is structurally valid.
+👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.

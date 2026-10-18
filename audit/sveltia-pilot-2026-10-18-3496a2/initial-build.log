@@ -1,0 +1,39 @@
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 build
+> astro build
+
+16:58:56 [content] Syncing content
+16:58:56 [content] Synced content
+16:58:56 [types] Generated 550ms
+16:58:56 [build] output: "static"
+16:58:56 [build] mode: "static"
+16:58:56 [build] directory: C:\dev\baseline-sveltia-pilot-20261018-3496a2\dist\
+16:58:56 [build] Collecting build info...
+16:58:56 [build] ✓ Completed in 569ms.
+16:58:56 [build] Building static entrypoints...
+16:58:57 [vite] ✓ built in 336ms
+16:58:57 [vite] ✓ built in 20ms
+16:58:57 [build] Rearranging server assets...
+
+ generating static routes
+16:58:57   ├─ /404.html (+12ms)
+16:58:57   ├─ /posts/index.html (+11ms)
+16:58:57   ├─ /posts/welcome/index.html (+4ms)
+16:58:57   ├─ /index.html (+4ms)
+16:58:57 ✓ Completed in 128ms.
+
+ generating optimized images
+16:58:57 [vite] ✓ built in 14ms
+16:58:57   ▶ /_astro/pilot-grid.C18fp0m6_1ChCCy.webp (before: 42kB, after: 2kB) (+124ms) (1/3)
+16:58:57   ▶ /_astro/pilot-grid.C18fp0m6_DL58u.webp (before: 42kB, after: 4kB) (+35ms) (2/3)
+16:58:57   ▶ /_astro/pilot-grid.C18fp0m6_HP8Dr.webp (before: 42kB, after: 8kB) (+84ms) (3/3)
+16:58:57 ✓ Completed in 244ms.
+
+16:58:57 [build] ✓ Completed in 781ms.
+16:58:57 [build] 4 page(s) built in 1.35s
+16:58:57 [build] Complete!
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 postbuild
+> node scripts/assert-release-artifact.mjs
+
+Release artifact profile verified. Also verify the actual production route via check:dev-tools.

@@ -1,0 +1,20 @@
+{
+  "label": "draft",
+  "commit": "97956397ff13e674c94a96c48aa331f461b71aa1",
+  "startedAt": "2026-10-18T15:02:37.445Z",
+  "checks": [
+    {
+      "command": "npm run verify",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    }
+  ],
+  "deploymentAttempted": true,
+  "deploymentSucceeded": true,
+  "trigger": "Explicit local promotion from checked-out GitHub commit, not automatic Git integration",
+  "deploymentExitCode": 0,
+  "completedAt": "2026-10-18T15:03:00.787Z"
+}

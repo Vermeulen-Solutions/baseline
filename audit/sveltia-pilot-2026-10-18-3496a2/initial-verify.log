@@ -1,0 +1,63 @@
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 verify
+> npm run lint && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck
+
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 lint
+> node scripts/check-script-syntax.mjs
+
+Syntax checked 11 JavaScript modules.
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 check:art-direction
+> node scripts/check-art-direction.mjs --changed
+
+Art direction gate: no visual source changes.
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 design:tokens
+> node scripts/design-system.mjs
+
+Design System Audit (C:\dev\baseline-sveltia-pilot-20261018-3496a2\src\styles\global.css): PASS
+- LF SHA-256: c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832
+- @theme tokens: 31
+- :root tokens: 6
+- [data-surface="dark"] tokens: 5
+- Font loading: PASS (system fonts)
+- EmDash edit proxies: NOT APPLICABLE (static foundation)
+- WCAG Contrast Pairs:
+  [PASS] default:text-on-page: 15.99:1 (min 4.5:1)
+  [PASS] default:text-on-surface: 16.45:1 (min 4.5:1)
+  [PASS] default:muted-on-page: 6.92:1 (min 4.5:1)
+  [PASS] default:muted-on-surface: 7.12:1 (min 4.5:1)
+  [PASS] default:on-action-on-action: 8.02:1 (min 4.5:1)
+  [PASS] default:action-on-page: 7.8:1 (min 3:1)
+  [PASS] default:focus-on-page: 5.26:1 (min 3:1)
+  [PASS] dark:text-on-surface: 16.75:1 (min 4.5:1)
+  [PASS] dark:muted-on-surface: 7.58:1 (min 4.5:1)
+  [PASS] dark:focus-on-surface: 8.79:1 (min 3:1)
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 test
+> node --test tests/*.test.mjs
+
+✔ shared tokens pass and CMS proxy checks are explicitly inapplicable (3.9266ms)
+✔ static dependencies and scripts have no CMS, database bootstrap or server adapter (0.5768ms)
+✔ Sveltia form, frontmatter and native image paths match the Astro collection (4.3783ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 100.4132
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 typecheck
+> astro check
+
+16:58:48 [content] Syncing content
+16:58:48 [content] Synced content
+16:58:48 [types] Generated 715ms
+16:58:48 [check] Getting diagnostics for Astro files in C:\dev\baseline-sveltia-pilot-20261018-3496a2...
+Result (26 files):
+- 0 errors
+- 0 warnings
+- 0 hints

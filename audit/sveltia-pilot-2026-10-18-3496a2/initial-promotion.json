@@ -1,0 +1,20 @@
+{
+  "label": "initial",
+  "commit": "8a65b0e81833575d74d56b7b5c76192dcfd9db5a",
+  "startedAt": "2026-10-18T14:58:39.785Z",
+  "checks": [
+    {
+      "command": "npm run verify",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0
+    }
+  ],
+  "deploymentAttempted": true,
+  "deploymentSucceeded": true,
+  "trigger": "Explicit local promotion from checked-out GitHub commit, not automatic Git integration",
+  "deploymentExitCode": 0,
+  "completedAt": "2026-10-18T14:59:09.153Z"
+}

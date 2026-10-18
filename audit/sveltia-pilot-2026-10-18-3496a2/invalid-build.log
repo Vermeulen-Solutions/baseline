@@ -1,0 +1,20 @@
+
+> baseline-sveltia-pilot-20261018-3496a2@0.0.0 build
+> astro build
+
+17:07:02 [content] Syncing content
+17:07:02 [content] Astro config changed
+17:07:02 [content] Clearing content store
+[InvalidContentEntryDataError] posts → authenticated-sveltia-pilot-3496a2 data does not match collection schema.
+
+  heroAlt: Describe the meaningful hero image.
+
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Location:
+    C:\dev\baseline-sveltia-pilot-20261018-3496a2\src\content\posts\authenticated-sveltia-pilot-3496a2.md:0:0
+  Stack trace:
+    at getEntryData (C:\dev\baseline-sveltia-pilot-20261018-3496a2\node_modules\astro\dist\content\utils.js:83:22)
+    at async eval (C:\dev\baseline-sveltia-pilot-20261018-3496a2\node_modules\astro\dist\content\loaders\glob.js:231:6)

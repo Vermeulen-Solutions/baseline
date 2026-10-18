@@ -1,0 +1,74 @@
+verify	Run npm run verify	﻿2026-10-18T15:07:05.9168499Z ##[group]Run npm run verify
+verify	Run npm run verify	2026-10-18T15:07:05.9169001Z npm run verify
+verify	Run npm run verify	2026-10-18T15:07:05.9253773Z shell: /usr/bin/bash -e {0}
+verify	Run npm run verify	2026-10-18T15:07:05.9254221Z ##[endgroup]
+verify	Run npm run verify	2026-10-18T15:07:06.0898642Z
+verify	Run npm run verify	2026-10-18T15:07:06.0899961Z > baseline-sveltia-pilot-20261018-3496a2@0.0.0 verify
+verify	Run npm run verify	2026-10-18T15:07:06.0919374Z > npm run lint && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck
+verify	Run npm run verify	2026-10-18T15:07:06.0926447Z
+verify	Run npm run verify	2026-10-18T15:07:06.2488706Z
+verify	Run npm run verify	2026-10-18T15:07:06.2509474Z > baseline-sveltia-pilot-20261018-3496a2@0.0.0 lint
+verify	Run npm run verify	2026-10-18T15:07:06.2528743Z > node scripts/check-script-syntax.mjs
+verify	Run npm run verify	2026-10-18T15:07:06.2529174Z
+verify	Run npm run verify	2026-10-18T15:07:06.6032088Z Syntax checked 11 JavaScript modules.
+verify	Run npm run verify	2026-10-18T15:07:06.8418385Z
+verify	Run npm run verify	2026-10-18T15:07:06.8429328Z > baseline-sveltia-pilot-20261018-3496a2@0.0.0 check:art-direction
+verify	Run npm run verify	2026-10-18T15:07:06.8438791Z > node scripts/check-art-direction.mjs --changed
+verify	Run npm run verify	2026-10-18T15:07:06.8458462Z
+verify	Run npm run verify	2026-10-18T15:07:06.9319383Z Art direction gate: no visual source changes.
+verify	Run npm run verify	2026-10-18T15:07:07.1016948Z
+verify	Run npm run verify	2026-10-18T15:07:07.1039501Z > baseline-sveltia-pilot-20261018-3496a2@0.0.0 design:tokens
+verify	Run npm run verify	2026-10-18T15:07:07.1040686Z > node scripts/design-system.mjs
+verify	Run npm run verify	2026-10-18T15:07:07.1058468Z
+verify	Run npm run verify	2026-10-18T15:07:07.1610221Z Design System Audit (/home/runner/work/baseline-sveltia-pilot-20261018-3496a2/baseline-sveltia-pilot-20261018-3496a2/src/styles/global.css): PASS
+verify	Run npm run verify	2026-10-18T15:07:07.1630071Z - LF SHA-256: c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832
+verify	Run npm run verify	2026-10-18T15:07:07.1646597Z - @theme tokens: 31
+verify	Run npm run verify	2026-10-18T15:07:07.1669115Z - :root tokens: 6
+verify	Run npm run verify	2026-10-18T15:07:07.1688567Z - [data-surface="dark"] tokens: 5
+verify	Run npm run verify	2026-10-18T15:07:07.1708658Z - Font loading: PASS (system fonts)
+verify	Run npm run verify	2026-10-18T15:07:07.1719435Z - EmDash edit proxies: NOT APPLICABLE (static foundation)
+verify	Run npm run verify	2026-10-18T15:07:07.1748641Z - WCAG Contrast Pairs:
+verify	Run npm run verify	2026-10-18T15:07:07.1759565Z   [PASS] default:text-on-page: 15.99:1 (min 4.5:1)
+verify	Run npm run verify	2026-10-18T15:07:07.1768751Z   [PASS] default:text-on-surface: 16.45:1 (min 4.5:1)
+verify	Run npm run verify	2026-10-18T15:07:07.1788862Z   [PASS] default:muted-on-page: 6.92:1 (min 4.5:1)
+verify	Run npm run verify	2026-10-18T15:07:07.1810837Z   [PASS] default:muted-on-surface: 7.12:1 (min 4.5:1)
+verify	Run npm run verify	2026-10-18T15:07:07.1848647Z   [PASS] default:on-action-on-action: 8.02:1 (min 4.5:1)
+verify	Run npm run verify	2026-10-18T15:07:07.1850813Z   [PASS] default:action-on-page: 7.8:1 (min 3:1)
+verify	Run npm run verify	2026-10-18T15:07:07.1873691Z   [PASS] default:focus-on-page: 5.26:1 (min 3:1)
+verify	Run npm run verify	2026-10-18T15:07:07.1888572Z   [PASS] dark:text-on-surface: 16.75:1 (min 4.5:1)
+verify	Run npm run verify	2026-10-18T15:07:07.1898786Z   [PASS] dark:muted-on-surface: 7.58:1 (min 4.5:1)
+verify	Run npm run verify	2026-10-18T15:07:07.1924606Z   [PASS] dark:focus-on-surface: 8.79:1 (min 3:1)
+verify	Run npm run verify	2026-10-18T15:07:07.3213822Z
+verify	Run npm run verify	2026-10-18T15:07:07.3215183Z > baseline-sveltia-pilot-20261018-3496a2@0.0.0 test
+verify	Run npm run verify	2026-10-18T15:07:07.3238878Z > node --test tests/*.test.mjs
+verify	Run npm run verify	2026-10-18T15:07:07.3258254Z
+verify	Run npm run verify	2026-10-18T15:07:07.4675772Z ✔ shared tokens pass and CMS proxy checks are explicitly inapplicable (7.354185ms)
+verify	Run npm run verify	2026-10-18T15:07:07.4709798Z ✔ static dependencies and scripts have no CMS, database bootstrap or server adapter (2.326387ms)
+verify	Run npm run verify	2026-10-18T15:07:07.5761459Z ✔ Sveltia form, frontmatter and native image paths match the Astro collection (3.15508ms)
+verify	Run npm run verify	2026-10-18T15:07:07.5929670Z ℹ tests 3
+verify	Run npm run verify	2026-10-18T15:07:07.5930754Z ℹ suites 0
+verify	Run npm run verify	2026-10-18T15:07:07.5948751Z ℹ pass 3
+verify	Run npm run verify	2026-10-18T15:07:07.5959216Z ℹ fail 0
+verify	Run npm run verify	2026-10-18T15:07:07.5978757Z ℹ cancelled 0
+verify	Run npm run verify	2026-10-18T15:07:07.5998535Z ℹ skipped 0
+verify	Run npm run verify	2026-10-18T15:07:07.6018529Z ℹ todo 0
+verify	Run npm run verify	2026-10-18T15:07:07.6019268Z ℹ duration_ms 218.688782
+verify	Run npm run verify	2026-10-18T15:07:07.7959713Z
+verify	Run npm run verify	2026-10-18T15:07:07.7989210Z > baseline-sveltia-pilot-20261018-3496a2@0.0.0 typecheck
+verify	Run npm run verify	2026-10-18T15:07:07.8005088Z > astro check
+verify	Run npm run verify	2026-10-18T15:07:07.8048308Z
+verify	Run npm run verify	2026-10-18T15:07:10.5787564Z 15:07:10 [content] Syncing content
+verify	Run npm run verify	2026-10-18T15:07:10.7395336Z [InvalidContentEntryDataError] posts → authenticated-sveltia-pilot-3496a2 data does not match collection schema.
+verify	Run npm run verify	2026-10-18T15:07:10.7396331Z
+verify	Run npm run verify	2026-10-18T15:07:10.7397591Z   heroAlt: Describe the meaningful hero image.
+verify	Run npm run verify	2026-10-18T15:07:10.7399131Z
+verify	Run npm run verify	2026-10-18T15:07:10.7404207Z   Hint:
+verify	Run npm run verify	2026-10-18T15:07:10.7405909Z     See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+verify	Run npm run verify	2026-10-18T15:07:10.7420348Z   Error reference:
+verify	Run npm run verify	2026-10-18T15:07:10.7421808Z     https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+verify	Run npm run verify	2026-10-18T15:07:10.7423428Z   Location:
+verify	Run npm run verify	2026-10-18T15:07:10.7425406Z     /home/runner/work/baseline-sveltia-pilot-20261018-3496a2/baseline-sveltia-pilot-20261018-3496a2/src/content/posts/authenticated-sveltia-pilot-3496a2.md:0:0
+verify	Run npm run verify	2026-10-18T15:07:10.7444691Z   Stack trace:
+verify	Run npm run verify	2026-10-18T15:07:10.7446933Z     at getEntryData (/home/runner/work/baseline-sveltia-pilot-20261018-3496a2/baseline-sveltia-pilot-20261018-3496a2/node_modules/astro/dist/content/utils.js:83:22)
+verify	Run npm run verify	2026-10-18T15:07:10.7454647Z     at async eval (/home/runner/work/baseline-sveltia-pilot-20261018-3496a2/baseline-sveltia-pilot-20261018-3496a2/node_modules/astro/dist/content/loaders/glob.js:231:6)
+verify	Run npm run verify	2026-10-18T15:07:10.7816793Z ##[error]Process completed with exit code 1.

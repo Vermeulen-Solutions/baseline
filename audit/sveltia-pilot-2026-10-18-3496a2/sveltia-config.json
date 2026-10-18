@@ -1,0 +1,72 @@
+{
+  "backend": {
+    "name": "github",
+    "repo": "jacoplane/baseline-sveltia-pilot-20261018-3496a2",
+    "branch": "main"
+  },
+  "media_folder": "src/assets",
+  "public_folder": "/src/assets",
+  "output": {
+    "omit_empty_optional_fields": true,
+    "encode_file_path": true
+  },
+  "collections": [
+    {
+      "name": "posts",
+      "label": "Posts",
+      "folder": "src/content/posts",
+      "create": true,
+      "extension": "md",
+      "format": "yaml-frontmatter",
+      "slug": "{{slug}}",
+      "media_folder": "/src/assets",
+      "public_folder": "../../assets",
+      "fields": [
+        {
+          "name": "title",
+          "label": "Title",
+          "widget": "string"
+        },
+        {
+          "name": "description",
+          "label": "Description",
+          "widget": "text"
+        },
+        {
+          "name": "publishedAt",
+          "label": "Publication date",
+          "widget": "datetime",
+          "date_format": "YYYY-MM-DD",
+          "time_format": false,
+          "format": "YYYY-MM-DD"
+        },
+        {
+          "name": "draft",
+          "label": "Draft",
+          "widget": "boolean",
+          "default": false,
+          "required": false
+        },
+        {
+          "name": "hero",
+          "label": "Hero image",
+          "widget": "image",
+          "required": false
+        },
+        {
+          "name": "heroAlt",
+          "label": "Hero image description",
+          "widget": "string",
+          "required": false,
+          "hint": "Required when a hero image is selected. The site build validates this relationship."
+        },
+        {
+          "name": "body",
+          "label": "Body",
+          "widget": "markdown"
+        }
+      ]
+    }
+  ],
+  "site_url": "https://baseline-sveltia-pilot-20261018-3496a2.pages.dev"
+}

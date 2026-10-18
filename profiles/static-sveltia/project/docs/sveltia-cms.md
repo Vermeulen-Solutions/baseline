@@ -57,3 +57,14 @@ an indexing hint, and GitHub authorization controls writes.
 Before editorial handoff, test sign-in, upload, save, rebuild, rendered alt text,
 draft exclusion and logout with the actual deployment and editor accounts.
 Local generation/build checks do not certify those credentialed operations.
+
+Complete the site's real Art Direction Record and run the full-source art check
+used by its CI before granting editor access. A fresh generated foundation has
+no invented client record; pulling a content commit can leave the local
+changed-source check quiet while CI still checks every source file. Deployment
+promotion should require the same gates as CI, then a successful production
+build and release checks. Preserve the last successful deployment on failure.
+The hero-description relationship is enforced at build time, so ensure editors
+can see build failures even when the CMS reports that their Git commit saved.
+This simple workflow defaults Draft to false; review that default for the site's
+publishing policy before handoff.

@@ -1,0 +1,282 @@
+{
+  "schemaVersion": 1,
+  "sourceCommit": "30b2e08bd0292d52b1f9ade2cba8af142e474e09",
+  "sourceTreeDirty": false,
+  "profile": "static-sveltia",
+  "sveltia": "0.248.0",
+  "repository": "jacoplane/baseline-sveltia-pilot-20261018-3496a2",
+  "repositoryVisibility": "private",
+  "origin": "https://baseline-sveltia-pilot-20261018-3496a2.pages.dev",
+  "authentication": {
+    "method": "Sveltia token sign-in using existing GitHub CLI OAuth access token",
+    "newPatCreated": false,
+    "oauthProxy": false,
+    "credentialPrinted": false,
+    "credentialCommitted": false,
+    "storageStateSaved": false
+  },
+  "checks": [
+    {
+      "name": "draft-production-exclusion",
+      "passed": true,
+      "observations": [
+        {
+          "route": "/",
+          "status": 200,
+          "sha256": "c1b44a61dc13ab3b06c465feb687ed923d57b2f2b8c64ae76bf2b2f8ef00f329",
+          "containsPilot": false,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/",
+          "status": 200,
+          "sha256": "b4ad90e60316ba6f7ff277feec81dc34abf62a9c62c788c02b242d1931690595",
+          "containsPilot": false,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/authenticated-sveltia-pilot-3496a2/",
+          "status": 404,
+          "sha256": "630b3fbb1ec43f78311df45d42be994ca8f3a8ee8bd8dca13eea6bd56f10d787",
+          "containsPilot": false,
+          "containsControl": false
+        },
+        {
+          "route": "/_styleguide/",
+          "status": 404,
+          "sha256": "630b3fbb1ec43f78311df45d42be994ca8f3a8ee8bd8dca13eea6bd56f10d787",
+          "containsPilot": false,
+          "containsControl": false
+        }
+      ]
+    },
+    {
+      "name": "authenticated-draft-and-upload-commit",
+      "passed": true,
+      "commit": "97956397ff13e674c94a96c48aa331f461b71aa1",
+      "uploadedAsset": "src/assets/sveltia-pilot-hero.jpg",
+      "assetSha256": "074765f7f90bc1655bde34056064de95b9172ce15a806a3ac058c7821e5ed00c",
+      "uploadedBytes": 43795
+    },
+    {
+      "name": "published-native-images-and-control-draft",
+      "passed": true,
+      "deployment": {
+        "id": "dcc595aa-b758-4bc0-9113-1b3b2ea3c70e",
+        "url": "https://dcc595aa.baseline-sveltia-pilot-20261018-3496a2.pages.dev",
+        "commit": "7c22f659f3057d0c3be40d7b5f74d037e5d9b12f",
+        "environment": "production",
+        "stage": "success"
+      },
+      "http": [
+        {
+          "route": "/",
+          "status": 200,
+          "sha256": "bccd115fb66c5538d434c9363c04e106d9bf1dae29959ca78995ae700b1ef090",
+          "containsPilot": true,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/",
+          "status": 200,
+          "sha256": "9e573579d52e09842c5ca90eadd0f0ff9a810093ccc64f9ca82b33a8adb327df",
+          "containsPilot": true,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/authenticated-sveltia-pilot-3496a2/",
+          "status": 200,
+          "sha256": "410abb829176421364e72d28a7a08050ff33cbaae71bbf286e8b36d8d0b9cf2a",
+          "containsPilot": true,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/unpublished-control-3496a2/",
+          "status": 404,
+          "sha256": "630b3fbb1ec43f78311df45d42be994ca8f3a8ee8bd8dca13eea6bd56f10d787",
+          "containsPilot": false,
+          "containsControl": false
+        },
+        {
+          "route": "/_styleguide/",
+          "status": 404,
+          "sha256": "630b3fbb1ec43f78311df45d42be994ca8f3a8ee8bd8dca13eea6bd56f10d787",
+          "containsPilot": false,
+          "containsControl": false
+        }
+      ],
+      "image": {
+        "alt": "Geometric blue grid used as the authenticated publishing pilot hero.",
+        "src": "/_astro/pilot-grid.C18fp0m6_DL58u.webp",
+        "srcset": "/_astro/pilot-grid.C18fp0m6_1ChCCy.webp 480w, /_astro/pilot-grid.C18fp0m6_DL58u.webp 800w, /_astro/pilot-grid.C18fp0m6_HP8Dr.webp 1400w",
+        "naturalWidth": 800
+      },
+      "renditions": [
+        {
+          "url": "/_astro/pilot-grid.C18fp0m6_1ChCCy.webp",
+          "width": "480w",
+          "status": 200,
+          "contentType": "image/webp",
+          "bytes": 3002
+        },
+        {
+          "url": "/_astro/pilot-grid.C18fp0m6_DL58u.webp",
+          "width": "800w",
+          "status": 200,
+          "contentType": "image/webp",
+          "bytes": 4436
+        },
+        {
+          "url": "/_astro/pilot-grid.C18fp0m6_HP8Dr.webp",
+          "width": "1400w",
+          "status": 200,
+          "contentType": "image/webp",
+          "bytes": 8584
+        }
+      ]
+    },
+    {
+      "name": "published-mobile-render",
+      "passed": true,
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "name": "invalid-entry-fails-safe",
+      "passed": true,
+      "invalidCommit": "900140f62a9db9e58d1960e989ff691d54cb9d2a",
+      "expectedError": "heroAlt: Describe the meaningful hero image.",
+      "deploymentBefore": {
+        "id": "dcc595aa-b758-4bc0-9113-1b3b2ea3c70e",
+        "url": "https://dcc595aa.baseline-sveltia-pilot-20261018-3496a2.pages.dev",
+        "commit": "7c22f659f3057d0c3be40d7b5f74d037e5d9b12f",
+        "environment": "production",
+        "stage": "success"
+      },
+      "deploymentAfter": {
+        "id": "dcc595aa-b758-4bc0-9113-1b3b2ea3c70e",
+        "url": "https://dcc595aa.baseline-sveltia-pilot-20261018-3496a2.pages.dev",
+        "commit": "7c22f659f3057d0c3be40d7b5f74d037e5d9b12f",
+        "environment": "production",
+        "stage": "success"
+      },
+      "httpAfter": [
+        {
+          "route": "/",
+          "status": 200,
+          "sha256": "bccd115fb66c5538d434c9363c04e106d9bf1dae29959ca78995ae700b1ef090",
+          "containsPilot": true,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/",
+          "status": 200,
+          "sha256": "9e573579d52e09842c5ca90eadd0f0ff9a810093ccc64f9ca82b33a8adb327df",
+          "containsPilot": true,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/authenticated-sveltia-pilot-3496a2/",
+          "status": 200,
+          "sha256": "410abb829176421364e72d28a7a08050ff33cbaae71bbf286e8b36d8d0b9cf2a",
+          "containsPilot": true,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/unpublished-control-3496a2/",
+          "status": 404,
+          "sha256": "630b3fbb1ec43f78311df45d42be994ca8f3a8ee8bd8dca13eea6bd56f10d787",
+          "containsPilot": false,
+          "containsControl": false
+        },
+        {
+          "route": "/_styleguide/",
+          "status": 404,
+          "sha256": "630b3fbb1ec43f78311df45d42be994ca8f3a8ee8bd8dca13eea6bd56f10d787",
+          "containsPilot": false,
+          "containsControl": false
+        }
+      ],
+      "productionBytesUnchanged": true
+    },
+    {
+      "name": "logout-and-reload",
+      "passed": true,
+      "loginRequiredAgain": true,
+      "githubTokenFoundInLocalStorage": false
+    },
+    {
+      "name": "recovery-after-invalid-entry",
+      "passed": true,
+      "commit": "085fe25878d241fc73857c7aebd1c921d1d9197e",
+      "deployment": {
+        "id": "3abca116-21ca-4949-961c-ea06f2020f34",
+        "url": "https://3abca116.baseline-sveltia-pilot-20261018-3496a2.pages.dev",
+        "commit": "085fe25878d241fc73857c7aebd1c921d1d9197e",
+        "environment": "production",
+        "stage": "success"
+      },
+      "http": [
+        {
+          "route": "/",
+          "status": 200,
+          "sha256": "bccd115fb66c5538d434c9363c04e106d9bf1dae29959ca78995ae700b1ef090",
+          "containsPilot": true,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/",
+          "status": 200,
+          "sha256": "9e573579d52e09842c5ca90eadd0f0ff9a810093ccc64f9ca82b33a8adb327df",
+          "containsPilot": true,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/authenticated-sveltia-pilot-3496a2/",
+          "status": 200,
+          "sha256": "410abb829176421364e72d28a7a08050ff33cbaae71bbf286e8b36d8d0b9cf2a",
+          "containsPilot": true,
+          "containsControl": false
+        },
+        {
+          "route": "/posts/unpublished-control-3496a2/",
+          "status": 404,
+          "sha256": "630b3fbb1ec43f78311df45d42be994ca8f3a8ee8bd8dca13eea6bd56f10d787",
+          "containsPilot": false,
+          "containsControl": false
+        },
+        {
+          "route": "/_styleguide/",
+          "status": 404,
+          "sha256": "630b3fbb1ec43f78311df45d42be994ca8f3a8ee8bd8dca13eea6bd56f10d787",
+          "containsPilot": false,
+          "containsControl": false
+        }
+      ],
+      "renderedBytesMatchLastGoodDeployment": true,
+      "githubCiRun": 39139086104,
+      "githubCiConclusion": "success"
+    }
+  ],
+  "adminBrowserErrors": [],
+  "lockfile": {
+    "cmsDatabasePackages": 0,
+    "sha256": "3ad95fb97594d49c3b0fea051a930e65e813c613e9bf50f804a7780b5a0bd509"
+  },
+  "setupFindings": [
+    "Initial content commits were rejected by full-source CI until the disposable pilot recorded its frozen neutral presentation. No starter gate was disabled.",
+    "Wrangler 4.151.1 attempted automatic root setup; it was stopped, task-owned package changes reverted, and root npm ci restored the committed dependency tree. Pages project creation used the API, and Direct Upload used isolated Wrangler 4.55.0."
+  ],
+  "publishing": {
+    "workflow": "simple",
+    "draftPolicy": "draft boolean controls route/listing exclusion; Save commits to main",
+    "promotion": "Explicit local verification/build followed by Cloudflare Pages Direct Upload; not automatic Git integration",
+    "invalidBuildExitCode": 1,
+    "invalidPromotionAttempted": false,
+    "expectedFailureCiRun": 39138993378,
+    "successfulCiRun": 39138887882
+  },
+  "passed": true,
+  "completedAt": "2026-10-18T15:09:40.561Z",
+  "browserContextClosed": true
+}

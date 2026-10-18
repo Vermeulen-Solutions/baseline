@@ -1,0 +1,19 @@
+{
+  "label": "invalid",
+  "commit": "900140f62a9db9e58d1960e989ff691d54cb9d2a",
+  "startedAt": "2026-10-18T15:07:03.187Z",
+  "checks": [
+    {
+      "command": "npm run check:art-direction -- --base 4b825dc642cb6eb9a060e54bf8d69288fbee4904",
+      "exitCode": 0
+    },
+    {
+      "command": "npm run verify",
+      "exitCode": 1
+    }
+  ],
+  "deploymentAttempted": false,
+  "deploymentSucceeded": false,
+  "trigger": "Explicit local promotion from checked-out GitHub commit, not automatic Git integration",
+  "completedAt": "2026-10-18T15:07:13.291Z"
+}
