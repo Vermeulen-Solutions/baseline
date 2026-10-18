@@ -239,6 +239,9 @@ Local SQLite can accept models that exceed Cloudflare D1's [100-column table lim
 
 Browser tests need the exact renderer described in [visual regression setup](docs/visual-regression.md). CI uses one Node version for fast checks and a normal build; screenshot comparisons remain local.
 
+### 🔄 Automated Weekly Upstream Updates
+Every site template includes [`.github/workflows/upstream-update.yml`](docs/automated-upstream-updates.md), which runs every Monday at 08:00 UTC (and on-demand). It syncs official EmDash and Impeccable skills, applies safe in-range dependency updates, executes tests and production builds, and safely auto-merges to `main` with alert issues on test failure. See [Automated Upstream Updates](docs/automated-upstream-updates.md).
+
 ---
 
 ## Build with content, not around it
