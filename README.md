@@ -6,7 +6,7 @@
   <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7.4.0-BC52EE" alt="Astro 7.4.0" /></a>
   <a href="https://docs.emdashcms.com/"><img src="https://img.shields.io/badge/EmDash-1.3.0-2563EB" alt="EmDash 1.3.0" /></a>
   <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind-v4-06B6D4" alt="Tailwind v4" /></a>
-  <a href="#-60-second-quickstart"><img src="https://img.shields.io/badge/Node-LTS-339933" alt="Node LTS" /></a>
+  <a href="#-quickstart"><img src="https://img.shields.io/badge/Node-LTS-339933" alt="Node LTS" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT License" /></a>
 </p>
 
@@ -95,7 +95,9 @@ Baseline is designed ground-up for an **agent-first workflow** pairing with **Cl
    - Locales: [E.g., Single language (en) or Multilingual (en, fr)]
 
    Install dependencies, generate .env secrets, begin with Stage 1 (Brief & Evidence Discovery), and present the Stage 1 handoff choices once complete.
-   ```
+   *(Canonical lanes: `editorial-paper`, `product-minimalism`, `technical-data`, `warm-editorial`; see [Art Direction Guide](docs/art-direction-workflow.md))*
+
+3. **Explore your local dev destinations:**
 
 ### 🖥️ Where to look in your browser
 
@@ -241,6 +243,7 @@ Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a stru
 - **Relational Normalization vs 50-Column Budget:** Model 1:N relations and shared master data instead of bloated JSON dumps, staying comfortably within Cloudflare D1's 100-column limits.
 - **Admin Polish & Non-Routable Collections:** Designate `routable: false` for internal entities, use standardized ASCII slugs in code, and author display labels in the client's working language.
 - **Automated Media Migration:** Use `npm run media:migrate-wp` for manifest-driven WordPress attachment preparation, EmDash ingestion, and Cloudflare R2 staging ([Image Delivery Guide](docs/image-delivery.md) · [Content Modeling Guide](docs/wordpress-content-modeling.md)).
+- **Acceptance-Driven Verification & Cutover Safety:** Run `npm run migration:verify -- --manifest <file>` for bounded HTTP structural audits (status, redirects, canonicals, headings, links, media) and inventory reconciliation. Rehearse importer fidelity with synthetic fixtures (`npm run rehearse:importer` · [Importer Fidelity Matrix](docs/importer-fidelity-matrix.md)), execute cutover with pre-freeze delta reconciliation ([Migration Cutover Runbook](docs/migration-cutover.md)), and protect production data with atomic SQLite backups ([Node Backup & Restore](docs/node-backup-restore.md)).
 
 The [privacy-edited gallery migration case study](audit/gallery-migration-case-study.md)
 records the distinction between copied files and editable Media Library ownership.
@@ -287,6 +290,7 @@ Local SQLite can accept models that exceed Cloudflare D1's [100-column table lim
 | `npm run db:diff` | Compare offline SQLite/D1 schema parity and column budgets |
 | `npm run media:migrate-wp` | Manifest-driven WordPress media preparation, CMS ingestion, and R2 staging |
 | `npm run migration:verify -- --manifest <file>` | Collect bounded HTTP evidence and reconcile v3 offline inventories, or replay with `--observations`; [declared scope and acceptance contract](docs/migration-acceptance.md) |
+| `npm run rehearse:importer` | Rehearse WordPress WXR and Exporter fidelity against synthetic fixtures |
 | `npm run test:visual` | Compare local Windows captures with reviewed baselines |
 | `npm run check:dev-tools` | Verify `/_styleguide` and fixture markers stay out of production |
 | `npm run build` | Build the Node production artifact |
