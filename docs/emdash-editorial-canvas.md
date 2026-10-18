@@ -53,6 +53,10 @@ Keep Portable Text's canonical tagged value and identity intact in edit mode. Ap
 
 ## Acceptance
 
+For EmDash 1.3 toolbar/link controls, revision attribution and restore-host callback
+requirements, use the [1.3 adoption review](emdash-1.3-upgrade-review.md). Existing
+field annotations do not by themselves verify these interactive behaviors.
+
 For every intended canvas field, verify that it is registered in the active schema and manifest, populated in the target locale, read by the template, and annotated with the same entry and field identity. Test save/reload and the appropriate draft/publish behavior on the authorized local or disposable surface. Verify public output in each required locale and compare canonical stored values—not only route status or record counts. Keep media, references, repeaters, URLs, plugin DTOs and transformed text on their supported structured-editor path unless the installed release demonstrates a reliable inline editor for that field type.
 
 Treat D1 migration, public code deployment and content transfer as separate operations. Build output does not copy local content to a remote database; an inaccessible remote target is unverified, not a parity pass.

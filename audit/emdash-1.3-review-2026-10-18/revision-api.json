@@ -1,0 +1,65 @@
+{
+  "items": [
+    {
+      "id": "01M57PWYD2PBA12NK1ZDDAKC8J",
+      "collection": "posts",
+      "entryId": "01M57PWYBJN2BZQC1M741ZYKX2",
+      "data": {
+        "title": "revision-review",
+        "content": [
+          {
+            "_type": "block",
+            "_key": "paragraph",
+            "style": "normal",
+            "markDefs": [],
+            "children": [
+              {
+                "_type": "span",
+                "_key": "span",
+                "text": "Changed revision wording",
+                "marks": []
+              }
+            ]
+          }
+        ]
+      },
+      "authorId": "01M57PWXYQ5YM82NPTWA368W8P",
+      "createdAt": "2026-10-18 14:33:22",
+      "author": {
+        "id": "01M57PWXYQ5YM82NPTWA368W8P",
+        "name": "Revision Editor"
+      }
+    },
+    {
+      "id": "01M57PWYC5H6KAHPGB2T5WZ3M7",
+      "collection": "posts",
+      "entryId": "01M57PWYBJN2BZQC1M741ZYKX2",
+      "data": {
+        "title": "revision-review",
+        "content": [
+          {
+            "_type": "block",
+            "_key": "paragraph",
+            "style": "normal",
+            "markDefs": [],
+            "children": [
+              {
+                "_type": "span",
+                "_key": "span",
+                "text": "Original revision wording",
+                "marks": []
+              }
+            ]
+          }
+        ]
+      },
+      "authorId": "01M57PWTG0ER28D789G681D36V",
+      "createdAt": "2026-10-18 14:33:22",
+      "author": {
+        "id": "01M57PWTG0ER28D789G681D36V",
+        "name": "Dev Admin"
+      }
+    }
+  ],
+  "total": 2
+}

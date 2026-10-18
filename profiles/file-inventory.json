@@ -698,6 +698,10 @@
     "tests/profile-delivery.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-emdash13.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

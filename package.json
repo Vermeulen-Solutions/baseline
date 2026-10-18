@@ -69,7 +69,8 @@
     "mcp:token": "node scripts/create-mcp-token.mjs",
     "init:profile": "node scripts/init-profile.mjs",
     "sync:baseline": "node scripts/sync-baseline.mjs",
-    "test:profiles": "node scripts/verify-profiles.mjs"
+    "test:profiles": "node scripts/verify-profiles.mjs",
+    "check:emdash13": "node scripts/check-emdash13.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",

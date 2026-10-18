@@ -49,6 +49,8 @@ Explore the documentation guides below, organized by workflow, design architectu
   Methodology for migrating WordPress sites: hunting for implicit content entities buried in page builder blocks or ACF repeaters, relational normalization, `routable: false`, admin language strategy, and manifest-driven media preparation (`npm run media:migrate-wp`).
 - **[Editorial Canvas & Content Binding](emdash-editorial-canvas.md)**  
   How to query EmDash collections in Astro templates and bind live editing field proxies (`entry.edit.title`) so clients can visually edit content. Also details the **50-column physical schema budget** for Cloudflare D1 safety.
+- **[EmDash 1.3 Adoption Review](emdash-1.3-upgrade-review.md)**
+  Native AI-training policy, contributor permissions, revisions/custom editor callbacks, scoped MCP names, guest bylines and focused runtime verification.
 - **[Internationalization (i18n)](internationalization.md)**  
   Native row-per-locale multilingual architecture linked by translation groups, avoiding anti-pattern duplicate language columns (e.g. `title_en`).
 - **[Forms & Verification](forms-adoption.md)**  

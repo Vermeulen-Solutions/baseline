@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "node": "24.21.0",
+  "platform": "win32",
+  "startedAt": "2026-10-18T14:32:07.868Z",
+  "emdash": "1.3.0",
+  "copiedWorkingDatabase": false,
+  "independentInstall": false,
+  "authentication": "Synthetic users and session provisioning only in the disposable fixture; native request middleware and permissions active",
+  "checks": [
+    {
+      "name": "contributor-own-draft-create-and-save",
+      "passed": true,
+      "role": 20,
+      "status": "draft"
+    },
+    {
+      "name": "contributor-other-draft-update-denied",
+      "passed": true,
+      "status": 403,
+      "code": "FORBIDDEN",
+      "canonicalUnchanged": true,
+      "revisionsUnchanged": true
+    },
+    {
+      "name": "contributor-publish-denied",
+      "passed": true,
+      "status": 403,
+      "code": "FORBIDDEN",
+      "canonicalUnchanged": true,
+      "revisionsUnchanged": true
+    },
+    {
+      "name": "contributor-other-lock-denied",
+      "passed": true,
+      "status": 403,
+      "code": "FORBIDDEN",
+      "canonicalUnchanged": true,
+      "revisionsUnchanged": true
+    },
+    {
+      "name": "contributor-own-draft-lock",
+      "passed": true,
+      "status": 200
+    },
+    {
+      "name": "contributor-published-update-denied",
+      "passed": true,
+      "status": 403,
+      "code": "FORBIDDEN",
+      "canonicalUnchanged": true,
+      "revisionsUnchanged": true
+    },
+    {
+      "name": "contributor-scheduled-update-denied",
+      "passed": true,
+      "status": 403,
+      "code": "FORBIDDEN",
+      "canonicalUnchanged": true,
+      "revisionsUnchanged": true
+    },
+    {
+      "name": "revision-author-api-without-user-management",
+      "passed": true,
+      "authorName": "Revision Editor",
+      "revisions": 2,
+      "userManagementStatus": 403
+    },
+    {
+      "name": "revision-diff-browser",
+      "passed": true,
+      "additions": [
+        "Added: Changed"
+      ],
+      "removals": [
+        "Removed: Original"
+      ],
+      "author": "Revision Editor"
+    },
+    {
+      "name": "standard-admin-restore-refresh",
+      "passed": true,
+      "restoredCanonicalDraft": true,
+      "returnedToEditing": true
+    },
+    {
+      "name": "inline-toolbar-links-save-reload",
+      "passed": true,
+      "turnIntoMenu": true,
+      "boldPersisted": true,
+      "bareDomainPrefixed": true,
+      "caretPreviewAndNoNavigation": true,
+      "linkEdited": true,
+      "linkRemoved": true,
+      "canonicalAndReloadVerified": true
+    }
+  ],
+  "passed": true,
+  "sourceCommit": "dde8ef8765532fe9b48e8b525299ca0387f489da",
+  "sourceTreeDirty": true,
+  "browserErrors": [],
+  "completedAt": "2026-10-18T14:34:13.886Z",
+  "serverStopped": true,
+  "sourceHashes": {
+    "scripts/check-emdash13.mjs": "e102320bcace60d09ad2ae163ddaf9c256c109ef90cdd1fb2c44cf0ddbaed3a9",
+    "src/layouts/Base.astro": "eb13b22ec0dc3e0122514c02328522b8ea95062ed00c6a4b0afecae86ae88989",
+    "src/layouts/SiteShell.astro": "80afe1f381fd8c58517f199884146f4abdbdf498d6240bc22b3a0cafa0c11b50",
+    "src/components/RichText.astro": "afc40e544a8b805a2fb5161267ce239db34e8619fd5a1b98b11c9d90773d156d",
+    "src/components/Card.astro": "d03714812d5bcee0d9d90ed7b6bf456ae2307ceca9681eb1fd0b37129e8562f1",
+    "astro.config.mjs": "f9213ed59412eff32b9038c43274be5a309e738813776a09338d6dec4ad2e638",
+    "package.json": "a205be7a570991a7ffdd7c3101055fff369db4a188460e641f4087bb8a96f842",
+    "tsconfig.json": "64ed26f381ec8ef5bef254d4e0df6cb3c0083b212a0b3b5a9d26b559cc95298c",
+    "emdash-env.d.ts": "ac9361bb78293e411fdb8af520dc1a452b49461ec460a7ce19026060b3ac0981",
+    "scripts/dev-tools-integration.mjs": "57ebf228291e760dcd4655685702e02a6924422745b6783eaeb4121b59811709",
+    "scripts/dev-tools-middleware.mjs": "3fa1aa4a78d34b11640875a9ea4b7bcb1e7fcb81481762034a198cf0f3e65baf"
+  },
+  "fixtureDirectory": ".emdash/checks/emdash13-qcYyFZ"
+}

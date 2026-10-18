@@ -1,0 +1,44 @@
+{
+  "verifiedAt": "2026-10-18T14:37:22.057Z",
+  "commands": [
+    {
+      "command": "npm run verify",
+      "exitCode": 0,
+      "tests": 112,
+      "passed": 112,
+      "failed": 0,
+      "astroFiles": 40,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0,
+      "log": "repository-verify.log",
+      "sha256": "017f0428814681da134122dea03eae2ae0096ecb939bc489fec27e8566c93675",
+      "originalSha256": "108eee4e79595488355a05a359e123bd896361cdd80905534a090ab59df28eef"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "releaseArtifact": "passed",
+      "note": "Existing EmDash bundle-size warning remains.",
+      "log": "repository-build.log",
+      "sha256": "cf14dd709489900b95fc4fc15640da55fe80d33f5ee64c16d2bd0beb14cf9af4",
+      "originalSha256": "3c7472a44198f772ba9220d0335ec4f7ae12ff80e2a53ccd2a352a098f79fe9b"
+    },
+    {
+      "command": "npm run check:emdash13",
+      "exitCode": 0,
+      "checks": 11,
+      "browserErrors": 0,
+      "serverStopped": true,
+      "dependencyLinkRemoved": true,
+      "receipt": "verification.json",
+      "sha256": "4d08a642ae48fa8ba6e22b2881addd5103f80f75b1f218c79e7bbc681e0e2f42"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "scope": "Local Node/SQLite and Chromium; no Worker/D1 or live client certification.",
+  "logFormatting": "Archived logs use LF line endings with trailing whitespace removed. originalSha256 records the captured bytes; sha256 records the archived log."
+}

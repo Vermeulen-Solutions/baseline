@@ -1,0 +1,134 @@
+[2m16:32:21[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+
+[2m16:32:21[22m [34m[vite][39m connected.
+[2m16:32:21[22m [34m[types][39m Generated [2m2ms[22m
+[2m16:32:21[22m [34m[vite][39m connected.
+[2m16:32:22[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+
+  [2m›[22m Admin UI    [36mhttp://127.0.0.1:9996/_emdash/admin[39m
+  [2m›[22m MCP server  [36mhttp://127.0.0.1:9996/_emdash/api/mcp[39m
+  [2m›[22m Dev bypass  [36mhttp://127.0.0.1:9996/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin[39m
+    [2mSkips passkey setup/auth and signs you in as a dev admin[22m
+
+[42m[1m astro [22m[49m [32mv7.4.0[39m [2mready in[22m 7765 [2mms[22m
+[2m┃[22m Local    [36mhttp://127.0.0.1:9996/[39m
+[2m16:32:22[22m [32mwatching for file changes...[39m
+[2m16:32:23[22m [34m[vite][39m [optimizer] bundling dependencies...
+Auto-seeded default collections
+[2m16:32:34[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m8088ms[22m
+[2m16:32:34[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m2ms[22m
+[2m16:33:18[22m [34m[200][39m / [2m1524ms[22m
+[2m16:33:18[22m [34m[200][39m / [2m1587ms[22m
+[2m16:33:18[22m [34m[200][39m / [2m1591ms[22m
+[2m16:33:18[22m [34m[200][39m / [2m1594ms[22m
+[setup-dev-bypass] Seed applied: 0 collections, 0 fields
+[setup-dev-bypass] Created dev admin user: dev@emdash.local
+[2m16:33:18[22m [34m[200][39m /_emdash/api/setup/dev-bypass [2m14ms[22m
+[setup-dev-bypass] Seed applied: 0 collections, 0 fields
+[2m16:33:18[22m [34m[200][39m /_emdash/api/setup/dev-bypass [2m9ms[22m
+[2m16:33:18[22m [34m[200][39m /_emdash/api/fixture-auth [2m3ms[22m
+[setup-dev-bypass] Seed applied: 0 collections, 0 fields
+[2m16:33:18[22m [34m[200][39m /_emdash/api/setup/dev-bypass [2m9ms[22m
+[2m16:33:18[22m [34m[200][39m /_emdash/api/fixture-auth [2m2ms[22m
+[setup-dev-bypass] Seed applied: 0 collections, 0 fields
+[2m16:33:18[22m [34m[200][39m /_emdash/api/setup/dev-bypass [2m16ms[22m
+[2m16:33:18[22m [34m[vite][39m program reload
+[2m16:33:22[22m [34m[200][39m /_emdash/api/fixture-auth [2m3ms[22m
+[2m16:33:22[22m [34m[201][39m [34mPOST[39m /_emdash/api/content/posts [2m24ms[22m
+[2m16:33:22[22m [34m[201][39m [34mPOST[39m /_emdash/api/content/posts [2m10ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m15ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y/revisions [2m2ms[22m
+[2m16:33:22[22m [33m[403][39m [33mPUT[39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y/revisions [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0/revisions [2m2ms[22m
+[2m16:33:22[22m [33m[403][39m [33mPOST[39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0/publish [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0/revisions [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y/revisions [2m2ms[22m
+[2m16:33:22[22m [33m[403][39m [33mPOST[39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y/lock [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY0KA2MAS2EEKGX0G25Y/revisions [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0/lock [2m4ms[22m
+[2m16:33:22[22m [34m[200][39m [34mDELETE[39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0/lock [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0/publish [2m12ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0/revisions [2m2ms[22m
+[2m16:33:22[22m [33m[403][39m [33mPUT[39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0 [2m3ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWXZYPD84S8ZP33PN0VG0/revisions [2m2ms[22m
+[2m16:33:22[22m [34m[201][39m [34mPOST[39m /_emdash/api/content/posts [2m9ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY98Q6KMXS239R22NEZC [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/posts/01M57PWY98Q6KMXS239R22NEZC/schedule [2m10ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY98Q6KMXS239R22NEZC [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY98Q6KMXS239R22NEZC [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY98Q6KMXS239R22NEZC/revisions [2m2ms[22m
+[2m16:33:22[22m [33m[403][39m [33mPUT[39m /_emdash/api/content/posts/01M57PWY98Q6KMXS239R22NEZC [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY98Q6KMXS239R22NEZC [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWY98Q6KMXS239R22NEZC/revisions [2m2ms[22m
+[2m16:33:22[22m [34m[201][39m [34mPOST[39m /_emdash/api/content/posts [2m9ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m9ms[22m
+[2m16:33:22[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/publish [2m9ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m2ms[22m
+[2m16:33:22[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m9ms[22m
+[2m16:33:22[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/publish [2m9ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/revisions [2m2ms[22m
+[2m16:33:22[22m [33m[403][39m /_emdash/api/admin/users [2m6ms[22m
+[2m16:33:22[22m [34m[200][39m /_emdash/admin/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m45ms[22m
+[2m16:33:25[22m [34m[200][39m /_emdash/api/manifest [2m5ms[22m
+[2m16:33:25[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m2ms[22m
+[2m16:33:25[22m [34m[200][39m /_emdash/api/auth/me [2m2ms[22m
+[2m16:33:26[22m [34m[200][39m [34mPOST[39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/lock [2m4ms[22m
+[2m16:33:26[22m [33m[403][39m /_emdash/api/admin/users [2m5ms[22m
+[2m16:33:26[22m [34m[200][39m /_emdash/api/taxonomies [2m4ms[22m
+[2m16:33:26[22m [34m[200][39m /_emdash/api/admin/bylines [2m3ms[22m
+[2m16:33:26[22m [34m[200][39m /_emdash/api/admin/comments/counts [2m3ms[22m
+[2m16:33:26[22m [34m[200][39m /_emdash/api/taxonomies/category/terms [2m13ms[22m
+[2m16:33:26[22m [34m[200][39m /_emdash/api/taxonomies/tag/terms [2m14ms[22m
+[2m16:33:26[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/terms/tag [2m6ms[22m
+[2m16:33:26[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/terms/category [2m7ms[22m
+[2m16:33:26[22m [34m[200][39m [34mPOST[39m /_emdash/api/auth/me [2m3ms[22m
+[2m16:33:26[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/revisions [2m2ms[22m
+[2m16:33:27[22m [33m[403][39m /_emdash/api/admin/users [2m2ms[22m
+[2m16:33:27[22m [34m[200][39m [34mPOST[39m /_emdash/api/revisions/01M57PWYC5H6KAHPGB2T5WZ3M7/restore [2m11ms[22m
+[2m16:33:27[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m11ms[22m
+[2m16:33:27[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m5ms[22m
+[2m16:33:27[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/revisions [2m4ms[22m
+[2m16:33:27[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/revisions [2m7ms[22m
+[2m16:33:27[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m3ms[22m
+[2m16:33:28[22m [34m[200][39m /_emdash/api/revisions/01M57PX3JJP8JRY0YTR25C7G5P [2m2ms[22m
+[33m[1m16:33:28[22m [WARN] [cache][39m `cache.set()` was called but caching is not enabled. Configure a cache provider in your Astro config under `cache` to enable caching.
+[2m16:33:28[22m [34m[200][39m /posts/revision-review [2m200ms[22m
+[2m16:33:28[22m [34m[200][39m [34mDELETE[39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2/lock [2m6ms[22m
+[2m16:33:44[22m [34m[200][39m /posts/revision-review [2m33ms[22m
+[2m16:33:45[22m [34m[200][39m /_emdash/api/manifest [2m3ms[22m
+[2m16:33:46[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m16:33:53[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m16:33:56[22m [34m[vite][39m [32mdependencies optimized: [33m@emdash-cms/admin/html-block, use-sync-external-store/shim/index.js, use-sync-external-store/shim/with-selector.js[32m[39m
+[2m16:33:56[22m [34m[vite][39m [32moptimized dependencies changed. reloading[39m
+[2m16:33:56[22m [34m[200][39m /posts/revision-review [2m80ms[22m
+[2m16:34:00[22m [34m[200][39m /_emdash/api/manifest [2m4ms[22m
+[2m16:34:10[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m12ms[22m
+[2m16:34:10[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m3ms[22m
+[2m16:34:10[22m [34m[200][39m /posts/revision-review [2m25ms[22m
+[2m16:34:10[22m [34m[200][39m /_emdash/api/manifest [2m5ms[22m
+[2m16:34:12[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m11ms[22m
+[2m16:34:12[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m10ms[22m
+[2m16:34:12[22m [34m[200][39m /_emdash/api/content/posts/01M57PWYBJN2BZQC1M741ZYKX2 [2m3ms[22m
+[2m16:34:12[22m [34m[200][39m /posts/revision-review [2m21ms[22m
+[2m16:34:12[22m [34m[200][39m /_emdash/api/manifest [2m4ms[22m
