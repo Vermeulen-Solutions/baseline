@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/baseline-logo.svg?v=2" alt="Baseline — Agent-First Astro & EmDash CMS Starter" width="468" />
+  <img src="docs/images/baseline-logo.svg?v=2" alt="Baseline — Agent-First Web Starter for Astro & EmDash CMS" width="468" />
 </p>
 
 <p align="center">
@@ -21,9 +21,9 @@
 
 ---
 
-EmDash is a modern, lightweight headless CMS built ground-up for AI-native web development. Baseline provides the visual frontend foundation, development guardrails, and testing harness built specifically for developers pairing with AI coding assistants—whether using **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, **Windsurf**, **Aider**, or local LLM runners.
+**Baseline is the agent-first frontend foundation and development guardrail system for Astro**, designed ground-up for developers pairing with AI coding assistants—whether using **Claude Code**, **OpenAI Codex**, **Google Antigravity**, **OpenCode / OMP**, **Hermes**, **Cursor**, **Windsurf**, **Aider**, or local LLM runners.
 
-Spend your time building the site, not debugging agent hallucinations or wrestling with styling drift. Baseline gives your AI assistant clear architectural boundaries, an agent-first token & WCAG contrast engine (`npm run design:tokens`), and a living component quarantine canvas (`/_styleguide`) to stress-test reusable components in isolation before assembling templates. Choose static file-owned content, Sveltia browser editing, or the relational EmDash CMS while sharing one design system.
+By default, Baseline powers full-scale applications with **EmDash CMS**—a lightweight headless CMS featuring live visual page editing, relational SQLite/D1, and native Model Context Protocol (MCP) server integration. When a database or server runtime isn't required, Baseline's **Platform Profiles** let you output pure static Astro sites or Git-backed Sveltia CMS sites while sharing the exact same fluid design tokens, WCAG contrast checks, layout primitives, and component quarantine (`/_styleguide`).
 
 ---
 
@@ -58,9 +58,9 @@ to use EmDash.
 
 This repository is a **GitHub Template**. To build a new website:
 
-1. Click the green **[Use this template](https://github.com/new?template_name=emdash-baseline&template_owner=Vermeulen-Solutions)** button at the top of this repository (or use the GitHub CLI):
+1. Click the green **[Use this template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions)** button at the top of this repository (or use the GitHub CLI):
    ```sh
-   gh repo create my-site --template Vermeulen-Solutions/emdash-baseline --private --clone
+   gh repo create my-site --template Vermeulen-Solutions/baseline --private --clone
    cd my-site
    ```
 2. Install dependencies & initialize secrets:
@@ -82,8 +82,8 @@ This repository is a **GitHub Template**. To build a new website:
 If you are developing or maintaining the Baseline template engine, specialist skills, or testing suites:
 
 ```sh
-git clone https://github.com/Vermeulen-Solutions/emdash-baseline.git
-cd emdash-baseline
+git clone https://github.com/Vermeulen-Solutions/baseline.git
+cd baseline
 npm install
 npm run verify
 ```
