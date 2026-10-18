@@ -59,21 +59,11 @@ hosting and external providers require separate acceptance. See
 
 ## ⚡ Quickstart
 
-For a pure static project without a CMS, run
-`npm run init:profile -- --profile static --out C:/dev/my-static-site` from this
-checkout, then install and verify in the generated directory. See the
-[Platform Profiles guide](profiles/README.md) for the allowlists, provenance,
-static and Sveltia generation. Use `--profile static-sveltia` for the browser editor,
-then follow its generated `docs/sveltia-cms.md` to configure the site's repository
-and authentication. Commit the new lockfile after the first `npm install`;
-generated CI uses `npm ci`. The root quickstart below continues
-to use EmDash.
-
 **Requirements:** Node 22.22.2 minimum (Node 24 LTS recommended) and `npm`.
 
-### 🚀 Starting a New Site Project (Recommended)
+### 🚀 Starting a New Site (EmDash CMS)
 
-This repository is a **GitHub Template**. To build a new website:
+This repository is configured by default with the **EmDash Node.js + SQLite** foundation. To build a new website:
 
 1. Click the green **[Use this template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions)** button at the top of this repository (or use the GitHub CLI):
    ```sh
@@ -92,6 +82,33 @@ This repository is a **GitHub Template**. To build a new website:
    npm run design:tokens -- --init-client --lane editorial-paper
    ```
 
+#### 🖥️ Where to look in your browser
+
+Once `npm run dev` is running, open these local URLs:
+
+| Destination | Local URL | What it's for |
+| --- | --- | --- |
+| 🌐 **Public Site** | [`http://localhost:4321/`](http://localhost:4321/) | Live website rendered by Astro |
+| ✏️ **CMS Admin** | [`http://localhost:4321/_emdash/admin`](http://localhost:4321/_emdash/admin) | Create your admin account, manage collections, and edit content |
+| 🧪 **Component Styleguide** | [`http://localhost:4321/_styleguide`](http://localhost:4321/_styleguide) | Stress-test layout primitives and calibrate typography/spacing (404 in production) |
+
+---
+
+### 📦 Alternative: Static Profiles (`static` / `static-sveltia`)
+
+If your project does not need a relational CMS database or server adapter, generate an unencumbered static Astro project from this checkout:
+
+- **Pure Static (Markdown / Content Collections):**
+  ```sh
+  npm run init:profile -- --profile static --out ../my-static-site
+  ```
+- **Static + Sveltia CMS (Git-backed browser editor):**
+  ```sh
+  npm run init:profile -- --profile static-sveltia --out ../my-static-site
+  ```
+
+After generating, `cd` into the new directory, run `npm install`, and commit the generated lockfile (`generated CI uses npm ci`). Sveltia sites follow the generated `docs/sveltia-cms.md` to configure repository and GitHub authentication. See the [Platform Profiles guide](profiles/README.md) for details.
+
 ---
 
 ### 🛠️ Contributing to the Baseline Starter Itself
@@ -104,16 +121,6 @@ cd baseline
 npm install
 npm run verify
 ```
-
-### 🖥️ Where to look in your browser
-
-Once `npm run dev` is running, open these local URLs:
-
-| Destination | Local URL | What it's for |
-| --- | --- | --- |
-| 🌐 **Public Site** | [`http://localhost:4321/`](http://localhost:4321/) | Live website rendered by Astro |
-| ✏️ **CMS Admin** | [`http://localhost:4321/_emdash/admin`](http://localhost:4321/_emdash/admin) | Create your admin account, manage collections, and edit content |
-| 🧪 **Component Styleguide** | [`http://localhost:4321/_styleguide`](http://localhost:4321/_styleguide) | Stress-test layout primitives and calibrate typography/spacing (404 in production) |
 
 ---
 
