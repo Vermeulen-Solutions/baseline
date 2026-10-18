@@ -278,3 +278,149 @@ Please run `npm run sync:site-skills` and `npm run sync:emdash-skills` to check 
 
 Review the staged diff, verify that any intentional local customizations are preserved, and guide me through applying or deferring the candidate updates.
 ```
+
+### Day-2 Design System & Token Updates (Client Request)
+Use this prompt when a client requests system-wide styling changes (e.g., border radii, brand colors, typography pairings, or spacing density).
+
+```markdown
+We need to update our design system tokens based on client feedback: [Insert request, e.g., "Change our card corner radius to be sharper / softer" or "Update the primary brand accent to #0066CC"].
+
+Please:
+1. Update the appropriate token(s) in `src/styles/global.css` under Tailwind v4 `@theme` (e.g. `--radius-card`, `--color-action`, `--font-display`).
+2. Run `npm run design:tokens` to verify WCAG AA perceptual contrast and fluid clamp bounds.
+3. If core token physics shifted, ensure the `## Art Direction Record` in `AGENTS.md` remains accurate.
+4. Run `npm run verify` to confirm all checks pass.
+```
+
+### Day-2 Section Layout Refactoring (e.g., Bento, Split, Timeline)
+Use this prompt when a client requests restructuring a specific section on a page into a different layout pattern.
+
+```markdown
+We need to refactor a section layout based on client feedback:
+- Page / Route: [Insert path, e.g., src/pages/index.astro]
+- Section to update: [Insert section, e.g., "Features / Services grid"]
+- Desired layout: [Insert pattern, e.g., Bento grid / Alternating split feature / Timeline]
+
+Please:
+1. Recompose the section using Baseline's semantic layout primitives (`<Section>`, `<Container>`, `<Grid>`) and CSS Grid classes referencing existing tokens (`--spacing-grid`, `--radius-card`).
+2. Avoid hardcoding one-off pixel values, breakpoint soup, or ad-hoc colors.
+3. If introducing a brand new reusable component, ensure it follows quarantine principles (zero-JS, semantic tokens).
+4. Run `npm run verify` and test responsive reflow.
+```
+
+### Day-2 Adding a New Page or Section (Client Request)
+Use this prompt when a client asks to build a new page or add a new section to an existing route.
+
+```markdown
+We need to add a new [page / section] based on client feedback:
+- Type: [New standalone route, e.g., src/pages/pricing.astro / New section on existing page]
+- Goal & Content: [Describe purpose, headings, content, and call-to-actions]
+- Content Source: [Editor-managed via CMS or Content Collections / Static code template]
+
+Please:
+1. If this is editor-managed content, add or extend the entry in the CMS/collection schema rather than hardcoding static routes.
+2. For new routes: wrap with `Base.astro` (or the profile site shell) and compose using layout primitives (`<Section>`, `<Container>`, `<Grid>`).
+3. For new sections: follow the section rhythm (vary visual weight, spatial density, or surface background so consecutive sections don't look monotonous).
+4. For assets: place photographic/vector images in `src/assets/` using `<ResponsiveImage>` or native Astro `<Image>`, or upload to the CMS Media Library (never put content images in `public/`).
+5. Update navigation links (header/footer menus in `Base.astro` or CMS menus / `seed/seed.json`) if this page should be discoverable.
+6. On EmDash sites, preserve live editing by binding `{...entry.edit.*}` field proxies.
+7. Run `npm run verify` to confirm all checks pass.
+```
+
+### Day-2 Renaming, Moving, or Deprecating Routes (Client Request)
+Use this prompt when a client asks to rename an existing page or remove an obsolete route.
+
+```markdown
+We need to [rename / move / remove] an existing route based on client feedback:
+- Existing route: [Insert path, e.g., /our-team or /faq]
+- Action: [Rename to /team / Remove and consolidate into /contact]
+
+Please:
+1. Move or remove the target route template/content.
+2. Set up a permanent 301 redirect from the old URL to the new destination (in `astro.config.mjs` `redirects` for static sites, or EmDash redirect middleware for CMS sites) to protect SEO and backlinks.
+3. Update all internal links across existing pages and site menus (header, footer, CMS menus).
+4. Run `npm run verify` to confirm all checks and link integrity pass.
+```
+
+### Day-2 Deploying Changes to Staging (Cloudflare Workers)
+Use this prompt when changes are ready for client review or pre-production testing on staging.
+
+```markdown
+We want to deploy our latest changes to our Cloudflare Workers staging environment for review.
+
+Please:
+1. Run `npm run verify` to confirm all lint, art direction, and typechecks pass.
+2. Run `npm run build` to compile the production edge bundle.
+3. If D1 database schema changes were made, apply pending migrations to the staging database:
+   `npx wrangler d1 migrations apply <database-binding> --env staging --remote`
+4. Deploy to the staging environment:
+   `npx wrangler deploy --env staging`
+5. Verify the live staging URL (e.g. https://staging.client-site.com) and confirm `X-Robots-Tag: noindex` or `<meta name="robots" content="noindex">` is present.
+```
+
+### Day-2 Cloning Production Content to Staging (EmDash Site Transfer)
+Use this prompt when you need to refresh your staging database with current production entries, media, and settings.
+
+```markdown
+We need to clone current production content into our staging environment so we can test against realistic data.
+
+Please:
+1. Export the production site snapshot:
+   `npx emdash site export --url https://client-site.com --token $PROD_EMDASH_TOKEN > .emdash/backups/prod-clone.zip`
+2. Import the snapshot into our staging environment:
+   `npx emdash site import .emdash/backups/prod-clone.zip --url https://staging.client-site.com --token $STAGING_EMDASH_TOKEN`
+3. Verify that staging has loaded the collections, media, and menus.
+```
+
+### Day-2 Deploying Changes to Cloudflare Workers (Production)
+Use this prompt when code, styling, or template changes are approved and ready to go live.
+
+```markdown
+We are ready to deploy our latest changes to Cloudflare Workers production.
+
+Please:
+1. Run `npm run verify` to confirm all lint, art direction, and typechecks pass.
+2. Run `npm run build` to compile the production edge bundle.
+3. If D1 database schema changes were made, apply pending remote migrations to production:
+   `npx wrangler d1 migrations apply <database-binding> --remote`
+4. Deploy the updated worker and assets:
+   `npx wrangler deploy`
+5. Test the live production URL to confirm successful deployment.
+```
+
+### Day-2 Emergency Deployment Rollback (Cloudflare Workers & D1)
+Use this prompt when a newly deployed change causes production errors and must be reverted immediately.
+
+```markdown
+An emergency occurred on our live Cloudflare Workers deployment: [Describe issue, e.g., "Contact form broken" or "500 error on service pages"]. Revert production immediately.
+
+Please:
+1. Roll back the Cloudflare Worker to the previous stable release:
+   `npx wrangler rollback`
+2. If a database migration was applied and corrupted data, use D1 Time Travel to restore the database to before the incident:
+   `npx wrangler d1 time-travel restore <database-binding> --timestamp="YYYY-MM-DDTHH:MM:SSZ"`
+3. Verify that the production site has returned to stable operation.
+4. Report the rollback status and preserve local error logs for post-mortem debugging.
+```
+
+### Day-2 Pulling Production Content to Local Development
+Use this prompt when you need to sync your local development environment with fresh content, media, or schema created by editors in production.
+
+```markdown
+We need to sync our local development environment with latest production content and media before developing new features.
+
+Please:
+1. Export the current production site package:
+   `npx emdash site export --url https://client-site.com --token $PROD_EMDASH_TOKEN > .emdash/backups/prod-latest.zip`
+2. Import the package into local development:
+   `npx emdash site import .emdash/backups/prod-latest.zip`
+3. If only D1 database schema inspection is needed without media, pull a D1 snapshot:
+   `npm run db:pull-remote -- --binding <database-binding> --out .emdash/backups/d1-snapshot`
+4. Run `npm run dev` and confirm that local routes display the latest production content.
+```
+
+
+
+
+
+

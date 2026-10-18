@@ -77,6 +77,19 @@ Use the live [EmDash docs](https://docs.emdashcms.com/) or configured docs MCP t
 - **Certified baseline & registry:** Scoped certified baseline is Astro `7.4.0` / EmDash `1.3.0` on Node `22.22.2+` or `24.15+` (Node 24 LTS recommended; see `standards/manifest.json` and `docs/starter-meta-review.md`). `docs/design-interchange.md` defines the optional `DESIGN.md` bridge; `AGENTS.md` and `src/styles/global.css` retain authority. Complete new sites with `npm run site:register` (`docs/site-registry.md`).
 - **Framework docs MCP & local visual regression:** Consult Astro Docs MCP and EmDash Docs MCP against installed versions (`docs/agent-documentation.md`). Run `npm run test:visual` locally on Windows only (`docs/visual-regression.md`); never run visual regression in automated CI or production builds.
 
+## Day-2 client changes and maintenance
+
+When modifying an existing, deployed site in response to client change requests, preserve the token and primitive hierarchy:
+
+- **Global visual changes** (radii, brand colors, typography, fluid spacing): update tokens in `src/styles/global.css` under `@theme`. If brand contrast or type scale changes, run `npm run design:tokens` to verify WCAG AA pairs and fluid bounds. Keep the `## Art Direction Record` in this file aligned if core physics shift.
+- **Component styling and variants** (cards, media frames, buttons, tickers): modify primitives in `src/components/` (e.g. `Card.astro`, `Grid.astro`) rather than scattering one-off overrides in page templates. Verify styleguide specimens via `npm run test:design` or on `/_styleguide`.
+- **Layout and section refactoring** (e.g., converting a grid into a bento or timeline): compose using existing layout primitives (`<Section>`, `<Container>`, `<Grid>`) and semantic CSS referencing existing tokens (`--spacing-grid`, `--radius-card`). Do not introduce arbitrary pixel values or breakpoint soup.
+- **New pages and section additions**: Distinguish editor-managed content (add entries to existing CMS collections or Markdown content) from structural routes (create in `src/pages/`). For new routes and sections, wrap in `Base.astro`, compose with layout primitives (`<Section>`, `<Container>`, `<Grid>`), vary section pacing and background surfaces to avoid repetitive stacking, and bind CMS edit proxies (`{...entry.edit.*}`) when EmDash-backed.
+- **Navigation & menu sync**: When adding, renaming, or removing routes, update site navigation links in `Base.astro`, shared navigation configs, or EmDash CMS menus and `seed/seed.json`.
+- **Asset placement**: Place new photographic or vector assets in `src/assets/` using `<ResponsiveImage>` or native Astro `<Image>`, or upload them into the EmDash Media Library. Never place site content imagery directly into `public/`.
+- **Renaming or removing routes**: Always preserve SEO and existing links by adding 301 redirects (via `redirects` in `astro.config.mjs` for static sites or EmDash redirect middleware for CMS sites).
+- **Verification:** Always run `npm run verify` (lint, art direction, token audits, typecheck, tests) before submitting changes.
+
 ## Commands
 
 ```bash
