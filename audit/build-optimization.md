@@ -1,7 +1,10 @@
 # Production chunk splitting
 
 The October 2026 checkout uses Astro 7.4 / Vite 8.3 / Rolldown. Vendor
-groups retain entry ownership and hashed asset names in client and server builds.
+groups retain entry ownership and hashed asset names in client builds. Server
+grouping is limited to the dependency-local Zod validators. Broad server vendor
+groups disrupted Astro renderer initialization in the production fixture smoke
+check; Astro's renderer modules must retain their automatic chunk boundaries.
 The 5,722,116-byte editor library and 3,645,248-byte registry chunk are split;
 the largest resulting client chunk is 1,516,838 bytes, with the next at 316,866.
 

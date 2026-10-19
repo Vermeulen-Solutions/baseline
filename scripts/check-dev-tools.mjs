@@ -81,7 +81,10 @@ try {
   const fixtureResponse = await fetch(origin + '/_styleguide');
   const fixtureHtml = await fixtureResponse.text();
   assert.equal(fixtureResponse.status, 200);
-  assert.ok(fixtureHtml.includes('data-fixture-version="2"'));
+  const fixturesSource = await readFile(path.join(root, 'src/dev/styleguide-fixtures.ts'), 'utf8');
+  const fixtureVersion = Number(fixturesSource.match(/export const fixtureVersion = (\d+);/)?.[1]);
+  assert.ok(Number.isSafeInteger(fixtureVersion) && fixtureVersion > 0, 'Expected the source fixture version');
+  assert.ok(fixtureHtml.includes(`data-fixture-version="${fixtureVersion}"`));
   assert.equal(fixtureResponse.headers.get('cache-control'), 'no-store');
   const tickerMarkup = [...fixtureHtml.matchAll(/<div[^>]*data-logo-ticker[^>]*>([\s\S]*?)<\/ul>\s*<\/div>\s*<\/div>\s*<\/div>/g)];
   assert.equal(tickerMarkup.length, 2, 'Empty ticker renders nothing');
@@ -90,7 +93,7 @@ try {
     assert.ok(/aria-hidden="true"[^>]*inert/.test(markup), 'Duplicate track must be hidden and inert');
   }
   for (const image of new Set([...fixtureHtml.matchAll(/<img\b[^>]*\ssrc="([^"]+)"/g)].map(match => match[1]))) assert.equal((await fetch(new URL(image, origin))).status, 200, image);
-  report.fixtures = { status: 200, fixtureVersion: 2, tickerInstances: tickerMarkup.length, emptyTickerOmitted: true, releaseRejected: true, images: 'all successful' };
+  report.fixtures = { status: 200, fixtureVersion, tickerInstances: tickerMarkup.length, emptyTickerOmitted: true, releaseRejected: true, images: 'all successful' };
   await stop();
   const build = launch(['node_modules/astro/bin/astro.mjs', 'build']);
   const [code] = await once(build, 'exit'); child = undefined;

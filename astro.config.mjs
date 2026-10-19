@@ -55,17 +55,33 @@ export default defineConfig({
   devToolbar: { enabled: false },
 
   vite: {
-    // Vite 8 uses Rolldown. Bound vendor groups in both environments while
-    // preserving entry ownership (in particular the gallery's lazy imports).
-    build: {
-      rolldownOptions: {
-        output: {
-          codeSplitting: {
-            groups: [
-              { name: 'react-vendor', test: /node_modules[\\/](?:react|react-dom|scheduler)[\\/]/, priority: 30, entriesAware: true, maxSize: 350_000 },
-              { name: 'photoswipe-vendor', test: /node_modules[\\/]photoswipe[\\/]/, priority: 20, entriesAware: true, maxSize: 350_000 },
-              { name: 'vendor', test: /node_modules[\\/]/, priority: 10, entriesAware: true, maxSize: 350_000 },
-            ],
+    // Vite 8 uses Rolldown. Preserve client entry ownership and lazy imports.
+    // Broad SSR groups can disrupt Astro renderer initialization; keep server
+    // grouping limited to the dependency-local validators we explicitly bundle.
+    environments: {
+      client: {
+        build: {
+          rolldownOptions: {
+            output: {
+              codeSplitting: {
+                groups: [
+                  { name: 'react-vendor', test: /node_modules[\\/](?:react|react-dom|scheduler)[\\/]/, priority: 30, entriesAware: true, maxSize: 350_000 },
+                  { name: 'photoswipe-vendor', test: /node_modules[\\/]photoswipe[\\/]/, priority: 20, entriesAware: true, maxSize: 350_000 },
+                  { name: 'vendor', test: /node_modules[\\/]/, priority: 10, entriesAware: true, maxSize: 350_000 },
+                ],
+              },
+            },
+          },
+        },
+      },
+      ssr: {
+        build: {
+          rolldownOptions: {
+            output: {
+              codeSplitting: {
+                groups: [{ name: 'zod-vendor', test: /node_modules[\\/]zod[\\/]/, entriesAware: true, maxSize: 350_000 }],
+              },
+            },
           },
         },
       },
