@@ -66,6 +66,8 @@ Baseline is designed ground-up for an **agent-first workflow** pairing with **Cl
 
 **Requirements:** Node ^22.22.3 or ^24.16.0 or >=26.3.0 (Node 24 LTS recommended; includes the template lint tooling floor) and `npm`.
 
+On Windows PowerShell, use `npm.cmd` wherever these instructions show `npm` (for example, `npm.cmd run verify:fast`), and `npx.cmd` for `npx`. These launchers work with the default execution policy without loading `npm.ps1`. Nested repository tooling invokes npm's JavaScript CLI with the current Node executable and preserves argument boundaries on Windows and Unix; no execution-policy change is needed.
+
 ### 🚀 Starting a New Site (Agent-First Workflow)
 
 1. **Create your repository** from this **GitHub Template**:

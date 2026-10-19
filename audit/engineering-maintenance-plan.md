@@ -14,7 +14,7 @@ Acceptance: unit tier below 10 seconds (target 8); complete suite passes; fast C
 
 ## ENG-2 — Shell-independent process execution
 
-Status: planned. Dependency: ENG-1 passed.
+Status: complete. Dependency: ENG-1 passed.
 
 Targets: new `scripts/process-runner.mjs`, `scripts/auto-update.mjs`, `scripts/d1-export.mjs`, `scripts/pilot-migration.mjs`, `scripts/verify-profiles.mjs`, `tests/audit-modernize.test.mjs`, process contract tests and Windows command documentation.
 
@@ -45,3 +45,5 @@ Acceptance: every retained script has a maintenance purpose or consumer; every d
 ## Verification log
 
 Windows x64, Node 24.21.0. Baseline: 218/218 tests, 60.675s. Phase 1: 219/219 tests, 79.734s while fast CI/build also ran; full verify passed, Astro 46 files with zero errors/warnings/hints. Fast CI: 32.700s, unit step 5.982s, under60Seconds true, all eight steps exit 0. A competing-load unit run reached 10.052s; final isolated benchmark required. No tests removed: no obsolete coverage established. See [file inventory](engineering-inventory.md).
+
+Phase 2: 221/221 tests (62.432s), complete verify passed; zero Astro diagnostics. Process/lifecycle subset 10/10 passed; final resolver contracts 3/3 passed after Unix launcher symlink support. Syntax checked 125 modules. No shell-string process invocations remain in scripts or test harnesses. Windows commands ran via npm.cmd under the existing policy. Unix prefix resolution is fixture-tested; no Unix host run claimed.

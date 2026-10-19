@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { execSync } from 'node:child_process';
+import { execNpmSync } from './process-runner.mjs';
 
 function parseArgs(args) {
   const result = { remote: true };
@@ -26,7 +26,7 @@ function detectDatabase() {
   return null;
 }
 
-export function exportD1Database({ database, out, remote = true } = {}) {
+export function exportD1Database({ database, out, remote = true } = {}, runNpm = execNpmSync) {
   const dbName = database || detectDatabase();
   if (!dbName) throw new Error('Database name required: specify --database <name> or configure in wrangler.jsonc');
 
@@ -35,11 +35,11 @@ export function exportD1Database({ database, out, remote = true } = {}) {
   const tempExportFile = path.resolve(`./.temp-d1-export-${Date.now()}.sql`);
 
   console.log(`[d1-export] Querying sqlite_master from D1 database "${dbName}"...`);
-  const wranglerCmd = process.platform === 'win32' ? 'npx.cmd wrangler' : 'npx wrangler';
+  const wranglerArgs = ['exec', '--yes', '--', 'wrangler'];
   const remoteFlag = remote ? '--remote' : '--local';
 
-  const masterJson = execSync(
-    `${wranglerCmd} d1 execute ${dbName} ${remoteFlag} --json --command="SELECT type, name, tbl_name, sql FROM sqlite_master WHERE name NOT LIKE 'sqlite_%' ORDER BY type, name;"`,
+  const masterJson = runNpm(
+    [...wranglerArgs, 'd1', 'execute', dbName, remoteFlag, '--json', '--command', "SELECT type, name, tbl_name, sql FROM sqlite_master WHERE name NOT LIKE 'sqlite_%' ORDER BY type, name;"],
     { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
   );
 
@@ -58,10 +58,8 @@ export function exportD1Database({ database, out, remote = true } = {}) {
 
   console.log(`[d1-export] Found ${exportableTables.length} exportable tables (${virtualTables.length} virtual tables skipped from table dump).`);
 
-  const tableArgs = exportableTables.map(t => `--table "${t.name}"`).join(' ');
-  const exportCmd = `${wranglerCmd} d1 export ${dbName} ${remoteFlag} ${tableArgs} --output="${tempExportFile}" -y`;
-
-  execSync(exportCmd, { stdio: 'inherit', maxBuffer: 50 * 1024 * 1024 });
+  const tableArgs = exportableTables.flatMap(t => ['--table', t.name]);
+  runNpm([...wranglerArgs, 'd1', 'export', dbName, remoteFlag, ...tableArgs, '--output', tempExportFile, '-y'], { stdio: 'inherit', maxBuffer: 50 * 1024 * 1024 });
 
   let fullSql = fs.readFileSync(tempExportFile, 'utf8');
   if (!fullSql.startsWith('PRAGMA foreign_keys = OFF;')) {

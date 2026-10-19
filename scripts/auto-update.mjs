@@ -4,18 +4,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { collectUpdates } from './check-upstream-updates.mjs';
 import { runSync, sources } from './skill-sync.mjs';
 import { syncImpeccable } from './sync-impeccable-skill.mjs';
+import { execNpmSync } from './process-runner.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 function git(args, cwd = ROOT) {
   return execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-}
-
-function runNpm(command, args = []) {
-  const isWin = process.platform === 'win32';
-  const npmCmd = isWin ? 'cmd' : 'npm';
-  const finalArgs = isWin ? ['/c', 'npm', command, ...args] : [command, ...args];
-  execFileSync(npmCmd, finalArgs, { cwd: ROOT, stdio: 'inherit' });
 }
 
 export async function autoUpdate(root = ROOT, options = {}) {
@@ -77,8 +71,8 @@ export async function autoUpdate(root = ROOT, options = {}) {
 
   console.log('\n🧪 Running verification suite (lint, schema budget, tests, build)...');
   try {
-    runNpm('run', ['lint']);
-    runNpm('run', ['check:schema-budget']);
+    execNpmSync(['run', 'lint'], { cwd: root, stdio: 'inherit' });
+    execNpmSync(['run', 'check:schema-budget'], { cwd: root, stdio: 'inherit' });
     execFileSync(process.execPath, ['--test', 'tests/meta-review.test.mjs', 'tests/audit-coverage.test.mjs'], { cwd: ROOT, stdio: 'inherit' });
     console.log('✔ Verification suite passed!');
   } catch (err) {

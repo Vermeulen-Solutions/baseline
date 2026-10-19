@@ -18,8 +18,8 @@ const started = performance.now(), receipts = [], logs = [];
 for (const [name, args] of steps) {
   const start = performance.now();
   const result = spawnSync(process.execPath, args, { env, encoding: 'utf8', timeout: 180000, maxBuffer: 8 * 1024 * 1024 });
-  receipts.push({ name, seconds: +( (performance.now() - start) / 1000 ).toFixed(3), exitCode: result.status });
-  logs.push(`${name}\n${result.stdout || ''}${result.stderr || ''}`);
+  receipts.push({ name, seconds: +( (performance.now() - start) / 1000 ).toFixed(3), exitCode: result.status, ...(result.error && { error: result.error.message }), ...(result.signal && { signal: result.signal }) });
+  logs.push(`${name}\n${result.stdout || ''}${result.stderr || ''}${result.error?.message || ''}`);
   if (result.status !== 0) { process.exitCode = 1; break; }
 }
 const seconds = +((performance.now() - started) / 1000).toFixed(3);

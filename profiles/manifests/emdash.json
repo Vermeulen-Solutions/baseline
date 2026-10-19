@@ -89,7 +89,8 @@
     "src/components/dev/EmDashStyleguide.astro",
     "src/dev/emdash-styleguide-fixtures.ts",
     "scripts/dev-tools-middleware.mjs",
-    "scripts/check-emdash13.mjs"
+    "scripts/check-emdash13.mjs",
+    "scripts/process-runner.mjs"
   ],
   "scripts": [
     "start",

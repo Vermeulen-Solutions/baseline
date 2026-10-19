@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 import { planModernization, writePlan, runModernization } from '../scripts/audit-modernize.mjs';
 import { sha256 } from '../scripts/audit-evidence.mjs';
+import { spawnNpmSync } from '../scripts/process-runner.mjs';
 
 const cli = fileURLToPath(new URL('../scripts/audit-modernize.mjs', import.meta.url));
 function fixture(fn, { prebuild = 'node scripts/prepare-assets.mjs' } = {}) {
@@ -71,7 +72,7 @@ test('actual npm lifecycle blocks over-budget builds, preserves existing hook an
   if (process.platform === 'win32') put('node_modules/.bin/astro.cmd', '@"' + process.execPath + '" "%~dp0\\..\\..\\build-fixture.mjs"\r\n');
   else { put('node_modules/.bin/astro', '#!/usr/bin/env node\nimport("node:fs").then(fs=>fs.writeFileSync("built.marker","built"));\n'); fs.chmodSync(path.join(root, 'node_modules/.bin/astro'), 0o755); }
   const database = path.join(root, 'data.db'); let db = new DatabaseSync(database); db.exec(`CREATE TABLE ec_wide(${Array.from({ length: 51 }, (_, i) => `c${i} TEXT`).join(',')})`); db.close();
-  const build = () => spawnSync('npm run build', { shell: true, cwd: root, encoding: 'utf8', timeout: 20000, env: { ...process.env, EMDASH_SQLITE_URL: 'file:./data.db' } });
+  const build = () => spawnNpmSync(['run', 'build'], { cwd: root, encoding: 'utf8', timeout: 20000, env: { ...process.env, EMDASH_SQLITE_URL: 'file:./data.db' } });
   assert.equal(build().status, 0); assert.equal(fs.existsSync(path.join(root, 'built.marker')), true); fs.unlinkSync(path.join(root, 'built.marker')); fs.unlinkSync(path.join(root, 'prepared.marker'));
   const file = writePlan(planModernization(root), path.join(parent, 'plan'), root); runModernization(root, file);
   const rejected = build(); assert.notEqual(rejected.status, 0); assert.match(rejected.stdout + rejected.stderr, /budget exceeded/); assert.equal(fs.existsSync(path.join(root, 'built.marker')), false); assert.equal(fs.existsSync(path.join(root, 'prepared.marker')), false);

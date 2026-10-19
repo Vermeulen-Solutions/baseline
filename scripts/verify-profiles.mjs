@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { initProfile } from './init-profile.mjs';
+import { spawnNpmSync } from './process-runner.mjs';
 
 const source = fileURLToPath(new URL('../', import.meta.url));
 const option = name => { const i = process.argv.indexOf(name); return i < 0 ? undefined : process.argv[i + 1]; };
@@ -14,7 +15,6 @@ const publicBrowser = process.argv.includes('--public-browser');
 if (publicBrowser && (process.env.CI || process.env.GITHUB_ACTIONS === 'true')) throw new Error('Browser verification is local-only; CI may run HTTP checks only');
 if (profiles.some(p => !['static', 'static-sveltia'].includes(p))) throw new Error('Unknown static profile');
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'baseline-profile-verification-'));
-const npm = process.env.npm_execpath ?? path.join(path.dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js');
 const receipts = [];
 const fixtureSite = 'https://static-profile.example.test';
 try {
@@ -31,7 +31,7 @@ try {
     await fs.writeFile(gatePath, JSON.stringify(gate, null, 2) + '\n');
     for (const args of [['install', '--no-audit', '--no-fund'], ['ci', '--no-audit', '--no-fund'], ['run', 'verify'], ['run', 'build'], ['run', 'check:dev-tools'], ['run', 'fixtures:build']]) {
       console.log(`[${profile}] npm ${args.join(' ')}`);
-      const result = spawnSync(process.execPath, [npm, ...args], { cwd: root, stdio: 'inherit', timeout: 300000, env: { ...process.env, SITE_URL: fixtureSite } });
+      const result = spawnNpmSync(args, { cwd: root, stdio: 'inherit', timeout: 300000, env: { ...process.env, SITE_URL: fixtureSite } });
       if (result.error) throw result.error;
       assert.equal(result.status, 0, `${profile}: npm ${args.join(' ')}`);
     }
