@@ -48,7 +48,7 @@ Pixelmatch color threshold **0.1** is independent from the allowed changed-pixel
 
 `.emdash/visual/` contains bootstrap/environment/cleanup receipts, server logs, JSON/HTML reports, expected/actual/diff images and retained traces for unexpected failures. These are ignored locally; reviewable goldens remain under tests. Native framework artifacts use synthetic public content and no authenticated browser storage. Cleanup stops the owned server, unlinks the dependency junction, validates the absolute temporary path and removes only that app. Wrapper cancellation uses IPC to reach Playwright's graceful signal handlers: Windows `child.kill('SIGINT')` would terminate immediately and bypass teardown. Failure/abort cleanup and the IPC relay have separate verification. Forced OS process-tree termination can still bypass JavaScript cleanup and requires removing the verified owned temporary tree. Never recursively delete through its dependency junction.
 
-Automated CI runs the root Node 22.23.3 verification/build job on Ubuntu with a ten-minute cap, plus separate Node 24.15.0 generated-profile jobs (`static`, `static-sveltia`) with fifteen-minute caps. The scheduled dependency-proposal workflow also verifies both profiles. None installs a browser or runs screenshot comparisons; there are no automatic pre-commit or deployment screenshot dependencies. Timings depend on installation, builds, runner queues and network conditions. Local reports remain available until the next run; copy dated receipts when retaining evidence. See [Reviewed upstream maintenance](automated-upstream-updates.md) for proposal artifacts.
+Automated CI configures Node 24.16.0 for the root verification/build job on Ubuntu with a ten-minute cap and the separate generated-profile jobs (`static`, `static-sveltia`) with fifteen-minute caps. The scheduled dependency-proposal workflow also verifies both profiles. None installs a browser or runs screenshot comparisons; there are no automatic pre-commit or deployment screenshot dependencies. Timings depend on installation, builds, runner queues and network conditions. Local reports remain available until the next run; copy dated receipts when retaining evidence. See [Reviewed upstream maintenance](automated-upstream-updates.md) for proposal artifacts.
 
 Screenshots do not certify editor saves, Cloudflare, provider delivery or WCAG conformance. Real editor/database/media acceptance stays separate.
 
@@ -66,3 +66,11 @@ For both independently generated static profiles, run
 no-JS, reduced-motion and narrow text-spacing checks to the existing HTTP pilot;
 it leaves Sveltia remote admin sign-in/publishing outside that mode. CI rejects
 the browser flag and retains ordinary HTTP-only profile verification.
+
+The shared composition specimens extend these local journeys with native
+Disclosure Enter/Space, closed-body tab exclusion, exclusive `name` groups, visible
+summary focus and real fragment reveal. Cluster/Sidebar checks measure wrapping
+inside narrow hosts at wide viewports, DOM/RTL keyboard order, long text, intrinsic
+media and absent supporting content. The no-JS, text-spacing and actual 200%/400%
+zoom cases exercise these production components too. Native toolbar Find, other
+browser engines and screen-reader output still require separate observations.

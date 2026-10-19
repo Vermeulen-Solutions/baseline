@@ -1,0 +1,1035 @@
+{
+  "version": 1,
+  "date": "2026-10-19",
+  "node": "v24.21.0",
+  "profile": "static-sveltia",
+  "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-profile-verification-2EuTmM\\static-sveltia",
+  "independentInstall": true,
+  "cleanInstall": true,
+  "databasePackages": 0,
+  "verify": "passed",
+  "production": {
+    "styleguide": "404 for GET/HEAD, slash, query and cookie attempts",
+    "draft": "404; excluded from public routes/listings"
+  },
+  "fixtures": {
+    "styleguide": 200,
+    "images": 3,
+    "releaseRejected": true,
+    "composition": {
+      "nativeDisclosures": 4,
+      "firstSummary": true,
+      "defaultClosed": true,
+      "body": "native Markdown",
+      "intrinsicRegions": "rendered"
+    },
+    "arabicHeadingLanguage": "ar"
+  },
+  "http": "passed",
+  "publicBrowser": "passed",
+  "tests": 23,
+  "astro": {
+    "files": 34,
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "browser": {
+    "observations": [
+      {
+        "width": 390,
+        "route": "/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 390,
+        "route": "/posts/welcome/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 390,
+        "route": "/_styleguide/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 390,
+        "journeys": [
+          {
+            "route": "/",
+            "skip": {
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "A",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            }
+          },
+          {
+            "route": "/_styleguide/",
+            "skip": {
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "BUTTON",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            },
+            "composition": {
+              "enter": "open",
+              "space": "close",
+              "focus": "native summary/body tab order",
+              "closedLink": "skipped",
+              "exclusiveGroup": "native name",
+              "independent": true,
+              "longDarkSummary": "visible focus/no overflow/native marker",
+              "linkContrast": 8.79,
+              "fragment": "native reveal",
+              "toolbarFind": "manual check pending"
+            },
+            "layout": {
+              "viewport": 390,
+              "geometry": {
+                "specimen-sidebar-wide": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 1255.03125,
+                    "width": 355.6875,
+                    "height": 292,
+                    "bottom": 1547.03125
+                  },
+                  "direction": "ltr",
+                  "scroll": 356,
+                  "client": 356,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 1255.03125,
+                      "width": 355.6875,
+                      "height": 138.140625,
+                      "bottom": 1393.171875,
+                      "order": "0",
+                      "scroll": 356,
+                      "client": 356
+                    },
+                    {
+                      "x": 17.15625,
+                      "y": 1414.328125,
+                      "width": 355.6875,
+                      "height": 132.703125,
+                      "bottom": 1547.03125,
+                      "order": "0",
+                      "scroll": 356,
+                      "client": 356
+                    }
+                  ]
+                },
+                "specimen-sidebar-narrow": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 1563.609375,
+                    "width": 311.15625,
+                    "height": 209.6875,
+                    "bottom": 1773.296875
+                  },
+                  "direction": "rtl",
+                  "scroll": 311,
+                  "client": 311,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 1563.609375,
+                      "width": 311.15625,
+                      "height": 111.75,
+                      "bottom": 1675.359375,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    },
+                    {
+                      "x": 17.15625,
+                      "y": 1696.515625,
+                      "width": 311.15625,
+                      "height": 76.78125,
+                      "bottom": 1773.296875,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    }
+                  ]
+                },
+                "specimen-sidebar-single": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 1789.875,
+                    "width": 355.6875,
+                    "height": 52.78125,
+                    "bottom": 1842.65625
+                  },
+                  "direction": "ltr",
+                  "scroll": 356,
+                  "client": 356,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 1789.875,
+                      "width": 355.6875,
+                      "height": 52.78125,
+                      "bottom": 1842.65625,
+                      "order": "0",
+                      "scroll": 356,
+                      "client": 356
+                    }
+                  ]
+                },
+                "specimen-cluster": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 873.984375,
+                    "width": 311.15625,
+                    "height": 155.15625,
+                    "bottom": 1029.140625
+                  },
+                  "direction": "rtl",
+                  "scroll": 311,
+                  "client": 311,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 873.984375,
+                      "width": 311.15625,
+                      "height": 50,
+                      "bottom": 923.984375,
+                      "order": "0",
+                      "scroll": 309,
+                      "client": 309
+                    },
+                    {
+                      "x": 213.25,
+                      "y": 940.5625,
+                      "width": 115.0625,
+                      "height": 24,
+                      "bottom": 964.5625,
+                      "order": "0",
+                      "scroll": 115,
+                      "client": 115
+                    },
+                    {
+                      "x": 17.15625,
+                      "y": 981.140625,
+                      "width": 311.15625,
+                      "height": 48,
+                      "bottom": 1029.140625,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    }
+                  ]
+                }
+              },
+              "readingOrder": "main then supporting; native RTL",
+              "narrowHost": "wrapped",
+              "optionalSupporting": "full-width main"
+            },
+            "errors": {
+              "label": "resolved",
+              "errors": [
+                "specimen-field-error"
+              ],
+              "summaryLink": "field focused"
+            },
+            "motion": {
+              "preference": "reduce",
+              "ticker": "single static list",
+              "scroll": "auto"
+            },
+            "textSpacing": {
+              "width": 320,
+              "spacing": "1.5/.12em/.16em/2em",
+              "overflow": false,
+              "keyboard": "usable",
+              "composition": {
+                "disclosure": {
+                  "enter": "open",
+                  "space": "close",
+                  "focus": "native summary/body tab order",
+                  "closedLink": "skipped",
+                  "exclusiveGroup": "native name",
+                  "independent": true,
+                  "longDarkSummary": "visible focus/no overflow/native marker",
+                  "linkContrast": 8.79,
+                  "fragment": "native reveal",
+                  "toolbarFind": "manual check pending"
+                },
+                "layout": {
+                  "viewport": 320,
+                  "geometry": {
+                    "specimen-sidebar-wide": {
+                      "root": {
+                        "x": 16,
+                        "y": 1459.25,
+                        "width": 288,
+                        "height": 444,
+                        "bottom": 1903.25
+                      },
+                      "direction": "ltr",
+                      "scroll": 288,
+                      "client": 288,
+                      "children": [
+                        {
+                          "x": 16,
+                          "y": 1459.25,
+                          "width": 288,
+                          "height": 240,
+                          "bottom": 1699.25,
+                          "order": "0",
+                          "scroll": 288,
+                          "client": 288
+                        },
+                        {
+                          "x": 16,
+                          "y": 1719.25,
+                          "width": 288,
+                          "height": 184,
+                          "bottom": 1903.25,
+                          "order": "0",
+                          "scroll": 288,
+                          "client": 288
+                        }
+                      ]
+                    },
+                    "specimen-sidebar-narrow": {
+                      "root": {
+                        "x": 16,
+                        "y": 1919.25,
+                        "width": 288,
+                        "height": 316,
+                        "bottom": 2235.25
+                      },
+                      "direction": "rtl",
+                      "scroll": 288,
+                      "client": 288,
+                      "children": [
+                        {
+                          "x": 16,
+                          "y": 1919.25,
+                          "width": 288,
+                          "height": 168,
+                          "bottom": 2087.25,
+                          "order": "0",
+                          "scroll": 288,
+                          "client": 288
+                        },
+                        {
+                          "x": 16,
+                          "y": 2107.25,
+                          "width": 288,
+                          "height": 128,
+                          "bottom": 2235.25,
+                          "order": "0",
+                          "scroll": 288,
+                          "client": 288
+                        }
+                      ]
+                    },
+                    "specimen-sidebar-single": {
+                      "root": {
+                        "x": 16,
+                        "y": 2251.25,
+                        "width": 288,
+                        "height": 104,
+                        "bottom": 2355.25
+                      },
+                      "direction": "ltr",
+                      "scroll": 288,
+                      "client": 288,
+                      "children": [
+                        {
+                          "x": 16,
+                          "y": 2251.25,
+                          "width": 288,
+                          "height": 104,
+                          "bottom": 2355.25,
+                          "order": "0",
+                          "scroll": 288,
+                          "client": 288
+                        }
+                      ]
+                    },
+                    "specimen-cluster": {
+                      "root": {
+                        "x": 16,
+                        "y": 993.25,
+                        "width": 288,
+                        "height": 154,
+                        "bottom": 1147.25
+                      },
+                      "direction": "rtl",
+                      "scroll": 288,
+                      "client": 288,
+                      "children": [
+                        {
+                          "x": 16,
+                          "y": 993.25,
+                          "width": 288,
+                          "height": 50,
+                          "bottom": 1043.25,
+                          "order": "0",
+                          "scroll": 286,
+                          "client": 286
+                        },
+                        {
+                          "x": 184.46875,
+                          "y": 1059.25,
+                          "width": 119.53125,
+                          "height": 24,
+                          "bottom": 1083.25,
+                          "order": "0",
+                          "scroll": 120,
+                          "client": 120
+                        },
+                        {
+                          "x": 16,
+                          "y": 1099.25,
+                          "width": 288,
+                          "height": 48,
+                          "bottom": 1147.25,
+                          "order": "0",
+                          "scroll": 288,
+                          "client": 288
+                        }
+                      ]
+                    }
+                  },
+                  "readingOrder": "main then supporting; native RTL",
+                  "narrowHost": "wrapped",
+                  "optionalSupporting": "full-width main"
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "width": 768,
+        "route": "/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 768,
+        "route": "/posts/welcome/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 768,
+        "route": "/_styleguide/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 768,
+        "journeys": [
+          {
+            "route": "/",
+            "skip": {
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "A",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            }
+          },
+          {
+            "route": "/_styleguide/",
+            "skip": {
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "BUTTON",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            },
+            "composition": {
+              "enter": "open",
+              "space": "close",
+              "focus": "native summary/body tab order",
+              "closedLink": "skipped",
+              "exclusiveGroup": "native name",
+              "independent": true,
+              "longDarkSummary": "visible focus/no overflow/native marker",
+              "linkContrast": 8.79,
+              "fragment": "native reveal",
+              "toolbarFind": "manual check pending"
+            },
+            "layout": {
+              "viewport": 768,
+              "geometry": {
+                "specimen-sidebar-wide": {
+                  "root": {
+                    "x": 23.453125,
+                    "y": 1170.90625,
+                    "width": 721.09375,
+                    "height": 171.6875,
+                    "bottom": 1342.59375
+                  },
+                  "direction": "ltr",
+                  "scroll": 721,
+                  "client": 721,
+                  "children": [
+                    {
+                      "x": 23.453125,
+                      "y": 1170.90625,
+                      "width": 485.71875,
+                      "height": 171.6875,
+                      "bottom": 1342.59375,
+                      "order": "0",
+                      "scroll": 486,
+                      "client": 486
+                    },
+                    {
+                      "x": 536.625,
+                      "y": 1170.90625,
+                      "width": 207.921875,
+                      "height": 171.6875,
+                      "bottom": 1342.59375,
+                      "order": "0",
+                      "scroll": 208,
+                      "client": 208
+                    }
+                  ]
+                },
+                "specimen-sidebar-narrow": {
+                  "root": {
+                    "x": 23.453125,
+                    "y": 1362.3125,
+                    "width": 311.15625,
+                    "height": 219.125,
+                    "bottom": 1581.4375
+                  },
+                  "direction": "rtl",
+                  "scroll": 311,
+                  "client": 311,
+                  "children": [
+                    {
+                      "x": 23.453125,
+                      "y": 1362.3125,
+                      "width": 311.15625,
+                      "height": 114.890625,
+                      "bottom": 1477.203125,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    },
+                    {
+                      "x": 23.453125,
+                      "y": 1504.65625,
+                      "width": 311.15625,
+                      "height": 76.78125,
+                      "bottom": 1581.4375,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    }
+                  ]
+                },
+                "specimen-sidebar-single": {
+                  "root": {
+                    "x": 23.453125,
+                    "y": 1601.15625,
+                    "width": 721.09375,
+                    "height": 26.390625,
+                    "bottom": 1627.546875
+                  },
+                  "direction": "ltr",
+                  "scroll": 721,
+                  "client": 721,
+                  "children": [
+                    {
+                      "x": 23.453125,
+                      "y": 1601.15625,
+                      "width": 721.09375,
+                      "height": 26.390625,
+                      "bottom": 1627.546875,
+                      "order": "0",
+                      "scroll": 721,
+                      "client": 721
+                    }
+                  ]
+                },
+                "specimen-cluster": {
+                  "root": {
+                    "x": 23.453125,
+                    "y": 848.46875,
+                    "width": 311.15625,
+                    "height": 161.4375,
+                    "bottom": 1009.90625
+                  },
+                  "direction": "rtl",
+                  "scroll": 311,
+                  "client": 311,
+                  "children": [
+                    {
+                      "x": 23.453125,
+                      "y": 848.46875,
+                      "width": 311.15625,
+                      "height": 50,
+                      "bottom": 898.46875,
+                      "order": "0",
+                      "scroll": 309,
+                      "client": 309
+                    },
+                    {
+                      "x": 219.546875,
+                      "y": 918.1875,
+                      "width": 115.0625,
+                      "height": 24,
+                      "bottom": 942.1875,
+                      "order": "0",
+                      "scroll": 115,
+                      "client": 115
+                    },
+                    {
+                      "x": 23.453125,
+                      "y": 961.90625,
+                      "width": 311.15625,
+                      "height": 48,
+                      "bottom": 1009.90625,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    }
+                  ]
+                }
+              },
+              "readingOrder": "main then supporting; native RTL",
+              "narrowHost": "wrapped",
+              "optionalSupporting": "full-width main"
+            },
+            "errors": {
+              "label": "resolved",
+              "errors": [
+                "specimen-field-error"
+              ],
+              "summaryLink": "field focused"
+            },
+            "motion": {
+              "preference": "reduce",
+              "ticker": "single static list",
+              "scroll": "auto"
+            }
+          }
+        ]
+      },
+      {
+        "width": 1440,
+        "route": "/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 1440,
+        "route": "/posts/welcome/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 1440,
+        "route": "/_styleguide/",
+        "overflow": false,
+        "brokenImages": 0
+      },
+      {
+        "width": 1440,
+        "journeys": [
+          {
+            "route": "/",
+            "skip": {
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "A",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            }
+          },
+          {
+            "route": "/_styleguide/",
+            "skip": {
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "BUTTON",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            },
+            "composition": {
+              "enter": "open",
+              "space": "close",
+              "focus": "native summary/body tab order",
+              "closedLink": "skipped",
+              "exclusiveGroup": "native name",
+              "independent": true,
+              "longDarkSummary": "visible focus/no overflow/native marker",
+              "linkContrast": 8.79,
+              "fragment": "native reveal",
+              "toolbarFind": "manual check pending"
+            },
+            "layout": {
+              "viewport": 1440,
+              "geometry": {
+                "specimen-sidebar-wide": {
+                  "root": {
+                    "x": 48,
+                    "y": 1211.140625,
+                    "width": 1344,
+                    "height": 188.78125,
+                    "bottom": 1399.921875
+                  },
+                  "direction": "ltr",
+                  "scroll": 1344,
+                  "client": 1344,
+                  "children": [
+                    {
+                      "x": 48,
+                      "y": 1211.140625,
+                      "width": 1099.46875,
+                      "height": 188.78125,
+                      "bottom": 1399.921875,
+                      "order": "0",
+                      "scroll": 1099,
+                      "client": 1099
+                    },
+                    {
+                      "x": 1183.46875,
+                      "y": 1211.140625,
+                      "width": 208.53125,
+                      "height": 188.78125,
+                      "bottom": 1399.921875,
+                      "order": "0",
+                      "scroll": 209,
+                      "client": 209
+                    }
+                  ]
+                },
+                "specimen-sidebar-narrow": {
+                  "root": {
+                    "x": 48,
+                    "y": 1423.921875,
+                    "width": 311.15625,
+                    "height": 231.953125,
+                    "bottom": 1655.875
+                  },
+                  "direction": "rtl",
+                  "scroll": 311,
+                  "client": 311,
+                  "children": [
+                    {
+                      "x": 48,
+                      "y": 1423.921875,
+                      "width": 311.15625,
+                      "height": 119.171875,
+                      "bottom": 1543.09375,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    },
+                    {
+                      "x": 48,
+                      "y": 1579.09375,
+                      "width": 311.15625,
+                      "height": 76.78125,
+                      "bottom": 1655.875,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    }
+                  ]
+                },
+                "specimen-sidebar-single": {
+                  "root": {
+                    "x": 48,
+                    "y": 1679.875,
+                    "width": 1344,
+                    "height": 26.390625,
+                    "bottom": 1706.265625
+                  },
+                  "direction": "ltr",
+                  "scroll": 1344,
+                  "client": 1344,
+                  "children": [
+                    {
+                      "x": 48,
+                      "y": 1679.875,
+                      "width": 1344,
+                      "height": 26.390625,
+                      "bottom": 1706.265625,
+                      "order": "0",
+                      "scroll": 1344,
+                      "client": 1344
+                    }
+                  ]
+                },
+                "specimen-cluster": {
+                  "root": {
+                    "x": 48,
+                    "y": 871.578125,
+                    "width": 311.15625,
+                    "height": 170,
+                    "bottom": 1041.578125
+                  },
+                  "direction": "rtl",
+                  "scroll": 311,
+                  "client": 311,
+                  "children": [
+                    {
+                      "x": 48,
+                      "y": 871.578125,
+                      "width": 311.15625,
+                      "height": 50,
+                      "bottom": 921.578125,
+                      "order": "0",
+                      "scroll": 309,
+                      "client": 309
+                    },
+                    {
+                      "x": 244.09375,
+                      "y": 945.578125,
+                      "width": 115.0625,
+                      "height": 24,
+                      "bottom": 969.578125,
+                      "order": "0",
+                      "scroll": 115,
+                      "client": 115
+                    },
+                    {
+                      "x": 48,
+                      "y": 993.578125,
+                      "width": 311.15625,
+                      "height": 48,
+                      "bottom": 1041.578125,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    }
+                  ]
+                }
+              },
+              "readingOrder": "main then supporting; native RTL",
+              "narrowHost": "wrapped",
+              "optionalSupporting": "full-width main"
+            },
+            "errors": {
+              "label": "resolved",
+              "errors": [
+                "specimen-field-error"
+              ],
+              "summaryLink": "field focused"
+            },
+            "motion": {
+              "preference": "reduce",
+              "ticker": "single static list",
+              "scroll": "auto"
+            }
+          }
+        ]
+      }
+    ],
+    "pageErrors": 0,
+    "keyboardFocus": "passed",
+    "noJavaScript": {
+      "sentinelExecuted": false,
+      "skip": {
+        "firstTab": "skip link",
+        "activation": "main focused",
+        "nextTab": "A",
+        "unobscured": true,
+        "keyboardScroll": "auto"
+      },
+      "composition": {
+        "enter": "open",
+        "space": "close",
+        "focus": "native summary/body tab order",
+        "closedLink": "skipped",
+        "exclusiveGroup": "native name",
+        "independent": true,
+        "longDarkSummary": "visible focus/no overflow/native marker",
+        "linkContrast": 8.79,
+        "fragment": "native reveal",
+        "toolbarFind": "manual check pending"
+      },
+      "layout": {
+        "viewport": 390,
+        "geometry": {
+          "specimen-sidebar-wide": {
+            "root": {
+              "x": 17.15625,
+              "y": 1255.03125,
+              "width": 355.6875,
+              "height": 292,
+              "bottom": 1547.03125
+            },
+            "direction": "ltr",
+            "scroll": 356,
+            "client": 356,
+            "children": [
+              {
+                "x": 17.15625,
+                "y": 1255.03125,
+                "width": 355.6875,
+                "height": 138.140625,
+                "bottom": 1393.171875,
+                "order": "0",
+                "scroll": 356,
+                "client": 356
+              },
+              {
+                "x": 17.15625,
+                "y": 1414.328125,
+                "width": 355.6875,
+                "height": 132.703125,
+                "bottom": 1547.03125,
+                "order": "0",
+                "scroll": 356,
+                "client": 356
+              }
+            ]
+          },
+          "specimen-sidebar-narrow": {
+            "root": {
+              "x": 17.15625,
+              "y": 1563.609375,
+              "width": 311.15625,
+              "height": 209.6875,
+              "bottom": 1773.296875
+            },
+            "direction": "rtl",
+            "scroll": 311,
+            "client": 311,
+            "children": [
+              {
+                "x": 17.15625,
+                "y": 1563.609375,
+                "width": 311.15625,
+                "height": 111.75,
+                "bottom": 1675.359375,
+                "order": "0",
+                "scroll": 311,
+                "client": 311
+              },
+              {
+                "x": 17.15625,
+                "y": 1696.515625,
+                "width": 311.15625,
+                "height": 76.78125,
+                "bottom": 1773.296875,
+                "order": "0",
+                "scroll": 311,
+                "client": 311
+              }
+            ]
+          },
+          "specimen-sidebar-single": {
+            "root": {
+              "x": 17.15625,
+              "y": 1789.875,
+              "width": 355.6875,
+              "height": 52.78125,
+              "bottom": 1842.65625
+            },
+            "direction": "ltr",
+            "scroll": 356,
+            "client": 356,
+            "children": [
+              {
+                "x": 17.15625,
+                "y": 1789.875,
+                "width": 355.6875,
+                "height": 52.78125,
+                "bottom": 1842.65625,
+                "order": "0",
+                "scroll": 356,
+                "client": 356
+              }
+            ]
+          },
+          "specimen-cluster": {
+            "root": {
+              "x": 17.15625,
+              "y": 873.984375,
+              "width": 311.15625,
+              "height": 155.15625,
+              "bottom": 1029.140625
+            },
+            "direction": "rtl",
+            "scroll": 311,
+            "client": 311,
+            "children": [
+              {
+                "x": 17.15625,
+                "y": 873.984375,
+                "width": 311.15625,
+                "height": 50,
+                "bottom": 923.984375,
+                "order": "0",
+                "scroll": 309,
+                "client": 309
+              },
+              {
+                "x": 213.25,
+                "y": 940.5625,
+                "width": 115.0625,
+                "height": 24,
+                "bottom": 964.5625,
+                "order": "0",
+                "scroll": 115,
+                "client": 115
+              },
+              {
+                "x": 17.15625,
+                "y": 981.140625,
+                "width": 311.15625,
+                "height": 48,
+                "bottom": 1029.140625,
+                "order": "0",
+                "scroll": 311,
+                "client": 311
+              }
+            ]
+          }
+        },
+        "readingOrder": "main then supporting; native RTL",
+        "narrowHost": "wrapped",
+        "optionalSupporting": "full-width main"
+      },
+      "navigation": 200,
+      "nativeCheckbox": true,
+      "summaryFocus": true,
+      "nativeImage": true,
+      "pageErrors": 0
+    }
+  },
+  "sourceSHA256": {
+    "src/components/Disclosure.astro": "894cf4ec782b05cf7276c0942de19bdb6f62d054cd6fab8aaeffa9a809d567df",
+    "src/components/Cluster.astro": "8611212d948ac162b1128ae094224e697af683c8b9218ef68aa84b8ff75f1852",
+    "src/components/Sidebar.astro": "33cd31b7dd5fbde00a2fc670396868a711fa88c625f012b5566d32316f05aa31",
+    "src/components/dev/CompositionSpecimens.astro": "652f38711e2cf12d449b059849c7b6703c2a6b0728f812ca860b11bdffc98376",
+    "src/components/dev/Styleguide.astro": "93d44e9f1280958b0568a308ee8bd1d10125f73a1fb5dccf0b2c543a32ed0d34",
+    "src/dev/styleguide-fixtures.ts": "373687c914dde16acb6429e90fc0b31c7ffee8927111770071f5e2b5f27eb4b0",
+    "src/dev/disclosure-prose.md": "21b30634a03e6f9fd46c30a0de6c8f9d8c08c57f77c08d4df013d2b4c442d466",
+    "src/styles/global.css": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+    "scripts/design-system.mjs": "ad83e67980b8f47bd96b9e528f7e4986cfaa7a98837b6c625a32187f60dc4b5b",
+    "docs/native-composition.md": "1a75891c1eb2cd2bc1d2e52f71f0eb107cf4d80aaa77ed33bf5bf52c86cc6b77"
+  },
+  "hashNormalization": "UTF-8 normalized to LF",
+  "manualPending": [
+    "Screen-reader output",
+    "Browser toolbar Find",
+    "Other browser engines",
+    "Physical devices",
+    "CMS editor save/reload"
+  ],
+  "builds": {
+    "production": "passed",
+    "fixtures": "passed"
+  }
+}

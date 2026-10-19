@@ -37,7 +37,13 @@
     "docs/platform-profiles.md",
     "docs/baseline-updates.md",
     "eslint.config.mjs",
-    "tests/template-lint.test.mjs"
+    "tests/template-lint.test.mjs",
+    "src/components/Disclosure.astro",
+    "src/components/Cluster.astro",
+    "src/components/Sidebar.astro",
+    "src/components/dev/CompositionSpecimens.astro",
+    "src/dev/disclosure-prose.md",
+    "docs/native-composition.md"
   ],
   "packages": {
     "dependencies": [

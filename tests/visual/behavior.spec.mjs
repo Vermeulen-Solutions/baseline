@@ -3,6 +3,7 @@ import path from 'node:path';
 import { test, expect, prepare, settlePage, noOverflow, galleryCaptionsFit, styleguide, observe } from './helpers.mjs';
 import { visualContract as contract } from './contract.mjs';
 import { skipLinkJourney, fieldErrorJourney } from '../journeys/public.mjs';
+import { disclosureJourney, intrinsicLayoutJourney } from '../journeys/composition.mjs';
 
 const ticker = page => page.getByRole('region', { name: 'Synthetic partner ticker', exact: true });
 test('behavior public skip link transfers keyboard focus into main', async ({ page }, info) => {
@@ -105,6 +106,8 @@ test('behavior no-JS native controls, ticker and gallery fallback', async ({ bro
     await prepare(page, styleguide, problems, { scripts: false });
     await skipLinkJourney(page, page.getByRole('button', { name: 'Native button', exact: true }));
     await fieldErrorJourney(page);
+    await disclosureJourney(page);
+    await intrinsicLayoutJourney(page);
     expect(await page.evaluate(() => typeof window.__visualDocumentScriptExecuted)).toBe('undefined');
     const root = ticker(page);
     await root.locator('input').press('Space');
@@ -130,6 +133,8 @@ test('reflow 320px with text-spacing overrides and native keyboard controls', as
   await settlePage(page);
   await noOverflow(page);
   await galleryCaptionsFit(page);
+  await disclosureJourney(page);
+  await intrinsicLayoutJourney(page);
   await page.getByRole('combobox', { name: 'Selection' }).press('ArrowDown');
   await page.getByRole('radio', { name: 'First radio', exact: true }).press('ArrowRight');
   await expect(page.getByRole('radio', { name: 'Second radio', exact: true })).toBeChecked();
@@ -162,6 +167,8 @@ test('zoom actual Chromium page zoom at 200% and 400%', async ({}, info) => {
       await settlePage(page);
       const dimensions = await noOverflow(page);
       await galleryCaptionsFit(page);
+      await disclosureJourney(page);
+      await intrinsicLayoutJourney(page);
       measurements.push({ factor, innerWidth: await page.evaluate(() => innerWidth), dpr: await page.evaluate(() => devicePixelRatio), ...dimensions });
       await page.getByLabel('Name', { exact: true }).press('Tab');
       await expect(page.locator('#specimen-invalid')).toBeFocused();

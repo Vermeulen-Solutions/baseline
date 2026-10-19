@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-async function focusVisible(locator) {
+export async function focusVisible(locator) {
   await expect(locator).toBeFocused();
   await expect.poll(() => locator.evaluate(element => {
     const rect = element.getBoundingClientRect();
@@ -57,7 +57,7 @@ export async function reducedMotionJourney(page) {
   return { preference: 'reduce', ticker: 'single static list', scroll: 'auto' };
 }
 
-export async function textSpacingJourney(page) {
+export async function textSpacingJourney(page, exerciseComposition) {
   const viewport = page.viewportSize();
   await page.setViewportSize({ width: 320, height: 900 });
   const style = await page.addStyleTag({ content: '* { line-height: 1.5 !important; letter-spacing: .12em !important; word-spacing: .16em !important; } p { margin-block-end: 2em !important; }' });
@@ -66,7 +66,7 @@ export async function textSpacingJourney(page) {
   await page.getByRole('combobox', { name: 'Selection', exact: true }).press('ArrowDown');
   await expect(page.getByRole('combobox', { name: 'Selection', exact: true })).toHaveValue('A much longer choice to inspect narrow layouts');
   await fieldErrorJourney(page);
-  return { width: 320, spacing: '1.5/.12em/.16em/2em', overflow: false, keyboard: 'usable' };
+  return { width: 320, spacing: '1.5/.12em/.16em/2em', overflow: false, keyboard: 'usable', ...(exerciseComposition && { composition: await exerciseComposition() }) };
   } finally {
     await style.evaluate(element => element.remove());
     await page.setViewportSize(viewport);

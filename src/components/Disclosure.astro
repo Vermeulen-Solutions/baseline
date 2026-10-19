@@ -1,0 +1,28 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'details'>;
+const { class: className, ...attributes } = Astro.props;
+if (!Astro.slots.has('summary')) throw new Error('Disclosure requires a meaningful named summary slot.');
+---
+<details {...attributes} class:list={['disclosure', className]}>
+  <summary><slot name="summary" /></summary>
+  <div class="disclosure__body flow"><slot /></div>
+</details>
+<style>
+  .disclosure {
+    min-inline-size: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-control);
+    color: var(--color-text);
+    background: var(--color-surface);
+    overflow-wrap: anywhere;
+  }
+  summary {
+    display: list-item;
+    padding: var(--spacing-content);
+    font-weight: var(--font-weight-display, 700);
+    cursor: pointer;
+  }
+  .disclosure__body { padding: 0 var(--spacing-content) var(--spacing-content); }
+</style>

@@ -117,7 +117,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     await build(true);
     await assert.rejects(assertReleaseArtifact(path.join(stage, 'dist-fixtures')), /Refusing fixture-enabled/);
     launch(['--import', clock, 'dist-fixtures/server/entry.mjs'], { NODE_ENV: 'production' });
-    await ready('data-fixture-version="2"');
+    await ready(`data-fixture-version="${visualContract.fixtureVersion}"`);
     await mkdir(reportDir, { recursive: true });
     await writeFile(path.join(reportDir, 'bootstrap.json'), JSON.stringify({ isolation: 'Owned temporary source + fresh DB; no working DB/media/env/credentials copied', fixtureVersion: visualContract.fixtureVersion, seed: 'seed/seed.json via supported dev setup', date: visualContract.date, normalStyleguide: 404, fixtureStyleguide: 200, fixtureReleaseRejected: true }, null, 2) + '\n');
     return { origin, cleanup };

@@ -2,8 +2,8 @@
 import specimen from '../assets/styleguide-grid.svg';
 import { fixtureImage } from './styleguide-fixtures';
 export const emdashCoverage = {
-  rendered: ['Section', 'Container', 'Grid', 'Card', 'PartnersPanel', 'ResponsiveImage', 'EditorialImage', 'RichText', 'PhotoGallery', 'FormError', 'LogoTicker'],
-  variants: { Section: ['content', 'section'], Container: ['reading', 'content', 'wide', 'breakout (.content-grid)'], Grid: ['compact', 'standard', 'wide'], Card: ['stacked', 'horizontal'], PartnersPanel: ['linked', 'unlinked', 'empty', 'dark artwork ground'], LogoTicker: ['animated with native stop control', 'single static item', 'RTL', 'empty renders nothing', 'reduced motion/print static'] },
+  rendered: ['Section', 'Container', 'Grid', 'Card', 'PartnersPanel', 'ResponsiveImage', 'EditorialImage', 'RichText', 'PhotoGallery', 'FormError', 'LogoTicker', 'Disclosure', 'Cluster', 'Sidebar'],
+  variants: { Disclosure: ['native independent/grouped', 'dark surface', 'long German summary', 'Markdown or platform-owned Portable Text body'], Cluster: ['wrapping actions', 'narrow RTL siblings'], Sidebar: ['main first', 'wide/narrow host', 'editor wrappers', 'single region'], Section: ['content', 'section'], Container: ['reading', 'content', 'wide', 'breakout (.content-grid)'], Grid: ['compact', 'standard', 'wide'], Card: ['stacked', 'horizontal'], PartnersPanel: ['linked', 'unlinked', 'empty', 'dark artwork ground'], LogoTicker: ['animated with native stop control', 'single static item', 'RTL', 'empty renders nothing', 'reduced motion/print static'] },
   stress: ['long heading/name', 'unbroken identifier', 'missing media', 'portrait 1:3', 'small native 96x64', 'repeated ordered gallery asset', 'invalid/disabled/empty controls', 'narrow placement', 'editorial breakout zone'],
   deferred: { CMSPartnersPanel: 'Queries a real collection; verify separately on disposable CMS content, not fake writable records.' },
   surfaceModes: 'Neutral light palette by default; data-surface="dark" and data-surface="light" remap surface, text, muted, border, and focus tokens.',

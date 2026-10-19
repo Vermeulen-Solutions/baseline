@@ -30,6 +30,22 @@ import { validateRecord, validateCssAlignment } from '../scripts/check-art-direc
 const GLOBAL_CSS_PATH = 'src/styles/global.css';
 const FIXTURES_PATH = 'src/dev/styleguide-fixtures.ts';
 
+test('text link contrast is gated on default, dark and restored light surfaces', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const audited = auditDesignTokens(css);
+  for (const id of ['default:link-on-page', 'default:link-on-surface', 'dark:link-on-surface', 'light:link-on-surface']) {
+    const pair = audited.contrast.find(pair => pair.id === id);
+    assert.ok(pair && pair.ratio >= 4.5 && pair.status === 'pass', JSON.stringify(pair));
+  }
+  // Reproduce the observed dark-disclosure defect: the dark action ink was inherited.
+  const regressed = css.replace('--color-link: var(--surface-dark-link, var(--color-focus-on-dark));', '--color-link: var(--color-action);');
+  assert.ok(auditDesignTokens(regressed).errors.some(error => error.includes('dark:link-on-surface')));
+  const badOverride = css.replace('--color-link: var(--surface-dark-link, var(--color-focus-on-dark));', '--color-link: var(--color-surface);');
+  assert.ok(auditDesignTokens(badOverride).errors.some(error => error.includes('dark:link-on-surface')));
+  const missingLightReset = css.replace('--color-link: var(--surface-light-link, var(--color-action));', '');
+  assert.ok(auditDesignTokens(missingLightReset).errors.some(error => error.includes('light:link-on-surface')));
+});
+
 // Tokens that are part of the public Tailwind v4 / CSS utility contract for downstream client templates
 // even when the minimal starter routes only consume a subset of elevation/easing steps directly.
 const PUBLIC_CONTRACT_TOKENS = new Set([

@@ -1,0 +1,496 @@
+{
+  "version": 1,
+  "date": "2026-10-19",
+  "scope": "Phase 5 native composition, scoped calibration and automated acceptance; manual AT/release observations remain pending",
+  "implementationBase": "0e6e7cb82a93dbecae3d32877d51b1b4a02c90de",
+  "workingTreeCapture": true,
+  "commands": [
+    {
+      "command": "npm run verify",
+      "exitCode": 0,
+      "error": null,
+      "tests": 208,
+      "pass": 208,
+      "fail": 0,
+      "astro": {
+        "files": 46,
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "error": null
+    },
+    {
+      "command": "npm run test:design",
+      "exitCode": 0,
+      "tests": 23,
+      "pass": 23
+    },
+    {
+      "command": "npm run design:tokens -- --write-calibration",
+      "exitCode": 0,
+      "contrastPairs": 14
+    },
+    {
+      "command": "npm run test:profiles -- --public-browser --keep",
+      "exitCode": 0,
+      "profiles": [
+        {
+          "profile": "static",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-profile-verification-2EuTmM\\static",
+          "tests": 22,
+          "astro": {
+            "files": 34,
+            "errors": 0,
+            "warnings": 0,
+            "hints": 0
+          },
+          "independentInstall": true,
+          "cleanInstall": true,
+          "databasePackages": 0,
+          "verify": "passed",
+          "production": {
+            "styleguide": "404 for GET/HEAD, slash, query and cookie attempts",
+            "draft": "404; excluded from public routes/listings"
+          },
+          "fixtures": {
+            "styleguide": 200,
+            "images": 3,
+            "releaseRejected": true,
+            "composition": {
+              "nativeDisclosures": 4,
+              "firstSummary": true,
+              "defaultClosed": true,
+              "body": "native Markdown",
+              "intrinsicRegions": "rendered"
+            },
+            "arabicHeadingLanguage": "ar"
+          },
+          "publicBrowser": "passed",
+          "receipt": "native-composition-phase-5-static.json",
+          "builds": {
+            "production": "passed",
+            "fixtures": "passed"
+          }
+        },
+        {
+          "profile": "static-sveltia",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-profile-verification-2EuTmM\\static-sveltia",
+          "tests": 23,
+          "astro": {
+            "files": 34,
+            "errors": 0,
+            "warnings": 0,
+            "hints": 0
+          },
+          "independentInstall": true,
+          "cleanInstall": true,
+          "databasePackages": 0,
+          "verify": "passed",
+          "production": {
+            "styleguide": "404 for GET/HEAD, slash, query and cookie attempts",
+            "draft": "404; excluded from public routes/listings"
+          },
+          "fixtures": {
+            "styleguide": 200,
+            "images": 3,
+            "releaseRejected": true,
+            "composition": {
+              "nativeDisclosures": 4,
+              "firstSummary": true,
+              "defaultClosed": true,
+              "body": "native Markdown",
+              "intrinsicRegions": "rendered"
+            },
+            "arabicHeadingLanguage": "ar"
+          },
+          "publicBrowser": "passed",
+          "receipt": "native-composition-phase-5-sveltia.json",
+          "builds": {
+            "production": "passed",
+            "fixtures": "passed"
+          }
+        }
+      ]
+    },
+    {
+      "command": "npm run test:visual",
+      "exitCode": 0,
+      "error": null,
+      "report": {
+        "startTime": "2026-10-19T16:16:19.684Z",
+        "duration": 156598.77500000002,
+        "expected": 69,
+        "skipped": 18,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cleanup": {
+        "serverStopped": true,
+        "dependencyJunctionUnlinked": true,
+        "temporaryTreeRemoved": true,
+        "workingDatabaseCopied": false
+      }
+    }
+  ],
+  "tokens": {
+    "themeValuesUnchanged": true,
+    "themeTokens": 31,
+    "existingRootAndSurfaceValuesUnchanged": true,
+    "addedRole": "--color-link",
+    "pairResults": [
+      {
+        "id": "default:text-on-page",
+        "foreground": "--color-text",
+        "background": "--color-page",
+        "foregroundValue": "oklch(24% 0.02 260)",
+        "backgroundValue": "oklch(99% 0.004 250)",
+        "ratio": 15.99,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "default:text-on-surface",
+        "foreground": "--color-text",
+        "background": "--color-surface",
+        "foregroundValue": "oklch(24% 0.02 260)",
+        "backgroundValue": "oklch(100% 0 0)",
+        "ratio": 16.45,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "default:muted-on-page",
+        "foreground": "--color-muted",
+        "background": "--color-page",
+        "foregroundValue": "oklch(46% 0.02 260)",
+        "backgroundValue": "oklch(99% 0.004 250)",
+        "ratio": 6.92,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "default:muted-on-surface",
+        "foreground": "--color-muted",
+        "background": "--color-surface",
+        "foregroundValue": "oklch(46% 0.02 260)",
+        "backgroundValue": "oklch(100% 0 0)",
+        "ratio": 7.12,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "default:on-action-on-action",
+        "foreground": "--color-on-action",
+        "background": "--color-action",
+        "foregroundValue": "oklch(100% 0 0)",
+        "backgroundValue": "oklch(43% 0.14 250)",
+        "ratio": 8.02,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "default:action-on-page",
+        "foreground": "--color-action",
+        "background": "--color-page",
+        "foregroundValue": "oklch(43% 0.14 250)",
+        "backgroundValue": "oklch(99% 0.004 250)",
+        "ratio": 7.8,
+        "minimum": 3,
+        "status": "pass"
+      },
+      {
+        "id": "default:link-on-page",
+        "foreground": "--color-link",
+        "background": "--color-page",
+        "foregroundValue": "oklch(43% 0.14 250)",
+        "backgroundValue": "oklch(99% 0.004 250)",
+        "ratio": 7.8,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "default:link-on-surface",
+        "foreground": "--color-link",
+        "background": "--color-surface",
+        "foregroundValue": "oklch(43% 0.14 250)",
+        "backgroundValue": "oklch(100% 0 0)",
+        "ratio": 8.02,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "dark:link-on-surface",
+        "foreground": "--color-link",
+        "background": "--color-surface",
+        "foregroundValue": "oklch(76% 0.13 250)",
+        "backgroundValue": "oklch(18% 0.02 260)",
+        "ratio": 8.79,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "light:link-on-surface",
+        "foreground": "--color-link",
+        "background": "--color-surface",
+        "foregroundValue": "oklch(43% 0.14 250)",
+        "backgroundValue": "oklch(100% 0 0)",
+        "ratio": 8.02,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "default:focus-on-page",
+        "foreground": "--color-focus",
+        "background": "--color-page",
+        "foregroundValue": "oklch(52% 0.18 250)",
+        "backgroundValue": "oklch(99% 0.004 250)",
+        "ratio": 5.26,
+        "minimum": 3,
+        "status": "pass"
+      },
+      {
+        "id": "dark:text-on-surface",
+        "foreground": "--color-text",
+        "background": "--color-surface",
+        "foregroundValue": "oklch(96% 0.005 250)",
+        "backgroundValue": "oklch(18% 0.02 260)",
+        "ratio": 16.75,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "dark:muted-on-surface",
+        "foreground": "--color-muted",
+        "background": "--color-surface",
+        "foregroundValue": "oklch(72% 0.015 260)",
+        "backgroundValue": "oklch(18% 0.02 260)",
+        "ratio": 7.58,
+        "minimum": 4.5,
+        "status": "pass"
+      },
+      {
+        "id": "dark:focus-on-surface",
+        "foreground": "--color-focus",
+        "background": "--color-surface",
+        "foregroundValue": "oklch(76% 0.13 250)",
+        "backgroundValue": "oklch(18% 0.02 260)",
+        "ratio": 8.79,
+        "minimum": 3,
+        "status": "pass"
+      }
+    ],
+    "observedPriorDarkLinkRatio": 2.34,
+    "neutralDarkLinkRatio": 8.79,
+    "restoredLightRegression": "Missing reset inherits dark link ink and fails the light pair"
+  },
+  "primitives": {
+    "names": [
+      "Disclosure",
+      "Cluster",
+      "Sidebar"
+    ],
+    "runtimeController": "none",
+    "newDependencies": 0,
+    "contentOwnership": "Caller slots; Markdown/Portable Text adapters remain profile-owned",
+    "grouping": "Native optional details name",
+    "domOrder": "Main then supporting; no visual reversal"
+  },
+  "renderer": {
+    "node": "24.21.0",
+    "playwright": "1.64.1",
+    "chromiumRevision": "1248",
+    "platform": "win32",
+    "comparison": {
+      "threshold": 0.1,
+      "maxDiffPixels": 0,
+      "animations": "disabled",
+      "caret": "hide",
+      "scale": "css"
+    },
+    "fixtureVersion": 3
+  },
+  "goldenReview": {
+    "updateStats": {
+      "startTime": "2026-10-19T16:13:19.065Z",
+      "duration": 160259.466,
+      "expected": 62,
+      "skipped": 25,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "changed": [
+      "chromium-1440/styleguide-no-js.png",
+      "chromium-1440/styleguide.png",
+      "chromium-1440/zoom-200.png",
+      "chromium-1440/zoom-400.png",
+      "chromium-390/styleguide-no-js.png",
+      "chromium-390/styleguide.png",
+      "chromium-390/text-spacing-320.png",
+      "chromium-768/styleguide-no-js.png",
+      "chromium-768/styleguide.png"
+    ],
+    "added": [
+      "chromium-1440/composition-open.png",
+      "chromium-1440/composition.png",
+      "chromium-390/composition-open.png",
+      "chromium-390/composition.png",
+      "chromium-768/composition-open.png",
+      "chromium-768/composition.png"
+    ],
+    "unrelatedExistingCaptures": "byte-identical",
+    "beforeFixtureVersion": 2,
+    "afterFixtureVersion": 3
+  },
+  "languageReview": {
+    "reason": "Explicit lang=ar corrects the Arabic heading language and changes browser font fallback; wording/geometry elsewhere unchanged",
+    "affectedHeading": "المحتوى الرئيسي",
+    "rawChangedPixelBounds": {
+      "left": 223,
+      "top": 11081,
+      "right": 328,
+      "bottom": 11096
+    },
+    "comparison": {
+      "startTime": "2026-10-19T16:08:45.231Z",
+      "duration": 172594.932,
+      "expected": 11,
+      "skipped": 73,
+      "unexpected": 3,
+      "flaky": 0
+    },
+    "errors": [
+      {
+        "message": "\u001b[31mTesting stopped early after 3 maximum allowed failures.\u001b[39m"
+      }
+    ]
+  },
+  "impeccable": {
+    "mode": "Scoped hardening and rendered review; not a formal dual-assessment critique",
+    "sourceFindings": [
+      {
+        "antipattern": "em-dash-overuse",
+        "name": "Em-dash overuse",
+        "description": "Em-dash saturation in body copy is an AI cadence tell. Advisory only: humans use em-dashes legitimately, so this fires only on saturation — at least 8 em-dashes (— or --) at a density near one per 500 characters of body text — never on a long article that uses a few. Prefer commas, colons, periods, or parentheses.",
+        "severity": "advisory",
+        "category": "slop",
+        "file": "C:\\dev\\emdash-baseline\\src\\components\\dev\\Styleguide.astro",
+        "line": 0,
+        "snippet": "10 em-dashes in body text",
+        "advisory": true,
+        "importedBy": [
+          "EmDashStyleguide.astro"
+        ]
+      }
+    ]
+  },
+  "sourceSHA256": {
+    "src/components/Disclosure.astro": "894cf4ec782b05cf7276c0942de19bdb6f62d054cd6fab8aaeffa9a809d567df",
+    "src/components/Cluster.astro": "8611212d948ac162b1128ae094224e697af683c8b9218ef68aa84b8ff75f1852",
+    "src/components/Sidebar.astro": "33cd31b7dd5fbde00a2fc670396868a711fa88c625f012b5566d32316f05aa31",
+    "src/components/dev/CompositionSpecimens.astro": "652f38711e2cf12d449b059849c7b6703c2a6b0728f812ca860b11bdffc98376",
+    "src/components/dev/Styleguide.astro": "93d44e9f1280958b0568a308ee8bd1d10125f73a1fb5dccf0b2c543a32ed0d34",
+    "src/components/dev/EmDashStyleguide.astro": "8cb2dfb10942ca9c4b824f2563e1c75e522f9dfaa0780802da05f40cd6e15029",
+    "src/dev/disclosure-prose.md": "21b30634a03e6f9fd46c30a0de6c8f9d8c08c57f77c08d4df013d2b4c442d466",
+    "src/dev/styleguide-fixtures.ts": "373687c914dde16acb6429e90fc0b31c7ffee8927111770071f5e2b5f27eb4b0",
+    "src/dev/emdash-styleguide-fixtures.ts": "f34fbdfb212c011c82616600100c57f5f33e5eac83992d1a63ff4372c916c017",
+    "src/styles/global.css": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+    "scripts/design-system.mjs": "ad83e67980b8f47bd96b9e528f7e4986cfaa7a98837b6c625a32187f60dc4b5b",
+    "tests/token-coverage.test.mjs": "4f2bae25a740f0baf36c06f9aef573cf18a4861ef661d921685ef611f71f3d9d",
+    "tests/journeys/public.mjs": "c7751131badefa509114147aff93bdfd744c58db9b8091ca75a4ab767a26712f",
+    "tests/journeys/composition.mjs": "503345e7b2677f2a98505dbf8a81e4c1c48ddea64766d9d76f57df12838fd761",
+    "tests/static-pilot.integration.mjs": "d211543febae0b2a5f4c6ac19bcb415ffd7d56efbbe353b39d7f940ec347d7e8",
+    "tests/visual/composition.spec.mjs": "82ce4b059dac9b4fb5def81305971408cdb83cfd3acdd197cbafb114cf11c12c",
+    "tests/visual/behavior.spec.mjs": "f05afce55f8d927f160314567290ce94ce9d542aad2e956bb30a472a5e57f7a5",
+    "tests/visual/site.mjs": "97f3fe1fb751811eb0f13db19f4205c94c9ffcbe642a99eec6d30b81862c4211",
+    "tests/visual/contract.mjs": "164899b52f3f4d97e6c1ce674bd3e5187512d9d9c8f060889b263f957ccc004e",
+    "profiles/manifests/shared.json": "10652634320605cd23f04948d87fd19cd98de3ef9987cbc46590e7138aedc733",
+    "profiles/file-inventory.json": "1315333261fa65ff60d8bfa7141490cf26010563d2fd658904dd9bec9c31272e",
+    "audit/design-gate-exceptions.json": "67228cab98bce22f5392e6e161ac83aef1e06273716967d88942d8398bd8c314"
+  },
+  "goldenSHA256": {
+    "chromium-1440/category.png": "fac9d80c9619fa8943b313646b32fa119677e57ce6cef4ac612717950b98bba5",
+    "chromium-1440/composition-open.png": "87c6d049574b6ae5538b1bf38ee989ce62f714fc611be32d0691d7372a523838",
+    "chromium-1440/composition.png": "5dacfe6c6dee599a3c69f46afa8e18b1c7ad942f94e044a1628c5f3952dcf4ba",
+    "chromium-1440/controls-focus.png": "2504e7d38860a220686b82e082f808f74935481ee07d981fc6813c80f8ece83a",
+    "chromium-1440/controls.png": "fb8ced75579ca0960d8cced62e513fd12d68a2f4e365e3a492139c37a31ed1a4",
+    "chromium-1440/gallery-open.png": "660e49610d901962b89ea47d129b0e1bf12594a27d26ad859493722f172e6814",
+    "chromium-1440/home.png": "91b40599efe49a8f8cd673d8f690bff290de4b273744076e0c75c262564b1aea",
+    "chromium-1440/not-found.png": "a8b4fe86c00241c710f87cd823f99fafffd704b4cffe3261808e837b62c273b2",
+    "chromium-1440/page.png": "3ea3d940b25e3afbe2d83fe2f2716de06be977ca033c211c2b5a6046d0e06eef",
+    "chromium-1440/post.png": "bb0fdc2982d577485d2fcd6f80e344877ff5f036e2089201715ae32c9ad19752",
+    "chromium-1440/posts.png": "f98f43b3a5fe70a2f52dc5bf223a9fdfcfcf57e3de663f4b8928f3fbc1e862d7",
+    "chromium-1440/sensitivity-control.png": "fb8ced75579ca0960d8cced62e513fd12d68a2f4e365e3a492139c37a31ed1a4",
+    "chromium-1440/styleguide-no-js.png": "12a78b2e99cd919b12edf0e0da8672129a9ba75a02a9b84b7e0869d153427e49",
+    "chromium-1440/styleguide.png": "e6bda5b79d35ebf372bfb2f24f81ad4af7176e3a40f9c40f0eab33404f3a534e",
+    "chromium-1440/tag.png": "3e267aeabadeb689cd6788a97e94838151d742384bdf3917f72d320483bd4ff2",
+    "chromium-1440/ticker-active.png": "bb6a4cb3c0a57c3e47074a9767fa1abb2a67c7bf30a8ce562f3c63da2f620b53",
+    "chromium-1440/ticker-reduced.png": "bf486293e4e7c36235775425ab59c5b1140b05de364499f035203a62f4f5f445",
+    "chromium-1440/ticker-rtl.png": "61d0f04d302e044cf3cad5908ce7320b803dddfe26e42fca8626434ba7f94eba",
+    "chromium-1440/zoom-200.png": "dbfe0f539803d5217ae0a4bd61d9668e15498e845d89eb24784ed718d251fa07",
+    "chromium-1440/zoom-400.png": "47028210084a371f2dca75fef5371f56e898424999212c8ac4c585e2021b52c6",
+    "chromium-390/category.png": "f76677163d76756c656e48a74d6dcc7cddb5b681c8c27fe3cdba1c8cad803118",
+    "chromium-390/composition-open.png": "8dfd8a915fba7402675bd0ec5a25e841ce6e3d64cd424159e3281a4f1f92dbfa",
+    "chromium-390/composition.png": "029fa4af62669c802cf38f50b066fcdbb5d34e5bb5ab99fcbde57abf14d95801",
+    "chromium-390/controls-focus.png": "4f286289253662e9f26d2ffc4af3647335b542b04fa7f8674d6278a7c502e9dc",
+    "chromium-390/controls.png": "698839d5a5db0b8564211417d5eae839b6943de305c2dc0f2edff4af6dda0a1a",
+    "chromium-390/gallery-open.png": "d1acf2877d8f7c5783675e3f3f643313b1cebad1eccfc7a43cfb80ba30be6165",
+    "chromium-390/home.png": "3b9e3b7d523a51f9df6c6de3432499c70c3cd0f4b7c3d88dc38a31244774a78f",
+    "chromium-390/not-found.png": "a50bdcf11bc1223ea69418d2fbedd246fd6a2aeb0a98291af869844304a852bd",
+    "chromium-390/page.png": "937be625dba82748498e77d7e820c3d68c6299046e16578de64414f2af960995",
+    "chromium-390/post.png": "9e5020fe5bdd3d242d1b38c497e68dd941e7a2908388ccf7cde8192f07030680",
+    "chromium-390/posts.png": "16499f553c37d75e2722d750e28a9fb598931375703e9f10f6110805b431e129",
+    "chromium-390/sensitivity-control.png": "698839d5a5db0b8564211417d5eae839b6943de305c2dc0f2edff4af6dda0a1a",
+    "chromium-390/styleguide-no-js.png": "0c47ef9f37b1c8cf38a9f882caad9decfe1a0c3dcfd6ee7780c7fa7f5e6f5b10",
+    "chromium-390/styleguide.png": "d0a4e7e881fe3137267e87c8fba2e7fd8f30f7fae57294f77a92ca904c989cf5",
+    "chromium-390/tag.png": "2833a1d32b93484f74d4233880334f913b30a852904e7280812a5ae3dab6f4d4",
+    "chromium-390/text-spacing-320.png": "7206de845b74819a4f471c5140ebb32f576bac8b85d9bb19fbd154623f84d0e9",
+    "chromium-390/ticker-active.png": "62b2aed25ffa51170b9eb43a1cc886b75dfa556137fea1ceb47e6cccf72d98ec",
+    "chromium-390/ticker-reduced.png": "b5a3467c2c54316771cd1bf267df510edcf0924756397c83c1432bcca0be618c",
+    "chromium-390/ticker-rtl.png": "7291a2f3354162a76ec2b059ea5be7f666bf9cbd66450722c24c82867209348c",
+    "chromium-768/category.png": "2939470403fab5287993bff5db909415a859219e1be994631d7709d6757ac035",
+    "chromium-768/composition-open.png": "b4bd0fc594d462cec9acbe3c9c7e92efcdfb2f46a0aa76b435bf45d57b213150",
+    "chromium-768/composition.png": "88b8782098ae617af60586a7a7dc8b6ab9798c2f70421394316a294dbd373fde",
+    "chromium-768/controls-focus.png": "cfc74ce7379559a52335cc9c81c97cd8e4b6b8b63654d36412e57f7f8f66c94d",
+    "chromium-768/controls.png": "acc26b8ddc77785ecc4f31bd0dd667f26be3ff9ddea5a419c040c4e3be7da70a",
+    "chromium-768/gallery-open.png": "53e0a792fd10551743e6aafa09378cca1ab637d084748cc652204130c44eeeb6",
+    "chromium-768/home.png": "b0118930e502f646201598c153e560baaa14be6bd8312c11037be51bb1c361c4",
+    "chromium-768/not-found.png": "c97b7413d1a35506937fe784f8a605c599cf41e4447aee909c012f8513db59d0",
+    "chromium-768/page.png": "f6f916436eca54d9a01d81a38412c2c46d32a71b61fd5acbd85e72bf6bce1dc9",
+    "chromium-768/post.png": "e024cee1e8384266f0e156fb9aa49f7fa850a5619d5d4047d9965bfa24c2eccc",
+    "chromium-768/posts.png": "b92cab40041c5320d67ecf92f2bb574322694e66810da3e6d61748245d786234",
+    "chromium-768/sensitivity-control.png": "acc26b8ddc77785ecc4f31bd0dd667f26be3ff9ddea5a419c040c4e3be7da70a",
+    "chromium-768/styleguide-no-js.png": "69e1fb032d90c507e9b5be88132bf217806433f06c9aee5f2ff8474558595ca1",
+    "chromium-768/styleguide.png": "c39c0ca94276f243cc1636fcff94a7f852ca23e2aaf5606fe6663f135e45e1b2",
+    "chromium-768/tag.png": "4aeaa91969f49f5937b9e6dccae754ca468bdb573926458d8ee15e97f5b14db3",
+    "chromium-768/ticker-active.png": "46fdd02f9c4fedbf33114e381f830e4ad34beb9e37efb33e4361c27cffa3e630",
+    "chromium-768/ticker-reduced.png": "a0cd0b6aaf72d589d6f5545887693d710385fbb6f8b95ff499a5b772c1bd0953",
+    "chromium-768/ticker-rtl.png": "267f7f87dec05a8b1bd483d7584d0a562c735a8e79b2137727c31000c8c316bb"
+  },
+  "hashNormalization": "Source UTF-8 normalized to LF; PNG hashes use actual bytes",
+  "limitations": [
+    "Pinned Windows Chromium automation only; not WCAG certification",
+    "Manual screen-reader/heading navigation, browser toolbar Find, Firefox/WebKit and physical devices remain unverified",
+    "Real CMS editor save/reload and credentialed Sveltia publishing remain outside these synthetic public fixtures",
+    "Browser checks remain local-only; no hosted CI run was executed in this session",
+    "New managed membership and link aliases/checker require reviewed additive adoption in existing sites"
+  ],
+  "artifacts": {
+    "calibration": "audit/component-calibration.md",
+    "contract": "docs/native-composition.md",
+    "reproduction": "docs/verification/native-composition-phase-5.md",
+    "generatedProjects": "Deliberately retained with --keep",
+    "cmsCleanup": {
+      "serverStopped": true,
+      "dependencyJunctionUnlinked": true,
+      "temporaryTreeRemoved": true,
+      "workingDatabaseCopied": false
+    },
+    "logs": ".emdash/metadata/phase5-*.log (ignored)"
+  },
+  "supersededRuns": "Initial calibration exposed dark links at 2.34:1; a fresh generated static run reproduced that failure. Later language tagging intentionally changed Arabic fallback glyphs, caught by strict snapshots and reviewed before a successful update/comparison. The final receipts match current source."
+}

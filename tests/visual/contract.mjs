@@ -1,6 +1,6 @@
 export const visualContract = {
   version: 1,
-  fixtureVersion: 2,
+  fixtureVersion: 3,
   playwright: '1.64.1',
   chromiumRevision: '1248',
   node: '24.21.0',

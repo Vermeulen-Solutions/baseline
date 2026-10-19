@@ -38,6 +38,7 @@ export const REQUIRED_THEME_TOKENS = [
 ];
 
 export const REQUIRED_ROOT_TOKENS = [
+  '--color-link',
   '--measure-reading',
   '--measure-content',
   '--measure-content-safe',
@@ -47,6 +48,7 @@ export const REQUIRED_ROOT_TOKENS = [
 ];
 
 export const REQUIRED_DARK_SURFACE_TOKENS = [
+  '--color-link',
   '--color-surface',
   '--color-text',
   '--color-muted',
@@ -428,8 +430,10 @@ export function auditDesignTokens(css) {
     if (clampError) errors.push(clampError);
   }
 
-  const allDefaults = { ...tokens.theme, ...tokens.root };
+  const allDefaults = { '--color-link': 'var(--color-action)', ...tokens.theme, ...tokens.root };
   const allDark = { ...allDefaults, ...tokens.dark };
+  // A restored light surface must reset values inherited from its dark ancestor.
+  const allLight = { ...allDark, ...tokens.light };
 
   const pairs = [
     { id: 'default:text-on-page', fg: '--color-text', bg: '--color-page', scope: allDefaults, min: 4.5 },
@@ -438,6 +442,10 @@ export function auditDesignTokens(css) {
     { id: 'default:muted-on-surface', fg: '--color-muted', bg: '--color-surface', scope: allDefaults, min: 4.5 },
     { id: 'default:on-action-on-action', fg: '--color-on-action', bg: '--color-action', scope: allDefaults, min: 4.5 },
     { id: 'default:action-on-page', fg: '--color-action', bg: '--color-page', scope: allDefaults, min: 3.0 },
+    { id: 'default:link-on-page', fg: '--color-link', bg: '--color-page', scope: allDefaults, min: 4.5 },
+    { id: 'default:link-on-surface', fg: '--color-link', bg: '--color-surface', scope: allDefaults, min: 4.5 },
+    { id: 'dark:link-on-surface', fg: '--color-link', bg: '--color-surface', scope: allDark, min: 4.5 },
+    { id: 'light:link-on-surface', fg: '--color-link', bg: '--color-surface', scope: allLight, min: 4.5 },
     { id: 'default:focus-on-page', fg: '--color-focus', bg: '--color-page', scope: allDefaults, min: 3.0 },
     { id: 'dark:text-on-surface', fg: '--color-text', bg: '--color-surface', scope: allDark, min: 4.5 },
     { id: 'dark:muted-on-surface', fg: '--color-muted', bg: '--color-surface', scope: allDark, min: 4.5 },

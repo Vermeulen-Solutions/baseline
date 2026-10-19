@@ -9,6 +9,7 @@ import { once } from 'node:events';
 import assert from 'node:assert/strict';
 import { chromium, expect } from '@playwright/test';
 import { skipLinkJourney, fieldErrorJourney, reducedMotionJourney, textSpacingJourney } from './journeys/public.mjs';
+import { disclosureJourney, intrinsicLayoutJourney } from './journeys/composition.mjs';
 import { assertReleaseArtifact } from '../scripts/assert-release-artifact.mjs';
 import { parse } from 'parse5';
 import sharp from 'sharp';
@@ -155,6 +156,26 @@ try {
   const fixtureHTML = await (await fetch(fixtures + '/_styleguide/')).text();
   assert.ok(fixtureHTML.includes('data-styleguide-ready'));
   report.fixtures = { styleguide: 200, images: await images(fixtures, fixtureHTML), releaseRejected: true };
+  const fixtureNodes = [];
+  const collect = node => { fixtureNodes.push(node); for (const child of node.childNodes ?? []) collect(child); };
+  collect(parse(fixtureHTML));
+  const attr = (node, name) => node.attrs?.find(a => a.name === name)?.value;
+  const disclosures = fixtureNodes.filter(node => node.tagName === 'details');
+  assert.equal(disclosures.length, 4, 'Native disclosure specimens rendered');
+  for (const disclosure of disclosures) {
+    const children = disclosure.childNodes.filter(node => node.tagName);
+    assert.equal(children[0].tagName, 'summary');
+    assert.ok(children[0].childNodes.length > 0);
+    assert.equal(attr(children[0], 'aria-expanded'), undefined, 'Expanded state stays browser-owned');
+    assert.equal(attr(disclosure, 'open'), undefined, 'No default-open policy');
+    assert.ok(attr(children[1], 'class').split(/\s+/).includes('flow'));
+  }
+  assert.equal(disclosures.filter(node => attr(node, 'name') === 'specimen-composition-group').length, 2);
+  assert.ok(fixtureHTML.includes('native Markdown'), 'Static native Markdown body fallback rendered');
+  for (const id of ['specimen-cluster', 'specimen-sidebar-wide', 'specimen-sidebar-narrow', 'specimen-sidebar-single']) {
+    assert.equal(fixtureNodes.filter(node => attr(node, 'id') === id).length, 1, id);
+  }
+  report.fixtures.composition = { nativeDisclosures: 4, firstSummary: true, defaultClosed: true, body: 'native Markdown', intrinsicRegions: 'rendered' };
   if (browserRequested) {
     browser = await chromium.launch({ headless: true });
     const observations = [];
@@ -182,8 +203,9 @@ try {
         if (route === '/') journeys.push({ route, skip: await skipLinkJourney(page, page.locator('main a[href="/posts/welcome/"]').first()) });
         if (route === '/_styleguide/') journeys.push({ route,
           skip: await skipLinkJourney(page, page.getByRole('button', { name: 'Native button', exact: true })),
+          composition: await disclosureJourney(page), layout: await intrinsicLayoutJourney(page),
           errors: await fieldErrorJourney(page), motion: await reducedMotionJourney(page),
-          ...(width === 390 && { textSpacing: await textSpacingJourney(page) }),
+          ...(width === 390 && { textSpacing: await textSpacingJourney(page, async () => ({ disclosure: await disclosureJourney(page), layout: await intrinsicLayoutJourney(page) })) }),
         });
         if (option('--screenshots') && width === 390) {
           await fs.mkdir(option('--screenshots'), { recursive: true });
@@ -214,12 +236,13 @@ try {
       assert.ok(await image.evaluate(element => element.complete && element.naturalWidth > 0));
       assert.equal((await page.goto(fixtures + '/_styleguide/')).status(), 200);
       await skipLinkJourney(page, page.getByRole('button', { name: 'Native button', exact: true }));
+      const composition = await disclosureJourney(page), layout = await intrinsicLayoutJourney(page);
       await fieldErrorJourney(page);
       await page.getByRole('checkbox', { name: 'Check this sample', exact: true }).press('Space');
       await expect(page.getByRole('checkbox', { name: 'Check this sample', exact: true })).toBeChecked();
       assert.equal(await page.evaluate(() => typeof window.__publicDocumentScriptRan), 'undefined');
       assert.deepEqual(failures, []);
-      report.browser.noJavaScript = { sentinelExecuted: false, skip, navigation: 200, nativeCheckbox: true, summaryFocus: true, nativeImage: true, pageErrors: 0 };
+      report.browser.noJavaScript = { sentinelExecuted: false, skip, composition, layout, navigation: 200, nativeCheckbox: true, summaryFocus: true, nativeImage: true, pageErrors: 0 };
     } finally { await context.close(); }
     if (config.platformProfile === 'static-sveltia' && process.argv.includes('--browser')) {
       const admin = await browser.newPage();

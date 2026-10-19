@@ -188,7 +188,7 @@ The flow utility differentiates rhythm across headings, lists, figures, and bloc
 - **Multi-Layer OKLCH Shadows (`@theme`):** `--shadow-sm` (3-stop), `--shadow-md` (4-stop), and `--shadow-lg` (6-stop) derived from `oklch(from var(--color-text) l c h / alpha)`.
 - **Curated Easing Curves (`@theme`):** `--ease-smooth`, `--ease-snappy`, and physics-inspired `--ease-spring` (via CSS `linear()`).
 - **Background & Mask Helpers:** Mark background media with `.is-bg` (its parent automatically becomes `position: relative; isolation: isolate` via `:where(:has(> .is-bg))`), and apply `.fade--bottom`, `.fade--top`, `.fade--block`, or `.fade--inline` (`--fade-amount: 25%`) for surface-independent `mask-image` fades.
-- **Contextual Surface Scopes:** Apply `data-surface="dark"` or `data-surface="light"` to any section or card to remap `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, and `--color-focus` together.
+- **Contextual Surface Scopes:** Apply `data-surface="dark"` or `data-surface="light"` to any section or card to remap `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, `--color-focus`, and `--color-link` together. Text links retain action ink by default, use the existing light focus ink on dark surfaces, and restore action ink on nested light surfaces. Optional `--surface-dark-link` / `--surface-light-link` aliases support calibrated overrides without changing solid-action colors.
 
 ---
 
@@ -219,7 +219,7 @@ Baseline treats `src/styles/global.css` as the single source of truth for tokens
    npm run design:tokens -- --write-calibration
    npm run test:design
    ```
-   This directly parses `src/styles/global.css`, verifies all 10 perceptual WCAG AA contrast pairs across default and `[data-surface="dark"]` contexts, checks fluid `clamp()` bounds, confirms `/_styleguide` swatch and `src/` consumer coverage, and writes a deterministic `## Token Calibration` section (bound to the LF-normalised SHA-256 of `src/styles/global.css`) into `audit/component-calibration.md`.
+   This directly parses `src/styles/global.css`, verifies 14 WCAG contrast pairs across default, dark and restored-light contexts (including 4.5:1 text-link gates), checks fluid `clamp()` bounds, confirms `/_styleguide` swatch and `src/` consumer coverage, and writes a deterministic `## Token Calibration` section (bound to the LF-normalised SHA-256 of `src/styles/global.css`) into `audit/component-calibration.md`.
 
 ---
 

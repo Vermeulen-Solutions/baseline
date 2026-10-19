@@ -25,8 +25,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Issue #2 neutral starter curated token engine, Smart Spacing (.flow), .content-grid breakout tracks, .clickable-parent/.focus-parent, .is-bg/.fade--*, and contextual surface tokens; no client theme or art direction. Any edit invalidates this exact exception.",
-    "sha256": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832"
+    "reason": "Neutral starter accessibility infrastructure: add a contextual text-link alias for default/dark/restored-light surfaces using existing palette roles after the dark Disclosure specimen exposed insufficient contrast; no @theme palette, scale or layout value changed. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -171,8 +171,8 @@
   },
   {
     "path": "src/dev/styleguide-fixtures.ts",
-    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "751912a45b821cf5713c0d66edbbb239ea69c505a91d5882710c35e42de9a151"
+    "reason": "Shared synthetic coverage inventory and version for the new native/intrinsic production primitives; no client identity or token calibration. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "373687c914dde16acb6429e90fc0b31c7ffee8927111770071f5e2b5f27eb4b0"
   },
   {
     "path": "src/pages/_styleguide.astro",
@@ -181,8 +181,8 @@
   },
   {
     "path": "src/components/dev/Styleguide.astro",
-    "reason": "Starter lint infrastructure: justify Safari list semantics and explicitly forward the existing synthetic image alternatives for static analysis; no specimen style or copy change. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "b6f1001c775aa312401fb73f2fc42a79b4b1b1b8f5c7116bae179ef95bcf9d2a"
+    "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "93d44e9f1280958b0568a308ee8bd1d10125f73a1fb5dccf0b2c543a32ed0d34"
   },
   {
     "path": "src/utils/grid-guide.ts",
@@ -266,13 +266,13 @@
   },
   {
     "path": "src/components/dev/EmDashStyleguide.astro",
-    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "40f635b0f4578636a7a578299703dda826cbb9366e3f77ef0f632cbfd05ae534"
+    "reason": "CMS-only neutral calibration: contribute synthetic Portable Text through the caller-owned disclosure body slot; no shared CMS dependency or writable identity. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "8cb2dfb10942ca9c4b824f2563e1c75e522f9dfaa0780802da05f40cd6e15029"
   },
   {
     "path": "src/dev/emdash-styleguide-fixtures.ts",
-    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "d5a87e5de2f1977ba5b390085d7648aa9e5b4d22d7e3ee8f851ff41e7b46090b"
+    "reason": "CMS-only synthetic coverage inventory for shared native/intrinsic production primitives, preserving the separate Portable Text/media extensions; no live CMS content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "f34fbdfb212c011c82616600100c57f5f33e5eac83992d1a63ff4372c916c017"
   },
   {
     "path": "src/dev/styleguide-prose.md",
@@ -383,5 +383,30 @@
     "path": "src/dev/FormRecoveryFixture.astro",
     "reason": "Starter lint infrastructure: justify summary autofocus only after synthetic server validation failure; development/fixture-only exposure and existing recovery behavior remain unchanged. Any edit invalidates this exact LF-normalized exception.",
     "sha256": "9db9f5ce82661b6ac1562d9d61cc001b9a86669f0b3a3c352ab2c0c522d98def"
+  },
+  {
+    "path": "src/components/Disclosure.astro",
+    "reason": "Reusable neutral starter infrastructure: native details/summary with open summary/body slots, normal HTML attributes and existing surface/focus/spacing tokens; no client theme or content ownership. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "894cf4ec782b05cf7276c0942de19bdb6f62d054cd6fab8aaeffa9a809d567df"
+  },
+  {
+    "path": "src/components/Cluster.astro",
+    "reason": "Reusable neutral starter infrastructure: open-slot wrapping sibling alignment using the existing content gap; native attributes and DOM order retained, no client styling. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "8611212d948ac162b1128ae094224e697af683c8b9218ef68aa84b8ff75f1852"
+  },
+  {
+    "path": "src/components/Sidebar.astro",
+    "reason": "Reusable neutral starter infrastructure: open-slot main-first unequal intrinsic regions using the existing reading measure and grid gap, narrow-host wrapping and optional-support fallback; no client template. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "33cd31b7dd5fbde00a2fc670396868a711fa88c625f012b5566d32316f05aa31"
+  },
+  {
+    "path": "src/components/dev/CompositionSpecimens.astro",
+    "reason": "Synthetic shared calibration infrastructure for production Disclosure/Cluster/Sidebar: long labels, surfaces, grouping, native fragments, narrow/RTL/editorial wrapper/missing-support states; protected styleguide only. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "652f38711e2cf12d449b059849c7b6703c2a6b0728f812ca860b11bdffc98376"
+  },
+  {
+    "path": "src/dev/disclosure-prose.md",
+    "reason": "Synthetic ID-free native Markdown disclosure body for static-profile calibration, separate from CMS Portable Text; no client content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "21b30634a03e6f9fd46c30a0de6c8f9d8c08c57f77c08d4df013d2b4c442d466"
   }
 ]

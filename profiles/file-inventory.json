@@ -828,6 +828,30 @@
     "tests/template-lint.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "src/components/Disclosure.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Cluster.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Sidebar.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/dev/CompositionSpecimens.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/dev/disclosure-prose.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/native-composition.md": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

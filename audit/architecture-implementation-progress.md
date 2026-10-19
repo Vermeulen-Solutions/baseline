@@ -9,10 +9,10 @@ Plan: [phased implementation](architecture-implementation-plan-2026-10-19.md). C
 | 2 — static metadata | Complete | [Rendered profiles](verification/metadata-phase-2-profiles.json), [three build variants](verification/metadata-phase-2-variants.json), [final checks/hashes](verification/metadata-phase-2-checks.json) |
 | 3 — interaction journeys | Automated slice complete; manual AT pending | [Checks/hashes](verification/interactions-phase-3-checks.json), [scope/reproduction and manual AT limits](../docs/verification/interactions-phase-3.md) |
 | 4 — template lint | Complete | [Toolchain, mutation probes and independent profiles](verification/template-lint-phase-4-checks.json); [scope/adoption](../docs/verification/template-lint-phase-4.md) |
-| 5 — native composition | Planned | No visual-system changes in this slice |
+| 5 — native composition | Automated slice complete; manual AT pending | [Contract](../docs/native-composition.md), [calibration](component-calibration.md), [current checks/hashes](verification/native-composition-phase-5-checks.json) |
 | 6 — token diagnostics | Planned | Existing calibrated tokens retained |
 | 7 — conditional capabilities | Deferred pending requirements | No new modal/navigation/OG runtime |
-| 8 — release/adoption | Planned | Phases 1–4 record scoped adoption; final release/manual observations remain pending |
+| 8 — release/adoption | Planned | Phases 1–5 record scoped adoption; final release/manual observations remain pending |
 
 Initial `npm run verify` passed before application edits (177 tests; Astro: 40 files, zero errors/warnings/hints).
 
@@ -128,8 +128,49 @@ No browsers or screenshot goldens were used in this lint-only slice. Generated
 projects remain deliberately retained with `--keep`. The adoption guide separates
 new generation from the additive tooling upgrade required by existing sites.
 
+## Phase 5 implementation
+
+Native `Disclosure`, wrapping `Cluster` and intrinsic `Sidebar` now share open
+slots, normal HTML attributes and the existing neutral token hierarchy. Disclosure
+keeps native markers, Enter/Space and optional name grouping; its required summary
+slot and `.flow` body preserve caller-owned content. Static Markdown and CMS
+Portable Text remain separate adapters. Cluster replaces the repeated action-row
+relationship; Sidebar supplies a main-first unequal layout that wraps by host
+width, handles stable editorial wrappers and fills the host when support is absent.
+No controller, hydration, query, FAQ schema or dependency was added.
+
+Rendered calibration exposed a shared dark-surface link defect at 2.34:1. A semantic
+link alias now uses existing palette roles per surface and restores correctly in
+nested light contexts. Four new text-link gates require 4.5:1; current dark contrast
+is 8.79:1. Regression tests reproduce the old inheritance failure and a missing
+light reset. All 31 `@theme` values, existing surface values and lane presets remain
+unchanged. Explicit inventories ship components, specimens, Markdown and their
+portable contract. Existing sites require reviewed additive membership/alias adoption.
+
+Final root verify passed 208 tests and checked 46 Astro files without diagnostics;
+build and the 23-test design suite passed. Both fresh independent profiles passed
+install/ci, verify (22/23 tests), 34-file Astro checks, normal/fixture builds, HTTP
+and shared JS/no-JS browser journeys. Ten shared source/document hashes match each
+generated project. The current CMS comparison passed 69 checks with 18 deliberate
+placement/opt-in skips, no unexpected failures and unchanged comparison thresholds.
+
+Nine existing full-page styleguide/spacing/zoom references changed and six targeted
+composition references were added; unrelated captures remain byte-identical.
+The Arabic heading's explicit language changed its font fallback: the strict diff
+was inspected, updated through the runner and compared successfully. Real fragment
+reveal, closed-body tab exclusion, long/dark summaries, RTL/narrow host geometry,
+text spacing and actual 200%/400% zoom are covered. Manual AT, toolbar Find, other
+engines and editor save/reload remain outside automated acceptance. Impeccable
+hardening/rendered review and source scanning are recorded in calibration; the
+scan's only advisory concerns existing styleguide punctuation.
+
+The [final receipt](verification/native-composition-phase-5-checks.json) records
+current source, golden hashes, superseded diagnostic runs and successful cleanup.
+CMS temporary resources were removed; generated projects were deliberately retained
+with `--keep`. Phase 5's implementation and automated acceptance are complete.
+
 ## Next slice
 
-Phase 5: add bounded native composition under component quarantine, with shared
-specimens and profile acceptance. Manual AT observations remain a release
+Phase 6: strengthen independent token mathematics and diagnostics without
+rewriting calibrated brand values. Manual AT observations remain a release
 follow-up alongside the later planned phases.
