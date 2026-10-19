@@ -55,6 +55,21 @@ export default defineConfig({
   devToolbar: { enabled: false },
 
   vite: {
+    // Vite 8 uses Rolldown. Bound vendor groups in both environments while
+    // preserving entry ownership (in particular the gallery's lazy imports).
+    build: {
+      rolldownOptions: {
+        output: {
+          codeSplitting: {
+            groups: [
+              { name: 'react-vendor', test: /node_modules[\\/](?:react|react-dom|scheduler)[\\/]/, priority: 30, entriesAware: true, maxSize: 350_000 },
+              { name: 'photoswipe-vendor', test: /node_modules[\\/]photoswipe[\\/]/, priority: 20, entriesAware: true, maxSize: 350_000 },
+              { name: 'vendor', test: /node_modules[\\/]/, priority: 10, entriesAware: true, maxSize: 350_000 },
+            ],
+          },
+        },
+      },
+    },
     define: { 'import.meta.env.STARTER_TEST_FIXTURES': JSON.stringify(testFixtures) },
     // Resolve each dependency's Zod version before bundling EmDash server chunks.
     // Optional tooling uses Zod 3; bare external imports in dist would select it.
@@ -62,3 +77,5 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 });
+
+
