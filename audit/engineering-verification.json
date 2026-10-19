@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-19",
+  "sourceCommit": "06efcc9a2edccd282b940e601f897cd40ed26e9f",
+  "node": "24.21.0",
+  "platform": "win32",
+  "architecture": "x64",
+  "baseline": {
+    "tests": 218,
+    "passed": 218,
+    "seconds": 60.6747919
+  },
+  "final": {
+    "command": "npm run verify",
+    "exitCode": 0,
+    "tests": 227,
+    "passed": 227,
+    "failed": 0,
+    "testSeconds": 56.0918312,
+    "astro": {
+      "files": 46,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    },
+    "syntaxModules": 126
+  },
+  "unit": {
+    "tests": 100,
+    "files": 18,
+    "seconds": 4.035,
+    "targetSeconds": 8,
+    "acceptanceSeconds": 10
+  },
+  "fastCI": {
+    "node": "24.21.0",
+    "platform": "win32",
+    "seconds": 19.243,
+    "under60Seconds": true,
+    "excludes": "GitHub checkout/setup/npm ci/queue time; actual Actions execution not claimed",
+    "browserTestsRun": false,
+    "receipts": [
+      {
+        "name": "art-direction",
+        "seconds": 0.258,
+        "exitCode": 0
+      },
+      {
+        "name": "syntax-lint",
+        "seconds": 2.343,
+        "exitCode": 0
+      },
+      {
+        "name": "template-lint",
+        "seconds": 1.953,
+        "exitCode": 0
+      },
+      {
+        "name": "design-tokens",
+        "seconds": 0.085,
+        "exitCode": 0
+      },
+      {
+        "name": "schema-budget",
+        "seconds": 0.076,
+        "exitCode": 0
+      },
+      {
+        "name": "unit-tests",
+        "seconds": 4.035,
+        "exitCode": 0
+      },
+      {
+        "name": "normal-build",
+        "seconds": 10.401,
+        "exitCode": 0
+      },
+      {
+        "name": "release-profile",
+        "seconds": 0.091,
+        "exitCode": 0
+      }
+    ]
+  },
+  "restrictedPowerShell": {
+    "seconds": 16.2711394,
+    "exitCode": 0,
+    "policy": "Restricted (child process only)",
+    "command": "npm.cmd run verify:fast",
+    "unitTests": 100,
+    "unitSeconds": 4.2126162
+  },
+  "generatedProfiles": [
+    {
+      "profile": "static",
+      "independentInstall": true,
+      "cleanInstall": true,
+      "databasePackages": 0,
+      "verify": "passed",
+      "production": "passed",
+      "fixtures": "passed",
+      "http": "passed"
+    },
+    {
+      "profile": "static-sveltia",
+      "independentInstall": true,
+      "cleanInstall": true,
+      "databasePackages": 0,
+      "verify": "passed",
+      "production": "passed",
+      "fixtures": "passed",
+      "http": "passed"
+    }
+  ],
+  "pruning": {
+    "scriptFilesDeleted": [],
+    "testFilesDeleted": [],
+    "reason": "All original files retain active consumers; compatible helper boilerplate and unused imports pruned."
+  },
+  "actualUnixRunObserved": false,
+  "actualGitHubActionsRunObserved": false,
+  "browserCapturesRun": false
+}
