@@ -21,7 +21,7 @@ export default function devTools({ fixtures = false, platform = 'emdash' } = {})
         if (fixtures) injectScript('page-ssr', 'import "/src/dev/visual-fonts.css";');
       },
       'astro:config:done': ({ config }) => { artifactDir = config.outDir; },
-      'astro:routes:resolved': ({ routes }) => { resolvedRoutes = routes.map(({ route, prerender }) => ({ route, prerender })); },
+      'astro:routes:resolved': ({ routes }) => { resolvedRoutes = routes.map(({ pattern, isPrerendered }) => ({ route: pattern, prerender: isPrerendered })); },
       'astro:build:done': async () => {
         // The build:done dir may be build.client for SSR adapters, not outDir.
         await writeFile(new URL('.starter-build.json', artifactDir), JSON.stringify({ version: 1, profile: fixtures ? 'test-fixtures' : 'release', deployable: !fixtures, platformProfile: platform }) + '\n');

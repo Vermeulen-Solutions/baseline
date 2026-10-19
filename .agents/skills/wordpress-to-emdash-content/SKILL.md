@@ -165,3 +165,16 @@ Read [`references/forms.md`](references/forms.md) for the native form, Astro Act
 Before blaming import optimization for softness, compare decoded oriented pixels and native dimensions with the actual export originals; file hashes may differ only because metadata was stripped. Search for larger originals versus WordPress derivatives, measure rendered width and pixel density, and inspect the browser's selected responsive source. Preserve small originals without enlargement or repeated lossy encoding. Keep official logo artwork/colors and suitable local grounds; readable locale-specific alt text should use verified source context, never invented pictured identities/action. Apply content corrections through APIs with backups/revision checks while preserving media identities, captions and order. See docs/reusable-public-patterns.md when using this starter's image preparation.
 
 Form failures should preserve allowlisted non-secret answers in private short-lived sessions, expose reason-specific localized feedback and field links, and align native/server date formats. Put fees/documents/preparation before forms at mobile widths. Treat this separately from the agreed storage/email-provider workflow; recovery utilities alone do not deliver or store submissions.
+
+## Engineering verification loop
+
+For the EmDash foundation, preflight with `npm.cmd run doctor`, use
+`npm.cmd run verify:fast` during edits, then run `npm.cmd run verify`,
+`npm.cmd run build`, and `npm.cmd run audit:html` against that fresh build
+before handoff. On Unix use `npm` in place of `npm.cmd`. Set up the local
+Git pre-commit hook once with `npm.cmd run setup:hooks`; it runs doctor and
+verify:fast and preserves existing hook managers. It supplements the final gate
+and CI; Git hooks are local and can be bypassed. The HTML audit checks emitted
+HTML only; SSR responses need separately rendered snapshots. For generated
+static profiles, inspect the installed package scripts and use their verification
+commands; do not add CMS tooling to satisfy an unavailable command.

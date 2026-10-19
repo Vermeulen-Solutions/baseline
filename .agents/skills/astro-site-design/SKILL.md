@@ -82,3 +82,16 @@ Keep a route checklist and resolve missing sections, broken assets, accidental c
 Use current [EmDash theme-porting guidance](https://docs.emdashcms.com/themes/porting-wp-themes/) when implementing EmDash-backed routes, and consult the current Astro documentation for framework APIs.
 
 For image delivery, verify the installed Astro image service and EmDash storage endpoint before custom infrastructure. Prefer native Image/Picture/getImage, accurate sizes and native-width limits. Configure runtime host services for fresh CMS uploads; do not introduce a manual rendition manifest by default. See docs/image-delivery.md in the starter.
+
+## Engineering verification loop
+
+For the EmDash foundation, preflight with `npm.cmd run doctor`, use
+`npm.cmd run verify:fast` during edits, then run `npm.cmd run verify`,
+`npm.cmd run build`, and `npm.cmd run audit:html` against that fresh build
+before handoff. On Unix use `npm` in place of `npm.cmd`. Set up the local
+Git pre-commit hook once with `npm.cmd run setup:hooks`; it runs doctor and
+verify:fast and preserves existing hook managers. It supplements the final gate
+and CI; Git hooks are local and can be bypassed. The HTML audit checks emitted
+HTML only; SSR responses need separately rendered snapshots. For generated
+static profiles, inspect the installed package scripts and use their verification
+commands; do not add CMS tooling to satisfy an unavailable command.

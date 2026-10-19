@@ -133,3 +133,16 @@ When cutover verification is complete and production traffic is serving cleanly,
 > 1. **(Recommended) Update Site Registry:** Run `npm run site:register` with status `active` to record the live production repository.
 > 2. **Confirm Backup Schedule:** Verify automated daily Cloudflare D1/R2 or SQLite backups.
 > 3. **Archive Cutover Log:** Record the finalized deployment notes and rollback procedure in `audit/production-cutover.md`.
+
+## Engineering verification loop
+
+For the EmDash foundation, preflight with `npm.cmd run doctor`, use
+`npm.cmd run verify:fast` during edits, then run `npm.cmd run verify`,
+`npm.cmd run build`, and `npm.cmd run audit:html` against that fresh build
+before handoff. On Unix use `npm` in place of `npm.cmd`. Set up the local
+Git pre-commit hook once with `npm.cmd run setup:hooks`; it runs doctor and
+verify:fast and preserves existing hook managers. It supplements the final gate
+and CI; Git hooks are local and can be bypassed. The HTML audit checks emitted
+HTML only; SSR responses need separately rendered snapshots. For generated
+static profiles, inspect the installed package scripts and use their verification
+commands; do not add CMS tooling to satisfy an unavailable command.

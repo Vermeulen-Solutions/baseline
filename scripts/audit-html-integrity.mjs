@@ -49,7 +49,7 @@ function schemaValid(value, inherited = false) {
   return types.length > 0 && types.every(type => typeof type === 'string' && /^(?:https?:\/\/schema\.org\/)?[A-Za-z][\w]*$/.test(type));
 }
 
-const leaked = relative => relative.split('/').some(part => /^(?:_styleguide(?:[._-]|$)|_form-recovery(?:[._-]|$)|__fixtures__|fixtures?|tests?|__tests__|dev-fixtures)(?:\.|$)/i.test(part)) || /\.(?:test|spec)\.[cm]?[jt]sx?$/i.test(relative);
+const leaked = relative => relative.split('/').some(part => /^(?:_styleguide|_form-recovery)(?:[._-]|$)|^(?:__fixtures__|fixtures?|tests?|__tests__|dev-fixtures)(?:\.|$)/i.test(part)) || /\.(?:test|spec)\.[cm]?[jt]sx?$/i.test(relative);
 
 /** Offline only. SSR responses require a separately rendered HTML snapshot. */
 export function auditHTMLIntegrity(directory = 'dist') {
@@ -68,7 +68,15 @@ export function auditHTMLIntegrity(directory = 'dist') {
   };
   // Include server output in the leak check, but never treat it as public files.
   walk(root);
-  files.clear(); walk(client);
+  if (client !== root) {
+    const publicFiles = [...files].filter(file => file.startsWith('client/')).map(file => file.slice(7));
+    files.clear(); for (const file of publicFiles) files.add(file);
+  }
+  const markerFile = path.join(root, '.starter-build.json');
+  if (fs.existsSync(markerFile)) {
+    const marker = JSON.parse(fs.readFileSync(markerFile, 'utf8'));
+    if (marker.profile !== 'release' || marker.deployable !== true) fail('.starter-build.json', 'leak', 'Fixture or nondeployable artifact');
+  }
   const routeFile = path.join(root, '.starter-routes.json');
   let runtimeRoutes = 0;
   if (fs.existsSync(routeFile)) {

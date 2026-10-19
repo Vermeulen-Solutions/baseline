@@ -22,3 +22,16 @@ Vermeulen-maintained skills include new-site-workflow, site-art-direction, astro
 Preserve canonical EmDash field values and edit attributes, editor metadata, locale ownership and query cache hints where caching is enabled. An ownership annotation does not prove successful editing. Use native Astro image processing and instance-specific media identities. Keep collections within the 50-physical-column preflight budget; never infer target width from seed fields alone. Database/media writes, deployments and client modernization are separately scoped operations.
 
 Contributions are offered under the root MIT license, with third-party exceptions retained in [notices](THIRD_PARTY_NOTICES.md). Participation follows [the Code of Conduct](CODE_OF_CONDUCT.md).
+
+## Engineering verification loop
+
+For the EmDash foundation, preflight with `npm.cmd run doctor`, use
+`npm.cmd run verify:fast` during edits, then run `npm.cmd run verify`,
+`npm.cmd run build`, and `npm.cmd run audit:html` against that fresh build
+before handoff. On Unix use `npm` in place of `npm.cmd`. Set up the local
+Git pre-commit hook once with `npm.cmd run setup:hooks`; it runs doctor and
+verify:fast and preserves existing hook managers. It supplements the final gate
+and CI; Git hooks are local and can be bypassed. The HTML audit checks emitted
+HTML only; SSR responses need separately rendered snapshots. For generated
+static profiles, inspect the installed package scripts and use their verification
+commands; do not add CMS tooling to satisfy an unavailable command.

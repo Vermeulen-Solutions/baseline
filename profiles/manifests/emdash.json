@@ -93,7 +93,10 @@
     "scripts/check-emdash13.mjs",
     "scripts/process-runner.mjs",
     "src/plugins/.gitkeep",
-    "src/plugins/README.md"
+    "src/plugins/README.md",
+    "scripts/audit-html-integrity.mjs",
+    "tests/html-integrity.test.mjs",
+    "scripts/setup-hooks.mjs"
   ],
   "scripts": [
     "doctor",
@@ -137,7 +140,9 @@
     "update:all",
     "site:register",
     "mcp:token",
-    "check:emdash13"
+    "check:emdash13",
+    "audit:html",
+    "setup:hooks"
   ],
   "checks": [
     "check:schema-budget"

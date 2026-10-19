@@ -18,7 +18,7 @@ Before scaffolding, inspect the target workspace and installed Node/package-mana
 - Closest current EmDash template and whether GitHub source control/deployment is wanted. When requested, default the site repo to private; a GitHub repo is useful but not required for manual Wrangler deployment.
 - Whether the user wants a local preview only or authorizes provisioning/deploying Cloudflare resources.
 
-When starting from the Vermeulen Solutions EmDash site-starter template, first run `npm run sync:emdash-skills` and review the diff so the mirrored EmDash-authored guidance is current. The sync touches only the EmDash skill mirrors; keep project-specific and Vermeulen Solutions skills intact. If the project was scaffolded directly with the EmDash CLI, check its generated `.agents/skills` against the current upstream EmDash `skills/` before relying on them.
+When starting from this starter, use the checked-in EmDash skills. Run `sync:emdash-skills -- --check` only for an explicitly requested upstream refresh or an older checkout; review staged differences before applying. Keep project-specific guidance intact.
 
 Keep hosting and plugin sandboxing as separate decisions:
 
@@ -122,3 +122,16 @@ When scaffolding and platform configuration are complete:
 > **Recommended Next Step:**
 > - Return to `new-site-workflow` and proceed to **Stage 3: Content Structure & Admin Setup**.
 >   *Shall we begin setting up the editing forms and collections in your EmDash admin?*
+
+## Engineering verification loop
+
+For the EmDash foundation, preflight with `npm.cmd run doctor`, use
+`npm.cmd run verify:fast` during edits, then run `npm.cmd run verify`,
+`npm.cmd run build`, and `npm.cmd run audit:html` against that fresh build
+before handoff. On Unix use `npm` in place of `npm.cmd`. Set up the local
+Git pre-commit hook once with `npm.cmd run setup:hooks`; it runs doctor and
+verify:fast and preserves existing hook managers. It supplements the final gate
+and CI; Git hooks are local and can be bypassed. The HTML audit checks emitted
+HTML only; SSR responses need separately rendered snapshots. For generated
+static profiles, inspect the installed package scripts and use their verification
+commands; do not add CMS tooling to satisfy an unavailable command.

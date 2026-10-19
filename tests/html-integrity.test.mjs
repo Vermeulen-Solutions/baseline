@@ -4,8 +4,9 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { auditHTMLIntegrity } from '../scripts/audit-html-integrity.mjs';
+import devTools from '../scripts/dev-tools-integration.mjs';
 
 function fixture(files, check) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'html-integrity-'));
@@ -60,12 +61,13 @@ test('HTML auditor validates JSON-LD syntax/context/types and canonical/OpenGrap
 }));
 
 test('HTML auditor rejects fixture/test output and runtime fixture routes without executing server code', () => fixture({
-  'client/index.html': '', 'client/_styleguide/index.html': '', 'server/example.test.mjs': '',
+  'client/index.html': '', 'client/_styleguide/index.html': '', 'server/example.test.mjs': '', 'server/chunks/_styleguide_hash.mjs': '',
   '.starter-routes.json': JSON.stringify([{ route: '/_form-recovery', prerender: false }]),
 }, root => {
   const report = auditHTMLIntegrity(root);
   assert.equal(report.valid, false); assert.equal(report.runtimeRoutes, 1);
   assert.ok(report.errors.some(e => e.file === 'server/example.test.mjs'));
+  assert.ok(report.errors.some(e => e.file === 'server/chunks/_styleguide_hash.mjs'));
   assert.ok(report.errors.some(e => e.file === '/_form-recovery'));
 }));
 
@@ -79,3 +81,25 @@ test('HTML audit CLI fails on missing build/broken HTML and states empty SSR cov
   assert.equal(run(root).status, 1);
   assert.equal(run(path.join(root, 'missing')).status, 1);
 }));
+
+test('Astro resolved route metadata reaches the offline runtime leak guard', async () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'html-routes-'));
+  try {
+    const { hooks } = devTools();
+    hooks['astro:config:done']({ config: { outDir: pathToFileURL(root + path.sep) } });
+    hooks['astro:routes:resolved']({ routes: [{ pattern: '/_styleguide', isPrerendered: false }] });
+    await hooks['astro:build:done']();
+    const report = auditHTMLIntegrity(root);
+    assert.equal(report.valid, false); assert.equal(report.runtimeRoutes, 1);
+    assert.ok(report.errors.some(error => error.file === '/_styleguide'));
+  } finally { fs.rmSync(root, { recursive: true, force: true }); }
+});
+
+test('HTML auditor stays below one second on a 250-page generated site', () => fixture(
+  Object.fromEntries(Array.from({ length: 250 }, (_, index) => [`page${index}.html`, `<h1 id=top>Page</h1><a href="page${(index + 1) % 250}.html#top">Next</a><img width=32 height=24 alt=Photo>`])),
+  root => {
+    const report = auditHTMLIntegrity(root);
+    assert.deepEqual(report.errors, []); assert.equal(report.htmlFiles, 250);
+    assert.ok(report.durationMs < 1000, `Audit took ${report.durationMs}ms`);
+  },
+));
