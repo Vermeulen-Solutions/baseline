@@ -29,8 +29,10 @@ if (optimize === true && nativeWidth && nativeHeight && image.widths.length) {
   <img class={className} style={image.nativeWidth ? `--image-native-width: ${image.nativeWidth}px` : undefined} src={optimized?.src || original} data-original-src={original} srcset={optimized?.srcSet.attribute} sizes={optimized ? sizes : undefined} alt={alt} width={image.width} height={image.height} loading={loading} fetchpriority={fetchpriority} decoding="async" /> :
   <span class:list={['image-fallback', className]} style={`aspect-ratio: ${image.aspectRatio}`}><img src={original} data-original-src={original} alt={alt} loading={loading} fetchpriority={fetchpriority} decoding="async" /></span>}
 <style>
+@layer components {
   .image-fallback { display: block; position: relative; inline-size: 100%; overflow: hidden; }
   .image-fallback > img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; }
+}
 </style>
 <script>
   // Recover from an unavailable image service (including transformation limits).

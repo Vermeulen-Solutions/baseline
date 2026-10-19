@@ -82,6 +82,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
   </body>
 </html>
 <style>
+@layer components {
   .stress { overflow-wrap: anywhere; }
   .swatches { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); gap:var(--spacing-content); padding:0; list-style:none; }
   .swatch { display:block; block-size:4rem; border:1px solid var(--color-border); margin-block-end:.5rem; }
@@ -92,4 +93,5 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
   .specimen-fields input:not([type=checkbox],[type=radio]), .specimen-fields textarea, .specimen-fields select { min-inline-size:0; inline-size:100%; padding:.5rem; border:1px solid var(--color-border); border-radius:var(--radius-control); color:var(--color-text); background:var(--color-surface); }
   .specimen-fields .choice { display:flex; align-items:center; min-block-size:2.75rem; }
   .breakout-specimen { padding:var(--spacing-content); border:1px dashed var(--color-border); border-radius:var(--radius-control); background:var(--color-surface); }
+}
 </style>

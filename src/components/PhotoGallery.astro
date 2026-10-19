@@ -146,6 +146,7 @@ const jsonLd = galleryJsonLd(photos, {
 </script>
 
 <style>
+@layer components {
   .photo-gallery {
     container-type: inline-size;
     gap: var(--spacing-grid, 1.5rem);
@@ -259,4 +260,5 @@ const jsonLd = galleryJsonLd(photos, {
   :global(.pswp__caption:empty) {
     display: none;
   }
+}
 </style>

@@ -28,6 +28,7 @@ const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId
   document.addEventListener('astro:page-load', syncDisclosures);
 </script>
 <style>
+@layer components {
   .disclosure {
     min-inline-size: 0;
     border: 1px solid var(--color-border);
@@ -43,4 +44,5 @@ const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId
     cursor: pointer;
   }
   .disclosure__body { padding: 0 var(--spacing-content) var(--spacing-content); }
+}
 </style>

@@ -106,12 +106,12 @@
   {
     "path": "src/components/ResponsiveImage.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "92dfc087960de259e7ed885da13d0b475893c790602efae7149e3370575aa5b7"
+    "sha256": "101985b5eaee063ac784fe42c7ca54ce7fe00e1a83ecb6680f189c24981f8ae2"
   },
   {
     "path": "src/components/EditorialImage.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "a241db47d94d83c1b5282c2a825375c3ec944e29c18a71772bd236c3ebfc1fa3"
+    "sha256": "22b35eb0b5e551ffd15647cf0cefab8b8117d53a520bd9f32d9f30e23ca0a386"
   },
   {
     "path": "src/components/RichText.astro",
@@ -121,17 +121,17 @@
   {
     "path": "src/components/Card.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "69460999cc01008ddbc733e3082202a5f207c9d8ebf42431874c998e36f0e00d"
+    "sha256": "7df1ffd251e645913794e96387cad7a195a068fba74a1b0bc2fc98069cb8097c"
   },
   {
     "path": "src/components/PartnersPanel.astro",
     "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Use a standalone presentation-data type rather than importing the collection mapper; retain panel markup and styles. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "31030c421b78250b55328e976e3058336bd0a6183d6441770f86555e55b9d122"
+    "sha256": "0b467e023f31e837688286c9d9e27a04fdda0ec1e5a8050f0cdc42a7bb994820"
   },
   {
     "path": "src/components/FormError.astro",
     "reason": "Starter lint infrastructure: justify only the optional native server-error summary autofocus line; default-off focus behavior and existing token styles remain unchanged. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "73505ef0ec67de808a63f7e68df2b061c064699feab4493673d89a7f6862f7b5"
+    "sha256": "407772c13a501484faa8669347fac76ee81af1da9351abe5a9a7a1f631702f4e"
   },
   {
     "path": "src/lib/partners.ts",
@@ -182,7 +182,7 @@
   {
     "path": "src/components/dev/Styleguide.astro",
     "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "93d44e9f1280958b0568a308ee8bd1d10125f73a1fb5dccf0b2c543a32ed0d34"
+    "sha256": "cb80bea6ac9068a5be293341a46ee92c35e1f1a56281ebe8f4ae75964a0a4403"
   },
   {
     "path": "src/utils/grid-guide.ts",
@@ -193,7 +193,7 @@
   {
     "path": "src/components/LogoTicker.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "cc0e6e1e5303e09bc473b1a9e2614f3e6cfbea92d4fe0d184df450a7d4d76419"
+    "sha256": "b56f699cc6afc020b814f66a84a92dd459b1a79778ec78bc72c3ca5dd730bdb2"
   },
   {
     "path": "src/env.d.ts",
@@ -218,7 +218,7 @@
   {
     "path": "src/components/PhotoGallery.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "0647c598f4ae4baa28e7b5dbfaaa16a8087051bd1b01ee5b0b32fcd491129ad4"
+    "sha256": "a45f47e22a02c368abb3a8c31bb4b5b60300d6b4c668e1e7d70efac6cfb3d4af"
   },
   {
     "path": "src/utils/reference-overlay.ts",
@@ -387,22 +387,22 @@
   {
     "path": "src/components/Disclosure.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "c1f8b48d0c3180842afbbc6bad649a079624bff7a90e66cb7c17b0ba239b05a7"
+    "sha256": "f25c8f6bf8d8e6c362d88e1aea68bb66ef006effdc2ae71cd35de4cd8d4c1a0f"
   },
   {
     "path": "src/components/Cluster.astro",
     "reason": "Reusable neutral starter infrastructure: open-slot wrapping sibling alignment using the existing content gap; native attributes and DOM order retained, no client styling. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "8611212d948ac162b1128ae094224e697af683c8b9218ef68aa84b8ff75f1852"
+    "sha256": "df613f5b1bbeb8c4015ccfa757471db77413e795ee8f916a11a92be66a52e690"
   },
   {
     "path": "src/components/Sidebar.astro",
     "reason": "Reusable neutral starter infrastructure: open-slot main-first unequal intrinsic regions using the existing reading measure and grid gap, narrow-host wrapping and optional-support fallback; no client template. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "33cd31b7dd5fbde00a2fc670396868a711fa88c625f012b5566d32316f05aa31"
+    "sha256": "db706fa26acf6712520b51cf721bf9c35b696256adb562e91cbf94d058020eeb"
   },
   {
     "path": "src/components/dev/CompositionSpecimens.astro",
     "reason": "Synthetic shared calibration infrastructure for production Disclosure/Cluster/Sidebar: long labels, surfaces, grouping, native fragments, narrow/RTL/editorial wrapper/missing-support states; protected styleguide only. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "652f38711e2cf12d449b059849c7b6703c2a6b0728f812ca860b11bdffc98376"
+    "sha256": "953b39b99f3b7b03287e26ba38bc77c63034649fc4d4b28e0ceec2186bfa63dc"
   },
   {
     "path": "src/dev/disclosure-prose.md",

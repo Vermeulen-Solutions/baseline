@@ -42,6 +42,7 @@ const hasDescription = Boolean(description || Astro.slots.has('default') || Obje
   </div>
 </article>
 <style>
+@layer components {
 .card {
   --card-bg: var(--color-surface);
   --card-text: var(--color-text);
@@ -89,4 +90,5 @@ const hasDescription = Boolean(description || Astro.slots.has('default') || Obje
 .card--horizontal { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
 @container (max-width: 32rem) { .card--horizontal { display: flex; } }
 @media (max-width: 40rem) { .card--horizontal { display: flex; } }
+}
 </style>

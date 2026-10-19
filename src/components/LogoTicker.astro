@@ -28,6 +28,7 @@ const logos = await Astro.slots.render('default');
   </div>
 </div>}
 <style>
+@layer components {
   .logo-ticker { --logo-ticker-gap: var(--spacing-grid); min-inline-size: 0; }
   .logo-ticker__toggle { inline-size: 1.25rem; block-size: 1.25rem; vertical-align: middle; accent-color: var(--color-action); }
   .logo-ticker__control { display: inline-flex; align-items: center; min-block-size: 2.75rem; padding-inline: .5rem; cursor: pointer; }
@@ -44,6 +45,7 @@ const logos = await Astro.slots.render('default');
   @media (prefers-reduced-motion: reduce), print {
     .logo-ticker__toggle, .logo-ticker__control { display: none; }
   }
-  @keyframes logo-ticker-scroll { to { transform: translateX(-100%); } }
-  @keyframes logo-ticker-scroll-rtl { to { transform: translateX(100%); } }
+}
+@keyframes logo-ticker-scroll { to { transform: translateX(-100%); } }
+@keyframes logo-ticker-scroll-rtl { to { transform: translateX(100%); } }
 </style>

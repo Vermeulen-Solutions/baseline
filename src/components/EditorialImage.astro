@@ -26,6 +26,7 @@ const breakoutClass = node?.alignment === 'wide' ? 'content--feature' : node?.al
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
 <style>
+@layer components {
   .editorial-image { width: min(100%, var(--image-limit, 100%)); margin-block: var(--spacing-content); }
   .editorial-image :global(img) { width: 100%; height: auto; }
   .editorial-image__fallback { position: relative; width: 100%; }
@@ -38,4 +39,5 @@ const breakoutClass = node?.alignment === 'wide' ? 'content--feature' : node?.al
   .emdash-image--align-left { float: left; margin-right: var(--spacing-content); }
   .emdash-image--align-right { float: right; margin-left: var(--spacing-content); }
   @media (max-width: 40rem) { .emdash-image--align-left, .emdash-image--align-right { float: none; max-width: 100%; margin-inline: 0; } }
+}
 </style>

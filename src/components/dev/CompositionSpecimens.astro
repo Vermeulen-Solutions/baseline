@@ -53,5 +53,7 @@ import { smallImage } from '../../dev/styleguide-fixtures';
   <Sidebar id="specimen-sidebar-single"><div class="flow"><p>A missing optional supporting region leaves the main region at full width.</p></div></Sidebar>
 </div></Section>
 <style>
+@layer components {
   .composition-narrow { max-inline-size: calc(var(--measure-reading) / 2); }
+}
 </style>
