@@ -20,6 +20,10 @@
   "defaultAction": "omit",
   "note": "Source classification, not an executable copy-all instruction. Only resolved manifest.files may be copied. Profile tests, visual baselines, docs, skills and local state are not implicitly shipped.",
   "files": {
+    "scripts/doctor.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     ".env.example": {
       "disposition": "replace-for-static",
       "static": "omit-until-explicitly-allowlisted"

@@ -68,6 +68,8 @@ Baseline is designed ground-up for an **agent-first workflow** pairing with **Cl
 
 On Windows PowerShell, use `npm.cmd` wherever these instructions show `npm` (for example, `npm.cmd run verify:fast`), and `npx.cmd` for `npx`. These launchers work with the default execution policy without loading `npm.ps1`. Nested repository tooling invokes npm's JavaScript CLI with the current Node executable and preserves argument boundaries on Windows and Unix; no execution-policy change is needed.
 
+Run `npm run doctor` before installing dependencies to check this EmDash foundation's Node engine, built-in SQLite, shell guidance, required files, `.emdash/` write access and Git status. It uses Node built-ins only, creates and removes a unique write probe, and bounds the Git subprocess to 200ms to target a preflight under 500ms. Warnings exit 0; critical failures exit 1. Use `npm run doctor -- --json` for structured output (`npm --silent run doctor -- --json` for JSON-only stdout), or `node scripts/doctor.mjs --json` if npm cannot start. `NO_COLOR` disables terminal colors. On Windows the outer `.cmd`/`.ps1` launcher may be unobservable; the doctor reports that uncertainty with the safe PowerShell command.
+
 ### 🚀 Starting a New Site (Agent-First Workflow)
 
 1. **Create your repository** from this **GitHub Template**:
@@ -228,6 +230,7 @@ See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field pro
 
 | Command | Use it for |
 | --- | --- |
+| `npm run doctor` | Dependency-free Node/SQLite, shell and workspace preflight (`-- --json` for automation) |
 | `npm run dev` | Develop the site and open `/_styleguide` |
 | `npm run verify` | Run all fast local checks in one command (`lint`, `check:art-direction`, `design:tokens`, `test`, `typecheck`) |
 | `npm run design:tokens` | Audit tokens, WCAG contrast, font loading & edit proxies (or pass `--init-client --lane <lane>` to initialize a client site) |

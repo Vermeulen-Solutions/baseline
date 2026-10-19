@@ -16,6 +16,7 @@
     "seed": "seed/seed.json"
   },
   "scripts": {
+    "doctor": "node scripts/doctor.mjs",
     "dev": "astro dev",
     "preview": "astro preview",
     "start": "node ./dist/server/entry.mjs",

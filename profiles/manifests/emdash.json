@@ -45,6 +45,7 @@
     "scripts/d1-snapshot.mjs",
     "scripts/db-diff.mjs",
     "scripts/db-export-seed.mjs",
+    "scripts/doctor.mjs",
     "scripts/infrastructure-io.mjs",
     "scripts/media-files.mjs",
     "scripts/media-ingest.mjs",
@@ -93,6 +94,7 @@
     "scripts/process-runner.mjs"
   ],
   "scripts": [
+    "doctor",
     "start",
     "start:local",
     "prestart",

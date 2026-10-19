@@ -9,6 +9,7 @@ import { exportD1Database } from '../scripts/d1-export.mjs';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
+import { diagnose, shellCheck, supportsNode } from '../scripts/doctor.mjs';
 
 test('test tiers are a disjoint exhaustive partition and stale inventories fail closed', () => {
   const unit = testFiles('unit'), rehearsal = testFiles('rehearsal');
@@ -25,6 +26,77 @@ test('test tiers are a disjoint exhaustive partition and stale inventories fail 
 
 const scriptPath = name => fileURLToPath(new URL(`../scripts/${name}`, import.meta.url));
 const runGate = (name, args = [], options = {}) => spawnSync(process.execPath, [scriptPath(name), ...args], { encoding: 'utf8', ...options });
+
+test('doctor evaluates the declared Node alternatives without semver dependencies', () => {
+  const range = JSON.parse(readFileSync('package.json', 'utf8')).engines.node;
+  for (const version of ['22.22.3', '22.23.0', '24.16.0', '24.21.0', '26.3.0', '27.0.0']) assert.equal(supportsNode(version, range), true, version);
+  for (const version of ['20.20.0', '22.22.2', '23.99.0', '24.15.9', '25.0.0', '26.2.9', '26.3.0-rc.1']) assert.equal(supportsNode(version, range), false, version);
+  assert.equal(supportsNode('24.21.0', '>=24'), null);
+  assert.equal(supportsNode('24.21.0', undefined), null);
+  assert.equal(supportsNode('0.2.9', '^0.2.3'), true);
+  assert.equal(supportsNode('0.3.0', '^0.2.3'), false);
+  assert.equal(supportsNode('0.0.4', '^0.0.3'), false);
+});
+
+test('doctor distinguishes known Windows launchers from unobservable outer launchers', () => {
+  assert.equal(shellCheck('linux', {}).status, 'pass');
+  assert.equal(shellCheck('win32', { npm_execpath: 'C:\\npm.cmd' }).status, 'pass');
+  assert.match(shellCheck('win32', { npm_execpath: 'C:\\npm.ps1' }).message, /execution policy/);
+  assert.equal(shellCheck('win32', { npm_config_script_shell: 'pwsh.exe' }).status, 'warn');
+  const unknown = shellCheck('win32', { npm_execpath: 'C:\\npm-cli.js', ComSpec: 'C:\\cmd.exe' });
+  assert.equal(unknown.status, 'warn');
+  assert.match(unknown.message, /not observable/);
+});
+
+test('doctor probes SQLite and workspace without residue, bounds Git and reports critical failures', async () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'baseline-doctor-'));
+  try {
+    writeFileSync(path.join(directory, 'package.json'), JSON.stringify({ engines: { node: '^24.16.0' } }));
+    writeFileSync(path.join(directory, 'astro.config.mjs'), '');
+    const options = { cwd: directory, version: '24.21.0', platform: 'linux', gitStatus: (command, args, options) => {
+      assert.equal(command, 'git'); assert.ok(args.includes('--no-optional-locks'));
+      assert.ok(options.timeout > 0 && options.timeout <= 200);
+      assert.equal(options.windowsHide, true); assert.equal(options.shell, undefined);
+      return { status: 0, stdout: '' };
+    } };
+    const report = await diagnose(options);
+    assert.equal(report.status, 'pass');
+    assert.ok(report.checks.every(check => check.status === 'pass'));
+    assert.deepEqual(readdirSync(path.join(directory, '.emdash')), []);
+    const dirty = await diagnose({ ...options, gitStatus: () => ({ status: 0, stdout: ' M example.txt\n' }) });
+    assert.equal(dirty.status, 'warn'); assert.match(dirty.checks.find(check => check.id === 'git').message, /dirty/);
+    const missingGit = await diagnose({ ...options, gitStatus: () => ({ status: null, error: { code: 'ENOENT' } }) });
+    assert.equal(missingGit.status, 'warn');
+    const failed = await diagnose({ ...options, version: '25.0.0', loadSQLite: () => { throw Error('Unavailable SQLite'); } });
+    assert.equal(failed.status, 'fail');
+    assert.equal(failed.checks.filter(check => check.status === 'fail').length, 2);
+    const probeDirectory = path.join(directory, '.emdash');
+    assert.equal(path.dirname(path.resolve(probeDirectory)), directory);
+    rmSync(probeDirectory, { recursive: true }); writeFileSync(probeDirectory, 'blocked');
+    assert.equal((await diagnose(options)).checks.find(check => check.id === 'workspace').status, 'fail');
+  } finally { assert.equal(path.dirname(directory), path.resolve(os.tmpdir())); rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('doctor CLI emits parseable JSON, honors NO_COLOR and uses exit 0 for warnings and 1 for failures', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'baseline-doctor-cli-'));
+  try {
+    const invalid = runGate('doctor.mjs', ['--json', '--unknown'], { cwd: directory });
+    assert.equal(invalid.status, 1); assert.equal(JSON.parse(invalid.stdout).checks[0].id, 'arguments');
+    assert.deepEqual(readdirSync(directory), []);
+    const missing = runGate('doctor.mjs', ['--json'], { cwd: directory });
+    assert.equal(missing.status, 1); assert.equal(JSON.parse(missing.stdout).status, 'fail');
+    writeFileSync(path.join(directory, 'package.json'), JSON.stringify({ engines: { node: JSON.parse(readFileSync('package.json', 'utf8')).engines.node } }));
+    writeFileSync(path.join(directory, 'astro.config.mjs'), '');
+    const json = runGate('doctor.mjs', ['--json'], { cwd: directory });
+    assert.equal(json.status, 0, json.stdout + json.stderr);
+    const report = JSON.parse(json.stdout);
+    assert.equal(report.schemaVersion, 1); assert.ok(Number.isFinite(report.durationMs));
+    assert.ok(report.checks.some(check => check.id === 'sqlite' && check.status === 'pass'));
+    const plain = runGate('doctor.mjs', [], { cwd: directory, env: { ...process.env, NO_COLOR: '' } });
+    assert.equal(plain.status, 0); assert.match(plain.stdout, /\[PASS\] sqlite/); assert.doesNotMatch(plain.stdout, /\x1b\[/);
+    assert.deepEqual(readdirSync(path.join(directory, '.emdash')), []);
+  } finally { assert.equal(path.dirname(directory), path.resolve(os.tmpdir())); rmSync(directory, { recursive: true, force: true }); }
+});
 
 test('schema gate reports physical overflow names/counts and closes a read-only failing database', () => {
   const directory = mkdtempSync(path.join(os.tmpdir(), 'baseline-schema-diagnostics-'));
