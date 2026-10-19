@@ -35,18 +35,18 @@
   },
   {
     "path": "src/components/Container.astro",
-    "reason": "Issue #2 neutral starter Container breakout (.content-grid) opt-in prop; default .container-shell preserved. Client adaptation or any source edit invalidates this exception.",
-    "sha256": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "e72ef8195e9c1768f6f66daed91173091eb3974d9305a78a76eb485598f8401a"
   },
   {
     "path": "src/components/Grid.astro",
-    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
-    "sha256": "61480da4ff50aae485a982136fe77d8c881d9fceb8e1bc4980ffcd4cf2131f5e"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "84b128c9743292df6d4629c07213b784b6e109213ea9de7a0e975dfcaf163324"
   },
   {
     "path": "src/components/Section.astro",
-    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
-    "sha256": "5f370d7cf6bb3b08b4e666f4f802458d4a94e1556a8c0531f367383711087ef3"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "ca1fdad4a6098d7a5a807c8ea9c954fb563c473d96581f5440c042461b3fc36b"
   },
   {
     "path": "src/live.config.ts",
@@ -95,8 +95,8 @@
   },
   {
     "path": "src/lib/photo-gallery.ts",
-    "reason": "Reusable neutral gallery infrastructure proven in legacy-migration; no client page, imagery, or invented brand direction. Any edit invalidates this exact exception.",
-    "sha256": "244558ab9cfd1b4372840aa6a132bab4bb5d977102a21cff9726893f84fab31e"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "4f26f41d4392bf36fa85a8f0a789f1408f055c376236c50b570347561a59c233"
   },
   {
     "path": "src/lib/justified-gallery.ts",
@@ -105,13 +105,13 @@
   },
   {
     "path": "src/components/ResponsiveImage.astro",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Separate native Astro image presentation from storage resolution; preserve bounded candidates, small-image passthrough and original-source recovery. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "cbdd316ec092276fff54f3933a32e55b32dc6fa13d736d9bcc2d8ccbd2833369"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "92dfc087960de259e7ed885da13d0b475893c790602efae7149e3370575aa5b7"
   },
   {
     "path": "src/components/EditorialImage.astro",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Route existing editorial image presentation through the extracted EmDash storage adapter; retain figure styling and captions. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "edd2db4e778436f6e45578088cffe0edb4777b4351a37b456c24102bdc34fec5"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "a241db47d94d83c1b5282c2a825375c3ec944e29c18a71772bd236c3ebfc1fa3"
   },
   {
     "path": "src/components/RichText.astro",
@@ -120,8 +120,8 @@
   },
   {
     "path": "src/components/Card.astro",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Replace EmDash FieldAnnotation imports with Astro attribute bags and native image inputs while retaining annotation forwarding and existing card styles. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "d03714812d5bcee0d9d90ed7b6bf456ae2307ceca9681eb1fd0b37129e8562f1"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "69460999cc01008ddbc733e3082202a5f207c9d8ebf42431874c998e36f0e00d"
   },
   {
     "path": "src/components/PartnersPanel.astro",
@@ -192,8 +192,8 @@
   },
   {
     "path": "src/components/LogoTicker.astro",
-    "sha256": "46f3f9f86d77b27825fda456ffcd67c3799e795516224e00ce8f3185154661ca",
-    "reason": "Starter lint infrastructure: justify explicit list roles after CSS list-style removal, preserving existing original/decorative-inert list behavior and styling. Any edit invalidates this exact LF-normalized exception."
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "cc0e6e1e5303e09bc473b1a9e2614f3e6cfbea92d4fe0d184df450a7d4d76419"
   },
   {
     "path": "src/env.d.ts",
@@ -217,8 +217,8 @@
   },
   {
     "path": "src/components/PhotoGallery.astro",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Route existing gallery image presentation through the extracted EmDash storage adapter; retain gallery markup, styles and lightbox behavior. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "f5a196f6df1bb2261570fff6aa0f21f78e718001dd7b50b472d1912bed3ae7ba"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "0647c598f4ae4baa28e7b5dbfaaa16a8087051bd1b01ee5b0b32fcd491129ad4"
   },
   {
     "path": "src/utils/reference-overlay.ts",
@@ -251,8 +251,8 @@
   },
   {
     "path": "src/components/EmDashImage.astro",
-    "reason": "Starter lint infrastructure: explicitly forward the existing required alt value to ResponsiveImage so the known native-image mapping can analyze it; no CMS storage or image presentation change. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "b727b0aab8a6f72476d49b0370c0a7e31b3f616f7e00c5262281c821c8316923"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "3fdec5234b2aa471afcb2919f90fa6eaa27c247ba0162de804973df76675b6df"
   },
   {
     "path": "src/lib/partner.ts",
@@ -261,8 +261,8 @@
   },
   {
     "path": "src/lib/responsive-image.ts",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Pure native image presentation inputs and bounded candidate calculation with no CMS or storage access. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "b3a8c20ea4bd4400b4db0e25f232e66f127d2394e780078dd043458af812108e"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "bb5e2433efb607ae64755bd9df4c7878788e54196149a9d1ddf9250f4ef1bd30"
   },
   {
     "path": "src/components/dev/EmDashStyleguide.astro",
@@ -386,8 +386,8 @@
   },
   {
     "path": "src/components/Disclosure.astro",
-    "reason": "Reusable neutral starter infrastructure: native details/summary with open summary/body slots, normal HTML attributes and existing surface/focus/spacing tokens; no client theme or content ownership. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "894cf4ec782b05cf7276c0942de19bdb6f62d054cd6fab8aaeffa9a809d567df"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "c1f8b48d0c3180842afbbc6bad649a079624bff7a90e66cb7c17b0ba239b05a7"
   },
   {
     "path": "src/components/Cluster.astro",

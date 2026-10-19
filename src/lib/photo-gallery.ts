@@ -5,7 +5,8 @@ const dimension = (v: unknown) => typeof v === 'number' && Number.isFinite(v) &&
 export function photo(value: unknown, key = ''): Photo | null {
   const n = record(value), a = record(n.asset || value), meta = record(a.meta);
   const id = text(a._ref || a.id);
-  const url = text(a.url || a.src) || (meta.storageKey ? `/_emdash/api/media/file/${encodeURIComponent(meta.storageKey)}` : '');
+  const storageKey = text(meta.storageKey);
+  const url = text(a.url || a.src) || (storageKey ? `/_emdash/api/media/file/${encodeURIComponent(storageKey)}` : '');
   if (!id && !url) return null;
   return { _type: 'image', _key: text(n._key) || key, asset: { _type: 'reference', _ref: id, url: url || undefined, provider: text(a.provider) || 'local' }, alt: text(n.alt ?? a.alt), caption: text(n.caption), width: dimension(n.width ?? a.width), height: dimension(n.height ?? a.height) };
 }

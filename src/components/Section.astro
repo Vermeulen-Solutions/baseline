@@ -5,7 +5,9 @@ interface Props {
 	class?: string;
 }
 
-const { labelledBy, spacing = "section", class: className } = Astro.props;
+const { labelledBy: rawLabel, spacing: rawSpacing, class: className } = Astro.props;
+const labelledBy = typeof rawLabel === 'string' && rawLabel.trim() ? rawLabel.trim() : undefined;
+const spacing = rawSpacing === 'content' ? 'content' : 'section';
 ---
 
 <section aria-labelledby={labelledBy} class:list={["section", `section--${spacing}`, className]}>

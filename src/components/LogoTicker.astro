@@ -1,4 +1,5 @@
 ---
+import { randomUUID } from 'node:crypto';
 interface Props {
   /** Unique page-local ID for the native motion control. */
   id: string;
@@ -6,13 +7,16 @@ interface Props {
   toggleLabel?: string;
   animate?: boolean;
 }
-const { id, label, toggleLabel = 'Animate logos', animate = false } = Astro.props;
+const { id: rawId, label: rawLabel, toggleLabel: rawToggleLabel, animate } = Astro.props;
+const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId : `logos-${randomUUID()}`;
+const label = typeof rawLabel === 'string' && rawLabel.trim() ? rawLabel : 'Logos';
+const toggleLabel = typeof rawToggleLabel === 'string' && rawToggleLabel.trim() ? rawToggleLabel : 'Animate logos';
 // Only trusted Astro-authored, noninteractive, ID-free <li> content. Not an HTML sanitizer.
 // No scripts/islands, raw CMS HTML, links, form controls, SVG IDs or edit proxies.
 const logos = await Astro.slots.render('default');
 ---
 {logos?.trim() && <div class="logo-ticker" role="region" aria-label={label} data-logo-ticker>
-  <input class="logo-ticker__toggle" id={`${id}-motion`} type="checkbox" checked={animate} />
+  <input class="logo-ticker__toggle" id={`${id}-motion`} type="checkbox" checked={animate === true} />
   <label class="logo-ticker__control" for={`${id}-motion`}>{toggleLabel}</label>
   <div class="logo-ticker__viewport">
     <div class="logo-ticker__track">

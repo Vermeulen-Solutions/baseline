@@ -5,7 +5,9 @@ interface Props {
 	class?: string;
 }
 
-const { width = "content", breakout = false, class: className } = Astro.props;
+const { width: rawWidth, breakout: rawBreakout, class: className } = Astro.props;
+const width = rawWidth === 'reading' || rawWidth === 'wide' ? rawWidth : 'content';
+const breakout = rawBreakout === true;
 ---
 
 <div

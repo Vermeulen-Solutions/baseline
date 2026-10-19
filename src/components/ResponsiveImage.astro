@@ -1,13 +1,18 @@
 ---
 import { getImage } from 'astro:assets';
 import { responsiveImageInput, type ResponsiveImageProps } from '../lib/responsive-image';
-type Props = ResponsiveImageProps;
-const { src, alt, sizes = '(max-width: 60rem) calc(100vw - 4rem), 800px', loading = 'lazy', fetchpriority, class: className, width, height, optimize = true, originalSrc } = Astro.props;
+interface Props extends ResponsiveImageProps {}
+const { src, alt: rawAlt, sizes: rawSizes, loading: rawLoading, fetchpriority: rawPriority, class: rawClass, width, height, optimize = true, originalSrc } = Astro.props;
+const className = typeof rawClass === 'string' ? rawClass : undefined;
+const alt = typeof rawAlt === 'string' ? rawAlt : '';
+const sizes = typeof rawSizes === 'string' && rawSizes.trim() ? rawSizes : '(max-width: 60rem) calc(100vw - 4rem), 800px';
+const loading = rawLoading === 'eager' ? 'eager' : 'lazy';
+const fetchpriority = rawPriority === 'high' || rawPriority === 'low' ? rawPriority : 'auto';
 const image = responsiveImageInput(src, width, height);
-const original = originalSrc ?? image.original;
+const original = responsiveImageInput(originalSrc).original || image.original;
 const { nativeWidth, nativeHeight } = image;
 let optimized;
-if (optimize && nativeWidth && nativeHeight && image.widths.length) {
+if (optimize === true && nativeWidth && nativeHeight && image.widths.length) {
   try {
     optimized = await getImage({
       src: image.src,
@@ -20,7 +25,13 @@ if (optimize && nativeWidth && nativeHeight && image.widths.length) {
   } catch { /* Keep the original when its source cannot be processed. */ }
 }
 ---
-<img class={className} style={image.nativeWidth ? `--image-native-width: ${image.nativeWidth}px` : undefined} src={optimized?.src || original} data-original-src={original} srcset={optimized?.srcSet.attribute} sizes={optimized ? sizes : undefined} alt={alt} width={image.width} height={image.height} loading={loading} fetchpriority={fetchpriority} decoding="async" />
+{!original ? <span class:list={['image-fallback', className]} style={`aspect-ratio: ${image.aspectRatio}`} role={alt ? 'img' : undefined} aria-label={alt || undefined} aria-hidden={alt ? undefined : true} /> : image.width && image.height ?
+  <img class={className} style={image.nativeWidth ? `--image-native-width: ${image.nativeWidth}px` : undefined} src={optimized?.src || original} data-original-src={original} srcset={optimized?.srcSet.attribute} sizes={optimized ? sizes : undefined} alt={alt} width={image.width} height={image.height} loading={loading} fetchpriority={fetchpriority} decoding="async" /> :
+  <span class:list={['image-fallback', className]} style={`aspect-ratio: ${image.aspectRatio}`}><img src={original} data-original-src={original} alt={alt} loading={loading} fetchpriority={fetchpriority} decoding="async" /></span>}
+<style>
+  .image-fallback { display: block; position: relative; inline-size: 100%; overflow: hidden; }
+  .image-fallback > img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; }
+</style>
 <script>
   // Recover from an unavailable image service (including transformation limits).
   function recoverImage(image: EventTarget | null) {

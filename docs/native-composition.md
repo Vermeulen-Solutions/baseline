@@ -19,8 +19,9 @@ caller. Static callers put a native Markdown `<Content />` in the default slot a
 omit EmDash imports/attributes. The body is already wrapped in `.flow`.
 
 The component emits `<details>` with a first-child `<summary>`, one named summary
-slot and a default body slot. Supply the summary slot or rendering fails with an
-actionable error. A supplied-but-empty slot is still the author's responsibility.
+slot and a default body slot. A missing summary slot falls back to “Details” so
+incomplete editor input cannot crash rendering. Supply a meaningful summary;
+a supplied-but-empty slot is still the author's responsibility.
 Use meaningful plain text or noninteractive phrasing markup; do not nest another
 summary, link, button, form field or whole rich-text document in the label. Avoid
 headings in summaries: native summary accessibility mappings vary across platforms.
@@ -30,8 +31,11 @@ Keep editor annotations on the caller's text/content; no slot is cloned or seria
 Ordinary details attributes, class, style and `data-*` attributes pass through.
 Native `open` is opt-in; omitted is closed. Pass a boolean, not `open="false"`, which
 HTML treats as present. The component adds no default-open policy. Do not override
-the native role or manually track `aria-expanded`, `aria-controls` or tabindex.
-Native Enter/Space activation, expanded state and the marker stay browser-owned.
+the native role or tabindex. Valid authored IDs are retained; missing or malformed
+IDs get unique generated values. The summary's `aria-controls` points to its body.
+Without JavaScript, expanded state stays browser-owned. A small enhancement adds
+`aria-expanded` and synchronizes it on native `toggle` events and Astro navigation.
+Native Enter/Space activation, grouping and the marker stay browser-owned.
 Spacing and focus are inherited from the existing semantic tokens and focus rules.
 
 Text links use the shared `--color-link` alias. The default retains action ink;

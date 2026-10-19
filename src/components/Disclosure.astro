@@ -1,14 +1,32 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
+import { randomUUID } from 'node:crypto';
 
-type Props = HTMLAttributes<'details'>;
-const { class: className, ...attributes } = Astro.props;
-if (!Astro.slots.has('summary')) throw new Error('Disclosure requires a meaningful named summary slot.');
+interface Props extends HTMLAttributes<'details'> {}
+const { id: rawId, open, class: className, 'aria-expanded': _expanded, 'aria-controls': _controls, ...attributes } = Astro.props;
+const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId : `disclosure-${randomUUID()}`;
 ---
-<details {...attributes} class:list={['disclosure', className]}>
-  <summary><slot name="summary" /></summary>
-  <div class="disclosure__body flow"><slot /></div>
+<details {...attributes} id={id} open={open === true} data-disclosure class:list={['disclosure', className]}>
+  <summary aria-controls={`${id}-body`}><slot name="summary">Details</slot></summary>
+  <div id={`${id}-body`} class="disclosure__body flow"><slot /></div>
 </details>
+<script>
+  // Without JS the browser owns native expanded semantics. Add explicit state
+  // only when it can be kept in sync, including native exclusive name groups.
+  document.addEventListener('toggle', event => {
+    const details = event.target;
+    if (details instanceof HTMLDetailsElement && details.hasAttribute('data-disclosure')) {
+      details.querySelector(':scope > summary')?.setAttribute('aria-expanded', String(details.open));
+    }
+  }, true);
+  function syncDisclosures() {
+    document.querySelectorAll<HTMLDetailsElement>('details[data-disclosure]').forEach(details => {
+      details.querySelector(':scope > summary')?.setAttribute('aria-expanded', String(details.open));
+    });
+  }
+  syncDisclosures();
+  document.addEventListener('astro:page-load', syncDisclosures);
+</script>
 <style>
   .disclosure {
     min-inline-size: 0;

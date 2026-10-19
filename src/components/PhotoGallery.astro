@@ -17,21 +17,23 @@ interface Props {
 const {
   value,
   node,
-  layout = 'justified',
-  breakout = 'feature',
+  layout: rawLayout,
+  breakout: rawBreakout = 'feature',
   locale = Astro.currentLocale === 'fr' ? 'fr' : 'en',
   title,
 } = Astro.props;
+const layout = rawLayout === 'grid' ? 'grid' : 'justified';
+const breakout = rawBreakout === 'feature' || rawBreakout === 'wide' || rawBreakout === 'full-safe' ? rawBreakout : false;
 
 const photos = albumPhotos(node ? [node] : value);
 const galleryNode = node || (Array.isArray(value) ? value.find(n => n?._type === 'gallery') : undefined);
-const requestedColumns = galleryNode && typeof galleryNode === 'object' && 'columns' in galleryNode ? Number(galleryNode.columns) : 3;
+const requestedColumns = galleryNode && typeof galleryNode === 'object' && 'columns' in galleryNode && (typeof galleryNode.columns === 'number' || typeof galleryNode.columns === 'string') ? Number(galleryNode.columns) : 3;
 const columns = Number.isInteger(requestedColumns) && requestedColumns >= 1 && requestedColumns <= 6 ? requestedColumns : 3;
 const labels = locale === 'fr'
   ? { open: 'Agrandir la photo', close: 'Fermer', next: 'Photo suivante', previous: 'Photo précédente', zoom: 'Zoomer', error: 'Photo indisponible. Fermez la visionneuse et réessayez.' }
   : { open: 'Enlarge photo', close: 'Close', next: 'Next photo', previous: 'Previous photo', zoom: 'Zoom', error: 'Photo unavailable. Close the viewer and try again.' };
 
-const galleryTitle = title || (galleryNode && typeof galleryNode === 'object' && 'title' in galleryNode && typeof galleryNode.title === 'string' ? galleryNode.title : undefined);
+const galleryTitle = typeof title === 'string' && title ? title : (galleryNode && typeof galleryNode === 'object' && 'title' in galleryNode && typeof galleryNode.title === 'string' ? galleryNode.title : undefined);
 const jsonLd = galleryJsonLd(photos, {
   siteUrl: Astro.site || Astro.url.origin,
   title: galleryTitle,
@@ -89,7 +91,7 @@ const jsonLd = galleryJsonLd(photos, {
 </div>
 
 {jsonLd && (
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
 )}
 
 <script>

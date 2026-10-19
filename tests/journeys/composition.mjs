@@ -46,7 +46,7 @@ export async function disclosureJourney(page) {
   expect(linkContrast, JSON.stringify(colors)).toBeGreaterThanOrEqual(4.5);
   expect(await dark.evaluate(element => ({
     marker: getComputedStyle(element.querySelector('summary')).display,
-    ownState: !element.querySelector('summary').hasAttribute('aria-expanded'),
+    ownState: !element.querySelector('summary').hasAttribute('aria-expanded') || element.querySelector('summary').getAttribute('aria-expanded') === String(element.open),
     dark: getComputedStyle(element).backgroundColor !== getComputedStyle(document.querySelector('#specimen-disclosure')).backgroundColor,
     overflow: element.scrollWidth > element.clientWidth + 1,
   }))).toEqual({ marker: 'list-item', ownState: true, dark: true, overflow: false });

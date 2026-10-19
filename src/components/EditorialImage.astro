@@ -4,24 +4,33 @@ import ResponsiveImage from './EmDashImage.astro';
 import { PTImage } from 'emdash/ui';
 import { photo, photoUrl } from '../lib/photo-gallery';
 import { imageSource } from '../lib/image-source';
-const { node } = Astro.props;
+interface Props { node?: unknown; }
+const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+const node = record(Astro.props.node);
 const p = photo(node);
 const src = p ? photoUrl(p, Astro.locals.emdash?.getPublicMediaUrl) : '';
 const metadata = await imageSource(src, Astro.url.origin, Astro.locals.emdash?.storage, p?.width, p?.height);
 const width = metadata.width;
 const height = metadata.height;
-const rawLink = typeof node?.link === 'string' ? node.link : node?.link?.href;
+const link = record(node.link);
+const rawLink = typeof node.link === 'string' ? node.link : link.href;
 const href = publicLink(rawLink);
-const blank = href && !href.startsWith('#') && node?.link?.blank === true;
+const blank = href && !href.startsWith('#') && link.blank === true;
+const alignment = typeof node.alignment === 'string' && ['left', 'right', 'center', 'wide', 'full'].includes(node.alignment) ? node.alignment : undefined;
+const caption = typeof node.caption === 'string' ? node.caption : '';
 const breakoutClass = node?.alignment === 'wide' ? 'content--feature' : node?.alignment === 'full' ? 'content--full-safe' : undefined;
 ---
-{src ? <figure class:list={['emdash-image', 'editorial-image', node.alignment && `emdash-image--align-${node.alignment}`, breakoutClass]} style={width ? `--image-limit: ${width}px` : undefined}>
-  {href ? <a href={href} target={blank ? '_blank' : undefined} rel={blank ? 'noopener noreferrer' : undefined}><ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" /></a> : <ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" />}
-  {node.caption && <figcaption>{node.caption}</figcaption>}
-</figure> : <PTImage node={node} />}
+<figure class:list={['emdash-image', 'editorial-image', alignment && `emdash-image--align-${alignment}`, breakoutClass]} style={width ? `--image-limit: ${width}px` : undefined}>
+  {src || !p ? (href ? <a href={href} target={blank ? '_blank' : undefined} rel={blank ? 'noopener noreferrer' : undefined}><ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" /></a> : <ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" />) :
+    <div class="editorial-image__fallback" style={`aspect-ratio: ${width && height ? width / height : 4 / 3}`}><PTImage node={{ ...p, caption: undefined, link: href ? { href, blank: Boolean(blank) } : undefined }} /></div>}
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
 <style>
   .editorial-image { width: min(100%, var(--image-limit, 100%)); margin-block: var(--spacing-content); }
   .editorial-image :global(img) { width: 100%; height: auto; }
+  .editorial-image__fallback { position: relative; width: 100%; }
+  .editorial-image__fallback :global(.emdash-image) { position: absolute; inset: 0; margin: 0; }
+  .editorial-image__fallback :global(img) { height: 100%; object-fit: contain; }
   figcaption { color: var(--color-muted); font-size: .875rem; margin-top: var(--spacing-content); }
   .emdash-image--align-center { margin-inline: auto; }
   .emdash-image--align-wide, .emdash-image--align-full { width: 100%; }

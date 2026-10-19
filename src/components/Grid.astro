@@ -4,7 +4,8 @@ interface Props {
 	class?: string;
 }
 
-const { minimum = "standard", class: className } = Astro.props;
+const { minimum: rawMinimum, class: className } = Astro.props;
+const minimum = rawMinimum === 'compact' || rawMinimum === 'wide' ? rawMinimum : 'standard';
 ---
 
 <div class:list={["grid-auto", `grid-auto--${minimum}`, className]}>

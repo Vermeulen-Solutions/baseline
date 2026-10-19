@@ -138,7 +138,7 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   assert.ok(editorialImage.includes("node?.alignment === 'full' ? 'content--full-safe'"));
 
   const photoGallery = readFileSync('src/components/PhotoGallery.astro', 'utf8');
-  assert.ok(photoGallery.includes("breakout = 'feature'"));
+  assert.ok(photoGallery.includes("breakout: rawBreakout = 'feature'"));
   assert.ok(photoGallery.includes('breakout && `content--${breakout}`'));
 });
 

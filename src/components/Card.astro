@@ -5,7 +5,7 @@ import { publicLink } from '../lib/public-link';
 import ResponsiveImage from './ResponsiveImage.astro';
 // Attribute bags also accept CMS data-* annotations, without importing a CMS type.
 type FieldAttributes = HTMLAttributes<'span'>;
-interface Props {
+interface Props extends Omit<HTMLAttributes<'article'>, 'title'> {
   title: string; href?: string; action?: string; description?: string;
   image?: ImageMetadata | string; imageAlt?: string;
   imageWidth?: number; imageHeight?: number;
@@ -15,13 +15,19 @@ interface Props {
   descriptionEdit?: FieldAttributes;
   actionEdit?: FieldAttributes;
   class?: string;
-  [key: string]: any;
 }
-const { title, href, action, description, image, imageAlt = '', imageWidth, imageHeight, headingLevel = 3,
-  layout = 'stacked', imageFit = 'cover', imageAspect = '3 / 2', sizes,
-  titleEdit, descriptionEdit, actionEdit, class: className, ...rest } = Astro.props;
-const Heading = `h${headingLevel}` as 'h2' | 'h3' | 'h4';
-if (href !== undefined && !publicLink(href)) throw new Error('Card href must use a supported public URL');
+const { title: rawTitle, href: rawHref, action: rawAction, description: rawDescription, image, imageAlt = '', imageWidth, imageHeight, headingLevel = 3,
+  layout = 'stacked', imageFit: rawFit, imageAspect: rawAspect, sizes,
+  titleEdit: rawTitleEdit, descriptionEdit: rawDescriptionEdit, actionEdit: rawActionEdit, class: className, ...rest } = Astro.props;
+const fieldAttributes = (value: unknown): FieldAttributes => value && typeof value === 'object' && !Array.isArray(value) ? value as FieldAttributes : {};
+const titleEdit = fieldAttributes(rawTitleEdit), descriptionEdit = fieldAttributes(rawDescriptionEdit), actionEdit = fieldAttributes(rawActionEdit);
+const imageFit = rawFit === 'contain' ? 'contain' : 'cover';
+const imageAspect = typeof rawAspect === 'string' && rawAspect.trim() ? rawAspect : '3 / 2';
+const title = typeof rawTitle === 'string' ? rawTitle : '';
+const description = typeof rawDescription === 'string' ? rawDescription : '';
+const action = typeof rawAction === 'string' ? rawAction : '';
+const href = publicLink(rawHref);
+const Heading = `h${[2, 3, 4].includes(headingLevel) ? headingLevel : 3}` as 'h2' | 'h3' | 'h4';
 const hasMedia = image || Astro.slots.has('media');
 const hasTitleExtra = Astro.slots.has('title-extra');
 const hasDescription = Boolean(description || Astro.slots.has('default') || Object.keys(descriptionEdit || {}).length);

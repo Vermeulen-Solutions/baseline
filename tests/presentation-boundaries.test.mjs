@@ -8,6 +8,8 @@ import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import sharp from 'sharp';
 import { responsiveImageInput } from '../src/lib/responsive-image.ts';
+import { albumPhotos, photo } from '../src/lib/photo-gallery.ts';
+import { parse } from 'parse5';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 
@@ -24,10 +26,26 @@ test('native image metadata bounds responsive candidates and preserves authored 
   assert.deepEqual(responsiveImageInput('/photo.jpg', NaN, 1200).widths, []);
 });
 
+test('malformed image and gallery inputs produce bounded presentation values', () => {
+  for (const src of [null, undefined, 42, [], {}, { src: null }, { src: { toString: null } }, 'javascript:alert(1)', '//remote.invalid/image.jpg']) {
+    const image = responsiveImageInput(src, NaN, -1);
+    assert.equal(image.original, '');
+    assert.equal(image.width, undefined);
+    assert.equal(image.height, undefined);
+    assert.equal(image.aspectRatio, 4 / 3);
+    assert.deepEqual(image.widths, []);
+  }
+  const image = responsiveImageInput({ src: '/photo.jpg', width: 0, height: Infinity }, 640, 480);
+  assert.equal(image.src, '/photo.jpg'); assert.equal(image.aspectRatio, 4 / 3);
+  assert.deepEqual(albumPhotos([null, {}, 42, { _type: 'gallery', images: [null, { asset: { meta: { storageKey: { toString: null } } } }] }]), []);
+  assert.equal(photo(null), null);
+  assert.equal(responsiveImageInput('images/relative.jpg').original, 'images/relative.jpg');
+});
+
 test('shared shell, annotated Card and native images build without a CMS integration or server adapter', { timeout: 90000 }, async () => {
   const stage = await fs.mkdtemp(path.join(tmpdir(), 'baseline-presentation-'));
   try {
-    const files = ['src/layouts/SiteShell.astro', 'src/styles/global.css', 'src/components/Card.astro', 'src/components/ResponsiveImage.astro', 'src/lib/responsive-image.ts', 'src/lib/public-link.ts'];
+    const files = ['src/layouts/SiteShell.astro', 'src/styles/global.css', ...['Card', 'ResponsiveImage', 'EditorialImage', 'EmDashImage', 'PhotoGallery', 'Disclosure', 'LogoTicker', 'Section', 'Container', 'Grid'].map(name => `src/components/${name}.astro`), ...['responsive-image', 'public-link', 'photo-gallery', 'image-source', 'justified-gallery'].map(name => `src/lib/${name}.ts`)];
     for (const file of files) {
       await fs.mkdir(path.dirname(path.join(stage, file)), { recursive: true });
       await fs.copyFile(path.join(root, file), path.join(stage, file));
@@ -53,6 +71,28 @@ import image from '../assets/photo.jpg';
   <footer slot="footer" id="footer-contribution"></footer>
   <span slot="body-end" id="body-end-contribution"></span>
 </SiteShell>`);
+    await fs.writeFile(path.join(stage, 'src/pages/edge.astro'), `---
+import Card from '../components/Card.astro';
+import ResponsiveImage from '../components/ResponsiveImage.astro';
+import Disclosure from '../components/Disclosure.astro';
+import LogoTicker from '../components/LogoTicker.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Grid from '../components/Grid.astro';
+const bad = { toString: null };
+---
+<html lang="en"><head><title>Malformed inputs</title></head><body>
+<Card title={bad} headingLevel={bad} href={bad} image={bad} description={bad} action={bad} titleEdit="bad" imageAspect={bad} />
+<Card title="Unsupported link" href="javascript:alert(1)" />
+<ResponsiveImage src={null} alt="Missing photo" width={640} height={480} />
+<ResponsiveImage src={bad} alt={bad} width={NaN} height={-10} />
+<ResponsiveImage src="/missing.jpg" alt="Unknown dimensions" />
+<Disclosure id={bad} open="false" /><Disclosure id="bad id"><span slot="summary">Second panel</span></Disclosure>
+<Disclosure id="valid-panel" open><span slot="summary">Open panel</span><a href="/target">Body link</a></Disclosure>
+<LogoTicker id={null} label={bad} animate="false"><li>Partner</li></LogoTicker>
+<LogoTicker id="bad id" label={null}><li>Other partner</li></LogoTicker>
+<Section labelledBy={bad} spacing={bad}><Container width={null} breakout="false"><Grid minimum={bad}>Content</Grid></Container></Section>
+</body></html>`);
     // A component compilation smoke test, not a certified generated static site.
     // Installed packages are reused; the import-closure test separately forbids CMS dependencies.
     const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => /^(PATH|PATHEXT|SYSTEMROOT|WINDIR|COMSPEC|TEMP|TMP|HOME|USERPROFILE|LOCALAPPDATA|APPDATA)$/i.test(name)));
@@ -74,6 +114,25 @@ import image from '../assets/photo.jpg';
     assert.ok(optimized.length >= 3, 'Expected actual optimized raster files');
     for (const file of optimized) { const image = await sharp(await fs.readFile(path.join(stage, 'dist', file))).metadata(); assert.ok(image.width <= 1600); assert.equal(image.format, 'webp'); }
     assert.ok(!html.includes('/_emdash/'));
+    const edge = await fs.readFile(path.join(stage, 'dist/edge/index.html'), 'utf8');
+    const elements = [];
+    const visit = node => { if (node.tagName) elements.push(node); for (const child of node.childNodes ?? []) visit(child); };
+    visit(parse(edge));
+    const attr = (node, name) => node.attrs.find(a => a.name === name)?.value;
+    const ids = elements.map(node => attr(node, 'id')).filter(Boolean);
+    assert.equal(new Set(ids).size, ids.length, 'Generated controls have unique IDs');
+    assert.ok(ids.every(id => /^[A-Za-z][\w:.-]*$/.test(id)));
+    for (const summary of elements.filter(node => node.tagName === 'summary')) {
+      assert.ok(ids.includes(attr(summary, 'aria-controls')));
+      assert.equal(attr(summary, 'aria-expanded'), undefined, 'No stale explicit state without JS');
+    }
+    assert.equal(elements.filter(node => node.tagName === 'details' && attr(node, 'open') !== undefined).length, 1);
+    assert.ok(elements.some(node => attr(node, 'class')?.includes('image-fallback') && attr(node, 'style')?.includes('aspect-ratio: 1.3333333333333333')));
+    assert.ok(!elements.some(node => node.tagName === 'img' && !attr(node, 'src')));
+    assert.ok(!elements.some(node => node.tagName === 'a' && attr(node, 'href')?.startsWith('javascript:')));
+    assert.ok(!elements.some(node => node.tagName === 'input' && attr(node, 'checked') !== undefined));
+    for (const name of ['section--section', 'container-shell--content', 'grid-auto--standard']) assert.ok(edge.includes(name), name);
+    assert.doesNotMatch(edge, /\[object Object\]|NaN|Infinity/);
   } finally {
     assert.equal(path.dirname(stage), path.resolve(tmpdir()));
     assert.ok(path.basename(stage).startsWith('baseline-presentation-'));
