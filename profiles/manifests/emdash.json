@@ -96,7 +96,9 @@
     "src/plugins/README.md",
     "scripts/audit-html-integrity.mjs",
     "tests/html-integrity.test.mjs",
-    "scripts/setup-hooks.mjs"
+    "scripts/setup-hooks.mjs",
+    "scripts/snapshot-ssr.mjs",
+    "scripts/html-tags.mjs"
   ],
   "scripts": [
     "doctor",

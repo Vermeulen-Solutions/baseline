@@ -10,6 +10,7 @@ dist-fixtures
 .emdash/pending-registration/
 .emdash/backups/
 .emdash/checks/
+.emdash/snapshots/
 uploads
 data.db
 data.db-*

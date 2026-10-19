@@ -5,7 +5,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { auditHTMLIntegrity } from '../scripts/audit-html-integrity.mjs';
+import { auditHTMLIntegrity, auditBuildIntegrity } from '../scripts/audit-html-integrity.mjs';
+import { snapshotSSR } from '../scripts/snapshot-ssr.mjs';
 import devTools from '../scripts/dev-tools-integration.mjs';
 
 function fixture(files, check) {
@@ -71,15 +72,105 @@ test('HTML auditor rejects fixture/test output and runtime fixture routes withou
   assert.ok(report.errors.some(e => e.file === '/_form-recovery'));
 }));
 
-test('HTML audit CLI fails on missing build/broken HTML and states empty SSR coverage explicitly', () => fixture({
+test('HTML audit CLI fails on missing builds, broken HTML and failed SSR instead of passing zero HTML', () => fixture({
   'server/entry.mjs': 'throw Error("Do not execute");',
 }, root => {
   const cli = fileURLToPath(new URL('../scripts/audit-html-integrity.mjs', import.meta.url));
   const run = directory => spawnSync(process.execPath, [cli, directory], { encoding: 'utf8' });
-  const empty = run(root); assert.equal(empty.status, 0); assert.match(empty.stdout, /0 HTML files/); assert.match(empty.stdout, /SSR HTML is not emitted or audited/);
+  const empty = run(root); assert.equal(empty.status, 1); assert.doesNotMatch(empty.stdout, /HTML integrity: PASS/);
   fs.writeFileSync(path.join(root, 'index.html'), '<img>');
   assert.equal(run(root).status, 1);
   assert.equal(run(path.join(root, 'missing')).status, 1);
+}));
+
+const serverSource = `
+import http from 'node:http';
+const page = content => '<!doctype html><html><head><link rel="canonical" href="https://snapshot.example/"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage"}</script></head><body><main id="main">'+content+'</main></body></html>';
+const server = http.createServer((req,res) => {
+ const url = new URL(req.url,'http://localhost');
+ if(url.pathname==='/legacy'){res.writeHead(301,{location:'/sample/'});res.end();return;}
+ if(url.pathname.startsWith('/baseline-audit-missing-')){res.writeHead(302,{location:'/404'});res.end();return;}
+ res.setHeader('content-type','text/html');
+ if(url.pathname==='/')res.end(page('<a href="/sample/?view=full#detail">Sample</a><a href="/legacy#detail">Old</a><img width="120" height="80" alt="Sample">'+(process.env.SNAPSHOT_BROKEN ? '<a href="/missing">Broken</a><a href="#absent">Anchor</a><img alt="No dimensions"><script type="application/ld+json">broken</script>' : '')));
+ else if(url.pathname==='/sample/')res.end(page('<h1 id="detail">Sample</h1><a href="../#main">Home</a>'));
+ else{res.statusCode=404;res.end(page('<h1>Not found</h1><a href="#main">Skip</a><a href="/">Home</a>'));}
+});
+server.listen(Number(process.env.PORT),process.env.HOST,()=>console.log('Server listening on http://127.0.0.1:'+server.address().port));
+process.on('SIGTERM',()=>{server.closeAllConnections();server.close(()=>process.exit());});
+`;
+async function serverFixture(source, check) {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-ssr-'));
+  try {
+    const artifact = path.join(root, 'dist'); fs.mkdirSync(path.join(artifact, 'server'), { recursive: true });
+    fs.writeFileSync(path.join(artifact, '.starter-build.json'), JSON.stringify({ version: 1, profile: 'release', deployable: true }));
+    fs.writeFileSync(path.join(artifact, 'server/entry.mjs'), source);
+    await check(root, artifact);
+  } finally {
+    assert.equal(path.dirname(root), path.resolve(os.tmpdir()));
+    assert.ok(path.basename(root).startsWith('baseline-ssr-'));
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+}
+
+test('SSR snapshots capture and audit real responses, redirects, queries and 404 anchors below three seconds', () => serverFixture(serverSource, async (root, artifact) => {
+  let child;
+  const started = performance.now();
+  const report = await auditBuildIntegrity(artifact, { cwd: root, onSpawn: process => { child = process; } });
+  assert.equal(report.valid, true, JSON.stringify(report.errors));
+  assert.ok(report.htmlFiles >= 3);
+  assert.ok(fs.existsSync(path.join(report.ssr.directory, '.ssr-snapshot.json')));
+  assert.ok(performance.now() - started < 3000);
+  assert.ok(child.exitCode !== null || child.signalCode !== null, 'Server must have exited before returning');
+  const manifest = JSON.parse(fs.readFileSync(path.join(report.ssr.directory, '.ssr-snapshot.json'), 'utf8'));
+  assert.ok(manifest.resources.some(r => r.url === '/sample/?view=full' && r.status === 200));
+  assert.ok(manifest.resources.some(r => r.status === 404 && r.file));
+}));
+
+test('SSR audit detects rendered broken links, anchors, image dimensions and malformed JSON-LD', () => serverFixture(serverSource.replace('process.env.SNAPSHOT_BROKEN', 'true'), async (root, artifact) => {
+  let child;
+  const report = await auditBuildIntegrity(artifact, { cwd: root, onSpawn: process => { child = process; } });
+  for (const rule of ['link', 'anchor', 'image-dimensions', 'json-ld']) assert.ok(report.errors.some(error => error.rule === rule), rule);
+  assert.equal(report.valid, false);
+  assert.ok(child.exitCode !== null || child.signalCode !== null);
+  const entry = path.join(artifact, 'server/entry.mjs');
+  fs.writeFileSync(entry, serverSource.replace("location:'/sample/'", "location:'/sample/#absent'"));
+  const redirected = await auditBuildIntegrity(artifact, { cwd: root });
+  assert.ok(redirected.errors.some(error => error.rule === 'anchor' && error.message.includes('/legacy#detail')), 'Redirect fragments override the incoming fragment');
+}));
+
+test('SSR finally kills a hung server on deadline and cleans signal listeners', () => serverFixture("process.on('SIGTERM',()=>{});setInterval(()=>{},1000);", async (root, artifact) => {
+  const before = process.listenerCount('SIGTERM'); let child;
+  const started = performance.now();
+  await assert.rejects(snapshotSSR({ directory: artifact, cwd: root, timeoutMs: 300, onSpawn: process => { child = process; } }), /deadline/);
+  assert.ok(child.exitCode !== null || child.signalCode !== null);
+  assert.equal(process.listenerCount('SIGTERM'), before);
+  assert.ok(performance.now() - started < 3000);
+}));
+
+test('SSR finally kills the server on caller failure and refuses external redirects', () => serverFixture(serverSource.replace("location:'/sample/'", "location:'https://external.invalid/'"), async (root, artifact) => {
+  let child;
+  await assert.rejects(snapshotSSR({ directory: artifact, cwd: root, onSpawn: process => { child = process; } }), /External redirect/);
+  assert.ok(child.exitCode !== null || child.signalCode !== null);
+  await assert.rejects(snapshotSSR({ directory: artifact, cwd: root, onSpawn: process => { child = process; throw Error('caller failure'); } }), /caller failure/);
+  assert.ok(child.exitCode !== null || child.signalCode !== null);
+}));
+
+test('SSR rejects a soft 404 instead of declaring successful error-page coverage', () => serverFixture(serverSource.replace('res.statusCode=404', 'res.statusCode=200'), async (root, artifact) => {
+  let child;
+  await assert.rejects(snapshotSSR({ directory: artifact, cwd: root, onSpawn: process => { child = process; } }), /error page with status 404/);
+  assert.ok(child.exitCode !== null || child.signalCode !== null);
+}));
+
+test('SSR cancellation and streaming-body deadlines both terminate the server', () => serverFixture(`
+import http from 'node:http';
+const server=http.createServer((req,res)=>{res.writeHead(200,{'content-type':'text/html'});res.flushHeaders();res.write('<html>');});
+server.listen(0,'127.0.0.1',()=>console.log('Server listening on http://127.0.0.1:'+server.address().port));
+`, async (root, artifact) => {
+  let child; const controller = new AbortController();
+  await assert.rejects(snapshotSSR({ directory: artifact, cwd: root, signal: controller.signal, onSpawn: process => { child = process; controller.abort(Error('caller cancelled')); } }), /caller cancelled/);
+  assert.ok(child.exitCode !== null || child.signalCode !== null);
+  await assert.rejects(snapshotSSR({ directory: artifact, cwd: root, timeoutMs: 300, onSpawn: process => { child = process; } }), /deadline/);
+  assert.ok(child.exitCode !== null || child.signalCode !== null);
 }));
 
 test('Astro resolved route metadata reaches the offline runtime leak guard', async () => {

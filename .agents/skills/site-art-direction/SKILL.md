@@ -139,6 +139,8 @@ before handoff. On Unix use `npm` in place of `npm.cmd`. Set up the local
 Git pre-commit hook once with `npm.cmd run setup:hooks`; it runs doctor and
 verify:fast and preserves existing hook managers. It supplements the final gate
 and CI; Git hooks are local and can be bypassed. The HTML audit checks emitted
-HTML only; SSR responses need separately rendered snapshots. For generated
+HTML or automatically captures linked public SSR responses from the local
+production CMS. Missing published content or broken navigation fails the audit;
+see `docs/html-integrity.md` for capture limits and snapshot inspection. For generated
 static profiles, inspect the installed package scripts and use their verification
 commands; do not add CMS tooling to satisfy an unavailable command.

@@ -141,6 +141,6 @@
   },
   "html-integrity.test.mjs": {
     "tier": "unit",
-    "reason": "Offline emitted HTML, route, media and SEO fixtures; no build/network"
+    "reason": "HTML validation and bounded loopback child-process capture; no framework builds or external network"
   }
 }
