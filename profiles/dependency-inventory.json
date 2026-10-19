@@ -229,6 +229,16 @@
       ],
       "versionSource": "package.json#/devDependencies/@cloudflare/workers-types",
       "reason": "Type-only optional Workers AI, D1 and R2 capabilities for trusted native plugins"
+    },
+    "@types/node": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/@types/node",
+      "reason": "Shared Astro build-time Node builtin imports must typecheck with independent profile installs"
     }
   }
 }

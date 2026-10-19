@@ -1,4 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "types": ["node"]
+  },
   "include": ["src", ".astro/types.d.ts"]
 }

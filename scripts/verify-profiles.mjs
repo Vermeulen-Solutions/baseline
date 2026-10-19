@@ -40,7 +40,8 @@ async function main() {
       const lock = JSON.parse(await fs.readFile(path.join(root, 'package-lock.json'), 'utf8'));
       assert.ok(!Object.keys(lock.packages).some(name => /(?:^|\/)(?:@emdash-cms|emdash|[^/]*sqlite[^/]*|libsql|@libsql)(?:\/|$)/i.test(name)), 'CMS/database package in independent lockfile');
       assert.equal((await fs.lstat(path.join(root, 'node_modules'))).isSymbolicLink(), false);
-      for (const relative of ['dist/server', 'data.db', 'seed', '.agents/skills/building-emdash-site']) await assert.rejects(fs.stat(path.join(root, relative)), { code: 'ENOENT' });
+      assert.ok(!Object.keys(lock.packages).some(name => name.endsWith('/@cloudflare/workers-types')), 'Workers plugin types in static lockfile');
+      for (const relative of ['dist/server', 'data.db', 'seed', 'src/plugins', '.agents/skills/building-emdash-site']) await assert.rejects(fs.stat(path.join(root, relative)), { code: 'ENOENT' });
       if (profile === 'static-sveltia') {
         for (const relative of ['admin/index.html', 'admin/config.yml']) assert.deepEqual(await fs.readFile(path.join(root, 'dist', relative)), await fs.readFile(path.join(root, 'public', relative)));
       } else await assert.rejects(fs.stat(path.join(root, 'dist/admin')), { code: 'ENOENT' });
