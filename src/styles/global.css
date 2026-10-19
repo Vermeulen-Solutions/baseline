@@ -115,6 +115,32 @@
 		flex: 1;
 	}
 
+	:where(.section) {
+		padding-block: var(--section-padding, var(--spacing-section));
+	}
+
+	:where([data-spacing="content"]) {
+		--section-padding: var(--spacing-content);
+	}
+
+	:where([data-spacing="none"]) {
+		--section-padding: 0px;
+		--container-gap: 0px;
+	}
+
+	:where(.section) > :where(
+		div, article, aside, nav, header, footer, form, ul, ol, figure, table, dl, pre, blockquote
+	) + :where(
+		div, article, aside, nav, header, footer, form, ul, ol, figure, table, dl, pre, blockquote
+	) {
+		margin-block-start: var(--container-gap, var(--spacing-grid));
+	}
+
+	/* Keep gap-based layouts from also receiving container margins. */
+	:where(.section.grid, .section.grid-auto, .section.cluster, .section.sidebar) {
+		--container-gap: 0px;
+	}
+
 	h1,
 	h2,
 	h3,
@@ -437,10 +463,14 @@
 		padding-inline: var(--spacing-container);
 	}
 
+	:where(.grid) {
+		gap: var(--grid-gap, var(--spacing-grid));
+	}
+
 	.grid-auto {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
-		gap: var(--spacing-grid);
+		gap: var(--grid-gap, var(--spacing-grid));
 	}
 
 	.grid-auto--compact {

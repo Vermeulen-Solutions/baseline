@@ -1,25 +1,19 @@
 ---
 interface Props {
 	labelledBy: string;
-	spacing?: "content" | "section";
+	spacing?: "content" | "section" | "none";
 	class?: string;
 }
 
 const { labelledBy: rawLabel, spacing: rawSpacing, class: className } = Astro.props;
 const labelledBy = typeof rawLabel === 'string' && rawLabel.trim() ? rawLabel.trim() : undefined;
-const spacing = rawSpacing === 'content' ? 'content' : 'section';
+const spacing = rawSpacing === 'content' || rawSpacing === 'none' ? rawSpacing : 'section';
 ---
 
-<section aria-labelledby={labelledBy} class:list={["section", `section--${spacing}`, className]}>
+<section
+	aria-labelledby={labelledBy}
+	data-spacing={spacing === 'section' ? undefined : spacing}
+	class:list={["section", className]}
+>
 	<slot />
 </section>
-
-<style>
-	.section--content {
-		padding-block: var(--spacing-content);
-	}
-
-	.section--section {
-		padding-block: var(--spacing-section);
-	}
-</style>
