@@ -25,8 +25,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Starter infrastructure: cascade-layer split plus zero-specificity automatic section, container and grid spacing defaults; existing tokens, palette and responsive values preserved, the reduced-motion accessibility block remains authoritative, and no client visual direction is introduced. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "9d3453bcb368168e07b60831143262e8d7cbd1cc62c81fa448089a2d23ea2198"
+    "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "4ce1e258e32909e3d8d29e496960ff4a32e07aab207c85b791be6992f5c27ef9"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -55,38 +55,38 @@
   },
   {
     "path": "src/pages/404.astro",
-    "reason": "Functional starter error metadata: explicit 404 status, no canonical and platform noindex directive; existing public layout/copy unchanged. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "d7bed91793ae32edafcbe380625b43aad3fdce5bd0af4740f6836c4844f8f25d"
+    "reason": "Starter error route: section-owned page rhythm and flow only; explicit 404 status, no canonical and platform noindex directive preserved, with no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "96f53da7bfba31af11e41f96b7fd37f8bd0dfd68cd6ab8a6467b925fb7d9b9ab"
   },
   {
     "path": "src/pages/category/[slug].astro",
-    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
-    "sha256": "26648e9a30f23794820d215101269a353dd4f3d9de09942981c1bfd7f259f2b2"
+    "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "e7182fcb2fc629a0d14bc1418b4972fac7638891acc39670863d904967c92cd9"
   },
   {
     "path": "src/pages/index.astro",
-    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
-    "sha256": "d679d8ea1675e0b2b3a2437b395b19903ac5aa7c225d38527ec9b7a375e79f3e"
+    "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "2eb7b1569d85502fa008e6d68cd2e7ec155e29afe302e343a710fb2ccc21506b"
   },
   {
     "path": "src/pages/posts/index.astro",
-    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
-    "sha256": "ee5066f27167d0e7dd45f67ce86dbcda8c673355be67d0ec25646c6e1a8dac5c"
+    "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "f7d09c6310fc7f6b3bd17ae200f164324debc7a193dfed5e6f5e6b00e1612f51"
   },
   {
     "path": "src/pages/posts/[slug].astro",
-    "reason": "Functional neutral starter Post SEO wiring: configured public origin, registered settings cache hint, actual article dates/byline and EmDash editor resolution; content markup/edit ownership preserved. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "f240ea72ba602c760ea874e11e4242878035c2abc477dad8a0b988550dab5f02"
+    "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring, article metadata and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "e69754226a1c6b9926d613ed0089688caaedd30f2cd1a758e3a629925855f255"
   },
   {
     "path": "src/pages/tag/[slug].astro",
-    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
-    "sha256": "fffa3909399eae45da6ec2df6ea5839b2bfbf84a13039ba0d2cb6f60bcb89eac"
+    "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "f0cd8f05caf74ca7625a90e857dc0000d0c10390a2b2f6636434ae5b3d731dc5"
   },
   {
     "path": "src/pages/[slug].astro",
-    "reason": "Functional neutral starter Page SEO wiring: configured public origin, registered settings cache hint and editorial image/title separator; content markup/edit ownership preserved. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "df21c64ac397c2936de1e643da0f0b56edfabd940f56db82eed9101dae52ddc7"
+    "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "d9ac735c3f19e83285f54a9344478ce55b2e5d41ab4e55e1cc2d623610072d31"
   },
   {
     "path": "src/utils/site-identity.ts",

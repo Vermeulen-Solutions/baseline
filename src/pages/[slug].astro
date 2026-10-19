@@ -3,6 +3,7 @@ import { getEmDashEntry, getSeoMeta, decodeSlug, getSiteSettingsWithCacheHint } 
 
 import Base from "../layouts/Base.astro";
 import RichText from "../components/RichText.astro";
+import Section from "../components/Section.astro";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
 import { resolvePublicSiteUrl } from "../utils/page-metadata";
 
@@ -41,11 +42,13 @@ const seo = getSeoMeta(page, {
 	image={seo.ogImage}
 	content={{ collection: "pages", id: page.data.id, slug }}
 >
-	<article>
-		<h1 {...page.edit.title}>{page.data.title}</h1>
+	<Section labelledBy="page-title">
+		<article class="flow">
+			<h1 id="page-title" {...page.edit.title}>{page.data.title}</h1>
 
-		<div class="flow article-body">
-			<RichText value={page.data.content} />
-		</div>
-	</article>
+			<div class="flow article-body">
+				<RichText value={page.data.content} />
+			</div>
+		</article>
+	</Section>
 </Base>

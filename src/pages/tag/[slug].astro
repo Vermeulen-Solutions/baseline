@@ -2,6 +2,7 @@
 import { getTerm, getEmDashCollection, decodeSlug } from "emdash";
 import { Image } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
+import Section from "../../components/Section.astro";
 
 const slug = decodeSlug(Astro.params.slug);
 const term = slug ? await getTerm("tag", slug, { includeCounts: false }) : null;
@@ -21,26 +22,28 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 	title={`Posts tagged "${term.label}"`}
 	description={`Posts tagged ${term.label}`}
 >
-	<h1>Tag: {term.label}</h1>
-	<p>{posts.length} {posts.length === 1 ? "post" : "posts"}</p>
+	<Section labelledBy="tag-heading" class="flow">
+		<h1 id="tag-heading">Tag: {term.label}</h1>
+		<p>{posts.length} {posts.length === 1 ? "post" : "posts"}</p>
 
-	{
-		posts.length === 0 ? (
-			<p>No posts with this tag yet.</p>
-		) : (
-			<ul>
-				{posts.map((post) => (
-					<li>
-						<a href={`/posts/${post.id}`}>
-							{post.data.featured_image && (
-								<Image image={post.data.featured_image} />
-							)}
-							<h2>{post.data.title}</h2>
-						</a>
-						{post.data.excerpt && <p>{post.data.excerpt}</p>}
-					</li>
-				))}
-			</ul>
-		)
-	}
+		{
+			posts.length === 0 ? (
+				<p>No posts with this tag yet.</p>
+			) : (
+				<ul class="flow">
+					{posts.map((post) => (
+						<li class="flow">
+							<a href={`/posts/${post.id}`}>
+								{post.data.featured_image && (
+									<Image image={post.data.featured_image} />
+								)}
+								<h2>{post.data.title}</h2>
+							</a>
+							{post.data.excerpt && <p>{post.data.excerpt}</p>}
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</Section>
 </Base>

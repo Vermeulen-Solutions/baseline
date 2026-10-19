@@ -115,7 +115,7 @@
 		flex: 1;
 	}
 
-	:where(.section) {
+	:where(main > section, .section) {
 		padding-block: var(--section-padding, var(--spacing-section));
 	}
 
@@ -128,7 +128,7 @@
 		--container-gap: 0px;
 	}
 
-	:where(.section) > :where(
+	:where(main > section, .section) > :where(
 		div, article, aside, nav, header, footer, form, ul, ol, figure, table, dl, pre, blockquote
 	) + :where(
 		div, article, aside, nav, header, footer, form, ul, ol, figure, table, dl, pre, blockquote
@@ -137,7 +137,7 @@
 	}
 
 	/* Keep gap-based layouts from also receiving container margins. */
-	:where(.section.grid, .section.grid-auto, .section.cluster, .section.sidebar) {
+	:where(main > section, .section):where(.grid, .grid-auto, .cluster, .sidebar) {
 		--container-gap: 0px;
 	}
 
@@ -344,7 +344,11 @@
 	.site-main {
 		width: min(100%, var(--measure-wide));
 		margin-inline: auto;
-		padding: var(--spacing-section) var(--spacing-container);
+		padding-inline: var(--spacing-container);
+	}
+
+	.site-main:not(:has(> section, > .section)) {
+		padding-block: var(--spacing-section);
 	}
 
 	.site-main > :where(* + *) {

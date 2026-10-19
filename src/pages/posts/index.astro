@@ -2,6 +2,7 @@
 import { getEmDashCollection, getTermsForEntries } from "emdash";
 import { Image } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
+import Section from "../../components/Section.astro";
 
 const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
 	orderBy: { published_at: "desc" },
@@ -22,32 +23,34 @@ const postsWithTags = posts.map((post) => ({
 ---
 
 <Base title="All Posts">
-	<h1>Posts</h1>
+	<Section labelledBy="posts-heading" class="flow">
+		<h1 id="posts-heading">Posts</h1>
 
-	{
-		postsWithTags.length === 0 ? (
-			<p>No posts yet.</p>
-		) : (
-			<ul>
-				{postsWithTags.map(({ post, tags }) => (
-					<li>
-						<a href={`/posts/${post.id}`}>
-							{post.data.featured_image && (
-								<Image image={post.data.featured_image} />
+		{
+			postsWithTags.length === 0 ? (
+				<p>No posts yet.</p>
+			) : (
+				<ul class="flow">
+					{postsWithTags.map(({ post, tags }) => (
+						<li class="flow">
+							<a href={`/posts/${post.id}`}>
+								{post.data.featured_image && (
+									<Image image={post.data.featured_image} />
+								)}
+								<h2>{post.data.title}</h2>
+							</a>
+							{post.data.excerpt && <p>{post.data.excerpt}</p>}
+							{tags.length > 0 && (
+								<div>
+									{tags.map((t) => (
+										<a href={`/tag/${t.slug}`}>{t.label}</a>
+									))}
+								</div>
 							)}
-							<h2>{post.data.title}</h2>
-						</a>
-						{post.data.excerpt && <p>{post.data.excerpt}</p>}
-						{tags.length > 0 && (
-							<div>
-								{tags.map((t) => (
-									<a href={`/tag/${t.slug}`}>{t.label}</a>
-								))}
-							</div>
-						)}
-					</li>
-				))}
-			</ul>
-		)
-	}
+						</li>
+					))}
+				</ul>
+			)
+		}
+	</Section>
 </Base>
