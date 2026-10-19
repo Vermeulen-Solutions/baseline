@@ -5,11 +5,13 @@ interface Props {
   title: string;
   description?: string | null;
   canonical?: string | null;
+  /** Platform heads own description/canonical when using EmDashHead or a static metadata renderer. */
+  metadataOwner?: 'shell' | 'platform';
   lang?: string;
   skipLinkLabel?: string;
 }
 
-const { title, description, canonical, lang = 'en', skipLinkLabel = 'Skip to content' } = Astro.props;
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', skipLinkLabel = 'Skip to content' } = Astro.props;
 ---
 <!doctype html>
 <html lang={lang} data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
@@ -17,8 +19,8 @@ const { title, description, canonical, lang = 'en', skipLinkLabel = 'Skip to con
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
-    {description && <meta name="description" content={description} />}
-    {canonical && <link rel="canonical" href={canonical} />}
+    {metadataOwner === 'shell' && description && <meta name="description" content={description} />}
+    {metadataOwner === 'shell' && canonical && <link rel="canonical" href={canonical} />}
     <slot name="head" />
   </head>
   <body>

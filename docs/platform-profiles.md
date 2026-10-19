@@ -51,8 +51,16 @@ Commit the first lockfile before enabling CI. No SQLite fixture is fabricated.
 ## Shared presentation
 
 `src/styles/global.css`, token tools, layout primitives and `SiteShell.astro` are
-shared authority. SiteShell owns document metadata, global styles and landmarks;
-platform wrappers supply navigation, settings and header/footer slots. `Card`
+shared authority. SiteShell owns the document, single title, global styles and landmarks.
+Its default `metadataOwner="shell"` emits description/canonical for existing static
+callers. The CMS Base uses `metadataOwner="platform"`, so `EmDashHead` alone resolves
+description, canonical, social tags and structured data, including editor/plugin overrides;
+the generated static Base also selects platform ownership and uses a build-time
+`StaticMetadata` renderer with safe JSON-LD. Static site identity and optional
+image defaults live in `src/config/site.ts`; `src/config/routing.ts` is shared by
+Astro config and metadata for deployment base/slash/output policy. `SITE_URL`
+provides the public origin; without it, URL-dependent metadata is omitted.
+Platform wrappers supply navigation, settings and header/footer slots. `Card`
 accepts generic HTML attribute bags. `ResponsiveImage` uses Astro's native image
 pipeline with metadata from `src/assets`; EmDash's `EmDashImage` adapter resolves
 storage endpoints before reaching this presentation boundary. Static RichText

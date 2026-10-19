@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import { assertReleaseArtifact } from '../../scripts/assert-release-artifact.mjs';
 import { visualContract } from './contract.mjs';
 
-export async function startVisualSite(root, reportDir, { signal, onDevReady, devOnly = false } = {}) {
+export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, devOnly = false, releaseOnly = false } = {}) {
   const stage = await mkdtemp(path.join(tmpdir(), 'emdash-visual-'));
   let child, cleaned = false, cancelled = false;
   const logs = [];
@@ -76,6 +76,8 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, dev
     await copyFile(path.join(root, 'scripts/dev-tools-integration.mjs'), path.join(stage, 'scripts/dev-tools-integration.mjs'));
     await copyFile(path.join(root, 'scripts/dev-tools-middleware.mjs'), path.join(stage, 'scripts/dev-tools-middleware.mjs'));
     await symlink(path.join(root, 'node_modules'), path.join(stage, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
+    // Trusted local rehearsals can add synthetic source/seed fixtures only to this owned copy.
+    await prepareStage?.({ stage, origin });
     // Seed is the checked-in public starter fixture; supported dev setup applies its sample content.
     launch(['--import', clock, 'node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', String(port)]);
     await ready('data-styleguide-ready');
@@ -102,6 +104,11 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, dev
     }
     assert.ok(normalReady, 'Clean built public content must be healthy');
     for (const method of ['GET', 'HEAD']) assert.equal((await request('/_styleguide?fixtures=1', { method, headers: { cookie: 'fixtures=1' } })).status, 404);
+    if (releaseOnly) {
+      await mkdir(reportDir, { recursive: true });
+      await writeFile(path.join(reportDir, 'bootstrap.json'), JSON.stringify({ releaseOnly: true, freshSeed: true, workingDatabaseCopied: false, normalStyleguide: 404, loopback: true }) + '\n');
+      return { origin, cleanup };
+    }
     await stop();
     await build(true);
     await assert.rejects(assertReleaseArtifact(path.join(stage, 'dist-fixtures')), /Refusing fixture-enabled/);

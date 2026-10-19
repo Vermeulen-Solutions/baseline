@@ -1,0 +1,214 @@
+{
+  "version": 1,
+  "scope": "Actual default-output HTML and HTTP acceptance from two independently installed generated profiles; synthetic public origin; no browser or provider certification",
+  "publicSite": "https://static-profile.example.test",
+  "profiles": {
+    "static": {
+      "platform": "win32",
+      "independentDependencies": true,
+      "development": {
+        "styleguide": 200,
+        "images": 3,
+        "nativeMarkdown": true,
+        "writableCMSIdentities": false
+      },
+      "production": {
+        "/": {
+          "status": 200,
+          "images": 1,
+          "metadata": {
+            "canonical": [
+              "https://static-profile.example.test/"
+            ],
+            "type": [
+              "website"
+            ],
+            "image": [],
+            "graphs": [
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "My Site",
+                "url": "https://static-profile.example.test/",
+                "inLanguage": "en"
+              }
+            ]
+          }
+        },
+        "/posts/": {
+          "status": 200,
+          "images": 1,
+          "metadata": {
+            "canonical": [
+              "https://static-profile.example.test/posts/"
+            ],
+            "type": [
+              "website"
+            ],
+            "image": [],
+            "graphs": [
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "My Site",
+                "url": "https://static-profile.example.test/",
+                "inLanguage": "en"
+              }
+            ]
+          }
+        },
+        "/posts/welcome/": {
+          "status": 200,
+          "images": 1,
+          "metadata": {
+            "canonical": [
+              "https://static-profile.example.test/posts/welcome/"
+            ],
+            "type": [
+              "article"
+            ],
+            "image": [
+              "https://static-profile.example.test/_astro/pilot-grid.C18fp0m6.jpg"
+            ],
+            "graphs": [
+              {
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                "headline": "Welcome",
+                "description": "A typed Markdown post using the shared Baseline design system.",
+                "url": "https://static-profile.example.test/posts/welcome/",
+                "inLanguage": "en",
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": "https://static-profile.example.test/posts/welcome/"
+                },
+                "image": "https://static-profile.example.test/_astro/pilot-grid.C18fp0m6.jpg",
+                "datePublished": "2026-01-01T00:00:00.000Z"
+              }
+            ]
+          }
+        },
+        "notFound": {
+          "canonical": [],
+          "type": [
+            "website"
+          ],
+          "image": [],
+          "graphs": []
+        },
+        "draft": "404; excluded from public routes/listings",
+        "styleguide": "404 for GET/HEAD, slash, query and cookie attempts"
+      },
+      "fixtures": {
+        "styleguide": 200,
+        "images": 3,
+        "releaseRejected": true
+      },
+      "browser": "not requested"
+    },
+    "static-sveltia": {
+      "platform": "win32",
+      "independentDependencies": true,
+      "development": {
+        "styleguide": 200,
+        "images": 3,
+        "nativeMarkdown": true,
+        "writableCMSIdentities": false
+      },
+      "production": {
+        "/": {
+          "status": 200,
+          "images": 1,
+          "metadata": {
+            "canonical": [
+              "https://static-profile.example.test/"
+            ],
+            "type": [
+              "website"
+            ],
+            "image": [],
+            "graphs": [
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "My Site",
+                "url": "https://static-profile.example.test/",
+                "inLanguage": "en"
+              }
+            ]
+          }
+        },
+        "/posts/": {
+          "status": 200,
+          "images": 1,
+          "metadata": {
+            "canonical": [
+              "https://static-profile.example.test/posts/"
+            ],
+            "type": [
+              "website"
+            ],
+            "image": [],
+            "graphs": [
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                "name": "My Site",
+                "url": "https://static-profile.example.test/",
+                "inLanguage": "en"
+              }
+            ]
+          }
+        },
+        "/posts/welcome/": {
+          "status": 200,
+          "images": 1,
+          "metadata": {
+            "canonical": [
+              "https://static-profile.example.test/posts/welcome/"
+            ],
+            "type": [
+              "article"
+            ],
+            "image": [
+              "https://static-profile.example.test/_astro/pilot-grid.C18fp0m6.jpg"
+            ],
+            "graphs": [
+              {
+                "@context": "https://schema.org",
+                "@type": "BlogPosting",
+                "headline": "Welcome",
+                "description": "A typed Markdown post using the shared Baseline design system.",
+                "url": "https://static-profile.example.test/posts/welcome/",
+                "inLanguage": "en",
+                "mainEntityOfPage": {
+                  "@type": "WebPage",
+                  "@id": "https://static-profile.example.test/posts/welcome/"
+                },
+                "image": "https://static-profile.example.test/_astro/pilot-grid.C18fp0m6.jpg",
+                "datePublished": "2026-01-01T00:00:00.000Z"
+              }
+            ]
+          }
+        },
+        "notFound": {
+          "canonical": [],
+          "type": [
+            "website"
+          ],
+          "image": [],
+          "graphs": []
+        },
+        "draft": "404; excluded from public routes/listings",
+        "styleguide": "404 for GET/HEAD, slash, query and cookie attempts",
+        "admin": "HTML and form config served unchanged"
+      },
+      "fixtures": {
+        "styleguide": 200,
+        "images": 3,
+        "releaseRejected": true
+      },
+      "browser": "not requested"
+    }
+  }
+}

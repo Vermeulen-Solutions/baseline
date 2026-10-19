@@ -138,9 +138,13 @@
     },
     "parse5": {
       "section": "devDependencies",
-      "profiles": ["emdash"],
+      "profiles": [
+        "emdash",
+        "static",
+        "static-sveltia"
+      ],
       "versionSource": "package.json#/devDependencies/parse5",
-      "reason": "Root migration HTTP tooling; structural HTML parser, not shipped to generated static projects"
+      "reason": "Development-only structural HTML validation for migration tooling and portable static metadata/JSON-LD regression tests; no public runtime dependency."
     },
     "parse-srcset": {
       "section": "devDependencies",

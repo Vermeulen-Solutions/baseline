@@ -1,0 +1,8 @@
+---
+import SiteShell from '../layouts/SiteShell.astro';
+const platform = Astro.url.searchParams.get('owner') === 'platform';
+---
+<SiteShell title="Shell fixture" description="Shell description" canonical="https://shell.example.test/original" metadataOwner={platform ? 'platform' : 'shell'}>
+  {platform && <Fragment slot="head"><meta name="description" content="Platform description" /><link rel="canonical" href="https://platform.example.test/preferred" /></Fragment>}
+  <h1>Metadata shell fixture</h1>
+</SiteShell>

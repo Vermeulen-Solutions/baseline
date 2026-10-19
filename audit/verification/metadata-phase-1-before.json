@@ -1,0 +1,288 @@
+{
+  "version": 1,
+  "mode": "baseline",
+  "publicOrigin": "https://public.example.test",
+  "scope": "Owned local Node/SQLite production build; synthetic API editor write and native plugin; isolated Chromium JS inventory",
+  "routes": {
+    "/": {
+      "status": 200,
+      "titles": [
+        "My Site"
+      ],
+      "description": [
+        "Built with EmDash",
+        "Built with EmDash"
+      ],
+      "canonical": [],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "http://localhost:10620"
+        }
+      ]
+    },
+    "/posts": {
+      "status": 200,
+      "titles": [
+        "All Posts — My Site"
+      ],
+      "description": [
+        "Built with EmDash",
+        "Built with EmDash"
+      ],
+      "canonical": [],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "http://localhost:10620"
+        }
+      ]
+    },
+    "/posts/welcome?tracking=ignored": {
+      "status": 200,
+      "titles": [
+        "Welcome | My Site"
+      ],
+      "description": [
+        "Your first post. Replace this with your own content.",
+        "Your first post. Replace this with your own content."
+      ],
+      "canonical": [
+        "http://localhost:10620/posts/welcome",
+        "http://localhost:10620/posts/welcome"
+      ],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [
+        "http://localhost:10620/posts/welcome"
+      ],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "http://localhost:10620"
+        }
+      ]
+    },
+    "/about": {
+      "status": 200,
+      "titles": [
+        "About | My Site"
+      ],
+      "description": [
+        "Built with EmDash",
+        "Built with EmDash"
+      ],
+      "canonical": [
+        "http://localhost:10620/about",
+        "http://localhost:10620/about"
+      ],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [
+        "http://localhost:10620/about"
+      ],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "http://localhost:10620"
+        }
+      ]
+    },
+    "/posts/metadata-editor": {
+      "status": 200,
+      "titles": [
+        "Editor SEO title | My Site"
+      ],
+      "description": [
+        "Editor description wins",
+        "Editor description wins"
+      ],
+      "canonical": [
+        "https://editor.example.test/selected",
+        "https://editor.example.test/selected"
+      ],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [
+        "https://editor.example.test/selected"
+      ],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "http://localhost:10620"
+        }
+      ]
+    },
+    "/metadata-plugin": {
+      "status": 200,
+      "titles": [
+        "Plugin fixture — My Site"
+      ],
+      "description": [
+        "Template description loses",
+        "Plugin description wins"
+      ],
+      "canonical": [
+        "https://template.example.test/original",
+        "https://plugin.example.test/preferred"
+      ],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [
+        "https://plugin.example.test/preferred"
+      ],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "url": "https://plugin.example.test/preferred"
+        }
+      ]
+    },
+    "/metadata-shell": {
+      "status": 200,
+      "titles": [
+        "Shell fixture"
+      ],
+      "description": [
+        "Shell description"
+      ],
+      "canonical": [
+        "https://shell.example.test/original"
+      ],
+      "type": [],
+      "ogUrl": [],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": []
+    },
+    "/metadata-shell?owner=platform": {
+      "status": 200,
+      "titles": [
+        "Shell fixture"
+      ],
+      "description": [
+        "Shell description",
+        "Platform description"
+      ],
+      "canonical": [
+        "https://shell.example.test/original",
+        "https://platform.example.test/preferred"
+      ],
+      "type": [],
+      "ogUrl": [],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": []
+    },
+    "/missing-metadata-page": {
+      "status": 404,
+      "titles": [
+        "Not Found — My Site"
+      ],
+      "description": [
+        "Built with EmDash",
+        "Built with EmDash"
+      ],
+      "canonical": [],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "http://localhost:10620"
+        }
+      ]
+    }
+  },
+  "javascript": {
+    "/": {
+      "freshContext": true,
+      "scripts": [
+        {
+          "path": "/_astro/LiveSearch.astro_astro_type_script_index_0_lang.BKUg8IFo.js",
+          "decodedBytes": 6078,
+          "transferredBodyBytes": 6078,
+          "sha256": "2fe4732c7f0dce2267bb5bcbfde66b27185894bf79aa2d5f05bce3a9c6ee9bbd"
+        }
+      ],
+      "decodedBytes": 6078,
+      "transferredBodyBytes": 6078
+    },
+    "/posts/welcome": {
+      "freshContext": true,
+      "scripts": [
+        {
+          "path": "/_astro/LiveSearch.astro_astro_type_script_index_0_lang.BKUg8IFo.js",
+          "decodedBytes": 6078,
+          "transferredBodyBytes": 6078,
+          "sha256": "2fe4732c7f0dce2267bb5bcbfde66b27185894bf79aa2d5f05bce3a9c6ee9bbd"
+        }
+      ],
+      "decodedBytes": 6078,
+      "transferredBodyBytes": 6078
+    }
+  },
+  "status": "passed",
+  "cleanup": "Owned server/temp tree removed; dependency junction unlinked; no working DB/media/env copied"
+}

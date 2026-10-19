@@ -1,4 +1,6 @@
 import { getCollection } from 'astro:content';
+import { routePath } from './metadata';
+import { routing } from '../config/routing';
 
 /** One publication policy for the homepage, listing and generated detail routes. */
 export async function publishedPosts() {
@@ -7,5 +9,5 @@ export async function publishedPosts() {
 }
 
 export function postUrl(id: string) {
-  return `/posts/${id.split('/').map(encodeURIComponent).join('/')}/`;
+  return routePath(`/posts/${id.split('/').map(encodeURIComponent).join('/')}/`, routing);
 }

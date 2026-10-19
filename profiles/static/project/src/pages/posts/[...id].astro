@@ -14,8 +14,10 @@ export async function getStaticPaths() {
 interface Props { post: CollectionEntry<'posts'>; }
 const { post } = Astro.props;
 const { Content } = await render(post);
+const imageTypes: Record<string, string> = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', avif: 'image/avif', gif: 'image/gif', svg: 'image/svg+xml', tiff: 'image/tiff' };
+const image = post.data.hero ? { src: post.data.hero.src, alt: post.data.heroAlt, width: post.data.hero.width, height: post.data.hero.height, mimeType: imageTypes[post.data.hero.format] } : undefined;
 ---
-<Base title={post.data.title} description={post.data.description}>
+<Base title={post.data.title} description={post.data.description} pageType="article" publishedAt={post.data.publishedAt} image={image}>
   <Section labelledBy="post-title"><Container breakout class="flow">
     <header class="flow"><h1 id="post-title">{post.data.title}</h1><p>{post.data.description}</p>
       <time datetime={post.data.publishedAt.toISOString()}>{post.data.publishedAt.toLocaleDateString('en-GB', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</time>

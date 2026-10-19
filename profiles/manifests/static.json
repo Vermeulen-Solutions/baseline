@@ -21,7 +21,9 @@
   "skills": [],
   "packages": {
     "dependencies": [],
-    "devDependencies": []
+    "devDependencies": [
+      "parse5"
+    ]
   },
   "pending": [],
   "scriptOverrides": {
@@ -123,6 +125,26 @@
     {
       "source": "profiles/static/project/.github/workflows/upstream-update.yml",
       "target": ".github/workflows/upstream-update.yml"
+    },
+    {
+      "source": "profiles/static/project/src/config/routing.ts",
+      "target": "src/config/routing.ts"
+    },
+    {
+      "source": "profiles/static/project/src/lib/metadata.ts",
+      "target": "src/lib/metadata.ts"
+    },
+    {
+      "source": "profiles/static/project/src/lib/json-ld.ts",
+      "target": "src/lib/json-ld.ts"
+    },
+    {
+      "source": "profiles/static/project/src/components/StaticMetadata.astro",
+      "target": "src/components/StaticMetadata.astro"
+    },
+    {
+      "source": "profiles/static/project/tests/metadata.test.mjs",
+      "target": "tests/metadata.test.mjs"
     }
   ]
 }

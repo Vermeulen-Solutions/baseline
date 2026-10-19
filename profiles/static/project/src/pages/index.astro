@@ -5,6 +5,8 @@ import Container from '../components/Container.astro';
 import Grid from '../components/Grid.astro';
 import Card from '../components/Card.astro';
 import { publishedPosts, postUrl } from '../lib/posts';
+import { routePath } from '../lib/metadata';
+import { routing } from '../config/routing';
 const posts = await publishedPosts();
 ---
 <Base title="Welcome">
@@ -15,6 +17,6 @@ const posts = await publishedPosts();
   <Section labelledBy="recent-posts"><Container width="wide" class="flow">
     <h2 id="recent-posts">Recent Posts</h2>
     <Grid>{posts.slice(0, 3).map(post => <Card title={post.data.title} href={postUrl(post.id)} description={post.data.description} image={post.data.hero} imageAlt={post.data.heroAlt} />)}</Grid>
-    <a href="/posts/">View all posts</a>
+    <a href={routePath('/posts/', routing)}>View all posts</a>
   </Container></Section>
 </Base>

@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "scope": "Architecture hardening phases 0-1 only",
+  "baselineCommit": "03340d1c8939f0aa845e5db84b93f47cc49ea875",
+  "workingTreeImplementation": true,
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "win32",
+    "playwright": "1.64.1"
+  },
+  "commands": [
+    {
+      "command": "npm run verify",
+      "exitCode": 0,
+      "tests": {
+        "tests": 185,
+        "pass": 185,
+        "fail": 0,
+        "skipped": 0
+      },
+      "astro": {
+        "files": 41,
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "releaseArtifact": "passed",
+      "advisories": "Existing Vite large-chunk advisory; no build failure"
+    },
+    {
+      "command": "npm run test:profiles",
+      "exitCode": 0,
+      "profiles": {
+        "static": "independent install/ci/verify/build/fixtures/HTTP passed",
+        "static-sveltia": "independent install/ci/verify/build/fixtures/HTTP passed"
+      }
+    },
+    {
+      "command": "node --test tests/visual-policy.test.mjs",
+      "exitCode": 0,
+      "tests": 2,
+      "note": "Includes new metadata rehearsal CI-refusal probe"
+    },
+    {
+      "command": "node tests/metadata.integration.mjs --out audit/verification/metadata-phase-1-after.json",
+      "exitCode": 0,
+      "cases": 9,
+      "baselineReceipt": "metadata-phase-1-before.json",
+      "resultReceipt": "metadata-phase-1-after.json"
+    }
+  ],
+  "sourceSHA256": {
+    "src/layouts/SiteShell.astro": "49e5194685572034ead7a8203cfbcb6eeaf07f68fbe738321e365ca9f6719cbb",
+    "src/layouts/Base.astro": "2c18252b095c973955fc7a62ae520f53475f967a2cd9af9dd9efc05a93ac721c",
+    "src/pages/posts/[slug].astro": "f240ea72ba602c760ea874e11e4242878035c2abc477dad8a0b988550dab5f02",
+    "src/pages/[slug].astro": "df21c64ac397c2936de1e643da0f0b56edfabd940f56db82eed9101dae52ddc7",
+    "src/pages/404.astro": "d7bed91793ae32edafcbe380625b43aad3fdce5bd0af4740f6836c4844f8f25d",
+    "src/utils/page-metadata.ts": "fe71f2266dfe4ceb9777e05445f884de57f760b8c24766a14bac9011c6f6b50c"
+  },
+  "javascriptComparison": {
+    "/": {
+      "beforeRequests": 1,
+      "afterRequests": 1,
+      "beforeDecodedBytes": 6078,
+      "afterDecodedBytes": 6078,
+      "identicalAssetSHA256": true
+    },
+    "/posts/welcome": {
+      "beforeRequests": 1,
+      "afterRequests": 1,
+      "beforeDecodedBytes": 6078,
+      "afterDecodedBytes": 6078,
+      "identicalAssetSHA256": true
+    }
+  },
+  "cleanup": {
+    "before": "passed",
+    "after": "passed",
+    "workingDatabaseCopied": false
+  },
+  "rootReleaseContainsSyntheticMetadataFixtures": false,
+  "limits": [
+    "No real editor authentication/credentialed Sveltia publish",
+    "No provider route-cache or CDN invalidation certification",
+    "No WCAG or screen-reader conformance claim",
+    "Static metadata renderer remains Phase 2"
+  ]
+}

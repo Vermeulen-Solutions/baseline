@@ -30,8 +30,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Extract document landmarks and metadata into SiteShell while retaining EmDash queries, cache hints and contribution slots. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "eb13b22ec0dc3e0122514c02328522b8ea95062ed00c6a4b0afecae86ae88989"
+    "reason": "Functional EmDash starter metadata correction: one platform metadata owner, public-origin defaults, typed article context and existing settings/menu cache hints. No client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "2c18252b095c973955fc7a62ae520f53475f967a2cd9af9dd9efc05a93ac721c"
   },
   {
     "path": "src/components/Container.astro",
@@ -55,8 +55,8 @@
   },
   {
     "path": "src/pages/404.astro",
-    "reason": "Exact neutral reusable-starter baseline, including sample CMS routes; client adaptation or any source edit invalidates this exception.",
-    "sha256": "be83543a9cdadeec8e08aedfbd8e14579b154d2229ad8b8564e85bb8bbe4d966"
+    "reason": "Functional starter error metadata: explicit 404 status, no canonical and platform noindex directive; existing public layout/copy unchanged. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "d7bed91793ae32edafcbe380625b43aad3fdce5bd0af4740f6836c4844f8f25d"
   },
   {
     "path": "src/pages/category/[slug].astro",
@@ -75,8 +75,8 @@
   },
   {
     "path": "src/pages/posts/[slug].astro",
-    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "6fb839d9103afdd565d612716e8544b5c09c80672f6e9f61f7ed8129ed515dba"
+    "reason": "Functional neutral starter Post SEO wiring: configured public origin, registered settings cache hint, actual article dates/byline and EmDash editor resolution; content markup/edit ownership preserved. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "f240ea72ba602c760ea874e11e4242878035c2abc477dad8a0b988550dab5f02"
   },
   {
     "path": "src/pages/tag/[slug].astro",
@@ -85,8 +85,8 @@
   },
   {
     "path": "src/pages/[slug].astro",
-    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "40d3c7274a97389afcf7e3bab55caea874cc356e731195ceb0e5a96cb13f3f62"
+    "reason": "Functional neutral starter Page SEO wiring: configured public origin, registered settings cache hint and editorial image/title separator; content markup/edit ownership preserved. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "df21c64ac397c2936de1e643da0f0b56edfabd940f56db82eed9101dae52ddc7"
   },
   {
     "path": "src/utils/site-identity.ts",
@@ -246,8 +246,8 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Shared CMS-free document, metadata and landmark shell extracted without changing the neutral visual system. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "80afe1f381fd8c58517f199884146f4abdbdf498d6240bc22b3a0cafa0c11b50"
+    "reason": "Functional shared starter metadata ownership option; preserve the document/title/landmarks and backward-compatible static default while allowing a platform head to own description/canonical. No visual-system or client content change. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "49e5194685572034ead7a8203cfbcb6eeaf07f68fbe738321e365ca9f6719cbb"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -291,8 +291,8 @@
   },
   {
     "path": "profiles/static/project/src/config/site.ts",
-    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "6e81091dfcdd638ff1634f33d4a876c8c6f043607364fde5198ba22360a45a21"
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "116a8296d8d6f8ca09c18967e99608775c1bcba408fcc4fad0a9333fdaf96f70"
   },
   {
     "path": "profiles/static/project/src/content/posts/welcome.md",
@@ -311,23 +311,23 @@
   },
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
-    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "2a0835104278e8d01faf0ceda5087ba8de0ee50ace06e71682219f5696fb6674"
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "27dfac8c9853b2c39bca575accf8d89408888b706ac927614bd94ba041e8587c"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",
-    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "5c421282f8fab536f3dcb2ea74aa4cfd3e1b8247547fdb7b67f4da5b47ceea2c"
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "1ad28febc56a1b7b04a2bbb69c3130762c232a226982dfe92b280aa59dd5c48d"
   },
   {
     "path": "profiles/static/project/src/pages/404.astro",
-    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "2a55629652e0827d86b3b1f4587a1bfa3ea8d7d1595c0bb67ba70b663e049558"
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "8817270719d98f16a1e6abbf50a1c79edf0403510703bb5dd8c4794049a82b55"
   },
   {
     "path": "profiles/static/project/src/pages/index.astro",
-    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "39307619deb2951726f00f77d0e1bdbb5f7fd6d7f4c68740bf1349dacdcce3c0"
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "f4ef4adbad607b30baffd17640321d2aced5b8a04fdd6071ad7770dc66ac9670"
   },
   {
     "path": "profiles/static/project/src/pages/posts/index.astro",
@@ -336,8 +336,8 @@
   },
   {
     "path": "profiles/static/project/src/pages/posts/[...id].astro",
-    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "9887721665a00753dfb3eb06d7af351cace0d25d9346de80ab4f4ee14a6671ab"
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "6cd806c04308d09b91676ae71f53e835f4f840e34de268ce5e75644083dd6733"
   },
   {
     "path": "profiles/static/project/src/pages/_styleguide.astro",
@@ -353,5 +353,30 @@
     "path": "profiles/static-sveltia/project/public/admin/config.yml",
     "reason": "Static Sveltia admin infrastructure: pinned editor entry and paired collection form, no client art direction.",
     "sha256": "bc20a3d62d516123dbe3377dd006d552ac95c63051f8f3760155d822e078bcb4"
+  },
+  {
+    "path": "src/utils/page-metadata.ts",
+    "reason": "EmDash-only metadata policy helper for public-origin defaults and real hydrated article facts; no visual styling or client implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "fe71f2266dfe4ceb9777e05445f884de57f760b8c24766a14bac9011c6f6b50c"
+  },
+  {
+    "path": "profiles/static/project/src/config/routing.ts",
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "7a6f545d8104e531e4d0479c9bd859c577c5ec14c5b4d836928b8b56c4294eb0"
+  },
+  {
+    "path": "profiles/static/project/src/lib/metadata.ts",
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "100111a0805981de27ff6db319c248df48e58e370cffe44629474d1323ac93b5"
+  },
+  {
+    "path": "profiles/static/project/src/lib/json-ld.ts",
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "bec565f82882521b0d1a627f7df55825a8f32bd1e2c3b5538ec61ca3bb2cc781"
+  },
+  {
+    "path": "profiles/static/project/src/components/StaticMetadata.astro",
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "30cba1e4123eba28f5ed95f6b17dc6f3fc4cdfaa8a71d6279a7795c7edd7a670"
   }
 ]

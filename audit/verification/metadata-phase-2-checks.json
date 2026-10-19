@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "scope": "Architecture hardening Phase 2 only; preceding Phase 1 evidence remains separate",
+  "date": "2026-10-19",
+  "baselineCommit": "03340d1c8939f0aa845e5db84b93f47cc49ea875",
+  "workingTreeImplementation": true,
+  "environment": {
+    "node": "v24.21.0",
+    "platform": "win32"
+  },
+  "commands": [
+    {
+      "command": "node --test tests/static-metadata.test.mjs",
+      "exitCode": 0,
+      "tests": 10,
+      "scope": "Same portable tests generated into both static profiles"
+    },
+    {
+      "command": "npm run verify",
+      "exitCode": 0,
+      "tests": {
+        "tests": 195,
+        "pass": 195,
+        "fail": 0,
+        "skipped": 0
+      },
+      "astro": {
+        "files": 41,
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      },
+      "execution": "Final quiet run after profile/build tasks finished"
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "releaseArtifact": "passed",
+      "scope": "Root CMS application; no Phase 2 CMS source change"
+    },
+    {
+      "command": "npm run test:profiles -- --keep",
+      "exitCode": 0,
+      "profiles": {
+        "static": {
+          "independentInstall": true,
+          "cleanInstall": true,
+          "tests": 12,
+          "astroFiles": 30,
+          "errors": 0,
+          "warnings": 0,
+          "hints": 0,
+          "build": "passed",
+          "fixtures": "passed",
+          "releaseIsolation": "passed",
+          "http": "passed",
+          "databasePackages": 0
+        },
+        "static-sveltia": {
+          "independentInstall": true,
+          "cleanInstall": true,
+          "tests": 13,
+          "astroFiles": 30,
+          "errors": 0,
+          "warnings": 0,
+          "hints": 0,
+          "build": "passed",
+          "fixtures": "passed",
+          "releaseIsolation": "passed",
+          "http": "passed",
+          "databasePackages": 0,
+          "adminAssets": "served unchanged"
+        }
+      },
+      "receipt": "metadata-phase-2-profiles.json",
+      "sourceBytes": "Both generated projects checked against current model/serializer/renderer/routing/test bytes; exact matches"
+    },
+    {
+      "command": "Local build variants (procedure in docs/verification/metadata-phase-2.md)",
+      "exitCode": 0,
+      "cases": 3,
+      "receipt": "metadata-phase-2-variants.json",
+      "dependencies": "Reused independently installed static tree via temporary junction; not a separate clean install for each variant"
+    }
+  ],
+  "transientVerificationFailure": {
+    "scope": "Earlier full root run while build/install work overlapped",
+    "test": "Existing migration HTTP timeout/cancellation test expected completed fast evidence but received unverified",
+    "followup": "Isolated migration-http file passed 17/17; final quiet full verify passed 195/195. No migration code or timeout assertion changed."
+  },
+  "sourceSHA256": {
+    "profiles/static/project/src/lib/metadata.ts": "100111a0805981de27ff6db319c248df48e58e370cffe44629474d1323ac93b5",
+    "profiles/static/project/src/lib/json-ld.ts": "bec565f82882521b0d1a627f7df55825a8f32bd1e2c3b5538ec61ca3bb2cc781",
+    "profiles/static/project/src/components/StaticMetadata.astro": "30cba1e4123eba28f5ed95f6b17dc6f3fc4cdfaa8a71d6279a7795c7edd7a670",
+    "profiles/static/project/src/config/routing.ts": "7a6f545d8104e531e4d0479c9bd859c577c5ec14c5b4d836928b8b56c4294eb0",
+    "profiles/static/project/src/config/site.ts": "116a8296d8d6f8ca09c18967e99608775c1bcba408fcc4fad0a9333fdaf96f70",
+    "profiles/static/project/src/layouts/Base.astro": "27dfac8c9853b2c39bca575accf8d89408888b706ac927614bd94ba041e8587c",
+    "profiles/static/project/src/lib/posts.ts": "1ad28febc56a1b7b04a2bbb69c3130762c232a226982dfe92b280aa59dd5c48d",
+    "profiles/static/project/src/pages/index.astro": "f4ef4adbad607b30baffd17640321d2aced5b8a04fdd6071ad7770dc66ac9670",
+    "profiles/static/project/src/pages/404.astro": "8817270719d98f16a1e6abbf50a1c79edf0403510703bb5dd8c4794049a82b55",
+    "profiles/static/project/src/pages/posts/[...id].astro": "6cd806c04308d09b91676ae71f53e835f4f840e34de268ce5e75644083dd6733",
+    "profiles/static/project/tests/metadata.test.mjs": "9e55f996f2d9fb5e23053e5c71cfedf7e6d91717a0d95365440162348f6203b5",
+    "profiles/static/project/astro.config.mjs": "756398366440fae94998543be95cd2622c433ecc3d7d282f50504b730c413498",
+    "profiles/manifests/static.json": "cd3a04dc5b2488d1b6a4d8938da640f04e2b7df513fb21aed84787d904226ba8",
+    "profiles/file-inventory.json": "99717c95265c74e5bbd2f6daa9e21e135509c1a9637dade1bf7b48e2fbfe8d02",
+    "profiles/dependency-inventory.json": "363aae1058fcf1413ac64498b0efe618f73dcf58e6cd1611dd8caa3396eedb08",
+    "tests/static-metadata.test.mjs": "e7a4ba9cf8f33bb8f560033972fd1c52c435561cb531fe4adc249aa3b54ff8d1",
+    "tests/static-pilot.integration.mjs": "251ab9c4e555ff265b53140d6e78096fe782fe7fc177be4c6999241774fa41fb",
+    "scripts/verify-profiles.mjs": "2c6151ee394370b5380de9770d1513e8ad2a955d0b075d4ea13b42654eb586fd"
+  },
+  "temporaryState": {
+    "variants": "Owned variant tree removed after dependency junction unlinked",
+    "finalProfileTree": "Retained by --keep; optional post-capture removal was rejected by automatic approval review with blocked by policy",
+    "earlierRehearsals": "Some earlier retained profile trees remain; one earlier tree was partially removed. They contain only generated synthetic projects, not the working CMS data."
+  },
+  "limits": [
+    "No browser/assistive-technology certification in Phase 2",
+    "No production hosting/redirect/CDN certification",
+    "No credentialed Sveltia publish",
+    "No existing installed-site additive upgrade or sync inventory expansion",
+    "No content-schema, theme-token, CMS dependency or public interaction-runtime change"
+  ]
+}

@@ -7,6 +7,7 @@ test('visual updates require the explicit local wrapper flag and are rejected in
   for (const [args, env, message] of [
     [['scripts/test-visual.mjs'], { CI: 'true' }, /local-only/],
     [['scripts/test-visual.mjs', '--update'], { CI: 'true' }, /local-only/],
+    [['tests/metadata.integration.mjs', '--out', 'unused-metadata-receipt.json'], { CI: 'true' }, /local-only/],
     [['scripts/test-visual.mjs', '--update-snapshots=all'], {}, /Allowed flags/],
     [['node_modules/@playwright/test/cli.js', 'test', '--config=playwright.config.mjs', '--update-snapshots=all', '--list'], { VISUAL_UPDATE: '0' }, /raw snapshot update flags are forbidden/],
   ]) {

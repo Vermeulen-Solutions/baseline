@@ -766,6 +766,47 @@
     "scripts/migration-cutover.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/utils/page-metadata.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/metadata.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/metadata.integration.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "profiles/static/project/src/config/routing.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/config/routing.ts"
+    },
+    "profiles/static/project/src/lib/metadata.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/lib/metadata.ts"
+    },
+    "profiles/static/project/src/lib/json-ld.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/lib/json-ld.ts"
+    },
+    "profiles/static/project/src/components/StaticMetadata.astro": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/components/StaticMetadata.astro"
+    },
+    "profiles/static/project/tests/metadata.test.mjs": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "tests/metadata.test.mjs"
+    },
+    "tests/static-metadata.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

@@ -1,0 +1,67 @@
+{
+  "scope": "Local generated builds, reusing an independently installed static dependency tree via a temporary junction; no provider/redirect/browser certification",
+  "observations": [
+    {
+      "name": "base-directory",
+      "routing": {
+        "base": "/studio/",
+        "trailingSlash": "always",
+        "format": "directory"
+      },
+      "canonical": [
+        "https://variants.example.test/studio/posts/welcome/"
+      ],
+      "imageAssetExists": true,
+      "executablePostScripts": 1,
+      "executableScript": {
+        "component": "Existing ResponsiveImage error recovery",
+        "bytes": 365,
+        "sha256": "aba821023c34a4f1bc99bae5fcfda5b8078bc970315fe1823ecd45d93b8f4568"
+      },
+      "listingLink": "/studio/posts/",
+      "postLink": "/studio/posts/welcome/",
+      "build": "passed"
+    },
+    {
+      "name": "file",
+      "routing": {
+        "base": "/",
+        "trailingSlash": "never",
+        "format": "file"
+      },
+      "canonical": [
+        "https://variants.example.test/posts/welcome.html"
+      ],
+      "imageAssetExists": true,
+      "executablePostScripts": 1,
+      "executableScript": {
+        "component": "Existing ResponsiveImage error recovery",
+        "bytes": 365,
+        "sha256": "aba821023c34a4f1bc99bae5fcfda5b8078bc970315fe1823ecd45d93b8f4568"
+      },
+      "listingLink": "/posts.html",
+      "postLink": "/posts/welcome.html",
+      "build": "passed"
+    },
+    {
+      "name": "unconfigured",
+      "routing": {
+        "base": "/",
+        "trailingSlash": "always",
+        "format": "directory"
+      },
+      "canonical": [],
+      "imageAssetExists": "URL omitted",
+      "executablePostScripts": 1,
+      "executableScript": {
+        "component": "Existing ResponsiveImage error recovery",
+        "bytes": 365,
+        "sha256": "aba821023c34a4f1bc99bae5fcfda5b8078bc970315fe1823ecd45d93b8f4568"
+      },
+      "listingLink": "/posts/",
+      "postLink": "/posts/welcome/",
+      "build": "passed"
+    }
+  ],
+  "cleanup": "dependency junction unlinked; owned temporary tree removed"
+}

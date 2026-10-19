@@ -40,6 +40,10 @@ Explore the documentation guides below, organized by workflow, design architectu
   Continuous mathematical fluid typography scales (`clamp()`) between 320px and 1280px, fluid spatial density, typographic reading measures (`68ch`), and self-responsive layout primitives (`<Section>`, `<Container>`, `<Grid>`, `.flow`).
 - **[Reusable Public Patterns & Primitives](reusable-public-patterns.md)**  
   Production-tested components: `Card`, `CMSPartnersPanel`, `ResponsiveImage`, `EditorialImage`, and zero-JS interactive primitives (`LogoTicker` CSS infinite marquee, pure CSS flexbox `PhotoGallery`, and surface-aware focus).
+- **[CMS Metadata Ownership Verification](verification/metadata-phase-1.md)**
+  Shared-shell compatibility, article semantics, public-origin defaults, editor/plugin precedence, and the disposable local metadata rehearsal.
+- **[Static Metadata and Safe JSON-LD](verification/metadata-phase-2.md)**
+  Static/Sveltia ownership, public URL and image policy, independent profile verification, and explicit existing-site adoption.
 
 ---
 

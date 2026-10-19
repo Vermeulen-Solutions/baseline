@@ -1,0 +1,33 @@
+---
+import type { ResolvedMetadata } from '../lib/metadata';
+import { serializeJsonLd } from '../lib/json-ld';
+interface Props { metadata: ResolvedMetadata; }
+const { metadata: page } = Astro.props;
+---
+<meta name="description" content={page.description} />
+{page.canonical && <link rel="canonical" href={page.canonical} />}
+{page.robots && <meta name="robots" content={page.robots} />}
+<meta property="og:type" content={page.pageType} />
+<meta property="og:title" content={page.pageTitle} />
+<meta property="og:description" content={page.description} />
+<meta property="og:site_name" content={page.siteName} />
+{page.openGraphLocale && <meta property="og:locale" content={page.openGraphLocale} />}
+{page.canonical && <meta property="og:url" content={page.canonical} />}
+{page.image && <>
+  <meta property="og:image" content={page.image.url} />
+  {page.image.alt !== undefined && <meta property="og:image:alt" content={page.image.alt} />}
+  {page.image.width && <meta property="og:image:width" content={String(page.image.width)} />}
+  {page.image.height && <meta property="og:image:height" content={String(page.image.height)} />}
+  {page.image.mimeType && <meta property="og:image:type" content={page.image.mimeType} />}
+</>}
+<meta name="twitter:card" content={page.image ? 'summary_large_image' : 'summary'} />
+<meta name="twitter:title" content={page.pageTitle} />
+<meta name="twitter:description" content={page.description} />
+{page.canonical && <meta name="twitter:url" content={page.canonical} />}
+{page.image && <>
+  <meta name="twitter:image" content={page.image.url} />
+  {page.image.alt !== undefined && <meta name="twitter:image:alt" content={page.image.alt} />}
+</>}
+{page.article?.publishedTime && <meta property="article:published_time" content={page.article.publishedTime} />}
+{page.article?.modifiedTime && <meta property="article:modified_time" content={page.article.modifiedTime} />}
+{page.graphs.map(graph => <script is:inline type="application/ld+json" set:html={serializeJsonLd(graph)} />)}

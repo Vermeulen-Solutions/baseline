@@ -4,6 +4,7 @@ import os from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { initProfile } from './init-profile.mjs';
 
 const source = fileURLToPath(new URL('../', import.meta.url));
@@ -13,13 +14,22 @@ if (profiles.some(p => !['static', 'static-sveltia'].includes(p))) throw new Err
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'baseline-profile-verification-'));
 const npm = process.env.npm_execpath ?? path.join(path.dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js');
 const receipts = [];
+const fixtureSite = 'https://static-profile.example.test';
 try {
   for (const profile of profiles) {
     const root = path.join(temporary, profile);
     await initProfile({ profile, out: root });
+    // Explicit content fixture only inside this owned generated project. Never a source-template entry.
+    const draftPath = 'src/content/posts/metadata-draft.md';
+    const draft = '---\ntitle: PRIVATE METADATA DRAFT\ndescription: Must not be published\npublishedAt: 2026-01-01\ndraft: true\n---\nPrivate synthetic draft.\n';
+    await fs.writeFile(path.join(root, draftPath), draft);
+    const gatePath = path.join(root, 'audit/design-gate-exceptions.json');
+    const gate = JSON.parse(await fs.readFile(gatePath, 'utf8'));
+    gate.push({ path: draftPath, reason: 'Exact synthetic publication-filter fixture in the owned generated verification project only; no client visual implementation.', sha256: createHash('sha256').update(draft).digest('hex') });
+    await fs.writeFile(gatePath, JSON.stringify(gate, null, 2) + '\n');
     for (const args of [['install', '--no-audit', '--no-fund'], ['ci', '--no-audit', '--no-fund'], ['run', 'verify'], ['run', 'build'], ['run', 'check:dev-tools'], ['run', 'fixtures:build']]) {
       console.log(`[${profile}] npm ${args.join(' ')}`);
-      const result = spawnSync(process.execPath, [npm, ...args], { cwd: root, stdio: 'inherit', timeout: 300000, env: process.env });
+      const result = spawnSync(process.execPath, [npm, ...args], { cwd: root, stdio: 'inherit', timeout: 300000, env: { ...process.env, SITE_URL: fixtureSite } });
       if (result.error) throw result.error;
       assert.equal(result.status, 0, `${profile}: npm ${args.join(' ')}`);
     }
@@ -30,7 +40,7 @@ try {
     if (profile === 'static-sveltia') {
       for (const relative of ['admin/index.html', 'admin/config.yml']) assert.deepEqual(await fs.readFile(path.join(root, 'dist', relative)), await fs.readFile(path.join(root, 'public', relative)));
     } else await assert.rejects(fs.stat(path.join(root, 'dist/admin')), { code: 'ENOENT' });
-    const result = spawnSync(process.execPath, ['tests/static-pilot.integration.mjs', '--root', root], { cwd: source, stdio: 'inherit', timeout: 120000 });
+    const result = spawnSync(process.execPath, ['tests/static-pilot.integration.mjs', '--root', root, '--site-url', fixtureSite], { cwd: source, stdio: 'inherit', timeout: 120000 });
     assert.equal(result.status, 0, 'Generated profile HTTP integration');
     receipts.push({ profile, root, independentInstall: true, cleanInstall: true, databasePackages: 0, verify: 'passed', production: 'passed', fixtures: 'passed', http: 'passed' });
   }

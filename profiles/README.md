@@ -60,8 +60,17 @@ are classified `adapt-before-static`, not silently treated as portable.
 
 ## Presentation boundary
 
-`src/layouts/SiteShell.astro` owns the document, metadata, skip link, main landmark
-and global CSS. Named `head`, `body-start`, `header`, `footer`, `body-end` slots
+`src/layouts/SiteShell.astro` owns the document, single title, skip link, main landmark
+and global CSS. Its default `metadataOwner="shell"` renders description/canonical for
+existing static callers. CMS Base selects `metadataOwner="platform"`, delegating the
+other metadata to `EmDashHead` without duplicating it outside its resolution pipeline.
+New static projects also select platform ownership: their `StaticMetadata`
+renderer consumes one build-time model for description/canonical/social/schema.
+`src/config/routing.ts` supplies both Astro and the model; `SITE_URL` sets the
+public origin. Existing installed projects need explicit adoption for the added
+files, dev-only `parse5` dependency and client-owned wrapper; sync membership is
+unchanged. See [Phase 2](../docs/verification/metadata-phase-2.md).
+Named `head`, `body-start`, `header`, `footer`, `body-end` slots
 accept platform contributions. The existing `Base.astro` remains the EmDash
 wrapper: queries, cache hints, menus, widgets, search and page contribution context
 stay there. The static overlay supplies file-owned site configuration and native
@@ -102,7 +111,7 @@ does not pretend its files exactly match the base Git commit.
 builds and HTTP-checks both static profiles. Root CI runs that as a profile matrix.
 `npm run verify` continues to validate the existing EmDash root. After independently
 installing and building a generated project and running `fixtures:build`, use
-`node tests/static-pilot.integration.mjs --root <generated-directory> --browser`
+`node tests/static-pilot.integration.mjs --root <generated-directory> --site-url <build-SITE_URL> --browser`
 from Baseline for optional local HTTP/browser verification. This checks production
 404 isolation, native Markdown, image loading, keyboard focus and narrow reflow;
 it does not certify static hosting providers or replace local visual baselines.

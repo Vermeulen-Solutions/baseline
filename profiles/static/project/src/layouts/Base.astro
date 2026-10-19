@@ -1,15 +1,18 @@
 ---
 import SiteShell from './SiteShell.astro';
 import { site } from '../config/site';
-interface Props { title: string; description?: string; }
-const { title, description = site.description } = Astro.props;
-const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+import { routing } from '../config/routing';
+import StaticMetadata from '../components/StaticMetadata.astro';
+import { resolveStaticMetadata, routePath, type PageMetadata } from '../lib/metadata';
+type Props = PageMetadata;
+const metadata = resolveStaticMetadata(Astro.props, site, { siteUrl: Astro.site, url: Astro.url, routing });
 ---
-<SiteShell title={`${title} — ${site.title}`} description={description} canonical={canonical} lang={site.language}>
+<SiteShell title={metadata.title} metadataOwner="platform" lang={metadata.language}>
+  <StaticMetadata slot="head" metadata={metadata} />
   <header slot="header" class="site-header">
     <nav class="site-nav" aria-label="Primary navigation">
-      <a class="site-brand" href="/">{site.title}</a>
-      {site.navigation.map(item => <a href={item.href}>{item.label}</a>)}
+      <a class="site-brand" href={routePath('/', routing)}>{site.title}</a>
+      {site.navigation.map(item => <a href={item.href.startsWith('/') && !item.href.startsWith('//') ? routePath(item.href, routing) : item.href}>{item.label}</a>)}
     </nav>
   </header>
   <slot />

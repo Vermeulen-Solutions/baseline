@@ -32,8 +32,17 @@ specimen build in `dist-fixtures/`. The release checker rejects that artifact.
 Normal production builds omit the styleguide route; configure static hosting to
 serve `404.html` with status 404 for missing URLs, without an SPA fallback.
 
-Set `SITE_URL` in the build environment to enable canonical URLs. Host the contents
-of `dist/` on a static host. Astro's preview server is for local inspection.
+Set `SITE_URL` in the build environment to enable public canonical, social and
+structured-data URLs. Without it, URL-dependent metadata is omitted rather than
+using the build/preview hostname. `src/config/routing.ts` supplies Astro and the
+metadata resolver with one base/slash/output policy; its default is directory
+output with trailing slashes. `Base.astro` supplies the sole static metadata
+renderer through the shared shell's head slot. Posts use their real publication
+date and native hero; missing author/update fields stay absent. No editorial
+schema changes or public JavaScript are required. Metadata tests run in `verify`;
+`parse5` is a development-only parser dependency.
+
+Host the contents of `dist/` on a static host. Astro's preview server is for local inspection.
 
 `baseline.config.json` records the profile and base source commit.
 `.baseline/managed-files.json` records source/output hashes and whether assembly
