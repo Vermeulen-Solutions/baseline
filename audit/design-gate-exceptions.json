@@ -26,7 +26,7 @@
   {
     "path": "src/styles/global.css",
     "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "4ce1e258e32909e3d8d29e496960ff4a32e07aab207c85b791be6992f5c27ef9"
+    "sha256": "7e69a04b71ff4316dc6fc6a8151c4941eae6d5850309aac221ef14970e5afc7d"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -76,7 +76,7 @@
   {
     "path": "src/pages/posts/[slug].astro",
     "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring, article metadata and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "e69754226a1c6b9926d613ed0089688caaedd30f2cd1a758e3a629925855f255"
+    "sha256": "934d5f33b5435b745387f50d5833c6d9c5dfe1c315cf2b2c50b9800b23f7d596"
   },
   {
     "path": "src/pages/tag/[slug].astro",
@@ -86,7 +86,7 @@
   {
     "path": "src/pages/[slug].astro",
     "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "d9ac735c3f19e83285f54a9344478ce55b2e5d41ab4e55e1cc2d623610072d31"
+    "sha256": "8e6867a740d4ce48114a6c7717ddbab2d79a3c22e31574bc1426f0272355b1cb"
   },
   {
     "path": "src/utils/site-identity.ts",
@@ -116,7 +116,7 @@
   {
     "path": "src/components/RichText.astro",
     "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "afc40e544a8b805a2fb5161267ce239db34e8619fd5a1b98b11c9d90773d156d"
+    "sha256": "54abbfe5a889370ff7b23126cf3ad30b28f86b31cbe340b8df2f1ea2a472bbda"
   },
   {
     "path": "src/components/Card.astro",
@@ -267,7 +267,7 @@
   {
     "path": "src/components/dev/EmDashStyleguide.astro",
     "reason": "CMS-only neutral calibration: contribute synthetic Portable Text through the caller-owned disclosure body slot; no shared CMS dependency or writable identity. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "8cb2dfb10942ca9c4b824f2563e1c75e522f9dfaa0780802da05f40cd6e15029"
+    "sha256": "78e092ed0786e6291cfbb4b54390ca4b3e6bbb182f175141bab0823e072d4ad1"
   },
   {
     "path": "src/dev/emdash-styleguide-fixtures.ts",
@@ -287,7 +287,7 @@
   {
     "path": "profiles/static/project/src/components/RichText.astro",
     "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "117021e6f226e1f850dd5d17e536910480717ece244bcaeef9ca1828bbdc96b8"
+    "sha256": "43c620071d0514400b2b741b3eb41f41bc28e5c8cd7013c561158118a0e8505d"
   },
   {
     "path": "profiles/static/project/src/config/site.ts",

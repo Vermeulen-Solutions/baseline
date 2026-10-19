@@ -1,6 +1,8 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-type Props = HTMLAttributes<'div'>;
-const { class: className, ...attributes } = Astro.props;
+interface Props extends HTMLAttributes<'div'> {
+  flow?: boolean;
+}
+const { class: className, flow = true, ...attributes } = Astro.props;
 ---
-<div class:list={['flow', className]} {...attributes}><slot /></div>
+<div class:list={[flow && 'flow', className]} {...attributes}><slot /></div>

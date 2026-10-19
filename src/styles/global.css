@@ -361,27 +361,27 @@
 	}
 
 	/* Apply this wrapper to EmDash Portable Text and other editorial rich text. */
-	.flow > :where(* + *) {
+	:where(.flow, [data-flow]) > :where(* + *) {
 		margin-block-start: var(--flow-space, var(--spacing-content));
 	}
 
-	.flow > :where(h2, h3, h4) {
+	:where(.flow, [data-flow]) > :where(h2, h3, h4) {
 		--flow-space: var(--heading-spacing, 1.5em);
 	}
 
-	.flow > :where(ul, ol) {
+	:where(.flow, [data-flow]) > :where(ul, ol) {
 		--flow-space: var(--list-spacing, var(--spacing-content));
 	}
 
-	.flow :where(li + li) {
+	:where(.flow, [data-flow]) :where(li + li) {
 		margin-block-start: var(--list-item-spacing, 0.35em);
 	}
 
-	.flow > :where(figure, img, table) {
+	:where(.flow, [data-flow]) > :where(figure, img, table) {
 		--flow-space: var(--figure-spacing, var(--spacing-grid));
 	}
 
-	.flow > :where(blockquote) {
+	:where(.flow, [data-flow]) > :where(blockquote) {
 		--flow-space: var(--blockquote-spacing, var(--spacing-grid));
 	}
 
@@ -389,15 +389,15 @@
 		margin-block-start: var(--spacing-content);
 	}
 
-	.flow :where(ul, ol) {
+	:where(.flow, [data-flow]) :where(ul, ol) {
 		padding-inline-start: 1.5em;
 	}
 
-	.flow :where(img, figure, table, blockquote) {
+	:where(.flow, [data-flow]) :where(img, figure, table, blockquote) {
 		margin-block: var(--spacing-grid);
 	}
 
-	.flow > :where(img, figure, table, blockquote) + * {
+	:where(.flow, [data-flow]) > :where(img, figure, table, blockquote) + * {
 		margin-block-start: 0;
 	}
 

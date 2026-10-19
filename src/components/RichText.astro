@@ -5,13 +5,14 @@ import PhotoGallery from './PhotoGallery.astro';
 interface Props {
   value: any;
   class?: string;
+  flow?: boolean;
   [key: string]: any;
 }
-const { value, class: className, ...attributes } = Astro.props;
-const hasWrapper = Boolean(className || Object.keys(attributes).length > 0);
+const { value, class: className, flow = true, ...attributes } = Astro.props;
+const hasWrapper = Boolean(flow || className || Object.keys(attributes).length > 0);
 ---
 {hasWrapper ? (
-  <div class:list={['flow', className]} {...attributes}>
+  <div class:list={[flow && 'flow', className]} {...attributes}>
     <PortableText value={value} components={{ type: { image: EditorialImage, gallery: PhotoGallery } }} />
   </div>
 ) : (

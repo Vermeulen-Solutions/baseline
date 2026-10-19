@@ -7,8 +7,8 @@ import { emdashCoverage, proseFixture, editorialImageFixture, galleryFixture } f
 ---
 <Styleguide coverage={emdashCoverage} editorialLabel="Portable Text">
   <Fragment slot="platform-media">
-    <Container width="reading"><div class="flow"><RichText value={[editorialImageFixture]} /></div></Container>
-    <div class="flow"><RichText value={[galleryFixture]} /></div>
+    <Container width="reading"><RichText value={[editorialImageFixture]} /></Container>
+    <RichText value={[galleryFixture]} />
   </Fragment>
   <Fragment slot="platform-empty-media"><PhotoGallery node={{ _type: 'gallery', images: [] }} title="Empty gallery" /></Fragment>
   <Fragment slot="platform-disclosure-body"><RichText value={[{ _type: 'block', _key: 'disclosure-prose', style: 'normal', markDefs: [], children: [{ _type: 'span', _key: 'disclosure-text', text: 'This optional explanation is rendered through the CMS Portable Text adapter. The disclosure owns no content query or editor annotations.', marks: [] }] }]} /></Fragment>
