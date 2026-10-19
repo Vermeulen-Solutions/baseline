@@ -892,6 +892,14 @@
     "scripts/process-runner.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-html-integrity.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/html-integrity.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

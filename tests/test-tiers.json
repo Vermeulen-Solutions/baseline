@@ -138,5 +138,9 @@
   "visual-policy.test.mjs": {
     "tier": "rehearsal",
     "reason": "Wrapper processes and graceful cancellation; no browser captures"
+  },
+  "html-integrity.test.mjs": {
+    "tier": "unit",
+    "reason": "Offline emitted HTML, route, media and SEO fixtures; no build/network"
   }
 }

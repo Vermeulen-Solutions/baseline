@@ -79,7 +79,8 @@
     "check:emdash13": "node scripts/check-emdash13.mjs",
     "rehearse:importer": "node scripts/rehearse-importer.mjs",
     "lint:scripts": "node scripts/check-script-syntax.mjs",
-    "lint:templates": "eslint src profiles/static/project/src --max-warnings 0"
+    "lint:templates": "eslint src profiles/static/project/src --max-warnings 0",
+    "audit:html": "node scripts/audit-html-integrity.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
