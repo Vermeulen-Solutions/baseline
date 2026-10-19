@@ -849,6 +849,22 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "docs/architecture-hardening-upgrade.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/upgrades/architecture-hardening-static.patch": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/architecture-adoption.integration.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/metadata/Media.astro": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "docs/design-framework.md": {
       "disposition": "shared",
       "static": "copy"

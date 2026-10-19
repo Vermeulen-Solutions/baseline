@@ -11,11 +11,13 @@ export async function disclosureJourney(page) {
   await expect(bodyLink).toBeHidden();
   await summary.press('Tab');
   await expect(page.locator('#disclosure-after-link')).toBeFocused();
-  await summary.press('Enter');
+  // Native keyboard pacing allows toggle layout/scroll anchoring to settle;
+  // this also works with document JavaScript disabled. No focus/scroll repair.
+  await summary.press('Enter', { delay: 50 });
   await expect(details).toHaveAttribute('open', '');
   await expect(bodyLink).toBeVisible();
   await focusVisible(summary);
-  await summary.press('Tab');
+  await summary.press('Tab', { delay: 50 });
   await focusVisible(bodyLink);
   await bodyLink.press('Shift+Tab');
   await expect(summary).toBeFocused();

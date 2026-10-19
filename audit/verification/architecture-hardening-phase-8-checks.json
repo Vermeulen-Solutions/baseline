@@ -1,0 +1,759 @@
+{
+  "version": 1,
+  "date": "2026-10-19",
+  "implementationBase": "84613f3b93a5e5e18d1e4ecfb6f7a3f86962ce6e",
+  "workingTreeCapture": true,
+  "scope": "Automated core release/adoption acceptance; local checkpoint, not publication, certification or deployment",
+  "generatorVersion": "0.4.0",
+  "rootPackageVersion": "0.0.3",
+  "standardsVersion": "0.1.1",
+  "node": "24.21.0",
+  "commands": [
+    {
+      "command": "npm run verify",
+      "exitCode": 0,
+      "error": null,
+      "tests": 218,
+      "pass": 218,
+      "fail": 0,
+      "astro": {
+        "files": 46,
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "error": null,
+      "releaseArtifact": "passed"
+    },
+    {
+      "command": "npm run test:profiles -- --public-browser --keep",
+      "exitCode": 0,
+      "error": null,
+      "profiles": [
+        {
+          "profile": "static",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-profile-verification-izhgsC\\static",
+          "generatorVersion": "0.4.0",
+          "source": {
+            "repository": "https://github.com/Vermeulen-Solutions/baseline",
+            "commit": "84613f3b93a5e5e18d1e4ecfb6f7a3f86962ce6e",
+            "release": null
+          },
+          "sourceTreeDirty": true,
+          "allAssembledSourceFilesCompared": 155,
+          "allComparedHashesMatch": true,
+          "tests": 32,
+          "astro": {
+            "files": 34,
+            "errors": 0,
+            "warnings": 0,
+            "hints": 0
+          },
+          "independentInstall": true,
+          "cleanInstall": true,
+          "databasePackages": 0,
+          "verify": "passed",
+          "production": "passed",
+          "fixtures": "passed",
+          "http": "passed",
+          "publicBrowser": "passed",
+          "draftFixture": "real typed private draft seeded and excluded; 404"
+        },
+        {
+          "profile": "static-sveltia",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-profile-verification-izhgsC\\static-sveltia",
+          "generatorVersion": "0.4.0",
+          "source": {
+            "repository": "https://github.com/Vermeulen-Solutions/baseline",
+            "commit": "84613f3b93a5e5e18d1e4ecfb6f7a3f86962ce6e",
+            "release": null
+          },
+          "sourceTreeDirty": true,
+          "allAssembledSourceFilesCompared": 159,
+          "allComparedHashesMatch": true,
+          "tests": 33,
+          "astro": {
+            "files": 34,
+            "errors": 0,
+            "warnings": 0,
+            "hints": 0
+          },
+          "independentInstall": true,
+          "cleanInstall": true,
+          "databasePackages": 0,
+          "verify": "passed",
+          "production": "passed",
+          "fixtures": "passed",
+          "http": "passed",
+          "publicBrowser": "passed",
+          "draftFixture": "real typed private draft seeded and excluded; 404"
+        }
+      ]
+    },
+    {
+      "command": "npm run test:visual",
+      "exitCode": 0,
+      "error": null,
+      "startTime": "2026-10-19T17:43:10.906Z",
+      "duration": 285333.136,
+      "expected": 69,
+      "skipped": 18,
+      "unexpected": 0,
+      "flaky": 0,
+      "thresholdsChanged": false,
+      "baselinesUpdated": false,
+      "bootstrap": {
+        "isolation": "Owned temporary source + fresh DB; no working DB/media/env/credentials copied",
+        "fixtureVersion": 3,
+        "seed": "seed/seed.json via supported dev setup",
+        "date": "2026-01-15T12:00:00.000Z",
+        "normalStyleguide": 404,
+        "fixtureStyleguide": 200,
+        "fixtureReleaseRejected": true
+      },
+      "cleanup": {
+        "serverStopped": true,
+        "dependencyJunctionUnlinked": true,
+        "temporaryTreeRemoved": true,
+        "workingDatabaseCopied": false
+      }
+    },
+    {
+      "command": "node tests/architecture-adoption.integration.mjs --from <recorded SHA> --to <recorded SHA> --out <new owned output>",
+      "exitCode": 0,
+      "error": null,
+      "from": "2d7e88ba608d9efa74d3f48f953ef74e8d1bf296",
+      "to": "84613f3b93a5e5e18d1e4ecfb6f7a3f86962ce6e",
+      "transport": "Trusted local git show bytes supplied to the production stage/apply API; no claim of fetching unpublished revisions from GitHub",
+      "fixtures": [
+        {
+          "profile": "static",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-architecture-adoption-WR5RTa\\static",
+          "tests": 32,
+          "verify": "passed",
+          "build": "passed",
+          "fixtureBuild": "passed",
+          "independentInstall": true,
+          "cleanInstall": true,
+          "conflicts": [],
+          "cssReconciliation": "Unchanged shared CSS eligible through bounded sync",
+          "invariants": {
+            "managedMembershipUnchanged": true,
+            "originalProvenanceUnchanged": true,
+            "calibratedThemeValuesUnchanged": true,
+            "siteConfigAndContentPreserved": true,
+            "customWrapperAndNavigationPreserved": false,
+            "sveltiaConfigurationPreserved": false
+          },
+          "databasePackages": 0
+        },
+        {
+          "profile": "static-sveltia",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-architecture-adoption-WR5RTa\\static-sveltia",
+          "tests": 33,
+          "verify": "passed",
+          "build": "passed",
+          "fixtureBuild": "passed",
+          "independentInstall": true,
+          "cleanInstall": true,
+          "conflicts": [
+            "src/styles/global.css"
+          ],
+          "cssReconciliation": "Explicit token-only fixture reconciliation; arbitrary local rule edits rejected; sync conflict retained",
+          "invariants": {
+            "managedMembershipUnchanged": true,
+            "originalProvenanceUnchanged": true,
+            "calibratedThemeValuesUnchanged": true,
+            "siteConfigAndContentPreserved": true,
+            "customWrapperAndNavigationPreserved": true,
+            "sveltiaConfigurationPreserved": true
+          },
+          "databasePackages": 0
+        }
+      ],
+      "browser": [
+        {
+          "profile": "static",
+          "observations": 12,
+          "publicJavascript": "passed",
+          "noJavascript": {
+            "sentinelExecuted": false,
+            "skip": {
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "A",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            },
+            "composition": {
+              "enter": "open",
+              "space": "close",
+              "focus": "native summary/body tab order",
+              "closedLink": "skipped",
+              "exclusiveGroup": "native name",
+              "independent": true,
+              "longDarkSummary": "visible focus/no overflow/native marker",
+              "linkContrast": 8.79,
+              "fragment": "native reveal",
+              "toolbarFind": "manual check pending"
+            },
+            "layout": {
+              "viewport": 390,
+              "geometry": {
+                "specimen-sidebar-wide": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 1255.03125,
+                    "width": 355.6875,
+                    "height": 292,
+                    "bottom": 1547.03125
+                  },
+                  "direction": "ltr",
+                  "scroll": 356,
+                  "client": 356,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 1255.03125,
+                      "width": 355.6875,
+                      "height": 138.140625,
+                      "bottom": 1393.171875,
+                      "order": "0",
+                      "scroll": 356,
+                      "client": 356
+                    },
+                    {
+                      "x": 17.15625,
+                      "y": 1414.328125,
+                      "width": 355.6875,
+                      "height": 132.703125,
+                      "bottom": 1547.03125,
+                      "order": "0",
+                      "scroll": 356,
+                      "client": 356
+                    }
+                  ]
+                },
+                "specimen-sidebar-narrow": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 1563.609375,
+                    "width": 311.15625,
+                    "height": 209.6875,
+                    "bottom": 1773.296875
+                  },
+                  "direction": "rtl",
+                  "scroll": 311,
+                  "client": 311,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 1563.609375,
+                      "width": 311.15625,
+                      "height": 111.75,
+                      "bottom": 1675.359375,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    },
+                    {
+                      "x": 17.15625,
+                      "y": 1696.515625,
+                      "width": 311.15625,
+                      "height": 76.78125,
+                      "bottom": 1773.296875,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    }
+                  ]
+                },
+                "specimen-sidebar-single": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 1789.875,
+                    "width": 355.6875,
+                    "height": 52.78125,
+                    "bottom": 1842.65625
+                  },
+                  "direction": "ltr",
+                  "scroll": 356,
+                  "client": 356,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 1789.875,
+                      "width": 355.6875,
+                      "height": 52.78125,
+                      "bottom": 1842.65625,
+                      "order": "0",
+                      "scroll": 356,
+                      "client": 356
+                    }
+                  ]
+                },
+                "specimen-cluster": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 873.984375,
+                    "width": 311.15625,
+                    "height": 155.15625,
+                    "bottom": 1029.140625
+                  },
+                  "direction": "rtl",
+                  "scroll": 311,
+                  "client": 311,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 873.984375,
+                      "width": 311.15625,
+                      "height": 50,
+                      "bottom": 923.984375,
+                      "order": "0",
+                      "scroll": 309,
+                      "client": 309
+                    },
+                    {
+                      "x": 213.25,
+                      "y": 940.5625,
+                      "width": 115.0625,
+                      "height": 24,
+                      "bottom": 964.5625,
+                      "order": "0",
+                      "scroll": 115,
+                      "client": 115
+                    },
+                    {
+                      "x": 17.15625,
+                      "y": 981.140625,
+                      "width": 311.15625,
+                      "height": 48,
+                      "bottom": 1029.140625,
+                      "order": "0",
+                      "scroll": 311,
+                      "client": 311
+                    }
+                  ]
+                }
+              },
+              "readingOrder": "main then supporting; native RTL",
+              "narrowHost": "wrapped",
+              "optionalSupporting": "full-width main"
+            },
+            "navigation": 200,
+            "nativeCheckbox": true,
+            "summaryFocus": true,
+            "nativeImage": true,
+            "pageErrors": 0
+          },
+          "admin": "not applicable"
+        },
+        {
+          "profile": "static-sveltia",
+          "observations": 12,
+          "publicJavascript": "passed",
+          "noJavascript": {
+            "sentinelExecuted": false,
+            "skip": {
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "A",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            },
+            "composition": {
+              "enter": "open",
+              "space": "close",
+              "focus": "native summary/body tab order",
+              "closedLink": "skipped",
+              "exclusiveGroup": "native name",
+              "independent": true,
+              "longDarkSummary": "visible focus/no overflow/native marker",
+              "linkContrast": 9.78,
+              "fragment": "native reveal",
+              "toolbarFind": "manual check pending"
+            },
+            "layout": {
+              "viewport": 390,
+              "geometry": {
+                "specimen-sidebar-wide": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 1255.03125,
+                    "width": 355.6875,
+                    "height": 292,
+                    "bottom": 1547.03125
+                  },
+                  "direction": "ltr",
+                  "scroll": 356,
+                  "client": 356,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 1255.03125,
+                      "width": 355.6875,
+                      "height": 138.140625,
+                      "bottom": 1393.171875,
+                      "order": "0",
+                      "scroll": 356,
+                      "client": 356
+                    },
+                    {
+                      "x": 17.15625,
+                      "y": 1414.328125,
+                      "width": 355.6875,
+                      "height": 132.703125,
+                      "bottom": 1547.03125,
+                      "order": "0",
+                      "scroll": 356,
+                      "client": 356
+                    }
+                  ]
+                },
+                "specimen-sidebar-narrow": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 1563.609375,
+                    "width": 292.859375,
+                    "height": 209.6875,
+                    "bottom": 1773.296875
+                  },
+                  "direction": "rtl",
+                  "scroll": 293,
+                  "client": 293,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 1563.609375,
+                      "width": 292.859375,
+                      "height": 111.75,
+                      "bottom": 1675.359375,
+                      "order": "0",
+                      "scroll": 293,
+                      "client": 293
+                    },
+                    {
+                      "x": 17.15625,
+                      "y": 1696.515625,
+                      "width": 292.859375,
+                      "height": 76.78125,
+                      "bottom": 1773.296875,
+                      "order": "0",
+                      "scroll": 293,
+                      "client": 293
+                    }
+                  ]
+                },
+                "specimen-sidebar-single": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 1789.875,
+                    "width": 355.6875,
+                    "height": 52.78125,
+                    "bottom": 1842.65625
+                  },
+                  "direction": "ltr",
+                  "scroll": 356,
+                  "client": 356,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 1789.875,
+                      "width": 355.6875,
+                      "height": 52.78125,
+                      "bottom": 1842.65625,
+                      "order": "0",
+                      "scroll": 356,
+                      "client": 356
+                    }
+                  ]
+                },
+                "specimen-cluster": {
+                  "root": {
+                    "x": 17.15625,
+                    "y": 873.984375,
+                    "width": 292.859375,
+                    "height": 155.15625,
+                    "bottom": 1029.140625
+                  },
+                  "direction": "rtl",
+                  "scroll": 293,
+                  "client": 293,
+                  "children": [
+                    {
+                      "x": 17.15625,
+                      "y": 873.984375,
+                      "width": 292.859375,
+                      "height": 50,
+                      "bottom": 923.984375,
+                      "order": "0",
+                      "scroll": 291,
+                      "client": 291
+                    },
+                    {
+                      "x": 194.953125,
+                      "y": 940.5625,
+                      "width": 115.0625,
+                      "height": 24,
+                      "bottom": 964.5625,
+                      "order": "0",
+                      "scroll": 115,
+                      "client": 115
+                    },
+                    {
+                      "x": 17.15625,
+                      "y": 981.140625,
+                      "width": 292.859375,
+                      "height": 48,
+                      "bottom": 1029.140625,
+                      "order": "0",
+                      "scroll": 293,
+                      "client": 293
+                    }
+                  ]
+                }
+              },
+              "readingOrder": "main then supporting; native RTL",
+              "narrowHost": "wrapped",
+              "optionalSupporting": "full-width main"
+            },
+            "navigation": 200,
+            "nativeCheckbox": true,
+            "summaryFocus": true,
+            "nativeImage": true,
+            "pageErrors": 0
+          },
+          "admin": {
+            "pinnedBundleAndConfigLoaded": true,
+            "tokenSignInOffered": true,
+            "runtimeErrors": 0,
+            "credentialedPublishing": "not tested"
+          }
+        }
+      ],
+      "detailedReceipt": "architecture-hardening-phase-8-adoption.json"
+    },
+    {
+      "command": "node tests/metadata.integration.mjs --out <owned receipt>",
+      "exitCode": 0,
+      "error": null,
+      "routes": 10,
+      "storageMedia": {
+        "storage": "LocalStorage public API in the owned temporary app",
+        "databaseMediaRecord": "not created; no Media Library/editor claim",
+        "original": {
+          "status": 200,
+          "sha256": "5e350d34321de85c3f9ec305719ea2e522db2e962474d11b7ab277f15eec48b7",
+          "width": 1800,
+          "height": 1200
+        },
+        "candidates": [
+          {
+            "status": 200,
+            "width": 480,
+            "height": 320,
+            "format": "webp"
+          },
+          {
+            "status": 200,
+            "width": 800,
+            "height": 533,
+            "format": "webp"
+          },
+          {
+            "status": 200,
+            "width": 1400,
+            "height": 933,
+            "format": "webp"
+          }
+        ]
+      },
+      "javascript": {
+        "/": {
+          "freshContext": true,
+          "scripts": [
+            {
+              "path": "/_astro/LiveSearch.astro_astro_type_script_index_0_lang.BKUg8IFo.js",
+              "decodedBytes": 6078,
+              "transferredBodyBytes": 6078,
+              "sha256": "2fe4732c7f0dce2267bb5bcbfde66b27185894bf79aa2d5f05bce3a9c6ee9bbd"
+            }
+          ],
+          "decodedBytes": 6078,
+          "transferredBodyBytes": 6078
+        },
+        "/posts/welcome": {
+          "freshContext": true,
+          "scripts": [
+            {
+              "path": "/_astro/LiveSearch.astro_astro_type_script_index_0_lang.BKUg8IFo.js",
+              "decodedBytes": 6078,
+              "transferredBodyBytes": 6078,
+              "sha256": "2fe4732c7f0dce2267bb5bcbfde66b27185894bf79aa2d5f05bce3a9c6ee9bbd"
+            }
+          ],
+          "decodedBytes": 6078,
+          "transferredBodyBytes": 6078
+        },
+        "/metadata-storage": {
+          "freshContext": true,
+          "scripts": [
+            {
+              "path": "/_astro/LiveSearch.astro_astro_type_script_index_0_lang.BKUg8IFo.js",
+              "decodedBytes": 6078,
+              "transferredBodyBytes": 6078,
+              "sha256": "2fe4732c7f0dce2267bb5bcbfde66b27185894bf79aa2d5f05bce3a9c6ee9bbd"
+            }
+          ],
+          "decodedBytes": 6078,
+          "transferredBodyBytes": 6078
+        }
+      },
+      "cleanup": {
+        "serverStopped": true,
+        "dependencyJunctionUnlinked": true,
+        "temporaryTreeRemoved": true,
+        "workingDatabaseCopied": false
+      },
+      "detailedReceipt": "architecture-hardening-phase-8-cms.json"
+    },
+    {
+      "command": "git apply --check docs/upgrades/architecture-hardening-static.patch",
+      "exitCode": 0,
+      "scope": "New disposable clone of the near-default fixture HEAD immediately after bounded sync; no package install or forced apply",
+      "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-patch-check-FzjN8u\\site",
+      "sha256": "c3ed904bbbdc2aa5886e8b438f2556eec5d32462c255b0093a4361646eb4717f"
+    }
+  ],
+  "nativeFocusInvestigation": {
+    "unpacedRepeats": [
+      {
+        "repeat": 1,
+        "exitCode": 0
+      },
+      {
+        "repeat": 2,
+        "exitCode": 0
+      },
+      {
+        "repeat": 3,
+        "exitCode": 1
+      },
+      {
+        "repeat": 4,
+        "exitCode": 0
+      }
+    ],
+    "failureGeometry": {
+      "viewport": {
+        "width": 320,
+        "height": 900
+      },
+      "focusedBodyLink": {
+        "x": 33,
+        "y": 936.84375,
+        "width": 200.15625,
+        "height": 46
+      },
+      "fragment": "#specimen-invalid"
+    },
+    "discardedRepaintProbe": "Document rAF callback stalls with JavaScript disabled; owned Node probe identified by PID/parent/fixture path and stopped; no working DB/dependency junction involved",
+    "finalChange": "Native opening Enter and subsequent Tab paced at 50ms; no focus or scroll repair; same viewport/outline/occlusion assertions",
+    "pacedRepeats": [
+      {
+        "repeat": 1,
+        "exitCode": 0,
+        "error": null
+      },
+      {
+        "repeat": 2,
+        "exitCode": 0,
+        "error": null
+      },
+      {
+        "repeat": 3,
+        "exitCode": 0,
+        "error": null
+      },
+      {
+        "repeat": 4,
+        "exitCode": 0,
+        "error": null
+      },
+      {
+        "repeat": 5,
+        "exitCode": 0,
+        "error": null
+      }
+    ],
+    "fullCurrentReleaseSuites": "passed"
+  },
+  "supersededRuns": [
+    {
+      "run": "adoption initial",
+      "result": "Git stdout buffer too small for existing skill JSON; raised bounded buffer to 32MiB"
+    },
+    {
+      "run": "adoption v2",
+      "result": "Git stdin configured ignore; corrected pipe input for explicit patch application"
+    },
+    {
+      "run": "adoption v3",
+      "result": "Unpaced native disclosure focus below viewport; reproduced and investigated without weakening assertions"
+    },
+    {
+      "run": "adoption v4",
+      "result": "Customized CSS three-way merge conflicts; replaced only the reviewed token-only fixture reconciliation, preserving actual client calibration and sync conflict"
+    },
+    {
+      "run": "CMS media initial",
+      "result": "Fixture changed Astro.site without its shared media-origin variable, so image fallback removed candidates; fixture now changes that single shared source coherently"
+    }
+  ],
+  "preserved": {
+    "calibratedStylesheetLfSha256": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+    "referenceScreenshotsUnchanged": true,
+    "comparisonThresholdsUnchanged": true,
+    "standardsManifestUnchanged": true,
+    "rootPackageAndLockfileUnchanged": true,
+    "syncImplementationAndTrustCeilingUnchanged": true
+  },
+  "sourceLfSha256": {
+    "scripts/init-profile.mjs": "6340d4327242b9f0b65dc18575db0923c6ddb6301506641caa60d692d1e431e8",
+    "tests/architecture-adoption.integration.mjs": "0d486f268cb5cff75d325f2ab919217c6e55f32bf12910c4b0681e864b48103d",
+    "tests/journeys/public.mjs": "bd192838db42e1692259a465380c37e528cae57989c3e0f49ece1a7289d90c7a",
+    "tests/journeys/composition.mjs": "3b07580318b6c9977f89ddad91b479014bd5371b5caae87702ec706852ae98c1",
+    "tests/metadata.integration.mjs": "7daf7b845fdefc754aa241b6ac2ab61ef67903a0797f3de4197d6bd78f78953c",
+    "tests/metadata/Media.astro": "2beda6a6264e8c3fd7957deb9692a2cea282c96cc2b3afcbbe7ccfcde813d256",
+    "profiles/manifests/shared.json": "7e4326fe8aab823ed37d814298968c715c0e33460b51ecfb232143cca764af7d",
+    "profiles/file-inventory.json": "44ffda3be82b52f3f620e479086bf9cf4bc7077559a4d42f1eb34b16e8a1d8fa",
+    "profiles/static/project/README.md": "563b1fa9a030d1a66c2e94140a8dc7810bbbb0023e295c4ceb43c0f25e5dc00e",
+    "docs/architecture-hardening-upgrade.md": "5742a80b15cfa7c18751bed919a861783ba94c3aeab3a52ee93686e808d04fa9",
+    "docs/upgrades/architecture-hardening-static.patch": "c3ed904bbbdc2aa5886e8b438f2556eec5d32462c255b0093a4361646eb4717f",
+    "docs/releases/generator-0.4.0.md": "beb3b52d504c596080f07929780729b6f7de0ca47bc198e009a70520f98501fd",
+    "docs/verification/architecture-hardening-phase-8.md": "5ab2c1758a8bae59b2ab4a6bc5bff02d5d63305f6e5dbc89d567b1083fd74e42",
+    "docs/visual-regression.md": "aaebc186944f4169a266cf1568184d788410a5764765ef3fc3db0335d2c16a35",
+    "docs/baseline-updates.md": "8674f517e669e48efa4feaad5a6b09076270064827ea319aa02ebbf78d0932c4",
+    "docs/platform-profiles.md": "aa494ee1e15841a2e5c5627d0856923b47bb736f3d6bae4a729b54949ee22002",
+    "src/styles/global.css": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+    "standards/manifest.json": "a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4",
+    "package.json": "47252443d67bcf1936be5b515ee83cd0467bb68a8b6469f147ebdbedba1174c5",
+    "package-lock.json": "47ca576fdba82e55e525f6d19857fefd59160bb7ed8af0a1c891e803b2f2d9ed"
+  },
+  "retention": "Synthetic downstream/new-generation projects and patch-check clone deliberately retained; CMS harness servers, junctions and temporary apps cleaned",
+  "limits": [
+    "Manual text-only resize, screen readers, toolbar Find, other engines/writing modes and physical devices pending",
+    "Native keyboard tests use documented 50ms pacing; arbitrary faster input sequences are outside this evidence",
+    "Media Library record registration and authenticated editor save/reload not tested",
+    "Credentialed Sveltia GitHub publishing, real mail delivery, provider deployment/cache behavior not tested",
+    "Downstream fixtures retain original generation receipts and local ownership of manual additions; no installed trust ceiling expansion",
+    "Downstream draft URL is 404; real seeded private-draft exclusion is established by fresh-profile checks",
+    "No WCAG/Cloudflare certification, release tag, package publication, push or deployment claimed"
+  ],
+  "optionalPhase7": "Deferred pending actual requirements"
+}

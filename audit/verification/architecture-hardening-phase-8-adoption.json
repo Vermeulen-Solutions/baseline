@@ -1,0 +1,279 @@
+{
+  "version": 1,
+  "from": "2d7e88ba608d9efa74d3f48f953ef74e8d1bf296",
+  "to": "84613f3b93a5e5e18d1e4ecfb6f7a3f86962ce6e",
+  "transport": "Trusted local git show bytes supplied to the production stage/apply API; no claim of fetching unpublished revisions from GitHub",
+  "temporary": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-architecture-adoption-WR5RTa",
+  "fixtures": [
+    {
+      "profile": "static",
+      "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-architecture-adoption-WR5RTa\\static",
+      "customized": false,
+      "stage": [
+        {
+          "target": "src/styles/global.css",
+          "source": "src/styles/global.css",
+          "baseHash": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832",
+          "currentHash": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832",
+          "incomingHash": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+          "conflict": false
+        },
+        {
+          "target": "src/layouts/SiteShell.astro",
+          "source": "src/layouts/SiteShell.astro",
+          "baseHash": "80afe1f381fd8c58517f199884146f4abdbdf498d6240bc22b3a0cafa0c11b50",
+          "currentHash": "80afe1f381fd8c58517f199884146f4abdbdf498d6240bc22b3a0cafa0c11b50",
+          "incomingHash": "49e5194685572034ead7a8203cfbcb6eeaf07f68fbe738321e365ca9f6719cbb",
+          "conflict": false
+        },
+        {
+          "target": "src/components/LogoTicker.astro",
+          "source": "src/components/LogoTicker.astro",
+          "baseHash": "af5233b66b4a965eeb73059c1b8298dd6336970954159496702018eb82e97f54",
+          "currentHash": "af5233b66b4a965eeb73059c1b8298dd6336970954159496702018eb82e97f54",
+          "incomingHash": "46f3f9f86d77b27825fda456ffcd67c3799e795516224e00ce8f3185154661ca",
+          "conflict": false
+        },
+        {
+          "target": "src/components/FormError.astro",
+          "source": "src/components/FormError.astro",
+          "baseHash": "8e5cf27a51dfe369fba3d5c1f7de6260437bbd992f727fa9126e1b7680ad7dca",
+          "currentHash": "8e5cf27a51dfe369fba3d5c1f7de6260437bbd992f727fa9126e1b7680ad7dca",
+          "incomingHash": "73505ef0ec67de808a63f7e68df2b061c064699feab4493673d89a7f6862f7b5",
+          "conflict": false
+        },
+        {
+          "target": "scripts/design-system.mjs",
+          "source": "scripts/design-system.mjs",
+          "baseHash": "8b0f65d9b7beb38ef23c4de6882878642cd85a51eb71f30d1a4a00955c122e00",
+          "currentHash": "8b0f65d9b7beb38ef23c4de6882878642cd85a51eb71f30d1a4a00955c122e00",
+          "incomingHash": "83501bcf1807a8584f2b550fc92f46db7ee4de044ae4e829620f595cc831f026",
+          "conflict": false
+        },
+        {
+          "target": "scripts/dev-tools-integration.mjs",
+          "source": "scripts/dev-tools-integration.mjs",
+          "baseHash": "57ebf228291e760dcd4655685702e02a6924422745b6783eaeb4121b59811709",
+          "currentHash": "57ebf228291e760dcd4655685702e02a6924422745b6783eaeb4121b59811709",
+          "incomingHash": "c0c41ba80361868dc2eb9688a31b169595be3f3e01125e3570c37c6d2f130b0d",
+          "conflict": false
+        },
+        {
+          "target": "src/components/dev/Styleguide.astro",
+          "source": "src/components/dev/Styleguide.astro",
+          "baseHash": "c4650309946133e248e9a8b5d2db6fe8988f6d5801992961206784ddb1948ee9",
+          "currentHash": "c4650309946133e248e9a8b5d2db6fe8988f6d5801992961206784ddb1948ee9",
+          "incomingHash": "93d44e9f1280958b0568a308ee8bd1d10125f73a1fb5dccf0b2c543a32ed0d34",
+          "conflict": false
+        },
+        {
+          "target": "src/dev/styleguide-fixtures.ts",
+          "source": "src/dev/styleguide-fixtures.ts",
+          "baseHash": "751912a45b821cf5713c0d66edbbb239ea69c505a91d5882710c35e42de9a151",
+          "currentHash": "751912a45b821cf5713c0d66edbbb239ea69c505a91d5882710c35e42de9a151",
+          "incomingHash": "373687c914dde16acb6429e90fc0b31c7ffee8927111770071f5e2b5f27eb4b0",
+          "conflict": false
+        },
+        {
+          "target": "src/lib/posts.ts",
+          "source": "profiles/static/project/src/lib/posts.ts",
+          "baseHash": "5c421282f8fab536f3dcb2ea74aa4cfd3e1b8247547fdb7b67f4da5b47ceea2c",
+          "currentHash": "5c421282f8fab536f3dcb2ea74aa4cfd3e1b8247547fdb7b67f4da5b47ceea2c",
+          "incomingHash": "1ad28febc56a1b7b04a2bbb69c3130762c232a226982dfe92b280aa59dd5c48d",
+          "conflict": false
+        }
+      ],
+      "applied": [
+        "src/styles/global.css",
+        "src/layouts/SiteShell.astro",
+        "src/components/LogoTicker.astro",
+        "src/components/FormError.astro",
+        "scripts/design-system.mjs",
+        "scripts/dev-tools-integration.mjs",
+        "src/components/dev/Styleguide.astro",
+        "src/dev/styleguide-fixtures.ts",
+        "src/lib/posts.ts"
+      ],
+      "conflicts": [],
+      "manualFiles": [
+        "src/components/StaticMetadata.astro",
+        "src/config/routing.ts",
+        "src/lib/metadata.ts",
+        "src/lib/json-ld.ts",
+        "tests/metadata.test.mjs",
+        "eslint.config.mjs",
+        "tests/template-lint.test.mjs",
+        "tests/fluid-tokens.test.mjs",
+        "src/components/Disclosure.astro",
+        "src/components/Cluster.astro",
+        "src/components/Sidebar.astro",
+        "src/components/dev/CompositionSpecimens.astro",
+        "src/dev/disclosure-prose.md",
+        "docs/design-framework.md",
+        "docs/native-composition.md",
+        "docs/baseline-updates.md"
+      ],
+      "cssReconciliation": "Unchanged shared CSS eligible through bounded sync",
+      "packageUpgrade": {
+        "before": "d721d767e9f2fe7c526832a39762a4076cebed00b0ecc3e3b1628725f7eb6690",
+        "after": "7652eee093ad9a16c25c6d62da26b035ac59046a576a562ed23f98eb65fe25eb",
+        "explicitDevelopmentDependencies": [
+          "eslint",
+          "eslint-plugin-astro",
+          "eslint-plugin-jsx-a11y-x",
+          "@typescript-eslint/parser",
+          "parse5"
+        ],
+        "independentInstall": true,
+        "cleanInstall": true,
+        "databasePackages": 0
+      },
+      "invariants": {
+        "managedMembershipUnchanged": true,
+        "originalProvenanceUnchanged": true,
+        "calibratedThemeValuesUnchanged": true,
+        "siteConfigAndContentPreserved": true,
+        "customWrapperAndNavigationPreserved": false,
+        "sveltiaConfigurationPreserved": false
+      },
+      "acceptance": "verify/build/fixture/HTTP/public browser passed; Sveltia sign-in offered where applicable",
+      "additivePatchSHA256": "c3ed904bbbdc2aa5886e8b438f2556eec5d32462c255b0093a4361646eb4717f"
+    },
+    {
+      "profile": "static-sveltia",
+      "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-architecture-adoption-WR5RTa\\static-sveltia",
+      "customized": true,
+      "stage": [
+        {
+          "target": "src/styles/global.css",
+          "source": "src/styles/global.css",
+          "baseHash": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832",
+          "currentHash": "1cd0a7ffa3df7a7c3ac70d44efc96c4816be74deb3387986845994703e733fe9",
+          "incomingHash": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+          "conflict": true
+        },
+        {
+          "target": "src/layouts/SiteShell.astro",
+          "source": "src/layouts/SiteShell.astro",
+          "baseHash": "80afe1f381fd8c58517f199884146f4abdbdf498d6240bc22b3a0cafa0c11b50",
+          "currentHash": "80afe1f381fd8c58517f199884146f4abdbdf498d6240bc22b3a0cafa0c11b50",
+          "incomingHash": "49e5194685572034ead7a8203cfbcb6eeaf07f68fbe738321e365ca9f6719cbb",
+          "conflict": false
+        },
+        {
+          "target": "src/components/LogoTicker.astro",
+          "source": "src/components/LogoTicker.astro",
+          "baseHash": "af5233b66b4a965eeb73059c1b8298dd6336970954159496702018eb82e97f54",
+          "currentHash": "af5233b66b4a965eeb73059c1b8298dd6336970954159496702018eb82e97f54",
+          "incomingHash": "46f3f9f86d77b27825fda456ffcd67c3799e795516224e00ce8f3185154661ca",
+          "conflict": false
+        },
+        {
+          "target": "src/components/FormError.astro",
+          "source": "src/components/FormError.astro",
+          "baseHash": "8e5cf27a51dfe369fba3d5c1f7de6260437bbd992f727fa9126e1b7680ad7dca",
+          "currentHash": "8e5cf27a51dfe369fba3d5c1f7de6260437bbd992f727fa9126e1b7680ad7dca",
+          "incomingHash": "73505ef0ec67de808a63f7e68df2b061c064699feab4493673d89a7f6862f7b5",
+          "conflict": false
+        },
+        {
+          "target": "scripts/design-system.mjs",
+          "source": "scripts/design-system.mjs",
+          "baseHash": "8b0f65d9b7beb38ef23c4de6882878642cd85a51eb71f30d1a4a00955c122e00",
+          "currentHash": "8b0f65d9b7beb38ef23c4de6882878642cd85a51eb71f30d1a4a00955c122e00",
+          "incomingHash": "83501bcf1807a8584f2b550fc92f46db7ee4de044ae4e829620f595cc831f026",
+          "conflict": false
+        },
+        {
+          "target": "scripts/dev-tools-integration.mjs",
+          "source": "scripts/dev-tools-integration.mjs",
+          "baseHash": "57ebf228291e760dcd4655685702e02a6924422745b6783eaeb4121b59811709",
+          "currentHash": "57ebf228291e760dcd4655685702e02a6924422745b6783eaeb4121b59811709",
+          "incomingHash": "c0c41ba80361868dc2eb9688a31b169595be3f3e01125e3570c37c6d2f130b0d",
+          "conflict": false
+        },
+        {
+          "target": "src/components/dev/Styleguide.astro",
+          "source": "src/components/dev/Styleguide.astro",
+          "baseHash": "c4650309946133e248e9a8b5d2db6fe8988f6d5801992961206784ddb1948ee9",
+          "currentHash": "c4650309946133e248e9a8b5d2db6fe8988f6d5801992961206784ddb1948ee9",
+          "incomingHash": "93d44e9f1280958b0568a308ee8bd1d10125f73a1fb5dccf0b2c543a32ed0d34",
+          "conflict": false
+        },
+        {
+          "target": "src/dev/styleguide-fixtures.ts",
+          "source": "src/dev/styleguide-fixtures.ts",
+          "baseHash": "751912a45b821cf5713c0d66edbbb239ea69c505a91d5882710c35e42de9a151",
+          "currentHash": "751912a45b821cf5713c0d66edbbb239ea69c505a91d5882710c35e42de9a151",
+          "incomingHash": "373687c914dde16acb6429e90fc0b31c7ffee8927111770071f5e2b5f27eb4b0",
+          "conflict": false
+        },
+        {
+          "target": "src/lib/posts.ts",
+          "source": "profiles/static/project/src/lib/posts.ts",
+          "baseHash": "5c421282f8fab536f3dcb2ea74aa4cfd3e1b8247547fdb7b67f4da5b47ceea2c",
+          "currentHash": "5c421282f8fab536f3dcb2ea74aa4cfd3e1b8247547fdb7b67f4da5b47ceea2c",
+          "incomingHash": "1ad28febc56a1b7b04a2bbb69c3130762c232a226982dfe92b280aa59dd5c48d",
+          "conflict": false
+        }
+      ],
+      "applied": [
+        "src/layouts/SiteShell.astro",
+        "src/components/LogoTicker.astro",
+        "src/components/FormError.astro",
+        "scripts/design-system.mjs",
+        "scripts/dev-tools-integration.mjs",
+        "src/components/dev/Styleguide.astro",
+        "src/dev/styleguide-fixtures.ts",
+        "src/lib/posts.ts"
+      ],
+      "conflicts": [
+        "src/styles/global.css"
+      ],
+      "manualFiles": [
+        "src/components/StaticMetadata.astro",
+        "src/config/routing.ts",
+        "src/lib/metadata.ts",
+        "src/lib/json-ld.ts",
+        "tests/metadata.test.mjs",
+        "eslint.config.mjs",
+        "tests/template-lint.test.mjs",
+        "tests/fluid-tokens.test.mjs",
+        "src/components/Disclosure.astro",
+        "src/components/Cluster.astro",
+        "src/components/Sidebar.astro",
+        "src/components/dev/CompositionSpecimens.astro",
+        "src/dev/disclosure-prose.md",
+        "docs/design-framework.md",
+        "docs/native-composition.md",
+        "docs/baseline-updates.md"
+      ],
+      "cssReconciliation": "Explicit token-only fixture reconciliation; arbitrary local rule edits rejected; sync conflict retained",
+      "packageUpgrade": {
+        "before": "21fdcfb2cb1fbd6a9dd1b7ab0225c26a7463b63ed6f15b855208b8028c9917d5",
+        "after": "2f206837fd521041697928047edb12a875c9d88dabd5383b0b8c86555192e347",
+        "explicitDevelopmentDependencies": [
+          "eslint",
+          "eslint-plugin-astro",
+          "eslint-plugin-jsx-a11y-x",
+          "@typescript-eslint/parser",
+          "parse5"
+        ],
+        "independentInstall": true,
+        "cleanInstall": true,
+        "databasePackages": 0
+      },
+      "invariants": {
+        "managedMembershipUnchanged": true,
+        "originalProvenanceUnchanged": true,
+        "calibratedThemeValuesUnchanged": true,
+        "siteConfigAndContentPreserved": true,
+        "customWrapperAndNavigationPreserved": true,
+        "sveltiaConfigurationPreserved": true
+      },
+      "acceptance": "verify/build/fixture/HTTP/public browser passed; Sveltia sign-in offered where applicable",
+      "additivePatchSHA256": "e6d65b311425728f35611f36b3fc5bfb52d02ad797b5a63919eba9dc8adbf553"
+    }
+  ],
+  "complete": true
+}

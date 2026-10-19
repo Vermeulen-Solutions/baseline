@@ -21,13 +21,13 @@ Review full-page captures, focused state images, changed dimensions and the envi
 
 ### Local-only policy
 
-Visual tests never run automatically on git push, pull requests, production builds or deployments. Both wrapper and direct Playwright configuration reject CI/GitHub Actions execution. There is no visual GitHub job or Linux/Docker prerequisite. Install Chromium locally only; npm ci in CI does not download browsers. This preserves the account's 2,000 minute/month budget. Local visual Node 24.21.0 is a pinned renderer input; automated build/unit CI uses only Node 22.23.3 LTS.
+Visual tests never run automatically on git push, pull requests, production builds or deployments. Both wrapper and direct Playwright configuration reject CI/GitHub Actions execution. There is no visual GitHub job or Linux/Docker prerequisite. Install Chromium locally only; npm ci in CI does not download browsers. Local visual Node 24.21.0 is a pinned renderer input; the current automated build/unit jobs use Node 24.16.0.
 
 ## Built-server fixtures and readiness
 
 Native Playwright Test owns assertions, reports, traces, workers and global teardown. Global setup copies only source/public/seed/config into an owned temporary app, links installed dependencies, creates a fresh SQLite database using supported EmDash dev setup, and then starts the real Node standalone build. No working DB, uploads, env files or CMS/cloud credentials are copied. A process-only fixed Date makes seed publication/server dates reproducible without assuming SQL tables or editing working content. Browser Date is fixed separately; animation/performance clocks continue for behavior tests.
 
-Bootstrap verifies a clean normal build (healthy public content, styleguide GET/HEAD 404 despite runtime/query/cookie flags) before building separate `dist-fixtures`. The fixture artifact must be rejected by the release guard. Runtime specimens must contain fixture version 2; a setup/login/error page with status 200 fails identity checks. No fixture artifact is uploaded for deployment.
+Bootstrap verifies a clean normal build (healthy public content, styleguide GET/HEAD 404 despite runtime/query/cookie flags) before building separate `dist-fixtures`. The fixture artifact must be rejected by the release guard. Runtime specimens must contain the contract's current fixture version (3); a setup/login/error page with status 200 fails identity checks. No fixture artifact is uploaded for deployment.
 
 `tests/visual/contract.mjs` defines actual fixture routes: home, about, posts, welcome post, general category, starter tag, intentional 404 and styleguide. They render at 390×844, 768×1024 and 1440×900. Each capture verifies expected HTTP status/headings/content, local font faces, loaded/decoded images, no HUD or fake edit identities, and runtime/network health. External requests are blocked and surfaced. Lazy sections are visited before full-page capture; inert hidden ticker clone images are excluded from readiness because native lazy loading intentionally leaves them unloaded. This is not a screenshot mask. No regions are masked.
 
@@ -74,3 +74,11 @@ inside narrow hosts at wide viewports, DOM/RTL keyboard order, long text, intrin
 media and absent supporting content. The no-JS, text-spacing and actual 200%/400%
 zoom cases exercise these production components too. Native toolbar Find, other
 browser engines and screen-reader output still require separate observations.
+
+Disclosure keyboard journeys pace the native opening Enter and subsequent Tab
+events at 50ms so layout/scroll anchoring can settle before the next action,
+including with document JavaScript disabled. No script moves focus or repairs
+scroll position, and the visible/unobscured focus assertions remain strict.
+Failures include focus geometry for diagnosis. Phase 8's repeated downstream
+probe exposed the unpaced timing failure; its receipt retains both diagnostic
+and successful repeated results.

@@ -12,7 +12,7 @@ Plan: [phased implementation](architecture-implementation-plan-2026-10-19.md). C
 | 5 — native composition | Automated slice complete; manual AT pending | [Contract](../docs/native-composition.md), [calibration](component-calibration.md), [current checks/hashes](verification/native-composition-phase-5-checks.json) |
 | 6 — token diagnostics | Automated slice complete; manual resize/AT pending | [Math, diagnostics and adoption](../docs/verification/fluid-tokens-phase-6.md); [checks/hashes](verification/fluid-tokens-phase-6-checks.json); calibrated values retained |
 | 7 — conditional capabilities | Deferred pending requirements | No new modal/navigation/OG runtime |
-| 8 — release/adoption | Planned | Phases 1–6 record scoped adoption; final release/manual observations remain pending |
+| 8 — release/adoption | Automated core acceptance complete; manual observations pending | [Upgrade guide and patch](../docs/architecture-hardening-upgrade.md); [current checks/hashes](verification/architecture-hardening-phase-8-checks.json); [scope and reproduction](../docs/verification/architecture-hardening-phase-8.md) |
 
 Initial `npm run verify` passed before application edits (177 tests; Astro: 40 files, zero errors/warnings/hints).
 
@@ -172,8 +172,10 @@ with `--keep`. Phase 5's implementation and automated acceptance are complete.
 ## Next slice
 
 Phase 7 remains deferred: no actual requirement activates a modal, more complex
-navigation or generated OG runtime. Next is Phase 8's release/adoption rehearsal,
-with manual AT and text-only resize observations kept explicit.
+navigation or generated OG runtime. Core implementation and automated release/
+adoption acceptance are complete. Manual AT, text-only resize, authenticated editor
+save/reload and credentialed publishing remain separate acceptance. No publication,
+tag or deployment was requested.
 
 ## Phase 6 implementation
 
@@ -196,3 +198,35 @@ still requires explicit adoption of new file membership and package scripts.
 Executed acceptance is recorded in the [Phase 6 receipt](verification/fluid-tokens-phase-6-checks.json).
 Manual text-only resize, screen-reader observations, other engines/writing modes
 and physical devices remain outside this automated slice.
+
+## Phase 8 implementation
+
+Generator 0.4.0 assembles the completed core feature set and ships the explicit
+upgrade guide plus a reviewed near-default static patch. The historical standards
+manifest and private package version remain unchanged. Ordinary synchronization
+still cannot grow installed membership, add packages/scripts or overwrite client
+Base/routes/navigation/content/admin configuration.
+
+The historical-generator rehearsal uses trusted local immutable Git bytes, not
+an assumed remote publication. Both a near-default static fixture and a calibrated
+Sveltia fixture independently install/clean-install, verify/build, separate fixture
+output and pass public JS/no-JS journeys. Custom Base/navigation/admin config,
+original provenance and all 31 theme values survive; the CSS sync conflict remains
+visible. A token-only fixture reconciliation is explicitly separate from sync.
+Sveltia's pinned admin loads and offers token sign-in without credentialed publishing.
+
+The first downstream probe exposed a native focus timing failure. Geometry
+diagnostics and repeated probes led to paced native Enter/Tab events, retaining
+the same visible/unobscured focus assertions and no focus/scroll repair. Five
+consecutive browser repeats pass. The discarded document repaint approach was
+incompatible with disabled JavaScript and its owned stalled probe was stopped.
+
+CMS metadata acceptance now includes ten routes and real storage-backed media:
+the original endpoint and three decoded native WebP candidates pass. Media Library
+registration and authenticated editor saves remain separate. Fresh 0.4.0 profiles
+match their assembled source hashes, and the full CMS comparison passes without
+changing calibrated CSS, reference images or thresholds.
+
+Final command results, superseded probe explanations and retained/manual scope
+are recorded in the [Phase 8 receipt](verification/architecture-hardening-phase-8-checks.json)
+and [reproduction guide](../docs/verification/architecture-hardening-phase-8.md).

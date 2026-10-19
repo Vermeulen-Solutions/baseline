@@ -9,6 +9,8 @@ Baseline provides two Astro foundations and three Platform Profiles: **`static`*
 - **[Platform Profiles](platform-profiles.md):** choose editing personas, hosting, infrastructure costs and the generation path.
 - **[Capability and Support Boundaries](support-boundaries.md):** upstream versus Baseline responsibilities, runtime expectations, tested scopes and site-specific acceptance.
 - **[Baseline Updates](baseline-updates.md):** stage profile-filtered shared source/skill updates while preserving client changes.
+- **[Architecture Hardening Upgrade](architecture-hardening-upgrade.md):** generator 0.4.0, explicit existing-site additions, reviewed static patch and preservation/rollback contracts.
+- **[Release and Adoption Acceptance](verification/architecture-hardening-phase-8.md):** current CMS/static rehearsals, downstream preservation evidence and explicit manual limits.
 - **[Real Downstream Update Rehearsal](verification/baseline-sync-rehearsal.md):** immutable GitHub updates, rename bridging and preserved design conflicts across both static profiles and provenance forms.
 - **[Generation Manifests](../profiles/README.md):** explicit file/dependency inventories and independent profile verification.
 - **[Platform Profile Verification](verification/platform-profiles.md):** milestone test results, reproduction commands and verification scope.
@@ -37,7 +39,9 @@ Explore the documentation guides below, organized by workflow, design architectu
 *Mathematical consistency over arbitrary utility classes.*
 
 - **[Design Framework & Token Physics](design-framework.md)**  
-  Continuous mathematical fluid typography scales (`clamp()`) between 320px and 1280px, fluid spatial density, typographic reading measures (`68ch`), and self-responsive layout primitives (`<Section>`, `<Container>`, `<Grid>`, `.flow`).
+  Bounded fluid scales, root-font/inline-axis assumptions and diagnostics, reading measures (`68ch`), and structural layout primitives.
+- **[Native Composition](native-composition.md)**
+  Open-slot Disclosure, Cluster and Sidebar contracts, intrinsic wrapping, CMS/static content ownership and manual acceptance limits.
 - **[Reusable Public Patterns & Primitives](reusable-public-patterns.md)**  
   Production-tested components: `Card`, `CMSPartnersPanel`, `ResponsiveImage`, `EditorialImage`, and zero-JS interactive primitives (`LogoTicker` CSS infinite marquee, pure CSS flexbox `PhotoGallery`, and surface-aware focus).
 - **[CMS Metadata Ownership Verification](verification/metadata-phase-1.md)**
@@ -46,6 +50,12 @@ Explore the documentation guides below, organized by workflow, design architectu
   Static/Sveltia ownership, public URL and image policy, independent profile verification, and explicit existing-site adoption.
 - **[Foundational Interaction Journeys](verification/interactions-phase-3.md)**
   Local keyboard, error recovery, no-JS and motion checks across CMS/static profiles, with explicit manual AT limits.
+- **[Astro Accessibility Lint](verification/template-lint-phase-4.md)**
+  Portable parser/rules, regression probes, runtime floor and additive adoption.
+- **[Native Composition Verification](verification/native-composition-phase-5.md)**
+  Shared production specimens, real browser focus/fragment behavior and calibrated reference comparisons.
+- **[Fluid Mathematics Verification](verification/fluid-tokens-phase-6.md)**
+  Independent numerical contracts, preserved scale values and advisory resize estimates.
 
 ---
 
@@ -81,7 +91,7 @@ Explore the documentation guides below, organized by workflow, design architectu
 *Code-first token calibration, component quarantine, and local visual verification.*
 
 - **[Design Framework, Token Presets & Optional EmVB](design-framework.md)**  
-  How `npm run design:tokens` seeds canonical Aesthetic Lane presets, audits 10 WCAG AA perceptual contrast pairs across default and `[data-surface="dark"]` contexts, validates fluid `clamp()` bounds, and bridges optional `@perkyzz/emvb` visual landing pages.
+  How `npm run design:tokens` seeds lane presets, checks 14 semantic WCAG relative-luminance contrast pairs across default/dark/restored-light surfaces, validates bounded fluid math, and bridges optional `@perkyzz/emvb` visual landing pages.
 - **[Component Quarantine & Styleguide Fixtures](styleguide-fixtures.md)**  
   How `/_styleguide` renders components and responsive stress cases in isolation before page assembly, and how the route is automatically excluded (404) from production builds.
 - **[Local Visual Regression Testing](visual-regression.md)**  

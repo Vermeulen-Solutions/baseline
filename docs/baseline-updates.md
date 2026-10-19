@@ -110,3 +110,11 @@ Adopt them explicitly in a reviewed generator migration, or copy the portable
 suite/document as locally owned files and add the suite to the existing design
 test command. Retain existing tests and perform verify/build plus local rendered
 resize acceptance before committing. No new dependency is required.
+
+Generator 0.4.0's [architecture upgrade](architecture-hardening-upgrade.md)
+groups the metadata, lint, composition and diagnostic additions in their required
+order. An eligible shared-file update can reference new paths absent from an older
+installed inventory. Finish those explicit additions before deployment; a partial
+sync is not a compatibility guarantee for unadopted capabilities. The upstream
+helper's selected update paths also exclude docs and tests, even when already
+listed in an installed receipt. Copy/review those changes explicitly.

@@ -57,6 +57,13 @@ for review; content, routes, settings, admin config and npm dependencies are exc
 See `docs/baseline-updates.md`. The manual upstream workflow verifies a disposable
 proposal and uploads a review artifact; it never pushes to the site repository.
 
+Generator 0.4.0 includes per-platform metadata, native Disclosure/Cluster/Sidebar,
+Astro accessibility lint and fluid-token diagnostics. Existing sites need explicit
+additions before adopting dependent shared files; sync does not install packages,
+add scripts or expand managed membership. See
+`docs/architecture-hardening-upgrade.md` and its reviewed example patch. Preserve
+the site's original provenance, calibrated tokens, Base/navigation and admin config.
+
 Record browser acceptance and deployment ownership in project notes. The EmDash
 database audit, site registry and Windows screenshot baseline commands are not
 included in this profile.

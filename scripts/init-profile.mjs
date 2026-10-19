@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { BASELINE_REPOSITORY, profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
-export const GENERATOR_VERSION = '0.3.1';
+export const GENERATOR_VERSION = '0.4.0';
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const gateHash = bytes => sha256(String(bytes).replaceAll('\r\n', '\n'));
 const json = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');

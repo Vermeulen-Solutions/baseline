@@ -1,0 +1,402 @@
+{
+  "version": 1,
+  "mode": "verification",
+  "publicOrigin": "https://public.example.test",
+  "scope": "Owned local Node/SQLite production build; synthetic API editor write and native plugin; isolated Chromium JS inventory",
+  "sourceSHA256": {
+    "src/layouts/SiteShell.astro": "49e5194685572034ead7a8203cfbcb6eeaf07f68fbe738321e365ca9f6719cbb",
+    "src/layouts/Base.astro": "2c18252b095c973955fc7a62ae520f53475f967a2cd9af9dd9efc05a93ac721c",
+    "src/pages/posts/[slug].astro": "f240ea72ba602c760ea874e11e4242878035c2abc477dad8a0b988550dab5f02",
+    "src/pages/[slug].astro": "df21c64ac397c2936de1e643da0f0b56edfabd940f56db82eed9101dae52ddc7",
+    "src/pages/404.astro": "d7bed91793ae32edafcbe380625b43aad3fdce5bd0af4740f6836c4844f8f25d",
+    "src/utils/page-metadata.ts": "fe71f2266dfe4ceb9777e05445f884de57f760b8c24766a14bac9011c6f6b50c"
+  },
+  "routes": {
+    "/": {
+      "status": 200,
+      "titles": [
+        "My Site"
+      ],
+      "description": [
+        "Built with EmDash"
+      ],
+      "canonical": [
+        "https://public.example.test/"
+      ],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [
+        "https://public.example.test/"
+      ],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "https://public.example.test"
+        }
+      ]
+    },
+    "/posts": {
+      "status": 200,
+      "titles": [
+        "All Posts — My Site"
+      ],
+      "description": [
+        "Built with EmDash"
+      ],
+      "canonical": [
+        "https://public.example.test/posts"
+      ],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [
+        "https://public.example.test/posts"
+      ],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "https://public.example.test"
+        }
+      ]
+    },
+    "/posts/welcome?tracking=ignored": {
+      "status": 200,
+      "titles": [
+        "Welcome | My Site"
+      ],
+      "description": [
+        "Your first post. Replace this with your own content."
+      ],
+      "canonical": [
+        "https://public.example.test/posts/welcome"
+      ],
+      "type": [
+        "article"
+      ],
+      "ogUrl": [
+        "https://public.example.test/posts/welcome"
+      ],
+      "robots": [],
+      "published": [
+        "2026-01-15T12:00:00.000Z"
+      ],
+      "modified": [
+        "2026-01-15T12:00:00.000Z"
+      ],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "Welcome",
+          "description": "Your first post. Replace this with your own content.",
+          "url": "https://public.example.test/posts/welcome",
+          "datePublished": "2026-01-15T12:00:00.000Z",
+          "dateModified": "2026-01-15T12:00:00.000Z",
+          "publisher": {
+            "@type": "Organization",
+            "name": "My Site"
+          },
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://public.example.test/posts/welcome"
+          }
+        }
+      ]
+    },
+    "/about": {
+      "status": 200,
+      "titles": [
+        "About | My Site"
+      ],
+      "description": [
+        "Built with EmDash"
+      ],
+      "canonical": [
+        "https://public.example.test/about"
+      ],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [
+        "https://public.example.test/about"
+      ],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "https://public.example.test"
+        }
+      ]
+    },
+    "/posts/metadata-editor": {
+      "status": 200,
+      "titles": [
+        "Editor SEO title | My Site"
+      ],
+      "description": [
+        "Editor description wins"
+      ],
+      "canonical": [
+        "https://editor.example.test/selected"
+      ],
+      "type": [
+        "article"
+      ],
+      "ogUrl": [
+        "https://editor.example.test/selected"
+      ],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "published": [
+        "2026-01-15T12:00:00.000Z"
+      ],
+      "modified": [
+        "2026-01-15T12:00:00.000Z"
+      ],
+      "author": [
+        "Synthetic Author"
+      ],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "BlogPosting",
+          "headline": "Editor SEO title",
+          "description": "Editor description wins",
+          "url": "https://editor.example.test/selected",
+          "datePublished": "2026-01-15T12:00:00.000Z",
+          "dateModified": "2026-01-15T12:00:00.000Z",
+          "author": {
+            "@type": "Person",
+            "name": "Synthetic Author"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "My Site"
+          },
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://editor.example.test/selected"
+          }
+        }
+      ]
+    },
+    "/metadata-plugin": {
+      "status": 200,
+      "titles": [
+        "Plugin fixture — My Site"
+      ],
+      "description": [
+        "Plugin description wins"
+      ],
+      "canonical": [
+        "https://plugin.example.test/preferred"
+      ],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [
+        "https://plugin.example.test/preferred"
+      ],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "url": "https://plugin.example.test/preferred"
+        }
+      ]
+    },
+    "/metadata-shell": {
+      "status": 200,
+      "titles": [
+        "Shell fixture"
+      ],
+      "description": [
+        "Shell description"
+      ],
+      "canonical": [
+        "https://shell.example.test/original"
+      ],
+      "type": [],
+      "ogUrl": [],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": []
+    },
+    "/metadata-shell?owner=platform": {
+      "status": 200,
+      "titles": [
+        "Shell fixture"
+      ],
+      "description": [
+        "Platform description"
+      ],
+      "canonical": [
+        "https://platform.example.test/preferred"
+      ],
+      "type": [],
+      "ogUrl": [],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": []
+    },
+    "/metadata-storage": {
+      "status": 200,
+      "titles": [
+        "Storage media fixture — My Site"
+      ],
+      "description": [
+        "Built with EmDash"
+      ],
+      "canonical": [
+        "https://public.example.test/metadata-storage"
+      ],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [
+        "https://public.example.test/metadata-storage"
+      ],
+      "robots": [],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "https://public.example.test"
+        }
+      ]
+    },
+    "/missing-metadata-page": {
+      "status": 404,
+      "titles": [
+        "Not Found — My Site"
+      ],
+      "description": [
+        "Built with EmDash"
+      ],
+      "canonical": [],
+      "type": [
+        "website"
+      ],
+      "ogUrl": [],
+      "robots": [
+        "noindex, nofollow"
+      ],
+      "published": [],
+      "modified": [],
+      "author": [],
+      "graphs": [
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "My Site",
+          "url": "https://public.example.test"
+        }
+      ]
+    }
+  },
+  "javascript": {
+    "/": {
+      "freshContext": true,
+      "scripts": [
+        {
+          "path": "/_astro/LiveSearch.astro_astro_type_script_index_0_lang.BKUg8IFo.js",
+          "decodedBytes": 6078,
+          "transferredBodyBytes": 6078,
+          "sha256": "2fe4732c7f0dce2267bb5bcbfde66b27185894bf79aa2d5f05bce3a9c6ee9bbd"
+        }
+      ],
+      "decodedBytes": 6078,
+      "transferredBodyBytes": 6078
+    },
+    "/posts/welcome": {
+      "freshContext": true,
+      "scripts": [
+        {
+          "path": "/_astro/LiveSearch.astro_astro_type_script_index_0_lang.BKUg8IFo.js",
+          "decodedBytes": 6078,
+          "transferredBodyBytes": 6078,
+          "sha256": "2fe4732c7f0dce2267bb5bcbfde66b27185894bf79aa2d5f05bce3a9c6ee9bbd"
+        }
+      ],
+      "decodedBytes": 6078,
+      "transferredBodyBytes": 6078
+    },
+    "/metadata-storage": {
+      "freshContext": true,
+      "scripts": [
+        {
+          "path": "/_astro/LiveSearch.astro_astro_type_script_index_0_lang.BKUg8IFo.js",
+          "decodedBytes": 6078,
+          "transferredBodyBytes": 6078,
+          "sha256": "2fe4732c7f0dce2267bb5bcbfde66b27185894bf79aa2d5f05bce3a9c6ee9bbd"
+        }
+      ],
+      "decodedBytes": 6078,
+      "transferredBodyBytes": 6078
+    }
+  },
+  "storageMedia": {
+    "storage": "LocalStorage public API in the owned temporary app",
+    "databaseMediaRecord": "not created; no Media Library/editor claim",
+    "original": {
+      "status": 200,
+      "sha256": "5e350d34321de85c3f9ec305719ea2e522db2e962474d11b7ab277f15eec48b7",
+      "width": 1800,
+      "height": 1200
+    },
+    "candidates": [
+      {
+        "status": 200,
+        "width": 480,
+        "height": 320,
+        "format": "webp"
+      },
+      {
+        "status": 200,
+        "width": 800,
+        "height": 533,
+        "format": "webp"
+      },
+      {
+        "status": 200,
+        "width": 1400,
+        "height": 933,
+        "format": "webp"
+      }
+    ]
+  },
+  "status": "passed",
+  "cleanup": "Owned server/temp tree removed; dependency junction unlinked; no working DB/media/env copied"
+}

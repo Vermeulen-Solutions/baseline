@@ -25,6 +25,7 @@ public/media/responsive/
 # Disposable visual reports and captures; reviewed baselines stay tracked
 .emdash/visual/
 .emdash/metadata/
+.emdash/release/
 playwright-report/
 test-results/
 

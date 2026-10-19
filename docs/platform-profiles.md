@@ -86,6 +86,12 @@ changing the profile ID in a receipt is not a migration.
 
 ## Updating and delivery
 
+Generator 0.4.0 includes unified per-platform metadata, Astro accessibility lint,
+native composition and fluid diagnostics. The [architecture upgrade](architecture-hardening-upgrade.md)
+separates current generation from existing-site sync/additive adoption. Original
+receipts and historical standards certification are retained; changing their
+version fields does not perform an upgrade.
+
 [Baseline updates](baseline-updates.md) describes immutable, staged shared-file
 and skill synchronization. Client content, settings, routes and admin config are
 never updated by that tool; calibrated tokens become review conflicts when changed

@@ -2,16 +2,24 @@ import { expect } from '@playwright/test';
 
 export async function focusVisible(locator) {
   await expect(locator).toBeFocused();
-  await expect.poll(() => locator.evaluate(element => {
-    const rect = element.getBoundingClientRect();
-    // Baseline's stretched card link delegates its visible ring to the focus parent.
-    const style = getComputedStyle(element.closest('.focus-parent') ?? element);
-    const x = rect.left + rect.width / 2, y = rect.top + Math.min(rect.height / 2, 16);
-    const covering = document.elementFromPoint(x, y);
-    return { inViewport: x >= 0 && x < innerWidth && y >= 0 && y < innerHeight,
-      uncovered: covering === element || element.contains(covering),
-      outline: style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) > 0 };
-  }), { message: 'Keyboard focus must be visible, within the viewport and unobscured' }).toEqual({ inViewport: true, uncovered: true, outline: true });
+  try {
+    await expect.poll(() => locator.evaluate(element => {
+      const rect = element.getBoundingClientRect();
+      // Baseline's stretched card link delegates its visible ring to the focus parent.
+      const style = getComputedStyle(element.closest('.focus-parent') ?? element);
+      const x = rect.left + rect.width / 2, y = rect.top + Math.min(rect.height / 2, 16);
+      const covering = document.elementFromPoint(x, y);
+      return { inViewport: x >= 0 && x < innerWidth && y >= 0 && y < innerHeight,
+        uncovered: covering === element || element.contains(covering),
+        outline: style.outlineStyle !== 'none' && parseFloat(style.outlineWidth) > 0 };
+    }), { message: 'Keyboard focus must be visible, within the viewport and unobscured' }).toEqual({ inViewport: true, uncovered: true, outline: true });
+  } catch (error) {
+    const geometry = await locator.evaluate(element => ({
+      rect: element.getBoundingClientRect().toJSON(), viewport: { width: innerWidth, height: innerHeight },
+      scroll: { x: scrollX, y: scrollY }, fragment: location.hash, text: element.textContent,
+    }));
+    throw new Error(error.message + '\nFocus geometry: ' + JSON.stringify(geometry), { cause: error });
+  }
 }
 
 /** Starts on a freshly navigated document; does not repair focus with automation. */

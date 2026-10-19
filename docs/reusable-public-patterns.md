@@ -2,6 +2,18 @@
 
 These are neutral infrastructure, not a client theme. Choose brand tokens and a real art direction before composing site pages. No client assets, sponsor collection, form storage or mail provider is installed by these patterns.
 
+## Native structural composition
+
+Compose open-slot `Disclosure`, `Cluster` and `Sidebar` alongside `Section`,
+`Container`, `Grid` and `Card`. Disclosure delegates toggling, grouping and
+closed-content focus exclusion to native details/summary; Cluster wraps children,
+and Sidebar preserves main-first DOM order while adapting to its host's width.
+See [native composition](native-composition.md) for exact slots and semantic
+limits. Both foundations run the same production specimens; Markdown and
+Portable Text remain platform-owned. Existing sites follow the explicit
+[architecture upgrade](architecture-hardening-upgrade.md) before adopting shared
+specimens that import new paths.
+
 ## Responsive media
 
 ResponsiveImage uses native Astro `getImage`; static public originals receive Vite metadata and CMS images use EmDash’s storage-backed image endpoint. No prepared renditions or manifest is required. Pass accurate `sizes`, descriptive `alt`, and eager/high priority only for the primary above-fold image. Use `optimize={false}` for original artwork or animated media. Small originals remain unchanged and candidates never enlarge the source. See [image delivery](image-delivery.md) for hosting, live uploads, failure recovery and verification.

@@ -1,0 +1,1304 @@
+diff --git a/astro.config.mjs b/astro.config.mjs
+index 647d598..3e03192 100644
+--- a/astro.config.mjs
++++ b/astro.config.mjs
+@@ -1,10 +1,12 @@
+ import { defineConfig } from 'astro/config';
+ import tailwindcss from '@tailwindcss/vite';
+ import devTools from './scripts/dev-tools-integration.mjs';
++import { routing } from './src/config/routing.ts';
+ 
+ const fixtures = process.env.ASTRO_TEST_FIXTURES === '1';
+ export default defineConfig({
+   output: 'static',
++  ...routing,
+   site: process.env.SITE_URL,
+   outDir: fixtures ? './dist-fixtures' : './dist',
+   cacheDir: fixtures ? './.astro-fixtures' : './.astro',
+diff --git a/docs/baseline-updates.md b/docs/baseline-updates.md
+index db5a5bc..f317e67 100644
+--- a/docs/baseline-updates.md
++++ b/docs/baseline-updates.md
+@@ -83,3 +83,30 @@ The root Baseline weekly update workflow similarly produces a dependency patch
+ after verification, rather than directly pushing to `main` or suppressing failures.
+ CMS skill updates remain explicit, staged operations documented in
+ `docs/skill-synchronization.md` in the full EmDash repository.
++
++Template accessibility lint is an additive tooling upgrade for older generated
++sites. Current generation includes `eslint.config.mjs`, portable regression tests,
++four development dependencies and `lint:scripts`/`lint:templates`; bounded sync
++does not add those package entries, scripts or new managed-file membership to an
++existing installation. Review the configuration and exact development versions
++from the selected Baseline revision, use Node `^22.22.3 || ^24.16.0 || >=26.3.0`,
++and regenerate the site's npm lockfile after installing. The installed-site
++template command is `eslint src --max-warnings 0`; the additional overlay target
++belongs only to the Baseline source repository. Resolve diagnostics with reviewed
++source fixes or narrowly justified line exceptions, then run full verify/build
++before committing. A reviewed generator migration is needed to expand managed
++membership; do not silently edit the receipt or adopt starter art-gate exemptions
++for client components.
++
++Fluid-token diagnostics are another bounded upgrade: an already-managed
++`scripts/design-system.mjs` can be proposed through sync, preserving the site's
++calibrated `global.css`. Review newly rejected expressions against the documented
++affine grammar before changing client values. The additive JSON `fluid` report
++has advisory resize estimates; these do not change the audit's pass/fail policy.
++Current generation also ships `tests/fluid-tokens.test.mjs` and
++`docs/design-framework.md`, and includes the mathematical suite in `test:design`.
++Older receipts and package scripts do not acquire those additions through sync.
++Adopt them explicitly in a reviewed generator migration, or copy the portable
++suite/document as locally owned files and add the suite to the existing design
++test command. Retain existing tests and perform verify/build plus local rendered
++resize acceptance before committing. No new dependency is required.
+diff --git a/docs/design-framework.md b/docs/design-framework.md
+new file mode 100644
+index 0000000..4868b25
+--- /dev/null
++++ b/docs/design-framework.md
+@@ -0,0 +1,269 @@
++# Design Framework & Token Physics
++
++Baseline includes a complete, mathematically grounded design framework built on **fluid responsive scales** and **structural layout primitives**.
++
++Traditional websites often suffer from **"breakpoint soup"**: dozens of arbitrary media queries (`p-4 md:p-8 lg:p-12 xl:p-16`) that create jarring layout jumps at arbitrary screen widths and look broken on intermediate screens (small laptops, tablets in split view, or foldable devices).
++
++Baseline eliminates breakpoint soup by using continuous mathematical clamp functions anchored to the viewport width, combined with self-responsive layout components.
++
++---
++
++## 1. Continuous Fluid Scaling
++
++Global type and spacing use bounded, ascending CSS `clamp()` expressions with `rem` bounds and a preferred `rem + vi` term. The CLI generator defaults to **20–80rem of viewport inline size**. At a 16px root and horizontal writing, that corresponds to 320–1280 CSS pixels. At a 20px root, it corresponds to 400–1600 CSS pixels. `vi` follows the root writing mode's inline axis; legacy `vw` follows physical viewport width ([CSS Values and Units](https://www.w3.org/TR/css-values-4/#viewport-relative-lengths)).
++
++Authored tokens and aesthetic presets can have different transition ranges. Their actual saturation points follow their own coefficients, with small differences from four-place rounding. Inspect `npm run design:tokens -- --json`: each `fluid.tokens` entry reports its `transitionRem`, five reference samples, changed root-font samples and zoom estimates. Equal bounds are valid constants and report a null transition range. The tables below assume a 16px root, horizontal writing, and whole-pixel rounding; they do not promise exact 20–80rem interpolation for every authored token.
++
++### Mathematics and diagnostic contract
++
++The generator uses linear interpolation between requested sizes and viewport endpoints, consistent with [Utopia's clamp calculation](https://utopia.fyi/blog/clamp/). Utopia is a comparison reference, with no runtime dependency or second generator. Baseline emits logical `vi` units and rounds bounds and coefficients to four decimal places. Independent tests cover both endpoints, midpoint, values outside the range, monotonicity and the rounding-error bound. Golden output hashes preserve the existing named type scales, representative spacing scales and all lane presets.
++
++`buildFluidClamp(minRem, maxRem, minViewportRem = 20, maxViewportRem = 80)` requires finite numeric inputs, `0 < minRem <= maxRem`, and a finite domain satisfying `0 <= minViewportRem < maxViewportRem`. Reversed sizes are unsupported for both type and spacing. A permitted spacing ratio does not guarantee that every combination of base sizes is ascending; adjust the inputs when bounds validation fails. Coefficients that cannot represent growth at four decimal places fail before CSS is emitted.
++
++The global-token validator supports a deliberately bounded grammar: positive ordered `rem` bounds and an affine `rem + vi` term (optionally inside `calc()`), or a direct viewport term. Negative intercepts, finite decimal/exponent numbers and existing `vw` values are supported; generated scales continue to use `vi`. CSS binary `+`/`-` requires surrounding whitespace. Negative slopes, zero slopes with varying bounds, malformed expressions, non-finite coefficients/domains and overflowing reference evaluations fail. General CSS math, variables and container units are outside this contract. `cqi` needs a separately documented inline-size container and matching validators/specimens before adoption; adding a substring containing `vi` cannot bypass that boundary.
++
++The JSON report models a fixed 1280px physical viewport, 16px root and horizontal writing. At estimated 200%/400% zoom, CSS viewport size shrinks to 640/320px while the root stays 16 CSS pixels. `effectiveSizeRatio` compares the enlarged modeled size against the initial size. A ratio below the requested zoom factor produces a text-token advisory, not an audit failure or a WCAG verdict. `rootFontSamples` separately evaluate 16/20/32px roots at a fixed 1280 CSS-pixel viewport. These calculations describe assumptions; they do not reproduce text-only browser resizing, font metrics, clipping, wrapping or focus behavior.
++
++Use `npm run test:design` and `npm run verify` for mathematical checks. Run the existing local Windows `npm run test:visual:functional` for actual Chromium 200%/400% zoom, 320px reflow, text spacing and keyboard journeys. Numerical results do not replace rendered acceptance or manual assistive-technology and text-only resize checks. No browser/screenshot suite runs in CI or production builds.
++
++### Fluid Typography Scale
++
++Defined in `src/styles/global.css` under Tailwind v4's `@theme`:
++
++| Token | Formula | 320px Viewport | 1280px Viewport | Intended Role |
++| :--- | :--- | :--- | :--- | :--- |
++| `--text-step--1` | `clamp(0.875rem, calc(0.8333rem + 0.2083vi), 1rem)` | 14px | 16px | Captions, metadata, fine print |
++| `--text-step-0` | `clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)` | 16px | 24px | Body copy, default interface text |
++| `--text-step-1` | `clamp(1.25rem, calc(1rem + 1.25vi), 2rem)` | 20px | 32px | Section headings (`<h2>`), cards |
++| `--text-step-2` | `clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem)` | 28px | 52px | Page titles (`<h1>`), hero display |
++| `--text-step-2-to-0` | `clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem)` | 16px | 52px | High-contrast display bridge |
++| `--text-step-3-to-1` | `clamp(1.25rem, calc(0.25rem + 5vi), 4.25rem)` | 20px | 68px | Dramatic hero display bridge |
++
++All headings apply `text-wrap: balance` by default to prevent awkward single-word typographic orphans.
++
++### Fluid Spatial Density Scale
++
++Spacing grows proportionally with the screen, maintaining balanced visual weight from mobile phones to 4K monitors:
++
++| Token | Formula | 320px Viewport | 1280px Viewport | Intended Role |
++| :--- | :--- | :--- | :--- | :--- |
++| `--spacing-content` | `clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)` | 16px | 24px | Flow margins, card inner padding |
++| `--spacing-grid` | `clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem)` | 20px | 36px | Column gaps, figure margins |
++| `--spacing-container`| `clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)` | 16px | 32px | Page horizontal gutter padding |
++| `--spacing-section` | `clamp(3rem, calc(1rem + 10vi), 9rem)` | 48px | 144px | Vertical section breathing room |
++| `--spacing-xl-to-sm` | `clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem)` | 12px | 64px | High-contrast padding/gap bridge |
++| `--spacing-2xl-to-md` | `clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem)` | 20px | 104px | Hero/spotlight padding bridge |
++
++Because `--spacing-section` expands from 48px to 144px naturally, you never need to write `@media (min-width: ...)` rules just to give desktop sections breathing room.
++
++---
++
++## 2. Typographic Measures (Line Lengths)
++
++Unconstrained line lengths make paragraphs exhausting to read on wide screens. Baseline enforces three typographic boundaries plus a gutter-safe content measure:
++
++```css
++--measure-reading: 68ch;   /* Ideal line length for body prose (~60-75 characters) */
++--measure-content: 76rem;  /* Standard content container (~1216px) */
++--measure-content-safe: min(var(--measure-content), calc(100% - var(--spacing-container) * 2));
++--measure-wide:    88rem;  /* Wide layouts, navbars, and media galleries (~1408px) */
++```
++
++Paragraphs and list items automatically inherit `max-width: var(--measure-reading)` with a comfortable line-height of `1.65`.
++
++---
++
++## 3. Structural Layout Primitives
++
++Baseline provides small, semantic Astro layout primitives located in `src/components/`. They accept standard slots and forward custom class names.
++
++### `<Container width="reading | content | wide" breakout />`
++
++For standard sections, `<Container>` constrains inner content to one of the three established measures and centers it with `margin-inline: auto`. When `breakout` is enabled (`<Container breakout>`), it renders `.content-grid`—a multi-track CSS Grid where default children remain constrained to `--measure-reading` while specific child blocks can break out to wider named tracks (`feature`, `wide`, `full`) without closing and reopening the container:
++
++```astro
++---
++import Container from '../components/Container.astro';
++---
++
++<!-- Standard content container (max-width: 76rem) -->
++<Container width="content">
++  <Grid minimum="standard"> ... </Grid>
++</Container>
++
++<!-- Editorial breakout container (.content-grid) for long-form articles & case studies -->
++<Container breakout class="flow">
++  <p>Default children stay in the comfortable reading column (68ch).</p>
++  <figure class="content--feature">
++    <!-- Expands to --measure-content (76rem) -->
++  </figure>
++  <div class="content--wide">
++    <!-- Expands to --measure-wide (88rem) -->
++  </div>
++</Container>
++```
++
++### `<Section spacing="content | section" labelledBy="..." />`
++
++Provides semantic `<section>` wrapping with consistent vertical rhythm and accessibility:
++
++```astro
++---
++import Section from '../components/Section.astro';
++import Container from '../components/Container.astro';
++---
++
++<Section labelledBy="news-heading" spacing="section">
++  <Container width="content">
++    <h2 id="news-heading">Latest Club News</h2>
++    <!-- Content -->
++  </Container>
++</Section>
++```
++* `spacing="section"` (default): Applies fluid `padding-block: var(--spacing-section)`.
++* `spacing="content"`: Applies compact `padding-block: var(--spacing-content)` for secondary panels or callouts.
++
++### `<Grid minimum="compact | standard | wide" />`
++
++A self-responsive CSS grid that automatically fits items across columns without media queries:
++
++```astro
++---
++import Grid from '../components/Grid.astro';
++import Card from '../components/Card.astro';
++---
++
++<Grid minimum="standard">
++  <Card title="Article 1" href="/article-1" ... />
++  <Card title="Article 2" href="/article-2" ... />
++  <Card title="Article 3" href="/article-3" ... />
++</Grid>
++```
++
++Under the hood, `<Grid>` uses CSS `minmax()` and `auto-fit`:
++```css
++.grid-auto {
++  display: grid;
++  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
++  gap: var(--spacing-grid);
++}
++
++.grid-auto--compact  { --grid-min: 14rem; } /* 224px cards (e.g. badges, team avatars) */
++.grid-auto--standard { --grid-min: 17rem; } /* 272px cards (e.g. standard article cards) */
++.grid-auto--wide     { --grid-min: 21rem; } /* 336px cards (e.g. featured posts, complex items) */
++```
++Columns wrap naturally when screen space narrows, with zero layout shift or overlapping cards.
++
++### `<Card />` (Turnkey Accessible Card & Concentric Radius)
++
++`<Card>` renders a semantic `<article class="card">` and uses `.clickable-parent` on the heading's `<a>` tag so the entire card is clickable while screen readers announce only the heading as the link name. Paired with `.focus-parent` (`:focus-within:has(:focus-visible)`), keyboard navigation draws a single focus ring on the card perimeter without sticky mouse outlines. Customize cards via `--card-bg`, `--card-text`, `--card-muted`, `--card-border-color`, `--card-radius`, `--card-padding`, `--card-frame-padding`, `--card-gap`, `--card-shadow`, and automatic concentric media radius (`--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))`).
++
++---
++
++## 4. Editorial Smart Spacing (`.flow`)
++
++Wrap CMS Portable Text and editorial articles in the `.flow` utility class to automatically establish vertical rhythm:
++
++```astro
++<div class="flow">
++  <PortableText value={entry.data.body} />
++</div>
++```
++
++The flow utility differentiates rhythm across headings, lists, figures, and blockquotes via CSS custom properties while preventing duplicate margin stacking after block elements:
++```css
++.flow > :where(* + *) {
++  margin-block-start: var(--flow-space, var(--spacing-content));
++}
++
++.flow > :where(h2, h3, h4) {
++  --flow-space: var(--heading-spacing, 1.5em);
++}
++
++.flow :where(li + li) {
++  margin-block-start: var(--list-item-spacing, 0.35em);
++}
++
++.flow :where(img, figure, table, blockquote) {
++  margin-block: var(--spacing-grid);
++}
++
++.flow > :where(img, figure, table, blockquote) + * {
++  margin-block-start: 0;
++}
++```
++
++---
++
++## 5. Elevation Shadows, Easing, Masks & Contextual Surfaces
++
++- **Multi-Layer OKLCH Shadows (`@theme`):** `--shadow-sm` (3-stop), `--shadow-md` (4-stop), and `--shadow-lg` (6-stop) derived from `oklch(from var(--color-text) l c h / alpha)`.
++- **Curated Easing Curves (`@theme`):** `--ease-smooth`, `--ease-snappy`, and physics-inspired `--ease-spring` (via CSS `linear()`).
++- **Background & Mask Helpers:** Mark background media with `.is-bg` (its parent automatically becomes `position: relative; isolation: isolate` via `:where(:has(> .is-bg))`), and apply `.fade--bottom`, `.fade--top`, `.fade--block`, or `.fade--inline` (`--fade-amount: 25%`) for surface-independent `mask-image` fades.
++- **Contextual Surface Scopes:** Apply `data-surface="dark"` or `data-surface="light"` to any section or card to remap `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, `--color-focus`, and `--color-link` together. Text links retain action ink by default, use the existing light focus ink on dark surfaces, and restore action ink on nested light surfaces. Optional `--surface-dark-link` / `--surface-light-link` aliases support calibrated overrides without changing solid-action colors.
++
++---
++
++## 6. Agent-First Token Calibration & WCAG Contrast Audit (`npm run design:tokens`)
++
++Baseline treats `src/styles/global.css` as the single source of truth for tokens, backed by an automated CLI engine (`scripts/design-system.mjs`) and live Vite HMR on `/_styleguide`:
++
++1. **List or seed a canonical Aesthetic Lane preset:**
++   ```sh
++   npm run design:tokens -- --list-lanes
++   npm run design:tokens -- --lane editorial-paper --write
++   ```
++   Available presets: `neutral`, `technical-systems`, `product-led-minimalism`, `editorial-paper`, and `luminous-futurism`.
++2. **Generate parametric fluid scales or WCAG-safe OKLCH brand palettes:**
++   ```sh
++   # Derive all --text-step-* and --spacing-* fluid clamp() tokens from mathematical ratios
++   npm run design:tokens -- --type-scale major-third --space-scale 1.5 --write
++
++   # Synthesize a complete light + [data-surface="dark"] OKLCH palette from brand hex/OKLCH seeds
++   npm run design:tokens -- --seed-accent "#1B4332" --seed-canvas "#FAF8F5" --write
++
++   # Set individual @theme, :root (--root:...), or dark-surface (--dark:...) tokens
++   npm run design:tokens -- --set "--radius-card=0.5rem" --set "--root:--measure-reading=64ch" --write
++   ```
++3. **Run the automated token & WCAG contrast audit and record Stage 4.5 evidence:**
++   ```sh
++   npm run design:tokens
++   npm run design:tokens -- --write-calibration
++   npm run test:design
++   ```
++   This directly parses `src/styles/global.css`, verifies 14 WCAG contrast pairs across default, dark and restored-light contexts (including 4.5:1 text-link gates), checks fluid `clamp()` bounds, confirms `/_styleguide` swatch and `src/` consumer coverage, and writes a deterministic `## Token Calibration` section (bound to the LF-normalised SHA-256 of `src/styles/global.css`) into `audit/component-calibration.md`.
++
++---
++
++## 7. Optional Visual Page Builder Integration (`@perkyzz/emvb`)
++
++Core routes, collections, and long-form articles should use Baseline's zero-JS Astro primitives (`<Section>`, `<Container>`, `<Grid>`, `<Card>`, `.flow`). When a client also needs a drag-and-drop visual editor for bespoke marketing landing pages or popups, integrate **[EmVB](https://emvb.dev/)** (`@perkyzz/emvb`) as an optional Stage 2 native plugin:
++
++1. **Install EmVB (and optional MCP server):**
++   ```sh
++   npm install @perkyzz/emvb
++   ```
++2. **Register in `astro.config.mjs` and pass `canvasStyles`:**
++   Pass your global stylesheet so the EmVB editor iframe and rendered blocks inherit Baseline's typography and CSS custom properties:
++   ```js
++   import { emvb } from "@perkyzz/emvb";
++
++   // Inside emdash({ plugins: [...] }):
++   emvb({
++     canvasStyles: ["/src/styles/global.css"],
++   })
++   ```
++3. **Resolve EmVB pages in `src/pages/[slug].astro`:**
++   ```astro
++   ---
++   import { resolveEmVBPage } from "@perkyzz/emvb/runtime";
++   import EmVBPage from "@perkyzz/emvb/astro/EmVBPage.astro";
++
++   const emvb = await resolveEmVBPage(Astro);
++   ---
++   {emvb ? <EmVBPage page={emvb} /> : (
++     <!-- Standard Astro template fallback -->
++   )}
++   ```
++4. **Synchronize tokens via MCP (`@perkyzz/emvb-mcp`):**
++   Agents can use `emvb_get_styles` and `emvb_update_styles` to align EmVB's site-styles palette and fluid typography scale with the OKLCH and `clamp()` tokens defined in `src/styles/global.css`.
+diff --git a/docs/native-composition.md b/docs/native-composition.md
+new file mode 100644
+index 0000000..e9a9f26
+--- /dev/null
++++ b/docs/native-composition.md
+@@ -0,0 +1,131 @@
++# Native composition contract
++
++These presentation primitives use the existing Tailwind v4 semantic tokens. They
++have no queries, content schema, hydration, custom keyboard controller or automatic
++structured data. Import their Astro components and compose authored content in slots.
++Root and generated profiles share the implementations and calibration specimens.
++
++## Disclosure
++
++```astro
++<Disclosure id="delivery-notes">
++  <span slot="summary" {...entry.edit.title}>{entry.title}</span>
++  <RichText value={entry.body} />
++</Disclosure>
++```
++
++This is the EmDash caller shape: imports, query and edit attributes belong to that
++caller. Static callers put a native Markdown `<Content />` in the default slot and
++omit EmDash imports/attributes. The body is already wrapped in `.flow`.
++
++The component emits `<details>` with a first-child `<summary>`, one named summary
++slot and a default body slot. Supply the summary slot or rendering fails with an
++actionable error. A supplied-but-empty slot is still the author's responsibility.
++Use meaningful plain text or noninteractive phrasing markup; do not nest another
++summary, link, button, form field or whole rich-text document in the label. Avoid
++headings in summaries: native summary accessibility mappings vary across platforms.
++Put the section heading outside the disclosure and appropriate subheadings inside.
++Keep editor annotations on the caller's text/content; no slot is cloned or serialized.
++
++Ordinary details attributes, class, style and `data-*` attributes pass through.
++Native `open` is opt-in; omitted is closed. Pass a boolean, not `open="false"`, which
++HTML treats as present. The component adds no default-open policy. Do not override
++the native role or manually track `aria-expanded`, `aria-controls` or tabindex.
++Native Enter/Space activation, expanded state and the marker stay browser-owned.
++Spacing and focus are inherited from the existing semantic tokens and focus rules.
++
++Text links use the shared `--color-link` alias. The default retains action ink;
++dark surfaces use the existing light focus ink and a nested light surface restores
++action ink. Optional `--surface-dark-link` / `--surface-light-link` overrides permit
++site-specific link calibration without changing solid-action backgrounds or labels.
++`design:tokens` gates default, dark and restored-light text-link pairs at 4.5:1.
++This fixes the dark specimen's observed 2.34:1 inherited action ink; the current
++dark link is 8.79:1. No `@theme` palette, fluid scale or lane preset was changed.
++
++An optional shared `name` creates a native exclusive group in supporting browsers.
++Names are document-wide, including nonadjacent details, so namespace them per group;
++do not assign the same name to every disclosure on a site. Only use exclusivity when
++readers benefit from it; independent panels allow comparison. Older browsers can
++retain independently usable panels without a group polyfill. There is no arrow-key
++accordion controller or modal focus trap.
++
++Keep essential instructions and required action controls outside collapsed panels.
++Browser fragment reveal and find behavior vary; test the browsers you support.
++Automated keyboard/fragment checks do not prove screen-reader announcements or the
++browser toolbar's Find behavior. Test those manually before claiming support.
++Disclosure does not imply FAQ content and emits no FAQ schema.
++
++See [native details](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details)
++and [summary accessibility notes](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/summary).
++
++## Cluster
++
++```astro
++<Cluster class="article-actions" style="--cluster-gap: var(--spacing-grid)">
++  <a href="/posts">All articles</a>
++  <button type="button">Copy this address</button>
++</Cluster>
++```
++
++Cluster is a `div` with wrapping flex siblings, centered cross-axis alignment and
++a content-token gap. It replaces the existing repeated action-row relationship;
++it is not a menu or a toolbar and supplies no extra role. Native div attributes
++pass through. Its only contextual tuning property is `--cluster-gap`. Wrap related
++editor-owned inline content in a stable child when it should remain one flex item.
++DOM order controls keyboard order; `dir="rtl"` follows writing direction without
++`order`, `row-reverse` or a duplicate localized tree.
++
++## Sidebar
++
++```astro
++<Sidebar style="--sidebar-basis: calc(var(--measure-reading) / 3)">
++  <div class="flow"><Content /></div>
++  <aside aria-label="Article facts"><p>Caller-owned supporting content</p></aside>
++</Sidebar>
++```
++
++Use at most two direct elements: main content first, optional supporting content
++second. The component is a `div`, not another document `main`. The caller supplies
++appropriate section/aside semantics and any accessible name. Keep CMS/editor
++wrappers *inside* these stable region elements, so the layout still sees two items.
++Do not place Fragment-expanded arbitrary region lists here; use Grid for collections.
++
++The main region grows into remaining space and requires 60% of the available inline
++size before wrapping. Supporting content uses one third of the reading measure as
++its initial basis; both regions can shrink and wrap long text inside narrow hosts.
++When wrapped, each region fills its line, in DOM order. A single main child fills
++the host without a phantom second column. Logical properties respect RTL; this API
++does not visually reverse the order of meaningful content.
++
++`--sidebar-gap`, `--sidebar-basis` and `--sidebar-main-min` are contextual CSS tuning
++properties, defaulting to the grid gap, reading-measure fraction and 60%. Keep the
++last value between 0% and 100%; smaller shares allow a narrower main region.
++These are layout relationships, not new global brand tokens. Do not overwrite
++client-calibrated `@theme` values to adopt them. Intrinsic minimums, wrapping and
++normal HTML are the fallback; there are no viewport breakpoints or query containers.
++Existing Grid narrow-host containment is unchanged.
++
++The unequal-region relationship follows the intrinsic flexbox principle described
++by [Every Layout](https://every-layout.dev/layouts/sidebar/) and the
++[W3C design system](https://design-system.w3.org/layouts/sidebar.html). It solves a
++different need from Grid's equal flexible columns and Card's semantic article API.
++
++## Calibration and adoption
++
++`/_styleguide` renders production primitives with independent/grouped disclosures,
++long German summaries, a dark surface, native Markdown or the platform Portable
++Text adapter, RTL wrapped siblings, wide/narrow unequal regions, stable editorial
++wrappers, intrinsic images and missing supporting content. The route and fixtures
++remain excluded from normal release artifacts.
++
++New generation receives these files through explicit manifests. Older installed
++sites need reviewed additive adoption: bounded sync does not expand their managed
++inventory. Copy the components, preserve the site's calibrated tokens, review any
++specimens/docs desired, and use a reviewed inventory migration or record the files
++as separately adopted. Run `npm run verify`, build and affected rendered journeys.
++Do not apply starter infrastructure exemptions to client page implementations.
++When adopting the updated token checker, merge the link alias, anchor rule and
++dark/light alias declarations together while preserving calibrated palette values.
++The updated checker deliberately rejects a stylesheet missing the link contract;
++installing only the new script is not a complete update. A sync conflict on a
++locally calibrated stylesheet requires this manual merge before verification passes.
+diff --git a/eslint.config.mjs b/eslint.config.mjs
+new file mode 100644
+index 0000000..8aedebf
+--- /dev/null
++++ b/eslint.config.mjs
+@@ -0,0 +1,15 @@
++import astro from 'eslint-plugin-astro';
++import tsParser from '@typescript-eslint/parser';
++
++// Portable across CMS/static profiles. Astro type checking remains a separate gate.
++export default [
++  { linterOptions: { reportUnusedDisableDirectives: 'error' } },
++  { ignores: ['**/node_modules/**', '**/dist/**', '**/dist-fixtures/**', '**/.astro/**', '**/.astro-fixtures/**'] },
++  ...astro.configs.recommended,
++  ...astro.configs['jsx-a11y-strict'],
++  {
++    files: ['**/*.astro'],
++    languageOptions: { parserOptions: { parser: tsParser } },
++    settings: { 'jsx-a11y-x': { components: { ResponsiveImage: 'img' } } },
++  },
++];
+diff --git a/package.json b/package.json
+index aa47cfe..8b14049 100644
+--- a/package.json
++++ b/package.json
+@@ -4,7 +4,7 @@
+   "private": true,
+   "type": "module",
+   "engines": {
+-    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
++    "node": "^22.22.3 || ^24.16.0 || >=26.3.0"
+   },
+   "scripts": {
+     "dev": "astro dev",
+@@ -12,7 +12,7 @@
+     "build": "astro build",
+     "build:timings": "astro build --timings",
+     "typecheck": "astro check",
+-    "lint": "node scripts/check-script-syntax.mjs",
++    "lint": "npm run lint:scripts && npm run lint:templates",
+     "test": "node --test tests/*.test.mjs",
+     "check:art-direction": "node scripts/check-art-direction.mjs --changed",
+     "design:check": "node scripts/design-interchange.mjs",
+@@ -25,7 +25,9 @@
+     "sync:baseline": "node scripts/sync-baseline.mjs",
+     "postbuild": "node scripts/assert-release-artifact.mjs",
+     "check:dev-tools": "node scripts/check-dev-tools.mjs",
+-    "test:design": "node --test tests/static-foundation.test.mjs"
++    "test:design": "node --test tests/static-foundation.test.mjs tests/fluid-tokens.test.mjs",
++    "lint:scripts": "node scripts/check-script-syntax.mjs",
++    "lint:templates": "eslint src --max-warnings 0"
+   },
+   "dependencies": {
+     "astro": "7.4.0",
+@@ -38,7 +40,12 @@
+     "sharp": "0.35.4",
+     "@fontsource/noto-sans": "5.3.0",
+     "@google/design.md": "0.4.0",
+-    "@playwright/test": "1.64.1"
++    "@playwright/test": "1.64.1",
++    "eslint": "10.13.0",
++    "eslint-plugin-astro": "3.2.1",
++    "eslint-plugin-jsx-a11y-x": "0.2.0",
++    "@typescript-eslint/parser": "8.71.2",
++    "parse5": "7.3.0"
+   },
+   "license": "MIT"
+ }
+diff --git a/src/components/Cluster.astro b/src/components/Cluster.astro
+new file mode 100644
+index 0000000..6bfd3cc
+--- /dev/null
++++ b/src/components/Cluster.astro
+@@ -0,0 +1,16 @@
++---
++import type { HTMLAttributes } from 'astro/types';
++
++type Props = HTMLAttributes<'div'>;
++const { class: className, ...attributes } = Astro.props;
++---
++<div {...attributes} class:list={['cluster', className]}><slot /></div>
++<style>
++  .cluster {
++    display: flex;
++    flex-wrap: wrap;
++    align-items: center;
++    gap: var(--cluster-gap, var(--spacing-content));
++  }
++  .cluster > :global(*) { min-inline-size: 0; overflow-wrap: anywhere; }
++</style>
+diff --git a/src/components/Disclosure.astro b/src/components/Disclosure.astro
+new file mode 100644
+index 0000000..dffaa50
+--- /dev/null
++++ b/src/components/Disclosure.astro
+@@ -0,0 +1,28 @@
++---
++import type { HTMLAttributes } from 'astro/types';
++
++type Props = HTMLAttributes<'details'>;
++const { class: className, ...attributes } = Astro.props;
++if (!Astro.slots.has('summary')) throw new Error('Disclosure requires a meaningful named summary slot.');
++---
++<details {...attributes} class:list={['disclosure', className]}>
++  <summary><slot name="summary" /></summary>
++  <div class="disclosure__body flow"><slot /></div>
++</details>
++<style>
++  .disclosure {
++    min-inline-size: 0;
++    border: 1px solid var(--color-border);
++    border-radius: var(--radius-control);
++    color: var(--color-text);
++    background: var(--color-surface);
++    overflow-wrap: anywhere;
++  }
++  summary {
++    display: list-item;
++    padding: var(--spacing-content);
++    font-weight: var(--font-weight-display, 700);
++    cursor: pointer;
++  }
++  .disclosure__body { padding: 0 var(--spacing-content) var(--spacing-content); }
++</style>
+diff --git a/src/components/Sidebar.astro b/src/components/Sidebar.astro
+new file mode 100644
+index 0000000..6853180
+--- /dev/null
++++ b/src/components/Sidebar.astro
+@@ -0,0 +1,20 @@
++---
++import type { HTMLAttributes } from 'astro/types';
++
++type Props = HTMLAttributes<'div'>;
++const { class: className, ...attributes } = Astro.props;
++---
++<div {...attributes} class:list={['sidebar', className]}><slot /></div>
++<style>
++  .sidebar { display: flex; flex-wrap: wrap; gap: var(--sidebar-gap, var(--spacing-grid)); }
++  .sidebar > :global(*) { min-inline-size: 0; overflow-wrap: anywhere; }
++  /* Main content stays first in DOM and reading order, including in RTL. */
++  .sidebar > :global(:first-child) {
++    flex: 999 1 0;
++    min-inline-size: min(100%, var(--sidebar-main-min, 60%));
++  }
++  .sidebar > :global(:nth-child(2)) {
++    flex: 1 1 var(--sidebar-basis, calc(var(--measure-reading) / 3));
++  }
++  .sidebar > :global(:only-child) { flex-basis: 100%; }
++</style>
+diff --git a/src/components/StaticMetadata.astro b/src/components/StaticMetadata.astro
+new file mode 100644
+index 0000000..561a8c5
+--- /dev/null
++++ b/src/components/StaticMetadata.astro
+@@ -0,0 +1,33 @@
++---
++import type { ResolvedMetadata } from '../lib/metadata';
++import { serializeJsonLd } from '../lib/json-ld';
++interface Props { metadata: ResolvedMetadata; }
++const { metadata: page } = Astro.props;
++---
++<meta name="description" content={page.description} />
++{page.canonical && <link rel="canonical" href={page.canonical} />}
++{page.robots && <meta name="robots" content={page.robots} />}
++<meta property="og:type" content={page.pageType} />
++<meta property="og:title" content={page.pageTitle} />
++<meta property="og:description" content={page.description} />
++<meta property="og:site_name" content={page.siteName} />
++{page.openGraphLocale && <meta property="og:locale" content={page.openGraphLocale} />}
++{page.canonical && <meta property="og:url" content={page.canonical} />}
++{page.image && <>
++  <meta property="og:image" content={page.image.url} />
++  {page.image.alt !== undefined && <meta property="og:image:alt" content={page.image.alt} />}
++  {page.image.width && <meta property="og:image:width" content={String(page.image.width)} />}
++  {page.image.height && <meta property="og:image:height" content={String(page.image.height)} />}
++  {page.image.mimeType && <meta property="og:image:type" content={page.image.mimeType} />}
++</>}
++<meta name="twitter:card" content={page.image ? 'summary_large_image' : 'summary'} />
++<meta name="twitter:title" content={page.pageTitle} />
++<meta name="twitter:description" content={page.description} />
++{page.canonical && <meta name="twitter:url" content={page.canonical} />}
++{page.image && <>
++  <meta name="twitter:image" content={page.image.url} />
++  {page.image.alt !== undefined && <meta name="twitter:image:alt" content={page.image.alt} />}
++</>}
++{page.article?.publishedTime && <meta property="article:published_time" content={page.article.publishedTime} />}
++{page.article?.modifiedTime && <meta property="article:modified_time" content={page.article.modifiedTime} />}
++{page.graphs.map(graph => <script is:inline type="application/ld+json" set:html={serializeJsonLd(graph)} />)}
+diff --git a/src/components/dev/CompositionSpecimens.astro b/src/components/dev/CompositionSpecimens.astro
+new file mode 100644
+index 0000000..216c77b
+--- /dev/null
++++ b/src/components/dev/CompositionSpecimens.astro
+@@ -0,0 +1,57 @@
++---
++import Section from '../Section.astro';
++import Disclosure from '../Disclosure.astro';
++import Cluster from '../Cluster.astro';
++import Sidebar from '../Sidebar.astro';
++import ResponsiveImage from '../ResponsiveImage.astro';
++import DisclosureProse from '../../dev/disclosure-prose.md';
++import { smallImage } from '../../dev/styleguide-fixtures';
++---
++<Section labelledBy="composition"><div class="flow">
++  <h2 id="composition">Native composition</h2>
++  <p>Optional disclosure, wrapping siblings, and unequal main/supporting regions. These specimens use the production primitives without a viewport breakpoint or interaction script.</p>
++  <Disclosure id="specimen-disclosure" data-composition="independent">
++    <span slot="summary">How does this optional explanation work?</span>
++    <slot name="editorial"><DisclosureProse /></slot>
++    <p id="disclosure-reveal-target">The native reveal specimen is inside a closed disclosure.</p>
++    <a id="disclosure-body-link" href="#coverage">Inspect the coverage notes</a>
++  </Disclosure>
++  <a id="disclosure-after-link" href="#disclosure-reveal-target">Reveal the optional explanation by its fragment</a>
++  <Disclosure id="disclosure-group-a" name="specimen-composition-group">
++    <span slot="summary">First grouped explanation</span>
++    <p>Grouping is native and optional. Opening a group peer closes this panel in supporting browsers.</p>
++  </Disclosure>
++  <Disclosure id="disclosure-group-b" name="specimen-composition-group">
++    <span slot="summary">Second grouped explanation</span>
++    <p>Independent disclosures above and below remain independent of this group.</p>
++  </Disclosure>
++  <Disclosure id="disclosure-dark" data-surface="dark">
++    <span slot="summary" lang="de">Zusätzliche Erläuterungen zur barrierefreien Bedienung mit einer absichtlich sehr langen Zusammenfassung</span>
++    <p lang="de">Die vollständige Erläuterung bleibt im Dokument. LangeBezeichnerOhneLeerzeichenBleibenAuchInSchmalenContainernLesbar.</p>
++    <a href="#composition">Return to the specimen heading</a>
++  </Disclosure>
++  <h3>Wrapping siblings</h3>
++  <div class="composition-narrow">
++    <Cluster id="specimen-cluster" dir="rtl">
++      <button type="button">A deliberately long translated action label</button>
++      <a href="#coverage" lang="ar">ملاحظات التغطية</a>
++      <span>OneUnbrokenEditorialIdentifierForNarrowHosts</span>
++    </Cluster>
++  </div>
++  <h3>Unequal regions inside wide and narrow hosts</h3>
++  <p>Main content precedes its supporting material in the document. Grid remains the equal-column collection layout; Sidebar makes the main region retain a minimum share before wrapping.</p>
++  <Sidebar id="specimen-sidebar-wide">
++    <div class="flow" data-editor-wrapper><h4>Main editorial region</h4><p>A stable region wrapper contains editorial markup and edit annotations without changing the two-child layout relationship.</p><a href="#composition">Read the composition contract</a></div>
++    <aside class="flow" aria-label="Wide specimen supporting material"><ResponsiveImage {...smallImage} alt={smallImage.alt} optimize={false} /><p>Supporting metadata follows the main region.</p></aside>
++  </Sidebar>
++  <div class="composition-narrow" dir="rtl">
++    <Sidebar id="specimen-sidebar-narrow">
++      <div class="flow" data-editor-wrapper><h4 lang="ar">المحتوى الرئيسي</h4><p>OneUnbrokenEditorialIdentifierThatMustWrapWithoutExpandingItsHost</p><a href="#composition">First in DOM order</a></div>
++      <aside class="flow" aria-label="Narrow specimen supporting material"><p>Second in DOM order, even when the layout wraps in a wide viewport.</p><a href="#coverage">Second in DOM order</a></aside>
++    </Sidebar>
++  </div>
++  <Sidebar id="specimen-sidebar-single"><div class="flow"><p>A missing optional supporting region leaves the main region at full width.</p></div></Sidebar>
++</div></Section>
++<style>
++  .composition-narrow { max-inline-size: calc(var(--measure-reading) / 2); }
++</style>
+diff --git a/src/config/routing.ts b/src/config/routing.ts
+new file mode 100644
+index 0000000..3a60fb7
+--- /dev/null
++++ b/src/config/routing.ts
+@@ -0,0 +1,6 @@
++// Imported by Astro config and metadata: keep URL policy in one place.
++export const routing = {
++  base: '/',
++  trailingSlash: 'always',
++  build: { format: 'directory' },
++} as const;
+diff --git a/src/dev/disclosure-prose.md b/src/dev/disclosure-prose.md
+new file mode 100644
+index 0000000..0db8f75
+--- /dev/null
++++ b/src/dev/disclosure-prose.md
+@@ -0,0 +1,5 @@
++This optional explanation is rendered from **native Markdown**. Its content stays
++with the static profile rather than inside the disclosure component.
++
++- Keep essential instructions outside collapsed content.
++- Use a clear summary so readers can decide whether to open it.
+diff --git a/src/layouts/Base.astro b/src/layouts/Base.astro
+index eb8d36e..650bed9 100644
+--- a/src/layouts/Base.astro
++++ b/src/layouts/Base.astro
+@@ -1,15 +1,18 @@
+ ---
+ import SiteShell from './SiteShell.astro';
+ import { site } from '../config/site';
+-interface Props { title: string; description?: string; }
+-const { title, description = site.description } = Astro.props;
+-const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
++import { routing } from '../config/routing';
++import StaticMetadata from '../components/StaticMetadata.astro';
++import { resolveStaticMetadata, routePath, type PageMetadata } from '../lib/metadata';
++type Props = PageMetadata;
++const metadata = resolveStaticMetadata(Astro.props, site, { siteUrl: Astro.site, url: Astro.url, routing });
+ ---
+-<SiteShell title={`${title} — ${site.title}`} description={description} canonical={canonical} lang={site.language}>
++<SiteShell title={metadata.title} metadataOwner="platform" lang={metadata.language}>
++  <StaticMetadata slot="head" metadata={metadata} />
+   <header slot="header" class="site-header">
+     <nav class="site-nav" aria-label="Primary navigation">
+-      <a class="site-brand" href="/">{site.title}</a>
+-      {site.navigation.map(item => <a href={item.href}>{item.label}</a>)}
++      <a class="site-brand" href={routePath('/', routing)}>{site.title}</a>
++      {site.navigation.map(item => <a href={item.href.startsWith('/') && !item.href.startsWith('//') ? routePath(item.href, routing) : item.href}>{item.label}</a>)}
+     </nav>
+   </header>
+   <slot />
+diff --git a/src/lib/json-ld.ts b/src/lib/json-ld.ts
+new file mode 100644
+index 0000000..80c1286
+--- /dev/null
++++ b/src/lib/json-ld.ts
+@@ -0,0 +1,9 @@
++/** Serialize data for an HTML script text node, not an HTML/raw-script override. */
++export function serializeJsonLd(graph: Record<string, unknown>): string {
++  return JSON.stringify(graph)
++    .replace(/</g, '\\u003c')
++    .replace(/>/g, '\\u003e')
++    .replace(/&/g, '\\u0026')
++    .replace(/\u2028/g, '\\u2028')
++    .replace(/\u2029/g, '\\u2029');
++}
+diff --git a/src/lib/metadata.ts b/src/lib/metadata.ts
+new file mode 100644
+index 0000000..2e027e0
+--- /dev/null
++++ b/src/lib/metadata.ts
+@@ -0,0 +1,146 @@
++export interface MetadataImage {
++  src: string;
++  alt?: string;
++  width?: number;
++  height?: number;
++  mimeType?: string;
++}
++
++export interface MetadataSite {
++  title: string;
++  description: string;
++  language: string;
++  image?: MetadataImage;
++  /** A real default author, when the site's content has one. */
++  author?: string;
++}
++
++export interface PageMetadata {
++  title: string;
++  description?: string;
++  canonical?: string | null;
++  image?: MetadataImage | null;
++  pageType?: 'website' | 'article';
++  publishedAt?: Date;
++  modifiedAt?: Date;
++  author?: string;
++  robots?: string;
++}
++
++export interface MetadataContext {
++  siteUrl?: URL;
++  url: URL;
++  routing: {
++    base: string;
++    trailingSlash: 'always' | 'never' | 'ignore';
++    build: { format: 'directory' | 'file' | 'preserve' };
++  };
++}
++
++function httpUrl(value: string, base?: URL): URL {
++  if (value.startsWith('//')) throw new Error('Use an explicit HTTP(S) URL instead of a protocol-relative URL.');
++  const url = new URL(value, base);
++  if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) {
++    throw new Error('Metadata URLs must use HTTP(S) without credentials.');
++  }
++  return url;
++}
++
++/** Prefix local links without changing their query, fragment or file suffix. */
++export function withBasePath(pathname: string, baseValue: string): string {
++  const base = '/' + baseValue.split('/').filter(Boolean).join('/');
++  const boundary = pathname.search(/[?#]/);
++  const suffix = boundary < 0 ? '' : pathname.slice(boundary);
++  const pathnameOnly = boundary < 0 ? pathname : pathname.slice(0, boundary);
++  let path = pathnameOnly.startsWith('/') ? pathnameOnly : '/' + pathnameOnly;
++  if (base !== '/' && path !== base && !path.startsWith(base + '/')) path = base + path;
++  return path + suffix;
++}
++
++/** Apply the deploy base exactly once; never interpret a pathname as a hostname. */
++export function routePath(pathname: string, routing: MetadataContext['routing']): string {
++  const boundary = pathname.search(/[?#]/);
++  const suffix = boundary < 0 ? '' : pathname.slice(boundary);
++  const path = withBasePath(boundary < 0 ? pathname : pathname.slice(0, boundary), routing.base);
++  if (/\.[^/]+$/.test(path)) return path + suffix;
++  const base = '/' + routing.base.split('/').filter(Boolean).join('/');
++  if (routing.build.format === 'file' && path.replace(/\/+$/, '') !== base.replace(/\/+$/, '')) return path.replace(/\/+$/, '') + '.html' + suffix;
++  if (routing.trailingSlash === 'never') return (path.replace(/\/+$/, '') || '/') + suffix;
++  if (routing.trailingSlash === 'always' || (routing.trailingSlash === 'ignore' && routing.build.format === 'directory')) return path.replace(/\/+$/, '') + '/' + suffix;
++  return path + suffix;
++}
++
++function siteRoot(context: MetadataContext): URL | undefined {
++  if (!context.siteUrl) return undefined;
++  const url = httpUrl(context.siteUrl.href);
++  const base = '/' + context.routing.base.split('/').filter(Boolean).join('/');
++  if (url.pathname !== '/' && url.pathname.replace(/\/+$/, '') !== base.replace(/\/+$/, '')) {
++    throw new Error('SITE_URL pathname must match the configured routing.base (or use the origin alone).');
++  }
++  url.pathname = base === '/' ? '/' : base + '/';
++  url.search = ''; url.hash = '';
++  return url;
++}
++
++function canonicalUrl(input: PageMetadata, context: MetadataContext, root?: URL): string | undefined {
++  if (input.canonical === null) return undefined;
++  if (input.canonical !== undefined) {
++    const explicit = httpUrl(input.canonical, root);
++    explicit.hash = '';
++    return explicit.href;
++  }
++  if (!root) return undefined;
++  const url = new URL(root);
++  url.pathname = routePath(context.url.pathname, context.routing);
++  return url.href;
++}
++
++function resolvedImage(image: MetadataImage | undefined, root?: URL) {
++  if (!image) return undefined;
++  // Relative assets need a configured public origin; do not leak Astro's build localhost.
++  if (!root && !/^https?:\/\//i.test(image.src)) return undefined;
++  const url = httpUrl(image.src, root).href;
++  for (const dimension of [image.width, image.height]) {
++    if (dimension !== undefined && (!Number.isInteger(dimension) || dimension <= 0)) throw new Error('Metadata image dimensions must be positive integers.');
++  }
++  if (image.mimeType && !/^image\/[a-z0-9.+-]+$/i.test(image.mimeType)) throw new Error('Metadata image MIME type must describe an image.');
++  return { ...image, url };
++}
++
++function iso(date?: Date): string | undefined {
++  return date && Number.isFinite(date.getTime()) ? date.toISOString() : undefined;
++}
++
++/** Pure data resolution shared by HTML meta and JSON-LD; no CMS, request globals or browser code. */
++export function resolveStaticMetadata(input: PageMetadata, site: MetadataSite, context: MetadataContext) {
++  const root = siteRoot(context);
++  const canonical = canonicalUrl(input, context, root);
++  const pageType = input.pageType ?? 'website';
++  const description = input.description ?? site.description;
++  const image = resolvedImage(input.image === null ? undefined : input.image ?? site.image, root);
++  const article = pageType === 'article' ? {
++    publishedTime: iso(input.publishedAt), modifiedTime: iso(input.modifiedAt), author: (input.author ?? site.author)?.trim() || undefined,
++  } : undefined;
++  const graphs: Record<string, unknown>[] = [];
++  if (canonical && article) {
++    graphs.push({
++      '@context': 'https://schema.org', '@type': 'BlogPosting',
++      headline: input.title, description, url: canonical, inLanguage: site.language,
++      mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
++      ...(image && { image: image.url }),
++      ...(article.publishedTime && { datePublished: article.publishedTime }),
++      ...(article.modifiedTime && { dateModified: article.modifiedTime }),
++      ...(article.author && { author: { '@type': 'Person', name: article.author } }),
++    });
++  } else if (canonical && root) {
++    graphs.push({ '@context': 'https://schema.org', '@type': 'WebSite', name: site.title, url: root.href, inLanguage: site.language });
++  }
++  return {
++    title: input.title === site.title ? site.title : `${input.title} — ${site.title}`,
++    pageTitle: input.title, siteName: site.title, description, language: site.language,
++    openGraphLocale: /^[a-z]{2,3}-[A-Z]{2}$/.test(site.language) ? site.language.replace('-', '_') : undefined,
++    canonical, pageType, image, article, graphs, robots: input.robots,
++  };
++}
++
++export type ResolvedMetadata = ReturnType<typeof resolveStaticMetadata>;
+diff --git a/src/pages/404.astro b/src/pages/404.astro
+index 8ae0198..fd72d60 100644
+--- a/src/pages/404.astro
++++ b/src/pages/404.astro
+@@ -2,7 +2,9 @@
+ import Base from '../layouts/Base.astro';
+ import Section from '../components/Section.astro';
+ import Container from '../components/Container.astro';
++import { routing } from '../config/routing';
++import { routePath } from '../lib/metadata';
+ ---
+-<Base title="Not Found"><Section labelledBy="not-found"><Container width="reading" class="flow">
+-  <h1 id="not-found">Page not found</h1><p>The page you're looking for doesn't exist.</p><a href="/">Go home</a>
++<Base title="Not Found" canonical={null} robots="noindex, nofollow"><Section labelledBy="not-found"><Container width="reading" class="flow">
++  <h1 id="not-found">Page not found</h1><p>The page you're looking for doesn't exist.</p><a href={routePath('/', routing)}>Go home</a>
+ </Container></Section></Base>
+diff --git a/src/pages/index.astro b/src/pages/index.astro
+index ac3f153..6ab66c2 100644
+--- a/src/pages/index.astro
++++ b/src/pages/index.astro
+@@ -5,6 +5,8 @@ import Container from '../components/Container.astro';
+ import Grid from '../components/Grid.astro';
+ import Card from '../components/Card.astro';
+ import { publishedPosts, postUrl } from '../lib/posts';
++import { routePath } from '../lib/metadata';
++import { routing } from '../config/routing';
+ const posts = await publishedPosts();
+ ---
+ <Base title="Welcome">
+@@ -15,6 +17,6 @@ const posts = await publishedPosts();
+   <Section labelledBy="recent-posts"><Container width="wide" class="flow">
+     <h2 id="recent-posts">Recent Posts</h2>
+     <Grid>{posts.slice(0, 3).map(post => <Card title={post.data.title} href={postUrl(post.id)} description={post.data.description} image={post.data.hero} imageAlt={post.data.heroAlt} />)}</Grid>
+-    <a href="/posts/">View all posts</a>
++    <a href={routePath('/posts/', routing)}>View all posts</a>
+   </Container></Section>
+ </Base>
+diff --git a/src/pages/posts/[...id].astro b/src/pages/posts/[...id].astro
+index bd5672d..ca6f4dd 100644
+--- a/src/pages/posts/[...id].astro
++++ b/src/pages/posts/[...id].astro
+@@ -14,8 +14,10 @@ export async function getStaticPaths() {
+ interface Props { post: CollectionEntry<'posts'>; }
+ const { post } = Astro.props;
+ const { Content } = await render(post);
++const imageTypes: Record<string, string> = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', avif: 'image/avif', gif: 'image/gif', svg: 'image/svg+xml', tiff: 'image/tiff' };
++const image = post.data.hero ? { src: post.data.hero.src, alt: post.data.heroAlt, width: post.data.hero.width, height: post.data.hero.height, mimeType: imageTypes[post.data.hero.format] } : undefined;
+ ---
+-<Base title={post.data.title} description={post.data.description}>
++<Base title={post.data.title} description={post.data.description} pageType="article" publishedAt={post.data.publishedAt} image={image}>
+   <Section labelledBy="post-title"><Container breakout class="flow">
+     <header class="flow"><h1 id="post-title">{post.data.title}</h1><p>{post.data.description}</p>
+       <time datetime={post.data.publishedAt.toISOString()}>{post.data.publishedAt.toLocaleDateString('en-GB', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</time>
+diff --git a/tests/fluid-tokens.test.mjs b/tests/fluid-tokens.test.mjs
+new file mode 100644
+index 0000000..9f0884b
+--- /dev/null
++++ b/tests/fluid-tokens.test.mjs
+@@ -0,0 +1,152 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { createHash } from 'node:crypto';
++import { readFileSync } from 'node:fs';
++import {
++  AESTHETIC_LANES, TYPE_SCALE_RATIOS, applyTokenOverrides, auditDesignTokens,
++  buildFluidClamp, diagnoseFluidToken, evaluateFluidClamp, generateSpaceScale,
++  generateTypeScale, parseFluidClamp, validateClampToken,
++} from '../scripts/design-system.mjs';
++
++const close = (actual, expected, tolerance = 0.002) => assert.ok(Math.abs(actual - expected) <= tolerance, `${actual} != ${expected} (tolerance ${tolerance})`);
++const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
++
++test('generator preserves previously emitted scales and authored lane values', () => {
++  // Captured independently from the Phase 5 source, before mathematical hardening.
++  assert.equal(digest({
++    type: Object.keys(TYPE_SCALE_RATIOS).map(ratio => generateTypeScale({ ratio })),
++    space: [1.25, 1.5, 2.2].map(ratio => generateSpaceScale({ ratio })),
++  }), '9c49768d6ed034d7aa9d2c43b8b9de051b20cd92255c2ae7efae44f6002a6cd8');
++  assert.equal(digest(AESTHETIC_LANES), 'd754fbdb6cfcf1c7f82352c69364a11ab53540a17cca5e2a30384e254f1ce535');
++});
++
++test('independent five-point interpolation, clamping and changed root font sizes', () => {
++  const clamp = buildFluidClamp(1, 2);
++  for (const rootFontPx of [16, 20, 32]) {
++    // Expected sizes come from the requested endpoints, not the parsed affine coefficients.
++    for (const [viewportRem, sizeRem] of [[10, 1], [20, 1], [50, 1.5], [80, 2], [100, 2]]) {
++      close(evaluateFluidClamp(clamp, { viewportSizePx: viewportRem * rootFontPx, rootFontPx }), sizeRem * rootFontPx, 0.004);
++    }
++  }
++});
++
++test('Utopia comparison example matches independent endpoints after four-place rounding', () => {
++  // https://utopia.fyi/blog/clamp/: 1rem..2rem across 320..1440px at a 16px root.
++  // Keep logical vi in Baseline; the source example uses vw.
++  const clamp = buildFluidClamp(1, 2, 20, 90);
++  assert.equal(clamp, 'clamp(1rem, calc(0.7143rem + 1.4286vi), 2rem)');
++  for (const [viewportSizePx, sizePx] of [[160, 16], [320, 16], [880, 24], [1440, 32], [1800, 32]]) {
++    close(evaluateFluidClamp(clamp, { viewportSizePx }), sizePx);
++  }
++});
++
++test('all generated scales interpolate requested bounds monotonically within rounding error', () => {
++  const scales = [
++    ...Object.keys(TYPE_SCALE_RATIOS).map(ratio => generateTypeScale({ ratio })),
++    ...[1.25, 1.5, 2.2].map(ratio => generateSpaceScale({ ratio })),
++  ];
++  for (const scale of scales) for (const value of Object.values(scale)) {
++    assert.match(value, /vi/);
++    const { minRem, maxRem } = parseFluidClamp(value);
++    let previous = 0;
++    for (let viewportRem = 0; viewportRem <= 100; viewportRem += 2.5) {
++      const actual = evaluateFluidClamp(value, { viewportSizePx: viewportRem * 16 }) / 16;
++      const fraction = Math.max(0, Math.min(1, (viewportRem - 20) / 60));
++      const expected = minRem + (maxRem - minRem) * fraction;
++      // Independent rounding bound: intercept <= .00005rem, slope <= .00005 per 100vi.
++      close(actual, expected, 0.00005 * (1 + viewportRem / 100) + 1e-12);
++      assert.ok(actual >= previous && actual >= minRem && actual <= maxRem);
++      previous = actual;
++    }
++  }
++});
++
++test('authored presets retain their own transition domains and diagnostic samples', () => {
++  const css = readFileSync('src/styles/global.css', 'utf8');
++  for (const lane of Object.keys(AESTHETIC_LANES)) {
++    const audit = auditDesignTokens(applyTokenOverrides(css, lane));
++    assert.equal(audit.valid, true, audit.errors.join('\n'));
++    assert.equal(audit.fluid.tokens.length, 12);
++    for (const token of audit.fluid.tokens) {
++      assert.equal(token.unit, 'vi');
++      let previous = 0;
++      for (const sample of token.samples) {
++        assert.ok(sample.sizeRem >= previous && sample.sizeRem >= token.minRem && sample.sizeRem <= token.maxRem);
++        previous = sample.sizeRem;
++      }
++      if (token.transitionRem && token.transitionRem.min >= 0) {
++        close(evaluateFluidClamp(audit.tokens.theme[token.name], { viewportSizePx: token.transitionRem.min * 16 }), token.minRem * 16);
++        close(evaluateFluidClamp(audit.tokens.theme[token.name], { viewportSizePx: token.transitionRem.max * 16 }), token.maxRem * 16);
++      }
++    }
++  }
++  const authored = diagnoseFluidToken('--spacing-example', 'clamp(3rem, calc(1rem + 9.5vi), 8.75rem)');
++  close(authored.transitionRem.min, 400 / 19, 1e-10);
++  close(authored.transitionRem.max, 1550 / 19, 1e-10);
++  assert.deepEqual(authored.advisories, []);
++});
++
++test('bounded grammar accepts negative intercepts, finite exponents and legacy viewport expressions', () => {
++  for (const value of [
++    'clamp(.75rem, calc(-.3333rem + 5.4167vi), 4rem)',
++    'clamp(1rem, 5vi, 3rem)',
++    'clamp(1rem, .5rem + 2.5vw, 3rem)',
++    'CLAMP(1e0rem, CALC(+.5rem + 2.5e0VI), 3rem)',
++    'clamp(1rem, calc(1rem + 0vi), 1rem)',
++  ]) assert.equal(validateClampToken('--text-step-0', value), null, value);
++  assert.equal(parseFluidClamp(buildFluidClamp(1, 1)).transitionRem, null);
++  assert.ok(diagnoseFluidToken('--text-step-0', 'clamp(1rem, 5vw, 3rem)').advisories.some(text => text.includes('Legacy vw')));
++});
++
++test('invalid CSS, nonfinite math, contextless cqi and descending or flat varying scales fail closed', () => {
++  const invalid = [
++    'clamp(1..2rem, 5vi, 3rem)', 'clamp(.rem, 5vi, 3rem)',
++    'clamp(1rem, calc(1rem+2vi), 3rem)', 'clamp(1rem, calc(1rem + -2vi), 3rem)',
++    'clamp(1rem, calc(1rem + 2vi) garbage, 3rem)', 'clamp(1rem, calc(1rem + 2vi + 1px), 3rem)',
++    'clamp(1rem, invalidvi, 3rem)', 'clamp(1rem, var(--vi), 3rem)',
++    'clamp(1rem, calc(Infinity * 1vi), 3rem)', 'clamp(1rem, calc(NaN * 1vi), 3rem)',
++    'clamp(1rem, calc(1rem + 1e309vi), 3rem)', 'clamp(1rem, 5vi, 1e309rem)',
++    'clamp(1rem, calc(1e308rem + 5e-324vi), 3rem)',
++    'clamp(0rem, 5vi, 3rem)', 'clamp(3rem, 5vi, 1rem)',
++    'clamp(1rem, calc(3rem - 2vi), 3rem)', 'clamp(1rem, calc(1rem + 0vi), 3rem)',
++    'clamp(1rem, 5cqi, 3rem)', 'clamp(1rem, calc(1rem + 2cqi /* vi */), 3rem)',
++  ];
++  for (const value of invalid) {
++    assert.throws(() => parseFluidClamp(value), undefined, value);
++    assert.match(validateClampToken('--text-step-0', value), /Token --text-step-0:/, value);
++  }
++  const css = readFileSync('src/styles/global.css', 'utf8');
++  assert.equal(auditDesignTokens(applyTokenOverrides(css, { theme: { '--text-step-0': invalid[4] } })).valid, false);
++});
++
++test('generator rejects invalid domains and nonrepresentable coefficients before emitting CSS', () => {
++  for (const args of [
++    [NaN, 2], [1, Infinity], [1, 2, 20, 20], [1, 2, 80, 20], [1, 2, -1, 80],
++    [1, 2, 20, Infinity], [1, 2, NaN, 80], [2, 1], [0.000001, 1],
++    [1, 2, 0, 5e-324], [1, 2, 0, 1e100], ['1', 2],
++  ]) assert.throws(() => buildFluidClamp(...args), undefined, JSON.stringify(args));
++  assert.throws(() => generateTypeScale({ baseMinRem: 2, baseMaxRem: 1 }));
++  assert.throws(() => generateSpaceScale({ baseMinRem: 2, baseMaxRem: 1 }));
++  // Existing ratio range is not a promise that every base-size/ratio combination is ascending.
++  assert.throws(() => generateSpaceScale({ ratio: 1.15 }), /bounds/);
++});
++
++test('viewport shrink and changed root sizes are advisory, with no false accessibility certification', () => {
++  const value = 'clamp(1rem, calc(.5rem + 2.5vi), 3rem)';
++  const diagnostic = diagnoseFluidToken('--text-step-0', value);
++  assert.deepEqual(diagnostic.rootFontSamples, [{ rootFontPx: 16, sizePx: 40 }, { rootFontPx: 20, sizePx: 42 }, { rootFontPx: 32, sizePx: 48 }]);
++  assert.deepEqual(diagnostic.zoom, [{ factor: 2, cssViewportPx: 640, effectiveSizeRatio: 1.2 }, { factor: 4, cssViewportPx: 320, effectiveSizeRatio: 1.6 }]);
++  assert.match(diagnostic.advisories[0], /not a WCAG verdict/);
++  assert.deepEqual(diagnoseFluidToken('--spacing-grid', value).advisories, []);
++  const css = readFileSync('src/styles/global.css', 'utf8');
++  assert.equal(auditDesignTokens(css).valid, true);
++  assert.ok(auditDesignTokens(css).fluid.tokens.some(token => token.advisories.length));
++});
++
++test('evaluator rejects nonfinite environments and arithmetic overflow', () => {
++  const value = buildFluidClamp(1, 2);
++  for (const environment of [{}, { viewportSizePx: NaN }, { viewportSizePx: -1 }, { viewportSizePx: Infinity }, { viewportSizePx: 320, rootFontPx: 0 }, { viewportSizePx: 320, rootFontPx: Infinity }]) {
++    assert.throws(() => evaluateFluidClamp(value, environment));
++  }
++  assert.throws(() => evaluateFluidClamp('clamp(1e308rem, 5vi, 1e308rem)', { viewportSizePx: 320 }), /overflow/);
++});
+diff --git a/tests/metadata.test.mjs b/tests/metadata.test.mjs
+new file mode 100644
+index 0000000..0872208
+--- /dev/null
++++ b/tests/metadata.test.mjs
+@@ -0,0 +1,97 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { parse } from 'parse5';
++import { resolveStaticMetadata, routePath, withBasePath } from '../src/lib/metadata.ts';
++import { serializeJsonLd } from '../src/lib/json-ld.ts';
++
++const site = { title: 'Example', description: 'Site description', language: 'en-GB' };
++const context = (overrides = {}) => ({ siteUrl: new URL('https://public.example.test'), url: new URL('https://build-preview.example.test/Posts/Story/?utm=test#part'), routing: { base: '/', trailingSlash: 'always', build: { format: 'directory' } }, ...overrides });
++
++test('one resolved model keeps public canonical, article schema and dates in agreement', () => {
++  const page = resolveStaticMetadata({ title: 'Story', pageType: 'article', description: 'A story', publishedAt: new Date('2026-01-01T00:00:00Z') }, site, context());
++  assert.equal(page.title, 'Story — Example'); assert.equal(page.pageTitle, 'Story');
++  assert.equal(page.canonical, 'https://public.example.test/Posts/Story/');
++  assert.equal(page.graphs[0].url, page.canonical); assert.equal(page.graphs[0].mainEntityOfPage['@id'], page.canonical);
++  assert.equal(page.graphs[0]['@type'], 'BlogPosting');
++  assert.equal(page.graphs[0].datePublished, page.article.publishedTime);
++  assert.equal(page.graphs[0].inLanguage, 'en-GB');
++  assert.equal(page.openGraphLocale, 'en_GB');
++  assert.equal(resolveStaticMetadata({ title: 'Language without territory' }, { ...site, language: 'en' }, context()).openGraphLocale, undefined);
++  assert.ok(!('author' in page.graphs[0]) && !('publisher' in page.graphs[0]) && !('dateModified' in page.graphs[0]));
++});
++
++test('website identity has a public base URL and does not duplicate an identical site title', () => {
++  const routing = { base: '/studio/', trailingSlash: 'always', build: { format: 'directory' } };
++  const page = resolveStaticMetadata({ title: 'Example' }, site, context({ routing, url: new URL('https://preview.test/studio/Posts/'), siteUrl: new URL('https://public.example.test/studio/') }));
++  assert.equal(page.title, 'Example'); assert.equal(page.canonical, 'https://public.example.test/studio/Posts/');
++  assert.equal(page.graphs[0]['@type'], 'WebSite'); assert.equal(page.graphs[0].url, 'https://public.example.test/studio/');
++  assert.equal(routePath('/Posts/', routing), '/studio/Posts/');
++  assert.equal(withBasePath('/studio/Posts/?q=x#part', routing.base), '/studio/Posts/?q=x#part');
++  assert.equal(withBasePath('/downloads/file.pdf#part', routing.base), '/studio/downloads/file.pdf#part');
++  assert.equal(withBasePath('/studio?q=x#part', routing.base), '/studio?q=x#part');
++});
++
++test('default canonical policy respects build-generated file paths, slash policy and case', () => {
++  const never = { base: '/base', trailingSlash: 'never', build: { format: 'directory' } };
++  assert.equal(routePath('/base/Posts/Story/', never), '/base/Posts/Story');
++  assert.equal(routePath('/Posts/Story.html', { ...never, build: { format: 'file' } }), '/base/Posts/Story.html');
++  assert.equal(routePath('/Posts/Story/', { ...never, build: { format: 'file' } }), '/base/Posts/Story.html');
++  assert.equal(routePath('/Posts/?edition=2#section', { ...never, build: { format: 'file' } }), '/base/Posts.html?edition=2#section');
++  assert.equal(routePath('/downloads/guide.pdf#part', never), '/base/downloads/guide.pdf#part');
++  assert.equal(routePath('/Posts/Story.html', { ...never, build: { format: 'preserve' } }), '/base/Posts/Story.html');
++  const double = resolveStaticMetadata({ title: 'Double slash' }, site, context({ url: new URL('https://preview.test//foreign.test/Story') }));
++  assert.equal(new URL(double.canonical).origin, 'https://public.example.test');
++  assert.equal(resolveStaticMetadata({ title: 'Root' }, site, context({ url: new URL('https://preview.test/') })).canonical, 'https://public.example.test/');
++});
++
++test('explicit canonical retains its origin, path case and meaningful query independently of defaults', () => {
++  const page = resolveStaticMetadata({ title: 'Story', pageType: 'article', canonical: 'https://syndication.example.test/Story?edition=2#fragment' }, site, context());
++  assert.equal(page.canonical, 'https://syndication.example.test/Story?edition=2');
++  assert.equal(page.graphs[0].url, page.canonical);
++  assert.equal(resolveStaticMetadata({ title: 'Relative', canonical: 'selected' }, site, context()).canonical, 'https://public.example.test/selected');
++});
++
++test('one fallback image supplies graph and social values without inventing type or dimensions', () => {
++  const page = resolveStaticMetadata({ title: 'Story', pageType: 'article' }, { ...site, image: { src: '/assets/cover.webp', alt: 'Actual cover', width: 900, height: 600, mimeType: 'image/webp' } }, context());
++  assert.equal(page.image.url, 'https://public.example.test/assets/cover.webp');
++  assert.equal(page.graphs[0].image, page.image.url); assert.equal(page.image.mimeType, 'image/webp');
++  const unknown = resolveStaticMetadata({ title: 'Other', image: { src: 'https://images.example.test/cover' } }, site, context());
++  assert.equal(unknown.image.width, undefined); assert.equal(unknown.image.height, undefined); assert.equal(unknown.image.mimeType, undefined);
++  const omitted = resolveStaticMetadata({ title: 'Other', image: null }, { ...site, image: { src: '/cover.png' } }, context());
++  assert.equal(omitted.image, undefined);
++});
++
++test('known authors/modified dates are optional facts; missing or invalid dates are omitted', () => {
++  const page = resolveStaticMetadata({ title: 'Story', pageType: 'article', publishedAt: new Date(NaN), modifiedAt: new Date('2026-02-03T04:05:06Z'), author: 'Guest' }, site, context());
++  assert.ok(!('datePublished' in page.graphs[0]));
++  assert.equal(page.graphs[0].dateModified, '2026-02-03T04:05:06.000Z');
++  assert.deepEqual(page.graphs[0].author, { '@type': 'Person', name: 'Guest' });
++});
++
++test('an unconfigured public URL never falls back to the static build or preview hostname', () => {
++  const page = resolveStaticMetadata({ title: 'Local', pageType: 'article', image: { src: '/cover.jpg' } }, site, context({ siteUrl: undefined }));
++  assert.equal(page.canonical, undefined); assert.equal(page.image, undefined); assert.deepEqual(page.graphs, []);
++  assert.ok(!JSON.stringify(page).includes('build-preview.example.test'));
++});
++
++test('404 policy omits canonical/schema while retaining robots and meaningful metadata', () => {
++  const page = resolveStaticMetadata({ title: 'Not Found', canonical: null, robots: 'noindex, nofollow' }, site, context());
++  assert.equal(page.canonical, undefined); assert.deepEqual(page.graphs, []); assert.equal(page.robots, 'noindex, nofollow');
++});
++
++test('invalid URL schemes, credentials, image facts and inconsistent deploy base fail explicitly', () => {
++  for (const canonical of ['javascript:alert(1)', 'https://user:password@public.test/', '//other.test/path']) assert.throws(() => resolveStaticMetadata({ title: 'Invalid', canonical }, site, context()));
++  assert.throws(() => resolveStaticMetadata({ title: 'Invalid' }, site, context({ siteUrl: new URL('ftp://public.test/') })));
++  assert.throws(() => resolveStaticMetadata({ title: 'Invalid' }, site, context({ siteUrl: new URL('https://public.test/wrong-base') })));
++  for (const image of [{ src: '/cover', width: -1 }, { src: '/cover', mimeType: 'text/html' }]) assert.throws(() => resolveStaticMetadata({ title: 'Invalid', image }, site, context()));
++});
++
++test('JSON-LD serialization preserves adversarial text in exactly one inert script node', () => {
++  const graph = { '@context': 'https://schema.org', '@type': 'BlogPosting', headline: '</script><img src=x onerror=alert(1)><script>alert(2)</script><!-- & " \u2028 \u2029' };
++  const html = parse(`<html><head><script type="application/ld+json">${serializeJsonLd(graph)}</script></head><body></body></html>`);
++  const nodes = [];
++  const walk = node => { nodes.push(node); (node.childNodes ?? []).forEach(walk); }; walk(html);
++  const scripts = nodes.filter(n => n.tagName === 'script');
++  assert.equal(scripts.length, 1); assert.equal(nodes.filter(n => n.tagName === 'img').length, 0);
++  assert.deepEqual(JSON.parse(scripts[0].childNodes.map(n => n.value ?? '').join('')), graph);
++});
+diff --git a/tests/template-lint.test.mjs b/tests/template-lint.test.mjs
+new file mode 100644
+index 0000000..6c4bef1
+--- /dev/null
++++ b/tests/template-lint.test.mjs
+@@ -0,0 +1,49 @@
++import test from 'node:test';
++import assert from 'node:assert/strict';
++import { fileURLToPath } from 'node:url';
++import { ESLint } from 'eslint';
++
++const cwd = fileURLToPath(new URL('../', import.meta.url));
++const eslint = new ESLint({ cwd });
++// Virtual input exercises the real project config without racing source inventory tests.
++const lint = async source => (await eslint.lintText(source, { filePath: 'src/components/AccessibilityProbe.astro' }))[0];
++
++for (const [name, source, rule] of [
++  ['image alternative', '<img src="/example.svg" />', 'alt-text'],
++  ['ARIA value', '<button aria-expanded="perhaps">Open</button>', 'aria-proptypes'],
++  ['keyboard interaction', '<div onclick={() => {}}>Open</div>', 'click-events-have-key-events'],
++  ['label control association', '<label>Name</label>', 'label-has-associated-control'],
++  ['real link destination', '<a href="#">More</a>', 'anchor-is-valid'],
++  ['natural tab order', '<button tabindex="2">Open</button>', 'tabindex-no-positive'],
++  ['unreviewed autofocus', '<input aria-label="Name" autofocus />', 'no-autofocus'],
++  ['known image component alternative', '<ResponsiveImage src="/example.svg" />', 'alt-text'],
++]) {
++  test(`template gate rejects missing/invalid ${name}`, async () => {
++    const result = await lint(source);
++    assert.ok(result.messages.some(m => m.severity === 2 && m.ruleId === `astro/jsx-a11y/${rule}`), JSON.stringify(result.messages));
++  });
++}
++
++test('template gate accepts typed frontmatter, slots, native disclosure and labelled fields', async () => {
++  const result = await lint(`---
++interface Props { id: string; }
++const { id } = Astro.props;
++---
++<section aria-labelledby={id}>
++  <h2 id={id}><slot name="heading" /></h2>
++  <details><summary>Details</summary><slot /></details>
++  <label for="name">Name</label><input id="name" name="name" />
++  <ResponsiveImage src="/example.svg" alt="Example diagram" />
++</section>`);
++  assert.equal(result.errorCount, 0, JSON.stringify(result.messages));
++  assert.equal(result.warningCount, 0, JSON.stringify(result.messages));
++});
++
++test('line exceptions stay narrow and become errors when obsolete', async () => {
++  const directive = '{/* eslint-disable-next-line astro/jsx-a11y/no-autofocus -- deliberate server-error focus */}';
++  assert.equal((await lint(`${directive}\n<input autofocus aria-label="Name" />`)).errorCount, 0);
++  const obsolete = await lint(`${directive}\n<input aria-label="Name" />`);
++  assert.ok(obsolete.messages.some(m => m.severity === 2 && /Unused eslint-disable directive/.test(m.message)));
++  const nextLine = await lint(`${directive}\n<input autofocus aria-label="Name" />\n<input autofocus aria-label="Email" />`);
++  assert.ok(nextLine.messages.some(m => m.ruleId === 'astro/jsx-a11y/no-autofocus' && m.line === 3));
++});

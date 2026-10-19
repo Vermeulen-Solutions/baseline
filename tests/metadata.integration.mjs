@@ -7,6 +7,8 @@ import { createHash } from 'node:crypto';
 import { parse } from 'parse5';
 import { chromium } from '@playwright/test';
 import { createTransport, csrfInterceptor, devBypassInterceptor } from 'emdash/client';
+import { LocalStorage } from 'emdash/storage/local';
+import sharp from 'sharp';
 import { startVisualSite } from './visual/site.mjs';
 
 assert.ok(!process.env.CI && !process.env.GITHUB_ACTIONS, 'Metadata browser rehearsal is local-only');
@@ -18,7 +20,8 @@ const out = path.resolve(process.argv[outIndex + 1]);
 const reportDir = path.resolve('.emdash/metadata', baseline ? 'before' : 'after');
 const publicOrigin = 'https://public.example.test';
 const receipt = { version: 1, mode: baseline ? 'baseline' : 'verification', publicOrigin, scope: 'Owned local Node/SQLite production build; synthetic API editor write and native plugin; isolated Chromium JS inventory', sourceSHA256: {}, routes: {}, javascript: {} };
-let site, browser, origin;
+let site, browser, origin, storageBytes;
+const storageKey = 'architecture-phase8-storage.png';
 
 function inspect(html) {
   const nodes = [];
@@ -50,12 +53,16 @@ try {
       seed.bylines = [{ id: 'metadata-author', slug: 'metadata-author', displayName: 'Synthetic Author', isGuest: true }];
       seed.content.posts.push({ id: 'metadata-editor', slug: 'metadata-editor', status: 'published', data: { title: 'Editorial fixture', excerpt: 'Original excerpt' }, bylines: [{ byline: 'metadata-author' }] });
       await writeFile(seedPath, JSON.stringify(seed));
+      storageBytes = await sharp({ create: { width: 1800, height: 1200, channels: 3, background: '#486b83' } }).png().toBuffer();
+      const storage = new LocalStorage({ directory: path.join(stage, 'uploads'), baseUrl: '/_emdash/api/media/file' });
+      await storage.upload({ key: storageKey, body: storageBytes, contentType: 'image/png' });
       await cp(path.join(root, 'tests/metadata/fixture-plugin.mjs'), path.join(stage, 'metadata-fixture-plugin.mjs'));
-      for (const [file, target] of [['Plugin.astro', 'metadata-plugin.astro'], ['Shell.astro', 'metadata-shell.astro']]) await cp(path.join(root, 'tests/metadata', file), path.join(stage, 'src/pages', target));
+      for (const [file, target] of [['Plugin.astro', 'metadata-plugin.astro'], ['Shell.astro', 'metadata-shell.astro'], ['Media.astro', 'metadata-storage.astro']]) await cp(path.join(root, 'tests/metadata', file), path.join(stage, 'src/pages', target));
       const configPath = path.join(stage, 'astro.config.mjs');
       const config = await readFile(configPath, 'utf8');
       assert.ok(config.includes('site: siteUrl,') && config.includes('emdash({'));
-      await writeFile(configPath, config.replace('site: siteUrl,', 'site: "https://astro-fallback.example.test",').replace('emdash({', `emdash({ plugins: [{ id: 'baseline-metadata-fixture', version: '1.0.0', entrypoint: ${JSON.stringify(path.join(stage, 'metadata-fixture-plugin.mjs').replaceAll('\\', '/'))} }],`));
+      // Set the shared source of Astro.site and authorized media origins together.
+      await writeFile(configPath, config.replace('const siteUrl = process.env.SITE_URL || env.SITE_URL;', 'const siteUrl = "https://astro-fallback.example.test";').replace('emdash({', `emdash({ plugins: [{ id: 'baseline-metadata-fixture', version: '1.0.0', entrypoint: ${JSON.stringify(path.join(stage, 'metadata-fixture-plugin.mjs').replaceAll('\\', '/'))} }],`));
     },
     async onDevReady() {
       await fetch(origin + '/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin');
@@ -64,7 +71,7 @@ try {
       assert.equal(response.status, 200, await response.text());
     },
   });
-  const cases = ['/', '/posts', '/posts/welcome?tracking=ignored', '/about', '/posts/metadata-editor', '/metadata-plugin', '/metadata-shell', '/metadata-shell?owner=platform', '/missing-metadata-page'];
+  const cases = ['/', '/posts', '/posts/welcome?tracking=ignored', '/about', '/posts/metadata-editor', '/metadata-plugin', '/metadata-shell', '/metadata-shell?owner=platform', '/metadata-storage', '/missing-metadata-page'];
   for (const route of cases) {
     const response = await fetch(site.origin + route);
     const html = await response.text();
@@ -105,8 +112,13 @@ try {
       } else assert.equal(data.graphs[0].url, publicOrigin);
     }
   }
+  const originalResponse = await fetch(site.origin + '/_emdash/api/media/file/' + storageKey);
+  assert.equal(originalResponse.status, 200);
+  const original = Buffer.from(await originalResponse.arrayBuffer());
+  assert.deepEqual(original, storageBytes, 'Real media endpoint serves the uploaded storage bytes');
+  receipt.storageMedia = { storage: 'LocalStorage public API in the owned temporary app', databaseMediaRecord: 'not created; no Media Library/editor claim', original: { status: originalResponse.status, sha256: createHash('sha256').update(original).digest('hex'), width: 1800, height: 1200 }, candidates: [] };
   browser = await chromium.launch({ headless: true });
-  for (const route of ['/', '/posts/welcome']) {
+  for (const route of ['/', '/posts/welcome', '/metadata-storage']) {
     const context = await browser.newContext({ serviceWorkers: 'block' });
     const page = await context.newPage(), responses = [], external = [], errors = [];
     await context.route('**/*', request => {
@@ -116,6 +128,21 @@ try {
     page.on('pageerror', error => errors.push(error.message));
     page.on('response', response => { if (response.request().resourceType() === 'script') responses.push(response); });
     await page.goto(site.origin + route); await page.waitForLoadState('networkidle');
+    if (route === '/metadata-storage') {
+      const image = page.getByAltText('Synthetic storage-backed media');
+      assert.equal(await image.count(), 1);
+      assert.ok(await image.evaluate(element => element.complete && element.naturalWidth > 0));
+      const candidates = (await image.getAttribute('srcset')).split(',').map(value => value.trim().split(/\s+/));
+      for (const [src, width] of candidates) {
+        const response = await fetch(new URL(src, site.origin));
+        assert.equal(response.status, 200);
+        const dimensions = await sharp(Buffer.from(await response.arrayBuffer())).metadata();
+        assert.equal(dimensions.format, 'webp');
+        assert.ok(Math.abs(dimensions.width - parseInt(width)) <= 1 && dimensions.width <= 1800);
+        receipt.storageMedia.candidates.push({ status: 200, width: dimensions.width, height: dimensions.height, format: dimensions.format });
+      }
+      assert.ok(receipt.storageMedia.candidates.length > 0);
+    }
     const scripts = await Promise.all(responses.map(async response => {
       const bytes = await response.body(), sizes = await response.request().sizes();
       return { path: new URL(response.url()).pathname, decodedBytes: bytes.length, transferredBodyBytes: sizes.responseBodySize, sha256: createHash('sha256').update(bytes).digest('hex') };

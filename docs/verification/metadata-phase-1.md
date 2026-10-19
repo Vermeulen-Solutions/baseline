@@ -54,3 +54,9 @@ Existing generated sites can stage the backward-compatible SiteShell update with
 The fixture checks installed plugin and editor SEO resolution through actual rendering. It does not authenticate a real editor, simulate production cache expiry/CDN invalidation, implement multilingual routing, benchmark deferred user interactions, or claim accessibility conformance. Route-cache hints are registered and reviewed, but the local fixture's default cache configuration is not a provider cache-certification test.
 
 Current check results are recorded in [the progress ledger](../../audit/architecture-implementation-progress.md).
+
+The later [Phase 8 rehearsal](architecture-hardening-phase-8.md) extends the
+current command with a tenth synthetic route for real LocalStorage-backed image
+delivery and native responsive candidate decoding. The nine-case receipts above
+remain historical Phase 1 observations; Media Library registration and real editor
+save/reload are still outside that automated scope.
