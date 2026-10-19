@@ -40,6 +40,16 @@ test('missing hook gets one preflight; already-current package is a zero-write n
   fixture(({ root, parent }) => { const plan = planModernization(root); assert.equal(plan.prebuildAfter, 'npm run check:schema-budget'); const file = writePlan(plan, path.join(parent, 'plan'), root); assert.equal(runModernization(root, file).status, 'applied'); }, { prebuild: null });
   fixture(({ root, parent, pkg }) => { const before = pkg(), plan = planModernization(root); assert.equal(plan.operation, 'already-current'); const file = writePlan(plan, path.join(parent, 'plan'), root); assert.equal(runModernization(root, file).status, 'already-current'); assert.deepEqual(pkg(), before); assert.equal(fs.existsSync(path.join(parent, 'plan/package.before.json')), false); }, { prebuild: 'npm run check:schema-budget' });
 });
+test('reviewed legacy schema helpers retain plan, apply and rollback compatibility', () => fixture(({ root, parent, put, git, pkg }) => {
+  put('scripts/check-schema-budget.mjs', fs.readFileSync(new URL('./fixtures/schema-budget-legacy.mjs', import.meta.url)));
+  git('add', '.'); git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'reviewed legacy helper');
+  const before = pkg(), plan = planModernization(root);
+  assert.equal(plan.helperHashes['scripts/check-schema-budget.mjs'], '61b11cbff6f811012b9971d567f60c126d2984ad05fba9985b3c4af2d29ef1b9');
+  const file = writePlan(plan, path.join(parent, 'legacy-plan'), root);
+  assert.equal(runModernization(root, file).status, 'applied');
+  assert.equal(runModernization(root, file, { rollback: true }).status, 'rolled-back');
+  assert.deepEqual(pkg(), before);
+}));
 test('changed revision, staged files, modified helpers and unsupported command chains refuse without overwriting edits', () => {
   fixture(({ root, parent, put, git, pkg }) => { const file = writePlan(planModernization(root), path.join(parent, 'plan'), root); git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '--allow-empty', '-qm', 'changed'); const before = pkg(); assert.throws(() => runModernization(root, file), /revision/); assert.deepEqual(pkg(), before); put('scripts/check-schema-budget.mjs', 'throw Error("modified")'); assert.throws(() => planModernization(root), /dirty/); });
   fixture(({ root, git }) => { fs.appendFileSync(path.join(root, 'package.json'), '\n'); git('add', 'package.json'); assert.throws(() => planModernization(root), /dirty/); });

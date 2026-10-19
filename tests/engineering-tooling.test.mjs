@@ -6,6 +6,9 @@ import path from 'node:path';
 import { testFiles } from '../scripts/run-tests.mjs';
 import { npmInvocation, execNpmSync, spawnNpmSync } from '../scripts/process-runner.mjs';
 import { exportD1Database } from '../scripts/d1-export.mjs';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
+import { DatabaseSync } from 'node:sqlite';
 
 test('test tiers are a disjoint exhaustive partition and stale inventories fail closed', () => {
   const unit = testFiles('unit'), rehearsal = testFiles('rehearsal');
@@ -17,6 +20,59 @@ test('test tiers are a disjoint exhaustive partition and stale inventories fail 
     writeFileSync(path.join(directory, 'test-tiers.json'), '{}');
     writeFileSync(path.join(directory, 'new.test.mjs'), '');
     assert.throws(() => testFiles('unit', directory), /inventory is stale/);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+const scriptPath = name => fileURLToPath(new URL(`../scripts/${name}`, import.meta.url));
+const runGate = (name, args = [], options = {}) => spawnSync(process.execPath, [scriptPath(name), ...args], { encoding: 'utf8', ...options });
+
+test('schema gate reports physical overflow names/counts and closes a read-only failing database', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'baseline-schema-diagnostics-'));
+  try {
+    const file = path.join(directory, 'wide.sqlite'), db = new DatabaseSync(file);
+    const columns = Array.from({ length: 50 }, (_, i) => `c${i} TEXT`).join(',');
+    db.exec(`CREATE TABLE ec_wide(${columns}, legacy_extra TEXT, generated_extra TEXT AS(c0) VIRTUAL); CREATE TABLE ec_valid(${columns});`);
+    db.close();
+    const before = readFileSync(file), result = runGate('check-schema-budget.mjs', [file]);
+    assert.equal(result.status, 1, result.stderr);
+    for (const expected of ['Expected vs Received', 'ec_wide', 'Expected: <= 50', 'Received: 52', '"legacy_extra"', '"generated_extra"', 'Recheck: npm run check:schema-budget']) assert.ok(result.stderr.includes(expected), result.stderr);
+    assert.doesNotMatch(result.stderr, /\n\s+at /);
+    assert.deepEqual(readFileSync(file), before);
+    const malformed = runGate('check-schema-budget.mjs', ['file:%broken']);
+    assert.equal(malformed.status, 1); assert.match(malformed.stderr, /Remediation:/); assert.doesNotMatch(malformed.stderr, /\n\s+at /);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('art gate shows invalid fields and required-structure diff with source lines', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'baseline-record-diagnostics-'));
+  try {
+    const missing = runGate('check-art-direction.mjs', ['--require-record'], { cwd: directory });
+    assert.equal(missing.status, 1); assert.match(missing.stderr, /no real Art Direction Record found/);
+    assert.match(missing.stderr, /Recheck:/);
+    writeFileSync(path.join(directory, 'AGENTS.md'), '# Project\n## Art Direction Record\n- **Aesthetic Lane:** TBD\n');
+    const result = runGate('check-art-direction.mjs', ['--require-record'], { cwd: directory });
+    assert.equal(result.status, 1);
+    for (const expected of ['Expected vs Received', '- AGENTS.md:3:', '+ - **Typography Pairing:**', 'Narrative Metaphor must', 'Token Physics needs a concrete Canvas', 'Recheck: npm run check:art-direction']) assert.ok(result.stderr.includes(expected), result.stderr);
+    assert.doesNotMatch(result.stderr, /\n\s+at /);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('token gate reports failing scoped pairs, actual/minimum contrast and keeps JSON machine-readable', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'baseline-token-diagnostics-'));
+  try {
+    const file = path.join(directory, 'tokens.css');
+    const css = readFileSync('src/styles/global.css', 'utf8').replace(/--color-text:\s*[^;]+;/, '--color-text: #ffffff;');
+    writeFileSync(file, css);
+    const result = runGate('design-system.mjs', ['--css', file]);
+    assert.equal(result.status, 1);
+    for (const expected of ['Expected vs Received', 'default:text-on-page', '--color-text on --color-page', 'Expected: >= 4.5:1', 'Received:', file + ':', 'Remediation:']) assert.ok(result.stderr.includes(expected), result.stderr);
+    assert.doesNotMatch(result.stderr, /\n\s+at /);
+    const json = runGate('design-system.mjs', ['--css', file, '--json']);
+    const report = JSON.parse(json.stdout);
+    assert.equal(json.status, 1); assert.equal(report.valid, false);
+    assert.equal(report.contrast.find(pair => pair.id === 'default:focus-on-page').minimum, 3);
+    assert.equal(report.contrast.find(pair => pair.id === 'default:text-on-page').status, 'fail');
+    assert.equal(json.stderr, '');
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });
 

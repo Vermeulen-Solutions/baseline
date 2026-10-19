@@ -76,6 +76,43 @@ export function matchesDeletionException(file, previousContent, exceptions) {
     && matchesException(file, previousContent, exceptions);
 }
 
+export function formatRecordDiagnostics(markdown, errors) {
+  const expected = [
+    '## Art Direction Record',
+    '- **Aesthetic Lane:** <reference lane, or Custom / existing brand — rationale>',
+    '- **Narrative Metaphor:** <concrete visual narrative>',
+    '- **Typography Pairing:** Display: <family>, Body: <family>',
+    '- **Token Physics:**',
+    '  - Canvas: <concrete surface>',
+    '  - Action/Accent: <concrete action color>',
+    '  - Borders: <concrete border treatment>',
+    '  - Spatial Density: <concrete spacing approach>',
+    '- **Site Anti-Patterns:** <first ban>; <second ban>; <optional third ban>',
+  ];
+  let fence = null, inRecord = false;
+  const received = [];
+  markdown.split(/\r?\n/).forEach((line, index) => {
+    const marker = line.match(/^\s*(`{3,}|~{3,})/);
+    if (marker) {
+      if (!fence) fence = marker[1];
+      else if (marker[1][0] === fence[0] && marker[1].length >= fence.length) fence = null;
+      return;
+    }
+    if (fence) return;
+    if (/^## /.test(line)) inRecord = /^## Art Direction Record\s*$/.test(line);
+    if (inRecord && line.trim()) received.push(`- AGENTS.md:${index + 1}: ${line}`);
+  });
+  return [
+    'Art direction gate: FAIL',
+    'Expected vs Received — required record structure diff (+ expected, - received):',
+    ...(received.length ? received : ['- AGENTS.md: no real Art Direction Record found outside code fences']),
+    ...expected.map(line => '+ ' + line),
+    'Invalid fields:', ...errors.map(error => `  - ${error}`),
+    'Remediation: edit AGENTS.md with concrete decisions in this structure; angle-bracket examples are not valid decisions.',
+    'Recheck: npm run check:art-direction -- --require-record',
+  ].join('\n');
+}
+
 function main() {
   const args = process.argv.slice(2);
   const baseIndex = args.indexOf('--base');
@@ -113,10 +150,10 @@ function main() {
     if (!uncovered.length) { console.log('Art direction gate: exact infrastructure exceptions cover these changes.'); return; }
     console.log(`Art direction gate: checking record for ${uncovered.join(', ')}`);
   }
-  const agentsMd = readFileSync('AGENTS.md', 'utf8');
+  const agentsMd = existsSync('AGENTS.md') ? readFileSync('AGENTS.md', 'utf8') : '';
   const css = existsSync('src/styles/global.css') ? readFileSync('src/styles/global.css', 'utf8') : null;
   const errors = [...validateRecord(agentsMd), ...validateCssAlignment(agentsMd, css)];
-  if (errors.length) { console.error(errors.join('\n')); process.exitCode = 1; }
+  if (errors.length) { console.error(formatRecordDiagnostics(agentsMd, errors)); process.exitCode = 1; }
   else {
     console.log('Art direction record is structurally valid.');
     console.log('👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.');

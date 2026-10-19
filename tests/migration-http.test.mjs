@@ -225,7 +225,8 @@ test('network concurrency is bounded and no cookies, auth or sensitive headers c
       destination = second;
       const manifest = manifestFor(origin); manifest.productionOrigin = second; manifest.http = { concurrency: 2 };
       manifest.urls = Array.from({length:4},(_,i)=>({id:'route-'+i,sourceUrl:manifest.sourceOrigin+'/route-'+i+'/',locale:'en',disposition:'redirected',requestPath:'/route-'+i+'/',expected:{status:200,redirects:[{status:301,path:'/end/'}]}}));
-      assert.equal((await collect(manifest,directory)).report.exitCode,0);
+      const { report } = await collect(manifest, directory);
+      assert.equal(report.exitCode, 0, JSON.stringify(report));
       assert.ok(maximum() <= 2); assert.ok(remote.length);
       for(const request of remote)for(const header of ['authorization','cookie','referer','x-api-key'])assert.equal(request.headers[header],undefined);
     });

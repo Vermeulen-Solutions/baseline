@@ -24,7 +24,7 @@ Acceptance: Windows smoke checks run without policy bypass; child exit/error pro
 
 ## ENG-3 — Actionable CLI gate failures
 
-Status: planned. Dependency: ENG-2 passed.
+Status: complete. Dependency: ENG-2 passed.
 
 Targets: `scripts/check-schema-budget.mjs`, `scripts/schema-column-budget.mjs`, `scripts/check-art-direction.mjs`, `scripts/design-system.mjs`, schema/design tests and engineering CLI fixtures.
 
@@ -47,3 +47,5 @@ Acceptance: every retained script has a maintenance purpose or consumer; every d
 Windows x64, Node 24.21.0. Baseline: 218/218 tests, 60.675s. Phase 1: 219/219 tests, 79.734s while fast CI/build also ran; full verify passed, Astro 46 files with zero errors/warnings/hints. Fast CI: 32.700s, unit step 5.982s, under60Seconds true, all eight steps exit 0. A competing-load unit run reached 10.052s; final isolated benchmark required. No tests removed: no obsolete coverage established. See [file inventory](engineering-inventory.md).
 
 Phase 2: 221/221 tests (62.432s), complete verify passed; zero Astro diagnostics. Process/lifecycle subset 10/10 passed; final resolver contracts 3/3 passed after Unix launcher symlink support. Syntax checked 125 modules. No shell-string process invocations remain in scripts or test harnesses. Windows commands ran via npm.cmd under the existing policy. Unix prefix resolution is fixture-tested; no Unix host run claimed.
+
+Phase 3: frozen-source full verify passed, 225/225 tests (56.366s), 46 Astro files with zero errors/warnings/hints. Deliberate gate failures and process contracts: 6/6; broader diagnostics/recipe/design subset: 38/38. Initial full run failed after a source edit invalidated an in-flight sync snapshot; an HTTP loopback test also returned unknown without diagnostics. Both passed isolated (25/25); added report context to the HTTP assertion and reran the complete suite with sources frozen. No production HTTP behavior changed. Legacy reviewed schema helper/plan compatibility remains covered by an exact historical fixture.

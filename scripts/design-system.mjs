@@ -1137,6 +1137,25 @@ function mergeOverrides(target, source) {
   };
 }
 
+export function formatTokenDiagnostics(report, cssPath, css) {
+  const lines = css.split(/\r?\n/);
+  const failed = report.contrast.filter(pair => pair.status !== 'pass');
+  return [
+    'Token audit: FAIL — Expected vs Received',
+    ...failed.flatMap(pair => {
+      const locations = lines.flatMap((line, index) => [pair.foreground, pair.background].some(token => line.trimStart().startsWith(token + ':')) ? [`${cssPath}:${index + 1}`] : []);
+      return [
+        `  Pair: ${pair.id} (${pair.foreground} on ${pair.background})`,
+        `  Expected: >= ${pair.minimum}:1 WCAG AA ${pair.minimum === 4.5 ? 'text' : 'non-text'} contrast`,
+        `  Received: ${pair.ratio === null ? 'unverified (unsupported/missing color)' : pair.ratio + ':1'} (${pair.foregroundValue} on ${pair.backgroundValue})`,
+        `  Token declarations: ${locations.join(', ') || cssPath}`,
+      ];
+    }),
+    ...report.errors.map(error => `  - ${error}`),
+    `Remediation: edit the affected scoped tokens in ${cssPath}, then run npm run design:tokens -- --css "${cssPath}".`,
+  ].join('\n');
+}
+
 function main() {
   const args = process.argv.slice(2);
   const cssIndex = args.indexOf('--css');
@@ -1225,7 +1244,7 @@ function main() {
     const updated = applyTokenOverrides(source, combinedOverrides);
     const audit = auditDesignTokens(updated);
     if (!audit.valid) {
-      console.error(audit.errors.join('\n'));
+      console.error(formatTokenDiagnostics(audit, cssPath, updated));
       process.exitCode = 1;
       return;
     }
@@ -1246,7 +1265,7 @@ function main() {
   const calIndex = args.indexOf('--write-calibration');
   if (calIndex >= 0 || initClient) {
     if (!report.valid) {
-      console.error('Refusing to write calibration report while token audit has errors:\n' + report.errors.join('\n'));
+      console.error('Refusing to write calibration report while token audit has errors:\n' + formatTokenDiagnostics(report, cssPath, css));
       process.exitCode = 1;
       return;
     }
@@ -1286,7 +1305,9 @@ function main() {
     }
     const allErrors = [...report.errors, ...fontAudit.warnings, ...proxyAudit.issues];
     if (allErrors.length) {
-      console.error('\nErrors:\n' + allErrors.map(e => `- ${e}`).join('\n'));
+      if (!report.valid) console.error(formatTokenDiagnostics(report, cssPath, css));
+      const otherErrors = [...fontAudit.warnings, ...proxyAudit.issues];
+      if (otherErrors.length) console.error('\nErrors:\n' + otherErrors.map(e => `- ${e}`).join('\n'));
     }
   }
 
