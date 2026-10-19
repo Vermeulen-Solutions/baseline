@@ -1,0 +1,1072 @@
+{
+  "version": 1,
+  "scope": "Local Windows Chromium functional suite; automated keyboard/browser state, not manual AT conformance",
+  "environment": {
+    "version": 1,
+    "fixtureVersion": 2,
+    "playwright": "1.64.1",
+    "chromiumRevision": "1248",
+    "node": "24.21.0",
+    "platform": "win32",
+    "executionPolicy": "Local developer verification only; no push/PR/build/deployment dependency",
+    "font": "@fontsource/noto-sans@5.3.0 (latin 400/700)",
+    "capturePaintPolicy": "Screenshot-only gallery content-visibility:visible; no masks or production layout overrides",
+    "date": "2026-01-15T12:00:00.000Z",
+    "locale": "en-US",
+    "timezoneId": "UTC",
+    "colorScheme": "light",
+    "deviceScaleFactor": 1,
+    "comparison": {
+      "threshold": 0.1,
+      "maxDiffPixels": 0,
+      "animations": "disabled",
+      "caret": "hide",
+      "scale": "css"
+    },
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 768,
+        "height": 1024
+      },
+      {
+        "width": 1440,
+        "height": 900
+      }
+    ],
+    "routes": [
+      {
+        "name": "home",
+        "path": "/",
+        "status": 200,
+        "heading": "Recent Posts",
+        "text": "Welcome"
+      },
+      {
+        "name": "page",
+        "path": "/about",
+        "status": 200,
+        "heading": "About",
+        "text": "This is the about page."
+      },
+      {
+        "name": "posts",
+        "path": "/posts",
+        "status": 200,
+        "heading": "Posts",
+        "text": "Welcome"
+      },
+      {
+        "name": "post",
+        "path": "/posts/welcome",
+        "status": 200,
+        "heading": "Welcome",
+        "text": "What to do next"
+      },
+      {
+        "name": "category",
+        "path": "/category/general",
+        "status": 200,
+        "heading": "General",
+        "text": "Welcome"
+      },
+      {
+        "name": "tag",
+        "path": "/tag/starter",
+        "status": 200,
+        "heading": "Tag: Starter",
+        "text": "Welcome"
+      },
+      {
+        "name": "not-found",
+        "path": "/does-not-exist-visual-fixture",
+        "status": 404,
+        "heading": "Page not found",
+        "text": "Go home"
+      },
+      {
+        "name": "styleguide",
+        "path": "/_styleguide",
+        "status": 200,
+        "heading": "Starter component styleguide",
+        "text": "Coverage and limits"
+      }
+    ],
+    "observedNode": "24.21.0",
+    "arch": "x64",
+    "seedSHA256": "8a1e21b5c47a750df394f79a544e31244690da7e5aeaada1a4628b3c52438543",
+    "sourceCSS_SHA256": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832"
+  },
+  "stats": {
+    "startTime": "2026-10-19T09:58:54.662Z",
+    "duration": 102498.581,
+    "expected": 26,
+    "skipped": 4,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "cases": [
+    {
+      "title": "behavior public skip link transfers keyboard focus into main",
+      "project": "chromium-390",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "public-keyboard-journeys",
+          "data": [
+            {
+              "route": "/",
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "A",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            },
+            {
+              "route": "/_styleguide",
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "BUTTON",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            }
+          ]
+        },
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior field labels and errors resolve and summary activation focuses the field",
+      "project": "chromium-390",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "field-error-journey",
+          "data": {
+            "label": "resolved",
+            "errors": [
+              "specimen-field-error"
+            ],
+            "summaryLink": "field focused"
+          }
+        },
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior ticker active motion, native stop, pause, RTL seam",
+      "project": "chromium-390",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "seam-geometry",
+          "data": {
+            "seam": [
+              {
+                "phase": 0,
+                "width": 525.703125,
+                "duplicateWidth": 525.703125,
+                "seam": 0,
+                "viewport": 355.6875,
+                "coverageStart": 0,
+                "coverageEnd": 695.71875,
+                "visibleItems": 3
+              },
+              {
+                "phase": 0.5,
+                "width": 525.703125,
+                "duplicateWidth": 525.703125,
+                "seam": 0,
+                "viewport": 355.6875,
+                "coverageStart": -262.8515625,
+                "coverageEnd": 432.8671875,
+                "visibleItems": 3
+              },
+              {
+                "phase": 0.999,
+                "width": 525.703125,
+                "duplicateWidth": 525.703125,
+                "seam": 0,
+                "viewport": 355.6875,
+                "coverageStart": -525.1774291992188,
+                "coverageEnd": 170.54132080078125,
+                "visibleItems": 3
+              }
+            ],
+            "rtlSeam": [
+              {
+                "phase": 0,
+                "width": 355.6875,
+                "duplicateWidth": 355.6875,
+                "seam": 0,
+                "viewport": 355.6875,
+                "coverageStart": -355.6875,
+                "coverageEnd": 0,
+                "visibleItems": 1
+              },
+              {
+                "phase": 0.5,
+                "width": 355.6875,
+                "duplicateWidth": 355.6875,
+                "seam": 0,
+                "viewport": 355.6875,
+                "coverageStart": -177.84375,
+                "coverageEnd": 177.84375,
+                "visibleItems": 2
+              },
+              {
+                "phase": 0.999,
+                "width": 355.6875,
+                "duplicateWidth": 355.6875,
+                "seam": 0,
+                "viewport": 355.6875,
+                "coverageStart": -0.35565185546875,
+                "coverageEnd": 355.33184814453125,
+                "visibleItems": 1
+              }
+            ]
+          }
+        },
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior reduced motion and print preserve a single complete list",
+      "project": "chromium-390",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior no-JS native controls, ticker and gallery fallback",
+      "project": "chromium-390",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "reflow 320px with text-spacing overrides and native keyboard controls",
+      "project": "chromium-390",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 320,
+              "height": 900
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "zoom actual Chromium page zoom at 200% and 400%",
+      "project": "chromium-390",
+      "status": "skipped"
+    },
+    {
+      "title": "behavior public skip link transfers keyboard focus into main",
+      "project": "chromium-768",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "public-keyboard-journeys",
+          "data": [
+            {
+              "route": "/",
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "A",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            },
+            {
+              "route": "/_styleguide",
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "BUTTON",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            }
+          ]
+        },
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior field labels and errors resolve and summary activation focuses the field",
+      "project": "chromium-768",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "field-error-journey",
+          "data": {
+            "label": "resolved",
+            "errors": [
+              "specimen-field-error"
+            ],
+            "summaryLink": "field focused"
+          }
+        },
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior ticker active motion, native stop, pause, RTL seam",
+      "project": "chromium-768",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "seam-geometry",
+          "data": {
+            "seam": [
+              {
+                "phase": 0,
+                "width": 721.09375,
+                "duplicateWidth": 721.09375,
+                "seam": 0,
+                "viewport": 721.09375,
+                "coverageStart": 0,
+                "coverageEnd": 721.09375,
+                "visibleItems": 4
+              },
+              {
+                "phase": 0.5,
+                "width": 721.09375,
+                "duplicateWidth": 721.09375,
+                "seam": 0,
+                "viewport": 721.09375,
+                "coverageStart": -360.546875,
+                "coverageEnd": 360.546875,
+                "visibleItems": 4
+              },
+              {
+                "phase": 0.999,
+                "width": 721.09375,
+                "duplicateWidth": 721.09375,
+                "seam": 0,
+                "viewport": 721.09375,
+                "coverageStart": -720.3726806640625,
+                "coverageEnd": 0.7210693359375,
+                "visibleItems": 4
+              }
+            ],
+            "rtlSeam": [
+              {
+                "phase": 0,
+                "width": 721.09375,
+                "duplicateWidth": 721.09375,
+                "seam": 0,
+                "viewport": 721.09375,
+                "coverageStart": -721.09375,
+                "coverageEnd": 0,
+                "visibleItems": 1
+              },
+              {
+                "phase": 0.5,
+                "width": 721.09375,
+                "duplicateWidth": 721.09375,
+                "seam": 0,
+                "viewport": 721.09375,
+                "coverageStart": -360.546875,
+                "coverageEnd": 360.546875,
+                "visibleItems": 2
+              },
+              {
+                "phase": 0.999,
+                "width": 721.09375,
+                "duplicateWidth": 721.09375,
+                "seam": 0,
+                "viewport": 721.09375,
+                "coverageStart": -0.7210693359375,
+                "coverageEnd": 720.3726806640625,
+                "visibleItems": 1
+              }
+            ]
+          }
+        },
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior reduced motion and print preserve a single complete list",
+      "project": "chromium-768",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior no-JS native controls, ticker and gallery fallback",
+      "project": "chromium-768",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "reflow 320px with text-spacing overrides and native keyboard controls",
+      "project": "chromium-768",
+      "status": "skipped",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "zoom actual Chromium page zoom at 200% and 400%",
+      "project": "chromium-768",
+      "status": "skipped"
+    },
+    {
+      "title": "behavior public skip link transfers keyboard focus into main",
+      "project": "chromium-1440",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "public-keyboard-journeys",
+          "data": [
+            {
+              "route": "/",
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "A",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            },
+            {
+              "route": "/_styleguide",
+              "firstTab": "skip link",
+              "activation": "main focused",
+              "nextTab": "BUTTON",
+              "unobscured": true,
+              "keyboardScroll": "auto"
+            }
+          ]
+        },
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior field labels and errors resolve and summary activation focuses the field",
+      "project": "chromium-1440",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "field-error-journey",
+          "data": {
+            "label": "resolved",
+            "errors": [
+              "specimen-field-error"
+            ],
+            "summaryLink": "field focused"
+          }
+        },
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior ticker active motion, native stop, pause, RTL seam",
+      "project": "chromium-1440",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "seam-geometry",
+          "data": {
+            "seam": [
+              {
+                "phase": 0,
+                "width": 1344,
+                "duplicateWidth": 1344,
+                "seam": 0,
+                "viewport": 1344,
+                "coverageStart": 0,
+                "coverageEnd": 1344,
+                "visibleItems": 4
+              },
+              {
+                "phase": 0.5,
+                "width": 1344,
+                "duplicateWidth": 1344,
+                "seam": 0,
+                "viewport": 1344,
+                "coverageStart": -672,
+                "coverageEnd": 672,
+                "visibleItems": 4
+              },
+              {
+                "phase": 0.999,
+                "width": 1344,
+                "duplicateWidth": 1344,
+                "seam": 0,
+                "viewport": 1344,
+                "coverageStart": -1342.6561279296875,
+                "coverageEnd": 1.3438720703125,
+                "visibleItems": 4
+              }
+            ],
+            "rtlSeam": [
+              {
+                "phase": 0,
+                "width": 1344,
+                "duplicateWidth": 1344,
+                "seam": 0,
+                "viewport": 1344,
+                "coverageStart": -1344,
+                "coverageEnd": 0,
+                "visibleItems": 1
+              },
+              {
+                "phase": 0.5,
+                "width": 1344,
+                "duplicateWidth": 1344,
+                "seam": 0,
+                "viewport": 1344,
+                "coverageStart": -672,
+                "coverageEnd": 672,
+                "visibleItems": 2
+              },
+              {
+                "phase": 0.999,
+                "width": 1344.0001220703125,
+                "duplicateWidth": 1344,
+                "seam": 0,
+                "viewport": 1344,
+                "coverageStart": -1.3438720703125,
+                "coverageEnd": 1342.65625,
+                "visibleItems": 1
+              }
+            ]
+          }
+        },
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior reduced motion and print preserve a single complete list",
+      "project": "chromium-1440",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior no-JS native controls, ticker and gallery fallback",
+      "project": "chromium-1440",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "reflow 320px with text-spacing overrides and native keyboard controls",
+      "project": "chromium-1440",
+      "status": "skipped",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "zoom actual Chromium page zoom at 200% and 400%",
+      "project": "chromium-1440",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "actual-page-zoom",
+          "data": [
+            {
+              "factor": 2,
+              "innerWidth": 640,
+              "dpr": 2,
+              "client": 640,
+              "scroll": 640,
+              "outliers": []
+            },
+            {
+              "factor": 4,
+              "innerWidth": 320,
+              "dpr": 4,
+              "client": 320,
+              "scroll": 320,
+              "outliers": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "behavior gallery opens, advances and restores keyboard focus",
+      "project": "chromium-390",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior gallery opens, advances and restores keyboard focus",
+      "project": "chromium-768",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 768,
+              "height": 1024
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior gallery opens, advances and restores keyboard focus",
+      "project": "chromium-1440",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "browser-diagnostics",
+          "data": {
+            "problems": [],
+            "browser": "156.0.8078.4",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior form recovery with JavaScript enabled",
+      "project": "chromium-390",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "form-recovery-journeys",
+          "data": {
+            "javaScriptEnabled": true,
+            "results": [
+              {
+                "noSession": false,
+                "nativeValidation": true,
+                "invalidPost": 303,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "consumed",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              },
+              {
+                "noSession": true,
+                "nativeValidation": true,
+                "invalidPost": 422,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "inline only",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              }
+            ],
+            "boundedValue": 2000,
+            "secretAndUnknownValues": "not retained",
+            "pageErrors": []
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior form recovery with JavaScript disabled",
+      "project": "chromium-390",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "form-recovery-journeys",
+          "data": {
+            "javaScriptEnabled": false,
+            "results": [
+              {
+                "noSession": false,
+                "nativeValidation": true,
+                "invalidPost": 303,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "consumed",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              },
+              {
+                "noSession": true,
+                "nativeValidation": true,
+                "invalidPost": 422,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "inline only",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              }
+            ],
+            "boundedValue": 2000,
+            "secretAndUnknownValues": "not retained",
+            "pageErrors": []
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior form recovery with JavaScript enabled",
+      "project": "chromium-768",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "form-recovery-journeys",
+          "data": {
+            "javaScriptEnabled": true,
+            "results": [
+              {
+                "noSession": false,
+                "nativeValidation": true,
+                "invalidPost": 303,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "consumed",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              },
+              {
+                "noSession": true,
+                "nativeValidation": true,
+                "invalidPost": 422,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "inline only",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              }
+            ],
+            "boundedValue": 2000,
+            "secretAndUnknownValues": "not retained",
+            "pageErrors": []
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior form recovery with JavaScript disabled",
+      "project": "chromium-768",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "form-recovery-journeys",
+          "data": {
+            "javaScriptEnabled": false,
+            "results": [
+              {
+                "noSession": false,
+                "nativeValidation": true,
+                "invalidPost": 303,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "consumed",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              },
+              {
+                "noSession": true,
+                "nativeValidation": true,
+                "invalidPost": 422,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "inline only",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              }
+            ],
+            "boundedValue": 2000,
+            "secretAndUnknownValues": "not retained",
+            "pageErrors": []
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior form recovery with JavaScript enabled",
+      "project": "chromium-1440",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "form-recovery-journeys",
+          "data": {
+            "javaScriptEnabled": true,
+            "results": [
+              {
+                "noSession": false,
+                "nativeValidation": true,
+                "invalidPost": 303,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "consumed",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              },
+              {
+                "noSession": true,
+                "nativeValidation": true,
+                "invalidPost": 422,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "inline only",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              }
+            ],
+            "boundedValue": 2000,
+            "secretAndUnknownValues": "not retained",
+            "pageErrors": []
+          }
+        }
+      ]
+    },
+    {
+      "title": "behavior form recovery with JavaScript disabled",
+      "project": "chromium-1440",
+      "status": "expected",
+      "observations": [
+        {
+          "name": "form-recovery-journeys",
+          "data": {
+            "javaScriptEnabled": false,
+            "results": [
+              {
+                "noSession": false,
+                "nativeValidation": true,
+                "invalidPost": 303,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "consumed",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              },
+              {
+                "noSession": true,
+                "nativeValidation": true,
+                "invalidPost": 422,
+                "repeatedFailure": "unrelated email error retained",
+                "correction": "accepted",
+                "oneReadRetention": "inline only",
+                "announcementPolicy": "native error-summary autofocus; AT output untested"
+              }
+            ],
+            "boundedValue": 2000,
+            "secretAndUnknownValues": "not retained",
+            "pageErrors": []
+          }
+        }
+      ]
+    }
+  ],
+  "normalFormFixture": {
+    "methods": [
+      "GET",
+      "HEAD",
+      "POST"
+    ],
+    "status": 404,
+    "emittedMarkerPresent": false,
+    "evidence": "Owned bootstrap assertions succeeded before the functional suite"
+  },
+  "bootstrap": {
+    "isolation": "Owned temporary source + fresh DB; no working DB/media/env/credentials copied",
+    "fixtureVersion": 2,
+    "seed": "seed/seed.json via supported dev setup",
+    "date": "2026-01-15T12:00:00.000Z",
+    "normalStyleguide": 404,
+    "fixtureStyleguide": 200,
+    "fixtureReleaseRejected": true
+  },
+  "cleanup": {
+    "serverStopped": true,
+    "dependencyJunctionUnlinked": true,
+    "temporaryTreeRemoved": true,
+    "workingDatabaseCopied": false
+  },
+  "goldensChanged": false,
+  "manualScreenReader": "not run"
+}

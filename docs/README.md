@@ -44,6 +44,8 @@ Explore the documentation guides below, organized by workflow, design architectu
   Shared-shell compatibility, article semantics, public-origin defaults, editor/plugin precedence, and the disposable local metadata rehearsal.
 - **[Static Metadata and Safe JSON-LD](verification/metadata-phase-2.md)**
   Static/Sveltia ownership, public URL and image policy, independent profile verification, and explicit existing-site adoption.
+- **[Foundational Interaction Journeys](verification/interactions-phase-3.md)**
+  Local keyboard, error recovery, no-JS and motion checks across CMS/static profiles, with explicit manual AT limits.
 
 ---
 

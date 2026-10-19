@@ -7,12 +7,15 @@ import { createServer as socketServer } from 'node:net';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import assert from 'node:assert/strict';
-import { chromium } from '@playwright/test';
+import { chromium, expect } from '@playwright/test';
+import { skipLinkJourney, fieldErrorJourney, reducedMotionJourney, textSpacingJourney } from './journeys/public.mjs';
 import { assertReleaseArtifact } from '../scripts/assert-release-artifact.mjs';
 import { parse } from 'parse5';
 import sharp from 'sharp';
 
 const option = name => { const i = process.argv.indexOf(name); return i < 0 ? undefined : process.argv[i + 1]; };
+const browserRequested = process.argv.includes('--browser') || process.argv.includes('--public-browser');
+if (browserRequested && (process.env.CI || process.env.GITHUB_ACTIONS === 'true')) throw new Error('Browser verification is local-only; CI may run HTTP checks only');
 if (!option('--root')) throw new Error('Use --root <generated-static-project> [--browser] [--screenshots <directory>]');
 const root = path.resolve(option('--root'));
 const expectedSite = option('--site-url') || process.env.SITE_URL;
@@ -152,14 +155,22 @@ try {
   const fixtureHTML = await (await fetch(fixtures + '/_styleguide/')).text();
   assert.ok(fixtureHTML.includes('data-styleguide-ready'));
   report.fixtures = { styleguide: 200, images: await images(fixtures, fixtureHTML), releaseRejected: true };
-  if (process.argv.includes('--browser')) {
+  if (browserRequested) {
     browser = await chromium.launch({ headless: true });
     const observations = [];
     for (const width of [390, 768, 1440]) {
-      const page = await browser.newPage({ viewport: { width, height: 900 } });
-      const errors = []; page.on('pageerror', error => errors.push(error.message));
+      const page = await browser.newPage({ viewport: { width, height: 900 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
+      const errors = [], journeys = []; page.on('pageerror', error => errors.push(error.message));
+      page.on('requestfailed', request => errors.push('request failed: ' + request.url()));
+      page.on('response', response => { if (response.status() >= 400) errors.push('HTTP ' + response.status() + ': ' + response.url()); });
+      await page.route('**/*', route => {
+        if ([production, fixtures].includes(new URL(route.request().url()).origin)) return route.continue();
+        errors.push('external request: ' + route.request().url()); return route.abort();
+      });
       for (const [origin, route] of [[production, '/'], [production, '/posts/welcome/'], [fixtures, '/_styleguide/']]) {
-        await page.goto(origin + route); await page.evaluate(() => document.fonts.ready);
+        const response = await page.goto(origin + route); assert.equal(response.status(), 200);
+        await expect(page.locator('h1')).toHaveText(route === '/_styleguide/' ? 'Starter component styleguide' : 'Welcome');
+        await page.evaluate(() => document.fonts.ready);
         // Load below-the-fold lazy specimens before judging image failures or captures.
         await page.locator('img').evaluateAll(async images => {
           images.forEach(image => { image.loading = 'eager'; });
@@ -168,20 +179,49 @@ try {
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1), false, `Overflow: ${width} ${route}`);
         assert.ok(await page.locator('h1').count());
         assert.equal(await page.locator('img').evaluateAll(images => images.filter(image => !image.complete || image.naturalWidth === 0).length), 0);
-        if (route === '/_styleguide/') {
-          await page.getByLabel('Name', { exact: true }).press('Tab');
-          assert.equal(await page.locator('#specimen-invalid').evaluate(element => element === document.activeElement), true);
-        }
+        if (route === '/') journeys.push({ route, skip: await skipLinkJourney(page, page.locator('main a[href="/posts/welcome/"]').first()) });
+        if (route === '/_styleguide/') journeys.push({ route,
+          skip: await skipLinkJourney(page, page.getByRole('button', { name: 'Native button', exact: true })),
+          errors: await fieldErrorJourney(page), motion: await reducedMotionJourney(page),
+          ...(width === 390 && { textSpacing: await textSpacingJourney(page) }),
+        });
         if (option('--screenshots') && width === 390) {
           await fs.mkdir(option('--screenshots'), { recursive: true });
           await page.screenshot({ path: path.join(option('--screenshots'), route === '/' ? 'home-390.png' : route.includes('welcome') ? 'post-390.png' : 'styleguide-390.png'), fullPage: true });
         }
         observations.push({ width, route, overflow: false, brokenImages: 0 });
       }
+      observations.push({ width, journeys });
       assert.deepEqual(errors, []); await page.close();
     }
     report.browser = { observations, pageErrors: 0, keyboardFocus: 'passed' };
-    if (config.platformProfile === 'static-sveltia') {
+    const context = await browser.newContext({ javaScriptEnabled: false, reducedMotion: 'reduce', viewport: { width: 390, height: 900 }, serviceWorkers: 'block' });
+    try {
+      const page = await context.newPage(), failures = [];
+      page.on('pageerror', error => failures.push(error.message));
+      page.on('requestfailed', request => failures.push('failed: ' + request.url()));
+      await context.route('**/*', async route => {
+        if (![production, fixtures].includes(new URL(route.request().url()).origin)) { failures.push('external request'); return route.abort(); }
+        if (!route.request().isNavigationRequest()) return route.continue();
+        const response = await route.fetch();
+        await route.fulfill({ response, body: (await response.text()).replace('</head>', '<script>window.__publicDocumentScriptRan=true</script></head>') });
+      });
+      assert.equal((await page.goto(production + '/')).status(), 200);
+      const skip = await skipLinkJourney(page, page.locator('main a[href="/posts/welcome/"]').first());
+      const [post] = await Promise.all([page.waitForNavigation(), page.locator('main a[href="/posts/welcome/"]').first().press('Enter')]);
+      assert.equal(post.status(), 200); await expect(page.locator('h1')).toHaveText('Welcome');
+      const image = page.locator('main img').first(); await expect(image).toBeVisible();
+      assert.ok(await image.evaluate(element => element.complete && element.naturalWidth > 0));
+      assert.equal((await page.goto(fixtures + '/_styleguide/')).status(), 200);
+      await skipLinkJourney(page, page.getByRole('button', { name: 'Native button', exact: true }));
+      await fieldErrorJourney(page);
+      await page.getByRole('checkbox', { name: 'Check this sample', exact: true }).press('Space');
+      await expect(page.getByRole('checkbox', { name: 'Check this sample', exact: true })).toBeChecked();
+      assert.equal(await page.evaluate(() => typeof window.__publicDocumentScriptRan), 'undefined');
+      assert.deepEqual(failures, []);
+      report.browser.noJavaScript = { sentinelExecuted: false, skip, navigation: 200, nativeCheckbox: true, summaryFocus: true, nativeImage: true, pageErrors: 0 };
+    } finally { await context.close(); }
+    if (config.platformProfile === 'static-sveltia' && process.argv.includes('--browser')) {
       const admin = await browser.newPage();
       const errors = []; admin.on('pageerror', error => errors.push(error.message));
       await admin.goto(production + '/admin/');
@@ -191,6 +231,7 @@ try {
       await admin.close();
     }
   }
+  if (option('--out')) await fs.writeFile(option('--out'), JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report, null, 2));
 } finally {
   await stopChild();

@@ -13,4 +13,17 @@ test('recovery is bounded, allowlisted, expires and is consumed once per form',a
  assert.equal(await readFormRecovery(session,'contact'),undefined);
  await saveFormRecovery(session,'contact',state,['email']);now=601;assert.equal(await readFormRecovery(session,'contact'),undefined);
  assert.equal(await saveFormRecovery(undefined,'contact',state,['email']),false);
+ assert.equal(await readFormRecovery(undefined,'contact'),undefined);
+});
+
+test('recovery caps the entire payload and omits secret fields even when explicitly allowlisted',async()=>{
+ const stored=new Map();const session={set(k,v){stored.set(k,v);},async get(k){return stored.get(k);},delete(k){stored.delete(k);}};
+ const allowed=['password','apiToken','credit_card','cvv',...Array.from({length:100},(_,i)=>`field${i}`)];
+ const values=Object.fromEntries(allowed.map(name=>[name,'x'.repeat(4000)]));
+ await saveFormRecovery(session,'bounded',{values,fields:allowed,reason:'x'.repeat(300)},allowed);
+ const result=await readFormRecovery(session,'bounded');
+ assert.ok(Object.values(result.values).reduce((n,v)=>n+v.length,0)<=16000);
+ assert.ok(Object.values(result.values).every(v=>v.length<=2000));
+ for(const key of ['password','apiToken','credit_card','cvv'])assert.equal(result.values[key],undefined);
+ assert.ok(result.fields.length<=80);assert.equal(result.reason.length,120);
 });

@@ -10,6 +10,8 @@ import { initProfile } from './init-profile.mjs';
 const source = fileURLToPath(new URL('../', import.meta.url));
 const option = name => { const i = process.argv.indexOf(name); return i < 0 ? undefined : process.argv[i + 1]; };
 const profiles = option('--profile') ? [option('--profile')] : ['static', 'static-sveltia'];
+const publicBrowser = process.argv.includes('--public-browser');
+if (publicBrowser && (process.env.CI || process.env.GITHUB_ACTIONS === 'true')) throw new Error('Browser verification is local-only; CI may run HTTP checks only');
 if (profiles.some(p => !['static', 'static-sveltia'].includes(p))) throw new Error('Unknown static profile');
 const temporary = await fs.mkdtemp(path.join(os.tmpdir(), 'baseline-profile-verification-'));
 const npm = process.env.npm_execpath ?? path.join(path.dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js');
@@ -40,9 +42,9 @@ try {
     if (profile === 'static-sveltia') {
       for (const relative of ['admin/index.html', 'admin/config.yml']) assert.deepEqual(await fs.readFile(path.join(root, 'dist', relative)), await fs.readFile(path.join(root, 'public', relative)));
     } else await assert.rejects(fs.stat(path.join(root, 'dist/admin')), { code: 'ENOENT' });
-    const result = spawnSync(process.execPath, ['tests/static-pilot.integration.mjs', '--root', root, '--site-url', fixtureSite], { cwd: source, stdio: 'inherit', timeout: 120000 });
+    const result = spawnSync(process.execPath, ['tests/static-pilot.integration.mjs', '--root', root, '--site-url', fixtureSite, ...(publicBrowser ? ['--public-browser'] : [])], { cwd: source, stdio: 'inherit', timeout: publicBrowser ? 240000 : 120000 });
     assert.equal(result.status, 0, 'Generated profile HTTP integration');
-    receipts.push({ profile, root, independentInstall: true, cleanInstall: true, databasePackages: 0, verify: 'passed', production: 'passed', fixtures: 'passed', http: 'passed' });
+    receipts.push({ profile, root, independentInstall: true, cleanInstall: true, databasePackages: 0, verify: 'passed', production: 'passed', fixtures: 'passed', http: 'passed', ...(publicBrowser && { publicBrowser: 'passed' }) });
   }
   console.log(JSON.stringify(receipts, null, 2));
 } finally {

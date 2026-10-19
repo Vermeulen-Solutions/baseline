@@ -12,15 +12,25 @@ import { onRequest } from '../scripts/dev-tools-middleware.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 
-test('server release reserves the styleguide path before any CMS catch-all can render it', () => {
-  for (const suffix of ['', '/', '?fixtures=1']) {
-    const response = onRequest({ url: new URL('https://example.invalid/_styleguide' + suffix) }, () => { throw new Error('CMS catch-all must not execute'); });
+test('server release reserves developer fixture paths before any CMS catch-all can render them', () => {
+  for (const route of ['/_styleguide', '/_form-recovery', '/%5fform-recovery']) for (const suffix of ['', '/', '?fixtures=1']) {
+    const response = onRequest({ url: new URL('https://example.invalid' + route + suffix) }, () => { throw new Error('CMS catch-all must not execute'); });
     assert.equal(response.status, 404);
     assert.equal(response.headers.get('cache-control'), 'no-store');
   }
   assert.equal(onRequest({ url: new URL('https://example.invalid/%5fstyleguide/') }, () => new Response('CMS page')).status, 404);
   const response = onRequest({ url: new URL('https://example.invalid/posts/welcome') }, () => new Response('Public content'));
   assert.equal(response.status, 200);
+});
+
+test('CMS form fixture is injected only in developer/fixture modes, never in a static profile or release', async () => {
+  for (const platform of ['emdash','static']) for (const command of ['dev','build','preview']) for (const fixtures of [false,true]) {
+    const routes=[];
+    await devTools({platform,fixtures}).hooks['astro:config:setup']({ config:{output:platform==='emdash'?'server':'static'}, command, injectRoute:r=>routes.push(r), injectScript:()=>{}, updateConfig:()=>{}, addMiddleware:()=>{} });
+    const form=routes.filter(r=>r.pattern==='/_form-recovery');
+    assert.equal(form.length,platform==='emdash'&&(command==='dev'||command==='build'&&fixtures)?1:0);
+    if(form.length)assert.equal(form[0].prerender,false);
+  }
 });
 
 test('static developer tools inject only dev/fixture routes, prerender static fixtures and never resolve a CMS version', async () => {

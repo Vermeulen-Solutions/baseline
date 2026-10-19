@@ -1,0 +1,59 @@
+---
+import SiteShell from '../layouts/SiteShell.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import FormError from '../components/FormError.astro';
+import { saveFormRecovery, readFormRecovery, type FormRecovery } from '../lib/form-recovery';
+
+// Injected only by the developer-tools integration; never a public form service.
+if (!import.meta.env.DEV && !import.meta.env.STARTER_TEST_FIXTURES) return new Response(null, { status: 404 });
+Astro.response.headers.set('Cache-Control', 'no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+const noSession = Astro.url.searchParams.get('mode') === 'no-session';
+const session = noSession ? undefined : Astro.session;
+const action = '/_form-recovery' + (noSession ? '?mode=no-session' : '');
+const fields = ['name', 'email', 'message'] as const;
+const messages = { name: 'Enter at least two characters for the name.', email: 'Enter an email address in the form name@example.test.' };
+let recovery: FormRecovery | undefined;
+if (Astro.request.method === 'POST') {
+  const data = await Astro.request.formData();
+  // Select and bound display values here too: the no-session response is inline.
+  const values = Object.fromEntries(fields.map(field => [field, String(data.get(field) ?? '').slice(0, 2000)]));
+  const invalid = [
+    ...(values.name.trim().length < 2 ? ['name'] : []),
+    ...(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim()) ? ['email'] : []),
+  ];
+  if (!invalid.length) {
+    await readFormRecovery(session, 'synthetic-contact');
+    return Astro.redirect(action + (noSession ? '&' : '?') + 'sent=1', 303);
+  }
+  recovery = { values, fields: invalid, reason: 'validation' };
+  if (await saveFormRecovery(session, 'synthetic-contact', recovery, fields)) return Astro.redirect(action + '?errors=1', 303);
+  Astro.response.status = 422;
+} else {
+  recovery = await readFormRecovery(session, 'synthetic-contact');
+}
+const invalid = new Set(recovery?.fields ?? []);
+const sent = Astro.url.searchParams.get('sent') === '1';
+const title = recovery ? 'Correct the sample form' : 'Form recovery fixture';
+---
+<SiteShell title={title}>
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <header slot="header" class="site-header"><nav class="site-nav" aria-label="Fixture navigation"><a href="/">Home</a><a href="/_styleguide">Specimens</a></nav></header>
+  <Section labelledBy="fixture-heading"><Container width="reading" class="flow">
+    <h1 id="fixture-heading" data-form-recovery-fixture>{title}</h1>
+    <p>Synthetic local verification only. Nothing is sent to an external service.</p>
+    {sent ? <p data-form-success>Sample accepted. No message was sent.</p> : <>
+      {recovery && <FormError autofocus message="Check the fields listed below." fields={recovery.fields.map(id => ({ id: `recovery-${id}`, label: id === 'name' ? 'Name' : 'Email' }))} />}
+      {noSession && <p>Session retention is unavailable. Errors and entered values remain on this response so you can correct them.</p>}
+      <form method="post" action={action} class="flow">
+        <div><label for="recovery-name">Name (required)</label><input id="recovery-name" name="name" autocomplete="off" required value={recovery?.values.name} aria-invalid={invalid.has('name') ? 'true' : undefined} aria-describedby={invalid.has('name') ? 'recovery-name-error' : undefined} />{invalid.has('name') && <p id="recovery-name-error">{messages.name}</p>}</div>
+        <div><label for="recovery-email">Email (required)</label><input id="recovery-email" name="email" type="email" autocomplete="off" required value={recovery?.values.email} aria-invalid={invalid.has('email') ? 'true' : undefined} aria-describedby={invalid.has('email') ? 'recovery-email-error' : undefined} />{invalid.has('email') && <p id="recovery-email-error">{messages.email}</p>}</div>
+        <div><label for="recovery-message">Message</label><textarea id="recovery-message" name="message" rows="3">{recovery?.values.message}</textarea></div>
+        <button type="submit">Submit sample</button>
+        <button type="submit" formnovalidate>Exercise server validation</button>
+      </form>
+      <p>The second submit button intentionally bypasses native constraints to exercise server error responses. The primary button keeps browser validation.</p>
+    </>}
+  </Container></Section>
+</SiteShell>

@@ -1,4 +1,4 @@
-import { cp, copyFile, mkdir, mkdtemp, readFile, rm, symlink, unlink, writeFile } from 'node:fs/promises';
+import { cp, copyFile, mkdir, mkdtemp, readFile, readdir, rm, symlink, unlink, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
@@ -104,6 +104,10 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     }
     assert.ok(normalReady, 'Clean built public content must be healthy');
     for (const method of ['GET', 'HEAD']) assert.equal((await request('/_styleguide?fixtures=1', { method, headers: { cookie: 'fixtures=1' } })).status, 404);
+    for (const method of ['GET', 'HEAD', 'POST']) assert.equal((await request('/_form-recovery?fixtures=1', { method, headers: { cookie: 'fixtures=1' } })).status, 404);
+    for (const file of await readdir(path.join(stage, 'dist/server'), { recursive: true })) {
+      if (/\.(?:m?js|html)$/.test(file)) assert.ok(!(await readFile(path.join(stage, 'dist/server', file), 'utf8')).includes('data-form-recovery-fixture'), 'Form fixture must not be compiled into a release chunk');
+    }
     if (releaseOnly) {
       await mkdir(reportDir, { recursive: true });
       await writeFile(path.join(reportDir, 'bootstrap.json'), JSON.stringify({ releaseOnly: true, freshSeed: true, workingDatabaseCopied: false, normalStyleguide: 404, loopback: true }) + '\n');

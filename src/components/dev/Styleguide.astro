@@ -43,7 +43,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
         <Section labelledBy="controls"><div class="flow"><h2 id="controls">Controls and errors</h2><div class="control-row"><button type="button">Native button</button><button type="button" disabled>Disabled button</button><a href="#editorial">Text link</a></div>
           <fieldset class="specimen-fields"><legend>Native control specimens — no submissions</legend>
             <label for="specimen-name">Name<input id="specimen-name" autocomplete="off" placeholder="Sample name" /></label>
-            <label for="specimen-invalid">Required sample<input id="specimen-invalid" aria-invalid="true" aria-describedby="specimen-field-error" required /><span id="specimen-field-error">Enter a value to resolve this illustrative error.</span></label>
+            <div class="specimen-field"><label for="specimen-invalid">Required sample<input id="specimen-invalid" aria-invalid="true" aria-describedby="specimen-field-error" required /></label><span id="specimen-field-error">Enter a value to resolve this illustrative error.</span></div>
             <label for="specimen-note">Notes<textarea id="specimen-note" rows="3"></textarea></label>
             <label for="specimen-select">Selection<select id="specimen-select"><option>First choice</option><option>A much longer choice to inspect narrow layouts</option></select></label>
             <label class="choice"><input type="checkbox" /> Check this sample</label>
@@ -83,7 +83,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
   code { font-size:.875rem; }
   .control-row { display:flex; flex-wrap:wrap; align-items:center; gap:var(--spacing-content); }
   .specimen-fields { display:grid; gap:var(--spacing-content); padding:var(--spacing-content); border:1px solid var(--color-border); min-inline-size:0; }
-  .specimen-fields label { display:grid; gap:.5rem; }
+  .specimen-fields label, .specimen-field { display:grid; gap:.5rem; }
   .specimen-fields input:not([type=checkbox],[type=radio]), .specimen-fields textarea, .specimen-fields select { min-inline-size:0; inline-size:100%; padding:.5rem; border:1px solid var(--color-border); border-radius:var(--radius-control); color:var(--color-text); background:var(--color-surface); }
   .specimen-fields .choice { display:flex; align-items:center; min-block-size:2.75rem; }
   .breakout-specimen { padding:var(--spacing-content); border:1px dashed var(--color-border); border-radius:var(--radius-control); background:var(--color-surface); }

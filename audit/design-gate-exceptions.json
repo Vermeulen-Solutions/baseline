@@ -130,8 +130,8 @@
   },
   {
     "path": "src/components/FormError.astro",
-    "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "8e5cf27a51dfe369fba3d5c1f7de6260437bbd992f727fa9126e1b7680ad7dca"
+    "reason": "Functional shared error-summary focus policy: optional native autofocus for server-rendered validation responses; existing neutral styles and default output preserved. Any edit invalidates this exact LF-normalized infrastructure exception.",
+    "sha256": "b98b2a0d0bdc3e428a1985ee19eb1e384d1aa8b42c385f716b27d15572f410ce"
   },
   {
     "path": "src/lib/partners.ts",
@@ -181,8 +181,8 @@
   },
   {
     "path": "src/components/dev/Styleguide.astro",
-    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "c4650309946133e248e9a8b5d2db6fe8988f6d5801992961206784ddb1948ee9"
+    "reason": "Functional neutral specimen accessibility correction: keep the error description outside its label so the input name is stable and aria-describedby supplies the error separately; preserve grid spacing and starter visual tokens. Any edit invalidates this exact LF-normalized infrastructure exception.",
+    "sha256": "4af3c6744317871dd5ff3fc0d78c39ee3677e863fbd841b1bdcc61b24d029a3f"
   },
   {
     "path": "src/utils/grid-guide.ts",
@@ -378,5 +378,10 @@
     "path": "profiles/static/project/src/components/StaticMetadata.astro",
     "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
     "sha256": "30cba1e4123eba28f5ed95f6b17dc6f3fc4cdfaa8a71d6279a7795c7edd7a670"
+  },
+  {
+    "path": "src/dev/FormRecoveryFixture.astro",
+    "reason": "Synthetic developer-only CMS form fixture for POST recovery, one-read session state and session-unavailable behavior; injected only in development/fixture builds and reserved as 404 in releases. No client page, theme or real service. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "1a43e96ef0220223695f6e73d715bc9e6d46ec74905af6b525ba1f215a38a584"
   }
 ]

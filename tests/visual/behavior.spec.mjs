@@ -2,8 +2,23 @@ import { chromium } from '@playwright/test';
 import path from 'node:path';
 import { test, expect, prepare, settlePage, noOverflow, galleryCaptionsFit, styleguide, observe } from './helpers.mjs';
 import { visualContract as contract } from './contract.mjs';
+import { skipLinkJourney, fieldErrorJourney } from '../journeys/public.mjs';
 
 const ticker = page => page.getByRole('region', { name: 'Synthetic partner ticker', exact: true });
+test('behavior public skip link transfers keyboard focus into main', async ({ page }, info) => {
+  const results = [];
+  for (const route of [contract.routes.find(route => route.name === 'home'), styleguide]) {
+    await prepare(page, route, page.visualProblems);
+    const next = route.name === 'home' ? page.locator('main a[href="/posts/welcome"]') : page.getByRole('button', { name: 'Native button', exact: true });
+    results.push({ route: route.path, ...await skipLinkJourney(page, next) });
+  }
+  await info.attach('public-keyboard-journeys', { body: JSON.stringify(results), contentType: 'application/json' });
+});
+
+test('behavior field labels and errors resolve and summary activation focuses the field', async ({ page }, info) => {
+  await prepare(page, styleguide, page.visualProblems);
+  await info.attach('field-error-journey', { body: JSON.stringify(await fieldErrorJourney(page)), contentType: 'application/json' });
+});
 async function assertSeam(root, rtl = false) {
   const result = await root.evaluate((element, rtl) => {
     const groups = [...element.querySelectorAll('ul')];
@@ -81,8 +96,15 @@ test('behavior no-JS native controls, ticker and gallery fallback', async ({ bro
   try {
     const page = await context.newPage(), problems = observe(page);
     await context.route('**/*', route => new URL(route.request().url()).origin === process.env.VISUAL_ORIGIN ? route.continue() : route.abort());
+    await prepare(page, contract.routes.find(route => route.name === 'home'), problems, { scripts: false });
+    await skipLinkJourney(page, page.locator('main a[href="/posts/welcome"]'));
+    const [post] = await Promise.all([page.waitForNavigation(), page.locator('main a[href="/posts/welcome"]').press('Enter')]);
+    expect(post.status()).toBe(200);
+    await expect(page.locator('h1')).toHaveText('Welcome');
     await page.route('**/_styleguide', instrument);
     await prepare(page, styleguide, problems, { scripts: false });
+    await skipLinkJourney(page, page.getByRole('button', { name: 'Native button', exact: true }));
+    await fieldErrorJourney(page);
     expect(await page.evaluate(() => typeof window.__visualDocumentScriptExecuted)).toBe('undefined');
     const root = ticker(page);
     await root.locator('input').press('Space');

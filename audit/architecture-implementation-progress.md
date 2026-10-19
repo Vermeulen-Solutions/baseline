@@ -7,12 +7,12 @@ Plan: [phased implementation](architecture-implementation-plan-2026-10-19.md). C
 | 0 — contracts and starting evidence | Complete | Ownership/applicability/upgrade matrix saved; initial verify passed; [before HTML/JS capture](verification/metadata-phase-1-before.json) |
 | 1 — CMS metadata | Complete | Eight focused policy/pipeline tests; [nine-case built-site rehearsal](verification/metadata-phase-1-after.json); [verification and reproduction](../docs/verification/metadata-phase-1.md) |
 | 2 — static metadata | Complete | [Rendered profiles](verification/metadata-phase-2-profiles.json), [three build variants](verification/metadata-phase-2-variants.json), [final checks/hashes](verification/metadata-phase-2-checks.json) |
-| 3 — interaction journeys | Planned | Existing CMS and static harnesses retained |
+| 3 — interaction journeys | Automated slice complete; manual AT pending | [Checks/hashes](verification/interactions-phase-3-checks.json), [scope/reproduction and manual AT limits](../docs/verification/interactions-phase-3.md) |
 | 4 — template lint | Planned | No dependency changes in this slice |
 | 5 — native composition | Planned | No visual-system changes in this slice |
 | 6 — token diagnostics | Planned | Existing calibrated tokens retained |
 | 7 — conditional capabilities | Deferred pending requirements | No new modal/navigation/OG runtime |
-| 8 — release/adoption | Planned | Phase 1 records its scoped upgrade boundary |
+| 8 — release/adoption | Planned | Phases 1–3 record scoped adoption; final release/manual observations remain pending |
 
 Initial `npm run verify` passed before application edits (177 tests; Astro: 40 files, zero errors/warnings/hints).
 
@@ -58,10 +58,45 @@ quiet full verify; no migration code/assertion was changed. See the
 [final receipt](verification/metadata-phase-2-checks.json) for scope and temporary
 artifact retention after optional cleanup was blocked by automatic approval review.
 
+## Phase 3 implementation
+
+Checkpoint history: `2d7e88b` commits the evaluation/plan and `cca6a10` commits
+the jointly verified Phases 0–2 implementation. Both are local commits.
+
+The existing CMS functional suite and static pilot now share bounded skip-link,
+field-error, motion and text-spacing journeys. CMS adds a synthetic developer-only
+POST recovery fixture, optional native summary autofocus, repeated-failure/correction
+checks, and JS-disabled/session-unavailable variants. Normal artifacts omit its
+marker and return 404 for the reserved route. Helper tests retain expiration,
+allowlisting, total/field bounds and secret-key exclusions. Static profiles omit
+the CMS fixture and gain no server/session handler or new dependency.
+
+The browser tests exposed an error nested inside a label; its description now
+sits outside the label while retaining the same specimen spacing. Existing goldens
+remain unchanged. Focus checks respect the existing Card focus-parent ring. Public
+static verification has its own local-only `--public-browser` mode, separate from
+the existing remote Sveltia admin smoke check. Browser flags are rejected in CI.
+
+Manual screen-reader announcements and human keyboard usability review remain
+untested. Phase 3's automated scope is distinct from those release observations;
+it does not claim WCAG conformance or credentialed Sveltia publishing. See the
+[interaction guide](../docs/verification/interactions-phase-3.md) for adoption,
+reproduction, controlled session-unavailable scope and the evidence inventory.
+
+Final `npm run verify` passed 197/197 tests and checked 42 Astro files with zero
+errors, warnings or hints; root build passed. The final Windows functional run
+passed 26 tests, with four intentional placement skips and unchanged goldens.
+[Static](verification/interactions-phase-3-static.json) and
+[Sveltia](verification/interactions-phase-3-sveltia.json) receipts record public
+keyboard/no-JS/motion/text-spacing acceptance from independent installations.
+The static artifact was rechecked after a harness-only locator correction;
+the Sveltia runner passed its full install/ci/verify/build/fixtures/browser sequence.
+The owned CMS server/dependency junction/temp tree were cleaned successfully;
+static projects were deliberately retained with `--keep` for review.
+
 ## Next slice
 
-Phase 3: establish foundational keyboard, focus and form-recovery journeys using
-the existing local harnesses and profile applicability contracts. Keep shared
-native interactions separate from CMS-only submission/session recovery and
-credentialed Sveltia publishing. Later phases remain planned work; no new modal,
-drawer, OG image generator or public framework runtime is part of Phase 2.
+Phase 4: introduce version-compatible Astro accessibility template linting,
+preserving the existing script checker and explicit profile dependency/config
+mappings. No lint dependency or configuration was added in Phase 3. Manual AT
+observations remain a release follow-up alongside the later planned phases.

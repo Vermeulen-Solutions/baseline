@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "date": "2026-10-19",
+  "scope": "Architecture hardening Phase 3 automated acceptance; manual keyboard usability and screen-reader observations remain pending",
+  "implementationBase": "cca6a1079ce81e0f7df344e7a280553dbb98a7c0",
+  "precedingCheckpoints": {
+    "researchAndPlan": "2d7e88b",
+    "metadata": "cca6a10"
+  },
+  "workingTreeCapture": true,
+  "commands": [
+    {
+      "command": "npm run verify",
+      "exitCode": 0,
+      "tests": 197,
+      "pass": 197,
+      "fail": 0,
+      "astro": {
+        "files": 42,
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "releaseArtifact": "passed",
+      "advisory": "Existing Vite large-chunk advisory; no build failure"
+    },
+    {
+      "command": "npm run test:visual:functional",
+      "exitCode": 0,
+      "expected": 26,
+      "intentionalPlacementSkips": 4,
+      "unexpected": 0,
+      "goldensChanged": false,
+      "receipt": "interactions-phase-3-cms.json"
+    },
+    {
+      "command": "node tests/static-pilot.integration.mjs --root <owned-independent-static> --site-url https://static-profile.example.test --public-browser --out audit/verification/interactions-phase-3-static.json",
+      "exitCode": 0,
+      "receipt": "interactions-phase-3-static.json",
+      "setup": "Independent static install/ci, 12 tests, 30-file Astro check, normal build, release checks and fixture build completed in the preceding profile runner. Its first browser attempt exposed a harness locator issue; after correcting the locator, this command rechecked that same unchanged app artifact successfully."
+    },
+    {
+      "command": "npm run test:profiles -- --profile static-sveltia --public-browser --keep",
+      "exitCode": 0,
+      "tests": 13,
+      "astroFiles": 30,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0,
+      "independentInstall": true,
+      "cleanInstall": true,
+      "normalAndFixtureBuilds": "passed",
+      "releaseAndHTTP": "passed",
+      "publicBrowser": "passed",
+      "receipt": "interactions-phase-3-sveltia.json"
+    }
+  ],
+  "sourceSHA256": {
+    "src/components/FormError.astro": "b98b2a0d0bdc3e428a1985ee19eb1e384d1aa8b42c385f716b27d15572f410ce",
+    "src/components/dev/Styleguide.astro": "4af3c6744317871dd5ff3fc0d78c39ee3677e863fbd841b1bdcc61b24d029a3f",
+    "src/dev/FormRecoveryFixture.astro": "1a43e96ef0220223695f6e73d715bc9e6d46ec74905af6b525ba1f215a38a584",
+    "src/lib/form-recovery.ts": "e6e56e289298b01da156a429137c9a6cf288375b26829eb2f13a019422ac00e2",
+    "scripts/dev-tools-integration.mjs": "c0c41ba80361868dc2eb9688a31b169595be3f3e01125e3570c37c6d2f130b0d",
+    "scripts/dev-tools-middleware.mjs": "3ff401e461fc5e1d2fcd266fdaa93f1cb99daee90d57a78eed61bfe8ff52b75e",
+    "scripts/check-dev-tools.mjs": "c9dffb28e6b1e8699b554d1810bcf10a46526d9e7c546b7e56c9589f62484bf8",
+    "scripts/verify-profiles.mjs": "ae76cd06f07253ac3203ebcf499542db5f12af65f1869ea7825100995c120764",
+    "tests/journeys/public.mjs": "6ce5e247de0629449ddf04608b80b95791bbe5eef77e0907e11ee701b4c2942f",
+    "tests/visual/behavior.spec.mjs": "5fe48d80ed0a82185b5866d923097022742e2d131a293e04178887c6268fece5",
+    "tests/visual/form.spec.mjs": "cfadda73606d665256d640fd02c3ecb92ace2f3cd26df79883c6977305205151",
+    "tests/visual/site.mjs": "44ddeb9c97769c969d7488735f4da91e690e1ccb91c4834bcc35ec8f22c1ded1",
+    "tests/static-pilot.integration.mjs": "6356405e54149cd0808101313dcfd293143449a84bbf8b14b97e60af47222044",
+    "tests/static-profile.test.mjs": "3243a042632c01cd1020e2671acd085f2e1b4d1989e8b283780b1e58f5cc9bd3",
+    "tests/form-recovery.test.mjs": "17f3065a64abb625275cde3f578d2197628fade351c0db301e8a39aa7564936c",
+    "tests/visual-policy.test.mjs": "28ab61966af11e890629ef5a1738da6543c83970ba1b0ca2660c02c827b19cbd",
+    "profiles/file-inventory.json": "5f2258c30571b951b8d8b4a493df491d41619e9e029912d0cc27a3ba5eda36df"
+  },
+  "profileSourceCheck": "Both installed/generated projects match current FormError, Styleguide and developer-tools integration bytes. Neither contains the CMS form fixture. The final static/browser commands use the corrected current shared journey module.",
+  "rehearsalFindings": [
+    "Shared specimen error text was nested inside its label; moved outside, preserving geometry and description linkage.",
+    "Visible Card focus ring belongs to focus-parent; harness recognizes that existing design contract.",
+    "Select computed name is Selection; exact DOM-label text lookup also includes option text. Switched the test locator to the exact combobox accessible name.",
+    "Focused geometry is polled until its actual rendered state settles; no repair CSS or focus injection is used."
+  ],
+  "temporaryState": {
+    "cms": {
+      "serverStopped": true,
+      "dependencyJunctionUnlinked": true,
+      "temporaryTreeRemoved": true,
+      "workingDatabaseCopied": false
+    },
+    "staticProjects": "Retained owned synthetic projects via explicit --keep for review; no working CMS data copied"
+  },
+  "unchanged": [
+    "public runtime dependencies",
+    "package and lockfile",
+    "calibrated global tokens",
+    "screenshot goldens",
+    "static content schema and Sveltia form"
+  ],
+  "notVerified": [
+    "Manual screen-reader announcements",
+    "Human keyboard usability review",
+    "Non-Chromium browsers",
+    "Actual session-storage driver failure",
+    "Static production hosting/redirect delivery",
+    "Credentialed Sveltia publishing"
+  ],
+  "next": "Phase 4 template lint; manual AT remains a release follow-up"
+}

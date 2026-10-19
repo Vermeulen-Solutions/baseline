@@ -12,6 +12,7 @@ npx playwright install chromium
 npm run test:visual
 npm run test:visual -- --repeat=3
 npm run test:visual:sensitivity
+npm run test:visual:functional
 ```
 
 The default command never creates/replaces goldens. Missing baselines fail. `npm run test:visual -- --update` is the only supported update path, local only. CI and raw Playwright update flags are rejected. It writes per-platform PNG candidates and a manifest after the complete update suite succeeds. A failed update can leave partial PNG changes; review the diff and complete a successful verification before accepting them. There is no automatic update based on PR input or screenshot failure.
@@ -50,3 +51,18 @@ Pixelmatch color threshold **0.1** is independent from the allowed changed-pixel
 Automated CI runs the root Node 22.23.3 verification/build job on Ubuntu with a ten-minute cap, plus separate Node 24.15.0 generated-profile jobs (`static`, `static-sveltia`) with fifteen-minute caps. The scheduled dependency-proposal workflow also verifies both profiles. None installs a browser or runs screenshot comparisons; there are no automatic pre-commit or deployment screenshot dependencies. Timings depend on installation, builds, runner queues and network conditions. Local reports remain available until the next run; copy dated receipts when retaining evidence. See [Reviewed upstream maintenance](automated-upstream-updates.md) for proposal artifacts.
 
 Screenshots do not certify editor saves, Cloudflare, provider delivery or WCAG conformance. Real editor/database/media acceptance stays separate.
+
+## Foundational interaction additions
+
+The functional selection also verifies public skip-link focus transfer, resolved
+field error relationships, and a developer-only `/_form-recovery` route with real
+invalid POST/repeated failure/correction flows, with and without document JavaScript
+or available session support. The normal artifact excludes the fixture and reserves
+its URL as 404. Native summary autofocus is an explicit response policy; manual
+screen-reader announcements remain untested. See [Phase 3](verification/interactions-phase-3.md).
+
+For both independently generated static profiles, run
+`npm run test:profiles -- --public-browser` locally. This adds public keyboard,
+no-JS, reduced-motion and narrow text-spacing checks to the existing HTTP pilot;
+it leaves Sveltia remote admin sign-in/publishing outside that mode. CI rejects
+the browser flag and retains ordinary HTTP-only profile verification.

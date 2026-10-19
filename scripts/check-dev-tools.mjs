@@ -113,11 +113,17 @@ try {
   const index = await publicResponse.text();
   assert.ok(index.includes('Welcome') && index.includes('Recent Posts'), 'Built public content must render, not setup/error markup');
   report.production.publicStatus = publicResponse.status;
+  for (const method of ['GET', 'HEAD', 'POST']) for (const suffix of ['', '/', '?fixtures=1']) {
+    const response = await fetch(origin + '/_form-recovery' + suffix, { method, headers: { cookie: 'fixtures=1' } });
+    assert.equal(response.status, 404); assert.ok(!(await response.text()).includes('data-form-recovery-fixture'));
+  }
+  report.production.formRecovery = '404 for GET/HEAD/POST, slash, query and runtime fixture flag';
   const { readdir } = await import('node:fs/promises');
   const serverOutput = path.join(stage, 'dist', 'server');
   for (const name of await readdir(serverOutput, { recursive: true })) {
     if (!name.endsWith('.mjs')) continue;
     const source = await readFile(path.join(serverOutput, name), 'utf8');
+    assert.ok(!source.includes('data-form-recovery-fixture'), 'Synthetic form fixture must be absent from release chunks');
     assert.ok(!/(?:from\s*|import\s*\()\s*["']zod(?:\/[^"']*)?["']/.test(source), `Server chunk relies on hoisted Zod: ${name}`);
   }
   report.production.zodResolution = 'Dependency-local validators bundled; no bare Zod imports in emitted server modules';
