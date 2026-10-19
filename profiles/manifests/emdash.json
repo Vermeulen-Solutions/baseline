@@ -91,7 +91,9 @@
     "src/dev/emdash-styleguide-fixtures.ts",
     "scripts/dev-tools-middleware.mjs",
     "scripts/check-emdash13.mjs",
-    "scripts/process-runner.mjs"
+    "scripts/process-runner.mjs",
+    "src/plugins/.gitkeep",
+    "src/plugins/README.md"
   ],
   "scripts": [
     "doctor",
@@ -163,7 +165,8 @@
       "jsonc-parser",
       "parse5",
       "parse-srcset",
-      "smol-toml"
+      "smol-toml",
+      "@cloudflare/workers-types"
     ]
   },
   "pending": [

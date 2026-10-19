@@ -197,8 +197,8 @@
   },
   {
     "path": "src/env.d.ts",
-    "reason": "Issue #6 neutral dev-only reference/ownership diagnostics and lifecycle infrastructure; source visual system preserved. Exact UTF-8/LF hash reviewed; edits invalidate this exception.",
-    "sha256": "41d6ec9b7cbd1fa39600983f51c00791e9f41bce6f17c007ea2af8b7c3aef82c"
+    "reason": "Starter infrastructure only: optional Workers binding types and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "a6d0421e90e49566b8536622c3a6ae057fcfbf30caa3e303481203de5e4d4db4"
   },
   {
     "path": "src/assets/styleguide-small.svg",
@@ -408,5 +408,15 @@
     "path": "src/dev/disclosure-prose.md",
     "reason": "Synthetic ID-free native Markdown disclosure body for static-profile calibration, separate from CMS Portable Text; no client content. Any edit invalidates this exact LF-normalized exception.",
     "sha256": "21b30634a03e6f9fd46c30a0de6c8f9d8c08c57f77c08d4df013d2b4c442d466"
+  },
+  {
+    "path": "src/plugins/.gitkeep",
+    "reason": "Starter infrastructure only: optional Workers binding types and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "src/plugins/README.md",
+    "reason": "Starter infrastructure only: optional Workers binding types and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "f355b4929ff78f39ee3f410a2c1f19d779b14c80ad4f0fe042f8ae624bdf55d3"
   }
 ]

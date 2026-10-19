@@ -900,6 +900,14 @@
     "tests/html-integrity.test.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/.gitkeep": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/README.md": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

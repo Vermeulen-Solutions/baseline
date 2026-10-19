@@ -221,6 +221,14 @@
       ],
       "versionSource": "package.json#/devDependencies/@typescript-eslint/parser",
       "reason": "Shared build-time Astro template accessibility linting; no browser runtime dependency"
+    },
+    "@cloudflare/workers-types": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/@cloudflare/workers-types",
+      "reason": "Type-only optional Workers AI, D1 and R2 capabilities for trusted native plugins"
     }
   }
 }

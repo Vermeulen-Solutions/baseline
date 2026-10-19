@@ -14,6 +14,21 @@ const config = profile => {
   return { schemaVersion: 1, platformProfile: profile, foundation: manifest.foundation, runtime: manifest.runtimes[0], source: { repository: BASELINE_REPOSITORY, commit: 'a'.repeat(40), release: null }, generatorVersion: '0.1.0', features: [], checks: [...manifest.checks], skills: [...manifest.skills] };
 };
 
+test('trusted plugin sources and Workers capability types remain EmDash-only', () => {
+  const inventory = json('profiles/file-inventory.json').files;
+  for (const file of ['src/plugins/.gitkeep', 'src/plugins/README.md']) {
+    assert.ok(fs.existsSync(path.join(root, file)));
+    assert.equal(inventory[file].disposition, 'emdash-only');
+    assert.ok(profileManifest('emdash').files.includes(file));
+  }
+  for (const profile of ['static', 'static-sveltia']) {
+    const manifest = profileManifest(profile);
+    assert.ok(!manifest.files.some(file => file.startsWith('src/plugins/')));
+    assert.ok(!manifest.overrides.some(entry => entry.target.startsWith('src/plugins/')));
+    assert.ok(!Object.hasOwn(profilePackages(profile, pkg).devDependencies, '@cloudflare/workers-types'));
+  }
+});
+
 test('profile contract binds foundation/runtime, immutable provenance and exact applicable skills/checks', () => {
   assert.deepEqual(PROFILE_IDS, json('profiles/baseline.config.schema.json').properties.platformProfile.enum);
   for (const profile of PROFILE_IDS) assert.equal(validateProfileConfig(config(profile)).platformProfile, profile);
