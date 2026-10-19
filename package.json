@@ -9,7 +9,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+    "node": "^22.22.3 || ^24.16.0 || >=26.3.0"
   },
   "emdash": {
     "label": "Starter",
@@ -28,7 +28,7 @@
     "postbuild": "node scripts/assert-release-artifact.mjs",
     "pretypecheck": "npm run check:schema-budget",
     "typecheck": "astro check",
-    "lint": "node scripts/check-script-syntax.mjs",
+    "lint": "npm run lint:scripts && npm run lint:templates",
     "test": "node --test tests/*.test.mjs",
     "verify": "npm run lint && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck",
     "design:tokens": "node scripts/design-system.mjs",
@@ -72,7 +72,9 @@
     "sync:baseline": "node scripts/sync-baseline.mjs",
     "test:profiles": "node scripts/verify-profiles.mjs",
     "check:emdash13": "node scripts/check-emdash13.mjs",
-    "rehearse:importer": "node scripts/rehearse-importer.mjs"
+    "rehearse:importer": "node scripts/rehearse-importer.mjs",
+    "lint:scripts": "node scripts/check-script-syntax.mjs",
+    "lint:templates": "eslint src profiles/static/project/src --max-warnings 0"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
@@ -90,7 +92,11 @@
     "@fontsource/noto-sans": "5.3.0",
     "@google/design.md": "0.4.0",
     "@playwright/test": "1.64.1",
+    "@typescript-eslint/parser": "8.71.2",
     "aws4fetch": "1.0.20",
+    "eslint": "10.13.0",
+    "eslint-plugin-astro": "3.2.1",
+    "eslint-plugin-jsx-a11y-x": "0.2.0",
     "jsonc-parser": "3.3.1",
     "parse-srcset": "1.0.2",
     "parse5": "7.3.0",

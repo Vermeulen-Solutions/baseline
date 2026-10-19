@@ -148,7 +148,9 @@
     },
     "parse-srcset": {
       "section": "devDependencies",
-      "profiles": ["emdash"],
+      "profiles": [
+        "emdash"
+      ],
       "versionSource": "package.json#/devDependencies/parse-srcset",
       "reason": "Root migration HTTP tooling; responsive candidate parsing, not shipped to generated static projects"
     },
@@ -179,6 +181,46 @@
       ],
       "versionSource": "package.json#/devDependencies/typescript",
       "reason": "Shared Astro presentation, design or verification tooling"
+    },
+    "eslint": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/eslint",
+      "reason": "Shared build-time Astro template accessibility linting; no browser runtime dependency"
+    },
+    "eslint-plugin-astro": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/eslint-plugin-astro",
+      "reason": "Shared build-time Astro template accessibility linting; no browser runtime dependency"
+    },
+    "eslint-plugin-jsx-a11y-x": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/eslint-plugin-jsx-a11y-x",
+      "reason": "Shared build-time Astro template accessibility linting; no browser runtime dependency"
+    },
+    "@typescript-eslint/parser": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/@typescript-eslint/parser",
+      "reason": "Shared build-time Astro template accessibility linting; no browser runtime dependency"
     }
   }
 }

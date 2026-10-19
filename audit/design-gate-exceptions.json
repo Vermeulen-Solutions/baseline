@@ -130,8 +130,8 @@
   },
   {
     "path": "src/components/FormError.astro",
-    "reason": "Functional shared error-summary focus policy: optional native autofocus for server-rendered validation responses; existing neutral styles and default output preserved. Any edit invalidates this exact LF-normalized infrastructure exception.",
-    "sha256": "b98b2a0d0bdc3e428a1985ee19eb1e384d1aa8b42c385f716b27d15572f410ce"
+    "reason": "Starter lint infrastructure: justify only the optional native server-error summary autofocus line; default-off focus behavior and existing token styles remain unchanged. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "73505ef0ec67de808a63f7e68df2b061c064699feab4493673d89a7f6862f7b5"
   },
   {
     "path": "src/lib/partners.ts",
@@ -181,8 +181,8 @@
   },
   {
     "path": "src/components/dev/Styleguide.astro",
-    "reason": "Functional neutral specimen accessibility correction: keep the error description outside its label so the input name is stable and aria-describedby supplies the error separately; preserve grid spacing and starter visual tokens. Any edit invalidates this exact LF-normalized infrastructure exception.",
-    "sha256": "4af3c6744317871dd5ff3fc0d78c39ee3677e863fbd841b1bdcc61b24d029a3f"
+    "reason": "Starter lint infrastructure: justify Safari list semantics and explicitly forward the existing synthetic image alternatives for static analysis; no specimen style or copy change. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "b6f1001c775aa312401fb73f2fc42a79b4b1b1b8f5c7116bae179ef95bcf9d2a"
   },
   {
     "path": "src/utils/grid-guide.ts",
@@ -192,8 +192,8 @@
   },
   {
     "path": "src/components/LogoTicker.astro",
-    "sha256": "af5233b66b4a965eeb73059c1b8298dd6336970954159496702018eb82e97f54",
-    "reason": "Issues #7/#10: correct RTL animation direction through inherited animation-name variable, preserving zero-JS source and neutral design. Browser review exposed specificity bug; viewport coverage/visible-content checks added. Exact LF-normalized source; edits invalidate this exception."
+    "sha256": "46f3f9f86d77b27825fda456ffcd67c3799e795516224e00ce8f3185154661ca",
+    "reason": "Starter lint infrastructure: justify explicit list roles after CSS list-style removal, preserving existing original/decorative-inert list behavior and styling. Any edit invalidates this exact LF-normalized exception."
   },
   {
     "path": "src/env.d.ts",
@@ -251,8 +251,8 @@
   },
   {
     "path": "src/components/EmDashImage.astro",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Explicit EmDash storage adapter around shared native image presentation, preserving legacy public URLs and fresh-upload resolution. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "19855db8f0b2de36b11220f25de574435da6f9dc39a72e1577a5eeafc6474959"
+    "reason": "Starter lint infrastructure: explicitly forward the existing required alt value to ResponsiveImage so the known native-image mapping can analyze it; no CMS storage or image presentation change. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "b727b0aab8a6f72476d49b0370c0a7e31b3f616f7e00c5262281c821c8316923"
   },
   {
     "path": "src/lib/partner.ts",
@@ -381,7 +381,7 @@
   },
   {
     "path": "src/dev/FormRecoveryFixture.astro",
-    "reason": "Synthetic developer-only CMS form fixture for POST recovery, one-read session state and session-unavailable behavior; injected only in development/fixture builds and reserved as 404 in releases. No client page, theme or real service. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "1a43e96ef0220223695f6e73d715bc9e6d46ec74905af6b525ba1f215a38a584"
+    "reason": "Starter lint infrastructure: justify summary autofocus only after synthetic server validation failure; development/fixture-only exposure and existing recovery behavior remain unchanged. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "9db9f5ce82661b6ac1562d9d61cc001b9a86669f0b3a3c352ab2c0c522d98def"
   }
 ]

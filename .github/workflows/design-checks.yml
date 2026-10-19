@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.15.0'
+          node-version: '24.16.0'
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Check art direction for changed visual source
@@ -47,7 +47,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24.15.0'
+          node-version: '24.16.0'
           cache: npm
       - run: npm ci --no-audit --no-fund
       - name: Generate, independently install and verify the selected profile

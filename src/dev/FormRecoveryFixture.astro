@@ -44,6 +44,7 @@ const title = recovery ? 'Correct the sample form' : 'Form recovery fixture';
     <h1 id="fixture-heading" data-form-recovery-fixture>{title}</h1>
     <p>Synthetic local verification only. Nothing is sent to an external service.</p>
     {sent ? <p data-form-success>Sample accepted. No message was sent.</p> : <>
+      {/* eslint-disable-next-line astro/jsx-a11y/no-autofocus -- Only the failed server response opts into summary focus; covered by keyboard recovery journeys. */}
       {recovery && <FormError autofocus message="Check the fields listed below." fields={recovery.fields.map(id => ({ id: `recovery-${id}`, label: id === 'name' ? 'Name' : 'Email' }))} />}
       {noSession && <p>Session retention is unavailable. Errors and entered values remain on this response so you can correct them.</p>}
       <form method="post" action={action} class="flow">

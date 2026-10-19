@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "date": "2026-10-19",
+  "scope": "Phase 4 Astro template accessibility lint; no browser/AT or new runtime certification",
+  "implementationBase": "ec015abda71e95511998d4d48981b766cb3385cd",
+  "workingTreeCapture": true,
+  "toolchain": {
+    "node": "v24.21.0",
+    "developmentDependencies": {
+      "eslint": "10.13.0",
+      "eslint-plugin-astro": "3.2.1",
+      "eslint-plugin-jsx-a11y-x": "0.2.0",
+      "@typescript-eslint/parser": "8.71.2"
+    },
+    "typescript": "6.0.3",
+    "nodeEngine": "^22.22.3 || ^24.16.0 || >=26.3.0",
+    "ciConfiguredNode": "24.16.0",
+    "historicalCertificationManifest": "unchanged",
+    "runtimeDependencies": "unchanged"
+  },
+  "commands": [
+    {
+      "command": "npm run verify",
+      "exitCode": 0,
+      "tests": 207,
+      "pass": 207,
+      "fail": 0,
+      "astro": {
+        "files": 42,
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "releaseArtifact": "passed",
+      "advisory": "Existing Vite large-chunk advisory"
+    },
+    {
+      "command": "npm run test:profiles -- --keep",
+      "exitCode": 0,
+      "profiles": [
+        {
+          "profile": "static",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-profile-verification-9yuu5v\\static",
+          "independentInstall": true,
+          "cleanInstall": true,
+          "databasePackages": 0,
+          "verify": "passed",
+          "production": "passed",
+          "fixtures": "passed",
+          "http": "passed",
+          "tests": 22,
+          "astro": {
+            "files": 30,
+            "errors": 0,
+            "warnings": 0,
+            "hints": 0
+          },
+          "portableCodeHashesMatch": true
+        },
+        {
+          "profile": "static-sveltia",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-profile-verification-9yuu5v\\static-sveltia",
+          "independentInstall": true,
+          "cleanInstall": true,
+          "databasePackages": 0,
+          "verify": "passed",
+          "production": "passed",
+          "fixtures": "passed",
+          "http": "passed",
+          "tests": 23,
+          "astro": {
+            "files": 30,
+            "errors": 0,
+            "warnings": 0,
+            "hints": 0
+          },
+          "portableCodeHashesMatch": true
+        }
+      ]
+    },
+    {
+      "command": "npm ls eslint eslint-plugin-astro eslint-plugin-jsx-a11y-x @typescript-eslint/parser --depth=0",
+      "exitCode": 0
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0
+    }
+  ],
+  "minimumNodeLintProbes": [
+    {
+      "node": "v22.22.3",
+      "lintedFiles": 34,
+      "errors": 0,
+      "warnings": 0,
+      "portableTests": 10
+    },
+    {
+      "node": "v24.16.0",
+      "lintedFiles": 34,
+      "errors": 0,
+      "warnings": 0,
+      "portableTests": 10
+    },
+    {
+      "node": "v26.3.0",
+      "lintedFiles": 34,
+      "errors": 0,
+      "warnings": 0,
+      "portableTests": 10
+    }
+  ],
+  "minimumNodeScope": "Actual lint over all 34 source Astro files and ten portable tests on each floor; full build/runtime matrix not repeated on these versions",
+  "cliMutationRehearsal": {
+    "probes": [
+      {
+        "directory": "src/components",
+        "exitCode": 1,
+        "rule": "astro/jsx-a11y/alt-text",
+        "removed": true
+      },
+      {
+        "directory": "profiles/static/project/src/components",
+        "exitCode": 1,
+        "rule": "astro/jsx-a11y/alt-text",
+        "removed": true
+      }
+    ],
+    "cleanExitCode": 0
+  },
+  "lockfileReview": {
+    "addedPackages": 88,
+    "changedExistingPackageVersions": 0,
+    "deduplicatedSameVersionPackages": [
+      "node_modules/sharp/node_modules/semver",
+      "node_modules/typescript-auto-import-cache/node_modules/semver",
+      "node_modules/volar-service-typescript/node_modules/semver"
+    ]
+  },
+  "sourceSHA256": {
+    "eslint.config.mjs": "6e95eb91a0c42da3f4497474017f83c4c08947ab6540529e907b6add132f7688",
+    "tests/template-lint.test.mjs": "e9468f33dffa5f7b2335f359918318a0b2921d0de24c22b4c2c6a69dec35db46",
+    "package.json": "fcfe7996b1c00e9421ef62cbd3bb529b25312588bc3a0cabb563bd919eeb44ef",
+    "package-lock.json": "47ca576fdba82e55e525f6d19857fefd59160bb7ed8af0a1c891e803b2f2d9ed",
+    "profiles/manifests/shared.json": "d2828fa9541c9e612e021cc4d5599079247cb9e6fdccf639e39ca19af2f97e89",
+    "profiles/manifests/static.json": "b2ffc7ccafc164ed6204d72371cb48473d7165a4aad436097dca50bba431d629",
+    "profiles/file-inventory.json": "fa51226615025f2a0a4b1a61f39368aaee6039693ccfe80cb6e22b6c3fb399ce",
+    "profiles/dependency-inventory.json": "34e48c99c3e91f1b2ed9c4c24417639f9ee0a3d1e3d85a9802005cc52b54b01e",
+    "audit/design-gate-exceptions.json": "c62acb831ee68d1a08efd0e91099b46b5b73200dbe79e514f45d77af3a17123b",
+    ".github/workflows/design-checks.yml": "7f62bafbebe4ddb8fb58f2f833658ed81b340a8e6f8e966a1a30e61e217ea0ed",
+    ".github/workflows/upstream-update.yml": "1e7c328aee70748b4d58ff14b93670652adcd6fd5f98f54c869562e0047140aa",
+    "profiles/static/project/.github/workflows/design-checks.yml": "294483122e9c02cfad9998b7ad5ef1bc43e9b51436b58d30fda1d69aa350d244",
+    "profiles/static/project/.github/workflows/upstream-update.yml": "24ee3d14a2119451a0b0a329966dc1b7081390021a49726ac8fbbb298233eb1d",
+    "src/components/FormError.astro": "73505ef0ec67de808a63f7e68df2b061c064699feab4493673d89a7f6862f7b5",
+    "src/components/LogoTicker.astro": "46f3f9f86d77b27825fda456ffcd67c3799e795516224e00ce8f3185154661ca",
+    "src/components/dev/Styleguide.astro": "b6f1001c775aa312401fb73f2fc42a79b4b1b1b8f5c7116bae179ef95bcf9d2a",
+    "src/dev/FormRecoveryFixture.astro": "9db9f5ce82661b6ac1562d9d61cc001b9a86669f0b3a3c352ab2c0c522d98def",
+    "src/components/EmDashImage.astro": "b727b0aab8a6f72476d49b0370c0a7e31b3f616f7e00c5262281c821c8316923"
+  },
+  "hashNormalization": "UTF-8 normalized to LF",
+  "lineExceptions": {
+    "count": 5,
+    "rules": [
+      "astro/jsx-a11y/no-autofocus",
+      "astro/jsx-a11y/no-redundant-roles"
+    ],
+    "unusedDirectives": "error",
+    "document": "docs/verification/template-lint-phase-4.md"
+  },
+  "limitations": [
+    "Source lint cannot verify computed content, rendered relationships, focus restoration or assistive technology behavior",
+    "Upstream strict preset does not reject a bare unlabeled input by itself; rendered label checks remain necessary",
+    "Existing installations require an additive package/config/script upgrade; bounded sync does not expand their inventory",
+    "No browser/visual or manual AT rerun in this lint-only slice; no screenshot goldens changed",
+    "Hosted CI was configured but not executed in this session; floor probes verify the lint tool locally"
+  ],
+  "artifacts": {
+    "generatedProfiles": "Retained deliberately with --keep",
+    "localLogs": ".emdash/metadata/phase4-*.log (ignored)",
+    "scopeOfGeneratedHashComparison": [
+      "eslint.config.mjs",
+      "tests/template-lint.test.mjs",
+      "src/components/FormError.astro",
+      "src/components/LogoTicker.astro",
+      "src/components/dev/Styleguide.astro"
+    ],
+    "documentationNote": "The static project was generated before the final prose-only addition to docs/baseline-updates.md; executable source/config/test hashes match both projects"
+  }
+}

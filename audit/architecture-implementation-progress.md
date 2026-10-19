@@ -8,11 +8,11 @@ Plan: [phased implementation](architecture-implementation-plan-2026-10-19.md). C
 | 1 — CMS metadata | Complete | Eight focused policy/pipeline tests; [nine-case built-site rehearsal](verification/metadata-phase-1-after.json); [verification and reproduction](../docs/verification/metadata-phase-1.md) |
 | 2 — static metadata | Complete | [Rendered profiles](verification/metadata-phase-2-profiles.json), [three build variants](verification/metadata-phase-2-variants.json), [final checks/hashes](verification/metadata-phase-2-checks.json) |
 | 3 — interaction journeys | Automated slice complete; manual AT pending | [Checks/hashes](verification/interactions-phase-3-checks.json), [scope/reproduction and manual AT limits](../docs/verification/interactions-phase-3.md) |
-| 4 — template lint | Planned | No dependency changes in this slice |
+| 4 — template lint | Complete | [Toolchain, mutation probes and independent profiles](verification/template-lint-phase-4-checks.json); [scope/adoption](../docs/verification/template-lint-phase-4.md) |
 | 5 — native composition | Planned | No visual-system changes in this slice |
 | 6 — token diagnostics | Planned | Existing calibrated tokens retained |
 | 7 — conditional capabilities | Deferred pending requirements | No new modal/navigation/OG runtime |
-| 8 — release/adoption | Planned | Phases 1–3 record scoped adoption; final release/manual observations remain pending |
+| 8 — release/adoption | Planned | Phases 1–4 record scoped adoption; final release/manual observations remain pending |
 
 Initial `npm run verify` passed before application edits (177 tests; Astro: 40 files, zero errors/warnings/hints).
 
@@ -94,9 +94,42 @@ the Sveltia runner passed its full install/ci/verify/build/fixtures/browser sequ
 The owned CMS server/dependency junction/temp tree were cleaned successfully;
 static projects were deliberately retained with `--keep` for review.
 
+## Phase 4 implementation
+
+Phase 3 was committed locally as `ec015ab`. Template accessibility lint now runs
+inside existing `verify`, alongside the retained script syntax checker. The root
+targets both source foundations; generated sites lint only their own `src`.
+Explicit inventories ship the portable ESLint configuration, ten regression tests
+and four pinned development dependencies without introducing CMS packages into
+static profiles. Only the known `ResponsiveImage` output receives an image mapping.
+Existing spread-owned image alternatives are now forwarded explicitly.
+
+Five narrowly explained line exceptions retain optional form-summary autofocus and
+Safari list semantics. Unused directives fail, and regression tests prove the
+exceptions are bounded. Actual temporary missing-alt templates failed the CLI in
+both root source targets; both were removed and clean lint passed. Source analysis
+does not catch a bare unlabeled input by itself, validate rendered references or
+replace Phase 3's browser journeys and pending manual AT observations.
+
+The maintained Astro plugin requires Node `^22.22.3 || ^24.16.0 || >=26.3.0`.
+Package engines, generated requirements and current CI use that floor (CI 24.16.0).
+Historical scoped certification and runtime dependency versions are unchanged.
+Lint over all 34 Astro source templates and the ten tests passed on all three
+minimum Node versions; those probes do not claim a new full runtime certification.
+The lockfile adds 88 packages and deduplicates three same-version semver entries,
+with no existing package-version changes or new browser code.
+
+Root verify passed 207/207 tests with zero diagnostics across 42 Astro files;
+the production build and release assertion passed. Independent static and Sveltia
+projects passed install/clean-install, verify (22/23 tests), 30-file Astro checks,
+normal/fixture builds and HTTP acceptance with no database packages. Their lint
+configuration, tests and changed shared component hashes match current source.
+No browsers or screenshot goldens were used in this lint-only slice. Generated
+projects remain deliberately retained with `--keep`. The adoption guide separates
+new generation from the additive tooling upgrade required by existing sites.
+
 ## Next slice
 
-Phase 4: introduce version-compatible Astro accessibility template linting,
-preserving the existing script checker and explicit profile dependency/config
-mappings. No lint dependency or configuration was added in Phase 3. Manual AT
-observations remain a release follow-up alongside the later planned phases.
+Phase 5: add bounded native composition under component quarantine, with shared
+specimens and profile acceptance. Manual AT observations remain a release
+follow-up alongside the later planned phases.

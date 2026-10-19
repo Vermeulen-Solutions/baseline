@@ -83,3 +83,17 @@ The root Baseline weekly update workflow similarly produces a dependency patch
 after verification, rather than directly pushing to `main` or suppressing failures.
 CMS skill updates remain explicit, staged operations documented in
 `docs/skill-synchronization.md` in the full EmDash repository.
+
+Template accessibility lint is an additive tooling upgrade for older generated
+sites. Current generation includes `eslint.config.mjs`, portable regression tests,
+four development dependencies and `lint:scripts`/`lint:templates`; bounded sync
+does not add those package entries, scripts or new managed-file membership to an
+existing installation. Review the configuration and exact development versions
+from the selected Baseline revision, use Node `^22.22.3 || ^24.16.0 || >=26.3.0`,
+and regenerate the site's npm lockfile after installing. The installed-site
+template command is `eslint src --max-warnings 0`; the additional overlay target
+belongs only to the Baseline source repository. Resolve diagnostics with reviewed
+source fixes or narrowly justified line exceptions, then run full verify/build
+before committing. A reviewed generator migration is needed to expand managed
+membership; do not silently edit the receipt or adopt starter art-gate exemptions
+for client components.

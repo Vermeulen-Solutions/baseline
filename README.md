@@ -64,7 +64,7 @@ Local SQLite can accept models that exceed Cloudflare D1's [100-column table lim
 
 Baseline is designed ground-up for an **agent-first workflow** pairing with **Claude Code**, **Google Antigravity**, **Cursor**, **Windsurf**, **OpenAI Codex**, **Aider**, or local LLM runners. Instead of manually typing setup commands, you hand off initialization and build steps to your coding assistant. The agent reads `AGENTS.md`, installs dependencies, generates `.env` secrets, seeds design tokens, and guides or executes the build.
 
-**Requirements:** Node 22.22.2 minimum (Node 24 LTS recommended) and `npm`.
+**Requirements:** Node ^22.22.3 or ^24.16.0 or >=26.3.0 (Node 24 LTS recommended; includes the template lint tooling floor) and `npm`.
 
 ### 🚀 Starting a New Site (Agent-First Workflow)
 

@@ -14,7 +14,8 @@
     ".mcp.example.json",
     ".github/workflows/design-checks.yml",
     ".github/workflows/upstream-update.yml",
-    "seed/seed.json"
+    "seed/seed.json",
+    "eslint.config.mjs"
   ],
   "defaultAction": "omit",
   "note": "Source classification, not an executable copy-all instruction. Only resolved manifest.files may be copied. Profile tests, visual baselines, docs, skills and local state are not implicitly shipped.",
@@ -819,6 +820,14 @@
     "tests/visual/form.spec.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "eslint.config.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/template-lint.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

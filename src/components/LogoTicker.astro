@@ -16,7 +16,9 @@ const logos = await Astro.slots.render('default');
   <label class="logo-ticker__control" for={`${id}-motion`}>{toggleLabel}</label>
   <div class="logo-ticker__viewport">
     <div class="logo-ticker__track">
+      {/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- Explicit list role preserves Safari semantics after list-style: none. */}
       <ul class="logo-ticker__group" role="list"><Fragment set:html={logos} /></ul>
+      {/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- Mirror the list semantics of the original; this decorative duplicate stays inert and hidden. */}
       <ul class="logo-ticker__group logo-ticker__duplicate" role="list" aria-hidden="true" inert><Fragment set:html={logos} /></ul>
     </div>
   </div>

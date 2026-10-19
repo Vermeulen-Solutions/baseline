@@ -35,7 +35,9 @@
     "docs/licenses/impeccable-Apache-2.0.txt",
     "scripts/sync-baseline.mjs",
     "docs/platform-profiles.md",
-    "docs/baseline-updates.md"
+    "docs/baseline-updates.md",
+    "eslint.config.mjs",
+    "tests/template-lint.test.mjs"
   ],
   "packages": {
     "dependencies": [
@@ -49,7 +51,11 @@
       "sharp",
       "@fontsource/noto-sans",
       "@google/design.md",
-      "@playwright/test"
+      "@playwright/test",
+      "eslint",
+      "eslint-plugin-astro",
+      "eslint-plugin-jsx-a11y-x",
+      "@typescript-eslint/parser"
     ]
   },
   "scripts": [
@@ -68,7 +74,9 @@
     "design:tokens",
     "fixtures:build",
     "fixtures:serve",
-    "sync:baseline"
+    "sync:baseline",
+    "lint:scripts",
+    "lint:templates"
   ],
   "checks": [
     "lint",
