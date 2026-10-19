@@ -44,8 +44,25 @@ export function newDirectory(directory, { ignoredRoot } = {}) {
 export function writeJSON(file, value, exclusive = true) { fs.writeFileSync(file, JSON.stringify(value, null, 2) + '\n', { flag: exclusive ? 'wx' : 'w', mode: 0o600 }); }
 export function atomicJSON(file, value) {
   noLinks(file); const temp = file + '.' + randomUUID();
-  fs.writeFileSync(temp, JSON.stringify(value, null, 2) + '\n', { flag: 'wx', mode: 0o600 });
-  try { fs.renameSync(temp, file); } finally { if (fs.existsSync(temp)) fs.unlinkSync(temp); }
+  // Keep the destination intact while Windows releases transient file locks.
+  const retry = operation => {
+    for (let attempt = 0; ; attempt++) {
+      try { return operation(); }
+      catch (error) {
+        if (attempt === 4 || !['EPERM', 'EBUSY', 'EEXIST'].includes(error.code)) throw error;
+        Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 10 * 2 ** attempt);
+      }
+    }
+  };
+  let descriptor;
+  try {
+    descriptor = fs.openSync(temp, 'wx', 0o600);
+    try { fs.writeFileSync(descriptor, JSON.stringify(value, null, 2) + '\n'); }
+    finally { fs.closeSync(descriptor); }
+    retry(() => fs.renameSync(temp, file));
+  } finally {
+    if (descriptor !== undefined) retry(() => { try { fs.unlinkSync(temp); } catch (error) { if (error.code !== 'ENOENT') throw error; } });
+  }
 }
 export function resolveCloudflare({ config, env, account, database, bucket }, kind) {
   requireFact(config && env && account && (kind === 'd1' ? database : bucket), 'Explicit config, environment, account and database/bucket required');

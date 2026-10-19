@@ -10,15 +10,50 @@ import { mediaPlan, prepareMedia } from '../scripts/media-migrate-wp.mjs';
 import { probeMedia, isolatedProbe } from '../scripts/media-probe.mjs';
 import { ingestPrepared, stageR2Objects, localEmdashAdapter, mapPreparedReferences } from '../scripts/media-ingest.mjs';
 import { syncR2, r2Transport } from '../scripts/sync-r2-media.mjs';
-import { sha256 } from '../scripts/infrastructure-io.mjs';
+import { atomicJSON, sha256 } from '../scripts/infrastructure-io.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 async function sandbox(run) {
-  const source = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-media-')), stageRoot = path.join(root, '.emdash/backups', path.basename(source)); fs.mkdirSync(stageRoot, { recursive: true });
+  const source = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-media-'));
+  let stageRoot;
   const put = (key, bytes) => { const file = path.join(source, key); fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, bytes); };
-  const png = await sharp({ create: { width: 8, height: 6, channels: 3, background: '#336699' } }).png().toBuffer();
-  try { return await run({ source, stageRoot, put, png }); }
-  finally { assert.equal(path.dirname(source), path.resolve(os.tmpdir())); assert.match(path.basename(source), /^baseline-media-/); fs.rmSync(source, { recursive: true, force: true }); assert.equal(path.dirname(stageRoot), path.join(root, '.emdash/backups')); fs.rmSync(stageRoot, { recursive: true, force: true }); }
+  try {
+    fs.mkdirSync(path.join(root, '.emdash/backups'), { recursive: true });
+    stageRoot = fs.mkdtempSync(path.join(root, '.emdash/backups/baseline-media-'));
+    const png = await sharp({ create: { width: 8, height: 6, channels: 3, background: '#336699' } }).png().toBuffer();
+    return await run({ source, stageRoot, put, png });
+  }
+  finally { assert.equal(path.dirname(source), path.resolve(os.tmpdir())); assert.match(path.basename(source), /^baseline-media-/); fs.rmSync(source, { recursive: true, force: true, maxRetries: 5, retryDelay: 20 }); if (stageRoot) { assert.equal(path.dirname(stageRoot), path.join(root, '.emdash/backups')); fs.rmSync(stageRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 20 }); } }
 }
+
+test('atomic JSON retries only transient locks, preserves destinations on failure and cleans partial writes', async t => {
+  const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-atomic-'));
+  const file = path.join(directory, 'prepared.json');
+  try {
+    for (const code of ['EPERM', 'EBUSY', 'EEXIST', 'EACCES']) {
+      for (const recover of [true, false]) {
+        fs.writeFileSync(file, '{"before":true}');
+        const rename = fs.renameSync; let calls = 0;
+        const mock = t.mock.method(fs, 'renameSync', (...args) => {
+          calls++;
+          if (!recover || calls < 3) throw Object.assign(new Error('synthetic lock'), { code });
+          return rename(...args);
+        });
+        try {
+          if (recover && code !== 'EACCES') { atomicJSON(file, { after: true }); assert.deepEqual(JSON.parse(fs.readFileSync(file)), { after: true }); }
+          else { assert.throws(() => atomicJSON(file, {}), { code }); assert.equal(fs.readFileSync(file, 'utf8'), '{"before":true}'); }
+          assert.equal(calls, code === 'EACCES' ? 1 : recover ? 3 : 5);
+          assert.deepEqual(fs.readdirSync(directory), ['prepared.json']);
+        } finally { mock.mock.restore(); }
+      }
+    }
+    const mock = t.mock.method(fs, 'writeFileSync', fd => { fs.writeSync(fd, 'partial'); throw Object.assign(new Error('disk full'), { code: 'ENOSPC' }); });
+    try { assert.throws(() => atomicJSON(file, {}), { code: 'ENOSPC' }); assert.deepEqual(fs.readdirSync(directory), ['prepared.json']); }
+    finally { mock.mock.restore(); }
+    const circular = {}; circular.self = circular;
+    assert.throws(() => atomicJSON(file, circular), TypeError);
+    assert.deepEqual(fs.readdirSync(directory), ['prepared.json']);
+  } finally { assert.equal(path.dirname(directory), path.resolve(os.tmpdir())); fs.rmSync(directory, { recursive: true, force: true }); }
+});
 const target = bucket => ({ kind: 'r2', account: '1'.repeat(32), environment: 'preview', binding: 'MEDIA', bucket, configSHA256: 'a'.repeat(64) });
 function fakeR2() {
   const objects = new Map(), calls = []; let fail = '';
