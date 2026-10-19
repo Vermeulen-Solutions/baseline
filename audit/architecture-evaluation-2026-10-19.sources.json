@@ -1,0 +1,815 @@
+{
+  "schemaVersion": 1,
+  "evaluationDate": "2026-10-19",
+  "baselineCommit": "03340d1c8939f0aa845e5db84b93f47cc49ea875",
+  "method": "Read-only shallow GitHub checkouts; source inspection; no upstream npm installs or application builds. Some large monorepos use sparse checkout. File inventory is bounded to inspected/cited modules, not exhaustive repository coverage.",
+  "sources": [
+    {
+      "repository": "incluud/accessible-astro-starter",
+      "commit": "3fc28ca1a2f91ec618a0f788ba392041d4855540",
+      "commitDate": "2026-10-15T21:03:47+02:00",
+      "commitSubject": "Merge pull request #203 from incluud/fix/components-page-mobile-overflow",
+      "selection": "selected-patterns",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/incluud/accessible-astro-starter/blob/3fc28ca1a2f91ec618a0f788ba392041d4855540/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": "eslint.config.js",
+          "gitBlob": "4d53552aa0c395b822a24228a7c272c0e74750a1",
+          "sha256Utf8Lf": "8407c9db5a4a36d2f78ad61577c12a5b718d465c32ef4c7aae1fcbde1d5a326f",
+          "url": "https://github.com/incluud/accessible-astro-starter/blob/3fc28ca1a2f91ec618a0f788ba392041d4855540/eslint.config.js"
+        },
+        {
+          "path": "package.json",
+          "gitBlob": "0e4fc40ff4eea4900896d8b81b82613cb0817b53",
+          "sha256Utf8Lf": "aed615246b482b97ef65d79296a70f44e3be7f6bd218c87b5647831d75cb0152",
+          "url": "https://github.com/incluud/accessible-astro-starter/blob/3fc28ca1a2f91ec618a0f788ba392041d4855540/package.json"
+        },
+        {
+          "path": "src/components/Navigation.astro",
+          "gitBlob": "960fdae5d6780bf239313699bed9c5801285a893",
+          "sha256Utf8Lf": "80d2e1556572836a5693f91ee4f8d93ab4028933dc58446bf3793965cf0786dc",
+          "url": "https://github.com/incluud/accessible-astro-starter/blob/3fc28ca1a2f91ec618a0f788ba392041d4855540/src/components/Navigation.astro"
+        },
+        {
+          "path": "src/components/ResponsiveToggle.astro",
+          "gitBlob": "b58e427ba85e66ab3d611df369fb8643df00008f",
+          "sha256Utf8Lf": "fe35082acc9e6dab4908ded592977e7dc37fe2c614fadfc11083e280f26ee7f4",
+          "url": "https://github.com/incluud/accessible-astro-starter/blob/3fc28ca1a2f91ec618a0f788ba392041d4855540/src/components/ResponsiveToggle.astro"
+        },
+        {
+          "path": "src/layouts/DefaultLayout.astro",
+          "gitBlob": "89dcf27f9f7dde02d43d14e30f362f3ec0f1bbe8",
+          "sha256Utf8Lf": "96ef9935e8f8d78edbb27622fd91bf8663457f7563d5270e9bd39cb4d85fd2b8",
+          "url": "https://github.com/incluud/accessible-astro-starter/blob/3fc28ca1a2f91ec618a0f788ba392041d4855540/src/layouts/DefaultLayout.astro"
+        }
+      ]
+    },
+    {
+      "repository": "arthelokyo/astrowind",
+      "commit": "14e1a691f80548dcc36370847b1a02c0d0b12821",
+      "commitDate": "2026-09-12T03:29:56-04:00",
+      "commitSubject": "Adjust github stars shield",
+      "selection": "excluded-from-deep-dive",
+      "licenseFiles": [
+        {
+          "path": "LICENSE.md",
+          "url": "https://github.com/arthelokyo/astrowind/blob/14e1a691f80548dcc36370847b1a02c0d0b12821/LICENSE.md"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": ".github/workflows/actions.yaml",
+          "gitBlob": "29905f4596eb3afce998b66db79859d3eead55a6",
+          "sha256Utf8Lf": "74c5a359c3825cc52e38e500336b476df7b4531b69d432cd150c4619305b6c26",
+          "url": "https://github.com/arthelokyo/astrowind/blob/14e1a691f80548dcc36370847b1a02c0d0b12821/.github/workflows/actions.yaml"
+        },
+        {
+          "path": "eslint.config.js",
+          "gitBlob": "003dcc685427fc2ce2a2c79261bc994655a1e284",
+          "sha256Utf8Lf": "a30e5a4d1d674be04c84f3e4471930a41c45d57bb2e39ad0b242f9bb72fc1ff9",
+          "url": "https://github.com/arthelokyo/astrowind/blob/14e1a691f80548dcc36370847b1a02c0d0b12821/eslint.config.js"
+        },
+        {
+          "path": "package.json",
+          "gitBlob": "c8dbf155eef65e58ba23792b4cecb62ea7abd1c4",
+          "sha256Utf8Lf": "03da08546d72085ac0e87ac3616da41d859d6b3ae36ed20a21bc30488d35fb3a",
+          "url": "https://github.com/arthelokyo/astrowind/blob/14e1a691f80548dcc36370847b1a02c0d0b12821/package.json"
+        },
+        {
+          "path": "src/components/widgets/Hero.astro",
+          "gitBlob": "66e2b98fce5b5bc537b81826fbedcee375044e99",
+          "sha256Utf8Lf": "98279cee9b1deef49c9ae994da380d77f25a825e925713f6ed7edc5a05439d7d",
+          "url": "https://github.com/arthelokyo/astrowind/blob/14e1a691f80548dcc36370847b1a02c0d0b12821/src/components/widgets/Hero.astro"
+        },
+        {
+          "path": "src/components/common/Metadata.astro",
+          "gitBlob": "06d2c1edc86b57de8a84021ad21152fc67f45d0e",
+          "sha256Utf8Lf": "ef352805906ebbe7003f0b359aaacb615abaa2b75dab27d029ec7972a4c58cae",
+          "url": "https://github.com/arthelokyo/astrowind/blob/14e1a691f80548dcc36370847b1a02c0d0b12821/src/components/common/Metadata.astro"
+        }
+      ]
+    },
+    {
+      "repository": "BryanHogan/astro-starter-template",
+      "commit": "25d8ec849133eded43f0b4a387af649ee973a947",
+      "commitDate": "2026-09-30T18:06:05+02:00",
+      "commitSubject": "Implementing @media (hover: hover) fix for hover states",
+      "selection": "excluded-from-deep-dive",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/BryanHogan/astro-starter-template/blob/25d8ec849133eded43f0b4a387af649ee973a947/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": "package.json",
+          "gitBlob": "c1afaaacdab36d47f2b27765d304b7335107422b",
+          "sha256Utf8Lf": "c47e1a3cf62f10b2f69dba184bcda864815c19ad5b86e31e911157408af5674d",
+          "url": "https://github.com/BryanHogan/astro-starter-template/blob/25d8ec849133eded43f0b4a387af649ee973a947/package.json"
+        },
+        {
+          "path": "src/components/Head.astro",
+          "gitBlob": "3aca32a0899cf2cee8671237835937be1044dbbd",
+          "sha256Utf8Lf": "1a68a11391c02a54d67a717f2527717c2c4f90a849412379b89357714d72e11e",
+          "url": "https://github.com/BryanHogan/astro-starter-template/blob/25d8ec849133eded43f0b4a387af649ee973a947/src/components/Head.astro"
+        },
+        {
+          "path": "src/components/HeaderNavigation.astro",
+          "gitBlob": "4b7a8e4d3194db1ffcd983aad028e63f4f9b853f",
+          "sha256Utf8Lf": "8c2ae8640af62f171696a3f3845313fbe1ab1dec8821a8b43480bf0915a586e5",
+          "url": "https://github.com/BryanHogan/astro-starter-template/blob/25d8ec849133eded43f0b4a387af649ee973a947/src/components/HeaderNavigation.astro"
+        }
+      ]
+    },
+    {
+      "repository": "devgelo-labs/astro-starter-pro",
+      "commit": "a16f7155ba78460e96c73987a8c544d2e0ce8e6c",
+      "commitDate": "2026-07-05T01:47:26Z",
+      "commitSubject": "data: update traffic clones",
+      "selection": "excluded-from-deep-dive",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/devgelo-labs/astro-starter-pro/blob/a16f7155ba78460e96c73987a8c544d2e0ce8e6c/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": "eslint.config.js",
+          "gitBlob": "7a8f39743a497417048d8beaa39710e5ca351cb6",
+          "sha256Utf8Lf": "5804ffba9eba70cd34679fdb52c807dd8402677689600493edf9068062003b82",
+          "url": "https://github.com/devgelo-labs/astro-starter-pro/blob/a16f7155ba78460e96c73987a8c544d2e0ce8e6c/eslint.config.js"
+        },
+        {
+          "path": "package.json",
+          "gitBlob": "7758f5c2c87948c949309f7337a13f3db0c4d0df",
+          "sha256Utf8Lf": "9afbcc46baf745cd0cd5f18af888e1fac3cf22fe5023137edaaa391a8a57caff",
+          "url": "https://github.com/devgelo-labs/astro-starter-pro/blob/a16f7155ba78460e96c73987a8c544d2e0ce8e6c/package.json"
+        },
+        {
+          "path": "src/components/seo/Schema.astro",
+          "gitBlob": "ca55b3cb21b5a0650bb0eff001a7160943838d1d",
+          "sha256Utf8Lf": "3226dbbf96f1cdd6673c3edeedd78b7be6fc0fc785c82302007d5aff289f3507",
+          "url": "https://github.com/devgelo-labs/astro-starter-pro/blob/a16f7155ba78460e96c73987a8c544d2e0ce8e6c/src/components/seo/Schema.astro"
+        },
+        {
+          "path": "src/components/seo/Seo.astro",
+          "gitBlob": "f38bd398a80a3affc0e9f3984586a1cd655af6e1",
+          "sha256Utf8Lf": "6d9cdd1a25ba52fd07524736fc546f01b1aba296b7fa8532275cd44c5003e36d",
+          "url": "https://github.com/devgelo-labs/astro-starter-pro/blob/a16f7155ba78460e96c73987a8c544d2e0ce8e6c/src/components/seo/Seo.astro"
+        }
+      ]
+    },
+    {
+      "repository": "surjithctly/astroship",
+      "commit": "da1272bb141abf42a3435d81774df92f0427ad57",
+      "commitDate": "2026-10-01T13:36:24+05:30",
+      "commitSubject": "upgrade to Astro v7",
+      "selection": "excluded-from-deep-dive",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/surjithctly/astroship/blob/da1272bb141abf42a3435d81774df92f0427ad57/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": "package.json",
+          "gitBlob": "c002e9a3985a5ae46463ca6b8c11732d44a29cbf",
+          "sha256Utf8Lf": "a146bce38109a4989f2e621f637e4ff430f911b2a9c9d5c4fd518b68fbb0648c",
+          "url": "https://github.com/surjithctly/astroship/blob/da1272bb141abf42a3435d81774df92f0427ad57/package.json"
+        },
+        {
+          "path": "src/components/hero.astro",
+          "gitBlob": "cbcdf63bfccbbc498f844fe99385254d619e8c41",
+          "sha256Utf8Lf": "ba4aa571a95b5058543ee1b475be3356b694b269c6536a1fbccf5c20527bdc49",
+          "url": "https://github.com/surjithctly/astroship/blob/da1272bb141abf42a3435d81774df92f0427ad57/src/components/hero.astro"
+        }
+      ]
+    },
+    {
+      "repository": "satnaing/astro-paper",
+      "commit": "35cfa7fbe0b897306d27670d3819e55d5205f3dd",
+      "commitDate": "2026-08-05T17:31:18+07:00",
+      "commitSubject": "fix: move focus to main content when skip-to-content is clicked (#665)",
+      "selection": "selected-patterns",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/satnaing/astro-paper/blob/35cfa7fbe0b897306d27670d3819e55d5205f3dd/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "gitBlob": "1fe731876178fb6083979e37165a8fd478919bb4",
+          "sha256Utf8Lf": "2804e11467715242aacf52dd58d98e771b8da5f3a1cf8f398cd5b64199e5f43c",
+          "url": "https://github.com/satnaing/astro-paper/blob/35cfa7fbe0b897306d27670d3819e55d5205f3dd/.github/workflows/ci.yml"
+        },
+        {
+          "path": "package.json",
+          "gitBlob": "6e659a5bb6b3891d3fb8b98255ba7324fb1ccc09",
+          "sha256Utf8Lf": "666589f8ea4ba85602ee016d04c59c908d197c9ca5de29fefc0c28c28f26bd1b",
+          "url": "https://github.com/satnaing/astro-paper/blob/35cfa7fbe0b897306d27670d3819e55d5205f3dd/package.json"
+        },
+        {
+          "path": "src/components/Header.astro",
+          "gitBlob": "9b494d34cfb20e9163863d2b3d1f58c8a7b06193",
+          "sha256Utf8Lf": "ba6f8f30e496b89e1ca30ab9462b7e81e33f5dd624d64f54b5cfae680be571bd",
+          "url": "https://github.com/satnaing/astro-paper/blob/35cfa7fbe0b897306d27670d3819e55d5205f3dd/src/components/Header.astro"
+        },
+        {
+          "path": "src/layouts/Layout.astro",
+          "gitBlob": "f136d5e3c1d7762a3ed31efd36952303d4f5c6d7",
+          "sha256Utf8Lf": "2a7cb8cc846f460822e69850da7a0138ec3b1201d0d297c006c5d2619ac6860d",
+          "url": "https://github.com/satnaing/astro-paper/blob/35cfa7fbe0b897306d27670d3819e55d5205f3dd/src/layouts/Layout.astro"
+        },
+        {
+          "path": "src/layouts/PostLayout.astro",
+          "gitBlob": "fa44862e3ab6bdcad04ab83b3dc9c41bd39391c5",
+          "sha256Utf8Lf": "7745e7e16eb678aca750b5cef6e36084d637f3f21a29768b2718728fa448fbe1",
+          "url": "https://github.com/satnaing/astro-paper/blob/35cfa7fbe0b897306d27670d3819e55d5205f3dd/src/layouts/PostLayout.astro"
+        },
+        {
+          "path": "src/pages/posts/[...slug]/index.png.ts",
+          "gitBlob": "31187d7904c767ecbf215126595fc84190406800",
+          "sha256Utf8Lf": "54c9266d8424e8b6b69deea46bbec304e97b9ff33429ef8af60277157dca24a9",
+          "url": "https://github.com/satnaing/astro-paper/blob/35cfa7fbe0b897306d27670d3819e55d5205f3dd/src/pages/posts/[...slug]/index.png.ts"
+        }
+      ]
+    },
+    {
+      "repository": "incluud/accessible-astro-components",
+      "commit": "0ed04fb813b4de7ae626de6aa06c110807a3c43a",
+      "commitDate": "2026-09-12T14:31:00+02:00",
+      "commitSubject": "Merge pull request #173 from incluud/feat/datatable",
+      "selection": "selected-patterns",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/incluud/accessible-astro-components/blob/0ed04fb813b4de7ae626de6aa06c110807a3c43a/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "gitBlob": "dfba8346e9155e464d51e5bf5ea5ff66bce3498b",
+          "sha256Utf8Lf": "a6fe80b81b7732da3ca0aee9c8a17d98f9f8b6cd2106d705385b1d12e1a7d965",
+          "url": "https://github.com/incluud/accessible-astro-components/blob/0ed04fb813b4de7ae626de6aa06c110807a3c43a/.github/workflows/ci.yml"
+        },
+        {
+          "path": "package.json",
+          "gitBlob": "16ef1e458f65d35801aa95b44cbe836929d2ff5f",
+          "sha256Utf8Lf": "02112904d5995ba5f86fd5dfacd0949f537e96a690f0e3078cd8d4f48d008cfd",
+          "url": "https://github.com/incluud/accessible-astro-components/blob/0ed04fb813b4de7ae626de6aa06c110807a3c43a/package.json"
+        },
+        {
+          "path": "src/components/accordion/AccordionItem.astro",
+          "gitBlob": "c1f389f5c46099718e71b4289eab79c097a3e1fe",
+          "sha256Utf8Lf": "4f92174d8d864d0e262ccef6006534c1747044551ae3e05807f6cd4eaf18b108",
+          "url": "https://github.com/incluud/accessible-astro-components/blob/0ed04fb813b4de7ae626de6aa06c110807a3c43a/src/components/accordion/AccordionItem.astro"
+        },
+        {
+          "path": "src/components/modal/Modal.astro",
+          "gitBlob": "cd014191f6b73b1b36127a944f479cc7eec94d6a",
+          "sha256Utf8Lf": "1d0fd48c568deae0a4f7e10464764cbb50e330644ef32ed01037eb9bf2c049e4",
+          "url": "https://github.com/incluud/accessible-astro-components/blob/0ed04fb813b4de7ae626de6aa06c110807a3c43a/src/components/modal/Modal.astro"
+        },
+        {
+          "path": "src/components/skiplink/SkipLink.astro",
+          "gitBlob": "2d6941fc44634b39036d3ddd5fbdf2144aa001db",
+          "sha256Utf8Lf": "51b5b5b16ed77e79cb224c44dff88574bceac4b868865b070c099ac16e03691e",
+          "url": "https://github.com/incluud/accessible-astro-components/blob/0ed04fb813b4de7ae626de6aa06c110807a3c43a/src/components/skiplink/SkipLink.astro"
+        }
+      ]
+    },
+    {
+      "repository": "radix-ui/primitives",
+      "commit": "eb3a2b7091293e27df8f9ba906632d8daa3d81a3",
+      "commitDate": "2026-10-14T12:06:36-07:00",
+      "commitSubject": "add formatting step after changesets",
+      "selection": "selected-patterns",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": ".github/workflows/build.yml",
+          "gitBlob": "a25d515233f5af5e7e1527fa2243a1259fc3be19",
+          "sha256Utf8Lf": "b7a478839e4427fa4faf5471b52d0ef7c4fe518670c5be5ddab0e53180cba2f6",
+          "url": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/.github/workflows/build.yml"
+        },
+        {
+          "path": "package.json",
+          "gitBlob": "bc5b06cf31ab2cf0591794222494671cc7ef5990",
+          "sha256Utf8Lf": "d7b73d4abc987840638ade4370a288fd188aaac715fb3ad77df23dbeae7e3ef6",
+          "url": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/package.json"
+        },
+        {
+          "path": "packages/react/accordion/src/accordion.tsx",
+          "gitBlob": "67517d7c1767cddba98586924873e03ab73613cb",
+          "sha256Utf8Lf": "38013149ee6d5bf54f5f1b1685b31eed36779c2105c9bb5b24f5bbbcfe65c48e",
+          "url": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/accordion/src/accordion.tsx"
+        },
+        {
+          "path": "packages/react/dialog/src/dialog.test.tsx",
+          "gitBlob": "bd160e93629bc48321a3216ed28786fd47cbdc96",
+          "sha256Utf8Lf": "2f7cdf9460029eee7bced3f5bfc1f01a6a6b902f94d898ed7441f2b9ceb9399b",
+          "url": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/dialog/src/dialog.test.tsx"
+        },
+        {
+          "path": "packages/react/dialog/src/dialog.tsx",
+          "gitBlob": "bd8ac8ddf5465e1cb32e0c4bde6930d3c151b745",
+          "sha256Utf8Lf": "f12123db9af35afdc341d71f2759027ae172762cc6693d5c08e3bb059e7ee1d1",
+          "url": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/dialog/src/dialog.tsx"
+        },
+        {
+          "path": "packages/react/dismissable-layer/src/dismissable-layer.tsx",
+          "gitBlob": "055371909fd8a03b3df8d1d934462de7a210a2ba",
+          "sha256Utf8Lf": "a5bdf62868ba2288e4c8cb57d01aaac4a01d36e42add57549efca0584a93eb4d",
+          "url": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/dismissable-layer/src/dismissable-layer.tsx"
+        },
+        {
+          "path": "packages/react/focus-scope/src/focus-scope.test.tsx",
+          "gitBlob": "086c67b84ffad4d73839ac652e1492cce9385f10",
+          "sha256Utf8Lf": "2763f9ddb4a19f2bbe70651cb9c9e311f74406c166ad1f2a637ed850b5f85916",
+          "url": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/focus-scope/src/focus-scope.test.tsx"
+        },
+        {
+          "path": "packages/react/focus-scope/src/focus-scope.tsx",
+          "gitBlob": "0c25672311e9bd06752564524298c425d950cab6",
+          "sha256Utf8Lf": "4f3a1e93f0886cf394f003660d937d2c4ca7a609c7cefc300da5749034a43e67",
+          "url": "https://github.com/radix-ui/primitives/blob/eb3a2b7091293e27df8f9ba906632d8daa3d81a3/packages/react/focus-scope/src/focus-scope.tsx"
+        }
+      ]
+    },
+    {
+      "repository": "adobe/react-spectrum",
+      "commit": "261344335e54265b2d02dc57a43b911a718de707",
+      "commitDate": "2026-10-16T15:41:28Z",
+      "commitSubject": "fix: remove unsupported excludeFromTabOrder from Select props (#10790)",
+      "selection": "selected-patterns",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/adobe/react-spectrum/blob/261344335e54265b2d02dc57a43b911a718de707/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": "package.json",
+          "gitBlob": "17699d4f2a2269c12387b2e1490c0d825a9bea88",
+          "sha256Utf8Lf": "70d846e886039a253e640e7a7a0fd294a9a5478a83144fd23009d5a34bbf8beb",
+          "url": "https://github.com/adobe/react-spectrum/blob/261344335e54265b2d02dc57a43b911a718de707/package.json"
+        },
+        {
+          "path": "packages/react-aria-components/test/Dialog.browser.test.tsx",
+          "gitBlob": "5b5b622accd640abe0382eb38b6c6644d36d1619",
+          "sha256Utf8Lf": "6b9ade6ef3358cb68aa89442c82bd23489bf9ad311f645b1ea18cb37229e3b47",
+          "url": "https://github.com/adobe/react-spectrum/blob/261344335e54265b2d02dc57a43b911a718de707/packages/react-aria-components/test/Dialog.browser.test.tsx"
+        },
+        {
+          "path": "packages/react-aria-components/test/Form.test.js",
+          "gitBlob": "d071248185f37c365b082ea292a00e81ba801881",
+          "sha256Utf8Lf": "31a5992dd500ddf23098e5e3ea77d4ee13e5db7a673d04b4b774815f86506168",
+          "url": "https://github.com/adobe/react-spectrum/blob/261344335e54265b2d02dc57a43b911a718de707/packages/react-aria-components/test/Form.test.js"
+        },
+        {
+          "path": "packages/react-aria/src/dialog/useDialog.ts",
+          "gitBlob": "97bf6133670ffc835cb186e3ce8499e354c13b47",
+          "sha256Utf8Lf": "538887eca22e1662dbaa2a23ad9ea5758102f1078a0c5e289e0d06c9682ac111",
+          "url": "https://github.com/adobe/react-spectrum/blob/261344335e54265b2d02dc57a43b911a718de707/packages/react-aria/src/dialog/useDialog.ts"
+        },
+        {
+          "path": "packages/react-aria/src/focus/FocusScope.tsx",
+          "gitBlob": "41114eeadcf4a4dba23a3b1c0249ec974a34e937",
+          "sha256Utf8Lf": "91bff200ad5dff948aca66ef65a434f5b85110688f8429948e487a6c5c678415",
+          "url": "https://github.com/adobe/react-spectrum/blob/261344335e54265b2d02dc57a43b911a718de707/packages/react-aria/src/focus/FocusScope.tsx"
+        },
+        {
+          "path": "packages/react-aria/src/overlays/useModalOverlay.ts",
+          "gitBlob": "c1fece2381087ee34ea9688d380fd40c162ae3d6",
+          "sha256Utf8Lf": "a851d1ad575945b51d3e04f973396d82399512970981162d31723818a06dde2f",
+          "url": "https://github.com/adobe/react-spectrum/blob/261344335e54265b2d02dc57a43b911a718de707/packages/react-aria/src/overlays/useModalOverlay.ts"
+        },
+        {
+          "path": "packages/react-aria/src/overlays/useOverlay.ts",
+          "gitBlob": "1f2f476f4f857f5a5fe78caec65b9e79d1972f5c",
+          "sha256Utf8Lf": "038ec0293001f78185d4ea75b76c0c2389c72e5afd843cf382a6edbfb7000088",
+          "url": "https://github.com/adobe/react-spectrum/blob/261344335e54265b2d02dc57a43b911a718de707/packages/react-aria/src/overlays/useOverlay.ts"
+        },
+        {
+          "path": "vitest.browser.config.ts",
+          "gitBlob": "c302f5df80ac25cf4cb0f45ff27a5c24ac341b24",
+          "sha256Utf8Lf": "9c40a05047f36b48ed7028db2ba586ad1ff2abe33af546ce989b55b2e443439f",
+          "url": "https://github.com/adobe/react-spectrum/blob/261344335e54265b2d02dc57a43b911a718de707/vitest.browser.config.ts"
+        }
+      ]
+    },
+    {
+      "repository": "trys/utopia-core",
+      "commit": "135c05142be271f1906897b61437d87465c09ec2",
+      "commitDate": "2024-09-19T11:45:14+01:00",
+      "commitSubject": "Merge pull request #8 from ghosh/feat/custom-step-labels",
+      "selection": "selected-patterns",
+      "licenseFiles": [],
+      "inspectedFiles": [
+        {
+          "path": "README.md",
+          "gitBlob": "bcfd66aceaf461ca4d78c4a6061ff3d2d5600d93",
+          "sha256Utf8Lf": "d8b64775c418810aa5cbff3625b716268e941b10f26b9795efc0625c519143f5",
+          "url": "https://github.com/trys/utopia-core/blob/135c05142be271f1906897b61437d87465c09ec2/README.md"
+        },
+        {
+          "path": "package.json",
+          "gitBlob": "fe65aaf19431a46d139bd4510ecdc6565b9a295e",
+          "sha256Utf8Lf": "5b9f9d51377e4e704052de95b27b2f44e1813891e92f952717b40bf84cdd74a8",
+          "url": "https://github.com/trys/utopia-core/blob/135c05142be271f1906897b61437d87465c09ec2/package.json"
+        },
+        {
+          "path": "src/index.test.ts",
+          "gitBlob": "531ec3447239ea537306a57f0e6f5399d1256232",
+          "sha256Utf8Lf": "a2250d680582a01c4b9a26a3f4aa87884dfcc0275d0baa2dc1881ac82da95e1a",
+          "url": "https://github.com/trys/utopia-core/blob/135c05142be271f1906897b61437d87465c09ec2/src/index.test.ts"
+        },
+        {
+          "path": "src/index.ts",
+          "gitBlob": "9b3c10fe1824302f6c58e1f5b7b048e2cfea7042",
+          "sha256Utf8Lf": "66a89787ebdabd813abcc7e712cbe82a05759de0693f9ac64a859bfd00707ffa",
+          "url": "https://github.com/trys/utopia-core/blob/135c05142be271f1906897b61437d87465c09ec2/src/index.ts"
+        }
+      ]
+    },
+    {
+      "repository": "madrilene/eleventy-excellent",
+      "commit": "69f0948c6d3c884e5b4e53a94f7893668a83d539",
+      "commitDate": "2026-10-18T11:48:44+02:00",
+      "commitSubject": "4.9.1",
+      "selection": "selected-patterns",
+      "licenseFiles": [
+        {
+          "path": "LICENSE.MD",
+          "url": "https://github.com/madrilene/eleventy-excellent/blob/69f0948c6d3c884e5b4e53a94f7893668a83d539/LICENSE.MD"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": "package.json",
+          "gitBlob": "baf99123ea004e2560f1f872f77cc3690705caf5",
+          "sha256Utf8Lf": "02bbe74949b4caf3a45d6903e6de0e770df184955be70c3984f93b4e9a88f03c",
+          "url": "https://github.com/madrilene/eleventy-excellent/blob/69f0948c6d3c884e5b4e53a94f7893668a83d539/package.json"
+        },
+        {
+          "path": "src/_includes/head/meta-info.njk",
+          "gitBlob": "c7e31f1fa8cf1c8b95655032399ed6d420dd679c",
+          "sha256Utf8Lf": "86128f1042acbc3591286be57c2e470ffc440e57a9a0e210722c6e97f9a2e03d",
+          "url": "https://github.com/madrilene/eleventy-excellent/blob/69f0948c6d3c884e5b4e53a94f7893668a83d539/src/_includes/head/meta-info.njk"
+        },
+        {
+          "path": "src/_includes/schemas/BlogPosting.njk",
+          "gitBlob": "9966c3a482554532c0d56d122dc212681d090a39",
+          "sha256Utf8Lf": "fb65ea505b4fa0b93c8da56cdc0cd7fcca290de3be08979da9ca5546303d0587",
+          "url": "https://github.com/madrilene/eleventy-excellent/blob/69f0948c6d3c884e5b4e53a94f7893668a83d539/src/_includes/schemas/BlogPosting.njk"
+        },
+        {
+          "path": "src/assets/css/global/compositions/cluster.css",
+          "gitBlob": "c798a81274a19c8d6901c0f98e1485dc119cef11",
+          "sha256Utf8Lf": "cfd4c4ab85ecbd547e4f74106bfbd89e24addbc48fb73f8db07bad257a0238bc",
+          "url": "https://github.com/madrilene/eleventy-excellent/blob/69f0948c6d3c884e5b4e53a94f7893668a83d539/src/assets/css/global/compositions/cluster.css"
+        },
+        {
+          "path": "src/assets/css/global/compositions/sidebar.css",
+          "gitBlob": "364fea8656d9964bf1806ada9aaa816aec8bc940",
+          "sha256Utf8Lf": "414a65254690e33376177e5b43c66401d190631f2759d5bcc995238f8d0bc78b",
+          "url": "https://github.com/madrilene/eleventy-excellent/blob/69f0948c6d3c884e5b4e53a94f7893668a83d539/src/assets/css/global/compositions/sidebar.css"
+        },
+        {
+          "path": "src/assets/scripts/bundle/dialog.js",
+          "gitBlob": "73db1dff0c6a5228151798abb302cfe655aca0c5",
+          "sha256Utf8Lf": "078e0c02cd6a528ff9cf5da7e86b0100e5e25ed4065606928af9e6d29506cddb",
+          "url": "https://github.com/madrilene/eleventy-excellent/blob/69f0948c6d3c884e5b4e53a94f7893668a83d539/src/assets/scripts/bundle/dialog.js"
+        },
+        {
+          "path": "src/common/pa11y.njk",
+          "gitBlob": "42b35fb38aa966bc3eac67236290fd5dcea9febf",
+          "sha256Utf8Lf": "3fcc6788a87f421b04bfed414d423f6a5a3177ccfabd9a7b48de9a2a8cff19ca",
+          "url": "https://github.com/madrilene/eleventy-excellent/blob/69f0948c6d3c884e5b4e53a94f7893668a83d539/src/common/pa11y.njk"
+        }
+      ]
+    },
+    {
+      "repository": "withastro/starlight",
+      "commit": "b77aca9047de0f1f5213559def6ebd70c6158770",
+      "commitDate": "2026-10-15T23:06:37+09:00",
+      "commitSubject": "i18n(ko-KR): update `plugins` (#4275)",
+      "selection": "selected-patterns",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "gitBlob": "072975582eb4188a6242c77c0eee775ebe711e0e",
+          "sha256Utf8Lf": "47e002f33788d9ef290dce02b99596e33771ab8766d53fe111075e503cb723a7",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/.github/workflows/ci.yml"
+        },
+        {
+          "path": "package.json",
+          "gitBlob": "c7a1cf6146b975116b8c52c694679fcbaabe1122",
+          "sha256Utf8Lf": "f6664cb64389d27eb7be964e243d49acd245a71abcf4f6806ebda5b2b513986c",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/package.json"
+        },
+        {
+          "path": "packages/starlight/__e2e__/basics.test.ts",
+          "gitBlob": "dbfcb79b01174ec0a89554e683fe730772093896",
+          "sha256Utf8Lf": "332bc2b7e85110c6b5aca04698f670ae3bdca4fce8f8a292a8a6bc6298762209",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/packages/starlight/__e2e__/basics.test.ts"
+        },
+        {
+          "path": "packages/starlight/__tests__/basics/format-canonical.test.ts",
+          "gitBlob": "2b55a99e27bcce53b36a1efcbe9a6164f8fe9ba6",
+          "sha256Utf8Lf": "0d1fc3f845c39c408029862e388d48463b77767510432e27f320cd60c750a5aa",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/packages/starlight/__tests__/basics/format-canonical.test.ts"
+        },
+        {
+          "path": "packages/starlight/__tests__/head/head.test.ts",
+          "gitBlob": "c707fb5ef6aadd4623e611363041e9e4a0019e16",
+          "sha256Utf8Lf": "d8729d759a02772f8acd9c7c33eed7d2e80c1a68171cf65640fa393274975baf",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/packages/starlight/__tests__/head/head.test.ts"
+        },
+        {
+          "path": "packages/starlight/__tests__/i18n/head.test.ts",
+          "gitBlob": "9f8641c247161ea7945e05f43fc6cd215ac2fee8",
+          "sha256Utf8Lf": "d86903c3d2da74e7c2f6694a3fb70ba39f6384dc69c485ee0abb5da24f9b5f04",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/packages/starlight/__tests__/i18n/head.test.ts"
+        },
+        {
+          "path": "packages/starlight/src/components/MobileMenuToggle.astro",
+          "gitBlob": "9108f64d5db1d3ff49042aa526cea0c428bf9f64",
+          "sha256Utf8Lf": "f3a8099e669d3d025f14e2c9cb6c0a41c0a5bf6460cd818c0e93dd38d9107726",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/packages/starlight/src/components/MobileMenuToggle.astro"
+        },
+        {
+          "path": "packages/starlight/src/components/PageFrame.astro",
+          "gitBlob": "361259522eecdf75777d5545fdceda8fa989bb91",
+          "sha256Utf8Lf": "8679e16ad7d5932815d5ccd81d5fc86c25462d0aa93c6607789ec6c1449ae2fd",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/packages/starlight/src/components/PageFrame.astro"
+        },
+        {
+          "path": "packages/starlight/src/components/SkipLink.astro",
+          "gitBlob": "1c83127d9fbdf64a8a50cf8b182bd5e3b42995e8",
+          "sha256Utf8Lf": "51fc07c1fd27fce193ef40b417e4766a4a1303a7b7f3861f1013f4e3c4f2ce7d",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/packages/starlight/src/components/SkipLink.astro"
+        },
+        {
+          "path": "packages/starlight/src/utils/canonical.ts",
+          "gitBlob": "5a0da5d4d5de4fa116e7444cc50410914ebd0648",
+          "sha256Utf8Lf": "411cbe2769b22d23c6bce44eb8417f8989e11b9f833a0d438e896133656d911b",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/packages/starlight/src/utils/canonical.ts"
+        },
+        {
+          "path": "packages/starlight/src/utils/head.ts",
+          "gitBlob": "b84e30a6b6dd07febce7a58c5c4095929f27060a",
+          "sha256Utf8Lf": "def8bc7dc1ae0d3a39497ef96d1a50d0eeb9abe1842e2a507278e1e11758533c",
+          "url": "https://github.com/withastro/starlight/blob/b77aca9047de0f1f5213559def6ebd70c6158770/packages/starlight/src/utils/head.ts"
+        }
+      ]
+    },
+    {
+      "repository": "huntabyte/bits-ui",
+      "commit": "fd10616a873a8e6e3652e31dcc88c5c2f155a9e2",
+      "commitDate": "2026-10-03T01:55:32-04:00",
+      "commitSubject": "Version Packages (#2181)",
+      "selection": "selected-patterns",
+      "licenseFiles": [
+        {
+          "path": "LICENSE",
+          "url": "https://github.com/huntabyte/bits-ui/blob/fd10616a873a8e6e3652e31dcc88c5c2f155a9e2/LICENSE"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": ".github/workflows/test.yml",
+          "gitBlob": "fe39ee3e6be99f885324eb41d4842a88c902e2ad",
+          "sha256Utf8Lf": "5ee8e0fda4b56d5040691d8422f3e3b45fc04af5c7eba62641a293cc3054f186",
+          "url": "https://github.com/huntabyte/bits-ui/blob/fd10616a873a8e6e3652e31dcc88c5c2f155a9e2/.github/workflows/test.yml"
+        },
+        {
+          "path": "package.json",
+          "gitBlob": "98966adb12bff1e34d0f4c56464e4006ea121405",
+          "sha256Utf8Lf": "9c54db5f31c25ef81827ec99e434c88b17483ef456ed1a827d6e10d6b098dca5",
+          "url": "https://github.com/huntabyte/bits-ui/blob/fd10616a873a8e6e3652e31dcc88c5c2f155a9e2/package.json"
+        },
+        {
+          "path": "packages/bits-ui/src/lib/bits/accordion/accordion.svelte.ts",
+          "gitBlob": "1ebf2e25e811d83f26ef6b7d2b7560f09b82e59a",
+          "sha256Utf8Lf": "d7d006ae672eac58834c7fee8c489e9cefc453c094a67d8206935a13f5f69ef8",
+          "url": "https://github.com/huntabyte/bits-ui/blob/fd10616a873a8e6e3652e31dcc88c5c2f155a9e2/packages/bits-ui/src/lib/bits/accordion/accordion.svelte.ts"
+        },
+        {
+          "path": "packages/bits-ui/src/lib/bits/dialog/components/dialog-content.svelte",
+          "gitBlob": "c5ebef8fd58fe836505923c031dd38cb849a47ae",
+          "sha256Utf8Lf": "74d57726057a1fc790c208f75c0768d7f4a30e14bd1a1cd49e7c097f2eeb2ff2",
+          "url": "https://github.com/huntabyte/bits-ui/blob/fd10616a873a8e6e3652e31dcc88c5c2f155a9e2/packages/bits-ui/src/lib/bits/dialog/components/dialog-content.svelte"
+        },
+        {
+          "path": "packages/bits-ui/src/lib/bits/dialog/dialog.svelte.ts",
+          "gitBlob": "2faab984918e75dbf00f7cb387a8f170a44c7a14",
+          "sha256Utf8Lf": "ac1434b2303870dbabb097d86229be24b20093541e65ee9adee346d05e83d6b4",
+          "url": "https://github.com/huntabyte/bits-ui/blob/fd10616a873a8e6e3652e31dcc88c5c2f155a9e2/packages/bits-ui/src/lib/bits/dialog/dialog.svelte.ts"
+        },
+        {
+          "path": "tests/src/tests/accordion/accordion.browser.test.ts",
+          "gitBlob": "9d2cbf18b56c6d16e9e1a9b6b783c30a82647507",
+          "sha256Utf8Lf": "94555efd838c18bcf355f1331455f8df7f1bcfd0b77f6ca28bc077160763c67d",
+          "url": "https://github.com/huntabyte/bits-ui/blob/fd10616a873a8e6e3652e31dcc88c5c2f155a9e2/tests/src/tests/accordion/accordion.browser.test.ts"
+        },
+        {
+          "path": "tests/src/tests/dialog/dialog.browser.test.ts",
+          "gitBlob": "40c25b9762aa296efbaf8adfe8a9dc754759248c",
+          "sha256Utf8Lf": "384fcb5b68c42a7255a30d4f0084f030b5cd52f73b28fd239ec05f94bbfea0df",
+          "url": "https://github.com/huntabyte/bits-ui/blob/fd10616a873a8e6e3652e31dcc88c5c2f155a9e2/tests/src/tests/dialog/dialog.browser.test.ts"
+        }
+      ]
+    },
+    {
+      "repository": "haydenbleasel/next-forge",
+      "commit": "f189de79ceef7c1ef69f61f12e272f99b4cdb699",
+      "commitDate": "2026-05-28T16:33:08+02:00",
+      "commitSubject": "Remove docs tweet wall (#751)",
+      "selection": "selected-patterns",
+      "licenseFiles": [
+        {
+          "path": "license.md",
+          "url": "https://github.com/haydenbleasel/next-forge/blob/f189de79ceef7c1ef69f61f12e272f99b4cdb699/license.md"
+        }
+      ],
+      "inspectedFiles": [
+        {
+          "path": "package.json",
+          "gitBlob": "83be1cc63164054927ec022f5090f0c9db3feff2",
+          "sha256Utf8Lf": "7517c6552859239b8f4b9a54c4774d7207938e99640ebb72b13895a7062d5a8a",
+          "url": "https://github.com/haydenbleasel/next-forge/blob/f189de79ceef7c1ef69f61f12e272f99b4cdb699/package.json"
+        },
+        {
+          "path": "packages/design-system/package.json",
+          "gitBlob": "a722227ec269e64e0bd3c3fd9c65355ae54a0aaf",
+          "sha256Utf8Lf": "09559ce56e820858da1b68b77b41426f2cb103c12e8938afcb817f2482a2b953",
+          "url": "https://github.com/haydenbleasel/next-forge/blob/f189de79ceef7c1ef69f61f12e272f99b4cdb699/packages/design-system/package.json"
+        },
+        {
+          "path": "packages/seo/json-ld.tsx",
+          "gitBlob": "d1a111bbb56d64c0b911242955c57ffcef6a0d99",
+          "sha256Utf8Lf": "309d4568a951143ad9d77a3c0b12616f339de6ba422922a1540b7cf7791037d0",
+          "url": "https://github.com/haydenbleasel/next-forge/blob/f189de79ceef7c1ef69f61f12e272f99b4cdb699/packages/seo/json-ld.tsx"
+        },
+        {
+          "path": "packages/seo/metadata.ts",
+          "gitBlob": "2fe352cc4c843c3e2ee5265006fb4899789cc656",
+          "sha256Utf8Lf": "ca93a88f07cef2fa9edab9727b129b800aae614e206c811369aecdaaee9193aa",
+          "url": "https://github.com/haydenbleasel/next-forge/blob/f189de79ceef7c1ef69f61f12e272f99b4cdb699/packages/seo/metadata.ts"
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "baselineVerify": {
+      "command": "npm run verify",
+      "exitCode": 0,
+      "node": "v24.21.0",
+      "testSummary": {
+        "tests": 177,
+        "passed": 177,
+        "failed": 0,
+        "skipped": 0,
+        "durationMs": 46130.0821
+      },
+      "astroCheck": {
+        "files": 40,
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    "upstreamBuildsExecuted": false,
+    "bundleSizesMeasured": false,
+    "assistiveTechnologySessionsExecuted": false,
+    "spotProbes": {
+      "jsonLdParserProbe": {
+        "rawInputInjectedImages": 1,
+        "escapedInjectedImages": 0,
+        "escapedScriptNodes": 1,
+        "roundTrip": true
+      },
+      "utopiaSpotChecks": {
+        "pinnedSourceExecuted": true,
+        "viewportAndContainerExpressionsMatched": true
+      },
+      "scope": "Pure serializer and math probes only; no upstream application/dependency installation or browser execution."
+    },
+    "documentation": {
+      "localLinksChecked": 12,
+      "externalSourceHashesChecked": 79,
+      "unresolvedPlaceholders": 0,
+      "missingLocalTargets": 0
+    }
+  },
+  "baselineInspectedFiles": [
+    {
+      "path": "README.md",
+      "sha256Utf8Lf": "e98cec1d1fb60356ec454705b08a36b8b83e9b54b89150569aadab6c73558392"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256Utf8Lf": "e53bfbb99e599e80b480af95b68e5bcac636ec212d8bc89910587e1e616aa928"
+    },
+    {
+      "path": "package.json",
+      "sha256Utf8Lf": "896e6a952f1f7401affdec6700ecf9694ecc743b200037097d37bfa60fa2f933"
+    },
+    {
+      "path": "src/layouts/SiteShell.astro",
+      "sha256Utf8Lf": "80afe1f381fd8c58517f199884146f4abdbdf498d6240bc22b3a0cafa0c11b50"
+    },
+    {
+      "path": "src/layouts/Base.astro",
+      "sha256Utf8Lf": "eb13b22ec0dc3e0122514c02328522b8ea95062ed00c6a4b0afecae86ae88989"
+    },
+    {
+      "path": "src/components/Section.astro",
+      "sha256Utf8Lf": "5f370d7cf6bb3b08b4e666f4f802458d4a94e1556a8c0531f367383711087ef3"
+    },
+    {
+      "path": "src/components/Container.astro",
+      "sha256Utf8Lf": "e4e168c21c16514f40a83bc4868c45a91389cbe17057d0e86669685360770a32"
+    },
+    {
+      "path": "src/components/Grid.astro",
+      "sha256Utf8Lf": "61480da4ff50aae485a982136fe77d8c881d9fceb8e1bc4980ffcd4cf2131f5e"
+    },
+    {
+      "path": "src/components/Card.astro",
+      "sha256Utf8Lf": "d03714812d5bcee0d9d90ed7b6bf456ae2307ceca9681eb1fd0b37129e8562f1"
+    },
+    {
+      "path": "src/components/FormError.astro",
+      "sha256Utf8Lf": "8e5cf27a51dfe369fba3d5c1f7de6260437bbd992f727fa9126e1b7680ad7dca"
+    },
+    {
+      "path": "src/styles/global.css",
+      "sha256Utf8Lf": "c1ddf3f331e5bcdbe30a6322212fe17f91016f903e420cfcb1ea22449b36a832"
+    },
+    {
+      "path": "scripts/design-system.mjs",
+      "sha256Utf8Lf": "8b0f65d9b7beb38ef23c4de6882878642cd85a51eb71f30d1a4a00955c122e00"
+    },
+    {
+      "path": "scripts/init-profile.mjs",
+      "sha256Utf8Lf": "89376a14c24d08b416154a23c8ddce7d2ee59f681decc0f78110d7c66b3f5593"
+    },
+    {
+      "path": "tests/visual/behavior.spec.mjs",
+      "sha256Utf8Lf": "b49cfdf8d9c35a0bf316f9f98ebdd6f3bba5e25839433f0996ee23526d3b0f5c"
+    },
+    {
+      "path": "tests/form-recovery.test.mjs",
+      "sha256Utf8Lf": "46861b566598c1f6e86a55a3df7ddcc4f97b1942d7818007f182ebe4f7008001"
+    },
+    {
+      "path": "profiles/static/project/src/layouts/Base.astro",
+      "sha256Utf8Lf": "2a0835104278e8d01faf0ceda5087ba8de0ee50ace06e71682219f5696fb6674"
+    },
+    {
+      "path": "profiles/static/project/src/content.config.ts",
+      "sha256Utf8Lf": "0494e62c9ed4ec64b0711acc50732041b496873277a9d81ccf816039e3bbb66c"
+    },
+    {
+      "path": "profiles/manifests/shared.json",
+      "sha256Utf8Lf": "fa0fe6824a470575c6883ceb724a0cbe2f04828a270e780569fde325e70aa7df"
+    },
+    {
+      "path": ".github/workflows/design-checks.yml",
+      "sha256Utf8Lf": "bba4fedd857642e50f2c7c7402034ceb7828bc26c2aec1213baca2210cb54d1b"
+    },
+    {
+      "path": "node_modules/emdash/src/components/EmDashHead.astro",
+      "sha256Utf8Lf": "bd1da22c5a0370a246b560185c8841d4e2d5d043196de32617a4bf38859e42d4"
+    },
+    {
+      "path": "node_modules/emdash/src/page/seo-contributions.ts",
+      "sha256Utf8Lf": "7234c4988d4179106eccd9b4a07fe91e6fd69bac49e26cb66dbac6afd2688c29"
+    }
+  ]
+}
