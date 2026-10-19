@@ -34,7 +34,7 @@
     "design:tokens": "node scripts/design-system.mjs",
     "design:check": "node scripts/design-interchange.mjs",
     "design:export": "node scripts/design-interchange.mjs --export",
-    "test:design": "node --test tests/design-workflow.test.mjs tests/design-interchange.test.mjs tests/token-coverage.test.mjs",
+    "test:design": "node --test tests/design-workflow.test.mjs tests/design-interchange.test.mjs tests/token-coverage.test.mjs tests/fluid-tokens.test.mjs",
     "test:visual": "node scripts/test-visual.mjs",
     "test:visual:update": "node scripts/test-visual.mjs --update",
     "test:visual:sensitivity": "node scripts/test-visual.mjs --sensitivity",

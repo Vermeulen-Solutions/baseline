@@ -97,3 +97,16 @@ source fixes or narrowly justified line exceptions, then run full verify/build
 before committing. A reviewed generator migration is needed to expand managed
 membership; do not silently edit the receipt or adopt starter art-gate exemptions
 for client components.
+
+Fluid-token diagnostics are another bounded upgrade: an already-managed
+`scripts/design-system.mjs` can be proposed through sync, preserving the site's
+calibrated `global.css`. Review newly rejected expressions against the documented
+affine grammar before changing client values. The additive JSON `fluid` report
+has advisory resize estimates; these do not change the audit's pass/fail policy.
+Current generation also ships `tests/fluid-tokens.test.mjs` and
+`docs/design-framework.md`, and includes the mathematical suite in `test:design`.
+Older receipts and package scripts do not acquire those additions through sync.
+Adopt them explicitly in a reviewed generator migration, or copy the portable
+suite/document as locally owned files and add the suite to the existing design
+test command. Retain existing tests and perform verify/build plus local rendered
+resize acceptance before committing. No new dependency is required.

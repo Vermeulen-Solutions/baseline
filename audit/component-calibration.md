@@ -76,7 +76,7 @@ the documented contract; the manual observations above remain deferred. See
 - **LF SHA-256:** `af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325`
 - **Validation status:** `PASS` (14 WCAG contrast pairs, 31 `@theme` tokens, 7 `:root` tokens)
 
-### WCAG AA Perceptual Contrast Matrix
+### WCAG Relative Luminance Contrast Matrix
 
 | Pair | Foreground | Background | Ratio | Minimum | Status |
 | --- | --- | --- | --- | --- | --- |

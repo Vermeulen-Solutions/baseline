@@ -1,0 +1,180 @@
+{
+  "version": 1,
+  "date": "2026-10-19",
+  "scope": "Phase 6 mathematical hardening and advisory diagnostics; no calibrated value or runtime change",
+  "implementationBase": "ea1f23c7b9110fb6ea6650425e9f2195ffe3cf7a",
+  "workingTreeCapture": true,
+  "node": "24.21.0",
+  "commands": [
+    {
+      "command": "npm run design:tokens",
+      "exitCode": 0,
+      "fluidTokens": 12,
+      "contrastPairs": 14
+    },
+    {
+      "command": "node scripts/design-system.mjs --json",
+      "exitCode": 0,
+      "valid": true,
+      "advisoryTokens": 6,
+      "reference": {
+        "rootFontPx": 16,
+        "viewportSizePx": 1280,
+        "writingMode": "horizontal-tb",
+        "zoomModel": "fixed physical viewport; CSS viewport divided by zoom; root font unchanged"
+      }
+    },
+    {
+      "command": "npm run test:design",
+      "exitCode": 0,
+      "tests": 33,
+      "pass": 33,
+      "fail": 0
+    },
+    {
+      "command": "npm run verify",
+      "exitCode": 0,
+      "error": null,
+      "tests": 218,
+      "pass": 218,
+      "fail": 0,
+      "astro": {
+        "files": 46,
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    {
+      "command": "npm run test:profiles -- --keep",
+      "exitCode": 0,
+      "error": null,
+      "profiles": [
+        {
+          "profile": "static",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-profile-verification-BgfHHt\\static",
+          "tests": 32,
+          "astro": {
+            "files": 34,
+            "errors": 0,
+            "warnings": 0,
+            "hints": 0
+          },
+          "independentInstall": true,
+          "cleanInstall": true,
+          "databasePackages": 0,
+          "verify": "passed",
+          "production": "passed",
+          "fixtures": "passed",
+          "http": "passed",
+          "publicBrowser": "not repeated in Phase 6; prior Phase 5 evidence retained",
+          "sourceHashes": {
+            "scripts/design-system.mjs": "83501bcf1807a8584f2b550fc92f46db7ee4de044ae4e829620f595cc831f026",
+            "tests/fluid-tokens.test.mjs": "4df586af29225ceaa1adb5226868c1b9527d12d8a1f689239c29459497ab45fd",
+            "src/styles/global.css": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+            "docs/design-framework.md": "47b5d648af03c259fa3b47f5f2667415fa64b102d9255f9b4daaea34cabce7f2",
+            "docs/baseline-updates.md": "4257c0bb44a49c5011edd931da9bb1c0fdba61155b230acf3a31f0d4d1505566"
+          }
+        },
+        {
+          "profile": "static-sveltia",
+          "root": "C:\\Users\\Jaap\\AppData\\Local\\Temp\\baseline-profile-verification-BgfHHt\\static-sveltia",
+          "tests": 33,
+          "astro": {
+            "files": 34,
+            "errors": 0,
+            "warnings": 0,
+            "hints": 0
+          },
+          "independentInstall": true,
+          "cleanInstall": true,
+          "databasePackages": 0,
+          "verify": "passed",
+          "production": "passed",
+          "fixtures": "passed",
+          "http": "passed",
+          "publicBrowser": "not repeated in Phase 6; prior Phase 5 evidence retained",
+          "sourceHashes": {
+            "scripts/design-system.mjs": "83501bcf1807a8584f2b550fc92f46db7ee4de044ae4e829620f595cc831f026",
+            "tests/fluid-tokens.test.mjs": "4df586af29225ceaa1adb5226868c1b9527d12d8a1f689239c29459497ab45fd",
+            "src/styles/global.css": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+            "docs/design-framework.md": "47b5d648af03c259fa3b47f5f2667415fa64b102d9255f9b4daaea34cabce7f2",
+            "docs/baseline-updates.md": "4257c0bb44a49c5011edd931da9bb1c0fdba61155b230acf3a31f0d4d1505566"
+          }
+        }
+      ]
+    },
+    {
+      "command": "npm run test:visual:functional",
+      "exitCode": 0,
+      "error": null,
+      "startTime": "2026-10-19T16:31:11.249Z",
+      "duration": 157200.302,
+      "expected": 32,
+      "skipped": 4,
+      "unexpected": 0,
+      "flaky": 0,
+      "skips": "Two reflow placement skips and two zoom placement skips across three viewport projects",
+      "coverage": [
+        "real Chromium page zoom at 200%/400%",
+        "320px reflow and text spacing",
+        "skip-link/keyboard and focus restoration",
+        "form recovery with and without JavaScript",
+        "native disclosure and intrinsic layout"
+      ],
+      "snapshotsUpdated": false,
+      "comparisonThresholdsChanged": false
+    },
+    {
+      "command": "npm run check:visual-cleanup",
+      "exitCode": 0,
+      "cleanup": {
+        "failure": {
+          "serverStopped": true,
+          "dependencyJunctionUnlinked": true,
+          "temporaryTreeRemoved": true,
+          "workingDatabaseCopied": false
+        },
+        "cancellation": {
+          "serverStopped": true,
+          "dependencyJunctionUnlinked": true,
+          "temporaryTreeRemoved": true,
+          "workingDatabaseCopied": false
+        }
+      }
+    }
+  ],
+  "preservation": {
+    "stylesheetLfSha256": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+    "stylesheetAndReferenceScreenshotsUnchanged": true,
+    "generatedScalesPhase5Sha256": "9c49768d6ed034d7aa9d2c43b8b9de051b20cd92255c2ae7efae44f6002a6cd8",
+    "laneObjectPhase5Sha256": "d754fbdb6cfcf1c7f82352c69364a11ab53540a17cca5e2a30384e254f1ce535",
+    "comparison": "Hashes independently computed by importing git show HEAD:scripts/design-system.mjs before comparison; seven named type ratios, spacing ratios 1.25/1.5/2.2 and complete lane object",
+    "dependenciesAdded": 0,
+    "publicRuntimeChanged": false
+  },
+  "sourceLfSha256": {
+    "scripts/design-system.mjs": "83501bcf1807a8584f2b550fc92f46db7ee4de044ae4e829620f595cc831f026",
+    "tests/fluid-tokens.test.mjs": "4df586af29225ceaa1adb5226868c1b9527d12d8a1f689239c29459497ab45fd",
+    "tests/token-coverage.test.mjs": "76b02ecffde516e909d251f1471037685df86b4dd8ec94cb5d1227a880243ef9",
+    "package.json": "47252443d67bcf1936be5b515ee83cd0467bb68a8b6469f147ebdbedba1174c5",
+    "profiles/manifests/shared.json": "dcef95468aec3868f4b2418edaefacb29669dfb28f9821cd90f3dd4be4418cde",
+    "profiles/manifests/static.json": "437ffd42bc623dda04d9804561da841c8d5a66a9b0b9e2c350a543f894ec243a",
+    "profiles/file-inventory.json": "14cc124dbaea7ef87bc101fe240d6f3590ccae7509c1be2b6a50936aa553d4ce",
+    "docs/design-framework.md": "47b5d648af03c259fa3b47f5f2667415fa64b102d9255f9b4daaea34cabce7f2",
+    "docs/baseline-updates.md": "4257c0bb44a49c5011edd931da9bb1c0fdba61155b230acf3a31f0d4d1505566",
+    "docs/verification/fluid-tokens-phase-6.md": "5deb803efbe4996bfd0b10ec65b55c82a5ce75ef74b916337ef3b51ffa43b84d",
+    "audit/component-calibration.md": "798f3ebdac1ab09df2f6f28db64ed486377660260fc75ce02e650b521c259d30",
+    "src/styles/global.css": "af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325",
+    "tests/visual/contract.mjs": "164899b52f3f4d97e6c1ce674bd3e5187512d9d9c8f060889b263f957ccc004e",
+    "tests/visual/baselines/win32/manifest.json": "6a99d23c5e97310a59ff3b91d63b86e406279a95df2ecd98fd408b4761bc9dd7"
+  },
+  "limits": [
+    "Modeled text resize ratios are advisory, not WCAG verdicts or rendered font-size measurements",
+    "Manual text-only resizing and screen-reader observations pending",
+    "Other browser engines, vertical writing modes, physical devices and CMS editor save/reload not verified in this slice",
+    "Generated profile public browser journeys were not repeated; Phase 5 evidence remains scoped to that revision",
+    "Generated projects deliberately retained with --keep; CMS harness resources cleaned; working database not copied"
+  ],
+  "next": "Phase 7 deferred pending requirements; Phase 8 release/adoption rehearsal and outstanding manual observations"
+}

@@ -43,7 +43,9 @@
     "src/components/Sidebar.astro",
     "src/components/dev/CompositionSpecimens.astro",
     "src/dev/disclosure-prose.md",
-    "docs/native-composition.md"
+    "docs/native-composition.md",
+    "tests/fluid-tokens.test.mjs",
+    "docs/design-framework.md"
   ],
   "packages": {
     "dependencies": [

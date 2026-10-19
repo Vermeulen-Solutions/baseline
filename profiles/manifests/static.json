@@ -27,7 +27,7 @@
   },
   "pending": [],
   "scriptOverrides": {
-    "test:design": "node --test tests/static-foundation.test.mjs",
+    "test:design": "node --test tests/static-foundation.test.mjs tests/fluid-tokens.test.mjs",
     "lint:templates": "eslint src --max-warnings 0"
   },
   "overrides": [

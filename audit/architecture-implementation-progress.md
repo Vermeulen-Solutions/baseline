@@ -10,9 +10,9 @@ Plan: [phased implementation](architecture-implementation-plan-2026-10-19.md). C
 | 3 — interaction journeys | Automated slice complete; manual AT pending | [Checks/hashes](verification/interactions-phase-3-checks.json), [scope/reproduction and manual AT limits](../docs/verification/interactions-phase-3.md) |
 | 4 — template lint | Complete | [Toolchain, mutation probes and independent profiles](verification/template-lint-phase-4-checks.json); [scope/adoption](../docs/verification/template-lint-phase-4.md) |
 | 5 — native composition | Automated slice complete; manual AT pending | [Contract](../docs/native-composition.md), [calibration](component-calibration.md), [current checks/hashes](verification/native-composition-phase-5-checks.json) |
-| 6 — token diagnostics | Planned | Existing calibrated tokens retained |
+| 6 — token diagnostics | Automated slice complete; manual resize/AT pending | [Math, diagnostics and adoption](../docs/verification/fluid-tokens-phase-6.md); [checks/hashes](verification/fluid-tokens-phase-6-checks.json); calibrated values retained |
 | 7 — conditional capabilities | Deferred pending requirements | No new modal/navigation/OG runtime |
-| 8 — release/adoption | Planned | Phases 1–5 record scoped adoption; final release/manual observations remain pending |
+| 8 — release/adoption | Planned | Phases 1–6 record scoped adoption; final release/manual observations remain pending |
 
 Initial `npm run verify` passed before application edits (177 tests; Astro: 40 files, zero errors/warnings/hints).
 
@@ -171,6 +171,28 @@ with `--keep`. Phase 5's implementation and automated acceptance are complete.
 
 ## Next slice
 
-Phase 6: strengthen independent token mathematics and diagnostics without
-rewriting calibrated brand values. Manual AT observations remain a release
-follow-up alongside the later planned phases.
+Phase 7 remains deferred: no actual requirement activates a modal, more complex
+navigation or generated OG runtime. Next is Phase 8's release/adoption rehearsal,
+with manual AT and text-only resize observations kept explicit.
+
+## Phase 6 implementation
+
+The CLI now validates a bounded affine grammar and finite interpolation domains,
+and rejects invalid generator inputs before emitting CSS. Ten portable tests add
+independent endpoints/interpolation, saturation, monotonicity, four-place rounding,
+root-font scenarios and adversarial expressions. Phase 5 Git-source hashes confirm
+unchanged named type scales, representative spacing scales and authored lane
+presets. The stylesheet retains its existing LF digest and all calibrated values.
+
+The additive JSON `fluid` report explains transition widths, reference samples,
+changed roots and advisory viewport-shrink/zoom estimates. It does not certify
+text resizing. Global generation retains `vi`; existing `vw` gets an axis advisory,
+and `cqi` remains outside the global contract until a component container context
+and matching acceptance exist. Contrast output accurately labels the existing
+14 WCAG relative-luminance ratios. Current generation ships the mathematical
+suite and framework documentation to both static profiles; bounded synchronization
+still requires explicit adoption of new file membership and package scripts.
+
+Executed acceptance is recorded in the [Phase 6 receipt](verification/fluid-tokens-phase-6-checks.json).
+Manual text-only resize, screen-reader observations, other engines/writing modes
+and physical devices remain outside this automated slice.

@@ -391,21 +391,75 @@ function resolveColorVar(value, scopeMap, fallbackMap = {}) {
   return current;
 }
 
+// Deliberately bounded affine grammar, not a general CSS evaluator. No eval or var resolution.
+const UNSIGNED_CSS_NUMBER = '(?:\\d+(?:\\.\\d+)?|\\.\\d+)(?:e[+-]?\\d+)?';
+const CSS_NUMBER = `[+-]?${UNSIGNED_CSS_NUMBER}`;
+const FLUID_CLAMP = new RegExp(`^clamp\\(\\s*(${CSS_NUMBER})rem\\s*,\\s*([^,]+)\\s*,\\s*(${CSS_NUMBER})rem\\s*\\)$`, 'i');
+const FLUID_AFFINE = new RegExp(`^(${CSS_NUMBER})rem\\s+([+-])\\s+(${UNSIGNED_CSS_NUMBER})(vi|vw)$`, 'i');
+const FLUID_VIEWPORT = new RegExp(`^(${CSS_NUMBER})(vi|vw)$`, 'i');
+
+export function parseFluidClamp(value) {
+  const match = String(value ?? '').trim().match(FLUID_CLAMP);
+  if (!match) throw new Error('expected clamp(<min>rem, <affine viewport term>, <max>rem)');
+  const minRem = Number(match[1]);
+  const maxRem = Number(match[3]);
+  let preferred = match[2].trim();
+  if (/^calc\(/i.test(preferred) && preferred.endsWith(')')) preferred = preferred.slice(5, -1).trim();
+  const affine = preferred.match(FLUID_AFFINE);
+  const viewport = preferred.match(FLUID_VIEWPORT);
+  if (!affine && !viewport) throw new Error('expected rem + vi (legacy vw supported); cqi requires a separate documented container contract');
+  const interceptRem = affine ? Number(affine[1]) : 0;
+  const viewportCoefficient = affine ? Number(affine[3]) * (affine[2] === '-' ? -1 : 1) : Number(viewport[1]);
+  const unit = (affine ? affine[4] : viewport[2]).toLowerCase();
+  if (![minRem, maxRem, interceptRem, viewportCoefficient].every(Number.isFinite)) throw new Error('all clamp coefficients must be finite');
+  if (!(minRem > 0 && maxRem >= minRem)) throw new Error('clamp bounds must satisfy 0 < min <= max');
+  if (viewportCoefficient < 0 || (maxRem > minRem && viewportCoefficient === 0)) throw new Error('ascending scales require a positive viewport coefficient (zero allowed for equal bounds)');
+  const transitionRem = maxRem === minRem ? null : {
+    min: (minRem - interceptRem) / viewportCoefficient * 100,
+    max: (maxRem - interceptRem) / viewportCoefficient * 100,
+  };
+  if (transitionRem && (!Object.values(transitionRem).every(Number.isFinite) || transitionRem.max <= transitionRem.min)) throw new Error('interpolation domain must be finite and nonzero');
+  return { minRem, maxRem, interceptRem, viewportCoefficient, unit, transitionRem };
+}
+
+/** Axis size is the viewport inline size for vi, physical width for legacy vw. */
+export function evaluateFluidClamp(value, { viewportSizePx, rootFontPx = 16 } = {}) {
+  if (!Number.isFinite(viewportSizePx) || viewportSizePx < 0 || !Number.isFinite(rootFontPx) || rootFontPx <= 0) throw new Error('Expected finite viewport size >= 0 and root font size > 0');
+  const { minRem, maxRem, interceptRem, viewportCoefficient } = parseFluidClamp(value);
+  const preferred = interceptRem * rootFontPx + viewportCoefficient * (viewportSizePx / 100);
+  const result = Math.max(minRem * rootFontPx, Math.min(preferred, maxRem * rootFontPx));
+  if (!Number.isFinite(preferred) || !Number.isFinite(maxRem * rootFontPx) || !Number.isFinite(result)) throw new Error('Fluid evaluation overflow');
+  return result;
+}
+
 export function validateClampToken(name, value) {
-  const match = String(value ?? '').match(/^clamp\(\s*([0-9.]+)rem\s*,\s*([^,]+)\s*,\s*([0-9.]+)rem\s*\)$/i);
-  if (!match) {
-    return `Token ${name} must use fluid clamp(<min>rem, <fluid>, <max>rem), got: ${value}`;
+  try {
+    parseFluidClamp(value);
+    return null;
+  } catch (error) {
+    return `Token ${name}: ${error.message}; got: ${value}`;
   }
-  const min = Number(match[1]);
-  const preferred = match[2].trim();
-  const max = Number(match[3]);
-  if (!(min > 0 && max >= min)) {
-    return `Token ${name} clamp bounds must satisfy 0 < min <= max (got ${min}rem .. ${max}rem).`;
-  }
-  if (!/(vi|vw)/i.test(preferred)) {
-    return `Token ${name} preferred fluid term should include viewport units (vi/vw), got: ${preferred}`;
-  }
-  return null;
+}
+
+export function diagnoseFluidToken(name, value) {
+  const parsed = parseFluidClamp(value);
+  const baselinePx = evaluateFluidClamp(value, { viewportSizePx: 1280 });
+  const zoom = [2, 4].map(factor => ({
+    factor,
+    cssViewportPx: 1280 / factor,
+    effectiveSizeRatio: evaluateFluidClamp(value, { viewportSizePx: 1280 / factor }) / baselinePx * factor,
+  }));
+  return {
+    name, ...parsed,
+    samples: [10, 20, 50, 80, 100].map(viewportRem => ({ viewportRem, sizeRem: evaluateFluidClamp(value, { viewportSizePx: viewportRem * 16 }) / 16 })),
+    rootFontSamples: [16, 20, 32].map(rootFontPx => ({ rootFontPx, sizePx: evaluateFluidClamp(value, { viewportSizePx: 1280, rootFontPx }) })),
+    zoom,
+    advisories: [
+      ...(parsed.unit === 'vw' ? ['Legacy vw uses physical width; prefer vi for global tokens.'] : []),
+      ...(name.startsWith('--text-') && zoom.some(sample => sample.effectiveSizeRatio < sample.factor - 0.001)
+        ? ['Viewport shrink offsets text enlargement in the reference model; inspect rendered zoom and text-only resizing. This is not a WCAG verdict.'] : []),
+    ],
+  };
 }
 
 export function auditDesignTokens(css) {
@@ -425,9 +479,20 @@ export function auditDesignTokens(css) {
   const fluidTokens = Object.keys(tokens.theme).filter(
     key => key.startsWith('--text-step-') || key.startsWith('--spacing-'),
   );
+  const fluid = {
+    reference: { rootFontPx: 16, viewportSizePx: 1280, writingMode: 'horizontal-tb', zoomModel: 'fixed physical viewport; CSS viewport divided by zoom; root font unchanged' },
+    tokens: [],
+  };
   for (const key of fluidTokens) {
     const clampError = validateClampToken(key, tokens.theme[key]);
     if (clampError) errors.push(clampError);
+    else {
+      try {
+        fluid.tokens.push(diagnoseFluidToken(key, tokens.theme[key]));
+      } catch (error) {
+        errors.push(`Token ${key}: ${error.message}`);
+      }
+    }
   }
 
   const allDefaults = { '--color-link': 'var(--color-action)', ...tokens.theme, ...tokens.root };
@@ -480,6 +545,7 @@ export function auditDesignTokens(css) {
     errors,
     tokens,
     contrast,
+    fluid,
   };
 }
 
@@ -531,6 +597,8 @@ function round4(n) {
  * Builds a fluid `clamp(minRem, calc(interceptRem + slopeVi), maxRem)` across minVwRem..maxVwRem.
  */
 export function buildFluidClamp(minRem, maxRem, minVwRem = 20, maxVwRem = 80) {
+  if (![minRem, maxRem, minVwRem, maxVwRem].every(Number.isFinite)) throw new Error('Fluid clamp inputs must be finite numbers');
+  if (!(minVwRem >= 0 && maxVwRem > minVwRem && Number.isFinite(maxVwRem - minVwRem))) throw new Error('Fluid viewport domain must satisfy 0 <= min < max with finite width');
   const min = round4(minRem);
   const max = round4(maxRem);
   if (!(min > 0 && max >= min)) {
@@ -539,6 +607,7 @@ export function buildFluidClamp(minRem, maxRem, minVwRem = 20, maxVwRem = 80) {
   const slope = (max - min) / (maxVwRem - minVwRem);
   const intercept = round4(min - minVwRem * slope);
   const slopeVi = round4(slope * 100);
+  if (![intercept, slopeVi].every(Number.isFinite) || (max > min && slopeVi <= 0)) throw new Error('Fluid coefficients cannot be represented at four decimal places');
   return `clamp(${min}rem, calc(${intercept}rem + ${slopeVi}vi), ${max}rem)`;
 }
 
@@ -709,7 +778,7 @@ export function formatCalibrationMarkdown(css, cssPath = 'src/styles/global.css'
     `- **LF SHA-256:** \`${digest}\``,
     `- **Validation status:** \`${audit.valid ? 'PASS' : 'FAIL'}\` (${audit.contrast.length} WCAG contrast pairs, ${Object.keys(audit.tokens.theme).length} \`@theme\` tokens, ${Object.keys(audit.tokens.root).length} \`:root\` tokens)`,
     '',
-    '### WCAG AA Perceptual Contrast Matrix',
+    '### WCAG Relative Luminance Contrast Matrix',
     '',
     '| Pair | Foreground | Background | Ratio | Minimum | Status |',
     '| --- | --- | --- | --- | --- | --- |',
@@ -1208,7 +1277,10 @@ function main() {
     console.log(proxyAudit.applicability === 'not-applicable'
       ? '- EmDash edit proxies: NOT APPLICABLE (static foundation)'
       : `- EmDash edit proxies: ${proxyAudit.valid ? 'PASS' : 'FAIL'} (${proxyAudit.checkedRoutes.length} single-entry routes, ${proxyAudit.collectionRoutes.length} collection routes)`);
-    console.log('- WCAG Contrast Pairs:');
+    console.log(`- Fluid mathematics: ${report.fluid.tokens.length} bounded affine tokens (vi default; reference root 16px, horizontal writing)`);
+    const advisoryCount = report.fluid.tokens.filter(token => token.advisories.length).length;
+    if (advisoryCount) console.log(`- Fluid advisories: ${advisoryCount} tokens; inspect --json fluid.tokens (advisory only, rendered acceptance required)`);
+    console.log('- WCAG Relative Luminance Contrast Pairs:');
     for (const item of report.contrast) {
       console.log(`  [${item.status.toUpperCase()}] ${item.id}: ${item.ratio}:1 (min ${item.minimum}:1)`);
     }

@@ -10,9 +10,21 @@ Baseline eliminates breakpoint soup by using continuous mathematical clamp funct
 
 ## 1. Continuous Fluid Scaling
 
-All typographic and spatial scales are calculated using CSS `clamp()` functions that grow continuously between a minimum viewport width of **`20rem` (320px)** and a maximum of **`80rem` (1280px)**.
+Global type and spacing use bounded, ascending CSS `clamp()` expressions with `rem` bounds and a preferred `rem + vi` term. The CLI generator defaults to **20–80rem of viewport inline size**. At a 16px root and horizontal writing, that corresponds to 320–1280 CSS pixels. At a 20px root, it corresponds to 400–1600 CSS pixels. `vi` follows the root writing mode's inline axis; legacy `vw` follows physical viewport width ([CSS Values and Units](https://www.w3.org/TR/css-values-4/#viewport-relative-lengths)).
 
-Below 320px, values lock at their minimum. Above 1280px, values lock at their maximum. In between, values scale smoothly with the viewport inline size (`vi`).
+Authored tokens and aesthetic presets can have different transition ranges. Their actual saturation points follow their own coefficients, with small differences from four-place rounding. Inspect `npm run design:tokens -- --json`: each `fluid.tokens` entry reports its `transitionRem`, five reference samples, changed root-font samples and zoom estimates. Equal bounds are valid constants and report a null transition range. The tables below assume a 16px root, horizontal writing, and whole-pixel rounding; they do not promise exact 20–80rem interpolation for every authored token.
+
+### Mathematics and diagnostic contract
+
+The generator uses linear interpolation between requested sizes and viewport endpoints, consistent with [Utopia's clamp calculation](https://utopia.fyi/blog/clamp/). Utopia is a comparison reference, with no runtime dependency or second generator. Baseline emits logical `vi` units and rounds bounds and coefficients to four decimal places. Independent tests cover both endpoints, midpoint, values outside the range, monotonicity and the rounding-error bound. Golden output hashes preserve the existing named type scales, representative spacing scales and all lane presets.
+
+`buildFluidClamp(minRem, maxRem, minViewportRem = 20, maxViewportRem = 80)` requires finite numeric inputs, `0 < minRem <= maxRem`, and a finite domain satisfying `0 <= minViewportRem < maxViewportRem`. Reversed sizes are unsupported for both type and spacing. A permitted spacing ratio does not guarantee that every combination of base sizes is ascending; adjust the inputs when bounds validation fails. Coefficients that cannot represent growth at four decimal places fail before CSS is emitted.
+
+The global-token validator supports a deliberately bounded grammar: positive ordered `rem` bounds and an affine `rem + vi` term (optionally inside `calc()`), or a direct viewport term. Negative intercepts, finite decimal/exponent numbers and existing `vw` values are supported; generated scales continue to use `vi`. CSS binary `+`/`-` requires surrounding whitespace. Negative slopes, zero slopes with varying bounds, malformed expressions, non-finite coefficients/domains and overflowing reference evaluations fail. General CSS math, variables and container units are outside this contract. `cqi` needs a separately documented inline-size container and matching validators/specimens before adoption; adding a substring containing `vi` cannot bypass that boundary.
+
+The JSON report models a fixed 1280px physical viewport, 16px root and horizontal writing. At estimated 200%/400% zoom, CSS viewport size shrinks to 640/320px while the root stays 16 CSS pixels. `effectiveSizeRatio` compares the enlarged modeled size against the initial size. A ratio below the requested zoom factor produces a text-token advisory, not an audit failure or a WCAG verdict. `rootFontSamples` separately evaluate 16/20/32px roots at a fixed 1280 CSS-pixel viewport. These calculations describe assumptions; they do not reproduce text-only browser resizing, font metrics, clipping, wrapping or focus behavior.
+
+Use `npm run test:design` and `npm run verify` for mathematical checks. Run the existing local Windows `npm run test:visual:functional` for actual Chromium 200%/400% zoom, 320px reflow, text spacing and keyboard journeys. Numerical results do not replace rendered acceptance or manual assistive-technology and text-only resize checks. No browser/screenshot suite runs in CI or production builds.
 
 ### Fluid Typography Scale
 

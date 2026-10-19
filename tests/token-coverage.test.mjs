@@ -176,7 +176,7 @@ test('formatCalibrationMarkdown and upsertCalibrationRecord bind Stage 4.5 token
     const second = readFileSync(target, 'utf8');
     assert.equal(second.match(/## Token Calibration/g)?.length, 1);
     assert.ok(second.includes('## Component Specimens To Verify'));
-    assert.ok(formatCalibrationMarkdown(css).includes('WCAG AA Perceptual Contrast Matrix'));
+    assert.ok(formatCalibrationMarkdown(css).includes('WCAG Relative Luminance Contrast Matrix'));
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
