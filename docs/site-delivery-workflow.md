@@ -126,7 +126,7 @@ Now assemble your public routes; the CMS editing and media-import steps below ap
 ## Stage 6: Verification & Route Completion
 
 Run deterministic local checks to verify the build before client handoff or deployment:
-- `npm run verify`: Run syntax lint, Art Direction Gate, token/font/edit-proxy audit, all unit tests (`npm test`), physical schema budget preflight (`check:schema-budget`), and Astro/TypeScript checks (`typecheck`) in one command.
+- `npm run verify`: Run syntax/template lint, Art Direction Gate, token/font/edit-proxy audit, the complete test suite (`npm test`, including lifecycle rehearsals), physical schema budget preflight (`check:schema-budget`), and Astro/TypeScript checks (`typecheck`) in one command. Use `npm run verify:fast` for daily lint/gate/token/unit feedback; it does not replace full verification. Test classification lives in `tests/test-tiers.json`.
 - EmDash only — `npm run test:visual`: Compare local Windows screenshots against reviewed baselines across mobile, tablet, and desktop viewports ([Visual Regression](visual-regression.md)).
 - `npm run check:dev-tools`: Confirm `/_styleguide` and synthetic fixture markers are completely stripped from the production build.
 - **Visual Critique & Polish (Optional):** Use the bundled `impeccable` skill for an automated UI critique pass on rendered pages before final signoff.

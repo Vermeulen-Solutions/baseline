@@ -1,0 +1,142 @@
+{
+  "audit-baseline.test.mjs": {
+    "tier": "unit",
+    "reason": "Local dependency/version contract"
+  },
+  "audit-coverage.test.mjs": {
+    "tier": "unit",
+    "reason": "Offline AST, report and evidence contracts"
+  },
+  "audit-modernize.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Git histories and real npm build lifecycle"
+  },
+  "audit-runtime-evidence.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Repeated Git revision, capture bundles and evidence CLI lifecycle"
+  },
+  "baseline-sync.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Generated projects and staged update lifecycle"
+  },
+  "database-tooling.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Installed EmDash CLI, schema and database export lifecycle"
+  },
+  "design-interchange.test.mjs": {
+    "tier": "unit",
+    "reason": "Token interchange parsing and validation"
+  },
+  "design-workflow.test.mjs": {
+    "tier": "unit",
+    "reason": "Record, gate and source composition contracts"
+  },
+  "engineering-tooling.test.mjs": {
+    "tier": "unit",
+    "reason": "Tier partition and infrastructure CLI contracts"
+  },
+  "fluid-tokens.test.mjs": {
+    "tier": "unit",
+    "reason": "Fluid scale mathematics"
+  },
+  "form-recovery.test.mjs": {
+    "tier": "unit",
+    "reason": "Form input and recovery contracts"
+  },
+  "importer-fidelity.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Installed importer endpoints, SQLite and HTTP rendering"
+  },
+  "justified-gallery.test.mjs": {
+    "tier": "unit",
+    "reason": "Gallery layout mathematics"
+  },
+  "media-infrastructure.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Media pipeline, subprocess and storage fixtures"
+  },
+  "meta-review.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Git registry writes and upstream simulation"
+  },
+  "metadata.test.mjs": {
+    "tier": "unit",
+    "reason": "Metadata and structured data projection"
+  },
+  "migration-acceptance.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "CLI evidence replay and filesystem refusal lifecycle"
+  },
+  "migration-content.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "CLI inventory reconciliation and HTTP fixtures"
+  },
+  "migration-cutover.test.mjs": {
+    "tier": "unit",
+    "reason": "Delta reconciliation and small in-process SQLite backup contract"
+  },
+  "migration-http.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Loopback HTTP timeouts, cancellation and bounded crawling"
+  },
+  "migration-pilot.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Complete import, defect detection, cutover and recovery lifecycle"
+  },
+  "partners.test.mjs": {
+    "tier": "unit",
+    "reason": "Partner normalization and URL safety"
+  },
+  "photo-gallery.test.mjs": {
+    "tier": "unit",
+    "reason": "Gallery media normalization and JSON-LD"
+  },
+  "platform-profiles.test.mjs": {
+    "tier": "unit",
+    "reason": "Manifest, provenance and source inventory contracts; no builds"
+  },
+  "presentation-boundaries.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Build a standalone Astro presentation fixture"
+  },
+  "profile-delivery.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Generate a Sveltia site and run its contracts"
+  },
+  "release-artifact.test.mjs": {
+    "tier": "unit",
+    "reason": "Release artifact refusal contract"
+  },
+  "schema-column-budget.test.mjs": {
+    "tier": "unit",
+    "reason": "In-memory physical SQLite column counting"
+  },
+  "site-standards-audit.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Downstream Git, SQLite, D1 and CLI diagnosis"
+  },
+  "skill-sync.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Interrupted apply, recovery and generated skill trees"
+  },
+  "static-metadata.test.mjs": {
+    "tier": "unit",
+    "reason": "Static metadata projection contract"
+  },
+  "static-profile.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Generated profile assembly and gate execution"
+  },
+  "template-lint.test.mjs": {
+    "tier": "unit",
+    "reason": "ESLint virtual template contracts"
+  },
+  "token-coverage.test.mjs": {
+    "tier": "unit",
+    "reason": "Token mathematics, font, proxy and specimen contracts"
+  },
+  "visual-policy.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Wrapper processes and graceful cancellation; no browser captures"
+  }
+}

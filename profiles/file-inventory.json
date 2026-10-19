@@ -876,6 +876,14 @@
     "docs/native-composition.md": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/run-tests.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/engineering-tooling.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

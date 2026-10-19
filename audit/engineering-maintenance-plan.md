@@ -4,7 +4,7 @@ Tracking issues are local, reviewable records; no external issue or message has 
 
 ## ENG-1 — Test inventory and fast feedback
 
-Status: planned. Dependency: inventory review.
+Status: complete. Dependency: inventory review.
 
 Targets: `package.json`, `scripts/run-tests.mjs`, `scripts/check-ci-fast.mjs`, `tests/test-tiers.json`, `tests/engineering-tooling.test.mjs`, `.github/workflows/design-checks.yml`, `profiles/file-inventory.json`, README and verification documentation.
 
@@ -44,4 +44,4 @@ Acceptance: every retained script has a maintenance purpose or consumer; every d
 
 ## Verification log
 
-Pending baseline benchmark and phase receipts. See [file inventory](engineering-inventory.md).
+Windows x64, Node 24.21.0. Baseline: 218/218 tests, 60.675s. Phase 1: 219/219 tests, 79.734s while fast CI/build also ran; full verify passed, Astro 46 files with zero errors/warnings/hints. Fast CI: 32.700s, unit step 5.982s, under60Seconds true, all eight steps exit 0. A competing-load unit run reached 10.052s; final isolated benchmark required. No tests removed: no obsolete coverage established. See [file inventory](engineering-inventory.md).
