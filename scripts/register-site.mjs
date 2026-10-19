@@ -1,8 +1,7 @@
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
-import { randomUUID } from 'node:crypto';
-import { pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { argumentsOf, jsonOf, atomicJSON, isMain } from './infrastructure-io.mjs';
 export function validateSite(site) {
   const keys = ['siteId', 'repository', 'starterCommit', 'starterRelease', 'runtimeProfile', 'ownerTeam', 'status', 'lastAudit', 'standardsVersion', 'previousRepositories'];
   if (!site || Object.keys(site).some(k => !keys.includes(k))) throw Error('Only registry contract fields are accepted; exclude domains, contacts and secrets');
@@ -41,17 +40,16 @@ export async function registerSite(root, site, registry, { reactivate = false } 
   const result = registry ? { formatVersion: 1, sites } : { formatVersion: 1, status: 'pending-reviewed-registration', reason: 'No authorized central private registry configured', site };
   const body = JSON.stringify(result, null, 2) + '\n';
   if (body !== await fs.readFile(destination, 'utf8').catch(e => { if (e.code === 'ENOENT') return ''; throw e; })) {
-    const temporary = destination + '.' + randomUUID() + '.tmp';
-    await fs.writeFile(temporary, body, { flag: 'wx', mode: 0o600 }); await fs.rename(temporary, destination);
+    atomicJSON(destination, result);
   }
   return { status: registry ? 'local-registry-proposal' : 'pending-reviewed-registration', destination, remoteMutation: false };
   } finally { await lock.close(); await fs.unlink(destination + '.lock'); }
 }
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const option = key => process.argv[process.argv.indexOf(key) + 1];
+if (isMain(import.meta.url)) {
   try {
-    if (!process.argv.includes('--input')) throw Error('Use --input <private JSON> [--registry <private path>] [--reactivate]');
-    const result = await registerSite(process.cwd(), JSON.parse(await fs.readFile(option('--input'), 'utf8')), process.argv.includes('--registry') ? option('--registry') : null, { reactivate: process.argv.includes('--reactivate') });
+    const options = argumentsOf(process.argv.slice(2), ['--input', '--registry'], ['--reactivate']);
+    if (!options.input) throw Error('Use --input <private JSON> [--registry <private path>] [--reactivate]');
+    const result = await registerSite(process.cwd(), jsonOf(options.input), options.registry ?? null, { reactivate: options.reactivate });
     console.log(JSON.stringify(result, null, 2));
     if (result.status === 'pending-reviewed-registration') {
       console.log('\n✔ Pending registration recorded: ' + result.destination);

@@ -1,7 +1,5 @@
 // Integrated Migration Pilot: runs full lifecycle rehearsal from verification to cutover and restore.
-import fs from 'node:fs';
 import path from 'node:path';
-import os from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
@@ -120,7 +118,7 @@ if (isMain(import.meta.url)) {
     console.log(`Integrated migration pilot passed: ${receipt.status}`);
     console.log(`Receipt saved to: ${out}`);
   }).catch(err => {
-    console.error('Migration pilot failed:', err);
-    process.exit(1);
+    console.error('Migration pilot failed:', err.message);
+    process.exitCode = 1;
   });
 }

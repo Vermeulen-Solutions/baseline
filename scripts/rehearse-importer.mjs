@@ -10,14 +10,13 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
-import { argumentsOf, newDirectory, isMain, writeJSON } from './infrastructure-io.mjs';
+import { argumentsOf, newDirectory, isMain, writeJSON, jsonOf as json } from './infrastructure-io.mjs';
 import { contractDigest, sha256 } from '../standards/schemas/migration-acceptance.mjs';
 import { exporterHandler, syntheticWXR, portableFacts, htmlFacts } from '../tests/fixtures/importer-fidelity/fixture-tools.mjs';
 import { httpAcceptance, inventoryAcceptance, expectedAfterRepair, replacement, repairedSEO } from '../tests/fixtures/importer-fidelity/acceptance.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const fixtures = path.join(root, 'tests/fixtures/importer-fidelity');
-const json = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 export async function rehearseImporter({ out, signal } = {}) {
   out = newDirectory(out ?? path.join(root, '.emdash/migration-acceptance/f5-' + randomUUID()));
   const fixture = json(path.join(fixtures, 'wordpress.json')), state = { fixture: structuredClone(fixture) };

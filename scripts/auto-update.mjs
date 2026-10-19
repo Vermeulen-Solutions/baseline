@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { collectUpdates } from './check-upstream-updates.mjs';
-import { runSync, sources } from './skill-sync.mjs';
+import { runSync } from './skill-sync.mjs';
 import { syncImpeccable } from './sync-impeccable-skill.mjs';
 import { execNpmSync } from './process-runner.mjs';
 

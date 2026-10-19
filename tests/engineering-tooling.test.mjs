@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, mkdtempSync, writeFileSync, readFileSync, mkdirSync, rmSync } from 'node:fs';
+import { readdirSync, mkdtempSync, writeFileSync, readFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { testFiles } from '../scripts/run-tests.mjs';
@@ -105,9 +105,9 @@ test('D1 export passes database/table names and SQL as argv without shell interp
     const calls = [];
     exportD1Database({ database, out, remote: false }, args => {
       calls.push(args);
-      assert.deepEqual(args.slice(0, 4), ['exec', '--yes', '--', 'wrangler']);
-      assert.equal(args[6], database);
-      if (args[5] === 'execute') return JSON.stringify([{ results: [{ type: 'table', name: table, sql: 'CREATE TABLE example(id TEXT)' }] }]);
+      assert.deepEqual(args.slice(0, 3), ['exec', '--', 'wrangler']);
+      assert.equal(args[5], database);
+      if (args[4] === 'execute') return JSON.stringify([{ results: [{ type: 'table', name: table, sql: 'CREATE TABLE example(id TEXT)' }] }]);
       assert.equal(args[args.indexOf('--table') + 1], table);
       writeFileSync(args[args.indexOf('--output') + 1], 'CREATE TABLE example(id TEXT);');
     });
@@ -115,5 +115,49 @@ test('D1 export passes database/table names and SQL as argv without shell interp
     assert.ok(calls.every(args => args.includes('--local')));
     assert.match(calls[0].at(-1), /^SELECT type, name/);
     assert.match(readFileSync(out, 'utf8'), /^PRAGMA foreign_keys = OFF;/);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('D1 partial export is cleaned after failure and JSONC autodetection preserves URL strings', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'baseline-D1-cleanup-'));
+  try {
+    let temporary;
+    const out = path.join(directory, 'output.sql');
+    assert.throws(() => exportD1Database({ database: 'synthetic', out }, args => {
+      if (args[4] === 'execute') return JSON.stringify([{ results: [] }]);
+      temporary = args[args.indexOf('--output') + 1]; writeFileSync(temporary, 'partial');
+      throw Error('simulated export failure');
+    }), /simulated export failure/);
+    assert.equal(existsSync(temporary), false); assert.equal(existsSync(out), false);
+    writeFileSync(path.join(directory, 'wrangler.jsonc'), '// synthetic config\n{"docs":"https://example.invalid/", "d1_databases":[{"database_name":"fixture-db"}],}\n');
+    const harness = path.join(directory, 'probe.mjs');
+    writeFileSync(harness, `import assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {exportD1Database} from ${JSON.stringify(new URL('../scripts/d1-export.mjs', import.meta.url).href)};\nexportD1Database({out:'fixture.sql'}, args => {assert.equal(args[5],'fixture-db'); if(args[4]==='execute')return JSON.stringify([{results:[]}]); fs.writeFileSync(args[args.indexOf('--output')+1],'-- synthetic export');});\n`);
+    const detected = spawnSync(process.execPath, [harness], { cwd: directory, encoding: 'utf8' });
+    assert.equal(detected.status, 0, detected.stdout + detected.stderr);
+    assert.equal(readdirSync(directory).some(file => file.startsWith('.temp-d1-export-')), false);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('operational CLI failures are stack-free, exit 1 and do not create output before validation', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'baseline-cli-hygiene-'));
+  try {
+    for (const [script, args] of [
+      ['d1-export.mjs', ['--unknown']], ['register-site.mjs', ['--input']],
+      ['verify-profiles.mjs', ['--profile', 'unknown']], ['styleguide-fixtures.mjs', ['unknown']],
+      ['check-script-syntax.mjs', []], ['check-ci-fast.mjs', []],
+    ]) {
+      const result = runGate(script, args, { cwd: directory });
+      assert.equal(result.status, 1, script + ': ' + result.stderr);
+      assert.doesNotMatch(result.stderr, /\n\s+at /, script);
+      assert.ok(result.stderr.trim(), script);
+      assert.deepEqual(readdirSync(directory), [], script + ' must validate before writing');
+    }
+    const database = path.join(directory, 'users.sqlite'), db = new DatabaseSync(database);
+    db.exec('CREATE TABLE users(id TEXT, email TEXT, role TEXT)'); db.close();
+    const before = readFileSync(database);
+    const token = runGate('create-mcp-token.mjs', ['--db=' + database, '--user=missing']);
+    assert.equal(token.status, 1, token.stderr); assert.match(token.stderr, /User "missing" not found/);
+    assert.doesNotMatch(token.stderr, /\n\s+at /); assert.doesNotMatch(token.stdout, /ec_pat_/);
+    assert.deepEqual(readFileSync(database), before);
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });

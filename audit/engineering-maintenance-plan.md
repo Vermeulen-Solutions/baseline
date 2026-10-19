@@ -34,7 +34,7 @@ Acceptance: deliberate invalid SQLite, AGENTS.md and CSS fixtures return failure
 
 ## ENG-4 — Script inventory and shared helpers
 
-Status: planned. Dependency: ENG-3 passed.
+Status: implemented; final verification pending. Dependency: ENG-3 passed.
 
 Targets: `audit/engineering-inventory.md`, active infrastructure CLIs, `scripts/infrastructure-io.mjs`, syntax gate and profile manifests where required by import closure.
 
@@ -49,3 +49,5 @@ Windows x64, Node 24.21.0. Baseline: 218/218 tests, 60.675s. Phase 1: 219/219 te
 Phase 2: 221/221 tests (62.432s), complete verify passed; zero Astro diagnostics. Process/lifecycle subset 10/10 passed; final resolver contracts 3/3 passed after Unix launcher symlink support. Syntax checked 125 modules. No shell-string process invocations remain in scripts or test harnesses. Windows commands ran via npm.cmd under the existing policy. Unix prefix resolution is fixture-tested; no Unix host run claimed.
 
 Phase 3: frozen-source full verify passed, 225/225 tests (56.366s), 46 Astro files with zero errors/warnings/hints. Deliberate gate failures and process contracts: 6/6; broader diagnostics/recipe/design subset: 38/38. Initial full run failed after a source edit invalidated an in-flight sync snapshot; an HTTP loopback test also returned unknown without diagnostics. Both passed isolated (25/25); added report context to the HTTP assertion and reran the complete suite with sources frozen. No production HTTP behavior changed. Legacy reviewed schema helper/plan compatibility remains covered by an exact historical fixture.
+
+Phase 4: inventory resolved all 60 current root scripts and 35 top-level test files, plus supplemental runners/fixtures. No file deletion justified. Cleanup/registry/design subset: 19/19; isolated unit tier: 100/100 in 3.623s. Full verify: 227/227 (115.510s under concurrent independent profile installation), zero diagnostics in 46 Astro files. Final argv compatibility subset: 8/8 after preserving npx install-prompt semantics. All ordinary direct process.exit calls in scripts were replaced; deliberate crash/legacy fixtures and exit-2 unverified protocols remain. Final frozen-source verify and isolated fast-CI benchmark follow the phase commit.

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { AESTHETIC_LANES, parseDesignTokens, auditDesignTokens, applyTokenOverrides } from '../scripts/design-system.mjs';
 import { validateRecord, matchesException, matchesDeletionException, isVisualPath } from '../scripts/check-art-direction.mjs';
 import { createHash } from 'node:crypto';
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname, basename } from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -85,7 +85,7 @@ test('CLI catches untracked visual work, accepts a record, and expires changed i
 });
 
 test('applyTokenOverrides updates @theme, :root, and [data-surface="dark"] tokens non-destructively while preserving comments', () => {
-  const css = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/styles/global.css','utf8'))"], { encoding: 'utf8' });
+  const css = readFileSync('src/styles/global.css', 'utf8');
   const editorial = applyTokenOverrides(css, 'editorial-paper');
   const parsed = parseDesignTokens(editorial);
   assert.equal(parsed.theme['--color-page'], AESTHETIC_LANES['editorial-paper'].theme['--color-page']);
@@ -96,12 +96,12 @@ test('applyTokenOverrides updates @theme, :root, and [data-surface="dark"] token
 });
 
 test('applyTokenOverrides rejects unknown aesthetic lane identifiers', () => {
-  const css = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/styles/global.css','utf8'))"], { encoding: 'utf8' });
+  const css = readFileSync('src/styles/global.css', 'utf8');
   assert.throws(() => applyTokenOverrides(css, 'non-existent-lane'), /Unknown aesthetic lane preset/);
 });
 
 test('global.css, Container.astro, and Card.astro ship the curated token engine, breakout grid, and accessible card contract', () => {
-  const css = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/styles/global.css','utf8'))"], { encoding: 'utf8' });
+  const css = readFileSync('src/styles/global.css', 'utf8');
   for (const token of [
     '--text-step-3-to-1', '--text-step-2-to-0',
     '--spacing-2xl-to-md', '--spacing-xl-to-sm',
@@ -118,11 +118,11 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   ]) {
     assert.ok(css.includes(selector), `Missing structural selector ${selector}`);
   }
-  const container = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/components/Container.astro','utf8'))"], { encoding: 'utf8' });
+  const container = readFileSync('src/components/Container.astro', 'utf8');
   assert.ok(container.includes('breakout?: boolean;'));
   assert.ok(container.includes('breakout ? "content-grid" : ["container-shell", `container-shell--${width}`]'));
 
-  const card = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/components/Card.astro','utf8'))"], { encoding: 'utf8' });
+  const card = readFileSync('src/components/Card.astro', 'utf8');
   assert.ok(card.includes('<article class:list='), 'Card must render a semantic <article> instead of wrapping the whole card in <a>');
   assert.ok(card.includes('class="card-link clickable-parent"'), 'Card heading link must stretch via .clickable-parent');
   assert.ok(card.includes('--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))'), 'Card must compute concentric inner media radius');
@@ -133,11 +133,11 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   assert.ok(card.includes('[data-emdash-field]'), 'Card must elevate EmDash field annotations above .clickable-parent');
   assert.ok(css.includes('grid-template-columns: subgrid'), 'global.css must propagate .content-grid tracks into .flow / [data-emdash-field] via subgrid');
 
-  const editorialImage = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/components/EditorialImage.astro','utf8'))"], { encoding: 'utf8' });
+  const editorialImage = readFileSync('src/components/EditorialImage.astro', 'utf8');
   assert.ok(editorialImage.includes("node?.alignment === 'wide' ? 'content--feature'"));
   assert.ok(editorialImage.includes("node?.alignment === 'full' ? 'content--full-safe'"));
 
-  const photoGallery = execFileSync(process.execPath, ['-e', "process.stdout.write(require('fs').readFileSync('src/components/PhotoGallery.astro','utf8'))"], { encoding: 'utf8' });
+  const photoGallery = readFileSync('src/components/PhotoGallery.astro', 'utf8');
   assert.ok(photoGallery.includes("breakout = 'feature'"));
   assert.ok(photoGallery.includes('breakout && `content--${breakout}`'));
 });
