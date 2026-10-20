@@ -131,7 +131,7 @@ const bad = { toString: null };
     assert.ok(!elements.some(node => node.tagName === 'img' && !attr(node, 'src')));
     assert.ok(!elements.some(node => node.tagName === 'a' && attr(node, 'href')?.startsWith('javascript:')));
     assert.ok(!elements.some(node => node.tagName === 'input' && attr(node, 'checked') !== undefined));
-    for (const name of ['section--section', 'container-shell--content', 'grid-auto--standard']) assert.ok(edge.includes(name), name);
+    for (const name of ['class="section"', 'container-shell--content', 'grid-auto--standard']) assert.ok(edge.includes(name), name);
     assert.doesNotMatch(edge, /\[object Object\]|NaN|Infinity/);
   } finally {
     assert.equal(path.dirname(stage), path.resolve(tmpdir()));
