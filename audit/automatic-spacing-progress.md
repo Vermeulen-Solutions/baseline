@@ -8,7 +8,7 @@ Started: 2026-10-20. Starting revision: `c3d965c`. Scope: [consolidated plan](au
 | --- | --- | --- | --- |
 | 1 | W01 contracts, caller inventory, baseline | Verified | [Caller inventory](automatic-spacing-callers.md); 251 tests; 46 Astro files, zero diagnostics |
 | 2 | W02 media/cascade and W03 parsed-check foundation | Verified foundation | 126 fast tests; parsed CSS/selector mutations; real uploaded ID-only media in dev and built Chromium at 390px; broader matrix remains Phase 6 |
-| 3 | W06 contextual aliases and token CLI | Planned | Known-name targeting, candidate validation, bounded resolver |
+| 3 | W06 contextual aliases and token CLI | Implemented; commit hook gates fast suite | Exact scope parsing, candidate validation, bounded resolver; T01-T06 maintained cases |
 | 4 | W04 scoped structural defaults | Planned | Activation and attribute/style API contract below |
 | 5 | W05/W07 editorial boundaries, routes; W09 editing preparation | Planned | Keep collection lists distinct from editorial lists |
 | 6 | W08 complete maintained behavioral/mutation cases | Planned | Complete V/M/T matrix; retain local-only browser policy |
@@ -50,3 +50,11 @@ Record phase commit IDs, exact commands, results and applicability here. Keep la
 - Native image rendering resolves local IDs through the supported MediaRepository/getDb APIs. Anonymous requests cannot use a provider requiring an editor context. Missing media retains a placeholder; ID-based resolution disables route caching when enabled because the installed media API exposes no cache hint.
 - Vendor styles are bounded at the PhotoSwipe import; the document establishes the shared order before component styles. Gallery probes exercise emitted DOM utility precedence, not a new public class prop.
 - CSS and Astro parsing cover standalone files, static overlays and local imports, strings/comments, malformed/anonymous/wrong layers and real flow selectors. The full M/V matrix and visual review remain later work.
+
+## Phase 3 evidence
+
+- Phase 2 commit: `3848991`.
+- Four root aliases preserve the incumbent neutral scales; their structural consumption follows in Phase 4. The context report names starter relationships and does not claim a complete downstream inventory.
+- T01-T06: three maintained test groups exercise typo/wrong scope/duplicates/no-op, narrow context writes, missing/cyclic references, zero/negative/unsupported/proportional values, read-only previews, invalid companion-file requests and saved calibration hash identity.
+- Existing token/workflow suite: 23 passed. The CLI diagnostic suite also checks that failed audits retain machine-readable JSON. Fast verification is required by the phase commit hook.
+- Candidate token, font and applicable CMS proxy validation precedes all writes. Supported expressions are deliberately bounded; unknown CSS evaluation is an error, not a green certification. Parser-based edits preserve unrelated source and comments.

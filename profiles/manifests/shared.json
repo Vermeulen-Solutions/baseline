@@ -50,7 +50,8 @@
     "docs/upgrades/architecture-hardening-static.patch",
     "scripts/css-contracts.mjs",
     "scripts/check-css-contracts.mjs",
-    "tests/css-contracts.test.mjs"
+    "tests/css-contracts.test.mjs",
+    "tests/spacing-tokens.test.mjs"
   ],
   "packages": {
     "dependencies": [

@@ -146,5 +146,9 @@
   "css-contracts.test.mjs": {
     "tier": "unit",
     "reason": "Parsed author layer and flow semantics with bounded mutation fixtures"
+  },
+  "spacing-tokens.test.mjs": {
+    "tier": "unit",
+    "reason": "Bounded spacing and transactional token CLI regression cases"
   }
 }

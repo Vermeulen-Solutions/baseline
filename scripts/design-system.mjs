@@ -1,3 +1,4 @@
+import postcss from 'postcss';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
@@ -45,6 +46,10 @@ export const REQUIRED_ROOT_TOKENS = [
   '--measure-wide',
   '--header-height',
   '--scroll-offset',
+  '--layout-section-padding',
+  '--layout-container-gap',
+  '--layout-content-gap',
+  '--layout-grid-gap',
 ];
 
 export const REQUIRED_DARK_SURFACE_TOKENS = [
@@ -269,45 +274,29 @@ export const AESTHETIC_LANES = {
   },
 };
 
-function extractBlock(css, selectorPattern) {
-  const match = selectorPattern.exec(css);
-  if (!match) return '';
-  let depth = 0;
-  let start = -1;
-  for (let i = match.index; i < css.length; i++) {
-    if (css[i] === '{') {
-      if (depth === 0) start = i + 1;
-      depth++;
-    } else if (css[i] === '}') {
-      depth--;
-      if (depth === 0 && start !== -1) {
-        return css.slice(start, i);
-      }
+function tokenScopes(css) {
+  const ast = postcss.parse(css);
+  const scopes = { theme: [], root: [], dark: [], light: [] };
+  ast.walkAtRules('theme', node => { if (node.params.trim() === '') scopes.theme.push(node); });
+  ast.walkRules(node => {
+    const scope = { ':root':'root', '[data-surface="dark"]':'dark', '[data-surface="light"]':'light' }[node.selector.trim()];
+    if (scope) scopes[scope].push(node);
+  });
+  for (const [scope, nodes] of Object.entries(scopes)) {
+    if (nodes.length > 1) throw new Error('Ambiguous token scope: ' + scope);
+    const names = new Set();
+    for (const node of nodes[0]?.nodes || []) {
+      if (node.type !== 'decl' || !node.prop.startsWith('--')) continue;
+      if (names.has(node.prop)) throw new Error('Duplicate token ' + scope + ':' + node.prop + ' at line ' + node.source.start.line);
+      names.add(node.prop);
     }
   }
-  return '';
-}
-
-function parseDeclarations(block) {
-  const withoutComments = block.replace(/\/\*[\s\S]*?\*\//g, '');
-  const map = {};
-  for (const match of withoutComments.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
-    map[match[1].trim()] = match[2].trim();
-  }
-  return map;
+  return { ast, scopes };
 }
 
 export function parseDesignTokens(css) {
-  const themeBlock = extractBlock(css, /@theme\s*\{/);
-  const rootBlock = extractBlock(css, /:root\s*\{/);
-  const darkBlock = extractBlock(css, /\[data-surface="dark"\][^{]*\{/);
-  const lightBlock = extractBlock(css, /\[data-surface="light"\][^{]*\{/);
-  return {
-    theme: parseDeclarations(themeBlock),
-    root: parseDeclarations(rootBlock),
-    dark: parseDeclarations(darkBlock),
-    light: parseDeclarations(lightBlock),
-  };
+  const { scopes } = tokenScopes(css);
+  return Object.fromEntries(Object.entries(scopes).map(([name,nodes]) => [name,Object.fromEntries((nodes[0]?.nodes || []).filter(n=>n.type==='decl' && n.prop.startsWith('--')).map(n=>[n.prop,n.value]))]));
 }
 
 function srgbChannelToLinear(c) {
@@ -462,9 +451,83 @@ export function diagnoseFluidToken(name, value) {
   };
 }
 
+export const SPACING_CONTEXTS = {
+  '--layout-section-padding': 'Section outer block padding',
+  '--layout-container-gap': 'Section stack children',
+  '--layout-content-gap': 'Container stack children',
+  '--layout-grid-gap': 'Grid and managed grid tracks',
+};
+
+// Bounded reference model: no eval, browser execution or arbitrary CSS grammar.
+export function resolveSpacing(name, values, environment = {}, trail = []) {
+  if (trail.length >= 32 || trail.includes(name)) throw new Error('Spacing dependency cycle/depth: ' + [...trail,name].join(' -> '));
+  if (!(name in values)) throw new Error('Missing spacing reference: ' + [...trail,name].join(' -> '));
+  const path = [...trail,name];
+  const dependencies = new Set(path);
+  const expanded = expand(values[name]);
+  const px = length(expanded);
+  if (!Number.isFinite(px) || px < 0) throw new Error('Expected nonnegative finite spacing: ' + path.join(' -> ') + ' received ' + expanded);
+  return { value:values[name], expanded, px, dependencies:[...dependencies] };
+
+  function expand(input) {
+    let text = String(input).trim();
+    if (text.length > 8192) throw new Error('Spacing expression too long: ' + path.join(' -> '));
+    for (let count=0; text.includes('var('); count++) {
+      if (count > 64) throw new Error('Spacing expansion limit: ' + path.join(' -> '));
+      const start=text.indexOf('var('); let depth=1, end=start+4;
+      for (; end<text.length && depth; end++) { if(text[end]==='(')depth++; if(text[end]===')')depth--; }
+      if(depth)throw new Error('Unverified spacing syntax: ' + input);
+      const args=text.slice(start+4,end-1), comma=args.indexOf(',');
+      const ref=(comma<0?args:args.slice(0,comma)).trim();
+      let replacement;
+      if (ref in values) {
+        const resolved=resolveSpacing(ref,values,environment,path);
+        resolved.dependencies.forEach(key=>dependencies.add(key)); replacement=resolved.expanded;
+      }
+      else if(comma>=0)replacement=expand(args.slice(comma+1));
+      else throw new Error('Missing spacing reference: ' + [...path,ref].join(' -> '));
+      text=text.slice(0,start)+replacement+text.slice(end);
+    }
+    return text;
+  }
+  function length(text, depth=0) {
+    if(depth>32)throw new Error('Spacing arithmetic depth exceeded');
+    text=text.trim();
+    if(/^0(?:\.0+)?$/.test(text))return 0;
+    const unit=text.match(/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))(px|rem|vi|vw)$/);
+    if(unit)return Number(unit[1]) * ({px:1,rem:environment.rootFontPx || 16,vi:(environment.viewportSizePx || 1280)/100,vw:(environment.viewportSizePx || 1280)/100})[unit[2]];
+    if(text.startsWith('clamp('))return evaluateFluidClamp(text,{viewportSizePx:environment.viewportSizePx || 1280,rootFontPx:environment.rootFontPx || 16});
+    if(text.startsWith('calc(') && text.endsWith(')')) {
+      const inner=text.slice(5,-1);let level=0;
+      for(let i=0;i<inner.length;i++) {
+        if(inner[i]==='(')level++;if(inner[i]===')')level--;
+        if(level===0 && inner[i]==='*') {
+          const left=inner.slice(0,i).trim(), right=inner.slice(i+1).trim();
+          if(/^[+-]?(?:\d*\.)?\d+$/.test(right))return length(left,depth+1)*Number(right);
+          if(/^[+-]?(?:\d*\.)?\d+$/.test(left))return Number(left)*length(right,depth+1);
+        }
+        if(level===0 && /[+-]/.test(inner[i]) && /\s/.test(inner[i-1] || '') && /\s/.test(inner[i+1] || ''))return length(inner.slice(0,i),depth+1)+(inner[i]==='+'?1:-1)*length(inner.slice(i+1),depth+1);
+      }
+    }
+    throw new Error('Unverified spacing syntax at ' + path.join(' -> ') + ': ' + text);
+  }
+}
+
+export function spacingReport(tokens) {
+  const values={...tokens.theme,...tokens.root};
+  return Object.entries(SPACING_CONTEXTS).map(([name,consumer])=>{
+    try {
+      const samples=[320,390,1280,1440].flatMap(viewportSizePx=>[16,20,32].map(rootFontPx=>({viewportSizePx,rootFontPx,...resolveSpacing(name,values,{viewportSizePx,rootFontPx})})));
+      return {name,consumer,status:'pass',samples};
+    } catch(error) { return {name,consumer,status:error.message.startsWith('Unverified')?'unverified':'fail',error:error.message}; }
+  });
+}
+
 export function auditDesignTokens(css) {
   const tokens = parseDesignTokens(css);
   const errors = [];
+  const spacing = spacingReport(tokens);
+  for (const context of spacing) if(context.status !== 'pass') errors.push(`${context.name}: ${context.error}`);
 
   for (const key of REQUIRED_THEME_TOKENS) {
     if (!tokens.theme[key]) errors.push(`Missing required @theme token in src/styles/global.css: ${key}`);
@@ -546,37 +609,8 @@ export function auditDesignTokens(css) {
     tokens,
     contrast,
     fluid,
+    spacing,
   };
-}
-
-function replaceBlockDeclarations(css, selectorPattern, updates) {
-  if (!updates || Object.keys(updates).length === 0) return css;
-  const match = selectorPattern.exec(css);
-  if (!match) return css;
-  let depth = 0;
-  let start = -1;
-  let end = -1;
-  for (let i = match.index; i < css.length; i++) {
-    if (css[i] === '{') {
-      if (depth === 0) start = i + 1;
-      depth++;
-    } else if (css[i] === '}') {
-      depth--;
-      if (depth === 0 && start !== -1) {
-        end = i;
-        break;
-      }
-    }
-  }
-  if (start === -1 || end === -1) return css;
-  let block = css.slice(start, end);
-  for (const [key, value] of Object.entries(updates)) {
-    const declRegex = new RegExp(`(${key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*:\\s*)([^;]+)(;)`);
-    if (declRegex.test(block)) {
-      block = block.replace(declRegex, `$1${value}$3`);
-    }
-  }
-  return css.slice(0, start) + block + css.slice(end);
 }
 
 export const TYPE_SCALE_RATIOS = {
@@ -1097,17 +1131,28 @@ export function applyTokenOverrides(css, presetOrOverrides) {
   if (!preset) {
     throw new Error(`Unknown aesthetic lane preset: ${String(presetOrOverrides)}. Available lanes: ${Object.keys(AESTHETIC_LANES).join(', ')}`);
   }
-  let next = css;
-  next = replaceBlockDeclarations(next, /@theme\s*\{/, preset.theme);
-  next = replaceBlockDeclarations(next, /:root\s*\{/, preset.root);
-  next = replaceBlockDeclarations(next, /\[data-surface="dark"\][^{]*\{/, preset.dark);
-  return next;
+  const { ast, scopes } = tokenScopes(css);
+  for (const scope of Object.keys(preset)) {
+    if (!['theme','root','dark','light','name','description','record'].includes(scope)) throw new Error('Unknown token scope: ' + scope);
+  }
+  for (const scope of ['theme','root','dark','light']) {
+    for (const [name,value] of Object.entries(preset[scope] || {})) {
+      const decl = scopes[scope][0]?.nodes?.find(n=>n.type==='decl' && n.prop===name);
+      if (!decl) throw new Error('Unknown token in ' + scope + ': ' + name + '; expected an existing declaration in that scope.');
+      if (typeof value !== 'string' || !value.trim() || /[;{}]/.test(value)) throw new Error('Invalid token value for ' + scope + ':' + name);
+      decl.value = value.trim();
+    }
+  }
+  const result = ast.toString();
+  tokenScopes(result);
+  return result;
 }
 
 function parseSetFlags(args) {
   const overrides = { theme: {}, root: {}, dark: {} };
   let count = 0;
   for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--set' && !args[i + 1]) throw new Error('Missing --set argument; expected <token>=<value>.');
     if (args[i] === '--set' && args[i + 1]) {
       const pair = args[i + 1];
       const eq = pair.indexOf('=');
@@ -1225,62 +1270,52 @@ function main() {
     hasMutationRequest = true;
   }
 
-  const recordIndex = args.indexOf('--write-record');
-  if (recordIndex >= 0 || initClient) {
-    const nextArg = recordIndex >= 0 ? args[recordIndex + 1] : null;
-    const agentsTarget = nextArg && !nextArg.startsWith('--') ? nextArg : 'AGENTS.md';
-    const writtenRecord = upsertArtDirectionRecord(agentsTarget, selectedLaneId);
-    console.log(`Wrote ## Art Direction Record (${selectedLaneId}) to ${writtenRecord}`);
-    if (!hasMutationRequest && !args.includes('--write-calibration') && !initClient) return;
-  }
-
-  if (initClient) {
-    const pruned = pruneStarterExceptions('audit/design-gate-exceptions.json');
-    console.log(`Pruned starter sample exceptions in ${pruned.path} (${pruned.before} -> ${pruned.after} dev/styleguide infrastructure entries).`);
-  }
-
-  if (hasMutationRequest) {
-    const source = readFileSync(cssPath, 'utf8');
-    const updated = applyTokenOverrides(source, combinedOverrides);
-    const audit = auditDesignTokens(updated);
-    if (!audit.valid) {
-      console.error(formatTokenDiagnostics(audit, cssPath, updated));
-      process.exitCode = 1;
-      return;
-    }
-    if (args.includes('--write') || initClient) {
-      writeFileSync(cssPath, updated, 'utf8');
-      console.log(`Updated ${cssPath} (${audit.contrast.length} WCAG contrast pairs verified, SHA-256 ${stylesheetDigest(updated).slice(0, 12)}).`);
-    } else {
-      console.log(JSON.stringify(combinedOverrides, null, 2));
-    }
-    if (!args.includes('--write-calibration') && !initClient) return;
-  }
-
-  const css = readFileSync(cssPath, 'utf8');
+  const source = readFileSync(cssPath, 'utf8');
+  const css = hasMutationRequest ? applyTokenOverrides(source,combinedOverrides) : source;
   const report = auditDesignTokens(css);
   const fontAudit = auditFontLoading(css);
   const proxyAudit = auditEditProxies();
-
-  const calIndex = args.indexOf('--write-calibration');
-  if (calIndex >= 0 || initClient) {
-    if (!report.valid) {
-      console.error('Refusing to write calibration report while token audit has errors:\n' + formatTokenDiagnostics(report, cssPath, css));
-      process.exitCode = 1;
-      return;
+  if (!(report.valid && fontAudit.valid && proxyAudit.valid)) {
+    if(args.includes('--json'))console.log(JSON.stringify({...report,valid:false,fontLoading:fontAudit,editProxies:proxyAudit,sha256:stylesheetDigest(css)},null,2));
+    else {
+      console.error(formatTokenDiagnostics(report,cssPath,css));
+      const other=[...fontAudit.warnings,...proxyAudit.issues];if(other.length)console.error(other.join('\n'));
     }
-    const nextArg = calIndex >= 0 ? args[calIndex + 1] : null;
-    const targetPath = nextArg && !nextArg.startsWith('--') ? nextArg : 'audit/component-calibration.md';
-    const written = upsertCalibrationRecord(targetPath, css, 'src/styles/global.css');
-    console.log(`Wrote Stage 4.5 token calibration report to ${written}`);
+    process.exitCode=1; return;
+  }
+  const saving = args.includes('--write') || initClient;
+  const recordIndex = args.indexOf('--write-record');
+  const calIndex = args.indexOf('--write-calibration');
+  if(hasMutationRequest && !saving && (recordIndex>=0 || calIndex>=0)) throw new Error('Preview is read-only. Add --write to save the validated candidate before writing record/calibration evidence.');
+  // All candidate gates above precede the first mutation, including companion files.
+  if(hasMutationRequest && saving) {
+    if(css===source)console.log('No-op: requested token values already match ' + cssPath);
+    else { writeFileSync(cssPath,css,'utf8'); console.log('Updated ' + cssPath + ' (SHA-256 ' + stylesheetDigest(css) + ').'); }
+  }
+  if(recordIndex>=0 || initClient) {
+    const next=recordIndex>=0?args[recordIndex+1]:null;
+    const target=next && !next.startsWith('--')?next:'AGENTS.md';
+    console.log('Wrote ## Art Direction Record to ' + upsertArtDirectionRecord(target,selectedLaneId));
+  }
+  if(initClient) {
+    const pruned=pruneStarterExceptions('audit/design-gate-exceptions.json');
+    console.log('Pruned starter sample exceptions (' + pruned.before + ' -> ' + pruned.after + ').');
+  }
+  if(calIndex>=0 || initClient) {
+    const next=calIndex>=0?args[calIndex+1]:null;
+    const target=next && !next.startsWith('--')?next:'audit/component-calibration.md';
+    console.log('Wrote saved-source calibration to ' + upsertCalibrationRecord(target,css,cssPath));
     return;
   }
+  if(hasMutationRequest && !saving && !args.includes('--json'))console.log(JSON.stringify({mode:css===source?'no-op':'preview',changes:combinedOverrides,spacing:report.spacing},null,2));
 
   const allValid = report.valid && fontAudit.valid && proxyAudit.valid;
 
   if (args.includes('--json')) {
     console.log(JSON.stringify({
       ...report,
+      mode:hasMutationRequest ? (saving ? "saved" : css===source ? "no-op" : "preview") : "audit",
+      changes:hasMutationRequest ? combinedOverrides : undefined,
       valid: allValid,
       fontLoading: fontAudit,
       editProxies: proxyAudit,
@@ -1299,6 +1334,8 @@ function main() {
     console.log(`- Fluid mathematics: ${report.fluid.tokens.length} bounded affine tokens (vi default; reference root 16px, horizontal writing)`);
     const advisoryCount = report.fluid.tokens.filter(token => token.advisories.length).length;
     if (advisoryCount) console.log(`- Fluid advisories: ${advisoryCount} tokens; inspect --json fluid.tokens (advisory only, rendered acceptance required)`);
+    console.log('- Spacing contexts (bounded reference values; starter consumers, not a downstream site inventory):');
+    for(const c of report.spacing)console.log('  ['+c.status.toUpperCase()+'] '+c.name+' -> '+c.consumer+' ('+(c.samples?.find(x=>x.viewportSizePx===1280 && x.rootFontPx===16)?.px ?? c.error)+'px at 1280/16)');
     console.log('- WCAG Relative Luminance Contrast Pairs:');
     for (const item of report.contrast) {
       console.log(`  [${item.status.toUpperCase()}] ${item.id}: ${item.ratio}:1 (min ${item.minimum}:1)`);

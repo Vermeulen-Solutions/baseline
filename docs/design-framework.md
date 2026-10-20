@@ -285,3 +285,11 @@ Core routes, collections, and long-form articles should use Baseline's zero-JS A
    ```
 4. **Synchronize tokens via MCP (`@perkyzz/emvb-mcp`):**
    Agents can use `emvb_get_styles` and `emvb_update_styles` to align EmVB's site-styles palette and fluid typography scale with the OKLCH and `clamp()` tokens defined in `src/styles/global.css`.
+# Contextual spacing maintenance
+
+CSS remains the configuration source. Four regular `:root` aliases select the existing spacing scales: `--layout-section-padding`, `--layout-container-gap`, `--layout-content-gap`, and `--layout-grid-gap`. They are not additional Tailwind scales. Regional selectors can override these aliases intentionally; primitive modes and gap props apply locally.
+
+Preview a narrow grid change with `npm run design:tokens -- --set "--root:--layout-grid-gap=calc(var(--spacing-grid) * 0.75)" --json`. Add `--write` to save it. Use `--write --write-calibration` when saved-source calibration is needed. A lane or `--space-scale` operation changes broader base values and therefore affects all their consumers; use those for a deliberate global recalibration.
+
+Unknown names/scopes, ambiguous declarations and unsupported spacing expressions fail validation. The bounded spacing report supports references, fallbacks, nonnegative px/rem/vi/vw lengths, the documented fluid clamp grammar, and proportional/additive calculations. Samples describe reference environments, not a complete CSS engine or downstream consumer inventory. Preview does not write source or calibration. The candidate passes token, font and applicable edit-proxy checks before CSS, records or starter exceptions change. Review the diff, run verification, then inspect the affected compositions at narrow and wide widths.
+

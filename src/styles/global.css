@@ -81,6 +81,10 @@
 		--color-link: var(--color-action);
 		--header-height: 0px;
 		--scroll-offset: 1.5rem;
+		--layout-section-padding: var(--spacing-section);
+		--layout-container-gap: var(--spacing-grid);
+		--layout-content-gap: var(--spacing-content);
+		--layout-grid-gap: var(--spacing-grid);
 	}
 
 	*,

@@ -60,6 +60,7 @@ const PUBLIC_CONTRACT_TOKENS = new Set([
   '--ease-snappy',
   '--ease-spring',
   '--measure-content-safe',
+  '--layout-section-padding', '--layout-container-gap', '--layout-content-gap', '--layout-grid-gap',
 ]);
 
 function readSpecimenColors() {

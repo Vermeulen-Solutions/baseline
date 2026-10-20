@@ -936,6 +936,10 @@
     "tests/css-contracts.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "tests/spacing-tokens.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }
