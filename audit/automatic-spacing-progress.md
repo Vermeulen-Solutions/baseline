@@ -11,7 +11,7 @@ Started: 2026-10-20. Starting revision: `c3d965c`. Scope: [consolidated plan](au
 | 3 | W06 contextual aliases and token CLI | Verified | Commit `30233e7`; 129 fast tests; T01-T06 maintained cases |
 | 4 | W04 scoped structural defaults | Verified foundation | V02-V05 actual primitives at 390px; full width/content matrix follows in Phase 6 |
 | 5 | W05/W07 editorial boundaries, routes; W09 editing preparation | Verified foundation | 5 built Chromium spacing tests at 390px; public routes and both real RichText renderers |
-| 6 | W08 complete maintained behavioral/mutation cases | Planned | Complete V/M/T matrix; retain local-only browser policy |
+| 6 | W08 complete maintained behavioral/mutation cases | Verified bounded browser/parser scope | 13 built tests passed, 3 deliberate viewport exclusions; four actual empty routes; M01-M10/T01-T06 maintained groups |
 | 7 | W10 visual review/calibration | Planned | Review intentional screenshot changes before accepting |
 | 8 | W09/W11/W12 profiles, editing, upgrades and handoff | Planned | Independent installs, custom-token upgrade pilot, final verification |
 
@@ -75,3 +75,13 @@ Record phase commit IDs, exact commands, results and applicability here. Keep la
 - Editorial defaults use one-sided sibling margins and a private value reset at each direct-child boundary. Native CSS scope bounds recursive list presentation at explicit editorial islands/nested editorial roots; utility layers still take precedence. Media defaults reset in base so they cannot defeat the parent flow relationship. Controls use retrying computed-style assertions to measure their applied result after rendering.
 - The empty native slot check caught an undefined slot result; it now normalizes to an empty string. EditorialImage uses owned class names so an emitted vendor image selector cannot target its frame. Gallery ID fallbacks use the same owned image presentation.
 - Current site Bases explicitly activate v2; shared SiteShell remains compatibility-default. Static caller overlays, public CMS routes and specimen policy are migrated. E01 remains pending actual save/reload proof in the disposable harness; attributes are not counted as that proof.
+
+## Phase 6 evidence
+
+- Phase 5 commit: `4cdb05f`.
+- Built spacing suite (`chromium-390` + `chromium-1440`): 13 passed / 3 intentionally inapplicable project cases. Narrow image/track cases explicitly iterate 320/390/1280. Public listing/article use actual extension-controlled 200%/400% browser zoom, checked via zoom API, CSS viewport and DPR. Public 320px text-spacing reflow also passes. See `.emdash/visual/spacing-phase6-browser.log` and attached geometry/resource JSON.
+- The public zoom case re-enters focused content using native Shift+Tab/Tab after each zoom; refocusing an already focused element alone does not request a new browser scroll. Floating-point zoom/DPR comparisons use eight-place tolerance, not relaxed layout bounds.
+- `node tests/visual/empty-listings.mjs`: PASS, four actual empty public routes in an independently seeded temporary DB. No empty list wrapper or horizontal overflow. Receipt: `.emdash/visual/empty-listings/receipt.json`.
+- V15 exposed a second gutter owner: the named breakout grid retained its own gutter inside the already padded shell. New-policy contextual defaults now pay the shell gutter once, with reading/feature/wide/full-safe tracks retained. Lazy responsive images use `sizes=auto` plus a fallback; actual selected renditions are checked against rendered bounds/native limits. Eager placement hints remain caller-owned.
+- M01-M10 cover exact source positions, strings/comments, invalid/anonymous layers, new files/overlays/imports, malformed CSS, missing imports, fake/negated/target-only flow classes, partial guards, duplicated layered definitions and both supported flow strategies. Unrecognized strategies remain unverified. T02 also has a shared expansion budget, preventing exponential dependency expansion from defeating the depth bound.
+- Fast verification: 129 tests passed. The final visual suite adds the intermediate viewport and existing gallery/no-JS/focus/RTL behavior. Live editor and independent generated profile delivery remain separately tracked.

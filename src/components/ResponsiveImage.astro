@@ -5,8 +5,11 @@ interface Props extends ResponsiveImageProps {}
 const { src, alt: rawAlt, sizes: rawSizes, loading: rawLoading, fetchpriority: rawPriority, class: rawClass, width, height, optimize = true, originalSrc } = Astro.props;
 const className = typeof rawClass === 'string' ? rawClass : undefined;
 const alt = typeof rawAlt === 'string' ? rawAlt : '';
-const sizes = typeof rawSizes === 'string' && rawSizes.trim() ? rawSizes : '(max-width: 60rem) calc(100vw - 4rem), 800px';
 const loading = rawLoading === 'eager' ? 'eager' : 'lazy';
+const fallbackSizes = typeof rawSizes === 'string' && rawSizes.trim() ? rawSizes : '(max-width: 60rem) calc(100vw - 4rem), 800px';
+// Lazy images can use their actual rendered width, including calibrated gutters
+// and breakout placements. Eager callers still supply their placement contract.
+const sizes = loading === 'lazy' && !fallbackSizes.startsWith('auto') ? `auto, ${fallbackSizes}` : fallbackSizes;
 const fetchpriority = rawPriority === 'high' || rawPriority === 'low' ? rawPriority : 'auto';
 const image = responsiveImageInput(src, width, height);
 const original = responsiveImageInput(originalSrc).original || image.original;

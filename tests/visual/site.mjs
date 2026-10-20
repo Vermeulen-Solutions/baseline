@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import { assertReleaseArtifact } from '../../scripts/assert-release-artifact.mjs';
 import { visualContract } from './contract.mjs';
 
-export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, devOnly = false, releaseOnly = false } = {}) {
+export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, devOnly = false, releaseOnly = false, expectWelcome = true } = {}) {
   const stage = await mkdtemp(path.join(tmpdir(), 'emdash-visual-'));
   let child, cleaned = false, cancelled = false;
   const logs = [];
@@ -84,7 +84,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     await onDevReady?.();
     if (cancelled) throw new Error('Visual bootstrap cancelled');
     assert.equal((await request('/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin')).status, 200);
-    assert.ok((await (await request('/posts/welcome')).text()).includes('What to do next'));
+    if(expectWelcome)assert.ok((await (await request('/posts/welcome')).text()).includes('What to do next'));
     if (devOnly) {
       await mkdir(reportDir, { recursive: true });
       await writeFile(path.join(reportDir, 'bootstrap.json'), JSON.stringify({ devOnly: true, freshSeed: true, workingDatabaseCopied: false, loopback: true }) + '\n');

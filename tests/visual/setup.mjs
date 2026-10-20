@@ -63,7 +63,7 @@ const modes=['section','content','none'];
 <Section id="scoped" labelledBy="fixture-title" style="--layout-section-padding:17px;--layout-container-gap:19px"><Section id="scoped-child" labelledBy="fixture-title"><p>Scoped</p></Section></Section>
 <Section id="local" labelledBy="fixture-title" gap="0" style="--section-padding:0px;--container-gap:90px"><Section id="local-child" labelledBy="fixture-title"><p>Independent</p></Section></Section>
 <Container id="custom" layout="custom"><p>A</p><p>B</p></Container>
-<Container id="breakout" breakout layout="stack"><p>Reading track</p></Container>
+<Container id="breakout" breakout layout="stack"><p id="track-reading">Reading track</p><div id="track-feature" class="content--feature">Feature</div><div id="track-wide" class="content--wide">Wide</div><div id="track-safe" class="content--full-safe"><a href="#fixture-title">Full safe focus</a></div></Container>
 <Grid id="grid-prop" gap="13px" style={{'--grid-gap':'99px',color:'rgb(1, 2, 3)'}} aria-label="grid attributes"><p>A</p><p>B</p></Grid>
 <Grid id="grid-utility" gap="13px" class="gap-0"><p>A</p><p>B</p></Grid>
 <Container id="container-prop" gap="11px" style="--content-gap:99px;color:rgb(1, 2, 3)" class="kept"><p>A</p><p>B</p></Container>
@@ -75,12 +75,14 @@ const modes=['section','content','none'];
 import '../styles/global.css';
 import EditorialImage from '../components/EditorialImage.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
+import EmDashImage from '../components/EmDashImage.astro';
 import media from '../dev/spacing-media.json';
 ---
-<html lang="en"><head><title>Media geometry</title></head><body>
+<html lang="en" data-spacing-policy="automatic-v2"><head><title>Media geometry</title></head><body>
 <div id="id-only-media" style="width:min(400px,100%)"><EditorialImage node={{ asset:{_ref:media.id}, alt:'ID-only local image', link:'#media-target' }} /></div>
 <div id="media-target">Link target</div>
 <PhotoGallery value={[{_type:'image',asset:{url:media.url},width:400,height:300,alt:'Gallery geometry'}]} />
+<div class="site-main"><div id="responsive-frame" style="width:min(800px,100%)"><EmDashImage src={media.largeUrl || ''} width={1600} height={1200} alt="Responsive resource geometry" /></div></div>
 <span hidden class="mt-0 mb-0 p-4 max-w-full gap-0"></span>
 </body></html>`);
     await writeFile(path.join(stage, 'src/pages/primitive-edge.astro'), `---
@@ -120,7 +122,9 @@ import '../styles/global.css';
     const bytes = await sharp({ create: { width:400, height:300, channels:3, background:'#486b83' } }).png().toBuffer();
     const adapter = localEmdashAdapter({ url:fixtureOrigin, devBypass:true });
     const media = await adapter.upload(bytes, { entryId:'spacing-media', output:{mimeType:'image/png',width:400,height:300},probe:{extension:'png'},metadata:{alt:'ID-only local image',caption:''} });
-    await writeFile(path.join(fixtureStage,'src/dev/spacing-media.json'),JSON.stringify({id:media.id,url:'/_emdash/api/media/file/'+encodeURIComponent(media.storageKey)}));
+    const largeBytes=await sharp({create:{width:1600,height:1200,channels:3,background:'#486b83'}}).png().toBuffer();
+    const large=await adapter.upload(largeBytes,{entryId:'spacing-responsive',output:{mimeType:'image/png',width:1600,height:1200},probe:{extension:'png'},metadata:{alt:'Responsive resource geometry',caption:''}});
+    await writeFile(path.join(fixtureStage,'src/dev/spacing-media.json'),JSON.stringify({id:media.id,url:'/_emdash/api/media/file/'+encodeURIComponent(media.storageKey),largeUrl:'/_emdash/api/media/file/'+encodeURIComponent(large.storageKey)}));
     const browser = await chromium.launch({channel:'chromium'});
     try {
       const page = await browser.newPage({viewport:{width:390,height:844}});

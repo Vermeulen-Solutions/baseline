@@ -411,8 +411,8 @@
 	}
 
 	/* Multi-track editorial breakout grid for long-form content with wide callouts/media. */
+	:where(.content-grid) { --_gutter: var(--spacing-container); }
 	.content-grid {
-		--_gutter: var(--spacing-container);
 		--_reading: min(var(--measure-reading), calc(100% - var(--_gutter) * 2));
 		--_feature-wing: minmax(0, calc((var(--measure-content) - var(--measure-reading)) / 2));
 		--_wide-wing: minmax(0, calc((var(--measure-wide) - var(--measure-content)) / 2));
@@ -454,7 +454,7 @@
 		grid-column: full;
 	}
 
-	.content-grid :where(.content--full-safe) {
+	:where(.content-grid .content--full-safe) {
 		grid-column: full;
 		padding-inline: var(--spacing-container);
 	}
@@ -531,6 +531,9 @@
 		gap: var(--grid-gap);
 	}
 	:where([data-spacing-policy="automatic-v2"]) :where(.site-main) { padding-block: 0; }
+	/* The shell has already paid the horizontal gutter inside public main. */
+	:where([data-spacing-policy="automatic-v2"]) :where(.site-main .content-grid) { --_gutter: 0px; }
+	:where([data-spacing-policy="automatic-v2"]) :where(.site-main .content-grid .content--full-safe) { padding-inline: 0; }
 	:where([data-spacing-policy="automatic-v2"]) :where(.section, .container-shell, .grid-auto) > :where(*) { min-inline-size: 0; }
 
 }

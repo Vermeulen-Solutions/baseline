@@ -459,7 +459,8 @@ export const SPACING_CONTEXTS = {
 };
 
 // Bounded reference model: no eval, browser execution or arbitrary CSS grammar.
-export function resolveSpacing(name, values, environment = {}, trail = []) {
+export function resolveSpacing(name, values, environment = {}, trail = [], budget = { steps:0 }) {
+  if (++budget.steps > 512) throw new Error('Spacing dependency expansion budget exceeded: ' + [...trail,name].join(' -> '));
   if (trail.length >= 32 || trail.includes(name)) throw new Error('Spacing dependency cycle/depth: ' + [...trail,name].join(' -> '));
   if (!(name in values)) throw new Error('Missing spacing reference: ' + [...trail,name].join(' -> '));
   const path = [...trail,name];
@@ -481,7 +482,7 @@ export function resolveSpacing(name, values, environment = {}, trail = []) {
       const ref=(comma<0?args:args.slice(0,comma)).trim();
       let replacement;
       if (ref in values) {
-        const resolved=resolveSpacing(ref,values,environment,path);
+        const resolved=resolveSpacing(ref,values,environment,path,budget);
         resolved.dependencies.forEach(key=>dependencies.add(key)); replacement=resolved.expanded;
       }
       else if(comma>=0)replacement=expand(args.slice(comma+1));

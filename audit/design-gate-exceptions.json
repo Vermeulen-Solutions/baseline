@@ -26,7 +26,7 @@
   {
     "path": "src/styles/global.css",
     "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "203f5db3233a0e247c4b42e368e09c9258747881b6b858893272b0d94bf59e00"
+    "sha256": "cdc7d81d1e5092c9a80f6dce9c7defff79e0da89bb069fc0cd884fe9c00a2cfe"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -106,7 +106,7 @@
   {
     "path": "src/components/ResponsiveImage.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "101985b5eaee063ac784fe42c7ca54ce7fe00e1a83ecb6680f189c24981f8ae2"
+    "sha256": "70fa7a7f2647548136d2a36e93833829777539030325bd043f9fa7e75abfca7a"
   },
   {
     "path": "src/components/EditorialImage.astro",

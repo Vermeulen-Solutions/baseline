@@ -56,7 +56,11 @@ export function inspectSourceTree(rootDir = process.cwd(), roots = ['src','profi
         issues.push(...inspectAuthorCSS(input.css,input));
         postcss.parse(input.css).walkAtRules('import',rule=>{
           const imported = rule.params.match(/^(?:url\(\s*)?["']([^"']+)["']/)?.[1];
-          if (imported?.startsWith('.')) visit(path.resolve(path.dirname(filename),imported));
+          if (imported?.startsWith('.')) {
+            const target=path.resolve(path.dirname(filename),imported);
+            if(!fs.existsSync(target))issues.push({file,line:(rule.source.start.line)+(input.lineOffset || 0),message:'Missing local author import: '+imported});
+            else visit(target);
+          }
         });
       }
     } catch(error) { issues.push({file,line:error.lineNumber || 1,message:error.message}); }
@@ -68,24 +72,43 @@ export function inspectSourceTree(rootDir = process.cwd(), roots = ['src','profi
 export function analyzeFlow(css) {
   let root;
   try { root = postcss.parse(css); } catch { return { verified:false, flowRuleCount:0, flowDuplicateMarginGuard:false }; }
-  let count=0, guard=false, twoSided=false, bases=0;
+  let count=0, twoSided=false, unknownEdges=false;
+  const requiredMedia=new Set(), guardedMedia=new Set();
   root.walkRules(rule=>{
     let ast;
     try { ast=selectorParser().astSync(rule.selector); } catch { return; }
-    let flow=false, adjacent=false, child=false, universal=0, tags=0, hidden=0;
-    ast.walkClasses(n=>{if(n.value==='flow')flow=true;});
-    ast.walkAttributes(n=>{if(n.attribute==='data-flow')flow=true;if(n.attribute==='hidden')hidden++;});
-    if(!flow)return;
-    ast.walkCombinators(n=>{if(n.value.trim()==='>')child=true;if(['+','~'].includes(n.value.trim()))adjacent=true;});
-    ast.walkUniversals(()=>universal++);ast.walkTags(()=>tags++);
     const declarations=(rule.nodes || []).filter(n=>n.type==='decl');
-    const hasStart=declarations.some(n=>n.prop==='margin-block-start');
-    if(child && adjacent && tags===0 && (universal>=2 || hidden>=2) && hasStart) count++;
-    if(child && adjacent && tags>0 && declarations.some(n=>n.prop==='margin-block-start' && /^0(?:px|rem|em)?$/.test(n.value.trim())))guard=true;
-    if(child && adjacent && declarations.some(n=>n.prop==='margin-block-end' && /^0(?:px|rem|em)?$/.test(n.value.trim())))guard=true;
-    if(declarations.some(n=>['margin-block','margin-block-end','margin'].includes(n.prop) && !/^0(?:px)?$/.test(n.value.trim())))twoSided=true;
-    if(rule.selector.trim()==='.flow')bases++;
+    let generic=false, ownsFlow=false;
+    const ownedMedia=new Set();
+    for(const selector of ast.nodes) {
+      const tokens=[];
+      const collect=node=>{
+        if(node.type==='pseudo' && [':not',':has'].includes(node.value))return;
+        if(node.nodes)node.nodes.forEach(collect);else tokens.push(node);
+      };
+      collect(selector);
+      const anchor=tokens.findIndex(n=>n.type==='class' && n.value==='flow' || n.type==='attribute' && n.attribute==='data-flow');
+      const child=tokens.findIndex((n,i)=>i>anchor && n.type==='combinator' && n.value.trim()==='>');
+      if(anchor<0)continue;
+      // A class on the target or inside :not/:has is not a flow-owning ancestor.
+      if(tokens.slice(0,anchor).some(n=>n.type==='combinator' && ['>','+','~'].includes(n.value.trim())))continue;
+      ownsFlow=true;
+      tokens.filter(n=>n.type==='tag' && ['img','figure','table','blockquote'].includes(n.value)).forEach(n=>ownedMedia.add(n.value));
+      const adjacent=tokens.findIndex((n,i)=>i>child && n.type==='combinator' && ['+','~'].includes(n.value.trim()));
+      if(child<0 || adjacent<0)continue;
+      let hidden=0;selector.walkAttributes(n=>{if(n.attribute==='hidden')hidden++;});
+      const universal=tokens.filter(n=>n.type==='universal').length;
+      const tags=tokens.filter(n=>n.type==='tag');
+      if(tags.length===0 && (universal>=2 || hidden>=2) && declarations.some(n=>n.prop==='margin-block-start'))generic=true;
+      const media=tokens.slice(child+1,adjacent).filter(n=>n.type==='tag' && ['img','figure','table','blockquote'].includes(n.value));
+      if(tokens.slice(adjacent+1).some(n=>n.type==='universal') && declarations.some(n=>['margin-block-start','margin-block-end'].includes(n.prop) && /^0(?:px|rem|em)?$/.test(n.value.trim())))media.forEach(n=>guardedMedia.add(n.value));
+    }
+    if(generic)count++;
+    if(ownsFlow && declarations.some(n=>['margin-block','margin-block-end','margin'].includes(n.prop) && !/^0(?:px)?$/.test(n.value.trim()))) {
+      twoSided=true;if(!ownedMedia.size)unknownEdges=true;
+      ownedMedia.forEach(tag=>requiredMedia.add(tag));
+    }
   });
-  if(bases>1)count=Math.max(2,count);
-  return { verified:true, flowRuleCount:count, flowDuplicateMarginGuard:guard || (!twoSided && count===1) };
+  const guard=twoSided && !unknownEdges && [...requiredMedia].every(tag=>guardedMedia.has(tag));
+  return { verified:count>0 && !unknownEdges, flowRuleCount:count, flowDuplicateMarginGuard:guard || (!twoSided && count===1) };
 }
