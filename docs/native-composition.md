@@ -5,6 +5,21 @@ have no queries, content schema, hydration, custom keyboard controller or automa
 structured data. Import their Astro components and compose authored content in slots.
 Root and generated profiles share the implementations and calibration specimens.
 
+## Planned automatic-v2 contract
+
+The [automatic spacing implementation plan](../audit/automatic-spacing-followup-plan.md)
+is being implemented in phases; the rules below are the target contract, not a
+claim that the new policy is already available. Track actual implementation in
+[the progress register](../audit/automatic-spacing-progress.md).
+
+The site-owned Base will explicitly select `spacingPolicy="automatic-v2"` on
+SiteShell. An unchanged downstream Base retains compatibility behavior. Standard
+Sections and Containers provide automatic structural gaps; custom layouts can
+relinquish that responsibility. Breakout Containers retain named tracks. RichText
+owns editorial rhythm, while structural collection lists keep their own alignment.
+CSS contextual aliases are maintained with the existing token CLI; there is no
+settings panel or second writable token store.
+
 ## Cascade layers and automatic spacing
 
 All authored component styles live in `@layer components`; element defaults and the
