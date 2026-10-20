@@ -21,7 +21,7 @@ export function designSystemRules(target, add) {
   } else {
     const css = cssRead.bytes.toString('utf8');
     const interpolateSize = /interpolate-size\s*:\s*allow-keywords/.test(css);
-    const { flowDuplicateMarginGuard, flowRuleCount } = analyzeFlow(css);
+    const { verified: flowVerified, flowDuplicateMarginGuard, flowRuleCount } = analyzeFlow(css);
     const contentGrid = /\.content-grid\b/.test(css);
     const contentGridSubgrid = /grid-template-columns\s*:\s*subgrid\b/.test(css);
     const surfaceTokens = /\[data-surface=/.test(css);
@@ -31,6 +31,7 @@ export function designSystemRules(target, add) {
 
     const pass =
       interpolateSize &&
+      flowVerified &&
       flowDuplicateMarginGuard &&
       flowRuleCount === 1 &&
       contentGrid &&
@@ -45,6 +46,7 @@ export function designSystemRules(target, add) {
       'Curated token matrix, Smart Spacing (.flow) duplicate-margin guard, .content-grid subgrid tracks, and surface/focus utilities in src/styles/global.css',
       {
         interpolateSize,
+        flowVerified,
         flowDuplicateMarginGuard,
         flowRuleCount,
         contentGrid,

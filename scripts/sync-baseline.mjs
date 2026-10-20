@@ -49,6 +49,43 @@ async function context(root) {
   return { config, managed };
 }
 
+// Deliberately conservative literal-import preflight, not a JavaScript/CSS
+// compiler. Keep it self-contained so an older installation can adopt it first.
+// New paths and packages require a reviewed additive migration, even when an
+// upstream component itself was already in the installed inventory.
+async function migrationReasons(root, target, incoming) {
+  if (!/\.(?:astro|[cm]?js|ts|css)$/.test(target)) return [];
+  const source = String(incoming), reasons = new Set();
+  const pkg = await readJSON(root, 'package.json');
+  const declared = { ...pkg.dependencies, ...pkg.devDependencies };
+  const imports = [...source.matchAll(/(?:\b(?:import|export)\s+(?:[^;'"\n]*?\s+from\s*)?|\bimport\s*\(\s*|@import\s+)["']([^"']+)["']/g)].map(match => match[1]);
+  for (const specifier of imports) {
+    if (/^(?:node:|astro:|virtual:|https?:|data:|#)/.test(specifier)) continue;
+    if (specifier.startsWith('.')) {
+      const relative = path.posix.normalize(path.posix.join(path.posix.dirname(target), specifier.split(/[?#]/)[0]));
+      if (relative.startsWith('../')) { reasons.add('Relative import escapes project: ' + specifier); continue; }
+      const candidates = path.posix.extname(relative) ? [relative] : [relative, ...['.ts','.js','.mjs','.astro','/index.ts','/index.js'].map(ext => relative + ext)];
+      let found = false;
+      for (const candidate of candidates) if (await bytes(root, candidate)) { found = true; break; }
+      if (!found) reasons.add('Missing local import: ' + specifier);
+    } else if (!specifier.startsWith('/')) {
+      const name = specifier.startsWith('@') ? specifier.split('/').slice(0, 2).join('/') : specifier.split('/')[0];
+      if (!Object.hasOwn(declared, name)) reasons.add('Undeclared direct package: ' + name);
+    }
+  }
+  if (target === 'src/styles/global.css' && source.includes('--layout-section-padding:') && !String(await bytes(root,target) ?? '').includes('--layout-section-padding:')) {
+    reasons.add('Automatic spacing CSS requires reviewed aliases, editorial boundaries and caller migration');
+  }
+  if (target !== 'src/styles/global.css') {
+    const aliases = new Set(source.match(/--layout-(?:section-padding|container-gap|content-gap|grid-gap)\b/g));
+    if (aliases.size) {
+      const css = String(await bytes(root, 'src/styles/global.css') ?? '');
+      for (const alias of aliases) if (!new RegExp(alias + '\\s*:').test(css)) reasons.add('Missing spacing alias: ' + alias);
+    }
+  }
+  return [...reasons].sort();
+}
+
 /** Read immutable upstream bytes as data. Never import or run upstream code. */
 export async function stageBaseline({ root = process.cwd(), commit, readSource } = {}) {
   if (!/^[a-f0-9]{40}$/.test(commit ?? '')) throw new Error('--ref must be an immutable 40-character commit SHA');
@@ -68,7 +105,8 @@ export async function stageBaseline({ root = process.cwd(), commit, readSource }
     if (incomingHash === record.sha256) continue;
     const current = await bytes(root, target);
     const currentHash = current === null ? null : hash(current);
-    entries.push({ target, source: record.source, baseHash: record.sha256, currentHash, incomingHash, conflict: currentHash !== record.sha256 && currentHash !== incomingHash });
+    const migration = await migrationReasons(root, target, incoming);
+    entries.push({ target, source: record.source, baseHash: record.sha256, currentHash, incomingHash, migrationReasons: migration, conflict: migration.length > 0 || currentHash !== record.sha256 && currentHash !== incomingHash });
     payloads.set(`.baseline/updates/${commit}/files/${target}`, incoming);
   }
   const stage = { schemaVersion: 1, commit, platformProfile: config.platformProfile, managedHash: hash(await bytes(root, '.baseline/managed-files.json')), configHash: hash(await bytes(root, 'baseline.config.json')), exceptionsHash: hash(await bytes(root, 'audit/design-gate-exceptions.json')), entries };
@@ -90,7 +128,7 @@ export async function applyBaseline({ root = process.cwd(), commit } = {}) {
     if (!digest(expected) || hash(await bytes(root, relative)) !== expected) throw new Error('Project metadata changed after staging; restage the update');
   }
   const exceptions = await readJSON(root, 'audit/design-gate-exceptions.json');
-  const writes = [], conflicts = [], seen = new Set();
+  const writes = [], conflicts = [], migrations = {}, seen = new Set();
   for (const entry of stage.entries) {
     safe(entry.target);
     const record = managed.files[entry.target];
@@ -101,6 +139,8 @@ export async function applyBaseline({ root = process.cwd(), commit } = {}) {
     if (entry.currentHash !== currentHash) throw new Error('Local file changed after staging: ' + entry.target);
     const incoming = await bytes(root, `.baseline/updates/${commit}/files/${entry.target}`);
     if (!incoming || hash(incoming) !== entry.incomingHash) throw new Error('Staged bytes changed: ' + entry.target);
+    const migration = await migrationReasons(root, entry.target, incoming);
+    if (migration.length) { conflicts.push(entry.target); migrations[entry.target] = migration; continue; }
     if (currentHash !== record.sha256 && currentHash !== entry.incomingHash) { conflicts.push(entry.target); continue; }
     writes.push([entry.target, incoming]);
     managed.files[entry.target] = { ...record, sha256: entry.incomingHash, lastUpdateCommit: commit };
@@ -112,7 +152,7 @@ export async function applyBaseline({ root = process.cwd(), commit } = {}) {
   }
   // Preflight every path/hash before applying any update; no force overwrite option.
   for (const [relative, incoming] of writes) await fs.writeFile(await file(root, relative), incoming);
-  managed.lastSync = { commit, applied: writes.map(([f]) => f), conflicts };
+  managed.lastSync = { commit, applied: writes.map(([f]) => f), conflicts, migrations };
   const exceptionBytes = json(exceptions);
   if (managed.files['audit/design-gate-exceptions.json']) managed.files['audit/design-gate-exceptions.json'].sha256 = hash(exceptionBytes);
   await fs.writeFile(await file(root, 'audit/design-gate-exceptions.json'), exceptionBytes);

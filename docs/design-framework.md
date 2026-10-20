@@ -1,10 +1,6 @@
 # Design Framework & Token Physics
 
-Baseline includes a complete, mathematically grounded design framework built on **fluid responsive scales** and **structural layout primitives**.
-
-Traditional websites often suffer from **"breakpoint soup"**: dozens of arbitrary media queries (`p-4 md:p-8 lg:p-12 xl:p-16`) that create jarring layout jumps at arbitrary screen widths and look broken on intermediate screens (small laptops, tablets in split view, or foldable devices).
-
-Baseline eliminates breakpoint soup by using continuous mathematical clamp functions anchored to the viewport width, combined with self-responsive layout components.
+Baseline supplies fluid type/space scales and small structural layout primitives. Use fluid values for continuous sizing and intrinsic wrapping for content-driven layouts. Media queries remain useful for a deliberate change of composition; avoid accumulating spacing breakpoints to repair unclear ownership. Token mathematics describes reference values, while rendered checks establish whether actual content remains readable and usable.
 
 ---
 
@@ -54,7 +50,7 @@ Spacing grows proportionally with the screen, maintaining balanced visual weight
 | `--spacing-xl-to-sm` | `clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem)` | 12px | 64px | High-contrast padding/gap bridge |
 | `--spacing-2xl-to-md` | `clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem)` | 20px | 104px | Hero/spotlight padding bridge |
 
-Because `--spacing-section` expands from 48px to 144px naturally, you never need to write `@media (min-width: ...)` rules just to give desktop sections breathing room.
+`--spacing-section` interpolates between its bounds without per-breakpoint padding overrides. Check actual page pacing and use a deliberate layout breakpoint when the content requires a different composition.
 
 ---
 
@@ -69,7 +65,7 @@ Unconstrained line lengths make paragraphs exhausting to read on wide screens. B
 --measure-wide:    88rem;  /* Wide layouts, navbars, and media galleries (~1408px) */
 ```
 
-Paragraphs and list items automatically inherit `max-width: var(--measure-reading)` with a comfortable line-height of `1.65`.
+Editorial prose is constrained by its reading container; generic component paragraphs and structural lists do not receive prose indentation or media margins.
 
 ---
 
@@ -79,98 +75,48 @@ Baseline provides small, semantic Astro layout primitives located in `src/compon
 
 ### Cascade and automatic spacing contract
 
-All authored CSS lives in `@layer base` or `@layer components`; Tailwind utilities remain in `@layer utilities`. Contextual defaults use zero-specificity `:where()` selectors, so `py-0`, `mt-0`, `gap-0` and other utilities override them without `!important`. Component `<style>` blocks follow the same rule; keyframes stay outside the layer.
+Owned CSS uses `@layer base` or `@layer components`. The document establishes `theme, base, vendor, astro, components, utilities` before stylesheet loading. PhotoSwipe is imported into `vendor`; contextual defaults use `:where()` so utilities override them. `check:css` parses owned CSS, Astro styles and local imports, including static overlays. This does not certify third-party admin/editor CSS.
 
-The layered defaults provide three automatic relationships:
+`SiteShell spacingPolicy="automatic-v2"` activates structural defaults. Its default is `legacy`, protecting downstream site-owned Bases. Current starter and newly generated Bases explicitly activate v2. Upgrade activation is a reviewed site migration; see [baseline updates](baseline-updates.md).
 
-1. **Section rhythm:** `:where(main > section, .section)` owns fluid block padding. `data-spacing="content"` selects the compact token; `data-spacing="none"` disables padding and container margins.
-2. **Container blocks:** direct block children of a section receive `--container-gap`; sections that are themselves `.grid`, `.grid-auto`, `.cluster` or `.sidebar` zero that margin so their gap is not doubled.
-3. **Editorial flow:** `.flow`, `[data-flow]` and the `RichText` wrapper space sibling content with `--flow-space`. `RichText` applies flow by default; `flow={false}` opts out.
+| Owner | Automatic-v2 behavior | Local control |
+| --- | --- | --- |
+| Section | Block padding; column stack of direct children with container gap | `spacing="section|content|none"`, `gap`, `layout="stack|custom"` |
+| Ordinary Container | Centered reading/content/wide measure; column stack with content gap | `width`, `gap`, `layout="stack|custom"` |
+| Breakout Container | Named-track grid; content gap, preserving subgrid propagation | `breakout`, `gap`, track classes |
+| Grid | Intrinsic auto-fit columns; grid gap | `minimum="compact|standard|wide"`, `gap` |
+| Site main | Horizontal page gutters once; no inferred block spacing | Compose explicit Sections |
+| RichText | Editorial sibling rhythm and bounded prose presentation | Six public flow controls, or `flow={false}` |
 
-`.site-main` owns horizontal gutters only. It adds block padding only when a page has no direct `section` or `.section`, so page-level sections do not double-stack with the shell. A post or page should wrap article and supporting content in one section.
+`spacing="none"` removes Section padding only. It does not zero its child gap or affect a nested Section. Compact spacing uses the existing content scale. Each primitive initializes its local `--section-padding`, `--container-gap`, `--content-gap` or `--grid-gap` from the appropriate `--layout-*` context; local modes do not leak into nested primitives. Intentionally scoped `--layout-*` aliases inherit.
 
-### `<Container width="reading | content | wide" breakout />`
-
-For standard sections, `<Container>` constrains inner content to one of the three established measures and centers it with `margin-inline: auto`. When `breakout` is enabled (`<Container breakout>`), it renders `.content-grid`—a multi-track CSS Grid where default children remain constrained to `--measure-reading` while specific child blocks can break out to wider named tracks (`feature`, `wide`, `full`) without closing and reopening the container:
-
-```astro
----
-import Container from '../components/Container.astro';
----
-
-<!-- Standard content container (max-width: 76rem) -->
-<Container width="content">
-  <Grid minimum="standard"> ... </Grid>
-</Container>
-
-<!-- Editorial breakout container (.content-grid) for long-form articles & case studies -->
-<Container breakout class="flow">
-  <p>Default children stay in the comfortable reading column (68ch).</p>
-  <figure class="content--feature">
-    <!-- Expands to --measure-content (76rem) -->
-  </figure>
-  <div class="content--wide">
-    <!-- Expands to --measure-wide (88rem) -->
-  </div>
-</Container>
-```
-
-### `<Section spacing="section | content | none" labelledBy="..." />`
-
-Provides semantic `<section>` wrapping with consistent vertical rhythm and accessibility:
+Use `layout="custom"` when the caller owns display, direction and gaps. Ordinary stack mode is appropriate for vertical siblings; change to custom before composing an unrelated row/grid. Breakout always retains its named-grid contract. Avoid adding `space-y-*` or flow margins to an already gapped group; use `gap-0` when deliberately transferring ownership.
 
 ```astro
----
-import Section from '../components/Section.astro';
-import Container from '../components/Container.astro';
----
-
-<Section labelledBy="news-heading" spacing="section">
+<Section labelledBy="news" spacing="content">
   <Container width="content">
-    <h2 id="news-heading">Latest Club News</h2>
-    <!-- Content -->
+    <h2 id="news">News</h2>
+    <Grid minimum="standard" gap="var(--spacing-content)">
+      <!-- Repeated cards -->
+    </Grid>
   </Container>
 </Section>
-```
-* `spacing="section"` (default): Applies fluid `padding-block: var(--section-padding, var(--spacing-section))`.
-* `spacing="content"`: Applies compact `padding-block: var(--spacing-content)` for secondary panels or callouts.
-* `spacing="none"`: Sets `--section-padding: 0px` and `--container-gap: 0px` for a nested or deliberately flush section.
-* `--section-padding` and `--container-gap` are contextual overrides; do not add new `@theme` tokens for one-off spacing.
 
-### `<Grid minimum="compact | standard | wide" gap="..." />`
+<Section labelledBy="actions" spacing="none" layout="custom" class="flex flex-wrap gap-content">
+  <h2 id="actions">Actions</h2>
+  <!-- Caller-owned composition -->
+</Section>
 
-A self-responsive CSS grid that automatically fits items across columns without media queries:
-
-```astro
----
-import Grid from '../components/Grid.astro';
-import Card from '../components/Card.astro';
----
-
-<Grid minimum="standard" gap="var(--spacing-grid)">
-  <Card title="Article 1" href="/article-1" ... />
-  <Card title="Article 2" href="/article-2" ... />
-  <Card title="Article 3" href="/article-3" ... />
-</Grid>
+<Container breakout class="flow" data-editorial-content>
+  <p>Reading track</p>
+  <figure class="content--feature"><!-- Feature track --></figure>
+  <figure class="content--wide"><!-- Wide track --></figure>
+</Container>
 ```
 
-Under the hood, `<Grid>` uses CSS `minmax()` and `auto-fit`; `gap` writes `--grid-gap` and utilities such as `gap-0` override the default directly:
-```css
-:where(.grid) {
-  gap: var(--grid-gap, var(--spacing-grid));
-}
+The components preserve ordinary HTML attributes, IDs, ARIA, class/class:list and string/object styles. A `gap` prop wins over the same local custom property in passed style; a real `gap-*` utility wins over the default property through layers. Invalid enum inputs normalize to documented defaults; empty/non-string optional gap values are omitted. These normalization rules do not validate arbitrary caller CSS.
 
-:where(.grid-auto) {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
-  gap: var(--grid-gap, var(--spacing-grid));
-}
-
-.grid-auto--compact  { --grid-min: 14rem; } /* 224px cards (e.g. badges, team avatars) */
-.grid-auto--standard { --grid-min: 17rem; } /* 272px cards (e.g. standard article cards) */
-.grid-auto--wide     { --grid-min: 21rem; } /* 336px cards (e.g. featured posts, complex items) */
-```
-Columns wrap naturally when screen space narrows, with zero layout shift or overlapping cards.
+Breakout children normally occupy the reading track (`--measure-reading`). `.content--feature`, `.content--wide`, `.content--full` and `.content--full-safe` select wider named tracks. Within the padded site shell, the grid does not add another gutter; full/full-safe extend to the shell content edge. Viewport-edge bleed requires a caller-owned shell composition and rendered verification. Native image placement hints must match those actual bounds.
 
 ### `<Card />` (Turnkey Accessible Card & Concentric Radius)
 
@@ -178,38 +124,22 @@ Columns wrap naturally when screen space narrows, with zero layout shift or over
 
 ---
 
-## 4. Editorial Smart Spacing (`.flow`)
+## 4. Editorial rhythm and boundaries
 
-`RichText` applies `.flow` by default, so CMS Portable Text and editorial articles establish vertical rhythm without an extra wrapper:
+CMS Portable Text and native Markdown use the platform `RichText` component. It adds `.flow` and `data-editorial-content` by default:
 
 ```astro
-<RichText value={entry.data.body} />
+<RichText value={entry.data.body} /> <!-- EmDash -->
+<RichText><Content /></RichText>    <!-- Static native Markdown -->
 ```
 
-Use `<div class="flow">...</div>` or `[data-flow]` for authored markup that does not pass through `RichText`. The flow utility differentiates rhythm across headings, lists, figures, and blockquotes via CSS custom properties while preventing duplicate margin stacking after block elements:
-```css
-:where(.flow, [data-flow]) > :where(* + *) {
-  margin-block-start: var(--flow-space, var(--spacing-content));
-}
+Generic `.flow` / `[data-flow]` supplies only one-sided spacing between visible direct siblings. Handwritten prose opts into element-aware presentation with `data-editorial-content`. Its controls are `--flow-space`, `--heading-spacing`, `--list-spacing`, `--list-item-spacing`, `--figure-spacing` and `--blockquote-spacing`. Each direct child resets a private computed spacing value; a heading's value cannot leak into nested flows. Figures and quotes use leading spacing only, avoiding duplicate trailing margins or a compensation guard.
 
-:where(.flow, [data-flow]) > :where(h2, h3, h4) {
-  --flow-space: var(--heading-spacing, 1.5em);
-}
+Nested list indentation, list-item rhythm and internal quote paragraphs are bounded by native CSS `@scope`. Mark composite roots `data-editorial-island`; Card, LogoTicker, PhotoGallery and Disclosure already do so. Disclosure's actual body establishes its own editorial boundary. Do not add editorial defaults to arbitrary descendants or store presentation utilities in CMS data.
 
-:where(.flow, [data-flow]) :where(li + li) {
-  margin-block-start: var(--list-item-spacing, 0.35em);
-}
+`.article-body` is a margin wrapper. Public metadata/listing stacks use layout gaps and block dates, with unindented structural lists; prose lists retain indentation and markers. Each relationship has one owner.
 
-:where(.flow, [data-flow]) :where(img, figure, table, blockquote) {
-  margin-block: var(--spacing-grid);
-}
-
-:where(.flow, [data-flow]) > :where(img, figure, table, blockquote) + * {
-  margin-block-start: 0;
-}
-```
-
-`.article-body` is a margin wrapper, not a second flow container. Use `flow={false}` on `RichText` when a caller explicitly owns rhythm.
+`flow={false}` relinquishes both rhythm and editorial defaults. Without attributes it renders the content without a wrapper; supplied classes/attributes require a plain wrapper. Empty public values/slots are omitted; actual CMS edit metadata retains a selectable empty editor field. A public empty-content test is not proof of live-editor behavior: the maintained E01 rehearsal checks selection, typing, blur save, reload, publish and anonymous reload.
 
 ---
 
@@ -285,7 +215,7 @@ Core routes, collections, and long-form articles should use Baseline's zero-JS A
    ```
 4. **Synchronize tokens via MCP (`@perkyzz/emvb-mcp`):**
    Agents can use `emvb_get_styles` and `emvb_update_styles` to align EmVB's site-styles palette and fluid typography scale with the OKLCH and `clamp()` tokens defined in `src/styles/global.css`.
-# Contextual spacing maintenance
+## 8. Contextual spacing maintenance
 
 CSS remains the configuration source. Four regular `:root` aliases select the existing spacing scales: `--layout-section-padding`, `--layout-container-gap`, `--layout-content-gap`, and `--layout-grid-gap`. They are not additional Tailwind scales. Regional selectors can override these aliases intentionally; primitive modes and gap props apply locally.
 
@@ -293,3 +223,16 @@ Preview a narrow grid change with `npm run design:tokens -- --set "--root:--layo
 
 Unknown names/scopes, ambiguous declarations and unsupported spacing expressions fail validation. The bounded spacing report supports references, fallbacks, nonnegative px/rem/vi/vw lengths, the documented fluid clamp grammar, and proportional/additive calculations. Samples describe reference environments, not a complete CSS engine or downstream consumer inventory. Preview does not write source or calibration. The candidate passes token, font and applicable edit-proxy checks before CSS, records or starter exceptions change. Review the diff, run verification, then inspect the affected compositions at narrow and wide widths.
 
+
+Choose the smallest scope that answers the change request:
+
+| Request | Change | Example |
+| --- | --- | --- |
+| Whole site's spatial scale | Existing `@theme --spacing-*` values | Deliberate `--space-scale` recalibration |
+| All structural grid gaps | Regular root alias | `--layout-grid-gap: calc(var(--spacing-grid) * 0.75)` |
+| One region's density | Layered regional alias | `@layer components { :where(.compact-region) { --layout-content-gap: var(--spacing-content); --layout-container-gap: var(--spacing-content); } }` |
+| One primitive | `gap` prop or local property | `<Container gap="0px">` |
+| One explicit exception | Utility | `<Grid class="gap-0">` |
+| Editorial media relationship | Prose control on its boundary | `<RichText style="--figure-spacing: 2rem" ... />` |
+
+For day-2 requests, inspect the route and actual owner, preview the narrow CLI change, review the diff, write explicitly, run `verify`/build and inspect affected pages plus styleguide at narrow/intermediate/wide widths. Regenerate source-bound calibration only after the saved change. No database configuration, admin panel, generated CSS copy or second token store is involved. Keep the art-direction record aligned when changing a client's core visual physics.

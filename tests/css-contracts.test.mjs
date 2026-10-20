@@ -38,6 +38,8 @@ test('M07-M10 flow audit recognizes real selectors and both guarded and one-side
   assert.equal(analyzeFlow(base).flowDuplicateMarginGuard,true);
   assert.equal(analyzeFlow(base+media+':where(.flow) > :where(figure) + * {margin-block-start:0}').flowDuplicateMarginGuard,true);
   assert.equal(analyzeFlow(base+base).flowRuleCount,2);
+  const physical=analyzeFlow('.flow > * + * {margin-top:1rem}');
+  assert.equal(physical.flowRuleCount,1);assert.equal(physical.verified,false);assert.equal(physical.flowDuplicateMarginGuard,false);
   assert.equal(analyzeFlow('@layer base{'+base+'}@layer components{'+base+'}').flowRuleCount,2);
   assert.equal(analyzeFlow(base+media+':not(.flow) > img + * {margin-block-start:0}').flowDuplicateMarginGuard,false);
   assert.equal(analyzeFlow(base+media+'.flow-legacy > img + *, .flow {margin-block-start:0}').flowDuplicateMarginGuard,false);

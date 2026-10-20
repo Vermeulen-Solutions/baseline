@@ -1,5 +1,8 @@
 # Automatic spacing and agent-first maintenance: consolidated implementation plan
 
+Implementation completed on 2026-10-20 in eight phases. See [the progress and closure register](automatic-spacing-progress.md) for commits, original-finding mapping, actual verification and scope limits. The work orders below retain the approved plan and historical findings.
+
+
 Status: implementation authorized on 2026-10-20; Phase 1 in progress. Track verified outcomes and phase commits in [the progress register](automatic-spacing-progress.md).
 
 Updated: 2026-10-20.

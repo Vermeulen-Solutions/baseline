@@ -130,6 +130,12 @@ test('V08-V13 editorial controls stay local, nested flows reset calculations and
   await expect(page.locator('#controls')).toHaveAttribute('data-editorial-content','');
   expect(parseFloat(await read('#controls > ul','paddingInlineStart'))).toBeGreaterThan(0);
   expect(parseFloat(await read('#controls ul ul','paddingInlineStart'))).toBeGreaterThan(0);
+  await expect(page.locator('#controls > ul')).toHaveCSS('list-style-type','disc');
+  expect(await read('#controls ul ul','listStyleType')).not.toBe('none');
+  await expect(page.locator('#cms-numbered ol')).toHaveCSS('list-style-type','decimal');
+  await expect(page.locator('#native-markers > ul')).toHaveCSS('list-style-type','disc');
+  await expect(page.locator('#native-markers > ol:not(.list-none)')).toHaveCSS('list-style-type','decimal');
+  await expect(page.locator('#native-markers > ol.list-none')).toHaveCSS('list-style-type','none');
   for(const [variable,selector] of [['--heading-spacing','#controls > h2'],['--list-spacing','#controls > ul'],['--figure-spacing','#controls > figure'],['--blockquote-spacing','#controls > blockquote'],['--flow-space','#controls > p:last-child'],['--list-item-spacing','#controls > ul > li + li']]) {
     await page.locator('#controls').evaluate((el,key)=>el.style.setProperty(key,'67px'),variable);
     await expect(page.locator(selector).first(),variable).toHaveCSS('margin-top','67px');
@@ -139,6 +145,7 @@ test('V08-V13 editorial controls stay local, nested flows reset calculations and
   expect(await read('#only-media > figure','marginTop')).toBe('0px');expect(await read('#only-media > figure','marginBottom')).toBe('0px');
   for(const selector of ['#composites .card img','#composites [data-logo-ticker] img','#composites .photo-gallery img','#only-media img'])expect(await read(selector,'marginTop'),selector).toBe('0px');
   expect(await read('#composites [data-logo-ticker] ul','paddingInlineStart')).toBe('0px');
+  expect(await read('#composites [data-logo-ticker] ul','listStyleType')).toBe('none');
   const nested=await read('#nested-flow p + p','marginTop'),inside=await read('#editorial-disclosure .flow p + p','marginTop');expect(nested).toBe(inside);
   await expect(page.locator('#empty-layout > *')).toHaveCount(2);
   await expect(page.locator('#cms-optout > p')).toHaveText('Wrapperless CMS');await expect(page.locator('#static-optout > p')).toHaveText('Wrapperless native');

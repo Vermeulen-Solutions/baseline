@@ -31,6 +31,8 @@ const values=[block('Opening'),block('Heading',{style:'h2'}),block('Paragraph'),
 ---
 <SiteShell title="Editorial geometry" spacingPolicy="automatic-v2">
 <RichText id="controls" value={values} />
+<RichText id="cms-numbered" value={[block('Number one',{listItem:'number',level:1}),block('Number two',{listItem:'number',level:1})]} />
+<StaticRichText id="native-markers"><ul><li>Native bullet</li></ul><ol><li>Native number</li></ol><ol class="list-none"><li>Explicit utility</li></ol></StaticRichText>
 <div id="hidden-first" class="flow" data-editorial-content><p hidden>Hidden</p><p>First visible</p><p>Second visible</p></div>
 <div id="only-media" class="flow" data-editorial-content><figure><img src={media.url} width="400" height="300" alt="Only media" /></figure></div>
 <div id="composites" class="flow" data-editorial-content>

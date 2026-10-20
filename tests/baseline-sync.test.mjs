@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { initProfile } from '../scripts/init-profile.mjs';
 import { stageBaseline, applyBaseline } from '../scripts/sync-baseline.mjs';
+import { createHash } from 'node:crypto';
 
 const source = new URL('../', import.meta.url);
 async function fixture(run, profile = 'static') {
@@ -13,6 +14,42 @@ async function fixture(run, profile = 'static') {
   finally { assert.equal(path.dirname(temp), path.resolve(os.tmpdir())); assert.ok(path.basename(temp).startsWith('baseline-sync-test-')); await fs.rm(temp, { recursive: true, force: true }); }
 }
 const readSource = transform => async relative => transform(relative, await fs.readFile(new URL(relative, source)));
+
+test('older installed inventory preserves legacy primitives, calibrated tokens and Base until additive spacing migration', () => fixture(async root => {
+  const commit = '1'.repeat(40), hash = value => createHash('sha256').update(value).digest('hex');
+  const managedPath = path.join(root,'.baseline/managed-files.json');
+  const managed = JSON.parse(await fs.readFile(managedPath,'utf8'));
+  for (const target of ['src/lib/layout-style.ts','scripts/css-contracts.mjs','scripts/check-css-contracts.mjs','tests/css-contracts.test.mjs','tests/spacing-tokens.test.mjs']) {
+    delete managed.files[target];await fs.unlink(path.join(root,target));
+  }
+  const packagePath=path.join(root,'package.json'), pkg=JSON.parse(await fs.readFile(packagePath,'utf8'));
+  for(const name of ['postcss','postcss-selector-parser','astro-eslint-parser'])delete pkg.devDependencies[name];
+  await fs.writeFile(packagePath,JSON.stringify(pkg));const originalPackage=await fs.readFile(packagePath);
+  const originals={};
+  for(const target of ['src/components/Section.astro','src/components/Container.astro','src/components/Grid.astro','scripts/design-system.mjs']) {
+    // A historical-shape installation: no imports of the additive helper or parsers.
+    const legacy=target.endsWith('.astro')?'---\nconst {class:className}=Astro.props;\n---\n<div class={className}><slot /></div>\n':'export const legacy = true;\n';
+    await fs.writeFile(path.join(root,target),legacy);managed.files[target].sha256=hash(legacy);originals[target]=legacy;
+  }
+  const cssPath=path.join(root,'src/styles/global.css');let css=await fs.readFile(cssPath,'utf8');
+  css=css.replace(/^\s*--layout-(?:section-padding|container-gap|content-gap|grid-gap):[^;]+;\s*$/gm,'');
+  managed.files['src/styles/global.css'].sha256=hash(css);
+  css+='\n/* Retain client density and palette */\n@layer base { :root { --client-calibration: 1; } }\n';await fs.writeFile(cssPath,css);
+  const basePath=path.join(root,'src/layouts/Base.astro');const base=(await fs.readFile(basePath,'utf8')).replace(' spacingPolicy="automatic-v2"','');await fs.writeFile(basePath,base);
+  await fs.writeFile(managedPath,JSON.stringify(managed));
+  const beforeMembership=Object.keys(managed.files).sort();
+  const stage=await stageBaseline({root,commit,readSource:readSource((file,bytes)=>file==='scripts/design-system.mjs'?Buffer.concat([bytes,Buffer.from("\nimport 'constructor';\n")]):bytes)});
+  for(const target of Object.keys(originals))assert.ok(stage.entries.find(e=>e.target===target)?.migrationReasons.length,target);
+  // Editable stage flags are not a bypass: apply recomputes from incoming bytes.
+  const stagePath=path.join(root,`.baseline/updates/${commit}/stage.json`);for(const entry of stage.entries){entry.migrationReasons=[];entry.conflict=false;}await fs.writeFile(stagePath,JSON.stringify(stage));
+  const result=await applyBaseline({root,commit});
+  for(const [target,legacy]of Object.entries(originals)){assert.ok(result.conflicts.includes(target));assert.equal(await fs.readFile(path.join(root,target),'utf8'),legacy);}
+  assert.match(result.migrations['scripts/design-system.mjs'].join('\n'),/Undeclared direct package: postcss/);
+  assert.match(result.migrations['scripts/design-system.mjs'].join('\n'),/Undeclared direct package: constructor/,'Inherited object keys are not declared packages');
+  assert.match(result.migrations['src/components/Section.astro'].join('\n'),/Missing local import/);
+  assert.equal(await fs.readFile(cssPath,'utf8'),css);assert.equal(await fs.readFile(basePath,'utf8'),base);assert.deepEqual(await fs.readFile(packagePath),originalPackage);
+  assert.deepEqual(Object.keys(JSON.parse(await fs.readFile(managedPath,'utf8')).files).sort(),beforeMembership);
+}));
 test('profile sync stages shared changes and skills, preserves calibrated tokens and excludes client files and packages', () => fixture(async root => {
   const commit = 'a'.repeat(40);
   const local = '/* local calibration */\n';

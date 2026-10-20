@@ -5,49 +5,23 @@ have no queries, content schema, hydration, custom keyboard controller or automa
 structured data. Import their Astro components and compose authored content in slots.
 Root and generated profiles share the implementations and calibration specimens.
 
-## Planned automatic-v2 contract
+## Automatic-v2 contract
 
-The [automatic spacing implementation plan](../audit/automatic-spacing-followup-plan.md)
-is being implemented in phases; the rules below are the target contract, not a
-claim that the new policy is already available. Track actual implementation in
-[the progress register](../audit/automatic-spacing-progress.md).
+The site-owned Base explicitly selects `spacingPolicy="automatic-v2"` on SiteShell; shared SiteShell defaults legacy for installed-site compatibility. Standard Sections and Containers provide structural stack gaps; `layout="custom"` relinquishes display/direction/gap. Breakout retains named tracks. RichText owns bounded editorial rhythm; structural collections own their alignment. CSS and the existing token CLI remain authoritative without a settings panel or second token store. See [implementation progress](../audit/automatic-spacing-progress.md) for evidence and limits.
 
-The site-owned Base will explicitly select `spacingPolicy="automatic-v2"` on
-SiteShell. An unchanged downstream Base retains compatibility behavior. Standard
-Sections and Containers provide automatic structural gaps; custom layouts can
-relinquish that responsibility. Breakout Containers retain named tracks. RichText
-owns editorial rhythm, while structural collection lists keep their own alignment.
-CSS contextual aliases are maintained with the existing token CLI; there is no
-settings panel or second writable token store.
+## Cascade layers and spacing ownership
 
-## Cascade layers and automatic spacing
+Owned styles use `@layer base` or `@layer components`, after vendor/framework ownership and before utilities in the declared document order. Contextual defaults use `:where()`; `py-0`, `mt-0` and `gap-0` can override them without `!important`. Keyframes stay outside these rule layers. The parsed check covers owned standalone CSS, Astro styles, local imports and static overlays; third-party editor/admin styles have a separate boundary.
 
-All authored component styles live in `@layer components`; element defaults and the
-section/container spacing rules live in `@layer base`. Tailwind utilities remain last,
-so `py-0`, `mt-0`, `gap-0` and other utilities override component defaults without
-`!important`. Every `.astro` style block follows this contract; ticker keyframes stay
-outside the layer.
+Section owns block padding and a stack's container gap. `spacing="section|content|none"` controls padding only, with none equal to zero. Ordinary Container owns content gap; Grid owns grid gap. Each primitive resets its local defaults from inherited root-context aliases. The shell pays horizontal gutters once and has no inferred block rhythm under v2. Intentionally scoped aliases inherit; local mode values do not.
 
-`<Section>` delegates its block padding to `:where(main > section, .section)`. The
-`spacing` values are `section` (default), `content` and `none`; `none` also zeroes the
-container gap. `--section-padding` and `--container-gap` are contextual overrides,
-not new global tokens. `.site-main` owns horizontal gutters and only supplies block
-padding when a page has no direct section.
-
-`<Grid>` writes `--grid-gap` from its optional `gap` prop. `.grid` and `.grid-auto`
-provide the default; utilities such as `gap-0` win. A section that is itself a grid,
-cluster or sidebar zeroes `--container-gap` so margin and `gap` do not double.
-
-`RichText` wraps Portable Text in `.flow` by default. Use `flow={false}` only when the
-caller explicitly owns rhythm. `.article-body` is a margin wrapper, not a second flow
-container. Authored markup that does not use `RichText` can opt in with `.flow` or
-`[data-flow]`.
+RichText establishes `.flow` and `data-editorial-content`; generic flow only spaces visible direct siblings. Editorial controls include heading/list/item/figure/quote/base flow spacing. Native CSS scope stops recursive list/quote defaults at islands and nested editorial boundaries. `flow={false}` removes both defaults, wrapperless unless attributes require a plain wrapper. Empty public content is omitted while real CMS edit metadata retains selectable empty fields.
 
 ## Section, Grid and RichText
 
 ```astro
 <Section labelledBy="post-title">
-  <article class="flow">
+  <article class="article-stack">
     <h1 id="post-title">Title</h1>
     <div class="article-body"><RichText value={entry.data.body} /></div>
   </article>
@@ -56,7 +30,7 @@ container. Authored markup that does not use `RichText` can opt in with `.flow` 
 ```
 
 `Section` renders a native section with `aria-labelledby`, `data-spacing` and a merged
-class list; it owns no scoped spacing. `Grid` accepts `minimum` and `gap`. `RichText`
+class list; its global contextual rules own the spacing. `Grid` accepts `minimum` and `gap`. `RichText`
 accepts `flow` and forwards other attributes to its wrapper. These APIs preserve
 zero-specificity contextual defaults while leaving every utility escape hatch open.
 
@@ -190,3 +164,11 @@ dark/light alias declarations together while preserving calibrated palette value
 The updated checker deliberately rejects a stylesheet missing the link contract;
 installing only the new script is not a complete update. A sync conflict on a
 locally calibrated stylesheet requires this manual merge before verification passes.
+
+## Automatic spacing and day-2 maintenance
+
+The shipped `automatic-v2` contract is detailed in [design framework](design-framework.md). New Bases explicitly enable it on SiteShell; shared SiteShell defaults legacy. Section's padding and container stack gap are separate, Container stacks with content gap, Grid owns its gap, and breakout retains named tracks. `spacing="none"` removes padding only. `layout="custom"` transfers display/direction/gap to the caller. Local mode values reset; regional `--layout-*` aliases intentionally inherit. A gap prop wins over the same passed style variable; a utility wins through the utilities layer. HTML attributes and unrelated classes/styles persist.
+
+Use CSS as the only spacing configuration. Pick an existing scale for a global density change, a root alias for one relationship, a regional alias for local density, a primitive gap for one composition, or an explicit utility for an exception. Keep generic flow to direct siblings and editorial behavior to RichText or explicitly marked prose; do not add child margins to a gapped group. Preview CLI changes, review the diff, write explicitly, verify/build and inspect actual affected placements. The token report is a bounded reference evaluation, not a browser or universal downstream consumer inventory.
+
+An older generated site must adopt new helpers, parser packages/checks, contextual aliases and editorial callers together through a reviewed migration before Base activation. Bounded sync now reports missing dependencies/aliases as migration conflicts and preserves local files. Adopt that self-contained sync helper first; older copies cannot anticipate new import requirements. Preserve calibrated theme values and rollback activation plus composition changes together. See [baseline updates](baseline-updates.md).

@@ -67,6 +67,21 @@ verification. `.baseline/updates/` is ignored local review material; it contains
 no credentials. To retry a revision after manual reconciliation, remove only its
 specific staging directory and stage again; unchanged conflicts continue to be
 reported because their recorded base hash is intentionally preserved.
+
+### Automatic-spacing migration
+
+Adopt the updated **self-contained** `scripts/sync-baseline.mjs` first. Its conservative literal-import preflight reports missing relative files, undeclared direct packages and missing contextual aliases in `migrationReasons`; apply recomputes these from incoming bytes instead of trusting editable stage flags. Introducing the new spacing stylesheet into an older alias-free site also requires manual composition/editorial migration. These are preserved conflicts, not automatic additions. The preflight is not a general JavaScript compiler or proof of arbitrary import/export compatibility; review all incoming code. Older installed helpers do not provide this protection until explicitly updated.
+
+For a reviewed additive migration:
+
+1. Save the current verified commit and rendered route/geometry evidence. Record the installed profile and client-owned Base, routes, content/settings and calibrated theme values. Stage the chosen immutable upstream revision and inspect every conflict.
+2. Add `src/lib/layout-style.ts`, `scripts/css-contracts.mjs`, `scripts/check-css-contracts.mjs` and the portable CSS/token regression tests from that revision. Add the revision's direct `postcss`, `postcss-selector-parser`, `astro-eslint-parser` development versions; regenerate and review the independent npm lockfile. Add `check:css` to verify/CI and retain existing checks/tests. Update docs/skill guidance explicitly; bounded sync does not add those paths automatically.
+3. Merge global structural/editorial rules and four regular root `--layout-*` aliases while preserving calibrated `@theme` palette/type/spacing/radii and unrelated site contexts. Adopt matching Section/Container/Grid, shared style helper, RichText editorial boundaries/islands and one-sided flow as one change. Review component-specific styles and vendor boundaries. No panel, database record or generated CSS settings copy is needed.
+4. Migrate actual caller ownership: remove duplicate gap/flow/space-y relationships, preserve structural list semantics and block metadata, and inspect ordinary/breakout gutter tracks. Keep shell policy legacy until the composition is ready. Explicitly set `spacingPolicy="automatic-v2"` in the **client-owned** Base only after reviewing that change. Starter sample routes are examples, not replacements for client routes/content.
+5. Run verify/build, production-isolation checks and rendered narrow/intermediate/wide/reflow/focus/media journeys. CMS installations separately need real edit/save/reload proof; static/Sveltia have their own publication workflows. Recalibrate from saved CSS after visual acceptance. Review managed inventory expansion and exact infrastructure exceptions as a separate provenance migration; never add a client page exemption or fabricate a base hash to suppress a conflict.
+6. Commit the complete migration. Roll back activation **and** related caller/layout/editorial changes to the saved verified state together; preserve the client's calibrated values. A marker-only rollback cannot undo already migrated editorial CSS. Repeat the affected build/browser checks after rollback.
+
+The maintained `tests/baseline-sync.test.mjs` includes an older-shape inventory with missing helpers/packages/aliases, calibrated CSS and legacy Base. It proves bounded preservation and stage-flag tamper resistance. The local historical upgrade rehearsal adds actual historical generation, independent installs/builds, browser comparison, reviewed activation and rollback; see `audit/automatic-spacing-progress.md` for its recorded result and limitations.
 `lastSync` records the latest operation, not cumulative adoption: a repeated sync
 can have no newly applied files while earlier per-file update commits remain
 recorded. Retain the original proposal/review evidence when restaging.
@@ -109,7 +124,7 @@ Older receipts and package scripts do not acquire those additions through sync.
 Adopt them explicitly in a reviewed generator migration, or copy the portable
 suite/document as locally owned files and add the suite to the existing design
 test command. Retain existing tests and perform verify/build plus local rendered
-resize acceptance before committing. No new dependency is required.
+resize acceptance before committing. That historical fluid-only update required no new dependency; adopting the current combined token checker also requires the parser packages and contextual aliases listed in the automatic-spacing migration above.
 
 Generator 0.4.0's [architecture upgrade](architecture-hardening-upgrade.md)
 groups the metadata, lint, composition and diagnostic additions in their required

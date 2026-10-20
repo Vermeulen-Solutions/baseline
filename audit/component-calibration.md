@@ -22,6 +22,7 @@ SiteShell defaults to legacy. The site-owned Bases explicitly enable automatic-v
 - Dates occupy a block in the article stack. RichText has one editorial boundary, independent of article metadata. Empty public values/slots do not create extra flex items; query-attached empty editor targets are retained.
 - Owned image frames avoid nested vendor figures and vendor image class collisions. Real ID-only uploaded media loads through supported CMS repository/runtime APIs. Gallery margins/padding/image width/gap can yield to utilities without important declarations.
 - Native scope keeps nested prose lists readable while protecting Card, Gallery, Ticker and Disclosure interiors. Each direct child resets private flow calculation state, so a quote/media interval cannot become a nested paragraph default. Each documented public prose control is checked with a distinctive 67px value.
+- Final review caught Tailwind's reset still hiding editorial list markers. `list-style: revert` now restores default bullets/numbers inside the bounded editorial scope. Utility overrides and composite list isolation remain intentional. Maintained CMS/native/profile browser assertions check markers as well as indentation; custom marker types remain caller-owned CSS.
 - Public main owns gutters. A breakout grid inside it no longer adds a second gutter; standalone breakout grids retain their own safe tracks. Lazy responsive images use actual rendered size with a fallback hint. Eager callers retain their authored placement hints.
 - Rendered review exposed crowded widget content and duplicate article/footer use of the same CMS area. Base remains the single owner of the existing sidebar-named area, rendered in the footer. The duplicate article aside is removed; CMS settings/content are preserved. The area uses the existing intrinsic grid and bounded internal groups, with separation between category counts and recent-post dates. This is an explicit refinement of the earlier caller inventory's preserve-aside assumption.
 - Full and targeted captures retain neutral section pacing, native disclosure markers, dark focus, wrapped actions, RTL reading order, constrained media, readable captions and visible form focus. An empty starter homepage still fills the available viewport; no filler content is introduced to disguise its size.
@@ -52,7 +53,7 @@ Manual assistive-technology announcements, Firefox/WebKit, physical devices, pro
 ## Token Calibration
 
 - **Source stylesheet:** `C:\dev\emdash-baseline\src\styles\global.css`
-- **LF SHA-256:** `b322b9951a283af43a54ec61b49b0aef76d778813776f3cf5336856898b193ae`
+- **LF SHA-256:** `735a233f3d62815611945b43fe138c59e1065e99beb5239ce52686da09e58db8`
 - **Validation status:** `PASS` (14 WCAG contrast pairs, 31 `@theme` tokens, 11 `:root` tokens)
 
 ### WCAG Relative Luminance Contrast Matrix

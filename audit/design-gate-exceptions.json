@@ -26,7 +26,7 @@
   {
     "path": "src/styles/global.css",
     "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "b322b9951a283af43a54ec61b49b0aef76d778813776f3cf5336856898b193ae"
+    "sha256": "735a233f3d62815611945b43fe138c59e1065e99beb5239ce52686da09e58db8"
   },
   {
     "path": "src/layouts/Base.astro",

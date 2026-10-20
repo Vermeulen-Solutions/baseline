@@ -381,7 +381,7 @@
 	:where([data-editorial-content]) > :where(*) { margin-block-end: 0; }
 	/* Native scope stops recursive list presentation at semantic islands and nested editors. */
 	@scope ([data-editorial-content]) to ([data-editorial-island], [data-editorial-content]) {
-		:where(ul, ol) { padding-inline-start: 1.5em; }
+		:where(ul, ol) { list-style: revert; padding-inline-start: 1.5em; }
 		:where(li + li) { margin-block-start: var(--list-item-spacing, 0.35em); }
 		:where(blockquote) > :where(* + *) { margin-block-start: var(--flow-space, var(--spacing-content)); }
 	}

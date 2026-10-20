@@ -42,9 +42,16 @@ test('T03-T05 CLI validates before writes and binds calibration to the saved can
     assert.deepEqual(before(),original);assert.equal(fs.existsSync(path.join(dir,'audit/component-calibration.md')),false);
     const preview=run('--set','--root:--layout-grid-gap=0','--json');assert.equal(preview.status,0,preview.stderr);
     assert.equal(JSON.parse(preview.stdout).mode,'preview');assert.deepEqual(before(),original);
-    const saved=run('--set','--root:--layout-grid-gap=0','--write','--write-calibration');assert.equal(saved.status,0,saved.stderr);
+    const saved=run('--set','--root:--layout-grid-gap=0','--write','--write-calibration','--json');assert.equal(saved.status,0,saved.stderr);
+    assert.equal(JSON.parse(saved.stdout).mode,'saved');assert.equal(JSON.parse(saved.stdout).valid,true);
     const candidate=fs.readFileSync(path.join(dir,'global.css'),'utf8');
     assert.ok(fs.readFileSync(path.join(dir,'audit/component-calibration.md'),'utf8').includes(stylesheetDigest(candidate)));
+    const cal=path.join(dir,'audit/component-calibration.md');
+    fs.writeFileSync(cal,fs.readFileSync(cal,'utf8').split('## Component Specimens To Verify')[0]);
+    const refreshed=run('--write-calibration','--json');assert.equal(refreshed.status,0,refreshed.stderr);
+    assert.equal(JSON.parse(refreshed.stdout).sha256,stylesheetDigest(candidate));
+    assert.equal(fs.readFileSync(cal,'utf8').match(/^## Token Calibration$/gm)?.length,1,'EOF calibration does not append duplicates');
     assert.match(run('--set','--root:--layout-grid-gap=0','--write').stdout,/No-op/);
+    assert.equal(JSON.parse(run('--set','--root:--layout-grid-gap=0','--write','--json').stdout).mode,'no-op');
   } finally { fs.rmSync(dir,{recursive:true,force:true}); }
 });

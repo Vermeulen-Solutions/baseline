@@ -34,10 +34,14 @@ that browser verification has been performed.
 
 Posts live in `src/content/posts/`, with a typed schema in `src/content.config.ts`.
 `draft: true` excludes a post from listings and generated routes. Detail routes use
-`getStaticPaths()` and `render()`; wrap native Markdown output in `.flow`.
+`getStaticPaths()` and `render()`; render native Markdown through `<RichText><Content /></RichText>`.
 All authored CSS must stay in `@layer base` or `@layer components`; use
 `<Section>`/`.section` for page vertical rhythm and `RichText` for editorial flow.
 Site settings and navigation live in `src/config/site.ts`.
+
+Base explicitly selects `SiteShell spacingPolicy="automatic-v2"`; shared SiteShell defaults to legacy for reviewed upgrades. Section owns block padding and a container gap, Container owns a content stack gap, Grid owns its grid gap, and the shell owns horizontal gutters once. `spacing="none"` removes padding only; nested modes reset. Use `layout="custom"` for caller-owned display/gaps; breakout retains its named grid. Avoid flow/space-y margins on gapped groups. RichText supplies `.flow` and `data-editorial-content`; generic flow only spaces direct siblings. Mark composite internals `data-editorial-island` and establish editorial bodies deliberately. `flow={false}` removes both behaviors, wrapperless unless attributes require a plain wrapper.
+
+For day-2 spacing requests choose the smallest scope: existing `@theme` scale for global density, regular root `--layout-*` alias for a structural relationship, layered regional alias, primitive `gap`, then an explicit utility exception. Preview `npm run design:tokens -- --set "--root:--layout-grid-gap=calc(var(--spacing-grid) * 0.75)" --json`; review, then add `--write` (and `--write-calibration` for saved-source evidence). Keep CSS authoritative without panels or a second configuration store. See `docs/design-framework.md` and `docs/native-composition.md`; inspect affected pages/styleguide at narrow/intermediate/wide widths after verify/build.
 
 Store content imagery in `src/assets/` and use native Astro image processing with
 accurate alt text and native bounds. Reserve `public/` for deliberate unchanged

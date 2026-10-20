@@ -201,6 +201,7 @@ try {
         assert.ok(await page.locator('h1').count());
         assert.equal(await page.locator('img').evaluateAll(images => images.filter(image => !image.complete || image.naturalWidth === 0).length), 0);
         if (route === '/') journeys.push({ route, skip: await skipLinkJourney(page, page.locator('main a[href="/posts/welcome/"]').first()) });
+        if (route === '/posts/welcome/') await expect(page.locator('main [data-editorial-content] ol')).toHaveCSS('list-style-type','decimal');
         if (route === '/_styleguide/') journeys.push({ route,
           skip: await skipLinkJourney(page, page.getByRole('button', { name: 'Native button', exact: true })),
           composition: await disclosureJourney(page), layout: await intrinsicLayoutJourney(page),

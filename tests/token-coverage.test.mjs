@@ -177,6 +177,15 @@ test('formatCalibrationMarkdown and upsertCalibrationRecord bind Stage 4.5 token
     const second = readFileSync(target, 'utf8');
     assert.equal(second.match(/## Token Calibration/g)?.length, 1);
     assert.ok(second.includes('## Component Specimens To Verify'));
+    // Maintained sections can be last in a manually reviewed calibration doc.
+    writeFileSync(target, '# Reviewed evidence\n\n'+formatCalibrationMarkdown(css)+'\n');
+    upsertCalibrationRecord(target,css);
+    const eof=readFileSync(target,'utf8');upsertCalibrationRecord(target,css);
+    assert.equal(readFileSync(target,'utf8'),eof,'EOF updates are idempotent');
+    writeFileSync(target,eof+'## Preserved notes\nKeep browser evidence.\n\n'+formatCalibrationMarkdown(css)+'\n');
+    upsertCalibrationRecord(target,css);
+    const repaired=readFileSync(target,'utf8');assert.equal(repaired.match(/^## Token Calibration$/gm)?.length,1);
+    assert.ok(repaired.includes('Keep browser evidence.'));
     assert.ok(formatCalibrationMarkdown(css).includes('WCAG Relative Luminance Contrast Matrix'));
   } finally {
     rmSync(dir, { recursive: true, force: true });
@@ -222,6 +231,13 @@ test('formatArtDirectionRecord and upsertArtDirectionRecord generate records tha
       assert.equal(saved.match(/^## Art Direction Record\b/gm)?.length, 1);
       assert.ok(saved.includes('## Implementation rules'));
     }
+    writeFileSync(agentsFile,'# Site\n\n'+formatArtDirectionRecord('neutral')+'\n');
+    upsertArtDirectionRecord(agentsFile,'neutral');const eof=readFileSync(agentsFile,'utf8');
+    upsertArtDirectionRecord(agentsFile,'neutral');assert.equal(readFileSync(agentsFile,'utf8'),eof);
+    writeFileSync(agentsFile,eof+'## Other instructions\nRetain these.\n\n'+formatArtDirectionRecord('neutral')+'\n');
+    upsertArtDirectionRecord(agentsFile,'neutral');const repaired=readFileSync(agentsFile,'utf8');
+    assert.equal(repaired.match(/^## Art Direction Record$/gm)?.length,1);assert.ok(repaired.includes('Retain these.'));
+    assert.deepEqual(validateRecord(repaired),[]);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

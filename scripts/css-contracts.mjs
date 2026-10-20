@@ -99,7 +99,12 @@ export function analyzeFlow(css) {
       let hidden=0;selector.walkAttributes(n=>{if(n.attribute==='hidden')hidden++;});
       const universal=tokens.filter(n=>n.type==='universal').length;
       const tags=tokens.filter(n=>n.type==='tag');
-      if(tags.length===0 && (universal>=2 || hidden>=2) && declarations.some(n=>n.prop==='margin-block-start'))generic=true;
+      if(tags.length===0 && (universal>=2 || hidden>=2) && declarations.some(n=>['margin-block-start','margin-top'].includes(n.prop))) {
+        generic=true;
+        // Count historical physical-margin definitions for drift diagnostics,
+        // but do not certify their writing-mode/edge behavior as logical flow.
+        if(declarations.some(n=>n.prop==='margin-top'))unknownEdges=true;
+      }
       const media=tokens.slice(child+1,adjacent).filter(n=>n.type==='tag' && ['img','figure','table','blockquote'].includes(n.value));
       if(tokens.slice(adjacent+1).some(n=>n.type==='universal') && declarations.some(n=>['margin-block-start','margin-block-end'].includes(n.prop) && /^0(?:px|rem|em)?$/.test(n.value.trim())))media.forEach(n=>guardedMedia.add(n.value));
     }
@@ -110,5 +115,5 @@ export function analyzeFlow(css) {
     }
   });
   const guard=twoSided && !unknownEdges && [...requiredMedia].every(tag=>guardedMedia.has(tag));
-  return { verified:count>0 && !unknownEdges, flowRuleCount:count, flowDuplicateMarginGuard:guard || (!twoSided && count===1) };
+  return { verified:count>0 && !unknownEdges, flowRuleCount:count, flowDuplicateMarginGuard:!unknownEdges && (guard || (!twoSided && count===1)) };
 }

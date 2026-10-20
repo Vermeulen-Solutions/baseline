@@ -852,9 +852,16 @@ export function upsertCalibrationRecord(targetPath, css, cssPath = 'src/styles/g
 
   if (existsSync(resolved)) {
     const existing = readFileSync(resolved, 'utf8').replace(/\r\n/g, '\n');
-    const headingRegex = /^## Token Calibration\b[\s\S]*?(?=^## |\Z)/m;
-    if (headingRegex.test(existing)) {
-      const updated = existing.replace(headingRegex, `${section}\n\n`).replace(/\n{3,}/g, '\n\n');
+    // JavaScript has no \Z end anchor. Handle a final section and repair
+    // duplicate generated sections left by earlier calibration writes.
+    const headingRegex = /^## Token Calibration[ \t]*(?:\n|$)[\s\S]*?(?=^## |(?![\s\S]))/gm;
+    let found = false;
+    const updated = existing.replace(headingRegex, () => {
+      if (found) return '';
+      found = true;
+      return `${section}\n\n`;
+    }).replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '\n');
+    if (found) {
       writeFileSync(resolved, updated, 'utf8');
       return resolved;
     }
@@ -911,9 +918,14 @@ export function upsertArtDirectionRecord(agentsPath = 'AGENTS.md', laneId = 'neu
   const section = formatArtDirectionRecord(laneId, custom);
   const resolved = resolve(agentsPath);
   const existing = existsSync(resolved) ? readFileSync(resolved, 'utf8').replace(/\r\n/g, '\n') : '# Site Instructions\n';
-  const headingRegex = /^## Art Direction Record\b[\s\S]*?(?=^## |\Z)/m;
-  if (headingRegex.test(existing)) {
-    const updated = existing.replace(headingRegex, `${section}\n\n`).replace(/\n{3,}/g, '\n\n');
+  const headingRegex = /^## Art Direction Record[ \t]*(?:\n|$)[\s\S]*?(?=^## |(?![\s\S]))/gm;
+  let found = false;
+  const updated = existing.replace(headingRegex, () => {
+    if (found) return '';
+    found = true;
+    return `${section}\n\n`;
+  }).replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '\n');
+  if (found) {
     writeFileSync(resolved, updated, 'utf8');
     return resolved;
   }
@@ -1287,26 +1299,27 @@ function main() {
   const saving = args.includes('--write') || initClient;
   const recordIndex = args.indexOf('--write-record');
   const calIndex = args.indexOf('--write-calibration');
+  const announce = message => (args.includes('--json') ? console.error : console.log)(message);
   if(hasMutationRequest && !saving && (recordIndex>=0 || calIndex>=0)) throw new Error('Preview is read-only. Add --write to save the validated candidate before writing record/calibration evidence.');
   // All candidate gates above precede the first mutation, including companion files.
   if(hasMutationRequest && saving) {
-    if(css===source)console.log('No-op: requested token values already match ' + cssPath);
-    else { writeFileSync(cssPath,css,'utf8'); console.log('Updated ' + cssPath + ' (SHA-256 ' + stylesheetDigest(css) + ').'); }
+    if(css===source)announce('No-op: requested token values already match ' + cssPath);
+    else { writeFileSync(cssPath,css,'utf8'); announce('Updated ' + cssPath + ' (SHA-256 ' + stylesheetDigest(css) + ').'); }
   }
   if(recordIndex>=0 || initClient) {
     const next=recordIndex>=0?args[recordIndex+1]:null;
     const target=next && !next.startsWith('--')?next:'AGENTS.md';
-    console.log('Wrote ## Art Direction Record to ' + upsertArtDirectionRecord(target,selectedLaneId));
+    announce('Wrote ## Art Direction Record to ' + upsertArtDirectionRecord(target,selectedLaneId));
   }
   if(initClient) {
     const pruned=pruneStarterExceptions('audit/design-gate-exceptions.json');
-    console.log('Pruned starter sample exceptions (' + pruned.before + ' -> ' + pruned.after + ').');
+    announce('Pruned starter sample exceptions (' + pruned.before + ' -> ' + pruned.after + ').');
   }
   if(calIndex>=0 || initClient) {
     const next=calIndex>=0?args[calIndex+1]:null;
     const target=next && !next.startsWith('--')?next:'audit/component-calibration.md';
-    console.log('Wrote saved-source calibration to ' + upsertCalibrationRecord(target,css,cssPath));
-    return;
+    announce('Wrote saved-source calibration to ' + upsertCalibrationRecord(target,css,cssPath));
+    if(!args.includes('--json'))return;
   }
   if(hasMutationRequest && !saving && !args.includes('--json'))console.log(JSON.stringify({mode:css===source?'no-op':'preview',changes:combinedOverrides,spacing:report.spacing},null,2));
 
@@ -1315,7 +1328,7 @@ function main() {
   if (args.includes('--json')) {
     console.log(JSON.stringify({
       ...report,
-      mode:hasMutationRequest ? (saving ? "saved" : css===source ? "no-op" : "preview") : "audit",
+      mode:hasMutationRequest ? (css===source ? "no-op" : saving ? "saved" : "preview") : "audit",
       changes:hasMutationRequest ? combinedOverrides : undefined,
       valid: allValid,
       fontLoading: fontAudit,
