@@ -27,6 +27,7 @@
   },
   "pending": [],
   "scriptOverrides": {
+    "test": "node --test tests/*.test.mjs",
     "test:design": "node --test tests/static-foundation.test.mjs tests/fluid-tokens.test.mjs tests/css-contracts.test.mjs tests/spacing-tokens.test.mjs",
     "lint:templates": "eslint src --max-warnings 0"
   },
