@@ -1,5 +1,28 @@
 import { test, expect } from '@playwright/test';
 
+test('V02-V05 real primitives isolate nested modes, merge attributes and own each gap once',async({page})=>{
+  await page.goto(process.env.VISUAL_ORIGIN+'/structural-spacing-fixture');
+  const data=await page.evaluate(()=>{
+    const css=id=>getComputedStyle(document.getElementById(id));
+    const ref=css('reference');
+    const modes=Object.fromEntries(['section','content','none'].flatMap(p=>['section','content','none'].map(c=>[p+'-'+c,parseFloat(css(p+'-'+c).paddingTop)])));
+    const box=id=>document.getElementById(id).getBoundingClientRect();
+    return {modes,regular:parseFloat(ref.paddingTop),compact:parseFloat(ref.paddingBottom),grid:parseFloat(ref.gap),
+      adjacent:box('adjacent-two').top-box('adjacent-one').bottom, stack:css('stack').gap,
+      scoped:css('scoped-child').paddingTop,local:css('local').gap,independent:css('local-child').paddingTop,
+      custom:css('custom').display,customGap:css('custom').gap,breakout:css('breakout').display,
+      prop:css('grid-prop').gap,utility:css('grid-utility').gap,container:css('container-prop').gap,raw:parseFloat(css('raw-grid').gap)};
+  });
+  for(const [pair,value] of Object.entries(data.modes))expect(value,pair).toBeCloseTo(pair.endsWith('none')?0:pair.endsWith('content')?data.compact:data.regular,1);
+  expect(data.adjacent).toBeCloseTo(0,1);expect(parseFloat(data.stack)).toBeCloseTo(data.compact,1);
+  expect(data.scoped).toBe('17px');expect(data.local).toBe('0px');expect(parseFloat(data.independent)).toBeCloseTo(data.regular,1);
+  expect(data.custom).toBe('block');expect(data.customGap).toBe('normal');expect(data.breakout).toBe('grid');
+  expect(data.prop).toBe('13px');expect(data.utility).toBe('0px');expect(data.container).toBe('11px');expect(data.raw).toBeCloseTo(data.grid,1);
+  await expect(page.locator('#grid-prop')).toHaveAttribute('aria-label','grid attributes');
+  await expect(page.locator('#grid-prop')).toHaveCSS('color','rgb(1, 2, 3)');
+  await expect(page.locator('#container-prop')).toHaveClass(/kept/);
+});
+
 test('behavior ID-only media resolves through its provider and gallery utilities override defaults', async ({ page }) => {
   await page.goto(process.env.VISUAL_ORIGIN + '/media-spacing-fixture');
   const image = page.locator('#id-only-media img');

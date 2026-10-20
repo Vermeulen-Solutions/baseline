@@ -51,7 +51,8 @@
     "scripts/css-contracts.mjs",
     "scripts/check-css-contracts.mjs",
     "tests/css-contracts.test.mjs",
-    "tests/spacing-tokens.test.mjs"
+    "tests/spacing-tokens.test.mjs",
+    "src/lib/layout-style.ts"
   ],
   "packages": {
     "dependencies": [

@@ -940,6 +940,10 @@
     "tests/spacing-tokens.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "src/lib/layout-style.ts": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

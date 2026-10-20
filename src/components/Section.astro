@@ -1,19 +1,26 @@
 ---
-interface Props {
+import type { HTMLAttributes } from 'astro/types';
+import { layoutStyle } from '../lib/layout-style';
+interface Props extends HTMLAttributes<'section'> {
 	labelledBy: string;
 	spacing?: "content" | "section" | "none";
 	class?: string;
+	gap?: string;
+	layout?: 'stack' | 'custom';
 }
 
-const { labelledBy: rawLabel, spacing: rawSpacing, class: className } = Astro.props;
+const { labelledBy: rawLabel, spacing: rawSpacing, gap, layout, class: className, 'class:list': classes, style, ...attributes } = Astro.props;
 const labelledBy = typeof rawLabel === 'string' && rawLabel.trim() ? rawLabel.trim() : undefined;
 const spacing = rawSpacing === 'content' || rawSpacing === 'none' ? rawSpacing : 'section';
 ---
 
 <section
+	{...attributes}
 	aria-labelledby={labelledBy}
 	data-spacing={spacing === 'section' ? undefined : spacing}
-	class:list={["section", className]}
+	data-layout={layout === 'custom' ? 'custom' : 'stack'}
+	class:list={["section", className, classes]}
+	style={layoutStyle(style, '--container-gap', gap)}
 >
 	<slot />
 </section>

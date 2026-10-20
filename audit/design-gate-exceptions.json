@@ -26,7 +26,7 @@
   {
     "path": "src/styles/global.css",
     "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "c697d029029a10788ccfa95339ad30f9a51d17f7579a1ec4de67d6144175a3ba"
+    "sha256": "48b0edbbc10236e8ef42153a50c41a0944f9727ac423b98e3ef4235af30acbd8"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -36,17 +36,17 @@
   {
     "path": "src/components/Container.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "e72ef8195e9c1768f6f66daed91173091eb3974d9305a78a76eb485598f8401a"
+    "sha256": "6191f396504660d3cf44a71ae7f4b021f2db3026be387093d6bf33bba5a9fbd6"
   },
   {
     "path": "src/components/Grid.astro",
     "reason": "Starter infrastructure: expose a contextual grid gap variable while retaining the calibrated minimum-width variants; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "ba8e561f8b1876ac8a310253c30618422191f98d353903fb8e0a595e1f1520db"
+    "sha256": "6510cee21bfbc48d7945d51c03c45b1168d863be75c740612729351db7f49908"
   },
   {
     "path": "src/components/Section.astro",
     "reason": "Starter infrastructure: section spacing moves to the layered global spacing contract with a data-spacing opt-out; semantic section markup and accessible naming are preserved. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "b6565c91fc5b5ba06bbad5173f66cb8370651dfbbeb059433a860701104ea9f1"
+    "sha256": "bbc9bb49669cf2a3d50c5be9cc6c006737785715bddd48b446ff3ed364caf013"
   },
   {
     "path": "src/live.config.ts",
@@ -247,7 +247,7 @@
   {
     "path": "src/layouts/SiteShell.astro",
     "reason": "Functional shared starter metadata ownership option; preserve the document/title/landmarks and backward-compatible static default while allowing a platform head to own description/canonical. No visual-system or client content change. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "c7824f26df45085e8fbf92f2dfbf4bc4a47ea90aa73e1f9c991d841d20ac131b"
+    "sha256": "c05c1b552ca9ef416e56a588a6fa4f9abf9ba80839c9487ae3b798afe7e3cb67"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -423,5 +423,10 @@
     "path": "src/styles/photoswipe.css",
     "reason": "Approved automatic-spacing starter infrastructure: isolated third-party CSS import boundary; no client visual implementation.",
     "sha256": "9a3fcb7e69b71cedb3fbd8fdaf302f42acc4ac7856104d5f4a3b923de1a77382"
+  },
+  {
+    "path": "src/lib/layout-style.ts",
+    "reason": "Approved automatic-spacing starter infrastructure: shared attribute/style merge helper; no client visual implementation.",
+    "sha256": "de4f24be706d7e62a89ecf471fcc4b4be1c744b8226f5c6eef0ea366de8ec9aa"
   }
 ]

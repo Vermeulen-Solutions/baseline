@@ -8,8 +8,8 @@ Started: 2026-10-20. Starting revision: `c3d965c`. Scope: [consolidated plan](au
 | --- | --- | --- | --- |
 | 1 | W01 contracts, caller inventory, baseline | Verified | [Caller inventory](automatic-spacing-callers.md); 251 tests; 46 Astro files, zero diagnostics |
 | 2 | W02 media/cascade and W03 parsed-check foundation | Verified foundation | 126 fast tests; parsed CSS/selector mutations; real uploaded ID-only media in dev and built Chromium at 390px; broader matrix remains Phase 6 |
-| 3 | W06 contextual aliases and token CLI | Implemented; commit hook gates fast suite | Exact scope parsing, candidate validation, bounded resolver; T01-T06 maintained cases |
-| 4 | W04 scoped structural defaults | Planned | Activation and attribute/style API contract below |
+| 3 | W06 contextual aliases and token CLI | Verified | Commit `30233e7`; 129 fast tests; T01-T06 maintained cases |
+| 4 | W04 scoped structural defaults | Verified foundation | V02-V05 actual primitives at 390px; full width/content matrix follows in Phase 6 |
 | 5 | W05/W07 editorial boundaries, routes; W09 editing preparation | Planned | Keep collection lists distinct from editorial lists |
 | 6 | W08 complete maintained behavioral/mutation cases | Planned | Complete V/M/T matrix; retain local-only browser policy |
 | 7 | W10 visual review/calibration | Planned | Review intentional screenshot changes before accepting |
@@ -58,3 +58,10 @@ Record phase commit IDs, exact commands, results and applicability here. Keep la
 - T01-T06: three maintained test groups exercise typo/wrong scope/duplicates/no-op, narrow context writes, missing/cyclic references, zero/negative/unsupported/proportional values, read-only previews, invalid companion-file requests and saved calibration hash identity.
 - Existing token/workflow suite: 23 passed. The CLI diagnostic suite also checks that failed audits retain machine-readable JSON. Fast verification is required by the phase commit hook.
 - Candidate token, font and applicable CMS proxy validation precedes all writes. Supported expressions are deliberately bounded; unknown CSS evaluation is an error, not a green certification. Parser-based edits preserve unrelated source and comments.
+
+## Phase 4 evidence
+
+- `npm.cmd run verify:fast`: PASS, 129 tests. `npm.cmd run typecheck`: PASS, 47 files, zero diagnostics. Native presentation build: 3 tests passed.
+- `npm.cmd exec playwright test tests/visual/spacing.spec.mjs -- --project=chromium-390`: PASS, 3 tests. V02-V05 measure the actual Section/Container/Grid implementations, all nine nested Section modes, intentionally inherited aliases, local zero controls, gap prop over string/object style, utility over gap prop, retained IDs/ARIA/classes/style, custom mode and breakout grid.
+- Legacy structural rules are explicitly scoped away from activated roots. SiteShell defaults to legacy; site-owned Base activation is Phase 5. No Section child allowlist or shell inference is used by the new policy. Cluster and Sidebar keep their own contracts.
+- Shared style helper and dependencies are explicitly inventoried; exact starter infrastructure exceptions were refreshed, without creating a client Art Direction Record.

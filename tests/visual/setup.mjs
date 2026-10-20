@@ -15,6 +15,30 @@ export default async function setup() {
   let fixtureStage, fixtureOrigin;
   const site = await startVisualSite(process.cwd(), reportDir, { prepareStage: async ({ stage, origin }) => {
     fixtureStage = stage; fixtureOrigin = origin;
+    await writeFile(path.join(stage,'src/pages/structural-spacing-fixture.astro'), `---
+import SiteShell from '../layouts/SiteShell.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Grid from '../components/Grid.astro';
+import Cluster from '../components/Cluster.astro';
+import Sidebar from '../components/Sidebar.astro';
+const modes=['section','content','none'];
+---
+<SiteShell title="Structural geometry" spacingPolicy="automatic-v2">
+<div id="reference" style="padding-top:var(--layout-section-padding);padding-bottom:var(--spacing-content);gap:var(--layout-grid-gap)"></div>
+{modes.map(parent=><Section labelledBy="fixture-title" spacing={parent}>{modes.map(child=><Section id={parent+'-'+child} labelledBy="fixture-title" spacing={child}><div>A</div><div>B</div></Section>)}</Section>)}
+<Section id="adjacent-one" labelledBy="fixture-title"><Container id="stack"><h1 id="fixture-title">Title</h1><p>Text</p><Cluster><a href="#fixture-title">Action</a><button>Button</button></Cluster></Container><Container><p>Second container</p></Container></Section>
+<Section id="adjacent-two" labelledBy="fixture-title" spacing="none"><p>Next band</p></Section>
+<Section id="scoped" labelledBy="fixture-title" style="--layout-section-padding:17px;--layout-container-gap:19px"><Section id="scoped-child" labelledBy="fixture-title"><p>Scoped</p></Section></Section>
+<Section id="local" labelledBy="fixture-title" gap="0" style="--section-padding:0px;--container-gap:90px"><Section id="local-child" labelledBy="fixture-title"><p>Independent</p></Section></Section>
+<Container id="custom" layout="custom"><p>A</p><p>B</p></Container>
+<Container id="breakout" breakout layout="stack"><p>Reading track</p></Container>
+<Grid id="grid-prop" gap="13px" style={{'--grid-gap':'99px',color:'rgb(1, 2, 3)'}} aria-label="grid attributes"><p>A</p><p>B</p></Grid>
+<Grid id="grid-utility" gap="13px" class="gap-0"><p>A</p><p>B</p></Grid>
+<Container id="container-prop" gap="11px" style="--content-gap:99px;color:rgb(1, 2, 3)" class="kept"><p>A</p><p>B</p></Container>
+<div id="raw-grid" class="grid md:grid-cols-2"><div>A</div><div>B</div></div>
+<Sidebar id="sidebar"><div>Main</div><aside>Side</aside></Sidebar>
+</SiteShell>`);
     await writeFile(path.join(stage, 'src/dev/spacing-media.json'), JSON.stringify({ id: '', url: '' }));
     await writeFile(path.join(stage, 'src/pages/media-spacing-fixture.astro'), `---
 import '../styles/global.css';
