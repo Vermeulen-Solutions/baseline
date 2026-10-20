@@ -29,7 +29,7 @@ const { coverage = componentCoverage, editorialLabel = 'Markdown' } = Astro.prop
 const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'editorial', 'composition', 'coverage'];
 ---
 <!doctype html>
-<html lang="en" data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
+<html data-spacing-policy="automatic-v2" lang="en" data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
   <head><style is:inline>@layer theme, base, vendor, astro, components, utilities;</style><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex, nofollow" /><title>Starter component styleguide</title></head>
   <body>
     <a class="skip-link" href="#main-content">Skip to specimens</a>
@@ -73,7 +73,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
           <div dir="rtl"><LogoTicker id="specimen-rtl-logos" label="Single static RTL logo"><li>Single synthetic partner</li></LogoTicker></div>
           <LogoTicker id="specimen-empty-logos" label="Empty ticker" />
         </div></Section>
-        <Section labelledBy="editorial"><div class="flow"><h2 id="editorial">{editorialLabel}</h2><div class="flow"><slot name="editorial"><MarkdownProse /></slot></div></div></Section>
+        <Section labelledBy="editorial"><div class="flow"><h2 id="editorial">{editorialLabel}</h2><div class="flow" data-editorial-content><slot name="editorial"><MarkdownProse /></slot></div></div></Section>
         <CompositionSpecimens><slot name="platform-disclosure-body" slot="editorial"><DisclosureProse /></slot></CompositionSpecimens>
         <Section labelledBy="coverage"><div class="flow"><h2 id="coverage">Coverage and limits</h2><ul>{coverage.rendered.map(name => <li><code>{name}</code></li>)}</ul><dl>{Object.entries(coverage.variants).map(([name, variants]) => <><dt>{name}</dt><dd>{variants.join('; ')}</dd></>)}</dl><p>{coverage.stress.join('; ')}.</p>{Object.values(coverage.deferred).map(note => <p>{note}</p>)}<slot name="platform-notes" /><p>Code blocks and tables intentionally scroll internally where needed. External embeds remain outside this verification scope.</p><ul>{coverage.unsupported.map(item => <li>{item}</li>)}</ul></div></Section>
       </Container>

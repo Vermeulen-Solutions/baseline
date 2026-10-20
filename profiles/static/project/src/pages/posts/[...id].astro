@@ -19,7 +19,7 @@ const image = post.data.hero ? { src: post.data.hero.src, alt: post.data.heroAlt
 ---
 <Base title={post.data.title} description={post.data.description} pageType="article" publishedAt={post.data.publishedAt} image={image}>
   <Section labelledBy="post-title"><Container breakout class="flow">
-    <header class="flow"><h1 id="post-title">{post.data.title}</h1><p>{post.data.description}</p>
+    <header class="article-stack"><h1 id="post-title">{post.data.title}</h1><p>{post.data.description}</p>
       <time datetime={post.data.publishedAt.toISOString()}>{post.data.publishedAt.toLocaleDateString('en-GB', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</time>
     </header>
     {post.data.hero && <figure class="content--feature"><ResponsiveImage src={post.data.hero} alt={post.data.heroAlt!} loading="eager" fetchpriority="high" /></figure>}

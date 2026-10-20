@@ -21,17 +21,17 @@ if (!src && p?.asset._ref) {
   // if this site later enables Astro route caching.
   if (Astro.cache?.enabled) Astro.cache.set(false);
   try {
-  if (providerId === 'local') {
-    const item = await new MediaRepository(await getDb()).findById(p.asset._ref);
-    if (item?.status === 'ready') {
-      src = photoUrl({ ...p, asset: { ...p.asset, url: `/_emdash/api/media/file/${encodeURIComponent(item.storageKey)}` } }, runtime?.getPublicMediaUrl);
-      dimensions = { width: item.width || dimensions.width, height: item.height || dimensions.height };
-    }
-  } else {
-    const provider = runtime?.getMediaProvider?.(providerId) || await getMediaProvider(providerId);
-    const value = await normalizeMediaValue({ id: p.asset._ref, provider: providerId, ...dimensions }, () => provider);
-    if (value) {
-    dimensions = { width: value.width, height: value.height };
+    if (providerId === 'local') {
+      const item = await new MediaRepository(await getDb()).findById(p.asset._ref);
+      if (item?.status === 'ready') {
+        src = photoUrl({ ...p, asset: { ...p.asset, url: `/_emdash/api/media/file/${encodeURIComponent(item.storageKey)}` } }, runtime?.getPublicMediaUrl);
+        dimensions = { width: item.width || dimensions.width, height: item.height || dimensions.height };
+      }
+    } else {
+      const provider = runtime?.getMediaProvider?.(providerId) || await getMediaProvider(providerId);
+      const value = await normalizeMediaValue({ id: p.asset._ref, provider: providerId, ...dimensions }, () => provider);
+      if (value) {
+        dimensions = { width: value.width, height: value.height };
         const embed = await provider?.getEmbed(value);
         if (embed?.type === 'image') {
           src = photoUrl({ ...p, asset: { ...p.asset, url: embed.src } });
@@ -52,20 +52,21 @@ const alignment = typeof node.alignment === 'string' && ['left', 'right', 'cente
 const caption = typeof node.caption === 'string' ? node.caption : '';
 const breakoutClass = node?.alignment === 'wide' ? 'content--feature' : node?.alignment === 'full' ? 'content--full-safe' : undefined;
 ---
-<figure class:list={['emdash-image', 'editorial-image', alignment && `emdash-image--align-${alignment}`, breakoutClass]} style={width ? `--image-limit: ${width}px` : undefined}>
+<figure class:list={['editorial-image', alignment && `editorial-image--align-${alignment}`, breakoutClass]} style={width ? `--image-limit: ${width}px` : undefined}>
   {href ? <a href={href} target={blank ? '_blank' : undefined} rel={blank ? 'noopener noreferrer' : undefined}><ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" /></a> : <ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" />}
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
 <style>
+@layer base { :where(.editorial-image) { margin-block: 0; } }
 @layer components {
-  .editorial-image { width: min(100%, var(--image-limit, 100%)); margin-block: var(--spacing-content); }
+  .editorial-image { width: min(100%, var(--image-limit, 100%)); }
   .editorial-image :global(img) { width: 100%; height: auto; }
   figcaption { color: var(--color-muted); font-size: .875rem; margin-top: var(--spacing-content); }
-  .emdash-image--align-center { margin-inline: auto; }
-  .emdash-image--align-wide, .emdash-image--align-full { width: 100%; }
-  .emdash-image--align-left, .emdash-image--align-right { max-width: 50%; }
-  .emdash-image--align-left { float: left; margin-right: var(--spacing-content); }
-  .emdash-image--align-right { float: right; margin-left: var(--spacing-content); }
-  @media (max-width: 40rem) { .emdash-image--align-left, .emdash-image--align-right { float: none; max-width: 100%; margin-inline: 0; } }
+  .editorial-image--align-center { margin-inline: auto; }
+  .editorial-image--align-wide, .editorial-image--align-full { width: 100%; }
+  .editorial-image--align-left, .editorial-image--align-right { max-width: 50%; }
+  .editorial-image--align-left { float: left; margin-right: var(--spacing-content); }
+  .editorial-image--align-right { float: right; margin-left: var(--spacing-content); }
+  @media (max-width: 40rem) { .editorial-image--align-left, .editorial-image--align-right { float: none; max-width: 100%; margin-inline: 0; } }
 }
 </style>

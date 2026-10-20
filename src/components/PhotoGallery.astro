@@ -1,5 +1,5 @@
 ---
-import { PTImage as Image } from 'emdash/ui';
+import EditorialImage from './EditorialImage.astro';
 import ResponsiveImage from './EmDashImage.astro';
 import { albumPhotos, photoUrl, galleryJsonLd } from '../lib/photo-gallery';
 import { photoAspectRatio } from '../lib/justified-gallery';
@@ -45,6 +45,7 @@ const jsonLd = galleryJsonLd(photos, {
   role="group"
   aria-label={locale === 'fr' ? 'Galerie de photographies' : 'Photo gallery'}
   style={`--photo-columns: ${columns}`}
+  data-editorial-island
   data-photo-gallery
   data-layout={layout}
   data-close={labels.close}
@@ -82,7 +83,7 @@ const jsonLd = galleryJsonLd(photos, {
             />
           </a>
         ) : (
-          <Image node={{ ...p, caption: undefined }} />
+          <EditorialImage node={{ ...p, caption: undefined }} />
         )}
         {p.caption && <p class="photo-caption">{p.caption}</p>}
       </div>
@@ -146,11 +147,11 @@ const jsonLd = galleryJsonLd(photos, {
 </script>
 
 <style>
+@layer base { :where(.photo-gallery) { margin: 0; } }
 @layer components {
   .photo-gallery {
     container-type: inline-size;
     gap: var(--spacing-grid, 1.5rem);
-    margin: 2rem 0;
     padding: 0;
     list-style: none;
   }

@@ -32,7 +32,7 @@ const hasMedia = image || Astro.slots.has('media');
 const hasTitleExtra = Astro.slots.has('title-extra');
 const hasDescription = Boolean(description || Astro.slots.has('default') || Object.keys(descriptionEdit || {}).length);
 ---
-<article class:list={['card', { 'card--horizontal': layout === 'horizontal' && hasMedia, 'card--clickable': Boolean(href), 'focus-parent': Boolean(href) }, className]} {...rest}>
+<article data-editorial-island class:list={['card', { 'card--horizontal': layout === 'horizontal' && hasMedia, 'card--clickable': Boolean(href), 'focus-parent': Boolean(href) }, className]} {...rest}>
   {hasMedia && <div class="card-media" style={{'--card-aspect':imageAspect,'--card-fit':imageFit}}><slot name="media">{image && <ResponsiveImage src={image} alt={imageAlt} width={imageWidth} height={imageHeight} sizes={sizes} />}</slot></div>}
   <div class="card-body">
     {hasTitleExtra ? <div class="card-title-row"><Heading class="card-title" {...(titleEdit || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading><slot name="title-extra" /></div> : <Heading class="card-title" {...(titleEdit || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading>}

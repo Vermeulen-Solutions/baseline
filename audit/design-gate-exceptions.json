@@ -26,12 +26,12 @@
   {
     "path": "src/styles/global.css",
     "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "48b0edbbc10236e8ef42153a50c41a0944f9727ac423b98e3ef4235af30acbd8"
+    "sha256": "203f5db3233a0e247c4b42e368e09c9258747881b6b858893272b0d94bf59e00"
   },
   {
     "path": "src/layouts/Base.astro",
     "reason": "Functional EmDash starter metadata correction: one platform metadata owner, public-origin defaults, typed article context and existing settings/menu cache hints. No client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "2c18252b095c973955fc7a62ae520f53475f967a2cd9af9dd9efc05a93ac721c"
+    "sha256": "9276f78838b5b36738f5d7d06954dc35d5a0a6c422f31899e2419b96c02c2763"
   },
   {
     "path": "src/components/Container.astro",
@@ -61,32 +61,32 @@
   {
     "path": "src/pages/category/[slug].astro",
     "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "e7182fcb2fc629a0d14bc1418b4972fac7638891acc39670863d904967c92cd9"
+    "sha256": "ead22eadf264638fefc5bdb8f82d6eac7643272abb9988536791534b36c1c1fc"
   },
   {
     "path": "src/pages/index.astro",
     "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "2eb7b1569d85502fa008e6d68cd2e7ec155e29afe302e343a710fb2ccc21506b"
+    "sha256": "def7acc3d703acc252a0f9a289a4693122202232a77d52f71c613e5e3fc76e78"
   },
   {
     "path": "src/pages/posts/index.astro",
     "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "f7d09c6310fc7f6b3bd17ae200f164324debc7a193dfed5e6f5e6b00e1612f51"
+    "sha256": "ed4e3d09fe5061e3c31ddf7f764183d9b2818d37a75e64a6402a23e437286f77"
   },
   {
     "path": "src/pages/posts/[slug].astro",
     "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring, article metadata and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "934d5f33b5435b745387f50d5833c6d9c5dfe1c315cf2b2c50b9800b23f7d596"
+    "sha256": "7799e0c8ba5f6ba9220baa5d4e7d011d8c77d4a6ff5652573c71d0b71bf5b556"
   },
   {
     "path": "src/pages/tag/[slug].astro",
     "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "f0cd8f05caf74ca7625a90e857dc0000d0c10390a2b2f6636434ae5b3d731dc5"
+    "sha256": "7139783a05d5b6ae862d7f00b4c7aa13e3a811084756ee325c5fc0bedab3b912"
   },
   {
     "path": "src/pages/[slug].astro",
     "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "8e6867a740d4ce48114a6c7717ddbab2d79a3c22e31574bc1426f0272355b1cb"
+    "sha256": "82c4b9382526b682be8b01c3ac9b9243fc3cc38d934264ab2746ae8aca560cc2"
   },
   {
     "path": "src/utils/site-identity.ts",
@@ -111,17 +111,17 @@
   {
     "path": "src/components/EditorialImage.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "70b545e38ab6d9fa15576d3611f7151e4d108729deb50e88eb2b23cf488fa0f5"
+    "sha256": "4bf12365a7dc5ae02942d7abf1df0e6778da89150ace1eedcefe9aa59ef7d7d6"
   },
   {
     "path": "src/components/RichText.astro",
     "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "54abbfe5a889370ff7b23126cf3ad30b28f86b31cbe340b8df2f1ea2a472bbda"
+    "sha256": "b74d7dd487a8a9d17238b33aae3d7800d854a8fe6099949ac4ece1dea6f613a2"
   },
   {
     "path": "src/components/Card.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "7df1ffd251e645913794e96387cad7a195a068fba74a1b0bc2fc98069cb8097c"
+    "sha256": "c09457ad78392f6995b8190a58c7ed39fbbdd79d926e39056ff56d8c5b7d76db"
   },
   {
     "path": "src/components/PartnersPanel.astro",
@@ -182,7 +182,7 @@
   {
     "path": "src/components/dev/Styleguide.astro",
     "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "f95117a95f6482b051d7279ba3841d040aae41168e20729374b9c6d648bd537c"
+    "sha256": "de9a0cdbd4b5a0e0adccd08a0c9abd2464d821ab29ace0bbd8883b163582e91a"
   },
   {
     "path": "src/utils/grid-guide.ts",
@@ -193,7 +193,7 @@
   {
     "path": "src/components/LogoTicker.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "b56f699cc6afc020b814f66a84a92dd459b1a79778ec78bc72c3ca5dd730bdb2"
+    "sha256": "3236f0fda6599e4c13357f07bf2affeb3a144ae0d969a1deed6afb772b2fd782"
   },
   {
     "path": "src/env.d.ts",
@@ -218,7 +218,7 @@
   {
     "path": "src/components/PhotoGallery.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "30252a00448b7d5ca8e870c4a22ff65b3ec860364af2821b6dec16646de49d82"
+    "sha256": "e179b2244741a2f63d55462b76c60eaea6bc628f1dfd6b5770e82b20ef0a9d91"
   },
   {
     "path": "src/utils/reference-overlay.ts",
@@ -287,7 +287,7 @@
   {
     "path": "profiles/static/project/src/components/RichText.astro",
     "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "43c620071d0514400b2b741b3eb41f41bc28e5c8cd7013c561158118a0e8505d"
+    "sha256": "d7738445b3a4b4b0e6b8b3a517fd7cf003771cd812269022a307a8a5617fc9a1"
   },
   {
     "path": "profiles/static/project/src/config/site.ts",
@@ -312,7 +312,7 @@
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
     "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "27dfac8c9853b2c39bca575accf8d89408888b706ac927614bd94ba041e8587c"
+    "sha256": "4df77f3d827d1f83664bf3b26eca1610243fef7d3e70bd26ee5e5c7138a4dfa8"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",
@@ -322,22 +322,22 @@
   {
     "path": "profiles/static/project/src/pages/404.astro",
     "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "8817270719d98f16a1e6abbf50a1c79edf0403510703bb5dd8c4794049a82b55"
+    "sha256": "d71705169d5a6a4e4645b6a8ad85ef390a23c0c0993390776b93e7f45bd8164c"
   },
   {
     "path": "profiles/static/project/src/pages/index.astro",
     "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "f4ef4adbad607b30baffd17640321d2aced5b8a04fdd6071ad7770dc66ac9670"
+    "sha256": "67d1fd18ea22e5882cdbb92020c938191a44d636a022537ddcd596c6ac3df6a3"
   },
   {
     "path": "profiles/static/project/src/pages/posts/index.astro",
     "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "47152e91bcef805d610adb05d12ecf8b68fa427617f19cc85fed15bdb57ad778"
+    "sha256": "f86aaa12d0870fdc337f1dcac88cf5a46b24426448a5561dedc3901e7c2d3c17"
   },
   {
     "path": "profiles/static/project/src/pages/posts/[...id].astro",
     "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "6cd806c04308d09b91676ae71f53e835f4f840e34de268ce5e75644083dd6733"
+    "sha256": "e7c29b9b05e9ac3928d594b985f0482d05b22cc121dd46d22ffa2f1a35fce114"
   },
   {
     "path": "profiles/static/project/src/pages/_styleguide.astro",
@@ -382,12 +382,12 @@
   {
     "path": "src/dev/FormRecoveryFixture.astro",
     "reason": "Starter lint infrastructure: justify summary autofocus only after synthetic server validation failure; development/fixture-only exposure and existing recovery behavior remain unchanged. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "9db9f5ce82661b6ac1562d9d61cc001b9a86669f0b3a3c352ab2c0c522d98def"
+    "sha256": "08276a89ca69f328bbcbdb7963204419bd2cfba4c8867353e4f912754f197892"
   },
   {
     "path": "src/components/Disclosure.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "f25c8f6bf8d8e6c362d88e1aea68bb66ef006effdc2ae71cd35de4cd8d4c1a0f"
+    "sha256": "12f86367c8003bc9ee556daee54df46bce0f61de31056dc30538165f65b3a507"
   },
   {
     "path": "src/components/Cluster.astro",

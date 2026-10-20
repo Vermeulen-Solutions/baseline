@@ -1,5 +1,6 @@
 ---
 import { PortableText } from 'emdash/ui';
+import { getEditMeta } from 'emdash';
 import EditorialImage from './EditorialImage.astro';
 import PhotoGallery from './PhotoGallery.astro';
 interface Props {
@@ -10,11 +11,14 @@ interface Props {
 }
 const { value, class: className, flow = true, ...attributes } = Astro.props;
 const hasWrapper = Boolean(flow || className || Object.keys(attributes).length > 0);
+const meaningful = (input: any): boolean => Array.isArray(input) ? input.some(meaningful) : input && typeof input === 'object' ? input._type === 'span' ? Boolean(input.text?.trim()) : input._type === 'block' ? meaningful(input.children) : Boolean(input._type) : typeof input === 'string' && Boolean(input.trim());
+// Query-attached metadata is required even for an empty live editor field.
+const renderContent = meaningful(value) || Boolean(getEditMeta(value)) || Object.keys(attributes).some(key => key.startsWith('data-emdash-'));
 ---
-{hasWrapper ? (
-  <div class:list={[flow && 'flow', className]} {...attributes}>
+{renderContent && (hasWrapper ? (
+  <div {...attributes} data-editorial-content={flow ? '' : undefined} class:list={[flow && 'flow', className]}>
     <PortableText value={value} components={{ type: { image: EditorialImage, gallery: PhotoGallery } }} />
   </div>
 ) : (
   <PortableText value={value} components={{ type: { image: EditorialImage, gallery: PhotoGallery } }} />
-)}
+))}

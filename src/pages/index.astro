@@ -13,16 +13,17 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 ---
 
 <Base title={siteTitle} description={siteTagline}>
-	<Section labelledBy="recent-posts" class="flow">
+	<Section labelledBy="recent-posts">
 		<h1 id="recent-posts">Recent Posts</h1>
 
 		{
 			posts.length === 0 ? (
 				<p>No posts yet.</p>
 			) : (
-				<ul class="flow">
+				/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- Safari needs the role when visual list markers are removed. */
+				<ul role="list" class="collection-list">
 					{posts.map((post) => (
-						<li class="flow">
+						<li class="collection-item">
 							<a href={`/posts/${post.id}`}>
 								{post.data.featured_image && (
 									<Image image={post.data.featured_image} />

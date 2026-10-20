@@ -10,11 +10,11 @@ import { routing } from '../config/routing';
 const posts = await publishedPosts();
 ---
 <Base title="Welcome">
-  <Section labelledBy="welcome"><Container width="reading" class="flow">
+  <Section labelledBy="welcome"><Container width="reading">
     <h1 id="welcome">Welcome</h1>
     <p>This static starter uses native Astro content and the shared Baseline design system.</p>
   </Container></Section>
-  <Section labelledBy="recent-posts"><Container width="wide" class="flow">
+  <Section labelledBy="recent-posts"><Container width="wide">
     <h2 id="recent-posts">Recent Posts</h2>
     <Grid>{posts.slice(0, 3).map(post => <Card title={post.data.title} href={postUrl(post.id)} description={post.data.description} image={post.data.hero} imageAlt={post.data.heroAlt} />)}</Grid>
     <a href={routePath('/posts/', routing)}>View all posts</a>

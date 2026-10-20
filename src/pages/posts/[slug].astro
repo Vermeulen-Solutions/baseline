@@ -50,7 +50,7 @@ const categories = post.data.terms?.category ?? [];
 	content={{ collection: "posts", id: post.data.id, slug }}
 >
 	<Section labelledBy="post-title">
-		<article class="flow">
+		<article class="article-stack">
 			{
 				post.data.featured_image && (
 					<div {...post.edit.featured_image}>
@@ -75,7 +75,7 @@ const categories = post.data.terms?.category ?? [];
 
 			{
 				categories.length > 0 && (
-					<div>
+					<div class="article-taxonomies">
 						{categories.map((c) => (
 							<a href={`/category/${c.slug}`}>{c.label}</a>
 						))}
@@ -89,7 +89,7 @@ const categories = post.data.terms?.category ?? [];
 
 			{
 				tags.length > 0 && (
-					<div>
+					<div class="article-taxonomies">
 						{tags.map((t) => (
 							<a href={`/tag/${t.slug}`}>{t.label}</a>
 						))}

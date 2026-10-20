@@ -4,5 +4,8 @@ interface Props extends HTMLAttributes<'div'> {
   flow?: boolean;
 }
 const { class: className, flow = true, ...attributes } = Astro.props;
+const content = (await Astro.slots.render('default')) || '';
+const renderContent = Boolean(content.replace(/<!--[\s\S]*?-->/g, '').trim());
+const hasWrapper = Boolean(flow || className || Object.keys(attributes).length);
 ---
-<div class:list={[flow && 'flow', className]} {...attributes}><slot /></div>
+{renderContent && (hasWrapper ? <div {...attributes} data-editorial-content={flow ? '' : undefined} class:list={[flow && 'flow', className]} set:html={content} /> : <Fragment set:html={content} />)}

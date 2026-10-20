@@ -23,16 +23,17 @@ const postsWithTags = posts.map((post) => ({
 ---
 
 <Base title="All Posts">
-	<Section labelledBy="posts-heading" class="flow">
+	<Section labelledBy="posts-heading">
 		<h1 id="posts-heading">Posts</h1>
 
 		{
 			postsWithTags.length === 0 ? (
 				<p>No posts yet.</p>
 			) : (
-				<ul class="flow">
+				/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- Safari needs the role when visual list markers are removed. */
+				<ul role="list" class="collection-list">
 					{postsWithTags.map(({ post, tags }) => (
-						<li class="flow">
+						<li class="collection-item">
 							<a href={`/posts/${post.id}`}>
 								{post.data.featured_image && (
 									<Image image={post.data.featured_image} />

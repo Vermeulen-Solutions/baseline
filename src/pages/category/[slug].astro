@@ -19,7 +19,7 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 ---
 
 <Base title={`${term.label} posts`} description={`Posts in ${term.label}`}>
-	<Section labelledBy="category-heading" class="flow">
+	<Section labelledBy="category-heading">
 		<h1 id="category-heading">{term.label}</h1>
 		<p>{posts.length} {posts.length === 1 ? "post" : "posts"}</p>
 
@@ -27,9 +27,10 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 			posts.length === 0 ? (
 				<p>No posts in this category yet.</p>
 			) : (
-				<ul class="flow">
+				/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- Safari needs the role when visual list markers are removed. */
+				<ul role="list" class="collection-list">
 					{posts.map((post) => (
-						<li class="flow">
+						<li class="collection-item">
 							<a href={`/posts/${post.id}`}>
 								{post.data.featured_image && (
 									<Image image={post.data.featured_image} />

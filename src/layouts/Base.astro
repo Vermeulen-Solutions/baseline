@@ -57,7 +57,7 @@ const pageCtx = createPublicPageContext({
 });
 ---
 
-<SiteShell title={fullTitle} metadataOwner="platform" lang={Astro.currentLocale ?? 'en'}>
+<SiteShell spacingPolicy="automatic-v2" title={fullTitle} metadataOwner="platform" lang={Astro.currentLocale ?? 'en'}>
 		<EmDashHead slot="head" page={pageCtx} />
 		<EmDashBodyStart slot="body-start" page={pageCtx} />
 

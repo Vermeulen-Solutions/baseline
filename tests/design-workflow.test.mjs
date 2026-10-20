@@ -124,7 +124,7 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   assert.ok(container.includes('breakout ? "content-grid" : ["container-shell", `container-shell--${width}`]'));
 
   const card = readFileSync('src/components/Card.astro', 'utf8');
-  assert.ok(card.includes('<article class:list='), 'Card must render a semantic <article> instead of wrapping the whole card in <a>');
+  assert.ok(card.includes('<article data-editorial-island class:list='), 'Card must render a semantic <article> instead of wrapping the whole card in <a>');
   assert.ok(card.includes('class="card-link clickable-parent"'), 'Card heading link must stretch via .clickable-parent');
   assert.ok(card.includes('--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))'), 'Card must compute concentric inner media radius');
   assert.ok(card.includes('titleEdit?: FieldAttributes'), 'Card must accept title annotation attributes');
@@ -149,7 +149,7 @@ test('cascade layers and automatic spacing contracts stay enforceable', () => {
   assert.deepEqual(inspectSourceTree().issues, [], 'All author inputs must satisfy named-layer contracts');
   for (const selector of [
     ':where(main > section, .section)',
-    ':where(.flow, [data-flow]) > :where(* + *)',
+    ':where(.flow, [data-flow]) > :where(:not([hidden]) ~ :not([hidden]))',
     ':where(.grid)',
     ':where(.grid-auto)',
     '--grid-gap',

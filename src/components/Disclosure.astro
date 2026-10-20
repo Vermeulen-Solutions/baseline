@@ -6,9 +6,9 @@ interface Props extends HTMLAttributes<'details'> {}
 const { id: rawId, open, class: className, 'aria-expanded': _expanded, 'aria-controls': _controls, ...attributes } = Astro.props;
 const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId : `disclosure-${randomUUID()}`;
 ---
-<details {...attributes} id={id} open={open === true} data-disclosure class:list={['disclosure', className]}>
+<details {...attributes} id={id} open={open === true} data-disclosure data-editorial-island class:list={['disclosure', className]}>
   <summary aria-controls={`${id}-body`}><slot name="summary">Details</slot></summary>
-  <div id={`${id}-body`} class="disclosure__body flow"><slot /></div>
+  <div id={`${id}-body`} class="disclosure__body flow" data-editorial-content><slot /></div>
 </details>
 <script>
   // Without JS the browser owns native expanded semantics. Add explicit state

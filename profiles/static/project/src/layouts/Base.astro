@@ -7,7 +7,7 @@ import { resolveStaticMetadata, routePath, type PageMetadata } from '../lib/meta
 type Props = PageMetadata;
 const metadata = resolveStaticMetadata(Astro.props, site, { siteUrl: Astro.site, url: Astro.url, routing });
 ---
-<SiteShell title={metadata.title} metadataOwner="platform" lang={metadata.language}>
+<SiteShell spacingPolicy="automatic-v2" title={metadata.title} metadataOwner="platform" lang={metadata.language}>
   <StaticMetadata slot="head" metadata={metadata} />
   <header slot="header" class="site-header">
     <nav class="site-nav" aria-label="Primary navigation">

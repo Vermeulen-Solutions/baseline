@@ -15,7 +15,7 @@ const toggleLabel = typeof rawToggleLabel === 'string' && rawToggleLabel.trim() 
 // No scripts/islands, raw CMS HTML, links, form controls, SVG IDs or edit proxies.
 const logos = await Astro.slots.render('default');
 ---
-{logos?.trim() && <div class="logo-ticker" role="region" aria-label={label} data-logo-ticker>
+{logos?.trim() && <div class="logo-ticker" role="region" aria-label={label} data-logo-ticker data-editorial-island>
   <input class="logo-ticker__toggle" id={`${id}-motion`} type="checkbox" checked={animate === true} />
   <label class="logo-ticker__control" for={`${id}-motion`}>{toggleLabel}</label>
   <div class="logo-ticker__viewport">

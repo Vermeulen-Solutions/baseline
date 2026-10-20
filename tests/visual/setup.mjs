@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { copyFile, mkdir, readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { startVisualSite } from './site.mjs';
 import { visualContract } from './contract.mjs';
@@ -13,8 +13,39 @@ export default async function setup() {
   const reportDir = path.resolve('.emdash/visual');
   await mkdir(reportDir, { recursive: true });
   let fixtureStage, fixtureOrigin;
-  const site = await startVisualSite(process.cwd(), reportDir, { prepareStage: async ({ stage, origin }) => {
+  const site = await startVisualSite(process.cwd(), reportDir, { devOnly:process.env.VISUAL_DEV_ONLY === '1', prepareStage: async ({ stage, origin }) => {
     fixtureStage = stage; fixtureOrigin = origin;
+    await copyFile('profiles/static/project/src/components/RichText.astro',path.join(stage,'src/components/StaticRichText.astro'));
+    await writeFile(path.join(stage,'src/pages/editorial-spacing-fixture.astro'), `---
+import SiteShell from '../layouts/SiteShell.astro';
+import RichText from '../components/RichText.astro';
+import StaticRichText from '../components/StaticRichText.astro';
+import Card from '../components/Card.astro';
+import Disclosure from '../components/Disclosure.astro';
+import LogoTicker from '../components/LogoTicker.astro';
+import Container from '../components/Container.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import media from '../dev/spacing-media.json';
+const block=(text,rest={})=>({_type:'block',_key:text,style:'normal',markDefs:[],children:[{_type:'span',text,marks:[]}],...rest});
+const values=[block('Opening'),block('Heading',{style:'h2'}),block('Paragraph'),block('Item one',{listItem:'bullet',level:1}),block('Nested',{listItem:'bullet',level:2}),block('Item two',{listItem:'bullet',level:1}),{_type:'image',_key:'media',asset:{url:media.url},width:400,height:300,alt:'Editorial control'},block('Quote',{style:'blockquote'}),block('Closing')];
+---
+<SiteShell title="Editorial geometry" spacingPolicy="automatic-v2">
+<RichText id="controls" value={values} />
+<div id="hidden-first" class="flow" data-editorial-content><p hidden>Hidden</p><p>First visible</p><p>Second visible</p></div>
+<div id="only-media" class="flow" data-editorial-content><figure><img src={media.url} width="400" height="300" alt="Only media" /></figure></div>
+<div id="composites" class="flow" data-editorial-content>
+<Card title="Card in prose" href="#controls"><img slot="media" src={media.url} width="400" height="300" alt="Card media" /><p>Card body</p></Card>
+<LogoTicker id="editorial-ticker" label="Editorial ticker"><li><img src={media.url} width="96" height="72" alt="" /><span>Logo</span></li></LogoTicker>
+<Disclosure id="editorial-disclosure" open><span slot="summary">Body</span><RichText value={[block('Nested paragraph'),block('Second paragraph')]} /></Disclosure>
+<PhotoGallery value={[{_type:'image',asset:{url:media.url},width:400,height:300,alt:'Gallery in prose'}]} />
+<blockquote><div id="nested-flow" class="flow"><p>Nested one</p><p>Nested two</p></div></blockquote>
+</div>
+<Container id="empty-layout"><p>Before</p><RichText value={[]} /><RichText value={[block(' ')]} /><StaticRichText>   <!-- empty native slot --></StaticRichText><p>After</p></Container>
+<div id="cms-optout"><RichText flow={false} value={[block('Wrapperless CMS')]} /></div>
+<RichText id="cms-attributed" flow={false} class="custom" value={[block('Attributed CMS')]} />
+<div id="static-optout"><StaticRichText flow={false}><p>Wrapperless native</p></StaticRichText></div>
+<StaticRichText id="static-attributed" flow={false} class="custom"><p>Attributed native</p></StaticRichText>
+</SiteShell>`);
     await writeFile(path.join(stage,'src/pages/structural-spacing-fixture.astro'), `---
 import SiteShell from '../layouts/SiteShell.astro';
 import Section from '../components/Section.astro';

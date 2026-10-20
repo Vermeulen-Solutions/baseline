@@ -10,7 +10,7 @@ Started: 2026-10-20. Starting revision: `c3d965c`. Scope: [consolidated plan](au
 | 2 | W02 media/cascade and W03 parsed-check foundation | Verified foundation | 126 fast tests; parsed CSS/selector mutations; real uploaded ID-only media in dev and built Chromium at 390px; broader matrix remains Phase 6 |
 | 3 | W06 contextual aliases and token CLI | Verified | Commit `30233e7`; 129 fast tests; T01-T06 maintained cases |
 | 4 | W04 scoped structural defaults | Verified foundation | V02-V05 actual primitives at 390px; full width/content matrix follows in Phase 6 |
-| 5 | W05/W07 editorial boundaries, routes; W09 editing preparation | Planned | Keep collection lists distinct from editorial lists |
+| 5 | W05/W07 editorial boundaries, routes; W09 editing preparation | Verified foundation | 5 built Chromium spacing tests at 390px; public routes and both real RichText renderers |
 | 6 | W08 complete maintained behavioral/mutation cases | Planned | Complete V/M/T matrix; retain local-only browser policy |
 | 7 | W10 visual review/calibration | Planned | Review intentional screenshot changes before accepting |
 | 8 | W09/W11/W12 profiles, editing, upgrades and handoff | Planned | Independent installs, custom-token upgrade pilot, final verification |
@@ -29,7 +29,7 @@ Started: 2026-10-20. Starting revision: `c3d965c`. Scope: [consolidated plan](au
 
 ## Closure register
 
-All A01-A07 / F01-F16 findings remain open. V01-V15, M01-M10, T01-T06 and E01 are pending maintained implementation evidence. Historical review probes are described in the plan; they are not new verification receipts.
+Phase evidence below records implemented corrections. Final closure still requires the broader V/M matrix, visual acceptance, independent profile verification and explicit E01 status. Historical review probes are described in the plan; they are not new verification receipts.
 
 ## Phase 1 observations
 
@@ -65,3 +65,13 @@ Record phase commit IDs, exact commands, results and applicability here. Keep la
 - `npm.cmd exec playwright test tests/visual/spacing.spec.mjs -- --project=chromium-390`: PASS, 3 tests. V02-V05 measure the actual Section/Container/Grid implementations, all nine nested Section modes, intentionally inherited aliases, local zero controls, gap prop over string/object style, utility over gap prop, retained IDs/ARIA/classes/style, custom mode and breakout grid.
 - Legacy structural rules are explicitly scoped away from activated roots. SiteShell defaults to legacy; site-owned Base activation is Phase 5. No Section child allowlist or shell inference is used by the new policy. Cluster and Sidebar keep their own contracts.
 - Shared style helper and dependencies are explicitly inventoried; exact starter infrastructure exceptions were refreshed, without creating a client Art Direction Record.
+
+## Phase 5 evidence
+
+- Phase 4 commit: `90b88b9`.
+- `npm.cmd run verify:fast`: PASS, 129 tests. Astro check during this phase: 47 files, zero diagnostics. Built Chromium spacing suite at 390px: 5 passed (`.emdash/visual/spacing-phase5-browser.log`).
+- V07/V12 inspect home/posts/category/tag and the actual welcome article. Collection lists retain explicit native list semantics after removing visual markers; titles/items share one edge and date/body bounds are separated by layout gaps.
+- V08-V13 import both production RichText implementations. They verify nested lists, each of six distinct public prose controls, first visible/only media edges, independent nested flow calculations, composite image/list isolation, wrapperless and attributed opt-outs, and empty CMS/native slots within a real Container.
+- Editorial defaults use one-sided sibling margins and a private value reset at each direct-child boundary. Native CSS scope bounds recursive list presentation at explicit editorial islands/nested editorial roots; utility layers still take precedence. Media defaults reset in base so they cannot defeat the parent flow relationship. Controls use retrying computed-style assertions to measure their applied result after rendering.
+- The empty native slot check caught an undefined slot result; it now normalizes to an empty string. EditorialImage uses owned class names so an emitted vendor image selector cannot target its frame. Gallery ID fallbacks use the same owned image presentation.
+- Current site Bases explicitly activate v2; shared SiteShell remains compatibility-default. Static caller overlays, public CMS routes and specimen policy are migrated. E01 remains pending actual save/reload proof in the disposable harness; attributes are not counted as that proof.

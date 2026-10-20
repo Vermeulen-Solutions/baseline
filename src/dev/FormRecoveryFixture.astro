@@ -40,7 +40,7 @@ const title = recovery ? 'Correct the sample form' : 'Form recovery fixture';
 <SiteShell title={title}>
   <meta slot="head" name="robots" content="noindex, nofollow" />
   <header slot="header" class="site-header"><nav class="site-nav" aria-label="Fixture navigation"><a href="/">Home</a><a href="/_styleguide">Specimens</a></nav></header>
-  <Section labelledBy="fixture-heading"><Container width="reading" class="flow">
+  <Section labelledBy="fixture-heading"><Container width="reading">
     <h1 id="fixture-heading" data-form-recovery-fixture>{title}</h1>
     <p>Synthetic local verification only. Nothing is sent to an external service.</p>
     {sent ? <p data-form-success>Sample accepted. No message was sent.</p> : <>
