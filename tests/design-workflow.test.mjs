@@ -1,3 +1,4 @@
+import { inspectSourceTree } from '../scripts/css-contracts.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { AESTHETIC_LANES, parseDesignTokens, auditDesignTokens, applyTokenOverrides } from '../scripts/design-system.mjs';
@@ -142,36 +143,10 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   assert.ok(photoGallery.includes('breakout && `content--${breakout}`'));
 });
 
-function topLevelRulePreludes(css) {
-  const source = css.replace(/\/\*[\s\S]*?\*\//g, '');
-  const preludes = [];
-  let depth = 0;
-  let start = 0;
-  for (let i = 0; i < source.length; i++) {
-    const char = source[i];
-    if (char === '{') {
-      const prelude = source.slice(start, i).trim();
-      if (depth === 0 && prelude) preludes.push(prelude);
-      depth++;
-      start = i + 1;
-    } else if (char === '}') {
-      depth--;
-      start = i + 1;
-    } else if (char === ';' && depth === 0) {
-      start = i + 1;
-    }
-  }
-  return preludes;
-}
-
 test('cascade layers and automatic spacing contracts stay enforceable', () => {
   const css = readFileSync('src/styles/global.css', 'utf8');
-  assert.match(css, /@layer theme, base, components, utilities;/);
-  assert.deepEqual(
-    topLevelRulePreludes(css).filter(prelude => !/^@(theme|layer)\b/.test(prelude)),
-    [],
-    'global.css must not leave normal selector rules outside its named layers',
-  );
+  assert.match(css, /@layer theme, base, vendor, astro, components, utilities;/);
+  assert.deepEqual(inspectSourceTree().issues, [], 'All author inputs must satisfy named-layer contracts');
   for (const selector of [
     ':where(main > section, .section)',
     ':where(.flow, [data-flow]) > :where(* + *)',
@@ -196,21 +171,4 @@ test('cascade layers and automatic spacing contracts stay enforceable', () => {
   assert.ok(richText.includes('flow?: boolean'), 'RichText must expose a flow opt-out');
   assert.ok(richText.includes("flow && 'flow'"), 'RichText must apply flow by default');
 
-  const walk = directory => readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
-    const file = join(directory, entry.name);
-    return entry.isDirectory() ? walk(file) : [file];
-  });
-  for (const file of walk('src').filter(file => file.endsWith('.astro'))) {
-    const source = readFileSync(file, 'utf8');
-    for (const match of source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {
-      const style = match[1];
-      assert.match(style, /@layer\s+components\s*\{/, `${file} must layer its component styles`);
-      assert.deepEqual(
-        topLevelRulePreludes(style).filter(prelude => !/^@(layer|keyframes|font-face|property)\b/.test(prelude)),
-        [],
-        `${file} must not leave normal component rules outside @layer components`,
-      );
-    }
-  }
 });
-

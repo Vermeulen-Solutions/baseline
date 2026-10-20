@@ -1,15 +1,47 @@
 ---
 import { publicLink } from '../lib/public-link';
 import ResponsiveImage from './EmDashImage.astro';
-import { PTImage } from 'emdash/ui';
+import { normalizeMediaValue } from 'emdash/media';
+import { MediaRepository } from 'emdash';
+import { getDb, getMediaProvider } from 'emdash/runtime';
 import { photo, photoUrl } from '../lib/photo-gallery';
 import { imageSource } from '../lib/image-source';
 interface Props { node?: unknown; }
 const record = (value: unknown): Record<string, unknown> => value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
 const node = record(Astro.props.node);
 const p = photo(node);
-const src = p ? photoUrl(p, Astro.locals.emdash?.getPublicMediaUrl) : '';
-const metadata = await imageSource(src, Astro.url.origin, Astro.locals.emdash?.storage, p?.width, p?.height);
+let src = p ? photoUrl(p, Astro.locals.emdash?.getPublicMediaUrl) : '';
+let dimensions = { width: p?.width, height: p?.height };
+if (!src && p?.asset._ref) {
+  // IDs are not storage keys. Resolve through the supported media provider,
+  // then render our native presentation instead of nesting a vendor figure.
+  const runtime = Astro.locals.emdash;
+  const providerId = p.asset.provider || 'local';
+  // MediaRepository has no public route-cache hint API. Avoid stale references
+  // if this site later enables Astro route caching.
+  if (Astro.cache?.enabled) Astro.cache.set(false);
+  try {
+  if (providerId === 'local') {
+    const item = await new MediaRepository(await getDb()).findById(p.asset._ref);
+    if (item?.status === 'ready') {
+      src = photoUrl({ ...p, asset: { ...p.asset, url: `/_emdash/api/media/file/${encodeURIComponent(item.storageKey)}` } }, runtime?.getPublicMediaUrl);
+      dimensions = { width: item.width || dimensions.width, height: item.height || dimensions.height };
+    }
+  } else {
+    const provider = runtime?.getMediaProvider?.(providerId) || await getMediaProvider(providerId);
+    const value = await normalizeMediaValue({ id: p.asset._ref, provider: providerId, ...dimensions }, () => provider);
+    if (value) {
+    dimensions = { width: value.width, height: value.height };
+        const embed = await provider?.getEmbed(value);
+        if (embed?.type === 'image') {
+          src = photoUrl({ ...p, asset: { ...p.asset, url: embed.src } });
+          dimensions = { width: embed.width || value.width, height: embed.height || value.height };
+        }
+      }
+    }
+  } catch { /* Missing media/providers retain the accessible native placeholder. */ }
+}
+const metadata = await imageSource(src, Astro.url.origin, Astro.locals.emdash?.storage, dimensions.width, dimensions.height);
 const width = metadata.width;
 const height = metadata.height;
 const link = record(node.link);
@@ -21,17 +53,13 @@ const caption = typeof node.caption === 'string' ? node.caption : '';
 const breakoutClass = node?.alignment === 'wide' ? 'content--feature' : node?.alignment === 'full' ? 'content--full-safe' : undefined;
 ---
 <figure class:list={['emdash-image', 'editorial-image', alignment && `emdash-image--align-${alignment}`, breakoutClass]} style={width ? `--image-limit: ${width}px` : undefined}>
-  {src || !p ? (href ? <a href={href} target={blank ? '_blank' : undefined} rel={blank ? 'noopener noreferrer' : undefined}><ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" /></a> : <ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" />) :
-    <div class="editorial-image__fallback" style={`aspect-ratio: ${width && height ? width / height : 4 / 3}`}><PTImage node={{ ...p, caption: undefined, link: href ? { href, blank: Boolean(blank) } : undefined }} /></div>}
+  {href ? <a href={href} target={blank ? '_blank' : undefined} rel={blank ? 'noopener noreferrer' : undefined}><ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" /></a> : <ResponsiveImage src={src} alt={p?.alt || ''} width={width} height={height} sizes="(max-width: 60rem) calc(100vw - 2.5rem), 800px" />}
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
 <style>
 @layer components {
   .editorial-image { width: min(100%, var(--image-limit, 100%)); margin-block: var(--spacing-content); }
   .editorial-image :global(img) { width: 100%; height: auto; }
-  .editorial-image__fallback { position: relative; width: 100%; }
-  .editorial-image__fallback :global(.emdash-image) { position: absolute; inset: 0; margin: 0; }
-  .editorial-image__fallback :global(img) { height: 100%; object-fit: contain; }
   figcaption { color: var(--color-muted); font-size: .875rem; margin-top: var(--spacing-content); }
   .emdash-image--align-center { margin-inline: auto; }
   .emdash-image--align-wide, .emdash-image--align-full { width: 100%; }

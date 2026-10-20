@@ -30,7 +30,7 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
 ---
 <!doctype html>
 <html lang="en" data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
-  <head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex, nofollow" /><title>Starter component styleguide</title></head>
+  <head><style is:inline>@layer theme, base, vendor, astro, components, utilities;</style><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><meta name="robots" content="noindex, nofollow" /><title>Starter component styleguide</title></head>
   <body>
     <a class="skip-link" href="#main-content">Skip to specimens</a>
     <header class="site-header"><nav class="site-nav" aria-label="Styleguide sections"><a class="site-brand" href="#main-content">Component styleguide</a>{sections.map(name => <a href={`#${name}`}>{name[0].toUpperCase() + name.slice(1)}</a>)}</nav></header>

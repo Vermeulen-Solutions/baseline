@@ -26,7 +26,7 @@
   {
     "path": "src/styles/global.css",
     "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "46531015fba8ea0c9f74b66d9a90b5ee7237bdba036bc664211d77c7e34567c1"
+    "sha256": "21e89ab248d787382852ffc74950d95f3ea9dc8ad5eb2b304f3d6f75ca4e6750"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -111,7 +111,7 @@
   {
     "path": "src/components/EditorialImage.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "22b35eb0b5e551ffd15647cf0cefab8b8117d53a520bd9f32d9f30e23ca0a386"
+    "sha256": "70b545e38ab6d9fa15576d3611f7151e4d108729deb50e88eb2b23cf488fa0f5"
   },
   {
     "path": "src/components/RichText.astro",
@@ -182,7 +182,7 @@
   {
     "path": "src/components/dev/Styleguide.astro",
     "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "cb80bea6ac9068a5be293341a46ee92c35e1f1a56281ebe8f4ae75964a0a4403"
+    "sha256": "f95117a95f6482b051d7279ba3841d040aae41168e20729374b9c6d648bd537c"
   },
   {
     "path": "src/utils/grid-guide.ts",
@@ -213,12 +213,12 @@
   {
     "path": "src/dev/visual-fonts.css",
     "reason": "Issue #7 neutral starter capture infrastructure: explicit fixture-only pinned font inputs; production public visual system preserved. Exact LF-normalized source; edits invalidate this exception.",
-    "sha256": "e6f3ec1ec61600ccd0e94dfa6ef46d41000f2abc45f6aee05b5e45b719b78ba3"
+    "sha256": "2199386191931ad5542bce4265fad26bd07942c4859baab80086aad10de83fc3"
   },
   {
     "path": "src/components/PhotoGallery.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "a45f47e22a02c368abb3a8c31bb4b5b60300d6b4c668e1e7d70efac6cfb3d4af"
+    "sha256": "30252a00448b7d5ca8e870c4a22ff65b3ec860364af2821b6dec16646de49d82"
   },
   {
     "path": "src/utils/reference-overlay.ts",
@@ -247,7 +247,7 @@
   {
     "path": "src/layouts/SiteShell.astro",
     "reason": "Functional shared starter metadata ownership option; preserve the document/title/landmarks and backward-compatible static default while allowing a platform head to own description/canonical. No visual-system or client content change. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "49e5194685572034ead7a8203cfbcb6eeaf07f68fbe738321e365ca9f6719cbb"
+    "sha256": "c7824f26df45085e8fbf92f2dfbf4bc4a47ea90aa73e1f9c991d841d20ac131b"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -418,5 +418,10 @@
     "path": "src/plugins/README.md",
     "reason": "Starter infrastructure only: optional Workers binding types and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception.",
     "sha256": "f355b4929ff78f39ee3f410a2c1f19d779b14c80ad4f0fe042f8ae624bdf55d3"
+  },
+  {
+    "path": "src/styles/photoswipe.css",
+    "reason": "Approved automatic-spacing starter infrastructure: isolated third-party CSS import boundary; no client visual implementation.",
+    "sha256": "9a3fcb7e69b71cedb3fbd8fdaf302f42acc4ac7856104d5f4a3b923de1a77382"
   }
 ]

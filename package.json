@@ -33,9 +33,9 @@
     "test": "node --test tests/*.test.mjs",
     "test:unit": "node scripts/run-tests.mjs --tier unit",
     "test:rehearsal": "node scripts/run-tests.mjs --tier rehearsal",
-    "verify:fast": "npm run lint && npm run check:art-direction && npm run design:tokens && npm run test:unit",
+    "verify:fast": "npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm run test:unit",
     "check:ci-fast": "node scripts/check-ci-fast.mjs",
-    "verify": "npm run lint && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck",
+    "verify": "npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck",
     "design:tokens": "node scripts/design-system.mjs",
     "design:check": "node scripts/design-interchange.mjs",
     "design:export": "node scripts/design-interchange.mjs --export",
@@ -81,7 +81,8 @@
     "lint:scripts": "node scripts/check-script-syntax.mjs",
     "lint:templates": "eslint src profiles/static/project/src --max-warnings 0",
     "audit:html": "node scripts/audit-html-integrity.mjs",
-    "setup:hooks": "node scripts/setup-hooks.mjs"
+    "setup:hooks": "node scripts/setup-hooks.mjs",
+    "check:css": "node scripts/check-css-contracts.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
@@ -102,6 +103,7 @@
     "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",
     "@typescript-eslint/parser": "8.71.2",
+    "astro-eslint-parser": "3.2.0",
     "aws4fetch": "1.0.20",
     "eslint": "10.13.0",
     "eslint-plugin-astro": "3.2.1",
@@ -109,6 +111,8 @@
     "jsonc-parser": "3.3.1",
     "parse-srcset": "1.0.2",
     "parse5": "7.3.0",
+    "postcss": "8.5.30",
+    "postcss-selector-parser": "7.1.6",
     "sharp": "0.35.4",
     "smol-toml": "1.9.1",
     "typescript": "6.0.3"

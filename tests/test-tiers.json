@@ -142,5 +142,9 @@
   "html-integrity.test.mjs": {
     "tier": "unit",
     "reason": "HTML validation and bounded loopback child-process capture; no framework builds or external network"
+  },
+  "css-contracts.test.mjs": {
+    "tier": "unit",
+    "reason": "Parsed author layer and flow semantics with bounded mutation fixtures"
   }
 }

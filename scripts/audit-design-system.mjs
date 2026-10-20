@@ -1,3 +1,4 @@
+import { analyzeFlow } from './css-contracts.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { readTarget, safeRelative } from './audit-evidence.mjs';
@@ -20,12 +21,7 @@ export function designSystemRules(target, add) {
   } else {
     const css = cssRead.bytes.toString('utf8');
     const interpolateSize = /interpolate-size\s*:\s*allow-keywords/.test(css);
-    const flowDuplicateMarginGuard =
-      /(?:\.flow|:where\(\.flow[^)]*\))[^{]*>\s*:where\([^)]*\)\s*\+\s*\*\s*\{[^}]*margin-block-start\s*:\s*0/.test(css) ||
-      /(?:\.flow|:where\(\.flow[^)]*\))[^{]*>\s*:where\(\*\s*\+\s*\*\)\s*\{[^}]*margin-block-end\s*:\s*0/.test(css);
-    const rawFlowRules = (css.match(/^\s*(?:\.flow|:where\(\.flow[^)]*\))\s*>\s*(?::where\(\*\s*\+\s*\*\)|:where\(\*\)\s*\+\s*:where\(\*\)|\*\s*\+\s*\*)\s*\{/gm) ?? []).length;
-    const duplicateFlowBase = (css.match(/^\s*\.flow\s*\{/gm) ?? []).length > 1;
-    const flowRuleCount = duplicateFlowBase ? Math.max(2, rawFlowRules) : rawFlowRules;
+    const { flowDuplicateMarginGuard, flowRuleCount } = analyzeFlow(css);
     const contentGrid = /\.content-grid\b/.test(css);
     const contentGridSubgrid = /grid-template-columns\s*:\s*subgrid\b/.test(css);
     const surfaceTokens = /\[data-surface=/.test(css);

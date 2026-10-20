@@ -47,7 +47,10 @@
     "tests/fluid-tokens.test.mjs",
     "docs/design-framework.md",
     "docs/architecture-hardening-upgrade.md",
-    "docs/upgrades/architecture-hardening-static.patch"
+    "docs/upgrades/architecture-hardening-static.patch",
+    "scripts/css-contracts.mjs",
+    "scripts/check-css-contracts.mjs",
+    "tests/css-contracts.test.mjs"
   ],
   "packages": {
     "dependencies": [
@@ -66,7 +69,10 @@
       "eslint-plugin-astro",
       "eslint-plugin-jsx-a11y-x",
       "@typescript-eslint/parser",
-      "@types/node"
+      "@types/node",
+      "postcss",
+      "postcss-selector-parser",
+      "astro-eslint-parser"
     ]
   },
   "scripts": [
@@ -87,7 +93,8 @@
     "fixtures:serve",
     "sync:baseline",
     "lint:scripts",
-    "lint:templates"
+    "lint:templates",
+    "check:css"
   ],
   "checks": [
     "lint",

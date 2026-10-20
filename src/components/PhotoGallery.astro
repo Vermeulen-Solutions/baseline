@@ -3,7 +3,7 @@ import { PTImage as Image } from 'emdash/ui';
 import ResponsiveImage from './EmDashImage.astro';
 import { albumPhotos, photoUrl, galleryJsonLd } from '../lib/photo-gallery';
 import { photoAspectRatio } from '../lib/justified-gallery';
-import 'photoswipe/style.css';
+import '../styles/photoswipe.css';
 
 interface Props {
   value?: unknown;
@@ -150,9 +150,9 @@ const jsonLd = galleryJsonLd(photos, {
   .photo-gallery {
     container-type: inline-size;
     gap: var(--spacing-grid, 1.5rem);
-    margin: 2rem 0 !important;
-    padding: 0 !important;
-    list-style: none !important;
+    margin: 2rem 0;
+    padding: 0;
+    list-style: none;
   }
 
   /* Justified Layout (Pure CSS Flexbox) */
@@ -226,8 +226,8 @@ const jsonLd = galleryJsonLd(photos, {
   /* Neutralize .prose / host CSS margins and resets */
   .photo-gallery :global(img) {
     width: 100%;
-    margin: 0 !important;
-    max-width: none !important;
+    margin: 0;
+    max-width: none;
     display: block;
     transition: transform 0.3s ease;
   }

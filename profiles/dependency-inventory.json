@@ -239,6 +239,33 @@
       ],
       "versionSource": "package.json#/devDependencies/@types/node",
       "reason": "Shared Astro build-time Node builtin imports must typecheck with independent profile installs"
+    },
+    "postcss": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash",
+        "static",
+        "static-sveltia"
+      ],
+      "reason": "Portable parsed author CSS and Astro style-source contract checks"
+    },
+    "postcss-selector-parser": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash",
+        "static",
+        "static-sveltia"
+      ],
+      "reason": "Portable parsed author CSS and Astro style-source contract checks"
+    },
+    "astro-eslint-parser": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash",
+        "static",
+        "static-sveltia"
+      ],
+      "reason": "Portable parsed author CSS and Astro style-source contract checks"
     }
   }
 }

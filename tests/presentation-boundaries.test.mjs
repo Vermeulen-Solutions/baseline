@@ -45,7 +45,7 @@ test('malformed image and gallery inputs produce bounded presentation values', (
 test('shared shell, annotated Card and native images build without a CMS integration or server adapter', { timeout: 90000 }, async () => {
   const stage = await fs.mkdtemp(path.join(tmpdir(), 'baseline-presentation-'));
   try {
-    const files = ['src/layouts/SiteShell.astro', 'src/styles/global.css', ...['Card', 'ResponsiveImage', 'EditorialImage', 'EmDashImage', 'PhotoGallery', 'Disclosure', 'LogoTicker', 'Section', 'Container', 'Grid'].map(name => `src/components/${name}.astro`), ...['responsive-image', 'public-link', 'photo-gallery', 'image-source', 'justified-gallery'].map(name => `src/lib/${name}.ts`)];
+    const files = ['src/layouts/SiteShell.astro', 'src/styles/global.css', 'src/styles/photoswipe.css', ...['Card', 'ResponsiveImage', 'EditorialImage', 'EmDashImage', 'PhotoGallery', 'Disclosure', 'LogoTicker', 'Section', 'Container', 'Grid'].map(name => `src/components/${name}.astro`), ...['responsive-image', 'public-link', 'photo-gallery', 'image-source', 'justified-gallery'].map(name => `src/lib/${name}.ts`)];
     for (const file of files) {
       await fs.mkdir(path.dirname(path.join(stage, file)), { recursive: true });
       await fs.copyFile(path.join(root, file), path.join(stage, file));

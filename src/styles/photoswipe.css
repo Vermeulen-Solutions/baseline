@@ -1,0 +1,3 @@
+/* Third-party overlay CSS has a dedicated import boundary, separate from admin. */
+@layer theme, base, vendor, astro, components, utilities;
+@import 'photoswipe/style.css' layer(vendor);

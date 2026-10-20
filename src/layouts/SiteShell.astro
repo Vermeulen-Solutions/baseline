@@ -16,6 +16,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
 <!doctype html>
 <html lang={lang} data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
   <head>
+    <style is:inline>@layer theme, base, vendor, astro, components, utilities;</style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>

@@ -7,7 +7,7 @@ Started: 2026-10-20. Starting revision: `c3d965c`. Scope: [consolidated plan](au
 | Phase | Work | State | Evidence / next step |
 | --- | --- | --- | --- |
 | 1 | W01 contracts, caller inventory, baseline | Verified | [Caller inventory](automatic-spacing-callers.md); 251 tests; 46 Astro files, zero diagnostics |
-| 2 | W02 media/cascade and W03 parsed-check foundation | Planned | Fix A01/A04 and reproduce source gate failures |
+| 2 | W02 media/cascade and W03 parsed-check foundation | Verified foundation | 126 fast tests; parsed CSS/selector mutations; real uploaded ID-only media in dev and built Chromium at 390px; broader matrix remains Phase 6 |
 | 3 | W06 contextual aliases and token CLI | Planned | Known-name targeting, candidate validation, bounded resolver |
 | 4 | W04 scoped structural defaults | Planned | Activation and attribute/style API contract below |
 | 5 | W05/W07 editorial boundaries, routes; W09 editing preparation | Planned | Keep collection lists distinct from editorial lists |
@@ -41,3 +41,12 @@ All A01-A07 / F01-F16 findings remain open. V01-V15, M01-M10, T01-T06 and E01 ar
 ## Evidence policy
 
 Record phase commit IDs, exact commands, results and applicability here. Keep large synthetic local logs/screenshots under ignored `.emdash/visual/`; retain concise reviewable results and approved goldens. Do not claim editor-save verification from attributes/API writes or cross-browser conformance from Chromium.
+
+## Phase 2 evidence
+
+- Phase 1 commit: `6eb12c2`.
+- `npm.cmd run verify:fast`: PASS, 126 tests; `npm.cmd run typecheck`: PASS, 46 files with zero diagnostics. Presentation dependency-boundary smoke: 3 passed.
+- `npm.cmd exec playwright test tests/visual/spacing.spec.mjs -- --project=chromium-390`: PASS, 2 tests against fresh built fixtures. Dev bootstrap separately loaded the same actual uploaded 400×300 ID-only media, with no nested vendor figure. Logs: `.emdash/visual/spacing-phase2-*`, `media-dev.json`, `cleanup.json`.
+- Native image rendering resolves local IDs through the supported MediaRepository/getDb APIs. Anonymous requests cannot use a provider requiring an editor context. Missing media retains a placeholder; ID-based resolution disables route caching when enabled because the installed media API exposes no cache hint.
+- Vendor styles are bounded at the PhotoSwipe import; the document establishes the shared order before component styles. Gallery probes exercise emitted DOM utility precedence, not a new public class prop.
+- CSS and Astro parsing cover standalone files, static overlays and local imports, strings/comments, malformed/anonymous/wrong layers and real flow selectors. The full M/V matrix and visual review remain later work.
