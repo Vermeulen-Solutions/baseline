@@ -6,8 +6,9 @@ physical-device and manual accessibility acceptance are deferred by the user.
 
 ## Phase A — New-site setup language and choice
 
-Complete: Standard and Express design handoffs explain layout spacing and ask
-once about shared defaults versus custom spacing for specified compositions.
+Complete: Standard and Express design handoffs explain layout spacing. The
+initial shared/custom choice was refined by the persona pass below: Express
+uses shared defaults; Standard asks only for a material unresolved choice.
 Root and generated-profile instructions share that contract. CSS remains the
 configuration source; `automatic-v2` remains only the compatibility API name.
 The generator remains noninteractive. Existing decisions and autonomous design
@@ -42,3 +43,19 @@ deadlines, resource limits and server teardown coverage. Log:
 In progress: measure actual module ownership and delivery, then make bounded
 changes that preserve dependency initialization and editor behavior. Never
 hide the size advisory or reinstate the generic vendor split that broke editing.
+
+## Phase D — Persona walkthrough and Express defaults
+
+Complete: `audit/new-site-workflow-persona-pass.md` records five representative
+journeys, eleven findings and their resolutions, discovery question groups,
+conditional questions, Express defaults and four outcome walkthroughs. This is
+a source-based reasoning pass, not interviews or usability-test evidence.
+
+The skill and root/generated instructions implement those decisions: ask only
+missing consequential questions, capture visitor/content/maintenance ownership,
+record approved versus assumed choices, keep material integration/locale/launch
+decisions explicit, and default technical choices in Express. Shared spacing
+and brief-led density (balanced if unspecified) need no separate CSS-policy
+question. Checkpoints are up to three decision bundles, not mandatory pauses.
+Stock completion copy now requires actual coverage and limitations rather than
+invented contrast counts or accessibility certification.

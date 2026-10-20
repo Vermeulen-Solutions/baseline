@@ -21,8 +21,8 @@ Shared on all profiles: `site-art-direction`, `astro-site-design`, `impeccable`,
 
 1. Read `README.md`, `AGENTS.md`, the installed tooling, and the current repository state.
 2. Choose the appropriate workflow track based on project scope:
-   - **Standard Track (7 Stages):** Default for complex migrations, multi-collection architectures, or multi-locale sites. Pause at each stage handoff below.
-   - **Express Track (3 Checkpoints):** Recommended for smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale). Consolidates user confirmations into three checkpoints while still enforcing every automated CLI gate (`check:art-direction`, `design:tokens`, `audit/component-calibration.md`, `verify`):
+   - **Standard Track (7 Stages):** Default for complex migrations, multi-collection architectures, or multi-locale sites. Report each stage handoff; pause only for a missing consequential decision or required external-action approval.
+   - **Express Track (3 Checkpoints):** Recommended for smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale). Consolidates unresolved decisions into up to three checkpoints while still enforcing every automated CLI gate (`check:art-direction`, `design:tokens`, `audit/component-calibration.md`, `verify`):
      1. **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):** Gather brief, confirm hosting/runtime, and model collections/routes in one pass.
      2. **Checkpoint B (Stages 4–4.5 — Art Direction & Component Calibration):** Seed tokens and `## Art Direction Record` (`npm run design:tokens -- --lane <lane> --write --write-record --write-calibration`), verify `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide`.
      3. **Checkpoint C (Stages 5–6 — Representative Pages, Critique & Verification):** Build routes, run the `impeccable` critique pass, and verify with `npm run verify` and `npm run build`.
@@ -32,9 +32,35 @@ Shared on all profiles: `site-art-direction`, `astro-site-design`, `impeccable`,
 
 Keep a concise site record in `AGENTS.md`: purpose, audiences, languages, content sources, routes and content types, hosting/runtime choices, visual direction, and material deviations from this starter. For a large site, put detailed inventories in a focused project document and link it from `AGENTS.md`.
 
+## Decision and question policy
+
+Use supplied evidence and prior answers before asking. Treat the handoff prompts below as adaptable examples, not mandatory scripts or permission requests. When work is already authorized, report the outcome and continue. Ask only unresolved questions whose answers change the work; combine related decisions and use plain language with a recommendation. Express has **up to three consolidated checkpoints**, not three mandatory stops. Do not ask “ready to build?” repeatedly or require users to choose implementation details the agent can derive.
+
+Discover the following in small groups, omitting known answers:
+
+1. **Purpose and visitor:** Who is the site for, what should visitors do, and what must that journey accomplish? Which pages/content are essential?
+2. **Content and identity:** New build or migration? Which content, logo, imagery and brand/source references are authoritative and available to use, what is missing, who supplies it, and which languages must launch?
+3. **Operation and constraints:** Who edits and maintains it? Is browser editing or immediate publication needed? Are there required forms, bookings, services, hosting/cost constraints or a target date?
+
+Ask conditional details when relevant: preserve/refine/overhaul and URL redirects for a migration; form destination, recovery, integration/data owner and handling requirements for enquiries; roles and review/publishing workflow for editors; translation ownership for multiple locales; actual measurement needs before analytics; existing SEO/search/social requirements; approved privacy/legal copy where needed. Do not invent policy copy or request secrets in chat; use the project's supported secret storage. Keep deployment, CMS data transfer and DNS changes separate, with the existing authorization rules.
+
+### Express defaults
+
+Present the material defaults briefly at the relevant checkpoint and record approved versus assumed decisions in `AGENTS.md`. Defaults are revisable, not approval claims:
+
+- Recommend `static` when developers/agents own file edits. Ask about editing needs before selecting a browser CMS or relational platform; record the selected profile.
+- Use the brief/content language as a labeled assumption. Resolve ambiguity or extra locales before committing to URL/schema structure.
+- Recommend one brief-led visual direction, preserving supplied identity. Offer alternatives when needed to resolve a material design uncertainty. Explain lane names in everyday terms.
+- Use **shared layout spacing** and calibrate density from the brief/reference; assume **balanced** density when no cue exists. Explain that the gaps adapt to screen size and remain locally adjustable. Do not ask users to opt into a CSS policy. Ask about compact/balanced/spacious feel only if it affects an unresolved visual decision.
+- Compose native primitives, editorial flow and progressive enhancement. Add browser JavaScript only for a required interaction. No third-party tracking by default; discuss it when measurement is requested.
+- Use real supplied content or explicitly marked local drafts. Identify the owner of missing material; do not publish filler or assume draft/legal approval.
+- Keep all verification gates and honest evidence. A local verified build is the delivery default until deployment is authorized; deferred manual/editor acceptance stays recorded.
+
+Assess complexity beyond the `<= 6` route / `<= 3` collection / single-locale heuristic: count route archetypes separately from repeated entries and consider migrations, roles, relationships, integrations, authentication/payments and translation. Move to Standard when these warrant it and explain why. Express consolidates decisions; it does not waive modeling, quality or editor acceptance.
+
 ## Express Track (3-Checkpoint Autonomous Mode)
 
-When the user requests **Express Mode** (or when building a straightforward greenfield site with `<= 6` routes, `<= 3` collections, and a single locale), execute the same specialist skills and CLI gates across **3 consolidated checkpoints** instead of pausing 7 times:
+When the user requests **Express Mode** (or when building a straightforward greenfield site with `<= 6` routes, `<= 3` collections, and a single locale), execute the same specialist skills and CLI gates with **up to 3 consolidated checkpoints**, using the decision policy and defaults above:
 
 1. **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):**
    - Document the brief and routes in `AGENTS.md`, choose the Platform Profile in Stage 2, then follow its Stage 3 content branch. On static profiles define native Zod schemas and routes; only EmDash uses CMS specialists and the SQL budget.
@@ -44,22 +70,22 @@ When the user requests **Express Mode** (or when building a straightforward gree
      > - **Collections & Routes:** [List collections and routes]
      >
      > Next is **Checkpoint B (Stages 4–4.5: Art Direction & Component Calibration)**.
-     > **Which visual direction should I initialize (`npm run design:tokens -- --init-client`)?**
-     > 1. **(Recommended) Curated Aesthetic Lane:** (*Product-Led Minimalism*, *Editorial Paper*, *Technical Systems*, or *Luminous Futurism*)
-     > 2. **Brand Seed Palette:** Provide a primary hex color or reference URL (`--seed-accent`).
-     > *(Reply `1` + lane name, or `2` + your brand color/URL.)*
+     > **Visual direction:** [Recommend one direction from the brief in plain language, with its density and shared spacing defaults. Ask for missing identity/reference information only if needed.]
+     > - **Look and feel:** [For example: clear and restrained, warm and editorial, or bold and technical; connect the recommendation to this site's audience.]
+     > - **Spacing:** Shared responsive defaults, with [brief-led density; balanced if unspecified] and [any deliberate layout exceptions].
+     > - **Missing input:** [Ask only an unresolved brand/reference or density question; otherwise record the recommendation/assumption and continue.]
 
-   Include the **Layout spacing choice** below in this same handoff. Reuse an existing answer; do not add a separate checkpoint.
+   Include the **Layout spacing choice** explanation below in this same handoff. Express uses shared defaults unless the brief or user calls for custom spacing; do not add a separate technical question or checkpoint.
 
 2. **Checkpoint B (Stages 4–4.5 — Art Direction & `/_styleguide` Calibration):**
    - Run `npm run design:tokens -- --init-client --lane <lane>` (or `--seed-accent <hex>`), refine `## Art Direction Record` in `AGENTS.md` and tokens in `src/styles/global.css`, pass `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide` (`audit/component-calibration.md`).
    - **Checkpoint B Handoff Prompt:**
      > **Express Checkpoint B Complete: Art Direction & `/_styleguide` Calibrated**
      > - **Art Direction Gate:** `PASS` (`AGENTS.md` + `src/styles/global.css` + `audit/component-calibration.md`)
-     > - **WCAG Contrast & Tokens:** 10/10 light & `[data-surface="dark"]` pairs verified.
+     > - **Contrast, tokens and specimens:** [Report the actual checks, results and unresolved limitations; automated checks are not accessibility certification.]
      >
      > Next is **Checkpoint C (Stages 5–6: Full Route Assembly, Impeccable Critique & Verification)**.
-     > *(Reply `1` to build all routes, run the `impeccable` critique pass, and run `npm run verify`, or `2` to inspect `/_styleguide` first.)*
+     > [Continue authorized implementation; offer the preview for inspection without requiring a continuation reply.]
 
 3. **Checkpoint C (Stages 5–6 — Route Implementation, Critique & Full Verification):**
    - Implement public routes using the selected profile (native `getStaticPaths()`/`render()` for static; `<Base content={{...}}>` + `{...entry.edit.*}` for EmDash), run the `impeccable` visual critique pass, run `npm run verify` + `npm run build`, and present the Stage 6 launch/deployment prompt.
@@ -148,7 +174,7 @@ Use `site-art-direction` with the brief, source audit, content model, real asset
 
 ### Layout spacing choice (Standard and Express)
 
-During the design handoff, explain and ask once unless the user has already decided:
+During the design handoff, explain briefly. Express uses the shared defaults above; Standard asks once when the spacing approach is a material unresolved decision. Reuse existing answers:
 
 > **Layout spacing:** Sections, content groups, and grids get consistent spacing that adapts to screen size. Shared settings keep changes consistent across the site, while individual layouts can have their own spacing. Article text uses flow spacing between headings, paragraphs, lists, and media.
 >
@@ -156,7 +182,7 @@ During the design handoff, explain and ask once unless the user has already deci
 > 1. **Shared spacing defaults (recommended):** Calibrate the site's overall density, then use the layout components' defaults with deliberate local exceptions.
 > 2. **Custom layout spacing:** Plan explicit spacing for the affected layouts, useful when matching a tightly specified composition. Shared tokens still keep those values maintainable.
 
-For Standard, include this in the Stage 3 → Stage 4 handoff; for Express, include it in Checkpoint A's design handoff. Bundle the answer with the visual-direction decision, without a separate blocking approval. If the user has authorized autonomous design, state the recommended working assumption and proceed. Do not replay this prompt for scoped maintenance or existing-site updates.
+For Standard, include any needed choice in the Stage 3 → Stage 4 handoff; for Express, include the explanation and recommended shared default in Checkpoint A's design handoff. Do not paste the two-choice question into Express unless the brief/user makes the architecture a real decision. Bundle any answer with visual direction, without a separate blocking approval. If the user has authorized autonomous design, state the recommended working assumption and proceed. Do not replay this prompt for scoped maintenance or existing-site updates.
 
 Record the selected approach, density, intended exceptions and whether the choice was approved or assumed in `AGENTS.md`; record actual calibrated values/evidence in `audit/component-calibration.md`. Use neutral terms: **layout spacing**, **spacing tokens**, **stack/grid gaps**, **fluid spacing**, and **flow spacing**. These describe the architecture, not a named CSS feature or external product. Do not introduce product comparisons or a settings panel.
 
@@ -198,7 +224,7 @@ Save `audit/component-calibration.md` (you can scaffold or refresh the verified 
 **Stage 4.5 Completion Handoff Prompt:**
 When `audit/component-calibration.md` is saved, present this prompt:
 > **Stage 4.5 Complete: Building Blocks Tested & Verified**
-> All core cards, containers, and buttons are responsive and accessible.
+> [Report which cards, containers and controls were checked, at which viewports and states, with any remaining limitations.]
 >
 > Next is **Stage 5: Implement Representative Pages**.
 > *In plain terms:* We build 1 or 2 key "archetype" pages first to make sure the full layout, navigation bar, and footer look and feel great in the browser before expanding across every route.
@@ -263,7 +289,7 @@ Before declaring a new-site workflow complete, use `npm run site:register` with 
 When Stage 6 finishes, present the prompt matching the hosting platform selected in Stage 2:
 *If Node.js hosting:*
 > **Stage 6 Complete: Site is Built and Fully Verified!**
-> All pages, admin features, and visual checks have passed with zero errors.
+> [Report the actual route coverage, automated/manual/editor checks and remaining limitations. Do not claim unperformed acceptance or launch readiness.]
 >
 > Next is **Stage 7: Production Deployment & Domain Setup**.
 > *In plain terms:* Connecting your custom domain name (e.g., `yourbrand.com`), configuring SSL certificates, and preparing production startup services.
@@ -278,7 +304,7 @@ When Stage 6 finishes, present the prompt matching the hosting platform selected
 
 *If Cloudflare Workers hosting:*
 > **Stage 6 Complete: Site is Built and Fully Verified!**
-> All pages, admin features, and visual checks have passed with zero errors.
+> [Report the actual route coverage, automated/manual/editor checks and remaining limitations. Do not claim unperformed acceptance or launch readiness.]
 >
 > Next is **Stage 7: Production Cutover (Going Live on Cloudflare)**.
 > *In plain terms:* Connecting your custom web address (e.g., `yourbrand.com`), ensuring secure HTTPS locks work, verifying admin passkey/email logins, and ensuring company email DNS is untouched.

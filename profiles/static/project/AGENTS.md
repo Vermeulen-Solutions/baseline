@@ -14,9 +14,11 @@ Record site decisions here as they are established.
 
 During new-site design setup, follow `new-site-workflow`'s **Layout spacing choice**
 in either track: briefly explain responsive spacing for sections, content groups,
-grids and article text, then ask once about shared defaults (recommended) versus
-custom spacing for specified layouts. Bundle it with the visual-direction choice,
-reuse prior answers and record the approach, density and exceptions here. An
+grids and article text. Express defaults to shared spacing and brief-led density
+(balanced when unspecified); ask about custom spacing only for a real unresolved
+design decision. Follow the skill's discovery questions and Express defaults,
+reuse prior answers and record approved versus assumed decisions, density,
+exceptions and content/maintenance ownership here. An
 authorized autonomous build may use an explicit recommended assumption. Keep
 the current shell policy for both choices; custom layouts use tokens and explicit
 primitive controls. No settings panel or external-product terminology is needed.
