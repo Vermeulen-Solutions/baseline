@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import { assertReleaseArtifact } from '../../scripts/assert-release-artifact.mjs';
 import { visualContract } from './contract.mjs';
 
-export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, devOnly = false, releaseOnly = false, expectWelcome = true, fixedClock = true } = {}) {
+export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, afterReleaseBuild, devOnly = false, releaseOnly = false, expectWelcome = true, fixedClock = true } = {}) {
   const stage = await mkdtemp(path.join(tmpdir(), 'emdash-visual-'));
   let child, cleaned = false, cancelled = false;
   const logs = [];
@@ -47,7 +47,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
       try { const r = await request('/_styleguide'); if (r.status === 200 && (await r.text()).includes(marker)) return; } catch {}
       await new Promise(resolve => setTimeout(resolve, 250));
     }
-    throw new Error('Visual server readiness timed out');
+    throw new Error('Visual server readiness timed out: ' + logs.slice(-10).join(''));
   }
   async function build(fixtures) {
     const target = launch(['node_modules/astro/bin/astro.mjs', 'build'], fixtures ? { ASTRO_TEST_FIXTURES: '1' } : {});
@@ -66,6 +66,20 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     try { await unlink(path.join(stage, 'node_modules')); } catch (error) { if (error.code !== 'ENOENT') throw error; }
     await rm(stage, { recursive: true, force: true });
     await writeFile(path.join(reportDir, 'cleanup.json'), JSON.stringify({ serverStopped: true, dependencyJunctionUnlinked: true, temporaryTreeRemoved: true, workingDatabaseCopied: false }) + '\n');
+  }
+  async function startRelease() {
+    await build(false);
+    await afterReleaseBuild?.({ stage });
+    await assertReleaseArtifact(path.join(stage, 'dist'));
+    launch([...serverClock, 'dist/server/entry.mjs'], { NODE_ENV: 'production', ASTRO_TEST_FIXTURES: '1' });
+    const deadline = Date.now() + 90000;
+    while (Date.now() < deadline) {
+      if (cancelled) throw new Error('Visual bootstrap cancelled');
+      if (child.exitCode !== null) throw new Error('Normal server exited before public readiness: ' + logs.slice(-10).join(''));
+      try { const r = await request('/'); if (r.status === 200 && (await r.text()).includes('Welcome')) return; } catch {}
+      await new Promise(resolve => setTimeout(resolve, 250));
+    }
+    throw new Error('Clean built public content must be healthy');
   }
   try {
     for (const name of ['src', 'public', 'seed']) {
@@ -92,18 +106,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
       return { origin, cleanup };
     }
     await stop();
-    await build(false);
-    await assertReleaseArtifact(path.join(stage, 'dist'));
-    launch([...serverClock, 'dist/server/entry.mjs'], { NODE_ENV: 'production', ASTRO_TEST_FIXTURES: '1' });
-    let normalReady = false;
-    const normalDeadline = Date.now() + 90000;
-    while (Date.now() < normalDeadline) {
-      if (cancelled) throw new Error('Visual bootstrap cancelled');
-      if (child.exitCode !== null) throw new Error('Normal server exited before public readiness');
-      try { const r = await request('/'); if (r.status === 200 && (await r.text()).includes('Welcome')) { normalReady = true; break; } } catch {}
-      await new Promise(resolve => setTimeout(resolve, 250));
-    }
-    assert.ok(normalReady, 'Clean built public content must be healthy');
+    await startRelease();
     for (const method of ['GET', 'HEAD']) assert.equal((await request('/_styleguide?fixtures=1', { method, headers: { cookie: 'fixtures=1' } })).status, 404);
     for (const method of ['GET', 'HEAD', 'POST']) assert.equal((await request('/_form-recovery?fixtures=1', { method, headers: { cookie: 'fixtures=1' } })).status, 404);
     for (const file of await readdir(path.join(stage, 'dist/server'), { recursive: true })) {
@@ -112,7 +115,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     if (releaseOnly) {
       await mkdir(reportDir, { recursive: true });
       await writeFile(path.join(reportDir, 'bootstrap.json'), JSON.stringify({ releaseOnly: true, freshSeed: true, workingDatabaseCopied: false, normalStyleguide: 404, loopback: true }) + '\n');
-      return { origin, cleanup };
+      return { origin, cleanup, async rebuildRelease(prepare) { await stop(); await prepare?.({ stage }); await startRelease(); } };
     }
     await stop();
     await build(true);

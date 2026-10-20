@@ -1,5 +1,5 @@
 ---
-import { getEmDashEntry, getSeoMeta, decodeSlug, getSiteSettingsWithCacheHint } from "emdash";
+import { getEmDashEntry, getSeoMeta, decodeSlug, getSiteSettingsWithCacheHint, getTaxonomyTermsWithCacheHint } from "emdash";
 import { Image } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
 import RichText from "../../components/RichText.astro";
@@ -23,6 +23,10 @@ const { data: settings, cacheHint: settingsCacheHint } = await getSiteSettingsWi
 if (Astro.cache?.enabled) {
 	Astro.cache.set(cacheHint);
 	Astro.cache.set(settingsCacheHint);
+	// Hydrated terms are read with the entry, but term renames invalidate their
+	// taxonomy tag rather than the collection. Register both visible facets.
+	const taxonomyHints = await Promise.all(['category', 'tag'].map(name => getTaxonomyTermsWithCacheHint(name, { includeCounts: false })));
+	for (const { cacheHint: taxonomyHint } of taxonomyHints) Astro.cache.set(taxonomyHint);
 }
 const { siteTitle } = resolveStarterSiteIdentity(settings);
 

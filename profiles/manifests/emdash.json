@@ -107,11 +107,13 @@
     "src/lib/structured-data.ts",
     "src/lib/page-url.ts",
     "src/lib/webhook-domain.ts",
-    "src/components/StructuredData.astro",
     "src/middleware.ts",
     "scripts/check-production-setup.mjs",
     "scripts/retain-build-assets.mjs",
-    "tests/production-hardening.test.mjs"
+    "tests/production-hardening.test.mjs",
+    "src/plugins/baseline-metadata/index.ts",
+    "tests/asset-retention.test.mjs",
+    "tests/cache.integration.mjs"
   ],
   "scripts": [
     "doctor",
@@ -160,7 +162,8 @@
     "setup:hooks",
     "build:analyze",
     "check:production-setup",
-    "assets:retain"
+    "assets:retain",
+    "check:cache"
   ],
   "checks": [
     "check:schema-budget"

@@ -3,6 +3,7 @@ import react from "@astrojs/react";
 import { defineConfig } from "astro/config";
 import emdash, { local } from "emdash/astro";
 import { sqlite } from "emdash/db";
+import { fileURLToPath } from "node:url";
 
 import tailwindcss from "@tailwindcss/vite";
 import { loadEnv } from "vite";
@@ -45,6 +46,11 @@ export default defineConfig({
       devTools({ fixtures: testFixtures }),
       react(),
       emdash({
+          plugins: [{
+              id: 'baseline-metadata', version: '0.1.0', format: 'native',
+              entrypoint: fileURLToPath(new URL('./src/plugins/baseline-metadata/index.ts', import.meta.url)).replaceAll('\\', '/'),
+              options: { organizationPaths: ['/'] },
+          }],
           database: sqlite({ url: "file:./data.db" }),
           storage: local({
               directory: "./uploads",

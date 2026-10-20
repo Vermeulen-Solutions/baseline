@@ -325,9 +325,7 @@ For migrations, follow `docs/migration-cutover.md` to enforce the pre-cutover co
 
 Use `emdash-production-cutover` when moving a Cloudflare Workers site from preview/`workers.dev` to its production custom domain. Establish and test admin recovery before changing the authentication origin, configure the canonical hostname and alias redirects, and verify fresh production login. Preserve working email providers and form integrations; configure Cloudflare Email Sending or replace forms only when requested or required by established site requirements.
 
-**Gate:** production custom domain resolves with valid TLS; required aliases preserve paths and queries; fresh admin login works through the configured authentication mode; corporate mail DNS remains intact; applicable email/form delivery checks pass; rollback configuration and observed verification results are recorded.
-
-For EmDash Cloudflare targets, enforce docs/cloudflare-backup-restore.md and docs/edge-cache-lifecycle.md: recorded pre-migration DB/media/key recovery receipts, canonical-domain bootstrap protection and setup-status lockdown, observed scheduled post/cron logs, old/new asset delivery and production publish/purge/environment parity. Config-only checks or successful previews do not close these gates. Leave live checks explicitly pending until observed.
+**Gate:** the deployment agent completes applicable setup/cutover checks within existing authorization using repository configuration and supported tools. All EmDash targets need valid TLS/aliases, fresh mode-specific login, preserved corporate mail, applicable form delivery, database/media/key recovery evidence and recorded rollback. For Cloudflare targets, follow docs/cloudflare-backup-restore.md and docs/edge-cache-lifecycle.md for protected bootstrap/setup status, retained assets, production publish/purge/provider parity and observed cron/public scheduled-post visibility. Node targets use their backup/deployment runbook and actual scheduler/cache setup. Previews/config-only checks cannot close live gates. Leave unobserved checks pending. Request only missing access/inputs or actions unavailable to the agent; do not send routine dashboard work back to the user.
 
 **Stage 7 Completion Handoff Prompt:**
 When Stage 7 cutover or production configuration is verified:
@@ -335,8 +333,8 @@ When Stage 7 cutover or production configuration is verified:
 > Production domain resolution, SSL certificates, admin access, and mail delivery checks have succeeded.
 >
 > **Recommended Post-Launch Actions:**
-> 1. **(Recommended) Finalize Site Registry & Backups:**
->    - Record the active production status via `npm run site:register`, verify automated database backup schedules, and archive deployment notes.
+> 1. **(Recommended) Finalize Site Registry:**
+>    - Record active production status via `npm run site:register` and archive completed deployment evidence. Backup schedules and restore ownership must already be established before launch.
 > 2. **Monitor Live Production Traffic:**
 >    - Keep monitoring error logs (`npx wrangler tail` or server logs) and test the public contact form live.
 >

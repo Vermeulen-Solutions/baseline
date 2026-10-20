@@ -30,8 +30,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Starter metadata infrastructure: typed breadcrumbs and additive safe JSON-LD; existing platform primary metadata and visual presentation remain intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "aabc83e10ca9720cb9cf4455a21f25670ec7aacf9edeb9828c03724a8d0c48e1"
+    "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "3f14fd0d2f1e3a26eca7d959358ed1571c8dc54886d4ad2aa5df61983d6255dc"
   },
   {
     "path": "src/components/Container.astro",
@@ -65,18 +65,18 @@
   },
   {
     "path": "src/pages/index.astro",
-    "reason": "Starter sample metadata infrastructure: explicit settings query hint, homepage organization graph and breadcrumb opt-out; existing neutral page presentation remains intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "996b7ef9b76abcd9457a384b5e60872cb67574a43bfcbf8156586114b9abe04c"
+    "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "b4a3af4729010b86f0887267cc8a6bb9cbcbb4cd79019288379edef1506c32b0"
   },
   {
     "path": "src/pages/posts/index.astro",
-    "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "ed4e3d09fe5061e3c31ddf7f764183d9b2818d37a75e64a6402a23e437286f77"
+    "reason": "Functional cache-contract correction: register supported taxonomy hints for rendered hydrated and batched term labels; preserve current styling, layout, data and metadata. No client visual implementation. Any edit invalidates this LF-normalized exception.",
+    "sha256": "6be50fb7fa22543b8a387c94c4180a2f906f8cb99842b83414a3961a4b84061b"
   },
   {
     "path": "src/pages/posts/[slug].astro",
-    "reason": "Starter sample metadata infrastructure: root/category/article breadcrumb facts only; existing article rendering, SEO panel ownership and visual tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "838089c4ef5892ebe863c67840350ffd63279f50cd53ca923d259bff5f359202"
+    "reason": "Functional cache-contract correction: register supported taxonomy hints for rendered hydrated and batched term labels; preserve current styling, layout, data and metadata. No client visual implementation. Any edit invalidates this LF-normalized exception.",
+    "sha256": "373af2b30132f31ef604090275b4df8728fdd98853fd991d128f17d939bedaf5"
   },
   {
     "path": "src/pages/tag/[slug].astro",
@@ -416,8 +416,8 @@
   },
   {
     "path": "src/plugins/README.md",
-    "reason": "Starter infrastructure only: optional Workers binding types and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "f355b4929ff78f39ee3f410a2c1f19d779b14c80ad4f0fe042f8ae624bdf55d3"
+    "reason": "Starter infrastructure documentation for the site-owned metadata hook, ownership options and shared core CSP/deduplication path; no client visual design. Any source edit invalidates this LF-normalized exception.",
+    "sha256": "4692d3b71fddce97e12a7271b9db67a38a3c1ec7fb276855ca15483432a96879"
   },
   {
     "path": "src/styles/photoswipe.css",
@@ -451,12 +451,18 @@
   },
   {
     "path": "src/components/StructuredData.astro",
-    "reason": "Starter metadata-only JSON-LD serializer using the installed EmDash safe serializer; no visible layout, styling or client theme. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "81c47153d40cfea3270c43435376fd812acb02e41c464eda9db003470b2e1e7a"
+    "reason": "Removed the separate script renderer; native page:metadata and EmDashHead now own all baseline JSON-LD and CSP hashes. Exact hash binds the deleted source.",
+    "sha256": "81c47153d40cfea3270c43435376fd812acb02e41c464eda9db003470b2e1e7a",
+    "deleted": true
   },
   {
     "path": "src/middleware.ts",
     "reason": "Functional starter request policy: opt-in page canonical redirects and bounded robots browser caching; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
     "sha256": "aefd3f11fed3b4f96c782212294973890c3fd65b4f28d90af20c47d49aaa2740"
+  },
+  {
+    "path": "src/plugins/baseline-metadata/index.ts",
+    "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "52c4b4b773ad17d9edc716dba62b490086468ac1f8a411a9ebed9ec18f6811e5"
   }
 ]

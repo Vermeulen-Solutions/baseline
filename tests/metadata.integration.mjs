@@ -20,7 +20,7 @@ assert.ok(outIndex >= 0 && process.argv[outIndex + 1], 'Use --out <receipt.json>
 const out = path.resolve(process.argv[outIndex + 1]);
 const reportDir = path.resolve('.emdash/metadata', baseline ? 'before' : 'after');
 const publicOrigin = 'https://public.example.test';
-const receipt = { version: 1, mode: baseline ? 'baseline' : 'verification', publicOrigin, scope: 'Owned local Node/SQLite production build; synthetic API editor write and native plugin; isolated Chromium JS inventory', sourceSHA256: {}, routes: {}, javascript: {} };
+const receipt = { version: 1, mode: baseline ? 'baseline' : 'verification', publicOrigin, scope: 'Owned local Node/SQLite production build; synthetic API editor write and native plugin; isolated Chromium JS inventory', csp: { enabled: true, nodeStreaming: false, scope: 'Buffered SSR ensures asynchronous metadata hashes settle before CSP headers; default streamed SSR is not certified' }, sourceSHA256: {}, routes: {}, javascript: {} };
 let site, browser, origin, storageBytes;
 const storageKey = 'architecture-phase8-storage.png';
 
@@ -44,7 +44,7 @@ try {
     releaseOnly: true,
     async prepareStage({ stage, origin: stagedOrigin }) {
       origin = stagedOrigin;
-      for (const file of ['src/layouts/SiteShell.astro', 'src/layouts/Base.astro', 'src/pages/posts/[slug].astro', 'src/pages/[slug].astro', 'src/pages/404.astro', 'src/utils/page-metadata.ts', 'src/components/StructuredData.astro', 'src/lib/structured-data.ts', 'src/middleware.ts', 'src/lib/page-url.ts', 'src/pages/index.astro', 'src/pages/category/[slug].astro', 'src/pages/tag/[slug].astro']) {
+      for (const file of ['src/layouts/SiteShell.astro', 'src/layouts/Base.astro', 'src/pages/posts/[slug].astro', 'src/pages/[slug].astro', 'src/pages/404.astro', 'src/utils/page-metadata.ts', 'src/plugins/baseline-metadata/index.ts', 'src/lib/structured-data.ts', 'src/middleware.ts', 'src/lib/page-url.ts', 'src/pages/index.astro', 'src/pages/category/[slug].astro', 'src/pages/tag/[slug].astro']) {
         try { receipt.sourceSHA256[file] = createHash('sha256').update((await readFile(path.join(stage, file), 'utf8')).replaceAll('\r\n', '\n')).digest('hex'); }
         catch (error) { if (error.code !== 'ENOENT') throw error; }
       }
@@ -63,9 +63,9 @@ try {
       for (const [file, target] of [['Plugin.astro', 'metadata-plugin.astro'], ['Shell.astro', 'metadata-shell.astro'], ['Media.astro', 'metadata-storage.astro']]) await cp(path.join(root, 'tests/metadata', file), path.join(stage, 'src/pages', target));
       const configPath = path.join(stage, 'astro.config.mjs');
       const config = await readFile(configPath, 'utf8');
-      assert.ok(config.includes('site: siteUrl,') && config.includes('emdash({'));
+      assert.ok(config.includes('site: siteUrl,') && config.includes('plugins: ['));
       // Set the shared source of Astro.site and authorized media origins together.
-      await writeFile(configPath, config.replace('const siteUrl = process.env.SITE_URL || env.SITE_URL;', 'const siteUrl = "https://astro-fallback.example.test";').replace('emdash({', `emdash({ plugins: [{ id: 'baseline-metadata-fixture', version: '1.0.0', entrypoint: ${JSON.stringify(path.join(stage, 'metadata-fixture-plugin.mjs').replaceAll('\\', '/'))} }],`));
+      await writeFile(configPath, config.replace('const siteUrl = process.env.SITE_URL || env.SITE_URL;', 'const siteUrl = "https://astro-fallback.example.test";').replace('output: "server",', 'output: "server", security: { csp: true },').replace('mode: "standalone",', 'mode: "standalone", experimentalDisableStreaming: true,').replace('plugins: [', `plugins: [{ id: 'baseline-metadata-fixture', version: '1.0.0', entrypoint: ${JSON.stringify(path.join(stage, 'metadata-fixture-plugin.mjs').replaceAll('\\', '/'))} },`));
     },
     async onDevReady() {
       await fetch(origin + '/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin');
@@ -85,7 +85,16 @@ try {
   for (const route of cases) {
     const response = await fetch(site.origin + route);
     const html = await response.text();
-    const data = { status: response.status, ...inspect(html) };
+    const tree = parse(html), all = []; const walk = node => { all.push(node); (node.childNodes || []).forEach(walk); }; walk(tree);
+    const attr = (node, name) => node?.attrs?.find(a => a.name === name)?.value;
+    const csp = response.headers.get('content-security-policy') || attr(all.find(node => node.tagName === 'meta' && attr(node, 'http-equiv') === 'content-security-policy'), 'content');
+    const scripts = all.filter(node => node.tagName === 'script' && attr(node, 'type') === 'application/ld+json');
+    if (!baseline) for (const script of scripts) {
+      const json = script.childNodes.map(node => node.value || '').join('');
+      const hash = 'sha256-' + createHash('sha256').update(json).digest('base64');
+      assert.ok(csp?.includes(hash), route + ' JSON-LD hash is allowed by the actual CSP');
+    }
+    const data = { status: response.status, cspGraphHashes: scripts.length, ...inspect(html) };
     receipt.routes[route] = data;
     if (baseline) continue;
     assert.equal(response.status, route === '/missing-metadata-page' ? 404 : 200, route);
@@ -110,7 +119,9 @@ try {
       assert.deepEqual(data.type, [article ? 'article' : 'website'], route);
       const taxonomy = route.startsWith('/category/') || route.startsWith('/tag/');
       const extraTypes = route === '/' ? ['Organization'] : article || taxonomy ? ['BreadcrumbList'] : [];
-      assert.deepEqual(data.graphs.map(g => g['@type']), [article ? 'BlogPosting' : 'WebSite', ...extraTypes], route);
+      assert.deepEqual(data.graphs.map(g => g['@type']).sort(), [article ? 'BlogPosting' : 'WebSite', ...extraTypes].sort(), route);
+      if (route === '/') assert.equal(data.graphs.find(g => g['@type'] === 'Organization').name, 'Fixture organization wins');
+      if (route.startsWith('/posts/welcome')) assert.equal(data.graphs.find(g => g['@type'] === 'BreadcrumbList').itemListElement[0].name, 'Plugin home');
       if (taxonomy) assert.deepEqual(data.robots, ['noindex, follow']);
       if (article || taxonomy) {
         const items = data.graphs.find(g => g['@type'] === 'BreadcrumbList').itemListElement;
@@ -119,15 +130,15 @@ try {
       }
       if (article) {
         assert.equal(data.published.length, 1); assert.equal(data.modified.length, 1);
-        assert.equal(data.graphs[0].url, expected);
-        assert.equal(data.graphs[0].datePublished, data.published[0]);
+        assert.equal(data.graphs.find(g => g['@type'] === 'BlogPosting').url, expected);
+        assert.equal(data.graphs.find(g => g['@type'] === 'BlogPosting').datePublished, data.published[0]);
         if (editor) {
           assert.deepEqual(data.description, ['Editor description wins']); assert.deepEqual(data.author, ['Synthetic Author']);
-          assert.equal(data.graphs[0].author.name, 'Synthetic Author');
+          assert.equal(data.graphs.find(g => g['@type'] === 'BlogPosting').author.name, 'Synthetic Author');
           assert.deepEqual(data.robots, ['noindex, nofollow']);
           assert.equal(data.titles[0], 'Editor SEO title | My Site');
         } else assert.deepEqual(data.author, [], 'No fabricated sample author');
-      } else assert.equal(data.graphs[0].url, publicOrigin);
+      } else assert.equal(data.graphs.find(g => g['@type'] === 'WebSite').url, publicOrigin);
     }
   }
   const originalResponse = await fetch(site.origin + '/_emdash/api/media/file/' + storageKey);

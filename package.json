@@ -85,7 +85,8 @@
     "setup:hooks": "node scripts/setup-hooks.mjs",
     "check:css": "node scripts/check-css-contracts.mjs",
     "check:production-setup": "node scripts/check-production-setup.mjs",
-    "assets:retain": "node scripts/retain-build-assets.mjs"
+    "assets:retain": "node scripts/retain-build-assets.mjs",
+    "check:cache": "node tests/cache.integration.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",

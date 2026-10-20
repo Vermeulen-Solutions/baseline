@@ -977,10 +977,6 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
-    "src/components/StructuredData.astro": {
-      "disposition": "emdash-only",
-      "static": "omit-until-explicitly-allowlisted"
-    },
     "src/middleware.ts": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -994,6 +990,18 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "tests/production-hardening.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/baseline-metadata/index.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/asset-retention.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/cache.integration.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     }

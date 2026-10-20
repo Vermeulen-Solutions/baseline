@@ -11,6 +11,8 @@ import { normalizedPageLocation } from '../src/lib/page-url.ts';
 import { isWebhookDomainAllowed } from '../src/lib/webhook-domain.ts';
 import { checkProductionSetup } from '../scripts/check-production-setup.mjs';
 import { retainBuildAssets } from '../scripts/retain-build-assets.mjs';
+import { siteMetadata } from '../src/plugins/baseline-metadata/index.ts';
+import { createPublicPageContext, resolvePageMetadata } from 'emdash/page';
 
 test('CMS flags distinguish explicit true/integer flags, absent opt-outs, and malformed values', () => {
   for (const value of [true, 1]) { assert.equal(isCmsFlagSet(value), true); assert.equal(isCmsFlagEnabled(value), true); }
@@ -47,6 +49,18 @@ test('URL normalization preserves case-sensitive assets, auth, queries, escapes 
   }
   for (const method of ['POST', 'PUT', 'DELETE', 'OPTIONS']) assert.equal(normalizedPageLocation(url('/Posts/'), method), undefined);
   assert.equal(normalizedPageLocation(url('/Posts/'), 'HEAD'), '/posts');
+});
+
+test('baseline metadata has explicit ownership, stable override IDs and no competing primary graph', () => {
+  const page = createPublicPageContext({ url: 'https://example.test/', kind: 'custom', siteUrl: 'https://example.test', siteName: 'Publisher', breadcrumbs: [{ name: 'Home', url: '/' }, { name: 'Story', url: '/story' }] });
+  const defaults = siteMetadata(page);
+  assert.deepEqual(defaults.map(item => item.id), ['breadcrumbs', 'organization']);
+  assert.ok(!defaults.some(item => item.id === 'primary'));
+  const resolved = resolvePageMetadata([{ kind: 'jsonld', id: 'organization', graph: { '@type': 'Organization', name: 'Other plugin owns this ID' } }, ...defaults]);
+  assert.equal(resolved.jsonld.length, 2);
+  assert.equal(JSON.parse(resolved.jsonld[0].json).name, 'Other plugin owns this ID');
+  assert.deepEqual(siteMetadata(page, { breadcrumbs: false, organizationPaths: [] }), []);
+  assert.equal(siteMetadata({ ...page, path: '/person' }).length, 1);
 });
 
 test('verified webhook events require an exact configured sending domain, never suffix/recipient matching', () => {

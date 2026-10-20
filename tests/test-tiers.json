@@ -162,5 +162,9 @@
   "production-hardening.test.mjs": {
     "tier": "unit",
     "reason": "Offline flag, JSON-LD, URL, webhook, setup and asset lifecycle contracts"
+  },
+  "asset-retention.test.mjs": {
+    "tier": "unit",
+    "reason": "Bounded local archive lock, killed-process recovery and output freshness contracts"
   }
 }

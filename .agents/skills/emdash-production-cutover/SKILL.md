@@ -9,6 +9,8 @@ Use this skill for the production domain transition of an existing Cloudflare Wo
 
 Perform only the requested work. A domain cutover does not require replacing a working email provider or third-party form service. Preserve established form requirements and integrations; consult `wordpress-to-emdash-content` when classifying a migrated form. Read [Native contact forms](references/contact-forms.md) only when implementing or replacing a form.
 
+The deployment agent owns the configuration and checks below within existing authorization. Prefer repository configuration, Wrangler and supported APIs; do not turn routine setup into dashboard homework. Ask only for missing access/inputs or genuinely unavailable actions. A bare `wrangler deploy` is not this workflow and does not run its verification tools automatically.
+
 ## Preflight and recovery
 
 Inspect the repository and deployed configuration. Record the following in existing deployment notes, or `audit/production-cutover.md` when no suitable record exists:
@@ -19,7 +21,7 @@ Inspect the repository and deployed configuration. Record the following in exist
 - Authentication mode, a working admin login, and recovery method. Distinguish built-in passkey/email login, OAuth, and Cloudflare Access.
 - Corporate mail provider and existing MX, SPF, DKIM, and DMARC records; sender domain, accepted From address, and current email provider.
 - Existing form behavior, trusted recipient source, and whether replacement is requested.
-- Previous deployment/version, routing and application configuration, and rollback procedure. Confirm backups when the task includes data changes.
+- Previous deployment/version, routing and application configuration, and rollback procedure. Before any production mutation, follow `docs/cloudflare-backup-restore.md`: record the exact account/database UUID, current recovery bookmark/UTC time, matching media snapshot, full encryption-key escrow version and reviewed migration fingerprint. Missing evidence blocks release. Site export is not DR; never reset/reseed production or remove users to repair login.
 
 Check current official docs and installed APIs before using examples:
 
@@ -50,7 +52,9 @@ The custom domain must be an active Cloudflare-managed zone in the Worker's acco
 ]
 ```
 
-Deploy through the project's normal build/deploy flow. Verify the site and TLS at the new hostname before changing its authentication origin. Custom Domains provision DNS and certificates; inspect existing record conflicts and wait for provisioning. Keep the preview address available during diagnosis when permitted by the site's access requirements.
+Before building/deploying, apply `docs/edge-cache-lifecycle.md` to the actual public routes: explicit HTML lifetimes, no HTML SWR, client toolbar, private/edit exclusions and asset-safe normalization. Use EmDash core migrations with managed production runtime `check` mode; Wrangler SQL migrations alone do not migrate EmDash. Run `npm run check:cache` locally when these contracts change; it exercises Node memory caching and does not certify Workers Cache.
+
+Build cleanly and run `assets:retain` on the real adapter output using a persistent site/environment archive, then deploy the merged artifact through the project's explicit config/environment. A lock conflict blocks release; recover only after the owner is known stopped. Ignore quarantined pending generations, and cleanly rebuild processed/interrupted output instead of refreshing inherited asset ages. Verify site/TLS at the new hostname before changing its authentication origin. Custom Domains provision DNS/certificates; inspect conflicts and wait for provisioning. Keep permitted preview access during diagnosis.
 
 For an apex canonical hostname, configure proxied DNS for `www` and an edge redirect matching only `www.example.com`. Use `concat("https://example.com", http.request.uri.path)` with **Preserve query string enabled**. Use the inverse rule when `www` is canonical. Inspect existing rules to avoid loops. A 301 suits ordinary page requests; use a method-preserving redirect where required for POST/API traffic, and submit forms directly to the canonical origin.
 
@@ -59,6 +63,8 @@ Verify HTTP/HTTPS aliases, nested paths, and query parameters. Follow [Cloudflar
 ### 3. Switch the canonical origin and verify fresh admin access
 
 Set the effective EmDash public origin to production without a trailing slash, for example `EMDASH_SITE_URL=https://example.com`. Reconcile explicit configuration and stored settings according to installed-version precedence. Update Astro's `site` and other canonical URL sources where used. Preserve database, media, secrets, and user records.
+
+For a first production bootstrap, follow `emdash-site-setup`: protect the uninitialized deployment, attach the canonical domain and set its origin before creating an admin. For an existing site, preserve its users and recovery path. Verify `check:production-setup` reports the actual JSON `success: true` and `data.needsSetup: false`, then fresh login through the configured auth mode. A setup SPA can return 200 after completion; 404/redirect/Access login alone cannot prove lockdown. External auth can defer first-user provisioning, so verify its policy. Restrict setup page/API paths externally after bootstrap so database loss cannot reopen public ownership; preserve normal authentication/media flows. An Access-blocked probe stays unverified until checked through authorized access.
 
 Passkeys are scoped to a relying-party ID, and authentication also checks the browser origin. A credential created for an unrelated `workers.dev` hostname cannot authenticate on the new domain. EmDash versions supporting additional allowed origins can share credentials across compatible subdomains with the same RP ID; not every origin change requires re-registration.
 
@@ -116,6 +122,8 @@ Run appropriate repository typecheck/build and existing relevant checks before d
 - Fresh admin login works through the configured mode; replacement passkey login works when required. Complete `docs/editor-handoff.md` for client roles and peripheral checklist signoff.
 - Corporate mail DNS remains intact; any changed provider passes actual inbox-delivery testing.
 - Existing forms retain required behavior; changed forms pass [Native contact forms](references/contact-forms.md) acceptance checks.
+- Publish and shared menu/settings changes invalidate cached pages on production; anonymous/editor/anonymous checks show no session artifacts leaking into shared HTML. Previous/current exact-case assets load, and robots reflects settings within the chosen budget. Compare preview/production origins, bindings, key/provider configuration presence, form IDs, sender domains and webhook allowlists; verify real provider delivery. Adopted newsletter workflows also pass `docs/newsletter-architecture.md` scanner/replay/domain-isolation checks.
+- Selected cron triggers, `scheduled: createScheduledHandler()`, D1/R2 bindings and `objectCache.defaultTtl` fit the publishing SLA (default object TTL is one hour). Schedule a disposable post 5–10 minutes ahead; observe actual cron logs and public list/detail visibility within the cache budget, then remove it. Record UTC times, entry ID and logs in `audit/production-cutover.md`. Leave delayed propagation pending; config alone is not a pass.
 
 For diagnosis, use `npx wrangler tail` with the selected project/environment and correlate a deliberately initiated test. Avoid logging message bodies or magic-link tokens. API acceptance is not proof of inbox delivery. Do not retry ambiguous send failures automatically: the original may already have been accepted. Remove temporary debugging and record the deployment/configuration verified.
 
@@ -131,8 +139,7 @@ When cutover verification is complete and production traffic is serving cleanly,
 >
 > **Recommended Final Actions:**
 > 1. **(Recommended) Update Site Registry:** Run `npm run site:register` with status `active` to record the live production repository.
-> 2. **Confirm Backup Schedule:** Verify automated daily Cloudflare D1/R2 or SQLite backups.
-> 3. **Archive Cutover Log:** Record the finalized deployment notes and rollback procedure in `audit/production-cutover.md`.
+> 2. **Archive Cutover Log:** Save the completed recovery, deployment and observed acceptance receipts with rollback instructions in `audit/production-cutover.md`. Backup ownership/cadence and live acceptance must already be established before declaring completion.
 
 ## Engineering verification loop
 
@@ -148,13 +155,3 @@ production CMS. Missing published content or broken navigation fails the audit;
 see `docs/html-integrity.md` for capture limits and snapshot inspection. For generated
 static profiles, inspect the installed package scripts and use their verification
 commands; do not add CMS tooling to satisfy an unavailable command.
-
-## Production safety acceptance
-
-Before a production mutation, enforce `docs/cloudflare-backup-restore.md`: record exact account/database UUID, current Time Travel bookmark/UTC time, matching media snapshot, encryption-key vault version and reviewed migration fingerprint. Abort if unavailable. Use EmDash core migrations with runtime check mode for managed production; Wrangler migrations alone do not migrate EmDash. Site export is not DR.
-
-Keep bootstrap behind Access/maintenance restrictions, attach the canonical domain and set its effective origin before initial setup. Never reset/reseed production or delete users to fix login. Run `npm run check:production-setup -- --url https://<canonical-domain>` after deploy/recovery; require the real setup-status JSON with `success: true` and `data.needsSetup: false`. A setup SPA can return 200 even after completion; 404/redirect/login is insufficient proof. External auth has a different user-provisioning contract: verify its real login and policy. After bootstrap, restrict setup page/API paths externally so DB loss cannot reopen public ownership; preserve required normal auth/media callbacks. An Access-blocked probe is unverified until checked through an authorized session.
-
-Before release, inspect the selected environment's triggers.crons, `scheduled: createScheduledHandler()` from `@emdash-cms/cloudflare/worker`, D1/R2 bindings and objectCache.defaultTtl. Schedule a disposable post 5–10 minutes ahead; observe the cron log in wrangler tail and public detail/list visibility within the agreed cache budget, then remove it. Record UTC times, entry ID and log evidence in audit/production-cutover.md. First trigger propagation can be delayed; configuration alone cannot pass the gate. Default object TTL is one hour; due-time query visibility and route purge do not guarantee every cached list is fresh.
-
-Use `docs/edge-cache-lifecycle.md` for 300-second HTML cache rules, no HTML SWR, client toolbar and seven-day assets. Test old/current exact-case asset URLs, production publish/purge, anonymous/editor/anonymous cache isolation and robots settings freshness. Compare preview/production bindings, per-environment origins, key/provider configuration presence, form IDs, sender domains, webhook allowlists and actual form delivery after each deploy. Keep secret values out of receipts. For new newsletter/provider workflows use docs/newsletter-architecture.md and scanner/replay/domain-isolation acceptance.
