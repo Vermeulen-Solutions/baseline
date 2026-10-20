@@ -20,3 +20,7 @@ The npm package was inspected and tested with Astro 7.4.0, EmDash 1.3.0 and Reac
 Receipts: `audit/phase-2/forms-probe.json` names mocked package-handler checks; `forms-integration.json` records real Node registration/rendering/submission storage. No notification, webhook or Turnstile provider was contacted. The test form contained only synthetic addresses. These checks are an adoption evaluation, not a promise of full plugin feature parity.
 
 Before opting in on a site, verify registration/build/admin, required/conditional fields, files and rejected input, spam success/failure, actual provider delivery and retry visibility, bounded non-secret recovery, retention/cleanup, keyboard/focus/errors and runtime-specific behavior. Preserve existing site workflows until that evidence supports a migration.
+
+## Consent and event security
+
+Follow [Scanner-safe confirmation and isolated webhooks](newsletter-architecture.md): GET/HEAD never confirm or consume tokens; an explicit POST performs one atomic confirmation. Verify provider signatures before exact configured sending-domain/form/list filtering, and update known subscribers only. Native Forms outgoing webhooks may be unsigned and at-most-once: use submission-ID deduplication plus stored-submission reconciliation, not assumed retries. Test missing/cross-origin CSRF tokens for session-mutating forms and scanner/replay/concurrent confirmation behavior against the actual integration. No newsletter backend or provider is enabled by this starter.

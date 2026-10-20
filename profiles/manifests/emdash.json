@@ -102,7 +102,16 @@
     "scripts/loopback-port.mjs",
     "scripts/client-bundles.mjs",
     "tests/client-bundles.test.mjs",
-    "tests/engineering-hooks.test.mjs"
+    "tests/engineering-hooks.test.mjs",
+    "src/lib/cms-flag.ts",
+    "src/lib/structured-data.ts",
+    "src/lib/page-url.ts",
+    "src/lib/webhook-domain.ts",
+    "src/components/StructuredData.astro",
+    "src/middleware.ts",
+    "scripts/check-production-setup.mjs",
+    "scripts/retain-build-assets.mjs",
+    "tests/production-hardening.test.mjs"
   ],
   "scripts": [
     "doctor",
@@ -149,7 +158,9 @@
     "check:emdash13",
     "audit:html",
     "setup:hooks",
-    "build:analyze"
+    "build:analyze",
+    "check:production-setup",
+    "assets:retain"
   ],
   "checks": [
     "check:schema-budget"

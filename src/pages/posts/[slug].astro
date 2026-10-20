@@ -46,6 +46,7 @@ const categories = post.data.terms?.category ?? [];
 	canonical={seo.canonical}
 	image={seo.ogImage}
 	pageType="article"
+	breadcrumbs={[{ name: 'Home', url: '/' }, ...categories.slice(0, 1).map(c => ({ name: c.label, url: '/category/' + encodeURIComponent(c.slug) })), { name: post.data.title, url: seo.canonical || Astro.url.pathname }]}
 	articleMeta={articleMetadata(post.data)}
 	content={{ collection: "posts", id: post.data.id, slug }}
 >

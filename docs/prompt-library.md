@@ -351,24 +351,23 @@ We want to deploy our latest changes to our Cloudflare Workers staging environme
 Please:
 1. Run `npm run verify` to confirm all lint, art direction, and typechecks pass.
 2. Run `npm run build` to compile the production edge bundle.
-3. If D1 database schema changes were made, apply pending migrations to the staging database:
-   `npx wrangler d1 migrations apply <database-binding> --env staging --remote`
+3. Record staging recovery bookmark/media/key receipts, then inspect/apply EmDash core migrations to the explicit staging database with the reviewed target fingerprint (docs/cloudflare-backup-restore.md). Use Wrangler migrations only for site-owned SQL.
 4. Deploy to the staging environment:
    `npx wrangler deploy --env staging`
 5. Verify the live staging URL (e.g. https://staging.client-site.com) and confirm `X-Robots-Tag: noindex` or `<meta name="robots" content="noindex">` is present.
 ```
 
 ### Day-2 Cloning Production Content to Staging (EmDash Site Transfer)
-Use this prompt when you need to refresh your staging database with current production entries, media, and settings.
+Use this prompt for content transfer into empty staging. Site export is not DR; it omits auth and plugin operational state. Follow docs/cloudflare-backup-restore.md for D1 + media + key recovery. Authenticate each CLI origin with emdash login and create the ignored transfers directory first.
 
 ```markdown
 We need to clone current production content into our staging environment so we can test against realistic data.
 
 Please:
 1. Export the production site snapshot:
-   `npx emdash site export --url https://client-site.com --token $PROD_EMDASH_TOKEN > .emdash/backups/prod-clone.zip`
-2. Import the snapshot into our staging environment:
-   `npx emdash site import .emdash/backups/prod-clone.zip --url https://staging.client-site.com --token $STAGING_EMDASH_TOKEN`
+   `npx emdash site export --url https://client-site.com --output .emdash/transfers/prod-clone.emdash`
+2. Prepare an empty staging content target with an administrator, analyze the package, then execute with the reviewed --plan <digest> --confirm:
+   `npx emdash site import .emdash/transfers/prod-clone.emdash --analyze --url https://staging.client-site.com`
 3. Verify that staging has loaded the collections, media, and menus.
 ```
 
@@ -381,11 +380,10 @@ We are ready to deploy our latest changes to Cloudflare Workers production.
 Please:
 1. Run `npm run verify` to confirm all lint, art direction, and typechecks pass.
 2. Run `npm run build` to compile the production edge bundle.
-3. If D1 database schema changes were made, apply pending remote migrations to production:
-   `npx wrangler d1 migrations apply <database-binding> --remote`
+3. Record the production recovery bookmark, media snapshot and key-vault version; fail before migration if any is missing. Inspect/apply EmDash core migrations using the exact account/database UUID and reviewed fingerprint (docs/cloudflare-backup-restore.md).
 4. Deploy the updated worker and assets:
    `npx wrangler deploy`
-5. Test the live production URL to confirm successful deployment.
+5. Verify production setup status, previous/current asset URLs, publish/purge, environment parity and an observed scheduled post per docs/edge-cache-lifecycle.md.
 ```
 
 ### Day-2 Emergency Deployment Rollback (Cloudflare Workers & D1)
@@ -397,7 +395,7 @@ An emergency occurred on our live Cloudflare Workers deployment: [Describe issue
 Please:
 1. Roll back the Cloudflare Worker to the previous stable release:
    `npx wrangler rollback`
-2. If a database migration was applied and corrupted data, use D1 Time Travel to restore the database to before the incident:
+2. Restrict writes/setup paths and capture current state. Review loss of later writes, then follow docs/cloudflare-backup-restore.md to restore DB + matching media + encryption-key list + compatible code/config. Deliberately select the account/config/environment/database before restoring:
    `npx wrangler d1 time-travel restore <database-binding> --timestamp="YYYY-MM-DDTHH:MM:SSZ"`
 3. Verify that the production site has returned to stable operation.
 4. Report the rollback status and preserve local error logs for post-mortem debugging.
@@ -411,11 +409,11 @@ We need to sync our local development environment with latest production content
 
 Please:
 1. Export the current production site package:
-   `npx emdash site export --url https://client-site.com --token $PROD_EMDASH_TOKEN > .emdash/backups/prod-latest.zip`
-2. Import the package into local development:
-   `npx emdash site import .emdash/backups/prod-latest.zip`
+   `npx emdash site export --url https://client-site.com --output .emdash/transfers/prod-latest.emdash`
+2. Prepare a separate empty local content target with an administrator, analyze the package, then execute with the reviewed --plan <digest> --confirm:
+   `npx emdash site import .emdash/transfers/prod-latest.emdash --analyze`
 3. If only D1 database schema inspection is needed without media, pull a D1 snapshot:
-   `npm run db:pull-remote -- --binding <database-binding> --out .emdash/backups/d1-snapshot`
+   `npm run db:pull-remote -- --config wrangler.jsonc --env production --account <account-id> --database <database-uuid> --out .emdash/backups/d1-inspection-001`
 4. Run `npm run dev` and confirm that local routes display the latest production content.
 ```
 

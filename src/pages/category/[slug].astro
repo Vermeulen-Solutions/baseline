@@ -1,11 +1,13 @@
 ---
-import { getTerm, getEmDashCollection, decodeSlug } from "emdash";
+import { getTerm, getTaxonomyTermsWithCacheHint, getEmDashCollection, decodeSlug } from "emdash";
 import { Image } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
 import Section from "../../components/Section.astro";
+import { taxonomyRobots } from '../../lib/structured-data';
 
 const slug = decodeSlug(Astro.params.slug);
-const term = slug ? await getTerm("category", slug, { includeCounts: false }) : null;
+// Keep getTerm's hierarchical/deep-link and locale fallback semantics.
+const term = slug ? await getTerm('category', slug, { includeCounts: false }) : null;
 
 if (!term) {
 	return Astro.redirect("/404");
@@ -15,10 +17,14 @@ const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
 	where: { category: term.slug },
 	orderBy: { published_at: "desc" },
 });
-if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+if (Astro.cache?.enabled) {
+  const { cacheHint: taxonomyCacheHint } = await getTaxonomyTermsWithCacheHint('category', { includeCounts: false });
+  Astro.cache.set(cacheHint);
+  Astro.cache.set(taxonomyCacheHint);
+}
 ---
 
-<Base title={`${term.label} posts`} description={`Posts in ${term.label}`}>
+<Base title={`${term.label} posts`} description={`Posts in ${term.label}`} seo={{ robots: taxonomyRobots(posts.length) }} breadcrumbs={[{ name: 'Home', url: '/' }, { name: term.label, url: Astro.url.pathname }]}>
 	<Section labelledBy="category-heading">
 		<h1 id="category-heading">{term.label}</h1>
 		<p>{posts.length} {posts.length === 1 ? "post" : "posts"}</p>

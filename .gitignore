@@ -9,6 +9,8 @@ dist-fixtures
 .emdash/site-registry.private.json*
 .emdash/pending-registration/
 .emdash/backups/
+.emdash/transfers/
+.emdash/asset-archive/
 .emdash/checks/
 .emdash/snapshots/
 uploads

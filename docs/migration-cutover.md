@@ -2,6 +2,8 @@
 
 This runbook defines the operational procedure for transitioning a production site from WordPress to EmDash. It covers the pre-cutover content freeze, snapshot-driven delta reconciliation, DNS switchover, and rollback safety.
 
+Before any production schema/content mutation, record a restorable database recovery point plus matching media/key receipts. Use [Cloudflare recovery](cloudflare-backup-restore.md) for D1/R2 and the full encryption-key list; site export does not protect authentication or plugin state. Missing recovery evidence blocks migration. Never reset production to repair import/login.
+
 ## 1. The Migration Window and Content Freeze
 
 A migration is not instantaneous. Between the initial source capture (`T0`) and DNS cutover (`T_cutover`), changes may occur on both the legacy WordPress site and the target EmDash preview environment.
@@ -59,7 +61,7 @@ Delta changes must be identified and reconciled deliberately using export snapsh
    ```
    All required checks must pass (exit `0`) before proceeding to DNS switchover.
 5. **Acquire Pre-Cutover Backup Snapshot:**
-   For Node.js + SQLite deployments, acquire a verified SQLite backup via `.backup` or `VACUUM INTO` and archive current media and configuration per [Node.js Backup & Recovery](node-backup-restore.md).
+   For Node.js + SQLite deployments, acquire a verified SQLite backup via `.backup` or `VACUUM INTO` and archive current media and configuration per [Node.js Backup & Recovery](node-backup-restore.md). For Cloudflare, enforce the bookmark/media/key gate and setup-status, scheduler and cache-parity acceptance in [edge lifecycle](edge-cache-lifecycle.md).
 
 ---
 

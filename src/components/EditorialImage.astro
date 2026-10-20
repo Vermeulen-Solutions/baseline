@@ -1,5 +1,6 @@
 ---
 import { publicLink } from '../lib/public-link';
+import { isCmsFlagSet } from '../lib/cms-flag';
 import ResponsiveImage from './EmDashImage.astro';
 import { normalizeMediaValue } from 'emdash/media';
 import { MediaRepository } from 'emdash';
@@ -47,7 +48,7 @@ const height = metadata.height;
 const link = record(node.link);
 const rawLink = typeof node.link === 'string' ? node.link : link.href;
 const href = publicLink(rawLink);
-const blank = href && !href.startsWith('#') && link.blank === true;
+const blank = href && !href.startsWith('#') && isCmsFlagSet(link.blank);
 const alignment = typeof node.alignment === 'string' && ['left', 'right', 'center', 'wide', 'full'].includes(node.alignment) ? node.alignment : undefined;
 const caption = typeof node.caption === 'string' ? node.caption : '';
 const breakoutClass = node?.alignment === 'wide' ? 'content--feature' : node?.alignment === 'full' ? 'content--full-safe' : undefined;

@@ -153,3 +153,9 @@ The runner uses development setup only to seed/authenticate the isolated instanc
 Review the report findings, `reviewed-plan.json`, capture bundles/PNGs, field receipts and `verification.json`. Only synthetic/permission-cleared evidence belongs in this repository. A passed fixture rehearsal supports the bounded recipe and ingestion pipeline; it is not certification of a client site, arbitrary legacy frameworks or Cloudflare infrastructure.
 
 Sources: [Astro cache configuration](https://docs.astro.build/en/reference/configuration-reference/#cache), [EmDash architecture/configuration](https://docs.emdashcms.com/concepts/architecture/), [Cloudflare D1 limits](https://developers.cloudflare.com/d1/platform/limits/).
+
+## Production contracts beyond offline diagnosis
+
+The field-hardening contract lives in [Cloudflare recovery](cloudflare-backup-restore.md), [edge lifecycle](edge-cache-lifecycle.md) and [scanner-safe forms](newsletter-architecture.md). These require live evidence; audit:site does not certify them. D1/media/key restore drills and pre-migration receipts, setup-status lockdown plus external setup restrictions, exact-case retained assets, publish/purge and cron visibility, and authenticated domain-isolated webhooks remain runtime checks.
+
+Read CMS/raw/nested flags through isCmsFlagSet (true or 1) or isCmsFlagEnabled (nullish defaults on, otherwise explicit true/1). Do not use Boolean(value) or === true at unnormalized boundaries. EmDash 1.3 normalizes declared collection booleans, not arbitrary nested/plugin/raw rows. Malformed string flags fail closed. The local helper, metadata/URL guards, setup probe and archive behavior have unit coverage; that does not establish Cloudflare deployment success.

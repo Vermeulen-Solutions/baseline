@@ -83,7 +83,9 @@
     "lint:templates": "eslint src profiles/static/project/src --max-warnings 0",
     "audit:html": "node scripts/audit-html-integrity.mjs",
     "setup:hooks": "node scripts/setup-hooks.mjs",
-    "check:css": "node scripts/check-css-contracts.mjs"
+    "check:css": "node scripts/check-css-contracts.mjs",
+    "check:production-setup": "node scripts/check-production-setup.mjs",
+    "assets:retain": "node scripts/retain-build-assets.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",

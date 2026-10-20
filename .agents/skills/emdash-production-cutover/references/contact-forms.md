@@ -93,3 +93,7 @@ Test meaningful endpoint boundaries using the project's test tooling and a stubb
 | Live delivery | Inbox receipt, accepted From, visitor Reply-To; reply reaches visitor |
 
 Check actual inbox delivery as well as HTTP responses. Remove debugging and document unverified delivery or unsupported existing behavior.
+
+## Confirmation and shared-provider events
+
+Use `docs/newsletter-architecture.md` for scanner-safe GET/HEAD landing pages with deliberate POST confirmation, atomic token consumption, session CSRF and no-store responses. Verify provider signatures on raw bounded bytes before exact sending/routing-domain and form/list filtering. The domain may be an approved mail subdomain rather than SITE_URL; never compare newsletter recipient domains to the site host. `src/lib/webhook-domain.ts` handles only domain isolation. Webhooks update existing records only, deduplicate event/submission IDs, and cannot reverse unsubscribe state. Native Forms unsigned at-most-once outgoing events require an authenticated relay or reconciliation before privileged changes. Include scanner GET, replayed POST, cross-site event and duplicate delivery acceptance cases.

@@ -29,7 +29,7 @@ node ./dist/server/entry.mjs
 ### Environment Configuration (`.env`)
 Ensure your production host has:
 - `SITE_URL=https://your-site.example`: Sets canonical origin and restricts public CMS media patterns.
-- `EMDASH_SECRET`: Generated via `npx emdash secrets generate`.
+- `EMDASH_ENCRYPTION_KEY`: Generated via `npx emdash secrets generate`; escrow the complete rotation list separately from the database. `EMDASH_AUTH_SECRET` is a separate legacy/optional input, not a replacement encryption key.
 - `PORT`: Server port (default 4321).
 - Persistent storage for the SQLite database (`data.db`) and uploaded media (`./uploads/`).
 - **Backup & Disaster Recovery:** Follow [Node.js + SQLite Backup & Recovery](node-backup-restore.md) to establish automated SQLite `.backup` / `VACUUM INTO` snapshots, media synchronization, and isolated restore drills. Naive copying of `data.db` while WAL is active is strictly prohibited.
@@ -39,6 +39,18 @@ Ensure your production host has:
 ## 2. Cloudflare Workers Deployment
 
 When deploying to Cloudflare Workers, Astro compiles templates for serverless edge isolates, EmDash connects to Cloudflare D1, and media is stored in Cloudflare R2.
+
+### Recovery and release gates
+
+Cloudflare recovery requires **D1 Time Travel/full SQL export + R2 media + the complete encryption-key rotation list**. Follow [Cloudflare backup and restore](cloudflare-backup-restore.md) for plan-specific retention, off-platform copies, key escrow and isolated drills. Record a current recovery bookmark and matching media/key receipts before applying migrations; missing evidence blocks release. A code rollback cannot recover these resources.
+
+Follow [Edge cache and deploy lifecycle](edge-cache-lifecycle.md) for explicit 300-second HTML rules, no HTML SWR, client toolbar, seven-day asset carry-forward, asset exclusions, robots caching, placement and scheduled publication acceptance. Root Node caching stays disabled.
+
+### Initial setup lockdown
+
+Never reset/reseed production or delete users to repair authentication. An empty or half-reset database can reopen public administrator creation. Protect bootstrap traffic with Access/maintenance restrictions, attach the canonical production domain, set the effective public URL, then complete first admin setup on that domain before opening traffic. Do not set up the production database on an unrelated workers.dev origin.
+
+Run `npm run check:production-setup -- --url https://your-site.example` after deployment and recovery. It requires the real setup-status API to return success with `data.needsSetup=false`. A 200 setup SPA, 404, Access login or redirect alone proves nothing. If Access protects the API, verify the same JSON through an authorized session and record that evidence separately; the anonymous probe remains unverified. In passkey mode the flag and users must exist; external auth may complete before first user provisioning, so verify its actual login/policy too. Restrict setup page/API paths after bootstrap through an external access rule that survives DB loss, then test restrictions signed out; preserve public media, normal admin authentication and required OAuth callbacks.
 
 ### Critical Edge Gotchas
 
@@ -161,14 +173,18 @@ To guarantee search engines ignore the staging environment:
 
 ### C. Data Synchronization (Cloning Production Content to Staging)
 
-Testing new features or layouts against an empty staging database is inefficient. Use EmDash's whole-site export and import features to populate staging with realistic, current production content:
+**Site export is a content transfer, not disaster recovery.** It excludes users, passkeys, credentials, plugin secrets/settings/state and some operational settings. Import requires a configured administrator and an empty content area; never clear production to make a transfer fit. Authenticate each CLI origin with `emdash login` and create the ignored transfers directory first.
+
+Use EmDash's whole-site export and import to populate a separate empty staging target:
 
 ```bash
-# 1. Export production snapshot into a self-contained package (entries, media, schema, settings)
-npx emdash site export --url https://client-site.com --token $PROD_EMDASH_TOKEN > .emdash/backups/prod-clone.zip
+# 1. Export a portable content package
+npx emdash site export --url https://client-site.com --output .emdash/transfers/prod-clone.emdash
 
-# 2. Import into the staging environment (target staging database must be prepared)
-npx emdash site import .emdash/backups/prod-clone.zip --url https://staging.client-site.com --token $STAGING_EMDASH_TOKEN
+# 2. Analyze the empty staging target; review exclusions and principal mapping
+npx emdash site import .emdash/transfers/prod-clone.emdash --analyze --url https://staging.client-site.com
+# 3. Execute with the plan digest returned by analysis
+npx emdash site import .emdash/transfers/prod-clone.emdash --plan <reviewed-plan-digest> --confirm --url https://staging.client-site.com
 ```
 
 ### D. Staging-to-Production Promotion Workflow
@@ -178,9 +194,11 @@ When rolling out Day-2 changes through staging:
 2. **Deploy to Staging:** Run `npx wrangler deploy --env staging` (and apply staging D1 migrations if schema changed).
 3. **Client Sign-off:** Share `staging.client-site.com` for client review and visual confirmation.
 4. **Promote to Production:**
-   * Apply production D1 migrations: `npx wrangler d1 migrations apply DB --remote`
+   * Record a current D1 Time Travel bookmark, UTC time, account/database IDs, media snapshot and key-vault version per [the recovery gate](cloudflare-backup-restore.md). Abort if unavailable.
+   * Build and inspect the EmDash migration target; apply core migrations with its reviewed fingerprint. Use Wrangler migrations only for site-owned SQL, with the same recovery gate.
    * Deploy production worker: `npx wrangler deploy`
-   * Test live production URL.
+   * Test production setup status, previous/current asset references, publish/purge and preview-versus-production configuration parity.
+   * Schedule a disposable post 5–10 minutes ahead; observe cron in `wrangler tail` and public list/detail visibility within the cache budget. Record UTC time, entry ID and logs; remove test content. Verify selected `triggers.crons`, scheduled handler, bindings and `objectCache.defaultTtl` (default one hour) against the publishing SLA. Leave acceptance pending until observed; configuration alone is insufficient.
 
 ---
 

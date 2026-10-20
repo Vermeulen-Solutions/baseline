@@ -1,0 +1,6 @@
+---
+import { safeJsonLdSerialize } from 'emdash/page';
+interface Props { graphs: unknown[]; }
+const graphs = Astro.props.graphs.filter(Boolean);
+---
+{graphs.map(graph => <script type="application/ld+json" set:html={safeJsonLdSerialize(graph)} />)}

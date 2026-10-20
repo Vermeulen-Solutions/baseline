@@ -10,6 +10,7 @@ import { createTransport, csrfInterceptor, devBypassInterceptor } from 'emdash/c
 import { LocalStorage } from 'emdash/storage/local';
 import sharp from 'sharp';
 import { startVisualSite } from './visual/site.mjs';
+import { checkProductionSetup } from '../scripts/check-production-setup.mjs';
 
 assert.ok(!process.env.CI && !process.env.GITHUB_ACTIONS, 'Metadata browser rehearsal is local-only');
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -43,13 +44,15 @@ try {
     releaseOnly: true,
     async prepareStage({ stage, origin: stagedOrigin }) {
       origin = stagedOrigin;
-      for (const file of ['src/layouts/SiteShell.astro', 'src/layouts/Base.astro', 'src/pages/posts/[slug].astro', 'src/pages/[slug].astro', 'src/pages/404.astro', 'src/utils/page-metadata.ts']) {
+      for (const file of ['src/layouts/SiteShell.astro', 'src/layouts/Base.astro', 'src/pages/posts/[slug].astro', 'src/pages/[slug].astro', 'src/pages/404.astro', 'src/utils/page-metadata.ts', 'src/components/StructuredData.astro', 'src/lib/structured-data.ts', 'src/middleware.ts', 'src/lib/page-url.ts', 'src/pages/index.astro', 'src/pages/category/[slug].astro', 'src/pages/tag/[slug].astro']) {
         try { receipt.sourceSHA256[file] = createHash('sha256').update((await readFile(path.join(stage, file), 'utf8')).replaceAll('\r\n', '\n')).digest('hex'); }
         catch (error) { if (error.code !== 'ENOENT') throw error; }
       }
+      await writeFile(path.join(stage, '.env'), 'NORMALIZE_PAGE_URLS=1\n');
       const seedPath = path.join(stage, 'seed/seed.json');
       const seed = JSON.parse(await readFile(seedPath, 'utf8'));
       seed.settings.url = publicOrigin;
+      seed.taxonomies.find(taxonomy => taxonomy.name === 'tag').terms.push({ slug: 'production-empty', label: 'Production empty' });
       seed.bylines = [{ id: 'metadata-author', slug: 'metadata-author', displayName: 'Synthetic Author', isGuest: true }];
       seed.content.posts.push({ id: 'metadata-editor', slug: 'metadata-editor', status: 'published', data: { title: 'Editorial fixture', excerpt: 'Original excerpt' }, bylines: [{ byline: 'metadata-author' }] });
       await writeFile(seedPath, JSON.stringify(seed));
@@ -71,7 +74,14 @@ try {
       assert.equal(response.status, 200, await response.text());
     },
   });
-  const cases = ['/', '/posts', '/posts/welcome?tracking=ignored', '/about', '/posts/metadata-editor', '/metadata-plugin', '/metadata-shell', '/metadata-shell?owner=platform', '/metadata-storage', '/missing-metadata-page'];
+  const normalized = await fetch(site.origin + '/Posts/Welcome/?Campaign=ABC', { redirect: 'manual' });
+  if (!baseline) { assert.equal(normalized.status, 301); assert.equal(normalized.headers.get('location'), '/posts/welcome?Campaign=ABC'); }
+  receipt.normalization = { status: normalized.status, location: normalized.headers.get('location') };
+  receipt.setup = await checkProductionSetup(site.origin);
+  const robots = await fetch(site.origin + '/robots.txt');
+  if (!baseline) assert.equal(robots.headers.get('cache-control'), 'public, max-age=3600, must-revalidate');
+  receipt.robotsCache = robots.headers.get('cache-control');
+  const cases = ['/', '/posts', '/posts/welcome?tracking=ignored', '/about', '/posts/metadata-editor', '/metadata-plugin', '/metadata-shell', '/metadata-shell?owner=platform', '/metadata-storage', '/missing-metadata-page', '/category/updates', '/tag/production-empty'];
   for (const route of cases) {
     const response = await fetch(site.origin + route);
     const html = await response.text();
@@ -98,7 +108,15 @@ try {
       assert.deepEqual(data.ogUrl, [expected], route);
       const article = route.startsWith('/posts/');
       assert.deepEqual(data.type, [article ? 'article' : 'website'], route);
-      assert.deepEqual(data.graphs.map(g => g['@type']), [article ? 'BlogPosting' : 'WebSite'], route);
+      const taxonomy = route.startsWith('/category/') || route.startsWith('/tag/');
+      const extraTypes = route === '/' ? ['Organization'] : article || taxonomy ? ['BreadcrumbList'] : [];
+      assert.deepEqual(data.graphs.map(g => g['@type']), [article ? 'BlogPosting' : 'WebSite', ...extraTypes], route);
+      if (taxonomy) assert.deepEqual(data.robots, ['noindex, follow']);
+      if (article || taxonomy) {
+        const items = data.graphs.find(g => g['@type'] === 'BreadcrumbList').itemListElement;
+        assert.equal(items[0].item, publicOrigin + '/');
+        assert.equal(items.at(-1).item, expected);
+      }
       if (article) {
         assert.equal(data.published.length, 1); assert.equal(data.modified.length, 1);
         assert.equal(data.graphs[0].url, expected);

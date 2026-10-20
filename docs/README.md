@@ -156,3 +156,7 @@ Explore the documentation guides below, organized by workflow, design architectu
   Release certification notes and tested scopes for the `standards-v0.1.1` baseline.
 - **[Third-Party Licenses](licenses/)**  
   Attributions for included upstream libraries (EmDash, Noto Sans OFL, PhotoSwipe, Impeccable).
+
+- **[Cloudflare Backup & Restore](cloudflare-backup-restore.md):** D1/media/key recovery, migration gates and isolated drills.
+- **[Edge Cache & Asset Lifecycle](edge-cache-lifecycle.md):** explicit freshness, seven-day asset carry-forward, normalization and scheduler verification.
+- **[Scanner-safe Newsletter & Webhooks](newsletter-architecture.md):** deliberate confirmation and domain-isolated idempotent events.

@@ -158,5 +158,9 @@
   "engineering-hooks.test.mjs": {
     "tier": "rehearsal",
     "reason": "Native Git hook installation and npm subprocess lifecycle, including fail-fast and preservation cases"
+  },
+  "production-hardening.test.mjs": {
+    "tier": "unit",
+    "reason": "Offline flag, JSON-LD, URL, webhook, setup and asset lifecycle contracts"
   }
 }

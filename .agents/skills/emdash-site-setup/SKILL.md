@@ -137,3 +137,9 @@ production CMS. Missing published content or broken navigation fails the audit;
 see `docs/html-integrity.md` for capture limits and snapshot inspection. For generated
 static profiles, inspect the installed package scripts and use their verification
 commands; do not add CMS tooling to satisfy an unavailable command.
+
+## Production bootstrap and recovery boundary
+
+For an initial production site, protect bootstrap with Access/maintenance restrictions, attach the canonical domain and set its effective public origin before first admin setup. A preview uses separate database/media/keys; do not initialize the production admin on an unrelated workers.dev hostname. Never reset production or remove users to repair login: empty/half-reset databases can reopen setup. Verify `/_emdash/api/setup/status` reports success/data.needsSetup=false, then verify fresh login in the configured auth mode. Run `npm run check:production-setup -- --url https://<canonical-domain>` where available; Access/login redirects are not proof. Restrict setup page/API paths externally after bootstrap, preserving ordinary authentication/media flows.
+
+Use docs/cloudflare-backup-restore.md for database/media/full encryption-key escrow and a recorded pre-migration recovery point. Site export is content transfer into an empty target, not DR. Use docs/edge-cache-lifecycle.md for HTML no-SWR policy, explicit TTLs/client toolbar, seven-day assets, normalization exclusions and observed scheduler/cache acceptance. These are project-owned additions; do not edit upstream skill mirrors to add operational policy.

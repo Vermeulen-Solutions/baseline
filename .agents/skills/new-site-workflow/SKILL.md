@@ -327,6 +327,8 @@ Use `emdash-production-cutover` when moving a Cloudflare Workers site from previ
 
 **Gate:** production custom domain resolves with valid TLS; required aliases preserve paths and queries; fresh admin login works through the configured authentication mode; corporate mail DNS remains intact; applicable email/form delivery checks pass; rollback configuration and observed verification results are recorded.
 
+For EmDash Cloudflare targets, enforce docs/cloudflare-backup-restore.md and docs/edge-cache-lifecycle.md: recorded pre-migration DB/media/key recovery receipts, canonical-domain bootstrap protection and setup-status lockdown, observed scheduled post/cron logs, old/new asset delivery and production publish/purge/environment parity. Config-only checks or successful previews do not close these gates. Leave live checks explicitly pending until observed.
+
 **Stage 7 Completion Handoff Prompt:**
 When Stage 7 cutover or production configuration is verified:
 > **Stage 7 Complete: Site is Live & Protected!**

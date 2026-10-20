@@ -10,7 +10,7 @@ This runbook defines backup acquisition, retention policy, and isolated restore 
 
 ## 1. Backup Anatomy: The Triple Set
 
-A working recovery requires three synchronized components. Backing up the database without media or configuration results in a broken, unrecoverable site.
+A working recovery requires three synchronized components. Backing up the database without media or configuration results in an incomplete restore. Preserve the complete comma-separated `EMDASH_ENCRYPTION_KEY` rotation list in an independent secret vault/offline escrow; database backups do not contain it. Keep historical keys for retained encrypted snapshots. Site export is a content transfer, not DR. For Workers use [Cloudflare recovery](cloudflare-backup-restore.md).
 
 ```
 Backup Bundle (YYYY-MM-DD-HHMM)
@@ -35,7 +35,7 @@ Backup Bundle (YYYY-MM-DD-HHMM)
 ### Supported Acquisition Methods
 
 #### Method A: SQLite Online Backup CLI (Recommended)
-The SQLite CLI's `.backup` command safely acquires an exclusive lock, checkpoints pending transactions, and produces a clean, consistent snapshot while the application remains online.
+The SQLite CLI's `.backup` command uses [SQLite's online backup API](https://www.sqlite.org/backup.html) to produce a consistent snapshot while the application remains online. It coordinates source reads and destination writes; do not rely on it taking an exclusive source lock or checkpointing all WAL data first.
 
 Always capture the filename in a shell variable once so verification checks the actual file created:
 
@@ -144,6 +144,7 @@ node --env-file=.env ./dist/server/entry.mjs
 | Tool | Purpose | What it Contains | Can it be used for Disaster Recovery? |
 |---|---|---|---|
 | **Disaster Recovery Backup** (This runbook) | Complete operational restore after server failure | Binary SQLite DB + Media + `.env` secrets + lockfile | **YES** — Restores full production state |
+| **`emdash site export`** | Portable content transfer into an empty target | Content/schema/media and supported settings | **NO** — excludes users, credentials and plugin secrets/state |
 | **`seed/seed.json`** (`db:export-seed`) | Development starter & test bootstrap | Privacy-reviewed schema & sample rows | **NO** — Development bootstrap only; drops sensitive data |
 | **`schema.json`** (`db:diff`) | Schema column budget checking (D1 preflight) | Table column definitions & metadata | **NO** — Contains zero content data |
 | **`db:pull-remote`** | Pulling staging/D1 data for local debugging | Debug snapshot | Partial — Non-production debugging only |

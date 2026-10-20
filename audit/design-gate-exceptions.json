@@ -30,8 +30,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Functional EmDash starter metadata correction: one platform metadata owner, public-origin defaults, typed article context and existing settings/menu cache hints. No client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "1cb75d137de85d42421cb4ee837adf0f832f64f32459c55b1608586bc40efc46"
+    "reason": "Starter metadata infrastructure: typed breadcrumbs and additive safe JSON-LD; existing platform primary metadata and visual presentation remain intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "aabc83e10ca9720cb9cf4455a21f25670ec7aacf9edeb9828c03724a8d0c48e1"
   },
   {
     "path": "src/components/Container.astro",
@@ -60,13 +60,13 @@
   },
   {
     "path": "src/pages/category/[slug].astro",
-    "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "ead22eadf264638fefc5bdb8f82d6eac7643272abb9988536791534b36c1c1fc"
+    "reason": "Starter sample metadata infrastructure: empty taxonomy noindex, typed breadcrumbs and supported taxonomy cache hints; existing neutral presentation remains intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "8dea05970a4042dda6aff72a443693b0f8f8bd47263758c7f4ca1151497cc55a"
   },
   {
     "path": "src/pages/index.astro",
-    "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "def7acc3d703acc252a0f9a289a4693122202232a77d52f71c613e5e3fc76e78"
+    "reason": "Starter sample metadata infrastructure: explicit settings query hint, homepage organization graph and breadcrumb opt-out; existing neutral page presentation remains intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "996b7ef9b76abcd9457a384b5e60872cb67574a43bfcbf8156586114b9abe04c"
   },
   {
     "path": "src/pages/posts/index.astro",
@@ -75,13 +75,13 @@
   },
   {
     "path": "src/pages/posts/[slug].astro",
-    "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring, article metadata and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "0bba04a24c6fc3f87dfe0de6d2403f8575e110471737e882bd4caaab38e91334"
+    "reason": "Starter sample metadata infrastructure: root/category/article breadcrumb facts only; existing article rendering, SEO panel ownership and visual tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "838089c4ef5892ebe863c67840350ffd63279f50cd53ca923d259bff5f359202"
   },
   {
     "path": "src/pages/tag/[slug].astro",
-    "reason": "Starter sample route: section-owned page rhythm and flow wrappers only; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "7139783a05d5b6ae862d7f00b4c7aa13e3a811084756ee325c5fc0bedab3b912"
+    "reason": "Starter sample metadata infrastructure: empty taxonomy noindex, typed breadcrumbs and supported taxonomy cache hints; existing neutral presentation remains intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "77f2a677c76729f07ca9631faeb378b0c9b6e4a1ac29694154632b896be4d8fb"
   },
   {
     "path": "src/pages/[slug].astro",
@@ -110,8 +110,8 @@
   },
   {
     "path": "src/components/EditorialImage.astro",
-    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "4bf12365a7dc5ae02942d7abf1df0e6778da89150ace1eedcefe9aa59ef7d7d6"
+    "reason": "Functional starter correction: nested CMS link flags accept integer 1 and boolean true through the shared reader; valid-input styling/tokens and media presentation remain intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "82e15c4aff80c130670a80c3766488c6c7e66e8ea9377bbe47f4644a5ee9f29c"
   },
   {
     "path": "src/components/RichText.astro",
@@ -135,8 +135,8 @@
   },
   {
     "path": "src/lib/partners.ts",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Re-export the extracted Partner type while retaining EmDash collection mapping behavior. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "3c425ed8614a031aa7ee53543de4f36b0de4483f3a2943d0ad6998b3e2dd11a3"
+    "reason": "Functional starter flag normalization for optional CMS partner activity; ordering, media resolution and presentation remain intact. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "285add9cd0936594baa7e8403da546aae6610d32769cf4ec19976d026bd63192"
   },
   {
     "path": "src/lib/form-recovery.ts",
@@ -428,5 +428,35 @@
     "path": "src/lib/layout-style.ts",
     "reason": "Approved automatic-spacing starter infrastructure: shared attribute/style merge helper; no client visual implementation.",
     "sha256": "de4f24be706d7e62a89ecf471fcc4b4be1c744b8226f5c6eef0ea366de8ec9aa"
+  },
+  {
+    "path": "src/lib/cms-flag.ts",
+    "reason": "Functional starter boundary helper for loader/raw/nested SQLite/D1 flags; no visual system changes. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "a3d1f0cb240d527ce4e86a47f3c96b1889ca4a0d67b3e02b9738d34574b3d658"
+  },
+  {
+    "path": "src/lib/structured-data.ts",
+    "reason": "Starter metadata-only helpers: breadcrumb/organization graphs and taxonomy indexing; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "12a11ea0bcf37548795e48d18e22bcbf935ed8a2af0a7d141d044f600f174729"
+  },
+  {
+    "path": "src/lib/page-url.ts",
+    "reason": "Functional infrastructure: opt-in public URL normalization with asset/auth/API exclusions; no presentation changes. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "89ff259a0c34f6a41076045fe4917854a380a5c4e7a05e3924bbe9169f64acd1"
+  },
+  {
+    "path": "src/lib/webhook-domain.ts",
+    "reason": "Functional infrastructure: exact configured email webhook domain isolation after authentication; no presentation changes. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "b8e868d81207fec07a3a75fb10a484ad559634872807c629d9fbcda5879a9873"
+  },
+  {
+    "path": "src/components/StructuredData.astro",
+    "reason": "Starter metadata-only JSON-LD serializer using the installed EmDash safe serializer; no visible layout, styling or client theme. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "81c47153d40cfea3270c43435376fd812acb02e41c464eda9db003470b2e1e7a"
+  },
+  {
+    "path": "src/middleware.ts",
+    "reason": "Functional starter request policy: opt-in page canonical redirects and bounded robots browser caching; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "aefd3f11fed3b4f96c782212294973890c3fd65b4f28d90af20c47d49aaa2740"
   }
 ]
