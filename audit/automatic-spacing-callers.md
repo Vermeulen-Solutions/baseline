@@ -1,6 +1,6 @@
 # Automatic spacing caller inventory
 
-Source revision: c3d965c. Phase 1 inventory; source implementation has not changed.
+Source revision: c3d965c. Historical Phase 1 inventory; the line numbers and migration proposals below describe that starting revision. Follow the progress register for implemented behavior and verification.
 
 Each row represents an inspected source file; line numbers identify every matched structural/editorial caller. The migration owner and cases below cover the individual occurrences, including conditional branches. Counts are inventory, not behavioral proof.
 
@@ -32,6 +32,8 @@ Each row represents an inspected source file; line numbers identify every matche
 - Empty CMS values, optional slots and hidden controls are explicit cases, not candidates for blanket CSS hiding.
 
 ## Downstream adoption
+
+Phase 7 revision R01 supersedes the original proposal to preserve the post aside: rendered review found the same CMS sidebar area rendered both there and in the footer. Base now renders that existing configured area once as a responsive footer grid; the duplicate post aside was removed. No widget configuration or content was deleted. Actual route tests assert a single widget area and review covers home and post at narrow/intermediate/wide widths.
 
 No external client checkout was changed or presumed available. Rehearse an older generated project in an owned temporary directory during Phase 8. Shared updates alone must preserve compatibility: new behavior is selected from the client-owned Base via SiteShell spacingPolicy="automatic-v2". Rollback reverts activation plus related composition changes, retaining calibrated tokens.
 

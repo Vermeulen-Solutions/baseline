@@ -119,6 +119,7 @@ test('V07/V12 public listings align and article metadata occupies a separate blo
     expect(result.list,route).toBeCloseTo(result.h,1);expect(result.item,route).toBeCloseTo(result.h,1);expect(result.padding).toBe('0px');expect(result.role).toBe('list');
   }
   await page.goto(process.env.VISUAL_ORIGIN+'/posts/welcome');
+  await expect(page.locator('[data-widget-area="sidebar"]')).toHaveCount(1);
   const bounds=await page.evaluate(()=>{const h=document.querySelector('main h1').getBoundingClientRect(),time=document.querySelector('main time').getBoundingClientRect(),body=document.querySelector('.article-body').getBoundingClientRect();return {titleBottom:h.bottom,dateTop:time.top,dateBottom:time.bottom,bodyTop:body.top};});
   expect(bounds.dateTop).toBeGreaterThan(bounds.titleBottom);expect(bounds.bodyTop).toBeGreaterThan(bounds.dateBottom);
 });

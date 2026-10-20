@@ -26,12 +26,12 @@
   {
     "path": "src/styles/global.css",
     "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "cdc7d81d1e5092c9a80f6dce9c7defff79e0da89bb069fc0cd884fe9c00a2cfe"
+    "sha256": "b322b9951a283af43a54ec61b49b0aef76d778813776f3cf5336856898b193ae"
   },
   {
     "path": "src/layouts/Base.astro",
     "reason": "Functional EmDash starter metadata correction: one platform metadata owner, public-origin defaults, typed article context and existing settings/menu cache hints. No client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "9276f78838b5b36738f5d7d06954dc35d5a0a6c422f31899e2419b96c02c2763"
+    "sha256": "1cb75d137de85d42421cb4ee837adf0f832f64f32459c55b1608586bc40efc46"
   },
   {
     "path": "src/components/Container.astro",
@@ -76,7 +76,7 @@
   {
     "path": "src/pages/posts/[slug].astro",
     "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring, article metadata and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "7799e0c8ba5f6ba9220baa5d4e7d011d8c77d4a6ff5652573c71d0b71bf5b556"
+    "sha256": "0bba04a24c6fc3f87dfe0de6d2403f8575e110471737e882bd4caaab38e91334"
   },
   {
     "path": "src/pages/tag/[slug].astro",

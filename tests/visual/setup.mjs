@@ -138,7 +138,7 @@ import '../styles/global.css';
   try {
     process.env.VISUAL_ORIGIN = site.origin;
     const hash = async file => createHash('sha256').update(await readFile(file)).digest('hex');
-    await writeFile(path.join(reportDir, 'environment.json'), JSON.stringify({ ...visualContract, observedNode: process.versions.node, platform: process.platform, arch: process.arch, seedSHA256: await hash('seed/seed.json'), sourceCSS_SHA256: await hash('src/styles/global.css') }, null, 2) + '\n');
+    await writeFile(path.join(reportDir, 'environment.json'), JSON.stringify({ ...visualContract, observedNode: process.versions.node, platform: process.platform, arch: process.arch, seedSHA256: await hash(path.join(fixtureStage,'seed/seed.json')), sourceCSS_SHA256: await hash(path.join(fixtureStage,'src/styles/global.css')) }, null, 2) + '\n');
     return site.cleanup;
   } catch (error) { await site.cleanup(); throw error; }
 }

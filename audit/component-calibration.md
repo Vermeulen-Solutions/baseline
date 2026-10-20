@@ -1,100 +1,59 @@
-# Shared native composition calibration
+# Automatic spacing and native composition calibration
 
-Scope: reusable Baseline infrastructure, 2026-10-19. This is not a client art
-direction or a client page implementation. Existing neutral tokens and production
-components are the visual authority. Exact source exceptions are reviewed with
-the code; no directory/client-page exemption is introduced.
+Reviewed: 2026-10-20. Scope: reusable neutral Baseline, shared Astro primitives and the Node/SQLite public renderer. Existing colors, fonts, fluid scales and radii remain the visual authority. Site-specific art direction remains a separate task.
 
-## Evidence and decisions
+## Accepted ownership
 
-The incumbent narrow styleguide was inspected from the committed Windows reference
-before implementation. Its repeated control-row CSS supplies Cluster's concrete
-use case. Equal-column Grid cannot express a main region retaining a minimum share
-beside supporting content; the wide/narrow editorial specimens establish Sidebar's
-separate relationship. Grid, Card and their existing containment behavior remain.
+| Relationship | Owner | Configuration |
+| --- | --- | --- |
+| Section block edges | Section | --layout-section-padding; content/none padding modes |
+| Section children | Section stack | --layout-container-gap; gap prop or local --container-gap |
+| Ordinary Container children | Container stack | --layout-content-gap; gap prop or local --content-gap |
+| Grid tracks | Grid / managed grid | --layout-grid-gap; gap prop or local --grid-gap |
+| Editorial blocks | RichText / explicit editorial boundary | One-sided flow; heading/list/item/figure/quote controls |
+| Public horizontal gutters | SiteShell main | --spacing-container, paid once inside breakout tracks |
+| Composite interiors | Card, Disclosure, Gallery, Ticker, Cluster, Sidebar | Their own primitive contract; editorial scopes stop at islands |
 
-Disclosure uses native details/summary with a required named summary slot, native
-attributes and a default `.flow` body slot. Cluster and Sidebar are open div wrappers
-with native attributes and contextual CSS properties. No content query, heading/CTA
-prop bundle, clone, runtime controller or automatic FAQ schema is introduced.
-Native Markdown and CMS Portable Text are supplied by their own callers.
+SiteShell defaults to legacy. The site-owned Bases explicitly enable automatic-v2. Custom layout mode relinquishes automatic display/gap. None padding does not erase child gaps. A gap utility replaces a layout gap; a margin utility controls a margin. The named breakout grid retains its tracks/subgrid; it is not converted into a flex stack.
 
-Token mapping: border/control radius, text/surface/focus and content spacing for
-Disclosure; content gap for Cluster; reading-measure basis and grid gap for Sidebar.
-Main content stays first in DOM/keyboard order. The supporting region is optional;
-editorial/editor wrappers sit inside stable region elements. No visual reversal or
-viewport breakpoint is added. Long text wraps rather than truncates.
+## Rendered decisions
 
-The first opened dark specimen exposed action-colored links at 2.34:1. This was a
-shared surface defect, corrected in global semantic CSS rather than specimen-only
-styles. `--color-link` aliases existing action/light focus values per surface.
-Default/dark/restored-light link pairs are now gated at 4.5:1; the neutral dark link
-is 8.79:1. The regression test reproduces the prior inheritance failure. All 31
-`@theme` values, fluid scales and lane presets remain unchanged.
+- The home/posts/category/tag listing is structural content. Heading, linked title, excerpt and date share the container edge. Removing the editorial ancestor and using a named native collection-list recipe fixes the observed side inset without negative offsets. Markerless lists retain explicit list roles for Safari semantics.
+- Dates occupy a block in the article stack. RichText has one editorial boundary, independent of article metadata. Empty public values/slots do not create extra flex items; query-attached empty editor targets are retained.
+- Owned image frames avoid nested vendor figures and vendor image class collisions. Real ID-only uploaded media loads through supported CMS repository/runtime APIs. Gallery margins/padding/image width/gap can yield to utilities without important declarations.
+- Native scope keeps nested prose lists readable while protecting Card, Gallery, Ticker and Disclosure interiors. Each direct child resets private flow calculation state, so a quote/media interval cannot become a nested paragraph default. Each documented public prose control is checked with a distinctive 67px value.
+- Public main owns gutters. A breakout grid inside it no longer adds a second gutter; standalone breakout grids retain their own safe tracks. Lazy responsive images use actual rendered size with a fallback hint. Eager callers retain their authored placement hints.
+- Rendered review exposed crowded widget content and duplicate article/footer use of the same CMS area. Base remains the single owner of the existing sidebar-named area, rendered in the footer. The duplicate article aside is removed; CMS settings/content are preserved. The area uses the existing intrinsic grid and bounded internal groups, with separation between category counts and recent-post dates. This is an explicit refinement of the earlier caller inventory's preserve-aside assumption.
+- Full and targeted captures retain neutral section pacing, native disclosure markers, dark focus, wrapped actions, RTL reading order, constrained media, readable captions and visible form focus. An empty starter homepage still fills the available viewport; no filler content is introduced to disguise its size.
 
-## Rendered review
+Manual inspection opened narrow home/article captures, intermediate home, wide composition-open, gallery-open and controls-focus images. The full suite checks all public routes and styleguide states at 390/768/1440. Additional geometry cases explicitly cover 320/390/1280. Source changes and candidate baselines are reviewed together before the phase commit.
 
-Review uses Impeccable's scoped hardening guidance and the incumbent implementation,
-not a new visual-world workflow or a formal dual-assessment critique command.
-Opened/closed native markers, long summaries, dark focus, wrapping actions and
-DOM-ordered unequal regions are inspected at narrow and wide sizes. Mechanical
-source scanning reports one advisory about existing styleguide punctuation; no
-component changes are justified by that advisory. The contrast issue above was
-found in rendered inspection and is now covered by a computed-color browser check.
-The Arabic heading declares `lang="ar"`; its language-sensitive font fallback was
-reviewed from an expected/actual/diff crop before accepting revised captures.
+## Maintained proof
 
-Capture paths are under `tests/visual/baselines/win32/chromium-{390,768,1440}/`:
-`composition.png` and `composition-open.png`, plus affected full-page styleguide,
-text-spacing and actual-zoom captures. The final execution receipt records hashes,
-comparison results, independent generated profiles and cleanup.
+| Cases | Actual implementation exercised | Evidence |
+| --- | --- | --- |
+| V01/V06 | Uploaded media by ID only, native frame and real Gallery output; emitted-DOM utility probes | spacing.spec.mjs; dev loading receipt; built geometry and preserved image link/alt |
+| V02-V05 | Imported Section/Container/Grid, all nine mode pairs, local/scoped overrides, style/attribute merges, custom/breakout/raw grid | Real-primitives browser test; legacy raw fixture remains separately labelled |
+| V07/V12 | Actual home/posts/category/tag and welcome article; four actual empty routes in a fresh DB | spacing.spec.mjs; empty-listings.mjs; widget area count |
+| V08-V13 | CMS RichText and the copied real static RichText, nested lists, six independent controls, composites, hidden/only/empty content and opt-outs | Editorial browser test; no fixture-only repair stylesheet |
+| V14/V15 | Public 320px text spacing, actual 200/400% zoom API + viewport + DPR, gutters/tracks/focus and selected image rendition | Attached JSON measurements; existing no-JS/RTL/gallery/controls journeys |
+| M01-M10 | Parsed CSS/Astro inputs and supported flow strategies, adversarial names, partial guards, duplicates and syntax errors | css-contracts.test.mjs; installed check:css in each profile |
+| T01-T06 | Exact scopes, bounded resolution, typo/no-op, read-only preview and saved-candidate calibration identity | spacing-tokens.test.mjs |
+| E01 | Actual CMS field selection, typing, save, editor/public reload and empty field | Separately recorded editor-rehearsal receipt; never inferred from source attributes |
 
-## Acceptance boundary
+Execution counts, source revisions, phase commits, profile/upgrade checks and the final E01 outcome are recorded in [implementation progress](automatic-spacing-progress.md). Older calibration counts and raw-section assertions are superseded by this register. Token arithmetic, geometry assertions, screenshot comparison and editor writes are distinct evidence.
 
-Automated acceptance covers Enter/Space, hidden body links excluded from tab order,
-native exclusive groups and independent panels, focus visibility, real fragment
-reveal, no document JavaScript, long German/RTL sibling content, intrinsic media,
-wide/narrow hosts, missing supporting content, text spacing and actual 200%/400%
-Chromium zoom. These checks exercise production primitives, not copies with repaired
-specimen CSS. The styleguide remains excluded from normal release artifacts.
+## Cascade and applicability
 
-Manual assistive-technology announcements, browser toolbar Find, Firefox/WebKit,
-physical devices and real CMS editor save/reload remain unverified. A native summary
-is not a heading-navigation guarantee; callers keep meaningful headings outside it.
-Ready/deferred status and exact executed results are recorded in the Phase 5
-verification receipt before this calibration is accepted for starter reuse.
+Authored rules belong to base/components; utilities remain later. The document establishes theme/base/vendor/astro/components/utilities order before imports. PhotoSwipe has an explicit vendor import boundary. The source check parses owned CSS/Astro, standalone files, overlays and supported local imports; it does not certify arbitrary third-party/admin/plugin CSS. Computed-style and media checks verify the rendered public boundary.
 
-**Accepted automated scope:** root verify 208 tests/46 Astro files, 23 design tests,
-normal build, 69 final CMS browser comparisons and independent static/Sveltia
-verification plus browser journeys all pass. Components are ready for reuse within
-the documented contract; the manual observations above remain deferred. See
-[current execution evidence](verification/native-composition-phase-5-checks.json).
-
-## Spacing override contract
-
-Authored CSS is split into `@layer base` and `@layer components`; Tailwind utilities
-remain in `@layer utilities`. Automatic section and container defaults use
-zero-specificity selectors, so `py-0`, `mt-0` and `gap-0` override them without
-`!important`. Every component `<style>` block is layered; ticker keyframes remain
-outside the layer.
-
-The Chromium spacing fixture verifies:
-- default section padding and sibling container margin are non-zero;
-- `Section.py-0` and `data-spacing="none"` compute zero padding;
-- `data-spacing="none"` also computes zero container margin;
-- `.flow` sibling margin is non-zero while `mt-0` computes zero;
-- `.grid` and `.grid-auto` defaults are non-zero while `gap-0` computes zero.
-
-`RichText` applies `.flow` by default; `.article-body` is margin-only. `.site-main`
-owns horizontal gutters and supplies block padding only when a page has no direct
-section, so section-owned pages do not double-stack shell padding. These are
-infrastructure contracts, not a client art direction.
+Manual assistive-technology announcements, Firefox/WebKit, physical devices, provider/Workers rendering and remote Sveltia authentication remain outside these local receipts. Native summary is not a heading-navigation guarantee. The synthetic pinned-font screenshots do not certify a future client's brand font or art direction.
 
 ## Token Calibration
 
-- **Source stylesheet:** `src/styles/global.css`
-- **LF SHA-256:** `46531015fba8ea0c9f74b66d9a90b5ee7237bdba036bc664211d77c7e34567c1`
-- **Validation status:** `PASS` (14 WCAG contrast pairs, 31 `@theme` tokens, 7 `:root` tokens)
+- **Source stylesheet:** `C:\dev\emdash-baseline\src\styles\global.css`
+- **LF SHA-256:** `b322b9951a283af43a54ec61b49b0aef76d778813776f3cf5336856898b193ae`
+- **Validation status:** `PASS` (14 WCAG contrast pairs, 31 `@theme` tokens, 11 `:root` tokens)
 
 ### WCAG Relative Luminance Contrast Matrix
 

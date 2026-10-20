@@ -55,9 +55,9 @@ export default defineConfig({
   devToolbar: { enabled: false },
 
   vite: {
-    // Vite 8 uses Rolldown. Preserve client entry ownership and lazy imports.
-    // Broad SSR groups can disrupt Astro renderer initialization; keep server
-    // grouping limited to the dependency-local validators we explicitly bundle.
+    // Preserve entry ownership and dependency initialization. A forced generic
+    // vendor size group can split ProseMirror's cyclic graph before PluginKey
+    // initializes, breaking the live editor. Let Rolldown own that graph.
     environments: {
       client: {
         build: {
@@ -67,7 +67,6 @@ export default defineConfig({
                 groups: [
                   { name: 'react-vendor', test: /node_modules[\\/](?:react|react-dom|scheduler)[\\/]/, priority: 30, entriesAware: true, maxSize: 350_000 },
                   { name: 'photoswipe-vendor', test: /node_modules[\\/]photoswipe[\\/]/, priority: 20, entriesAware: true, maxSize: 350_000 },
-                  { name: 'vendor', test: /node_modules[\\/]/, priority: 10, entriesAware: true, maxSize: 350_000 },
                 ],
               },
             },

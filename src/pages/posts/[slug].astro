@@ -1,6 +1,6 @@
 ---
 import { getEmDashEntry, getSeoMeta, decodeSlug, getSiteSettingsWithCacheHint } from "emdash";
-import { Image, WidgetArea } from "emdash/ui";
+import { Image } from "emdash/ui";
 import Base from "../../layouts/Base.astro";
 import RichText from "../../components/RichText.astro";
 import Section from "../../components/Section.astro";
@@ -97,9 +97,5 @@ const categories = post.data.terms?.category ?? [];
 				)
 			}
 		</article>
-
-		<aside>
-			<WidgetArea name="sidebar" />
-		</aside>
 	</Section>
 </Base>

@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import { assertReleaseArtifact } from '../../scripts/assert-release-artifact.mjs';
 import { visualContract } from './contract.mjs';
 
-export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, devOnly = false, releaseOnly = false, expectWelcome = true } = {}) {
+export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, devOnly = false, releaseOnly = false, expectWelcome = true, fixedClock = true } = {}) {
   const stage = await mkdtemp(path.join(tmpdir(), 'emdash-visual-'));
   let child, cleaned = false, cancelled = false;
   const logs = [];
@@ -20,6 +20,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
   const origin = `http://127.0.0.1:${port}`;
   Object.assign(env, { HOST: '127.0.0.1', PORT: String(port), TZ: 'UTC', EMDASH_ENCRYPTION_KEY: 'emdash_enc_v1_' + randomBytes(32).toString('base64url') });
   const clock = pathToFileURL(path.join(root, 'tests/visual/fixed-clock.mjs')).href;
+  const serverClock = fixedClock ? ['--import',clock] : [];
   const onSignal = () => { cancelled = true; child?.kill(); };
   process.once('SIGINT', onSignal); process.once('SIGTERM', onSignal);
   signal?.addEventListener('abort', onSignal, { once: true });
@@ -79,7 +80,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     // Trusted local rehearsals can add synthetic source/seed fixtures only to this owned copy.
     await prepareStage?.({ stage, origin });
     // Seed is the checked-in public starter fixture; supported dev setup applies its sample content.
-    launch(['--import', clock, 'node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', String(port)]);
+    launch([...serverClock, 'node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', String(port)]);
     await ready('data-styleguide-ready');
     await onDevReady?.();
     if (cancelled) throw new Error('Visual bootstrap cancelled');
@@ -93,7 +94,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     await stop();
     await build(false);
     await assertReleaseArtifact(path.join(stage, 'dist'));
-    launch(['--import', clock, 'dist/server/entry.mjs'], { NODE_ENV: 'production', ASTRO_TEST_FIXTURES: '1' });
+    launch([...serverClock, 'dist/server/entry.mjs'], { NODE_ENV: 'production', ASTRO_TEST_FIXTURES: '1' });
     let normalReady = false;
     const normalDeadline = Date.now() + 90000;
     while (Date.now() < normalDeadline) {
@@ -116,7 +117,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     await stop();
     await build(true);
     await assert.rejects(assertReleaseArtifact(path.join(stage, 'dist-fixtures')), /Refusing fixture-enabled/);
-    launch(['--import', clock, 'dist-fixtures/server/entry.mjs'], { NODE_ENV: 'production' });
+    launch([...serverClock, 'dist-fixtures/server/entry.mjs'], { NODE_ENV: 'production' });
     await ready(`data-fixture-version="${visualContract.fixtureVersion}"`);
     await mkdir(reportDir, { recursive: true });
     await writeFile(path.join(reportDir, 'bootstrap.json'), JSON.stringify({ isolation: 'Owned temporary source + fresh DB; no working DB/media/env/credentials copied', fixtureVersion: visualContract.fixtureVersion, seed: 'seed/seed.json via supported dev setup', date: visualContract.date, normalStyleguide: 404, fixtureStyleguide: 200, fixtureReleaseRejected: true }, null, 2) + '\n');

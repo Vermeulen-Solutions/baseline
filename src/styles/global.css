@@ -392,6 +392,24 @@
 	.collection-item > :where(*), .article-stack > :where(*) { margin-block: 0; }
 	:where(.article-stack time, .collection-item time) { display: block; }
 	.article-taxonomies { display: flex; flex-wrap: wrap; gap: var(--spacing-content); }
+	/* The shared widget area has one page owner; group its native output. */
+	:where([data-spacing-policy="automatic-v2"] [data-widget-area] > .widget) {
+		display: flex;
+		flex-direction: column;
+		gap: calc(var(--layout-content-gap) * 0.5);
+		min-inline-size: 0;
+	}
+	:where([data-spacing-policy="automatic-v2"] .widget-categories > li) { display: flex; gap: 0.35em; }
+	:where([data-spacing-policy="automatic-v2"] .widget-recent-posts > li) { display: flex; flex-direction: column; gap: 0.35em; }
+	:where([data-spacing-policy="automatic-v2"] .widget-search) { display: flex; flex-wrap: wrap; align-items: start; gap: calc(var(--layout-content-gap) * 0.5); }
+	:where([data-spacing-policy="automatic-v2"] .widget-search__input) {
+		flex: 1 1 10rem;
+		min-inline-size: 0;
+		inline-size: min(100%, var(--measure-reading));
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-control);
+		padding: calc(var(--layout-content-gap) * 0.5);
+	}
 
 	.container-shell {
 		width: 100%;

@@ -651,6 +651,8 @@ Tasks:
 3. Compare changed captures against both intended behavior and previous output. Do not accept the 24px listing indentation merely because a new golden matches it.
 4. Record each intended baseline change and its reason. Keep failures and before/after evidence inspectable. Re-run relevant checks after fixes, then finalize hashes and statements.
 
+Implementation review additions (2026-10-20): rendered captures exposed crowded footer widgets and duplicate article/footer rendering of the same area (R01). Keep Base as its single owner, preserve CMS configuration and add grouped spacing with the existing intrinsic grid. The real editor rehearsal also exposed a client chunk initialization failure (R02): a generic forced vendor split constructed ProseMirror history before PluginKey initialized. Remove that generic split, retain entry ownership and require actual editor save/reload evidence. These findings extend W09/W10; neither is accepted through screenshot matching alone.
+
 Done when: visual concerns are resolved or explicitly deferred, every calibration claim names its proof, and screenshot updates reflect reviewed decisions rather than broad baseline regeneration.
 
 ### W11 — Ship the same contract in both profiles and rehearse upgrades
