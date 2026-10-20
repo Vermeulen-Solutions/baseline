@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
 import { spawn, execFileSync } from 'node:child_process';
 import { once } from 'node:events';
-import { createServer } from 'node:net';
+import { availableLoopbackPort } from './loopback-port.mjs';
 import { chromium, expect as baseExpect } from '@playwright/test';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -54,8 +54,7 @@ const config = await fs.readFile(configPath, 'utf8');
 assert.equal(config.split('integrations: [').length, 2);
 await fs.writeFile(configPath, config.replace('integrations: [', `integrations: [
   { name: 'emdash13-disposable-auth', hooks: { 'astro:config:setup': ({injectRoute}) => injectRoute({pattern:'/_emdash/api/fixture-auth',entrypoint:new URL('./src/pages/_emdash/api/fixture-auth.ts',import.meta.url),prerender:false}) } },`).replace('vite: {', `vite: { server: { fs: { allow: ${JSON.stringify([site, path.join(root, 'node_modules')])} } },`));
-const socket = createServer(); socket.listen(0, '127.0.0.1'); await once(socket, 'listening');
-const port = socket.address().port; await new Promise(resolve => socket.close(resolve));
+const port = await availableLoopbackPort();
 const origin = `http://127.0.0.1:${port}`;
 const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => /^(PATH|PATHEXT|SYSTEMROOT|WINDIR|COMSPEC|TEMP|TMP|HOME|USERPROFILE|LOCALAPPDATA|APPDATA)$/i.test(name)));
 Object.assign(env, { EMDASH_ENCRYPTION_KEY: 'emdash_enc_v1_' + randomBytes(32).toString('base64url'), EMDASH13_FIXTURE_KEY: key });

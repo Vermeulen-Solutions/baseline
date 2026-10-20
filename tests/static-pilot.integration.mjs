@@ -3,7 +3,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { createServer } from 'node:http';
-import { createServer as socketServer } from 'node:net';
+import { availableLoopbackPort, listenLoopback } from '../scripts/loopback-port.mjs';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
 import assert from 'node:assert/strict';
@@ -60,7 +60,7 @@ async function staticServer(directory) {
       response.end(request.method === 'HEAD' ? undefined : bytes);
     } catch { response.writeHead(500); response.end(); }
   });
-  server.listen(0, '127.0.0.1'); await once(server, 'listening'); servers.push(server);
+  await listenLoopback(server); servers.push(server);
   return `http://127.0.0.1:${server.address().port}`;
 }
 
@@ -106,8 +106,7 @@ async function metadata(origin, route, html, { error = false } = {}) {
 }
 
 try {
-  const socket = socketServer(); socket.listen(0, '127.0.0.1'); await once(socket, 'listening');
-  const port = socket.address().port; await new Promise(resolve => socket.close(resolve));
+  const port = await availableLoopbackPort();
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => /^(PATH|PATHEXT|SYSTEMROOT|WINDIR|COMSPEC|TEMP|TMP|HOME|USERPROFILE|LOCALAPPDATA|APPDATA)$/i.test(name)));
   child = spawn(process.execPath, ['node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', String(port)], { cwd: root, env, stdio: ['ignore', 'pipe', 'pipe'] });
   let logs = ''; child.stdout.on('data', chunk => { logs += chunk; }); child.stderr.on('data', chunk => { logs += chunk; });

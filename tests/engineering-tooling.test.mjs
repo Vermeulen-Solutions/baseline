@@ -4,6 +4,8 @@ import { readdirSync, mkdtempSync, writeFileSync, readFileSync, existsSync, mkdi
 import os from 'node:os';
 import path from 'node:path';
 import { testFiles } from '../scripts/run-tests.mjs';
+import { availableLoopbackPort, listenLoopback } from '../scripts/loopback-port.mjs';
+import { createServer } from 'node:http';
 import { npmInvocation, execNpmSync, spawnNpmSync } from '../scripts/process-runner.mjs';
 import { exportD1Database } from '../scripts/d1-export.mjs';
 import { spawnSync } from 'node:child_process';
@@ -55,6 +57,33 @@ test('test tiers are a disjoint exhaustive partition and stale inventories fail 
     writeFileSync(path.join(directory, 'new.test.mjs'), '');
     assert.throws(() => testFiles('unit', directory), /inventory is stale/);
   } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('loopback fixtures bind Fetch-safe ports, retry collisions and release reservations', async () => {
+  const first = createServer((_request, response) => response.end('ready'));
+  const second = createServer();
+  try {
+    const port = await listenLoopback(first);
+    assert.ok(port >= 49152 && port <= 65535);
+    const response = await fetch(`http://127.0.0.1:${port}`);
+    assert.equal(await response.text(), 'ready');
+    const alternate = await availableLoopbackPort();
+    let attempts = 0;
+    assert.equal(await listenLoopback(second, { nextPort: () => ++attempts === 1 ? port : alternate }), alternate);
+    assert.equal(attempts, 2);
+    const collision = createServer();
+    const listeners = { error: collision.listenerCount('error'), listening: collision.listenerCount('listening') };
+    await assert.rejects(listenLoopback(collision, { nextPort: () => port, attempts: 2 }), /after 2 attempts/);
+    assert.equal(collision.listening, false);
+    assert.equal(collision.listenerCount('error'), listeners.error);
+    assert.equal(collision.listenerCount('listening'), listeners.listening);
+    await assert.rejects(listenLoopback(collision, { nextPort: () => 6000 }), /49152/);
+    await assert.rejects(listenLoopback(collision, { attempts: 0 }), /attempts/);
+    await assert.rejects(listenLoopback(first), /already listening/);
+  } finally {
+    first.closeAllConnections();
+    for (const server of [first, second]) if (server.listening) await new Promise(resolve => server.close(resolve));
+  }
 });
 
 const scriptPath = name => fileURLToPath(new URL(`../scripts/${name}`, import.meta.url));

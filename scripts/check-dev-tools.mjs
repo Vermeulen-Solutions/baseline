@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
-import { createServer } from 'node:net';
+import { availableLoopbackPort } from './loopback-port.mjs';
 import { randomBytes } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { assertReleaseArtifact } from './assert-release-artifact.mjs';
@@ -13,10 +13,7 @@ const root = process.cwd();
 const stage = await mkdtemp(path.join(tmpdir(), 'emdash-dev-tools-'));
 const logs = [];
 let child;
-async function freePort() {
-  const socket = createServer(); socket.listen(0, '127.0.0.1'); await once(socket, 'listening');
-  const port = socket.address().port; await new Promise(resolve => socket.close(resolve)); return port;
-}
+const freePort = availableLoopbackPort;
 const port = await freePort(), origin = `http://127.0.0.1:${port}`;
 // Do not inherit CMS/Cloudflare credentials, production origin or user env files.
 const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => /^(PATH|PATHEXT|SYSTEMROOT|WINDIR|COMSPEC|TEMP|TMP|HOME|USERPROFILE|LOCALAPPDATA|APPDATA|CI)$/i.test(name)));

@@ -164,7 +164,7 @@ test('SSR rejects a soft 404 instead of declaring successful error-page coverage
 test('SSR cancellation and streaming-body deadlines both terminate the server', () => serverFixture(`
 import http from 'node:http';
 const server=http.createServer((req,res)=>{res.writeHead(200,{'content-type':'text/html'});res.flushHeaders();res.write('<html>');});
-server.listen(0,'127.0.0.1',()=>console.log('Server listening on http://127.0.0.1:'+server.address().port));
+server.listen(Number(process.env.PORT),'127.0.0.1',()=>console.log('Server listening on http://127.0.0.1:'+server.address().port));
 `, async (root, artifact) => {
   let child; const controller = new AbortController();
   await assert.rejects(snapshotSSR({ directory: artifact, cwd: root, signal: controller.signal, onSpawn: process => { child = process; controller.abort(Error('caller cancelled')); } }), /caller cancelled/);

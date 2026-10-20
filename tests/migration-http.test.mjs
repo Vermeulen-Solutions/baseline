@@ -1,3 +1,4 @@
+import { listenLoopback } from '../scripts/loopback-port.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -30,7 +31,7 @@ async function site(run, handler) {
     if (/\.png$/.test(url.pathname)) { res.setHeader('content-type', 'image/png'); res.end('synthetic-image-no-decode-claim'); return; }
     res.statusCode = 404; res.setHeader('content-type', 'text/html'); res.end('<!doctype html><title>Missing</title>');
   });
-  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve)); origin = `http://127.0.0.1:${server.address().port}`;
+  await listenLoopback(server); origin = `http://127.0.0.1:${server.address().port}`;
   try { return await run({ directory, origin, server, requests, maximum: () => maximum }); }
   finally {
     server.closeAllConnections(); await new Promise(resolve => server.close(resolve));

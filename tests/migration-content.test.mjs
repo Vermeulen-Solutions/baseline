@@ -1,10 +1,10 @@
+import { listenLoopback } from '../scripts/loopback-port.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import http from 'node:http';
-import { once } from 'node:events';
 import { fileURLToPath } from 'node:url';
 import { contractDigest, declarations, resultOf, sha256, validateManifest, validateMigrationReport, validateObservations } from '../standards/schemas/migration-acceptance.mjs';
 import { inventoryTotals, validateContentInventory, validateContentMapping } from '../standards/schemas/migration-content.mjs';
@@ -210,7 +210,7 @@ test('URL-only scope never reads inventories, and full scope cannot infer editor
 
 test('v3 live HTTP and offline inventories coexist without certifying editor acceptance', async () => scratch(async dir => {
   const server = http.createServer((_req, res) => { res.setHeader('content-type', 'text/html'); res.end('<!doctype html><title>Example</title><p>Example</p>'); });
-  server.listen(0, '127.0.0.1'); await once(server, 'listening');
+  await listenLoopback(server);
   try {
     const options = await bundle(dir), m = load('manifest');
     m.targetOrigin = `http://127.0.0.1:${server.address().port}`;

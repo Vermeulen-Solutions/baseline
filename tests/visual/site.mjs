@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
-import { createServer } from 'node:net';
+import { availableLoopbackPort } from '../../scripts/loopback-port.mjs';
 import { randomBytes } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
@@ -15,8 +15,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
   let child, cleaned = false, cancelled = false;
   const logs = [];
   const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => /^(PATH|PATHEXT|SYSTEMROOT|WINDIR|COMSPEC|TEMP|TMP|HOME|USERPROFILE|LOCALAPPDATA|APPDATA)$/i.test(key)));
-  const socket = createServer(); socket.listen(0, '127.0.0.1'); await once(socket, 'listening');
-  const port = socket.address().port; await new Promise(resolve => socket.close(resolve));
+  const port = await availableLoopbackPort();
   const origin = `http://127.0.0.1:${port}`;
   Object.assign(env, { HOST: '127.0.0.1', PORT: String(port), TZ: 'UTC', EMDASH_ENCRYPTION_KEY: 'emdash_enc_v1_' + randomBytes(32).toString('base64url') });
   const clock = pathToFileURL(path.join(root, 'tests/visual/fixed-clock.mjs')).href;

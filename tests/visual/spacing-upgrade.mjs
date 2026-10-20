@@ -1,10 +1,10 @@
+import { listenLoopback } from '../../scripts/loopback-port.mjs';
 // Local historical static upgrade rehearsal. Never targets a client checkout.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { execFileSync } from 'node:child_process';
 import { createServer } from 'node:http';
-import { once } from 'node:events';
 import { createHash } from 'node:crypto';
 import assert from 'node:assert/strict';
 import postcss from 'postcss';
@@ -26,7 +26,7 @@ async function refreshGate(){const p=path.join(root,'audit/design-gate-exception
 async function capture(label){
   const base=path.join(root,'dist'), types={'.html':'text/html','.css':'text/css','.js':'text/javascript','.svg':'image/svg+xml','.jpg':'image/jpeg','.webp':'image/webp','.woff2':'font/woff2'};
   const server=createServer(async(req,res)=>{try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);let target=path.resolve(base,'.'+pathname);assert.ok(target===base||target.startsWith(base+path.sep));if((await fs.stat(target)).isDirectory())target=path.join(target,'index.html');res.setHeader('Content-Type',types[path.extname(target)]??'application/octet-stream');res.end(await fs.readFile(target));}catch{res.writeHead(404);res.end();}});
-  server.listen(0,'127.0.0.1');await once(server,'listening');const origin='http://127.0.0.1:'+server.address().port,result=[];
+  await listenLoopback(server);const origin='http://127.0.0.1:'+server.address().port,result=[];
   const context=await browser.newContext();
   try{for(const width of [390,768,1440])for(const route of ['/','/posts/welcome/']){
     const page=await context.newPage();page.setDefaultTimeout(15000);await page.setViewportSize({width,height:900});const response=await page.goto(origin+route);assert.equal(response.status(),200);await page.evaluate(()=>document.fonts.ready);

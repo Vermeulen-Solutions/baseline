@@ -22,8 +22,20 @@ both handoff paths and generated-profile instruction inheritance.
 
 ## Phase B — Local test reliability
 
-In progress: retain performance budgets while avoiding browser/Fetch-blocked
-loopback ports and excessive concurrent rehearsal subprocesses.
+Complete: all owned loopback harnesses use a shared dynamic/private-range port
+allocator (49152–65535), with bounded occupied/excluded-port retries. SSR capture
+keeps its 3.5-second default deadline. A child-process reservation cannot remove
+the cross-process bind race; readiness/exit checks remain in force.
+
+The root full suite runs all unit files with concurrency 2, then all rehearsal
+files with concurrency 1. Fast local/CI checks use the same unit cap. No tests or
+performance assertions were removed or relaxed. Collision/Fetch/readiness and
+listener cleanup regression checks were added; root and EmDash inventory updated.
+
+Validation: `npm.cmd run verify` passed 130 unit + 130 rehearsal tests, followed
+by Astro checks. Targeted HTTP/migration checks retain cancellation, streaming
+deadlines, resource limits and server teardown coverage. Log:
+`.emdash/visual/layout-maintenance-verify.log`.
 
 ## Phase C — Editor/admin bundle investigation
 

@@ -98,7 +98,8 @@
     "tests/html-integrity.test.mjs",
     "scripts/setup-hooks.mjs",
     "scripts/snapshot-ssr.mjs",
-    "scripts/html-tags.mjs"
+    "scripts/html-tags.mjs",
+    "scripts/loopback-port.mjs"
   ],
   "scripts": [
     "doctor",

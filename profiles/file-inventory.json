@@ -944,6 +944,10 @@
     "src/lib/layout-style.ts": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/loopback-port.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

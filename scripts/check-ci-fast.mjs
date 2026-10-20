@@ -10,7 +10,7 @@ async function main() {
     ['template-lint', ['node_modules/eslint/bin/eslint.js', 'src', 'profiles/static/project/src', '--max-warnings', '0']],
     ['design-tokens', ['scripts/design-system.mjs']],
     ['schema-budget', ['scripts/check-schema-budget.mjs']],
-    ['unit-tests', ['--test', ...tests]],
+    ['unit-tests', ['--test', '--test-concurrency=2', ...tests]],
     ['normal-build', ['node_modules/astro/bin/astro.mjs', 'build']],
     ['release-profile', ['scripts/assert-release-artifact.mjs']],
   ];

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync, spawn } from 'node:child_process';
 import { once } from 'node:events';
-import { createServer } from 'node:net';
+import { availableLoopbackPort } from './loopback-port.mjs';
 import { randomBytes } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { DatabaseSync, backup } from 'node:sqlite';
@@ -46,8 +46,7 @@ async function stop() {
     owned.kill(); try { await done; } finally { clearTimeout(timer); }
   }
 }
-const socket = createServer(); socket.listen(0, '127.0.0.1'); await once(socket, 'listening');
-const port = socket.address().port; await new Promise(resolve => socket.close(resolve));
+const port = await availableLoopbackPort();
 const origin = 'http://127.0.0.1:' + port;
 // Do not forward deployment credentials, database URLs, NODE_OPTIONS or other local site settings.
 const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => /^(PATH|PATHEXT|SYSTEMROOT|WINDIR|COMSPEC|TEMP|TMP|HOME|USERPROFILE|LOCALAPPDATA|APPDATA)$/i.test(name)));

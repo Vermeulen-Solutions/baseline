@@ -6,6 +6,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
 import { scanHTML } from './html-tags.mjs';
 import { assertReleaseArtifact } from './assert-release-artifact.mjs';
+import { availableLoopbackPort } from './loopback-port.mjs';
 
 /** Anonymous, loopback-only GETs against the existing local production CMS.
  * No setup bypass, seeding, authentication or external redirect is performed.
@@ -35,8 +36,10 @@ export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), rou
     const parent = path.join(root, '.emdash/snapshots');
     fs.mkdirSync(parent, { recursive: true });
     out = fs.mkdtempSync(path.join(parent, 'capture-'));
+    const port = await availableLoopbackPort();
+    check();
     child = spawn(process.execPath, ['--env-file-if-exists=' + path.join(root, '.env'), entry], {
-      cwd: root, env: { ...process.env, NODE_ENV: 'production', HOST: '127.0.0.1', PORT: '0', ASTRO_TEST_FIXTURES: '0' },
+      cwd: root, env: { ...process.env, NODE_ENV: 'production', HOST: '127.0.0.1', PORT: String(port), ASTRO_TEST_FIXTURES: '0' },
       windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'],
     });
     // Register immediately, before the first await, including spawn failures.

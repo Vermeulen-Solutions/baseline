@@ -18,11 +18,16 @@ export function testFiles(tier, directory = 'tests') {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
-    if (process.argv.length !== 4 || process.argv[2] !== '--tier') throw new Error('Use --tier unit or --tier rehearsal.');
-    const tier = process.argv[3], files = testFiles(tier);
-    console.log(`Running ${files.length} ${tier} test files.`);
-    const result = spawnSync(process.execPath, ['--test', ...files], { stdio: 'inherit' });
-    if (result.error) throw result.error;
-    process.exitCode = result.status ?? 1;
+    if (process.argv.length !== 4 || process.argv[2] !== '--tier' || !['all', 'unit', 'rehearsal'].includes(process.argv[3])) throw new Error('Use --tier all, unit or rehearsal.');
+    const tiers = process.argv[3] === 'all' ? ['unit', 'rehearsal'] : [process.argv[3]];
+    // Keep CPU-heavy build/install/Git rehearsals away from sub-second HTML
+    // checks. Preserve every test and its original performance budget.
+    for (const tier of tiers) {
+      const files = testFiles(tier), concurrency = tier === 'unit' ? 2 : 1;
+      console.log(`Running ${files.length} ${tier} test files (concurrency ${concurrency}).`);
+      const result = spawnSync(process.execPath, ['--test', `--test-concurrency=${concurrency}`, ...files], { stdio: 'inherit' });
+      if (result.error) throw result.error;
+      if (result.status !== 0) { process.exitCode = result.status ?? 1; break; }
+    }
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }

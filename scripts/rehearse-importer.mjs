@@ -1,9 +1,9 @@
+import { listenLoopback, availableLoopbackPort } from './loopback-port.mjs';
 // Disposable synthetic runtime/protocol rehearsal; no working CMS or credentials.
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import http from 'node:http';
-import net from 'node:net';
 import { once } from 'node:events';
 import { spawn } from 'node:child_process';
 import { randomBytes, randomUUID } from 'node:crypto';
@@ -33,9 +33,9 @@ export async function rehearseImporter({ out, signal } = {}) {
   const result = receipt.observations;
   try {
     for (const [id, color] of [[201, '#e02020'], [202, '#2040e0']]) images.set(`/uploads/${id}.png`, await sharp({ create: { width: 4, height: 3, channels: 3, background: color } }).png().toBuffer());
-    protocol = http.createServer(exporterHandler(state, images, requests)); protocol.listen(0, '127.0.0.1'); await once(protocol, 'listening');
+    protocol = http.createServer(exporterHandler(state, images, requests)); await listenLoopback(protocol);
     const protocolOrigin = `http://127.0.0.1:${protocol.address().port}`;
-    const socket = net.createServer(); socket.listen(0, '127.0.0.1'); await once(socket, 'listening'); const port = socket.address().port; await new Promise(resolve => socket.close(resolve));
+    const port = await availableLoopbackPort();
     const origin = `http://127.0.0.1:${port}`;
     fs.cpSync(path.join(fixtures, 'site'), stage, { recursive: true });
     fs.symlinkSync(path.join(root, 'node_modules'), path.join(stage, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
