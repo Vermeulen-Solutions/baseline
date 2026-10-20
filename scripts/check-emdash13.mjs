@@ -23,7 +23,7 @@ const hashes = {};
 receipt.sourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
 receipt.sourceTreeDirty = Boolean(execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim());
 for (const relative of ['scripts/check-emdash13.mjs', 'src/layouts/Base.astro', 'src/layouts/SiteShell.astro', 'src/components/RichText.astro', 'src/components/Card.astro']) hashes[relative] = createHash('sha256').update(await fs.readFile(path.join(root, relative))).digest('hex');
-for (const relative of ['src', 'seed', 'astro.config.mjs', 'package.json', 'tsconfig.json', 'emdash-env.d.ts', 'scripts/dev-tools-integration.mjs', 'scripts/dev-tools-middleware.mjs']) {
+for (const relative of ['src', 'seed', 'astro.config.mjs', 'package.json', 'tsconfig.json', 'emdash-env.d.ts', 'scripts/dev-tools-integration.mjs', 'scripts/dev-tools-middleware.mjs', 'scripts/client-bundles.mjs', 'scripts/process-runner.mjs']) {
   const target = path.join(site, relative);
   await fs.mkdir(path.dirname(target), { recursive: true });
   await fs.cp(path.join(root, relative), target, { recursive: true });

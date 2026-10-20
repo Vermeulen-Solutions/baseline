@@ -99,7 +99,10 @@
     "scripts/setup-hooks.mjs",
     "scripts/snapshot-ssr.mjs",
     "scripts/html-tags.mjs",
-    "scripts/loopback-port.mjs"
+    "scripts/loopback-port.mjs",
+    "scripts/client-bundles.mjs",
+    "tests/client-bundles.test.mjs",
+    "tests/engineering-hooks.test.mjs"
   ],
   "scripts": [
     "doctor",
@@ -145,7 +148,8 @@
     "mcp:token",
     "check:emdash13",
     "audit:html",
-    "setup:hooks"
+    "setup:hooks",
+    "build:analyze"
   ],
   "checks": [
     "check:schema-budget"

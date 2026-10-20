@@ -948,6 +948,18 @@
     "scripts/loopback-port.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/client-bundles.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/client-bundles.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/engineering-hooks.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

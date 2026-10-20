@@ -26,6 +26,7 @@
     "prebuild": "npm run check:schema-budget",
     "build": "astro build",
     "build:timings": "astro build --timings",
+    "build:analyze": "node scripts/client-bundles.mjs --build",
     "postbuild": "node scripts/assert-release-artifact.mjs",
     "pretypecheck": "npm run check:schema-budget",
     "typecheck": "astro check",

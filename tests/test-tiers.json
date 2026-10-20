@@ -150,5 +150,13 @@
   "spacing-tokens.test.mjs": {
     "tier": "unit",
     "reason": "Bounded spacing and transactional token CLI regression cases"
+  },
+  "client-bundles.test.mjs": {
+    "tier": "unit",
+    "reason": "Named icon import semantics and emitted static dependency graph accounting"
+  },
+  "engineering-hooks.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Native Git hook installation and npm subprocess lifecycle, including fail-fast and preservation cases"
   }
 }

@@ -7,6 +7,7 @@ import { sqlite } from "emdash/db";
 import tailwindcss from "@tailwindcss/vite";
 import { loadEnv } from "vite";
 import devTools from "./scripts/dev-tools-integration.mjs";
+import { namedIconImports, clientBundleReport } from "./scripts/client-bundles.mjs";
 
 const env = loadEnv(process.env.NODE_ENV || "development", process.cwd(), "");
 const siteUrl = process.env.SITE_URL || env.SITE_URL;
@@ -66,6 +67,9 @@ export default defineConfig({
               codeSplitting: {
                 groups: [
                   { name: 'react-vendor', test: /node_modules[\\/](?:react|react-dom|scheduler)[\\/]/, priority: 30, entriesAware: true, maxSize: 350_000 },
+                  // Public per-icon imports keep the full dynamic admin icon
+                  // catalog out of the inline editor's static dependency graph.
+                  { name: 'icon-vendor', test: /node_modules[\\/]@phosphor-icons[\\/]react[\\/]/, priority: 25, entriesAware: true, maxSize: 350_000 },
                   { name: 'photoswipe-vendor', test: /node_modules[\\/]photoswipe[\\/]/, priority: 20, entriesAware: true, maxSize: 350_000 },
                 ],
               },
@@ -89,7 +93,7 @@ export default defineConfig({
     // Resolve each dependency's Zod version before bundling EmDash server chunks.
     // Optional tooling uses Zod 3; bare external imports in dist would select it.
     ssr: { noExternal: ["zod"] },
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), namedIconImports(), clientBundleReport()],
   },
 });
 

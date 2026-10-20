@@ -145,3 +145,14 @@ Receipt and four-stage geometry/captures: `.emdash/visual/spacing-upgrade/`; com
 E01 was repeated on the final stylesheet and passed the complete UI journey again (`.emdash/visual/spacing-editor-final.log`), with normal harness cleanup. The final marker review accepted seven changed prose-containing snapshots (styleguide with/without JS at all three widths, and 320px text spacing). A native select's unrelated 12-pixel, one-channel antialias variation was rejected; its existing approved control golden was retained. No comparison tolerance, readiness gate or source failure threshold was weakened.
 
 All eight implementation phases are complete for the agreed reusable-starter scope. The phase commits and this closure register preserve the original audit findings, later corrections, commands, applicability and remaining platform limits. No external client adoption, push or deployment is included.
+
+## Post-plan setup and tooling follow-up
+
+The subsequent authorized baseline work is recorded in
+[layout maintenance follow-up](layout-maintenance-followup.md): neutral layout
+spacing terminology, persona-informed setup questions and Express defaults,
+loopback/test-tier reliability, and editor/admin bundle ownership and evidence.
+[The persona pass](new-site-workflow-persona-pass.md) records the journeys,
+findings and defaults. Its source walkthrough is distinct from user testing;
+client adoption and the previously stated platform/manual acceptance limits
+remain deferred.

@@ -1,6 +1,9 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { chromium, expect } from '@playwright/test';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { Acorn } from '@phosphor-icons/react/dist/csr/Acorn';
 import { startVisualSite } from './site.mjs';
 
 if(process.platform!=='win32' || process.env.CI || process.env.GITHUB_ACTIONS==='true')throw new Error('Local Windows CMS editor rehearsal only');
@@ -17,6 +20,9 @@ const site=await startVisualSite(process.cwd(),report,{fixedClock:false,prepareS
   source=source.replace('  output: "server",','  output: "server",\n  session:{driver:sessionDrivers.fsLite({base:'+JSON.stringify(path.join(stage,'editor-sessions'))+'})},');
   await fs.writeFile(config,source);
   const target=path.join(stage,'seed/seed.json');const seed=JSON.parse(await fs.readFile(target,'utf8'));
+  // Exercise the installed admin's lazy custom-icon catalog as well as the
+  // named inline-editor icons optimized by the baseline build transform.
+  seed.collections.find(collection=>collection.slug==='pages').icon='acorn';
   seed.content.pages.push({id:'spacing-editor',slug:'spacing-editor-rehearsal',status:'published',data:{title:'Spacing editor rehearsal',content:[block('Editable spacing paragraph','p'),block('Editorial heading','h',{style:'h2'}),block('First list item','li',{listItem:'bullet',level:1}),block('Nested list item','nested',{listItem:'bullet',level:2})]}},
     {id:'spacing-empty-editor',slug:'spacing-empty-editor',status:'published',data:{title:'Empty field rehearsal',content:[]}});
   await fs.writeFile(target,JSON.stringify(seed));
@@ -65,8 +71,20 @@ try {
   await page.goto(site.origin+'/spacing-empty-editor');await expect(editor).toBeVisible();await editor.click();
   console.log('E01: empty field');
   await expect(editor).toBeFocused();await page.screenshot({path:path.join(report,'empty-editor.png'),fullPage:true});
+  console.log('E01: built admin navigation and custom icon');
+  await page.goto(site.origin+'/_emdash/admin');
+  await page.getByRole('button',{name:'Get Started',exact:true}).click();
+  const pagesLink=page.locator('a[href="/_emdash/admin/content/pages"]').first();
+  await expect(pagesLink).toBeVisible({timeout:30000});
+  const expectedPath=renderToStaticMarkup(React.createElement(Acorn)).match(/<path[^>]*\sd="([^"]+)"/)?.[1];
+  expect(expectedPath).toBeTruthy();
+  await expect(pagesLink.locator('svg path').first()).toHaveAttribute('d',expectedPath);
+  await pagesLink.click();await expect(page).toHaveURL(/\/_emdash\/admin\/content\/pages/);
+  await expect(page.getByRole('heading',{name:'Pages',exact:true})).toBeVisible();
+  await expect(page.getByText('Spacing editor rehearsal',{exact:true})).toBeVisible();
+  await page.screenshot({path:path.join(report,'admin-pages.png'),fullPage:true});
   expect(errors).toEqual([]);
-  await fs.writeFile(path.join(report,'receipt.json'),JSON.stringify({case:'E01',freshSeed:true,workingContentTouched:false,entry:'pages/'+entryId,field:'content',seed:'supported disposable seed; dev session used by built editor; no API substitute for edit',uiSelected:true,uiTyped:true,blurSaveStatus:saved.status(),editorReload:true,uiPublish:true,anonymousPublicReload:true,nestedListsRetained:true,emptyFieldSelectable:true,scope:'Node/SQLite built inline editor; not provider/Workers certification'},null,2)+'\n');
+  await fs.writeFile(path.join(report,'receipt.json'),JSON.stringify({case:'E01',freshSeed:true,workingContentTouched:false,entry:'pages/'+entryId,field:'content',seed:'supported disposable seed; dev session used by built editor; no API substitute for edit',uiSelected:true,uiTyped:true,blurSaveStatus:saved.status(),editorReload:true,uiPublish:true,anonymousPublicReload:true,nestedListsRetained:true,emptyFieldSelectable:true,adminNavigation:true,customCatalogIcon:'acorn: rendered path matches the installed package component',scope:'Node/SQLite built inline editor and admin; not provider/Workers certification'},null,2)+'\n');
   console.log('E01 actual inline editor selection, typing, save, reload, publish, anonymous render and empty field passed.');
 }catch(error){
   console.error('E01 failure:',error);

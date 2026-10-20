@@ -75,6 +75,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     await mkdir(path.join(stage, 'scripts'), { recursive: true });
     await copyFile(path.join(root, 'scripts/dev-tools-integration.mjs'), path.join(stage, 'scripts/dev-tools-integration.mjs'));
     await copyFile(path.join(root, 'scripts/dev-tools-middleware.mjs'), path.join(stage, 'scripts/dev-tools-middleware.mjs'));
+    for (const name of ['client-bundles.mjs', 'process-runner.mjs']) await copyFile(path.join(root, 'scripts', name), path.join(stage, 'scripts', name));
     await symlink(path.join(root, 'node_modules'), path.join(stage, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
     // Trusted local rehearsals can add synthetic source/seed fixtures only to this owned copy.
     await prepareStage?.({ stage, origin });
