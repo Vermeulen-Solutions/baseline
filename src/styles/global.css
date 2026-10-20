@@ -471,7 +471,7 @@
 		gap: var(--grid-gap, var(--spacing-grid));
 	}
 
-	.grid-auto {
+	:where(.grid-auto) {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
 		gap: var(--grid-gap, var(--spacing-grid));

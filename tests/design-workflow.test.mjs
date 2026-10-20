@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { AESTHETIC_LANES, parseDesignTokens, auditDesignTokens, applyTokenOverrides } from '../scripts/design-system.mjs';
 import { validateRecord, matchesException, matchesDeletionException, isVisualPath } from '../scripts/check-art-direction.mjs';
 import { createHash } from 'node:crypto';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname, basename } from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
@@ -140,5 +140,77 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   const photoGallery = readFileSync('src/components/PhotoGallery.astro', 'utf8');
   assert.ok(photoGallery.includes("breakout: rawBreakout = 'feature'"));
   assert.ok(photoGallery.includes('breakout && `content--${breakout}`'));
+});
+
+function topLevelRulePreludes(css) {
+  const source = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const preludes = [];
+  let depth = 0;
+  let start = 0;
+  for (let i = 0; i < source.length; i++) {
+    const char = source[i];
+    if (char === '{') {
+      const prelude = source.slice(start, i).trim();
+      if (depth === 0 && prelude) preludes.push(prelude);
+      depth++;
+      start = i + 1;
+    } else if (char === '}') {
+      depth--;
+      start = i + 1;
+    } else if (char === ';' && depth === 0) {
+      start = i + 1;
+    }
+  }
+  return preludes;
+}
+
+test('cascade layers and automatic spacing contracts stay enforceable', () => {
+  const css = readFileSync('src/styles/global.css', 'utf8');
+  assert.match(css, /@layer theme, base, components, utilities;/);
+  assert.deepEqual(
+    topLevelRulePreludes(css).filter(prelude => !/^@(theme|layer)\b/.test(prelude)),
+    [],
+    'global.css must not leave normal selector rules outside its named layers',
+  );
+  for (const selector of [
+    ':where(main > section, .section)',
+    ':where(.flow, [data-flow]) > :where(* + *)',
+    ':where(.grid)',
+    ':where(.grid-auto)',
+    '--grid-gap',
+    '--container-gap',
+    '--section-padding',
+  ]) {
+    assert.ok(css.includes(selector), `Missing automatic spacing contract: ${selector}`);
+  }
+
+  const section = readFileSync('src/components/Section.astro', 'utf8');
+  assert.ok(!section.includes('<style>'), 'Section spacing must be owned by layered global CSS');
+  assert.ok(section.includes('data-spacing'), 'Section must expose its spacing opt-out');
+
+  const grid = readFileSync('src/components/Grid.astro', 'utf8');
+  assert.ok(grid.includes('gap?: string'), 'Grid must expose a contextual gap');
+  assert.ok(grid.includes('--grid-gap'), 'Grid must pass the gap through the CSS variable');
+
+  const richText = readFileSync('src/components/RichText.astro', 'utf8');
+  assert.ok(richText.includes('flow?: boolean'), 'RichText must expose a flow opt-out');
+  assert.ok(richText.includes("flow && 'flow'"), 'RichText must apply flow by default');
+
+  const walk = directory => readdirSync(directory, { withFileTypes: true }).flatMap(entry => {
+    const file = join(directory, entry.name);
+    return entry.isDirectory() ? walk(file) : [file];
+  });
+  for (const file of walk('src').filter(file => file.endsWith('.astro'))) {
+    const source = readFileSync(file, 'utf8');
+    for (const match of source.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {
+      const style = match[1];
+      assert.match(style, /@layer\s+components\s*\{/, `${file} must layer its component styles`);
+      assert.deepEqual(
+        topLevelRulePreludes(style).filter(prelude => !/^@(layer|keyframes|font-face|property)\b/.test(prelude)),
+        [],
+        `${file} must not leave normal component rules outside @layer components`,
+      );
+    }
+  }
 });
 

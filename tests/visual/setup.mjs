@@ -22,7 +22,26 @@ const bad = { toString: null };
 <EditorialImage node={{ asset: { _ref: 'missing' }, caption: bad }} />
 <PhotoGallery value={null} node={bad} layout={null} breakout={bad} title={bad} />
 <PhotoGallery node={{ _type:'gallery', columns:bad, images:[null,bad] }} />
-<Disclosure id="edge-panel"><span slot="summary">Panel</span>Body</Disclosure>
+    <Disclosure id="edge-panel"><span slot="summary">Panel</span>Body</Disclosure>
+</body></html>`);
+    await writeFile(path.join(stage, 'src/pages/spacing-fixture.astro'), `---
+import '../styles/global.css';
+---
+<html lang="en"><head><title>Spacing fixture</title></head><body>
+<main class="site-main">
+  <section class="section" id="default-section">
+    <div>One</div>
+    <div>Two</div>
+    <div class="flow" id="flow"><p>One</p><p id="flow-default">Two</p><p class="mt-0">Three</p></div>
+    <div class="grid" id="default-grid"><div>A</div><div>B</div></div>
+    <div class="grid gap-0" id="override-grid"><div>A</div><div>B</div></div>
+  </section>
+  <section class="section py-0" id="override-section">Override</section>
+  <section class="section" data-spacing="none" id="none-section">
+    <div>One</div>
+    <div>Two</div>
+  </section>
+</main>
 </body></html>`);
   } });
   try {
