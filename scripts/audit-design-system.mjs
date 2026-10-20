@@ -14,7 +14,7 @@ export function designSystemRules(target, add) {
     add(
       'design-system:tokens-and-rhythm',
       'unverified',
-      'Curated token matrix, Smart Spacing (.flow) duplicate-margin guard, .content-grid subgrid tracks, and surface/focus utilities in src/styles/global.css',
+      'Curated token matrix, flow spacing (.flow) duplicate-margin guard, .content-grid subgrid tracks, and surface/focus utilities in src/styles/global.css',
       'src/styles/global.css not observed',
       { required: false, evidence: ['src/styles/global.css'], confidence: 'bounded-static', remediation: 'docs/reusable-public-patterns.md' }
     );
@@ -43,7 +43,7 @@ export function designSystemRules(target, add) {
     add(
       'design-system:tokens-and-rhythm',
       pass ? 'pass' : 'warning',
-      'Curated token matrix, Smart Spacing (.flow) duplicate-margin guard, .content-grid subgrid tracks, and surface/focus utilities in src/styles/global.css',
+      'Curated token matrix, flow spacing (.flow) duplicate-margin guard, .content-grid subgrid tracks, and surface/focus utilities in src/styles/global.css',
       {
         interpolateSize,
         flowVerified,

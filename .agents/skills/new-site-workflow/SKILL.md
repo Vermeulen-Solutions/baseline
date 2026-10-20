@@ -49,6 +49,8 @@ When the user requests **Express Mode** (or when building a straightforward gree
      > 2. **Brand Seed Palette:** Provide a primary hex color or reference URL (`--seed-accent`).
      > *(Reply `1` + lane name, or `2` + your brand color/URL.)*
 
+   Include the **Layout spacing choice** below in this same handoff. Reuse an existing answer; do not add a separate checkpoint.
+
 2. **Checkpoint B (Stages 4–4.5 — Art Direction & `/_styleguide` Calibration):**
    - Run `npm run design:tokens -- --init-client --lane <lane>` (or `--seed-accent <hex>`), refine `## Art Direction Record` in `AGENTS.md` and tokens in `src/styles/global.css`, pass `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide` (`audit/component-calibration.md`).
    - **Checkpoint B Handoff Prompt:**
@@ -144,6 +146,22 @@ When Stage 3 is complete, present this unified prompt once to transition into St
 
 Use `site-art-direction` with the brief, source audit, content model, real assets, and relevant references. Select a primary lane from `references/aesthetic-lanes.md`, or Custom / existing brand with a rationale when those lanes do not fit. Define the narrative metaphor, typography, color physics, spatial density, section pacing rhythm, and explicit anti-patterns.
 
+### Layout spacing choice (Standard and Express)
+
+During the design handoff, explain and ask once unless the user has already decided:
+
+> **Layout spacing:** Sections, content groups, and grids get consistent spacing that adapts to screen size. Shared settings keep changes consistent across the site, while individual layouts can have their own spacing. Article text uses flow spacing between headings, paragraphs, lists, and media.
+>
+> **Which approach suits this site?**
+> 1. **Shared spacing defaults (recommended):** Calibrate the site's overall density, then use the layout components' defaults with deliberate local exceptions.
+> 2. **Custom layout spacing:** Plan explicit spacing for the affected layouts, useful when matching a tightly specified composition. Shared tokens still keep those values maintainable.
+
+For Standard, include this in the Stage 3 → Stage 4 handoff; for Express, include it in Checkpoint A's design handoff. Bundle the answer with the visual-direction decision, without a separate blocking approval. If the user has authorized autonomous design, state the recommended working assumption and proceed. Do not replay this prompt for scoped maintenance or existing-site updates.
+
+Record the selected approach, density, intended exceptions and whether the choice was approved or assumed in `AGENTS.md`; record actual calibrated values/evidence in `audit/component-calibration.md`. Use neutral terms: **layout spacing**, **spacing tokens**, **stack/grid gaps**, **fluid spacing**, and **flow spacing**. These describe the architecture, not a named CSS feature or external product. Do not introduce product comparisons or a settings panel.
+
+Both choices use the current `SiteShell` policy (`automatic-v2` is an internal compatibility identifier). A custom choice uses contextual aliases, explicit primitive gap/padding controls and `layout="custom"` where the caller owns display/gap. Do not switch a new site to `legacy`, disable editorial boundaries, remove gutters, or scatter arbitrary values to implement that choice. Verify the chosen relationship owners on `/_styleguide` before broad page assembly; see `docs/design-framework.md`.
+
 Do not start broad visual implementation from the starter's neutral defaults. First record the approved direction or explicitly labeled working assumption in `AGENTS.md` following the mandatory Art Direction Record schema and canonical gate in `AGENTS.md` (you can scaffold a structurally valid record directly via `npm run design:tokens -- --lane <lane> --write-record` and refine its prose for the client brief); use a linked project document when the direction needs substantial visual references or component detail.
 
 For Stackable, Elementor, Blocksy builder, or similar migrations, explicitly classify the source visual language as preserve, refine, or overhaul. If the source is visually weak or the new premise materially departs from it, run the visual concept pass in `site-art-direction` before broad implementation: develop two or three concepts for a representative archetype using real content shapes and known assets, compare them against the brief and source identity, and document the selected direction. Use the harness's available image-generation or visual prototyping capability (such as `designmd-mcp`, Stitch, OpenDesign, or Claude Design) when useful; ensure any prompt embeds the narrative metaphor. Do not treat generated concepts as exact implementation specifications.
@@ -171,7 +189,7 @@ When Stage 4 passes `check:art-direction`, present this prompt:
 
 ## Stage 4.5: calibrate components before page assembly
 
-For URL/screenshot migrations or external component sourcing (such as `21st.dev MCP`), follow `astro-site-design/references/component-quarantine.md` after Stage 4 and its art-direction gate. Inspect representative source elements or candidate registry blueprints, then calibrate relevant tokens, states, and production primitives on `/_styleguide` before creating client page templates or bespoke sections — including `<Container width="reading|content|wide">` versus `<Container breakout>` (`.content-grid` with `.content--feature|wide|full|full-safe`), `<Card>` (`--card-*` custom properties, concentric radius math, and `.clickable-parent`/`.focus-parent` accessibility), and Smart Spacing (`.flow`). When sourcing external React/Tailwind components (e.g., from `21st.dev`), transmute them through the quarantine checklist: strip unnecessary React/Framer Motion runtime down to zero-JS Astro markup, replace hardcoded palette classes with semantic tokens, bind fluid typography/spacing steps, and wire EmDash live edit proxies only on the `emdash` profile. For greenfield work, review the relevant primitive baseline against the brief and record inapplicable source comparisons.
+For URL/screenshot migrations or external component sourcing (such as `21st.dev MCP`), follow `astro-site-design/references/component-quarantine.md` after Stage 4 and its art-direction gate. Inspect representative source elements or candidate registry blueprints, then calibrate relevant tokens, states, and production primitives on `/_styleguide` before creating client page templates or bespoke sections — including `<Container width="reading|content|wide">` versus `<Container breakout>` (`.content-grid` with `.content--feature|wide|full|full-safe`), `<Card>` (`--card-*` custom properties, concentric radius math, and `.clickable-parent`/`.focus-parent` accessibility), and flow spacing (`.flow`). When sourcing external React/Tailwind components (e.g., from `21st.dev`), transmute them through the quarantine checklist: strip unnecessary React/Framer Motion runtime down to zero-JS Astro markup, replace hardcoded palette classes with semantic tokens, bind fluid typography/spacing steps, and wire EmDash live edit proxies only on the `emdash` profile. For greenfield work, review the relevant primitive baseline against the brief and record inapplicable source comparisons.
 
 Save `audit/component-calibration.md` (you can scaffold or refresh the verified `## Token Calibration` table and SHA-256 digest via `npm run design:tokens -- --write-calibration`) with evidence, actual component APIs, supported surfaces/states, asset provenance, narrow/wide and keyboard/motion checks, unresolved gaps and ready/deferred decisions. Resolve material reusable-component gaps before broad assembly. Keep normal-build route exclusion and synthetic fixtures intact. Page findings may reopen calibration; this is not a permanent component freeze. Use written handoffs between passes; fork/archive chats only when the user requests it.
 

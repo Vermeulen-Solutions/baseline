@@ -31,7 +31,7 @@ Static profiles use `new-site-workflow`, `site-art-direction`, `astro-site-desig
 | `astro.config.mjs` | Node adapter, EmDash SQLite/local-media setup, Tailwind v4 |
 | `seed/seed.json` | Initial Posts/Pages schema and sample content; a seed is not a deploy-time content migration |
 | `src/live.config.ts` | EmDash live collection registration |
-| `src/styles/global.css` | Neutral `@theme` tokens, base rules, Smart Spacing `.flow`, `.content-grid`, and shared layout classes |
+| `src/styles/global.css` | Neutral `@theme` tokens, base rules, flow spacing `.flow`, `.content-grid`, and shared layout classes |
 | `src/components/` | `Section`, `Container` (including `breakout`), `Grid`, `Card`, native `Disclosure`, wrapping `Cluster` and intrinsic `Sidebar` primitives (`docs/native-composition.md`) |
 | `src/layouts/Base.astro` | Site shell, EmDash page contributions, menu, and widgets |
 | `src/pages/` | Server-rendered public routes |
@@ -50,6 +50,8 @@ Static profiles use `new-site-workflow`, `site-art-direction`, `astro-site-desig
 - `astro-site-design`: visual inspection and maintainable public Astro presentation. For existing-site rebuilds, read its migration visual-audit reference before implementing pages.
 
 For complete site work, the normal sequence is: brief and evidence → platform decisions → content and routes → art direction → representative Astro/EmDash implementation → Impeccable visual critique and refinement → full review and delivery. A scoped task may begin at the earliest affected stage, but must check whether its inputs are already established and update downstream decisions when they are invalidated.
+
+During new-site design setup, explain **layout spacing** and ask once about shared defaults (recommended) versus custom spacing for specified layouts, bundled with the visual-direction choice in either workflow track. Reuse prior answers; autonomous design may proceed with an explicit recommended assumption. Record the choice, density and exceptions here. Use the plain-language explanation and implementation mapping in `new-site-workflow`; no settings panel or external-product terminology is needed.
 
 For WordPress migrations, classify repeated material that is not a registered custom post type before implementing routes. Keep a substantial content-candidate register in `audit/content-candidate-register.md` and link it here; classify each candidate as a collection, page content, site setting, plugin/integration data, or deliberate exclusion.
 

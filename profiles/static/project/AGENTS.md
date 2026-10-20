@@ -12,6 +12,15 @@ React, server-adapter or EmDash dependencies. `static-sveltia` adds the pinned
 admin SPA and paired form only; read `docs/sveltia-cms.md` for OAuth proxy/PAT setup.
 Record site decisions here as they are established.
 
+During new-site design setup, follow `new-site-workflow`'s **Layout spacing choice**
+in either track: briefly explain responsive spacing for sections, content groups,
+grids and article text, then ask once about shared defaults (recommended) versus
+custom spacing for specified layouts. Bundle it with the visual-direction choice,
+reuse prior answers and record the approach, density and exceptions here. An
+authorized autonomous build may use an explicit recommended assumption. Keep
+the current shell policy for both choices; custom layouts use tokens and explicit
+primitive controls. No settings panel or external-product terminology is needed.
+
 ## Shared design authority
 
 `src/styles/global.css`, the layout primitives, `SiteShell.astro`, `design:tokens`

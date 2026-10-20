@@ -2,6 +2,16 @@
 
 Baseline supplies fluid type/space scales and small structural layout primitives. Use fluid values for continuous sizing and intrinsic wrapping for content-driven layouts. Media queries remain useful for a deliberate change of composition; avoid accumulating spacing breakpoints to repair unclear ownership. Token mathematics describes reference values, while rendered checks establish whether actual content remains readable and usable.
 
+## Explaining layout spacing during new-site setup
+
+Use **layout spacing** as the plain-language description. **Spacing tokens**, **layout primitives**, **stack/grid gaps**, **fluid spacing** and **flow spacing** describe its individual techniques. This is a composition of CSS techniques, not a standard feature named “automatic spacing”. The internal `automatic-v2` identifier remains a compatibility contract for installed sites, not a user-facing product name. See [Every Layout's Stack](https://every-layout.dev/layouts/stack/) and [CSS gaps](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Gaps/Defining_gaps) for the underlying patterns.
+
+Explain: “Sections, content groups, and grids get consistent spacing that adapts to screen size. Shared settings keep changes consistent across the site, while individual layouts can have their own spacing. Article text uses flow spacing between headings, paragraphs, lists, and media.”
+
+The agent asks once during the visual-direction handoff in Standard or Express: shared spacing defaults (recommended), or custom spacing for specified layouts. Record the choice, spatial density, exceptions and approved/assumed status in the site's `AGENTS.md`. Existing answers and autonomous authorization take precedence; this is not a new maintenance approval gate. Profile generation itself remains noninteractive and enables the current defaults.
+
+Custom spacing retains the current shell policy and token scales: adjust root/context aliases, primitive gap/padding controls, or use `layout="custom"` when owning display/gap. It does not select the legacy compatibility policy. Calibrate actual values on `/_styleguide` and save evidence in `audit/component-calibration.md`. Maintenance stays in CSS and the CLI; no separate settings UI or configuration store.
+
 ---
 
 ## 1. Continuous Fluid Scaling
@@ -73,7 +83,7 @@ Editorial prose is constrained by its reading container; generic component parag
 
 Baseline provides small, semantic Astro layout primitives located in `src/components/`. They accept standard slots and forward custom class names.
 
-### Cascade and automatic spacing contract
+### Cascade and layout spacing contract
 
 Owned CSS uses `@layer base` or `@layer components`. The document establishes `theme, base, vendor, astro, components, utilities` before stylesheet loading. PhotoSwipe is imported into `vendor`; contextual defaults use `:where()` so utilities override them. `check:css` parses owned CSS, Astro styles and local imports, including static overlays. This does not certify third-party admin/editor CSS.
 
