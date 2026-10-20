@@ -35,6 +35,8 @@ that browser verification has been performed.
 Posts live in `src/content/posts/`, with a typed schema in `src/content.config.ts`.
 `draft: true` excludes a post from listings and generated routes. Detail routes use
 `getStaticPaths()` and `render()`; wrap native Markdown output in `.flow`.
+All authored CSS must stay in `@layer base` or `@layer components`; use
+`<Section>`/`.section` for page vertical rhythm and `RichText` for editorial flow.
 Site settings and navigation live in `src/config/site.ts`.
 
 Store content imagery in `src/assets/` and use native Astro image processing with

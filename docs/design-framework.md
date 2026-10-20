@@ -77,6 +77,18 @@ Paragraphs and list items automatically inherit `max-width: var(--measure-readin
 
 Baseline provides small, semantic Astro layout primitives located in `src/components/`. They accept standard slots and forward custom class names.
 
+### Cascade and automatic spacing contract
+
+All authored CSS lives in `@layer base` or `@layer components`; Tailwind utilities remain in `@layer utilities`. Contextual defaults use zero-specificity `:where()` selectors, so `py-0`, `mt-0`, `gap-0` and other utilities override them without `!important`. Component `<style>` blocks follow the same rule; keyframes stay outside the layer.
+
+The layered defaults provide three automatic relationships:
+
+1. **Section rhythm:** `:where(main > section, .section)` owns fluid block padding. `data-spacing="content"` selects the compact token; `data-spacing="none"` disables padding and container margins.
+2. **Container blocks:** direct block children of a section receive `--container-gap`; sections that are themselves `.grid`, `.grid-auto`, `.cluster` or `.sidebar` zero that margin so their gap is not doubled.
+3. **Editorial flow:** `.flow`, `[data-flow]` and the `RichText` wrapper space sibling content with `--flow-space`. `RichText` applies flow by default; `flow={false}` opts out.
+
+`.site-main` owns horizontal gutters only. It adds block padding only when a page has no direct `section` or `.section`, so page-level sections do not double-stack with the shell. A post or page should wrap article and supporting content in one section.
+
 ### `<Container width="reading | content | wide" breakout />`
 
 For standard sections, `<Container>` constrains inner content to one of the three established measures and centers it with `margin-inline: auto`. When `breakout` is enabled (`<Container breakout>`), it renders `.content-grid`—a multi-track CSS Grid where default children remain constrained to `--measure-reading` while specific child blocks can break out to wider named tracks (`feature`, `wide`, `full`) without closing and reopening the container:
@@ -103,7 +115,7 @@ import Container from '../components/Container.astro';
 </Container>
 ```
 
-### `<Section spacing="content | section" labelledBy="..." />`
+### `<Section spacing="section | content | none" labelledBy="..." />`
 
 Provides semantic `<section>` wrapping with consistent vertical rhythm and accessibility:
 
@@ -120,10 +132,12 @@ import Container from '../components/Container.astro';
   </Container>
 </Section>
 ```
-* `spacing="section"` (default): Applies fluid `padding-block: var(--spacing-section)`.
+* `spacing="section"` (default): Applies fluid `padding-block: var(--section-padding, var(--spacing-section))`.
 * `spacing="content"`: Applies compact `padding-block: var(--spacing-content)` for secondary panels or callouts.
+* `spacing="none"`: Sets `--section-padding: 0px` and `--container-gap: 0px` for a nested or deliberately flush section.
+* `--section-padding` and `--container-gap` are contextual overrides; do not add new `@theme` tokens for one-off spacing.
 
-### `<Grid minimum="compact | standard | wide" />`
+### `<Grid minimum="compact | standard | wide" gap="..." />`
 
 A self-responsive CSS grid that automatically fits items across columns without media queries:
 
@@ -133,19 +147,23 @@ import Grid from '../components/Grid.astro';
 import Card from '../components/Card.astro';
 ---
 
-<Grid minimum="standard">
+<Grid minimum="standard" gap="var(--spacing-grid)">
   <Card title="Article 1" href="/article-1" ... />
   <Card title="Article 2" href="/article-2" ... />
   <Card title="Article 3" href="/article-3" ... />
 </Grid>
 ```
 
-Under the hood, `<Grid>` uses CSS `minmax()` and `auto-fit`:
+Under the hood, `<Grid>` uses CSS `minmax()` and `auto-fit`; `gap` writes `--grid-gap` and utilities such as `gap-0` override the default directly:
 ```css
-.grid-auto {
+:where(.grid) {
+  gap: var(--grid-gap, var(--spacing-grid));
+}
+
+:where(.grid-auto) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
-  gap: var(--spacing-grid);
+  gap: var(--grid-gap, var(--spacing-grid));
 }
 
 .grid-auto--compact  { --grid-min: 14rem; } /* 224px cards (e.g. badges, team avatars) */
@@ -162,36 +180,36 @@ Columns wrap naturally when screen space narrows, with zero layout shift or over
 
 ## 4. Editorial Smart Spacing (`.flow`)
 
-Wrap CMS Portable Text and editorial articles in the `.flow` utility class to automatically establish vertical rhythm:
+`RichText` applies `.flow` by default, so CMS Portable Text and editorial articles establish vertical rhythm without an extra wrapper:
 
 ```astro
-<div class="flow">
-  <PortableText value={entry.data.body} />
-</div>
+<RichText value={entry.data.body} />
 ```
 
-The flow utility differentiates rhythm across headings, lists, figures, and blockquotes via CSS custom properties while preventing duplicate margin stacking after block elements:
+Use `<div class="flow">...</div>` or `[data-flow]` for authored markup that does not pass through `RichText`. The flow utility differentiates rhythm across headings, lists, figures, and blockquotes via CSS custom properties while preventing duplicate margin stacking after block elements:
 ```css
-.flow > :where(* + *) {
+:where(.flow, [data-flow]) > :where(* + *) {
   margin-block-start: var(--flow-space, var(--spacing-content));
 }
 
-.flow > :where(h2, h3, h4) {
+:where(.flow, [data-flow]) > :where(h2, h3, h4) {
   --flow-space: var(--heading-spacing, 1.5em);
 }
 
-.flow :where(li + li) {
+:where(.flow, [data-flow]) :where(li + li) {
   margin-block-start: var(--list-item-spacing, 0.35em);
 }
 
-.flow :where(img, figure, table, blockquote) {
+:where(.flow, [data-flow]) :where(img, figure, table, blockquote) {
   margin-block: var(--spacing-grid);
 }
 
-.flow > :where(img, figure, table, blockquote) + * {
+:where(.flow, [data-flow]) > :where(img, figure, table, blockquote) + * {
   margin-block-start: 0;
 }
 ```
+
+`.article-body` is a margin wrapper, not a second flow container. Use `flow={false}` on `RichText` when a caller explicitly owns rhythm.
 
 ---
 

@@ -5,6 +5,46 @@ have no queries, content schema, hydration, custom keyboard controller or automa
 structured data. Import their Astro components and compose authored content in slots.
 Root and generated profiles share the implementations and calibration specimens.
 
+## Cascade layers and automatic spacing
+
+All authored component styles live in `@layer components`; element defaults and the
+section/container spacing rules live in `@layer base`. Tailwind utilities remain last,
+so `py-0`, `mt-0`, `gap-0` and other utilities override component defaults without
+`!important`. Every `.astro` style block follows this contract; ticker keyframes stay
+outside the layer.
+
+`<Section>` delegates its block padding to `:where(main > section, .section)`. The
+`spacing` values are `section` (default), `content` and `none`; `none` also zeroes the
+container gap. `--section-padding` and `--container-gap` are contextual overrides,
+not new global tokens. `.site-main` owns horizontal gutters and only supplies block
+padding when a page has no direct section.
+
+`<Grid>` writes `--grid-gap` from its optional `gap` prop. `.grid` and `.grid-auto`
+provide the default; utilities such as `gap-0` win. A section that is itself a grid,
+cluster or sidebar zeroes `--container-gap` so margin and `gap` do not double.
+
+`RichText` wraps Portable Text in `.flow` by default. Use `flow={false}` only when the
+caller explicitly owns rhythm. `.article-body` is a margin wrapper, not a second flow
+container. Authored markup that does not use `RichText` can opt in with `.flow` or
+`[data-flow]`.
+
+## Section, Grid and RichText
+
+```astro
+<Section labelledBy="post-title">
+  <article class="flow">
+    <h1 id="post-title">Title</h1>
+    <div class="article-body"><RichText value={entry.data.body} /></div>
+  </article>
+  <aside aria-label="Article facts">...</aside>
+</Section>
+```
+
+`Section` renders a native section with `aria-labelledby`, `data-spacing` and a merged
+class list; it owns no scoped spacing. `Grid` accepts `minimum` and `gap`. `RichText`
+accepts `flow` and forwards other attributes to its wrapper. These APIs preserve
+zero-specificity contextual defaults while leaving every utility escape hatch open.
+
 ## Disclosure
 
 ```astro
@@ -74,7 +114,8 @@ and [summary accessibility notes](https://developer.mozilla.org/en-US/docs/Web/H
 Cluster is a `div` with wrapping flex siblings, centered cross-axis alignment and
 a content-token gap. It replaces the existing repeated action-row relationship;
 it is not a menu or a toolbar and supplies no extra role. Native div attributes
-pass through. Its only contextual tuning property is `--cluster-gap`. Wrap related
+pass through. Its only contextual tuning property is `--cluster-gap`; `gap-*`
+utilities override the default because the component CSS is layered. Wrap related
 editor-owned inline content in a stable child when it should remain one flex item.
 DOM order controls keyboard order; `dir="rtl"` follows writing direction without
 `order`, `row-reverse` or a duplicate localized tree.
@@ -105,7 +146,8 @@ does not visually reverse the order of meaningful content.
 properties, defaulting to the grid gap, reading-measure fraction and 60%. Keep the
 last value between 0% and 100%; smaller shares allow a narrower main region.
 These are layout relationships, not new global brand tokens. Do not overwrite
-client-calibrated `@theme` values to adopt them. Intrinsic minimums, wrapping and
+client-calibrated `@theme` values to adopt them. `gap-*` utilities override the
+component gap because the styles are layered. Intrinsic minimums, wrapping and
 normal HTML are the fallback; there are no viewport breakpoints or query containers.
 Existing Grid narrow-host containment is unchanged.
 

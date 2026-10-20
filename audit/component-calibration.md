@@ -70,10 +70,30 @@ verification plus browser journeys all pass. Components are ready for reuse with
 the documented contract; the manual observations above remain deferred. See
 [current execution evidence](verification/native-composition-phase-5-checks.json).
 
+## Spacing override contract
+
+Authored CSS is split into `@layer base` and `@layer components`; Tailwind utilities
+remain in `@layer utilities`. Automatic section and container defaults use
+zero-specificity selectors, so `py-0`, `mt-0` and `gap-0` override them without
+`!important`. Every component `<style>` block is layered; ticker keyframes remain
+outside the layer.
+
+The Chromium spacing fixture verifies:
+- default section padding and sibling container margin are non-zero;
+- `Section.py-0` and `data-spacing="none"` compute zero padding;
+- `data-spacing="none"` also computes zero container margin;
+- `.flow` sibling margin is non-zero while `mt-0` computes zero;
+- `.grid` and `.grid-auto` defaults are non-zero while `gap-0` computes zero.
+
+`RichText` applies `.flow` by default; `.article-body` is margin-only. `.site-main`
+owns horizontal gutters and supplies block padding only when a page has no direct
+section, so section-owned pages do not double-stack shell padding. These are
+infrastructure contracts, not a client art direction.
+
 ## Token Calibration
 
 - **Source stylesheet:** `src/styles/global.css`
-- **LF SHA-256:** `af3e535ba352ca908362f7afc2991feff0d6f830c62f7451613d05e6b784d325`
+- **LF SHA-256:** `46531015fba8ea0c9f74b66d9a90b5ee7237bdba036bc664211d77c7e34567c1`
 - **Validation status:** `PASS` (14 WCAG contrast pairs, 31 `@theme` tokens, 7 `:root` tokens)
 
 ### WCAG Relative Luminance Contrast Matrix
