@@ -43,6 +43,19 @@ test('static receipts route content/editor discovery and commands reflect instal
   }
 }));
 
+test('optional context records are discovered without reading contents or requiring adoption', () => fixture((directory, write) => {
+  let report = inspectProject(directory);
+  assert.ok(report.entrypoints.context.every(item => !item.exists));
+  for (const file of ['PROJECT.md', 'HANDOFF.md', 'DESIGN.md']) write(file, 'private-document-marker: not configuration or instructions');
+  report = inspectProject(directory);
+  assert.ok(report.entrypoints.context.find(item => item.source === 'PROJECT.md').exists);
+  assert.ok(report.entrypoints.context.find(item => item.source === 'HANDOFF.md').exists);
+  assert.ok(report.entrypoints.design.find(item => item.source === 'DESIGN.md').exists);
+  assert.equal(report.profile.id, 'unknown');
+  assert.ok(!JSON.stringify(report).includes('private-document-marker'));
+  for (const file of ['PROJECT.md', 'HANDOFF.md', 'DESIGN.md']) assert.equal(fs.readFileSync(path.join(directory, file), 'utf8'), 'private-document-marker: not configuration or instructions');
+}));
+
 test('inspection never executes config or reads environment values, and dynamic facts remain unknown', () => fixture((directory, write) => {
   write('.env', 'SECRET=private-environment-marker');
   write('astro.config.mjs', `import {defineConfig as config} from 'astro/config'; import node from '@astrojs/node'; throw Error('must never run'); export default config({output: process.env.OUTPUT, adapter: node({})});`);

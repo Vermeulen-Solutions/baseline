@@ -19,6 +19,27 @@ async function fixture(run, profile = 'static') {
 }
 const readSource = transform => async relative => transform(relative, await fs.readFile(new URL(relative, source)));
 
+test('bounded updates preserve adopted context, design and handoff even if misclassified as managed', () => fixture(async root => {
+  const names = ['PROJECT.md', 'DESIGN.md', 'HANDOFF.md'];
+  const managedPath = path.join(root, '.baseline/managed-files.json'), managed = JSON.parse(await fs.readFile(managedPath, 'utf8'));
+  for (const name of names) {
+    const body = '# Site-owned ' + name + '\nExisting client decision evidence.\n';
+    await fs.writeFile(path.join(root, name), body);
+    managed.files[name] = { source: name, ownership: 'shared', sha256: createHash('sha256').update(body).digest('hex') };
+  }
+  await fs.writeFile(managedPath, JSON.stringify(managed));
+  const originals = await Promise.all(names.map(name => fs.readFile(path.join(root, name))));
+  const commit = 'f'.repeat(40), stage = await stageBaseline({ root, commit, readSource: async relative => {
+    assert.ok(!names.includes(relative), 'Client context must never be fetched from upstream');
+    const bytes = await fs.readFile(new URL(relative, source));
+    return relative === 'scripts/inspect-project.mjs' ? Buffer.concat([bytes, Buffer.from('\n// shared update\n')]) : bytes;
+  } });
+  assert.ok(stage.entries.some(entry => entry.target === 'scripts/inspect-project.mjs'));
+  assert.ok(!stage.entries.some(entry => names.includes(entry.target)));
+  await applyBaseline({ root, commit });
+  for (let i = 0; i < names.length; i++) assert.deepEqual(await fs.readFile(path.join(root, names[i])), originals[i]);
+}));
+
 test('older installed inventory preserves legacy primitives, calibrated tokens and Base until additive spacing migration', () => fixture(async root => {
   const commit = '1'.repeat(40), hash = value => createHash('sha256').update(value).digest('hex');
   const managedPath = path.join(root,'.baseline/managed-files.json');

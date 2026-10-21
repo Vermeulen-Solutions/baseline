@@ -1,5 +1,10 @@
 # AI-Native Visual Design, Component Sourcing & DESIGN.md Interchange
 
+`DESIGN.md` holds selected visual references, rationale and interchange snapshots.
+The compact gate record stays in `AGENTS.md`, CSS owns shipped values, and an
+optional adopted `PROJECT.md` holds the client brief rather than another design
+system. See [document scope and conflict handling](project-context.md).
+
 When an AI coding assistant is asked to "build a modern landing page" from a single text prompt, it almost always regresses to statistical averages: indigo-to-purple gradients, `Inter` everywhere, uniform `rounded-xl shadow-md` 3-column card rows, and thin, lifeless layouts lacking real-world UX details.
 
 Baseline replaces one-shot prompt guesswork with a **code-first, 5-stage visual design pipeline**. You do not need to spend weeks drawing static rectangles in Figma—instead, you combine real-world UX teardowns, community `DESIGN.md` systems ([designmd.ai](https://designmd.ai/explore)), generative screen prototyping (**Google Stitch**, **Claude Design**, **OpenDesign**), open Tailwind component registries (**21st.dev**), and live in-browser optical calibration.

@@ -19,7 +19,7 @@ Shared on all profiles: `site-art-direction`, `astro-site-design`, `impeccable`,
 
 ## Start here
 
-1. Read `README.md`, `AGENTS.md`, the installed tooling, and the current repository state.
+1. Read `README.md`, `AGENTS.md`, an adopted `PROJECT.md` and current handoff if present, the installed tooling, and the current repository state. Missing optional records do not block work; consult the selected `DESIGN.md` only when visual decisions matter.
 2. Choose the appropriate workflow track based on project scope:
    - **Standard Track (7 Stages):** Default for complex migrations, multi-collection architectures, or multi-locale sites. Report each stage handoff; pause only for a missing consequential decision or required external-action approval.
    - **Express Track (3 Checkpoints):** Recommended for smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale). Consolidates unresolved decisions into up to three checkpoints while still enforcing every automated CLI gate (`check:art-direction`, `design:tokens`, `audit/component-calibration.md`, `verify`):
@@ -30,7 +30,7 @@ Shared on all profiles: `site-art-direction`, `astro-site-design`, `impeccable`,
 4. Identify the earliest unfinished stage below. Preserve valid decisions and completed work from earlier stages rather than restarting automatically.
 5. Load each specialist skill when its stage begins. Do not load every skill up front.
 
-Keep a concise site record in `AGENTS.md`: purpose, audiences, languages, content sources, routes and content types, hosting/runtime choices, visual direction, and material deviations from this starter. For a large site, put detailed inventories in a focused project document and link it from `AGENTS.md`.
+Keep business context in its established home: `AGENTS.md` by default, or an explicitly adopted optional `PROJECT.md` linked there. The brief covers purpose, audiences, scope, ownership and decision rationale; link actual models, routes and configuration instead of copying their current values. Working rules and the compact Art Direction Record stay in `AGENTS.md`; selected `DESIGN.md` references support that record while CSS owns shipped values. Put current progress and next actions in the existing tracker or a short handoff when needed. Use one home per fact and resolve conflicts by subject and evidence, not a blanket filename hierarchy. Do not relocate established facts or create missing records merely to complete a template. When installed, `docs/project-context.md` expands this guidance and `PROJECT.example.md` offers an optional starting point; older installed profiles can use this scope summary without adding those files.
 
 ## Decision and question policy
 
@@ -48,7 +48,7 @@ Ask conditional details when relevant: preserve/refine/overhaul and URL redirect
 
 ### Express defaults
 
-Present the material defaults briefly at the relevant checkpoint and record approved versus assumed decisions in `AGENTS.md`. Defaults are revisable, not approval claims:
+Present the material defaults briefly at the relevant checkpoint and record approved versus assumed decisions in the established context home; keep the selected visual direction and density with the Art Direction Record in `AGENTS.md`. Defaults are revisable, not approval claims:
 
 - Recommend `static` when developers/agents own file edits. Ask about editing needs before selecting a browser CMS or relational platform; record the selected profile.
 - Use the brief/content language as a labeled assumption. Resolve ambiguity or extra locales before committing to URL/schema structure.
@@ -65,7 +65,7 @@ Assess complexity beyond the `<= 6` route / `<= 3` collection / single-locale he
 When the user requests **Express Mode** (or when building a straightforward greenfield site with `<= 6` routes, `<= 3` collections, and a single locale), execute the same specialist skills and CLI gates with **up to 3 consolidated checkpoints**, using the decision policy and defaults above:
 
 1. **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):**
-   - Document the brief and routes in `AGENTS.md`, choose the Platform Profile in Stage 2, then follow its Stage 3 content branch. On static profiles define native Zod schemas and routes; only EmDash uses CMS specialists and the SQL budget.
+   - Document the brief and route rationale in the established context home, choose the Platform Profile in Stage 2, then follow its Stage 3 content branch. Link the actual route inventory. On static profiles define native Zod schemas and routes; only EmDash uses CMS specialists and the SQL budget.
    - **Checkpoint A Handoff Prompt:**
      > **Express Checkpoint A Complete: Brief, Platform & Content Schema Ready**
      > - **Platform Profile & Hosting:** [static / static-sveltia / emdash; chosen host]
@@ -119,7 +119,7 @@ When undecided, ask: **Who will edit the site, and how quickly must changes publ
 2. **Static + Sveltia CMS** — non-technical editors use a browser, changes commit to Git then rebuild. Budget for static builds and an OAuth proxy service (or PAT administration); no live canvas or relational CMS.
 3. **Full EmDash CMS** — relational editorial workflows, live edit canvas or MCP server. Choose Node/SQLite/persistent media or Workers/D1/R2 and budget hosting, storage, auth, backups and optional sandbox runners.
 
-Record profile, editing personas, content complexity, build latency, hosting restrictions, recurring infrastructure costs and locale/URL decisions in `AGENTS.md`. Use existing answers without asking again. For a new static site, run `npm run init:profile -- --profile static|static-sveltia --out <new-empty-directory>` from Baseline; work in the generated destination afterward. Initial `npm install` creates its independent lockfile, then use `npm ci`. EmDash uses the full repository template. Profile selection does not change the design system or delivery track.
+Record profile rationale, editing personas, content complexity, hosting/cost constraints and locale/URL decisions in the established context home; link the installed profile and actual configuration. Use existing answers without asking again. For a new static site, run `npm run init:profile -- --profile static|static-sveltia --out <new-empty-directory>` from Baseline; work in the generated destination afterward. Initial `npm install` creates its independent lockfile, then use `npm ci`. EmDash uses the full repository template. Profile selection does not change the design system or delivery track.
 
 **Static branch:** configure static host deployment of `dist/`, missing-route 404 behavior without an SPA rewrite, `SITE_URL`, file-owned settings and rebuild triggers. For Sveltia also choose OAuth proxy vs PAT, editor GitHub permissions and publishing branch. Load no CMS specialists. Continue to the static Stage 3 branch.
 

@@ -1020,6 +1020,14 @@
     "docs/project-inspection.md": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "PROJECT.example.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/project-context.md": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

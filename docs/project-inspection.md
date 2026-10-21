@@ -14,6 +14,11 @@ observations come from literal configuration and recognized imports in
 `astro.config.mjs`; dynamic expressions remain unknown. This is not a complete
 profile receipt/provenance validator.
 
+Optional root `PROJECT.md`, `DESIGN.md` and `HANDOFF.md` entries report presence
+only; their text is not read, interpreted or granted authority. The selected
+design reference may instead live at a path linked from the site's instructions.
+See [document scope](project-context.md) for the brief/rules/design boundaries.
+
 Generated static configurations spread their routing settings into the config.
 The pilot conservatively reports runtime observations as unknown for that whole
 object; the receipt still identifies the declared static profile/runtime.

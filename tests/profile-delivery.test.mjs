@@ -22,6 +22,8 @@ test('Sveltia is an additive dependency-free overlay with paired forms and stati
     assert.equal(pkg.scripts['baseline:inspect'], 'node scripts/inspect-project.mjs');
     const inspected = inspectProject(root);
     assert.equal(inspected.profile.id, 'static-sveltia');
+    assert.ok(inspected.entrypoints.context.find(item => item.source === 'PROJECT.example.md').exists);
+    assert.ok(!inspected.entrypoints.context.find(item => item.source === 'PROJECT.md').exists);
     assert.ok(inspected.entrypoints.editor.every(item => item.exists));
     assert.equal(inspected.commands['mcp:token'].available, false);
     assert.ok(!JSON.stringify(pkg.dependencies).includes('sveltia'));

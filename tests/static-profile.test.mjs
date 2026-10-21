@@ -98,6 +98,9 @@ test('allowlisted assembly is dry-run safe, records exact provenance and keeps t
     const pkg = await readJSON('package.json');
     assert.equal(pkg.scripts['baseline:inspect'], 'node scripts/inspect-project.mjs');
     assert.equal(inspectProject(options.out).profile.id, 'static');
+    assert.ok(inspectProject(options.out).entrypoints.context.find(item => item.source === 'PROJECT.example.md').exists);
+    assert.ok(inspectProject(options.out).entrypoints.context.find(item => item.source === 'docs/project-context.md').exists);
+    await assert.rejects(fs.stat(path.join(options.out, 'PROJECT.md')), { code: 'ENOENT' });
     assert.ok(inspectProject(options.out).skills.every(skill => !/emdash/.test(skill.name)));
     assert.equal((await readJSON('baseline.config.json')).source.repository, 'https://github.com/Vermeulen-Solutions/baseline');
     assert.equal(pkg.name, 'project-with-spaces');

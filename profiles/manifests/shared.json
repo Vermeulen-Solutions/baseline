@@ -54,7 +54,9 @@
     "tests/spacing-tokens.test.mjs",
     "src/lib/layout-style.ts",
     "scripts/inspect-project.mjs",
-    "docs/project-inspection.md"
+    "docs/project-inspection.md",
+    "PROJECT.example.md",
+    "docs/project-context.md"
   ],
   "packages": {
     "dependencies": [

@@ -146,6 +146,10 @@ npm run dev
 > Adapt ready-to-copy recipes for day-2 maintenance, migrations, and layout polish from the **[AI Developer Prompt Library (`docs/prompt-library.md`)](docs/prompt-library.md)**.
 > Connect your assistant to EmDash through its scoped OAuth flow or Admin API tokens. `npm run mcp:token -- --help` describes the explicit local SQLite fallback; it does not mint a token automatically. See [agent documentation](docs/agent-documentation.md).
 
+For durable client context, optionally adapt [PROJECT.example.md](PROJECT.example.md).
+[Document scope](docs/project-context.md) explains how it works with `AGENTS.md`,
+the selected `DESIGN.md`, source configuration and a short handoff.
+
 ---
 
 ## Platform Profiles

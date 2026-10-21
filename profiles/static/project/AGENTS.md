@@ -10,15 +10,24 @@ public Astro implementation stages. Their EmDash-only sections do not apply to
 this profile. Do not load CMS setup/modeling/plugin skills or add database,
 React, server-adapter or EmDash dependencies. `static-sveltia` adds the pinned
 admin SPA and paired form only; read `docs/sveltia-cms.md` for OAuth proxy/PAT setup.
-Record site decisions here as they are established.
+Keep site decisions in their established home: here by default, or in an explicitly
+adopted optional `PROJECT.md` linked here. Keep working rules and the compact Art
+Direction Record in this file. `PROJECT.md` holds brief, scope, ownership and
+nonvisual rationale; the selected optional `DESIGN.md` holds visual references
+and interchange. CSS and configuration own implemented values. Keep one home per
+fact, link actual sources, and resolve disagreements by subject and evidence.
+Current progress belongs in the existing tracker or a short handoff when needed.
+Missing optional records do not block authorized work. See `docs/project-context.md`
+and `PROJECT.example.md`; neither creates an extra checkpoint or approval claim.
 
 During new-site design setup, follow `new-site-workflow`'s **Layout spacing choice**
 in either track: briefly explain responsive spacing for sections, content groups,
 grids and article text. Express defaults to shared spacing and brief-led density
 (balanced when unspecified); ask about custom spacing only for a real unresolved
 design decision. Follow the skill's discovery questions and Express defaults,
-reuse prior answers and record approved versus assumed decisions, density,
-exceptions and content/maintenance ownership here. An
+reuse prior answers and record visual direction, density and exceptions with the
+Art Direction Record here. Keep approved/assumed nonvisual decisions and
+content/maintenance ownership in the established context home. An
 authorized autonomous build may use an explicit recommended assumption. Keep
 the current shell policy for both choices; custom layouts use tokens and explicit
 primitive controls. No settings panel or external-product terminology is needed.

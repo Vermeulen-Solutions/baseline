@@ -20,9 +20,20 @@ Static profiles use `new-site-workflow`, `site-art-direction`, `astro-site-desig
 
 1. Read `README.md`, inspect the installed tooling and existing files, and use the package manager matching the lockfile (`npm`).
 2. Use `new-site-workflow` as the entry point when adapting this starter into a site or carrying out a full rebuild. Choose either the **Standard Track (7 Stages)** for complex migrations/multi-locale builds or the **Express Track (3 Checkpoints)** for smaller greenfield sites (`<= 6` routes, single locale), and load each specialist skill when its stage begins.
-3. Record site-specific content types, routes, design decisions, hosting, and localization here as they become known. Do not carry the starter's sample content or English text into a client site by default; use `npm run design:tokens -- --init-client --lane <lane>` when initializing a client site to seed tokens, write the `## Art Direction Record`, and prune starter sample-page gate exceptions.
+3. Keep site-specific facts in their established home: here by default, or in an explicitly adopted optional `PROJECT.md` linked here. Keep working rules and the `## Art Direction Record` in this file; link actual content models, route inventories, hosting and localization configuration rather than maintaining competing copies. Do not carry the starter's sample content or English text into a client site by default; use `npm run design:tokens -- --init-client --lane <lane>` when initializing a client site to seed tokens, write the record, and prune starter sample-page gate exceptions.
 4. Only run `npm run sync:emdash-skills` or `npm run sync:site-skills -- --check` when explicitly checking for upstream skill updates or refreshing an older checkout (`docs/skill-synchronization.md`). On a fresh clone, use the checked-in skills under `.agents/skills/` directly without a blocking sync detour.
 
+
+## Project records
+
+`AGENTS.md` owns working rules and the compact Art Direction Record. Optional
+`PROJECT.md` owns an adopted client brief, scope, ownership and nonvisual decision
+rationale. The selected optional `DESIGN.md` owns visual references/interchange;
+CSS and application configuration own implemented values. Current progress belongs
+in the existing tracker or a short handoff when needed. Use one home per fact,
+link the others, and resolve conflicts by subject and evidence rather than filename
+precedence. Missing optional files do not block authorized work. See
+`docs/project-context.md` and `PROJECT.example.md`.
 
 ## Where to work
 
@@ -51,7 +62,7 @@ Static profiles use `new-site-workflow`, `site-art-direction`, `astro-site-desig
 
 For complete site work, the normal sequence is: brief and evidence → platform decisions → content and routes → art direction → representative Astro/EmDash implementation → Impeccable visual critique and refinement → full review and delivery. A scoped task may begin at the earliest affected stage, but must check whether its inputs are already established and update downstream decisions when they are invalidated.
 
-During new-site design setup, explain **layout spacing**. Express defaults to shared responsive spacing and brief-led density (balanced when unspecified), without a separate CSS-policy question. Standard asks about shared versus custom spacing only when it is a material unresolved decision. Use `new-site-workflow`'s persona-informed discovery questions and defaults, reuse prior answers and continue authorized work without mandatory checkpoint stops. Record approved versus assumed choices, density, exceptions and content/maintenance ownership here. No settings panel or external-product terminology is needed.
+During new-site design setup, explain **layout spacing**. Express defaults to shared responsive spacing and brief-led density (balanced when unspecified), without a separate CSS-policy question. Standard asks about shared versus custom spacing only when it is a material unresolved decision. Use `new-site-workflow`'s persona-informed discovery questions and defaults, reuse prior answers and continue authorized work without mandatory checkpoint stops. Record visual density, exceptions and approved/assumed direction with the Art Direction Record here; keep nonvisual decisions and content/maintenance ownership in the established context home. No settings panel or external-product terminology is needed.
 
 For WordPress migrations, classify repeated material that is not a registered custom post type before implementing routes. Keep a substantial content-candidate register in `audit/content-candidate-register.md` and link it here; classify each candidate as a collection, page content, site setting, plugin/integration data, or deliberate exclusion.
 
