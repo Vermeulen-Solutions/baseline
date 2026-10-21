@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-10-21T20:27:28.759Z",
+  "workspace": "C:\\dev\\baseline-context-cad44bea",
+  "freshSessions": true,
+  "modelOverride": null,
+  "taskNames": [
+    "context_inline",
+    "context_project"
+  ],
+  "inputSHA256LF": {
+    "inline": {
+      ".agents/skills/new-site-workflow/SKILL.md": "110b9e83b35ee5da11e72e45d9cbd187b515f0a50e71e55657f584417e4d98f9",
+      "AGENTS.md": "1633abe06aea8c18ca598aa7944ee352445769f0e9099f1b1874502e6be143b0",
+      "astro.config.mjs": "124d8a69d1371f7925d34e5554d1300e395b845de6c5bd1b5bbb6443508ea7ee",
+      "audit/brief-decision.md": "289308d97223bda6c797e419693418615239e280bd8abc9e809613f52492ed43",
+      "baseline.config.json": "64f261a971bb0ae5eed9ab384b23c8064f6a1a9bfa66bf9d3c3a2572b74c8ec6",
+      "DESIGN.md": "f5f1f35b34a2c000df611669ad1a634458990d865d98856647185147d25229bd",
+      "docs/project-context.md": "15e077314399e39d8b703cf0ee109f1f06ba997e551a443100333442fdf802b7",
+      "HANDOFF.md": "27d687b7dd00037b4ff38534d337cb13dbb7d526c4c4c898eaa3c9f8cbd6d46c",
+      "README.md": "210ec6b318514328532ad9e55266756990abae52c9b432fb20c02b895896e55d",
+      "src/content/workshops/clear-briefs.md": "18b0d42fdfe9ad3367fd3919ccb843de232816d74045e0fb666566b74ebe8d27",
+      "src/content.config.ts": "0e63dab682122e9e9f97e2aef1984ad46fbd159b7cc375c0e0807e5114f026de",
+      "src/pages/index.astro": "1107433937666b9f2df370b075d8ced471256c45c00016dcfdc41282975122a1",
+      "src/styles/global.css": "c1878a9dd68f3a0a1e673a6e2c0c44beb82229f18ca18dd65175788205ed064c"
+    },
+    "project": {
+      ".agents/skills/new-site-workflow/SKILL.md": "110b9e83b35ee5da11e72e45d9cbd187b515f0a50e71e55657f584417e4d98f9",
+      "AGENTS.md": "961b24ba795ad83c54cd5a790f8ea90c580a943b1d149f9b8ed8748d83a93b06",
+      "astro.config.mjs": "124d8a69d1371f7925d34e5554d1300e395b845de6c5bd1b5bbb6443508ea7ee",
+      "audit/brief-decision.md": "289308d97223bda6c797e419693418615239e280bd8abc9e809613f52492ed43",
+      "baseline.config.json": "64f261a971bb0ae5eed9ab384b23c8064f6a1a9bfa66bf9d3c3a2572b74c8ec6",
+      "DESIGN.md": "f5f1f35b34a2c000df611669ad1a634458990d865d98856647185147d25229bd",
+      "docs/project-context.md": "15e077314399e39d8b703cf0ee109f1f06ba997e551a443100333442fdf802b7",
+      "HANDOFF.md": "27d687b7dd00037b4ff38534d337cb13dbb7d526c4c4c898eaa3c9f8cbd6d46c",
+      "PROJECT.md": "3c6a016044399cb9ce9d26eb1d9570825c2e703f6dade2290ac844e603957e9a",
+      "README.md": "210ec6b318514328532ad9e55266756990abae52c9b432fb20c02b895896e55d",
+      "src/content/workshops/clear-briefs.md": "18b0d42fdfe9ad3367fd3919ccb843de232816d74045e0fb666566b74ebe8d27",
+      "src/content.config.ts": "0e63dab682122e9e9f97e2aef1984ad46fbd159b7cc375c0e0807e5114f026de",
+      "src/pages/index.astro": "1107433937666b9f2df370b075d8ced471256c45c00016dcfdc41282975122a1",
+      "src/styles/global.css": "c1878a9dd68f3a0a1e673a6e2c0c44beb82229f18ca18dd65175788205ed064c"
+    }
+  },
+  "roleOfFixture": "Synthetic facts only; no original environment, database, credentials or client approvals were copied."
+}

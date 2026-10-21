@@ -1,0 +1,6 @@
+
+> emdash-baseline@0.0.3 audit:html
+> node scripts/audit-html-integrity.mjs
+
+HTML integrity: PASS; 9 HTML files; 1784.1ms.
+SSR capture: 10 public responses; snapshots: C:\dev\emdash-baseline\.emdash\snapshots\capture-O7tDou. Representative linked routes only; 224 runtime route patterns in the build.

@@ -1,0 +1,44 @@
+{
+  "checkedAt": "2026-10-21T20:24:07.386Z",
+  "scope": "Manual review of two independent history-free handoff tasks plus source preservation checks.",
+  "checks": [
+    {
+      "variant": "inline",
+      "status": "pass",
+      "checks": {
+        "durableAndSourceFilesPreserved": true,
+        "noQuestions": true,
+        "staticEnglishScopeRecovered": true,
+        "exactRegistrationPreserved": true,
+        "ownershipRecovered": true,
+        "assumedCadenceAndUnapprovedDeadline": true,
+        "staleCMSNotesRecognized": true,
+        "fluidCSSPreserved": true,
+        "nextLocalActionAndNoFalseChecks": true
+      },
+      "review": "Reviewed full handoff and result: proposed URLs were not called approved/existing; gate/calibration and external deployment were not invented; no mandatory PROJECT migration; source remained untouched."
+    },
+    {
+      "variant": "project",
+      "status": "pass",
+      "checks": {
+        "durableAndSourceFilesPreserved": true,
+        "noQuestions": true,
+        "staticEnglishScopeRecovered": true,
+        "exactRegistrationPreserved": true,
+        "ownershipRecovered": true,
+        "assumedCadenceAndUnapprovedDeadline": true,
+        "staleCMSNotesRecognized": true,
+        "fluidCSSPreserved": true,
+        "nextLocalActionAndNoFalseChecks": true
+      },
+      "review": "Reviewed full handoff and result: proposed URLs were not called approved/existing; gate/calibration and external deployment were not invented; no mandatory PROJECT migration; source remained untouched."
+    }
+  ],
+  "limits": [
+    "One trial per brief location; no instrumented token, latency or efficiency comparison.",
+    "Read-only synthetic resumption task; handoffs were detailed and do not prove brevity or full implementation readiness.",
+    "The final workflow sentence making new guide/template references optional for older installed profiles was added after fixture capture; those missing-reference semantics are not independently scored by these two trials."
+  ],
+  "status": "pass"
+}

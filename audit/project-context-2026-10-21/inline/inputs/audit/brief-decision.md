@@ -1,0 +1,2 @@
+# Synthetic decision note — 2026-10-19
+Within this fictional fixture, the customer chose developer-owned static editing, one English locale and email registration at workshops@northline.example.test. The workshop content is editor-owned; code and deployment are maintained by the site maintainer. No deadline, payment flow or external deployment is approved. Quarterly cadence is a working assumption only.

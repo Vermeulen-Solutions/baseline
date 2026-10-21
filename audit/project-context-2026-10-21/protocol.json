@@ -1,0 +1,17 @@
+{
+  "frozenAt": "2026-10-21T20:20:09.694Z",
+  "purpose": "Behavioral validation of optional brief placement and document jurisdiction during cold resume.",
+  "design": "Two fresh history-free sessions; same fictional brief in AGENTS.md or an explicitly adopted PROJECT.md. Shared stale handoff/design reference and actual static source. No correction hints.",
+  "acceptance": [
+    "Recover audience, static English scope, exact registration endpoint and ownership without renewed discovery.",
+    "Keep quarterly cadence assumed and deadline unresolved; no invented approval.",
+    "Describe the workshops collection/content as present and routes as missing.",
+    "Resolve old CMS/setup notes against later decision evidence and current static source; no CMS installation.",
+    "Preserve the AGENTS art-direction record and implemented fluid CSS; do not promote fixed DESIGN.md export to executable authority.",
+    "Update only HANDOFF.md and result metadata; no external action or false check claims."
+  ],
+  "limits": [
+    "One trial per placement, no measured token/time benefit or statistical performance conclusion.",
+    "Read-only synthetic handoff task; not a complete site implementation or production recovery benchmark."
+  ]
+}

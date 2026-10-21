@@ -1,0 +1,52 @@
+{
+  "summary": "Updated the workshop handoff from current source and established fictional client decisions, replacing stale CMS/discovery instructions with a static-profile continuation plan.",
+  "filesRead": [
+    "C:/dev/baseline-context-cad44bea/inline/prompt.txt",
+    "C:/dev/baseline-context-cad44bea/inline/site/AGENTS.md",
+    "C:/dev/baseline-context-cad44bea/inline/site/README.md",
+    "C:/dev/baseline-context-cad44bea/inline/site/HANDOFF.md",
+    "C:/dev/baseline-context-cad44bea/inline/site/DESIGN.md",
+    "C:/dev/baseline-context-cad44bea/inline/site/baseline.config.json",
+    "C:/dev/baseline-context-cad44bea/inline/site/audit/brief-decision.md",
+    "C:/dev/baseline-context-cad44bea/inline/site/.agents/skills/new-site-workflow/SKILL.md",
+    "C:/dev/baseline-context-cad44bea/inline/site/docs/project-context.md",
+    "C:/dev/baseline-context-cad44bea/inline/site/src/content.config.ts",
+    "C:/dev/baseline-context-cad44bea/inline/site/src/content/workshops/clear-briefs.md",
+    "C:/dev/baseline-context-cad44bea/inline/site/astro.config.mjs",
+    "C:/dev/baseline-context-cad44bea/inline/site/src/styles/global.css",
+    "C:/dev/baseline-context-cad44bea/inline/site/src/pages/index.astro",
+    "C:/dev/baseline-context-cad44bea/inline/site/PROJECT.example.md"
+  ],
+  "factsRecovered": [
+    "AGENTS.md is the established durable brief and art-direction home; no PROJECT.md has been adopted or is required.",
+    "Audience: team leads at small local organizations; purpose: find and register for practical workshops.",
+    "Approved fictional decisions dated 2026-10-19: developer-owned static editing, one English locale, email registration at mailto:workshops@northline.example.test; no browser CMS or payments.",
+    "Studio editor supplies copy; site maintainer owns code/build/deployment. No launch date is approved; quarterly cadence is assumed only.",
+    "The static profile receipt and Astro static output agree with the later decision note and supersede the old handoff's pending platform and EmDash instructions.",
+    "The workshops collection uses native glob-loaded Markdown with title, coerced date and draft defaulting false.",
+    "Supplied workshop: Clear project briefs, 2026-11-12, draft false; copy: Leave with a clear brief and manageable next steps.",
+    "Only a root heading is implemented; listing, detail routes, registration links and draft filtering remain absent.",
+    "Editorial Paper/notebook direction and balanced density are saved; approval and gate/calibration execution are not evidenced.",
+    "CSS owns the fluid grid spacing and root alias. DESIGN.md is explicitly unselected historical material, so its fixed 32px and CMS notes do not supersede current implementation.",
+    "The fixture lacks a package manifest, lockfile, shared primitive files, styleguide route and calibration evidence; executable verification cannot be assumed.",
+    "Existing evidence supports local route planning without restarting discovery; candidate URLs are proposals rather than approved or existing routes."
+  ],
+  "changes": [
+    {
+      "path": "C:/dev/baseline-context-cad44bea/inline/site/HANDOFF.md",
+      "description": "Replaced stale handoff with linked established need, decisions and ownership; source-backed implementation status; remaining static work and honest evidence limits; a concrete next local route-planning action."
+    },
+    {
+      "path": "C:/dev/baseline-context-cad44bea/inline/result.json",
+      "description": "Created the requested evaluation result."
+    }
+  ],
+  "questionsNeeded": [],
+  "limitations": [
+    "Source review and handoff only: no application source, dependencies, configuration, design records or durable client context were modified.",
+    "No tests, art-direction gate, builds, browser checks, component calibration, client acceptance or deployment were performed or claimed.",
+    "Hosting and launch acceptance are not established; no deployment is authorized by this request.",
+    "Proposed workshop URLs and route ordering need local implementation decisions; they are not recorded client approvals.",
+    "Only this trial's prompt and project were inspected; no agents or external actions were used."
+  ]
+}

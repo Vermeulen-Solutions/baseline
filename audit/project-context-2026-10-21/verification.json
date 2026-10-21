@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-10-21T20:27:28.766Z",
+  "status": "pass",
+  "commands": [
+    {
+      "command": "focused inspection/generation/update tests",
+      "exitCode": 0,
+      "tests": 25
+    },
+    {
+      "command": "npm.cmd run verify",
+      "exitCode": 0,
+      "unitTests": 158,
+      "rehearsalTests": 136,
+      "astroDiagnostics": {
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    {
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "releaseArtifact": "pass",
+      "advisory": "Existing client chunk-size advisory above 500 kB."
+    },
+    {
+      "command": "npm.cmd run audit:html",
+      "exitCode": 0,
+      "htmlFiles": 9,
+      "publicSSRResponses": 10,
+      "runtimeRoutePatterns": 224
+    }
+  ],
+  "sourceSHA256LF": {
+    "PROJECT.example.md": "ad87dd20dea736e2f54820bad376d642c11925ceca129b5bed23dad1c5e6dabd",
+    "docs/project-context.md": "15e077314399e39d8b703cf0ee109f1f06ba997e551a443100333442fdf802b7",
+    "AGENTS.md": "5a6b245624f221db13fe7bbf09cf8f8e94fc1dcb7bec9d096164a61624ea098c",
+    ".agents/skills/new-site-workflow/SKILL.md": "e108e10defa547e1b7eeb4507cbba2981d2cde7d1ceac20ecaf972060cfda577",
+    ".agents/skills/site-art-direction/SKILL.md": "addd65c93cded2c4d38be0394807ecece378074e29b806ef1404327c3bb94296",
+    "profiles/static/project/AGENTS.md": "58854b94d4792f960d666ce7f3be6ab90e5d46416651e9997ec59ae58847075f",
+    "scripts/inspect-project.mjs": "3dbe10af85d470ddf0e176765139349d197367bfab643b1e91b1d11b6ab8acd3",
+    "profiles/manifests/shared.json": "16f791cf18d1013c6cc5632ac67315446c3324dcbf9bbf24dec9eecb2e15be77",
+    "tests/project-inspection.test.mjs": "b1a1dbafe303579d0d22297e6a5becd4fa1edff84801355d4fcc784ec6dda302",
+    "tests/baseline-sync.test.mjs": "b60888821d9b9e98886d385d66814d218f6c00748b3dd22f09653d2b88dc69fa"
+  },
+  "limits": [
+    "Cold-resume checks validate optional placement and document jurisdiction, not efficiency or missing-guide behavior in every older installation.",
+    "Local SSR capture is representative, not complete production acceptance."
+  ]
+}

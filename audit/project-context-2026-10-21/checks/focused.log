@@ -1,0 +1,33 @@
+✔ bounded updates preserve adopted context, design and handoff even if misclassified as managed (1077.3215ms)
+✔ older installed inventory preserves legacy primitives, calibrated tokens and Base until additive spacing migration (1065.2093ms)
+✔ profile sync stages shared changes and skills, preserves calibrated tokens and excludes client files and packages (890.8266ms)
+✔ sync refuses changed local files and altered staged payloads before any writes (843.4302ms)
+✔ sync rejects mutable refs, traversal and attempts to exceed installed membership (828.5248ms)
+✔ static sync accepts baseline provenance and fetches only canonical immutable URLs (887.8324ms)
+✔ static sync accepts emdash-baseline provenance and fetches only canonical immutable URLs (868.4764ms)
+✔ static-sveltia sync accepts baseline provenance and fetches only canonical immutable URLs (875.5237ms)
+✔ static-sveltia sync accepts emdash-baseline provenance and fetches only canonical immutable URLs (873.7748ms)
+✔ sync rejects lookalike upstream identities before fetching or staging (736.1294ms)
+✔ Sveltia is an additive dependency-free overlay with paired forms and static CI (1089.8643ms)
+✔ installed CMS discovery follows sources without changing files or claiming runtime health (56.4687ms)
+✔ static receipts route content/editor discovery and commands reflect installed scripts only (55.1355ms)
+✔ optional context records are discovered without reading contents or requiring adoption (46.673ms)
+✔ inspection never executes config or reads environment values, and dynamic facts remain unknown (43.8612ms)
+✔ declared prop observations refresh with source and do not invent inherited APIs (45.9731ms)
+✔ invalid receipts, linked sources and oversized files fail closed without fallback (29.986ms)
+✔ JSON CLI is parseable and failures withhold source details (759.9678ms)
+✔ development discovery follows base and slash policy without changing release routing (1.3101ms)
+✔ server release reserves developer fixture paths before any CMS catch-all can render them (18.7279ms)
+✔ CMS form fixture is injected only in developer/fixture modes, never in a static profile or release (0.4603ms)
+✔ static developer tools inject only dev/fixture routes, prerender static fixtures and never resolve a CMS version (0.4464ms)
+✔ generator refuses unknown/unavailable profiles, overlapping roots, populated destinations and linked destinations before writing (18.5386ms)
+✔ allowlisted assembly is dry-run safe, records exact provenance and keeps the design gate active before Git initialization (1835.8952ms)
+✔ generator still refuses a calibrated source without reviewed infrastructure bytes before writing (8.4585ms)
+ℹ tests 25
+ℹ suites 0
+ℹ pass 25
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10526.7973

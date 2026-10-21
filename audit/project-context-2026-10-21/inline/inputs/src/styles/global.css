@@ -1,0 +1,2 @@
+@theme { --spacing-grid: clamp(1rem, 0.5rem + 2vi, 2.25rem); }
+@layer base { :root { --layout-grid-gap: var(--spacing-grid); } }

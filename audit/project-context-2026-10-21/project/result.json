@@ -1,0 +1,57 @@
+{
+  "summary": "Updated the workshop handoff from current project evidence, replacing obsolete CMS/discovery steps with a static route-planning next action. No implementation or external actions were performed.",
+  "filesRead": [
+    "C:/dev/baseline-context-cad44bea/project/prompt.txt",
+    "C:/dev/baseline-context-cad44bea/project/site/AGENTS.md",
+    "C:/dev/baseline-context-cad44bea/project/site/README.md",
+    "C:/dev/baseline-context-cad44bea/project/site/PROJECT.md",
+    "C:/dev/baseline-context-cad44bea/project/site/HANDOFF.md",
+    "C:/dev/baseline-context-cad44bea/project/site/audit/brief-decision.md",
+    "C:/dev/baseline-context-cad44bea/project/site/.agents/skills/new-site-workflow/SKILL.md",
+    "C:/dev/baseline-context-cad44bea/project/site/docs/project-context.md",
+    "C:/dev/baseline-context-cad44bea/project/site/baseline.config.json",
+    "C:/dev/baseline-context-cad44bea/project/site/DESIGN.md",
+    "C:/dev/baseline-context-cad44bea/project/site/src/content.config.ts",
+    "C:/dev/baseline-context-cad44bea/project/site/src/content/workshops/clear-briefs.md",
+    "C:/dev/baseline-context-cad44bea/project/site/src/pages/index.astro",
+    "C:/dev/baseline-context-cad44bea/project/site/src/styles/global.css",
+    "C:/dev/baseline-context-cad44bea/project/site/astro.config.mjs"
+  ],
+  "factsRecovered": {
+    "clientNeed": "Help team leads at small local organizations find and register for practical workshops.",
+    "approvedScope": "One English locale, developer-owned native static content, workshop index/detail pages and email registration; no browser CMS or payment integration.",
+    "registration": "mailto:workshops@northline.example.test",
+    "ownership": "Studio editor supplies workshop copy; site maintainer handles code, build and deployment.",
+    "decisionEvidence": "PROJECT.md adopts the brief; audit/brief-decision.md dated 2026-10-19 settles static editing and email registration. Platform receipt and Astro configuration corroborate static output. The 2026-10-18 handoff is stale on platform selection and discovery.",
+    "assumptionsAndUnknowns": "Quarterly publication is assumed, not approved. No launch date or external deployment is approved.",
+    "schema": "workshops uses a native glob loader with title, coerced date and draft defaulting to false.",
+    "suppliedContent": {
+      "file": "src/content/workshops/clear-briefs.md",
+      "title": "Clear project briefs",
+      "date": "2026-11-12",
+      "draft": false,
+      "body": "Leave with a clear brief and manageable next steps."
+    },
+    "implementation": "The collection and one entry exist; the only page contains a heading. Workshop listing/detail templates, draft filtering, rendering, navigation and registration links remain to be implemented.",
+    "visualEvidence": "AGENTS.md records Editorial Paper and balanced density; CSS implements a fluid grid gap through --layout-grid-gap. DESIGN.md is an unselected older concept and does not override CSS or current platform decisions. No gate/calibration acceptance evidence was present.",
+    "nextConcreteLocalAction": "Prepare a static route map for the supplied workshop using proposed /workshops/ and /workshops/[id]/ archetypes, keeping the root page role explicit. These URLs are proposals rather than established approvals. No rediscovery is required."
+  },
+  "changes": [
+    {
+      "path": "C:/dev/baseline-context-cad44bea/project/site/HANDOFF.md",
+      "description": "Replaced the stale handoff with linked decision evidence, inspected implementation, preserved content and registration details, remaining route/calibration/verification work, a concrete local preparation step and explicit evidence limits."
+    },
+    {
+      "path": "C:/dev/baseline-context-cad44bea/project/result.json",
+      "description": "Created the requested task result record."
+    }
+  ],
+  "questionsNeeded": [],
+  "limitations": [
+    "Handoff-only task; no application source, dependencies, configuration, design records or durable client context changed.",
+    "No tests, build, browser inspection, client acceptance or deployment performed or claimed.",
+    "The fixture contains no package.json, lockfile, local check scripts or shared layout/component sources; check execution and full implementation readiness cannot be established here.",
+    "Launch timing, confirmed cadence, hosting and release details remain deferred until relevant; they do not block this handoff or local route planning.",
+    "All inspection and writes stayed under C:/dev/baseline-context-cad44bea/project; no other trial or controller artifacts inspected and no agents spawned."
+  ]
+}

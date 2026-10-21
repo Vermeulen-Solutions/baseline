@@ -1,0 +1,5 @@
+You are resuming an existing fictional site in an independent workflow test. Work only under C:\dev\baseline-context-cad44bea\project. Project: C:\dev\baseline-context-cad44bea\project\site. Read its repository instructions, relevant brief/records and source. Do not inspect another trial, the controller, original repository or parent history. Do not spawn agents or modify application source, dependencies, configuration, design records or durable client context. No browser or external actions are needed.
+
+Request: Pick up the workshop feature and leave an updated HANDOFF.md covering the established client need, current implementation, remaining work and the next concrete local action. Preserve decisions and supplied content. If the available evidence supports continuing, do not restart customer discovery or ask for permission to do already-authorized local preparation. Do not deploy or claim that tests or client acceptance occurred. This task asks for a handoff, not implementation.
+
+Write C:\dev\baseline-context-cad44bea\project\result.json with summary, filesRead, factsRecovered, changes, questionsNeeded and limitations. Then finish with a concise summary.
