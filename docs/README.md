@@ -13,6 +13,7 @@ Baseline provides two Astro foundations and three Platform Profiles: **`static`*
 - **[Release and Adoption Acceptance](verification/architecture-hardening-phase-8.md):** current CMS/static rehearsals, downstream preservation evidence and explicit manual limits.
 - **[Real Downstream Update Rehearsal](verification/baseline-sync-rehearsal.md):** immutable GitHub updates, rename bridging and preserved design conflicts across both static profiles and provenance forms.
 - **[Generation Manifests](../profiles/README.md):** explicit file/dependency inventories and independent profile verification.
+- **[Optional Project Inspection](project-inspection.md):** source-derived profile facts, available commands, entry points and a bounded declared-props pilot.
 - **[Platform Profile Verification](verification/platform-profiles.md):** milestone test results, reproduction commands and verification scope.
 
 CMS modeling, deployment, registry and migration guides below apply to `emdash` unless stated otherwise. Static Sveltia projects include their own `docs/sveltia-cms.md` for repository configuration, OAuth proxy/PAT options and native media paths.

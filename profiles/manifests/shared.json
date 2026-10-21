@@ -52,7 +52,9 @@
     "scripts/check-css-contracts.mjs",
     "tests/css-contracts.test.mjs",
     "tests/spacing-tokens.test.mjs",
-    "src/lib/layout-style.ts"
+    "src/lib/layout-style.ts",
+    "scripts/inspect-project.mjs",
+    "docs/project-inspection.md"
   ],
   "packages": {
     "dependencies": [
@@ -96,7 +98,8 @@
     "sync:baseline",
     "lint:scripts",
     "lint:templates",
-    "check:css"
+    "check:css",
+    "baseline:inspect"
   ],
   "checks": [
     "lint",

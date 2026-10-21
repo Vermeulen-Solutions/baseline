@@ -240,6 +240,7 @@ See [editorial canvas guide](docs/emdash-editorial-canvas.md) for full field pro
 | `npm run doctor` | Dependency-free Node/SQLite, shell and workspace preflight (`-- --json` for automation) |
 | `npm run dev` | Develop the site and open `/_styleguide` |
 | `npm run verify` | Run all fast local checks in one command (`lint`, `check:art-direction`, `design:tokens`, `test`, `typecheck`) |
+| `npm run baseline:inspect -- --json` | Discover installed project commands, source entry points and declared core props ([pilot limits](docs/project-inspection.md)) |
 | `npm run design:tokens` | Audit tokens, WCAG contrast, font loading & edit proxies (or pass `--init-client --lane <lane>` to initialize a client site) |
 | `npm test` | Run the full unit and tooling test suite (`tests/*.test.mjs`) |
 | `npm run test:design` | Validate art direction record, token coverage, and `DESIGN.md` interchange |

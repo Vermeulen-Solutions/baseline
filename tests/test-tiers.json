@@ -170,5 +170,9 @@
   "mcp-access.test.mjs": {
     "tier": "unit",
     "reason": "Owned SQLite token plans, role/scope limits and exact revocation; no runtime or remote accounts"
+  },
+  "project-inspection.test.mjs": {
+    "tier": "unit",
+    "reason": "Read-only project facts, source parsing and input boundaries"
   }
 }

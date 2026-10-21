@@ -1,0 +1,44 @@
+{
+  "recordedAt": "2026-10-21T19:34:39.103Z",
+  "status": "pass",
+  "commands": [
+    {
+      "command": "npm.cmd run verify",
+      "exitCode": 0,
+      "unitTests": 157,
+      "rehearsalTests": 135,
+      "astroDiagnostics": {
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    {
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "releaseArtifact": "pass",
+      "advisory": "Existing client chunks above 500 kB."
+    },
+    {
+      "command": "npm.cmd run audit:html",
+      "exitCode": 0,
+      "htmlFiles": 9,
+      "publicSSRResponses": 10,
+      "runtimeRoutePatterns": 224
+    }
+  ],
+  "sourceSHA256LF": {
+    "scripts/inspect-project.mjs": "d0f6a007472ab37d05ecc0b4400dc6959fc0554eb945c2773173f7aa79b3867a",
+    "scripts/create-mcp-token.mjs": "a483674f4afed8e7e66092c7d60328ef636d402967e42f47e2decf9f3bb8e114",
+    "tests/project-inspection.test.mjs": "f74d7f5a1728c178dbf00a1b10b6d624848552027eff777afe9d64a108693b38",
+    "tests/mcp-access.test.mjs": "74cadf52b56f7ae2c31a64b83a4a78b871dc5ba2200fab5938e2f7cd8654e1f6",
+    "profiles/manifests/shared.json": "1b675f057ea11439cbb23b5502dbac98afecef1e3bacf70744caf7a5e943af17",
+    "profiles/manifests/emdash.json": "48c2a2a16f04e6c2d723547edb9880fcab1e3eae94814029ef9e4f91afa32a28",
+    "profiles/file-inventory.json": "abc0218bad04713e1da810674acd841dc9b8e653b5e0f8298baebe4b7d9e4f04"
+  },
+  "qualifications": [
+    "An initial full run caught a missing shared documentation inventory entry, which was corrected.",
+    "A concurrent-install run exceeded the existing HTML-audit timing assertion (1344.4 ms against 1000 ms). Unchanged checks passed with the installs finished; the timing limit was not relaxed.",
+    "Representative local SSR capture only; not an exhaustive production-route, OAuth or D1 acceptance."
+  ]
+}

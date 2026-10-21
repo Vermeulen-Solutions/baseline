@@ -8,6 +8,7 @@ import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import devTools, { styleguidePath } from '../scripts/dev-tools-integration.mjs';
 import { profileSource } from './helpers/profile-source.mjs';
+import { inspectProject } from '../scripts/inspect-project.mjs';
 import { containedPath, initProfile, planProfile } from '../scripts/init-profile.mjs';
 import { onRequest } from '../scripts/dev-tools-middleware.mjs';
 
@@ -95,6 +96,9 @@ test('allowlisted assembly is dry-run safe, records exact provenance and keeps t
     assert.equal(receipt.profile, 'static');
     const readJSON = async file => JSON.parse(await fs.readFile(path.join(options.out, file), 'utf8'));
     const pkg = await readJSON('package.json');
+    assert.equal(pkg.scripts['baseline:inspect'], 'node scripts/inspect-project.mjs');
+    assert.equal(inspectProject(options.out).profile.id, 'static');
+    assert.ok(inspectProject(options.out).skills.every(skill => !/emdash/.test(skill.name)));
     assert.equal((await readJSON('baseline.config.json')).source.repository, 'https://github.com/Vermeulen-Solutions/baseline');
     assert.equal(pkg.name, 'project-with-spaces');
     assert.ok(!JSON.stringify(pkg).includes('schema-budget'));

@@ -6,6 +6,7 @@ import os from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { initProfile } from '../scripts/init-profile.mjs';
 import { profileSource } from './helpers/profile-source.mjs';
+import { inspectProject } from '../scripts/inspect-project.mjs';
 
 const fixtureSource = await profileSource();
 after(fixtureSource.dispose);
@@ -18,6 +19,11 @@ test('Sveltia is an additive dependency-free overlay with paired forms and stati
     const read = file => fs.readFile(path.join(root, file), 'utf8');
     const pkg = JSON.parse(await read('package.json'));
     assert.equal(pkg.scripts['sync:baseline'], 'node scripts/sync-baseline.mjs');
+    assert.equal(pkg.scripts['baseline:inspect'], 'node scripts/inspect-project.mjs');
+    const inspected = inspectProject(root);
+    assert.equal(inspected.profile.id, 'static-sveltia');
+    assert.ok(inspected.entrypoints.editor.every(item => item.exists));
+    assert.equal(inspected.commands['mcp:token'].available, false);
     assert.ok(!JSON.stringify(pkg.dependencies).includes('sveltia'));
     assert.ok(!JSON.stringify(pkg).includes('emdash'));
     for (const name of ['design-checks', 'upstream-update']) {

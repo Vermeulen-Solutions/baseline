@@ -16,6 +16,10 @@ npm run check:dev-tools
 npm run preview
 ```
 
+Optional discovery: `npm run baseline:inspect -- --json` reports the installed
+profile, commands, skills, source entry points and declared core component props.
+See [project inspection](docs/project-inspection.md) for its read-only scope and limits.
+
 The first install creates a project-specific `package-lock.json`; commit it and
 use `npm ci` for subsequent clean installs. Dependency versions originate from
 Baseline's canonical package definition. No source lockfile is copied from EmDash.

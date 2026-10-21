@@ -9,6 +9,11 @@ Whether you use Claude Code, OpenAI Codex, Cursor, OpenCode, Windsurf, Antigravi
 3. **Model Context Protocol (MCP):** Open JSON-RPC standard for live framework documentation, community `DESIGN.md` systems, UI component sourcing, visual prototyping, and site content management (see [`.mcp.example.json`](../.mcp.example.json)).
 4. **Deterministic Shell Tooling:** Standard npm commands (`npm run ...`) runnable in any bash, PowerShell, or automated execution environment.
 
+For optional installed-project discovery, use `npm run baseline:inspect -- --json`
+after installing dependencies. It reports source-derived facts and paths without
+executing project configuration. See [scope and limits](project-inspection.md);
+it does not replace repository instructions, skills or verification.
+
 ---
 
 ## Harness Integration Quick-Reference

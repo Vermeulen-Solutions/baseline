@@ -1,0 +1,27 @@
+{
+  "status": "pass",
+  "workspace": "C:\\dev\\baseline-inspection-3b28fb1b",
+  "startedAt": "2026-10-21T19:28:13.631Z",
+  "checks": [
+    {
+      "profile": "static",
+      "independentDependencies": true,
+      "cli": true,
+      "profileRouting": true,
+      "gridPropFromSource": true,
+      "contentSources": true
+    },
+    {
+      "profile": "static-sveltia",
+      "independentDependencies": true,
+      "cli": true,
+      "profileRouting": true,
+      "gridPropFromSource": true,
+      "contentSources": true
+    }
+  ],
+  "limits": [
+    "Functional discovery acceptance, not a comparative agent-performance benchmark. No live CMS, deployment or visual assertions."
+  ],
+  "completedAt": "2026-10-21T19:29:25.738Z"
+}

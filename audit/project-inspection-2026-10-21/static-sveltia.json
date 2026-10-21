@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 1,
+  "profile": {
+    "id": "static-sveltia",
+    "foundation": "static",
+    "declaredRuntime": "static",
+    "evidence": "baseline.config.json declarations; not deployment verification"
+  },
+  "runtime": {
+    "output": "unknown",
+    "adapter": "unknown",
+    "database": "unknown",
+    "storage": "unknown",
+    "evidence": "astro.config.mjs static AST; expressions are not evaluated"
+  },
+  "commands": {
+    "dev": {
+      "available": true,
+      "command": "npm run dev"
+    },
+    "doctor": {
+      "available": false,
+      "command": null
+    },
+    "verify:fast": {
+      "available": false,
+      "command": null
+    },
+    "verify": {
+      "available": true,
+      "command": "npm run verify"
+    },
+    "lint": {
+      "available": true,
+      "command": "npm run lint"
+    },
+    "check:css": {
+      "available": true,
+      "command": "npm run check:css"
+    },
+    "check:art-direction": {
+      "available": true,
+      "command": "npm run check:art-direction"
+    },
+    "design:tokens": {
+      "available": true,
+      "command": "npm run design:tokens"
+    },
+    "test": {
+      "available": true,
+      "command": "npm run test"
+    },
+    "typecheck": {
+      "available": true,
+      "command": "npm run typecheck"
+    },
+    "build": {
+      "available": true,
+      "command": "npm run build"
+    },
+    "audit:html": {
+      "available": false,
+      "command": null
+    },
+    "test:visual": {
+      "available": false,
+      "command": null
+    },
+    "mcp:token": {
+      "available": false,
+      "command": null
+    }
+  },
+  "entrypoints": {
+    "instructions": [
+      {
+        "source": "AGENTS.md",
+        "exists": true
+      },
+      {
+        "source": "README.md",
+        "exists": true
+      }
+    ],
+    "configuration": [
+      {
+        "source": "baseline.config.json",
+        "exists": true
+      },
+      {
+        "source": "astro.config.mjs",
+        "exists": true
+      }
+    ],
+    "design": [
+      {
+        "source": "src/styles/global.css",
+        "exists": true
+      },
+      {
+        "source": "src/layouts/Base.astro",
+        "exists": true
+      },
+      {
+        "source": "src/layouts/SiteShell.astro",
+        "exists": true
+      },
+      {
+        "source": "audit/component-calibration.md",
+        "exists": false
+      },
+      {
+        "source": "docs/design-framework.md",
+        "exists": true
+      },
+      {
+        "source": "docs/native-composition.md",
+        "exists": true
+      }
+    ],
+    "content": [
+      {
+        "source": "src/content.config.ts",
+        "exists": true
+      },
+      {
+        "source": "src/content",
+        "exists": true
+      },
+      {
+        "source": "src/config/site.ts",
+        "exists": true
+      }
+    ],
+    "editor": [
+      {
+        "source": "public/admin/config.yml",
+        "exists": true
+      },
+      {
+        "source": "public/admin/index.html",
+        "exists": true
+      }
+    ]
+  },
+  "skills": [
+    {
+      "name": "astro-site-design",
+      "source": ".agents/skills/astro-site-design/SKILL.md"
+    },
+    {
+      "name": "impeccable",
+      "source": ".agents/skills/impeccable/SKILL.md"
+    },
+    {
+      "name": "new-site-workflow",
+      "source": ".agents/skills/new-site-workflow/SKILL.md"
+    },
+    {
+      "name": "site-art-direction",
+      "source": ".agents/skills/site-art-direction/SKILL.md"
+    }
+  ],
+  "components": [
+    {
+      "name": "Section",
+      "source": "src/components/Section.astro",
+      "exists": true,
+      "status": "declared-only",
+      "props": [
+        {
+          "name": "labelledBy",
+          "optional": false,
+          "type": "string"
+        },
+        {
+          "name": "spacing",
+          "optional": true,
+          "type": "\"content\" | \"section\" | \"none\""
+        },
+        {
+          "name": "class",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "gap",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "layout",
+          "optional": true,
+          "type": "'stack' | 'custom'"
+        }
+      ],
+      "inheritedTypes": [
+        "HTMLAttributes<'section'>"
+      ]
+    },
+    {
+      "name": "Container",
+      "source": "src/components/Container.astro",
+      "exists": true,
+      "status": "declared-only",
+      "props": [
+        {
+          "name": "width",
+          "optional": true,
+          "type": "\"reading\" | \"content\" | \"wide\""
+        },
+        {
+          "name": "breakout",
+          "optional": true,
+          "type": "boolean"
+        },
+        {
+          "name": "class",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "gap",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "layout",
+          "optional": true,
+          "type": "'stack' | 'custom'"
+        }
+      ],
+      "inheritedTypes": [
+        "HTMLAttributes<'div'>"
+      ]
+    },
+    {
+      "name": "Grid",
+      "source": "src/components/Grid.astro",
+      "exists": true,
+      "status": "declared-only",
+      "props": [
+        {
+          "name": "minimum",
+          "optional": true,
+          "type": "\"compact\" | \"standard\" | \"wide\""
+        },
+        {
+          "name": "gap",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "class",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "inheritedTypes": [
+        "HTMLAttributes<'div'>"
+      ]
+    },
+    {
+      "name": "Card",
+      "source": "src/components/Card.astro",
+      "exists": true,
+      "status": "declared-only",
+      "props": [
+        {
+          "name": "title",
+          "optional": false,
+          "type": "string"
+        },
+        {
+          "name": "href",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "image",
+          "optional": true,
+          "type": "ImageMetadata | string"
+        },
+        {
+          "name": "imageAlt",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "imageWidth",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "name": "imageHeight",
+          "optional": true,
+          "type": "number"
+        },
+        {
+          "name": "headingLevel",
+          "optional": true,
+          "type": "2 | 3 | 4"
+        },
+        {
+          "name": "layout",
+          "optional": true,
+          "type": "'stacked' | 'horizontal'"
+        },
+        {
+          "name": "imageFit",
+          "optional": true,
+          "type": "'cover' | 'contain'"
+        },
+        {
+          "name": "imageAspect",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "sizes",
+          "optional": true,
+          "type": "string"
+        },
+        {
+          "name": "titleEdit",
+          "optional": true,
+          "type": "FieldAttributes"
+        },
+        {
+          "name": "descriptionEdit",
+          "optional": true,
+          "type": "FieldAttributes"
+        },
+        {
+          "name": "actionEdit",
+          "optional": true,
+          "type": "FieldAttributes"
+        },
+        {
+          "name": "class",
+          "optional": true,
+          "type": "string"
+        }
+      ],
+      "inheritedTypes": [
+        "Omit<HTMLAttributes<'article'>, 'title'>"
+      ]
+    },
+    {
+      "name": "RichText",
+      "source": "src/components/RichText.astro",
+      "exists": true,
+      "status": "declared-only",
+      "props": [
+        {
+          "name": "flow",
+          "optional": true,
+          "type": "boolean"
+        }
+      ],
+      "inheritedTypes": [
+        "HTMLAttributes<'div'>"
+      ]
+    },
+    {
+      "name": "ResponsiveImage",
+      "source": "src/components/ResponsiveImage.astro",
+      "exists": true,
+      "status": "declared-only",
+      "props": [],
+      "inheritedTypes": [
+        "ResponsiveImageProps"
+      ]
+    }
+  ],
+  "limits": [
+    "Read-only source observations, not health, deployment, content or design certification.",
+    "Configuration expressions, inherited/imported props, slots and component relationships require source review.",
+    "Commands are available script names, not executed checks. Seed files describe initial content, not the live CMS.",
+    "Six-component pilot; no claim of measured agent performance improvement."
+  ]
+}

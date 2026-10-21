@@ -1008,6 +1008,18 @@
     "tests/mcp-access.test.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/inspect-project.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/project-inspection.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "docs/project-inspection.md": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }
