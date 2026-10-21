@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "frozenAt": "2026-10-21T19:44:07.475Z",
+  "sourceHead": "1a72d077127e1c5b16c80764e48e1191e36caeeb",
+  "design": "Three matched scenario pairs, one fresh session per arm. Same fixture source per pair; treatment may use baseline:inspect, control may not. No model override.",
+  "scenarios": {
+    "static": "Reduce only the services grid gap by 25 percent, preserving global tokens and other grids.",
+    "sveltia": "Add optional integer readingMinutes (1..60) to typed posts and paired editor form; render conditionally on article detail. Preserve legacy content and verify boundaries.",
+    "cms": "Use MCP to create an owned draft post with exact supplied text; keep it unpublished and report the publishing permission boundary."
+  },
+  "metrics": [
+    "Independent acceptance of source/artifacts/MCP content",
+    "Actual wrapper-recorded discovery requests and output bytes; includes repeat requests",
+    "Verified source preservation and requested constraints",
+    "Reported blockers/clarifications; uninstrumented reads unverified"
+  ],
+  "limits": [
+    "Exploratory N=1 pair per scenario; no statistical performance, token-cost or elapsed-time claim.",
+    "Project source/artifacts are separated, but dependencies/cache are explicitly shared through junctions. No strict process/filesystem sandbox is claimed.",
+    "Tool wrapper is an instructed telemetry convention, not an enforced tool-runner boundary.",
+    "CMS trials share a synthetic server, separate scoped contributor identities and unique slugs; namespace separation is not independent database isolation.",
+    "No GitHub editor login/save, hosted OAuth, D1 or production acceptance."
+  ],
+  "criteriaFrozenBeforeDispatch": true
+}

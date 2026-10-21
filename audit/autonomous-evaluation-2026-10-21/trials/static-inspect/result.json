@@ -1,0 +1,15 @@
+{
+  "summary": "Reduced only the homepage services grid gap by 25% using Grid's local gap prop: calc(var(--layout-grid-gap) * 0.75). The inherited fluid clamp remains intact, so the reduction applies proportionally at every viewport. Other grids, global tokens, copy and navigation were preserved.",
+  "changedFiles": ["site/src/pages/index.astro"],
+  "checks": [
+    {"command": "runner run baseline:inspect --json", "result": "PASS: identified static profile, available commands and authoritative design/component sources."},
+    {"command": "runner run check:art-direction --require-record", "result": "PASS before implementation: existing art direction record structurally valid."},
+    {"command": "runner run verify", "result": "PASS (exit 0): script/template lint, CSS contracts, art direction, token audits, 39 tests and Astro typecheck. Typecheck reported 0 errors, 0 warnings and 4 existing unused-import hints in contact/services routes."},
+    {"command": "runner run build", "result": "PASS (exit 0): built 7 static pages; release artifact profile verified."},
+    {"command": "runner search services-grid|approach-grid dist/index.html", "result": "PASS: emitted services grid has --grid-gap:calc(var(--layout-grid-gap) * 0.75); approach grid has no local gap override. Source review confirms Grid maps gap to its local --grid-gap and automatic-v2 otherwise derives that gap from --layout-grid-gap, whose underlying responsive clamp is unchanged."},
+    {"command": "runner run check:dev-tools", "result": "UNAVAILABLE (exit 1): runner returned 'Command unavailable in this arm'. No bypass attempted."}
+  ],
+  "clarificationsNeeded": [],
+  "blockers": ["check:dev-tools is disallowed by this trial's runner, despite appearing in package scripts. Browser/computed-style acceptance was not performed; verification covers source contracts, emitted HTML, automated checks and the production build."],
+  "outsideRunnerReads": []
+}

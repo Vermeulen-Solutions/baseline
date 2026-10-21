@@ -1,0 +1,55 @@
+{
+  "startedAt": "2026-10-21T19:58:38.840Z",
+  "checks": [
+    {
+      "trial": "static-source",
+      "command": "npm run verify",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "static-source",
+      "command": "npm run check:dev-tools",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "static-inspect",
+      "command": "npm run verify",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "static-inspect",
+      "command": "npm run check:dev-tools",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "command": "npm run verify",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "command": "npm run check:dev-tools",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "command": "npm run verify",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "command": "npm run check:dev-tools",
+      "exitCode": 0,
+      "status": "pass"
+    }
+  ],
+  "status": "pass",
+  "completedAt": "2026-10-21T20:00:05.350Z"
+}

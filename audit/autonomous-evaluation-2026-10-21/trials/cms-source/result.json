@@ -1,0 +1,70 @@
+{
+  "summary": "Created exactly one new posts draft through the live EmDash MCP endpoint and verified its saved title, excerpt, body, slug, and unpublished status by both ID and slug. No application source, seed files, or settings were authored or changed.",
+  "changedFiles": ["C:/dev/baseline-autonomous-e04c44c7/cms-source/result.json"],
+  "checks": [
+    {
+      "command": "node tools.mjs mcp schema_get_collection '{\"slug\":\"posts\"}'",
+      "result": "Live MCP returned INSUFFICIENT_SCOPE: requires schema:read. Used the checked-in seed only to identify the existing content field; did not change the schema or credentials."
+    },
+    {
+      "command": "node tools.mjs mcp content_get '{\"collection\":\"posts\",\"id\":\"kickoff-cms-source\",\"markdown\":true}' (before creation)",
+      "result": "NOT_FOUND, confirming no existing item at the requested slug before the single create call."
+    },
+    {
+      "command": "node tools.mjs mcp content_create (posts, slug kickoff-cms-source, requested title/excerpt/content; status omitted for default draft)",
+      "result": "PASS. Created ID 01M5G05W6K0XN7SC7J6XV86MF6 with status draft. The body was converted from Markdown into a normal Portable Text block containing the exact requested sentence."
+    },
+    {
+      "command": "node tools.mjs mcp content_get '{\"collection\":\"posts\",\"id\":\"01M5G05W6K0XN7SC7J6XV86MF6\",\"markdown\":true}'",
+      "result": "PASS. Returned the requested title, excerpt, and body text, with a serializer newline after the body; status draft, publishedAt null, scheduledAt null, liveRevisionId null."
+    },
+    {
+      "command": "node tools.mjs mcp content_get '{\"collection\":\"posts\",\"id\":\"kickoff-cms-source\"}' (after creation)",
+      "result": "PASS. Slug resolved to the same created ID. Raw Portable Text span exactly matched the requested body. Status remained draft with no publication date, schedule, or live revision."
+    },
+    {
+      "command": "node tools.mjs run doctor",
+      "result": "UNAVAILABLE. Runner exited 1 with Command unavailable in this arm."
+    },
+    {
+      "command": "node tools.mjs run verify",
+      "result": "FAIL, exit 1. Syntax checks, CSS contracts, art-direction gate (no visual source changes), and token audit passed. All 157 unit tests passed. Rehearsals: 133 passed, 2 failed with Linked paths are refused: tests/importer-fidelity.test.mjs and tests/migration-pilot.test.mjs. Typecheck was not reached because the test command failed. No attempt was made to alter the supplied dependency junction or repair unrelated infrastructure."
+    },
+    {
+      "command": "node tools.mjs run build",
+      "result": "PASS, exit 0. Astro Node server build and release artifact verification completed. Warning: some chunks exceeded 500 kB. Schema budget was not measured because this copied project has no local data.db. Build-generated outputs are separate from authored source changes."
+    },
+    {
+      "command": "node tools.mjs run audit:html",
+      "result": "UNAVAILABLE. Runner exited 1 with Command unavailable in this arm."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "verificationLimitations": [
+    "Full repository verification is not green because two importer/migration rehearsal tests refuse linked paths in this supplied checkout.",
+    "doctor and audit:html are unavailable through the assigned runner.",
+    "The live schema could not be read with the assigned token; the server accepted and returned all requested content fields."
+  ],
+  "outsideRunnerReads": [
+    {
+      "path": "C:/dev/baseline-autonomous-e04c44c7/cms-source/prompt.txt",
+      "reason": "Initial frozen task instruction read, explicitly exempted as scaffolding by the task assignment.",
+      "exempt": true
+    }
+  ],
+  "createdContent": {
+    "collection": "posts",
+    "id": "01M5G05W6K0XN7SC7J6XV86MF6",
+    "slug": "kickoff-cms-source",
+    "status": "draft",
+    "title": "Planning a useful kickoff",
+    "excerpt": "A short agenda for the first conversation.",
+    "bodyField": "content",
+    "body": "Agree the purpose, invite the people doing the work, and leave with clear next steps.",
+    "publishedAt": null,
+    "scheduledAt": null,
+    "liveRevisionId": null
+  },
+  "permissionExplanation": "Contributor (role 20) can create content and edit owned drafts, but cannot publish; publishing remains an editorial responsibility for a role with publishing authority. The supplied token adds a scope boundary: schema_get_collection was denied with INSUFFICIENT_SCOPE requiring schema:read, even though the tool is advertised. This identity therefore cannot read the live schema through MCP and has no schema administration authority; the project role guide assigns schema/configuration administration to Admin. Role and token scope must both authorize an operation. Publishing and schema mutations were not attempted. Permission evidence: docs/emdash-1.3-upgrade-review.md and the live schema_get_collection response."
+}

@@ -1,0 +1,38 @@
+{
+  "recordedAt": "2026-10-21T20:02:57.839Z",
+  "status": "pass",
+  "evaluatedSourceHead": "1a72d077127e1c5b16c80764e48e1191e36caeeb",
+  "commands": [
+    {
+      "command": "npm.cmd run verify",
+      "exitCode": 0,
+      "unitTests": 157,
+      "rehearsalTests": 135,
+      "astroDiagnostics": {
+        "errors": 0,
+        "warnings": 0,
+        "hints": 0
+      }
+    },
+    {
+      "command": "npm.cmd run build",
+      "exitCode": 0,
+      "releaseArtifact": "pass",
+      "advisory": "Existing client bundle size advisory above 500 kB."
+    },
+    {
+      "command": "npm.cmd run audit:html",
+      "exitCode": 0,
+      "htmlFiles": 9,
+      "publicSSRResponses": 10,
+      "runtimeRoutePatterns": 224
+    }
+  ],
+  "sourceSHA256LF": {
+    "scripts/inspect-project.mjs": "d0f6a007472ab37d05ecc0b4400dc6959fc0554eb945c2773173f7aa79b3867a",
+    "scripts/create-mcp-token.mjs": "a483674f4afed8e7e66092c7d60328ef636d402967e42f47e2decf9f3bb8e114",
+    "docs/project-inspection.md": "c9df76455703a85600cc40fcb6dbecc9d6a9dade991200c64f8ea3b305ea4bca",
+    "docs/agent-documentation.md": "7e8069c34c294b9a4ee101ca3fc783c546024b10c444c038558da53e0b5a0a0d"
+  },
+  "qualification": "Root verification is distinct from the CMS comparison clones, whose shared-dependency junctions reproduced two importer/migration refusals. No check was weakened."
+}

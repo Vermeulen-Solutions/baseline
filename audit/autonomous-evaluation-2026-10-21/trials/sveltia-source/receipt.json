@@ -1,0 +1,32 @@
+{
+  "id": "sveltia-source",
+  "scenario": "sveltia",
+  "arm": "source",
+  "baseCommit": "c8c73dcdfddb3dd8657c791fe89e320db4624131",
+  "changedFiles": [
+    "docs/sveltia-cms.md",
+    "public/admin/config.yml",
+    "src/content.config.ts",
+    "src/pages/posts/[...id].astro",
+    "tests/sveltia-config.test.mjs"
+  ],
+  "discoveryRequests": 12,
+  "discoveryEmittedBytes": 65240,
+  "fileReadRequests": 17,
+  "repeatedFileReads": [
+    "src/content.config.ts",
+    "public/admin/config.yml",
+    "src/pages/posts/[...id].astro",
+    "tests/sveltia-config.test.mjs"
+  ],
+  "mcpCalls": 1,
+  "blockedWrapperRequests": 6,
+  "clarificationsNeeded": [],
+  "sourceSHA256LF": {
+    "docs/sveltia-cms.md": "b4331e13e57182d59010181af9097deb4eb3bc36a9877554bd9bd29a08b7fef3",
+    "public/admin/config.yml": "066cbf8aad13678c94b1499baac037494a3fff77f7c6ddadf19344937768df4d",
+    "src/content.config.ts": "c30801cb79b2719ccada6f374919c9d213691c6d077b6b10909ac27d8dbe246c",
+    "src/pages/posts/[...id].astro": "fa9a8b5f92c1eb5957c9852783449cb1c3e23fd4ad4eed1e04104a3f5936f372",
+    "tests/sveltia-config.test.mjs": "3fbb2e129fb8ec29f110fe1614f823b47c07fb0eb389df214e1075f89fe3356c"
+  }
+}

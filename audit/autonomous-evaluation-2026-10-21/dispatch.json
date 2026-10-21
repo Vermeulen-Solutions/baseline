@@ -1,0 +1,39 @@
+{
+  "freshSessions": true,
+  "forkTurns": "none",
+  "modelOverride": null,
+  "resolvedModelAndTokenCost": "Not exposed by collaboration tools",
+  "tasks": [
+    {
+      "trial": "static-source",
+      "agentTask": "discovery_static_source",
+      "complete": true
+    },
+    {
+      "trial": "static-inspect",
+      "agentTask": "discovery_static_inspect",
+      "complete": true
+    },
+    {
+      "trial": "sveltia-source",
+      "agentTask": "discovery_sveltia_source",
+      "complete": true
+    },
+    {
+      "trial": "sveltia-inspect",
+      "agentTask": "discovery_sveltia_inspect",
+      "complete": true
+    },
+    {
+      "trial": "cms-source",
+      "agentTask": "discovery_cms_source",
+      "complete": true
+    },
+    {
+      "trial": "cms-inspect",
+      "agentTask": "discovery_cms_inspect",
+      "complete": true
+    }
+  ],
+  "correctionsDuringTrial": "None. No implementation hints or post-result retries were supplied."
+}

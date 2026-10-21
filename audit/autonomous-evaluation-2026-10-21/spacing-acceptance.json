@@ -1,0 +1,58 @@
+{
+  "startedAt": "2026-10-21T19:50:51.607Z",
+  "checks": [
+    {
+      "trial": "static-source",
+      "width": 600,
+      "services": 18.5005,
+      "approach": 24.6674,
+      "ratio": 0.7499979730332341,
+      "status": "pass"
+    },
+    {
+      "trial": "static-source",
+      "width": 1000,
+      "services": 23.5007,
+      "approach": 31.3342,
+      "ratio": 0.7500015957005444,
+      "status": "pass"
+    },
+    {
+      "trial": "static-source",
+      "width": 1500,
+      "services": 27,
+      "approach": 36,
+      "ratio": 0.75,
+      "status": "pass"
+    },
+    {
+      "trial": "static-inspect",
+      "width": 600,
+      "services": 18.5005,
+      "approach": 24.6674,
+      "ratio": 0.7499979730332341,
+      "status": "pass"
+    },
+    {
+      "trial": "static-inspect",
+      "width": 1000,
+      "services": 23.5007,
+      "approach": 31.3342,
+      "ratio": 0.7500015957005444,
+      "status": "pass"
+    },
+    {
+      "trial": "static-inspect",
+      "width": 1500,
+      "services": 27,
+      "approach": 36,
+      "ratio": 0.75,
+      "status": "pass"
+    }
+  ],
+  "limits": [
+    "Computed-style acceptance in local Chromium; not a general visual/accessibility audit."
+  ],
+  "status": "pass",
+  "completedAt": "2026-10-21T19:50:52.809Z"
+}

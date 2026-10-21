@@ -1,0 +1,41 @@
+✔ reviewed synthetic WXR, Exporter and Portable Text oracles cover the maintained contracts (6.0994ms)
+✖ installed WXR/Exporter endpoints, SQLite, public renderer, retries and F3/F4 acceptance rehearse offline (9.7214ms)
+✖ integrated migration pilot runs full lifecycle rehearsal and passes (171.7773ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 1
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 490.7256
+
+✖ failing tests:
+
+test at tests\importer-fidelity.test.mjs:23:1
+✖ installed WXR/Exporter endpoints, SQLite, public renderer, retries and F3/F4 acceptance rehearse offline (9.7214ms)
+  Error: Linked paths are refused
+      at requireFact (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/infrastructure-io.mjs:10:76)
+      at noLinks (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/infrastructure-io.mjs:26:33)
+      at bytesOf (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/infrastructure-io.mjs:32:20)
+      at jsonOf (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/infrastructure-io.mjs:36:42)
+      at file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/rehearse-importer.mjs:25:120
+      at Array.map (<anonymous>)
+      at rehearseImporter (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/rehearse-importer.mjs:25:101)
+      at TestContext.<anonymous> (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/tests/importer-fidelity.test.mjs:26:31)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+
+test at tests\migration-pilot.test.mjs:8:1
+✖ integrated migration pilot runs full lifecycle rehearsal and passes (171.7773ms)
+  Error: Linked paths are refused
+      at requireFact (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/infrastructure-io.mjs:10:76)
+      at noLinks (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/infrastructure-io.mjs:26:33)
+      at bytesOf (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/infrastructure-io.mjs:32:20)
+      at jsonOf (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/infrastructure-io.mjs:36:42)
+      at file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/rehearse-importer.mjs:25:120
+      at Array.map (<anonymous>)
+      at rehearseImporter (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/rehearse-importer.mjs:25:101)
+      at runMigrationPilot (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/scripts/pilot-migration.mjs:53:46)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///C:/dev/baseline-autonomous-e04c44c7/cms-source/site/tests/migration-pilot.test.mjs:11:30)

@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-10-21T19:59:21.963Z",
+  "workspace": "C:\\dev\\baseline-autonomous-e04c44c7",
+  "sourceHead": "1a72d077127e1c5b16c80764e48e1191e36caeeb",
+  "pairs": [
+    {
+      "scenario": "static",
+      "baseTrees": [
+        "29ff1a4d8c17304ae9bcf0c5cdf8990c85410e6f",
+        "29ff1a4d8c17304ae9bcf0c5cdf8990c85410e6f"
+      ],
+      "identicalTrackedInputs": true
+    },
+    {
+      "scenario": "sveltia",
+      "baseTrees": [
+        "c5a18d3d97d252435324f0bb169f215d9339e18f",
+        "c5a18d3d97d252435324f0bb169f215d9339e18f"
+      ],
+      "identicalTrackedInputs": true
+    },
+    {
+      "scenario": "cms",
+      "baseTrees": [
+        "8aa3c1cb080e4555e80da45d3ecf49fbbff3d9a2",
+        "8aa3c1cb080e4555e80da45d3ecf49fbbff3d9a2"
+      ],
+      "identicalTrackedInputs": true
+    }
+  ],
+  "dependencyIsolation": "Shared existing node_modules through explicit junctions; source and artifacts separate.",
+  "cmsConfiguration": "All four copied harness/client configs sanitized before worker dispatch; CMS Git history reinitialized to exclude original configuration history. No environment, database or uploads copied to discovery projects.",
+  "inspectionScriptSHA256": "d0f6a007472ab37d05ecc0b4400dc6959fc0554eb945c2773173f7aa79b3867a",
+  "preflight": "Both static foundations passed verify before dispatch, with zero errors/warnings and four existing unused-import hints. CMS live fixture had prior complete independent-install verification; source-only CMS comparison clones were not claimed to have a green application preflight."
+}

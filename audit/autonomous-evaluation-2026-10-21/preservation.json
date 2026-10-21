@@ -1,0 +1,179 @@
+{
+  "checkedAt": "2026-10-21T19:58:52.162Z",
+  "status": "pass",
+  "checks": [
+    {
+      "trial": "static-source",
+      "name": "bounded source changes",
+      "status": "pass",
+      "changedFiles": [
+        "src/pages/index.astro"
+      ]
+    },
+    {
+      "trial": "static-source",
+      "name": "preserved src/styles/global.css",
+      "status": "pass"
+    },
+    {
+      "trial": "static-source",
+      "name": "preserved src/config/site.ts",
+      "status": "pass"
+    },
+    {
+      "trial": "static-source",
+      "name": "preserved src/layouts/Base.astro",
+      "status": "pass"
+    },
+    {
+      "trial": "static-source",
+      "name": "preserved src/content",
+      "status": "pass"
+    },
+    {
+      "trial": "static-inspect",
+      "name": "bounded source changes",
+      "status": "pass",
+      "changedFiles": [
+        "src/pages/index.astro"
+      ]
+    },
+    {
+      "trial": "static-inspect",
+      "name": "preserved src/styles/global.css",
+      "status": "pass"
+    },
+    {
+      "trial": "static-inspect",
+      "name": "preserved src/config/site.ts",
+      "status": "pass"
+    },
+    {
+      "trial": "static-inspect",
+      "name": "preserved src/layouts/Base.astro",
+      "status": "pass"
+    },
+    {
+      "trial": "static-inspect",
+      "name": "preserved src/content",
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "bounded source changes",
+      "status": "pass",
+      "changedFiles": [
+        "docs/sveltia-cms.md",
+        "public/admin/config.yml",
+        "src/content.config.ts",
+        "src/pages/posts/[...id].astro",
+        "tests/sveltia-config.test.mjs"
+      ]
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "preserved src/styles/global.css",
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "preserved src/config/site.ts",
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "preserved src/layouts/Base.astro",
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "preserved src/content",
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "bounded source changes",
+      "status": "pass",
+      "changedFiles": [
+        "docs/sveltia-cms.md",
+        "public/admin/config.yml",
+        "src/content.config.ts",
+        "src/pages/posts/[...id].astro",
+        "tests/sveltia-config.test.mjs",
+        "src/lib/post-fields.ts"
+      ]
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "preserved src/styles/global.css",
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "preserved src/config/site.ts",
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "preserved src/layouts/Base.astro",
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "preserved src/content",
+      "status": "pass"
+    },
+    {
+      "trial": "cms-source",
+      "name": "bounded source changes",
+      "status": "pass",
+      "changedFiles": []
+    },
+    {
+      "trial": "cms-source",
+      "name": "preserved src",
+      "status": "pass"
+    },
+    {
+      "trial": "cms-source",
+      "name": "preserved seed",
+      "status": "pass"
+    },
+    {
+      "trial": "cms-source",
+      "name": "preserved astro.config.mjs",
+      "status": "pass"
+    },
+    {
+      "trial": "cms-source",
+      "name": "preserved package.json",
+      "status": "pass"
+    },
+    {
+      "trial": "cms-inspect",
+      "name": "bounded source changes",
+      "status": "pass",
+      "changedFiles": []
+    },
+    {
+      "trial": "cms-inspect",
+      "name": "preserved src",
+      "status": "pass"
+    },
+    {
+      "trial": "cms-inspect",
+      "name": "preserved seed",
+      "status": "pass"
+    },
+    {
+      "trial": "cms-inspect",
+      "name": "preserved astro.config.mjs",
+      "status": "pass"
+    },
+    {
+      "trial": "cms-inspect",
+      "name": "preserved package.json",
+      "status": "pass"
+    }
+  ]
+}

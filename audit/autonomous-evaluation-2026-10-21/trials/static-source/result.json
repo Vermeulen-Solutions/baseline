@@ -1,0 +1,38 @@
+{
+  "summary": "Reduced only the homepage Services Grid gap by 25% using its local gap prop: calc(var(--layout-grid-gap) * 0.75). The existing fluid responsive value remains the source, so the reduction applies at every viewport. No global tokens, shared components, copy, navigation or other grids were edited.",
+  "changedFiles": ["site/src/pages/index.astro"],
+  "checks": [
+    {
+      "command": "runner run check:art-direction --require-record",
+      "result": "PASS before implementation: established art direction record structurally valid."
+    },
+    {
+      "command": "runner run verify",
+      "result": "PASS: script/template lint, CSS contracts, changed-source art direction, token audit, all 39 tests and Astro typecheck. Typecheck reported 0 errors, 0 warnings and 4 unused-import hints in unchanged contact/services routes."
+    },
+    {
+      "command": "runner run build",
+      "result": "PASS: 7 static pages built; optimized images emitted; release artifact profile verified."
+    },
+    {
+      "command": "runner search 'services-grid|approach-grid' dist/index.html",
+      "result": "PASS: built Services Grid has --grid-gap:calc(var(--layout-grid-gap) * 0.75); Approach Grid retains its default without an override. Source comparison shows the sole authored change is the Services Grid gap prop."
+    },
+    {
+      "command": "runner run check:dev-tools",
+      "result": "UNAVAILABLE: runner returned exit 1 and 'Command unavailable in this arm'. Not treated as a pass."
+    },
+    {
+      "command": "Responsive scaling review",
+      "result": "Source and emitted HTML confirm multiplication of the unchanged responsive layout alias rather than fixed values or breakpoint overrides. Browser visual acceptance was not performed."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": ["Optional release/dev-tools check could not run because the assigned telemetry runner withholds that command; implementation, verify and build completed."],
+  "outsideRunnerReads": [
+    {
+      "path": "C:/dev/baseline-autonomous-e04c44c7/static-source/prompt.txt",
+      "reason": "Initial frozen instruction-file read, explicitly exempted as scaffolding by the task dispatch. All subsequent discovery reads/searches and npm calls used the runner."
+    }
+  ]
+}

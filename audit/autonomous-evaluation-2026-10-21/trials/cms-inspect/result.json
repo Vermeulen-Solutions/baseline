@@ -1,0 +1,70 @@
+{
+  "summary": "Created and read back one unpublished posts draft with the requested title, excerpt, body and slug. No application source, seed files or settings were edited.",
+  "changedFiles": ["C:/dev/baseline-autonomous-e04c44c7/cms-inspect/result.json"],
+  "checks": [
+    {
+      "command": "runner run baseline:inspect --json",
+      "result": "PASS: identified emdash profile, server output, Node adapter, SQLite, local storage, commands and authoritative source paths. This was discovery, not runtime certification."
+    },
+    {
+      "command": "runner run doctor --json",
+      "result": "UNAVAILABLE: runner returned exit 1, Command unavailable in this arm."
+    },
+    {
+      "command": "runner mcp schema_get_collection {\"collection\":\"posts\"}",
+      "result": "Initial discovery request failed validation because this tool requires slug. Corrected on the next schema request."
+    },
+    {
+      "command": "runner mcp schema_get_collection {\"slug\":\"posts\"}",
+      "result": "DENIED as expected for assigned scope: INSUFFICIENT_SCOPE, requires schema:read. No schema was changed."
+    },
+    {
+      "command": "runner mcp content_get kickoff-cms-inspect before create",
+      "result": "NOT_FOUND: requested slug was absent before creation."
+    },
+    {
+      "command": "runner mcp content_create posts kickoff-cms-inspect status=draft",
+      "result": "PASS: created id 01M5G0EAB4495NSQX3RPYBS5H1; response status draft. The content field accepted Markdown and stored the exact requested body as a Portable Text paragraph."
+    },
+    {
+      "command": "runner mcp content_get posts 01M5G0EAB4495NSQX3RPYBS5H1 markdown=true",
+      "result": "PASS: readback matched title, excerpt and body (Markdown serialization adds a trailing newline). Status draft; publishedAt, scheduledAt and liveRevisionId all null."
+    },
+    {
+      "command": "runner run verify",
+      "result": "FAIL, exit 1: syntax checks (154 modules), CSS contracts, art direction and token audit passed; 157/157 unit tests passed; 133/135 rehearsal tests passed. importer-fidelity.test.mjs and migration-pilot.test.mjs failed with Error: Linked paths are refused in rehearse-importer.mjs via infrastructure-io.mjs. Verification stopped at the failed test phase; no typecheck pass is claimed."
+    },
+    {
+      "command": "runner run build",
+      "result": "PASS, exit 0: Node server production build and release artifact profile verification completed. Bundle-size warning present. Local schema budget was not measured because site/data.db is absent; content task used the assigned live MCP endpoint."
+    },
+    {
+      "command": "runner run audit:html",
+      "result": "UNAVAILABLE: runner returned exit 1, Command unavailable in this arm."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [
+    "No blocker to the requested CMS draft. Full repository verification is not green because two migration rehearsal tests reject linked paths in this supplied shared-dependency environment.",
+    "doctor and audit:html are advertised by inspection but unavailable through this arm's runner."
+  ],
+  "outsideRunnerReads": [
+    {
+      "path": "C:/dev/baseline-autonomous-e04c44c7/cms-inspect/prompt.txt",
+      "reason": "Initial instruction-file scaffolding read, explicitly exempted by the assigned task. No other discovery reads bypassed the runner."
+    }
+  ],
+  "cms": {
+    "collection": "posts",
+    "id": "01M5G0EAB4495NSQX3RPYBS5H1",
+    "slug": "kickoff-cms-inspect",
+    "status": "draft",
+    "title": "Planning a useful kickoff",
+    "excerpt": "A short agenda for the first conversation.",
+    "body": "Agree the purpose, invite the people doing the work, and leave with clear next steps.",
+    "publishedAt": null,
+    "scheduledAt": null,
+    "liveRevisionId": null,
+    "permissionExplanation": "The assigned Contributor role can create content and edit its own drafts, but cannot publish. Token content-writing scope does not override role restrictions. Publishing was not attempted because the task explicitly requires an unpublished draft. Schema administration belongs to Admin; the assigned token also lacks schema:read, and the live schema_get_collection request was denied with INSUFFICIENT_SCOPE. Tool discovery listing schema or publishing tools does not itself grant permission to execute them. The role explanation is supported by docs/emdash-1.3-upgrade-review.md and docs/agent-documentation.md."
+  }
+}

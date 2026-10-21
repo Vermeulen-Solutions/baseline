@@ -1,0 +1,29 @@
+{
+  "summary": "Added optional readingMinutes to the typed post schema and paired Sveltia number field, accepting whole minutes from 1 through 60. Article detail displays N min read only when supplied. Existing post content and visual tokens are unchanged. Temporary validation posts were removed and the final original-content build passed.",
+  "changedFiles": [
+    "src/content.config.ts",
+    "public/admin/config.yml",
+    "src/pages/posts/[...id].astro",
+    "tests/sveltia-config.test.mjs",
+    "docs/sveltia-cms.md"
+  ],
+  "checks": [
+    {"command": "runner run check:art-direction --require-record", "result": "PASS: existing art direction record is structurally valid before implementation."},
+    {"command": "runner run verify", "result": "PASS: script/template lint, CSS contracts, art direction, token audit, all 40 tests, and Astro typecheck. Typecheck reported 0 errors, 0 warnings, and 4 existing unused-import hints in contact/services routes."},
+    {"command": "runner run build (temporary posts with readingMinutes: 1 and readingMinutes: 60, alongside unchanged Welcome post)", "result": "PASS: 9 pages built and release artifact check passed."},
+    {"command": "runner search 'min read' dist/posts/reading-minimum-check/index.html dist/posts/reading-maximum-check/index.html dist/posts/welcome/index.html", "result": "PASS: emitted article HTML contains 1 min read and 60 min read for boundary posts; Welcome has no reading-time label."},
+    {"command": "runner run build (temporary readingMinutes: 0)", "result": "EXPECTED REJECTION: exit 1 with readingMinutes too small, expected >=1."},
+    {"command": "runner run build (temporary readingMinutes: 61)", "result": "EXPECTED REJECTION: exit 1 with readingMinutes too big, expected <=60."},
+    {"command": "runner run build (temporary readingMinutes: 1.5)", "result": "EXPECTED REJECTION: exit 1, expected integer and received number."},
+    {"command": "runner run build (temporary readingMinutes: quoted numeric string 5)", "result": "EXPECTED REJECTION: exit 1, expected number and received string."},
+    {"command": "runner run build (after removing all temporary validation posts)", "result": "PASS: 7 original-content pages built; release artifact profile verified. Final source/output inventory confirms only Welcome remains in posts; its emitted HTML has no min read label."},
+    {"command": "runner run check:dev-tools", "result": "UNAVAILABLE: runner rejected with Command unavailable in this arm (exit 1). Did not bypass the runner."},
+    {"command": "runner mcp tools", "result": "UNAVAILABLE: MCP not part of this trial (exit 1). No MCP calls were made outside the runner."}
+  ],
+  "clarificationsNeeded": [],
+  "blockers": ["The prescribed check:dev-tools command is unavailable through the assigned runner. Other implementation and validation work completed."],
+  "outsideRunnerReads": [
+    {"path": "C:/dev/baseline-autonomous-e04c44c7/sveltia-source/prompt.txt", "reason": "Initial task instruction read, explicitly exempted scaffolding. No other discovery reads or npm/MCP calls bypassed the runner."}
+  ],
+  "verificationLimitations": ["No browser visual inspection or credentialed Sveltia login/save was performed. Schema input rejection and rendered conditional labels were checked through actual Astro builds; form options were checked by the paired contract test."]
+}

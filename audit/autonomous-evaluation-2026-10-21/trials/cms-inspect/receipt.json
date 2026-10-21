@@ -1,0 +1,18 @@
+{
+  "id": "cms-inspect",
+  "scenario": "cms",
+  "arm": "inspect",
+  "baseCommit": "d3cd4c8eaf8277a57e02f987efa3af4461187ba5",
+  "changedFiles": [],
+  "discoveryRequests": 10,
+  "discoveryEmittedBytes": 131742,
+  "fileReadRequests": 7,
+  "repeatedFileReads": [
+    "README.md",
+    ".agents/skills/emdash-cli/SKILL.md"
+  ],
+  "mcpCalls": 9,
+  "blockedWrapperRequests": 4,
+  "clarificationsNeeded": [],
+  "sourceSHA256LF": {}
+}

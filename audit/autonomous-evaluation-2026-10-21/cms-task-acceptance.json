@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-10-21T19:57:12.416Z",
+  "reports": [
+    {
+      "trial": "cms-source",
+      "status": "pass",
+      "id": "01M5G05W6K0XN7SC7J6XV86MF6",
+      "slug": "kickoff-cms-source",
+      "itemStatus": "draft",
+      "ownedByAssignedContributor": true,
+      "title": "Planning a useful kickoff",
+      "excerpt": "A short agenda for the first conversation.",
+      "markdown": "Agree the purpose, invite the people doing the work, and leave with clear next steps.\n",
+      "anonymousHTTP": 404,
+      "anonymousBodyContainsDraft": false,
+      "sourceChanged": false
+    },
+    {
+      "trial": "cms-inspect",
+      "status": "pass",
+      "id": "01M5G0EAB4495NSQX3RPYBS5H1",
+      "slug": "kickoff-cms-inspect",
+      "itemStatus": "draft",
+      "ownedByAssignedContributor": true,
+      "title": "Planning a useful kickoff",
+      "excerpt": "A short agenda for the first conversation.",
+      "markdown": "Agree the purpose, invite the people doing the work, and leave with clear next steps.\n",
+      "anonymousHTTP": 404,
+      "anonymousBodyContainsDraft": false,
+      "sourceChanged": false
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "summary": "Implemented optional readingMinutes for static Sveltia posts: integer 1–60 validation, paired optional numeric editor field, and conditional N min read article label. Existing content and visual tokens are unchanged. Temporary boundary fixtures were removed and the final seven-page production build passed.",
+  "changedFiles": [
+    "src/content.config.ts",
+    "src/lib/post-fields.ts",
+    "public/admin/config.yml",
+    "src/pages/posts/[...id].astro",
+    "tests/sveltia-config.test.mjs",
+    "docs/sveltia-cms.md"
+  ],
+  "checks": [
+    {
+      "command": "runner run baseline:inspect --json",
+      "result": "PASS. Identified static-sveltia profile, content schema, editor config, local presentation skill, and available verification commands."
+    },
+    {
+      "command": "runner run check:art-direction --require-record",
+      "result": "PASS before implementation. Existing editorial-paper record is structurally valid."
+    },
+    {
+      "command": "runner run verify",
+      "result": "PASS. Script/template lint, CSS contracts, art-direction gate, token audit, 41 tests and Astro typecheck passed. Typecheck reported four existing unused-import hints in contact.astro and services.astro, zero errors and zero warnings. New tests accept omitted/1/30/60 and reject 0/-1/61/fractions/string/empty/null/boolean/NaN/Infinity; editor constraints and optional omission are checked."
+    },
+    {
+      "command": "runner run build (temporary 1-minute and 60-minute posts); runner search 'min read' dist/posts",
+      "result": "PASS. Nine-page static build and release artifact check passed. Generated HTML contained 1 min read and 60 min read only in the two boundary fixtures; the unchanged welcome post omitted the label."
+    },
+    {
+      "command": "runner run build (temporary readingMinutes: 1.5)",
+      "result": "EXPECTED REJECTION. Exit 1, InvalidContentEntryDataError on readingMinutes: expected int, received number. Confirms the actual content pipeline enforces the field validator."
+    },
+    {
+      "command": "runner run build (after removing temporary fixtures)",
+      "result": "PASS. Final seven-page static build and production release artifact check passed; existing post remains valid without readingMinutes."
+    },
+    {
+      "command": "runner search 'min read|reading-test' dist/posts",
+      "result": "PASS. No matches in final generated posts; no temporary fixture content remains."
+    },
+    {
+      "command": "runner run check:dev-tools",
+      "result": "UNAVAILABLE. Runner returned exit 1: Command unavailable in this arm. No direct command bypass was attempted."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [
+    "The telemetry runner disallowed check:dev-tools despite the site's package script. Public browser/reflow and credentialed Sveltia login/save flows were not exercised; no authentication or external writes were attempted."
+  ],
+  "outsideRunnerReads": [
+    "Read C:/dev/baseline-autonomous-e04c44c7/sveltia-inspect/prompt.txt directly once as the initial scaffolding read explicitly exempted by the task. All project discovery and npm calls used the telemetry runner."
+  ]
+}

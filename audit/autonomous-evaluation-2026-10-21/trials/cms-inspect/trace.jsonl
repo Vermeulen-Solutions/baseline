@@ -1,0 +1,22 @@
+{"startedAt":"2026-10-21T19:52:56.699Z","action":"read","args":["AGENTS.md","README.md"],"success":true,"outputBytes":49310}
+{"startedAt":"2026-10-21T19:53:00.291Z","action":"run","args":["--json"],"success":true,"outputBytes":9469}
+{"startedAt":"2026-10-21T19:53:09.254Z","action":"run","args":["--json"],"success":false,"outputBytes":31}
+{"startedAt":"2026-10-21T19:53:09.254Z","action":"read","args":["README.md",".agents/skills/emdash-cli/SKILL.md"],"success":true,"outputBytes":39938}
+{"startedAt":"2026-10-21T19:53:09.254Z","action":"mcp","args":["tools"],"success":true,"outputBytes":80033}
+{"startedAt":"2026-10-21T19:53:18.020Z","action":"read","args":[".agents/skills/emdash-cli/SKILL.md"],"success":true,"outputBytes":11141}
+{"startedAt":"2026-10-21T19:53:18.027Z","action":"mcp","args":["tools"],"success":true,"outputBytes":80033}
+{"startedAt":"2026-10-21T19:53:24.338Z","action":"mcp","args":["tools"],"success":true,"outputBytes":80033}
+{"startedAt":"2026-10-21T19:53:30.855Z","action":"search","args":["Contributor|schema:read|content:publish|permissions","docs/agent-documentation.md",".agents/skills/emdash-cli"],"success":true,"outputBytes":104}
+{"startedAt":"2026-10-21T19:53:30.870Z","action":"mcp","args":["schema_get_collection","{\"collection\":\"posts\"}"],"success":true,"outputBytes":261}
+{"startedAt":"2026-10-21T19:53:39.557Z","action":"read","args":["docs/agent-documentation.md"],"success":true,"outputBytes":13128}
+{"startedAt":"2026-10-21T19:53:39.560Z","action":"mcp","args":["content_get","{\"collection\":\"posts\",\"id\":\"kickoff-cms-inspect\",\"markdown\":true}"],"success":true,"outputBytes":195}
+{"startedAt":"2026-10-21T19:53:39.574Z","action":"mcp","args":["schema_get_collection","{\"slug\":\"posts\"}"],"success":true,"outputBytes":210}
+{"startedAt":"2026-10-21T19:53:49.231Z","action":"mcp","args":["content_list","{\"collection\":\"posts\",\"limit\":1,\"markdown\":true}"],"success":true,"outputBytes":1335}
+{"startedAt":"2026-10-21T19:53:49.217Z","action":"search","args":["Contributor|publish_own|publish_any","docs","scripts/mcp-token.mjs"],"success":false,"outputBytes":83}
+{"startedAt":"2026-10-21T19:54:04.468Z","action":"mcp","args":["content_create","{\"collection\":\"posts\",\"slug\":\"kickoff-cms-inspect\",\"status\":\"draft\",\"data\":{\"title\":\"Planning a useful kickoff\",\"excerpt\":\"A short agenda for the first conversation.\",\"content\":\"Agree the purpose, invite the people doing the work, and leave with clear next steps.\"}}"],"success":true,"outputBytes":1525}
+{"startedAt":"2026-10-21T19:54:11.383Z","action":"mcp","args":["content_get","{\"collection\":\"posts\",\"id\":\"01M5G0EAB4495NSQX3RPYBS5H1\",\"markdown\":true}"],"success":true,"outputBytes":1176}
+{"startedAt":"2026-10-21T19:54:11.373Z","action":"search","args":["Contributor|publish_own|publish_any","docs"],"success":true,"outputBytes":1601}
+{"startedAt":"2026-10-21T19:54:11.374Z","action":"run","args":[],"success":true,"outputBytes":1637}
+{"startedAt":"2026-10-21T19:54:29.829Z","action":"read","args":["docs/emdash-1.3-upgrade-review.md"],"success":true,"outputBytes":6937}
+{"startedAt":"2026-10-21T19:54:43.780Z","action":"run","args":[],"success":false,"outputBytes":31}
+{"startedAt":"2026-10-21T19:53:49.217Z","action":"run","args":[],"success":false,"outputBytes":36906}

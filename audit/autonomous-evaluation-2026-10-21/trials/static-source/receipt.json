@@ -1,0 +1,19 @@
+{
+  "id": "static-source",
+  "scenario": "static",
+  "arm": "source",
+  "baseCommit": "62e4fd45fd2e86d11efa69372126df111021e2fe",
+  "changedFiles": [
+    "src/pages/index.astro"
+  ],
+  "discoveryRequests": 5,
+  "discoveryEmittedBytes": 80429,
+  "fileReadRequests": 9,
+  "repeatedFileReads": [],
+  "mcpCalls": 0,
+  "blockedWrapperRequests": 1,
+  "clarificationsNeeded": [],
+  "sourceSHA256LF": {
+    "src/pages/index.astro": "301d423b51fc1bf3df3a0573134ed158ddc89fe67e8ce7aa96c98b9c3fab5119"
+  }
+}

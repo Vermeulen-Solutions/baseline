@@ -1,0 +1,152 @@
+{
+  "startedAt": "2026-10-21T19:54:32.708Z",
+  "checks": [
+    {
+      "trial": "sveltia-source",
+      "name": "paired editor control",
+      "status": "pass",
+      "field": {
+        "name": "readingMinutes",
+        "label": "Reading time (minutes)",
+        "widget": "number",
+        "value_type": "int",
+        "min": 1,
+        "max": 60,
+        "step": 1,
+        "required": false,
+        "hint": "Optional. Enter whole minutes from 1 through 60."
+      }
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "min",
+      "input": "1",
+      "expected": "accepted and rendered",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "max",
+      "input": "60",
+      "expected": "accepted and rendered",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "zero",
+      "input": "0",
+      "expected": "schema rejection",
+      "exitCode": 1,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "above-max",
+      "input": "61",
+      "expected": "schema rejection",
+      "exitCode": 1,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "fraction",
+      "input": "1.5",
+      "expected": "schema rejection",
+      "exitCode": 1,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "string",
+      "input": "\"2\"",
+      "expected": "schema rejection",
+      "exitCode": 1,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-source",
+      "name": "legacy absent value and restored build",
+      "exitCode": 0,
+      "contentRestored": true,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "paired editor control",
+      "status": "pass",
+      "field": {
+        "name": "readingMinutes",
+        "label": "Reading time (minutes)",
+        "widget": "number",
+        "value_type": "int",
+        "min": 1,
+        "max": 60,
+        "step": 1,
+        "required": false,
+        "hint": "Optional. Enter whole minutes from 1 through 60."
+      }
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "min",
+      "input": "1",
+      "expected": "accepted and rendered",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "max",
+      "input": "60",
+      "expected": "accepted and rendered",
+      "exitCode": 0,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "zero",
+      "input": "0",
+      "expected": "schema rejection",
+      "exitCode": 1,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "above-max",
+      "input": "61",
+      "expected": "schema rejection",
+      "exitCode": 1,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "fraction",
+      "input": "1.5",
+      "expected": "schema rejection",
+      "exitCode": 1,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "string",
+      "input": "\"2\"",
+      "expected": "schema rejection",
+      "exitCode": 1,
+      "status": "pass"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "name": "legacy absent value and restored build",
+      "exitCode": 0,
+      "contentRestored": true,
+      "status": "pass"
+    }
+  ],
+  "limits": [
+    "Real Astro build/schema and emitted-HTML acceptance. No credentialed browser-editor GitHub login/save or general UI audit."
+  ],
+  "completedAt": "2026-10-21T19:55:19.356Z",
+  "status": "pass"
+}

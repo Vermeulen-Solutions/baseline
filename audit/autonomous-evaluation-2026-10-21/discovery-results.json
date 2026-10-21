@@ -1,0 +1,152 @@
+{
+  "collectedAt": "2026-10-21T19:57:14.148Z",
+  "complete": true,
+  "results": [
+    {
+      "id": "static-source",
+      "scenario": "static",
+      "arm": "source",
+      "baseCommit": "62e4fd45fd2e86d11efa69372126df111021e2fe",
+      "changedFiles": [
+        "src/pages/index.astro"
+      ],
+      "discoveryRequests": 5,
+      "discoveryEmittedBytes": 80429,
+      "fileReadRequests": 9,
+      "repeatedFileReads": [],
+      "mcpCalls": 0,
+      "blockedWrapperRequests": 1,
+      "clarificationsNeeded": [],
+      "sourceSHA256LF": {
+        "src/pages/index.astro": "301d423b51fc1bf3df3a0573134ed158ddc89fe67e8ce7aa96c98b9c3fab5119"
+      }
+    },
+    {
+      "id": "static-inspect",
+      "scenario": "static",
+      "arm": "inspect",
+      "baseCommit": "ef1f3565eb27845bc46f85ad6a2e1db131583a41",
+      "changedFiles": [
+        "src/pages/index.astro"
+      ],
+      "discoveryRequests": 7,
+      "discoveryEmittedBytes": 64119,
+      "fileReadRequests": 9,
+      "repeatedFileReads": [],
+      "mcpCalls": 0,
+      "blockedWrapperRequests": 1,
+      "clarificationsNeeded": [],
+      "sourceSHA256LF": {
+        "src/pages/index.astro": "301d423b51fc1bf3df3a0573134ed158ddc89fe67e8ce7aa96c98b9c3fab5119"
+      }
+    },
+    {
+      "id": "sveltia-source",
+      "scenario": "sveltia",
+      "arm": "source",
+      "baseCommit": "c8c73dcdfddb3dd8657c791fe89e320db4624131",
+      "changedFiles": [
+        "docs/sveltia-cms.md",
+        "public/admin/config.yml",
+        "src/content.config.ts",
+        "src/pages/posts/[...id].astro",
+        "tests/sveltia-config.test.mjs"
+      ],
+      "discoveryRequests": 12,
+      "discoveryEmittedBytes": 65240,
+      "fileReadRequests": 17,
+      "repeatedFileReads": [
+        "src/content.config.ts",
+        "public/admin/config.yml",
+        "src/pages/posts/[...id].astro",
+        "tests/sveltia-config.test.mjs"
+      ],
+      "mcpCalls": 1,
+      "blockedWrapperRequests": 6,
+      "clarificationsNeeded": [],
+      "sourceSHA256LF": {
+        "docs/sveltia-cms.md": "b4331e13e57182d59010181af9097deb4eb3bc36a9877554bd9bd29a08b7fef3",
+        "public/admin/config.yml": "066cbf8aad13678c94b1499baac037494a3fff77f7c6ddadf19344937768df4d",
+        "src/content.config.ts": "c30801cb79b2719ccada6f374919c9d213691c6d077b6b10909ac27d8dbe246c",
+        "src/pages/posts/[...id].astro": "fa9a8b5f92c1eb5957c9852783449cb1c3e23fd4ad4eed1e04104a3f5936f372",
+        "tests/sveltia-config.test.mjs": "3fbb2e129fb8ec29f110fe1614f823b47c07fb0eb389df214e1075f89fe3356c"
+      }
+    },
+    {
+      "id": "sveltia-inspect",
+      "scenario": "sveltia",
+      "arm": "inspect",
+      "baseCommit": "d4f6dea96d8479ecb6f75498a612d129eddb888e",
+      "changedFiles": [
+        "docs/sveltia-cms.md",
+        "public/admin/config.yml",
+        "src/content.config.ts",
+        "src/pages/posts/[...id].astro",
+        "tests/sveltia-config.test.mjs",
+        "src/lib/post-fields.ts"
+      ],
+      "discoveryRequests": 8,
+      "discoveryEmittedBytes": 73787,
+      "fileReadRequests": 14,
+      "repeatedFileReads": [],
+      "mcpCalls": 0,
+      "blockedWrapperRequests": 2,
+      "clarificationsNeeded": [],
+      "sourceSHA256LF": {
+        "docs/sveltia-cms.md": "55781e31408f697baa14809a9eefba0f3d3653607843eddadbdd2a15fe77351f",
+        "public/admin/config.yml": "066cbf8aad13678c94b1499baac037494a3fff77f7c6ddadf19344937768df4d",
+        "src/content.config.ts": "ad698a5d90f626a499dc1b110e18aa2aee8641826d2293ee5c49e6a94fda0682",
+        "src/pages/posts/[...id].astro": "fa9a8b5f92c1eb5957c9852783449cb1c3e23fd4ad4eed1e04104a3f5936f372",
+        "tests/sveltia-config.test.mjs": "e0830e37b5bc1a4b83dfbab9354e3719d2babd1b273accc5b9c8b300f5530487",
+        "src/lib/post-fields.ts": "8f9d93b755a08cbd508833ab67466e08276a64304622bfe836d9a2580b28d67b"
+      }
+    },
+    {
+      "id": "cms-source",
+      "scenario": "cms",
+      "arm": "source",
+      "baseCommit": "3e7b993cc14843fc75865d473935c69887507de8",
+      "changedFiles": [],
+      "discoveryRequests": 5,
+      "discoveryEmittedBytes": 124467,
+      "fileReadRequests": 8,
+      "repeatedFileReads": [
+        "README.md"
+      ],
+      "mcpCalls": 9,
+      "blockedWrapperRequests": 3,
+      "clarificationsNeeded": [],
+      "sourceSHA256LF": {}
+    },
+    {
+      "id": "cms-inspect",
+      "scenario": "cms",
+      "arm": "inspect",
+      "baseCommit": "d3cd4c8eaf8277a57e02f987efa3af4461187ba5",
+      "changedFiles": [],
+      "discoveryRequests": 10,
+      "discoveryEmittedBytes": 131742,
+      "fileReadRequests": 7,
+      "repeatedFileReads": [
+        "README.md",
+        ".agents/skills/emdash-cli/SKILL.md"
+      ],
+      "mcpCalls": 9,
+      "blockedWrapperRequests": 4,
+      "clarificationsNeeded": [],
+      "sourceSHA256LF": {}
+    }
+  ],
+  "definitions": {
+    "discoveryRequests": "Wrapper read/search/files invocations plus baseline:inspect run with --json; includes post-build source/artifact reads.",
+    "discoveryEmittedBytes": "Bytes emitted by the wrapper before any tool/UI truncation, not model input tokens or cost.",
+    "mcpCalls": "Includes read and write calls; a transport success may still contain an MCP tool error.",
+    "blockedWrapperRequests": "Operator allowlist refusals and unavailable RPC attempts, not automatically task failures.",
+    "sourceSHA256LF": "SHA-256 of collected authored UTF-8 source with CRLF normalized to LF; stable across Git text checkouts."
+  },
+  "qualifications": [
+    "The runner shifted npm script names out of recorded args. Inspection invocations are identifiable by --json and checked against worker results; other npm runs are excluded from discovery metrics.",
+    "The initial instruction-file read is scaffolding and excluded; preflight npm runs are also excluded.",
+    "Wrapper telemetry is instructed, not an enforced record of every possible filesystem/tool access."
+  ]
+}

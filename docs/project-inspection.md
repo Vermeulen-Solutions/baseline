@@ -33,3 +33,10 @@ schema/content inputs and do not describe live CMS state. Inspection does not
 replace AGENTS.md, applicable skills, calibration or verification, and adds no
 mandatory checkpoint. Functional discovery checks do not establish a measured
 improvement in agent task performance; expansion should follow task evidence.
+
+An exploratory matched-task comparison found mixed request counts and emitted
+bytes across spacing, Sveltia and CMS tasks (recorded in the Baseline source
+repository under `audit/autonomous-evaluation-2026-10-21/`).
+Functional outcomes passed in both conditions; a general performance advantage
+was not established. Keep inspection optional rather than adding it as a required
+step for every task.

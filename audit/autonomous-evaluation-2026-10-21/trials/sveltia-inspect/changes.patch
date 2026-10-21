@@ -1,0 +1,108 @@
+diff --git a/docs/sveltia-cms.md b/docs/sveltia-cms.md
+index d413e8b..81b26da 100644
+--- a/docs/sveltia-cms.md
++++ b/docs/sveltia-cms.md
+@@ -34,7 +34,9 @@ PKCE flow is assumed. See the authentication guide above for current support.
+ ## Content and native images
+ 
+ The Posts form matches `src/content.config.ts`: `title`, `description`,
+-`publishedAt`, `draft`, optional `hero`/`heroAlt`, plus the Markdown `body`.
++`publishedAt`, `draft`, optional `readingMinutes` and `hero`/`heroAlt`, plus the Markdown `body`.
++Reading time accepts whole minutes from 1 through 60. Leave it blank to omit
++the reading-time label on the article page; existing posts need no changes.
+ When a hero is present its alt description must be nonempty; the Astro schema
+ enforces that at build time. Empty optional fields are omitted so Astro's image
+ schema does not receive an empty string. Draft entries are excluded from public
+diff --git a/public/admin/config.yml b/public/admin/config.yml
+index 228a4d5..1c14529 100644
+--- a/public/admin/config.yml
++++ b/public/admin/config.yml
+@@ -25,6 +25,7 @@
+         { "name": "title", "label": "Title", "widget": "string" },
+         { "name": "description", "label": "Description", "widget": "text" },
+         { "name": "publishedAt", "label": "Publication date", "widget": "datetime", "date_format": "YYYY-MM-DD", "time_format": false, "format": "YYYY-MM-DD" },
++        { "name": "readingMinutes", "label": "Reading time (minutes)", "widget": "number", "value_type": "int", "min": 1, "max": 60, "step": 1, "required": false, "hint": "Optional. Enter whole minutes from 1 through 60." },
+         { "name": "draft", "label": "Draft", "widget": "boolean", "default": false, "required": false },
+         { "name": "hero", "label": "Hero image", "widget": "image", "required": false },
+         { "name": "heroAlt", "label": "Hero image description", "widget": "string", "required": false, "hint": "Required when a hero image is selected. The site build validates this relationship." },
+diff --git a/src/content.config.ts b/src/content.config.ts
+index 153818c..175c971 100644
+--- a/src/content.config.ts
++++ b/src/content.config.ts
+@@ -1,6 +1,7 @@
+ import { defineCollection } from 'astro:content';
+ import { glob } from 'astro/loaders';
+ import { z } from 'astro/zod';
++import { readingMinutesSchema } from './lib/post-fields';
+ 
+ const posts = defineCollection({
+   loader: glob({ base: './src/content/posts', pattern: '**/*.md' }),
+@@ -8,6 +9,7 @@ const posts = defineCollection({
+     title: z.string().trim().min(1),
+     description: z.string().trim().min(1),
+     publishedAt: z.coerce.date(),
++    readingMinutes: readingMinutesSchema,
+     draft: z.boolean().default(false),
+     hero: image().optional(),
+     heroAlt: z.string().trim().optional(),
+diff --git a/src/pages/posts/[...id].astro b/src/pages/posts/[...id].astro
+index 399d80d..909dc19 100644
+--- a/src/pages/posts/[...id].astro
++++ b/src/pages/posts/[...id].astro
+@@ -21,6 +21,7 @@ const image = post.data.hero ? { src: post.data.hero.src, alt: post.data.heroAlt
+   <Section labelledBy="post-title"><Container breakout class="flow">
+     <header class="article-stack"><h1 id="post-title">{post.data.title}</h1><p>{post.data.description}</p>
+       <time datetime={post.data.publishedAt.toISOString()}>{post.data.publishedAt.toLocaleDateString('en-GB', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</time>
++      {post.data.readingMinutes !== undefined && <p>{post.data.readingMinutes} min read</p>}
+     </header>
+     {post.data.hero && <figure class="content--feature"><ResponsiveImage src={post.data.hero} alt={post.data.heroAlt!} loading="eager" fetchpriority="high" /></figure>}
+     <RichText><Content /></RichText>
+diff --git a/tests/sveltia-config.test.mjs b/tests/sveltia-config.test.mjs
+index e1e6ddf..b5bb045 100644
+--- a/tests/sveltia-config.test.mjs
++++ b/tests/sveltia-config.test.mjs
+@@ -2,6 +2,7 @@ import test from 'node:test';
+ import assert from 'node:assert/strict';
+ import fs from 'node:fs';
+ import path from 'node:path';
++import { readingMinutesSchema } from '../src/lib/post-fields.ts';
+ 
+ test('Sveltia form, frontmatter and native image paths match the Astro collection', () => {
+   const config = JSON.parse(fs.readFileSync('public/admin/config.yml', 'utf8'));
+@@ -16,13 +17,13 @@ test('Sveltia form, frontmatter and native image paths match the Astro collectio
+   assert.equal(posts.create, true);
+   assert.equal(posts.format, 'yaml-frontmatter');
+   assert.equal(posts.extension, 'md');
+-  const widgets = { title: 'string', description: 'text', publishedAt: 'datetime', draft: 'boolean', hero: 'image', heroAlt: 'string', body: 'markdown' };
++  const widgets = { title: 'string', description: 'text', publishedAt: 'datetime', readingMinutes: 'number', draft: 'boolean', hero: 'image', heroAlt: 'string', body: 'markdown' };
+   assert.deepEqual(posts.fields.map(f => f.name).sort(), Object.keys(widgets).sort());
+   for (const field of posts.fields) {
+     assert.equal(field.widget, widgets[field.name]);
+     if (field.name !== 'body') assert.match(schema, new RegExp(`\\b${field.name}:`));
+   }
+-  for (const name of ['hero', 'heroAlt', 'draft']) assert.equal(posts.fields.find(f => f.name === name).required, false);
++  for (const name of ['hero', 'heroAlt', 'draft', 'readingMinutes']) assert.equal(posts.fields.find(f => f.name === name).required, false);
+   assert.equal(posts.fields.find(f => f.name === 'draft').default, false);
+   assert.match(schema, /hero && !post.heroAlt/);
+   const reference = posts.public_folder + '/pilot-grid.jpg';
+@@ -37,3 +38,20 @@ test('Sveltia form, frontmatter and native image paths match the Astro collectio
+   assert.match(scriptURL, /^https:\/\/unpkg\.com\/@sveltia\/cms@\d+\.\d+\.\d+\/dist\/sveltia-cms\.js$/);
+   assert.ok(!/client_secret|access_token/.test(JSON.stringify(config)));
+ });
++
++test('optional reading minutes use the same integer boundaries in the schema and editor', () => {
++  const config = JSON.parse(fs.readFileSync('public/admin/config.yml', 'utf8'));
++  const field = config.collections.find(c => c.name === 'posts').fields.find(f => f.name === 'readingMinutes');
++  assert.equal(field.value_type, 'int');
++  assert.equal(field.min, 1);
++  assert.equal(field.max, 60);
++  assert.equal(field.step, 1);
++  assert.equal(field.required, false);
++  assert.ok(!Object.hasOwn(field, 'default'));
++  for (const value of [undefined, 1, 30, 60]) {
++    assert.equal(readingMinutesSchema.safeParse(value).success, true, `accept ${value}`);
++  }
++  for (const value of [0, -1, 61, 1.5, 59.9, '5', '', null, true, NaN, Infinity]) {
++    assert.equal(readingMinutesSchema.safeParse(value).success, false, `reject ${value}`);
++  }
++});

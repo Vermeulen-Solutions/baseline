@@ -1,0 +1,18 @@
+
+> fixture-sveltia@0.0.0 build
+> astro build
+
+21:54:46 [content] Syncing content
+[InvalidContentEntryDataError] posts → welcome data does not match collection schema.
+
+  readingMinutes: Too big: expected number to be <=60
+
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Location:
+    C:\dev\baseline-autonomous-e04c44c7\sveltia-source\site\src\content\posts\welcome.md:0:0
+  Stack trace:
+    at getEntryData (C:\dev\baseline-task-evals-20261021-cde21c0d\fixture-sveltia\node_modules\astro\dist\content\utils.js:83:22)
+    at async eval (C:\dev\baseline-task-evals-20261021-cde21c0d\fixture-sveltia\node_modules\astro\dist\content\loaders\glob.js:231:6)

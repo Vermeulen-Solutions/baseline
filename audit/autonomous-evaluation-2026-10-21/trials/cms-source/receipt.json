@@ -1,0 +1,17 @@
+{
+  "id": "cms-source",
+  "scenario": "cms",
+  "arm": "source",
+  "baseCommit": "3e7b993cc14843fc75865d473935c69887507de8",
+  "changedFiles": [],
+  "discoveryRequests": 5,
+  "discoveryEmittedBytes": 124467,
+  "fileReadRequests": 8,
+  "repeatedFileReads": [
+    "README.md"
+  ],
+  "mcpCalls": 9,
+  "blockedWrapperRequests": 3,
+  "clarificationsNeeded": [],
+  "sourceSHA256LF": {}
+}
