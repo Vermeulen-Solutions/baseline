@@ -1,0 +1,33 @@
+
+> site@0.0.0 build
+> astro build
+
+11:50:58 [content] Syncing content
+11:50:58 [content] Synced content
+11:50:58 [types] Generated 769ms
+11:50:58 [build] output: "static"
+11:50:58 [build] mode: "static"
+11:50:58 [build] directory: C:\dev\baseline-task-evals-20261021-cde21c0d\static-new-1\site\dist\
+11:50:58 [build] Collecting build info...
+11:50:58 [build] ✓ Completed in 816ms.
+11:50:58 [build] Building static entrypoints...
+11:50:58 [vite] ✓ built in 715ms
+11:50:58 [vite] ✓ built in 19ms
+11:50:58 [build] Rearranging server assets...
+
+ generating static routes 
+11:50:59   ├─ /404.html (+23ms) 
+11:50:59   ├─ /about/index.html (+6ms) 
+11:50:59   ├─ /contact/index.html (+3ms) 
+11:50:59   ├─ /services/index.html (+3ms) 
+11:50:59   ├─ /index.html (+5ms) 
+11:50:59 ✓ Completed in 238ms.
+
+11:50:59 [build] ✓ Completed in 1.06s.
+11:50:59 [build] 5 page(s) built in 1.88s
+11:50:59 [build] Complete!
+
+> site@0.0.0 postbuild
+> node scripts/assert-release-artifact.mjs
+
+Release artifact profile verified. Also verify the actual production route via check:dev-tools.

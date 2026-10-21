@@ -1,0 +1,28 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { layoutStyle } from '../lib/layout-style';
+interface Props extends HTMLAttributes<'div'> {
+	width?: "reading" | "content" | "wide";
+	breakout?: boolean;
+	class?: string;
+	gap?: string;
+	layout?: 'stack' | 'custom';
+}
+
+const { width: rawWidth, breakout: rawBreakout, gap, layout, class: className, 'class:list': classes, style, ...attributes } = Astro.props;
+const width = rawWidth === 'reading' || rawWidth === 'wide' ? rawWidth : 'content';
+const breakout = rawBreakout === true;
+---
+
+<div
+	{...attributes}
+	data-layout={breakout ? 'breakout' : layout === 'custom' ? 'custom' : 'stack'}
+	style={layoutStyle(style, '--content-gap', gap)}
+	class:list={[
+		breakout ? "content-grid" : ["container-shell", `container-shell--${width}`],
+		className,
+		classes,
+	]}
+>
+	<slot />
+</div>

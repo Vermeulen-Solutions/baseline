@@ -1,0 +1,45 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from 'astro';
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import RichText from '../components/RichText.astro';
+import { site } from '../config/site';
+export const getStaticPaths = (async () => {
+  const pages = await getCollection('pages', ({ data }) => !data.draft);
+  return pages.map(entry => ({ params: { page: entry.data.path || undefined }, props: { entry } }));
+}) satisfies GetStaticPaths;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const path = entry.data.path;
+const services = (await getCollection('services', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title={entry.data.title} description={entry.data.description}>
+  <Section labelledBy="page-heading" class:list={['page-intro', { 'page-intro--home': path === '' }]}>
+    <Container>
+      <h1 id="page-heading" class="page-title">{entry.data.heading}</h1>
+      {entry.body?.trim() && <div class="intro-copy"><RichText><Content /></RichText></div>}
+      {path === 'contact' && <a class="contact-email" href={`mailto:${site.email}`}>{site.email}</a>}
+      <div class="intro-action"><a class="primary-action" href={`mailto:${site.email}`}>{site.action}</a></div>
+    </Container>
+  </Section>
+  {(path === '' || path === 'services') && <Section labelledBy="services-heading" class="services-section">
+    <Container class="services-layout" layout="custom">
+      <div class="flow">
+        <h2 id="services-heading">{path === '' ? 'How we can help' : 'Planning support'}</h2>
+        {path === '' && <a class="text-action" href="/services/">Explore services</a>}
+      </div>
+      <dl class="service-list">
+        {services.map(service => <div class="service-row"><dt>{service.data.title}</dt><dd>{service.data.description}</dd></div>)}
+      </dl>
+    </Container>
+  </Section>}
+  {path === '' && <Section labelledBy="about-heading" class="about-section">
+    <Container class="about-layout" layout="custom">
+      <h2 id="about-heading">Independent thinking.<br />Practical next steps.</h2>
+      <div class="flow"><p>{(await getCollection('pages')).find(page => page.data.path === 'about')?.data.description}</p><a class="text-action" href="/about/">About Northline Planning</a></div>
+    </Container>
+  </Section>}
+</Base>

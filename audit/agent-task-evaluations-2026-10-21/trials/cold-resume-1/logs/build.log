@@ -1,0 +1,58 @@
+
+> fixture-static@0.0.0 build
+> astro build
+
+16:36:44 [content] Syncing content
+16:36:44 [content] Synced content
+16:36:44 [types] Generated 740ms
+16:36:44 [build] output: "static"
+16:36:44 [build] mode: "static"
+16:36:44 [build] directory: C:\dev\baseline-task-evals-20261021-cde21c0d\cold-resume-1\site\dist\
+16:36:44 [build] Collecting build info...
+16:36:44 [build] ✓ Completed in 777ms.
+16:36:44 [build] Building static entrypoints...
+16:36:46 [vite] ✓ built in 1.29s
+16:36:46 [vite] ✓ built in 29ms
+16:36:46 [build] Rearranging server assets...
+
+ generating static routes 
+16:36:47   ├─ /404.html (+24ms) 
+16:36:47   ├─ /about/index.html (+15ms) 
+16:36:47   ├─ /contact/index.html (+6ms) 
+16:36:47   ├─ /posts/index.html (+17ms) 
+16:36:47   ├─ /posts/welcome/index.html (+9ms) 
+16:36:47   ├─ /services/index.html (+13ms) 
+16:36:47   ├─ /workshops/index.html (+22ms) 
+16:36:47   ├─ /index.html (+10ms) 
+16:36:47 ✓ Completed in 1.36s.
+
+ generating optimized images 
+16:36:47   ▶ /_astro/pilot-grid.C18fp0m6_1ChCCy.webp (reused cache entry) (+14ms) (1/3)
+16:36:47   ▶ /_astro/pilot-grid.C18fp0m6_DL58u.webp (reused cache entry) (+14ms) (2/3)
+16:36:47   ▶ /_astro/pilot-grid.C18fp0m6_HP8Dr.webp (reused cache entry) (+3ms) (3/3)
+16:36:47 ✓ Completed in 32ms.
+
+16:36:47 [build] ✓ Completed in 2.82s.
+16:36:47 [build] 8 page(s) built in 3.61s
+16:36:47 [build] Complete!
+
+> fixture-static@0.0.0 postbuild
+> node scripts/assert-release-artifact.mjs && npm run test:workshops
+
+Release artifact profile verified. Also verify the actual production route via check:dev-tools.
+
+> fixture-static@0.0.0 test:workshops
+> node --test tests/workshops-output.mjs
+
+✔ public workshops include the published entry and never expose the draft (1.1884ms)
+✔ workshop date is calendar-safe and venue is visible (0.2386ms)
+✔ email enquiry action and primary navigation have the agreed destinations (14.553ms)
+✔ existing routes survive and workshop detail routes are not generated (1.3483ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 199.3636

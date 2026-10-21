@@ -1,0 +1,57 @@
+{
+  "name": "fixture-static",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "^22.22.3 || ^24.16.0 || >=26.3.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "preview": "astro preview",
+    "build": "astro build",
+    "build:timings": "astro build --timings",
+    "typecheck": "astro check",
+    "lint": "npm run lint:scripts && npm run lint:templates",
+    "test": "node --test tests/*.test.mjs",
+    "check:art-direction": "node scripts/check-art-direction.mjs --changed",
+    "design:check": "node scripts/design-interchange.mjs",
+    "design:export": "node scripts/design-interchange.mjs --export",
+    "check:release-artifact": "node scripts/assert-release-artifact.mjs",
+    "verify": "npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck",
+    "design:tokens": "node scripts/design-system.mjs",
+    "fixtures:build": "node scripts/styleguide-fixtures.mjs build",
+    "fixtures:serve": "node scripts/styleguide-fixtures.mjs serve",
+    "sync:baseline": "node scripts/sync-baseline.mjs",
+    "lint:scripts": "node scripts/check-script-syntax.mjs",
+    "lint:templates": "eslint src --max-warnings 0",
+    "check:css": "node scripts/check-css-contracts.mjs",
+    "postbuild": "node scripts/assert-release-artifact.mjs && npm run test:workshops",
+    "test:workshops": "node --test tests/workshops-output.mjs",
+    "check:dev-tools": "node scripts/check-dev-tools.mjs",
+    "test:design": "node --test tests/static-foundation.test.mjs tests/fluid-tokens.test.mjs tests/css-contracts.test.mjs tests/spacing-tokens.test.mjs"
+  },
+  "dependencies": {
+    "astro": "7.4.0",
+    "tailwindcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "6.0.3",
+    "sharp": "0.35.4",
+    "@fontsource/noto-sans": "5.3.0",
+    "@google/design.md": "0.4.0",
+    "@playwright/test": "1.64.1",
+    "eslint": "10.13.0",
+    "eslint-plugin-astro": "3.2.1",
+    "eslint-plugin-jsx-a11y-x": "0.2.0",
+    "@typescript-eslint/parser": "8.71.2",
+    "@types/node": "24.19.2",
+    "postcss": "8.5.30",
+    "postcss-selector-parser": "7.1.6",
+    "astro-eslint-parser": "3.2.0",
+    "parse5": "7.3.0"
+  },
+  "license": "MIT"
+}

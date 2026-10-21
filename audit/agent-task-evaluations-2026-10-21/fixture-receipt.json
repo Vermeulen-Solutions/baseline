@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-21T09:46:13.802Z",
+  "fixtures": {
+    "static": {
+      "commit": "74c6ee5edf4f1ca104fbd9d90e90ee27ca0c0f69",
+      "node": "24.21.0",
+      "astro": "7.4.0",
+      "profile": "static",
+      "installation": "Separate npm install and successful installed verify/build before maintenance trials"
+    },
+    "static-sveltia": {
+      "commit": "2493fb7550577d6531a8ca1fc7e195eac778f4f3",
+      "node": "24.21.0",
+      "astro": "7.4.0",
+      "profile": "static-sveltia",
+      "installation": "Separate npm install and successful installed verify/build before maintenance trials"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "trial": "sveltia-field-3",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "f674569fb3ea740bab8099b3139920267193464e306c5771e6755a8092a24c92"
+    },
+    {
+      "path": "docs/sveltia-cms.md",
+      "sha256": "29d8b31895e6d74576166480a42e1ee0cdd33fbc2a97c30fd40346105ee22bea"
+    },
+    {
+      "path": "public/admin/config.yml",
+      "sha256": "629910c387dc7505773f3a023cf0075a6c3afd920bed7c2cd8770fa73bf207f6"
+    },
+    {
+      "path": "src/content.config.ts",
+      "sha256": "e62a6e25267d616c372a82f9c48b40216df7dea165a4e5c1339df8482f4798c8"
+    },
+    {
+      "path": "src/pages/posts/[...id].astro",
+      "sha256": "9fd4204549648a263bd48512b5634f608dd6999aa76ef9c51ed896c05383c1d7"
+    },
+    {
+      "path": "tests/sveltia-config.test.mjs",
+      "sha256": "793b31e98351a36993770c1f46fc4808a81a6ce697d5fdcde2734132f078b123"
+    },
+    {
+      "path": "src/content/posts/field-notes.md",
+      "sha256": "9006a5721891e5b79300487ebd75cdade8a7d5047825d922041348c36978eef8"
+    },
+    {
+      "path": "src/content/posts/practice-update.md",
+      "sha256": "5552c07b6615eb5ab9b3666efe96b3fbd24fdd7c7aab237c252953505886dd9b"
+    },
+    {
+      "path": "tests/post-reading-time.test.mjs",
+      "sha256": "d189061b30fdb738f5cdcaef719cf564ef04679928869512b6456ab3ca9530d2"
+    }
+  ]
+}

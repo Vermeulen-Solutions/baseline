@@ -1,0 +1,21 @@
+{
+  "recordedAt": "2026-10-21T09:52:48.227Z",
+  "fixture": "unchanged prepared static fixture",
+  "gitRevision": "recorded in fixture-receipt.json",
+  "responses": [
+    {
+      "route": "/_styleguide",
+      "status": 404,
+      "location": null,
+      "hasSpecimen": false,
+      "bodyLength": 36656
+    },
+    {
+      "route": "/_styleguide/",
+      "status": 200,
+      "location": null,
+      "hasSpecimen": true,
+      "bodyLength": 83690
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+---
+import Styleguide from '../components/dev/Styleguide.astro';
+if (!import.meta.env.DEV && !import.meta.env.STARTER_TEST_FIXTURES) return new Response(null, { status: 404 });
+if (import.meta.env.DEV) {
+  Astro.response.headers.set('Cache-Control', 'no-store');
+  Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+}
+---
+<Styleguide />

@@ -1,0 +1,28 @@
+---
+import SiteShell from './SiteShell.astro';
+import { site } from '../config/site';
+import { routing } from '../config/routing';
+import StaticMetadata from '../components/StaticMetadata.astro';
+import { resolveStaticMetadata, routePath, type PageMetadata } from '../lib/metadata';
+type Props = PageMetadata;
+const metadata = resolveStaticMetadata(Astro.props, site, { siteUrl: Astro.site, url: Astro.url, routing });
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<SiteShell spacingPolicy="automatic-v2" title={metadata.title} metadataOwner="platform" lang={metadata.language}>
+  <StaticMetadata slot="head" metadata={metadata} />
+  <header slot="header" class="site-header">
+    <div class="header-inner">
+      <a class="site-brand" href={routePath('/', routing)}>{site.title}</a>
+      <nav class="primary-nav" aria-label="Primary navigation">
+        {site.navigation.map(item => <a href={routePath(item.href, routing)} aria-current={currentPath === (item.href.replace(/\/$/, '') || '/') ? 'page' : undefined}>{item.label}</a>)}
+      </nav>
+    </div>
+  </header>
+  <slot />
+  <footer slot="footer" class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-name">{site.title}</p>
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+  </footer>
+</SiteShell>

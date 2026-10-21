@@ -1,0 +1,48 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { randomUUID } from 'node:crypto';
+
+interface Props extends HTMLAttributes<'details'> {}
+const { id: rawId, open, class: className, 'aria-expanded': _expanded, 'aria-controls': _controls, ...attributes } = Astro.props;
+const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId : `disclosure-${randomUUID()}`;
+---
+<details {...attributes} id={id} open={open === true} data-disclosure data-editorial-island class:list={['disclosure', className]}>
+  <summary aria-controls={`${id}-body`}><slot name="summary">Details</slot></summary>
+  <div id={`${id}-body`} class="disclosure__body flow" data-editorial-content><slot /></div>
+</details>
+<script>
+  // Without JS the browser owns native expanded semantics. Add explicit state
+  // only when it can be kept in sync, including native exclusive name groups.
+  document.addEventListener('toggle', event => {
+    const details = event.target;
+    if (details instanceof HTMLDetailsElement && details.hasAttribute('data-disclosure')) {
+      details.querySelector(':scope > summary')?.setAttribute('aria-expanded', String(details.open));
+    }
+  }, true);
+  function syncDisclosures() {
+    document.querySelectorAll<HTMLDetailsElement>('details[data-disclosure]').forEach(details => {
+      details.querySelector(':scope > summary')?.setAttribute('aria-expanded', String(details.open));
+    });
+  }
+  syncDisclosures();
+  document.addEventListener('astro:page-load', syncDisclosures);
+</script>
+<style>
+@layer components {
+  .disclosure {
+    min-inline-size: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-control);
+    color: var(--color-text);
+    background: var(--color-surface);
+    overflow-wrap: anywhere;
+  }
+  summary {
+    display: list-item;
+    padding: var(--spacing-content);
+    font-weight: var(--font-weight-display, 700);
+    cursor: pointer;
+  }
+  .disclosure__body { padding: 0 var(--spacing-content) var(--spacing-content); }
+}
+</style>

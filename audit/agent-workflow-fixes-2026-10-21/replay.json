@@ -1,0 +1,63 @@
+{
+  "startedAt": "2026-10-21T15:05:21.666Z",
+  "workspace": "C:/dev/baseline-workflow-fixes-20261021-OtMojE",
+  "checks": [
+    {
+      "id": "reviewed-fixture-bytes",
+      "status": "pass",
+      "evidence": {
+        "files": 33,
+        "method": "Git checkout with text eol=lf; byte-for-byte comparison to reviewed source"
+      }
+    },
+    {
+      "id": "independent-cms-install",
+      "status": "pass",
+      "evidence": "Independent npm ci; dependency paths are regular files, retaining linked-input refusal checks"
+    },
+    {
+      "id": "calibrated-journal-full-verification",
+      "status": "pass",
+      "evidence": "Full installed verification, including both test tiers and typecheck"
+    },
+    {
+      "id": "client-calibration-preserved",
+      "status": "pass",
+      "evidence": "Calibrated CSS and pruned exceptions unchanged; no client exemption restored"
+    },
+    {
+      "id": "journal-and-dev-styleguide",
+      "status": "pass",
+      "evidence": "Real anonymous CMS Journal/Posts routes, draft 404, actual dev specimen"
+    },
+    {
+      "id": "calibrated-production-build",
+      "status": "pass",
+      "evidence": "Fresh server build and release-artifact guard"
+    },
+    {
+      "id": "calibrated-html-audit",
+      "status": "pass",
+      "evidence": "Fresh build public SSR capture and HTML audit"
+    },
+    {
+      "id": "native-static-full-verification",
+      "status": "pass",
+      "evidence": "Installed static profile checks; no CMS commands added"
+    },
+    {
+      "id": "static-canonical-styleguide-discovery",
+      "status": "pass",
+      "evidence": "Startup printed canonical /_styleguide/; real GET 200 with specimens; slashless GET 404"
+    },
+    {
+      "id": "static-production-build-and-isolation",
+      "status": "pass",
+      "evidence": "Static release build contains no developer specimens or server entrypoint"
+    }
+  ],
+  "limits": [
+    "Post-fix regression replay, not new blind agent trials. CMS has an independent npm ci; static uses existing native-profile dependencies through a junction. Databases and authored sources are separate. No previous working database or original user environment copied."
+  ],
+  "completedAt": "2026-10-21T15:12:37.082Z"
+}

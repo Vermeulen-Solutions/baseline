@@ -1,0 +1,42 @@
+{
+  "trial": "cold-resume-2",
+  "capturedAt": "2026-10-21T14:27:47.896Z",
+  "baseCommit": "74c6ee5edf4f1ca104fbd9d90e90ee27ca0c0f69",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "a1d8ca346db24514133bb42b55194caa08d78ab621ebd2056fd9fb7655b37073"
+    },
+    {
+      "path": "src/content.config.ts",
+      "sha256": "f76c3cad8c100367a12cc28e575bf2265c7834d847295810556ae3ffe506248d"
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "8345aeaf762a9b815c014e650b7d9b34f8b3ace091e7bec4dd4d9cc5569c3dc5"
+    },
+    {
+      "path": "src/content/workshops/clear-project-briefs.md",
+      "sha256": "d5e1e4270fae51133b04f9a5b2867ae87739b46be3dc9a0d7b80a4fb3f1fadd2"
+    },
+    {
+      "path": "src/content/workshops/winter-planning-clinic.md",
+      "sha256": "6e2c89ff190e09ce924fceb7141ec8b24a405968f11f7d4742334fdb00ef88a8"
+    },
+    {
+      "path": "src/lib/workshop-schema.ts",
+      "sha256": "ee3863314b7800c813c336aaa9e548b98cbcb3e8912ca0fde7a32ffd0c38cb2c"
+    },
+    {
+      "path": "tests/workshops.test.mjs",
+      "sha256": "8eabbdecf450671c106b0b70a83c921d73492ba414816c0798e83f0e47d18895"
+    }
+  ],
+  "checks": {
+    "noRouteImplementation": true,
+    "noNavigationChange": true,
+    "typedSchemaPresent": true,
+    "twoSampleEntriesPresent": true,
+    "writtenHandoffPresent": true
+  }
+}

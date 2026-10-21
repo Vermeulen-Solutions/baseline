@@ -1,0 +1,126 @@
+
+> site@0.0.0 verify
+> npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck
+
+
+> site@0.0.0 lint
+> npm run lint:scripts && npm run lint:templates
+
+
+> site@0.0.0 lint:scripts
+> node scripts/check-script-syntax.mjs
+
+Syntax checked 17 JavaScript modules.
+
+> site@0.0.0 lint:templates
+> eslint src --max-warnings 0
+
+
+> site@0.0.0 check:css
+> node scripts/check-css-contracts.mjs
+
+CSS contracts: PASS; 25 source inputs.
+
+> site@0.0.0 check:art-direction
+> node scripts/check-art-direction.mjs --changed
+
+Art direction gate: checking record for src/assets/pilot-grid.jpg, src/components/Card.astro, src/components/Cluster.astro, src/components/Container.astro, src/components/Disclosure.astro, src/components/FormError.astro, src/components/Grid.astro, src/components/LogoTicker.astro, src/components/PartnersPanel.astro, src/components/ProjectAction.astro, src/components/ResponsiveImage.astro, src/components/RichText.astro, src/components/Section.astro, src/components/ServicesList.astro, src/components/Sidebar.astro, src/components/StaticMetadata.astro, src/config/routing.ts, src/config/site.ts, src/content/pages/about.md, src/content/pages/contact.md, src/content/pages/home.md, src/content/pages/services.md, src/content/services/application-support.md, src/content/services/planning-guidance.md, src/content/services/premises-review.md, src/content.config.ts, src/env.d.ts, src/layouts/Base.astro, src/layouts/SiteShell.astro, src/lib/json-ld.ts, src/lib/layout-style.ts, src/lib/metadata.ts, src/lib/partner.ts, src/lib/public-link.ts, src/lib/responsive-image.ts, src/pages/404.astro, src/pages/index.astro, src/pages/[slug].astro, src/styles/global.css
+Art direction record is structurally valid.
+👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.
+
+> site@0.0.0 design:tokens
+> node scripts/design-system.mjs
+
+Design System Audit (C:\dev\baseline-task-evals-20261021-cde21c0d\static-new-1\site\src\styles\global.css): PASS
+- LF SHA-256: 1dba1fab2ac9504e287de7359370a19507630155460ccbb2879b7ec0a46a5287
+- @theme tokens: 31
+- :root tokens: 12
+- [data-surface="dark"] tokens: 6
+- Font loading: PASS (system fonts)
+- EmDash edit proxies: NOT APPLICABLE (static foundation)
+- Fluid mathematics: 12 bounded affine tokens (vi default; reference root 16px, horizontal writing)
+- Fluid advisories: 6 tokens; inspect --json fluid.tokens (advisory only, rendered acceptance required)
+- Spacing contexts (bounded reference values; starter consumers, not a downstream site inventory):
+  [PASS] --layout-section-padding -> Section outer block padding (112px at 1280/16)
+  [PASS] --layout-container-gap -> Section stack children (36px at 1280/16)
+  [PASS] --layout-content-gap -> Container stack children (23.99904px at 1280/16)
+  [PASS] --layout-grid-gap -> Grid and managed grid tracks (36px at 1280/16)
+- WCAG Relative Luminance Contrast Pairs:
+  [PASS] default:text-on-page: 11.1:1 (min 4.5:1)
+  [PASS] default:text-on-surface: 10.32:1 (min 4.5:1)
+  [PASS] default:muted-on-page: 6.17:1 (min 4.5:1)
+  [PASS] default:muted-on-surface: 5.74:1 (min 4.5:1)
+  [PASS] default:on-action-on-action: 8.1:1 (min 4.5:1)
+  [PASS] default:action-on-page: 7.64:1 (min 3:1)
+  [PASS] default:link-on-page: 7.64:1 (min 4.5:1)
+  [PASS] default:link-on-surface: 7.1:1 (min 4.5:1)
+  [PASS] dark:link-on-surface: 8.09:1 (min 4.5:1)
+  [PASS] light:link-on-surface: 7.64:1 (min 4.5:1)
+  [PASS] default:focus-on-page: 7.64:1 (min 3:1)
+  [PASS] dark:text-on-surface: 11.42:1 (min 4.5:1)
+  [PASS] dark:muted-on-surface: 7.89:1 (min 4.5:1)
+  [PASS] dark:focus-on-surface: 8.09:1 (min 3:1)
+
+> site@0.0.0 test
+> node --test tests/*.test.mjs
+
+✔ M01-M03/M05 CSS parsing handles strings, comments, at-rules and anonymous/wrong layers (6.2758ms)
+✔ Astro parsing ignores style-looking script strings and comments and preserves source locations (1.7927ms)
+✔ M04/M06 standalone imports, new CSS files and static overlays are included without inspecting package CSS (19.4444ms)
+✔ M07-M10 flow audit recognizes real selectors and both guarded and one-sided strategies (9.6595ms)
+✔ generator preserves previously emitted scales and authored lane values (2.4074ms)
+✔ independent five-point interpolation, clamping and changed root font sizes (1.3664ms)
+✔ Utopia comparison example matches independent endpoints after four-place rounding (0.254ms)
+✔ all generated scales interpolate requested bounds monotonically within rounding error (23.6045ms)
+✔ authored presets retain their own transition domains and diagnostic samples (89.5726ms)
+✔ bounded grammar accepts negative intercepts, finite exponents and legacy viewport expressions (18.7309ms)
+✔ invalid CSS, nonfinite math, contextless cqi and descending or flat varying scales fail closed (28.4802ms)
+✔ generator rejects invalid domains and nonrepresentable coefficients before emitting CSS (1.7943ms)
+✔ viewport shrink and changed root sizes are advisory, with no false accessibility certification (56.6133ms)
+✔ evaluator rejects nonfinite environments and arithmetic overflow (1.7192ms)
+✔ one resolved model keeps public canonical, article schema and dates in agreement (24.8608ms)
+✔ website identity has a public base URL and does not duplicate an identical site title (0.505ms)
+✔ default canonical policy respects build-generated file paths, slash policy and case (0.7526ms)
+✔ explicit canonical retains its origin, path case and meaningful query independently of defaults (0.7056ms)
+✔ one fallback image supplies graph and social values without inventing type or dimensions (4.9131ms)
+✔ known authors/modified dates are optional facts; missing or invalid dates are omitted (4.2373ms)
+✔ an unconfigured public URL never falls back to the static build or preview hostname (17.9722ms)
+✔ 404 policy omits canonical/schema while retaining robots and meaningful metadata (1.5799ms)
+✔ invalid URL schemes, credentials, image facts and inconsistent deploy base fail explicitly (23.1145ms)
+✔ JSON-LD serialization preserves adversarial text in exactly one inert script node (10.7033ms)
+✔ T01/T06 exact token scope, ambiguity, no-op and narrow context targeting (76.5249ms)
+✔ T02 bounded spacing resolution reports dependency failures and supported arithmetic (1.4715ms)
+✔ T03-T05 CLI validates before writes and binds calibration to the saved candidate (1225.5445ms)
+✔ shared tokens pass and CMS proxy checks are explicitly inapplicable (21.7279ms)
+✔ static dependencies and scripts have no CMS, database bootstrap or server adapter (2.6099ms)
+✔ template gate rejects missing/invalid image alternative (1174.8816ms)
+✔ template gate rejects missing/invalid ARIA value (11.1743ms)
+✔ template gate rejects missing/invalid keyboard interaction (4.8693ms)
+✔ template gate rejects missing/invalid label control association (2.6989ms)
+✔ template gate rejects missing/invalid real link destination (2.8562ms)
+✔ template gate rejects missing/invalid natural tab order (2.3816ms)
+✔ template gate rejects missing/invalid unreviewed autofocus (2.4035ms)
+✔ template gate rejects missing/invalid known image component alternative (2.1885ms)
+✔ template gate accepts typed frontmatter, slots, native disclosure and labelled fields (13.968ms)
+✔ line exceptions stay narrow and become errors when obsolete (8.988ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1801.9828
+
+> site@0.0.0 typecheck
+> astro check
+
+11:50:48 [content] Syncing content
+11:50:48 [content] Synced content
+11:50:48 [types] Generated 855ms
+11:50:48 [check] Getting diagnostics for Astro files in C:\dev\baseline-task-evals-20261021-cde21c0d\static-new-1\site...
+Result (35 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+

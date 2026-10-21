@@ -1,0 +1,530 @@
+{
+  "trial": "regional-spacing-1",
+  "startedAt": "2026-10-21T09:54:47.040Z",
+  "independent": true,
+  "criteria": [
+    {
+      "id": "verification",
+      "status": "pass",
+      "evidence": "Independent installed verification passed"
+    },
+    {
+      "id": "production-build",
+      "status": "pass",
+      "evidence": "Independent production build passed"
+    },
+    {
+      "id": "responsive-public-pages",
+      "status": "pass",
+      "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+    },
+    {
+      "id": "missing-route-404",
+      "status": "pass",
+      "evidence": "Missing URL served as 404, not SPA fallback"
+    },
+    {
+      "id": "regional-gap-ratio-and-isolation",
+      "status": "pass",
+      "evidence": "Only requested services gaps changed to 75%; other measured grids, copy and links retained"
+    },
+    {
+      "id": "theme-and-root-tokens-preserved",
+      "status": "fail",
+      "observation": "Expected values to be strictly deep-equal:\n+ actual - expected\n... Skipped lines\n\n  {\n    dark: {\n      '--color-border': 'var(--surface-dark-border, oklch(32% 0.02 55))',\n      '--color-focus': 'var(--color-focus-on-dark)',\n      '--color-link': 'var(--surface-dark-link, var(--color-focus-on-dark))',\n...\n      '--ease-snappy': 'cubic-bezier(0.16, 1, 0.3, 1)',\n+     '--ease-spring': 'linear(\\r\\n' +\n+       '\\t\\t0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017,\\r\\n' +\n+       '\\t\\t1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%,\\r\\n' +\n+       '\\t\\t1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%,\\r\\n' +\n+       '\\t\\t0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1\\r\\n' +\n-     '--ease-spring': 'linear(\\n' +\n-       '\\t\\t0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017,\\n' +\n-       '\\t\\t1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%,\\n' +\n-       '\\t\\t1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%,\\n' +\n-       '\\t\\t0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1\\n' +\n        '\\t)',\n      '--font-body': 'ui-sans-serif, system-ui, sans-serif',\n      '--font-display': 'Georgia, Cambria, \"Times New Roman\", Times, serif',\n      '--radius-card': '0.25rem',\n      '--radius-control': '0.1875rem',\n+     '--shadow-lg': '0 2px 4px -2px oklch(from var(--color-text) l c h / 0.04),\\r\\n' +\n+       '\\t\\t0 6px 12px -2px oklch(from var(--color-text) l c h / 0.06),\\r\\n' +\n+       '\\t\\t0 16px 24px -4px oklch(from var(--color-text) l c h / 0.07),\\r\\n' +\n+       '\\t\\t0 28px 36px -6px oklch(from var(--color-text) l c h / 0.07),\\r\\n' +\n+       '\\t\\t0 44px 52px -8px oklch(from var(--color-text) l c h / 0.06),\\r\\n' +\n-     '--shadow-lg': '0 2px 4px -2px oklch(from var(--color-text) l c h / 0.04),\\n' +\n-       '\\t\\t0 6px 12px -2px oklch(from var(--color-text) l c h / 0.06),\\n' +\n-       '\\t\\t0 16px 24px -4px oklch(from var(--color-text) l c h / 0.07),\\n' +\n-       '\\t\\t0 28px 36px -6px oklch(from var(--color-text) l c h / 0.07),\\n' +\n-       '\\t\\t0 44px 52px -8px oklch(from var(--color-text) l c h / 0.06),\\n' +\n        '\\t\\t0 64px 72px -12px oklch(from var(--color-text) l c h / 0.05)',\n+     '--shadow-md': '0 2px 4px -2px oklch(from var(--color-text) l c h / 0.05),\\r\\n' +\n+       '\\t\\t0 6px 10px -2px oklch(from var(--color-text) l c h / 0.07),\\r\\n' +\n+       '\\t\\t0 14px 20px -4px oklch(from var(--color-text) l c h / 0.07),\\r\\n' +\n-     '--shadow-md': '0 2px 4px -2px oklch(from var(--color-text) l c h / 0.05),\\n' +\n-       '\\t\\t0 6px 10px -2px oklch(from var(--color-text) l c h / 0.07),\\n' +\n-       '\\t\\t0 14px 20px -4px oklch(from var(--color-text) l c h / 0.07),\\n' +\n        '\\t\\t0 24px 32px -6px oklch(from var(--color-text) l c h / 0.05)',\n+     '--shadow-sm': '0 2px 4px -1px oklch(from var(--color-text) l c h / 0.04),\\r\\n' +\n+       '\\t\\t0 4px 6px -1px oklch(from var(--color-text) l c h / 0.06),\\r\\n' +\n-     '--shadow-sm': '0 2px 4px -1px oklch(from var(--color-text) l c h / 0.04),\\n' +\n-       '\\t\\t0 4px 6px -1px oklch(from var(--color-text) l c h / 0.06),\\n' +\n        '\\t\\t0 8px 10px -2px oklch(from var(--color-text) l c h / 0.05)',\n      '--spacing-2xl-to-md': 'clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem)',\n      '--spacing-container': 'clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)',\n      '--spacing-content': 'clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)',\n      '--spacing-grid': 'clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem)',\n"
+    }
+  ],
+  "measurements": {
+    "pages": [
+      {
+        "route": "/",
+        "width": 390,
+        "status": 200,
+        "title": "Clear plans, useful conversations — Northline Studio",
+        "text": "Clear plans, useful conversationsNorthline Studio helps small teams plan useful work.ServicesProject briefsTurn an initial conversation into a practical brief.Working sessionsMake room for useful decisions.Planning supportKeep the next steps manageable.Our approachListenStart with the real situation.ClarifyAgree what matters next.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Project briefs",
+            "href": "/services/"
+          },
+          {
+            "text": "Working sessions",
+            "href": "/services/"
+          },
+          {
+            "text": "Planning support",
+            "href": "/services/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": {
+            "row": 15.8755,
+            "column": 15.8755
+          },
+          "approach-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          },
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\regional-spacing-1-grade\\390--.png"
+      },
+      {
+        "route": "/about/",
+        "width": 390,
+        "status": 200,
+        "title": "About Northline Studio — Northline Studio",
+        "text": "About Northline StudioWe value clear thinking, practical advice and manageable next steps.ClarityUseful language for real decisions.CareAttention to the people doing the work.",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          }
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\regional-spacing-1-grade\\390--about-.png"
+      },
+      {
+        "route": "/",
+        "width": 1440,
+        "status": 200,
+        "title": "Clear plans, useful conversations — Northline Studio",
+        "text": "Clear plans, useful conversationsNorthline Studio helps small teams plan useful work.ServicesProject briefsTurn an initial conversation into a practical brief.Working sessionsMake room for useful decisions.Planning supportKeep the next steps manageable.Our approachListenStart with the real situation.ClarifyAgree what matters next.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Project briefs",
+            "href": "/services/"
+          },
+          {
+            "text": "Working sessions",
+            "href": "/services/"
+          },
+          {
+            "text": "Planning support",
+            "href": "/services/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": {
+            "row": 27,
+            "column": 27
+          },
+          "approach-grid": {
+            "row": 36,
+            "column": 36
+          },
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\regional-spacing-1-grade\\1440--.png"
+      },
+      {
+        "route": "/about/",
+        "width": 1440,
+        "status": 200,
+        "title": "About Northline Studio — Northline Studio",
+        "text": "About Northline StudioWe value clear thinking, practical advice and manageable next steps.ClarityUseful language for real decisions.CareAttention to the people doing the work.",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": {
+            "row": 36,
+            "column": 36
+          }
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\regional-spacing-1-grade\\1440--about-.png"
+      }
+    ],
+    "before": [
+      {
+        "route": "/",
+        "width": 390,
+        "status": 200,
+        "title": "Clear plans, useful conversations — Northline Studio",
+        "text": "Clear plans, useful conversationsNorthline Studio helps small teams plan useful work.ServicesProject briefsTurn an initial conversation into a practical brief.Working sessionsMake room for useful decisions.Planning supportKeep the next steps manageable.Our approachListenStart with the real situation.ClarifyAgree what matters next.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Project briefs",
+            "href": "/services/"
+          },
+          {
+            "text": "Working sessions",
+            "href": "/services/"
+          },
+          {
+            "text": "Planning support",
+            "href": "/services/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          },
+          "approach-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          },
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\regional-spacing-1-grade\\before\\390--.png"
+      },
+      {
+        "route": "/about/",
+        "width": 390,
+        "status": 200,
+        "title": "About Northline Studio — Northline Studio",
+        "text": "About Northline StudioWe value clear thinking, practical advice and manageable next steps.ClarityUseful language for real decisions.CareAttention to the people doing the work.",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          }
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\regional-spacing-1-grade\\before\\390--about-.png"
+      },
+      {
+        "route": "/",
+        "width": 1440,
+        "status": 200,
+        "title": "Clear plans, useful conversations — Northline Studio",
+        "text": "Clear plans, useful conversationsNorthline Studio helps small teams plan useful work.ServicesProject briefsTurn an initial conversation into a practical brief.Working sessionsMake room for useful decisions.Planning supportKeep the next steps manageable.Our approachListenStart with the real situation.ClarifyAgree what matters next.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Project briefs",
+            "href": "/services/"
+          },
+          {
+            "text": "Working sessions",
+            "href": "/services/"
+          },
+          {
+            "text": "Planning support",
+            "href": "/services/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": {
+            "row": 36,
+            "column": 36
+          },
+          "approach-grid": {
+            "row": 36,
+            "column": 36
+          },
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\regional-spacing-1-grade\\before\\1440--.png"
+      },
+      {
+        "route": "/about/",
+        "width": 1440,
+        "status": 200,
+        "title": "About Northline Studio — Northline Studio",
+        "text": "About Northline StudioWe value clear thinking, practical advice and manageable next steps.ClarityUseful language for real decisions.CareAttention to the people doing the work.",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": {
+            "row": 36,
+            "column": 36
+          }
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\regional-spacing-1-grade\\before\\1440--about-.png"
+      }
+    ]
+  },
+  "limits": [],
+  "completedAt": "2026-10-21T09:55:17.569Z",
+  "summary": {
+    "pass": 5,
+    "fail": 1,
+    "unverified": 0
+  },
+  "status": "fail",
+  "changedFiles": [
+    "M src/pages/index.astro"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "recordedAt": "2026-10-21T15:15:59.013Z",
+  "rootVisualTokensAndGateExceptionsUnchanged": [
+    "src/styles/global.css",
+    "audit/design-gate-exceptions.json"
+  ],
+  "files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "85ff63fcc830153b71febedc948858b9e044bc68934b594d1490928c7de905f5"
+    },
+    {
+      "path": "scripts/dev-tools-integration.mjs",
+      "sha256": "a5aeeaf42a510c58c8ec7529a0f915e57a860332ad7bffa6380f7f48b76b8221"
+    },
+    {
+      "path": "tests/helpers/profile-source.mjs",
+      "sha256": "6c4fb3bb59f00aa3a71edf8cd3e016c7de73e2e4a5ac2adcd031f1d8b2fe22ea"
+    },
+    {
+      "path": "tests/fixtures/design/neutral.css",
+      "sha256": "73bb2e481133dac3a782bbdad4ee66be1193be07d0b904a47cbfc9d1bda3f789"
+    },
+    {
+      "path": "tests/design-interchange.test.mjs",
+      "sha256": "0b1971d0fad12804cfe35bf2b2a4f3f61b3044e280fb9c4e0c63f1ee97510a9f"
+    },
+    {
+      "path": "tests/token-coverage.test.mjs",
+      "sha256": "ae44d963dbe7dbf499b747694c3c59eeaeace0d1ebf960d3429665e29586ad24"
+    },
+    {
+      "path": "tests/baseline-sync.test.mjs",
+      "sha256": "7dd67ce99316deb624685396fdd72682395c87bf4db5d5b550e01651b6035c04"
+    },
+    {
+      "path": "tests/static-profile.test.mjs",
+      "sha256": "a05d819cd11511991b85fb10f53c0d261b81293f092d696f57a957b2ebd2bb20"
+    },
+    {
+      "path": "tests/profile-delivery.test.mjs",
+      "sha256": "d0df072ab52f0d06011f9dfaf6227d37378a6d5abec8886d6c3ebc14ec1153c3"
+    },
+    {
+      "path": "tests/migration-acceptance.test.mjs",
+      "sha256": "df83971c57cb4519a9cc0526c8e0d1bd5f31f06f6d36d3f9723d1c1f38898200"
+    },
+    {
+      "path": "docs/design-framework.md",
+      "sha256": "b9b2841c2f50b6686d219a1923f59cfc64504ecb4d4bb9fb047ec457eee34bfc"
+    },
+    {
+      "path": "profiles/static/project/README.md",
+      "sha256": "36767a028b3aaab3a43c22683c8325ca11c1698a9f42ee42f56754926ce05402"
+    },
+    {
+      "path": "profiles/static/project/AGENTS.md",
+      "sha256": "02882a83ed2270f3149456ca7137ecd56b87040db633b543f41d352d8845af99"
+    },
+    {
+      "path": ".agents/skills/new-site-workflow/SKILL.md",
+      "sha256": "7bdce3b183c5b5204d257c8ec94f947b7a891b3d951929a20adf433542d8efa7"
+    },
+    {
+      "path": "README.md",
+      "sha256": "4019455488606c755bc19e0bdfb504cd1c80325b469751d02d63b50dff1bebaa"
+    }
+  ],
+  "validation": "280 root tests, 280 calibrated CMS tests, 39 native static tests; builds and HTML audits passed",
+  "qualification": "Current working-tree hashes include preserved earlier instruction edits where a file was already modified."
+}

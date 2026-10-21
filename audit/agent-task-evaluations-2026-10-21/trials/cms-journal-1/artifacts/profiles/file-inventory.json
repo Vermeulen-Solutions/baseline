@@ -1,0 +1,1017 @@
+{
+  "schemaVersion": 1,
+  "scope": [
+    "src/**",
+    "scripts/*.mjs",
+    "tests/*.test.mjs",
+    "astro.config.mjs",
+    "tsconfig.json",
+    "emdash-env.d.ts",
+    "package.json",
+    "package-lock.json",
+    "playwright.config.mjs",
+    ".env.example",
+    ".mcp.example.json",
+    ".github/workflows/design-checks.yml",
+    ".github/workflows/upstream-update.yml",
+    "seed/seed.json",
+    "eslint.config.mjs"
+  ],
+  "defaultAction": "omit",
+  "note": "Source classification, not an executable copy-all instruction. Only resolved manifest.files may be copied. Profile tests, visual baselines, docs, skills and local state are not implicitly shipped.",
+  "files": {
+    "scripts/doctor.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    ".env.example": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    ".github/workflows/design-checks.yml": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    ".github/workflows/upstream-update.yml": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    ".mcp.example.json": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "astro.config.mjs": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "emdash-env.d.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "package-lock.json": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "package.json": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "playwright.config.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/assert-release-artifact.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/audit-baseline.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-capabilities.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-design-system.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-evidence.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-modernize.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-report.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-runtime-evidence.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-site.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-skills.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/auto-update.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-art-direction.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/check-ci-fast.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-dev-tools.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-docs-mcp.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-native-images.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-schema-budget.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-script-syntax.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/check-upstream-updates.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/create-mcp-token.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/d1-export.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/d1-snapshot.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/db-diff.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/db-export-seed.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/design-interchange.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/design-system.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/dev-tools-integration.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/infrastructure-io.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/media-files.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/media-ingest.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/media-migrate-wp.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/media-probe.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-report.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-html.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-http.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-verify.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "standards/schemas/migration-acceptance.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/organize-media.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/register-site.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/rehearse-infrastructure.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/rehearse-site-audit.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/schema-column-budget.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/skill-sync.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/sqlite-schema.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/styleguide-fixtures.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/sync-emdash-skills.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/sync-impeccable-skill.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/sync-r2-media.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/sync-site-skills.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/test-visual.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "seed/seed.json": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/assets/styleguide-grid.svg": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/assets/styleguide-portrait.svg": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/assets/styleguide-small.svg": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/CMSPartnersPanel.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/components/Card.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Container.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/EditorialImage.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/components/EmDashImage.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/components/FormError.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Grid.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/LogoTicker.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/PartnersPanel.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/PhotoGallery.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/components/ResponsiveImage.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/RichText.astro": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/components/Section.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/dev/Styleguide.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/dev/styleguide-fixtures.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/dev/visual-fonts.css": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/env.d.ts": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/layouts/Base.astro": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/layouts/SiteShell.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/form-recovery.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/image-source.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/justified-gallery.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/partner.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/partners.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/photo-gallery.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/public-link.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/responsive-image.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/live.config.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/404.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/[slug].astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/_styleguide.astro": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/category/[slug].astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/index.astro": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/posts/[slug].astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/posts/index.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/tag/[slug].astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/styles/global.css": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/utils/site-identity.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/audit-baseline.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/audit-coverage.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/audit-modernize.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/audit-runtime-evidence.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/database-tooling.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/design-interchange.test.mjs": {
+      "disposition": "shared",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/design-workflow.test.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/form-recovery.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/justified-gallery.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/media-infrastructure.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/meta-review.test.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-acceptance.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-http.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/partners.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/photo-gallery.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/platform-profiles.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/presentation-boundaries.test.mjs": {
+      "disposition": "shared",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/release-artifact.test.mjs": {
+      "disposition": "shared",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/schema-column-budget.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/site-standards-audit.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/skill-sync.test.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/token-coverage.test.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/visual-policy.test.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tsconfig.json": {
+      "disposition": "replace-for-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/components/dev/EmDashStyleguide.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/dev/emdash-styleguide-fixtures.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/dev/styleguide-prose.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/init-profile.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "LICENSE": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/licenses/noto-sans-OFL.txt": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/licenses/impeccable-Apache-2.0.txt": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "profiles/static/project/.env.example": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": ".env.example"
+    },
+    "profiles/static/project/.gitignore": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": ".gitignore"
+    },
+    "profiles/static/project/.mcp.example.json": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": ".mcp.example.json"
+    },
+    "profiles/static/project/AGENTS.md": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "AGENTS.md"
+    },
+    "profiles/static/project/astro.config.mjs": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "astro.config.mjs"
+    },
+    "profiles/static/project/README.md": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "README.md"
+    },
+    "profiles/static/project/scripts/check-dev-tools.mjs": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "scripts/check-dev-tools.mjs"
+    },
+    "profiles/static/project/src/assets/pilot-grid.jpg": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/assets/pilot-grid.jpg"
+    },
+    "profiles/static/project/src/components/RichText.astro": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/components/RichText.astro"
+    },
+    "profiles/static/project/src/config/site.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/config/site.ts"
+    },
+    "profiles/static/project/src/content/posts/welcome.md": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/content/posts/welcome.md"
+    },
+    "profiles/static/project/src/content.config.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/content.config.ts"
+    },
+    "profiles/static/project/src/env.d.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/env.d.ts"
+    },
+    "profiles/static/project/src/layouts/Base.astro": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/layouts/Base.astro"
+    },
+    "profiles/static/project/src/lib/posts.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/lib/posts.ts"
+    },
+    "profiles/static/project/src/pages/404.astro": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/pages/404.astro"
+    },
+    "profiles/static/project/src/pages/index.astro": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/pages/index.astro"
+    },
+    "profiles/static/project/src/pages/posts/index.astro": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/pages/posts/index.astro"
+    },
+    "profiles/static/project/src/pages/posts/[...id].astro": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/pages/posts/[...id].astro"
+    },
+    "profiles/static/project/src/pages/_styleguide.astro": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/pages/_styleguide.astro"
+    },
+    "profiles/static/project/tests/static-foundation.test.mjs": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "tests/static-foundation.test.mjs"
+    },
+    "profiles/static/project/tsconfig.json": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "tsconfig.json"
+    },
+    "tests/static-profile.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/static-pilot.integration.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/dev-tools-middleware.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/sync-baseline.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/verify-profiles.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/baseline-sync.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "profiles/static/project/.github/workflows/design-checks.yml": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": ".github/workflows/design-checks.yml"
+    },
+    "profiles/static/project/.github/workflows/upstream-update.yml": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": ".github/workflows/upstream-update.yml"
+    },
+    "profiles/static-sveltia/project/public/admin/index.html": {
+      "disposition": "static-sveltia-overlay",
+      "static": "overlay",
+      "target": "public/admin/index.html"
+    },
+    "profiles/static-sveltia/project/public/admin/config.yml": {
+      "disposition": "static-sveltia-overlay",
+      "static": "overlay",
+      "target": "public/admin/config.yml"
+    },
+    "profiles/static-sveltia/project/docs/sveltia-cms.md": {
+      "disposition": "static-sveltia-overlay",
+      "static": "overlay",
+      "target": "docs/sveltia-cms.md"
+    },
+    "profiles/static-sveltia/project/tests/sveltia-config.test.mjs": {
+      "disposition": "static-sveltia-overlay",
+      "static": "overlay",
+      "target": "tests/sveltia-config.test.mjs"
+    },
+    "docs/platform-profiles.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/baseline-updates.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/profile-delivery.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-emdash13.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-content.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "standards/schemas/migration-content.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-content.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/rehearse-importer.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/importer-fidelity.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/pilot-migration.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-cutover.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-pilot.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/migration-cutover.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/utils/page-metadata.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/metadata.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/metadata.integration.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "profiles/static/project/src/config/routing.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/config/routing.ts"
+    },
+    "profiles/static/project/src/lib/metadata.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/lib/metadata.ts"
+    },
+    "profiles/static/project/src/lib/json-ld.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/lib/json-ld.ts"
+    },
+    "profiles/static/project/src/components/StaticMetadata.astro": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/components/StaticMetadata.astro"
+    },
+    "profiles/static/project/tests/metadata.test.mjs": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "tests/metadata.test.mjs"
+    },
+    "tests/static-metadata.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/dev/FormRecoveryFixture.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/journeys/public.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/visual/form.spec.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "eslint.config.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/template-lint.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Disclosure.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Cluster.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Sidebar.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/dev/CompositionSpecimens.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/dev/disclosure-prose.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/architecture-hardening-upgrade.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/upgrades/architecture-hardening-static.patch": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/architecture-adoption.integration.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/metadata/Media.astro": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "docs/design-framework.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/fluid-tokens.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/native-composition.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/run-tests.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/engineering-tooling.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/process-runner.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-html-integrity.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/html-integrity.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/.gitkeep": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/README.md": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/setup-hooks.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/snapshot-ssr.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/html-tags.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/styles/photoswipe.css": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/css-contracts.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/check-css-contracts.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/css-contracts.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/spacing-tokens.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/layout-style.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/loopback-port.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/client-bundles.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/client-bundles.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/engineering-hooks.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/cms-flag.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/structured-data.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/page-url.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/webhook-domain.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/middleware.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-production-setup.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/retain-build-assets.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/production-hardening.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/baseline-metadata/index.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/asset-retention.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/cache.integration.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/journal/index.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/journal/[slug].astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    }
+  }
+}

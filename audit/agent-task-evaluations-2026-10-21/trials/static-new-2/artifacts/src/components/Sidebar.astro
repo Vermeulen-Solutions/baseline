@@ -1,0 +1,22 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'>;
+const { class: className, ...attributes } = Astro.props;
+---
+<div {...attributes} class:list={['sidebar', className]}><slot /></div>
+<style>
+@layer components {
+  .sidebar { display: flex; flex-wrap: wrap; gap: var(--sidebar-gap, var(--spacing-grid)); }
+  .sidebar > :global(*) { min-inline-size: 0; overflow-wrap: anywhere; }
+  /* Main content stays first in DOM and reading order, including in RTL. */
+  .sidebar > :global(:first-child) {
+    flex: 999 1 0;
+    min-inline-size: min(100%, var(--sidebar-main-min, 60%));
+  }
+  .sidebar > :global(:nth-child(2)) {
+    flex: 1 1 var(--sidebar-basis, calc(var(--measure-reading) / 3));
+  }
+  .sidebar > :global(:only-child) { flex-basis: 100%; }
+}
+</style>

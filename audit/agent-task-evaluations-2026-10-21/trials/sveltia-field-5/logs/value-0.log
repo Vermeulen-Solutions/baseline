@@ -1,0 +1,18 @@
+
+> fixture-sveltia@0.0.0 build
+> astro build
+
+16:40:17 [content] Syncing content
+[InvalidContentEntryDataError] posts → field-notes data does not match collection schema.
+
+  readingTime: Too small: expected number to be >=1
+
+  Hint:
+    See https://docs.astro.build/en/guides/content-collections/ for more information on content schemas.
+  Error reference:
+    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/
+  Location:
+    C:\dev\baseline-task-evals-20261021-cde21c0d\sveltia-field-5\site\src\content\posts\field-notes.md:0:0
+  Stack trace:
+    at getEntryData (C:\dev\baseline-task-evals-20261021-cde21c0d\sveltia-field-5\site\node_modules\astro\dist\content\utils.js:83:22)
+    at async eval (C:\dev\baseline-task-evals-20261021-cde21c0d\sveltia-field-5\site\node_modules\astro\dist\content\loaders\glob.js:231:6)

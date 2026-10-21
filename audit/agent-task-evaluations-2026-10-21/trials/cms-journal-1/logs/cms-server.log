@@ -1,0 +1,57 @@
+[2m16:27:09[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+[2m16:27:10[22m [34m[vite][39m connected.
+[2m16:27:10[22m [34m[types][39m Generated [2m3ms[22m
+[2m16:27:10[22m [34m[vite][39m connected.
+
+  [2m›[22m Admin UI    [36mhttp://127.0.0.1:53040/_emdash/admin[39m
+  [2m›[22m MCP server  [36mhttp://127.0.0.1:53040/_emdash/api/mcp[39m
+  [2m›[22m Dev bypass  [36mhttp://127.0.0.1:53040/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin[39m
+    [2mSkips passkey setup/auth and signs you in as a dev admin[22m
+
+[42m[1m astro [22m[49m [32mv7.4.0[39m [2mready in[22m 9528 [2mms[22m
+[2m┃[22m Local    [36mhttp://127.0.0.1:53040/[39m
+[2m16:27:13[22m [32mwatching for file changes...[39m
+[2m16:27:14[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m16:27:30[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m11299ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2693ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2695ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m1799ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2737ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2744ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2750ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2759ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2770ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2783ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2789ms[22m
+[2m16:27:38[22m [34m[200][39m / [2m2797ms[22m
+[2m16:27:39[22m [34m[200][39m /journal/ [2m36ms[22m
+[2m16:27:40[22m [34m[200][39m /journal/planning-your-first-workshop [2m64ms[22m
+[33m[1m16:27:41[22m [WARN] [cache][39m `cache.set()` was called but caching is not enabled. Configure a cache provider in your Astro config under `cache` to enable caching.
+[2m16:27:41[22m [33m[404][39m /404 [2m54ms[22m
+[2m16:27:41[22m [33m[404][39m /404 [2m14ms[22m
+[2m16:27:41[22m [34m[200][39m /posts/planning-your-first-workshop [2m31ms[22m
+[2m16:27:41[22m [34m[200][39m /journal/ [2m26ms[22m
+[2m16:27:41[22m [34m[200][39m /journal/planning-your-first-workshop [2m23ms[22m
+[2m16:27:42[22m [34m[200][39m /posts/planning-your-first-workshop [2m33ms[22m
+[2m16:27:42[22m [33m[404][39m [33m(rewrite) [39m/journal/unannounced-workshop [2m48ms[22m
+[2m16:27:42[22m [34m[200][39m /_emdash/api/auth/dev-bypass [2m6ms[22m
+[2m16:27:42[22m [34m[200][39m /journal/planning-your-first-workshop [2m101ms[22m
+[2m16:27:43[22m [34m[200][39m /journal/planning-your-first-workshop [2m72ms[22m
+[2m16:27:43[22m [34m[200][39m /_emdash/api/manifest [2m16ms[22m
+[2m16:27:44[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m16:27:48[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m16:27:50[22m [34m[vite][39m [32mdependencies optimized: [33m@emdash-cms/admin/html-block, use-sync-external-store/shim/index.js, use-sync-external-store/shim/with-selector.js[32m[39m
+[2m16:27:50[22m [34m[vite][39m [32moptimized dependencies changed. reloading[39m
+[2m16:27:50[22m [34m[200][39m /journal/planning-your-first-workshop [2m50ms[22m
+[2m16:27:50[22m [34m[200][39m /_emdash/api/manifest [2m4ms[22m
+[2m16:27:51[22m [34m[200][39m [34mPUT[39m /_emdash/api/content/posts/01M5EX9H2HZ3CNE4WAJE963EMM [2m56ms[22m
+[2m16:27:51[22m [34m[200][39m /journal/planning-your-first-workshop [2m25ms[22m
+[2m16:27:51[22m [34m[200][39m /_emdash/api/manifest [2m5ms[22m
+[2m16:27:52[22m [34m[200][39m [34mPOST[39m /_emdash/api/visual-editing/content/posts/01M5EX9H2HZ3CNE4WAJE963EMM/publish [2m25ms[22m
+[2m16:27:52[22m [34m[200][39m /journal/planning-your-first-workshop [2m26ms[22m
+[2m16:27:52[22m [34m[200][39m /_emdash/api/manifest [2m10ms[22m
+[2m16:27:52[22m [34m[200][39m /journal/planning-your-first-workshop [2m24ms[22m

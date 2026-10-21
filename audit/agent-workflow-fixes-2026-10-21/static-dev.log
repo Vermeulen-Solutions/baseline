@@ -1,0 +1,17 @@
+.env not found. Continuing without it.
+[2m17:12:24[22m [34m[vite][39m connected.
+[2m17:12:24[22m [34m[types][39m Generated [2m2ms[22m
+[2m17:12:26[22m [34m[vite][39m connected.
+[2m17:12:26[22m [34m[content][39m Syncing content
+[2m17:12:26[22m [34m[content][39m Astro config changed
+[2m17:12:26[22m [34m[content][39m Clearing content store
+[2m17:12:26[22m [34m[content][39m Synced content
+[2m17:12:26[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m17:12:26[22m [34m[starter-dev-tools][39m Component calibration: /_styleguide/ (use Astro's local development origin)
+[42m[1m astro [22m[49m [32mv7.4.0[39m [2mready in[22m 2951 [2mms[22m
+[2m┃[22m Local    [36mhttp://127.0.0.1:62318/[39m
+[2m17:12:26[22m [32mwatching for file changes...[39m
+[2m17:12:29[22m [34m[200][39m / [2m50ms[22m
+[2m17:12:29[22m [34m[200][39m / [2m4ms[22m
+[2m17:12:29[22m [34m[200][39m /_styleguide/ [2m22ms[22m
+[2m17:12:29[22m [33m[404][39m /_styleguide/ [2m12ms[22m

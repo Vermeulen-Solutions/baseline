@@ -1,0 +1,25 @@
+{
+  "trial": "cms-journal-3",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "cd130d7e9c43065bbaa929829e0ed310b863da487895f2240cc5d320c8c871f2"
+    },
+    {
+      "path": "profiles/file-inventory.json",
+      "sha256": "6a62cf31df2a10021a7eaea890a4c2adaff914a5248ecf1de00fdc16e6433c80"
+    },
+    {
+      "path": "seed/seed.json",
+      "sha256": "7f1ffa383e9f80433ed1c262ab24b2c2b930a74fa69363d27d8fe21631b0b1be"
+    },
+    {
+      "path": "src/pages/journal/[slug].astro",
+      "sha256": "391879e8ee4264a38a4b9be9ce5a01a7edbff2d90c3ec808f57feb5ba8b0716f"
+    },
+    {
+      "path": "src/pages/journal/index.astro",
+      "sha256": "330aff7012235a9cd442a6a1ea347e072522c4fcc3e74ee912465f60f35e9077"
+    }
+  ]
+}

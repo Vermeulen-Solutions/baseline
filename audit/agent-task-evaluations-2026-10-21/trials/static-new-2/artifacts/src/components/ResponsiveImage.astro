@@ -1,0 +1,55 @@
+---
+import { getImage } from 'astro:assets';
+import { responsiveImageInput, type ResponsiveImageProps } from '../lib/responsive-image';
+interface Props extends ResponsiveImageProps {}
+const { src, alt: rawAlt, sizes: rawSizes, loading: rawLoading, fetchpriority: rawPriority, class: rawClass, width, height, optimize = true, originalSrc } = Astro.props;
+const className = typeof rawClass === 'string' ? rawClass : undefined;
+const alt = typeof rawAlt === 'string' ? rawAlt : '';
+const loading = rawLoading === 'eager' ? 'eager' : 'lazy';
+const fallbackSizes = typeof rawSizes === 'string' && rawSizes.trim() ? rawSizes : '(max-width: 60rem) calc(100vw - 4rem), 800px';
+// Lazy images can use their actual rendered width, including calibrated gutters
+// and breakout placements. Eager callers still supply their placement contract.
+const sizes = loading === 'lazy' && !fallbackSizes.startsWith('auto') ? `auto, ${fallbackSizes}` : fallbackSizes;
+const fetchpriority = rawPriority === 'high' || rawPriority === 'low' ? rawPriority : 'auto';
+const image = responsiveImageInput(src, width, height);
+const original = responsiveImageInput(originalSrc).original || image.original;
+const { nativeWidth, nativeHeight } = image;
+let optimized;
+if (optimize === true && nativeWidth && nativeHeight && image.widths.length) {
+  try {
+    optimized = await getImage({
+      src: image.src,
+      width: Math.min(800, nativeWidth),
+      height: Math.round(Math.min(800, nativeWidth) * nativeHeight / nativeWidth),
+      widths: image.widths,
+      sizes, layout: 'none', format: 'webp', quality: 90, fit: 'contain',
+    });
+    if (optimized.src === image.original) optimized = undefined;
+  } catch { /* Keep the original when its source cannot be processed. */ }
+}
+---
+{!original ? <span class:list={['image-fallback', className]} style={`aspect-ratio: ${image.aspectRatio}`} role={alt ? 'img' : undefined} aria-label={alt || undefined} aria-hidden={alt ? undefined : true} /> : image.width && image.height ?
+  <img class={className} style={image.nativeWidth ? `--image-native-width: ${image.nativeWidth}px` : undefined} src={optimized?.src || original} data-original-src={original} srcset={optimized?.srcSet.attribute} sizes={optimized ? sizes : undefined} alt={alt} width={image.width} height={image.height} loading={loading} fetchpriority={fetchpriority} decoding="async" /> :
+  <span class:list={['image-fallback', className]} style={`aspect-ratio: ${image.aspectRatio}`}><img src={original} data-original-src={original} alt={alt} loading={loading} fetchpriority={fetchpriority} decoding="async" /></span>}
+<style>
+@layer components {
+  .image-fallback { display: block; position: relative; inline-size: 100%; overflow: hidden; }
+  .image-fallback > img { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; }
+}
+</style>
+<script>
+  // Recover from an unavailable image service (including transformation limits).
+  function recoverImage(image: EventTarget | null) {
+    if (!(image instanceof HTMLImageElement)) return;
+    const original = image.dataset.originalSrc;
+    if (!original || image.src === new URL(original, document.baseURI).href) return;
+    image.removeAttribute('srcset');
+    image.removeAttribute('sizes');
+    image.src = original;
+  }
+  document.addEventListener('error', event => recoverImage(event.target), true);
+  // An eager image can fail before this module loads.
+  document.querySelectorAll<HTMLImageElement>('img[data-original-src]').forEach(image => {
+    if (image.complete && image.naturalWidth === 0 && image.currentSrc) recoverImage(image);
+  });
+</script>

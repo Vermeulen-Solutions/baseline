@@ -1,0 +1,18 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'>;
+const { class: className, ...attributes } = Astro.props;
+---
+<div {...attributes} class:list={['cluster', className]}><slot /></div>
+<style>
+@layer components {
+  .cluster {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--cluster-gap, var(--spacing-content));
+  }
+  .cluster > :global(*) { min-inline-size: 0; overflow-wrap: anywhere; }
+}
+</style>

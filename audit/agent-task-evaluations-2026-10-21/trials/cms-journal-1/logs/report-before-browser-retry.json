@@ -1,0 +1,35 @@
+{
+  "trial": "cms-journal-1",
+  "startedAt": "2026-10-21T14:19:40.711Z",
+  "independent": true,
+  "criteria": [
+    {
+      "id": "verification",
+      "status": "fail",
+      "observation": "run verify:  generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: '299ade30a182618abf777884d5043851a926d161aaf6110fd992a35fe7fb866d',\n    expected: '72fc52c1f94cdb429abb80c14e8db9263ea4809bcecdd962fa04602dbdc7963d',\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at tests\\token-coverage.test.mjs:289:1\n✖ validateCssAlignment catches untouched neutral starter global.css when a named lane is declared and passes once lane tokens are applied (5.5789ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  0 !== 1\n  \n      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-journal-1/site/tests/token-coverage.test.mjs:293:10)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1402:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)\n      at Test.postRun (node:internal/test_runner/test:1542:19)\n      at Test.run (node:internal/test_runner/test:1467:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 0,\n    expected: 1,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at tests\\token-coverage.test.mjs:301:1\n✖ pruneStarterExceptions strips sample-page and deleted entries while retaining dev/styleguide infrastructure (34.28ms)\n  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n  \n    assert.ok(result.before > result.after)\n  \n      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-journal-1/site/tests/token-coverage.test.mjs:308:12)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1402:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)\n      at Test.postRun (node:internal/test_runner/test:1542:19)\n      at Test.run (node:internal/test_runner/test:1467:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: false,\n    expected: true,\n    operator: '==',\n    diff: 'simple'\n  }\n"
+    },
+    {
+      "id": "production-build",
+      "status": "pass",
+      "evidence": "Independent production build passed"
+    }
+  ],
+  "measurements": {},
+  "limits": [],
+  "infrastructureError": "Error: CMS readiness timed out\n    at serveCMS (file:///C:/dev/emdash-baseline/.emdash/checks/agent-task-evals/runtime.mjs:50:23)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///C:/dev/emdash-baseline/.emdash/checks/agent-task-evals/grade.mjs:121:14",
+  "completedAt": "2026-10-21T14:24:14.768Z",
+  "summary": {
+    "pass": 1,
+    "fail": 1,
+    "unverified": 0
+  },
+  "status": "infrastructure-error",
+  "changedFiles": [
+    "M AGENTS.md",
+    " M emdash-env.d.ts",
+    " M profiles/file-inventory.json",
+    " M seed/seed.json",
+    "?? src/pages/journal/",
+    "?? tests/journal.integration.mjs"
+  ]
+}

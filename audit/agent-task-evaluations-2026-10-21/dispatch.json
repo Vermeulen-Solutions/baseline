@@ -1,0 +1,150 @@
+{
+  "dispatchVersion": 1,
+  "controls": {
+    "freshHistory": true,
+    "modelOverride": null,
+    "independentSessions": true,
+    "maximumConcurrentWorkers": 3,
+    "evaluatorDidNotSendCorrectiveHints": true,
+    "tokenAndCostTelemetry": "not exposed by collaboration tools"
+  },
+  "started": [
+    {
+      "id": "static-new-1",
+      "agent": "/root/eval_static_1",
+      "dispatchWindowStart": "2026-10-21T09:32:30Z"
+    },
+    {
+      "id": "static-new-2",
+      "agent": "/root/eval_static_2",
+      "dispatchWindowStart": "2026-10-21T09:32:30Z"
+    },
+    {
+      "id": "sveltia-field-1",
+      "agent": "/root/eval_sveltia_1",
+      "dispatchWindowStart": "2026-10-21T09:32:30Z"
+    },
+    {
+      "id": "sveltia-field-2",
+      "agent": "/root/eval_sveltia_2",
+      "dispatchWindowStart": "2026-10-21T09:40:58.274Z"
+    },
+    {
+      "id": "cms-journal-1",
+      "agent": "/root/eval_cms_1",
+      "dispatchWindowStart": "2026-10-21T09:42:53.475Z"
+    },
+    {
+      "id": "sveltia-field-3",
+      "agent": "/root/eval_sveltia_3",
+      "dispatchWindowStart": "2026-10-21T09:48:54.126Z"
+    },
+    {
+      "id": "regional-spacing-1",
+      "agent": "/root/eval_spacing_1",
+      "dispatchWindowStart": "2026-10-21T09:50:59.636Z"
+    },
+    {
+      "id": "cms-journal-2",
+      "agent": "/root/eval_cms_2",
+      "dispatchWindowStart": "2026-10-21T09:54:45.557Z"
+    },
+    {
+      "id": "sveltia-field-4",
+      "agent": "/root/eval_sveltia_4",
+      "dispatchWindowStart": "2026-10-21T09:55:43.541Z"
+    }
+  ],
+  "timingNote": "Initial three dispatches occurred after the recorded UTC clock reading; exact per-call start timestamps are not exposed. Report these as windows, not precise durations.",
+  "completed": [
+    {
+      "id": "sveltia-field-1",
+      "observedCompleteAt": "2026-10-21T09:40:58.275Z",
+      "agentReport": "Implemented; verify has one baseline field-list contract failure; other claimed checks to be independently graded."
+    },
+    {
+      "id": "static-new-2",
+      "observedCompleteAt": "2026-10-21T09:48:54.125Z",
+      "agentReport": "Four static routes; verify/build/browser checks claimed passed; independent grading pending."
+    },
+    {
+      "id": "static-new-1",
+      "observedCompleteAt": "2026-10-21T09:50:23.175Z",
+      "agentReport": "Four static routes; verify/build/responsive acceptance claimed passed. Post-trial cleanup requested because preview remained running."
+    },
+    {
+      "id": "static-new-1-cleanup",
+      "observedCompleteAt": "2026-10-21T09:50:59.637Z",
+      "agentReport": "Owned preview stopped; no source changes."
+    },
+    {
+      "id": "regional-spacing-1",
+      "observedCompleteAt": "2026-10-21T09:54:45.556Z",
+      "agentReport": "Scoped gap change; verify/build/browser acceptance claimed passed."
+    },
+    {
+      "id": "sveltia-field-3",
+      "observedCompleteAt": "2026-10-21T09:55:43.540Z",
+      "agentReport": "Optional field, both samples and updated regression coverage; verify/build/browser acceptance claimed passed."
+    }
+  ],
+  "excluded": [
+    {
+      "id": "sveltia-field-1",
+      "reason": "Operator wrapper discouraged legitimate regression-test updates; retained as a confounded run, not a Baseline task-failure rate."
+    },
+    {
+      "id": "sveltia-field-2",
+      "reason": "Same ambiguous wrapper; operator interrupted before completion to avoid repeating a known confound."
+    }
+  ],
+  "amendments": [
+    {
+      "recordedAt": "2026-10-21T09:42:35.721Z",
+      "scope": "Sveltia replacement trials 3 and 4",
+      "change": "Replace the test-edit warning with: Preserve verification rigor; requested feature changes may update relevant regression coverage, but do not remove, disable or weaken checks.",
+      "noWorkerFeedback": "Replacement agents receive no prior result, suspected issue, expected file change or grading criteria."
+    }
+  ],
+  "continuation": {
+    "recordedAt": "2026-10-21T14:29:03.598Z",
+    "accountAllowsWork": true,
+    "interrupted": [
+      {
+        "id": "sveltia-field-4",
+        "reason": "Explicit account usage-limit worker error; partial source retained, not scored as task failure."
+      },
+      {
+        "id": "cms-journal-2",
+        "reason": "Prior worker no longer active on continuation; no final notes or completion receipt. Partial source retained; fresh replacement."
+      }
+    ],
+    "replacementIds": {
+      "sveltia-field-4": "sveltia-field-5",
+      "cms-journal-2": "cms-journal-3"
+    },
+    "newSessions": [
+      "spacing_second",
+      "resume_first_a",
+      "resume_second_a",
+      "resume_first_b",
+      "cms_second_clean",
+      "sveltia_second_clean",
+      "resume_second_b"
+    ],
+    "timing": "Continuation occurred after an account interruption. Exact dispatch times unavailable; no comparative elapsed-time metric is reported.",
+    "completedTrialIds": [
+      "static-new-1",
+      "static-new-2",
+      "sveltia-field-3",
+      "sveltia-field-5",
+      "regional-spacing-1",
+      "regional-spacing-2",
+      "cms-journal-1",
+      "cms-journal-3",
+      "cold-resume-1",
+      "cold-resume-2"
+    ],
+    "completedAt": "2026-10-21T14:48:17.903Z"
+  }
+}

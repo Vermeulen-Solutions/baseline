@@ -1,0 +1,46 @@
+{
+  "recordedAt": "2026-10-21T09:40:32.727Z",
+  "beforeAnyGrading": true,
+  "implementationHashes": {
+    "prepare.mjs": "3fd94796b8ed22be151d5334e7c8050f6c5d2f1e9a35746fd39310d59849614a",
+    "runtime.mjs": "88a17e9a8f6e3fb702d653a5da27792d6fd1f81b52f48bbb55b3204f90cea64c",
+    "grade.mjs": "676f42cdcd218302e5c76e578085cb9239ff2222d75bd9a5ad837a9fac99e759"
+  },
+  "criteriaSource": "protocol.json",
+  "implementationLocation": "ignored .emdash/checks/agent-task-evals/",
+  "gradePolicy": "Artifacts are graded independently. Any later grader repair must be recorded and applied consistently, without coaching workers.",
+  "amendments": [
+    {
+      "recordedAt": "2026-10-21T09:56:40.675Z",
+      "reason": "A Windows Git checkout changed LF to CRLF inside multiline tokens. Raw parser strings produced a false semantic change; normalize line endings before all spacing/resume comparisons.",
+      "affectedTrials": [
+        "regional-spacing-1"
+      ],
+      "originalReportRetained": true,
+      "criteriaUnchanged": true,
+      "gradeSHA256": "4078d1c19b3caa5dc9b969c70c0f12a44b84560d6f114b293213c16ff1705c5f"
+    },
+    {
+      "recordedAt": "2026-10-21T14:26:59.761Z",
+      "reason": "Resume independent browser observation after a local CMS readiness timeout. Preserve original verify/build outcomes and raw report; unchanged timeout and artifact source.",
+      "criteriaUnchanged": true,
+      "gradeSHA256": "df824f201f027a0a158aa7e628a4e71c54c140cf398f4c6e7b381819df8c333e"
+    },
+    {
+      "recordedAt": "2026-10-21T14:29:03.600Z",
+      "reason": "Complete the already specified cold-resume content-preservation observations using saved phase-A hashes and unchanged public-page baselines, before any cold-resume grading.",
+      "criteriaUnchanged": true
+    }
+  ],
+  "finalImplementationHashes": {
+    "prepare.mjs": "3fd94796b8ed22be151d5334e7c8050f6c5d2f1e9a35746fd39310d59849614a",
+    "runtime.mjs": "88a17e9a8f6e3fb702d653a5da27792d6fd1f81b52f48bbb55b3204f90cea64c",
+    "grade.mjs": "104cb7b35121228e1a6f2ba04a800a0f2cd4543600154d705a9fcbb146979acb",
+    "checkpoint.mjs": "d4f63e9f8ff687d2fc163c43704b6666f2c7b9be8cf50e006df94a0d24685ea2",
+    "continue-prepare.mjs": "daa1d6698a135b3fd498a60f05c5bac11fb5cc8d1809d0f8d688a1c743046476",
+    "collect.mjs": "fff18231b3416af8a9a173a1483fc8ff2fab64a60616ad67847bc0d197e5a5ac",
+    "final-check.mjs": "eaca1d616866fe39bd6efb793db482f6ab90d5c4c2f6e76aecd1212e0674a408",
+    "finalize.mjs": "44d3a7ea164a25ccc0be7b4fece4e52275e1ef9dc604312b00a5d6e838ecb771"
+  },
+  "finalHashesRecordedAt": "2026-10-21T14:48:17.899Z"
+}

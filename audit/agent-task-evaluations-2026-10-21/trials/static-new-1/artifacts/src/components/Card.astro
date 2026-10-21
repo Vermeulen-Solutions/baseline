@@ -1,0 +1,94 @@
+---
+import type { ImageMetadata } from 'astro';
+import type { HTMLAttributes } from 'astro/types';
+import { publicLink } from '../lib/public-link';
+import ResponsiveImage from './ResponsiveImage.astro';
+// Attribute bags also accept CMS data-* annotations, without importing a CMS type.
+type FieldAttributes = HTMLAttributes<'span'>;
+interface Props extends Omit<HTMLAttributes<'article'>, 'title'> {
+  title: string; href?: string; action?: string; description?: string;
+  image?: ImageMetadata | string; imageAlt?: string;
+  imageWidth?: number; imageHeight?: number;
+  headingLevel?: 2 | 3 | 4; layout?: 'stacked' | 'horizontal';
+  imageFit?: 'cover' | 'contain'; imageAspect?: string; sizes?: string;
+  titleEdit?: FieldAttributes;
+  descriptionEdit?: FieldAttributes;
+  actionEdit?: FieldAttributes;
+  class?: string;
+}
+const { title: rawTitle, href: rawHref, action: rawAction, description: rawDescription, image, imageAlt = '', imageWidth, imageHeight, headingLevel = 3,
+  layout = 'stacked', imageFit: rawFit, imageAspect: rawAspect, sizes,
+  titleEdit: rawTitleEdit, descriptionEdit: rawDescriptionEdit, actionEdit: rawActionEdit, class: className, ...rest } = Astro.props;
+const fieldAttributes = (value: unknown): FieldAttributes => value && typeof value === 'object' && !Array.isArray(value) ? value as FieldAttributes : {};
+const titleEdit = fieldAttributes(rawTitleEdit), descriptionEdit = fieldAttributes(rawDescriptionEdit), actionEdit = fieldAttributes(rawActionEdit);
+const imageFit = rawFit === 'contain' ? 'contain' : 'cover';
+const imageAspect = typeof rawAspect === 'string' && rawAspect.trim() ? rawAspect : '3 / 2';
+const title = typeof rawTitle === 'string' ? rawTitle : '';
+const description = typeof rawDescription === 'string' ? rawDescription : '';
+const action = typeof rawAction === 'string' ? rawAction : '';
+const href = publicLink(rawHref);
+const Heading = `h${[2, 3, 4].includes(headingLevel) ? headingLevel : 3}` as 'h2' | 'h3' | 'h4';
+const hasMedia = image || Astro.slots.has('media');
+const hasTitleExtra = Astro.slots.has('title-extra');
+const hasDescription = Boolean(description || Astro.slots.has('default') || Object.keys(descriptionEdit || {}).length);
+---
+<article data-editorial-island class:list={['card', { 'card--horizontal': layout === 'horizontal' && hasMedia, 'card--clickable': Boolean(href), 'focus-parent': Boolean(href) }, className]} {...rest}>
+  {hasMedia && <div class="card-media" style={{'--card-aspect':imageAspect,'--card-fit':imageFit}}><slot name="media">{image && <ResponsiveImage src={image} alt={imageAlt} width={imageWidth} height={imageHeight} sizes={sizes} />}</slot></div>}
+  <div class="card-body">
+    {hasTitleExtra ? <div class="card-title-row"><Heading class="card-title" {...(titleEdit || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading><slot name="title-extra" /></div> : <Heading class="card-title" {...(titleEdit || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading>}
+    {Astro.slots.has('metadata') && <div class="card-metadata"><slot name="metadata" /></div>}
+    {hasDescription && <div class="card-description">{description && <p {...(descriptionEdit || {})}>{description}</p>}<slot /></div>}
+    {action && <span class="card-action" {...(actionEdit || {})}>{action}<slot name="action-icon" /></span>}
+  </div>
+</article>
+<style>
+@layer components {
+.card {
+  --card-bg: var(--color-surface);
+  --card-text: var(--color-text);
+  --card-muted: var(--color-muted);
+  --card-border-width: 1px;
+  --card-border-color: var(--color-border);
+  --card-radius: var(--radius-card);
+  --card-padding: var(--spacing-content);
+  --card-frame-padding: 0px;
+  --card-gap: var(--spacing-content);
+  --card-shadow: none;
+  --card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)));
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100%;
+  padding: var(--card-frame-padding);
+  border: var(--card-border-width) solid var(--card-border-color);
+  border-radius: var(--card-radius);
+  background: var(--card-bg);
+  color: var(--card-text);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition: border-color 0.2s var(--ease-smooth, ease), box-shadow 0.2s var(--ease-smooth, ease);
+}
+.card-link { color: inherit; text-decoration: none; }
+.card-link:hover { text-decoration: none; }
+.card-link::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.card :global(a:not(.card-link), button, [data-emdash-field]) { position: relative; z-index: 2; }
+.card--clickable:focus-within:has(:focus-visible) { border-color: var(--color-action); }
+.card--clickable:focus-within:has(:focus-visible) .card-action { text-decoration: underline; }
+@media (hover: hover) and (pointer: fine) {
+  .card--clickable:hover { border-color: var(--color-action); }
+  .card--clickable:hover .card-action { text-decoration: underline; }
+}
+.card-media { aspect-ratio: var(--card-aspect); border-radius: var(--card-media-radius); overflow: hidden; }
+.card-media :global(img), .card-media :global(picture) { width: 100%; height: 100%; object-fit: var(--card-fit); display: block; }
+.card-body { display: flex; flex: 1; flex-direction: column; gap: var(--card-gap); padding: var(--card-padding); min-width: 0; }
+.card-title-row { display: flex; justify-content: space-between; align-items: center; gap: var(--card-gap); }
+.card h2, .card h3, .card h4 { font-size: var(--text-step-0); overflow-wrap: anywhere; }
+.card-metadata, .card-description { color: var(--card-muted); }
+.card-action { margin-top: auto; font-weight: 700; color: var(--color-action); }
+.card--horizontal { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+@container (max-width: 32rem) { .card--horizontal { display: flex; } }
+@media (max-width: 40rem) { .card--horizontal { display: flex; } }
+}
+</style>

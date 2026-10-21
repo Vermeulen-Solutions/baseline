@@ -1,0 +1,20 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { layoutStyle } from '../lib/layout-style';
+interface Props extends HTMLAttributes<'div'> {
+	minimum?: "compact" | "standard" | "wide";
+	gap?: string;
+	class?: string;
+}
+
+const { minimum: rawMinimum, gap, class: className, 'class:list': classes, style, ...attributes } = Astro.props;
+const minimum = rawMinimum === 'compact' || rawMinimum === 'wide' ? rawMinimum : 'standard';
+---
+
+<div
+	{...attributes}
+	class:list={["grid-auto", `grid-auto--${minimum}`, className, classes]}
+	style={layoutStyle(style, '--grid-gap', gap)}
+>
+	<slot />
+</div>

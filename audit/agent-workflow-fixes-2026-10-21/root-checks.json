@@ -1,0 +1,21 @@
+{
+  "startedAt": "2026-10-21T15:10:04.137Z",
+  "checks": [
+    {
+      "command": "npm.cmd run verify",
+      "status": "pass",
+      "exitCode": 0
+    },
+    {
+      "command": "npm.cmd run audit:html",
+      "status": "pass",
+      "exitCode": 0
+    }
+  ],
+  "freshBuild": {
+    "status": "pass",
+    "completedAt": "2026-10-21T15:06:23Z",
+    "evidence": "Root exec session 82773 exited 0; release guard passed; existing large-bundle advisory remains."
+  },
+  "completedAt": "2026-10-21T15:13:55.403Z"
+}

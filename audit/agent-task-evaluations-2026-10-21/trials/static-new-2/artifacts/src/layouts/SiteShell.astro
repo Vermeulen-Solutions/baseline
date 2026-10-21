@@ -1,0 +1,36 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string | null;
+  canonical?: string | null;
+  /** Platform heads own description/canonical when using EmDashHead or a static metadata renderer. */
+  metadataOwner?: 'shell' | 'platform';
+  lang?: string;
+  skipLinkLabel?: string;
+  spacingPolicy?: 'legacy' | 'automatic-v2';
+}
+
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy' } = Astro.props;
+---
+<!doctype html>
+<html lang={lang} data-spacing-policy={spacingPolicy === 'automatic-v2' ? 'automatic-v2' : 'legacy'} data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
+  <head>
+    <style is:inline>@layer theme, base, vendor, astro, components, utilities;</style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    {metadataOwner === 'shell' && description && <meta name="description" content={description} />}
+    {metadataOwner === 'shell' && canonical && <link rel="canonical" href={canonical} />}
+    <slot name="head" />
+  </head>
+  <body>
+    <slot name="body-start" />
+    <a class="skip-link" href="#main-content">{skipLinkLabel}</a>
+    <slot name="header" />
+    <main id="main-content" class="site-main" tabindex="-1"><slot /></main>
+    <slot name="footer" />
+    <slot name="body-end" />
+  </body>
+</html>

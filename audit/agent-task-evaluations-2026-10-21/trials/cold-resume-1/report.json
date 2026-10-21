@@ -1,0 +1,1128 @@
+{
+  "trial": "cold-resume-1",
+  "startedAt": "2026-10-21T14:34:49.467Z",
+  "independent": true,
+  "criteria": [
+    {
+      "id": "verification",
+      "status": "pass",
+      "evidence": "Independent installed verification passed"
+    },
+    {
+      "id": "production-build",
+      "status": "pass",
+      "evidence": "Independent production build passed"
+    },
+    {
+      "id": "responsive-public-pages",
+      "status": "pass",
+      "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+    },
+    {
+      "id": "missing-route-404",
+      "status": "pass",
+      "evidence": "Missing URL served as 404, not SPA fallback"
+    },
+    {
+      "id": "saved-checkpoint-and-content-preserved",
+      "status": "pass",
+      "evidence": "Captured phase A deferred routes/navigation and persisted a typed model, samples and handoff; phase B preserved LF-normalized workshop content"
+    },
+    {
+      "id": "existing-public-content-preserved",
+      "status": "pass",
+      "evidence": "Existing main content and links retained on all four established public pages"
+    },
+    {
+      "id": "public-workshop-policy",
+      "status": "pass",
+      "evidence": "Published workshop with agreed date, summary, venue and enquiry rendered; draft omitted"
+    },
+    {
+      "id": "existing-brand-tokens-preserved",
+      "status": "pass",
+      "evidence": "Existing LF-normalized parsed design tokens unchanged"
+    }
+  ],
+  "measurements": {
+    "pages": [
+      {
+        "route": "/workshops/",
+        "width": 390,
+        "status": 200,
+        "title": "Workshops — Northline Studio",
+        "text": "WorkshopsClear project briefs12 November 2026Venue: Northline StudioLearn how to turn an initial conversation into a useful project brief.Ask about a place",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [
+          {
+            "datetime": "2026-11-12",
+            "text": "12 November 2026"
+          }
+        ],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Ask about a place",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\390--workshops-.png"
+      },
+      {
+        "route": "/",
+        "width": 390,
+        "status": 200,
+        "title": "Clear plans, useful conversations — Northline Studio",
+        "text": "Clear plans, useful conversationsNorthline Studio helps small teams plan useful work.ServicesProject briefsTurn an initial conversation into a practical brief.Working sessionsMake room for useful decisions.Planning supportKeep the next steps manageable.Our approachListenStart with the real situation.ClarifyAgree what matters next.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Project briefs",
+            "href": "/services/"
+          },
+          {
+            "text": "Working sessions",
+            "href": "/services/"
+          },
+          {
+            "text": "Planning support",
+            "href": "/services/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          },
+          "approach-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          },
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\390--.png"
+      },
+      {
+        "route": "/about/",
+        "width": 390,
+        "status": 200,
+        "title": "About Northline Studio — Northline Studio",
+        "text": "About Northline StudioWe value clear thinking, practical advice and manageable next steps.ClarityUseful language for real decisions.CareAttention to the people doing the work.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          }
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\390--about-.png"
+      },
+      {
+        "route": "/services/",
+        "width": 390,
+        "status": 200,
+        "title": "Services — Northline Studio",
+        "text": "ServicesProject briefs, working sessions and planning support.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\390--services-.png"
+      },
+      {
+        "route": "/contact/",
+        "width": 390,
+        "status": 200,
+        "title": "Contact Northline Studio — Northline Studio",
+        "text": "Contact Northline StudioTell us what you are planning.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\390--contact-.png"
+      },
+      {
+        "route": "/workshops/",
+        "width": 1440,
+        "status": 200,
+        "title": "Workshops — Northline Studio",
+        "text": "WorkshopsClear project briefs12 November 2026Venue: Northline StudioLearn how to turn an initial conversation into a useful project brief.Ask about a place",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [
+          {
+            "datetime": "2026-11-12",
+            "text": "12 November 2026"
+          }
+        ],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Ask about a place",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\1440--workshops-.png"
+      },
+      {
+        "route": "/",
+        "width": 1440,
+        "status": 200,
+        "title": "Clear plans, useful conversations — Northline Studio",
+        "text": "Clear plans, useful conversationsNorthline Studio helps small teams plan useful work.ServicesProject briefsTurn an initial conversation into a practical brief.Working sessionsMake room for useful decisions.Planning supportKeep the next steps manageable.Our approachListenStart with the real situation.ClarifyAgree what matters next.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Project briefs",
+            "href": "/services/"
+          },
+          {
+            "text": "Working sessions",
+            "href": "/services/"
+          },
+          {
+            "text": "Planning support",
+            "href": "/services/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": {
+            "row": 36,
+            "column": 36
+          },
+          "approach-grid": {
+            "row": 36,
+            "column": 36
+          },
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\1440--.png"
+      },
+      {
+        "route": "/about/",
+        "width": 1440,
+        "status": 200,
+        "title": "About Northline Studio — Northline Studio",
+        "text": "About Northline StudioWe value clear thinking, practical advice and manageable next steps.ClarityUseful language for real decisions.CareAttention to the people doing the work.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": {
+            "row": 36,
+            "column": 36
+          }
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\1440--about-.png"
+      },
+      {
+        "route": "/services/",
+        "width": 1440,
+        "status": 200,
+        "title": "Services — Northline Studio",
+        "text": "ServicesProject briefs, working sessions and planning support.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\1440--services-.png"
+      },
+      {
+        "route": "/contact/",
+        "width": 1440,
+        "status": 200,
+        "title": "Contact Northline Studio — Northline Studio",
+        "text": "Contact Northline StudioTell us what you are planning.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "Workshops",
+            "href": "/workshops/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\1440--contact-.png"
+      }
+    ],
+    "before": [
+      {
+        "route": "/",
+        "width": 390,
+        "status": 200,
+        "title": "Clear plans, useful conversations — Northline Studio",
+        "text": "Clear plans, useful conversationsNorthline Studio helps small teams plan useful work.ServicesProject briefsTurn an initial conversation into a practical brief.Working sessionsMake room for useful decisions.Planning supportKeep the next steps manageable.Our approachListenStart with the real situation.ClarifyAgree what matters next.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Project briefs",
+            "href": "/services/"
+          },
+          {
+            "text": "Working sessions",
+            "href": "/services/"
+          },
+          {
+            "text": "Planning support",
+            "href": "/services/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          },
+          "approach-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          },
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\before\\390--.png"
+      },
+      {
+        "route": "/about/",
+        "width": 390,
+        "status": 200,
+        "title": "About Northline Studio — Northline Studio",
+        "text": "About Northline StudioWe value clear thinking, practical advice and manageable next steps.ClarityUseful language for real decisions.CareAttention to the people doing the work.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": {
+            "row": 21.1673,
+            "column": 21.1673
+          }
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\before\\390--about-.png"
+      },
+      {
+        "route": "/services/",
+        "width": 390,
+        "status": 200,
+        "title": "Services — Northline Studio",
+        "text": "ServicesProject briefs, working sessions and planning support.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\before\\390--services-.png"
+      },
+      {
+        "route": "/contact/",
+        "width": 390,
+        "status": 200,
+        "title": "Contact Northline Studio — Northline Studio",
+        "text": "Contact Northline StudioTell us what you are planning.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\before\\390--contact-.png"
+      },
+      {
+        "route": "/",
+        "width": 1440,
+        "status": 200,
+        "title": "Clear plans, useful conversations — Northline Studio",
+        "text": "Clear plans, useful conversationsNorthline Studio helps small teams plan useful work.ServicesProject briefsTurn an initial conversation into a practical brief.Working sessionsMake room for useful decisions.Planning supportKeep the next steps manageable.Our approachListenStart with the real situation.ClarifyAgree what matters next.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Project briefs",
+            "href": "/services/"
+          },
+          {
+            "text": "Working sessions",
+            "href": "/services/"
+          },
+          {
+            "text": "Planning support",
+            "href": "/services/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": {
+            "row": 36,
+            "column": 36
+          },
+          "approach-grid": {
+            "row": 36,
+            "column": 36
+          },
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\before\\1440--.png"
+      },
+      {
+        "route": "/about/",
+        "width": 1440,
+        "status": 200,
+        "title": "About Northline Studio — Northline Studio",
+        "text": "About Northline StudioWe value clear thinking, practical advice and manageable next steps.ClarityUseful language for real decisions.CareAttention to the people doing the work.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": {
+            "row": 36,
+            "column": 36
+          }
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\before\\1440--about-.png"
+      },
+      {
+        "route": "/services/",
+        "width": 1440,
+        "status": 200,
+        "title": "Services — Northline Studio",
+        "text": "ServicesProject briefs, working sessions and planning support.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\before\\1440--services-.png"
+      },
+      {
+        "route": "/contact/",
+        "width": 1440,
+        "status": 200,
+        "title": "Contact Northline Studio — Northline Studio",
+        "text": "Contact Northline StudioTell us what you are planning.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cold-resume-1-grade\\before\\1440--contact-.png"
+      }
+    ]
+  },
+  "limits": [
+    "Recovery at a deliberate saved checkpoint; not arbitrary process crash or half-written-file recovery."
+  ],
+  "completedAt": "2026-10-21T14:37:15.228Z",
+  "summary": {
+    "pass": 8,
+    "fail": 0,
+    "unverified": 0
+  },
+  "status": "pass",
+  "changedFiles": [
+    "M AGENTS.md",
+    " M audit/component-calibration.md",
+    " M package.json",
+    " M src/config/site.ts",
+    " M src/content.config.ts",
+    "?? HANDOFF.md",
+    "?? src/content/workshops/",
+    "?? src/pages/workshops.astro",
+    "?? tests/workshops-output.mjs"
+  ]
+}

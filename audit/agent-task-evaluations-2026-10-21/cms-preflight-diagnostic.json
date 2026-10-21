@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-10-21T14:32:35.144Z",
+  "preTaskCommit": "027b19a8e5016988aac2f476ee95744e4d675602",
+  "method": "Detached committed pre-task CMS tree. Only a junction to installed dependencies; no Journal implementation or working database copied. Installed verify rerun independently.",
+  "result": {
+    "unitTests": 145,
+    "passed": 141,
+    "failed": 4
+  },
+  "failures": [
+    "Pinned neutral DESIGN.md mapping assumes the current global.css is still neutral",
+    "Calibration portability fixture double-converts already-CRLF input",
+    "Neutral CSS alignment fixture reads already calibrated site tokens",
+    "Starter-exception pruning fixture assumes exceptions have not already been pruned"
+  ],
+  "qualification": "CMS preparation did not run a green full verification before original dispatch. This is an operator preflight gap. Failures are a reproduced baseline-after-calibration issue; do not attribute them to agent Journal implementation.",
+  "log": "cms-preflight-verify.log"
+}

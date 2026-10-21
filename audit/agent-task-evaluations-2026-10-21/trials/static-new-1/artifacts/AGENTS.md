@@ -1,0 +1,101 @@
+# Baseline — Static Foundation
+
+Read `baseline.config.json` and `README.md` first. This project uses Astro static
+output, file-owned content and the shared Baseline design system. Keep the npm
+lockfile and use `npm ci` once it has been created by the initial `npm install`.
+
+Use the checked-in `new-site-workflow`, `site-art-direction`, `astro-site-design`
+and `impeccable` skills for the applicable brief, art direction, calibration and
+public Astro implementation stages. Their EmDash-only sections do not apply to
+this profile. Do not load CMS setup/modeling/plugin skills or add database,
+React, server-adapter or EmDash dependencies. `static-sveltia` adds the pinned
+admin SPA and paired form only; read `docs/sveltia-cms.md` for OAuth proxy/PAT setup.
+Record site decisions here as they are established.
+
+During new-site design setup, follow `new-site-workflow`'s **Layout spacing choice**
+in either track: briefly explain responsive spacing for sections, content groups,
+grids and article text. Express defaults to shared spacing and brief-led density
+(balanced when unspecified); ask about custom spacing only for a real unresolved
+design decision. Follow the skill's discovery questions and Express defaults,
+reuse prior answers and record approved versus assumed decisions, density,
+exceptions and content/maintenance ownership here. An
+authorized autonomous build may use an explicit recommended assumption. Keep
+the current shell policy for both choices; custom layouts use tokens and explicit
+primitive controls. No settings panel or external-product terminology is needed.
+
+## Shared design authority
+
+`src/styles/global.css`, the layout primitives, `SiteShell.astro`, `design:tokens`
+and `check:art-direction` are canonical. Before client-specific visual work,
+save a complete `## Art Direction Record` with Aesthetic Lane, Narrative Metaphor,
+Typography Pairing (Display and Body), Token Physics (Canvas, Action/Accent,
+Borders, Spatial Density), and two or three semicolon-separated Site Anti-Patterns.
+Run `npm run check:art-direction -- --require-record` before implementing that work.
+
+This reusable foundation has no invented client art direction. Starter infrastructure
+exceptions are exact-path, LF-normalized SHA-256 records; any edit invalidates its
+exception. Never add broad directory exceptions or exempt client implementations.
+The changed-source check also validates all visual files before Git initialization.
+Run `npm run design:tokens -- --init-client --lane <lane>` when adapting the starter,
+then calibrate real components on `/_styleguide` and record the observed results in
+`audit/component-calibration.md`. A generated calibration checklist is not evidence
+that browser verification has been performed.
+
+## Content, assets and rendering
+
+Posts live in `src/content/posts/`, with a typed schema in `src/content.config.ts`.
+`draft: true` excludes a post from listings and generated routes. Detail routes use
+`getStaticPaths()` and `render()`; render native Markdown through `<RichText><Content /></RichText>`.
+All authored CSS must stay in `@layer base` or `@layer components`; use
+`<Section>`/`.section` for page vertical rhythm and `RichText` for editorial flow.
+Site settings and navigation live in `src/config/site.ts`.
+
+Base explicitly selects `SiteShell spacingPolicy="automatic-v2"`; shared SiteShell defaults to legacy for reviewed upgrades. Section owns block padding and a container gap, Container owns a content stack gap, Grid owns its grid gap, and the shell owns horizontal gutters once. `spacing="none"` removes padding only; nested modes reset. Use `layout="custom"` for caller-owned display/gaps; breakout retains its named grid. Avoid flow/space-y margins on gapped groups. RichText supplies `.flow` and `data-editorial-content`; generic flow only spaces direct siblings. Mark composite internals `data-editorial-island` and establish editorial bodies deliberately. `flow={false}` removes both behaviors, wrapperless unless attributes require a plain wrapper.
+
+For day-2 spacing requests choose the smallest scope: existing `@theme` scale for global density, regular root `--layout-*` alias for a structural relationship, layered regional alias, primitive `gap`, then an explicit utility exception. Preview `npm run design:tokens -- --set "--root:--layout-grid-gap=calc(var(--spacing-grid) * 0.75)" --json`; review, then add `--write` (and `--write-calibration` for saved-source evidence). Keep CSS authoritative without panels or a second configuration store. See `docs/design-framework.md` and `docs/native-composition.md`; inspect affected pages/styleguide at narrow/intermediate/wide widths after verify/build.
+
+Store content imagery in `src/assets/` and use native Astro image processing with
+accurate alt text and native bounds. Reserve `public/` for deliberate unchanged
+URL assets, including the Sveltia admin SPA when selected. There is no media
+storage endpoint or live CMS editing canvas. Sveltia edits the same Markdown files,
+requires a rebuild to publish, and must keep its form paired with the native schema.
+
+## Verification and release
+
+Run `npm run verify`, `npm run build` and `npm run check:dev-tools`. Inspect the
+public routes, emitted images, keyboard focus and narrow reflow in a browser.
+`/_styleguide` exists in development and isolated fixture builds, and is absent
+from production. Never deploy `dist-fixtures/`. Deploy only a verified `dist/`.
+
+Generated CI uses clean `npm ci`, token/art checks, tests, typecheck, static build
+and production isolation checks. Commit the initial project-specific lockfile.
+Stage shared-source/skill updates with `sync:baseline -- --ref <immutable-SHA>`,
+review the incoming files, then apply with `--apply <SHA>` and reverify.
+Locally modified tokens/components are conflicts for manual review. Routes,
+content, settings, site-owned Base layout, admin config and package definitions
+are excluded. Read `docs/baseline-updates.md`; keep managed provenance tracked.
+Do not invoke EmDash registry/database/screenshot harness commands on this profile.
+Record static browser and deployment evidence in project notes. Before Sveltia
+editor handoff test real login, upload, save, rebuild and logout on the deployment.
+
+Template verification requires Node `^22.22.3 || ^24.16.0 || >=26.3.0` (Node 24 LTS recommended). Run `npm run lint:templates` for Astro accessibility checks; `npm run verify` also retains script syntax, tokens, tests and type checking.
+
+
+## Northline Planning site record
+- Approved brief: independent planning consultant for small businesses; four English routes /, /services/, /about/, /contact/; supplied factual copy and email hello@northline.example.test; primary action Discuss your project.
+- Platform: static, local delivery only. Owner and coding assistant maintain typed Markdown and site settings in Git. No CMS, accounts, tracking, forms, integrations or deployment.
+- Content: pages collection with four entries and services collection with three ordered entries; site identity, navigation and email in src/config/site.ts. No posts or starter content.
+- Assumptions: Express track, balanced editorial density, shared responsive spacing. Section spacing separates topics, container spacing groups content and service rows reuse existing gap tokens; no custom spacing policy. No production SITE_URL supplied, so URL-dependent metadata is omitted.
+- Assets: no photography, external imagery, logo assets, invented proof or custom fonts. System Georgia display and system sans body match the brief; no asset downloads.
+- Ownership: owner approves factual copy; owner and coding assistant edit Git files and rebuild. Publication and hosting are outside this local assignment.
+
+## Art Direction Record
+- **Aesthetic Lane:** Editorial Paper — restrained consultancy typography and warm paper surfaces with forest green ink, using supplied system fonts.
+- **Narrative Metaphor:** A concise printed premises briefing; clear margins, fine horizontal rules and a readable service index organize decisions. No decorative drawings or simulated plans.
+- **Typography Pairing:** Display: Georgia, Cambria, Times New Roman, serif; Body: ui-sans-serif, system-ui, sans-serif. System stacks require no font downloads; regular serif display and medium sans labels create a calm hierarchy.
+- **Token Physics:**
+  - Canvas: warm paper #f9f6f0 with a deeper warm #f1eee5 surface and #203c32 text.
+  - Action/Accent: forest green #215846 for primary email actions and headings, with #fffdf8 action text.
+  - Borders: 1px muted green #b9c3b8 rules; square surfaces and restrained control corners; no content shadows.
+  - Spatial Density: Standard / balanced; shared fluid section gaps from 3rem to 7rem across 20rem–80rem viewports, 65ch reading measure, wrapping navigation.
+- **Site Anti-Patterns:** Invented planning credentials, metrics or testimonials; stock office imagery or decorative blueprint grids; floating rounded card walls and animated marketing effects.

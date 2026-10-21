@@ -1,0 +1,2 @@
+import type { MetadataSite } from '../lib/metadata';
+export const site: MetadataSite & { navigation: { label: string; href: string }[] } = { title: 'Northline Studio', description: 'Practical project planning and useful conversations.', language: 'en', navigation: [{label:'Home',href:'/'},{label:'Services',href:'/services/'},{label:'Workshops',href:'/workshops/'},{label:'About',href:'/about/'},{label:'Contact',href:'/contact/'},{label:'Posts',href:'/posts/'}] };

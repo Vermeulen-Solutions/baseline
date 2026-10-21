@@ -1,0 +1,56 @@
+
+> emdash-baseline@0.0.3 prebuild
+> npm run check:schema-budget
+
+
+> emdash-baseline@0.0.3 check:schema-budget
+> node scripts/check-schema-budget.mjs
+
+[
+  {
+    "table": "ec_pages",
+    "columns": 17
+  },
+  {
+    "table": "ec_posts",
+    "columns": 19
+  }
+]
+
+> emdash-baseline@0.0.3 build
+> astro build
+
+16:40:50 [@astrojs/node] Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+16:40:51 [vite] Re-optimizing dependencies because vite config has changed
+16:40:52 [vite] [optimizer] bundling dependencies...
+16:40:54 [types] Generated 3.96s
+16:40:54 [build] output: "server"
+16:40:54 [build] mode: "server"
+16:40:54 [build] directory: C:\dev\baseline-task-evals-20261021-cde21c0d\cms-journal-3\site\dist\
+16:40:54 [build] adapter: @astrojs/node
+16:40:54 [build] Collecting build info...
+16:40:54 [build] ✓ Completed in 4.21s.
+16:40:54 [build] Building server entrypoints...
+16:40:55 [assets] Copying fonts (16 files)...
+16:40:55 [vite] ✓ built in 760ms
+16:40:58 [vite] ✓ built in 2.80s
+16:41:03 [WARN] [vite] [plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+16:41:03 [vite] ✓ built in 4.62s
+16:41:03 [build] Rearranging server assets...
+16:41:03 [build] ✓ Completed in 8.37s.
+16:41:03 [emdash] Build complete
+16:41:03 [build] Server built in 12.73s
+16:41:03 [build] Complete!
+
+> emdash-baseline@0.0.3 postbuild
+> node scripts/assert-release-artifact.mjs
+
+Release artifact profile verified. Also verify the actual production route via check:dev-tools.

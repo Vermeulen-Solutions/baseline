@@ -1,0 +1,100 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index b595617..110395b 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -94,3 +94,28 @@ Template verification requires Node `^22.22.3 || ^24.16.0 || >=26.3.0` (Node 24
+ 
+ ## Existing synthetic site decisions
+ This is a disposable local evaluation fixture. Developer-maintained English content; no external writes or deployment. The existing editorial-paper design and automatic-v2 spacing are established for this fixture. Existing routes and copy are authoritative. No real client approval is claimed.
++
++## Workshops — public listing
++
++User-settled decisions: keep the static profile, Git-owned English Markdown and
++existing presentation/content/routes. Workshops live in `src/content/workshops/`
++and use the typed `workshops` collection in `src/content.config.ts`: title, explicit
++lowercase hyphenated slug, summary, date, venue and draft status. Dates are
++calendar dates authored as `YYYY-MM-DD`, parsed as Date values; no time or timezone
++has been supplied. Both supplied entries explicitly declare their draft status.
++
++The original content-stage [handoff](HANDOFF.md) is retained as history.
++`/workshops/` now queries only non-drafts in development and production and uses
++the existing Base, Section, Container and collection list styles. Workshop anchors
++use explicit slugs; no detail routes are requested. Ascending date ordering with a
++slug tie-break is an implementation assumption from the handoff's recommendation.
++Dates display in English with explicit UTC formatting to preserve calendar days.
++The shared navigation includes Workshops. The enquiry is a simple
++`mailto:hello@northline.example.test` action labeled **Ask about a place**. No CMS,
++registration backend, browser editor or external integration is required.
++
++Responsive spacing continues to come from the established shared section,
++container and collection stack tokens; no visual tokens or spacing policy changed.
++`npm run build` retains the release artifact gate and now also runs the focused
++`test:workshops` production-output acceptance. Keep that coverage when adding
++future public workshops, and update its known fixture/route expectations deliberately.
+diff --git a/audit/component-calibration.md b/audit/component-calibration.md
+index c1d5a51..cec1ef4 100644
+--- a/audit/component-calibration.md
++++ b/audit/component-calibration.md
+@@ -1,5 +1,18 @@
+ # Stage 4.5 Component & Token Calibration
+ 
++## Workshops continuation — 2026-10-21
++
++Before page implementation, the existing `/services/` page was inspected at 1440px
++and `/_styleguide/` at 390px, 768px and 1440px in local Chromium. The slashless
++styleguide URL returned the site 404 under the installed trailing-slash policy;
++the slash URL returned 200 and the real specimen heading. Full-page captures at
++`../styleguide-{390,768,1440}.png` show the inherited typography, stacked content,
++rules and responsive layout, with no document overflow at those widths. The new
++listing reuses the existing Section/Container and collection-list/item stack
++rules; no token or primitive changes are needed. This is scoped inherited-layout
++review, not a new full styleguide/accessibility certification. Production page
++and keyboard evidence is recorded in the trial's `EVALUATION-NOTES-B.md`.
++
+ Record `/_styleguide` verification across mobile (`390px`), tablet (`768px`), and desktop (`1440px`) before assembling full site routes.
+ 
+ ## Token Calibration
+diff --git a/package.json b/package.json
+index f19cbfe..54f07b9 100644
+--- a/package.json
++++ b/package.json
+@@ -26,7 +26,8 @@
+     "lint:scripts": "node scripts/check-script-syntax.mjs",
+     "lint:templates": "eslint src --max-warnings 0",
+     "check:css": "node scripts/check-css-contracts.mjs",
+-    "postbuild": "node scripts/assert-release-artifact.mjs",
++    "postbuild": "node scripts/assert-release-artifact.mjs && npm run test:workshops",
++    "test:workshops": "node --test tests/workshops-output.mjs",
+     "check:dev-tools": "node scripts/check-dev-tools.mjs",
+     "test:design": "node --test tests/static-foundation.test.mjs tests/fluid-tokens.test.mjs tests/css-contracts.test.mjs tests/spacing-tokens.test.mjs"
+   },
+diff --git a/src/config/site.ts b/src/config/site.ts
+index 828eec2..bfbad2e 100644
+--- a/src/config/site.ts
++++ b/src/config/site.ts
+@@ -1,2 +1,2 @@
+ import type { MetadataSite } from '../lib/metadata';
+-export const site: MetadataSite & { navigation: { label: string; href: string }[] } = { title: 'Northline Studio', description: 'Practical project planning and useful conversations.', language: 'en', navigation: [{label:'Home',href:'/'},{label:'Services',href:'/services/'},{label:'About',href:'/about/'},{label:'Contact',href:'/contact/'},{label:'Posts',href:'/posts/'}] };
++export const site: MetadataSite & { navigation: { label: string; href: string }[] } = { title: 'Northline Studio', description: 'Practical project planning and useful conversations.', language: 'en', navigation: [{label:'Home',href:'/'},{label:'Services',href:'/services/'},{label:'Workshops',href:'/workshops/'},{label:'About',href:'/about/'},{label:'Contact',href:'/contact/'},{label:'Posts',href:'/posts/'}] };
+diff --git a/src/content.config.ts b/src/content.config.ts
+index 153818c..8d6b366 100644
+--- a/src/content.config.ts
++++ b/src/content.config.ts
+@@ -16,4 +16,16 @@ const posts = defineCollection({
+   }),
+ });
+ 
+-export const collections = { posts };
++const workshops = defineCollection({
++  loader: glob({ base: './src/content/workshops', pattern: '**/*.md' }),
++  schema: z.object({
++    title: z.string().trim().min(1),
++    slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Use a lowercase, hyphen-separated slug.'),
++    summary: z.string().trim().min(1),
++    date: z.coerce.date(),
++    venue: z.string().trim().min(1),
++    draft: z.boolean().default(false),
++  }),
++});
++
++export const collections = { posts, workshops };

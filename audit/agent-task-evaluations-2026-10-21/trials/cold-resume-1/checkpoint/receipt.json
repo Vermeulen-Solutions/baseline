@@ -1,0 +1,34 @@
+{
+  "trial": "cold-resume-1",
+  "capturedAt": "2026-10-21T14:24:51.103Z",
+  "baseCommit": "74c6ee5edf4f1ca104fbd9d90e90ee27ca0c0f69",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "17b69914de1e491084636cac42c5cb7fbd66945796bf9eb5a122c98f0c21fd85"
+    },
+    {
+      "path": "src/content.config.ts",
+      "sha256": "d72eb0909a079f93c94e049812f639c2930c18713f19126bf9319c74b241e847"
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "ed33c27dac760c80101d4c7e8fd37ed8ee32fe34b10d95e59ef2e9fd1015d0ce"
+    },
+    {
+      "path": "src/content/workshops/clear-project-briefs.md",
+      "sha256": "29c2018a86de806f8f66e87bd3a63d9f1528a35bf1cca78173e87e8b7e8ef261"
+    },
+    {
+      "path": "src/content/workshops/winter-planning-clinic.md",
+      "sha256": "68d5659bc854d7e6b31f1491af30a1a791362d08ee171e7f1a7eb3fe3dfb6b84"
+    }
+  ],
+  "checks": {
+    "noRouteImplementation": true,
+    "noNavigationChange": true,
+    "typedSchemaPresent": true,
+    "twoSampleEntriesPresent": true,
+    "writtenHandoffPresent": true
+  }
+}

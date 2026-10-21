@@ -1,0 +1,43 @@
+
+> fixture-sveltia@0.0.0 build
+> astro build
+
+11:57:41 [content] Syncing content
+11:57:42 [content] Synced content
+11:57:42 [types] Generated 1.24s
+11:57:42 [build] output: "static"
+11:57:42 [build] mode: "static"
+11:57:42 [build] directory: C:\dev\baseline-task-evals-20261021-cde21c0d\sveltia-field-3\site\dist\
+11:57:42 [build] Collecting build info...
+11:57:42 [build] ✓ Completed in 1.28s.
+11:57:42 [build] Building static entrypoints...
+11:57:43 [vite] ✓ built in 831ms
+11:57:43 [vite] ✓ built in 28ms
+11:57:43 [build] Rearranging server assets...
+
+ generating static routes 
+11:57:43   ├─ /404.html (+20ms) 
+11:57:43   ├─ /about/index.html (+11ms) 
+11:57:43   ├─ /contact/index.html (+5ms) 
+11:57:43   ├─ /posts/index.html (+10ms) 
+11:57:43   ├─ /posts/practice-update/index.html (+7ms) 
+11:57:43   ├─ /posts/field-notes/index.html (+3ms) 
+11:57:43   ├─ /posts/welcome/index.html (+3ms) 
+11:57:43   ├─ /services/index.html (+4ms) 
+11:57:43   ├─ /index.html (+5ms) 
+11:57:43 ✓ Completed in 516ms.
+
+ generating optimized images 
+11:57:43   ▶ /_astro/pilot-grid.C18fp0m6_1ChCCy.webp (reused cache entry) (+2ms) (1/3)
+11:57:43   ▶ /_astro/pilot-grid.C18fp0m6_DL58u.webp (reused cache entry) (+2ms) (2/3)
+11:57:43   ▶ /_astro/pilot-grid.C18fp0m6_HP8Dr.webp (reused cache entry) (+1ms) (3/3)
+11:57:43 ✓ Completed in 7ms.
+
+11:57:43 [build] ✓ Completed in 1.47s.
+11:57:43 [build] 9 page(s) built in 2.76s
+11:57:43 [build] Complete!
+
+> fixture-sveltia@0.0.0 postbuild
+> node scripts/assert-release-artifact.mjs
+
+Release artifact profile verified. Also verify the actual production route via check:dev-tools.

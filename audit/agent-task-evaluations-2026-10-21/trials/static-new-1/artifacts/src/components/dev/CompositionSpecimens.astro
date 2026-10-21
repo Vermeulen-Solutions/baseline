@@ -1,0 +1,59 @@
+---
+import Section from '../Section.astro';
+import Disclosure from '../Disclosure.astro';
+import Cluster from '../Cluster.astro';
+import Sidebar from '../Sidebar.astro';
+import ResponsiveImage from '../ResponsiveImage.astro';
+import DisclosureProse from '../../dev/disclosure-prose.md';
+import { smallImage } from '../../dev/styleguide-fixtures';
+---
+<Section labelledBy="composition"><div class="flow">
+  <h2 id="composition">Native composition</h2>
+  <p>Optional disclosure, wrapping siblings, and unequal main/supporting regions. These specimens use the production primitives without a viewport breakpoint or interaction script.</p>
+  <Disclosure id="specimen-disclosure" data-composition="independent">
+    <span slot="summary">How does this optional explanation work?</span>
+    <slot name="editorial"><DisclosureProse /></slot>
+    <p id="disclosure-reveal-target">The native reveal specimen is inside a closed disclosure.</p>
+    <a id="disclosure-body-link" href="#coverage">Inspect the coverage notes</a>
+  </Disclosure>
+  <a id="disclosure-after-link" href="#disclosure-reveal-target">Reveal the optional explanation by its fragment</a>
+  <Disclosure id="disclosure-group-a" name="specimen-composition-group">
+    <span slot="summary">First grouped explanation</span>
+    <p>Grouping is native and optional. Opening a group peer closes this panel in supporting browsers.</p>
+  </Disclosure>
+  <Disclosure id="disclosure-group-b" name="specimen-composition-group">
+    <span slot="summary">Second grouped explanation</span>
+    <p>Independent disclosures above and below remain independent of this group.</p>
+  </Disclosure>
+  <Disclosure id="disclosure-dark" data-surface="dark">
+    <span slot="summary" lang="de">Zusätzliche Erläuterungen zur barrierefreien Bedienung mit einer absichtlich sehr langen Zusammenfassung</span>
+    <p lang="de">Die vollständige Erläuterung bleibt im Dokument. LangeBezeichnerOhneLeerzeichenBleibenAuchInSchmalenContainernLesbar.</p>
+    <a href="#composition">Return to the specimen heading</a>
+  </Disclosure>
+  <h3>Wrapping siblings</h3>
+  <div class="composition-narrow">
+    <Cluster id="specimen-cluster" dir="rtl">
+      <button type="button">A deliberately long translated action label</button>
+      <a href="#coverage" lang="ar">ملاحظات التغطية</a>
+      <span>OneUnbrokenEditorialIdentifierForNarrowHosts</span>
+    </Cluster>
+  </div>
+  <h3>Unequal regions inside wide and narrow hosts</h3>
+  <p>Main content precedes its supporting material in the document. Grid remains the equal-column collection layout; Sidebar makes the main region retain a minimum share before wrapping.</p>
+  <Sidebar id="specimen-sidebar-wide">
+    <div class="flow" data-editor-wrapper><h4>Main editorial region</h4><p>A stable region wrapper contains editorial markup and edit annotations without changing the two-child layout relationship.</p><a href="#composition">Read the composition contract</a></div>
+    <aside class="flow" aria-label="Wide specimen supporting material"><ResponsiveImage {...smallImage} alt={smallImage.alt} optimize={false} /><p>Supporting metadata follows the main region.</p></aside>
+  </Sidebar>
+  <div class="composition-narrow" dir="rtl">
+    <Sidebar id="specimen-sidebar-narrow">
+      <div class="flow" data-editor-wrapper><h4 lang="ar">المحتوى الرئيسي</h4><p>OneUnbrokenEditorialIdentifierThatMustWrapWithoutExpandingItsHost</p><a href="#composition">First in DOM order</a></div>
+      <aside class="flow" aria-label="Narrow specimen supporting material"><p>Second in DOM order, even when the layout wraps in a wide viewport.</p><a href="#coverage">Second in DOM order</a></aside>
+    </Sidebar>
+  </div>
+  <Sidebar id="specimen-sidebar-single"><div class="flow"><p>A missing optional supporting region leaves the main region at full width.</p></div></Sidebar>
+</div></Section>
+<style>
+@layer components {
+  .composition-narrow { max-inline-size: calc(var(--measure-reading) / 2); }
+}
+</style>

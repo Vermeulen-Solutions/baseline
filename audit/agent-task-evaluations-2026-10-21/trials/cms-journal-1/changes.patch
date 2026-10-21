@@ -1,0 +1,60 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index 0fc54da..858c117 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -71,6 +71,10 @@ Use the live [EmDash docs](https://docs.emdashcms.com/) or configured docs MCP t
+ 
+ ## Implementation rules
+ 
++### Journal maintenance
++
++Journal is an editor-managed view of the existing `posts` collection at `/journal/` and `/journal/[slug]/`. Keep `/posts` and `/posts/[slug]` serving their existing content. The primary CMS menu and seed include Journal; the Posts collection URL pattern is `/journal/{slug}/` for editor previews and generated links. Titles, excerpts and Portable Text belong to Posts, with live edit proxies and the original tagged content value. The archive lists published posts with cursor pagination; entry lookup uses EmDash's authenticated preview rules. Existing art direction, tokens and automatic spacing remain authoritative. Local acceptance: `JOURNAL_TEST_URL=http://127.0.0.1:<port> node tests/journal.integration.mjs` against an authorized disposable CMS.
++
+ - Before site-specific visual implementation anywhere under `src/` or `public/`, save one complete `## Art Direction Record` in this file with Aesthetic Lane, Narrative Metaphor, Typography Pairing, Token Physics (Canvas, Action/Accent, Borders, Spatial Density), and 2–3 Site Anti-Patterns separated by semicolons. “Save” means write to disk; a Git commit is not required or implied. Run `npm run check:art-direction -- --require-record` before implementing. Route inventory and content modeling may precede this gate; visual route templates may not.
+ - The gate applies to site visual work regardless of file extension or directory relocation. Functional fixes that preserve the visual system, backend/platform setup, starter infrastructure maintenance, and isolated concept studies under `audit/visual-concepts/` are scoped exceptions. Document source-file exceptions in `audit/design-gate-exceptions.json` with an exact path, concrete reason, and SHA-256 of UTF-8 content normalized to LF; an edit invalidates its exception. Never exempt a directory or client page implementation. Exception changes require the same review as code changes.
+ - `npm run check:art-direction` checks changed visual source against HEAD (or `--base <revision>`) and validates the record unless exact infrastructure exceptions cover it. CI runs this check. This is structural outcome validation, not prevention of writes, proof of decision chronology, human approval, or design quality. True pre-write enforcement requires a guard in the agent tool runner. Keep evidence and approved versus assumed decisions explicit; revisit the record when the brief changes.
+diff --git a/profiles/file-inventory.json b/profiles/file-inventory.json
+index 8cfb01d..bfc7a3a 100644
+--- a/profiles/file-inventory.json
++++ b/profiles/file-inventory.json
+@@ -1004,6 +1004,14 @@
+     "tests/cache.integration.mjs": {
+       "disposition": "emdash-only",
+       "static": "omit-until-explicitly-allowlisted"
++    },
++    "src/pages/journal/index.astro": {
++      "disposition": "emdash-only",
++      "static": "omit-until-explicitly-allowlisted"
++    },
++    "src/pages/journal/[slug].astro": {
++      "disposition": "emdash-only",
++      "static": "omit-until-explicitly-allowlisted"
+     }
+   }
+ }
+diff --git a/seed/seed.json b/seed/seed.json
+index 4e602ab..4c9e7d5 100644
+--- a/seed/seed.json
++++ b/seed/seed.json
+@@ -45,7 +45,8 @@
+           "label": "Excerpt",
+           "type": "text"
+         }
+-      ]
++      ],
++      "urlPattern": "/journal/{slug}/"
+     },
+     {
+       "slug": "pages",
+@@ -133,6 +134,11 @@
+           "type": "custom",
+           "label": "About",
+           "url": "/about"
++        },
++        {
++          "type": "custom",
++          "label": "Journal",
++          "url": "/journal/"
+         }
+       ]
+     }

@@ -1,0 +1,625 @@
+{
+  "recordedAt": "2026-10-21T14:47:22.871Z",
+  "trials": [
+    {
+      "trial": "static-new-1",
+      "status": "partial",
+      "summary": {
+        "pass": 8,
+        "fail": 0,
+        "unverified": 1
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "pass",
+          "evidence": "Independent installed verification passed"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "responsive-public-pages",
+          "status": "pass",
+          "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+        },
+        {
+          "id": "missing-route-404",
+          "status": "pass",
+          "evidence": "Missing URL served as 404, not SPA fallback"
+        },
+        {
+          "id": "native-static-profile",
+          "status": "pass",
+          "evidence": {
+            "dependencies": [
+              "astro",
+              "tailwindcss",
+              "@tailwindcss/vite",
+              "@astrojs/check",
+              "typescript",
+              "sharp",
+              "@fontsource/noto-sans",
+              "@google/design.md",
+              "@playwright/test",
+              "eslint",
+              "eslint-plugin-astro",
+              "eslint-plugin-jsx-a11y-x",
+              "@typescript-eslint/parser",
+              "@types/node",
+              "postcss",
+              "postcss-selector-parser",
+              "astro-eslint-parser",
+              "parse5"
+            ],
+            "noServerArtifact": true
+          }
+        },
+        {
+          "id": "supplied-copy-navigation-enquiry",
+          "status": "pass",
+          "evidence": "Four requested routes, supplied service copy and enquiry action present"
+        },
+        {
+          "id": "art-direction-record",
+          "status": "pass",
+          "evidence": "Required saved record passed the installed gate"
+        },
+        {
+          "id": "calibration-record",
+          "status": "pass",
+          "evidence": "Calibration artifact exists; inspect evidence separately"
+        },
+        {
+          "id": "calibration-chronology",
+          "status": "unverified",
+          "observation": "Tool-level execution chronology is not exposed to the evaluator; a final record does not independently prove pre-assembly timing."
+        }
+      ],
+      "limits": []
+    },
+    {
+      "trial": "static-new-2",
+      "status": "partial",
+      "summary": {
+        "pass": 8,
+        "fail": 0,
+        "unverified": 1
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "pass",
+          "evidence": "Independent installed verification passed"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "responsive-public-pages",
+          "status": "pass",
+          "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+        },
+        {
+          "id": "missing-route-404",
+          "status": "pass",
+          "evidence": "Missing URL served as 404, not SPA fallback"
+        },
+        {
+          "id": "native-static-profile",
+          "status": "pass",
+          "evidence": {
+            "dependencies": [
+              "astro",
+              "tailwindcss",
+              "@tailwindcss/vite",
+              "@astrojs/check",
+              "typescript",
+              "sharp",
+              "@fontsource/noto-sans",
+              "@google/design.md",
+              "@playwright/test",
+              "eslint",
+              "eslint-plugin-astro",
+              "eslint-plugin-jsx-a11y-x",
+              "@typescript-eslint/parser",
+              "@types/node",
+              "postcss",
+              "postcss-selector-parser",
+              "astro-eslint-parser",
+              "parse5"
+            ],
+            "noServerArtifact": true
+          }
+        },
+        {
+          "id": "supplied-copy-navigation-enquiry",
+          "status": "pass",
+          "evidence": "Four requested routes, supplied service copy and enquiry action present"
+        },
+        {
+          "id": "art-direction-record",
+          "status": "pass",
+          "evidence": "Required saved record passed the installed gate"
+        },
+        {
+          "id": "calibration-record",
+          "status": "pass",
+          "evidence": "Calibration artifact exists; inspect evidence separately"
+        },
+        {
+          "id": "calibration-chronology",
+          "status": "unverified",
+          "observation": "Tool-level execution chronology is not exposed to the evaluator; a final record does not independently prove pre-assembly timing."
+        }
+      ],
+      "limits": []
+    },
+    {
+      "trial": "sveltia-field-3",
+      "status": "pass",
+      "summary": {
+        "pass": 11,
+        "fail": 0,
+        "unverified": 0
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "pass",
+          "evidence": "Independent installed verification passed"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "responsive-public-pages",
+          "status": "pass",
+          "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+        },
+        {
+          "id": "missing-route-404",
+          "status": "pass",
+          "evidence": "Missing URL served as 404, not SPA fallback"
+        },
+        {
+          "id": "sveltia-form-contract",
+          "status": "pass",
+          "evidence": {
+            "name": "readingTime",
+            "label": "Reading time (minutes)",
+            "widget": "number",
+            "value_type": "int",
+            "min": 1,
+            "max": 60,
+            "step": 1,
+            "required": false,
+            "hint": "Optional. Enter a whole number from 1 to 60, or leave empty."
+          }
+        },
+        {
+          "id": "reading-time-output-and-absence",
+          "status": "pass",
+          "evidence": "5 min read appears only on the supplied article with a value"
+        },
+        {
+          "id": "accept-boundary-1",
+          "status": "pass",
+          "evidence": "Valid boundary accepted by actual Astro build"
+        },
+        {
+          "id": "accept-boundary-60",
+          "status": "pass",
+          "evidence": "Valid boundary accepted by actual Astro build"
+        },
+        {
+          "id": "reject-invalid-0",
+          "status": "pass",
+          "evidence": "Invalid content rejected by actual Astro build"
+        },
+        {
+          "id": "reject-invalid-61",
+          "status": "pass",
+          "evidence": "Invalid content rejected by actual Astro build"
+        },
+        {
+          "id": "reject-invalid-1.5",
+          "status": "pass",
+          "evidence": "Invalid content rejected by actual Astro build"
+        }
+      ],
+      "limits": [
+        "No credentialed Sveltia login/save/upload or GitHub publication was performed."
+      ]
+    },
+    {
+      "trial": "sveltia-field-5",
+      "status": "pass",
+      "summary": {
+        "pass": 11,
+        "fail": 0,
+        "unverified": 0
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "pass",
+          "evidence": "Independent installed verification passed"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "responsive-public-pages",
+          "status": "pass",
+          "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+        },
+        {
+          "id": "missing-route-404",
+          "status": "pass",
+          "evidence": "Missing URL served as 404, not SPA fallback"
+        },
+        {
+          "id": "sveltia-form-contract",
+          "status": "pass",
+          "evidence": {
+            "name": "readingTime",
+            "label": "Reading time (minutes)",
+            "widget": "number",
+            "value_type": "int",
+            "min": 1,
+            "max": 60,
+            "step": 1,
+            "required": false,
+            "hint": "Optional. Enter a whole number from 1 to 60, or leave empty."
+          }
+        },
+        {
+          "id": "reading-time-output-and-absence",
+          "status": "pass",
+          "evidence": "5 min read appears only on the supplied article with a value"
+        },
+        {
+          "id": "accept-boundary-1",
+          "status": "pass",
+          "evidence": "Valid boundary accepted by actual Astro build"
+        },
+        {
+          "id": "accept-boundary-60",
+          "status": "pass",
+          "evidence": "Valid boundary accepted by actual Astro build"
+        },
+        {
+          "id": "reject-invalid-0",
+          "status": "pass",
+          "evidence": "Invalid content rejected by actual Astro build"
+        },
+        {
+          "id": "reject-invalid-61",
+          "status": "pass",
+          "evidence": "Invalid content rejected by actual Astro build"
+        },
+        {
+          "id": "reject-invalid-1.5",
+          "status": "pass",
+          "evidence": "Invalid content rejected by actual Astro build"
+        }
+      ],
+      "limits": [
+        "No credentialed Sveltia login/save/upload or GitHub publication was performed."
+      ]
+    },
+    {
+      "trial": "regional-spacing-1",
+      "status": "pass",
+      "summary": {
+        "pass": 6,
+        "fail": 0,
+        "unverified": 0
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "pass",
+          "evidence": "Independent installed verification passed"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "responsive-public-pages",
+          "status": "pass",
+          "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+        },
+        {
+          "id": "missing-route-404",
+          "status": "pass",
+          "evidence": "Missing URL served as 404, not SPA fallback"
+        },
+        {
+          "id": "regional-gap-ratio-and-isolation",
+          "status": "pass",
+          "evidence": "Only requested services gaps changed to 75%; other measured grids, copy and links retained"
+        },
+        {
+          "id": "theme-and-root-tokens-preserved",
+          "status": "pass",
+          "evidence": "Independent LF-normalized token comparison passed; initial failure was only Git CRLF checkout formatting."
+        }
+      ],
+      "limits": []
+    },
+    {
+      "trial": "regional-spacing-2",
+      "status": "pass",
+      "summary": {
+        "pass": 6,
+        "fail": 0,
+        "unverified": 0
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "pass",
+          "evidence": "Independent installed verification passed"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "responsive-public-pages",
+          "status": "pass",
+          "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+        },
+        {
+          "id": "missing-route-404",
+          "status": "pass",
+          "evidence": "Missing URL served as 404, not SPA fallback"
+        },
+        {
+          "id": "regional-gap-ratio-and-isolation",
+          "status": "pass",
+          "evidence": "Only requested services gaps changed to 75%; other measured grids, copy and links retained"
+        },
+        {
+          "id": "theme-and-root-tokens-preserved",
+          "status": "pass",
+          "evidence": "LF-normalized parsed theme/root/dark tokens unchanged"
+        }
+      ],
+      "limits": []
+    },
+    {
+      "trial": "cms-journal-1",
+      "status": "fail",
+      "summary": {
+        "pass": 5,
+        "fail": 1,
+        "unverified": 0
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "fail",
+          "observation": "run verify:  generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: '299ade30a182618abf777884d5043851a926d161aaf6110fd992a35fe7fb866d',\n    expected: '72fc52c1f94cdb429abb80c14e8db9263ea4809bcecdd962fa04602dbdc7963d',\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at tests\\token-coverage.test.mjs:289:1\n✖ validateCssAlignment catches untouched neutral starter global.css when a named lane is declared and passes once lane tokens are applied (5.5789ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  0 !== 1\n  \n      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-journal-1/site/tests/token-coverage.test.mjs:293:10)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1402:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)\n      at Test.postRun (node:internal/test_runner/test:1542:19)\n      at Test.run (node:internal/test_runner/test:1467:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 0,\n    expected: 1,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at tests\\token-coverage.test.mjs:301:1\n✖ pruneStarterExceptions strips sample-page and deleted entries while retaining dev/styleguide infrastructure (34.28ms)\n  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n  \n    assert.ok(result.before > result.after)\n  \n      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-journal-1/site/tests/token-coverage.test.mjs:308:12)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1402:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)\n      at Test.postRun (node:internal/test_runner/test:1542:19)\n      at Test.run (node:internal/test_runner/test:1467:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: false,\n    expected: true,\n    operator: '==',\n    diff: 'simple'\n  }\n"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "published-journal-and-existing-post-route",
+          "status": "pass",
+          "evidence": "Published content served through Journal and retained Posts route"
+        },
+        {
+          "id": "anonymous-draft-isolation",
+          "status": "pass",
+          "evidence": "Draft journal URL resolves to 404 without draft body"
+        },
+        {
+          "id": "journal-navigation",
+          "status": "pass",
+          "evidence": "Journal reachable through navigation"
+        },
+        {
+          "id": "actual-inline-editor-roundtrip",
+          "status": "pass",
+          "evidence": {
+            "uiTyped": true,
+            "blurSaved": true,
+            "editorReload": true,
+            "uiPublished": true,
+            "anonymousReload": true,
+            "titleReference": {
+              "collection": "posts",
+              "id": "01M5EX9H2HZ3CNE4WAJE963EMM",
+              "status": "published",
+              "field": "title"
+            }
+          }
+        }
+      ],
+      "limits": [
+        "Actual disposable local development editor only; no production origin, real editor account, Workers or external-provider certification."
+      ]
+    },
+    {
+      "trial": "cms-journal-3",
+      "status": "fail",
+      "summary": {
+        "pass": 5,
+        "fail": 1,
+        "unverified": 0
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "fail",
+          "observation": "run verify:  generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: '299ade30a182618abf777884d5043851a926d161aaf6110fd992a35fe7fb866d',\n    expected: '72fc52c1f94cdb429abb80c14e8db9263ea4809bcecdd962fa04602dbdc7963d',\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at tests\\token-coverage.test.mjs:289:1\n✖ validateCssAlignment catches untouched neutral starter global.css when a named lane is declared and passes once lane tokens are applied (1.0122ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  0 !== 1\n  \n      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-journal-3/site/tests/token-coverage.test.mjs:293:10)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1402:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)\n      at Test.postRun (node:internal/test_runner/test:1542:19)\n      at Test.run (node:internal/test_runner/test:1467:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 0,\n    expected: 1,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at tests\\token-coverage.test.mjs:301:1\n✖ pruneStarterExceptions strips sample-page and deleted entries while retaining dev/styleguide infrastructure (6.246ms)\n  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n  \n    assert.ok(result.before > result.after)\n  \n      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-journal-3/site/tests/token-coverage.test.mjs:308:12)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1402:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)\n      at Test.postRun (node:internal/test_runner/test:1542:19)\n      at Test.run (node:internal/test_runner/test:1467:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: false,\n    expected: true,\n    operator: '==',\n    diff: 'simple'\n  }\n"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "published-journal-and-existing-post-route",
+          "status": "pass",
+          "evidence": "Published content served through Journal and retained Posts route"
+        },
+        {
+          "id": "anonymous-draft-isolation",
+          "status": "pass",
+          "evidence": "Draft journal URL resolves to 404 without draft body"
+        },
+        {
+          "id": "journal-navigation",
+          "status": "pass",
+          "evidence": "Journal reachable through navigation"
+        },
+        {
+          "id": "actual-inline-editor-roundtrip",
+          "status": "pass",
+          "evidence": {
+            "uiTyped": true,
+            "blurSaved": true,
+            "editorReload": true,
+            "uiPublished": true,
+            "anonymousReload": true,
+            "titleReference": {
+              "collection": "posts",
+              "id": "01M5FDQWJA1NP6S80Q3A9F9BMM",
+              "status": "published",
+              "field": "title"
+            }
+          }
+        }
+      ],
+      "limits": [
+        "Actual disposable local development editor only; no production origin, real editor account, Workers or external-provider certification."
+      ]
+    },
+    {
+      "trial": "cold-resume-1",
+      "status": "pass",
+      "summary": {
+        "pass": 8,
+        "fail": 0,
+        "unverified": 0
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "pass",
+          "evidence": "Independent installed verification passed"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "responsive-public-pages",
+          "status": "pass",
+          "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+        },
+        {
+          "id": "missing-route-404",
+          "status": "pass",
+          "evidence": "Missing URL served as 404, not SPA fallback"
+        },
+        {
+          "id": "saved-checkpoint-and-content-preserved",
+          "status": "pass",
+          "evidence": "Captured phase A deferred routes/navigation and persisted a typed model, samples and handoff; phase B preserved LF-normalized workshop content"
+        },
+        {
+          "id": "existing-public-content-preserved",
+          "status": "pass",
+          "evidence": "Existing main content and links retained on all four established public pages"
+        },
+        {
+          "id": "public-workshop-policy",
+          "status": "pass",
+          "evidence": "Published workshop with agreed date, summary, venue and enquiry rendered; draft omitted"
+        },
+        {
+          "id": "existing-brand-tokens-preserved",
+          "status": "pass",
+          "evidence": "Existing LF-normalized parsed design tokens unchanged"
+        }
+      ],
+      "limits": [
+        "Recovery at a deliberate saved checkpoint; not arbitrary process crash or half-written-file recovery."
+      ]
+    },
+    {
+      "trial": "cold-resume-2",
+      "status": "pass",
+      "summary": {
+        "pass": 8,
+        "fail": 0,
+        "unverified": 0
+      },
+      "criteria": [
+        {
+          "id": "verification",
+          "status": "pass",
+          "evidence": "Independent installed verification passed"
+        },
+        {
+          "id": "production-build",
+          "status": "pass",
+          "evidence": "Independent production build passed"
+        },
+        {
+          "id": "responsive-public-pages",
+          "status": "pass",
+          "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+        },
+        {
+          "id": "missing-route-404",
+          "status": "pass",
+          "evidence": "Missing URL served as 404, not SPA fallback"
+        },
+        {
+          "id": "saved-checkpoint-and-content-preserved",
+          "status": "pass",
+          "evidence": "Captured phase A deferred routes/navigation and persisted a typed model, samples and handoff; phase B preserved LF-normalized workshop content"
+        },
+        {
+          "id": "existing-public-content-preserved",
+          "status": "pass",
+          "evidence": "Existing main content and links retained on all four established public pages"
+        },
+        {
+          "id": "public-workshop-policy",
+          "status": "pass",
+          "evidence": "Published workshop with agreed date, summary, venue and enquiry rendered; draft omitted"
+        },
+        {
+          "id": "existing-brand-tokens-preserved",
+          "status": "pass",
+          "evidence": "Existing LF-normalized parsed design tokens unchanged"
+        }
+      ],
+      "limits": [
+        "Recovery at a deliberate saved checkpoint; not arbitrary process crash or half-written-file recovery."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,105 @@
+diff --git a/AGENTS.md b/AGENTS.md
+index b595617..486161a 100644
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -94,3 +94,34 @@ Template verification requires Node `^22.22.3 || ^24.16.0 || >=26.3.0` (Node 24
+ 
+ ## Existing synthetic site decisions
+ This is a disposable local evaluation fixture. Developer-maintained English content; no external writes or deployment. The existing editorial-paper design and automatic-v2 spacing are established for this fixture. Existing routes and copy are authoritative. No real client approval is claimed.
++
++## Workshop content preparation (2026-10-21)
++
++User-settled scope: developer-maintained Git content, static profile, English only;
++no CMS or registration backend. `workshops` is a native Markdown collection in
++`src/content/workshops/`, registered in `src/content.config.ts` with the shared
++schema `src/lib/workshop-schema.ts`. Required fields: title, lowercase kebab-case
++slug, summary, date, venue and explicit boolean draft. Implementation choice:
++quoted ISO calendar-date strings (`YYYY-MM-DD`), without invented times/time zones;
++no default draft status. Keep filenames aligned with slugs (Astro's glob loader
++uses frontmatter slug as entry ID). The two supplied entries preserve their exact
++copy and dates; Clear project briefs is published, Winter planning clinic is draft.
++
++The continuation request authorizes the local `/workshops/` listing and primary
++navigation link. Public queries must exclude `draft: true` in every environment.
++Registration is solely `mailto:hello@northline.example.test`, labelled
++“Ask about a place”. Preserve the established design, spacing, existing routes
++and content. See `HANDOFF.md` for exact changes, verification and remaining work.
++
++## Workshop public continuation (2026-10-21)
++
++`/workshops/` renders the published native collection through the established
++Base, Section, Container, Grid and Card components. Keep supplied copy, slugs,
++dates and explicit draft flags unchanged. Each workshop exposes its slug as a
++stable listing anchor; no detail routes are requested. Implementation assumption:
++ascending calendar date, then slug for ties. Format English dates with explicit
++UTC so the build machine cannot shift their calendar day. An empty collection
++shows a plain empty state. Shared responsive spacing and existing tokens remain
++authoritative; no new visual system, CMS, public JavaScript or booking backend.
++Content and maintenance remain developer-owned. Local acceptance and limits are
++recorded in `../EVALUATION-NOTES-B.md`.
+diff --git a/audit/component-calibration.md b/audit/component-calibration.md
+index c1d5a51..a87a424 100644
+--- a/audit/component-calibration.md
++++ b/audit/component-calibration.md
+@@ -51,3 +51,30 @@ Record `/_styleguide` verification across mobile (`390px`), tablet (`768px`), an
+ - **Layout & Cards:** Check `Section`, `Container` (`reading`, `content`, `wide`, `breakout`), `Grid`, and `Card` (`stacked`, `horizontal`) on `/_styleguide#layout`.
+ - **Media & Editorial Flow:** Check native `ResponsiveImage`, `PartnersPanel`, `LogoTicker`, and `.flow` Markdown on the common specimens. For EmDash, also check `EditorialImage`, `PhotoGallery` and Portable Text in the platform extension.
+ - **Evidence:** Record captures and observed results before marking component specimens verified. Token calculations alone do not verify rendered components.
++
++## Workshop continuation evidence — 2026-10-21
++
++This scoped extension inherits the saved Editorial Paper direction and unchanged
++token hash above. Before writing the workshop template, the incumbent homepage's
++Section/Container/Grid/Card composition was inspected in Chromium at 390, 768 and
++1280px (`workshops-before-390.png`, `workshops-before-768.png`,
++`workshops-before-desktop.png`). No redesign or external asset was introduced.
++
++After assembly, the development `/_styleguide/` layout section was inspected at
++390, 768 and 1280px with reduced motion enabled. The captures
++`workshops-styleguide-{390,768,1280}.png` show five card specimens, natural wrapping,
++reading/content containers and automatic-v2 spacing; no document overflow was
++observed. The 768px horizontal media specimen has a narrow text column; the
++workshop page uses stacked cards without media and is unaffected. This is a
++review of relevant layout specimens, not certification of every styleguide state.
++
++The final public page was visually inspected at 320, 390, 768 and 1280px
++(`workshops-{320,390,768,1280}.png`). It retains the inherited paper surface,
++typography, card border, shared spacing and native link treatment. Browser checks
++exercise skip-link activation, natural keyboard order, visible email-link focus,
++navigation activation, increased text spacing and 200% root text sizing. Initial
++combined 320px stress overflow was resolved by inherited `overflow-wrap: anywhere`
++on the listing container (`workshops-stress-320.png` shows the final result).
++No existing tokens or shared primitives were changed. No new motion was added.
++Production `/_styleguide/` still responds 404. See `workshops-acceptance.mjs` for
++the repeatable production checks and `../../EVALUATION-NOTES-B.md` for full limits.
+diff --git a/src/config/site.ts b/src/config/site.ts
+index 828eec2..bfbad2e 100644
+--- a/src/config/site.ts
++++ b/src/config/site.ts
+@@ -1,2 +1,2 @@
+ import type { MetadataSite } from '../lib/metadata';
+-export const site: MetadataSite & { navigation: { label: string; href: string }[] } = { title: 'Northline Studio', description: 'Practical project planning and useful conversations.', language: 'en', navigation: [{label:'Home',href:'/'},{label:'Services',href:'/services/'},{label:'About',href:'/about/'},{label:'Contact',href:'/contact/'},{label:'Posts',href:'/posts/'}] };
++export const site: MetadataSite & { navigation: { label: string; href: string }[] } = { title: 'Northline Studio', description: 'Practical project planning and useful conversations.', language: 'en', navigation: [{label:'Home',href:'/'},{label:'Services',href:'/services/'},{label:'Workshops',href:'/workshops/'},{label:'About',href:'/about/'},{label:'Contact',href:'/contact/'},{label:'Posts',href:'/posts/'}] };
+diff --git a/src/content.config.ts b/src/content.config.ts
+index 153818c..2b63266 100644
+--- a/src/content.config.ts
++++ b/src/content.config.ts
+@@ -1,6 +1,7 @@
+ import { defineCollection } from 'astro:content';
+ import { glob } from 'astro/loaders';
+ import { z } from 'astro/zod';
++import { workshopSchema } from './lib/workshop-schema';
+ 
+ const posts = defineCollection({
+   loader: glob({ base: './src/content/posts', pattern: '**/*.md' }),
+@@ -16,4 +17,9 @@ const posts = defineCollection({
+   }),
+ });
+ 
+-export const collections = { posts };
++const workshops = defineCollection({
++  loader: glob({ base: './src/content/workshops', pattern: '**/*.md' }),
++  schema: workshopSchema,
++});
++
++export const collections = { posts, workshops };

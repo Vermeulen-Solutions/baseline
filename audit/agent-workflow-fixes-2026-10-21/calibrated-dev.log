@@ -1,0 +1,39 @@
+[2m17:10:26[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+[2m17:10:27[22m [34m[vite][39m connected.
+[2m17:10:27[22m [34m[types][39m Generated [2m2ms[22m
+[2m17:10:27[22m [34m[vite][39m connected.
+[2m17:10:29[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+
+  [2m›[22m Admin UI    [36mhttp://127.0.0.1:62886/_emdash/admin[39m
+  [2m›[22m MCP server  [36mhttp://127.0.0.1:62886/_emdash/api/mcp[39m
+  [2m›[22m Dev bypass  [36mhttp://127.0.0.1:62886/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin[39m
+    [2mSkips passkey setup/auth and signs you in as a dev admin[22m
+
+[2m17:10:29[22m [34m[starter-dev-tools][39m Component calibration: /_styleguide (use Astro's local development origin)
+[42m[1m astro [22m[49m [32mv7.4.0[39m [2mready in[22m 4250 [2mms[22m
+[2m┃[22m Local    [36mhttp://127.0.0.1:62886/[39m
+[2m17:10:29[22m [32mwatching for file changes...[39m
+[2m17:10:30[22m [34m[vite][39m [optimizer] bundling dependencies...
+Auto-seeded default collections
+[2m17:10:38[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m5426ms[22m
+[2m17:10:38[22m [34m[emdash][39m Generated emdash-env.d.ts (2 collections)
+[2m17:10:39[22m [34m[200][39m [34mPOST[39m /_emdash/api/typegen [2m2ms[22m
+[2m17:10:42[22m [34m[200][39m / [2m1649ms[22m
+[2m17:10:42[22m [34m[200][39m / [2m1703ms[22m
+[2m17:10:42[22m [34m[200][39m / [2m1708ms[22m
+[2m17:10:42[22m [34m[200][39m / [2m1712ms[22m
+[2m17:10:42[22m [34m[200][39m / [2m1717ms[22m
+[2m17:10:42[22m [34m[200][39m / [2m689ms[22m
+[setup-dev-bypass] Seed applied: 0 collections, 0 fields
+[setup-dev-bypass] Created dev admin user: dev@emdash.local
+[2m17:10:42[22m [34m[200][39m /_emdash/api/setup/dev-bypass [2m57ms[22m
+[2m17:10:42[22m [34m[200][39m /journal/ [2m40ms[22m
+[2m17:10:42[22m [34m[200][39m /journal/planning-your-first-workshop [2m36ms[22m
+[2m17:10:42[22m [34m[200][39m /posts/planning-your-first-workshop [2m30ms[22m
+[33m[1m17:10:42[22m [WARN] [cache][39m `cache.set()` was called but caching is not enabled. Configure a cache provider in your Astro config under `cache` to enable caching.
+[2m17:10:42[22m [33m[404][39m [33m(rewrite) [39m/journal/unannounced-workshop [2m48ms[22m
+[2m17:10:43[22m [34m[200][39m /_styleguide [2m52ms[22m

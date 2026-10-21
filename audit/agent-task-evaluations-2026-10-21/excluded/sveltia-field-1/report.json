@@ -1,0 +1,389 @@
+{
+  "trial": "sveltia-field-1",
+  "startedAt": "2026-10-21T09:41:24.171Z",
+  "independent": true,
+  "criteria": [
+    {
+      "id": "verification",
+      "status": "fail",
+      "observation": "run verify: roxy checks are explicitly inapplicable (49.5707ms)\n✔ static dependencies and scripts have no CMS, database bootstrap or server adapter (0.8657ms)\n✖ Sveltia form, frontmatter and native image paths match the Astro collection (3.626ms)\n✔ template gate rejects missing/invalid image alternative (1078.92ms)\n✔ template gate rejects missing/invalid ARIA value (9.7186ms)\n✔ template gate rejects missing/invalid keyboard interaction (4.4818ms)\n✔ template gate rejects missing/invalid label control association (2.3655ms)\n✔ template gate rejects missing/invalid real link destination (2.8238ms)\n✔ template gate rejects missing/invalid natural tab order (2.348ms)\n✔ template gate rejects missing/invalid unreviewed autofocus (2.3587ms)\n✔ template gate rejects missing/invalid known image component alternative (2.209ms)\n✔ template gate accepts typed frontmatter, slots, native disclosure and labelled fields (13.5497ms)\n✔ line exceptions stay narrow and become errors when obsolete (8.437ms)\nℹ tests 40\nℹ suites 0\nℹ pass 39\nℹ fail 1\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 1648.8455\n\n✖ failing tests:\n\ntest at tests\\sveltia-config.test.mjs:6:1\n✖ Sveltia form, frontmatter and native image paths match the Astro collection (3.626ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n  + actual - expected\n  \n    [\n      'body',\n      'description',\n      'draft',\n      'hero',\n      'heroAlt',\n      'publishedAt',\n  +   'readingTime',\n      'title'\n    ]\n  \n      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/sveltia-field-1/site/tests/sveltia-config.test.mjs:20:10)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1402:25)\n      at Test.start (node:internal/test_runner/test:1262:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: [ 'body', 'description', 'draft', 'hero', 'heroAlt', 'publishedAt', 'readingTime', 'title' ],\n    expected: [ 'body', 'description', 'draft', 'hero', 'heroAlt', 'publishedAt', 'title' ],\n    operator: 'deepStrictEqual',\n    diff: 'simple'\n  }\n"
+    },
+    {
+      "id": "production-build",
+      "status": "pass",
+      "evidence": "Independent production build passed"
+    },
+    {
+      "id": "responsive-public-pages",
+      "status": "pass",
+      "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+    },
+    {
+      "id": "missing-route-404",
+      "status": "pass",
+      "evidence": "Missing URL served as 404, not SPA fallback"
+    },
+    {
+      "id": "sveltia-form-contract",
+      "status": "pass",
+      "evidence": {
+        "name": "readingTime",
+        "label": "Reading time (minutes)",
+        "widget": "number",
+        "value_type": "int",
+        "min": 1,
+        "max": 60,
+        "step": 1,
+        "required": false,
+        "hint": "Optional. Enter a whole number from 1 to 60; leave empty to hide the reading time."
+      }
+    },
+    {
+      "id": "reading-time-output-and-absence",
+      "status": "pass",
+      "evidence": "5 min read appears only on the supplied article with a value"
+    },
+    {
+      "id": "accept-boundary-1",
+      "status": "pass",
+      "evidence": "Valid boundary accepted by actual Astro build"
+    },
+    {
+      "id": "accept-boundary-60",
+      "status": "pass",
+      "evidence": "Valid boundary accepted by actual Astro build"
+    },
+    {
+      "id": "reject-invalid-0",
+      "status": "pass",
+      "evidence": "Invalid content rejected by actual Astro build"
+    },
+    {
+      "id": "reject-invalid-61",
+      "status": "pass",
+      "evidence": "Invalid content rejected by actual Astro build"
+    },
+    {
+      "id": "reject-invalid-1.5",
+      "status": "pass",
+      "evidence": "Invalid content rejected by actual Astro build"
+    }
+  ],
+  "measurements": {
+    "pages": [
+      {
+        "route": "/posts/field-notes/",
+        "width": 390,
+        "status": 200,
+        "title": "Field notes — Northline Studio",
+        "text": "Field notesPractical observations from our latest project.1 October 20265 min readA clear brief makes the next decision easier.\n",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\sveltia-field-1-grade\\390--posts-field-notes-.png"
+      },
+      {
+        "route": "/posts/practice-update/",
+        "width": 390,
+        "status": 200,
+        "title": "Practice update — Northline Studio",
+        "text": "Practice updateNews from the practice.2 October 2026We are making room for new conversations.\n",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\sveltia-field-1-grade\\390--posts-practice-update-.png"
+      },
+      {
+        "route": "/posts/welcome/",
+        "width": 390,
+        "status": 200,
+        "title": "Welcome — Northline Studio",
+        "text": "WelcomeA typed Markdown post using the shared Baseline design system.1 January 2026function e(e){if(!(e instanceof HTMLImageElement))return;let t=e.dataset.originalSrc;t&&e.src!==new URL(t,document.baseURI).href&&(e.removeAttribute(`srcset`),e.removeAttribute(`sizes`),e.src=t)}document.addEventListener(`error`,t=>e(t.target),!0),document.querySelectorAll(`img[data-original-src]`).forEach(t=>{t.complete&&t.naturalWidth===0&&t.currentSrc&&e(t)});Your static foundation\nEdit this Markdown file to update the post. Astro validates its fields and creates the page during the production build.\nThe presentation uses the same tokens, layout primitives, and .flow rhythm as the Baseline design system.\nWhat to do next\n\nReplace the starter content with your own.\nEstablish the site’s art direction before changing its visual identity.\nCalibrate the shared components on the development styleguide.\n\n\nContent changes appear on the public site after a successful rebuild and deployment.\n\n",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [
+          {
+            "src": "/_astro/pilot-grid.C18fp0m6_DL58u.webp",
+            "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+            "loaded": true
+          }
+        ],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\sveltia-field-1-grade\\390--posts-welcome-.png"
+      },
+      {
+        "route": "/posts/field-notes/",
+        "width": 1440,
+        "status": 200,
+        "title": "Field notes — Northline Studio",
+        "text": "Field notesPractical observations from our latest project.1 October 20265 min readA clear brief makes the next decision easier.\n",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\sveltia-field-1-grade\\1440--posts-field-notes-.png"
+      },
+      {
+        "route": "/posts/practice-update/",
+        "width": 1440,
+        "status": 200,
+        "title": "Practice update — Northline Studio",
+        "text": "Practice updateNews from the practice.2 October 2026We are making room for new conversations.\n",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\sveltia-field-1-grade\\1440--posts-practice-update-.png"
+      },
+      {
+        "route": "/posts/welcome/",
+        "width": 1440,
+        "status": 200,
+        "title": "Welcome — Northline Studio",
+        "text": "WelcomeA typed Markdown post using the shared Baseline design system.1 January 2026function e(e){if(!(e instanceof HTMLImageElement))return;let t=e.dataset.originalSrc;t&&e.src!==new URL(t,document.baseURI).href&&(e.removeAttribute(`srcset`),e.removeAttribute(`sizes`),e.src=t)}document.addEventListener(`error`,t=>e(t.target),!0),document.querySelectorAll(`img[data-original-src]`).forEach(t=>{t.complete&&t.naturalWidth===0&&t.currentSrc&&e(t)});Your static foundation\nEdit this Markdown file to update the post. Astro validates its fields and creates the page during the production build.\nThe presentation uses the same tokens, layout primitives, and .flow rhythm as the Baseline design system.\nWhat to do next\n\nReplace the starter content with your own.\nEstablish the site’s art direction before changing its visual identity.\nCalibrate the shared components on the development styleguide.\n\n\nContent changes appear on the public site after a successful rebuild and deployment.\n\n",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts/"
+          }
+        ],
+        "images": [
+          {
+            "src": "/_astro/pilot-grid.C18fp0m6_DL58u.webp",
+            "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+            "loaded": true
+          }
+        ],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\sveltia-field-1-grade\\1440--posts-welcome-.png"
+      }
+    ]
+  },
+  "limits": [
+    "No credentialed Sveltia login/save/upload or GitHub publication was performed."
+  ],
+  "completedAt": "2026-10-21T09:42:27.901Z",
+  "summary": {
+    "pass": 10,
+    "fail": 1,
+    "unverified": 0
+  },
+  "status": "fail",
+  "changedFiles": [
+    "M AGENTS.md",
+    " M docs/sveltia-cms.md",
+    " M public/admin/config.yml",
+    " M src/content.config.ts",
+    " M src/pages/posts/[...id].astro",
+    "?? src/content/posts/field-notes.md",
+    "?? src/content/posts/practice-update.md"
+  ]
+}

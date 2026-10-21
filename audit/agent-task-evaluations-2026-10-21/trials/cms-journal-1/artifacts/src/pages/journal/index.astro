@@ -1,0 +1,41 @@
+---
+import { getEmDashCollection } from "emdash";
+import { Image } from "emdash/ui";
+import Base from "../../layouts/Base.astro";
+import Section from "../../components/Section.astro";
+
+const cursor = Astro.url.searchParams.get("cursor") ?? undefined;
+const { entries: posts, nextCursor, error, cacheHint } = await getEmDashCollection("posts", {
+	status: "published",
+	orderBy: { published_at: "desc" },
+	limit: 20,
+	cursor,
+});
+if (error) return new Response("Unable to load the Journal", { status: 500 });
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
+---
+
+<Base title="Journal">
+	<Section labelledBy="journal-heading">
+		<h1 id="journal-heading">Journal</h1>
+		{posts.length === 0 ? (
+			<p>No journal entries yet.</p>
+		) : (
+			/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- Safari needs the role when visual list markers are removed. */
+			<ul role="list" class="collection-list">
+				{posts.map((post) => (
+					<li class="collection-item">
+						<a href={`/journal/${post.id}/`}>
+							{post.data.featured_image && (
+								<div {...post.edit.featured_image}><Image image={post.data.featured_image} /></div>
+							)}
+							<h2 {...post.edit.title}>{post.data.title}</h2>
+						</a>
+						{post.data.excerpt && <p {...post.edit.excerpt}>{post.data.excerpt}</p>}
+					</li>
+				))}
+			</ul>
+		)}
+		{nextCursor && <a href={`?cursor=${encodeURIComponent(nextCursor)}`}>Older entries</a>}
+	</Section>
+</Base>

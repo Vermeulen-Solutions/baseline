@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+
+const workshops = (await getCollection('workshops', ({ data }) => !data.draft))
+  .sort((a, b) => a.data.date.getTime() - b.data.date.getTime()
+    || a.data.slug.localeCompare(b.data.slug, 'en'));
+const calendarDate = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC',
+});
+---
+
+<Base title="Workshops">
+  <Section labelledBy="workshops-title">
+    <Container>
+      <h1 id="workshops-title">Workshops</h1>
+      {workshops.length ? (
+        <ul class="collection-list">
+          {workshops.map(({ data }) => (
+            <li>
+              <article class="collection-item" id={data.slug} aria-labelledby={`${data.slug}-title`}>
+                <h2 id={`${data.slug}-title`}>{data.title}</h2>
+                <p><time datetime={data.date.toISOString().slice(0, 10)}>{calendarDate.format(data.date)}</time>Venue: {data.venue}</p>
+                <p>{data.summary}</p>
+                <a href="mailto:hello@northline.example.test">Ask about a place</a>
+              </article>
+            </li>
+          ))}
+        </ul>
+      ) : <p>No workshops have been published yet.</p>}
+    </Container>
+  </Section>
+</Base>

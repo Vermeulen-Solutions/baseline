@@ -1,0 +1,52 @@
+[
+  {
+    "path": "src/components/dev/Styleguide.astro",
+    "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "de9a0cdbd4b5a0e0adccd08a0c9abd2464d821ab29ace0bbd8883b163582e91a"
+  },
+  {
+    "path": "src/dev/styleguide-fixtures.ts",
+    "reason": "Shared synthetic coverage inventory and version for the new native/intrinsic production primitives; no client identity or token calibration. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "373687c914dde16acb6429e90fc0b31c7ffee8927111770071f5e2b5f27eb4b0"
+  },
+  {
+    "path": "src/dev/styleguide-prose.md",
+    "reason": "Approved Issue #5 shared specimen and platform adapter extraction; neutral developer infrastructure, no client theme/content. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "00a948f64598d6cb2dfbd7f37b27c39582e9e7deb0f8639d5531f656b3168122"
+  },
+  {
+    "path": "src/dev/visual-fonts.css",
+    "reason": "Issue #7 neutral starter capture infrastructure: explicit fixture-only pinned font inputs; production public visual system preserved. Exact LF-normalized source; edits invalidate this exception.",
+    "sha256": "2199386191931ad5542bce4265fad26bd07942c4859baab80086aad10de83fc3"
+  },
+  {
+    "path": "src/assets/styleguide-grid.svg",
+    "reason": "Phase 1 neutral starter developer inspection infrastructure authorized by the reviewed roadmap; reuses existing tokens/components with synthetic fixtures and dev-only diagnostics, no client visual implementation. Any edit invalidates this exact exception.",
+    "sha256": "1628336b39d006ce410883ad6da90322f345a6b8d0c7caba76d9f541dcc33d91"
+  },
+  {
+    "path": "src/assets/styleguide-small.svg",
+    "sha256": "b402c2a2c9190d2c0c6f2936677db3f331a0d9b881910a31ad279d96190c8ff8",
+    "reason": "Issues #5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception."
+  },
+  {
+    "path": "src/assets/styleguide-portrait.svg",
+    "sha256": "6aa7873127edfb083d25e08256815804d82a935d586f3714c9bb35127f9787e8",
+    "reason": "Issues #5/#10 neutral starter component and deterministic inspection infrastructure; no client theme or page implementation. Exact LF-normalized source reviewed; any edit invalidates this exception."
+  },
+  {
+    "path": "src/components/dev/CompositionSpecimens.astro",
+    "reason": "Synthetic shared calibration infrastructure for production Disclosure/Cluster/Sidebar: long labels, surfaces, grouping, native fragments, narrow/RTL/editorial wrapper/missing-support states; protected styleguide only. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "953b39b99f3b7b03287e26ba38bc77c63034649fc4d4b28e0ceec2186bfa63dc"
+  },
+  {
+    "path": "src/dev/disclosure-prose.md",
+    "reason": "Synthetic ID-free native Markdown disclosure body for static-profile calibration, separate from CMS Portable Text; no client content. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "21b30634a03e6f9fd46c30a0de6c8f9d8c08c57f77c08d4df013d2b4c442d466"
+  },
+  {
+    "path": "src/pages/_styleguide.astro",
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
+    "sha256": "d85529584052c8cb934d1b16e4153ed632f58ba3ead53bcb42fe2adfee2b6494"
+  }
+]

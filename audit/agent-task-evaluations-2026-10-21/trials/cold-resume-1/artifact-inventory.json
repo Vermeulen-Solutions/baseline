@@ -1,0 +1,45 @@
+{
+  "trial": "cold-resume-1",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "1d6627a294dd7abd316954dd361b8ae09c715049f4399e01a3c3186e313fe130"
+    },
+    {
+      "path": "audit/component-calibration.md",
+      "sha256": "d99b2452995c34021f4256faae2f8d06ffbc09e73ad6756a4073197cd7bca955"
+    },
+    {
+      "path": "package.json",
+      "sha256": "6a2e7286427d9a227b180b62ee197242ad87ef6c0c1c9d02bf4c322c70b55ec9"
+    },
+    {
+      "path": "src/config/site.ts",
+      "sha256": "84cf911307338042202652711c43f3b0c7b940dddcca294257e072fc6c7b09b8"
+    },
+    {
+      "path": "src/content.config.ts",
+      "sha256": "d72eb0909a079f93c94e049812f639c2930c18713f19126bf9319c74b241e847"
+    },
+    {
+      "path": "HANDOFF.md",
+      "sha256": "ed33c27dac760c80101d4c7e8fd37ed8ee32fe34b10d95e59ef2e9fd1015d0ce"
+    },
+    {
+      "path": "src/content/workshops/clear-project-briefs.md",
+      "sha256": "29c2018a86de806f8f66e87bd3a63d9f1528a35bf1cca78173e87e8b7e8ef261"
+    },
+    {
+      "path": "src/content/workshops/winter-planning-clinic.md",
+      "sha256": "68d5659bc854d7e6b31f1491af30a1a791362d08ee171e7f1a7eb3fe3dfb6b84"
+    },
+    {
+      "path": "src/pages/workshops.astro",
+      "sha256": "f72719e98b8e800eeb39b5ef4d94756b8e8bfd24e9818ee031e59791cc1fbd51"
+    },
+    {
+      "path": "tests/workshops-output.mjs",
+      "sha256": "32fbf5f81245454b14a1ac8532a4035e4efa26aa29a6994056a90d5470d20db7"
+    }
+  ]
+}

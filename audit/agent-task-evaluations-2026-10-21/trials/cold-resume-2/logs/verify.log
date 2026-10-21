@@ -1,0 +1,154 @@
+
+> fixture-static@0.0.0 verify
+> npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck
+
+
+> fixture-static@0.0.0 lint
+> npm run lint:scripts && npm run lint:templates
+
+
+> fixture-static@0.0.0 lint:scripts
+> node scripts/check-script-syntax.mjs
+
+Syntax checked 18 JavaScript modules.
+
+> fixture-static@0.0.0 lint:templates
+> eslint src --max-warnings 0
+
+
+> fixture-static@0.0.0 check:css
+> node scripts/check-css-contracts.mjs
+
+CSS contracts: PASS; 28 source inputs.
+
+> fixture-static@0.0.0 check:art-direction
+> node scripts/check-art-direction.mjs --changed
+
+warning: in the working copy of 'AGENTS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/content.config.ts', LF will be replaced by CRLF the next time Git touches it
+Art direction gate: checking record for src/config/site.ts, src/content.config.ts, src/content/workshops/clear-project-briefs.md, src/content/workshops/winter-planning-clinic.md, src/lib/workshop-presentation.ts, src/lib/workshop-schema.ts, src/pages/workshops/index.astro
+Art direction record is structurally valid.
+👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.
+
+> fixture-static@0.0.0 design:tokens
+> node scripts/design-system.mjs
+
+Design System Audit (C:\dev\baseline-task-evals-20261021-cde21c0d\cold-resume-2\site\src\styles\global.css): PASS
+- LF SHA-256: 72fc52c1f94cdb429abb80c14e8db9263ea4809bcecdd962fa04602dbdc7963d
+- @theme tokens: 31
+- :root tokens: 11
+- [data-surface="dark"] tokens: 6
+- Font loading: PASS (system fonts)
+- EmDash edit proxies: NOT APPLICABLE (static foundation)
+- Fluid mathematics: 12 bounded affine tokens (vi default; reference root 16px, horizontal writing)
+- Fluid advisories: 6 tokens; inspect --json fluid.tokens (advisory only, rendered acceptance required)
+- Spacing contexts (bounded reference values; starter consumers, not a downstream site inventory):
+  [PASS] --layout-section-padding -> Section outer block padding (148px at 1280/16)
+  [PASS] --layout-container-gap -> Section stack children (36px at 1280/16)
+  [PASS] --layout-content-gap -> Container stack children (23.99904px at 1280/16)
+  [PASS] --layout-grid-gap -> Grid and managed grid tracks (36px at 1280/16)
+- WCAG Relative Luminance Contrast Pairs:
+  [PASS] default:text-on-page: 16.89:1 (min 4.5:1)
+  [PASS] default:text-on-surface: 17.74:1 (min 4.5:1)
+  [PASS] default:muted-on-page: 7.59:1 (min 4.5:1)
+  [PASS] default:muted-on-surface: 7.98:1 (min 4.5:1)
+  [PASS] default:on-action-on-action: 8.87:1 (min 4.5:1)
+  [PASS] default:action-on-page: 8.49:1 (min 3:1)
+  [PASS] default:link-on-page: 8.49:1 (min 4.5:1)
+  [PASS] default:link-on-surface: 8.92:1 (min 4.5:1)
+  [PASS] dark:link-on-surface: 9.78:1 (min 4.5:1)
+  [PASS] light:link-on-surface: 9.13:1 (min 4.5:1)
+  [PASS] default:focus-on-page: 6.6:1 (min 3:1)
+  [PASS] dark:text-on-surface: 17.03:1 (min 4.5:1)
+  [PASS] dark:muted-on-surface: 9.08:1 (min 4.5:1)
+  [PASS] dark:focus-on-surface: 9.78:1 (min 3:1)
+
+> fixture-static@0.0.0 test
+> node --test tests/*.test.mjs
+
+✔ M01-M03/M05 CSS parsing handles strings, comments, at-rules and anonymous/wrong layers (14.5865ms)
+✔ Astro parsing ignores style-looking script strings and comments and preserves source locations (2.2567ms)
+✔ M04/M06 standalone imports, new CSS files and static overlays are included without inspecting package CSS (31.7594ms)
+✔ M07-M10 flow audit recognizes real selectors and both guarded and one-sided strategies (9.8071ms)
+✔ generator preserves previously emitted scales and authored lane values (2.7169ms)
+✔ independent five-point interpolation, clamping and changed root font sizes (1.5162ms)
+✔ Utopia comparison example matches independent endpoints after four-place rounding (0.2691ms)
+✔ all generated scales interpolate requested bounds monotonically within rounding error (21.8952ms)
+✔ authored presets retain their own transition domains and diagnostic samples (67.5119ms)
+✔ bounded grammar accepts negative intercepts, finite exponents and legacy viewport expressions (0.3233ms)
+✔ invalid CSS, nonfinite math, contextless cqi and descending or flat varying scales fail closed (10.1189ms)
+✔ generator rejects invalid domains and nonrepresentable coefficients before emitting CSS (0.9514ms)
+✔ viewport shrink and changed root sizes are advisory, with no false accessibility certification (6.597ms)
+✔ evaluator rejects nonfinite environments and arithmetic overflow (1.763ms)
+✔ one resolved model keeps public canonical, article schema and dates in agreement (4.0317ms)
+✔ website identity has a public base URL and does not duplicate an identical site title (0.443ms)
+✔ default canonical policy respects build-generated file paths, slash policy and case (0.4289ms)
+✔ explicit canonical retains its origin, path case and meaningful query independently of defaults (0.2946ms)
+✔ one fallback image supplies graph and social values without inventing type or dimensions (0.7325ms)
+✔ known authors/modified dates are optional facts; missing or invalid dates are omitted (2.6404ms)
+✔ an unconfigured public URL never falls back to the static build or preview hostname (0.4827ms)
+✔ 404 policy omits canonical/schema while retaining robots and meaningful metadata (0.2433ms)
+✔ invalid URL schemes, credentials, image facts and inconsistent deploy base fail explicitly (0.936ms)
+✔ JSON-LD serialization preserves adversarial text in exactly one inert script node (4.4418ms)
+✔ T01/T06 exact token scope, ambiguity, no-op and narrow context targeting (56.4328ms)
+✔ T02 bounded spacing resolution reports dependency failures and supported arithmetic (3.0698ms)
+✔ T03-T05 CLI validates before writes and binds calibration to the saved candidate (1674.0267ms)
+✔ shared tokens pass and CMS proxy checks are explicitly inapplicable (28.9444ms)
+✔ static dependencies and scripts have no CMS, database bootstrap or server adapter (2.2743ms)
+✔ template gate rejects missing/invalid image alternative (1777.5211ms)
+✔ template gate rejects missing/invalid ARIA value (13.0504ms)
+✔ template gate rejects missing/invalid keyboard interaction (5.1837ms)
+✔ template gate rejects missing/invalid label control association (2.8345ms)
+✔ template gate rejects missing/invalid real link destination (4.0806ms)
+✔ template gate rejects missing/invalid natural tab order (3.8367ms)
+✔ template gate rejects missing/invalid unreviewed autofocus (2.825ms)
+✔ template gate rejects missing/invalid known image component alternative (4.2154ms)
+✔ template gate accepts typed frontmatter, slots, native disclosure and labelled fields (16.6177ms)
+✔ line exceptions stay narrow and become errors when obsolete (14.5733ms)
+✔ workshop dates retain their calendar day in western and eastern build time zones (90.1198ms)
+✔ workshops sort by ascending calendar date and then slug (4.7781ms)
+✔ workshop schema preserves date-only content and explicit publication status (7.9006ms)
+✔ workshop schema requires every field and rejects blank content (1.0974ms)
+✔ workshop schema rejects invalid calendar dates, unsafe slugs and ambiguous draft flags (2.0308ms)
+ℹ tests 44
+ℹ suites 0
+ℹ pass 44
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2629.6518
+
+> fixture-static@0.0.0 typecheck
+> astro check
+
+16:45:34 [vite] Re-optimizing dependencies because vite config has changed
+16:45:36 [content] Syncing content
+16:45:36 [content] Astro config changed
+16:45:36 [content] Clearing content store
+16:45:36 [content] Synced content
+16:45:36 [types] Generated 1.49s
+16:45:36 [check] Getting diagnostics for Astro files in C:\dev\baseline-task-evals-20261021-cde21c0d\cold-resume-2\site...
+[96msrc/pages/contact.astro[0m:[93m6[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'Card' is declared but its value is never read.
+
+[7m6[0m import Card from '../components/Card.astro';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/pages/contact.astro[0m:[93m5[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'Grid' is declared but its value is never read.
+
+[7m5[0m import Grid from '../components/Grid.astro';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/pages/services.astro[0m:[93m6[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'Card' is declared but its value is never read.
+
+[7m6[0m import Card from '../components/Card.astro';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[96msrc/pages/services.astro[0m:[93m5[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'Grid' is declared but its value is never read.
+
+[7m5[0m import Grid from '../components/Grid.astro';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+Result (41 files): 
+- 0 errors
+- 0 warnings
+- 4 hints
+

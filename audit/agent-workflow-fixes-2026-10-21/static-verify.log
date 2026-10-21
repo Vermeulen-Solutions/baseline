@@ -1,0 +1,125 @@
+
+> static@0.0.0 verify
+> npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck
+
+
+> static@0.0.0 lint
+> npm run lint:scripts && npm run lint:templates
+
+
+> static@0.0.0 lint:scripts
+> node scripts/check-script-syntax.mjs
+
+Syntax checked 17 JavaScript modules.
+
+> static@0.0.0 lint:templates
+> eslint src --max-warnings 0
+
+
+> static@0.0.0 check:css
+> node scripts/check-css-contracts.mjs
+
+CSS contracts: PASS; 24 source inputs.
+
+> static@0.0.0 check:art-direction
+> node scripts/check-art-direction.mjs --changed
+
+Art direction gate: exact infrastructure exceptions cover these changes.
+
+> static@0.0.0 design:tokens
+> node scripts/design-system.mjs
+
+Design System Audit (C:\dev\baseline-workflow-fixes-20261021-OtMojE\static\src\styles\global.css): PASS
+- LF SHA-256: 735a233f3d62815611945b43fe138c59e1065e99beb5239ce52686da09e58db8
+- @theme tokens: 31
+- :root tokens: 11
+- [data-surface="dark"] tokens: 6
+- Font loading: PASS (system fonts)
+- EmDash edit proxies: NOT APPLICABLE (static foundation)
+- Fluid mathematics: 12 bounded affine tokens (vi default; reference root 16px, horizontal writing)
+- Fluid advisories: 6 tokens; inspect --json fluid.tokens (advisory only, rendered acceptance required)
+- Spacing contexts (bounded reference values; starter consumers, not a downstream site inventory):
+  [PASS] --layout-section-padding -> Section outer block padding (144px at 1280/16)
+  [PASS] --layout-container-gap -> Section stack children (36px at 1280/16)
+  [PASS] --layout-content-gap -> Container stack children (23.99904px at 1280/16)
+  [PASS] --layout-grid-gap -> Grid and managed grid tracks (36px at 1280/16)
+- WCAG Relative Luminance Contrast Pairs:
+  [PASS] default:text-on-page: 15.99:1 (min 4.5:1)
+  [PASS] default:text-on-surface: 16.45:1 (min 4.5:1)
+  [PASS] default:muted-on-page: 6.92:1 (min 4.5:1)
+  [PASS] default:muted-on-surface: 7.12:1 (min 4.5:1)
+  [PASS] default:on-action-on-action: 8.02:1 (min 4.5:1)
+  [PASS] default:action-on-page: 7.8:1 (min 3:1)
+  [PASS] default:link-on-page: 7.8:1 (min 4.5:1)
+  [PASS] default:link-on-surface: 8.02:1 (min 4.5:1)
+  [PASS] dark:link-on-surface: 8.79:1 (min 4.5:1)
+  [PASS] light:link-on-surface: 8.02:1 (min 4.5:1)
+  [PASS] default:focus-on-page: 5.26:1 (min 3:1)
+  [PASS] dark:text-on-surface: 16.75:1 (min 4.5:1)
+  [PASS] dark:muted-on-surface: 7.58:1 (min 4.5:1)
+  [PASS] dark:focus-on-surface: 8.79:1 (min 3:1)
+
+> static@0.0.0 test
+> node --test tests/*.test.mjs
+
+✔ M01-M03/M05 CSS parsing handles strings, comments, at-rules and anonymous/wrong layers (6.3515ms)
+✔ Astro parsing ignores style-looking script strings and comments and preserves source locations (2.2482ms)
+✔ M04/M06 standalone imports, new CSS files and static overlays are included without inspecting package CSS (285.7565ms)
+✔ M07-M10 flow audit recognizes real selectors and both guarded and one-sided strategies (8.885ms)
+✔ generator preserves previously emitted scales and authored lane values (2.1185ms)
+✔ independent five-point interpolation, clamping and changed root font sizes (1.2695ms)
+✔ Utopia comparison example matches independent endpoints after four-place rounding (0.2165ms)
+✔ all generated scales interpolate requested bounds monotonically within rounding error (9.2212ms)
+✔ authored presets retain their own transition domains and diagnostic samples (68.3866ms)
+✔ bounded grammar accepts negative intercepts, finite exponents and legacy viewport expressions (0.426ms)
+✔ invalid CSS, nonfinite math, contextless cqi and descending or flat varying scales fail closed (9.7648ms)
+✔ generator rejects invalid domains and nonrepresentable coefficients before emitting CSS (0.7627ms)
+✔ viewport shrink and changed root sizes are advisory, with no false accessibility certification (12.0476ms)
+✔ evaluator rejects nonfinite environments and arithmetic overflow (0.5683ms)
+✔ one resolved model keeps public canonical, article schema and dates in agreement (3.0982ms)
+✔ website identity has a public base URL and does not duplicate an identical site title (0.3423ms)
+✔ default canonical policy respects build-generated file paths, slash policy and case (0.4042ms)
+✔ explicit canonical retains its origin, path case and meaningful query independently of defaults (0.234ms)
+✔ one fallback image supplies graph and social values without inventing type or dimensions (0.5356ms)
+✔ known authors/modified dates are optional facts; missing or invalid dates are omitted (1.8727ms)
+✔ an unconfigured public URL never falls back to the static build or preview hostname (0.4841ms)
+✔ 404 policy omits canonical/schema while retaining robots and meaningful metadata (0.223ms)
+✔ invalid URL schemes, credentials, image facts and inconsistent deploy base fail explicitly (0.7221ms)
+✔ JSON-LD serialization preserves adversarial text in exactly one inert script node (4.492ms)
+✔ T01/T06 exact token scope, ambiguity, no-op and narrow context targeting (44.2573ms)
+✔ T02 bounded spacing resolution reports dependency failures and supported arithmetic (1.6374ms)
+✔ T03-T05 CLI validates before writes and binds calibration to the saved candidate (3171.1846ms)
+✔ shared tokens pass and CMS proxy checks are explicitly inapplicable (20.1004ms)
+✔ static dependencies and scripts have no CMS, database bootstrap or server adapter (0.7995ms)
+✔ template gate rejects missing/invalid image alternative (3126.9683ms)
+✔ template gate rejects missing/invalid ARIA value (6.9121ms)
+✔ template gate rejects missing/invalid keyboard interaction (7.9019ms)
+✔ template gate rejects missing/invalid label control association (4.8502ms)
+✔ template gate rejects missing/invalid real link destination (6.1492ms)
+✔ template gate rejects missing/invalid natural tab order (6.3463ms)
+✔ template gate rejects missing/invalid unreviewed autofocus (4.5015ms)
+✔ template gate rejects missing/invalid known image component alternative (3.7995ms)
+✔ template gate accepts typed frontmatter, slots, native disclosure and labelled fields (20.5598ms)
+✔ line exceptions stay narrow and become errors when obsolete (22.5609ms)
+ℹ tests 39
+ℹ suites 0
+ℹ pass 39
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3951.3577
+
+> static@0.0.0 typecheck
+> astro check
+
+17:12:14 [vite] Re-optimizing dependencies because vite config has changed
+17:12:15 [content] Syncing content
+17:12:15 [content] Synced content
+17:12:15 [types] Generated 1.44s
+17:12:15 [check] Getting diagnostics for Astro files in C:\dev\baseline-workflow-fixes-20261021-OtMojE\static...
+Result (35 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+

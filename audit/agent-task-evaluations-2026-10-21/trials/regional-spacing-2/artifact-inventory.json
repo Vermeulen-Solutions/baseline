@@ -1,0 +1,13 @@
+{
+  "trial": "regional-spacing-2",
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "eb1fe3487f3822076fa788d7defc73ea0c82ca86d5793ebfc6aef2408b03babc"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "sha256": "6c0b5190b3c0c2962e0bfeb489e5623fdaa1785bd3e73b6ac018ebae35f10b73"
+    }
+  ]
+}

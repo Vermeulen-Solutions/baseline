@@ -1,0 +1,451 @@
+{
+  "trial": "cms-journal-1",
+  "startedAt": "2026-10-21T14:26:50.501Z",
+  "independent": true,
+  "criteria": [
+    {
+      "id": "verification",
+      "status": "fail",
+      "observation": "run verify:  generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: '299ade30a182618abf777884d5043851a926d161aaf6110fd992a35fe7fb866d',\n    expected: '72fc52c1f94cdb429abb80c14e8db9263ea4809bcecdd962fa04602dbdc7963d',\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at tests\\token-coverage.test.mjs:289:1\n✖ validateCssAlignment catches untouched neutral starter global.css when a named lane is declared and passes once lane tokens are applied (5.5789ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  0 !== 1\n  \n      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-journal-1/site/tests/token-coverage.test.mjs:293:10)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1402:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)\n      at Test.postRun (node:internal/test_runner/test:1542:19)\n      at Test.run (node:internal/test_runner/test:1467:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 0,\n    expected: 1,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at tests\\token-coverage.test.mjs:301:1\n✖ pruneStarterExceptions strips sample-page and deleted entries while retaining dev/styleguide infrastructure (34.28ms)\n  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n  \n    assert.ok(result.before > result.after)\n  \n      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-journal-1/site/tests/token-coverage.test.mjs:308:12)\n      at Test.runInAsyncScope (node:async_hooks:227:14)\n      at Test.run (node:internal/test_runner/test:1402:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)\n      at Test.postRun (node:internal/test_runner/test:1542:19)\n      at Test.run (node:internal/test_runner/test:1467:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: false,\n    expected: true,\n    operator: '==',\n    diff: 'simple'\n  }\n"
+    },
+    {
+      "id": "production-build",
+      "status": "pass",
+      "evidence": "Independent production build passed"
+    },
+    {
+      "id": "published-journal-and-existing-post-route",
+      "status": "pass",
+      "evidence": "Published content served through Journal and retained Posts route"
+    },
+    {
+      "id": "anonymous-draft-isolation",
+      "status": "pass",
+      "evidence": "Draft journal URL resolves to 404 without draft body"
+    },
+    {
+      "id": "journal-navigation",
+      "status": "pass",
+      "evidence": "Journal reachable through navigation"
+    },
+    {
+      "id": "actual-inline-editor-roundtrip",
+      "status": "pass",
+      "evidence": {
+        "uiTyped": true,
+        "blurSaved": true,
+        "editorReload": true,
+        "uiPublished": true,
+        "anonymousReload": true,
+        "titleReference": {
+          "collection": "posts",
+          "id": "01M5EX9H2HZ3CNE4WAJE963EMM",
+          "status": "published",
+          "field": "title"
+        }
+      }
+    }
+  ],
+  "measurements": {
+    "pages": [
+      {
+        "route": "/journal/",
+        "width": 390,
+        "status": 200,
+        "title": "Journal — Northline Studio",
+        "text": "JournalPlanning your first workshopMake the first conversation useful.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts"
+          },
+          {
+            "text": "About",
+            "href": "/about"
+          },
+          {
+            "text": "Journal",
+            "href": "/journal/"
+          },
+          {
+            "text": "Planning your first workshop",
+            "href": "/journal/planning-your-first-workshop/"
+          },
+          {
+            "text": "General",
+            "href": "/category/general"
+          },
+          {
+            "text": "Updates",
+            "href": "/category/updates"
+          },
+          {
+            "text": "Planning your first workshop",
+            "href": "/posts/planning-your-first-workshop"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cms-journal-1-grade\\390--journal-.png"
+      },
+      {
+        "route": "/journal/planning-your-first-workshop",
+        "width": 390,
+        "status": 200,
+        "title": "Planning your first workshop | Northline Studio",
+        "text": "Back to JournalPlanning your first workshopMake the first conversation useful.October 21, 2026Start with a clear purpose and a manageable group.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [
+          {
+            "datetime": "2026-10-21T09:39:47.409Z",
+            "text": "October 21, 2026"
+          }
+        ],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts"
+          },
+          {
+            "text": "About",
+            "href": "/about"
+          },
+          {
+            "text": "Journal",
+            "href": "/journal/"
+          },
+          {
+            "text": "Back to Journal",
+            "href": "/journal/"
+          },
+          {
+            "text": "General",
+            "href": "/category/general"
+          },
+          {
+            "text": "Updates",
+            "href": "/category/updates"
+          },
+          {
+            "text": "Planning your first workshop",
+            "href": "/posts/planning-your-first-workshop"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cms-journal-1-grade\\390--journal-planning-your-first-workshop.png"
+      },
+      {
+        "route": "/posts/planning-your-first-workshop",
+        "width": 390,
+        "status": 200,
+        "title": "Planning your first workshop | Northline Studio",
+        "text": "Planning your first workshopOctober 21, 2026Start with a clear purpose and a manageable group.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [
+          {
+            "datetime": "2026-10-21T09:39:47.409Z",
+            "text": "October 21, 2026"
+          }
+        ],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts"
+          },
+          {
+            "text": "About",
+            "href": "/about"
+          },
+          {
+            "text": "Journal",
+            "href": "/journal/"
+          },
+          {
+            "text": "General",
+            "href": "/category/general"
+          },
+          {
+            "text": "Updates",
+            "href": "/category/updates"
+          },
+          {
+            "text": "Planning your first workshop",
+            "href": "/posts/planning-your-first-workshop"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cms-journal-1-grade\\390--posts-planning-your-first-workshop.png"
+      },
+      {
+        "route": "/journal/",
+        "width": 1440,
+        "status": 200,
+        "title": "Journal — Northline Studio",
+        "text": "JournalPlanning your first workshopMake the first conversation useful.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts"
+          },
+          {
+            "text": "About",
+            "href": "/about"
+          },
+          {
+            "text": "Journal",
+            "href": "/journal/"
+          },
+          {
+            "text": "Planning your first workshop",
+            "href": "/journal/planning-your-first-workshop/"
+          },
+          {
+            "text": "General",
+            "href": "/category/general"
+          },
+          {
+            "text": "Updates",
+            "href": "/category/updates"
+          },
+          {
+            "text": "Planning your first workshop",
+            "href": "/posts/planning-your-first-workshop"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cms-journal-1-grade\\1440--journal-.png"
+      },
+      {
+        "route": "/journal/planning-your-first-workshop",
+        "width": 1440,
+        "status": 200,
+        "title": "Planning your first workshop | Northline Studio",
+        "text": "Back to JournalPlanning your first workshopMake the first conversation useful.October 21, 2026Start with a clear purpose and a manageable group.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [
+          {
+            "datetime": "2026-10-21T09:39:47.409Z",
+            "text": "October 21, 2026"
+          }
+        ],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts"
+          },
+          {
+            "text": "About",
+            "href": "/about"
+          },
+          {
+            "text": "Journal",
+            "href": "/journal/"
+          },
+          {
+            "text": "Back to Journal",
+            "href": "/journal/"
+          },
+          {
+            "text": "General",
+            "href": "/category/general"
+          },
+          {
+            "text": "Updates",
+            "href": "/category/updates"
+          },
+          {
+            "text": "Planning your first workshop",
+            "href": "/posts/planning-your-first-workshop"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cms-journal-1-grade\\1440--journal-planning-your-first-workshop.png"
+      },
+      {
+        "route": "/posts/planning-your-first-workshop",
+        "width": 1440,
+        "status": 200,
+        "title": "Planning your first workshop | Northline Studio",
+        "text": "Planning your first workshopOctober 21, 2026Start with a clear purpose and a manageable group.",
+        "overflow": 0,
+        "h1s": 1,
+        "times": [
+          {
+            "datetime": "2026-10-21T09:39:47.409Z",
+            "text": "October 21, 2026"
+          }
+        ],
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Studio",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Posts",
+            "href": "/posts"
+          },
+          {
+            "text": "About",
+            "href": "/about"
+          },
+          {
+            "text": "Journal",
+            "href": "/journal/"
+          },
+          {
+            "text": "General",
+            "href": "/category/general"
+          },
+          {
+            "text": "Updates",
+            "href": "/category/updates"
+          },
+          {
+            "text": "Planning your first workshop",
+            "href": "/posts/planning-your-first-workshop"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\cms-journal-1-grade\\1440--posts-planning-your-first-workshop.png"
+      }
+    ]
+  },
+  "limits": [
+    "Actual disposable local development editor only; no production origin, real editor account, Workers or external-provider certification."
+  ],
+  "reusedChecks": {
+    "recordedAt": "2026-10-21T14:24:14.768Z",
+    "ids": [
+      "verification",
+      "production-build"
+    ],
+    "reason": "Retry browser readiness after unchanged-source infrastructure timeout; preserve prior check outcomes."
+  },
+  "completedAt": "2026-10-21T14:27:53.139Z",
+  "summary": {
+    "pass": 5,
+    "fail": 1,
+    "unverified": 0
+  },
+  "status": "fail",
+  "changedFiles": [
+    "M AGENTS.md",
+    " M emdash-env.d.ts",
+    " M profiles/file-inventory.json",
+    " M seed/seed.json",
+    "?? src/pages/journal/",
+    "?? tests/journal.integration.mjs"
+  ]
+}

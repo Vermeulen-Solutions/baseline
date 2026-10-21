@@ -1,0 +1,510 @@
+{
+  "trial": "static-new-1",
+  "startedAt": "2026-10-21T09:50:25.414Z",
+  "independent": true,
+  "criteria": [
+    {
+      "id": "verification",
+      "status": "pass",
+      "evidence": "Independent installed verification passed"
+    },
+    {
+      "id": "production-build",
+      "status": "pass",
+      "evidence": "Independent production build passed"
+    },
+    {
+      "id": "responsive-public-pages",
+      "status": "pass",
+      "evidence": "Requested pages rendered at 390 and 1440 CSS pixels without horizontal overflow, failed images or page errors"
+    },
+    {
+      "id": "missing-route-404",
+      "status": "pass",
+      "evidence": "Missing URL served as 404, not SPA fallback"
+    },
+    {
+      "id": "native-static-profile",
+      "status": "pass",
+      "evidence": {
+        "dependencies": [
+          "astro",
+          "tailwindcss",
+          "@tailwindcss/vite",
+          "@astrojs/check",
+          "typescript",
+          "sharp",
+          "@fontsource/noto-sans",
+          "@google/design.md",
+          "@playwright/test",
+          "eslint",
+          "eslint-plugin-astro",
+          "eslint-plugin-jsx-a11y-x",
+          "@typescript-eslint/parser",
+          "@types/node",
+          "postcss",
+          "postcss-selector-parser",
+          "astro-eslint-parser",
+          "parse5"
+        ],
+        "noServerArtifact": true
+      }
+    },
+    {
+      "id": "supplied-copy-navigation-enquiry",
+      "status": "pass",
+      "evidence": "Four requested routes, supplied service copy and enquiry action present"
+    },
+    {
+      "id": "art-direction-record",
+      "status": "pass",
+      "evidence": "Required saved record passed the installed gate"
+    },
+    {
+      "id": "calibration-record",
+      "status": "pass",
+      "evidence": "Calibration artifact exists; inspect evidence separately"
+    },
+    {
+      "id": "calibration-chronology",
+      "status": "unverified",
+      "observation": "Tool-level execution chronology is not exposed to the evaluator; a final record does not independently prove pre-assembly timing."
+    }
+  ],
+  "measurements": {
+    "pages": [
+      {
+        "route": "/",
+        "width": 390,
+        "status": 200,
+        "title": "Home — Northline Planning",
+        "text": "Practical planning for small businesses.Northline Planning helps independent businesses understand their options before committing to a new space.\nDiscuss your projectHow we can helpPremises reviewUnderstand the opportunities and constraints of a potential workspace.Planning guidanceTurn requirements into a clear sequence of next steps.Application supportPrepare a focused, well-organised application.Explore our services",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Planning",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "Explore our services",
+            "href": "/services/"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\static-new-1-grade\\390--.png"
+      },
+      {
+        "route": "/services/",
+        "width": 390,
+        "status": 200,
+        "title": "Services — Northline Planning",
+        "text": "Clear advice for your next move.Premises reviewUnderstand the opportunities and constraints of a potential workspace.Planning guidanceTurn requirements into a clear sequence of next steps.Application supportPrepare a focused, well-organised application.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Planning",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\static-new-1-grade\\390--services-.png"
+      },
+      {
+        "route": "/about/",
+        "width": 390,
+        "status": 200,
+        "title": "About — Northline Planning",
+        "text": "Independent advice. Manageable next steps.Northline Planning is an independent consultancy focused on clear advice and manageable next steps.\nDiscuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Planning",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\static-new-1-grade\\390--about-.png"
+      },
+      {
+        "route": "/contact/",
+        "width": 390,
+        "status": 200,
+        "title": "Contact — Northline Planning",
+        "text": "Tell us about your space.Discuss your projecthello@northline.example.test",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Planning",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\static-new-1-grade\\390--contact-.png"
+      },
+      {
+        "route": "/",
+        "width": 1440,
+        "status": 200,
+        "title": "Home — Northline Planning",
+        "text": "Practical planning for small businesses.Northline Planning helps independent businesses understand their options before committing to a new space.\nDiscuss your projectHow we can helpPremises reviewUnderstand the opportunities and constraints of a potential workspace.Planning guidanceTurn requirements into a clear sequence of next steps.Application supportPrepare a focused, well-organised application.Explore our services",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Planning",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "Explore our services",
+            "href": "/services/"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\static-new-1-grade\\1440--.png"
+      },
+      {
+        "route": "/services/",
+        "width": 1440,
+        "status": 200,
+        "title": "Services — Northline Planning",
+        "text": "Clear advice for your next move.Premises reviewUnderstand the opportunities and constraints of a potential workspace.Planning guidanceTurn requirements into a clear sequence of next steps.Application supportPrepare a focused, well-organised application.Discuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Planning",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\static-new-1-grade\\1440--services-.png"
+      },
+      {
+        "route": "/about/",
+        "width": 1440,
+        "status": 200,
+        "title": "About — Northline Planning",
+        "text": "Independent advice. Manageable next steps.Northline Planning is an independent consultancy focused on clear advice and manageable next steps.\nDiscuss your project",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Planning",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\static-new-1-grade\\1440--about-.png"
+      },
+      {
+        "route": "/contact/",
+        "width": 1440,
+        "status": 200,
+        "title": "Contact — Northline Planning",
+        "text": "Tell us about your space.Discuss your projecthello@northline.example.test",
+        "overflow": 0,
+        "h1s": 1,
+        "links": [
+          {
+            "text": "Skip to content",
+            "href": "#main-content"
+          },
+          {
+            "text": "Northline Planning",
+            "href": "/"
+          },
+          {
+            "text": "Home",
+            "href": "/"
+          },
+          {
+            "text": "Services",
+            "href": "/services/"
+          },
+          {
+            "text": "About",
+            "href": "/about/"
+          },
+          {
+            "text": "Contact",
+            "href": "/contact/"
+          },
+          {
+            "text": "Discuss your project",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          },
+          {
+            "text": "hello@northline.example.test",
+            "href": "mailto:hello@northline.example.test"
+          }
+        ],
+        "images": [],
+        "gaps": {
+          "services-grid": null,
+          "approach-grid": null,
+          "about-grid": null
+        },
+        "pageErrors": [],
+        "screenshot": "C:\\dev\\emdash-baseline\\.emdash\\checks\\agent-task-evals\\static-new-1-grade\\1440--contact-.png"
+      }
+    ]
+  },
+  "limits": [],
+  "completedAt": "2026-10-21T09:51:02.241Z",
+  "summary": {
+    "pass": 8,
+    "fail": 0,
+    "unverified": 1
+  },
+  "status": "partial"
+}

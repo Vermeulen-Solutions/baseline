@@ -1,0 +1,307 @@
+
+> emdash-baseline@0.0.3 verify
+> npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck
+
+
+> emdash-baseline@0.0.3 lint
+> npm run lint:scripts && npm run lint:templates
+
+
+> emdash-baseline@0.0.3 lint:scripts
+> node scripts/check-script-syntax.mjs
+
+Syntax checked 150 JavaScript modules.
+
+> emdash-baseline@0.0.3 lint:templates
+> eslint src profiles/static/project/src --max-warnings 0
+
+
+> emdash-baseline@0.0.3 check:css
+> node scripts/check-css-contracts.mjs
+
+CSS contracts: PASS; 41 source inputs.
+
+> emdash-baseline@0.0.3 check:art-direction
+> node scripts/check-art-direction.mjs --changed
+
+Art direction gate: no visual source changes.
+
+> emdash-baseline@0.0.3 design:tokens
+> node scripts/design-system.mjs
+
+Design System Audit (C:\dev\baseline-task-evals-20261021-cde21c0d\cms-preflight-diagnostic\src\styles\global.css): PASS
+- LF SHA-256: 72fc52c1f94cdb429abb80c14e8db9263ea4809bcecdd962fa04602dbdc7963d
+- @theme tokens: 31
+- :root tokens: 11
+- [data-surface="dark"] tokens: 6
+- Font loading: PASS (system fonts)
+- EmDash edit proxies: PASS (2 single-entry routes, 4 collection routes)
+- Fluid mathematics: 12 bounded affine tokens (vi default; reference root 16px, horizontal writing)
+- Fluid advisories: 6 tokens; inspect --json fluid.tokens (advisory only, rendered acceptance required)
+- Spacing contexts (bounded reference values; starter consumers, not a downstream site inventory):
+  [PASS] --layout-section-padding -> Section outer block padding (148px at 1280/16)
+  [PASS] --layout-container-gap -> Section stack children (36px at 1280/16)
+  [PASS] --layout-content-gap -> Container stack children (23.99904px at 1280/16)
+  [PASS] --layout-grid-gap -> Grid and managed grid tracks (36px at 1280/16)
+- WCAG Relative Luminance Contrast Pairs:
+  [PASS] default:text-on-page: 16.89:1 (min 4.5:1)
+  [PASS] default:text-on-surface: 17.74:1 (min 4.5:1)
+  [PASS] default:muted-on-page: 7.59:1 (min 4.5:1)
+  [PASS] default:muted-on-surface: 7.98:1 (min 4.5:1)
+  [PASS] default:on-action-on-action: 8.87:1 (min 4.5:1)
+  [PASS] default:action-on-page: 8.49:1 (min 3:1)
+  [PASS] default:link-on-page: 8.49:1 (min 4.5:1)
+  [PASS] default:link-on-surface: 8.92:1 (min 4.5:1)
+  [PASS] dark:link-on-surface: 9.78:1 (min 4.5:1)
+  [PASS] light:link-on-surface: 9.13:1 (min 4.5:1)
+  [PASS] default:focus-on-page: 6.6:1 (min 3:1)
+  [PASS] dark:text-on-surface: 17.03:1 (min 4.5:1)
+  [PASS] dark:muted-on-surface: 9.08:1 (min 4.5:1)
+  [PASS] dark:focus-on-surface: 9.78:1 (min 3:1)
+
+> emdash-baseline@0.0.3 test
+> node scripts/run-tests.mjs --tier all
+
+Running 24 unit test files (concurrency 2).
+✔ archive locking rejects concurrent work and cannot recover a live owner (44.9544ms)
+✔ an abruptly killed job leaves staging quarantined and can be recovered before a clean deployment (114.7117ms)
+✔ repeat/incomplete output cannot refresh inherited asset lifetimes; validation errors release locks (40.867ms)
+✔ nested real build assets retain exact paths and bytes (59.1471ms)
+✔ baseline separates declared/locked/installed versions without writing or claiming certification (106.0588ms)
+✔ complete offline fixture passes implemented required scopes, with explicit runtime/upstream unknowns (459.5926ms)
+✔ config AST ignores comments, accepts import aliases, never evaluates code, and refuses computed/spread/function configs (8.7404ms)
+✔ static defects fail; unknowns cannot pass; cache and locale opt-ins require appropriate evidence (1020.311ms)
+✔ managed inventory detects missing/extra/edited files and membership changes without exposing local paths (708.3643ms)
+✔ traversal, linked managed roots, incomplete manifests and unsupported inventories stay unverified (247.5192ms)
+✔ report v2 rejects incompatible versions, unknown fields, invalid statuses, duplicates and incorrect totals (148.9437ms)
+✔ installed icon exports resolve aliases to public per-icon paths (1.95ms)
+✔ named imports preserve local names, type imports, unknown exports and other code (4.2725ms)
+✔ namespace and dynamic icon imports stay intact, including custom admin catalogs (2.943ms)
+✔ build transform resolves from the importer and ignores icon internals and virtual IDs (51.5091ms)
+✔ unsupported package export layouts preserve the original imports (14.3901ms)
+✔ bundle report counts static import closure once, handles cycles and excludes dynamic imports/assets (2.6311ms)
+✔ M01-M03/M05 CSS parsing handles strings, comments, at-rules and anonymous/wrong layers (5.9382ms)
+✔ Astro parsing ignores style-looking script strings and comments and preserves source locations (1.7123ms)
+✔ M04/M06 standalone imports, new CSS files and static overlays are included without inspecting package CSS (17.3821ms)
+✔ M07-M10 flow audit recognizes real selectors and both guarded and one-sided strategies (8.6011ms)
+✖ pinned DESIGN.md bridge validates the neutral specimen and rejects typography/reference losses (40.5465ms)
+✔ infrastructure deletions require explicit approval of exact previous bytes (1.6711ms)
+✔ gate accepts real standard and custom directions, including CRLF (2.9562ms)
+✔ gate rejects absent, duplicate, placeholder, or fenced-only records (0.8208ms)
+✔ gate requires each physics field inside its block and two or three bans (0.3224ms)
+✔ infrastructure exceptions are exact, reasoned, hash-bound, and LF/CRLF portable (0.3212ms)
+✔ CLI catches untracked visual work, accepts a record, and expires changed infrastructure exceptions (1736.4115ms)
+✔ applyTokenOverrides updates @theme, :root, and [data-surface="dark"] tokens non-destructively while preserving comments (21.8182ms)
+✔ applyTokenOverrides rejects unknown aesthetic lane identifiers (1.1497ms)
+✔ global.css, Container.astro, and Card.astro ship the curated token engine, breakout grid, and accessible card contract (3.0744ms)
+✔ cascade layers and automatic spacing contracts stay enforceable (101.914ms)
+✔ test tiers are a disjoint exhaustive partition and stale inventories fail closed (51.5258ms)
+[d1-export] Querying sqlite_master from D1 database "db with spaces & punctuation"...
+[d1-export] Found 1 exportable tables (0 virtual tables skipped from table dump).
+[d1-export] Successfully exported D1 database to C:\Users\Jaap\AppData\Local\Temp\baseline D1 argv RYndVV\export output.sql (0.1 KB)
+[d1-export] Querying sqlite_master from D1 database "synthetic"...
+[d1-export] Found 0 exportable tables (0 virtual tables skipped from table dump).
+✔ loopback fixtures bind Fetch-safe ports, retry collisions and release reservations (81.0132ms)
+✔ doctor evaluates the declared Node alternatives without semver dependencies (2.7429ms)
+✔ doctor distinguishes known Windows launchers from unobservable outer launchers (0.7277ms)
+✔ doctor probes SQLite and workspace without residue, bounds Git and reports critical failures (31.5317ms)
+✔ doctor CLI emits parseable JSON, honors NO_COLOR and uses exit 0 for warnings and 1 for failures (604.8646ms)
+✔ schema gate reports physical overflow names/counts and closes a read-only failing database (158.3018ms)
+✔ art gate shows invalid fields and required-structure diff with source lines (162.9933ms)
+✔ token gate reports failing scoped pairs, actual/minimum contrast and keeps JSON machine-readable (280.8198ms)
+✔ npm launcher preserves argv bytes, spaces and failure status without a shell (297.15ms)
+✔ D1 export passes database/table names and SQL as argv without shell interpretation (5.1995ms)
+✔ D1 partial export is cleaned after failure and JSONC autodetection preserves URL strings (140.4582ms)
+✔ operational CLI failures are stack-free, exit 1 and do not create output before validation (3129.1968ms)
+✔ generator preserves previously emitted scales and authored lane values (2.5468ms)
+✔ independent five-point interpolation, clamping and changed root font sizes (3.1678ms)
+✔ Utopia comparison example matches independent endpoints after four-place rounding (0.5264ms)
+✔ all generated scales interpolate requested bounds monotonically within rounding error (15.5246ms)
+✔ authored presets retain their own transition domains and diagnostic samples (55.1822ms)
+✔ bounded grammar accepts negative intercepts, finite exponents and legacy viewport expressions (0.307ms)
+✔ invalid CSS, nonfinite math, contextless cqi and descending or flat varying scales fail closed (9.6692ms)
+✔ generator rejects invalid domains and nonrepresentable coefficients before emitting CSS (0.8028ms)
+✔ viewport shrink and changed root sizes are advisory, with no false accessibility certification (7.7384ms)
+✔ evaluator rejects nonfinite environments and arithmetic overflow (0.601ms)
+✔ native/legacy dates agree and impossible or future birthdays are rejected (3.5799ms)
+✔ recovery is bounded, allowlisted, expires and is consumed once per form (1.4326ms)
+✔ recovery caps the entire payload and omits secret fields even when explicitly allowlisted (1.8083ms)
+✔ HTML auditor resolves directory/file routes, queries, entities and cross-page encoded anchors (27.7606ms)
+✔ HTML auditor catches 404s, same-origin absolute links and broken anchors (4.7031ms)
+✔ HTML auditor checks delivered image metadata and ignores fake tags in raw text/comments (6.6062ms)
+✔ HTML auditor validates JSON-LD syntax/context/types and canonical/OpenGraph URLs (7.6918ms)
+✔ HTML auditor rejects fixture/test output and runtime fixture routes without executing server code (12.1473ms)
+✔ HTML audit CLI fails on missing builds, broken HTML and failed SSR instead of passing zero HTML (542.8945ms)
+✔ SSR snapshots capture and audit real responses, redirects, queries and 404 anchors below three seconds (497.8041ms)
+✔ SSR audit detects rendered broken links, anchors, image dimensions and malformed JSON-LD (655.6687ms)
+✔ SSR finally kills a hung server on deadline and cleans signal listeners (342.2568ms)
+✔ SSR finally kills the server on caller failure and refuses external redirects (294.325ms)
+✔ SSR rejects a soft 404 instead of declaring successful error-page coverage (223.4287ms)
+✔ SSR cancellation and streaming-body deadlines both terminate the server (349.9815ms)
+✔ Astro resolved route metadata reaches the offline runtime leak guard (8.0351ms)
+✔ HTML auditor stays below one second on a 250-page generated site (583.6796ms)
+✔ photoAspectRatio safely handles valid, missing, and invalid dimensions (1.2607ms)
+✔ justifiedFlexStyle generates correct CSS flexbox layout properties (0.262ms)
+✔ pure CSS flexbox simulation preserves equal row height across mixed aspect ratios (0.4302ms)
+✔ large albums with 400+ mixed items compute aspect ratios safely (1.4839ms)
+✔ public default origin prefers site settings then Astro.site, preserving path ownership at the caller (1.3458ms)
+✔ invalid configured public URLs do not silently fall back to the incoming host (0.5378ms)
+✔ default canonicals preserve path case/base without interpreting double-slash paths as another host (0.379ms)
+✔ article metadata uses real hydrated facts and omits unknown/invalid values (2.6451ms)
+✔ installed EmDash resolver retains cross-domain editor canonical and configured title separator (0.2807ms)
+✔ installed page pipeline emits article facts and keeps ordinary content pages as websites when specified (2.522ms)
+✔ installed plugin precedence produces one canonical/description/graph in parsed metadata (5.9956ms)
+✔ explicit null canonical and robots survive the CMS page context for error responses (0.2695ms)
+✔ delta reconciliation detects new, modified, deleted, slug changes and conflicts (1.2522ms)
+✔ consistent SQLite backup acquisition via VACUUM INTO and integrity verification (18.4389ms)
+✔ peripheral integrations checklist rejects unresolved items and accepts canonical dispositions (0.7731ms)
+✔ partner records honor CMS order/activity and actual storage keys without record caps (1.8115ms)
+✔ public links reject executable protocols, protocol-relative hosts and obfuscated URLs (0.3506ms)
+✔ native editor and seeded media shapes preserve ordered duplicates and context (1.9656ms)
+✔ storage keys remain distinct from media IDs and can use the public media origin (0.3309ms)
+✔ malformed input and unsafe full-image links do not become substitute images (0.2442ms)
+✔ galleryJsonLd generates valid Schema.org ImageGallery structured data (0.4147ms)
+✔ trusted plugin sources and Workers capability types remain EmDash-only (14.6574ms)
+✔ profile contract binds foundation/runtime, immutable provenance and exact applicable skills/checks (54.5444ms)
+✔ provenance accepts only the canonical repository and its exact historical name without rewriting history (59.4846ms)
+✔ profile allowlists contain only explicit existing sources and correctly declare generation readiness (36.8021ms)
+✔ dependency inventory accounts for every root dependency and versions have a single source (5.1902ms)
+✔ source inventory covers the declared surface and shared presentation imports stay inside its allowlist (39.0896ms)
+✔ CMS flags distinguish explicit true/integer flags, absent opt-outs, and malformed values (1.5613ms)
+✔ breadcrumb and organization graphs use real absolute facts and serialize hostile strings safely (5.6963ms)
+✔ URL normalization preserves case-sensitive assets, auth, queries, escapes and unsafe methods (0.9522ms)
+✔ baseline metadata has explicit ownership, stable override IDs and no competing primary graph (0.9517ms)
+✔ verified webhook events require an exact configured sending domain, never suffix/recipient matching (0.53ms)
+✔ setup probe fails closed on wizard, external login, bad JSON, server errors and wrong envelope (27.0446ms)
+✔ seven-day build retention carries exact-case assets, expires old generations and rejects collisions/tampering (175.6385ms)
+✔ release gate rejects missing/fixture/unknown profiles and refuses a fixture command despite stale clean output (82.2537ms)
+✔ measures physical collection columns including generated columns (2.1216ms)
+✔ accepts exactly 50 columns and rejects a collection above budget (1.6356ms)
+✔ T01/T06 exact token scope, ambiguity, no-op and narrow context targeting (44.3714ms)
+✔ T02 bounded spacing resolution reports dependency failures and supported arithmetic (2.5905ms)
+✔ T03-T05 CLI validates before writes and binds calibration to the saved candidate (1196.5983ms)
+✔ one resolved model keeps public canonical, article schema and dates in agreement (4.0474ms)
+✔ website identity has a public base URL and does not duplicate an identical site title (0.4389ms)
+✔ default canonical policy respects build-generated file paths, slash policy and case (0.4426ms)
+✔ explicit canonical retains its origin, path case and meaningful query independently of defaults (0.3106ms)
+✔ one fallback image supplies graph and social values without inventing type or dimensions (0.7394ms)
+✔ known authors/modified dates are optional facts; missing or invalid dates are omitted (1.0794ms)
+✔ an unconfigured public URL never falls back to the static build or preview hostname (0.3326ms)
+✔ 404 policy omits canonical/schema while retaining robots and meaningful metadata (0.2775ms)
+✔ invalid URL schemes, credentials, image facts and inconsistent deploy base fail explicitly (1.4881ms)
+✔ JSON-LD serialization preserves adversarial text in exactly one inert script node (4.6683ms)
+✔ template gate rejects missing/invalid image alternative (1449.9944ms)
+✔ template gate rejects missing/invalid ARIA value (6.3182ms)
+✔ template gate rejects missing/invalid keyboard interaction (5.9705ms)
+✔ template gate rejects missing/invalid label control association (4.0803ms)
+✔ template gate rejects missing/invalid real link destination (13.6904ms)
+✔ template gate rejects missing/invalid natural tab order (3.2399ms)
+✔ template gate rejects missing/invalid unreviewed autofocus (19.6165ms)
+✔ template gate rejects missing/invalid known image component alternative (3.3815ms)
+✔ template gate accepts typed frontmatter, slots, native disclosure and labelled fields (32.5801ms)
+✔ line exceptions stay narrow and become errors when obsolete (13.97ms)
+✔ text link contrast is gated on default, dark and restored light surfaces (30.2875ms)
+✔ global.css declares all required semantic tokens, valid fluid clamps, and WCAG AA contrast pairs (4.1381ms)
+✔ every @theme color token is represented on the styleguide palette specimen (6.7155ms)
+✔ every authored token in global.css is either consumed in src/ or part of the documented public contract (59.6013ms)
+✔ every canonical Aesthetic Lane preset applies cleanly and passes WCAG AA contrast and fluid checks (35.2874ms)
+✔ parametric fluid type/space scales and WCAG-safe OKLCH palette generator pass all audits (56.8061ms)
+✖ formatCalibrationMarkdown and upsertCalibrationRecord bind Stage 4.5 token evidence to LF SHA-256 (4.03ms)
+✔ auditDesignTokens catches insufficient WCAG contrast and invalid fluid clamp bounds (6.2909ms)
+✔ formatArtDirectionRecord and upsertArtDirectionRecord generate records that pass check-art-direction validateRecord (28.6284ms)
+✔ auditFontLoading passes for system fonts and catches unloaded custom font families (16.1461ms)
+✔ auditEditProxies verifies starter single-entry and collection routes and catches missing Base content or field edit proxies (10.6993ms)
+✖ validateCssAlignment catches untouched neutral starter global.css when a named lane is declared and passes once lane tokens are applied (3.0416ms)
+✖ pruneStarterExceptions strips sample-page and deleted entries while retaining dev/styleguide infrastructure (8.5763ms)
+ℹ tests 145
+ℹ suites 0
+ℹ pass 141
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 20823.0266
+
+✖ failing tests:
+
+test at tests\design-interchange.test.mjs:5:1
+✖ pinned DESIGN.md bridge validates the neutral specimen and rejects typography/reference losses (40.5465ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  'drift' !== 'current'
+  
+      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-preflight-diagnostic/tests/design-interchange.test.mjs:12:10)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'drift',
+    expected: 'current',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\token-coverage.test.mjs:161:1
+✖ formatCalibrationMarkdown and upsertCalibrationRecord bind Stage 4.5 token evidence to LF SHA-256 (4.03ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '299ade30a182618abf777884d5043851a926d161aaf6110fd992a35fe7fb866d'
+  - '72fc52c1f94cdb429abb80c14e8db9263ea4809bcecdd962fa04602dbdc7963d'
+  
+      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-preflight-diagnostic/tests/token-coverage.test.mjs:164:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '299ade30a182618abf777884d5043851a926d161aaf6110fd992a35fe7fb866d',
+    expected: '72fc52c1f94cdb429abb80c14e8db9263ea4809bcecdd962fa04602dbdc7963d',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\token-coverage.test.mjs:289:1
+✖ validateCssAlignment catches untouched neutral starter global.css when a named lane is declared and passes once lane tokens are applied (3.0416ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-preflight-diagnostic/tests/token-coverage.test.mjs:293:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\token-coverage.test.mjs:301:1
+✖ pruneStarterExceptions strips sample-page and deleted entries while retaining dev/styleguide infrastructure (8.5763ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(result.before > result.after)
+  
+      at TestContext.<anonymous> (file:///C:/dev/baseline-task-evals-20261021-cde21c0d/cms-preflight-diagnostic/tests/token-coverage.test.mjs:308:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }

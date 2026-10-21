@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import Container from '../../components/Container.astro';
+import Grid from '../../components/Grid.astro';
+import Card from '../../components/Card.astro';
+import { compareWorkshops, formatWorkshopDate } from '../../lib/workshop-presentation';
+
+const workshops = (await getCollection('workshops', ({ data }) => !data.draft)).sort(compareWorkshops);
+---
+<Base title="Workshops">
+  <Section labelledBy="workshops-heading">
+    <Container width="content" class="workshop-listing">
+      <h1 id="workshops-heading">Workshops</h1>
+      {workshops.length ? (
+        <Grid minimum="wide">
+          {workshops.map(({ data }) => (
+            <Card title={data.title} headingLevel={2} id={data.slug}>
+              <p slot="metadata"><time datetime={data.date}>{formatWorkshopDate(data.date)}</time> · {data.venue}</p>
+              <div class="flow">
+                <p>{data.summary}</p>
+                <p><a href="mailto:hello@northline.example.test">Ask about a place</a></p>
+              </div>
+            </Card>
+          ))}
+        </Grid>
+      ) : <p>No workshops have been published yet.</p>}
+    </Container>
+  </Section>
+</Base>
+
+<style>
+  @layer components {
+    :where(.workshop-listing) { overflow-wrap: anywhere; }
+  }
+</style>

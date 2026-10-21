@@ -1,0 +1,741 @@
+{
+  "origin": "http://127.0.0.1:4312",
+  "evidence": [
+    {
+      "route": "/",
+      "width": 320,
+      "status": 200,
+      "title": "Home — Northline Planning",
+      "h1": [
+        "Practical planning for small businesses."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": "page"
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/services/",
+      "width": 320,
+      "status": 200,
+      "title": "Services — Northline Planning",
+      "h1": [
+        "Clear advice for your next move."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": "page"
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/about/",
+      "width": 320,
+      "status": 200,
+      "title": "About — Northline Planning",
+      "h1": [
+        "Independent advice. Manageable next steps."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": "page"
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/contact/",
+      "width": 320,
+      "status": 200,
+      "title": "Contact — Northline Planning",
+      "h1": [
+        "Tell us about your space."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": "page"
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "status": 200,
+      "title": "Home — Northline Planning",
+      "h1": [
+        "Practical planning for small businesses."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": "page"
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/services/",
+      "width": 390,
+      "status": 200,
+      "title": "Services — Northline Planning",
+      "h1": [
+        "Clear advice for your next move."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": "page"
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/about/",
+      "width": 390,
+      "status": 200,
+      "title": "About — Northline Planning",
+      "h1": [
+        "Independent advice. Manageable next steps."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": "page"
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/contact/",
+      "width": 390,
+      "status": 200,
+      "title": "Contact — Northline Planning",
+      "h1": [
+        "Tell us about your space."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": "page"
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "status": 200,
+      "title": "Home — Northline Planning",
+      "h1": [
+        "Practical planning for small businesses."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": "page"
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/services/",
+      "width": 768,
+      "status": 200,
+      "title": "Services — Northline Planning",
+      "h1": [
+        "Clear advice for your next move."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": "page"
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/about/",
+      "width": 768,
+      "status": 200,
+      "title": "About — Northline Planning",
+      "h1": [
+        "Independent advice. Manageable next steps."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": "page"
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/contact/",
+      "width": 768,
+      "status": 200,
+      "title": "Contact — Northline Planning",
+      "h1": [
+        "Tell us about your space."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": "page"
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "status": 200,
+      "title": "Home — Northline Planning",
+      "h1": [
+        "Practical planning for small businesses."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": "page"
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/services/",
+      "width": 1440,
+      "status": 200,
+      "title": "Services — Northline Planning",
+      "h1": [
+        "Clear advice for your next move."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": "page"
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/about/",
+      "width": 1440,
+      "status": 200,
+      "title": "About — Northline Planning",
+      "h1": [
+        "Independent advice. Manageable next steps."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": "page"
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": null
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    },
+    {
+      "route": "/contact/",
+      "width": 1440,
+      "status": 200,
+      "title": "Contact — Northline Planning",
+      "h1": [
+        "Tell us about your space."
+      ],
+      "overflow": false,
+      "action": [
+        {
+          "label": "Discuss your project",
+          "href": "mailto:hello@northline.example.test"
+        }
+      ],
+      "navigation": [
+        {
+          "label": "Home",
+          "href": "/",
+          "current": null
+        },
+        {
+          "label": "Services",
+          "href": "/services/",
+          "current": null
+        },
+        {
+          "label": "About",
+          "href": "/about/",
+          "current": null
+        },
+        {
+          "label": "Contact",
+          "href": "/contact/",
+          "current": "page"
+        }
+      ],
+      "fonts": {
+        "heading": "Georgia, Cambria, \"Times New Roman\", Times, serif",
+        "body": "ui-sans-serif, system-ui, sans-serif"
+      },
+      "forms": 0,
+      "scripts": 0,
+      "background": "rgb(249, 246, 240)"
+    }
+  ],
+  "keyboard": {
+    "skipLink": true,
+    "skipActivation": true,
+    "brandFocus": {
+      "outline": "solid",
+      "width": "3px"
+    },
+    "navigationClicks": true
+  },
+  "missingStatus": 404,
+  "styleguideStatus": 404,
+  "textReflow": {
+    "overflow": false,
+    "email": 256
+  },
+  "pageErrors": []
+}

@@ -1,0 +1,17 @@
+{
+  "collection": "posts",
+  "entryId": "01M5EX9H2HZ3CNE4WAJE963EMM",
+  "route": "/journal/planning-your-first-workshop/",
+  "richContent": {
+    "selected": true,
+    "typed": true,
+    "blurSaveStatus": 200,
+    "editorReload": true,
+    "unpublishedDraftPrivate": true,
+    "publishViaToolbar": true,
+    "anonymousReload": true,
+    "restoredThroughEditor": true
+  },
+  "scalarInteraction": "Title and excerpt clicked, typed, saved, reloaded, draft privacy verified and original values restored/published through UI",
+  "errors": []
+}

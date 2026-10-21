@@ -1,0 +1,28 @@
+---
+import SiteShell from './SiteShell.astro';
+import { site } from '../config/site';
+import { routing } from '../config/routing';
+import StaticMetadata from '../components/StaticMetadata.astro';
+import { resolveStaticMetadata, routePath, type PageMetadata } from '../lib/metadata';
+type Props = PageMetadata;
+const metadata = resolveStaticMetadata(Astro.props, site, { siteUrl: Astro.site, url: Astro.url, routing });
+const current = Astro.url.pathname;
+---
+<SiteShell spacingPolicy="automatic-v2" title={metadata.title} metadataOwner="platform" lang={metadata.language}>
+  <StaticMetadata slot="head" metadata={metadata} />
+  <header slot="header" class="site-header">
+    <div class="northline-header">
+      <a class="northline-name" href={routePath('/', routing)}>{site.title}</a>
+      <nav class="northline-nav" aria-label="Primary navigation">
+        {site.navigation.map(item => <a href={routePath(item.href, routing)} aria-current={current === routePath(item.href, routing) ? 'page' : undefined}>{item.label}</a>)}
+      </nav>
+    </div>
+  </header>
+  <slot />
+  <footer slot="footer" class="site-footer">
+    <div class="northline-footer">
+      <div class="flow"><p class="footer-name">{site.title}</p><p>Independent planning consultancy.</p></div>
+      <a class="text-action" href={`mailto:${site.email}`}>{site.action}</a>
+    </div>
+  </footer>
+</SiteShell>

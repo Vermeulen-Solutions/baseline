@@ -1,0 +1,52 @@
+{
+  "protocolVersion": 1,
+  "recordedBeforeTrials": true,
+  "purpose": "Observe common Baseline tasks in independent agent sessions, rather than infer usability from source walkthroughs.",
+  "trialsPerScenario": 2,
+  "source": "Current tracked working-tree bytes, including the six uncommitted instruction/setup fixes; exact hashes recorded by preparation.",
+  "environment": "Disposable repositories outside the working checkout; synthetic content; npm and local Windows Chromium; no production systems or external writes.",
+  "agentControls": {
+    "history": "Fresh session, no parent conversation or grader findings",
+    "model": "Inherited model, no override; record resolved model/usage only if exposed by the execution tools",
+    "assistance": "No corrective hints during a trial. Requests for unnecessary clarification count as friction. Infrastructure failures are distinguished from task failures.",
+    "timing": "Wall time from dispatch to final response, including tool waits; dependency/bootstrap preparation is recorded separately.",
+    "claims": "Do not infer human usability, multi-model superiority, editor acceptance or external publication from builds alone."
+  },
+  "scenarios": [
+    {
+      "id": "static-new",
+      "name": "Small professional-services site",
+      "required": ["native static foundation", "four requested routes with supplied content and working enquiry links", "correct navigation and real missing-route 404", "no CMS/database/server-adapter dependencies", "saved valid art-direction record", "calibration before broad assembly supported by evidence", "installed verification and production build pass", "no overflow at 390 and 1440 CSS pixels", "no unrelated starter brand/content in requested routes"],
+      "review": ["coherent hierarchy and readable layouts", "no unnecessary continuation questions", "assumptions distinguished from approvals", "honest scope of browser and launch evidence"]
+    },
+    {
+      "id": "sveltia-field",
+      "name": "Optional reading-time field",
+      "required": ["Astro schema and Sveltia form both support optional integer minutes from 1 through 60", "valid value survives a build and renders on its article", "old entries with absent value still build without an empty reading-time label", "zero, 61 and fractional values are rejected", "existing content and unrelated schemas remain intact", "installed verification and production build pass"],
+      "review": ["no claims of credentialed Sveltia browser acceptance", "no new CMS/server dependencies", "no unrelated visual or navigation changes"]
+    },
+    {
+      "id": "cms-journal",
+      "name": "Editor-managed journal routes",
+      "required": ["server-rendered /journal/ and /journal/planning-your-first-workshop", "published fixture visible and draft fixture absent from anonymous list/detail", "actual CMS content used", "Base content identity, title edit proxy and editorial RichText target use real entry identities", "existing /posts URLs retained", "navigation reaches Journal", "installed verification and production build pass", "independent local editor typing/save/reload/publish round trip or explicit unverified result"],
+      "review": ["no duplicate language fields, direct SQL content mutations or invented editor identities", "cache hints retained when applicable", "no production or remote account access"]
+    },
+    {
+      "id": "regional-spacing",
+      "name": "Tighter homepage services grid",
+      "required": ["homepage services grid gap becomes 75 percent of its initial computed value", "other homepage and about-page grid gaps remain unchanged", "theme palette/type/radii and global spacing scales remain unchanged", "existing content and links preserved", "no overflow at 390 and 1440 CSS pixels", "installed verification and production build pass"],
+      "review": ["uses existing contextual aliases or primitive controls", "does not disable automatic spacing or scatter fixed values", "scope and visual evidence reported accurately"]
+    },
+    {
+      "id": "cold-resume",
+      "name": "Resume a workshop feature from a written handoff",
+      "required": ["phase A creates typed workshop data and a useful handoff without implementing the deferred route", "fresh phase B implements /workshops/ from persisted state", "published and draft workshop policy respected", "agreed content, slugs and visual tokens preserved", "no repeated discovery of supplied decisions", "installed verification and production build pass", "no overflow at 390 and 1440 CSS pixels"],
+      "review": ["handoff identifies completed work, outstanding work and evidence", "phase B does not claim checks performed only by the prior session", "controlled checkpoint recovery only; no claim of arbitrary crash recovery"]
+    }
+  ],
+  "grading": {
+    "outcomes": ["pass", "partial", "fail", "unverified"],
+    "policy": "A mandatory criterion without observation stays unverified; a demonstrated violation fails that criterion. Keep artifact correctness, process friction and quality judgments separate. Agent self-report is evidence to inspect, not a passing oracle.",
+    "limits": "Two trials per task are a small exploratory sample. No before/after or model comparison is implied. Token/cost metrics may be unavailable."
+  }
+}
