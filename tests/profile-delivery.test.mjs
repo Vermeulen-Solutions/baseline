@@ -1,16 +1,20 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { spawnSync } from 'node:child_process';
 import { initProfile } from '../scripts/init-profile.mjs';
+import { profileSource } from './helpers/profile-source.mjs';
+
+const fixtureSource = await profileSource();
+after(fixtureSource.dispose);
 
 test('Sveltia is an additive dependency-free overlay with paired forms and static CI', async () => {
   const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'baseline-sveltia-assembly-'));
   try {
     const root = path.join(temp, 'sveltia');
-    await initProfile({ profile: 'static-sveltia', out: root });
+    await initProfile({ profile: 'static-sveltia', out: root, sourceRoot: fixtureSource.root });
     const read = file => fs.readFile(path.join(root, file), 'utf8');
     const pkg = JSON.parse(await read('package.json'));
     assert.equal(pkg.scripts['sync:baseline'], 'node scripts/sync-baseline.mjs');

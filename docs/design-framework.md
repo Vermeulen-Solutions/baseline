@@ -164,6 +164,27 @@ Nested list indentation, list-item rhythm and internal quote paragraphs are boun
 
 ## 6. Agent-First Token Calibration & WCAG Contrast Audit (`npm run design:tokens`)
 
+Start `npm run dev` and use its **Component calibration** path on the local origin
+printed by Astro. The path follows `base` and `trailingSlash`: generated static
+sites default to `/_styleguide/`, whose slashless variant returns 404. EmDash's
+default accepts `/_styleguide`. A release preview intentionally returns 404;
+use development or `npm run fixtures:build` followed by `npm run fixtures:serve`
+for calibration. Do not rebuild fixtures merely to recover from a missing slash.
+
+`npm run verify` continues to audit the installed site's real tokens, contrast,
+font loading, edit targets and source contracts after `--init-client`. Algorithm
+tests use fixed neutral specimens and synthetic exception lists; profile-generator
+rehearsals use a separate synthetic source. They do not restore starter exemptions
+or neutral colours in the client site. The production generator still refuses
+unreviewed source bytes.
+
+Byte-bound migration fixtures use LF checkouts through `.gitattributes`, keeping
+their reviewed hashes and reports unchanged on Windows. This does not rewrite
+files already checked out as CRLF. If updating an older checkout, inspect
+`git ls-files --eol tests/fixtures` and preserve local fixture edits before using
+a fresh checkout with the new attributes. Do not rebaseline evidence hashes to
+make a line-ending error pass.
+
 Baseline treats `src/styles/global.css` as the single source of truth for tokens, backed by an automated CLI engine (`scripts/design-system.mjs`) and live Vite HMR on `/_styleguide`:
 
 1. **List or seed a canonical Aesthetic Lane preset:**

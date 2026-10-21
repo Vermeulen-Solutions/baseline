@@ -26,9 +26,13 @@ collection. Required fields are title, description and publication date; hero
 images require descriptive alt text. Drafts are excluded from both listings and
 detail routes. Content changes require a successful rebuild and deployment.
 
-Visit `/_styleguide` during development to calibrate the common components.
+Use the **Component calibration** path printed by `npm run dev` on Astro's local
+origin to calibrate the common components. With the default routing policy this
+is `/_styleguide/`, including the trailing slash; `/_styleguide` returns 404.
+The printed path also follows a configured base or `trailingSlash: 'never'`.
 `npm run fixtures:build` and `npm run fixtures:serve` create an isolated static
-specimen build in `dist-fixtures/`. The release checker rejects that artifact.
+specimen build in `dist-fixtures/`; open the same canonical path on its local
+origin (normally `http://127.0.0.1:4349`). The release checker rejects that artifact.
 Normal production builds omit the styleguide route; configure static hosting to
 serve `404.html` with status 404 for missing URLs, without an SPA fallback.
 

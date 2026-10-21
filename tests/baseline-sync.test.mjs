@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import os from 'node:os';
@@ -6,11 +6,15 @@ import path from 'node:path';
 import { initProfile } from '../scripts/init-profile.mjs';
 import { stageBaseline, applyBaseline } from '../scripts/sync-baseline.mjs';
 import { createHash } from 'node:crypto';
+import { pathToFileURL } from 'node:url';
+import { profileSource } from './helpers/profile-source.mjs';
 
-const source = new URL('../', import.meta.url);
+const fixtureSource = await profileSource();
+after(fixtureSource.dispose);
+const source = pathToFileURL(fixtureSource.root + path.sep);
 async function fixture(run, profile = 'static') {
   const temp = await fs.mkdtemp(path.join(os.tmpdir(), 'baseline-sync-test-'));
-  try { const root = path.join(temp, 'site'); await initProfile({ profile, out: root }); await run(root); }
+  try { const root = path.join(temp, 'site'); await initProfile({ profile, out: root, sourceRoot: fixtureSource.root }); await run(root); }
   finally { assert.equal(path.dirname(temp), path.resolve(os.tmpdir())); assert.ok(path.basename(temp).startsWith('baseline-sync-test-')); await fs.rm(temp, { recursive: true, force: true }); }
 }
 const readSource = transform => async relative => transform(relative, await fs.readFile(new URL(relative, source)));

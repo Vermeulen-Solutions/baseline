@@ -159,7 +159,7 @@ test('parametric fluid type/space scales and WCAG-safe OKLCH palette generator p
 });
 
 test('formatCalibrationMarkdown and upsertCalibrationRecord bind Stage 4.5 token evidence to LF SHA-256', () => {
-  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8').replaceAll('\r\n', '\n');
   const digest = stylesheetDigest(css);
   assert.equal(stylesheetDigest(css.replace(/\n/g, '\r\n')), digest);
 
@@ -287,13 +287,13 @@ test('auditEditProxies verifies starter single-entry and collection routes and c
 });
 
 test('validateCssAlignment catches untouched neutral starter global.css when a named lane is declared and passes once lane tokens are applied', () => {
-  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const css = readFileSync(new URL('./fixtures/design/neutral.css', import.meta.url), 'utf8');
   const editorialRecord = formatArtDirectionRecord('editorial-paper');
   const unalignedErrors = validateCssAlignment(editorialRecord, css);
   assert.equal(unalignedErrors.length, 1);
   assert.ok(unalignedErrors[0].includes('untouched neutral starter palette'));
 
-  const alignedCss = applyTokenOverrides(css, 'editorial-paper');
+  const alignedCss = applyTokenOverrides(readFileSync(GLOBAL_CSS_PATH, 'utf8'), 'editorial-paper');
   assert.deepEqual(validateCssAlignment(editorialRecord, alignedCss), []);
   assert.deepEqual(validateCssAlignment(formatArtDirectionRecord('neutral'), css), []);
 });
@@ -302,13 +302,16 @@ test('pruneStarterExceptions strips sample-page and deleted entries while retain
   const dir = mkdtempSync(join(tmpdir(), 'emdash-prune-'));
   try {
     const exFile = join(dir, 'design-gate-exceptions.json');
-    const source = JSON.parse(readFileSync('audit/design-gate-exceptions.json', 'utf8'));
+    const retained = ['src/pages/_styleguide.astro', 'src/components/dev/Styleguide.astro', 'src/dev/styleguide-fixtures.ts', 'src/assets/styleguide-grid.svg'].map(path => ({ path, reason: 'Synthetic infrastructure fixture', sha256: 'a'.repeat(64) }));
+    const source = [...retained, ...['src/pages/index.astro', 'src/styles/global.css'].map(path => ({ path, reason: 'Synthetic starter sample', sha256: 'b'.repeat(64) })), { ...retained[2], path: 'src/dev/retired.ts', deleted: true }];
     writeFileSync(exFile, JSON.stringify(source, null, 2), 'utf8');
     const result = pruneStarterExceptions(exFile);
-    assert.ok(result.before > result.after);
-    assert.ok(result.after >= 7, 'Retain the common and platform-specific developer infrastructure');
+    assert.equal(result.before, 7);
+    assert.equal(result.after, 4);
     const kept = JSON.parse(readFileSync(exFile, 'utf8'));
     assert.ok(kept.every(item => !item.deleted && /^src\/(?:pages\/_styleguide\.astro|components\/dev\/|dev\/|assets\/styleguide-)/.test(item.path)));
+    assert.deepEqual(kept, retained);
+    assert.deepEqual(pruneStarterExceptions(exFile), { path: exFile, before: 4, after: 4 });
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }

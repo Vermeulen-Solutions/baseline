@@ -1,13 +1,18 @@
 /** Underscore-prefixed pages are ignored by Astro's file-based router. */
 import { writeFile } from 'node:fs/promises';
+export function styleguidePath({ base = '/', trailingSlash = 'ignore' } = {}) {
+  return base.replace(/\/$/, '') + '/_styleguide' + (trailingSlash === 'always' ? '/' : '');
+}
 export default function devTools({ fixtures = false, platform = 'emdash' } = {}) {
   if (!['static', 'emdash'].includes(platform)) throw new Error('Unknown developer-tools platform');
   let artifactDir;
   let resolvedRoutes = [];
+  let calibrationPath;
   return {
     name: 'starter-dev-tools',
     hooks: {
       'astro:config:setup': async ({ config, command, injectRoute, injectScript, updateConfig, addMiddleware }) => {
+        calibrationPath = styleguidePath(config);
         const definitions = { 'import.meta.env.STARTER_TEST_FIXTURES': JSON.stringify(fixtures) };
         updateConfig({ vite: { define: definitions } });
         // Omit the route entirely from release builds. Runtime flags cannot restore it.
@@ -19,6 +24,9 @@ export default function devTools({ fixtures = false, platform = 'emdash' } = {})
           addMiddleware({ entrypoint: new URL('./dev-tools-middleware.mjs', import.meta.url), order: 'pre' });
         }
         if (fixtures) injectScript('page-ssr', 'import "/src/dev/visual-fonts.css";');
+      },
+      'astro:server:start': ({ logger }) => {
+        logger.info(`Component calibration: ${calibrationPath} (use Astro's local development origin)`);
       },
       'astro:config:done': ({ config }) => { artifactDir = config.outDir; },
       'astro:routes:resolved': ({ routes }) => { resolvedRoutes = routes.map(({ pattern, isPrerendered }) => ({ route: pattern, prerender: isPrerendered })); },

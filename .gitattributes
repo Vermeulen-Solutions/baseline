@@ -1,4 +1,8 @@
 # This standalone release artifact has a pinned byte digest on every platform.
 standards/baselines/*.json text eol=lf
+# Reviewed migration fixtures bind exact UTF-8 bytes, including their newlines.
+tests/fixtures/importer-fidelity/** text eol=lf
+tests/fixtures/migration-acceptance/** text eol=lf
+tests/fixtures/migration-content/** text eol=lf
 # Unified diff context lines intentionally contain a single space.
 docs/upgrades/architecture-hardening-static.patch -whitespace

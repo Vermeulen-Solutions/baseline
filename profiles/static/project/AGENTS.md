@@ -37,7 +37,8 @@ exceptions are exact-path, LF-normalized SHA-256 records; any edit invalidates i
 exception. Never add broad directory exceptions or exempt client implementations.
 The changed-source check also validates all visual files before Git initialization.
 Run `npm run design:tokens -- --init-client --lane <lane>` when adapting the starter,
-then calibrate real components on `/_styleguide` and record the observed results in
+then calibrate real components at the Component calibration path printed by
+`npm run dev` (`/_styleguide/` with the default slash policy) and record results in
 `audit/component-calibration.md`. A generated calibration checklist is not evidence
 that browser verification has been performed.
 

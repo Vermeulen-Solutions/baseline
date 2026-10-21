@@ -1,4 +1,4 @@
-import test from 'node:test';
+import test, { after } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -6,11 +6,26 @@ import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import devTools from '../scripts/dev-tools-integration.mjs';
+import devTools, { styleguidePath } from '../scripts/dev-tools-integration.mjs';
+import { profileSource } from './helpers/profile-source.mjs';
 import { containedPath, initProfile, planProfile } from '../scripts/init-profile.mjs';
 import { onRequest } from '../scripts/dev-tools-middleware.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+const fixtureSource = await profileSource();
+after(fixtureSource.dispose);
+
+test('development discovery follows base and slash policy without changing release routing', async () => {
+  for (const trailingSlash of ['always', 'never', 'ignore']) for (const base of ['/', '/preview/']) {
+    const messages = [];
+    const plugin = devTools({ platform: 'static' });
+    await plugin.hooks['astro:config:setup']({ config: { output: 'static', base, trailingSlash }, command: 'dev', injectRoute: () => {}, injectScript: () => {}, updateConfig: () => {} });
+    plugin.hooks['astro:server:start']({ logger: { info: message => messages.push(message) } });
+    const expected = base.replace(/\/$/, '') + '/_styleguide' + (trailingSlash === 'always' ? '/' : '');
+    assert.equal(styleguidePath({ base, trailingSlash }), expected);
+    assert.ok(messages[0].includes(expected));
+  }
+});
 
 test('server release reserves developer fixture paths before any CMS catch-all can render them', () => {
   for (const route of ['/_styleguide', '/_form-recovery', '/%5fform-recovery']) for (const suffix of ['', '/', '?fixtures=1']) {
@@ -73,7 +88,7 @@ test('generator refuses unknown/unavailable profiles, overlapping roots, populat
 test('allowlisted assembly is dry-run safe, records exact provenance and keeps the design gate active before Git initialization', async () => {
   const stage = await fs.mkdtemp(path.join(os.tmpdir(), 'baseline-generator-assembly-'));
   try {
-    const options = { profile: 'static', out: path.join(stage, 'project with spaces') };
+    const options = { profile: 'static', out: path.join(stage, 'project with spaces'), sourceRoot: fixtureSource.root };
     assert.equal((await initProfile({ ...options, dryRun: true })).dryRun, true);
     await assert.rejects(fs.stat(options.out), { code: 'ENOENT' });
     const receipt = await initProfile(options);
@@ -97,6 +112,24 @@ test('allowlisted assembly is dry-run safe, records exact provenance and keeps t
   } finally {
     assert.equal(path.dirname(stage), path.resolve(os.tmpdir()));
     assert.ok(path.basename(stage).startsWith('baseline-generator-assembly-'));
+    await fs.rm(stage, { recursive: true, force: true });
+  }
+});
+
+test('generator still refuses a calibrated source without reviewed infrastructure bytes before writing', async () => {
+  const stage = await fs.mkdtemp(path.join(os.tmpdir(), 'baseline-generator-calibrated-'));
+  const exceptionsPath = path.join(fixtureSource.root, 'audit/design-gate-exceptions.json');
+  const original = await fs.readFile(exceptionsPath);
+  try {
+    const exceptions = JSON.parse(original).filter(entry => entry.path !== 'src/styles/global.css');
+    await fs.writeFile(exceptionsPath, JSON.stringify(exceptions));
+    const out = path.join(stage, 'site');
+    await assert.rejects(initProfile({ profile: 'static', out, sourceRoot: fixtureSource.root }), /Source lacks a current reviewed infrastructure exception: src\/styles\/global.css/);
+    await assert.rejects(fs.stat(out), { code: 'ENOENT' });
+  } finally {
+    await fs.writeFile(exceptionsPath, original);
+    assert.equal(path.dirname(stage), path.resolve(os.tmpdir()));
+    assert.ok(path.basename(stage).startsWith('baseline-generator-calibrated-'));
     await fs.rm(stage, { recursive: true, force: true });
   }
 });

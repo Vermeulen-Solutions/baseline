@@ -35,6 +35,27 @@ function invoke(directory, args) {
   return spawnSync(process.execPath, [script, ...args], { cwd: directory, encoding: 'utf8', timeout: 15000 });
 }
 
+test('reviewed migration fixtures retain exact LF bytes in a Windows-style Git checkout', () => scratch(directory => {
+  const source = path.join(directory, 'source'), target = path.join(directory, 'checkout');
+  fs.mkdirSync(source);
+  const files = ['tests/fixtures/importer-fidelity/wordpress.xml', 'tests/fixtures/migration-acceptance/manifest.json', 'tests/fixtures/migration-content/manifest.json'];
+  fs.copyFileSync(new URL('../.gitattributes', import.meta.url), path.join(source, '.gitattributes'));
+  for (const file of files) {
+    fs.mkdirSync(path.dirname(path.join(source, file)), { recursive: true });
+    fs.copyFileSync(new URL('../' + file, import.meta.url), path.join(source, file));
+  }
+  const git = (...args) => execFileSync('git', args, { stdio: 'pipe' });
+  git('-C', source, 'init', '--quiet');
+  git('-C', source, '-c', 'core.autocrlf=true', 'add', '.');
+  git('-C', source, '-c', 'user.name=Baseline test', '-c', 'user.email=test@example.invalid', 'commit', '--quiet', '-m', 'Reviewed LF fixture');
+  git('clone', '--quiet', '--no-hardlinks', '--config', 'core.autocrlf=true', source, target);
+  for (const file of files) {
+    const bytes = fs.readFileSync(path.join(target, file));
+    assert.ok(!bytes.includes(Buffer.from('\r\n')), file);
+    assert.deepEqual(bytes, fs.readFileSync(new URL('../' + file, import.meta.url)), file);
+  }
+}));
+
 test('reference manifest, bound observations and JSON/Markdown reports implement the version-1 contract', () => {
   const manifest = load('manifest'), observations = load('observations'), report = load('report');
   assert.deepEqual(validateManifest(manifest), []);
