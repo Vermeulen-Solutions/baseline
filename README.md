@@ -44,6 +44,10 @@ Use continuous `clamp()` scales in `src/styles/global.css`. The generator defaul
 ### 🎨 2. The Art Direction Gate & `/_styleguide` Quarantine
 `AGENTS.md` requires the assistant to save a complete **Art Direction Record** to disk before site-specific visual implementation, then run `npm run check:art-direction -- --require-record`. The record defines the aesthetic lane, narrative metaphor, typography, token physics and site anti-patterns. The normal `npm run check:art-direction` validates changed visual source and the required record against Git, subject to exact hash-bound infrastructure exceptions. Reusable primitives and responsive stress cases are calibrated on **`/_styleguide`** (which returns **404** in production builds) before broad page assembly. Pair with `DESIGN.md` interchange (`npm run design:check` / `design:export`) or optional `@perkyzz/emvb` visual landing pages as needed ([Design Interchange Guide](docs/design-interchange.md) · [Art Direction Workflow](docs/art-direction-workflow.md)).
 
+Use the **Component calibration** path printed by `npm run dev` on Astro's local
+origin. Static profiles default to `/_styleguide/`, including the trailing slash;
+the path respects custom base/slash settings. See the [calibration commands](docs/design-framework.md#6-agent-first-token-calibration--wcag-contrast-audit-npm-run-designtokens).
+
 ### 🗄️ 3. Intelligent content modeling & WordPress migration
 Don't copy WordPress's legacy mess into your clean CMS. Baseline provides a structured methodology for converting legacy sites to EmDash:
 - **The Content Candidate Register:** Uncover implicit operational entities trapped in page builder accordions or ACF repeaters (e.g. rosters, schedules, venues, sponsors) and elevate them to first-class collections.
@@ -89,7 +93,7 @@ Run `npm run doctor` before installing dependencies to check this EmDash foundat
    - Purpose & Routes: [E.g., 5-page studio site: Home, Work, About, Blog, Contact]
    - Aesthetic Lane / Palette: [E.g., Editorial Paper / Product-Led Minimalism, or seed accent #1B4332]
 
-   Install dependencies, generate .env secrets, complete Checkpoint A (Brief, Platform & Content Schema), and present the Checkpoint A handoff.
+   Determine the profile first and work in its project directory. Install dependencies; generate .env secrets only when required by that profile. Complete the local site and verification, reporting Checkpoints A–C as you go. Continue authorized work without waiting for a reply at each checkpoint; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending.
    ```
 
    **Option B — Standard Agency Track (Full 7 Stages, for migrations or complex multi-locale sites):**
@@ -102,7 +106,9 @@ Run `npm run doctor` before installing dependencies to check this EmDash foundat
    - Target Audience: [E.g., Enterprise buyers / General public]
    - Locales: [E.g., Single language (en) or Multilingual (en, fr)]
 
-   Install dependencies, generate .env secrets, begin with Stage 1 (Brief & Evidence Discovery), and present the Stage 1 handoff choices once complete.
+   Begin with Stage 1 (Brief & Evidence Discovery), determine the profile, and install dependencies in the selected project directory. Generate .env secrets only when required by that profile. Complete the requested local site and verification, reporting stage handoffs and continuing authorized work. Ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending.
+   ```
+
    *(Canonical lanes: `editorial-paper`, `product-minimalism`, `technical-data`, `warm-editorial`; see [Art Direction Guide](docs/art-direction-workflow.md))*
 
 3. **Explore your local dev destinations:**

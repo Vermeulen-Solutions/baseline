@@ -10,10 +10,12 @@ Platform Profile (`static`, `static-sveltia`, `emdash`) selects content/editing/
 
 ### Choosing Your Track: Standard (7 Stages) vs. Express (3 Checkpoints)
 
-| Track | Best For | Human Checkpoints | CLI Gates Enforced |
+| Track | Best For | Handoffs and decisions | CLI Gates Enforced |
 | --- | --- | --- | --- |
-| **Standard Track (7 Stages)** | Complex migrations, multi-collection architectures, or multi-locale sites | Pauses at each stage handoff (`1` → `2` → `3` → `4` → `4.5` → `5` → `6`) | Profile-appropriate (`check:art-direction`, `design:tokens`, `verify`; SQL budget only on EmDash) |
-| **Express Track (3 Checkpoints)** | Smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale) | **Checkpoint A** (Stages 1–3) → **Checkpoint B** (Stages 4–4.5) → **Checkpoint C** (Stages 5–6) | Profile-appropriate (`check:art-direction`, `design:tokens`, `verify`; SQL budget only on EmDash) |
+| **Standard Track (7 Stages)** | Complex migrations, multi-collection architectures, or multi-locale sites | Detailed stage handoffs; ask when consequential decisions remain unresolved | Profile-appropriate (`check:art-direction`, `design:tokens`, `verify`; SQL budget only on EmDash) |
+| **Express Track (3 Checkpoints)** | Smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale) | Up to three consolidated checkpoints: **A** (Stages 1–3), **B** (Stages 4–4.5), **C** (Stages 5–6) | Profile-appropriate (`check:art-direction`, `design:tokens`, `verify`; SQL budget only on EmDash) |
+
+Both tracks continue authorized work without mandatory handoff stops. Ask only for consequential missing decisions or external actions not already authorized, and honor an explicit request to stop at a stage or review before continuing. Record approved versus assumed choices. A saved Art Direction Record or passing gate establishes neither user approval nor visual acceptance; Stage 4.5 calibration remains required before broad page assembly. Local preparation, deployment, CMS content transfer and DNS changes have distinct scopes and evidence.
 
 ```mermaid
 flowchart TD
@@ -129,7 +131,7 @@ Run deterministic local checks to verify the build before client handoff or depl
 - `npm run verify`: Run syntax/template lint, Art Direction Gate, token/font/edit-proxy audit, the complete test suite (`npm test`, including lifecycle rehearsals), physical schema budget preflight (`check:schema-budget`), and Astro/TypeScript checks (`typecheck`) in one command. Use `npm run verify:fast` for daily lint/gate/token/unit feedback; it does not replace full verification. Test classification lives in `tests/test-tiers.json`.
 - EmDash only — `npm run test:visual`: Compare local Windows screenshots against reviewed baselines across mobile, tablet, and desktop viewports ([Visual Regression](visual-regression.md)).
 - `npm run check:dev-tools`: Confirm `/_styleguide` and synthetic fixture markers are completely stripped from the production build.
-- **Visual Critique & Polish (Optional):** Use the bundled `impeccable` skill for an automated UI critique pass on rendered pages before final signoff.
+- **Visual Critique & Polish:** Use the bundled `impeccable` skill for a bounded critique of rendered pages, resolve material findings and record the evidence. This complements automated checks; it does not establish user approval.
 - **EmDash Client Verification:** Log in to `/_emdash/admin`, test editing live content, publish drafts, and verify updates on the public site.
 - **Migration Acceptance Verification (If Migrating):** Run `npm run migration:verify -- --scope full --manifest audit/url-inventory.json` to verify HTTP status codes, 301 redirect chains without loops, canonicals, robots tags, link/image integrity, and content inventory reconciliation ([Migration Acceptance Contract](migration-acceptance.md)).
 - **EmDash Site Registration:** Run `npm run site:register` to register the site metadata ([Site Registry](site-registry.md)).

@@ -4,6 +4,8 @@ This prompt library provides adaptable recipes for the documented Baseline workf
 
 Use these prompts to invoke specific Baseline features and workflows without having to remember internal commands or skill names.
 
+Check the installed profile and `package.json` before choosing commands. Handoffs report evidence and next steps; they do not require a reply unless a consequential decision or external-action authorization is missing. The kickoff prompts below request a complete local build. For a discovery-only or review-at-each-stage task, state that scope explicitly.
+
 ---
 
 ## 🧭 Navigation Quick Links
@@ -23,7 +25,7 @@ Use these prompts to invoke specific Baseline features and workflows without hav
 ## 1. Starting a New Site Project
 
 ### Express / Autonomous Mode Kickoff (3 Checkpoints — For Smaller Sites)
-Use this prompt when building a straightforward greenfield site (`<= 6` routes, `<= 3` collections, single locale) and you want the agent to move through discovery, platform setup, and content modeling in one consolidated pass before pausing.
+Use this prompt for a straightforward greenfield site (`<= 6` routes, `<= 3` collections, single locale), consolidating decisions into up to three checkpoints while continuing the authorized build.
 
 ```markdown
 Read AGENTS.md, follow new-site-workflow under .agents/skills/ in **Express Track (3 Checkpoints)**, and build this site using consolidated checkpoints:
@@ -34,11 +36,11 @@ Read AGENTS.md, follow new-site-workflow under .agents/skills/ in **Express Trac
 - Aesthetic Lane / Palette: [E.g., Editorial Paper / Product-Led Minimalism, or seed accent #1B4332]
 - Hosting & Locale: [E.g., Node.js + SQLite, single language (en)]
 
-Please complete **Checkpoint A (Stages 1–3: Brief, Platform & Content Schema)** and present the Checkpoint A handoff.
+Determine the profile first and work in its project directory. Complete the local site and verification, reporting Checkpoints A–C as you go. Continue authorized work without waiting for a reply at each checkpoint; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
 ```
 
 ### Standard Agency Mode Kickoff (Full 7 Stages — For Complex Sites & Migrations)
-Use this prompt when starting a complex multi-collection build, multi-locale site, or legacy migration with step-by-step stage approvals.
+Use this prompt for a complex multi-collection build, multi-locale site or legacy migration with detailed stage handoffs and decisions resolved when they become material.
 
 ```markdown
 Read AGENTS.md, follow new-site-workflow under .agents/skills/, and guide me through the staged delivery workflow.
@@ -50,7 +52,7 @@ Here is the context for this project:
 - Brand Assets Available: [E.g., SVGs in src/assets/, brand colors: #1A1A1A and #0055FF, typography: Inter + Newsreader]
 - Required Locales: [E.g., Single language (en) or Multilingual (en, de)]
 
-Please begin with Stage 1 (Brief & Evidence Discovery) and present the Stage 1 handoff choices once complete.
+Begin with Stage 1 (Brief & Evidence Discovery), determine the profile, and complete the requested local site and verification. Report stage handoffs and continue authorized work; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
 ```
 
 ### Evaluating & Installing Sandboxed Registry Plugins (Stage 2)

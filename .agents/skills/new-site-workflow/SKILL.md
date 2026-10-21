@@ -36,6 +36,8 @@ Keep a concise site record in `AGENTS.md`: purpose, audiences, languages, conten
 
 Use supplied evidence and prior answers before asking. Treat the handoff prompts below as adaptable examples, not mandatory scripts or permission requests. When work is already authorized, report the outcome and continue. Ask only unresolved questions whose answers change the work; combine related decisions and use plain language with a recommendation. Express has **up to three consolidated checkpoints**, not three mandatory stops. Do not ask “ready to build?” repeatedly or require users to choose implementation details the agent can derive.
 
+Each handoff reports the completed scope, observed evidence, unresolved decisions and next authorized action. Label working assumptions explicitly; a saved record or passing check does not establish user approval. If the user requested only a stage, stop at that scope. For a complete build, continue through local verification; deployment, content transfer, DNS changes and external submissions require authorization covering those actions. Reuse existing authorization rather than asking again at each stage.
+
 Discover the following in small groups, omitting known answers:
 
 1. **Purpose and visitor:** Who is the site for, what should visitors do, and what must that journey accomplish? Which pages/content are essential?
@@ -81,14 +83,14 @@ When the user requests **Express Mode** (or when building a straightforward gree
    - Run `npm run design:tokens -- --init-client --lane <lane>` (or `--seed-accent <hex>`), refine `## Art Direction Record` in `AGENTS.md` and tokens in `src/styles/global.css`, pass `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide` (`audit/component-calibration.md`).
    - **Checkpoint B Handoff Prompt:**
      > **Express Checkpoint B Complete: Art Direction & `/_styleguide` Calibrated**
-     > - **Art Direction Gate:** `PASS` (`AGENTS.md` + `src/styles/global.css` + `audit/component-calibration.md`)
+     > - **Art Direction Gate:** [Actual command and result; the saved record and passing gate do not imply user approval.]
      > - **Contrast, tokens and specimens:** [Report the actual checks, results and unresolved limitations; automated checks are not accessibility certification.]
      >
      > Next is **Checkpoint C (Stages 5–6: Full Route Assembly, Impeccable Critique & Verification)**.
      > [Continue authorized implementation; offer the preview for inspection without requiring a continuation reply.]
 
 3. **Checkpoint C (Stages 5–6 — Route Implementation, Critique & Full Verification):**
-   - Implement public routes using the selected profile (native `getStaticPaths()`/`render()` for static; `<Base content={{...}}>` + `{...entry.edit.*}` for EmDash), run the `impeccable` visual critique pass, run `npm run verify` + `npm run build`, and present the Stage 6 launch/deployment prompt.
+   - Implement public routes using the selected profile (native `getStaticPaths()`/`render()` for static; `<Base content={{...}}>` + `{...entry.edit.*}` for EmDash), run the `impeccable` visual critique pass, run `npm run verify` + `npm run build`, and report the Stage 6 handoff with actual acceptance and any remaining launch work.
 
 ## Stage 1: establish the brief and evidence
 
@@ -150,23 +152,10 @@ Use the content-candidate register to classify every repeated editorial element 
 
 **Gate:** every planned page archetype and content candidate has a source, target representation, migration method, route or placement, container/breakout model, and editorial ownership model. No repeated editorial material remains unclassified. The art-direction stage has realistic content shapes and known imagery to design around.
 
-**Stage 3 → Stage 4 Handoff & Design Capability Prompt:**
-When Stage 3 is complete, present this unified prompt once to transition into Stage 4 (do not repeat a second capability prompt upon entering Stage 4):
-> **Stage 3 Complete: Content Structure & Admin Dashboard Ready**
-> Your content model and routes are structured for the selected profile; only EmDash includes database/admin setup.
->
-> Next is **Stage 4: Visual Direction & Art Direction**.
-> *In plain terms:* Before we build full website pages, we establish the visual identity—fonts, brand colors, fluid spacing, and overall personality.
->
-> **How would you like to establish the visual design?**
-> 1. **(Recommended) Code-First with Curated Aesthetic Lanes:**
->    - Pick a curated design mood (*Product-Led Minimalism*, *Editorial Paper*, *Technical Systems*, or *Luminous Futurism*), seed and customize tokens + the `AGENTS.md` record in one step (`npm run design:tokens -- --lane <lane> --write --write-record`), and preview live on `/_styleguide`.
-> 2. **Match an Existing Brand or Seed Palette:**
->    - Provide your brand's primary hex color, logo, or reference URL, and I will synthesize a WCAG AA-verified OKLCH palette (`--seed-accent`), typography pairing, and `AGENTS.md` record.
-> 3. **Explore `DESIGN.md` Systems, UX Teardowns, or Component Registries (`designmd-mcp` / `Stitch` / `21st.dev`):**
->    - Compare 2–3 visual concepts in `audit/visual-concepts/`, bridge a community `DESIGN.md` system, or pull `21st.dev` component blueprints for zero-JS Astro quarantine.
->
-> *(Reply `1` for the recommended code-first lane setup, `2` to match your brand colors/URL, or `3` for visual concepting.)*
+**Stage 3 → Stage 4 handoff:**
+Report the content model, route archetypes and editorial ownership established for the selected profile, including actual admin/schema status on EmDash. Recommend a visual direction from the supplied identity and evidence, using `site-art-direction`'s canonical lanes or Custom / existing brand with a rationale. Explain the intended typography, density and layout spacing in plain language; distinguish user decisions from working assumptions.
+
+Continue authorized design setup with existing assets and local token tooling. Ask about identity/reference gaps only when they materially change the direction. Use optional `DESIGN.md`, visual concepting or component registries when they help resolve the brief; do not require a tool-selection reply or repeat a capability menu at Stage 4.
 
 ## Stage 4: set the art direction
 
@@ -197,23 +186,16 @@ For Stackable, Elementor, Blocksy builder, or similar migrations, explicitly cla
 
 **Gate:** `AGENTS.md` contains the saved `## Art Direction Record` with all required fields (Aesthetic Lane selected from `references/aesthetic-lanes.md` or Custom / existing brand with rationale, Narrative Metaphor, Typography Pairing, Token Physics, and Site Anti-Patterns). For an overhaul migration, the concept pass is complete, the selected direction is recorded, and the preserved source identity and deliberate changes are explicit.
 
-**Stage 4 Completion Handoff Prompt:**
-When Stage 4 passes `check:art-direction`, present this prompt:
-> **Stage 4 Complete: Visual Style & Brand Rules Approved**
-> The design system rules (fonts, palette, spacing, and buttons) are saved in `AGENTS.md`.
->
-> Next is **Stage 4.5: Component Calibration**.
-> *In plain terms:* We first preview individual building blocks—cards, buttons, banners, text rhythm, and dark/light section backgrounds—on the development styleguide (`/_styleguide`). We check representative narrow and wide layouts and record the findings before assembling full pages; the rendered pages still need verification.
->
-> **What would you like to do?**
-> 1. **(Recommended) Calibrate building blocks on `/_styleguide`:**
->    - We will preview cards, containers, and headings on the private styleguide, check contrast and mobile sizing, and record verification in `audit/component-calibration.md`.
-> 2. **Proceed directly to page assembly:**
->    - Skip isolated component testing and calibrate building blocks directly within full page templates.
->
-> *(Reply `1` to run the calibration pass, or `2` to start page assembly.)*
+**Stage 4 handoff:**
+Report the saved Art Direction Record, which choices are approved versus assumed, and the actual `check:art-direction -- --require-record` result. Continue to Stage 4.5 within the authorized scope: preview the relevant building blocks on `/_styleguide`, check their surfaces, responsive behavior and interaction states, and record evidence before broad page assembly. Calibration is a required stage, not a skip/proceed choice.
 
 ## Stage 4.5: calibrate components before page assembly
+
+Open the **Component calibration** path printed by `npm run dev` on Astro's local
+origin. It respects base/slash policy: generated static sites default to
+`/_styleguide/`, including the slash; their slashless URL returns 404. Release
+previews intentionally omit it. Use the documented fixture build/serve commands
+only when a separate specimen artifact is needed, not to recover a missing slash.
 
 For URL/screenshot migrations or external component sourcing (such as `21st.dev MCP`), follow `astro-site-design/references/component-quarantine.md` after Stage 4 and its art-direction gate. Inspect representative source elements or candidate registry blueprints, then calibrate relevant tokens, states, and production primitives on `/_styleguide` before creating client page templates or bespoke sections — including `<Container width="reading|content|wide">` versus `<Container breakout>` (`.content-grid` with `.content--feature|wide|full|full-safe`), `<Card>` (`--card-*` custom properties, concentric radius math, and `.clickable-parent`/`.focus-parent` accessibility), and flow spacing (`.flow`). When sourcing external React/Tailwind components (e.g., from `21st.dev`), transmute them through the quarantine checklist: strip unnecessary React/Framer Motion runtime down to zero-JS Astro markup, replace hardcoded palette classes with semantic tokens, bind fluid typography/spacing steps, and wire EmDash live edit proxies only on the `emdash` profile. For greenfield work, review the relevant primitive baseline against the brief and record inapplicable source comparisons.
 
@@ -221,23 +203,8 @@ Save `audit/component-calibration.md` (you can scaffold or refresh the verified 
 
 **Gate:** the calibration record identifies which patterns are ready for representative pages and why; relevant checks pass. No source cloning, un-quarantined React/palette bloat, invented APIs, fake CMS edit identities, or specimen-only CSS repairs.
 
-**Stage 4.5 Completion Handoff Prompt:**
-When `audit/component-calibration.md` is saved, present this prompt:
-> **Stage 4.5 Complete: Building Blocks Tested & Verified**
-> [Report which cards, containers and controls were checked, at which viewports and states, with any remaining limitations.]
->
-> Next is **Stage 5: Implement Representative Pages**.
-> *In plain terms:* We build 1 or 2 key "archetype" pages first to make sure the full layout, navigation bar, and footer look and feel great in the browser before expanding across every route.
->
-> **Which representative page should we build and review first?**
-> 1. **(Recommended) Global Header/Footer + Homepage:**
->    - Builds the navigation bar, mobile menu drawer, homepage hero, featured content cards, and footer. This sets the foundation for the entire site.
-> 2. **Long-Form Editorial Template (Article / Case Study):**
->    - Builds a detailed reading layout with rich text, pull quotes, images, and author details.
-> 3. **Directory / Listing Page:**
->    - Builds a filterable list of items (e.g. Teams, Projects, or Services) with card grids.
->
-> *(Reply `1` to build the shell and homepage first, or tell me which page you prefer.)*
+**Stage 4.5 handoff:**
+Report the checked components, viewports, surfaces/states and unresolved limitations from `audit/component-calibration.md`. A saved token table alone does not establish rendered acceptance. When the calibration gate passes, continue to the shell and the representative page archetypes that best exercise the actual route/content model. Use an established page priority; otherwise explain the selection and proceed without requiring the user to choose an implementation order.
 
 ## Stage 5: implement representative pages
 
@@ -256,21 +223,8 @@ Once representative pages render, load `impeccable` for a bounded visual critiqu
 
 **Gate:** representative pages work with real content at mobile, intermediate, and wide viewports, and establish reusable patterns for the remaining routes. The main visual findings from the Impeccable pass are resolved or recorded.
 
-**Stage 5 Completion Handoff Prompt:**
-When representative pages are refined, present this prompt:
-> **Stage 5 Complete: Core Page Templates Proven & Polished**
-> The homepage and shell have been built and refined with the Impeccable critique pass.
->
-> Next is **Stage 6: Complete & Verify the Full Site**.
-> *In plain terms:* Now that the design patterns are proven, we build all remaining pages from our inventory and perform comprehensive quality checks (making sure links work, mobile layouts don't break, and editors can edit pages in the admin).
->
-> **Ready to complete the site?**
-> 1. **(Recommended) Build all remaining routes and run full quality checks:**
->    - Build the rest of the pages, verify browser accessibility/mobile views, test admin editing round-trips, and run the automated test suite.
-> 2. **Review the current pages in your browser first:**
->    - Take time to click through the homepage and shell locally before generating the remaining pages.
->
-> *(Reply `1` to generate and verify all routes, or `2` to inspect the current pages.)*
+**Stage 5 handoff:**
+Report which representative routes render, the browser/Impeccable findings addressed, and any remaining content or interaction gaps. Offer the preview for inspection while continuing the remaining authorized routes and Stage 6 checks. Pause for a user review only when requested or when a consequential unresolved decision prevents further work.
 
 ## Stage 6: complete and verify
 
@@ -283,39 +237,12 @@ Use `emdash-site-setup` again for deployment and site transfer. Treat deployment
 
 **Gate:** every required route and distinct state is accounted for; material visual, content, responsive, accessibility, and editor-mode findings are resolved or explicitly documented. For migrations, run `npm run migration:verify -- --scope full --manifest audit/url-inventory.json` to verify HTTP statuses, 301 redirect chains without loops, SEO tags, link/image integrity, and content inventory reconciliation (`docs/migration-acceptance.md`).
 
-Before declaring a new-site workflow complete, use `npm run site:register` with the actual stable site/repository/runtime/owner and starter version metadata. Follow `docs/site-registry.md`: submit a reviewed private registry change, or retain the ignored pending-registration artifact and record its reason when central access is unavailable. Reuse the same site ID for renames; do not publish private client details in the starter or invent a stable release for an unreleased checkout.
+On EmDash, before declaring a new-site workflow complete, use `npm run site:register` with the actual stable site/repository/runtime/owner and starter version metadata. Follow `docs/site-registry.md`: submit a reviewed private registry change within existing authorization, or retain the ignored pending-registration artifact and record its reason when central access or submission authorization is unavailable. Reuse the same site ID for renames; do not publish private client details in the starter or invent a stable release for an unreleased checkout.
 
-**Stage 6 Completion Handoff Prompt:**
-When Stage 6 finishes, present the prompt matching the hosting platform selected in Stage 2:
-*If Node.js hosting:*
-> **Stage 6 Complete: Site is Built and Fully Verified!**
-> [Report the actual route coverage, automated/manual/editor checks and remaining limitations. Do not claim unperformed acceptance or launch readiness.]
->
-> Next is **Stage 7: Production Deployment & Domain Setup**.
-> *In plain terms:* Connecting your custom domain name (e.g., `yourbrand.com`), configuring SSL certificates, and preparing production startup services.
->
-> **What is your launch plan?**
-> 1. **(Recommended) Prepare production deployment configuration:**
->    - Generate production environment variable templates, systemd or Docker compose startup files, and reverse-proxy instructions (e.g. Nginx / Caddy with automated SSL).
-> 2. **Keep the site in local development mode for now:**
->    - Keep testing locally while editors populate initial content before deploying.
->
-> *(Reply `1` to prepare production deployment files, or `2` to keep in local mode.)*
+**Stage 6 handoff:**
+Report actual route coverage, automated results, browser/editor acceptance and pending checks. Distinguish a verified local build from deployment and launch acceptance; avoid blanket claims of full verification when required evidence is missing.
 
-*If Cloudflare Workers hosting:*
-> **Stage 6 Complete: Site is Built and Fully Verified!**
-> [Report the actual route coverage, automated/manual/editor checks and remaining limitations. Do not claim unperformed acceptance or launch readiness.]
->
-> Next is **Stage 7: Production Cutover (Going Live on Cloudflare)**.
-> *In plain terms:* Connecting your custom web address (e.g., `yourbrand.com`), ensuring secure HTTPS locks work, verifying admin passkey/email logins, and ensuring company email DNS is untouched.
->
-> **What is your launch plan?**
-> 1. **(Recommended) Guide me through connecting my custom domain (`emdash-production-cutover`):**
->    - Safely attach your custom domain via Wrangler, verify SSL certificates, test admin passkey/email login, and verify corporate mail records.
-> 2. **Keep the site on the Cloudflare preview / `workers.dev` URL for now:**
->    - Keep the preview URL active so your team can review and populate content before switching the public domain.
->
-> *(Reply `1` to begin custom domain cutover, or `2` to keep on preview.)*
+Use the selected profile and hosting decision for any Stage 7 preparation: static `dist/` and build/404 configuration; Node startup, persistence and reverse proxy configuration; or Workers bindings, preview and cutover configuration. Complete authorized local preparation before requesting any missing external-action authorization, and identify the concrete deployment/content-transfer/DNS action it would cover. If deployment is already authorized, continue without asking again. If the requested scope ends at a local build, deliver that result with remaining launch work recorded.
 
 ## Stage 7: production cutover, email & forms
 
@@ -327,18 +254,8 @@ Use `emdash-production-cutover` when moving a Cloudflare Workers site from previ
 
 **Gate:** the deployment agent completes applicable setup/cutover checks within existing authorization using repository configuration and supported tools. All EmDash targets need valid TLS/aliases, fresh mode-specific login, preserved corporate mail, applicable form delivery, database/media/key recovery evidence and recorded rollback. For Cloudflare targets, follow docs/cloudflare-backup-restore.md and docs/edge-cache-lifecycle.md for protected bootstrap/setup status, retained assets, production publish/purge/provider parity and observed cron/public scheduled-post visibility. Node targets use their backup/deployment runbook and actual scheduler/cache setup. Previews/config-only checks cannot close live gates. Leave unobserved checks pending. Request only missing access/inputs or actions unavailable to the agent; do not send routine dashboard work back to the user.
 
-**Stage 7 Completion Handoff Prompt:**
-When Stage 7 cutover or production configuration is verified:
-> **Stage 7 Complete: Site is Live & Protected!**
-> Production domain resolution, SSL certificates, admin access, and mail delivery checks have succeeded.
->
-> **Recommended Post-Launch Actions:**
-> 1. **(Recommended) Finalize Site Registry:**
->    - Record active production status via `npm run site:register` and archive completed deployment evidence. Backup schedules and restore ownership must already be established before launch.
-> 2. **Monitor Live Production Traffic:**
->    - Keep monitoring error logs (`npx wrangler tail` or server logs) and test the public contact form live.
->
-> *(Reply `1` to record the registry entry and wrap up the deployment workflow.)*
+**Stage 7 handoff:**
+State whether the result is prepared configuration, a preview deployment or an observed production launch. Report only the TLS/domain, profile-specific login/publication, mail/form and recovery checks actually performed; retain missing evidence as pending. For EmDash, finalize the required registry record or pending-registration artifact within the existing submission authorization. Static profiles record ownership and acceptance in project notes. Record backup/restore ownership and any agreed follow-up; do not start ongoing monitoring without a request.
 
 ## Working with partial requests and ongoing evolution
 
