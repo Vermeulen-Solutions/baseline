@@ -1,0 +1,193 @@
+{
+  "startedAt": "2026-10-21T19:49:15.244Z",
+  "transport": "Real stateless EmDash MCP over loopback HTTP",
+  "runtime": "EmDash 1.3 / Node / SQLite; owned synthetic fixture",
+  "checks": [
+    {
+      "name": "create owned draft",
+      "role": "contributor",
+      "status": "pass",
+      "evidence": {
+        "owned": true,
+        "status": "draft"
+      }
+    },
+    {
+      "name": "edit own draft",
+      "role": "contributor",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": true,
+        "status": "draft"
+      }
+    },
+    {
+      "name": "stale revision rejected",
+      "role": "contributor",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": false,
+        "error": {
+          "message": "[CONFLICT] Content has been modified since last read (version conflict)"
+        }
+      }
+    },
+    {
+      "name": "edit another contributor draft refused",
+      "role": "other",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": false,
+        "error": {
+          "message": "[INSUFFICIENT_PERMISSIONS] Insufficient permissions for this operation"
+        }
+      }
+    },
+    {
+      "name": "publish own draft refused",
+      "role": "contributor",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": false,
+        "error": {
+          "message": "[INSUFFICIENT_PERMISSIONS] Insufficient permissions for this operation"
+        }
+      }
+    },
+    {
+      "name": "create published item refused",
+      "role": "contributor",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": false,
+        "error": {
+          "message": "[INSUFFICIENT_PERMISSIONS] Insufficient permissions: publishing requires content:publish_own"
+        }
+      }
+    },
+    {
+      "name": "subscriber list excludes drafts",
+      "role": "subscriber",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "items": 1,
+        "allPublished": true
+      }
+    },
+    {
+      "name": "subscriber cannot read draft by id",
+      "role": "subscriber",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": false,
+        "error": {
+          "message": "[NOT_FOUND] Content item not found: 01M5G05FXNKTQM3CSM78632H5P"
+        }
+      }
+    },
+    {
+      "name": "contributor can read another draft",
+      "role": "other",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "status": "draft",
+        "visibility": "Read access is broader than edit ownership."
+      }
+    },
+    {
+      "name": "author publishes own content",
+      "role": "author",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": true,
+        "status": "published"
+      }
+    },
+    {
+      "name": "author cannot edit another user draft",
+      "role": "author",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": false,
+        "error": {
+          "message": "[INSUFFICIENT_PERMISSIONS] Insufficient permissions for this operation"
+        }
+      }
+    },
+    {
+      "name": "editor edits another user draft",
+      "role": "editor",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": true,
+        "status": "draft"
+      }
+    },
+    {
+      "name": "editor publishes another user content",
+      "role": "editor",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": true,
+        "status": "published"
+      }
+    },
+    {
+      "name": "read-only editor scope refuses create",
+      "role": "readonly",
+      "status": "pass",
+      "evidence": {
+        "http": 200,
+        "ok": false,
+        "error": {
+          "message": "[INSUFFICIENT_SCOPE] Insufficient scope: requires content:write"
+        }
+      }
+    },
+    {
+      "name": "contributor cannot mint schema-read grant",
+      "role": "contributor",
+      "status": "pass",
+      "evidence": {
+        "readOnlyPlanRejected": true
+      }
+    },
+    {
+      "name": "explicit token revocation rejected by MCP",
+      "role": "author",
+      "status": "pass",
+      "evidence": {
+        "revokedHTTP": 401,
+        "otherTokenStillWorks": true
+      }
+    }
+  ],
+  "cleanup": [
+    {
+      "id": "01M5G05FXNKTQM3CSM78632H5P",
+      "trashed": true
+    },
+    {
+      "id": "01M5G05G80QPK6KC0N50V1CP4T",
+      "trashed": true
+    }
+  ],
+  "limits": [
+    "No hosted OAuth browser, external login, production, D1 or media-upload acceptance.",
+    "Synthetic identities are provisioned locally through SQLite only for the fixture; all tested content operations use MCP. Contributor draft visibility is not assumed to be owner-only."
+  ],
+  "completedAt": "2026-10-21T19:49:16.079Z",
+  "status": "pass"
+}

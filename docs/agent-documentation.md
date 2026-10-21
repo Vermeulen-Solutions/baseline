@@ -188,6 +188,13 @@ In EmDash 1.3, `content:write` also grants taxonomy/menu writes for compatibilit
 publication, owned-content limits and draft visibility still follow the account
 role. A read-only token for an administrator may therefore read drafts.
 
+Draft read access is also broader than edit ownership: a Contributor can read
+another user's draft while being unable to edit it or publish their own draft.
+The authoring preset therefore does not isolate private drafts by owner. Use a
+Subscriber with the narrower read scopes above when access should cover only
+published content. These boundaries were exercised through live MCP in the
+[local role acceptance](../audit/autonomous-evaluation-2026-10-21/roles.md).
+
 No account is selected or created automatically. `--db` must name an existing,
 non-linked local file; `--user` must resolve to one existing account. Without
 `--apply`, the helper opens the database read-only and returns a JSON plan with

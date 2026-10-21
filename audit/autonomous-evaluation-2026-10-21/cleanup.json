@@ -1,0 +1,25 @@
+{
+  "startedAt": "2026-10-21T19:57:14.246Z",
+  "content": [
+    {
+      "slug": "kickoff-cms-source",
+      "id": "01M5G05W6K0XN7SC7J6XV86MF6",
+      "trashed": true
+    },
+    {
+      "slug": "kickoff-cms-inspect",
+      "id": "01M5G0EAB4495NSQX3RPYBS5H1",
+      "trashed": true
+    },
+    {
+      "slug": "role-boundary-contributor",
+      "id": "01M5G03Y4Y2814RD9WXSDKC6QY",
+      "trashed": true
+    }
+  ],
+  "credentials": "All eight evaluation PATs absent from the local token store; private token file removed.",
+  "status": "pass",
+  "syntheticAccountsDisabled": 7,
+  "serverStopped": true,
+  "completedAt": "2026-10-21T19:57:49.542Z"
+}
