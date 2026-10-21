@@ -1,0 +1,11 @@
+{
+  "startedAt": "2026-10-21T15:33:31.530Z",
+  "disposableOnly": true,
+  "checks": {},
+  "limits": [
+    "Local EmDash 1.3 Node/SQLite; no hosted account, production mutation, D1 or OAuth browser acceptance."
+  ],
+  "status": "fail",
+  "error": "CMS readiness timed out",
+  "completedAt": "2026-10-21T15:35:03.855Z"
+}

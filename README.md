@@ -144,7 +144,7 @@ npm run dev
 > [!TIP]
 > **Need prompt templates or MCP tools?**
 > Adapt ready-to-copy recipes for day-2 maintenance, migrations, and layout polish from the **[AI Developer Prompt Library (`docs/prompt-library.md`)](docs/prompt-library.md)**.
-> To connect your assistant directly to EmDash's Model Context Protocol server, run `npm run mcp:token` (see [agent documentation](docs/agent-documentation.md)).
+> Connect your assistant to EmDash through its scoped OAuth flow or Admin API tokens. `npm run mcp:token -- --help` describes the explicit local SQLite fallback; it does not mint a token automatically. See [agent documentation](docs/agent-documentation.md).
 
 ---
 

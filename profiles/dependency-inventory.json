@@ -266,6 +266,22 @@
         "static-sveltia"
       ],
       "reason": "Portable parsed author CSS and Astro style-source contract checks"
+    },
+    "@emdash-cms/auth": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/@emdash-cms/auth",
+      "reason": "Explicit dependencies of the local scoped-token compatibility helper"
+    },
+    "ulidx": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/ulidx",
+      "reason": "Explicit dependencies of the local scoped-token compatibility helper"
     }
   }
 }

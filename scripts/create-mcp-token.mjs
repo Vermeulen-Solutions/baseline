@@ -1,119 +1,77 @@
+// Local SQLite fallback. Prefer supported OAuth or the PAT UI for hosted sites.
+import fs from 'node:fs';
 import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
-import { generatePrefixedToken } from '@emdash-cms/auth';
+import { clampScopes, generatePrefixedToken, isValidScope, Role, roleFromLevel, toRoleLevel } from '@emdash-cms/auth';
 import { ulid } from 'ulidx';
-import { argumentsOf, isMain } from './infrastructure-io.mjs';
+import { argumentsOf, isMain, noLinks, requireFact } from './infrastructure-io.mjs';
 
-function main() {
-  const args = argumentsOf(process.argv.slice(2), ['--name', '--db', '--d1', '--user', '--url']);
-  const options = {
-    name: 'Assistant MCP',
-    db: 'data.db',
-    d1: null,
-    user: null,
-    url: process.env.SITE_URL || 'http://localhost:4321',
-  };
+export const TOKEN_PRESETS = Object.freeze({
+  'read-only': Object.freeze(['content:read', 'media:read', 'schema:read', 'settings:read']),
+  'content-authoring': Object.freeze(['content:read', 'content:write', 'media:read', 'media:write']),
+  setup: Object.freeze(['content:read', 'content:write', 'media:read', 'media:write', 'schema:read', 'schema:write', 'taxonomies:manage', 'menus:manage', 'settings:read', 'settings:manage']),
+});
+const usage = `Local SQLite MCP token fallback (EmDash 1.3). Hosted sites: use OAuth or Admin > API tokens.
+  npm run mcp:token -- --db <existing.sqlite> --user <id-or-email> [--preset read-only|content-authoring|setup]
+    [--scopes <comma-separated-scopes>] [--name <name>] [--url <loopback-origin>]
+    [--expires-at <future-ISO-timestamp>] [--apply]
+  npm run mcp:token -- --db <existing.sqlite> --user <id-or-email> --revoke <token-id> [--apply]
+Without --apply, only a read-only plan is returned. Default preset: read-only; expiry: 30 days.
+--scopes replaces the preset and cannot be combined with --preset. No users are created.
+Creation with --apply shows the secret once as JSON. Keep it in private client settings.`;
 
-  Object.assign(options, args);
-  if (args.url) options.url = args.url.replace(/\/+$/, '');
-  const dbPath = path.resolve(options.db);
-  const db = new DatabaseSync(dbPath);
+export function tokenOperation(args, now = Date.now()) {
+  requireFact(args.db && args.user, 'An explicit --db and --user are required. Use --help.');
+  const dbPath = noLinks(path.resolve(args.db));
+  requireFact(fs.statSync(dbPath).isFile(), 'Database must be an existing regular file');
+  requireFact(!(args.preset && args.scopes), 'Choose --preset or --scopes, not both');
+  if (args.revoke) requireFact(!['preset', 'scopes', 'name', 'expires-at', 'url'].some(key => Object.hasOwn(args, key)), 'Revocation accepts only --db, --user, --revoke and --apply');
+  const preset = args.scopes ? 'custom' : args.preset ?? 'read-only';
+  const scopes = args.scopes ? args.scopes.split(',').map(scope => scope.trim()) : TOKEN_PRESETS[preset];
+  requireFact(scopes?.length && scopes.every(scope => scope && isValidScope(scope)), 'Unknown preset or invalid scope');
+  requireFact(new Set(scopes).size === scopes.length, 'Duplicate scopes are not allowed');
+  const name = args.name ?? `Assistant MCP (${preset})`;
+  requireFact(name.trim() && name.length <= 100, 'Token name must contain 1–100 characters');
+  const expires = new Date(args['expires-at'] ?? now + 30 * 86400000);
+  requireFact(Number.isFinite(expires.getTime()) && expires.getTime() > now && (!args['expires-at'] || /^\d{4}-\d{2}-\d{2}T/.test(args['expires-at'])), 'Expiry must be a future ISO timestamp');
+  const url = new URL(args.url ?? 'http://localhost:4321');
+  requireFact(['http:', 'https:'].includes(url.protocol) && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname) && !url.username && !url.password && !url.search && !url.hash, 'This fallback accepts only a loopback URL; use OAuth/admin for hosted sites');
+  const db = new DatabaseSync(dbPath, { readOnly: !args.apply });
+  let transaction = false;
   try {
-
-    console.log('=== EmDash MCP Token Generator ===\n');
-
-    // 1. Resolve User
-    let userId = null;
-    if (options.user) {
-      const user = db.prepare('SELECT id, email, role FROM users WHERE id = ? OR email = ?').get(options.user, options.user);
-      if (!user) {
-        throw new Error(`User "${options.user}" not found in database.`);
-      }
-      userId = user.id;
-      console.log(`Using specified user: ${user.email} (${user.id})`);
-    } else {
-      // Find first admin user
-      const admin = db.prepare("SELECT id, email, role FROM users WHERE role IN ('admin', 'superadmin') LIMIT 1").get();
-      if (admin) {
-        userId = admin.id;
-        console.log(`Using existing admin: ${admin.email} (${admin.id})`);
-      } else {
-        // If no users exist, create a dedicated service account
-        userId = ulid();
-        const serviceEmail = 'mcp-service@localhost';
-        db.prepare("INSERT INTO users (id, email, name, role, created_at) VALUES (?, ?, 'MCP Service Account', 'admin', datetime('now'))")
-          .run(userId, serviceEmail);
-        console.log(`No admin users found. Created MCP service user: ${serviceEmail} (${userId})`);
-      }
+    if (args.apply) { db.exec('PRAGMA foreign_keys = ON; BEGIN IMMEDIATE'); transaction = true; }
+    const users = db.prepare('SELECT id, email, role FROM users WHERE id = ? OR email = ?').all(args.user, args.user);
+    requireFact(users.length > 0, `User "${args.user}" not found in database.`);
+    requireFact(users.length === 1, 'Account selection is ambiguous; use the exact user ID');
+    const selected = users[0];
+    const namedRole = String(selected.role).toUpperCase();
+    requireFact(typeof selected.role === 'number' || Object.hasOwn(Role, namedRole), 'Unknown account role');
+    const level = toRoleLevel(typeof selected.role === 'number' ? selected.role : Role[namedRole]);
+    const user = { ...selected, role: roleFromLevel(level).toLowerCase(), roleLevel: level };
+    if (args.revoke) {
+      const token = db.prepare('SELECT id, name, prefix, scopes, expires_at FROM _emdash_api_tokens WHERE id = ? AND user_id = ?').get(args.revoke, user.id);
+      requireFact(token, 'Token not found for the selected account');
+      const result = { status: args.apply ? 'revoked' : 'planned', action: 'revoke', user, token: { id: token.id, name: token.name, prefix: token.prefix, scopes: JSON.parse(token.scopes), expiresAt: token.expires_at } };
+      if (args.apply) { db.prepare('DELETE FROM _emdash_api_tokens WHERE id = ? AND user_id = ?').run(token.id, user.id); db.exec('COMMIT'); transaction = false; }
+      return result;
     }
-
-    // 2. Generate Token
-    const { raw: rawToken, hash: tokenHash, prefix } = generatePrefixedToken('ec_pat_');
-    const tokenId = ulid();
-
-    const standardScopes = [
-      'admin',
-      'mcp:tools',
-      'content:read',
-      'content:write',
-      'media:read',
-      'media:write',
-      'schema:read',
-      'schema:write',
-      'taxonomies:manage',
-      'menus:manage',
-      'settings:read'
-    ];
-
-    db.prepare(`
-      INSERT INTO _emdash_api_tokens (id, name, token_hash, prefix, user_id, scopes, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
-    `).run(tokenId, options.name, tokenHash, prefix, userId, JSON.stringify(standardScopes));
-
-    console.log(`\nSuccessfully created API token "${options.name}" (ID: ${tokenId})!`);
-    console.log('--------------------------------------------------------------------------------');
-    console.log('Personal Access Token (KEEP SECRET - NOT SHOWN AGAIN):');
-    console.log(`\x1b[32m${rawToken}\x1b[0m`);
-    console.log('--------------------------------------------------------------------------------\n');
-
-    const mcpEndpoint = `${options.url}/_emdash/api/mcp`;
-
-    console.log('To configure this in .mcp.json (Cursor / Windsurf / Antigravity):');
-    console.log(JSON.stringify({
-      mcpServers: {
-        emdash: {
-          type: 'http',
-          url: mcpEndpoint,
-          headers: {
-            Authorization: `Bearer ${rawToken}`
-          }
-        }
-      }
-    }, null, 2));
-
-    console.log('\nTo configure this in Claude Desktop (claude_desktop_config.json):');
-    console.log(JSON.stringify({
-      mcpServers: {
-        emdash: {
-          url: mcpEndpoint,
-          headers: {
-            Authorization: `Bearer ${rawToken}`
-          }
-        }
-      }
-    }, null, 2));
-
-    if (options.d1) {
-      console.log(`\n--- SQL for Cloudflare D1 (${options.d1}) ---`);
-      const safeScopes = JSON.stringify(standardScopes).replace(/'/g, "''");
-      const sql = `INSERT INTO _emdash_api_tokens (id, name, token_hash, prefix, user_id, scopes, created_at) VALUES ('${tokenId}', '${options.name.replace(/'/g, "''")}', '${tokenHash}', '${prefix}', '${userId}', '${safeScopes}', datetime('now'));`;
-      console.log(sql);
-      console.log(`\nTo run remotely: npx wrangler d1 execute ${options.d1} --remote --command "${sql.replace(/"/g, '\\"')}"`);
+    const allowed = clampScopes(scopes, level);
+    requireFact(allowed.length === scopes.length, 'Selected account role cannot hold all requested scopes; choose narrower scopes or another existing account');
+    const result = { status: args.apply ? 'created' : 'planned', action: 'create', user, preset, scopes: [...scopes], elevated: scopes.some(scope => !TOKEN_PRESETS['read-only'].includes(scope)), name, expiresAt: expires.toISOString(), endpoint: url.href.replace(/\/$/, '') + '/_emdash/api/mcp', notes: ['Scopes and account roles both apply. Draft visibility and publication follow the account role.', ...(scopes.includes('content:write') ? ['EmDash 1.3 content:write also allows taxonomy and menu writes for compatibility.'] : [])] };
+    if (args.apply) {
+      const { raw, hash, prefix } = generatePrefixedToken('ec_pat_'), id = ulid();
+      db.prepare('INSERT INTO _emdash_api_tokens (id, name, token_hash, prefix, user_id, scopes, expires_at, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)').run(id, name, hash, prefix, user.id, JSON.stringify(scopes), result.expiresAt, new Date(now).toISOString());
+      db.exec('COMMIT'); transaction = false;
+      Object.assign(result, { tokenId: id, token: raw });
     }
-  } finally { db.close(); }
+    return result;
+  } finally { if (transaction) db.exec('ROLLBACK'); db.close(); }
 }
 
 if (isMain(import.meta.url)) {
-  try { main(); }
-  catch (error) { console.error(`MCP token generator failed: ${error.message}`); process.exitCode = 1; }
+  try {
+    const args = argumentsOf(process.argv.slice(2), ['--db', '--user', '--preset', '--scopes', '--name', '--url', '--expires-at', '--revoke'], ['--apply', '--help']);
+    if (args.help || !process.argv.slice(2).length) console.log(usage);
+    else console.log(JSON.stringify(tokenOperation(args), null, 2));
+  } catch (error) { console.error(`MCP token helper failed: ${error.message}`); process.exitCode = 1; }
 }

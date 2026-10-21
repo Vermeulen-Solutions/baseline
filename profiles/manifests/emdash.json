@@ -192,7 +192,9 @@
       "parse5",
       "parse-srcset",
       "smol-toml",
-      "@cloudflare/workers-types"
+      "@cloudflare/workers-types",
+      "@emdash-cms/auth",
+      "ulidx"
     ]
   },
   "pending": [

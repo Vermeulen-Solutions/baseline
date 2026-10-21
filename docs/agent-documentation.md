@@ -144,17 +144,53 @@ During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, con
 
 ## 3. Site-Level EmDash CMS MCP Setup
 
-To allow your coding assistant to directly create, inspect, and update content, media, and taxonomies via EmDash's built-in MCP server (`/_emdash/api/mcp`), generate a Personal Access Token:
+Connect your MCP client's supported OAuth flow to `/_emdash/api/mcp`, sign in as
+the intended existing account and keep only the scopes needed for its task.
+EmDash checks both scopes and the account's role. Personal access tokens can also
+be created and revoked in **Admin → Users → API tokens**. Use these supported
+interfaces for hosted sites and D1. See the [MCP authentication and scope contract](https://docs.emdashcms.com/reference/mcp-server/).
+
+For a local Node/SQLite instance, the compatibility helper below supports explicit
+account selection, a read-only plan, finite expiry and owner-bound revocation.
+It still accesses EmDash 1.3's token table directly: PAT creation is an admin UI
+route rather than a supported public REST operation in this version. Do not use
+this fallback to mutate production databases; follow the runtime's recovery
+procedure before any authorized production mutation.
 
 ```bash
-npm run mcp:token
-# Or specify a custom agent name or target URL:
-npm run mcp:token -- --name="Agent Assistant" --url="http://localhost:4321"
-# Or generate SQL for Cloudflare D1:
-npm run mcp:token -- --d1=my-site-db
+# Help only; does not open or create a database:
+npm run mcp:token -- --help
+# Inspect the proposed read-only grants for an existing account:
+npm run mcp:token -- --db data.db --user editor@example.test --preset read-only --url http://localhost:4321
+# Create only after reviewing that plan; use the actual origin printed by Astro:
+npm run mcp:token -- --db data.db --user editor@example.test --preset read-only --url http://localhost:4321 --apply
+# Plan revocation, then repeat with --apply to revoke exactly this owner's token:
+npm run mcp:token -- --db data.db --user editor@example.test --revoke TOKEN_ID
 ```
 
-The script registers the token in `_emdash_api_tokens` and prints a `mcpServers` configuration containing the secret. Adapt it to your client's schema above, keep the token in private client settings, and do not commit it. This helper currently grants administrative scopes; it is an elevated local setup operation, not a read-only connection check. Static profiles have no site-level EmDash MCP endpoint.
+| Preset | Grants | Minimum existing role |
+| --- | --- | --- |
+| `read-only` (default) | Content, media, schema and settings reads | Editor |
+| `content-authoring` | Content and media reads/writes | Contributor |
+| `setup` | Core content/media/schema/settings writes, taxonomy and menu management | Admin |
+
+Presets never grant `admin`, plugin-tool or site-transfer scopes. `setup` is
+explicit elevated access. For narrower or advanced grants, use `--scopes` with
+an exact comma-separated list instead of `--preset`; invalid scopes and grants
+beyond the chosen account's role are rejected rather than silently expanded or
+clamped. For example, a Subscriber can hold `--scopes content:read,media:read`.
+In EmDash 1.3, `content:write` also grants taxonomy/menu writes for compatibility;
+publication, owned-content limits and draft visibility still follow the account
+role. A read-only token for an administrator may therefore read drafts.
+
+No account is selected or created automatically. `--db` must name an existing,
+non-linked local file; `--user` must resolve to one existing account. Without
+`--apply`, the helper opens the database read-only and returns a JSON plan with
+no secret. Creation returns the token once in JSON, its ID, owner, exact grants
+and expiry; only its hash is stored in the database. Expiry defaults to 30 days;
+override it with `--expires-at <future-ISO-timestamp>`. Keep the token in private
+client settings using the client schema above; do not commit the creation output.
+The legacy `--d1` SQL path is removed. Static profiles have no EmDash MCP endpoint.
 
 ---
 

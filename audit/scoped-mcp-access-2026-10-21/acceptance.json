@@ -1,0 +1,18 @@
+{
+  "startedAt": "2026-10-21T19:21:13.282Z",
+  "disposableOnly": true,
+  "fixture": "C:\\dev\\baseline-workflow-fixes-20261021-OtMojE\\cms",
+  "accountRole": "admin",
+  "checks": {
+    "readOnlyCanRead": true,
+    "readOnlyAdminCannotWrite": true,
+    "authoringCanCreateDraft": true,
+    "revokedTokenRejected": true,
+    "otherTokenPreserved": true
+  },
+  "limits": [
+    "Reuses the owned synthetic post-fix fixture. Local EmDash 1.3 Node/SQLite; no hosted account, production mutation, D1 or OAuth browser acceptance."
+  ],
+  "status": "pass",
+  "completedAt": "2026-10-21T19:22:11.496Z"
+}

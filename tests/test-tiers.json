@@ -166,5 +166,9 @@
   "asset-retention.test.mjs": {
     "tier": "unit",
     "reason": "Bounded local archive lock, killed-process recovery and output freshness contracts"
+  },
+  "mcp-access.test.mjs": {
+    "tier": "unit",
+    "reason": "Owned SQLite token plans, role/scope limits and exact revocation; no runtime or remote accounts"
   }
 }
