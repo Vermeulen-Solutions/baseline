@@ -3,6 +3,12 @@
 [Back to Baseline](../README.md) · [Choose a platform](platform-profiles.md) ·
 [Command reference](commands.md)
 
+For the agent-first path, use the [README profile prompts](../README.md#quickstart).
+Choose Static, Sveltia, or EmDash and select Express or Standard in that prompt.
+Each asks your assistant to prepare the right project, install dependencies,
+build the site, and start a local preview. The commands below are
+the manual reference for those operations; you can ask your assistant to run them.
+
 Choose the editing and hosting model before installing dependencies. The full
 repository is the EmDash Node/SQLite starter. Static and static-sveltia projects
 are generated into their own directories; they use their generated instructions.
@@ -25,6 +31,15 @@ also creates an EmDash site repository.
 
 Create your own repository from the template, clone it, and work in that directory.
 If you already cloned Baseline for a new EmDash site, continue in that checkout.
+
+You can use the template button linked above, or the GitHub CLI:
+
+```sh
+gh repo create my-site --template Vermeulen-Solutions/baseline --private --clone
+cd my-site
+```
+
+Then initialize the local environment:
 
 ```sh
 npm run doctor
@@ -53,6 +68,15 @@ follow the [production deployment runbook](production-deployment.md).
 
 Use a local Baseline checkout as the generator workspace. Its generator uses
 Node built-ins; installing the EmDash dependencies there is unnecessary for generation.
+
+If you do not already have that checkout:
+
+```sh
+git clone https://github.com/Vermeulen-Solutions/baseline.git baseline
+cd baseline
+```
+
+Generate and install the actual site:
 
 ```sh
 npm run init:profile -- --profile static --out ../my-site

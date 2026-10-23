@@ -24,6 +24,11 @@ Check the installed profile and `package.json` before choosing commands. Handoff
 
 ## 1. Starting a New Site Project
 
+To have your assistant prepare the checkout or generate the site as well as build
+it, start with the [agent-first profile prompts](../README.md#quickstart) and choose
+Express or Standard within your selected profile. The track-specific prompts below
+expand the brief once your assistant has access to the project.
+
 ### Express / Autonomous Mode Kickoff (3 Checkpoints — For Smaller Sites)
 Use this prompt for a straightforward greenfield site (`<= 6` routes, `<= 3` collections, single locale), consolidating decisions into up to three checkpoints while continuing the authorized build.
 

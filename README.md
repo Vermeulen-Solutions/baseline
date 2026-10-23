@@ -13,8 +13,8 @@
 </p>
 
 <p align="center">
-  <a href="#choose-your-setup">Choose your setup</a> ·
   <a href="#quickstart">Start a website</a> ·
+  <a href="#choose-your-setup">Choose your setup</a> ·
   <a href="docs/README.md">Documentation</a> ·
   <a href="CONTRIBUTING.md">Contribute</a>
 </p>
@@ -29,83 +29,125 @@ Start with a static site, add Git-based editing with Sveltia, or use EmDash CMS
 for structured content and live editing. Each option shares the same design
 foundation.
 
-<a id="platform-profiles"></a>
-
-## Choose your setup
-
-Choose how the site will be edited and hosted:
-
-| Setup | How content is edited | Hosting |
-| --- | --- | --- |
-| **Static** | You or your assistant edit Markdown files | Static hosting |
-| **Static + Sveltia** | A browser editor saves content to Git | Static hosting; GitHub authentication for editors |
-| **EmDash CMS** | CMS forms and live page editing | Node.js, SQLite, and persistent media by default |
-
-**The repository template is the EmDash setup.** Static sites are generated into
-a separate directory. [Compare the options and requirements →](docs/platform-profiles.md)
-
 <a id="-quickstart"></a>
 
 ## Quickstart
 
-Use **Node.js 24 LTS (24.16.0+)** and npm.
-[Other supported versions and Windows instructions](docs/getting-started.md#requirements).
+Open a coding assistant that can work with local files and run terminal commands.
+Open an existing Baseline checkout, or start in a workspace where the agent can prepare
+the project. Choose a content setup and a workflow, then copy the matching prompt
+and replace its bracketed fields.
 
-### With EmDash CMS
+<a id="platform-profiles"></a>
+<a id="choose-your-setup"></a>
 
-[Create a repository from this template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions),
-then clone and open your new repository.
+**How should content be edited?**
 
-Or, with the GitHub CLI installed:
+| You want… | Use this prompt |
+| --- | --- |
+| Markdown files edited by you or your agent | [Static](#static-site) |
+| A browser editor that saves to GitHub | [Static + Sveltia](#static-site-with-sveltia) |
+| CMS forms, structured content, and live page editing | [EmDash CMS](#emdash-cms-site) |
 
-```sh
-gh repo create my-site --template Vermeulen-Solutions/baseline --private --clone
-cd my-site
-```
-
-Continue with the assistant prompt below, or follow the
-[manual local setup](docs/getting-started.md#emdash-local-setup).
-
-### With static content or Sveltia
-
-Clone Baseline as a generator workspace, then create your site separately:
-
-```sh
-git clone https://github.com/Vermeulen-Solutions/baseline.git baseline
-cd baseline
-npm run init:profile -- --profile static --out ../my-site
-cd ../my-site
-npm install
-```
-
-For browser editing, use `--profile static-sveltia` instead of `--profile static`.
-Then follow your generated site's README and Sveltia setup guide. Commit its new
-lockfile before enabling CI. [Static setup details](docs/getting-started.md#static-local-setup).
+[Compare editing and hosting requirements](docs/platform-profiles.md).
 
 <a id="the-7-stage-site-delivery-workflow"></a>
 
-### Build with your assistant
+**How should the project run?**
 
-Open your assistant in the **site's directory** and give it your brief:
+| Workflow | Suitable projects | How work is organized |
+| --- | --- | --- |
+| **Express** | Small greenfield sites: up to six routes, three collections, and one language | Up to three consolidated checkpoints |
+| **Standard** | Larger sites, migrations, multilingual builds, or complex requirements | The full seven-stage workflow |
+
+Both tracks cover content planning, art direction, component calibration,
+implementation, and verification. Express consolidates the handoffs; checkpoints
+are progress reports, not mandatory stops. Set the workflow field in your prompt;
+if unsure, write “recommend” and let the agent assess the brief. The prompts finish
+the local site and identify remaining editor or launch steps.
+[Workflow details](docs/site-delivery-workflow.md).
+
+### Static site
 
 ```text
-Read AGENTS.md and follow the relevant site workflow.
+Use Baseline (https://github.com/Vermeulen-Solutions/baseline)
+to build a website with the static profile.
 
-Build a website for [name / organization].
-Its purpose is [goal], and its audience is [people].
-It needs [pages or content] and will be edited by [who / how].
-Available brand assets and references: [locations or links].
+Site and purpose: [name / goal]
+Audience: [people]
+Pages and content: [what the site needs]
+Brand assets and references: [locations or links]
+Site destination: [folder]
+Workflow: [Express (3 checkpoints) / Standard (7 stages)]
 
-Complete the local implementation and verification.
-Record assumptions, checks performed, and decisions still needed.
+Read AGENTS.md and follow the selected new-site-workflow track.
+Prepare or reuse a Baseline generator checkout, then generate the site
+separately at the destination. Preserve existing work, install dependencies
+in the generated project, and follow its AGENTS.md. Use typed Markdown
+content; this site does not need a CMS or database.
+
+Complete the local site, design calibration, and applicable verification.
+Start its preview and report the URL, checks, assumptions, and pending steps.
 ```
 
-The checked-in instructions guide the assistant through content, design,
-implementation, and review. Smaller sites use three checkpoints; complex builds
-and migrations use the fuller seven-stage workflow.
+### Static site with Sveltia
+
+```text
+Use Baseline (https://github.com/Vermeulen-Solutions/baseline)
+to build a website with the static-sveltia profile.
+
+Site and purpose: [name / goal]
+Audience: [people]
+Pages and content: [what the site needs]
+Brand assets and references: [locations or links]
+Site destination: [folder]
+GitHub repository: [owner/repo, or not set up yet]
+Workflow: [Express (3 checkpoints) / Standard (7 stages)]
+
+Read AGENTS.md and follow the selected new-site-workflow track.
+Prepare or reuse a Baseline generator checkout, then generate the site
+separately at the destination. Preserve existing work, install dependencies
+there, and follow its AGENTS.md and Sveltia setup guide.
+
+Build the site and prepare the Git-backed editor for my repository.
+Guide me through authentication. Verify editor login, upload, save,
+rebuild, and sign-out when access is available; report any pending editor
+setup separately while completing the local site.
+
+Complete design calibration and applicable verification, start the
+preview, and report the URL, checks, assumptions, and remaining steps.
+```
+
+### EmDash CMS site
+
+```text
+Use Baseline (https://github.com/Vermeulen-Solutions/baseline)
+to build a website with the emdash profile.
+
+Site and purpose: [name / goal]
+Audience: [people]
+Pages and content: [what the site needs]
+Brand assets and references: [locations or links]
+Site destination: [folder]
+Workflow: [Express (3 checkpoints) / Standard (7 stages)]
+
+Read AGENTS.md and follow the selected new-site-workflow track.
+Use a prepared site checkout at the destination, or create one from the
+full EmDash template. Install dependencies and configure local Node.js,
+SQLite, media, and missing secrets, preserving existing content and keys.
+Guide me through first-run CMS administrator setup where needed.
+
+Build the content model, CMS content, and public pages. Complete design
+calibration, applicable verification, and editing checks when access is
+available. Start the preview and report the site/admin URLs, checks,
+assumptions, and any steps still needing my involvement.
+```
+
+The agent checks local requirements and handles the setup commands. It should
+guide you through any machine setup or editor sign-in that needs your involvement.
 
 [More prompt examples](docs/prompt-library.md) ·
-[Delivery workflow](docs/site-delivery-workflow.md) ·
+[Manual setup and requirements](docs/getting-started.md) ·
 [Optional project brief](docs/project-context.md)
 
 ## Why Baseline?
@@ -119,22 +161,22 @@ and migrations use the fuller seven-stage workflow.
 - **Checks alongside the build.** Checks cover code, types,
   design tokens, and other implementation contracts. [Checks and tested scope](docs/support-boundaries.md)
 
-## Daily commands
+<a id="daily-commands"></a>
 
-Run commands from your site directory:
+## Everyday requests
 
-| Command | Purpose |
+Keep working through your assistant:
+
+| You want to… | Ask your assistant |
 | --- | --- |
-| `npm run dev` | Start the local development server |
-| `npm run verify` | Run your project's verification suite |
-| `npm run build` | Build the production output |
+| Preview the site | “Start the local preview and give me its URL.” |
+| Make a change | “Update [page or feature], following the site's existing design and content model.” |
+| Review the result | “Check the changed pages, run the applicable verification, and report anything still pending.” |
 
-Use the local URL printed by Astro. EmDash adds `/_emdash/admin`; the development
-styleguide's path is printed at startup. Sveltia sites have a separate `/admin/`
-interface that needs repository and authentication setup.
-
-Final delivery includes additional checks for your setup and browser review.
-See the [command reference](docs/commands.md#before-handoff) for the complete loop.
+Your assistant can also open the component styleguide and guide you to the content
+editor when your setup includes one. The [command reference](docs/commands.md)
+documents the underlying tools and the [handoff checks](docs/commands.md#before-handoff)
+for manual use, scripting, and troubleshooting.
 
 <a id="where-to-work-project-layout"></a>
 
