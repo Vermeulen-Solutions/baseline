@@ -5,6 +5,14 @@ home for a durable client brief when business context would otherwise be scatter
 through implementation instructions. Start from `PROJECT.example.md` if useful;
 the starter and generated sites do not require a filled project record.
 
+The default task is building or maintaining the website. Baseline's source AGENTS.md routes
+explicit work on Baseline as a reusable starter to its contributor guidance;
+generated sites retain their own profile-specific instructions. Choose task scope
+from the user's request and conversation, not repository metadata. The platform
+profile and the purpose of the current task are separate decisions. Site records
+do not need a persistent maintainer-mode setting, and changing a local component
+does not by itself make the task upstream development.
+
 | Source | Owns | Interaction |
 | --- | --- | --- |
 | `AGENTS.md` | Working rules, architectural constraints, verification, and the compact Art Direction Record used by the existing gate | Link an adopted project brief and the selected design reference; retain the gate record here |

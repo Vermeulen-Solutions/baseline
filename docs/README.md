@@ -15,6 +15,8 @@ Baseline provides two Astro foundations and three Platform Profiles: **`static`*
 - **[Generation Manifests](../profiles/README.md):** explicit file/dependency inventories and independent profile verification.
 - **[Optional Project Inspection](project-inspection.md):** source-derived profile facts, available commands, entry points and a bounded declared-props pilot.
 - **[Project Context and Document Scope](project-context.md):** optional client brief, AGENTS.md working rules, DESIGN.md references and focused handoffs.
+- **[Detailed Site Working Rules](site-working-rules.md):** task-specific implementation, rendering, layout and production contracts for the root foundation.
+- **[Maintaining Baseline](../CONTRIBUTING.md):** contributor and agent guidance for improving the reusable starter, generators, distribution and checks.
 - **[Platform Profile Verification](verification/platform-profiles.md):** milestone test results, reproduction commands and verification scope.
 
 CMS modeling, deployment, registry and migration guides below apply to `emdash` unless stated otherwise. Static Sveltia projects include their own `docs/sveltia-cms.md` for repository configuration, OAuth proxy/PAT options and native media paths.

@@ -1,5 +1,12 @@
 # Baseline — Static Foundation
 
+Default task: build or maintain this website. Use the user's request and existing
+site decisions to establish scope; a local component change is still site work.
+Baseline contributor procedures do not become site prerequisites because starter
+files or an upstream Git remote are present. This profile ships site guidance;
+upstream starter development uses Baseline's own CONTRIBUTING.md in its source
+checkout, without changing this project's profile or adding maintainer tooling.
+
 Read `baseline.config.json` and `README.md` first. This project uses Astro static
 output, file-owned content and the shared Baseline design system. Keep the npm
 lockfile and use `npm ci` once it has been created by the initial `npm install`.
