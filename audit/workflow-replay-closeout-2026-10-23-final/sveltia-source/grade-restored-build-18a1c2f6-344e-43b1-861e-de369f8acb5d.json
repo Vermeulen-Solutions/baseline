@@ -1,0 +1,22 @@
+{
+  "attemptId": "18a1c2f6-344e-43b1-861e-de369f8acb5d",
+  "requestedArgv": [
+    "run",
+    "build"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "build"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 2133,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "grade-restored-build-18a1c2f6-344e-43b1-861e-de369f8acb5d.log"
+}

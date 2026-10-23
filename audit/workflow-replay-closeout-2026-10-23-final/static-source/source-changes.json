@@ -1,0 +1,13 @@
+{
+  "capturedAt": "2026-10-23T15:36:52.387Z",
+  "files": [
+    {
+      "path": "src/pages/index.astro",
+      "status": "present",
+      "beforeSHA256": "9f8f4489e54ab7aae1a4eb4cdf7a35fdcd38b0e56278143305876ba164ad3714",
+      "afterSHA256": "c46c2c2da2b8df911232b6c6cb5f1cbceec5dac1a3f8612cb3b896dd656ac6be",
+      "bytes": 978,
+      "content": "---\nimport Base from '../layouts/Base.astro';\nimport Section from '../components/Section.astro';\nimport Container from '../components/Container.astro';\nimport Grid from '../components/Grid.astro';\nimport Card from '../components/Card.astro';\n---\n<Base title=\"Useful conversations\"><Section labelledBy=\"page-title\"><Container>\n<h1 id=\"page-title\">Useful conversations</h1><p>Northline Studio helps small teams plan useful work.</p>\n<h2 id=\"services-heading\">Services</h2><Grid id=\"services-grid\" aria-labelledby=\"services-heading\" gap=\"calc(var(--spacing-grid) * 0.75)\"><Card title=\"Project briefs\" description=\"Start with a practical brief.\"/><Card title=\"Working sessions\" description=\"Make useful decisions.\"/></Grid>\n<h2 id=\"approach-heading\">Our approach</h2><Grid id=\"approach-grid\" aria-labelledby=\"approach-heading\"><Card title=\"Listen\" description=\"Understand the situation.\"/><Card title=\"Clarify\" description=\"Agree next steps.\"/></Grid>\n</Container></Section></Base>\n"
+    }
+  ]
+}

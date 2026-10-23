@@ -1,0 +1,55 @@
+{
+  "recordedAt": "2026-10-23T15:41:19.9830195Z",
+  "trials": [
+    {
+      "sessionId": "/root/replay6_static_source",
+      "promptSHA256": "9694bedb4646e4f3f910393944b671c23bfe63e1d514e899f84ec47c26185be1",
+      "correctiveHints": false,
+      "id": "static-source",
+      "freshHistoryFree": true
+    },
+    {
+      "sessionId": "/root/replay6_static_inspect",
+      "promptSHA256": "b7441305c3ea93b821b1ad0360b024a4a1ba0de69a6cdd7848cc00d48eaa16d1",
+      "correctiveHints": false,
+      "id": "static-inspect",
+      "freshHistoryFree": true
+    },
+    {
+      "sessionId": "/root/replay6_sveltia_source",
+      "promptSHA256": "66d898f6d3612b7c57ce889bcaee66e146c7b43b203bec9db5b7a19f7fe02322",
+      "correctiveHints": false,
+      "id": "sveltia-source",
+      "freshHistoryFree": true
+    },
+    {
+      "sessionId": "/root/replay6_sveltia_inspect",
+      "promptSHA256": "e0824d78fabf9fd3f9cdd1d78f67e4afe74a14781b3f84f13b29646527db9b07",
+      "correctiveHints": false,
+      "id": "sveltia-inspect",
+      "freshHistoryFree": true
+    },
+    {
+      "sessionId": "/root/replay6_cms_source",
+      "promptSHA256": "8c4cb7ab9dd11436f83e1f31f76f0c7b3e30ab303b95c827b8cefee742da693a",
+      "correctiveHints": false,
+      "id": "cms-source",
+      "freshHistoryFree": true
+    },
+    {
+      "sessionId": "/root/replay6_cms_inspect",
+      "promptSHA256": "f5d7c2ce7f030085f786f65767b41ae7880c16950dbd9768e277fdc493a5b7d1",
+      "correctiveHints": false,
+      "id": "cms-inspect",
+      "freshHistoryFree": true
+    },
+    {
+      "sessionId": "/root/replay6_older_profile_source",
+      "promptSHA256": "4b34f14cbd7365f0700292b362c4fe72a2bbcc08921b7abbc34d8715c409ab55",
+      "correctiveHints": false,
+      "id": "older-profile-source",
+      "freshHistoryFree": true
+    }
+  ],
+  "schemaVersion": 1
+}

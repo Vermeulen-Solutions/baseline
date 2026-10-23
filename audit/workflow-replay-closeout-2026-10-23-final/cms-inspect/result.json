@@ -1,0 +1,54 @@
+{
+  "summary": "Created and read back one unpublished posts draft through live EmDash MCP. No source, seed, or settings files were changed.",
+  "changedFiles": [
+    "CMS posts item 01M5MPQ9P59F38E3G96WZZHEVG (slug: kickoff-cms-inspect, status: draft)",
+    "result.json"
+  ],
+  "checks": [
+    {
+      "command": "baseline:inspect --json",
+      "result": "Passed. Detected the EmDash Node/SQLite profile and available verification scripts."
+    },
+    {
+      "command": "MCP content_list posts status=draft limit=3 (before create)",
+      "result": "Passed; no existing drafts were returned."
+    },
+    {
+      "command": "MCP schema_get_collection posts",
+      "result": "Denied with INSUFFICIENT_SCOPE; schema:read is required. Used the checked-in posts seed schema only to map the requested body to the content field."
+    },
+    {
+      "command": "MCP content_create posts",
+      "result": "Passed; created ID 01M5MPQ9P59F38E3G96WZZHEVG as draft with requested slug and fields. Author ID returned as 01M5MP7FH4N2SSWWPSCQJN1EGG."
+    },
+    {
+      "command": "MCP content_get posts/01M5MPQ9P59F38E3G96WZZHEVG markdown=true",
+      "result": "Passed; readback matched title, excerpt, content, and slug. Status is draft; publishedAt is null."
+    },
+    {
+      "command": "doctor",
+      "result": "Passed runtime, SQLite, workspace, Astro config, and Git checks; one warning says the outer npm launcher is not observable in this PowerShell environment."
+    },
+    {
+      "command": "verify",
+      "result": "Did not complete: no output after several minutes; the runner continued to report the verify lock as busy. A follow-up verify:fast attempt was rejected as busy."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [
+    "The full verify run did not return a result and continues to hold the trial verify lock; verify:fast could not start."
+  ],
+  "outsideRunnerReads": [],
+  "cms": {
+    "collection": "posts",
+    "id": "01M5MPQ9P59F38E3G96WZZHEVG",
+    "slug": "kickoff-cms-inspect",
+    "status": "draft",
+    "title": "Planning a useful kickoff",
+    "excerpt": "A short agenda for the first conversation.",
+    "body": "Agree the purpose, invite the people doing the work, and leave with clear next steps.",
+    "authorId": "01M5MP7FH4N2SSWWPSCQJN1EGG",
+    "publishedAt": null,
+    "permissionExplanation": "The live schema read was denied with INSUFFICIENT_SCOPE and explicitly required schema:read. EmDash's MCP contract describes content:publish as the permission for publish/unpublish/schedule actions. This contributor task allowed draft creation and readback; I left the item unpublished."
+  }
+}

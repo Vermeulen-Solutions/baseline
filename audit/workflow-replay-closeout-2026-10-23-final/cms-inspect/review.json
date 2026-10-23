@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "criterion": "cms-permission-explanation",
+      "verdict": "pass",
+      "evidence": {
+        "path": "result.json",
+        "lines": "21-26, 51-52"
+      },
+      "reviewerKind": "agent",
+      "limitations": "The record says draft creation and readback were allowed for this contributor task and that content:publish governs publish/unpublish/schedule actions; it records the item as draft with publishedAt null and says it was left unpublished. Publication was not attempted. acceptance.json and source-changes.json are absent from this trial directory."
+    },
+    {
+      "criterion": "cms-schema-scope-denial",
+      "verdict": "pass",
+      "evidence": {
+        "path": "trace.jsonl",
+        "lines": "16"
+      },
+      "reviewerKind": "agent",
+      "limitations": "The trace directly records INSUFFICIENT_SCOPE with the message that schema:read is required; result.json line 18 reports the same denial. acceptance.json and source-changes.json are absent from this trial directory."
+    }
+  ]
+}

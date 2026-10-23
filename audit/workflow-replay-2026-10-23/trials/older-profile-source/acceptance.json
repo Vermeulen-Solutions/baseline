@@ -1,0 +1,30 @@
+{
+  "trial": "older-profile-source",
+  "startedAt": "2026-10-23T10:33:06.342Z",
+  "checks": [
+    {
+      "name": "source preservation and bounded changes",
+      "status": "pass",
+      "evidence": {
+        "changed": [
+          "HANDOFF.md"
+        ],
+        "untracked": []
+      }
+    },
+    {
+      "name": "missing optional references and recovered handoff facts",
+      "status": "pass",
+      "evidence": {
+        "handoff": "# Workshop feature handoff — 2026-10-23\n\nThis replaces the outdated 2026-10-18 handoff. The established brief and decisions live in [AGENTS.md](AGENTS.md#existing-site-brief) and [audit/brief-decision.md](audit/brief-decision.md); the approvals describe a fictional evaluation client.\n\n## Established need and decisions\n\nHelp team leads at small local organizations find and register for practical workshops. Launch scope is a workshop index and detail pages in one English locale. Developer-owned static editing and email registration are already approved. Preserve `mailto:workshops@northline.example.test`; no browser CMS or payment integration is needed. The Studio editor supplies workshop copy; the site maintainer owns code, builds and deployment. No launch date or external deployment is approved. Quarterly publication cadence remains an assumption.\n\nKeep the installed `static` profile in [baseline.config.json](baseline.config.json) and static output in [astro.config.mjs](astro.config.mjs). Do not restart platform or audience discovery or install EmDash. Keep decisions in their existing homes; no optional project-record adoption is needed for this work.\n\n## Current implementation\n\n- [src/content.config.ts](src/content.config.ts) registers a native `workshops` collection loaded from `src/content/workshops/**/*.md`, with `title`, coerced `date`, and `draft` defaulting to `false`.\n- [src/content/workshops/clear-briefs.md](src/content/workshops/clear-briefs.md) contains “Clear project briefs,” dated `2026-11-12`, with `draft: false` and the supplied body “Leave with a clear brief and manageable next steps.” Preserve this content; its flag alone is not evidence of client copy acceptance or a deployed page.\n- Workshop index/detail routes are absent. Existing home and post routes still show starter content. [src/config/site.ts](src/config/site.ts) retains starter identity and Home/Posts navigation, with no workshop link. Email registration is recorded in the brief but not implemented in a workshop page.\n- Preserve the Editorial Paper Art Direction Record in [AGENTS.md](AGENTS.md#art-direction-record), the visual reference in `DESIGN.md`, shipped tokens in `src/styles/global.css`, and Base's `automatic-v2` shell policy. Shared spacing adapts section padding, content groups, grids and reading text to viewport width; retain the recorded generous editorial density.\n- [audit/component-calibration.md](audit/component-calibration.md) records passing token calculations and a specimen checklist. It contains no captures or observed browser results, so rendered calibration remains unverified.\n\n## Remaining work and next local action\n\nThe earliest unfinished workflow stage is rendered component calibration (Stage 4.5), followed by public route implementation (Stage 5). Read the checked-in `astro-site-design` skill when that work begins. Before visual implementation, run `npm run check:art-direction -- --require-record`, start `npm run dev`, open the printed `/_styleguide/` URL, and record actual observations at 390px, 768px and 1440px in the existing calibration file. This is the next concrete local action; it does not require another customer-discovery checkpoint.\n\nThen implement `/workshops/` and `/workshops/[...id]/` with native collection queries, draft filtering, `getStaticPaths()` and `render()`. Use Base, Section, Container, Grid/Card where appropriate, and RichText for the Markdown body. Choose and document a sensible date order locally; no ordering decision is recorded yet. Wire the preserved email registration endpoint, add workshop navigation, and keep the supplied entry intact. Starter identity/home content still needs adaptation to the established workshop purpose without inventing unapproved copy, dates or services.\n\nAfter implementation, run the installed profile's verification/build/release checks, inspect routes, draft exclusion, registration links, keyboard focus and responsive reflow, and apply the bounded Impeccable critique. Studio-editor copy acceptance and client acceptance remain outstanding. Hosting, production `SITE_URL` and deployment authorization can be resolved at release; they do not block this local preparation. Do not deploy `dist-fixtures/`.\n\n## Evidence from this handoff session\n\nThis session inspected the existing records and source and updated only this handoff within the site. It did not implement routes, change content or visual decisions, perform browser/client acceptance, or deploy. These automated command outcomes do not establish feature completeness or acceptance:\n\n- `npm run verify`: passed; lint, CSS contracts, art-direction and token checks passed, and Astro reported zero errors, warnings or hints. The art-direction check reported no visual source changes.\n- `npm run build`: passed, including its release-artifact postbuild check. It generated four starter pages (home, 404, post index and welcome post), with no workshop routes.\n- `npm run check:dev-tools`: passed; the static release contains no styleguide route, fixture specimens or server entrypoint.\n",
+        "optionalReferencesAbsent": true
+      }
+    }
+  ],
+  "limits": [
+    "Local mechanical artifact checks; operator reviews permission explanations and cold-resume decision quality separately.",
+    "Not full visual/accessibility, hosted OAuth, D1/R2 or browser-editor acceptance."
+  ],
+  "completedAt": "2026-10-23T10:33:06.592Z",
+  "status": "pass"
+}

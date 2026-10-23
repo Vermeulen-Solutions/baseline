@@ -1,0 +1,269 @@
+{
+  "checks": [
+    {
+      "criterion": "older-profile-01",
+      "verdict": "pass",
+      "evidence": {
+        "path": "site/HANDOFF.md",
+        "lines": [
+          5
+        ]
+      },
+      "supportingEvidence": [
+        {
+          "path": "site/HANDOFF.md",
+          "lines": [
+            5
+          ]
+        },
+        {
+          "path": "site/AGENTS.md",
+          "lines": [
+            105,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113
+          ]
+        },
+        {
+          "path": "site/audit/brief-decision.md",
+          "lines": [
+            2
+          ]
+        }
+      ],
+      "reviewerKind": "agent",
+      "limitations": "The reviewed audience and ownership facts are synthetic fixture decisions, as AGENTS.md states; this review validates their preservation, not real customer approval."
+    },
+    {
+      "criterion": "older-profile-02",
+      "verdict": "pass",
+      "evidence": {
+        "path": "site/HANDOFF.md",
+        "lines": [
+          5,
+          11,
+          12,
+          13,
+          18
+        ]
+      },
+      "supportingEvidence": [
+        {
+          "path": "site/HANDOFF.md",
+          "lines": [
+            5,
+            11,
+            12,
+            13,
+            18
+          ]
+        },
+        {
+          "path": "site/AGENTS.md",
+          "lines": [
+            107,
+            110,
+            113
+          ]
+        },
+        {
+          "path": "site/baseline.config.json",
+          "lines": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "path": "site/src/content.config.ts",
+          "lines": [
+            19,
+            20
+          ]
+        },
+        {
+          "path": "site/src/content/workshops/clear-briefs.md",
+          "lines": [
+            1,
+            6
+          ]
+        }
+      ],
+      "reviewerKind": "agent",
+      "limitations": "Route absence is stated in HANDOFF.md and is consistent with the checked source inventory; this review does not run Astro to test generated routes."
+    },
+    {
+      "criterion": "older-profile-03",
+      "verdict": "pass",
+      "evidence": {
+        "path": "site/HANDOFF.md",
+        "lines": [
+          5,
+          7,
+          14
+        ]
+      },
+      "supportingEvidence": [
+        {
+          "path": "site/HANDOFF.md",
+          "lines": [
+            5,
+            7,
+            14
+          ]
+        },
+        {
+          "path": "site/audit/brief-decision.md",
+          "lines": [
+            2
+          ]
+        },
+        {
+          "path": "site/AGENTS.md",
+          "lines": [
+            23,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            95,
+            96,
+            97,
+            98,
+            102
+          ]
+        },
+        {
+          "path": "site/baseline.config.json",
+          "lines": [
+            3,
+            4,
+            5
+          ]
+        },
+        {
+          "path": "site/src/styles/global.css",
+          "lines": [
+            4,
+            7,
+            19,
+            24
+          ]
+        }
+      ],
+      "reviewerKind": "agent",
+      "limitations": "The later saved decision note and actual CSS support static editing and responsive fluid spacing; the review establishes the handoff's consistency with those records, not the chronology of the earlier stale handoff."
+    },
+    {
+      "criterion": "older-profile-04",
+      "verdict": "pass",
+      "evidence": {
+        "path": "acceptance.json",
+        "lines": [
+          15,
+          20,
+          21
+        ]
+      },
+      "supportingEvidence": [
+        {
+          "path": "acceptance.json",
+          "lines": [
+            15,
+            20,
+            21
+          ]
+        },
+        {
+          "path": "site/AGENTS.md",
+          "lines": [
+            10,
+            12,
+            13,
+            21
+          ]
+        },
+        {
+          "path": "site/baseline.config.json",
+          "lines": [
+            3,
+            5
+          ]
+        },
+        {
+          "path": "site/package.json",
+          "lines": [
+            34,
+            55
+          ]
+        }
+      ],
+      "reviewerKind": "agent",
+      "limitations": "Optional-reference absence is recorded by the supplied mechanical acceptance artifact; no broader filesystem search beyond the specified trial evidence was used."
+    },
+    {
+      "criterion": "older-profile-05",
+      "verdict": "pass",
+      "evidence": {
+        "path": "acceptance.json",
+        "lines": [
+          5,
+          13
+        ]
+      },
+      "supportingEvidence": [
+        {
+          "path": "acceptance.json",
+          "lines": [
+            5,
+            13
+          ]
+        },
+        {
+          "path": "source-changes.json",
+          "lines": [
+            3,
+            10
+          ]
+        },
+        {
+          "path": "site/HANDOFF.md",
+          "lines": [
+            7,
+            20
+          ]
+        },
+        {
+          "path": "site/AGENTS.md",
+          "lines": [
+            93,
+            114
+          ]
+        },
+        {
+          "path": "site/src/styles/global.css",
+          "lines": [
+            19,
+            24
+          ]
+        },
+        {
+          "path": "site/src/content/workshops/clear-briefs.md",
+          "lines": [
+            1,
+            6
+          ]
+        }
+      ],
+      "reviewerKind": "agent",
+      "limitations": "The changed-path acceptance and source-change record identify HANDOFF.md as the sole change and contain its before/after hashes; unchanged files do not each have separate before/after hashes in these records. Handoff verification steps are described as future work, not as checks already run."
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+{
+  "capturedAt": "2026-10-23T15:16:51.668Z",
+  "browser": "156.0.8078.4",
+  "viewports": [
+    {
+      "width": 600,
+      "services": {
+        "row": 24.6674,
+        "column": 24.6674,
+        "columns": "558.688px"
+      },
+      "reference": {
+        "row": 24.6674,
+        "column": 24.6674,
+        "columns": "558.688px"
+      },
+      "mainText": "Useful conversations Northline Studio helps small teams plan useful work. Services Project briefs Start with a practical brief. Working sessions Make useful decisions. Our approach Listen Understand the situation. Clarify Agree next steps.",
+      "navigation": [
+        {
+          "text": "My Site",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    },
+    {
+      "width": 1000,
+      "services": {
+        "row": 31.3342,
+        "column": 31.3342,
+        "columns": "457px 457.016px 0px"
+      },
+      "reference": {
+        "row": 31.3342,
+        "column": 31.3342,
+        "columns": "457px 457.016px 0px"
+      },
+      "mainText": "Useful conversations Northline Studio helps small teams plan useful work. Services Project briefs Start with a practical brief. Working sessions Make useful decisions. Our approach Listen Understand the situation. Clarify Agree next steps.",
+      "navigation": [
+        {
+          "text": "My Site",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    },
+    {
+      "width": 1500,
+      "services": {
+        "row": 36,
+        "column": 36,
+        "columns": "574px 574px 0px"
+      },
+      "reference": {
+        "row": 36,
+        "column": 36,
+        "columns": "574px 574px 0px"
+      },
+      "mainText": "Useful conversations Northline Studio helps small teams plan useful work. Services Project briefs Start with a practical brief. Working sessions Make useful decisions. Our approach Listen Understand the situation. Clarify Agree next steps.",
+      "navigation": [
+        {
+          "text": "My Site",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    }
+  ]
+}

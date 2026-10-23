@@ -1,0 +1,92 @@
+{
+  "checkedAt": "2026-10-23T10:45:31.820Z",
+  "status": "pass-with-recorded-limits",
+  "mechanicalOutcomes": [
+    {
+      "trial": "static-source",
+      "status": "pass",
+      "checks": 6
+    },
+    {
+      "trial": "static-inspect",
+      "status": "pass",
+      "checks": 6
+    },
+    {
+      "trial": "sveltia-source",
+      "status": "pass",
+      "checks": 13
+    },
+    {
+      "trial": "sveltia-inspect",
+      "status": "pass",
+      "checks": 13
+    },
+    {
+      "trial": "cms-source",
+      "status": "pass",
+      "checks": 5
+    },
+    {
+      "trial": "cms-inspect",
+      "status": "pass",
+      "checks": 5
+    },
+    {
+      "trial": "older-profile-source",
+      "status": "pass",
+      "checks": 2
+    }
+  ],
+  "cms": {
+    "identityAndRevocation": [
+      {
+        "trial": "cms-source",
+        "account": {
+          "id": "01M5M4KW5TZSCWJP6W5YN87T64",
+          "email": "cms-source@example.invalid",
+          "role": 20,
+          "disabled": 1
+        },
+        "remainingTokens": 0,
+        "ownershipMatchedIndependentReadback": true
+      },
+      {
+        "trial": "cms-inspect",
+        "account": {
+          "id": "01M5M4JR3BYNVEPAXA8E81E9T9",
+          "email": "cms-inspect@example.invalid",
+          "role": 20,
+          "disabled": 1
+        },
+        "remainingTokens": 0,
+        "ownershipMatchedIndependentReadback": true
+      }
+    ],
+    "permissionReview": "Both results correctly separate Contributor ownership/publishing limits from the missing schema:read scope. The tool denial was observed, no publish operation was attempted, and live readback had null publishedAt/liveRevisionId with an anonymous 404. Source preservation matched the frozen baseline."
+  },
+  "sveltia": "Both added helpers are only strict optional z.number().int().min(1).max(60) definitions. Paired controls, detail labels and tests were inspected; actual loader boundaries independently passed. Content, tokens, navigation and package hashes were preserved.",
+  "olderProfile": {
+    "status": "scoped-pass",
+    "guideAbsent": true,
+    "templateAbsent": true,
+    "projectAdoption": false,
+    "onlyHandoffChanged": true,
+    "preserved": [
+      "AGENTS.md",
+      "DESIGN.md",
+      "global CSS",
+      "content schema",
+      "supplied workshop",
+      "site config",
+      "package and lock"
+    ],
+    "facts": "Audience, English static scope, exact mailto registration, editor/maintainer ownership, assumed quarterly cadence and unapproved deadline were recovered. Collection/content exist; workshop routes remain absent. No clarification or platform rediscovery occurred.",
+    "limits": [
+      "The frozen task said not to claim tests occurred while generic instructions said to run relevant checks. Actual recorded gates passed and were truthfully reported. Treat fallback behavior as validated, not literal obedience to that conflicting wording. Future task wording was corrected without rewriting this prompt.",
+      "The handoff retains DESIGN.md as a reference without explicitly calling it unselected. Implemented fluid CSS and static configuration remained byte-identical; no old fixed-spacing or CMS notes were applied.",
+      "This is a synthetic missing-reference case on the current toolchain, not every older installed version."
+    ]
+  },
+  "preservedRootSources": "git diff contains no src/, public/ or seed/ changes; final repository checks record that assertion."
+}

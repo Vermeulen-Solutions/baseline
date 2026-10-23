@@ -1,0 +1,61 @@
+{
+  "scenario": "sveltia",
+  "trials": [
+    "sveltia-source",
+    "sveltia-inspect"
+  ],
+  "equivalent": true,
+  "differences": [],
+  "lockHashes": [
+    "5a528f2a3855409754eb5bf83cae3d35a4454d07c5eec314c83010d9106a614e",
+    "5a528f2a3855409754eb5bf83cae3d35a4454d07c5eec314c83010d9106a614e"
+  ],
+  "installed": [
+    {
+      "@astrojs/check": "0.9.12",
+      "@fontsource/noto-sans": "5.3.0",
+      "@google/design.md": "0.4.0",
+      "@playwright/test": "1.64.1",
+      "@tailwindcss/vite": "4.3.3",
+      "@types/node": "24.19.2",
+      "@typescript-eslint/parser": "8.71.2",
+      "astro": "7.4.0",
+      "astro-eslint-parser": "3.2.0",
+      "eslint": "10.13.0",
+      "eslint-plugin-astro": "3.2.1",
+      "eslint-plugin-jsx-a11y-x": "0.2.0",
+      "parse5": "7.3.0",
+      "postcss": "8.5.30",
+      "postcss-selector-parser": "7.1.6",
+      "sharp": "0.35.4",
+      "tailwindcss": "4.3.3",
+      "typescript": "6.0.3"
+    },
+    {
+      "@astrojs/check": "0.9.12",
+      "@fontsource/noto-sans": "5.3.0",
+      "@google/design.md": "0.4.0",
+      "@playwright/test": "1.64.1",
+      "@tailwindcss/vite": "4.3.3",
+      "@types/node": "24.19.2",
+      "@typescript-eslint/parser": "8.71.2",
+      "astro": "7.4.0",
+      "astro-eslint-parser": "3.2.0",
+      "eslint": "10.13.0",
+      "eslint-plugin-astro": "3.2.1",
+      "eslint-plugin-jsx-a11y-x": "0.2.0",
+      "parse5": "7.3.0",
+      "postcss": "8.5.30",
+      "postcss-selector-parser": "7.1.6",
+      "sharp": "0.35.4",
+      "tailwindcss": "4.3.3",
+      "typescript": "6.0.3"
+    }
+  ],
+  "harness": {
+    "workflow-replay.mjs": "0a05e742e0917547e7e230c731cafc395e8c3b4bb21bd691e4a98218775f1ec7",
+    "workflow-replay-runner.mjs": "a05330e18681d4fc8b291f7287dac14dca302e637d198883ea068cb256c47426",
+    "workflow-replay-grade.mjs": "5a1906c071a0e49d5ade63d6a1c78e3d2cb2bc8c0bd6052f9820d3c0391a5ada",
+    "workflow-preview-host.mjs": "445cf5f79a17d466bd50ae6b630dfcd4227ef17fc4b59850cec5962b95757399"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "attemptId": "aaa78624-f5e9-4643-82e5-01af1f1beb71",
+  "requestedArgv": [
+    "run",
+    "build"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "build"
+    ]
+  },
+  "exitCode": 1,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 89,
+  "stderrBytes": 896,
+  "capturedTail": false,
+  "log": "grade-boundary-above-max-aaa78624-f5e9-4643-82e5-01af1f1beb71.log"
+}

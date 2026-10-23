@@ -1,4 +1,8 @@
 {
+  "workflow-replay.test.mjs": {
+    "tier": "unit",
+    "reason": "Replay freeze, bounded worker operations, immutable telemetry, archive privacy, cleanup ownership and failure classification"
+  },
   "audit-baseline.test.mjs": {
     "tier": "unit",
     "reason": "Local dependency/version contract"

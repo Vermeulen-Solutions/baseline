@@ -1,0 +1,105 @@
+{
+  "checkedAt": "2026-10-23T10:49:23.782Z",
+  "status": "pass",
+  "commands": [
+    {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "verify:fast"
+      ],
+      "exitCode": 0,
+      "log": "checks/workflow-replay-verify-fast.log"
+    },
+    {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "verify"
+      ],
+      "exitCode": 0,
+      "log": "checks/workflow-replay-final-verify.log"
+    },
+    {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "checks/workflow-replay-final-build.log"
+    },
+    {
+      "argv": [
+        "npm.cmd",
+        "run",
+        "audit:html"
+      ],
+      "exitCode": 0,
+      "log": "checks/workflow-replay-final-html.log"
+    }
+  ],
+  "tests": {
+    "unit": 168,
+    "rehearsal": 136,
+    "total": 304,
+    "failures": 0
+  },
+  "typecheck": {
+    "files": 53,
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "html": {
+    "files": 9,
+    "publicResponses": 10,
+    "scope": "Representative linked public SSR routes; not all 224 runtime route patterns."
+  },
+  "preflightDoctor": {
+    "argv": [
+      "npm.cmd",
+      "run",
+      "doctor"
+    ],
+    "exitCode": 0,
+    "status": "warn",
+    "warning": "Windows outer npm launcher unobservable; npm.cmd used."
+  },
+  "hooks": {
+    "argv": [
+      "npm.cmd",
+      "run",
+      "setup:hooks"
+    ],
+    "exitCode": 0,
+    "installedLocalHook": true
+  },
+  "initialFailure": {
+    "argv": [
+      "npm.cmd",
+      "run",
+      "verify:fast"
+    ],
+    "exitCode": 1,
+    "observedError": "AssertionError [ERR_ASSERTION]: Classify new source explicitly: scripts/workflow-replay-runner.mjs",
+    "resolution": "Classified all new replay scripts and the test file in profiles/file-inventory.json; subsequent verify:fast and final verify passed.",
+    "fullFailedLogRetained": false,
+    "note": "The original fast log was overwritten by the successful rerun; error above was observed in the tool output, not reconstructed as a full log."
+  },
+  "postRunDispatchChecks": {
+    "changedSourcePromptExit": 1,
+    "unchangedSourcePromptExit": 0
+  },
+  "sourcePreservation": {
+    "src": true,
+    "public": true,
+    "seed": true,
+    "artDirectionRecordInvented": false,
+    "inspectionStillOptional": true,
+    "projectContextStillOptional": true
+  },
+  "frozenProtocolSHA256": "f18c839fd9851099f0b37f65a8e2a45474a7f5356d706e5f3c6c44562110b9b7",
+  "frozenBeforeDispatch": "2026-10-23T10:01:24.008Z",
+  "cleanup": "PAT revocations/live 401, disabled Contributors and stopped owned servers passed. Directory removal was rejected by automatic approval review; see fixture-removal.json."
+}

@@ -1,0 +1,9 @@
+{
+  "allOwnedServersStopped": true,
+  "removed": false,
+  "reason": "Automatic approval review rejected both ownership-checked and literal-path recursive removal commands: blocked by policy. No more specific reason was supplied.",
+  "exactTarget": "C:\\dev\\baseline-workflow-replay-20261023",
+  "recordedAt": "2026-10-23T10:48:23.9863484Z",
+  "remaining": true,
+  "ownershipMarkerMatched": true
+}

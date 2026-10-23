@@ -1,0 +1,428 @@
+
+> emdash-baseline@0.0.3 verify
+> npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck
+
+
+> emdash-baseline@0.0.3 lint
+> npm run lint:scripts && npm run lint:templates
+
+
+> emdash-baseline@0.0.3 lint:scripts
+> node scripts/check-script-syntax.mjs
+
+Syntax checked 158 JavaScript modules.
+
+> emdash-baseline@0.0.3 lint:templates
+> eslint src profiles/static/project/src --max-warnings 0
+
+
+> emdash-baseline@0.0.3 check:css
+> node scripts/check-css-contracts.mjs
+
+CSS contracts: PASS; 41 source inputs.
+
+> emdash-baseline@0.0.3 check:art-direction
+> node scripts/check-art-direction.mjs --changed
+
+Art direction gate: no visual source changes.
+
+> emdash-baseline@0.0.3 design:tokens
+> node scripts/design-system.mjs
+
+Design System Audit (C:\dev\baseline-workflow-replay-20261023\cms-inspect\site\src\styles\global.css): PASS
+- LF SHA-256: 735a233f3d62815611945b43fe138c59e1065e99beb5239ce52686da09e58db8
+- @theme tokens: 31
+- :root tokens: 11
+- [data-surface="dark"] tokens: 6
+- Font loading: PASS (system fonts)
+- EmDash edit proxies: PASS (2 single-entry routes, 4 collection routes)
+- Fluid mathematics: 12 bounded affine tokens (vi default; reference root 16px, horizontal writing)
+- Fluid advisories: 6 tokens; inspect --json fluid.tokens (advisory only, rendered acceptance required)
+- Spacing contexts (bounded reference values; starter consumers, not a downstream site inventory):
+  [PASS] --layout-section-padding -> Section outer block padding (144px at 1280/16)
+  [PASS] --layout-container-gap -> Section stack children (36px at 1280/16)
+  [PASS] --layout-content-gap -> Container stack children (23.99904px at 1280/16)
+  [PASS] --layout-grid-gap -> Grid and managed grid tracks (36px at 1280/16)
+- WCAG Relative Luminance Contrast Pairs:
+  [PASS] default:text-on-page: 15.99:1 (min 4.5:1)
+  [PASS] default:text-on-surface: 16.45:1 (min 4.5:1)
+  [PASS] default:muted-on-page: 6.92:1 (min 4.5:1)
+  [PASS] default:muted-on-surface: 7.12:1 (min 4.5:1)
+  [PASS] default:on-action-on-action: 8.02:1 (min 4.5:1)
+  [PASS] default:action-on-page: 7.8:1 (min 3:1)
+  [PASS] default:link-on-page: 7.8:1 (min 4.5:1)
+  [PASS] default:link-on-surface: 8.02:1 (min 4.5:1)
+  [PASS] dark:link-on-surface: 8.79:1 (min 4.5:1)
+  [PASS] light:link-on-surface: 8.02:1 (min 4.5:1)
+  [PASS] default:focus-on-page: 5.26:1 (min 3:1)
+  [PASS] dark:text-on-surface: 16.75:1 (min 4.5:1)
+  [PASS] dark:muted-on-surface: 7.58:1 (min 4.5:1)
+  [PASS] dark:focus-on-surface: 8.79:1 (min 3:1)
+
+> emdash-baseline@0.0.3 test
+> node scripts/run-tests.mjs --tier all
+
+Running 27 unit test files (concurrency 2).
+✔ archive locking rejects concurrent work and cannot recover a live owner (46.3795ms)
+✔ an abruptly killed job leaves staging quarantined and can be recovered before a clean deployment (106.8915ms)
+✔ repeat/incomplete output cannot refresh inherited asset lifetimes; validation errors release locks (23.6531ms)
+✔ nested real build assets retain exact paths and bytes (37.9565ms)
+✔ baseline separates declared/locked/installed versions without writing or claiming certification (96.5901ms)
+✔ complete offline fixture passes implemented required scopes, with explicit runtime/upstream unknowns (147.6899ms)
+✔ config AST ignores comments, accepts import aliases, never evaluates code, and refuses computed/spread/function configs (6.3692ms)
+✔ static defects fail; unknowns cannot pass; cache and locale opt-ins require appropriate evidence (531.2808ms)
+✔ managed inventory detects missing/extra/edited files and membership changes without exposing local paths (492.64ms)
+✔ traversal, linked managed roots, incomplete manifests and unsupported inventories stay unverified (192.5336ms)
+✔ report v2 rejects incompatible versions, unknown fields, invalid statuses, duplicates and incorrect totals (120.6484ms)
+✔ installed icon exports resolve aliases to public per-icon paths (1.438ms)
+✔ named imports preserve local names, type imports, unknown exports and other code (3.0357ms)
+✔ namespace and dynamic icon imports stay intact, including custom admin catalogs (2.2798ms)
+✔ build transform resolves from the importer and ignores icon internals and virtual IDs (29.7739ms)
+✔ unsupported package export layouts preserve the original imports (8.5972ms)
+✔ bundle report counts static import closure once, handles cycles and excludes dynamic imports/assets (1.6112ms)
+✔ M01-M03/M05 CSS parsing handles strings, comments, at-rules and anonymous/wrong layers (5.0587ms)
+✔ Astro parsing ignores style-looking script strings and comments and preserves source locations (1.4257ms)
+✔ M04/M06 standalone imports, new CSS files and static overlays are included without inspecting package CSS (13.0885ms)
+✔ M07-M10 flow audit recognizes real selectors and both guarded and one-sided strategies (7.5242ms)
+✔ pinned DESIGN.md bridge validates the neutral specimen and rejects typography/reference losses (43.7509ms)
+✔ infrastructure deletions require explicit approval of exact previous bytes (1.4017ms)
+✔ gate accepts real standard and custom directions, including CRLF (3.2648ms)
+✔ gate rejects absent, duplicate, placeholder, or fenced-only records (0.3751ms)
+✔ gate requires each physics field inside its block and two or three bans (0.2666ms)
+✔ infrastructure exceptions are exact, reasoned, hash-bound, and LF/CRLF portable (0.2597ms)
+✔ CLI catches untracked visual work, accepts a record, and expires changed infrastructure exceptions (1479.1133ms)
+✔ applyTokenOverrides updates @theme, :root, and [data-surface="dark"] tokens non-destructively while preserving comments (20.3947ms)
+✔ applyTokenOverrides rejects unknown aesthetic lane identifiers (1.2384ms)
+✔ global.css, Container.astro, and Card.astro ship the curated token engine, breakout grid, and accessible card contract (2.8382ms)
+✔ cascade layers and automatic spacing contracts stay enforceable (100.0897ms)
+✔ test tiers are a disjoint exhaustive partition and stale inventories fail closed (6.6263ms)
+[d1-export] Querying sqlite_master from D1 database "db with spaces & punctuation"...
+[d1-export] Found 1 exportable tables (0 virtual tables skipped from table dump).
+[d1-export] Successfully exported D1 database to C:\Users\Jaap\AppData\Local\Temp\baseline D1 argv yxUZtE\export output.sql (0.1 KB)
+[d1-export] Querying sqlite_master from D1 database "synthetic"...
+[d1-export] Found 0 exportable tables (0 virtual tables skipped from table dump).
+✔ loopback fixtures bind Fetch-safe ports, retry collisions and release reservations (43.6839ms)
+✔ doctor evaluates the declared Node alternatives without semver dependencies (1.086ms)
+✔ doctor distinguishes known Windows launchers from unobservable outer launchers (0.5071ms)
+✔ doctor probes SQLite and workspace without residue, bounds Git and reports critical failures (16.4496ms)
+✔ doctor CLI emits parseable JSON, honors NO_COLOR and uses exit 0 for warnings and 1 for failures (531.3739ms)
+✔ schema gate reports physical overflow names/counts and closes a read-only failing database (142.991ms)
+✔ art gate shows invalid fields and required-structure diff with source lines (148.1845ms)
+✔ token gate reports failing scoped pairs, actual/minimum contrast and keeps JSON machine-readable (258.5454ms)
+✔ npm launcher preserves argv bytes, spaces and failure status without a shell (258.052ms)
+✔ D1 export passes database/table names and SQL as argv without shell interpretation (4.2476ms)
+✔ D1 partial export is cleaned after failure and JSONC autodetection preserves URL strings (100.565ms)
+✔ operational CLI failures are stack-free, exit 1 and do not create output before validation (810.7158ms)
+✔ generator preserves previously emitted scales and authored lane values (1.9113ms)
+✔ independent five-point interpolation, clamping and changed root font sizes (1.1853ms)
+✔ Utopia comparison example matches independent endpoints after four-place rounding (0.1993ms)
+✔ all generated scales interpolate requested bounds monotonically within rounding error (7.0846ms)
+✔ authored presets retain their own transition domains and diagnostic samples (41.5993ms)
+✔ bounded grammar accepts negative intercepts, finite exponents and legacy viewport expressions (0.2636ms)
+✔ invalid CSS, nonfinite math, contextless cqi and descending or flat varying scales fail closed (5.7614ms)
+✔ generator rejects invalid domains and nonrepresentable coefficients before emitting CSS (0.7098ms)
+✔ viewport shrink and changed root sizes are advisory, with no false accessibility certification (5.4225ms)
+✔ evaluator rejects nonfinite environments and arithmetic overflow (0.4007ms)
+✔ native/legacy dates agree and impossible or future birthdays are rejected (2.4362ms)
+✔ recovery is bounded, allowlisted, expires and is consumed once per form (1.2555ms)
+✔ recovery caps the entire payload and omits secret fields even when explicitly allowlisted (0.7865ms)
+✔ HTML auditor resolves directory/file routes, queries, entities and cross-page encoded anchors (9.5791ms)
+✔ HTML auditor catches 404s, same-origin absolute links and broken anchors (2.6454ms)
+✔ HTML auditor checks delivered image metadata and ignores fake tags in raw text/comments (2.6618ms)
+✔ HTML auditor validates JSON-LD syntax/context/types and canonical/OpenGraph URLs (3.0219ms)
+✔ HTML auditor rejects fixture/test output and runtime fixture routes without executing server code (6.3702ms)
+✔ HTML audit CLI fails on missing builds, broken HTML and failed SSR instead of passing zero HTML (250.401ms)
+✔ SSR snapshots capture and audit real responses, redirects, queries and 404 anchors below three seconds (202.5453ms)
+✔ SSR audit detects rendered broken links, anchors, image dimensions and malformed JSON-LD (297.6254ms)
+✔ SSR finally kills a hung server on deadline and cleans signal listeners (317.3946ms)
+✔ SSR finally kills the server on caller failure and refuses external redirects (169.2547ms)
+✔ SSR rejects a soft 404 instead of declaring successful error-page coverage (150.4129ms)
+✔ SSR cancellation and streaming-body deadlines both terminate the server (335.218ms)
+✔ Astro resolved route metadata reaches the offline runtime leak guard (4.1393ms)
+✔ HTML auditor stays below one second on a 250-page generated site (280.7632ms)
+✔ photoAspectRatio safely handles valid, missing, and invalid dimensions (0.8578ms)
+✔ justifiedFlexStyle generates correct CSS flexbox layout properties (0.1702ms)
+✔ pure CSS flexbox simulation preserves equal row height across mixed aspect ratios (0.3104ms)
+✔ large albums with 400+ mixed items compute aspect ratios safely (0.4142ms)
+✔ default access planning does not change bytes, create users or reveal credentials (16.5321ms)
+✔ explicit apply stores only the hash, selected owner, exact scopes and expiry (17.1788ms)
+✔ role limits, unknown scopes, malformed expiry and ambiguous owners fail without changes (47.2138ms)
+✔ narrow custom scopes support lower roles; setup is explicit and excludes plugin/transfer grants (16.0701ms)
+✔ revocation is planned by default and limited to the selected owner and token (33.0359ms)
+✔ CLI refuses legacy remote SQL and missing explicit inputs without creating a database (1125.0225ms)
+✔ public default origin prefers site settings then Astro.site, preserving path ownership at the caller (1.1046ms)
+✔ invalid configured public URLs do not silently fall back to the incoming host (0.3309ms)
+✔ default canonicals preserve path case/base without interpreting double-slash paths as another host (0.2364ms)
+✔ article metadata uses real hydrated facts and omits unknown/invalid values (1.8218ms)
+✔ installed EmDash resolver retains cross-domain editor canonical and configured title separator (0.2271ms)
+✔ installed page pipeline emits article facts and keeps ordinary content pages as websites when specified (0.9078ms)
+✔ installed plugin precedence produces one canonical/description/graph in parsed metadata (5.4243ms)
+✔ explicit null canonical and robots survive the CMS page context for error responses (0.1939ms)
+✔ delta reconciliation detects new, modified, deleted, slug changes and conflicts (0.9561ms)
+✔ consistent SQLite backup acquisition via VACUUM INTO and integrity verification (15.2025ms)
+✔ peripheral integrations checklist rejects unresolved items and accepts canonical dispositions (0.5889ms)
+✔ partner records honor CMS order/activity and actual storage keys without record caps (1.3592ms)
+✔ public links reject executable protocols, protocol-relative hosts and obfuscated URLs (0.2772ms)
+✔ native editor and seeded media shapes preserve ordered duplicates and context (1.5292ms)
+✔ storage keys remain distinct from media IDs and can use the public media origin (0.2439ms)
+✔ malformed input and unsafe full-image links do not become substitute images (0.2097ms)
+✔ galleryJsonLd generates valid Schema.org ImageGallery structured data (0.3587ms)
+✔ trusted plugin sources and Workers capability types remain EmDash-only (10.4714ms)
+✔ profile contract binds foundation/runtime, immutable provenance and exact applicable skills/checks (35.9457ms)
+✔ provenance accepts only the canonical repository and its exact historical name without rewriting history (41.2405ms)
+✔ profile allowlists contain only explicit existing sources and correctly declare generation readiness (31.5537ms)
+✔ dependency inventory accounts for every root dependency and versions have a single source (4.2096ms)
+✔ source inventory covers the declared surface and shared presentation imports stay inside its allowlist (34.8992ms)
+✔ CMS flags distinguish explicit true/integer flags, absent opt-outs, and malformed values (0.7878ms)
+✔ breadcrumb and organization graphs use real absolute facts and serialize hostile strings safely (3.4512ms)
+✔ URL normalization preserves case-sensitive assets, auth, queries, escapes and unsafe methods (0.5198ms)
+✔ baseline metadata has explicit ownership, stable override IDs and no competing primary graph (0.5851ms)
+✔ verified webhook events require an exact configured sending domain, never suffix/recipient matching (0.3888ms)
+✔ setup probe fails closed on wizard, external login, bad JSON, server errors and wrong envelope (17.55ms)
+✔ seven-day build retention carries exact-case assets, expires old generations and rejects collisions/tampering (102.7067ms)
+✔ installed CMS discovery follows sources without changing files or claiming runtime health (44.1996ms)
+✔ static receipts route content/editor discovery and commands reflect installed scripts only (47.1546ms)
+✔ optional context records are discovered without reading contents or requiring adoption (35.9181ms)
+✔ inspection never executes config or reads environment values, and dynamic facts remain unknown (35.376ms)
+✔ declared prop observations refresh with source and do not invent inherited APIs (37.0598ms)
+✔ invalid receipts, linked sources and oversized files fail closed without fallback (25.9654ms)
+✔ JSON CLI is parseable and failures withhold source details (561.8158ms)
+✔ release gate rejects missing/fixture/unknown profiles and refuses a fixture command despite stale clean output (79.4012ms)
+✔ measures physical collection columns including generated columns (1.8383ms)
+✔ accepts exactly 50 columns and rejects a collection above budget (0.5231ms)
+✔ T01/T06 exact token scope, ambiguity, no-op and narrow context targeting (29.5408ms)
+✔ T02 bounded spacing resolution reports dependency failures and supported arithmetic (1.1823ms)
+✔ T03-T05 CLI validates before writes and binds calibration to the saved candidate (874.3508ms)
+✔ one resolved model keeps public canonical, article schema and dates in agreement (2.5935ms)
+✔ website identity has a public base URL and does not duplicate an identical site title (0.239ms)
+✔ default canonical policy respects build-generated file paths, slash policy and case (0.2756ms)
+✔ explicit canonical retains its origin, path case and meaningful query independently of defaults (0.1948ms)
+✔ one fallback image supplies graph and social values without inventing type or dimensions (0.4602ms)
+✔ known authors/modified dates are optional facts; missing or invalid dates are omitted (0.7364ms)
+✔ an unconfigured public URL never falls back to the static build or preview hostname (0.2052ms)
+✔ 404 policy omits canonical/schema while retaining robots and meaningful metadata (0.5893ms)
+✔ invalid URL schemes, credentials, image facts and inconsistent deploy base fail explicitly (0.6011ms)
+✔ JSON-LD serialization preserves adversarial text in exactly one inert script node (3.1356ms)
+✔ template gate rejects missing/invalid image alternative (943.5446ms)
+✔ template gate rejects missing/invalid ARIA value (4.6925ms)
+✔ template gate rejects missing/invalid keyboard interaction (12.8793ms)
+✔ template gate rejects missing/invalid label control association (2.8444ms)
+✔ template gate rejects missing/invalid real link destination (3.0656ms)
+✔ template gate rejects missing/invalid natural tab order (2.2656ms)
+✔ template gate rejects missing/invalid unreviewed autofocus (2.1977ms)
+✔ template gate rejects missing/invalid known image component alternative (2.1443ms)
+✔ template gate accepts typed frontmatter, slots, native disclosure and labelled fields (13.5109ms)
+✔ line exceptions stay narrow and become errors when obsolete (8.5672ms)
+✔ text link contrast is gated on default, dark and restored light surfaces (22.2611ms)
+✔ global.css declares all required semantic tokens, valid fluid clamps, and WCAG AA contrast pairs (3.7352ms)
+✔ every @theme color token is represented on the styleguide palette specimen (3.4831ms)
+✔ every authored token in global.css is either consumed in src/ or part of the documented public contract (32.764ms)
+✔ every canonical Aesthetic Lane preset applies cleanly and passes WCAG AA contrast and fluid checks (21.8782ms)
+✔ parametric fluid type/space scales and WCAG-safe OKLCH palette generator pass all audits (42.0796ms)
+✔ formatCalibrationMarkdown and upsertCalibrationRecord bind Stage 4.5 token evidence to LF SHA-256 (25.2334ms)
+✔ auditDesignTokens catches insufficient WCAG contrast and invalid fluid clamp bounds (4.1367ms)
+✔ formatArtDirectionRecord and upsertArtDirectionRecord generate records that pass check-art-direction validateRecord (17.8522ms)
+✔ auditFontLoading passes for system fonts and catches unloaded custom font families (11.9077ms)
+✔ auditEditProxies verifies starter single-entry and collection routes and catches missing Base content or field edit proxies (6.9417ms)
+✔ validateCssAlignment catches untouched neutral starter global.css when a named lane is declared and passes once lane tokens are applied (3.5245ms)
+✔ pruneStarterExceptions strips sample-page and deleted entries while retaining dev/styleguide infrastructure (5.4898ms)
+✔ installed bounded commands include the previously withheld gates and report missing commands (1.387ms)
+✔ trace retains immutable npm script/argv, failure status, output bounds and redaction (25.4706ms)
+✔ unsupported and intentionally withheld commands are distinct and never execute (3.9704ms)
+✔ MCP transport, HTTP, protocol, JSON-RPC and tool failures remain distinguishable (3.7ms)
+✔ real process status and capture-tail counts are observable; environment excludes credentials (82.8529ms)
+✔ discovery refuses credentials, traversal and linked inputs without relaxing infrastructure guards (7.5381ms)
+✔ replay preparation refuses existing projects before any mutation (3.9851ms)
+ℹ tests 165
+ℹ suites 0
+ℹ pass 165
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 10590.7221
+Running 18 rehearsal test files (concurrency 1).
+✔ revision-bound plan is read-only; apply twice, rollback twice and reapply preserve exact bytes and existing hook (2210.7351ms)
+✔ missing hook gets one preflight; already-current package is a zero-write no-op (1677.7915ms)
+✔ reviewed legacy schema helpers retain plan, apply and rollback compatibility (1299.9352ms)
+✔ changed revision, staged files, modified helpers and unsupported command chains refuse without overwriting edits (4462.6112ms)
+✔ journal recovery accepts interrupted finalization; backup corruption and post-apply edits block rollback (1767.5744ms)
+✔ plan tampering, target output and linked backup are refused (1457.0316ms)
+✔ actual npm lifecycle blocks over-budget builds, preserves existing hook and rolls back exactly (synthetic build executable) (5612.994ms)
+✔ CLI defaults to planning only and malformed flags never apply (687.478ms)
+✔ hash-bound declared capture and editor round-trip evidence remains scoped, private and read-only (1160.7921ms)
+✔ annotations, API-only writes and partial captures cannot verify supported editor saves (1369.3542ms)
+✔ reported overflow/errors and unsuccessful save or public reload are failures, never annotation passes (1667.3759ms)
+✔ stale revision, changed working bytes, timestamps and malformed matrices fail closed (1671.996ms)
+✔ tampered, missing, linked and escaping artifacts remain required unknowns without exposing their contents (1366.1733ms)
+✔ CLI imports evidence into validated JSON/Markdown and rejects duplicate flags without target writes (4157.3231ms)
+✔ bounded updates preserve adopted context, design and handoff even if misclassified as managed (980.0231ms)
+✔ older installed inventory preserves legacy primitives, calibrated tokens and Base until additive spacing migration (1735.0473ms)
+✔ profile sync stages shared changes and skills, preserves calibrated tokens and excludes client files and packages (1312.499ms)
+✔ sync refuses changed local files and altered staged payloads before any writes (1058.4074ms)
+✔ sync rejects mutable refs, traversal and attempts to exceed installed membership (859.5067ms)
+✔ static sync accepts baseline provenance and fetches only canonical immutable URLs (1136.6715ms)
+✔ static sync accepts emdash-baseline provenance and fetches only canonical immutable URLs (955.9735ms)
+✔ static-sveltia sync accepts baseline provenance and fetches only canonical immutable URLs (1318.189ms)
+✔ static-sveltia sync accepts emdash-baseline provenance and fetches only canonical immutable URLs (1279.9124ms)
+✔ sync rejects lookalike upstream identities before fetching or staging (759.69ms)
+{"operation":"read-only D1 export","target":{"kind":"d1","account":"11111111111111111111111111111111","environment":"preview","binding":"DB","database":"11111111-1111-4111-8111-111111111111","configSHA256":"46838d5b474ca5d0c68f0891bfaa2bdfae8e92e0e3a88869f99c38cd22f394ab"}}
+{"operation":"read-only D1 export","target":{"kind":"d1","account":"11111111111111111111111111111111","environment":"preview","binding":"DB","database":"11111111-1111-4111-8111-111111111111","configSHA256":"46838d5b474ca5d0c68f0891bfaa2bdfae8e92e0e3a88869f99c38cd22f394ab"}}
+{"operation":"read-only D1 export","target":{"kind":"d1","account":"11111111111111111111111111111111","environment":"preview","binding":"DB","database":"11111111-1111-4111-8111-111111111111","configSHA256":"46838d5b474ca5d0c68f0891bfaa2bdfae8e92e0e3a88869f99c38cd22f394ab"}}
+✔ schema equality is deterministic, metadata-only and byte-preserving; default/type spelling normalizes (864.3479ms)
+✔ generated/retained columns, index/FK/default and migration drift never become content parity (534.3822ms)
+✔ foreign keys, column-owned collation/checks, nullability and defaults remain distinct (544.322ms)
+✔ numeric affinity normalization cannot hide different TEXT defaults (531.3357ms)
+✔ registry JSON key order normalizes while values and array order remain significant (548.7071ms)
+✔ 51 actual columns fail even when the saved schema is identical; missing registry/malformed snapshots are unverified (379.9247ms)
+✔ JSONC/TOML explicit targets refuse ambiguity, inheritance, missing auth and shell-like selections (12.4146ms)
+✔ bounded D1 export polling/download uses explicit identity, rejects auth/error/changing bookmarks and never forwards credentials to downloads (17.8901ms)
+✔ isolated SQL reconstruction accepts literals, validates FK/integrity and quarantines malicious/trigger/virtual SQL without touching working DB (9546.8147ms)
+✔ mocked D1 pull reconstructs a new ignored snapshot, records provenance and refuses unsafe/existing outputs before another request (1425.2649ms)
+✔ diff CLI requires one explicit target; saved capture yields equal JSON/Markdown and error exit 2 preserves sources (2859.3448ms)
+✔ seed allowlist retains array/reference/locale semantics and refuses excluded references or relation gaps (0.8855ms)
+✔ installed EmDash CLI export wrapper is read-only, allowlisted and round-trips a fresh synthetic seed without leaking private fields (3892.6175ms)
+✔ native pre-commit hook installs idempotently, executes in order and propagates failures (8038.4555ms)
+✔ hook setup refuses a non-Git directory before creating files (66.2143ms)
+✔ reviewed synthetic WXR, Exporter and Portable Text oracles cover the maintained contracts (4.2599ms)
+✔ installed WXR/Exporter endpoints, SQLite, public renderer, retries and F3/F4 acceptance rehearse offline (26450.3239ms)
+✔ atomic JSON retries only transient locks, preserves destinations on failure and cleans partial writes (718.2371ms)
+✔ read-only media plan preserves identities, missing originals, nested Unicode, aliases and crop-like originals deterministically (1019.7686ms)
+✔ Sharp profiles preserve small originals and animated frames; opt-in resize orients EXIF without upscaling/format conversion; SVG/PDF/corruption quarantine (213.5709ms)
+✔ preparation archives originals, resumes verified files safely and refuses changed sources/links (368.1975ms)
+✔ supported ingestion preserves duplicate metadata identities, verifies bytes/native keys, repeats safely and stages actual keys (591.2054ms)
+✔ reviewed vectors remain exact passthroughs while unreviewed SVG/PDF and header-only rasters stay quarantined (336.7874ms)
+✔ ambiguous CMS writes require explicit verified adoption and never automatically duplicate or delete (385.3791ms)
+✔ R2 nested keys, changed bytes, bucket switch and deleted remote objects cannot trust stale caches (79.6474ms)
+✔ R2 partial failure records verified work and returns nonzero; signed transport encodes keys without shell interpolation or credential redirects (27.0586ms)
+✔ R2 staging manifest supplies MIME for extensionless native keys and refuses altered hashes, metadata and occupied locks (32.9065ms)
+✔ real R2 CLI sets exit 1 on upload failures using injected offline fetch; absent targets and remote CMS origins fail closed (904.7594ms)
+✔ Astro and adapter updates surface independently of unchanged EmDash; outages remain unverified and read-only (226.7832ms)
+warning: in the working copy of '.emdash/site-registry.private.json', LF will be replaced by CRLF the next time Git touches it
+✔ private site registry is idempotent, preserves rename/archive history and records inaccessible central registration (742.6655ms)
+✔ reviewed migration fixtures retain exact LF bytes in a Windows-style Git checkout (447.7846ms)
+✔ reference manifest, bound observations and JSON/Markdown reports implement the version-1 contract (12.4046ms)
+✔ origins must be explicit exact HTTP origins; canonicals cannot silently adopt preview (5.9745ms)
+✔ duplicate source/request identities and silently normalized or ambiguous URLs are refused (6.0308ms)
+✔ query order/values and trailing slashes are preserved; fragments have independent HTML expectations (1.3826ms)
+✔ dispositions cannot mix fields, waive removal status or exclude without an explicit reason (6.3956ms)
+✔ full scope must declare required content/editor parity and reject unsupported schema fields/versions (4.5964ms)
+✔ missing required evidence never passes; URL scope explicitly removes content/editor from its result (9.7531ms)
+✔ required unknowns take precedence over failures while confirmed failures are retained (10.0291ms)
+✔ observations cannot weaken required checks using advisory/not-applicable or reserved-looking IDs (9.9109ms)
+✔ optional failures remain visible without changing the required-check exit policy (6.389ms)
+✔ unknown, duplicate, stale-bound and unsubstantiated observation declarations are rejected (8.1866ms)
+✔ missing or altered artifact bytes cannot substantiate a pass (8.1561ms)
+✔ report validation binds complete declarations, severity, coverage and outcome to the paired manifest (9.9482ms)
+✔ validators refuse malformed/non-JSON structures without throwing (2.2066ms)
+✔ strict JSON reading rejects duplicate/escaped keys, trailing data and comments (13.132ms)
+✔ CLI flags reject duplicates, unknown target/strict switches and invalid scopes (0.4279ms)
+✔ CLI emits scoped JSON/Markdown, uses ignored defaults and refuses existing destinations (662.8249ms)
+✔ CLI refuses malformed inputs before output and linked evidence is required-unverified (263.9643ms)
+✔ versioned normalized fixtures, mappings and count-only JSON/Markdown reports validate (22.1281ms)
+✔ explicit merge changes totals deliberately while preserving fields and media (2.7458ms)
+✔ explicit split distributes source fields to multiple target entries (2.7566ms)
+✔ source deletion, missing target and unaccounted extra source entities are confirmed failures (6.9764ms)
+✔ equal aggregate totals with substituted target IDs fail entity identity (3.1815ms)
+✔ slug changes require mapped expectations; raw draft/private/future transformations are explicit (10.1317ms)
+✔ duplicate assignments, contradictory cardinality, URL IDs and missing exclusion reasons are invalid (12.0247ms)
+✔ documented exclusions account for source records without requiring target rows (2.1516ms)
+✔ broken parents, unexpected translation groups, duplicate locales and cycles fail (10.739ms)
+✔ missing media catalog entries, lost attachment mappings and unresolved media fail (11.1228ms)
+✔ required source/target fields and preservation links detect unavailable and changed data (6.5236ms)
+✔ declared SEO compares titles, descriptions, canonical production origin and noindex (12.2085ms)
+✔ incomplete inputs and declared coverage mismatch take precedence over retained failures (18.2497ms)
+✔ installed WxrPost JSON projection and ContentItem snapshot adapters retain stable identity and raw statuses (2.6524ms)
+✔ CLI combines offline HTTP/editor proofs with fresh inventory evidence, safely replays and redacts IDs/bodies (72.9948ms)
+✔ CLI missing, altered, linked, incomplete or escaping inventory inputs remain unverified with partial findings (120.8304ms)
+✔ URL-only scope never reads inventories, and full scope cannot infer editor acceptance (40.4791ms)
+✔ v3 live HTTP and offline inventories coexist without certifying editor acceptance (60.7915ms)
+✔ linked inventory inputs are unverified, and deliberate field replacement is explicit (34.9853ms)
+✔ v2 opts into HTTP assertions without changing v1 declaration meanings or permitting unbounded limits (5.5988ms)
+✔ live loopback pass parses structural HTML, entities, headings, srcset and records bounded evidence (122.7301ms)
+✔ wrong page status is a failure; unavailable metadata remains unknown with failure retained (23.375ms)
+✔ exact redirect paths, query bytes and slash policy pass; loops and wrong destinations fail (26.6612ms)
+✔ redirects to undeclared hosts, user-info URLs, missing destinations and error pages cannot pass (30.1644ms)
+✔ empty query markers and encoded/repeated query values survive exact path comparison (17.0136ms)
+✔ production canonicals, duplicate tags, unexpected header noindex and missing fragment IDs are detected (64.182ms)
+✔ broken internal links and missing/nonimage media fail; HEAD 405 fallback uses bounded GET (74.8541ms)
+✔ removals and exclusions remain visible, excluded pages are never fetched (9.2027ms)
+✔ timeout and cancellation retain completed evidence and do not become clean passes (168.6109ms)
+✔ a broken reference and a timed-out reference retain failure plus required unknown coverage (181.5901ms)
+✔ streamed over-budget bodies and a stalled 404 preserve bounded partial evidence (117.2007ms)
+✔ same-origin legacy references remain legitimate and undeclared image origins are not requested (63.5619ms)
+✔ response, reference, request and hop caps yield bounded failures/unknowns rather than silent truncation (145.4991ms)
+✔ network concurrency is bounded and no cookies, auth or sensitive headers cross allowed origins (82.8425ms)
+✔ review signals use parsed text/comments, are advisory, and srcset data commas do not create fake requests (65.0244ms)
+✔ CLI collects live observations, replays them offline, and refuses existing output before requests (357.1947ms)
+✔ integrated migration pilot runs full lifecycle rehearsal and passes (21077.449ms)
+✔ native image metadata bounds responsive candidates and preserves authored dimensions (1.5411ms)
+✔ malformed image and gallery inputs produce bounded presentation values (0.4262ms)
+✔ shared shell, annotated Card and native images build without a CMS integration or server adapter (3262.6129ms)
+✔ Sveltia is an additive dependency-free overlay with paired forms and static CI (973.2062ms)
+✔ offline pinned baseline works without private history; diagnosis cannot execute target code or leak env/paths (76.9023ms)
+✔ degraded, malformed and absent evidence stay warnings/unverified; altered baseline is refused (222.7959ms)
+✔ snapshot schema includes generated columns, detects 51 columns and leaves original DB bytes/tree unchanged (197.6637ms)
+✔ reports refuse target paths, existing directories and a symlink back into the target (60.4617ms)
+✔ normalized skill drift never becomes an upstream/membership pass and linked evidence is refused (176.8555ms)
+✔ CLI strict policy fails required unknowns, rejects malformed flags and records Git state without mutations (3581.0375ms)
+✔ D1 SQL dump ingestion measures physical schema directly without requiring binary SQLite snapshot (3207.721ms)
+✔ AST analyzer supports dual-runtime ternaries for adapter and database/storage (112.0768ms)
+✔ declared skill overrides are documented rather than reporting unexpected drift (62.3834ms)
+✔ design-system drift rules detect brownfield CSS/Card gaps and pass on baseline primitives (394.424ms)
+✔ skill staging detects same-commit drift, extras and missing skills; failed apply restores originals (146.0535ms)
+✔ a killed skill apply leaves a recoverable journal and binary corruption is detected (192.4051ms)
+✔ skill apply refuses post-review edits and symlinks; managed distribution includes content modeling (40.4837ms)
+✔ development discovery follows base and slash policy without changing release routing (1.4124ms)
+✔ server release reserves developer fixture paths before any CMS catch-all can render them (19.5828ms)
+✔ CMS form fixture is injected only in developer/fixture modes, never in a static profile or release (0.5355ms)
+✔ static developer tools inject only dev/fixture routes, prerender static fixtures and never resolve a CMS version (0.4876ms)
+✔ generator refuses unknown/unavailable profiles, overlapping roots, populated destinations and linked destinations before writing (24.7891ms)
+✔ allowlisted assembly is dry-run safe, records exact provenance and keeps the design gate active before Git initialization (2191.0634ms)
+✔ generator still refuses a calibrated source without reviewed infrastructure bytes before writing (43.7867ms)
+✔ visual updates require the explicit local wrapper flag and are rejected in CI (3079.998ms)
+✔ visual wrapper cancellation reaches graceful child handlers on Windows (83.5779ms)
+ℹ tests 136
+ℹ suites 0
+ℹ pass 136
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 156651.9236
+
+> emdash-baseline@0.0.3 pretypecheck
+> npm run check:schema-budget
+
+
+> emdash-baseline@0.0.3 check:schema-budget
+> node scripts/check-schema-budget.mjs
+
+[
+  {
+    "table": "ec_pages",
+    "columns": 17
+  },
+  {
+    "table": "ec_posts",
+    "columns": 19
+  }
+]
+
+> emdash-baseline@0.0.3 typecheck
+> astro check
+
+[2m12:18:16[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+[2m12:18:16[22m [34m[vite][39m Re-optimizing dependencies because vite config has changed
+[2m12:18:17[22m [34m[vite][39m [optimizer] bundling dependencies...
+[2m12:18:19[22m [34m[types][39m Generated [2m2.90s[22m
+[2m12:18:19[22m [34m[check][39m Getting diagnostics for Astro files in C:\dev\baseline-workflow-replay-20261023\cms-inspect\site...
+Result (53 files): 
+- 0 errors
+- 0 warnings
+- 0 hints
+

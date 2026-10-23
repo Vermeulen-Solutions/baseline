@@ -1,0 +1,22 @@
+{
+  "attemptId": "994d4653-5dd8-4250-92e0-4c9f7165f315",
+  "requestedArgv": [
+    "run",
+    "audit:html"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "audit:html"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 343,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "grade-audit-html-994d4653-5dd8-4250-92e0-4c9f7165f315.log"
+}

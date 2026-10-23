@@ -1,0 +1,54 @@
+
+> emdash-baseline@0.0.3 prebuild
+> npm run check:schema-budget
+
+
+> emdash-baseline@0.0.3 check:schema-budget
+> node scripts/check-schema-budget.mjs
+
+[
+  {
+    "table": "ec_pages",
+    "columns": 17
+  },
+  {
+    "table": "ec_posts",
+    "columns": 19
+  }
+]
+
+> emdash-baseline@0.0.3 build
+> astro build
+
+[2m17:29:20[22m [34m[@astrojs/node][39m Enabling sessions with filesystem storage
+
+
+  [1m[36m— E M D A S H —[39m[22m  [2mv1.3.0[22m
+   
+[2m17:29:21[22m [34m[types][39m Generated [2m140ms[22m
+[2m17:29:21[22m [34m[build][39m output: [34m"server"[39m
+[2m17:29:21[22m [34m[build][39m mode: [34m"server"[39m
+[2m17:29:21[22m [34m[build][39m directory: [34m[fixture-root]\cms-inspect\site\dist\[39m
+[2m17:29:21[22m [34m[build][39m adapter: [32m@astrojs/node[39m
+[2m17:29:21[22m [34m[build][39m Collecting build info...
+[2m17:29:21[22m [34m[build][39m [32m✓ Completed in 401ms.[39m
+[2m17:29:21[22m [34m[build][39m Building server entrypoints...
+[2m17:29:21[22m [34m[assets][39m Copying fonts (16 files)...
+[2m17:29:22[22m [34m[vite][39m [32m✓ built in 1.04s[39m
+[2m17:29:24[22m [34m[vite][39m [32m✓ built in 2.26s[39m
+[33m[1m17:29:27[22m [WARN] [vite][39m [33m[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.[39m
+[2m17:29:28[22m [34m[vite][39m [32m✓ built in 3.45s[39m
+[2m17:29:28[22m [34m[build][39m Rearranging server assets...
+[2m17:29:28[22m [34m[build][39m [32m✓ Completed in 6.94s.[39m
+[2m17:29:28[22m [34m[emdash][39m Build complete
+[2m17:29:28[22m [34m[build][39m Server built in [1m7.34s[22m
+[2m17:29:28[22m [34m[build][39m [1mComplete![22m
+
+> emdash-baseline@0.0.3 postbuild
+> node scripts/assert-release-artifact.mjs
+
+Release artifact profile verified. Also verify the actual production route via check:dev-tools.

@@ -1,0 +1,27 @@
+diff --git a/HANDOFF.md b/HANDOFF.md
+index 07534ce..c2aff81 100644
+--- a/HANDOFF.md
++++ b/HANDOFF.md
+@@ -1,2 +1,20 @@
+-# Earlier handoff — 2026-10-18
+-Workshops collection and one example exist; index/detail routes are not built. Platform choice is still pending. Next: choose CMS, then install EmDash. Ask the customer to restate audience and registration flow.
++# Workshop feature handoff — 2026-10-23
++
++## Established need and decisions
++
++Help local team leads at small organizations find practical workshops and register by email. The launch scope is one English-language static site with a workshop index and detail pages. Developer-owned Markdown editing is selected; the Studio editor supplies workshop copy, and the site maintainer owns code, builds, and deployment. Preserve the registration address `workshops@northline.example.test`. Browser editing, payment integration, a launch date, and external deployment are not approved. Quarterly publication is an assumption only. These decisions are recorded in `AGENTS.md` and `audit/brief-decision.md`; continue from them without repeating customer discovery.
++
++Keep the established Editorial Paper art direction in `AGENTS.md`. Its warm paper palette, terracotta actions, Georgia display type, system sans body, generous responsive spacing, and anti-patterns remain the visual authority. The calibration note records token checks, while its component specimens still need rendered evidence before they can be marked verified.
++
++## Current implementation
++
++- `baseline.config.json` selects the `static` profile. Workshops use the native typed Astro collection in `src/content.config.ts`, with `title`, `date`, and `draft` fields.
++- `src/content/workshops/clear-briefs.md` is the sole workshop entry. It is published in the source and contains the supplied title, date, and short description.
++- No workshop index or detail route exists yet. The current homepage and navigation still expose the starter welcome and posts routes; `src/config/site.ts` links only Home and Posts.
++- The existing handoff's pending CMS decision and request to restate the audience and registration flow are superseded by the established decisions above.
++
++## Remaining work and next local action
++
++Implement the static workshop journey using the existing collection and supplied content: add a draft-filtered `/workshops/` index, add static detail routes for published entries, show each workshop's title, date, and Markdown body, and provide a registration link to the preserved mailto endpoint. Add Workshops to the site navigation and link to the index from the homepage where it fits the existing layout. Do not invent workshop fields, dates, policy copy, or customer acceptance; the content owner can supply additional workshop material.
++
++After route implementation, run the profile's verification and build commands, inspect the index and detail pages at narrow and wide widths, and record actual browser observations. The current calibration checklist is not evidence of that inspection. External deployment remains outside the approved scope; continue local preparation until a separate deployment decision is available.

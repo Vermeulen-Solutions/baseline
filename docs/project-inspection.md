@@ -45,3 +45,7 @@ repository under `audit/autonomous-evaluation-2026-10-21/`).
 Functional outcomes passed in both conditions; a general performance advantage
 was not established. Keep inspection optional rather than adding it as a required
 step for every task.
+
+For a fresh bounded replay, use the source repository's
+[local workflow replay entry point](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/workflow-replay.md).
+Historical graders depend on their archived fixtures and are not a supported benchmark.

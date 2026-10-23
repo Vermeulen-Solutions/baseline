@@ -1,0 +1,26 @@
+{
+  "summary": "Reduced only the homepage services Grid gap to calc(var(--layout-grid-gap) * 0.75), retaining fluid responsive scaling and the established art direction. Browser comparisons confirmed the approach grid, copy and navigation were unchanged.",
+  "changedFiles": ["site/src/pages/index.astro"],
+  "checks": [
+    {"command": "runner run check:art-direction -- --require-record", "result": "Passed before implementation; existing Art Direction Record structurally valid."},
+    {"command": "runner run dev -- --host 127.0.0.1 --port 4387", "result": "Rejected by runner bounded policy as unsupported. Used the built static site with a temporary direct Node HTTP server for browser acceptance."},
+    {"command": "runner run build (before change)", "result": "Passed; four static routes built and release artifact profile verified."},
+    {"command": ".agents/skills/impeccable/scripts/impeccable.cmd context --target src/pages/index.astro", "result": "Passed; scoped existing refinement permitted; no PRODUCT.md or DESIGN.md found. No optional context file adopted."},
+    {"command": ".agents/skills/impeccable/scripts/impeccable.cmd detect --json --scope layout src/pages/index.astro", "result": "Passed; returned an empty findings array."},
+    {"command": "runner run verify", "result": "Passed: script syntax, template lint, CSS contracts, art-direction gate, token audit, 39 tests, and Astro typecheck with zero errors, warnings or hints."},
+    {"command": "runner run build (after change)", "result": "Passed; four static routes built and release artifact profile verified."},
+    {"command": "runner run check:dev-tools", "result": "Passed; static release contains no styleguide route, fixture specimens or server entrypoint."},
+    {"command": "node browser-check.mjs before; node browser-check.mjs after", "result": "Passed Chromium comparison at 320, 768 and 1440px: services gaps 20.0006→15.0005px, 27.4675→20.6006px and 36→27px. Each equals 75% within 0.001px. Approach gaps and columns, main copy, and navigation were unchanged. No horizontal overflow. After screenshots inspected at all three widths; editorial system retained."}
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [
+    "Executed the local Impeccable context launcher directly because runner has no arbitrary skill-launcher action; it resolved project source/context availability within this trial.",
+    "Executed the local Impeccable detector directly; it read site/src/pages/index.astro within this trial.",
+    "Created and ran browser-check.mjs in this trial to load the independently installed @playwright/test package, serve this trial's site/dist over localhost, inspect rendered computed styles/text/navigation, and compare generated before-browser.json evidence. Runner rejected the dev npm script, so it could not supply a browser server.",
+    "Used view_image to inspect this trial's generated before-768.png and after-320.png, after-768.png and after-1440.png."
+  ],
+  "evidenceArtifacts": ["browser-check.mjs", "before-browser.json", "after-browser.json", "before-320.png", "before-768.png", "before-1440.png", "after-320.png", "after-768.png", "after-1440.png"],
+  "cms": null,
+  "permissionExplanation": "Static profile: no CMS record created. The requested reversible source refinement and local checks were authorized; no deployment, credentials, dependency installation, commit or additional approval was needed."
+}

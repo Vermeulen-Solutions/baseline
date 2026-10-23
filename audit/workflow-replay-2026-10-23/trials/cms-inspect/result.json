@@ -1,0 +1,88 @@
+{
+  "summary": "Created exactly one owned unpublished post through live EmDash MCP and read it back. No project source, seed, settings, or art-direction changes were made.",
+  "changedFiles": [],
+  "checks": [
+    {
+      "command": "runner run baseline:inspect --json",
+      "result": "PASS (exit 0): EmDash foundation, Node adapter, SQLite, local storage; inspected available commands and authoritative source paths. Source inspection was not treated as live CMS certification."
+    },
+    {
+      "command": "runner run doctor --json",
+      "result": "PASS with warning (exit 0), both before and after work: Node 24.21.0 and built-in SQLite passed; working tree clean. Warning only concerns unobservable outer Windows npm launcher."
+    },
+    {
+      "command": "runner mcp tools",
+      "result": "PASS (exit 0): discovered live content CRUD input schemas and Markdown-to-Portable-Text behavior. Runner output was truncated, so later schema_get_collection input validation identified its required slug argument."
+    },
+    {
+      "command": "runner mcp schema_get_collection {collection: posts}",
+      "result": "FAILED input validation (exit 1): required slug argument was missing; no mutation. Corrected the next read request to slug."
+    },
+    {
+      "command": "runner mcp schema_get_collection {slug: posts}",
+      "result": "EXPECTED DENIAL (exit 1): INSUFFICIENT_SCOPE, requires schema:read. Did not elevate access. Checked seed/seed.json and an existing live post to identify content as the body field; seed was not treated as proof of current live schema."
+    },
+    {
+      "command": "runner mcp content_list {collection: posts, limit: 20, markdown: true}",
+      "result": "PASS (exit 0): initial live list contained one published welcome post and no kickoff-cms-inspect entry."
+    },
+    {
+      "command": "runner mcp content_create posts kickoff-cms-inspect",
+      "result": "PASS (exit 0): created one draft with exact requested title, excerpt and body in content; authorId assigned by CMS. Omitted status to use MCP's documented draft default. No publish operation was attempted."
+    },
+    {
+      "command": "runner mcp content_get {collection: posts, id: 01M5M4QXBWXSD90B4VG9KHQBRQ, markdown: true}",
+      "result": "PASS (exit 0): exact title and excerpt and complete body read back (Markdown output adds its normal trailing newline); status draft, publishedAt null, scheduledAt null, liveRevisionId null, authorId retained."
+    },
+    {
+      "command": "runner mcp content_list {collection: posts, status: published, limit: 100}",
+      "result": "PASS (exit 0): only the existing welcome post was returned; the new draft was excluded."
+    },
+    {
+      "command": "runner run verify",
+      "result": "PASS (exit 0): lint, CSS contracts, art direction, tokens, full tests and typecheck completed. Art-direction output reported no visual source changes. Runner output was bounded/truncated; exit status was observed."
+    },
+    {
+      "command": "runner run build",
+      "result": "PASS (exit 0): schema budget, Astro production server build and release artifact check passed. Nonfatal Vite chunk-size warning observed."
+    },
+    {
+      "command": "runner run audit:html (first attempt during verify)",
+      "result": "FAILED (exit 1): SSR snapshot deadline exceeded."
+    },
+    {
+      "command": "runner run audit:html (retry after verify completed)",
+      "result": "PASS (exit 0): 9 HTML files audited in 1922.4ms; 10 public responses captured. Representative linked routes only."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [],
+  "discoveryNotes": [
+    "All discovery reads/searches and npm/MCP operations used the requested runner. The result file was written directly with apply_patch as permitted.",
+    "A broad runner search of docs incidentally returned docs/workflow-replay.md:65; that file was not opened and no controller internals were used.",
+    "A combined read containing an unavailable linked historical roles audit failed with ENOENT; the needed existing skill reference and seed were then read separately."
+  ],
+  "cms": {
+    "collection": "posts",
+    "created": {
+      "id": "01M5M4QXBWXSD90B4VG9KHQBRQ",
+      "slug": "kickoff-cms-inspect",
+      "status": "draft",
+      "authorId": "01M5M4JR3BYNVEPAXA8E81E9T9",
+      "title": "Planning a useful kickoff",
+      "excerpt": "A short agenda for the first conversation.",
+      "content": "Agree the purpose, invite the people doing the work, and leave with clear next steps.",
+      "publishedAt": null,
+      "scheduledAt": null,
+      "liveRevisionId": null
+    },
+    "permissionExplanation": "EmDash checks both token scopes and the account role. A Contributor (role 20) can create content and edit owned drafts, but cannot publish even its own draft; publishing remains an editorial action for a suitably authorized account. Draft read visibility is broader than edit ownership and does not imply permission to edit another author's draft. The live schema read was denied because this token lacks schema:read; content-authoring permission does not grant schema access or schema administration. The checked-in role guide assigns schema/configuration administration to Admin. No scopes, roles, settings or schema were changed, and publication denial was explained from the documented role contract rather than tested with a publish attempt.",
+    "permissionSources": [
+      "docs/agent-documentation.md",
+      "docs/emdash-1.3-upgrade-review.md",
+      "Live schema_get_collection INSUFFICIENT_SCOPE response",
+      "Live content_create and content_get responses"
+    ]
+  }
+}

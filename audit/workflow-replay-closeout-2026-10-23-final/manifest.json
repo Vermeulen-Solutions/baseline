@@ -1,0 +1,1064 @@
+{
+  "schemaVersion": 1,
+  "status": "final",
+  "privacyStatus": "pass",
+  "sourceRun": "baseline-workflow-replay-20261023-replay6",
+  "files": [
+    {
+      "path": "canonical-lock-older-profile.json",
+      "sha256": "9f0e5c0f3a434f14e0a9bdc5aea74d9686a5e860440466059aac95e7d1c990c9",
+      "bytes": 278156
+    },
+    {
+      "path": "canonical-lock-static.json",
+      "sha256": "9f0e5c0f3a434f14e0a9bdc5aea74d9686a5e860440466059aac95e7d1c990c9",
+      "bytes": 278156
+    },
+    {
+      "path": "canonical-lock-sveltia.json",
+      "sha256": "9f0e5c0f3a434f14e0a9bdc5aea74d9686a5e860440466059aac95e7d1c990c9",
+      "bytes": 278156
+    },
+    {
+      "path": "cleanup.json",
+      "sha256": "c7754004d6cb58e642695fc326abcb9f14556aef6d28e943efeba31c59f64f4c",
+      "bytes": 7397
+    },
+    {
+      "path": "cms-inspect/acceptance.json",
+      "sha256": "e9f33377c96783426951b1d075084f32f92ae1bfdf02d888820fe5179440f242",
+      "bytes": 70093
+    },
+    {
+      "path": "cms-inspect/after-source.json",
+      "sha256": "82e8a6a4631e9cdc2d0cbd7e1a217fdcde3fa8e76b52f8ad76368e0964fdd95d",
+      "bytes": 65079
+    },
+    {
+      "path": "cms-inspect/baseline-cms.json",
+      "sha256": "c6fea36b4488d51967926af74cef949a12a48cb627ddde376517c63ae46cc8d7",
+      "bytes": 2448
+    },
+    {
+      "path": "cms-inspect/changes.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "cms-inspect/cms-after.json",
+      "sha256": "608e8f88efc75ae3f791417ce62830ba12bdd982a564ed38a6fd14f79eb3569e",
+      "bytes": 353
+    },
+    {
+      "path": "cms-inspect/grade-audit-html-ab77a60f-4042-48d0-a5ab-420c8ff150e1.json",
+      "sha256": "82370450bc1c5a7f80718cd751dd6de794de24a45016010ad5a1a0217e29a54e",
+      "bytes": 505
+    },
+    {
+      "path": "cms-inspect/grade-audit-html-ab77a60f-4042-48d0-a5ab-420c8ff150e1.log",
+      "sha256": "1d236ba201ca95532ce328ed0f92e8367110a87684a024a19fc37fd7fa122d70",
+      "bytes": 310
+    },
+    {
+      "path": "cms-inspect/grade-build-da948dff-1209-4468-95f9-60b0a4b8d242.json",
+      "sha256": "05f879a7b1575b238fc17f7087306bc2ed39ae0a8abbec2443e7b3324af176e0",
+      "bytes": 491
+    },
+    {
+      "path": "cms-inspect/grade-build-da948dff-1209-4468-95f9-60b0a4b8d242.log",
+      "sha256": "23307a4a57aa0ccc9d0cbd1cb8d4cd556226ead736e2172812ef6942f3c9bde4",
+      "bytes": 2153
+    },
+    {
+      "path": "cms-inspect/grade-verify-f393e5c7-4bfd-42db-8a14-3ce6e6ba5fc7.json",
+      "sha256": "c7505fc64875aa3004d0ebc8778f253a09403bc377d09b1bb6397fbf236d80a4",
+      "bytes": 495
+    },
+    {
+      "path": "cms-inspect/grade-verify-f393e5c7-4bfd-42db-8a14-3ce6e6ba5fc7.log",
+      "sha256": "0eeca61dc82c988ab679c55ef095c35b79c4187eaa39e70773705be719ed7506",
+      "bytes": 38421
+    },
+    {
+      "path": "cms-inspect/install-b831d192-c6c8-4943-9fe7-5eb073442f76.json",
+      "sha256": "42bb2b9e1915a05f0744ee21a091436748e491420a4d9df0e6a3d3c5cf55dbb5",
+      "bytes": 532
+    },
+    {
+      "path": "cms-inspect/install-b831d192-c6c8-4943-9fe7-5eb073442f76.log",
+      "sha256": "f599a1ac1dec6f08aae522f5eb5095e25762eee1711f9be3c885119fb1e0436c",
+      "bytes": 1186
+    },
+    {
+      "path": "cms-inspect/install.json",
+      "sha256": "1b105c5f1d8052f92f369a6e8f37c5a05fea2060bc16716f47cc4bb859b5613e",
+      "bytes": 528
+    },
+    {
+      "path": "cms-inspect/preflight-audit-html-043447d1-1f56-42e0-b6b3-bece045ab66d.json",
+      "sha256": "73c41178f89585bc9b2003978183ceede0bb71777635d946f650e8c646218ee1",
+      "bytes": 509
+    },
+    {
+      "path": "cms-inspect/preflight-audit-html-043447d1-1f56-42e0-b6b3-bece045ab66d.log",
+      "sha256": "0762dc8d398cf567b1bd6666a60d7ad22b666dea4b7046e29adb3f6ca17fc01f",
+      "bytes": 310
+    },
+    {
+      "path": "cms-inspect/preflight-build-f97881e7-6067-4a40-a7d7-b1defaee8332.json",
+      "sha256": "03d457d008076513b8cb1157d99725bc8b21b4a6c96b0112400c62fab82264d6",
+      "bytes": 495
+    },
+    {
+      "path": "cms-inspect/preflight-build-f97881e7-6067-4a40-a7d7-b1defaee8332.log",
+      "sha256": "eaf5c66ead40746f9385a6f4d9c6f34cd74d6eb1292dc2119752dd69f3fa7c87",
+      "bytes": 2153
+    },
+    {
+      "path": "cms-inspect/preflight-doctor-098b1aab-90bb-4ba3-adb1-ec18c4b16ef6.json",
+      "sha256": "039b3eeda833d5523f91c1a757d09a72a55e870dee1efbc367047af888ec41a3",
+      "bytes": 497
+    },
+    {
+      "path": "cms-inspect/preflight-doctor-098b1aab-90bb-4ba3-adb1-ec18c4b16ef6.log",
+      "sha256": "b0132e4456bdb9b390ff5829d76bee259b25ebaf641348b9b3a698fd1da74efa",
+      "bytes": 573
+    },
+    {
+      "path": "cms-inspect/preflight-verify-60505a55-67ae-4c53-b236-814b287699d5.json",
+      "sha256": "501a86650fa7d5fc6765ddd4e5c0bc82cc8857bfa8c04d6b426b5b1e99eca273",
+      "bytes": 499
+    },
+    {
+      "path": "cms-inspect/preflight-verify-60505a55-67ae-4c53-b236-814b287699d5.log",
+      "sha256": "f2095172e94f97abed257ae7f7e5a9a45998f015c5e44755ca84cad08642b760",
+      "bytes": 38411
+    },
+    {
+      "path": "cms-inspect/prompt.txt",
+      "sha256": "f5d7c2ce7f030085f786f65767b41ae7880c16950dbd9768e277fdc493a5b7d1",
+      "bytes": 2131
+    },
+    {
+      "path": "cms-inspect/receipt.json",
+      "sha256": "d72ad39089dafd26ba70736abd7bc0a98623029d39bfca37758bdaaa3ac75e14",
+      "bytes": 172221
+    },
+    {
+      "path": "cms-inspect/result.json",
+      "sha256": "94402ba053ada7920304b0c8329a6dc1f1735c2db5ac5345b9ed3066b8f6774d",
+      "bytes": 2633
+    },
+    {
+      "path": "cms-inspect/review.json",
+      "sha256": "5603e6d8e697b1a867d7310720a54c17e19958a7d5f39b22b1e76ea8b35ac8c9",
+      "bytes": 1036
+    },
+    {
+      "path": "cms-inspect/source-changes.json",
+      "sha256": "d7f770a5a3b7636919c284610d67426ab886019de36833ade5c50e8da00a3c59",
+      "bytes": 62
+    },
+    {
+      "path": "cms-inspect/trace.jsonl",
+      "sha256": "b527f06c9d1640e9f74dbc8abb0c8b2140c08040e6aa7348b274a8b91b87dbac",
+      "bytes": 162953
+    },
+    {
+      "path": "cms-source/acceptance.json",
+      "sha256": "9e12841018caabe68575b9d3336af870a4ba327a04979cfc8efaeec5a7c3f4d5",
+      "bytes": 70091
+    },
+    {
+      "path": "cms-source/after-source.json",
+      "sha256": "82e8a6a4631e9cdc2d0cbd7e1a217fdcde3fa8e76b52f8ad76368e0964fdd95d",
+      "bytes": 65079
+    },
+    {
+      "path": "cms-source/baseline-cms.json",
+      "sha256": "9496437f836536e390bec835e10d0edf469851e2cfdc9051a26ae2154a7cfed3",
+      "bytes": 2448
+    },
+    {
+      "path": "cms-source/changes.patch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "cms-source/cms-after.json",
+      "sha256": "9daaea577745bf18c3a5253c0d1a52bc852d6a237a98e11fc31c563441d575cc",
+      "bytes": 353
+    },
+    {
+      "path": "cms-source/grade-audit-html-994d4653-5dd8-4250-92e0-4c9f7165f315.json",
+      "sha256": "a4c1f060c89d301b8d20d5c3edc872193bc06dab267c661015b473dd8880374a",
+      "bytes": 505
+    },
+    {
+      "path": "cms-source/grade-audit-html-994d4653-5dd8-4250-92e0-4c9f7165f315.log",
+      "sha256": "1fc19d50e79690ebd7afa69b2ed921cc33305b52595b79d64dd1fed7070f2dfa",
+      "bytes": 309
+    },
+    {
+      "path": "cms-source/grade-build-8ac4db25-ab83-4a55-b918-31fea9fb70f3.json",
+      "sha256": "dfb5d4f7eec4833f904306940126694b708199baf277d79e8eedb471e733fc1f",
+      "bytes": 491
+    },
+    {
+      "path": "cms-source/grade-build-8ac4db25-ab83-4a55-b918-31fea9fb70f3.log",
+      "sha256": "062ae1ffa6e9aeabca0b5495187bb381b13925c6e2494c3eb8de8894788e454c",
+      "bytes": 2152
+    },
+    {
+      "path": "cms-source/grade-verify-b420757f-7799-4d9a-9c49-8c2f19d12dd5.json",
+      "sha256": "fb3800a3b1a7bd91b089dcd1db3b0478819f1d0b9cc27c0122c2c5d99c0cfda5",
+      "bytes": 495
+    },
+    {
+      "path": "cms-source/grade-verify-b420757f-7799-4d9a-9c49-8c2f19d12dd5.log",
+      "sha256": "642e6606704870ceacb03b757e31d430bce2d0cb83612eebd7ed0ae73f50d2d8",
+      "bytes": 38414
+    },
+    {
+      "path": "cms-source/install-7893ba5e-6346-459d-9069-384beb39ab4b.json",
+      "sha256": "f368e9e4f000bffc2a5e533d8ce91a76a085b4cbc039d34e7fb50c0dd8e17efb",
+      "bytes": 532
+    },
+    {
+      "path": "cms-source/install-7893ba5e-6346-459d-9069-384beb39ab4b.log",
+      "sha256": "f599a1ac1dec6f08aae522f5eb5095e25762eee1711f9be3c885119fb1e0436c",
+      "bytes": 1186
+    },
+    {
+      "path": "cms-source/install.json",
+      "sha256": "c210fd81b90cca083ef751d0a7438eac5a9a14828be626524f5b0cf398e78eb5",
+      "bytes": 528
+    },
+    {
+      "path": "cms-source/preflight-audit-html-8011cfe2-d115-4e1a-851f-3c478edf055b.json",
+      "sha256": "a97d047dbf631d44da2b61f5cb7c65cd8231f924dbf840e3f75ca58b47225ba5",
+      "bytes": 509
+    },
+    {
+      "path": "cms-source/preflight-audit-html-8011cfe2-d115-4e1a-851f-3c478edf055b.log",
+      "sha256": "7e8aca83cfed86e4dd22e657894e2c02e60f578402cc640bcb0c92dc05f59c2f",
+      "bytes": 309
+    },
+    {
+      "path": "cms-source/preflight-build-18b095a8-2049-416e-90db-5b623b8b374d.json",
+      "sha256": "d483e087f2d0fc9c5a4a64eb47da1d8f9fde178db985fd2f887681b2cce9adbd",
+      "bytes": 495
+    },
+    {
+      "path": "cms-source/preflight-build-18b095a8-2049-416e-90db-5b623b8b374d.log",
+      "sha256": "3b977a3e8bdfd2184068ce2f5f81e255f86bcf5da57ba9f491fc98290f66a958",
+      "bytes": 2152
+    },
+    {
+      "path": "cms-source/preflight-doctor-44f9fd12-cc7a-44d5-820f-e0a8e680bef5.json",
+      "sha256": "39f688fa8eef540d93cbef04898157dde70d91d81383b3fdfba17b702517270f",
+      "bytes": 497
+    },
+    {
+      "path": "cms-source/preflight-doctor-44f9fd12-cc7a-44d5-820f-e0a8e680bef5.log",
+      "sha256": "d0ff6e6e7a4da9e2dbef57d7d5216cdcf643b6d1b21754edaff661f494b8cdc1",
+      "bytes": 573
+    },
+    {
+      "path": "cms-source/preflight-verify-4970a937-9d26-4cb6-8fe7-b47c6ee72fef.json",
+      "sha256": "75620b5929cffbedf0b3a8b66998711c1155f70abeaabbd73384d684d037ae30",
+      "bytes": 499
+    },
+    {
+      "path": "cms-source/preflight-verify-4970a937-9d26-4cb6-8fe7-b47c6ee72fef.log",
+      "sha256": "7be39afbf9d53d7a1dbacd0561ac708db58657bd675ce877469d791d004e25e2",
+      "bytes": 38423
+    },
+    {
+      "path": "cms-source/prompt.txt",
+      "sha256": "8c4cb7ab9dd11436f83e1f31f76f0c7b3e30ab303b95c827b8cefee742da693a",
+      "bytes": 2133
+    },
+    {
+      "path": "cms-source/receipt.json",
+      "sha256": "2afb6300647228023820ac799b0e035ed7ad52797dc220ec8ad50fa3b47419f3",
+      "bytes": 172238
+    },
+    {
+      "path": "cms-source/result.json",
+      "sha256": "0788d3acecaf2904f489611420a903e268bd27838d17e584f3b6f1854c795716",
+      "bytes": 1873
+    },
+    {
+      "path": "cms-source/review.json",
+      "sha256": "20095e68e15754f826755ad8b17951c3ba5ad2ec2c23b2d9e23a538304360824",
+      "bytes": 1138
+    },
+    {
+      "path": "cms-source/source-changes.json",
+      "sha256": "b83b8eea5f12239c2683b303631ea90cd82d10214a5dfb610285bba1f48d2076",
+      "bytes": 62
+    },
+    {
+      "path": "cms-source/trace.jsonl",
+      "sha256": "9741e78d6dfc59f179b0f2cd158814634a82402551f210ac38821314902233f7",
+      "bytes": 110268
+    },
+    {
+      "path": "dispatch.json",
+      "sha256": "c8d5604315051a230114c52ba3f6a470372043be755e4c63517754e81e32fd49",
+      "bytes": 1818
+    },
+    {
+      "path": "fixture-removal.json",
+      "sha256": "8cea06ee4ff5fc36ed13dc6ae9c74e830a406c8259a37ad829cb783ee00c05b4",
+      "bytes": 896
+    },
+    {
+      "path": "old-residual-resolution.json",
+      "sha256": "13ac04303d1d0c19558ab3dc9489a42013d36519e26ec911f68070831c395314",
+      "bytes": 250
+    },
+    {
+      "path": "older-profile-source/acceptance.json",
+      "sha256": "25646cc64c515106bcf4d6293d54964056fd093e6a3ae264d87b103d83af09d4",
+      "bytes": 22873
+    },
+    {
+      "path": "older-profile-source/after-source.json",
+      "sha256": "a3e4923485923c82023408dee2605447f10dadeef18e652b18b1aa908f8c6343",
+      "bytes": 18825
+    },
+    {
+      "path": "older-profile-source/changes.patch",
+      "sha256": "dac82fa5a8ae7e540f26ec55a543075d1d80ce0cabe7306c9a804dfd5909cef9",
+      "bytes": 3178
+    },
+    {
+      "path": "older-profile-source/install-93565c8f-4c36-4cac-951d-d0b3d09bbada.json",
+      "sha256": "e3dec28577495e644fb67c7f75509445f5c8e49071d95abb162ff4e9783cc112",
+      "bytes": 539
+    },
+    {
+      "path": "older-profile-source/install-93565c8f-4c36-4cac-951d-d0b3d09bbada.log",
+      "sha256": "7d58d4df54056365ab3a93e0dc251acb085d4bfc62f0cea279b74e6036e88b0c",
+      "bytes": 26
+    },
+    {
+      "path": "older-profile-source/install.json",
+      "sha256": "b9ed45a8d5ec0849b3b921572594ded27e2974efd04457bc02ac61a613f67612",
+      "bytes": 530
+    },
+    {
+      "path": "older-profile-source/preflight-build-950262a3-fa4b-4ec3-97d5-9ca5bcf11d9a.json",
+      "sha256": "777848265c14023a39a5631921cc416f61760ba02d453db2b5b7b0d4b8507273",
+      "bytes": 495
+    },
+    {
+      "path": "older-profile-source/preflight-build-950262a3-fa4b-4ec3-97d5-9ca5bcf11d9a.log",
+      "sha256": "043a8a3e098870347f2082205d4f0c53bb53650792ba6859dc26eaa5a25f3946",
+      "bytes": 2192
+    },
+    {
+      "path": "older-profile-source/preflight-check-dev-tools-9a4a9f31-137e-4e0c-94ef-ca6fc25bed05.json",
+      "sha256": "9e8c745c694fad026a956ef10f2eab03eb069cc1fb8dd3bdfeabc2f243f85107",
+      "bytes": 524
+    },
+    {
+      "path": "older-profile-source/preflight-check-dev-tools-9a4a9f31-137e-4e0c-94ef-ca6fc25bed05.log",
+      "sha256": "2476c32d0d0676df0b5b9842121f94a3d306ca03f776a5c354395e06ea26ba05",
+      "bytes": 151
+    },
+    {
+      "path": "older-profile-source/preflight-verify-870e8e57-b89c-49df-a3f2-a900addbd590.json",
+      "sha256": "606392d8dec0d294b43865ef68f25e216fa15c767b734c6ad98aa751a9954ccf",
+      "bytes": 498
+    },
+    {
+      "path": "older-profile-source/preflight-verify-870e8e57-b89c-49df-a3f2-a900addbd590.log",
+      "sha256": "352fbd712dfbb5cc0f1dea49ea6172fde70f6c2653546376ae1e3007a233d389",
+      "bytes": 6609
+    },
+    {
+      "path": "older-profile-source/prompt.txt",
+      "sha256": "4b34f14cbd7365f0700292b362c4fe72a2bbcc08921b7abbc34d8715c409ab55",
+      "bytes": 2159
+    },
+    {
+      "path": "older-profile-source/receipt.json",
+      "sha256": "548bca29fd9ce9b503743a47a52d4cd8d258d6d9531e5b56578b54b019710349",
+      "bytes": 26559
+    },
+    {
+      "path": "older-profile-source/result.json",
+      "sha256": "cb7092a38f735a1554837afc303151efe74b0d7741716b10861e377360ffe46a",
+      "bytes": 1252
+    },
+    {
+      "path": "older-profile-source/review.json",
+      "sha256": "af981e92ee082bf580528832fbbe2807003339b4bff842bd3efab0a1fc2b7308",
+      "bytes": 5841
+    },
+    {
+      "path": "older-profile-source/source-changes.json",
+      "sha256": "52255ac2a531985abd58bf86ab813572cab533a99abba1362f6b96bc28e55bdb",
+      "bytes": 3165
+    },
+    {
+      "path": "older-profile-source/trace.jsonl",
+      "sha256": "f71c44ee7b5c57cf2de8acd0ca0924954a0d6fb7033bac0b78bcf1e117a9f210",
+      "bytes": 96042
+    },
+    {
+      "path": "pair-cms.json",
+      "sha256": "57dac775a7bde4f5642141fe861d8b441ef17f16acaafcf153337076b5ba80c0",
+      "bytes": 2771
+    },
+    {
+      "path": "pair-static.json",
+      "sha256": "8f08b3a77a74cd4c05524cf2746ad3eaf7dec0797d81e0652cc4fc1d2ac8b066",
+      "bytes": 1974
+    },
+    {
+      "path": "pair-sveltia.json",
+      "sha256": "610d6b86b614fb8d064e2f5c57b69b2d71b50252b4946198055c0f40017bdad9",
+      "bytes": 1977
+    },
+    {
+      "path": "protocol.json",
+      "sha256": "8bc9a6f4a3b7723139cab27eb9d1424fdb9dc76d4b2bf42005dadb63b9a9aaeb",
+      "bytes": 219932
+    },
+    {
+      "path": "repository-checks.json",
+      "sha256": "d38945e87e1d35efdf8bf62074b857ba43ef9f81abdd0d71aa7e6f8f2f45c35c",
+      "bytes": 958
+    },
+    {
+      "path": "static-inspect/acceptance.json",
+      "sha256": "0610ae8fc7b7c26b474aef736f804af95c7f1c905f7fc8ea75307c9bcf3530bb",
+      "bytes": 24846
+    },
+    {
+      "path": "static-inspect/after-source.json",
+      "sha256": "dd73d53c18fa15bc56da52d2213726c444473a18ce12fa305037d6bdcb5f6953",
+      "bytes": 18639
+    },
+    {
+      "path": "static-inspect/baseline-observations.json",
+      "sha256": "fce96044e67c1b6185629b168f0876ff6083b4c6b398cf3d05f9bd8417c1579e",
+      "bytes": 2400
+    },
+    {
+      "path": "static-inspect/changes.patch",
+      "sha256": "c2ab01e7e246c05fc94162f0390812154dcfb3a9f6638f89d1df128495a8b629",
+      "bytes": 1202
+    },
+    {
+      "path": "static-inspect/grade-build-b2a269ab-aef6-4e0a-8d22-c9375d743d60.json",
+      "sha256": "b9a4e56ad280ad7ba04cba667f1a7410517732696df615741afafbb241dcfe80",
+      "bytes": 491
+    },
+    {
+      "path": "static-inspect/grade-build-b2a269ab-aef6-4e0a-8d22-c9375d743d60.log",
+      "sha256": "4c1a19b829b9862224f260b7b518fa44863efbab7549d3d9ec29854554d5d22e",
+      "bytes": 2099
+    },
+    {
+      "path": "static-inspect/grade-check-dev-tools-22206294-cd77-4321-89f4-b50a04ad9fc8.json",
+      "sha256": "6bae205b5a5799e8bb6920527e2425d5636c8979a874c27ea9c875a01abcabf8",
+      "bytes": 520
+    },
+    {
+      "path": "static-inspect/grade-check-dev-tools-22206294-cd77-4321-89f4-b50a04ad9fc8.log",
+      "sha256": "2476c32d0d0676df0b5b9842121f94a3d306ca03f776a5c354395e06ea26ba05",
+      "bytes": 151
+    },
+    {
+      "path": "static-inspect/grade-verify-94c826da-3edd-4c99-b96d-2364f79a7936.json",
+      "sha256": "cea2d722c9b209761e6c58e2e5754214e70d7e5cf47eb70245240a0ec41f8439",
+      "bytes": 496
+    },
+    {
+      "path": "static-inspect/grade-verify-94c826da-3edd-4c99-b96d-2364f79a7936.log",
+      "sha256": "df087b9fc3ea7bcc133e500afacd865cfff7e0c010292ad688c09a7e99f34831",
+      "bytes": 6956
+    },
+    {
+      "path": "static-inspect/install-4922a09e-e5b7-47b5-b35e-6c32a4a4aa4b.json",
+      "sha256": "b720b2202cd3b6f0d5c132ba6b34565be0e499a79f5ab49d65fd1604e9fbfb48",
+      "bytes": 529
+    },
+    {
+      "path": "static-inspect/install-4922a09e-e5b7-47b5-b35e-6c32a4a4aa4b.log",
+      "sha256": "e6ce634fa9f9420d7215adf148e26d628c62da2cb328a1340bea20df7036f497",
+      "bytes": 27
+    },
+    {
+      "path": "static-inspect/install.json",
+      "sha256": "44e6bfe5886be077f1e70e7ff1cd5f07f215f5397f49cb47ef912cddfea447e2",
+      "bytes": 525
+    },
+    {
+      "path": "static-inspect/preflight-build-2b2e3c9d-db70-4445-a866-fad578459b31.json",
+      "sha256": "fb6f999f89b7e677c8109282ebd2af0c461ac6024c280a12e2ec34b15f851d49",
+      "bytes": 495
+    },
+    {
+      "path": "static-inspect/preflight-build-2b2e3c9d-db70-4445-a866-fad578459b31.log",
+      "sha256": "dead592a38a6d4efe2c6d84a827bdd85667bb34babd6d2aeee414a858da2480e",
+      "bytes": 2186
+    },
+    {
+      "path": "static-inspect/preflight-check-dev-tools-8d138e18-905d-40e0-be43-ea032903090d.json",
+      "sha256": "734a4ee9adf71c9c8cd7a5e89840d6fe0e79f3dc71a3bdde32f3679f9132e510",
+      "bytes": 524
+    },
+    {
+      "path": "static-inspect/preflight-check-dev-tools-8d138e18-905d-40e0-be43-ea032903090d.log",
+      "sha256": "2476c32d0d0676df0b5b9842121f94a3d306ca03f776a5c354395e06ea26ba05",
+      "bytes": 151
+    },
+    {
+      "path": "static-inspect/preflight-verify-3a048bbe-b78c-4ab8-b8fa-b00a77ead8d2.json",
+      "sha256": "52107af7ac86be0ae37698cfd0b49356031217d31de63ca7bcde593f83a79fb3",
+      "bytes": 498
+    },
+    {
+      "path": "static-inspect/preflight-verify-3a048bbe-b78c-4ab8-b8fa-b00a77ead8d2.log",
+      "sha256": "1adc399bebbb56983b24d81341370d9b04b40f43eefa505c1d58592df0e4360a",
+      "bytes": 6597
+    },
+    {
+      "path": "static-inspect/preview.json",
+      "sha256": "1cabac9d47d5c342dfb761df853ab47ddf2c686174601681c2eed49fbf951867",
+      "bytes": 69
+    },
+    {
+      "path": "static-inspect/prompt.txt",
+      "sha256": "b7441305c3ea93b821b1ad0360b024a4a1ba0de69a6cdd7848cc00d48eaa16d1",
+      "bytes": 1991
+    },
+    {
+      "path": "static-inspect/receipt.json",
+      "sha256": "4192da45f474f539bff882803aba3a82140b3387cd1cf939b11ed9663140a810",
+      "bytes": 26335
+    },
+    {
+      "path": "static-inspect/result.json",
+      "sha256": "19a647ebc2b96e581f5341aabf8f91394307952a14fff502114c89265f0ad982",
+      "bytes": 1690
+    },
+    {
+      "path": "static-inspect/source-changes.json",
+      "sha256": "862ce9baa0379edc5a6978ba26c855e75d897da55dfc06bb9b705484948edb8f",
+      "bytes": 1391
+    },
+    {
+      "path": "static-inspect/trace.jsonl",
+      "sha256": "0934319d283138ed23cbd697129c20986dedca294d8fc66705cb6da4d6d4531f",
+      "bytes": 129900
+    },
+    {
+      "path": "static-source/acceptance.json",
+      "sha256": "1646ccd524378b3c9a5f662481d957e2d580c072ee6d35d57a0d96f808b66fa2",
+      "bytes": 24845
+    },
+    {
+      "path": "static-source/after-source.json",
+      "sha256": "b6ceaeaa4855d64bfa8df8f2e6677a6c38de51f72d578d05e8310f6850f4911e",
+      "bytes": 18639
+    },
+    {
+      "path": "static-source/baseline-observations.json",
+      "sha256": "ee9cbaa81b8c57b89edfb1634f7320c2d6b7ca62d69260f0ed0b67eb0324f71e",
+      "bytes": 2400
+    },
+    {
+      "path": "static-source/changes.patch",
+      "sha256": "82de983d51cefd3b3ff014a4ef02ae613f577bff80b821e3118d09f2535251c7",
+      "bytes": 1199
+    },
+    {
+      "path": "static-source/grade-build-2da42d2d-9ca6-4a61-9286-584ea7f0585a.json",
+      "sha256": "c165dbdd627a14233ea94189e1a1c29a47a8b12d41c29d28d51e937c097e1c38",
+      "bytes": 491
+    },
+    {
+      "path": "static-source/grade-build-2da42d2d-9ca6-4a61-9286-584ea7f0585a.log",
+      "sha256": "d37f59a8c6712db1f8b926338d41d92bd856f67887af15148847f4ae5a763cae",
+      "bytes": 2098
+    },
+    {
+      "path": "static-source/grade-check-dev-tools-bc9daf0c-9d6b-44ae-92ec-0da161140d6f.json",
+      "sha256": "e8b58d91f59055bf3a2848cc632e55081d85704bf42713acdf4fc4e418347e8d",
+      "bytes": 520
+    },
+    {
+      "path": "static-source/grade-check-dev-tools-bc9daf0c-9d6b-44ae-92ec-0da161140d6f.log",
+      "sha256": "2476c32d0d0676df0b5b9842121f94a3d306ca03f776a5c354395e06ea26ba05",
+      "bytes": 151
+    },
+    {
+      "path": "static-source/grade-verify-f41ba9c0-b591-4d82-b66a-d268a6158a46.json",
+      "sha256": "1a9d72ff61580ca51be73ed96d458466f24fd6524772ddec4e008b59dad42f42",
+      "bytes": 496
+    },
+    {
+      "path": "static-source/grade-verify-f41ba9c0-b591-4d82-b66a-d268a6158a46.log",
+      "sha256": "02c8a723641b4f747005919439f22bc88bb7d72fee5bfb7fa2b45494a9537778",
+      "bytes": 6956
+    },
+    {
+      "path": "static-source/install-25b3e33b-8373-4858-9627-183afd12e005.json",
+      "sha256": "adc891dc986d48c9a746e9fbd60728be3c5b974142d263cbaf4e90d481c14377",
+      "bytes": 539
+    },
+    {
+      "path": "static-source/install-25b3e33b-8373-4858-9627-183afd12e005.log",
+      "sha256": "14ec860430c342888cce76c86d346f1e8c0d7272c79771807adc3f6a02455447",
+      "bytes": 27
+    },
+    {
+      "path": "static-source/install.json",
+      "sha256": "e242a010ebd2a58c936ab402f761da9a3d74a35950976889f420dea1a36321f6",
+      "bytes": 530
+    },
+    {
+      "path": "static-source/preflight-build-fa7af4e2-cbe3-417a-994b-0607216d3498.json",
+      "sha256": "0c964d034ee4b1bc1ff60fc5a432d624bd3e23e6860afe2d03ba546554072bc6",
+      "bytes": 495
+    },
+    {
+      "path": "static-source/preflight-build-fa7af4e2-cbe3-417a-994b-0607216d3498.log",
+      "sha256": "10dcb850f295be06b5b9d7eb21cd33b5e15856a223d7cb7f678dd362310207c0",
+      "bytes": 2185
+    },
+    {
+      "path": "static-source/preflight-check-dev-tools-6d13aa3b-365e-4e59-b91d-018ad8260734.json",
+      "sha256": "c63283c97518bfad1858fc45355d1cc91bf5d9673e3ad2b949370695e894b555",
+      "bytes": 524
+    },
+    {
+      "path": "static-source/preflight-check-dev-tools-6d13aa3b-365e-4e59-b91d-018ad8260734.log",
+      "sha256": "2476c32d0d0676df0b5b9842121f94a3d306ca03f776a5c354395e06ea26ba05",
+      "bytes": 151
+    },
+    {
+      "path": "static-source/preflight-verify-2b7cf990-d015-4131-aabf-1235004b86be.json",
+      "sha256": "589dfccd4e942643616f581bb2065dbde3e334c768285c115220a690a9bb5631",
+      "bytes": 498
+    },
+    {
+      "path": "static-source/preflight-verify-2b7cf990-d015-4131-aabf-1235004b86be.log",
+      "sha256": "85b138dc78ca90dd088cdecfbc1dd17fef6d304ddaada7ce7bb6b3282d46d7fd",
+      "bytes": 6592
+    },
+    {
+      "path": "static-source/preview.json",
+      "sha256": "161995c6c91689df52cb4eed87ab5215a5fcd6c61aa215a7f6adf101668c7649",
+      "bytes": 69
+    },
+    {
+      "path": "static-source/prompt.txt",
+      "sha256": "9694bedb4646e4f3f910393944b671c23bfe63e1d514e899f84ec47c26185be1",
+      "bytes": 1994
+    },
+    {
+      "path": "static-source/receipt.json",
+      "sha256": "1498d01f0b5a39f72f38ab52ffee894a4b6cfb8282133c84ddd5cae74102bdfe",
+      "bytes": 26362
+    },
+    {
+      "path": "static-source/result.json",
+      "sha256": "88ca79614cf1312ad4c923332c1ee6926374c97061648799d5fe56b59a246d68",
+      "bytes": 1983
+    },
+    {
+      "path": "static-source/source-changes.json",
+      "sha256": "2cc3482769bf8c09b40ce3ad96a6686bb3ae370d9f4888bef103ff3c26302fb6",
+      "bytes": 1388
+    },
+    {
+      "path": "static-source/trace.jsonl",
+      "sha256": "aaec92545e2c333b5ff6d3757ee0dc424834e9fab3258a251fa2190b13dbbf6c",
+      "bytes": 175547
+    },
+    {
+      "path": "sveltia-inspect/acceptance.json",
+      "sha256": "15deb60b68260a89c7dd85bee58927749885e5abf50d85fa387aaca4812f60e8",
+      "bytes": 28168
+    },
+    {
+      "path": "sveltia-inspect/after-source.json",
+      "sha256": "6a453cef06aad1852131b43d6e0de01f94a987780e385186b45bcde1c5646a7b",
+      "bytes": 19029
+    },
+    {
+      "path": "sveltia-inspect/changes.patch",
+      "sha256": "4e808373d89a1631a6d81d04c5d5bf8a7dcbfd770fa84a1675c10097104d6401",
+      "bytes": 4542
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-above-max-aaa78624-f5e9-4643-82e5-01af1f1beb71.json",
+      "sha256": "1831671863f7d4a20fb33bb4c54b3db8fd16c9b8a7d7b1a10b4980e5866a5a3c",
+      "bytes": 504
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-above-max-aaa78624-f5e9-4643-82e5-01af1f1beb71.log",
+      "sha256": "c1597c83fa5746291ed873b60e146fa12adbf9f7a42d34319a615d45a4eb90b3",
+      "bytes": 883
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-fraction-46114e93-5e68-4ef7-a2ea-f0344f0a7c32.json",
+      "sha256": "38ee15f34dab639fa86c28dc87cc644d34796019683e70f6c93efc956050bc1a",
+      "bytes": 503
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-fraction-46114e93-5e68-4ef7-a2ea-f0344f0a7c32.log",
+      "sha256": "cec4d5f5e0e69ac142895d7d6cbd20a667827c4fe4e56b195857bc085b66508d",
+      "bytes": 910
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-max-41e7e1c1-0291-4940-b91e-3e71d5b9480a.json",
+      "sha256": "3f974f5c5092c1431082781bfcf7dc5a47f097ba0f65014ae96805b64e275cff",
+      "bytes": 498
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-max-41e7e1c1-0291-4940-b91e-3e71d5b9480a.log",
+      "sha256": "49d9500054bf922da3f28d5b86381beded456956765e4f72160437458dcf8c6e",
+      "bytes": 2100
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-min-dd247770-4417-4ead-9d86-32f327b10d71.json",
+      "sha256": "335866f9f1448746218fb52135705297d95d4511a6768d1b2f691658861437d3",
+      "bytes": 498
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-min-dd247770-4417-4ead-9d86-32f327b10d71.log",
+      "sha256": "4e998db8856d77054b8feaea74b8ad2319a60f830cf022ff018cf5c39cb8d88b",
+      "bytes": 2100
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-string-d5a4e900-d0cb-48f9-b9a8-f7ccacd3b813.json",
+      "sha256": "8395a261f83fe34e5787aa88dee5590d4583e411f570cd26a1fdfd3a042b0aa9",
+      "bytes": 501
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-string-d5a4e900-d0cb-48f9-b9a8-f7ccacd3b813.log",
+      "sha256": "260a6ecdd190de1054f37dfe792e6028941a94d5ad318e56c4a022bdad645602",
+      "bytes": 913
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-zero-b3a54c1e-b56b-4ae0-9dbf-097997bde027.json",
+      "sha256": "d9a93ca7f3f400f0fb6c779be6babfa82f1c80c431200746a36e34bb6257ae1c",
+      "bytes": 499
+    },
+    {
+      "path": "sveltia-inspect/grade-boundary-zero-b3a54c1e-b56b-4ae0-9dbf-097997bde027.log",
+      "sha256": "88002145e20af6e0af122e1bb9377436e4643f9daa4f0c8b99e0fcafbf462801",
+      "bytes": 884
+    },
+    {
+      "path": "sveltia-inspect/grade-build-3966086a-4ecf-4f53-a41d-c506e02a38b9.json",
+      "sha256": "1a19eb0dd268a5ba3d73467c6c227db076d4db7de35b6cd435f691a44f6e2c21",
+      "bytes": 491
+    },
+    {
+      "path": "sveltia-inspect/grade-build-3966086a-4ecf-4f53-a41d-c506e02a38b9.log",
+      "sha256": "fc97ed631e6b61449b6e151c55d8539af98069f7ae8ae2e61ac09603e4382cf9",
+      "bytes": 2100
+    },
+    {
+      "path": "sveltia-inspect/grade-check-dev-tools-e80372b9-7a97-4ac6-8b82-ca522a7d7bce.json",
+      "sha256": "0ee7d9f53530bcabe543298d7cd093f40036883af7207375941102ae230c6f9c",
+      "bytes": 520
+    },
+    {
+      "path": "sveltia-inspect/grade-check-dev-tools-e80372b9-7a97-4ac6-8b82-ca522a7d7bce.log",
+      "sha256": "2476c32d0d0676df0b5b9842121f94a3d306ca03f776a5c354395e06ea26ba05",
+      "bytes": 151
+    },
+    {
+      "path": "sveltia-inspect/grade-restored-build-41cb58a0-f8e5-409a-82c8-5e926e3bcea5.json",
+      "sha256": "4e8c38765834d2039d99e2fa3a6f4f17c85de662e9e246026822c724c95a3412",
+      "bytes": 500
+    },
+    {
+      "path": "sveltia-inspect/grade-restored-build-41cb58a0-f8e5-409a-82c8-5e926e3bcea5.log",
+      "sha256": "bd6d77c83b11d100c07af5121ebc39092211f69873c5ab92d8adb8d1d6cf2a0b",
+      "bytes": 2100
+    },
+    {
+      "path": "sveltia-inspect/grade-verify-82a27410-e8c8-442b-94cb-e5021cb26eb7.json",
+      "sha256": "6cab9eff9fda80cd8bc060b69b069bdeb38ad1cc1ae890dc072b8f49fa437197",
+      "bytes": 496
+    },
+    {
+      "path": "sveltia-inspect/grade-verify-82a27410-e8c8-442b-94cb-e5021cb26eb7.log",
+      "sha256": "85a7f8252e386fef1cb0da3c56fc79389e9eac5156a25eac59d888241f3e8416",
+      "bytes": 7470
+    },
+    {
+      "path": "sveltia-inspect/install-39a219d4-3219-4dc6-9f1c-f79d0101d7ab.json",
+      "sha256": "888813fc78776666af509815ce9661bc06b669b3d9769e3a59d0c9e1df9f479a",
+      "bytes": 529
+    },
+    {
+      "path": "sveltia-inspect/install-39a219d4-3219-4dc6-9f1c-f79d0101d7ab.log",
+      "sha256": "e6ce634fa9f9420d7215adf148e26d628c62da2cb328a1340bea20df7036f497",
+      "bytes": 27
+    },
+    {
+      "path": "sveltia-inspect/install.json",
+      "sha256": "2c438a13c501334aa5244293946b02fc10f511e4a7dbd371dc40a449d8d65a68",
+      "bytes": 525
+    },
+    {
+      "path": "sveltia-inspect/preflight-build-d5ccee02-e41f-4659-bee2-e10f94e0ec16.json",
+      "sha256": "d3dfc2ee1e416da6175fc27961cb11ce12633a4c149c2ea7b0b2cec1438cffc9",
+      "bytes": 495
+    },
+    {
+      "path": "sveltia-inspect/preflight-build-d5ccee02-e41f-4659-bee2-e10f94e0ec16.log",
+      "sha256": "0f530c4a38db6f5c760951d6a1f054e8154effacdbac7b0b3c7f5ed17a2cdca9",
+      "bytes": 2187
+    },
+    {
+      "path": "sveltia-inspect/preflight-check-dev-tools-532e903f-abdf-4ede-9c4f-8ce3d4b77d68.json",
+      "sha256": "dd4d9b977c06c7784ed724f636e5086dc07d0ae00732a2a5348106cf318e96bc",
+      "bytes": 524
+    },
+    {
+      "path": "sveltia-inspect/preflight-check-dev-tools-532e903f-abdf-4ede-9c4f-8ce3d4b77d68.log",
+      "sha256": "2476c32d0d0676df0b5b9842121f94a3d306ca03f776a5c354395e06ea26ba05",
+      "bytes": 151
+    },
+    {
+      "path": "sveltia-inspect/preflight-verify-0d3cdd53-9eca-4bd5-a285-039687bc9ebe.json",
+      "sha256": "bd748355832f414aa5d5f46f9b4cd061ba664cc332caa7fea524c54bc6e8baff",
+      "bytes": 498
+    },
+    {
+      "path": "sveltia-inspect/preflight-verify-0d3cdd53-9eca-4bd5-a285-039687bc9ebe.log",
+      "sha256": "987d90caedb7a6f5e6fc17a8d0341187c53a54ebb0278a108a0d1a14da3ef1a4",
+      "bytes": 6694
+    },
+    {
+      "path": "sveltia-inspect/preview.json",
+      "sha256": "c10cfe365661a81a213a0981a6ae585d3c3250b4053fb56f4248f2131841d32e",
+      "bytes": 69
+    },
+    {
+      "path": "sveltia-inspect/prompt.txt",
+      "sha256": "e0824d78fabf9fd3f9cdd1d78f67e4afe74a14781b3f84f13b29646527db9b07",
+      "bytes": 2066
+    },
+    {
+      "path": "sveltia-inspect/receipt.json",
+      "sha256": "edd9b55252ce4a45a3665a4ece397b1f10574525146205f1937df1746cf2ea40",
+      "bytes": 26734
+    },
+    {
+      "path": "sveltia-inspect/result.json",
+      "sha256": "8407aab31d805ced23284b7f927e02d29c2a6552bb97ff8991a361b6a0250097",
+      "bytes": 3151
+    },
+    {
+      "path": "sveltia-inspect/source-changes.json",
+      "sha256": "700456ee2a1bc7402ceecfc3c6d954496594b4701ff8daab422e972f0ca38f8f",
+      "bytes": 8922
+    },
+    {
+      "path": "sveltia-inspect/trace.jsonl",
+      "sha256": "775c9c859cdbb998d7dc7653a17b616bd404569d11c8e89114a8bafc8f415f65",
+      "bytes": 121596
+    },
+    {
+      "path": "sveltia-source/acceptance.json",
+      "sha256": "da9e1bd675726a0075f26dd294747245ad0048f34abb7c15cd7858441a604394",
+      "bytes": 28172
+    },
+    {
+      "path": "sveltia-source/after-source.json",
+      "sha256": "5f00b6555fe3f6f31447adb3049508ad278c9995553c8715af101e045592dbe8",
+      "bytes": 19029
+    },
+    {
+      "path": "sveltia-source/changes.patch",
+      "sha256": "a3e9675866f7dea6f40728f1d586626d0feba0380dc3704f25b2d41f3611867a",
+      "bytes": 5245
+    },
+    {
+      "path": "sveltia-source/grade-boundary-above-max-865d1b9d-e618-4a54-8d3a-354fc218c611.json",
+      "sha256": "bd3653c3fec6dbe8f9e1460cae74f8d7231ddefbc74dda3beeb087ea35bad10a",
+      "bytes": 504
+    },
+    {
+      "path": "sveltia-source/grade-boundary-above-max-865d1b9d-e618-4a54-8d3a-354fc218c611.log",
+      "sha256": "ac5c0edfb5921616931c8b7a4437275071838b53a643823b8b53175e1c2b9d1e",
+      "bytes": 880
+    },
+    {
+      "path": "sveltia-source/grade-boundary-fraction-fa6c0ac9-3845-443b-85fa-c2c2da541129.json",
+      "sha256": "da06790c97b8d62a89ae1ce04065acb587d84179ddfe5e7d3f7630027602fa93",
+      "bytes": 503
+    },
+    {
+      "path": "sveltia-source/grade-boundary-fraction-fa6c0ac9-3845-443b-85fa-c2c2da541129.log",
+      "sha256": "2ceb269c8768d2e0ab72e933e811741c6f3bc419678db755e99af8dc39e32fa6",
+      "bytes": 907
+    },
+    {
+      "path": "sveltia-source/grade-boundary-max-75680f52-5487-45ec-beb6-6a964e0d7da5.json",
+      "sha256": "6d80eb863621989abeae8df16559727a0b81507d9e01cb2932935f74a39af522",
+      "bytes": 498
+    },
+    {
+      "path": "sveltia-source/grade-boundary-max-75680f52-5487-45ec-beb6-6a964e0d7da5.log",
+      "sha256": "2b5dd683ea2fdb9b79d77a7c20e5aef406b51077e0989a57d8461edf2a11d022",
+      "bytes": 2099
+    },
+    {
+      "path": "sveltia-source/grade-boundary-min-340e1d75-6f94-4d03-ae7d-de54647d518c.json",
+      "sha256": "83eb1ab92a02471b1d79aaa35a1300af8381fe26a050b0bcce6ae347a57fae7e",
+      "bytes": 498
+    },
+    {
+      "path": "sveltia-source/grade-boundary-min-340e1d75-6f94-4d03-ae7d-de54647d518c.log",
+      "sha256": "a907babe8db2ff0c72055140166f2727b7f73d46d40c79053900e876dd491459",
+      "bytes": 2099
+    },
+    {
+      "path": "sveltia-source/grade-boundary-string-b43db299-5c19-401f-b3b1-b43875cd4b8e.json",
+      "sha256": "5c8dbd1f994b4ea7970510f18d6b4065b0807d41c898a55fa60cc0645c82d906",
+      "bytes": 501
+    },
+    {
+      "path": "sveltia-source/grade-boundary-string-b43db299-5c19-401f-b3b1-b43875cd4b8e.log",
+      "sha256": "59c163a08d46b742fc9b14c3df4213d29be0d01ef8170a8409b7fdfb7c8937a8",
+      "bytes": 910
+    },
+    {
+      "path": "sveltia-source/grade-boundary-zero-60dbafce-c8b5-4c4f-adb5-20f12b760eb6.json",
+      "sha256": "7301fbb4a0a7f0f0c088a6166d796387a5c6a405494690bdcd9c3321b223675b",
+      "bytes": 499
+    },
+    {
+      "path": "sveltia-source/grade-boundary-zero-60dbafce-c8b5-4c4f-adb5-20f12b760eb6.log",
+      "sha256": "8e1e7a64ed410cde0722126caa7ec954366d57cf4848addb6d8f8e1d83479f7e",
+      "bytes": 881
+    },
+    {
+      "path": "sveltia-source/grade-build-6a2d1d43-1b2c-499f-8305-592875656208.json",
+      "sha256": "9b9917bfc39a22382e9f811fcde9a2c1c72603274ec885332af9984e684deab1",
+      "bytes": 491
+    },
+    {
+      "path": "sveltia-source/grade-build-6a2d1d43-1b2c-499f-8305-592875656208.log",
+      "sha256": "30a190f307c117e846e88605bb2b0d12540a4fd37c545635f9627bf599a8212e",
+      "bytes": 2099
+    },
+    {
+      "path": "sveltia-source/grade-check-dev-tools-8fd8950d-94e2-4ba6-9f7a-058bde8f7c9f.json",
+      "sha256": "3c67243ec94c0d4dd71b886a785722a5f64ebb690a6afbf1a5326c7f97a0f781",
+      "bytes": 520
+    },
+    {
+      "path": "sveltia-source/grade-check-dev-tools-8fd8950d-94e2-4ba6-9f7a-058bde8f7c9f.log",
+      "sha256": "2476c32d0d0676df0b5b9842121f94a3d306ca03f776a5c354395e06ea26ba05",
+      "bytes": 151
+    },
+    {
+      "path": "sveltia-source/grade-restored-build-18a1c2f6-344e-43b1-861e-de369f8acb5d.json",
+      "sha256": "6d20ad7ba22d20d0b23bec3de17d4ea13bdf88ea7abd1fdcc2da6ad7650436d1",
+      "bytes": 500
+    },
+    {
+      "path": "sveltia-source/grade-restored-build-18a1c2f6-344e-43b1-861e-de369f8acb5d.log",
+      "sha256": "b6d81bd2e5ac6d2f290600fe4423d7db8dc23f800d6c4f2a61cba911ab555832",
+      "bytes": 2099
+    },
+    {
+      "path": "sveltia-source/grade-verify-5006c7a2-a735-4fd2-88d1-4eb484375f49.json",
+      "sha256": "85d5d7e7e54722f37557ff6cb8a1e9e730ecc8545f1428f62c61c41f85c1e336",
+      "bytes": 496
+    },
+    {
+      "path": "sveltia-source/grade-verify-5006c7a2-a735-4fd2-88d1-4eb484375f49.log",
+      "sha256": "96619201831453e6bb8b62630aa30ea4def096d1f481a27829cd4d44ecf69778",
+      "bytes": 7584
+    },
+    {
+      "path": "sveltia-source/install-fc332b87-4f88-4fd0-a7f4-79981daae053.json",
+      "sha256": "8fd97471a5cd516c56a9710b18ffb0831d5ce30311cbebb4c4c38b8a32660ad2",
+      "bytes": 539
+    },
+    {
+      "path": "sveltia-source/install-fc332b87-4f88-4fd0-a7f4-79981daae053.log",
+      "sha256": "4b1416ebbf43f03f922022df783cc3d2a071ea8ecb3b12dc9ac43d0ee4ced7c8",
+      "bytes": 27
+    },
+    {
+      "path": "sveltia-source/install.json",
+      "sha256": "0b625e45231c254d5565f58d196ea8c07cffa9e5c113bffc3593138494ba658d",
+      "bytes": 530
+    },
+    {
+      "path": "sveltia-source/preflight-build-277e31e1-68b1-4f3a-9469-2d5ef250e9b3.json",
+      "sha256": "466150c50a74e7d88d92fe23b0b23ccdab1fcf54ff2acc4a3edcd83ab5a486eb",
+      "bytes": 495
+    },
+    {
+      "path": "sveltia-source/preflight-build-277e31e1-68b1-4f3a-9469-2d5ef250e9b3.log",
+      "sha256": "378370e94bb35957c92afc7a20feb801ca44b1a58def4fe096fd7c1ca386c672",
+      "bytes": 2186
+    },
+    {
+      "path": "sveltia-source/preflight-check-dev-tools-d129e7c2-f325-42ba-9ea1-c93c2094a20d.json",
+      "sha256": "a5a454d79959278bf6adb4f56180de2bd087ee5b47a89127da415ee882244957",
+      "bytes": 524
+    },
+    {
+      "path": "sveltia-source/preflight-check-dev-tools-d129e7c2-f325-42ba-9ea1-c93c2094a20d.log",
+      "sha256": "2476c32d0d0676df0b5b9842121f94a3d306ca03f776a5c354395e06ea26ba05",
+      "bytes": 151
+    },
+    {
+      "path": "sveltia-source/preflight-verify-575afbab-037a-4554-aa33-16398580ba5a.json",
+      "sha256": "477671ff63edb267f48f05b673ad07ebe45e468ab4c6d200efcb8bd22a5c90a7",
+      "bytes": 498
+    },
+    {
+      "path": "sveltia-source/preflight-verify-575afbab-037a-4554-aa33-16398580ba5a.log",
+      "sha256": "6c39a7e07b323355663c7d713af75ed6ce20424cdc25d72e56a78d81bb949377",
+      "bytes": 6683
+    },
+    {
+      "path": "sveltia-source/prompt.txt",
+      "sha256": "66d898f6d3612b7c57ce889bcaee66e146c7b43b203bec9db5b7a19f7fe02322",
+      "bytes": 2069
+    },
+    {
+      "path": "sveltia-source/receipt.json",
+      "sha256": "42f5cf0f9e71ad4688ab1ea4e07c9a96753796a00941b33f95686055cfdf8432",
+      "bytes": 26761
+    },
+    {
+      "path": "sveltia-source/result.json",
+      "sha256": "56a8dadfb60bc2fb914b595fcb6a226b7e99725d9f8081ce5106dbb302e69441",
+      "bytes": 2536
+    },
+    {
+      "path": "sveltia-source/source-changes.json",
+      "sha256": "09bbe3a407de90320b8b25fdecbf1fead140d6e983edfdeef2102504b6d60c14",
+      "bytes": 13764
+    },
+    {
+      "path": "sveltia-source/trace.jsonl",
+      "sha256": "044adc3f73674d06670be67ccad3aa14676983721067abb36a4c4ac4d28f0e10",
+      "bytes": 91362
+    }
+  ],
+  "createdAt": "2026-10-23T16:04:50.193Z"
+}

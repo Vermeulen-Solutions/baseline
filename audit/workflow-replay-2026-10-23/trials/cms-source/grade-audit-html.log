@@ -1,0 +1,6 @@
+
+> emdash-baseline@0.0.3 audit:html
+> node scripts/audit-html-integrity.mjs
+
+HTML integrity: PASS; 9 HTML files; 1633.1ms.
+SSR capture: 10 public responses; snapshots: C:\dev\baseline-workflow-replay-20261023\cms-source\site\.emdash\snapshots\capture-PDGpql. Representative linked routes only; 224 runtime route patterns in the build.

@@ -1,0 +1,22 @@
+{
+  "attemptId": "098b1aab-90bb-4ba3-adb1-ec18c4b16ef6",
+  "requestedArgv": [
+    "run",
+    "doctor"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "doctor"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 573,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "preflight-doctor-098b1aab-90bb-4ba3-adb1-ec18c4b16ef6.log"
+}

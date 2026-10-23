@@ -1,0 +1,39 @@
+
+> site@0.0.0 build
+> astro build
+
+[2m12:20:09[22m [34m[content][39m Syncing content
+[2m12:20:09[22m [34m[content][39m Synced content
+[2m12:20:09[22m [34m[types][39m Generated [2m526ms[22m
+[2m12:20:09[22m [34m[build][39m output: [34m"static"[39m
+[2m12:20:09[22m [34m[build][39m mode: [34m"static"[39m
+[2m12:20:09[22m [34m[build][39m directory: [34mC:\dev\baseline-workflow-replay-20261023\older-profile-source\site\dist\[39m
+[2m12:20:09[22m [34m[build][39m Collecting build info...
+[2m12:20:09[22m [34m[build][39m [32m✓ Completed in 550ms.[39m
+[2m12:20:09[22m [34m[build][39m Building static entrypoints...
+[2m12:20:09[22m [34m[vite][39m [32m✓ built in 361ms[39m
+[2m12:20:09[22m [34m[vite][39m [32m✓ built in 17ms[39m
+[2m12:20:09[22m [34m[build][39m Rearranging server assets...
+
+[42m[30m generating static routes [39m[49m
+[2m12:20:10[22m   [34m├─[39m [2m/404.html[22m [2m(+15ms)[22m 
+[2m12:20:10[22m   [34m├─[39m [2m/posts/index.html[22m [2m(+11ms)[22m 
+[2m12:20:10[22m   [34m├─[39m [2m/posts/welcome/index.html[22m [2m(+5ms)[22m 
+[2m12:20:10[22m   [34m├─[39m [2m/index.html[22m [2m(+5ms)[22m 
+[2m12:20:10[22m [32m✓ Completed in 128ms.
+[39m
+[42m[30m generating optimized images [39m[49m
+[2m12:20:10[22m [34m[vite][39m [32m✓ built in 12ms[39m
+[2m12:20:10[22m   [32m▶[39m /_astro/pilot-grid.C18fp0m6_1ChCCy.webp [2m(before: 42kB, after: 2kB)[22m [2m(+119ms)[22m [2m(1/3)[22m
+[2m12:20:10[22m   [32m▶[39m /_astro/pilot-grid.C18fp0m6_DL58u.webp [2m(before: 42kB, after: 4kB)[22m [2m(+34ms)[22m [2m(2/3)[22m
+[2m12:20:10[22m   [32m▶[39m /_astro/pilot-grid.C18fp0m6_HP8Dr.webp [2m(before: 42kB, after: 8kB)[22m [2m(+84ms)[22m [2m(3/3)[22m
+[2m12:20:10[22m [32m✓ Completed in 238ms.
+[39m
+[2m12:20:10[22m [34m[build][39m [32m✓ Completed in 800ms.[39m
+[2m12:20:10[22m [34m[build][39m 4 page(s) built in [1m1.35s[22m
+[2m12:20:10[22m [34m[build][39m [1mComplete![22m
+
+> site@0.0.0 postbuild
+> node scripts/assert-release-artifact.mjs
+
+Release artifact profile verified. Also verify the actual production route via check:dev-tools.

@@ -1,0 +1,22 @@
+{
+  "attemptId": "950262a3-fa4b-4ec3-97d5-9ca5bcf11d9a",
+  "requestedArgv": [
+    "run",
+    "build"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "build"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 2226,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "preflight-build-950262a3-fa4b-4ec3-97d5-9ca5bcf11d9a.log"
+}

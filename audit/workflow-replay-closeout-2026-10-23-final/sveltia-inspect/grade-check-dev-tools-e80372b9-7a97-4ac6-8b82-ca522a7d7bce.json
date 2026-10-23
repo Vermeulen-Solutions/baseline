@@ -1,0 +1,22 @@
+{
+  "attemptId": "e80372b9-7a97-4ac6-8b82-ca522a7d7bce",
+  "requestedArgv": [
+    "run",
+    "check:dev-tools"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "check:dev-tools"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 151,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "grade-check-dev-tools-e80372b9-7a97-4ac6-8b82-ca522a7d7bce.log"
+}

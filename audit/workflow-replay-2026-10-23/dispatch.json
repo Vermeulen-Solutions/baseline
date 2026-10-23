@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-10-23T10:28:55.825Z",
+  "method": "collaboration.spawn_agent with fork_turns=none; frozen prompt text only; no model override, inherited configured model unverified",
+  "dispatchOrder": [
+    {
+      "trial": "static-source",
+      "ordinal": 1,
+      "agent": "/root/static_source_replay",
+      "promptSHA256": "2b22d728cbee05e10890fc1b7e6e76e7afad54ee0c5b1a7d19f32cc734edb334"
+    },
+    {
+      "trial": "static-inspect",
+      "ordinal": 2,
+      "agent": "/root/static_inspect_replay",
+      "promptSHA256": "620029e5b1fc6cf0b0f0e3eb45db3a5b0bc9c46dd385cb2a3bf868e04881d244"
+    },
+    {
+      "trial": "sveltia-source",
+      "ordinal": 3,
+      "agent": "/root/sveltia_source_replay",
+      "promptSHA256": "17e6f70060ef110e17652f81684441abb92e7277e09a6bca442de57393bb12c1"
+    },
+    {
+      "trial": "sveltia-inspect",
+      "ordinal": 4,
+      "agent": "/root/sveltia_inspect_replay",
+      "promptSHA256": "72e75927154ae183c40215f8449e47a04e685d855d970a5312afaa3a51ed232a"
+    },
+    {
+      "trial": "cms-source",
+      "ordinal": 5,
+      "agent": "/root/cms_source_replay",
+      "promptSHA256": "8ea91e46cadf28463065e97d9532509cb368603f83bb8e05eb0857c2d02dd945"
+    },
+    {
+      "trial": "cms-inspect",
+      "ordinal": 6,
+      "agent": "/root/cms_inspect_replay",
+      "promptSHA256": "788d59bbcff311dca098659fa5a420e808467a6ed41fe14d835ef27cbbbcf4c0"
+    },
+    {
+      "trial": "older-profile-source",
+      "ordinal": 7,
+      "agent": "/root/older_profile_replay",
+      "promptSHA256": "eef9a304909aa51619e3f63f8812eb45d3344a4d005712325e7d39625a54efd7"
+    }
+  ],
+  "implementationRetries": 0,
+  "postEvaluationFollowups": "Cleanup-only followups asked static and Sveltia evaluators to stop their owned preview processes; source/results unchanged.",
+  "graderCorrection": "Before Sveltia grading, the operator expanded the helper-file allowlist to include reading-minutes.ts as well as post-fields.ts. The frozen behavioral/preservation criteria did not prescribe a helper filename and were unchanged. No evaluator received corrective hints."
+}

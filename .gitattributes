@@ -6,3 +6,7 @@ tests/fixtures/migration-acceptance/** text eol=lf
 tests/fixtures/migration-content/** text eol=lf
 # Unified diff context lines intentionally contain a single space.
 docs/upgrades/architecture-hardening-static.patch -whitespace
+# Captured terminal logs preserve tool output, including intentional padding.
+audit/**/*.log -whitespace
+# Captured unified diffs contain whitespace-only context lines by design.
+audit/**/changes.patch -whitespace

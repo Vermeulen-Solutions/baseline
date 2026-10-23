@@ -1,0 +1,12 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Grid from '../components/Grid.astro';
+import Card from '../components/Card.astro';
+---
+<Base title="Useful conversations"><Section labelledBy="page-title"><Container>
+<h1 id="page-title">Useful conversations</h1><p>Northline Studio helps small teams plan useful work.</p>
+<h2 id="services-heading">Services</h2><Grid id="services-grid" aria-labelledby="services-heading" gap="calc(var(--layout-grid-gap) * 0.75)"><Card title="Project briefs" description="Start with a practical brief."/><Card title="Working sessions" description="Make useful decisions."/></Grid>
+<h2 id="approach-heading">Our approach</h2><Grid id="approach-grid" aria-labelledby="approach-heading"><Card title="Listen" description="Understand the situation."/><Card title="Clarify" description="Agree next steps."/></Grid>
+</Container></Section></Base>

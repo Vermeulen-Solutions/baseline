@@ -1,0 +1,22 @@
+{
+  "attemptId": "3a048bbe-b78c-4ab8-b8fa-b00a77ead8d2",
+  "requestedArgv": [
+    "run",
+    "verify"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "verify"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 6665,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "preflight-verify-3a048bbe-b78c-4ab8-b8fa-b00a77ead8d2.log"
+}

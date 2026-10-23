@@ -1,0 +1,27 @@
+[
+  {
+    "scenario": "static",
+    "lockfilesEqual": true,
+    "sourceDifferences": [
+      "audit/component-calibration.md"
+    ],
+    "fixtureLocalCalibrationPathOnly": true,
+    "sourceEquivalent": true
+  },
+  {
+    "scenario": "sveltia",
+    "lockfilesEqual": true,
+    "sourceDifferences": [
+      "audit/component-calibration.md"
+    ],
+    "fixtureLocalCalibrationPathOnly": true,
+    "sourceEquivalent": true
+  },
+  {
+    "scenario": "cms",
+    "lockfilesEqual": true,
+    "sourceDifferences": [],
+    "fixtureLocalCalibrationPathOnly": false,
+    "sourceEquivalent": true
+  }
+]

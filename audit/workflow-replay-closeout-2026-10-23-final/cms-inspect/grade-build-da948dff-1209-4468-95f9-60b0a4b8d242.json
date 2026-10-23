@@ -1,0 +1,22 @@
+{
+  "attemptId": "da948dff-1209-4468-95f9-60b0a4b8d242",
+  "requestedArgv": [
+    "run",
+    "build"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "build"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 2187,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "grade-build-da948dff-1209-4468-95f9-60b0a4b8d242.log"
+}

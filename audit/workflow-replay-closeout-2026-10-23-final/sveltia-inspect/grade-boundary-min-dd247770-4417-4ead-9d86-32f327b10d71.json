@@ -1,0 +1,22 @@
+{
+  "attemptId": "dd247770-4417-4ead-9d86-32f327b10d71",
+  "requestedArgv": [
+    "run",
+    "build"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "build"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 2134,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "grade-boundary-min-dd247770-4417-4ead-9d86-32f327b10d71.log"
+}

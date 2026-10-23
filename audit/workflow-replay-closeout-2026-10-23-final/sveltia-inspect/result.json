@@ -1,0 +1,75 @@
+{
+  "summary": "Added optional readingMinutes (integer 1–60) to the typed post schema and Sveltia form. Article detail pages show “N min read” only when supplied; posts without it continue to build normally.",
+  "changedFiles": [
+    "result.json",
+    "site/src/content.config.ts",
+    "site/public/admin/config.yml",
+    "site/src/pages/posts/[...id].astro",
+    "site/tests/sveltia-config.test.mjs"
+  ],
+  "checks": [
+    {
+      "command": "npm run baseline:inspect --json",
+      "result": "Passed; identified the profile as static-sveltia."
+    },
+    {
+      "command": "npm test",
+      "result": "Passed: 40 tests, including the Sveltia field contract."
+    },
+    {
+      "command": "npm run typecheck",
+      "result": "Passed: 0 errors, 0 warnings, 0 hints."
+    },
+    {
+      "command": "npm run build (existing post without readingMinutes)",
+      "result": "Passed; the existing welcome route built successfully."
+    },
+    {
+      "command": "npm run build (temporary fixtures with readingMinutes 1 and 60)",
+      "result": "Passed; emitted pages showed “1 min read” and “60 min read”."
+    },
+    {
+      "command": "npm run build (temporary fixture with readingMinutes 0)",
+      "result": "Rejected as expected: value was below the minimum of 1."
+    },
+    {
+      "command": "npm run build (temporary fixture with readingMinutes 61)",
+      "result": "Rejected as expected: value exceeded the maximum of 60."
+    },
+    {
+      "command": "npm run build (temporary fixture with readingMinutes 1.5)",
+      "result": "Rejected as expected: value was not an integer."
+    },
+    {
+      "command": "npm run build (temporary fixture with readingMinutes \"2\")",
+      "result": "Rejected as expected: value was a string instead of a number."
+    },
+    {
+      "command": "npm run verify",
+      "result": "Passed, including lint, CSS contracts, art-direction check, token audit, tests, and typecheck."
+    },
+    {
+      "command": "npm run build (final clean content)",
+      "result": "Passed; built four routes and passed the release-artifact check."
+    },
+    {
+      "command": "npm run check:dev-tools",
+      "result": "Passed; confirmed the static release excludes styleguide fixtures and server entrypoints."
+    },
+    {
+      "command": "Local browser preview at /admin/ via cua_repl",
+      "result": "Loaded the Sveltia CMS landing page and showed sign-in options. The edit form was not opened; no credentials or local-repository access were supplied."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [
+    "Browser observation via cua_repl: http://127.0.0.1:55049/admin/ rendered the Sveltia CMS landing page with local-repository and GitHub sign-in options. The readingMinutes editor control itself was not visually inspected because the form requires repository access or sign-in."
+  ],
+  "cms": {
+    "createdId": null,
+    "slug": null,
+    "status": "not_applicable_static_sveltia",
+    "permissionExplanation": "No CMS content item was created. This static-sveltia change updates the Git-owned schema, browser editor config, and Astro detail template."
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "frozenAt": "2026-10-23T10:01:24.008Z",
+  "scenarios": {
+    "static": {
+      "profile": "static",
+      "task": "The services cards on the homepage feel too far apart. Reduce only the services grid gap by 25% at every viewport size, retaining responsive scaling. Keep other grids, global tokens, copy and navigation unchanged. Implement and verify using the established visual system.",
+      "criteria": [
+        "Only the services grid relationship changes; global tokens, copy, navigation and reference grid are preserved.",
+        "Computed services/reference grid gap ratio is 0.75 at 600, 1000 and 1500 CSS pixels.",
+        "Applicable final verify, build and production isolation checks pass."
+      ]
+    },
+    "sveltia": {
+      "profile": "static-sveltia",
+      "task": "Editors need optional readingMinutes on posts: whole minutes from 1 through 60. Pair the typed content schema with the browser editor form. Show \"N min read\" on article detail only when supplied. Existing posts without a value must build and render normally. Preserve content and the visual system; verify valid boundaries and invalid inputs.",
+      "criteria": [
+        "Optional integer form field has min 1, max 60 and whole-number input; schema matches without coercing numeric strings.",
+        "Real Astro builds render 1 and 60; reject 0, 61, 1.5 and numeric string \"2\" with field-specific validation.",
+        "Absent legacy value builds without a reading-time label; grader restores original content.",
+        "Global CSS, existing content, navigation and dependencies are preserved; applicable final gates pass."
+      ]
+    },
+    "cms": {
+      "profile": "emdash",
+      "task": "Create one owned draft in posts through live EmDash MCP using the runner. Title: \"Planning a useful kickoff\". Excerpt: \"A short agenda for the first conversation.\" Body: \"Agree the purpose, invite the people doing the work, and leave with clear next steps.\" Slug: kickoff-{{id}}. Keep unpublished, read it back, and explain the Contributor publishing and schema-access boundary. Do not change source, seed or settings.",
+      "criteria": [
+        "MCP readback contains exact supplied text, assigned owner, slug and draft status.",
+        "Anonymous public route returns 404; no published version is created.",
+        "All tracked application, configuration, seed and settings sources remain byte-identical.",
+        "Independent final verify, build and HTML audit pass; temporary token is revoked and synthetic user disabled."
+      ]
+    },
+    "older-profile": {
+      "profile": "static",
+      "task": "Pick up the workshop feature and update only HANDOFF.md with the established need, current implementation, remaining work and next concrete local action. Preserve supplied decisions and content. Continue authorized local preparation from available evidence without restarting customer discovery. This is a handoff task, not implementation. Do not deploy or claim tests or client acceptance occurred during your session.",
+      "criteria": [
+        "Recover local team leads, English static scope, email registration workshops@northline.example.test and editorial/maintenance ownership.",
+        "Keep quarterly cadence assumed and launch date unapproved; workshops collection/content exist while workshop routes are missing.",
+        "Resolve stale CMS handoff and unselected fixed-spacing design against later decision evidence and actual source.",
+        "Missing docs/project-context.md and PROJECT.example.md do not block; no CMS dependencies or forced PROJECT.md adoption.",
+        "Only HANDOFF.md changes; art record, fluid CSS, supplied content and durable context remain identical; report actual checks only."
+      ]
+    }
+  },
+  "limits": [
+    "One pair per scenario is exploratory.",
+    "Emitted bytes are not model tokens; model usage, cost and comparable elapsed time are unavailable.",
+    "Runner use is an instructed convention, not filesystem/process confinement.",
+    "No production data, browser editor login, hosted OAuth, D1 or R2 acceptance."
+  ]
+}

@@ -1,0 +1,265 @@
+{
+  "trial": "sveltia-source",
+  "startedAt": "2026-10-23T10:24:58.580Z",
+  "checks": [
+    {
+      "name": "source preservation and bounded changes",
+      "status": "pass",
+      "evidence": {
+        "changed": [
+          "docs/sveltia-cms.md",
+          "public/admin/config.yml",
+          "src/content.config.ts",
+          "src/pages/posts/[...id].astro",
+          "tests/sveltia-config.test.mjs"
+        ],
+        "untracked": [
+          "src/lib/reading-minutes.ts",
+          "tests/reading-minutes.test.mjs"
+        ]
+      }
+    },
+    {
+      "name": "independent verify",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "verify"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 7251,
+        "stderrBytes": 586,
+        "capturedTail": false,
+        "log": "grade-verify.log"
+      }
+    },
+    {
+      "name": "independent build",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 2125,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-build.log"
+      }
+    },
+    {
+      "name": "independent production isolation",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "check:dev-tools"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 151,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-check-dev-tools.log"
+      }
+    },
+    {
+      "name": "emitted HTML integrity",
+      "status": "pass",
+      "evidence": {
+        "valid": true,
+        "htmlFiles": 5,
+        "runtimeRoutes": 2,
+        "durationMs": 7.252800000002026,
+        "errors": []
+      }
+    },
+    {
+      "name": "paired editor field",
+      "status": "pass",
+      "evidence": {
+        "name": "readingMinutes",
+        "label": "Reading time (minutes)",
+        "widget": "number",
+        "value_type": "int",
+        "min": 1,
+        "max": 60,
+        "step": 1,
+        "required": false,
+        "hint": "Optional. Enter whole minutes from 1 through 60."
+      }
+    },
+    {
+      "name": "real content boundary: min",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 2125,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-boundary-min.log"
+      }
+    },
+    {
+      "name": "real content boundary: max",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 2125,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-boundary-max.log"
+      }
+    },
+    {
+      "name": "real content boundary: zero",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 1,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 89,
+        "stderrBytes": 870,
+        "capturedTail": false,
+        "log": "grade-boundary-zero.log"
+      }
+    },
+    {
+      "name": "real content boundary: above-max",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 1,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 89,
+        "stderrBytes": 869,
+        "capturedTail": false,
+        "log": "grade-boundary-above-max.log"
+      }
+    },
+    {
+      "name": "real content boundary: fraction",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 1,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 89,
+        "stderrBytes": 896,
+        "capturedTail": false,
+        "log": "grade-boundary-fraction.log"
+      }
+    },
+    {
+      "name": "real content boundary: string",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 1,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 89,
+        "stderrBytes": 899,
+        "capturedTail": false,
+        "log": "grade-boundary-string.log"
+      }
+    },
+    {
+      "name": "restored absent legacy value",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 2125,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-restored-build.log"
+      }
+    }
+  ],
+  "limits": [
+    "Local mechanical artifact checks; operator reviews permission explanations and cold-resume decision quality separately.",
+    "Not full visual/accessibility, hosted OAuth, D1/R2 or browser-editor acceptance."
+  ],
+  "completedAt": "2026-10-23T10:26:32.228Z",
+  "status": "pass"
+}

@@ -1,0 +1,10 @@
+You are a fresh evaluator in a disposable Baseline fixture. Work only in C:\dev\baseline-workflow-replay-20261023\cms-source; project C:\dev\baseline-workflow-replay-20261023\cms-source\site. Read AGENTS.md and README.md first, then applicable local skills. Preserve established art direction. Dependencies are independently installed; do not install dependencies, deploy, use external credentials, commit, spawn agents, inspect other trials, original source, parent history or controller files. No forced PROJECT.md adoption.
+
+Use this runner for discovery reads/searches and npm/MCP operations: node "C:\dev\emdash-baseline\scripts\workflow-replay.mjs" tool --out "C:\dev\baseline-workflow-replay-20261023" --trial cms-source -- <action> <argv...>. Actions: read <relative-file...>; files [relative-directory...]; search <regex> [relative-path...]; run <npm-script> [args...]; mcp tools; mcp <tool-name> '<JSON>'. Direct file edits/apply_patch are permitted. Record unavoidable outside-runner discovery honestly. Runner is telemetry by convention, not enforced confinement.
+
+Use ordinary source discovery. Do not run baseline:inspect or read its implementation/report.
+
+Task: Create one owned draft in posts through live EmDash MCP using the runner. Title: "Planning a useful kickoff". Excerpt: "A short agenda for the first conversation." Body: "Agree the purpose, invite the people doing the work, and leave with clear next steps." Slug: kickoff-cms-source. Keep unpublished, read it back, and explain the Contributor publishing and schema-access boundary. Do not change source, seed or settings.
+
+Run relevant available checks. Write C:\dev\baseline-workflow-replay-20261023\cms-source\result.json with summary, changedFiles, checks [{command,result}], clarificationsNeeded, blockers, outsideRunnerReads, and for CMS created id/slug/status plus permission explanation. Report observed outcomes only. Finish with a short summary.
+

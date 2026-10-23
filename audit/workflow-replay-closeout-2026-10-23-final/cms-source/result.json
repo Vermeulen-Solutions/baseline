@@ -1,0 +1,38 @@
+{
+  "summary": "Created and read back the requested post through live EmDash MCP. It remains an unpublished draft.",
+  "changedFiles": [
+    "[fixture-root]\\cms-source\\result.json"
+  ],
+  "checks": [
+    {
+      "command": "MCP content_list(collection=posts, limit=10, markdown=true)",
+      "result": "Passed. Existing post data exposed the collection field names title, content, and excerpt."
+    },
+    {
+      "command": "MCP schema_get_collection(slug=posts)",
+      "result": "Access denied: INSUFFICIENT_SCOPE, requires schema:read."
+    },
+    {
+      "command": "MCP content_create(collection=posts, slug=kickoff-cms-source, data={title, content, excerpt})",
+      "result": "Passed. The first attempt using field body was rejected as unknown; corrected to the observed content field. The successful create returned status draft."
+    },
+    {
+      "command": "MCP content_get(collection=posts, id=01M5MPPPY5Y2X970XC5C11TFR0, markdown=true)",
+      "result": "Passed. Readback confirmed title, excerpt, requested body text in content, slug kickoff-cms-source, status draft, publishedAt null, and scheduledAt null."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [],
+  "cms": {
+    "created": {
+      "id": "01M5MPPPY5Y2X970XC5C11TFR0",
+      "collection": "posts",
+      "slug": "kickoff-cms-source",
+      "status": "draft",
+      "publishedAt": null,
+      "scheduledAt": null
+    },
+    "permissionExplanation": "The create tool defaults new content to draft; its schema says setting an explicit status requires publish permission. Publishing makes a draft live, so no publish action was taken. The current MCP credential could create the draft, but schema_get_collection was rejected because it lacks schema:read. Existing content reads were sufficient to identify the accepted title, content, and excerpt fields."
+  }
+}

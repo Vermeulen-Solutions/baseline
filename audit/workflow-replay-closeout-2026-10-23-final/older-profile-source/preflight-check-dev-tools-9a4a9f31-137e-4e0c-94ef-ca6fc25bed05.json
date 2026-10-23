@@ -1,0 +1,22 @@
+{
+  "attemptId": "9a4a9f31-137e-4e0c-94ef-ca6fc25bed05",
+  "requestedArgv": [
+    "run",
+    "check:dev-tools"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "check:dev-tools"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 151,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "preflight-check-dev-tools-9a4a9f31-137e-4e0c-94ef-ca6fc25bed05.log"
+}

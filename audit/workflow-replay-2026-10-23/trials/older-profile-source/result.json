@@ -1,0 +1,29 @@
+{
+  "summary": "Replaced the outdated workshop handoff with evidence-backed static-profile decisions, current collection/content and absent routes, remaining work, and the next local calibration action. Preserved supplied content and Editorial Paper direction. No implementation, CMS operations, client acceptance or deployment occurred.",
+  "changedFiles": ["site/HANDOFF.md", "result.json"],
+  "checks": [
+    {
+      "command": "workflow-replay.mjs tool --trial older-profile-source -- run verify",
+      "result": "PASS (exit 0): lint, CSS contracts, art direction and token audits passed; Astro reported 0 errors, 0 warnings and 0 hints. No visual source changes reported."
+    },
+    {
+      "command": "workflow-replay.mjs tool --trial older-profile-source -- run build",
+      "result": "PASS (exit 0): four starter pages emitted, no workshop routes; release-artifact postbuild check passed."
+    },
+    {
+      "command": "workflow-replay.mjs tool --trial older-profile-source -- run check:dev-tools",
+      "result": "PASS (exit 0): static release contains no styleguide route, fixture specimens or server entrypoint."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [],
+  "cms": {
+    "applicable": false,
+    "created": [],
+    "id": null,
+    "slug": null,
+    "status": "not applicable — static profile, handoff-only task",
+    "permissionExplanation": "The authorized scope was local evidence gathering and updating HANDOFF.md, plus this result receipt. No CMS exists in the installed static profile and no CMS mutation, external action or deployment was performed."
+  }
+}

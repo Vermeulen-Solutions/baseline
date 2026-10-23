@@ -1,0 +1,44 @@
+{
+  "summary": "Reduced only the homepage Services grid gap by 25% by multiplying its existing responsive --spacing-grid token by 0.75.",
+  "changedFiles": [
+    "site/src/pages/index.astro"
+  ],
+  "checks": [
+    {
+      "command": "npm run design:tokens -- --set \"--root:--layout-grid-gap=calc(var(--spacing-grid) * 0.75)\" --json",
+      "result": "PASS: preview candidate validated (valid=true); candidate was not written to the global token."
+    },
+    {
+      "command": ".agents/skills/impeccable/scripts/impeccable.cmd detect --json src/pages/index.astro",
+      "result": "PASS: no findings."
+    },
+    {
+      "command": "npm run verify",
+      "result": "PASS: lint, CSS contracts, art direction, design tokens, 39 tests, and Astro typecheck all passed."
+    },
+    {
+      "command": "npm run build",
+      "result": "PASS: four static routes built; release artifact profile verified."
+    },
+    {
+      "command": "npm run check:dev-tools",
+      "result": "PASS: static release contains no styleguide route, fixture specimens, or server entrypoint."
+    },
+    {
+      "command": "Assigned preview: http://127.0.0.1:59827",
+      "result": "PASS: homepage opened and visually inspected. Emitted HTML applies --grid-gap: calc(var(--spacing-grid) * 0.75) only to #services-grid; #approach-grid has no gap override."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [
+    "Browser observation via mcp__cua_repl on the assigned loopback preview: homepage rendered with both Services cards and the separate Our approach grid; the page remained readable at the observed default viewport. The CUA tab could not be made visible in this subagent thread, so visual inspection used its screenshot observation."
+  ],
+  "cms": {
+    "created": false,
+    "id": null,
+    "slug": null,
+    "status": null,
+    "permissionExplanation": "This is a static profile with no CMS record creation; no CMS permission or external write was needed."
+  }
+}

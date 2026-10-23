@@ -1,0 +1,21 @@
+{
+  "scope": "Post-evaluation operator cleanup only",
+  "stoppedDuringCleanup": [],
+  "ownedServers": [
+    {
+      "command": "runner run dev -- --host 127.0.0.1 --port 4387",
+      "state": "Never started: runner rejected the unsupported dev command and returned exit code 1."
+    },
+    {
+      "command": "node browser-check.mjs before",
+      "state": "Already stopped: script closed its localhost:4387 HTTP server and Chromium browser in its finally block, then exited with code 0."
+    },
+    {
+      "command": "node browser-check.mjs after",
+      "state": "Already stopped: script closed its localhost:4387 HTTP server and Chromium browser in its finally block, then exited with code 0."
+    }
+  ],
+  "remainingOwnedPreviewOrDevServers": 0,
+  "projectSourcesChanged": false,
+  "taskResultOrAcceptanceChanged": false
+}

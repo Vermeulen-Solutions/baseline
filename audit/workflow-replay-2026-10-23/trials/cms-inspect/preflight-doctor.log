@@ -1,0 +1,12 @@
+
+> emdash-baseline@0.0.3 doctor
+> node scripts/doctor.mjs
+
+[PASS] package: package.json is present and valid JSON.
+[PASS] node: Node 24.21.0; required ^22.22.3 || ^24.16.0 || >=26.3.0.
+[PASS] sqlite: node:sqlite DatabaseSync opened and queried an in-memory database.
+[WARN] shell: Windows; outer npm.cmd vs npm.ps1 launcher is not observable here. In PowerShell use npm.cmd (and npx.cmd); direct node scripts/doctor.mjs also works.
+[PASS] astro: astro.config.mjs is present.
+[PASS] workspace: .emdash/ is writable.
+[PASS] git: Working tree is clean.
+Doctor: warn (77.8ms)

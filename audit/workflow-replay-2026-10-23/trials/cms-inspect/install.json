@@ -1,0 +1,18 @@
+{
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Users\\Jaap\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js",
+      "ci",
+      "--no-audit",
+      "--no-fund"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 26,
+  "stderrBytes": 1954,
+  "capturedTail": false,
+  "log": "install.log"
+}

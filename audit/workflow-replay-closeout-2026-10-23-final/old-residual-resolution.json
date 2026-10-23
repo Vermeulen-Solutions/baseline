@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "removed": true,
+  "path": "C:\\dev\\baseline-workflow-replay-20261023",
+  "checkedAt": "2026-10-23T16:02:04.8341036Z",
+  "evidence": "Confirmed absent after user removal; retained fixture was not altered by this replay."
+}

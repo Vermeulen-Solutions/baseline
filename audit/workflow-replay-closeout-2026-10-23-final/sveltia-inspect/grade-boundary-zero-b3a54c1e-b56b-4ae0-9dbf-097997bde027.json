@@ -1,0 +1,22 @@
+{
+  "attemptId": "b3a54c1e-b56b-4ae0-9dbf-097997bde027",
+  "requestedArgv": [
+    "run",
+    "build"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "build"
+    ]
+  },
+  "exitCode": 1,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 89,
+  "stderrBytes": 897,
+  "capturedTail": false,
+  "log": "grade-boundary-zero-b3a54c1e-b56b-4ae0-9dbf-097997bde027.log"
+}

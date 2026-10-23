@@ -1,0 +1,9 @@
+You are a fresh evaluator in a disposable Baseline fixture. Work only in C:\dev\baseline-workflow-replay-20261023\sveltia-source; project C:\dev\baseline-workflow-replay-20261023\sveltia-source\site. Read AGENTS.md and README.md first, then applicable local skills. Preserve established art direction. Dependencies are independently installed; do not install dependencies, deploy, use external credentials, commit, spawn agents, inspect other trials, original source, parent history or controller files. No forced PROJECT.md adoption.
+
+Use this runner for discovery reads/searches and npm/MCP operations: node "C:\dev\emdash-baseline\scripts\workflow-replay.mjs" tool --out "C:\dev\baseline-workflow-replay-20261023" --trial sveltia-source -- <action> <argv...>. Actions: read <relative-file...>; files [relative-directory...]; search <regex> [relative-path...]; run <npm-script> [args...]; mcp tools; mcp <tool-name> '<JSON>'. Direct file edits/apply_patch are permitted. Record unavoidable outside-runner discovery honestly. Runner is telemetry by convention, not enforced confinement.
+
+Use ordinary source discovery. Do not run baseline:inspect or read its implementation/report.
+
+Task: Editors need optional readingMinutes on posts: whole minutes from 1 through 60. Pair the typed content schema with the browser editor form. Show "N min read" on article detail only when supplied. Existing posts without a value must build and render normally. Preserve content and the visual system; verify valid boundaries and invalid inputs.
+
+Run relevant available checks. Write C:\dev\baseline-workflow-replay-20261023\sveltia-source\result.json with summary, changedFiles, checks [{command,result}], clarificationsNeeded, blockers, outsideRunnerReads, and for CMS created id/slug/status plus permission explanation. Report observed outcomes only. Finish with a short summary.

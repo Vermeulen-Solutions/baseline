@@ -1,0 +1,72 @@
+{
+  "summary": "Added optional readingMinutes to native Astro posts and the paired Sveltia browser-editor form. The field accepts whole numeric minutes from 1 through 60 and renders as N min read on article detail only when supplied. Existing content and visual tokens were preserved; temporary acceptance posts were removed before the final build.",
+  "changedFiles": [
+    "site/src/content.config.ts",
+    "site/src/lib/reading-minutes.ts",
+    "site/public/admin/config.yml",
+    "site/src/pages/posts/[...id].astro",
+    "site/tests/reading-minutes.test.mjs",
+    "site/tests/sveltia-config.test.mjs",
+    "site/docs/sveltia-cms.md"
+  ],
+  "checks": [
+    {
+      "command": "runner run check:art-direction --require-record",
+      "result": "Passed before implementation; existing Art Direction Record is structurally valid."
+    },
+    {
+      "command": "runner mcp tools",
+      "result": "Unavailable: MCP is unavailable for this trial."
+    },
+    {
+      "command": "runner run verify",
+      "result": "Passed lint, CSS contracts, art-direction gate, token audit, all 42 tests, and Astro typecheck (0 errors, 0 warnings, 0 hints). Tests accepted undefined, 1, 12 and 60; rejected 0, -1, 61, 1.5, numeric strings, empty strings, null, true, NaN and Infinity. Sveltia contract test verified optional integer storage, minimum 1, maximum 60, step 1 and no default."
+    },
+    {
+      "command": "runner run build (with temporary 1-minute and 60-minute Markdown posts)",
+      "result": "Passed; generated 6 pages including both boundary detail routes and the unchanged welcome post without readingMinutes."
+    },
+    {
+      "command": "runner search min read dist",
+      "result": "Returned no output; not used as evidence because generated dist is ignored by the discovery search."
+    },
+    {
+      "command": "runner read dist/posts/reading-time-min-check/index.html dist/posts/reading-time-max-check/index.html dist/posts/welcome/index.html dist/posts/index.html dist/index.html",
+      "result": "Rejected as unsupported discovery path; generated HTML was checked through local browser preview instead."
+    },
+    {
+      "command": "runner run preview --host 127.0.0.1 --port 4357",
+      "result": "Rejected: preview is outside the runner's installed bounded command policy."
+    },
+    {
+      "command": "npm.cmd run preview -- --host 127.0.0.1 --port 4357 (outside runner), then CUA browser inspection",
+      "result": "Preview started locally and was stopped after inspection. Browser showed 1 min read on the minimum detail route, 60 min read on the maximum detail route, no reading-time label on the existing welcome detail, and no label on either /posts/ or /. Inspected desktop screenshot and 320x800 narrow screenshot; label remained readable with no visible horizontal overflow. Initial navigation preceded server readiness and failed; a later navigation succeeded. Visibility options are unsupported in a subagent, so the successful tab used default visibility. Temporary viewport was reset and tab closed. No credentialed editor login/save was attempted."
+    },
+    {
+      "command": "runner run build (after removing temporary acceptance posts)",
+      "result": "Passed final static build and postbuild release check; generated the original 4 routes only."
+    },
+    {
+      "command": "runner run check:dev-tools",
+      "result": "Passed: static release contains no styleguide route, fixture specimens or server entrypoint."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [
+    {
+      "source": "https://sveltiacms.app/en/docs/fields/number and official Sveltia search results through web search",
+      "reason": "Runner MCP discovery returned unavailable. Verified the official number-field configuration options value_type, min, max and step."
+    },
+    {
+      "source": "Local npm preview output and CUA browser runtime documentation plus rendered pages at http://127.0.0.1:4357/",
+      "reason": "Runner rejected preview and generated-dist reads. Used local preview and read-only browser inspection to verify actual rendering, omission on listings/legacy post, and narrow reflow."
+    }
+  ],
+  "cms": {
+    "createdId": null,
+    "createdSlug": null,
+    "createdStatus": null,
+    "permissionExplanation": "This static-sveltia profile edits Git-owned Markdown. No external credentials, CMS records, commits, deployments or remote writes were used. Local schema/form/template edits and temporary disposable acceptance posts were within the requested scope; both temporary posts were removed. Credentialed Sveltia login/save/publish remains untested because external credentials and deployment were prohibited."
+  }
+}

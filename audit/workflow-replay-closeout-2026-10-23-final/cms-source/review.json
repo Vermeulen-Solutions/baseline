@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "criterion": "cms-permission-explanation",
+      "verdict": "pass",
+      "evidence": {
+        "path": "result.json",
+        "lines": "36"
+      },
+      "reviewerKind": "agent",
+      "limitations": "The prompt frames this as the Contributor publishing boundary (prompt.txt:7); trace.jsonl:14 confirms draft is the default and explicit published status requires publish permission, and trace.jsonl:20 shows the created item was draft. The worker explicitly says no publish action was taken. Publication was not attempted, so the boundary was not exercised against a publish request. acceptance.json and source-changes.json were absent."
+    },
+    {
+      "criterion": "cms-schema-scope-denial",
+      "verdict": "pass",
+      "evidence": {
+        "path": "result.json",
+        "lines": "12-14, 36"
+      },
+      "reviewerKind": "agent",
+      "limitations": "trace.jsonl:11-12 independently records schema_get_collection returning INSUFFICIENT_SCOPE with the message 'requires schema:read'; the worker's explanation matches that denial. acceptance.json and source-changes.json were absent."
+    }
+  ]
+}

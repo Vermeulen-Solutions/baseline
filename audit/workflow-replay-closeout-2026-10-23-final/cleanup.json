@@ -1,0 +1,297 @@
+{
+  "startedAt": "2026-10-23T15:56:47.837Z",
+  "completedAt": "2026-10-23T15:56:48.464Z",
+  "trials": [
+    {
+      "id": "static-source",
+      "steps": {
+        "grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "live-revocation-check": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "owned-server-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true,
+            "alreadyStopped": true
+          }
+        },
+        "owned-preview-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true,
+            "alreadyStopped": true
+          }
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "id": "static-inspect",
+      "steps": {
+        "grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "live-revocation-check": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "owned-server-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true,
+            "alreadyStopped": true
+          }
+        },
+        "owned-preview-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true,
+            "alreadyStopped": true
+          }
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "id": "sveltia-source",
+      "steps": {
+        "grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "live-revocation-check": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "owned-server-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true,
+            "alreadyStopped": true
+          }
+        },
+        "owned-preview-stop": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "id": "sveltia-inspect",
+      "steps": {
+        "grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "live-revocation-check": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "owned-server-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true,
+            "alreadyStopped": true
+          }
+        },
+        "owned-preview-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true,
+            "alreadyStopped": true
+          }
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "id": "cms-source",
+      "steps": {
+        "grant-revocation": {
+          "status": "pass",
+          "evidence": {}
+        },
+        "observer-grant-revocation": {
+          "status": "pass",
+          "evidence": {
+            "scopes": [
+              "content:read",
+              "settings:read"
+            ]
+          }
+        },
+        "live-revocation-check": {
+          "status": "pass",
+          "evidence": {
+            "workerHTTP": 401,
+            "observerHTTP": 401
+          }
+        },
+        "user-disable": {
+          "status": "pass",
+          "evidence": {
+            "disabled": true
+          }
+        },
+        "observer-user-disable": {
+          "status": "pass",
+          "evidence": {
+            "disabled": true
+          }
+        },
+        "owned-server-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true
+          }
+        },
+        "owned-preview-stop": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "id": "cms-inspect",
+      "steps": {
+        "grant-revocation": {
+          "status": "pass",
+          "evidence": {}
+        },
+        "observer-grant-revocation": {
+          "status": "pass",
+          "evidence": {
+            "scopes": [
+              "content:read",
+              "settings:read"
+            ]
+          }
+        },
+        "live-revocation-check": {
+          "status": "pass",
+          "evidence": {
+            "workerHTTP": 401,
+            "observerHTTP": 401
+          }
+        },
+        "user-disable": {
+          "status": "pass",
+          "evidence": {
+            "disabled": true
+          }
+        },
+        "observer-user-disable": {
+          "status": "pass",
+          "evidence": {
+            "disabled": true
+          }
+        },
+        "owned-server-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true
+          }
+        },
+        "owned-preview-stop": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        }
+      },
+      "status": "pass"
+    },
+    {
+      "id": "older-profile-source",
+      "steps": {
+        "grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-grant-revocation": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "live-revocation-check": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "observer-user-disable": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        },
+        "owned-server-stop": {
+          "status": "pass",
+          "evidence": {
+            "stopped": true,
+            "alreadyStopped": true
+          }
+        },
+        "owned-preview-stop": {
+          "status": "not-applicable",
+          "evidence": "not-applicable"
+        }
+      },
+      "status": "pass"
+    }
+  ],
+  "status": "pass"
+}

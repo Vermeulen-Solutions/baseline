@@ -1,0 +1,8 @@
+{
+  "phase": "post-evaluation operator cleanup",
+  "stopped": [],
+  "remainingOwnedServers": [],
+  "confirmation": "No persistent preview/dev servers were started for this trial. The temporary HTTP server used by tests/reading-acceptance.mjs was closed in its finally block, and the runner command exited successfully. Chromium was also closed by that harness. No owned server/session handles remain to stop.",
+  "projectSourcesChanged": false,
+  "taskResultOrAcceptanceChanged": false
+}

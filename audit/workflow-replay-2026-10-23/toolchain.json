@@ -1,0 +1,17 @@
+{
+  "sourceHead": "f95089859fdbca5fe39bb2796edd2b73ce5410cc",
+  "sourceDirty": true,
+  "node": "v24.21.0",
+  "platform": "win32",
+  "sourcePreservation": "Project sources are captured per trial; root src/public/seed were not modified.",
+  "evaluatedHarness": {
+    "workflow-replay.mjs": "0a560906de020a71a1aa8f5ac3254125ca316eb4c4a01096300eb479d429de3a",
+    "workflow-replay-runner.mjs": "d762d9cd2ee52e89a622954fce68c6457db454c35708e8e1c0c78dbd714135d5",
+    "workflow-replay-grade.mjs": "b6d8d5159d2580c118824870b5b5514677674be4789751ea14566d4aa971979f"
+  },
+  "finalSupportedHarness": {
+    "scripts/workflow-replay.mjs": "a83a285122f08df869589fc2aa64a2c64a9f9fc600e2004fb672764c06013efc",
+    "scripts/workflow-replay-runner.mjs": "352a96dbfeede2573e5ab6f65dcd105b7624427e7e0c8b01deae56335e922edf",
+    "scripts/workflow-replay-grade.mjs": "b6d8d5159d2580c118824870b5b5514677674be4789751ea14566d4aa971979f"
+  }
+}

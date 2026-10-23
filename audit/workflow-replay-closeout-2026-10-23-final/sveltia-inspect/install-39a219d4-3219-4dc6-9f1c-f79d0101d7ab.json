@@ -1,0 +1,24 @@
+{
+  "attemptId": "39a219d4-3219-4dc6-9f1c-f79d0101d7ab",
+  "requestedArgv": [
+    "ci",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "ci",
+      "--no-audit",
+      "--no-fund"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 27,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "install-39a219d4-3219-4dc6-9f1c-f79d0101d7ab.log"
+}

@@ -1,0 +1,54 @@
+{
+  "completedAt": "2026-10-23T10:39:18.021Z",
+  "trials": [
+    {
+      "id": "static-source",
+      "tokenRevoked": null,
+      "revocationHTTP": null,
+      "userDisabled": null,
+      "serverStopped": true
+    },
+    {
+      "id": "static-inspect",
+      "tokenRevoked": null,
+      "revocationHTTP": null,
+      "userDisabled": null,
+      "serverStopped": true
+    },
+    {
+      "id": "sveltia-source",
+      "tokenRevoked": null,
+      "revocationHTTP": null,
+      "userDisabled": null,
+      "serverStopped": true
+    },
+    {
+      "id": "sveltia-inspect",
+      "tokenRevoked": null,
+      "revocationHTTP": null,
+      "userDisabled": null,
+      "serverStopped": true
+    },
+    {
+      "id": "cms-source",
+      "tokenRevoked": true,
+      "revocationHTTP": 401,
+      "userDisabled": true,
+      "serverStopped": true
+    },
+    {
+      "id": "cms-inspect",
+      "tokenRevoked": true,
+      "revocationHTTP": 401,
+      "userDisabled": true,
+      "serverStopped": true
+    },
+    {
+      "id": "older-profile-source",
+      "tokenRevoked": null,
+      "revocationHTTP": null,
+      "userDisabled": null,
+      "serverStopped": true
+    }
+  ]
+}

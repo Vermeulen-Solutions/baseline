@@ -1,0 +1,40 @@
+{
+  "summary": "Reduced only the homepage Services grid gap to 75% of the existing responsive layout grid gap. The local expression preserves fluid scaling at every viewport size.",
+  "changedFiles": [
+    "site/src/pages/index.astro"
+  ],
+  "checks": [
+    {
+      "command": "npm run baseline:inspect -- --json",
+      "result": "Passed; confirmed the static profile and available verification commands."
+    },
+    {
+      "command": "npm run verify",
+      "result": "Passed: lint, CSS contracts, art direction, design token audit, 39 tests, and typecheck (0 errors, 0 warnings, 0 hints)."
+    },
+    {
+      "command": "npm run build",
+      "result": "Passed; generated four static pages and verified the release artifact."
+    },
+    {
+      "command": "npm run check:dev-tools",
+      "result": "Passed; confirmed the static release excludes styleguide routes, fixture specimens, and server entrypoints."
+    },
+    {
+      "command": "Assigned preview and generated dist/index.html inspection",
+      "result": "Confirmed the Services grid emits --grid-gap:calc(var(--layout-grid-gap) * 0.75), the Approach grid has no local override, and the homepage renders in the desktop preview."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [
+    "CUA browser accessibility tree and screenshot at http://127.0.0.1:56956/ showed the Services and Our approach sections with their respective card grids at the default desktop viewport."
+  ],
+  "cms": {
+    "created": false,
+    "id": null,
+    "slug": null,
+    "status": null,
+    "permissionExplanation": "Not applicable: this is the static profile and no CMS mutation was requested or performed."
+  }
+}

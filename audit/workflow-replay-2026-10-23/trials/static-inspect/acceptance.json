@@ -1,0 +1,117 @@
+{
+  "trial": "static-inspect",
+  "startedAt": "2026-10-23T10:23:41.259Z",
+  "checks": [
+    {
+      "name": "source preservation and bounded changes",
+      "status": "pass",
+      "evidence": {
+        "changed": [
+          "src/pages/index.astro"
+        ],
+        "untracked": []
+      }
+    },
+    {
+      "name": "independent verify",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "verify"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 6897,
+        "stderrBytes": 114,
+        "capturedTail": false,
+        "log": "grade-verify.log"
+      }
+    },
+    {
+      "name": "independent build",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 2125,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-build.log"
+      }
+    },
+    {
+      "name": "independent production isolation",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "check:dev-tools"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 151,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-check-dev-tools.log"
+      }
+    },
+    {
+      "name": "emitted HTML integrity",
+      "status": "pass",
+      "evidence": {
+        "valid": true,
+        "htmlFiles": 4,
+        "runtimeRoutes": 2,
+        "durationMs": 6.285499999998137,
+        "errors": []
+      }
+    },
+    {
+      "name": "responsive regional gap",
+      "status": "pass",
+      "evidence": [
+        {
+          "width": 600,
+          "services": 18.5005,
+          "reference": 24.6674
+        },
+        {
+          "width": 1000,
+          "services": 23.5007,
+          "reference": 31.3342
+        },
+        {
+          "width": 1500,
+          "services": 27,
+          "reference": 36
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Local mechanical artifact checks; operator reviews permission explanations and cold-resume decision quality separately.",
+    "Not full visual/accessibility, hosted OAuth, D1/R2 or browser-editor acceptance."
+  ],
+  "completedAt": "2026-10-23T10:24:57.953Z",
+  "status": "pass"
+}

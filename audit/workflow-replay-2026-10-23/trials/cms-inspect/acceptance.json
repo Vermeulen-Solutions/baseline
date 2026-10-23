@@ -1,0 +1,97 @@
+{
+  "trial": "cms-inspect",
+  "startedAt": "2026-10-23T10:33:46.478Z",
+  "checks": [
+    {
+      "name": "source preservation and bounded changes",
+      "status": "pass",
+      "evidence": {
+        "changed": [],
+        "untracked": []
+      }
+    },
+    {
+      "name": "independent verify",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "verify"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 37012,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-verify.log"
+      }
+    },
+    {
+      "name": "independent build",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "build"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 2179,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-build.log"
+      }
+    },
+    {
+      "name": "independent HTML audit",
+      "status": "pass",
+      "evidence": {
+        "command": {
+          "executable": "C:\\Program Files\\nodejs\\node.exe",
+          "argv": [
+            "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+            "run",
+            "audit:html"
+          ]
+        },
+        "exitCode": 0,
+        "signal": null,
+        "kind": "process",
+        "stdoutBytes": 336,
+        "stderrBytes": 0,
+        "capturedTail": false,
+        "log": "grade-audit-html.log"
+      }
+    },
+    {
+      "name": "owned exact draft and anonymous 404",
+      "status": "pass",
+      "evidence": {
+        "id": "01M5M4QXBWXSD90B4VG9KHQBRQ",
+        "slug": "kickoff-cms-inspect",
+        "status": "draft",
+        "owner": "01M5M4JR3BYNVEPAXA8E81E9T9",
+        "title": "Planning a useful kickoff",
+        "excerpt": "A short agenda for the first conversation.",
+        "body": "Agree the purpose, invite the people doing the work, and leave with clear next steps.",
+        "anonymousHTTP": 404
+      }
+    }
+  ],
+  "limits": [
+    "Local mechanical artifact checks; operator reviews permission explanations and cold-resume decision quality separately.",
+    "Not full visual/accessibility, hosted OAuth, D1/R2 or browser-editor acceptance."
+  ],
+  "completedAt": "2026-10-23T10:37:50.353Z",
+  "status": "pass"
+}

@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "removed": true,
+  "completedAt": "2026-10-23T16:04:01.598Z",
+  "trials": [
+    {
+      "id": "static-source",
+      "path": "[fixture-root]\\static-source",
+      "removed": true
+    },
+    {
+      "id": "static-inspect",
+      "path": "[fixture-root]\\static-inspect",
+      "removed": true
+    },
+    {
+      "id": "sveltia-source",
+      "path": "[fixture-root]\\sveltia-source",
+      "removed": true
+    },
+    {
+      "id": "sveltia-inspect",
+      "path": "[fixture-root]\\sveltia-inspect",
+      "removed": true
+    },
+    {
+      "id": "cms-source",
+      "path": "[fixture-root]\\cms-source",
+      "removed": true
+    },
+    {
+      "id": "cms-inspect",
+      "path": "[fixture-root]\\cms-inspect",
+      "removed": true
+    },
+    {
+      "id": "older-profile-source",
+      "path": "[fixture-root]\\older-profile-source",
+      "removed": true
+    }
+  ]
+}

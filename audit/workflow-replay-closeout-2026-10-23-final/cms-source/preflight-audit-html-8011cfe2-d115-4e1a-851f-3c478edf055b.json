@@ -1,0 +1,22 @@
+{
+  "attemptId": "8011cfe2-d115-4e1a-851f-3c478edf055b",
+  "requestedArgv": [
+    "run",
+    "audit:html"
+  ],
+  "command": {
+    "executable": "C:\\Program Files\\nodejs\\node.exe",
+    "argv": [
+      "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+      "run",
+      "audit:html"
+    ]
+  },
+  "exitCode": 0,
+  "signal": null,
+  "kind": "process",
+  "stdoutBytes": 343,
+  "stderrBytes": 0,
+  "capturedTail": false,
+  "log": "preflight-audit-html-8011cfe2-d115-4e1a-851f-3c478edf055b.log"
+}

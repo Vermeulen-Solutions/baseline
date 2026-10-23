@@ -1,0 +1,18 @@
+
+> site@0.0.0 build
+> astro build
+
+[2m12:26:20[22m [34m[content][39m Syncing content
+[31m[InvalidContentEntryDataError][39m [1mposts → welcome[22m data does not match collection schema.
+
+  [1mreadingMinutes**: **readingMinutes[22m: Expected type `"int"`, received `"number"`
+
+  [1mHint:[22m
+[33m    See [4mhttps://docs.astro.build/en/guides/content-collections/[24m for more information on content schemas.[39m
+  [1mError reference:[22m
+    [36m[4mhttps://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/[24m[39m
+  [1mLocation:[22m
+    [4mC:\dev\baseline-workflow-replay-20261023\sveltia-source\site\src\content\posts\welcome.md:0:0[24m
+  [1mStack trace:[22m
+[2m    at getEntryData (C:\dev\baseline-workflow-replay-20261023\sveltia-source\site\node_modules\astro\dist\content\utils.js:83:22)
+    at async eval (C:\dev\baseline-workflow-replay-20261023\sveltia-source\site\node_modules\astro\dist\content\loaders\glob.js:231:6)[22m

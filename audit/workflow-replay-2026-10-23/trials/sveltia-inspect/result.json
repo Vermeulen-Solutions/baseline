@@ -1,0 +1,40 @@
+{
+  "summary": "Added optional readingMinutes to the typed post schema and Sveltia form, accepting whole numbers from 1 through 60. Article details render N min read only when supplied. Existing content and visual tokens were preserved. Temporary acceptance posts and the browser harness were removed, then the original content was rebuilt successfully.",
+  "changedFiles": [
+    "site/src/content.config.ts",
+    "site/src/lib/post-fields.ts",
+    "site/public/admin/config.yml",
+    "site/src/pages/posts/[...id].astro",
+    "site/tests/reading-minutes.test.mjs",
+    "site/tests/sveltia-config.test.mjs",
+    "site/docs/sveltia-cms.md"
+  ],
+  "checks": [
+    { "command": "npm run baseline:inspect -- --json (via runner)", "result": "Passed; reported static-sveltia, typed content and editor entry points, and available static verification commands." },
+    { "command": "runner mcp tools", "result": "Unavailable for this trial; no MCP operations were possible." },
+    { "command": "npm run check:art-direction -- --require-record (via runner)", "result": "Passed before source implementation; existing Art Direction Record was structurally valid." },
+    { "command": "npm run verify (via runner)", "result": "Passed: script/template lint, CSS contracts, art direction, token audit, 43 tests, and Astro check with 0 errors/warnings/hints. Boundary validator tests accepted undefined, 1, 30, 60 and rejected 0, -1, 61, 1.5, 59.5, numeric/text/empty strings, null, boolean, NaN and Infinity. Form constraint tests passed." },
+    { "command": "npm run build with temporary readingMinutes 1 and 60 posts (via runner)", "result": "Passed; both boundary posts and the existing omitted-value post generated successfully." },
+    { "command": "npm run test -- tests/reading-acceptance.mjs using temporary Edge browser harness (via runner)", "result": "Initial attempt failed because the msedge browser executable was unavailable. Existing 43 tests passed. No browser was installed." },
+    { "command": "npm run test -- tests/reading-acceptance.mjs using installed Chromium (via runner)", "result": "Passed all 44 tests. Temporary browser acceptance verified visible 1 min read and 60 min read on detail pages at 320, 768 and 1280px; omitted value remained absent; no horizontal overflow. Emitted homepage and posts listing contained no reading label. Harness was removed afterward." },
+    { "command": "npm run build with temporary readingMinutes 1.5 (via runner)", "result": "Expected failure: Astro InvalidContentEntryDataError on readingMinutes, requiring int. Temporary invalid post was removed afterward." },
+    { "command": "npm run build after removing all temporary content (via runner)", "result": "Passed; original four public pages built, including welcome without readingMinutes, and release artifact postbuild passed." },
+    { "command": "npm run check:dev-tools after final build (via runner)", "result": "Passed; no styleguide route, fixture specimens, or server entrypoint in final static release." }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [
+    {
+      "source": "https://sveltiacms.app/en/docs/fields/number",
+      "method": "web tool",
+      "reason": "Runner MCP was unavailable. Consulted official documentation for number widget value_type, min/max/step, optional empty values and validation before pairing the browser form with the typed schema. No external credentials or account data were accessed."
+    }
+  ],
+  "cms": {
+    "created": [],
+    "id": null,
+    "slug": null,
+    "status": null,
+    "permissionExplanation": "This is a file-owned static-sveltia fixture. No live CMS records were created and no credentialed login/save/publish was attempted, consistent with the prohibition on external credentials and deployment. Local temporary Markdown fixtures were removed. Browser editor configuration and schema pairing were checked; credentialed editor behavior is not certified."
+  }
+}

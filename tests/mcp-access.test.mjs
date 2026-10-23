@@ -68,6 +68,15 @@ test('narrow custom scopes support lower roles; setup is explicit and excludes p
   assert.ok(!setup.scopes.some(scope => scope === 'admin' || scope.startsWith('mcp:') || scope.startsWith('transfer:')));
 }));
 
+test('CMS replay observer receives read-only content/settings scopes while Contributor remains unable to read settings', () => fixture(({ db, options }) => {
+  const observer = tokenOperation({ ...options, user: 'editor-id', scopes: 'content:read,settings:read', name: 'Replay observer', apply: true });
+  assert.deepEqual(observer.scopes, ['content:read', 'settings:read']);
+  assert.equal(observer.user.role, 'editor');
+  const row = db.prepare('SELECT scopes FROM _emdash_api_tokens WHERE id = ?').get(observer.tokenId);
+  assert.deepEqual(JSON.parse(row.scopes), ['content:read', 'settings:read']);
+  assert.throws(() => tokenOperation({ ...options, user: 'contributor-id', scopes: 'content:read,settings:read' }), /cannot hold all requested scopes/);
+}));
+
 test('revocation is planned by default and limited to the selected owner and token', () => fixture(({ db, options }) => {
   const first = tokenOperation({ ...options, apply: true }), second = tokenOperation({ ...options, apply: true });
   const args = { ...options, revoke: first.tokenId };

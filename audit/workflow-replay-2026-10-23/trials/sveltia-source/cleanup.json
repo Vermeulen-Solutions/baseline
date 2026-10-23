@@ -1,0 +1,23 @@
+{
+  "scope": "Post-evaluation operator cleanup only",
+  "serversStarted": [
+    {
+      "command": "npm.cmd run preview -- --host 127.0.0.1 --port 4357",
+      "ownedSessionId": 38143,
+      "status": "Stopped during original evaluation using Ctrl+C on the owned session; cleanup confirmed the session no longer exists and no listener remains on port 4357."
+    }
+  ],
+  "checks": [
+    {
+      "command": "write_stdin session 38143, Ctrl+C",
+      "result": "Unknown process id 38143; owned session was already closed."
+    },
+    {
+      "command": "Get-NetTCPConnection -LocalPort 4357 -State Listen -ErrorAction SilentlyContinue",
+      "result": "No listener remains on owned preview port 4357."
+    }
+  ],
+  "remainingOwnedServers": [],
+  "projectSourcesChanged": false,
+  "taskResultOrAcceptanceChanged": false
+}

@@ -1,0 +1,30 @@
+{
+  "summary": "Updated the workshop handoff to reflect the established static-site need and decisions, current source state, remaining route work, and next local action. No customer discovery was repeated and no implementation or external deployment was performed.",
+  "changedFiles": [
+    "site/HANDOFF.md"
+  ],
+  "checks": [
+    {
+      "command": "npm run verify",
+      "result": "passed: lint, CSS contracts, art-direction changed-source gate, design-token audit, 39 tests, and Astro typecheck (0 errors, 0 warnings, 0 hints)."
+    },
+    {
+      "command": "npm run build",
+      "result": "passed: static release artifact verified; emitted 4 pages (404, posts index, post detail, home)."
+    },
+    {
+      "command": "npm run check:dev-tools",
+      "result": "passed: static release contains no styleguide route, fixture specimens, or server entrypoint."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [],
+  "cms": {
+    "created": false,
+    "id": null,
+    "slug": null,
+    "status": "not applicable; the installed profile is static and no CMS content was created",
+    "permissionExplanation": "No CMS mutation was part of this handoff task; the established profile uses native static content."
+  }
+}

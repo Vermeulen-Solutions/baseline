@@ -1,0 +1,23 @@
+{
+  "summary": "Reduced only the homepage services Grid gap to calc(var(--layout-grid-gap) * 0.75), preserving the shared responsive spacing scale and established art direction. The approach grid, global tokens, copy and navigation were unchanged.",
+  "changedFiles": ["site/src/pages/index.astro"],
+  "checks": [
+    {"command": "runner run baseline:inspect --json", "result": "PASS: detected static profile; inspected actual Grid source after declared-prop discovery."},
+    {"command": "runner run check:art-direction --require-record", "result": "PASS before implementation: existing art direction record structurally valid."},
+    {"command": "runner run dev --host 127.0.0.1 --port 4467", "result": "Runner refused dev as outside its bounded command policy; direct dev command used for required rendered inspection."},
+    {"command": "npm.cmd run dev -- --host 127.0.0.1 --port 4467 (direct fallback)", "result": "Started local Astro dev server for browser acceptance."},
+    {"command": "node browser-spacing.mjs before; node browser-spacing.mjs after", "result": "PASS: Chromium before/after at 320, 768 and 1440 CSS px. Services gap changed 20.0006→15.0005px, 27.4675→20.6006px and 36→27px (25% reduction within computed-style rounding). Approach gap remained 20.0006px, 27.4675px and 36px; navigation and main text matched; no horizontal overflow. Screenshots inspected at narrow and wide before, and all three widths after."},
+    {"command": "runner run verify", "result": "PASS: lint, CSS contracts, art direction, token audit, all 39 tests and Astro typecheck (0 errors, warnings or hints)."},
+    {"command": "runner run build", "result": "PASS: four static routes built; postbuild release artifact profile verified."},
+    {"command": "runner run check:dev-tools", "result": "PASS: release excludes styleguide, fixture specimens and server entrypoint."}
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [
+    {"operation": "Direct npm dev-server startup", "reason": "The runner rejected the installed dev script; rendered checks required a local server. No dependency installation, deployment or credentials used."},
+    {"operation": "Direct Playwright browser-spacing.mjs before/after", "reason": "Runner has no browser inspection action. Used the existing installed Playwright dependency to inspect only this trial's localhost page, computed styles, copy, navigation and overflow; saved trial-local evidence."},
+    {"operation": "view_image for trial-local before-320.png, before-1440.png, after-320.png, after-768.png and after-1440.png", "reason": "Visual acceptance of rendered trial screenshots; runner has no image viewer action."}
+  ],
+  "cms": {"applicable": false, "created": [], "permissionExplanation": "Static profile with file-owned content; no CMS record creation or external mutation involved. The requested local spacing change was authorized."},
+  "limitations": ["Impeccable launcher/detector unavailable in checked-in scripts; existing AGENTS art direction and source were used directly. Optional PRODUCT.md and DESIGN.md are absent; no context file adoption required."]
+}

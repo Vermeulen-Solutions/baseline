@@ -1,0 +1,56 @@
+{
+  "summary": "Added optional post reading time (whole minutes from 1 through 60) to the Astro content schema and Sveltia editor. Article details show '<N> min read' only when provided. The existing post without the field builds and renders normally, and the established art direction was preserved.",
+  "changedFiles": [
+    "site/src/content.config.ts",
+    "site/public/admin/config.yml",
+    "site/src/pages/posts/[...id].astro",
+    "site/docs/sveltia-cms.md",
+    "site/tests/sveltia-config.test.mjs"
+  ],
+  "checks": [
+    {
+      "command": "npm run verify",
+      "result": "PASS: lint, CSS contracts, art-direction check, token audit, 40 tests, and Astro typecheck; zero errors, warnings, or hints."
+    },
+    {
+      "command": "npm run build with temporary readingMinutes: 1 fixture",
+      "result": "PASS: endpoint accepted; emitted article HTML contained '1 min read'."
+    },
+    {
+      "command": "npm run build with temporary readingMinutes: 60 fixture",
+      "result": "PASS: endpoint accepted."
+    },
+    {
+      "command": "npm run build with temporary readingMinutes: 0 fixture",
+      "result": "PASS: rejected invalid content; schema reported value must be >= 1."
+    },
+    {
+      "command": "npm run build with temporary readingMinutes: 61 fixture",
+      "result": "PASS: rejected invalid content; schema reported value must be <= 60."
+    },
+    {
+      "command": "npm run build with temporary readingMinutes: 1.5 fixture",
+      "result": "PASS: rejected invalid content; schema required an integer."
+    },
+    {
+      "command": "npm run build with temporary readingMinutes: \"7\" fixture",
+      "result": "PASS: rejected invalid content; schema required a number."
+    },
+    {
+      "command": "npm run build after removing the temporary fixture",
+      "result": "PASS: clean static production build completed with the existing post that has no readingMinutes field. Its generated article HTML omitted the reading-time label."
+    },
+    {
+      "command": "npm run check:dev-tools",
+      "result": "PASS: static release contains no styleguide route, fixture specimens, or server entrypoint."
+    }
+  ],
+  "clarificationsNeeded": [],
+  "blockers": [],
+  "outsideRunnerReads": [],
+  "cmsCreated": false,
+  "cmsCreatedId": null,
+  "cmsCreatedSlug": null,
+  "cmsCreatedStatus": null,
+  "permissionExplanation": "This static-sveltia task changed local schema, editor configuration, rendering, documentation, and a contract test. No CMS record was created and no external credentials were used."
+}

@@ -1,0 +1,11 @@
+{
+  "beforeSHA256": "2fee141cb468b9b0e7d0ff0dc04e53490e21df35517e305922ffd384a47e7aed",
+  "afterSHA256": "03df99b9572971aade735d68386794f712fc1bb2d0020aeb590af4b6c4d0e4ec",
+  "unchangedExistingContent": true,
+  "onlyAdded": {
+    "collection": "posts",
+    "id": "01M5MPPPY5Y2X970XC5C11TFR0"
+  },
+  "menusUnchanged": true,
+  "settingsUnchanged": true
+}

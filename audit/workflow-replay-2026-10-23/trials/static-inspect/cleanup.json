@@ -1,0 +1,14 @@
+{
+  "phase": "post-evaluation operator cleanup",
+  "servers": [
+    {
+      "command": "npm.cmd run dev -- --host 127.0.0.1 --port 4467",
+      "ownedSessionId": 8894,
+      "action": "Sent Ctrl+C through owned session handle after browser acceptance; session returned completion with exit code 1.",
+      "confirmation": "Post-evaluation fetch to http://127.0.0.1:4467/ failed with ECONNREFUSED; no listener remains on the owned trial port."
+    }
+  ],
+  "remainingOwnedServers": [],
+  "projectSourcesChanged": false,
+  "taskResultOrAcceptanceChanged": false
+}
