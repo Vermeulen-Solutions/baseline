@@ -4,9 +4,20 @@
 
 # Documentation Directory
 
+## Start here
+
+| You want to… | Read |
+| --- | --- |
+| Choose a setup and run your first local site | [Getting started](getting-started.md) |
+| Find a command or the final verification steps | [Command reference](commands.md) |
+| Build a site with your assistant | [Prompt library](prompt-library.md) · [Delivery workflow](site-delivery-workflow.md) |
+| Improve Baseline itself | [Contributor guide](../CONTRIBUTING.md) |
+
+## Reference guides
+
 Baseline provides two Astro foundations and three Platform Profiles: **`static`** (developer/agent edits files), **`static-sveltia`** (browser editing of the same files), and **`emdash`** (relational CMS, live canvas and MCP). Shared tokens, layout primitives and component quarantine serve all three.
 
-- **[Platform Profiles](platform-profiles.md):** choose editing personas, hosting, infrastructure costs and the generation path.
+- **[Platform Profiles](platform-profiles.md):** compare content editing, hosting, infrastructure costs and project generation.
 - **[Capability and Support Boundaries](support-boundaries.md):** upstream versus Baseline responsibilities, runtime expectations, tested scopes and site-specific acceptance.
 - **[Baseline Updates](baseline-updates.md):** stage profile-filtered shared source/skill updates while preserving client changes.
 - **[Architecture Hardening Upgrade](architecture-hardening-upgrade.md):** generator 0.4.0, explicit existing-site additions, reviewed static patch and preservation/rollback contracts.
