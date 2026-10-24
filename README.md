@@ -42,11 +42,11 @@ If you already have a prepared site, open its folder and skip to the prompts.
 
 **How should content be edited?**
 
-| You want… | Use this prompt |
+| You want… | Prepare this project |
 | --- | --- |
-| Markdown files edited by you or your agent | [Static](#static-site) |
-| A browser editor that saves to GitHub | [Static + Sveltia](#static-site-with-sveltia) |
-| CMS forms, structured content, and live page editing | [EmDash CMS](#emdash-cms-site) |
+| Markdown files edited by you or your agent | [Static project](#static-setup) |
+| A browser editor that saves to GitHub | [Static + Sveltia project](#static-setup) |
+| CMS forms, structured content, and live page editing | [EmDash project](#emdash-setup) |
 
 [Compare editing and hosting requirements](docs/platform-profiles.md).
 
@@ -61,6 +61,8 @@ Run the commands below in a terminal, using your own folder name instead of `my-
 
 Clone Baseline as a generator, then generate your
 site into a separate folder. For Sveltia, replace `static` with `static-sveltia`.
+
+<a id="static-setup"></a>
 
 Windows PowerShell:
 
@@ -87,6 +89,8 @@ must be new or empty. [Static setup details](docs/getting-started.md#static-loca
 ---
 
 #### Option B: EmDash CMS
+
+<a id="emdash-setup"></a>
 
 [Create your own repository from the template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions),
 then clone your new repository. With the optional GitHub CLI, both steps are:
