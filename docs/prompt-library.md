@@ -35,6 +35,9 @@ Use this prompt for a straightforward greenfield site (`<= 6` routes, `<= 3` col
 ```markdown
 Read AGENTS.md, follow new-site-workflow under .agents/skills/ in **Express Track (3 Checkpoints)**, and build this site using consolidated checkpoints:
 
+Detect the host OS and shell before running commands. In Windows PowerShell,
+use npm.cmd and npx.cmd for all npm and npx commands.
+
 - Client / Brand: [Insert Brand Name]
 - Purpose & Routes: [E.g., 5-page architecture studio site: Home, Projects, Studio, Journal, Contact]
 - Primary Audience: [E.g., Residential and cultural architecture clients]
@@ -49,6 +52,9 @@ Use this prompt for a complex multi-collection build, multi-locale site or legac
 
 ```markdown
 Read AGENTS.md, follow new-site-workflow under .agents/skills/, and guide me through the staged delivery workflow.
+
+Detect the host OS and shell before running commands. In Windows PowerShell,
+use npm.cmd and npx.cmd for all npm and npx commands.
 
 Here is the context for this project:
 - Client / Brand: [Insert Brand Name]

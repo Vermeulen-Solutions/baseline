@@ -20,9 +20,9 @@ Use npm and the supplied lockfile. The supported Node.js engine range is
 `^22.22.3 || ^24.16.0 || >=26.3.0`, as declared in [package.json](../package.json).
 Node 24 LTS, version 24.16.0 or later within the 24.x line, is the recommended choice.
 
-In Windows PowerShell, use `npm.cmd` and `npx.cmd` wherever examples show npm and
-npx. These avoid PowerShell script execution-policy friction. No policy change is
-needed.
+Setup commands below have separate Windows PowerShell and macOS/Linux blocks.
+The PowerShell blocks use `npm.cmd` and `npx.cmd` to avoid script execution-policy
+friction. No policy change is needed.
 
 Git is needed to clone a repository and record changes. The GitHub CLI is optional:
 the [template button](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions)
@@ -42,6 +42,17 @@ cd my-site
 
 Open this cloned site folder as the project in your coding assistant. You can
 now use the README's EmDash prompt, or initialize the local environment manually:
+
+Windows PowerShell:
+
+```powershell
+npm.cmd run doctor
+npm.cmd ci
+npx.cmd emdash secrets generate --write .env
+npm.cmd run dev
+```
+
+macOS / Linux:
 
 ```sh
 npm run doctor
@@ -79,6 +90,17 @@ cd baseline
 ```
 
 Generate and install the actual site:
+
+Windows PowerShell:
+
+```powershell
+npm.cmd run init:profile -- --profile static --out ../my-site
+cd ../my-site
+npm.cmd install
+npm.cmd run dev
+```
+
+macOS / Linux:
 
 ```sh
 npm run init:profile -- --profile static --out ../my-site

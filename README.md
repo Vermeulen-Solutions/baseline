@@ -54,10 +54,20 @@ If you already have a prepared site, open its folder and skip to the prompts.
 
 You need Git and a supported Node.js version; see [requirements](docs/getting-started.md#requirements).
 Run the commands below in a terminal, using your own folder name instead of `my-site`.
-In Windows PowerShell, use `npm.cmd` wherever an example shows `npm`.
 
 **Static or Static + Sveltia:** clone Baseline as a generator, then generate your
 site into a separate folder. For Sveltia, replace `static` with `static-sveltia`.
+
+Windows PowerShell:
+
+```powershell
+git clone https://github.com/Vermeulen-Solutions/baseline.git baseline
+cd baseline
+npm.cmd run init:profile -- --profile static --out ../my-site
+cd ../my-site
+```
+
+macOS / Linux:
 
 ```sh
 git clone https://github.com/Vermeulen-Solutions/baseline.git baseline
@@ -112,6 +122,9 @@ the local site and identify remaining editor or launch steps.
 ```text
 Build a website in this prepared Baseline project (static profile).
 
+Detect the host OS and shell before running commands. In Windows PowerShell,
+use npm.cmd and npx.cmd for all npm and npx commands.
+
 Site and purpose: [name / goal]
 Audience: [people]
 Pages and content: [what the site needs]
@@ -131,6 +144,9 @@ Start its preview and report the URL, checks, assumptions, and pending steps.
 
 ```text
 Build a website in this prepared Baseline project (static-sveltia profile).
+
+Detect the host OS and shell before running commands. In Windows PowerShell,
+use npm.cmd and npx.cmd for all npm and npx commands.
 
 Site and purpose: [name / goal]
 Audience: [people]
@@ -156,6 +172,9 @@ preview, and report the URL, checks, assumptions, and remaining steps.
 
 ```text
 Build a website in this prepared Baseline project (emdash profile).
+
+Detect the host OS and shell before running commands. In Windows PowerShell,
+use npm.cmd and npx.cmd for all npm and npx commands.
 
 Site and purpose: [name / goal]
 Audience: [people]
