@@ -52,10 +52,14 @@ If you already have a prepared site, open its folder and skip to the prompts.
 
 ### 1. Prepare the site folder
 
+Choose **one** of the two setup paths below.
+
 You need Git and a supported Node.js version; see [requirements](docs/getting-started.md#requirements).
 Run the commands below in a terminal, using your own folder name instead of `my-site`.
 
-**Static or Static + Sveltia:** clone Baseline as a generator, then generate your
+#### Option A: Static or Static + Sveltia
+
+Clone Baseline as a generator, then generate your
 site into a separate folder. For Sveltia, replace `static` with `static-sveltia`.
 
 Windows PowerShell:
@@ -80,7 +84,11 @@ No dependency installation is needed in the generator checkout. The generated
 `my-site` folder is your project; open that folder in your assistant. The destination
 must be new or empty. [Static setup details](docs/getting-started.md#static-local-setup).
 
-**EmDash CMS:** [create your own repository from the template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions),
+---
+
+#### Option B: EmDash CMS
+
+[Create your own repository from the template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions),
 then clone your new repository. With the optional GitHub CLI, both steps are:
 
 ```sh
