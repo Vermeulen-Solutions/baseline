@@ -1,6 +1,6 @@
 ---
 name: new-site-workflow
-description: Coordinate the staged conversion of this Astro and EmDash starter into a real site. Use when starting a new site, planning a full rebuild, or resuming work that affects several site disciplines; route each stage to the relevant specialist skill instead of replacing those skills.
+description: Coordinate new sites, full rebuilds, and maintenance spanning content models, templates or shared design in this Astro and EmDash starter. Use profile-aware stages and existing decisions; route implementation to the relevant specialist skills. Isolated component or content edits can use their specialist directly.
 ---
 
 # New site workflow
@@ -260,6 +260,21 @@ State whether the result is prepared configuration, a preview deployment or an o
 ## Working with partial requests and ongoing evolution
 
 If the user requests only one stage, perform that stage without forcing a complete site build. Check its upstream inputs, state any consequential assumptions, and revisit downstream stages only when the change invalidates them. A later-stage request does not authorize inventing missing brand, content, or deployment decisions.
+
+### Scoped maintenance across site surfaces
+
+For a change spanning several files or disciplines, use this compact loop:
+
+1. Recover the installed profile, current implementation and requested outcome. Identify what must stay unchanged: for example other grid gaps, existing entries, navigation or edit ownership.
+2. Trace the affected surfaces before editing: a content field can involve schema, stored entries, editor form, queries and templates; a shared component can affect several routes. Choose the smallest change that fulfills the request and load only the relevant specialists.
+3. Apply within the existing authorization, keeping client-owned content/design and compatible omitted-field behavior. Use the established art-direction gate for visual changes; distinguish live CMS changes from seed defaults.
+4. Verify the requested outcome and preservation with the installed commands and relevant rendered/editor checks. A passing build does not prove an editor save, and an earlier check does not cover later edits.
+5. When work remains or will resume later, update the existing tracker or handoff with changed surfaces, checks actually completed, unresolved acceptance and the next concrete action. Link authoritative decisions rather than copying them into a new required record.
+
+When installed, [references/site-maintenance.md](references/site-maintenance.md)
+expands this loop for spacing, fields, shared components and routes. Older
+installations can use the summary above without adding that optional reference,
+changing profile or restarting discovery.
 
 ### Evolving content on an existing site
 

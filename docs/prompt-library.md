@@ -270,6 +270,16 @@ Please:
 
 ## 9. Brownfield Site Maintenance & Upgrades
 
+Start from the installed profile, `package.json`, the site's instructions and its
+existing decisions. Use the applicable checked-in skills and commands, and keep
+optional project records optional. A scoped maintenance request can proceed from
+its affected stage without restarting discovery. For changes spanning several
+surfaces, use `new-site-workflow`'s scoped maintenance guidance; isolated edits
+can use their specialist directly. These recipes reuse the
+[spacing contracts](design-framework.md#8-contextual-spacing-maintenance),
+[reviewed static updates](baseline-updates.md) and
+[EmDash skill synchronization](skill-synchronization.md).
+
 ### Running a Diagnostic Site Standards Audit
 Use this prompt to diagnose an existing downstream EmDash project against Baseline standards.
 
@@ -287,9 +297,26 @@ Once the diagnosis completes:
 Use this prompt to pull updated AI guidance into your project.
 
 ```markdown
-Please run `npm run sync:site-skills` and `npm run sync:emdash-skills` to check for upstream updates to our skills under .agents/skills/.
+Review upstream skill updates for this installed project. Read AGENTS.md,
+baseline.config.json when present, package.json and the applicable update guide.
 
-Review the staged diff, verify that any intentional local customizations are preserved, and guide me through applying or deferring the candidate updates.
+For static/static-sveltia, use the installed sync:baseline command with an
+immutable Baseline commit, following docs/baseline-updates.md. Its reviewed
+candidates include the installed shared skills; report other proposed files
+as part of the full candidate scope. When that scope includes unrelated shared
+source updates, leave it staged until the broader update is authorized. Preserve
+the managed update path and its provenance records.
+
+For emdash, use the installed sync:site-skills and sync:emdash-skills helpers
+with --check for comparisons, then stage applicable candidates following
+docs/skill-synchronization.md. If an older installation lacks a helper or guide,
+report the available update path before attempting changes.
+
+Review candidate diffs, provenance, licenses, local customizations and conflicts.
+Report the proposed application scope and apply within the existing
+authorization; leave unresolved ownership or conflicts for review. Report
+staged, applied and deferred changes accurately, then run applicable installed
+checks. Preserve client-owned content, calibrated design and configuration.
 ```
 
 ### Day-2 Design System & Token Updates (Client Request)
@@ -299,10 +326,11 @@ Use this prompt when a client requests system-wide styling changes (e.g., border
 We need to update our design system tokens based on client feedback: [Insert request, e.g., "Change our card corner radius to be sharper / softer" or "Update the primary brand accent to #0066CC"].
 
 Please:
-1. Update the appropriate token(s) in `src/styles/global.css` under Tailwind v4 `@theme` (e.g. `--radius-card`, `--color-action`, `--font-display`).
-2. Run `npm run design:tokens` to verify WCAG AA perceptual contrast and fluid clamp bounds.
-3. If core token physics shifted, ensure the `## Art Direction Record` in `AGENTS.md` remains accurate.
-4. Run `npm run verify` to confirm all checks pass.
+1. Inspect the current token consumers and establish whether the request affects the whole site, one region or one primitive. Reuse the site's approved design and existing content.
+2. Before visual implementation, align the existing `## Art Direction Record` in `AGENTS.md` with the requested change and run `npm run check:art-direction -- --require-record`.
+3. Change the smallest appropriate scope in `src/styles/global.css` or the affected composition. Global scales belong in `@theme`; structural spacing aliases such as `--layout-grid-gap` belong in regular `:root`. A local spacing request should use the region's alias or primitive gap control. Preview token CLI changes before writing; reserve lane/space-scale resets for an explicitly requested global recalibration.
+4. Run `npm run design:tokens` for the supported token diagnostics. Inspect affected components and the styleguide at narrow, intermediate and wide widths, including an unaffected reference composition. Record actual observations separately from generated calibration data; token diagnostics do not establish complete accessibility or visual acceptance.
+5. Run the installed verification, build and release checks, and report changed scope, preservation checks and remaining acceptance. Refresh source-bound calibration after saving the final CSS when applicable.
 ```
 
 ### Day-2 Section Layout Refactoring (e.g., Bento, Split, Timeline)
@@ -315,10 +343,10 @@ We need to refactor a section layout based on client feedback:
 - Desired layout: [Insert pattern, e.g., Bento grid / Alternating split feature / Timeline]
 
 Please:
-1. Recompose the section using Baseline's semantic layout primitives (`<Section>`, `<Container>`, `<Grid>`) and CSS Grid classes referencing existing tokens (`--spacing-grid`, `--radius-card`).
-2. Avoid hardcoding one-off pixel values, breakpoint soup, or ad-hoc colors.
-3. If introducing a brand new reusable component, ensure it follows quarantine principles (zero-JS, semantic tokens).
-4. Run `npm run verify` and test responsive reflow.
+1. Inspect the target composition and its content/editing owner. Preserve the established design, copy, navigation and unaffected sections. Check the existing Art Direction Record with `npm run check:art-direction -- --require-record` before visual implementation.
+2. Recompose the section using the existing semantic primitives (`<Section>`, `<Container>`, `<Grid>`). For a local grid-gap change, use that Grid's `gap` prop, for example `gap="calc(var(--layout-grid-gap) * 0.75)"`; use regional aliases for changes spanning several primitives. Keep CSS in named layers and avoid combining gap with flow margins for the same relationship.
+3. Reuse existing tokens and component controls. If a new reusable component is needed, follow the installed component-quarantine guidance and calibrate it on the styleguide.
+4. Compare the changed section and an unaffected reference at narrow, intermediate and wide widths. Check intended geometry, responsive reflow, copy, navigation and relevant keyboard behavior. Run the installed verification, build and release checks, and report actual rendered observations.
 ```
 
 ### Day-2 Adding a New Page or Section (Client Request)
@@ -331,13 +359,13 @@ We need to add a new [page / section] based on client feedback:
 - Content Source: [Editor-managed via CMS or Content Collections / Static code template]
 
 Please:
-1. If this is editor-managed content, add or extend the entry in the CMS/collection schema rather than hardcoding static routes.
-2. For new routes: wrap with `Base.astro` (or the profile site shell) and compose using layout primitives (`<Section>`, `<Container>`, `<Grid>`).
-3. For new sections: follow the section rhythm (vary visual weight, spatial density, or surface background so consecutive sections don't look monotonous).
+1. Inspect the installed profile and reuse an existing content type when it fits. Static profiles use typed Markdown; static-sveltia also needs a paired editor form when fields change. EmDash uses live content APIs. Change schemas only when needed, preserving existing entries; a seed is not a content migration.
+2. Before visual implementation, check the existing Art Direction Record with `npm run check:art-direction -- --require-record`. Wrap new routes with the existing `Base.astro` or site shell and compose with layout primitives. Preserve the installed static/server rendering behavior.
+3. Fit new sections into the established page rhythm, spacing and editorial rendering. Preserve unaffected sections and existing copy.
 4. For assets: place photographic/vector images in `src/assets/` using `<ResponsiveImage>` or native Astro `<Image>`, or upload to the CMS Media Library (never put content images in `public/`).
-5. Update navigation links (header/footer menus in `Base.astro` or CMS menus / `seed/seed.json`) if this page should be discoverable.
-6. On EmDash sites, preserve live editing by binding `{...entry.edit.*}` field proxies.
-7. Run `npm run verify` to confirm all checks pass.
+5. If the page should be discoverable, update the actual navigation owner: for example `src/config/site.ts` in static profiles or live EmDash menus. Update seeds separately only when changing new-install defaults; editing a seed does not update an existing site's menu records.
+6. On EmDash sites, preserve live editing with the correct `{...entry.edit.*}` field proxies. Verify typing, save and reload when edit targets change, reporting any acceptance that access prevents.
+7. Run the installed verification, build and release checks. Inspect the route/section, links, draft exclusion where applicable, keyboard behavior and responsive reflow; report remaining editorial or launch acceptance.
 ```
 
 ### Day-2 Renaming, Moving, or Deprecating Routes (Client Request)
