@@ -99,7 +99,13 @@ cd my-site
 Open the cloned `my-site` folder in your assistant. If it accepts a GitHub repository
 instead of a local folder, select your new repository. For a local-only start, you
 can also clone Baseline directly into `my-site` and use that checkout for EmDash.
-[EmDash setup details](docs/getting-started.md#emdash-local-setup).
+
+**Using an AI coding assistant?** Follow [Step 2](#open-the-project-and-give-your-assistant-the-brief),
+paste the EmDash prompt below, and let your assistant handle CMS setup. The
+[EmDash setup reference](docs/getting-started.md#emdash-local-setup) is for manual,
+command-by-command setup.
+
+<a id="open-the-project-and-give-your-assistant-the-brief"></a>
 
 ### 2. Open the project and give your assistant the brief
 
