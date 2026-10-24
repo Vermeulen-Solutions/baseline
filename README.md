@@ -135,7 +135,7 @@ if unsure, write “recommend” and let the agent assess the brief. The prompts
 the local site and identify remaining editor or launch steps.
 [Workflow details](docs/site-delivery-workflow.md).
 
-### Static site
+#### Static site
 
 ```text
 Build a website in this prepared Baseline project (static profile).
@@ -158,7 +158,7 @@ Complete the local site, design calibration, and applicable verification.
 Start its preview and report the URL, checks, assumptions, and pending steps.
 ```
 
-### Static site with Sveltia
+#### Static site with Sveltia
 
 ```text
 Build a website in this prepared Baseline project (static-sveltia profile).
@@ -186,7 +186,7 @@ Complete design calibration and applicable verification, start the
 preview, and report the URL, checks, assumptions, and remaining steps.
 ```
 
-### EmDash CMS site
+#### EmDash CMS site
 
 ```text
 Build a website in this prepared Baseline project (emdash profile).
