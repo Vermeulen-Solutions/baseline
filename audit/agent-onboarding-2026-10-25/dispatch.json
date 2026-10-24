@@ -1,0 +1,26 @@
+{
+  "protocolSHA256": "40513d545af14d58c4abfcbace3b471d86f97a26dda27925831b2a67c3c4f422",
+  "method": "collaboration agents with fresh context and no model override",
+  "kickoff": {
+    "agent": "/root/static_onboarding_kickoff",
+    "prompt": "prompts/kickoff.md",
+    "freshContext": true,
+    "modelOverride": null,
+    "correctiveHints": false
+  },
+  "resume": {
+    "agent": "/root/static_onboarding_resume",
+    "prompt": "prompts/resume.md",
+    "freshContext": true,
+    "modelOverride": null,
+    "correctiveHints": false,
+    "originalBriefSupplied": false
+  },
+  "postAcceptanceCleanup": {
+    "implementationRetry": false,
+    "previewStoppedByParent": true,
+    "agentTask": "/root/static_onboarding_resume",
+    "request": "Close only its retained preview browser tab after independent acceptance",
+    "result": "Browser 2 unavailable and browser inventory empty; exact closure unconfirmed"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "changedPreparedInputs": [
+    {
+      "sha256": "0331bc5a612b15586bcf6e656f573d18402f4636eb1e3cbeff4e6ae7cb89841f",
+      "status": "changed",
+      "path": "AGENTS.md"
+    }
+  ],
+  "nodeModulesAttributes": "Directory",
+  "observer": "parent read-only after kickoff completion",
+  "preparedInputCount": 168,
+  "lockfileSHA256": "dc478c4b532a0b54a678899daec79ab9ed9ade8094038639ddc72ff4ff41218d"
+}

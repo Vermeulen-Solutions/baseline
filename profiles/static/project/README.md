@@ -28,6 +28,20 @@ The first install creates a project-specific `package-lock.json`; commit it and
 use `npm ci` for subsequent clean installs. Dependency versions originate from
 Baseline's canonical package definition. No source lockfile is copied from EmDash.
 
+To resume an unfinished build, open this same project folder and ask:
+
+```text
+Continue the authorized local site build from AGENTS.md, the current source,
+and the existing brief and handoff when present. Preserve established decisions
+and content, use the installed profile and lockfile, and finish the remaining
+local work and verification. Start the preview and report its URL, actual
+checks and any pending editor or launch acceptance.
+```
+
+Saved progress should identify what is implemented, what was actually checked,
+and the next local action. Optional context records remain optional; a previous
+starter build is setup evidence, not proof that the requested site is complete.
+
 Edit `src/config/site.ts` for navigation and site identity, and
 `src/content/posts/welcome.md` for sample content. Add Markdown posts to the same
 collection. Required fields are title, description and publication date; hero

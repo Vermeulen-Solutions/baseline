@@ -1,0 +1,11 @@
+{
+  "previewPid": 27052,
+  "stopMethod": "Inspected fixture-owned guarded PowerShell script after verifying exact PID, command, loopback listener and actual site response",
+  "sourceRetainedForReview": true,
+  "previewListenerCount": 0,
+  "fixture": "C:/dev/baseline-onboarding-static-20261025-run1",
+  "previewProcessExists": false,
+  "deployment": "none",
+  "credentials": "none",
+  "retainedBrowserTab": "Creating agent attempted close after acceptance; browser 2 was unavailable and its inventory empty. Exact tab closure unconfirmed."
+}

@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "Mapped Contact draft has no built route",
+    "Draft Contact absent from primary navigation",
+    "Draft workshop absent from public listing"
+  ],
+  "fixtureRetained": false,
+  "sourceRestored": true
+}

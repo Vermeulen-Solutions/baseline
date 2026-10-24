@@ -1,0 +1,429 @@
+{
+  "reviewerKind": "agent-operated mechanical/browser observations",
+  "platform": "win32",
+  "origin": "http://127.0.0.1:4362/",
+  "fixture": "C:/dev/baseline-onboarding-static-20261025-run1",
+  "routes": [
+    {
+      "path": "/",
+      "width": 390,
+      "status": 200,
+      "title": "Fieldnote Workshops",
+      "navigation": [
+        {
+          "text": "Fieldnote Workshops",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Workshops",
+          "href": "/workshops/"
+        },
+        {
+          "text": "Contact",
+          "href": "/contact/"
+        }
+      ],
+      "mailto": [
+        "mailto:workshops@fieldnote.example.test"
+      ],
+      "dates": [],
+      "geometry": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "firstFocus": {
+        "tag": "A",
+        "href": "#main-content",
+        "text": "Skip to content"
+      },
+      "skipTarget": {
+        "tag": "MAIN",
+        "id": "main-content"
+      },
+      "screenshot": "home-390.png"
+    },
+    {
+      "path": "/workshops/",
+      "width": 390,
+      "status": 200,
+      "title": "Upcoming workshops — Fieldnote Workshops",
+      "navigation": [
+        {
+          "text": "Fieldnote Workshops",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Workshops",
+          "href": "/workshops/"
+        },
+        {
+          "text": "Contact",
+          "href": "/contact/"
+        }
+      ],
+      "mailto": [
+        "mailto:workshops@fieldnote.example.test",
+        "mailto:workshops@fieldnote.example.test",
+        "mailto:workshops@fieldnote.example.test"
+      ],
+      "dates": [
+        {
+          "datetime": "2026-11-12",
+          "text": "12 November 2026"
+        },
+        {
+          "datetime": "2026-11-26",
+          "text": "26 November 2026"
+        }
+      ],
+      "geometry": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "firstFocus": {
+        "tag": "A",
+        "href": "#main-content",
+        "text": "Skip to content"
+      },
+      "skipTarget": {
+        "tag": "MAIN",
+        "id": "main-content"
+      },
+      "screenshot": "workshops-390.png"
+    },
+    {
+      "path": "/contact/",
+      "width": 390,
+      "status": 200,
+      "title": "Find the right workshop — Fieldnote Workshops",
+      "navigation": [
+        {
+          "text": "Fieldnote Workshops",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Workshops",
+          "href": "/workshops/"
+        },
+        {
+          "text": "Contact",
+          "href": "/contact/"
+        }
+      ],
+      "mailto": [
+        "mailto:workshops@fieldnote.example.test",
+        "mailto:workshops@fieldnote.example.test"
+      ],
+      "dates": [],
+      "geometry": {
+        "viewport": 390,
+        "scroll": 390
+      },
+      "firstFocus": {
+        "tag": "A",
+        "href": "#main-content",
+        "text": "Skip to content"
+      },
+      "skipTarget": {
+        "tag": "MAIN",
+        "id": "main-content"
+      },
+      "screenshot": "contact-390.png"
+    },
+    {
+      "path": "/",
+      "width": 768,
+      "status": 200,
+      "title": "Fieldnote Workshops",
+      "navigation": [
+        {
+          "text": "Fieldnote Workshops",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Workshops",
+          "href": "/workshops/"
+        },
+        {
+          "text": "Contact",
+          "href": "/contact/"
+        }
+      ],
+      "mailto": [
+        "mailto:workshops@fieldnote.example.test"
+      ],
+      "dates": [],
+      "geometry": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "firstFocus": {
+        "tag": "A",
+        "href": "#main-content",
+        "text": "Skip to content"
+      },
+      "skipTarget": {
+        "tag": "MAIN",
+        "id": "main-content"
+      },
+      "screenshot": "home-768.png"
+    },
+    {
+      "path": "/workshops/",
+      "width": 768,
+      "status": 200,
+      "title": "Upcoming workshops — Fieldnote Workshops",
+      "navigation": [
+        {
+          "text": "Fieldnote Workshops",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Workshops",
+          "href": "/workshops/"
+        },
+        {
+          "text": "Contact",
+          "href": "/contact/"
+        }
+      ],
+      "mailto": [
+        "mailto:workshops@fieldnote.example.test",
+        "mailto:workshops@fieldnote.example.test",
+        "mailto:workshops@fieldnote.example.test"
+      ],
+      "dates": [
+        {
+          "datetime": "2026-11-12",
+          "text": "12 November 2026"
+        },
+        {
+          "datetime": "2026-11-26",
+          "text": "26 November 2026"
+        }
+      ],
+      "geometry": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "firstFocus": {
+        "tag": "A",
+        "href": "#main-content",
+        "text": "Skip to content"
+      },
+      "skipTarget": {
+        "tag": "MAIN",
+        "id": "main-content"
+      },
+      "screenshot": "workshops-768.png"
+    },
+    {
+      "path": "/contact/",
+      "width": 768,
+      "status": 200,
+      "title": "Find the right workshop — Fieldnote Workshops",
+      "navigation": [
+        {
+          "text": "Fieldnote Workshops",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Workshops",
+          "href": "/workshops/"
+        },
+        {
+          "text": "Contact",
+          "href": "/contact/"
+        }
+      ],
+      "mailto": [
+        "mailto:workshops@fieldnote.example.test",
+        "mailto:workshops@fieldnote.example.test"
+      ],
+      "dates": [],
+      "geometry": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "firstFocus": {
+        "tag": "A",
+        "href": "#main-content",
+        "text": "Skip to content"
+      },
+      "skipTarget": {
+        "tag": "MAIN",
+        "id": "main-content"
+      },
+      "screenshot": "contact-768.png"
+    },
+    {
+      "path": "/",
+      "width": 1440,
+      "status": 200,
+      "title": "Fieldnote Workshops",
+      "navigation": [
+        {
+          "text": "Fieldnote Workshops",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Workshops",
+          "href": "/workshops/"
+        },
+        {
+          "text": "Contact",
+          "href": "/contact/"
+        }
+      ],
+      "mailto": [
+        "mailto:workshops@fieldnote.example.test"
+      ],
+      "dates": [],
+      "geometry": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "firstFocus": {
+        "tag": "A",
+        "href": "#main-content",
+        "text": "Skip to content"
+      },
+      "skipTarget": {
+        "tag": "MAIN",
+        "id": "main-content"
+      },
+      "screenshot": "home-1440.png"
+    },
+    {
+      "path": "/workshops/",
+      "width": 1440,
+      "status": 200,
+      "title": "Upcoming workshops — Fieldnote Workshops",
+      "navigation": [
+        {
+          "text": "Fieldnote Workshops",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Workshops",
+          "href": "/workshops/"
+        },
+        {
+          "text": "Contact",
+          "href": "/contact/"
+        }
+      ],
+      "mailto": [
+        "mailto:workshops@fieldnote.example.test",
+        "mailto:workshops@fieldnote.example.test",
+        "mailto:workshops@fieldnote.example.test"
+      ],
+      "dates": [
+        {
+          "datetime": "2026-11-12",
+          "text": "12 November 2026"
+        },
+        {
+          "datetime": "2026-11-26",
+          "text": "26 November 2026"
+        }
+      ],
+      "geometry": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "firstFocus": {
+        "tag": "A",
+        "href": "#main-content",
+        "text": "Skip to content"
+      },
+      "skipTarget": {
+        "tag": "MAIN",
+        "id": "main-content"
+      },
+      "screenshot": "workshops-1440.png"
+    },
+    {
+      "path": "/contact/",
+      "width": 1440,
+      "status": 200,
+      "title": "Find the right workshop — Fieldnote Workshops",
+      "navigation": [
+        {
+          "text": "Fieldnote Workshops",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Workshops",
+          "href": "/workshops/"
+        },
+        {
+          "text": "Contact",
+          "href": "/contact/"
+        }
+      ],
+      "mailto": [
+        "mailto:workshops@fieldnote.example.test",
+        "mailto:workshops@fieldnote.example.test"
+      ],
+      "dates": [],
+      "geometry": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "firstFocus": {
+        "tag": "A",
+        "href": "#main-content",
+        "text": "Skip to content"
+      },
+      "skipTarget": {
+        "tag": "MAIN",
+        "id": "main-content"
+      },
+      "screenshot": "contact-1440.png"
+    }
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "limitations": [
+    "No email sent, editor authentication, deployment, screen-reader or physical-device acceptance."
+  ],
+  "chromium": "156.0.8078.4",
+  "status": "pass"
+}

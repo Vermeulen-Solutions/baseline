@@ -10,3 +10,7 @@ docs/upgrades/architecture-hardening-static.patch -whitespace
 audit/**/*.log -whitespace
 # Captured unified diffs contain whitespace-only context lines by design.
 audit/**/changes.patch -whitespace
+# Frozen onboarding inputs retain their recorded byte hashes on Windows too.
+audit/agent-onboarding-2026-10-25/protocol.json text eol=lf
+audit/agent-onboarding-2026-10-25/prompts/*.md text eol=lf
+audit/agent-onboarding-2026-10-25/prepared-*.json text eol=lf
