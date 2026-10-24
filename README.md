@@ -35,7 +35,7 @@ foundation.
 
 Prepare a local site folder, open it as a project in your coding assistant, then
 paste a build prompt. Choose your content setup below to create the right folder.
-If you already have a prepared site, open its folder and skip to the prompts.
+If you already have a prepared site, open its folder and [continue to Step 2](#open-the-project-and-give-your-assistant-the-brief).
 
 <a id="platform-profiles"></a>
 <a id="choose-your-setup"></a>
@@ -57,12 +57,14 @@ Choose **one** of the two setup paths below.
 You need Git and a supported Node.js version; see [requirements](docs/getting-started.md#requirements).
 Run the commands below in a terminal, using your own folder name instead of `my-site`.
 
+<a id="static-setup"></a>
+
 #### Option A: Static or Static + Sveltia
 
-Clone Baseline as a generator, then generate your
-site into a separate folder. For Sveltia, replace `static` with `static-sveltia`.
-
-<a id="static-setup"></a>
+Clone Baseline as a generator, then generate your site into a separate folder.
+For Sveltia, replace `static` with `static-sveltia` in your command block.
+The destination must be new or empty. No dependency installation is needed
+in the generator checkout.
 
 Windows PowerShell:
 
@@ -82,15 +84,20 @@ npm run init:profile -- --profile static --out ../my-site
 cd ../my-site
 ```
 
-No dependency installation is needed in the generator checkout. The generated
-`my-site` folder is your project; open that folder in your assistant. The destination
-must be new or empty. [Static setup details](docs/getting-started.md#static-local-setup).
+> [!TIP]
+> Open the generated `my-site` folder in your coding assistant. Continue to
+> [Step 2](#open-the-project-and-give-your-assistant-the-brief) and copy the
+> [Static](#static-site) or [Static + Sveltia](#static-site-with-sveltia) prompt.
+> Your assistant handles dependency installation and starts the local preview.
+
+For a command-by-command alternative, follow the optional
+[Static manual setup guide](docs/getting-started.md#static-local-setup).
 
 ---
 
-#### Option B: EmDash CMS
-
 <a id="emdash-setup"></a>
+
+#### Option B: EmDash CMS
 
 [Create your own repository from the template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions),
 then clone your new repository. With the optional GitHub CLI, both steps are:
@@ -100,14 +107,18 @@ gh repo create my-site --template Vermeulen-Solutions/baseline --private --clone
 cd my-site
 ```
 
-Open the cloned `my-site` folder in your assistant. If it accepts a GitHub repository
-instead of a local folder, select your new repository. For a local-only start, you
-can also clone Baseline directly into `my-site` and use that checkout for EmDash.
+For a local-only start, you can also clone Baseline directly into `my-site`
+and use that checkout for EmDash.
 
-**Using an AI coding assistant?** Follow [Step 2](#open-the-project-and-give-your-assistant-the-brief),
-paste the EmDash prompt below, and let your assistant handle CMS setup. The
-[EmDash setup reference](docs/getting-started.md#emdash-local-setup) is for manual,
-command-by-command setup.
+> [!TIP]
+> Open the cloned `my-site` folder in your coding assistant, or select your new
+> repository if it accepts a GitHub URL. Continue to
+> [Step 2](#open-the-project-and-give-your-assistant-the-brief) and copy the
+> [EmDash CMS prompt](#emdash-cms-site). Your assistant handles dependency
+> installation and guides you through CMS administrator setup.
+
+For a command-by-command alternative, follow the optional
+[EmDash manual setup guide](docs/getting-started.md#emdash-local-setup).
 
 <a id="open-the-project-and-give-your-assistant-the-brief"></a>
 
@@ -147,7 +158,7 @@ Site and purpose: [name / goal]
 Audience: [people]
 Pages and content: [what the site needs]
 Brand assets and references: [locations or links]
-Workflow: [Express (3 checkpoints) / Standard (7 stages)]
+Workflow: [recommend / Express (3 checkpoints) / Standard (7 stages)]
 
 Read AGENTS.md and follow the selected new-site-workflow track.
 Work in the current project folder, preserve existing work, and install
@@ -171,7 +182,7 @@ Audience: [people]
 Pages and content: [what the site needs]
 Brand assets and references: [locations or links]
 GitHub repository: [owner/repo, or not set up yet]
-Workflow: [Express (3 checkpoints) / Standard (7 stages)]
+Workflow: [recommend / Express (3 checkpoints) / Standard (7 stages)]
 
 Read AGENTS.md and follow the selected new-site-workflow track.
 Work in the current project folder, preserve existing work, install its
@@ -198,7 +209,7 @@ Site and purpose: [name / goal]
 Audience: [people]
 Pages and content: [what the site needs]
 Brand assets and references: [locations or links]
-Workflow: [Express (3 checkpoints) / Standard (7 stages)]
+Workflow: [recommend / Express (3 checkpoints) / Standard (7 stages)]
 
 Read AGENTS.md and follow the selected new-site-workflow track.
 Work in the current project folder. Run doctor, install dependencies, and
@@ -215,9 +226,11 @@ assumptions, and any steps still needing my involvement.
 The agent checks local requirements and handles the remaining setup commands. It should
 guide you through any machine setup or editor sign-in that needs your involvement.
 
-[More prompt examples](docs/prompt-library.md) ·
-[Manual setup and requirements](docs/getting-started.md) ·
-[Optional project brief](docs/project-context.md)
+**Optional references**
+
+- [More prompt examples](docs/prompt-library.md) for migrations and specific follow-up tasks.
+- [Manual setup and requirements](docs/getting-started.md) if you want to run the setup commands yourself.
+- [Optional project brief](docs/project-context.md) to keep a longer site brief in your repository.
 
 ## Why Baseline?
 
@@ -251,9 +264,11 @@ for manual use, scripting, and troubleshooting.
 
 ## Find your next step
 
+Use these guides as references for you or your coding assistant.
+
 | I want to… | Guide |
 | --- | --- |
-| Set up locally or find the right project files | [Getting started](docs/getting-started.md) |
+| Run setup commands myself or find the project files | [Getting started](docs/getting-started.md) |
 | Change the visual direction or layout | [Art direction](docs/art-direction-workflow.md) · [Design framework](docs/design-framework.md) |
 | Work with CMS content or move from WordPress | [Editorial editing](docs/emdash-editorial-canvas.md) · [WordPress content](docs/wordpress-content-modeling.md) |
 | Publish the site | [Platform and hosting choices](docs/platform-profiles.md) · [EmDash deployment](docs/production-deployment.md) |
@@ -262,6 +277,8 @@ for manual use, scripting, and troubleshooting.
 [Browse all documentation →](docs/README.md)
 
 <a id="capability-and-support-boundaries"></a>
+
+## Before publishing
 
 EmDash runs locally with SQLite and local media; no cloud account is needed to
 start. Static content changes require a rebuild to publish. Hosting, authentication,
