@@ -198,6 +198,7 @@
     ".agents/skills/impeccable/scripts/modern-screenshot.umd.js",
     ".agents/skills/new-site-workflow/SKILL.md",
     ".agents/skills/new-site-workflow/agents/openai.yaml",
+    ".agents/skills/new-site-workflow/references/site-maintenance.md",
     ".agents/skills/site-art-direction/SKILL.md",
     ".agents/skills/site-art-direction/agents/openai.yaml",
     ".agents/skills/site-art-direction/references/aesthetic-lanes.md"
