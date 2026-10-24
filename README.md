@@ -33,10 +33,9 @@ foundation.
 
 ## Quickstart
 
-Open a coding assistant that can work with local files and run terminal commands.
-Open an existing Baseline checkout, or start in a workspace where the agent can prepare
-the project. Choose a content setup and a workflow, then copy the matching prompt
-and replace its bracketed fields.
+Prepare a local site folder, open it as a project in your coding assistant, then
+paste a build prompt. Choose your content setup below to create the right folder.
+If you already have a prepared site, open its folder and skip to the prompts.
 
 <a id="platform-profiles"></a>
 <a id="choose-your-setup"></a>
@@ -50,6 +49,47 @@ and replace its bracketed fields.
 | CMS forms, structured content, and live page editing | [EmDash CMS](#emdash-cms-site) |
 
 [Compare editing and hosting requirements](docs/platform-profiles.md).
+
+### 1. Prepare the site folder
+
+You need Git and a supported Node.js version; see [requirements](docs/getting-started.md#requirements).
+Run the commands below in a terminal, using your own folder name instead of `my-site`.
+In Windows PowerShell, use `npm.cmd` wherever an example shows `npm`.
+
+**Static or Static + Sveltia:** clone Baseline as a generator, then generate your
+site into a separate folder. For Sveltia, replace `static` with `static-sveltia`.
+
+```sh
+git clone https://github.com/Vermeulen-Solutions/baseline.git baseline
+cd baseline
+npm run init:profile -- --profile static --out ../my-site
+cd ../my-site
+```
+
+No dependency installation is needed in the generator checkout. The generated
+`my-site` folder is your project; open that folder in your assistant. The destination
+must be new or empty. [Static setup details](docs/getting-started.md#static-local-setup).
+
+**EmDash CMS:** [create your own repository from the template](https://github.com/new?template_name=baseline&template_owner=Vermeulen-Solutions),
+then clone your new repository. With the optional GitHub CLI, both steps are:
+
+```sh
+gh repo create my-site --template Vermeulen-Solutions/baseline --private --clone
+cd my-site
+```
+
+Open the cloned `my-site` folder in your assistant. If it accepts a GitHub repository
+instead of a local folder, select your new repository. For a local-only start, you
+can also clone Baseline directly into `my-site` and use that checkout for EmDash.
+[EmDash setup details](docs/getting-started.md#emdash-local-setup).
+
+### 2. Open the project and give your assistant the brief
+
+Use a coding assistant that can edit project files and run terminal commands.
+Select the site folder prepared above when it asks you to open or create a project.
+Then choose a workflow and paste the matching profile prompt below, replacing its
+bracketed fields. Your assistant handles dependency installation and local setup
+inside that project.
 
 <a id="the-7-stage-site-delivery-workflow"></a>
 
@@ -70,21 +110,18 @@ the local site and identify remaining editor or launch steps.
 ### Static site
 
 ```text
-Use Baseline (https://github.com/Vermeulen-Solutions/baseline)
-to build a website with the static profile.
+Build a website in this prepared Baseline project (static profile).
 
 Site and purpose: [name / goal]
 Audience: [people]
 Pages and content: [what the site needs]
 Brand assets and references: [locations or links]
-Site destination: [folder]
 Workflow: [Express (3 checkpoints) / Standard (7 stages)]
 
 Read AGENTS.md and follow the selected new-site-workflow track.
-Prepare or reuse a Baseline generator checkout, then generate the site
-separately at the destination. Preserve existing work, install dependencies
-in the generated project, and follow its AGENTS.md. Use typed Markdown
-content; this site does not need a CMS or database.
+Work in the current project folder, preserve existing work, and install
+its dependencies. Use typed Markdown content; this site does not need a
+CMS or database.
 
 Complete the local site, design calibration, and applicable verification.
 Start its preview and report the URL, checks, assumptions, and pending steps.
@@ -93,21 +130,18 @@ Start its preview and report the URL, checks, assumptions, and pending steps.
 ### Static site with Sveltia
 
 ```text
-Use Baseline (https://github.com/Vermeulen-Solutions/baseline)
-to build a website with the static-sveltia profile.
+Build a website in this prepared Baseline project (static-sveltia profile).
 
 Site and purpose: [name / goal]
 Audience: [people]
 Pages and content: [what the site needs]
 Brand assets and references: [locations or links]
-Site destination: [folder]
 GitHub repository: [owner/repo, or not set up yet]
 Workflow: [Express (3 checkpoints) / Standard (7 stages)]
 
 Read AGENTS.md and follow the selected new-site-workflow track.
-Prepare or reuse a Baseline generator checkout, then generate the site
-separately at the destination. Preserve existing work, install dependencies
-there, and follow its AGENTS.md and Sveltia setup guide.
+Work in the current project folder, preserve existing work, install its
+dependencies, and follow its Sveltia setup guide.
 
 Build the site and prepare the Git-backed editor for my repository.
 Guide me through authentication. Verify editor login, upload, save,
@@ -121,20 +155,18 @@ preview, and report the URL, checks, assumptions, and remaining steps.
 ### EmDash CMS site
 
 ```text
-Use Baseline (https://github.com/Vermeulen-Solutions/baseline)
-to build a website with the emdash profile.
+Build a website in this prepared Baseline project (emdash profile).
 
 Site and purpose: [name / goal]
 Audience: [people]
 Pages and content: [what the site needs]
 Brand assets and references: [locations or links]
-Site destination: [folder]
 Workflow: [Express (3 checkpoints) / Standard (7 stages)]
 
 Read AGENTS.md and follow the selected new-site-workflow track.
-Use a prepared site checkout at the destination, or create one from the
-full EmDash template. Install dependencies and configure local Node.js,
-SQLite, media, and missing secrets, preserving existing content and keys.
+Work in the current project folder. Run doctor, install dependencies, and
+configure local Node.js, SQLite, media, and missing secrets, preserving
+existing content and keys.
 Guide me through first-run CMS administrator setup where needed.
 
 Build the content model, CMS content, and public pages. Complete design
@@ -143,7 +175,7 @@ available. Start the preview and report the site/admin URLs, checks,
 assumptions, and any steps still needing my involvement.
 ```
 
-The agent checks local requirements and handles the setup commands. It should
+The agent checks local requirements and handles the remaining setup commands. It should
 guide you through any machine setup or editor sign-in that needs your involvement.
 
 [More prompt examples](docs/prompt-library.md) ·

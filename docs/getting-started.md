@@ -3,10 +3,11 @@
 [Back to Baseline](../README.md) · [Choose a platform](platform-profiles.md) ·
 [Command reference](commands.md)
 
-For the agent-first path, use the [README profile prompts](../README.md#quickstart).
-Choose Static, Sveltia, or EmDash and select Express or Standard in that prompt.
-Each asks your assistant to prepare the right project, install dependencies,
-build the site, and start a local preview. The commands below are
+For the agent-first path, follow the [README quickstart](../README.md#quickstart):
+prepare the site folder for Static, Sveltia, or EmDash, then open that folder as
+a project in your assistant. Paste the matching build prompt and select Express
+or Standard. Each prompt asks your assistant to install dependencies, configure
+the local environment, build the site, and start a local preview. The commands below are
 the manual reference for those operations; you can ask your assistant to run them.
 
 Choose the editing and hosting model before installing dependencies. The full
@@ -39,7 +40,8 @@ gh repo create my-site --template Vermeulen-Solutions/baseline --private --clone
 cd my-site
 ```
 
-Then initialize the local environment:
+Open this cloned site folder as the project in your coding assistant. You can
+now use the README's EmDash prompt, or initialize the local environment manually:
 
 ```sh
 npm run doctor
@@ -84,6 +86,10 @@ cd ../my-site
 npm install
 npm run dev
 ```
+
+Open the generated `my-site` folder as the project in your coding assistant,
+rather than the Baseline generator checkout. If you use the README's Static or
+Sveltia prompt, your assistant can handle installation and preview after generation.
 
 The destination must be new or empty, outside the source checkout, with an existing
 parent directory. To include Sveltia, substitute `--profile static-sveltia`.
