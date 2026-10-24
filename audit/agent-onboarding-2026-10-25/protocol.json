@@ -1,0 +1,95 @@
+{
+  "schemaVersion": 1,
+  "issue": 11,
+  "scenario": "prepared-static-kickoff-and-resume",
+  "frozenBeforeDispatch": true,
+  "source": {
+    "commit": "2a4a9d35a71edc36a3d32d7e4c53f1fa426b664a",
+    "sourceTreeDirty": false,
+    "generatorVersion": "0.4.0",
+    "preparedManagedFilesSHA256": "06902f50cc6833a6cb462099581ad5e99bfa4ecb78e5bc248733611a014550c7",
+    "files": 169
+  },
+  "environment": {
+    "os": "Windows",
+    "node": "24.21.0",
+    "npm": "10.5.0",
+    "timezone": "Europe/Paris"
+  },
+  "fixture": "C:/dev/baseline-onboarding-static-20261025-run1",
+  "prompts": {
+    "kickoff": {
+      "path": "prompts/kickoff.md",
+      "sha256": "fd0611c85a91455949e7ecfc6ef1914adc1c7d08ec6bb17ebce0614275a0b25e"
+    },
+    "resume": {
+      "path": "prompts/resume.md",
+      "sha256": "dbfbbb7b36062dfb8da2ba79f5c0e02f97f50caafcc2ad047cdd59a357f10adc"
+    }
+  },
+  "dispatch": {
+    "method": "two fresh-context collaboration agents, fork_turns none, no model override; each reads only its saved user prompt plus fixture sources",
+    "correctiveHints": false,
+    "operatorSuppliesOriginalBriefToResume": false
+  },
+  "acceptance": [
+    {
+      "id": "source-identity",
+      "criterion": "Prepared project is generated from clean source commit 2a4a9d35a71edc36a3d32d7e4c53f1fa426b664a, static receipt retained, independent dependency directory and recorded lockfile."
+    },
+    {
+      "id": "profile-track",
+      "criterion": "Installed static profile and file-owned editing are retained, delivery track chosen independently with scope rationale, no CMS/server dependencies introduced."
+    },
+    {
+      "id": "pause-boundary",
+      "criterion": "First session completes setup and brief/content/route planning, leaves a usable handoff and stops before visual implementation or persistent servers."
+    },
+    {
+      "id": "saved-context",
+      "criterion": "Project records/source preserve all supplied copy, routes, English locale, ownership, email endpoint, scope limits and assumed versus approved decisions."
+    },
+    {
+      "id": "fresh-resume",
+      "criterion": "Second session receives only the project path and generic resume prompt; continues without corrective operator hints or restarting consequential decisions already settled."
+    },
+    {
+      "id": "design-evidence",
+      "criterion": "Real Art Direction Record and pre-implementation gate; actual rendered calibration at narrow/intermediate/wide widths; applicable bounded critique recorded separately from generated token diagnostics."
+    },
+    {
+      "id": "visitor-journey",
+      "criterion": "Requested three routes expose the supplied copy, workshop dates and email registration/questions; correct navigation and no published starter identity or invented commercial/policy facts."
+    },
+    {
+      "id": "final-gates",
+      "criterion": "Actual final installed verify/build/check:dev-tools pass after final implementation; normal production output excludes the styleguide and CMS/server output."
+    },
+    {
+      "id": "preview-browser",
+      "criterion": "Independent production-preview HTTP/browser observations cover three routes, representative text/links, a real 404, responsive reflow and keyboard navigation at several widths."
+    },
+    {
+      "id": "handoff-honesty",
+      "criterion": "Final records distinguish implementation, command outcomes, rendered observations and unperformed hosting/editor/manual accessibility acceptance."
+    },
+    {
+      "id": "resource-scope",
+      "criterion": "Only fixture-owned resources are used; no credentials or deployment. Stop owned servers after observations; retain the synthetic source fixture explicitly for review."
+    },
+    {
+      "id": "development-decision",
+      "criterion": "Workflow/source changes follow concrete observations; successful behavior and limitations are retained without general performance claims or a new replay framework."
+    }
+  ],
+  "limits": [
+    "One synthetic prepared static project; not all onboarding/profile-selection paths.",
+    "No model-token, cost, comparable-time or productivity claim.",
+    "No editor/provider/manual accessibility certification; no deployment, credentials or real messages.",
+    "Read relevant specialist skills in the fixture as stages begin. Exercise code remains outside the starter."
+  ],
+  "resources": {
+    "sourceFixture": "Retain explicitly for review; do not delete automatically",
+    "servers": "Stop only owned servers after independent preview observations"
+  }
+}

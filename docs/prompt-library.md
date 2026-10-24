@@ -66,6 +66,29 @@ Here is the context for this project:
 Begin with Stage 1 (Brief & Evidence Discovery), determine the profile, and complete the requested local site and verification. Report stage handoffs and continue authorized work; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
 ```
 
+### Resuming a Prepared or Partly Built Site
+
+Open the existing site folder and use this prompt after an interruption. The
+agent should recover the brief and completed work from the project; the optional
+context records do not need to be created just to resume.
+
+```text
+Continue the authorized local website build in this project.
+
+Read AGENTS.md, the installed profile and scripts, current source, and the
+existing brief and handoff when present. Reconcile saved progress with what
+is actually implemented and checked, then continue the earliest unfinished
+stage using the applicable checked-in skills.
+
+Preserve established scope, supplied content, editing ownership and design
+decisions. Use the current project and its lockfile. Ask only for consequential
+missing decisions, and label reversible working assumptions.
+
+Complete the remaining local work and applicable verification, start the
+preview, and report its URL, actual checks and observations, and pending
+editor or launch acceptance. Keep deployment within the existing authorization.
+```
+
 ### Evaluating & Installing Sandboxed Registry Plugins (Stage 2)
 Use this prompt when your site requires specialized functionality (e.g. event management, registration, or translation dashboards) before writing custom code.
 

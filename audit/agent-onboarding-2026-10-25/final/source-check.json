@@ -1,0 +1,106 @@
+{
+  "changedPreparedInputs": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "2e30256509308604b9bf85c1e2bf750259a2233493a6d92189f1cf804071a49c",
+      "status": "changed"
+    },
+    {
+      "path": "audit/design-gate-exceptions.json",
+      "sha256": "842cc67ff5e7115b0cf36dddc3028029061396d857bf00e4810225de848d8010",
+      "status": "changed"
+    },
+    {
+      "path": "package.json",
+      "sha256": "5787136b20d3aa10f8ae994d156982cc1ddc6495aa53a863c8f7d075cd5d1258",
+      "status": "changed"
+    },
+    {
+      "path": "README.md",
+      "sha256": "d1647504b640505b105d734b418f550dba3ad38e9685ea07b29532ff9d527b88",
+      "status": "changed"
+    },
+    {
+      "path": "src/config/site.ts",
+      "sha256": "024d859b0beb29faab27cce00546e42b529935b748827e42db5f157e399696b0",
+      "status": "changed"
+    },
+    {
+      "path": "src/content.config.ts",
+      "sha256": "44fa33cae197d19300b76da943eb2305fc5a9bcc9b0b354de2ecb26092672e82",
+      "status": "changed"
+    },
+    {
+      "path": "src/content/posts/welcome.md",
+      "status": "missing"
+    },
+    {
+      "path": "src/layouts/Base.astro",
+      "sha256": "49ef160f99d38cc45196159485f961c34fa73afc5696310e1a93278d783a20c5",
+      "status": "changed"
+    },
+    {
+      "path": "src/lib/posts.ts",
+      "status": "missing"
+    },
+    {
+      "path": "src/pages/index.astro",
+      "status": "missing"
+    },
+    {
+      "path": "src/pages/posts/[...id].astro",
+      "status": "missing"
+    },
+    {
+      "path": "src/pages/posts/index.astro",
+      "status": "missing"
+    },
+    {
+      "path": "src/styles/global.css",
+      "sha256": "85aced91f67783dff27b4ae32f189920d250d327ab20c1c7d577daba8384a56e",
+      "status": "changed"
+    }
+  ],
+  "observer": "parent read-only after implementation and independent gates; handoff includes identified operator resource update",
+  "addedSourceFiles": [
+    {
+      "path": "src/components/WorkshopList.astro",
+      "sha256": "272e0be7ec7cccf3d868619c6d0071b3c1877e1219d330b11c33178e48d30492"
+    },
+    {
+      "path": "src/content/pages/contact.md",
+      "sha256": "cf513127ac170693cf4f364fbf40f4a9314d81ea041357de9079d37d06f4fb99"
+    },
+    {
+      "path": "src/content/pages/home.md",
+      "sha256": "ad5e5f7498abf063241e2d1b1b0b332f0fd6bdb0fc71edf89bd5523d71d11004"
+    },
+    {
+      "path": "src/content/pages/workshops.md",
+      "sha256": "20ca1ba19666289bea166d603f98c0c781cdd9c14d14de34741b4d42b273219c"
+    },
+    {
+      "path": "src/content/workshops/better-team-check-ins.md",
+      "sha256": "f55f2bcdcf48039d80d59f8d34eec3d7d8a3e591440d12c87c222a8792c8f521"
+    },
+    {
+      "path": "src/content/workshops/clear-project-briefs.md",
+      "sha256": "ab71f533d438b56552fba94ed863e234d75a0e3b37109d6115b74d5dbee2d3b6"
+    },
+    {
+      "path": "src/lib/site-content.ts",
+      "sha256": "16f0f287f05ade18e6975a37ce71a815170a2442aefaf17a784954918a408815"
+    },
+    {
+      "path": "src/pages/[...page].astro",
+      "sha256": "c7c5fe6358f3510e55cd36d087231ab0d0e32705f03b732ed5c7a534cbe650d1"
+    }
+  ],
+  "envFilePresent": false,
+  "lockfileSHA256": "cd70a52a85f228563d7a6a8197418f0af9ccdc0b659e5449c9d528c7cf4907b6",
+  "cssSHA256": "85aced91f67783dff27b4ae32f189920d250d327ab20c1c7d577daba8384a56e",
+  "preparedInputCount": 168,
+  "hashConvention": "SHA-256 over raw file bytes, except the explicitly LF-normalized CSS field",
+  "cssLFNormalizedSHA256": "45d43ee8b5c3a919bc3800b529cff9e91250f506aadbcfaddd9ebf7e1b2551ab",
+  "calibrationReferencesFinalCSS": true
+}

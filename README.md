@@ -252,6 +252,7 @@ Keep working through your assistant:
 | You want to… | Ask your assistant |
 | --- | --- |
 | Preview the site | “Start the local preview and give me its URL.” |
+| Resume unfinished work | “Continue the authorized local build from the current source and handoff, preserve established decisions, and report the preview and remaining acceptance.” |
 | Make a change | “Update [page or feature], following the site's existing design and content model.” |
 | Review the result | “Check the changed pages, run the applicable verification, and report anything still pending.” |
 

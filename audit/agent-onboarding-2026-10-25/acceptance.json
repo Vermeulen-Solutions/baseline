@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 1,
+  "status": "pass-with-limits",
+  "reviewerKind": "parent agent review plus actual independent commands/browser/HTTP observations",
+  "scope": "One synthetic prepared static local build, with explicit planning pause and fresh-context resume",
+  "criteria": [
+    {
+      "id": "source-identity",
+      "verdict": "pass",
+      "evidence": [
+        "prepared-profile.json",
+        "prepared-managed-files.json",
+        "checkpoint/source-check.json",
+        "final/source-check.json"
+      ]
+    },
+    {
+      "id": "profile-track",
+      "verdict": "pass",
+      "evidence": [
+        "checkpoint/PROJECT.md",
+        "final/PROJECT.md",
+        "final/independent-html.json"
+      ]
+    },
+    {
+      "id": "pause-boundary",
+      "verdict": "pass",
+      "evidence": [
+        "checkpoint/HANDOFF.md",
+        "checkpoint/source-check.json"
+      ]
+    },
+    {
+      "id": "saved-context",
+      "verdict": "pass",
+      "evidence": [
+        "checkpoint/PROJECT.md",
+        "checkpoint/content-route-plan.md",
+        "final/HANDOFF.md"
+      ]
+    },
+    {
+      "id": "fresh-resume",
+      "verdict": "pass",
+      "evidence": [
+        "dispatch.json",
+        "prompts/resume.md",
+        "final/HANDOFF.md"
+      ]
+    },
+    {
+      "id": "design-evidence",
+      "verdict": "pass",
+      "evidence": [
+        "final/AGENTS.snapshot.md",
+        "final/component-calibration.md",
+        "final/rendered-review.md"
+      ]
+    },
+    {
+      "id": "visitor-journey",
+      "verdict": "pass",
+      "evidence": [
+        "final/independent-browser.json",
+        "final/independent-html.json",
+        "screenshots/"
+      ]
+    },
+    {
+      "id": "final-gates",
+      "verdict": "pass",
+      "evidence": [
+        "final/verify.json",
+        "final/build.json",
+        "final/release.json",
+        "final/independent-html.json"
+      ]
+    },
+    {
+      "id": "preview-browser",
+      "verdict": "pass",
+      "evidence": [
+        "final/independent-browser.json",
+        "final/independent-html.json"
+      ]
+    },
+    {
+      "id": "handoff-honesty",
+      "verdict": "pass",
+      "evidence": [
+        "checkpoint/HANDOFF.md",
+        "final/HANDOFF.md",
+        "final/dependency-audit.json"
+      ]
+    },
+    {
+      "id": "resource-scope",
+      "verdict": "pass-with-limit",
+      "evidence": [
+        "final/resources.json",
+        "final/HANDOFF.md"
+      ]
+    },
+    {
+      "id": "development-decision",
+      "verdict": "pass",
+      "evidence": [
+        "README.md"
+      ]
+    }
+  ],
+  "limits": [
+    "The pre-page art-direction order is recorded by the worker; parent validates current source/calibration and rendered artifacts, not a separately instrumented tool chronology.",
+    "Scope restrictions were instructions, not a process/filesystem sandbox.",
+    "The preview process/listener were verified stopped; exact browser-tab closure was unconfirmed after its context became unavailable.",
+    "Two development-tool audit findings remain separately tracked in #12; no launch/security or provider acceptance claimed.",
+    "End-to-end exercise source is the frozen 2a4a9d3 guidance. Later documentation edits have separate validation, not a relabeled fresh end-to-end trial.",
+    "One case, no general model-token/cost/timing/productivity conclusions."
+  ]
+}

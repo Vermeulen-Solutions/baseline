@@ -1,0 +1,44 @@
+{
+  "reviewerKind": "parent agent, actual HTTP and emitted artifact observations after independent fresh build",
+  "routes": [
+    {
+      "route": "/",
+      "status": 200,
+      "language": "en",
+      "htmlSHA256": "027117c6227f0fae5e8954f1ff4e7a2a81d7d9ba8e737d2dcedc2a4cdeacd27e"
+    },
+    {
+      "route": "/workshops/",
+      "status": 200,
+      "language": "en",
+      "htmlSHA256": "926687d8a875529b660490f71b6ef50ada168ee4afbf74c6894288ece9f12950"
+    },
+    {
+      "route": "/contact/",
+      "status": 200,
+      "language": "en",
+      "htmlSHA256": "cd8864206fc3cbdf9fd69e34c3a754892f53d0325b2d67becc7e86395f105562"
+    },
+    {
+      "route": "/not-a-real-page/",
+      "status": 404,
+      "language": "en",
+      "htmlSHA256": "0c754ea85035366d664c8cc77957a8101c38a1766ac80f1809eb45c4baf58831"
+    },
+    {
+      "route": "/_styleguide/",
+      "status": 404,
+      "language": "en",
+      "htmlSHA256": "0c754ea85035366d664c8cc77957a8101c38a1766ac80f1809eb45c4baf58831"
+    }
+  ],
+  "htmlFiles": [
+    "404.html",
+    "contact/index.html",
+    "index.html",
+    "workshops/index.html"
+  ],
+  "lockfileSHA256": "cd70a52a85f228563d7a6a8197418f0af9ccdc0b659e5449c9d528c7cf4907b6",
+  "sharp": "0.35.5",
+  "status": "pass"
+}

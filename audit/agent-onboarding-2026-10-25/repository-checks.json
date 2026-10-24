@@ -1,0 +1,38 @@
+{
+  "sourceBaseCommit": "2a4a9d35a71edc36a3d32d7e4c53f1fa426b664a",
+  "sourceState": "working changes with fixed distributed inputs during final verification",
+  "hashConvention": "LF-normalized SHA-256 for the four edited guidance sources",
+  "guidance": {
+    ".agents/skills/new-site-workflow/SKILL.md": "168774c6571b2ea6e293a8759cffc36eeedecc590b37f28bc69f475febff3279",
+    "README.md": "2d0167eb76b5f5966c9e62092c7e488cb733916842e0f1e61c1283910951c440",
+    "docs/prompt-library.md": "2573cfe67751315bc2c44aa9e0721633aa2d284e72b1aaa1c4c0c106857f3912",
+    "profiles/static/project/README.md": "e392bf9b141cdbdd61985dd88ac3d4d650f20a0f1c1ea31767cf5ff001271de2"
+  },
+  "checks": {
+    "verify-fast": {
+      "command": "npm.cmd run verify:fast",
+      "exitCode": 0
+    },
+    "profiles": {
+      "command": "npm.cmd run test:profiles",
+      "exitCode": 0
+    },
+    "final-verify": {
+      "exitCode": 0,
+      "command": "npm.cmd run verify"
+    },
+    "final-build": {
+      "command": "npm.cmd run build",
+      "exitCode": 0
+    },
+    "final-html": {
+      "command": "npm.cmd run audit:html",
+      "exitCode": 0
+    }
+  },
+  "skillValidation": "python -X utf8 quick_validate.py passed",
+  "limits": [
+    "Existing root bundle-size advisory remains.",
+    "End-to-end site exercise used frozen source 2a4a9d3; these later guidance changes have separate normal verification."
+  ]
+}
