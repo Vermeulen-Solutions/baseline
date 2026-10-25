@@ -11,7 +11,7 @@ test('Astro and adapter updates surface independently of unchanged EmDash; outag
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-meta-test-'));
   try {
     await fs.writeFile(path.join(root, 'package.json'), JSON.stringify({ dependencies: { astro: '^7.3.2', emdash: '1.3.0', '@astrojs/node': '^11.1.6' } }));
-    await fs.writeFile(path.join(root, 'package-lock.json'), JSON.stringify({ packages: { 'node_modules/astro': { version: '7.3.5' }, 'node_modules/emdash': { version: '1.3.0' }, 'node_modules/@astrojs/node': { version: '11.1.6' } } }));
+    await fs.writeFile(path.join(root, 'package-lock.json'), JSON.stringify({ lockfileVersion: 3, packages: { '': { dependencies: { astro: '^7.3.2', emdash: '1.3.0', '@astrojs/node': '^11.1.6' } }, 'node_modules/astro': { version: '7.3.5' }, 'node_modules/emdash': { version: '1.3.0' }, 'node_modules/@astrojs/node': { version: '11.1.6' } } }));
     const files = await fs.readdir(root);
     const lookup = { package: async name => { const latest = { astro: '7.4.0', emdash: '1.3.0', '@astrojs/node': '11.1.8' }[name]; return { 'dist-tags': { latest }, versions: Object.fromEntries([latest, name === 'astro' ? '7.3.7' : latest].map(v => [v, {}])) }; }, skill: async () => { throw Error('offline'); }, node: async () => { throw Error('offline'); } };
     const report = await collectUpdates(root, lookup);
@@ -27,6 +27,18 @@ test('Astro and adapter updates surface independently of unchanged EmDash; outag
     const malformed = await collectUpdates(root, { ...lookup, skill: async () => ({ object: { sha: 'main' } }) });
     assert.ok(malformed.skills.every(skill => skill.status === 'unverified'));
   } finally { assert.equal(path.dirname(root), path.resolve(os.tmpdir())); assert.ok(path.basename(root).startsWith('emdash-meta-test-')); await fs.rm(root, { recursive: true, force: true }); }
+});
+
+test('upstream review skips registry lookup for locally vendored packages', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-meta-local-'));
+  try {
+    await fs.writeFile(path.join(root, 'package.json'), JSON.stringify({ dependencies: { eventual: 'file:vendor/eventual-0.1.0.tgz' } }));
+    await fs.writeFile(path.join(root, 'package-lock.json'), JSON.stringify({ lockfileVersion: 3, packages: { '': { dependencies: { eventual: 'file:vendor/eventual-0.1.0.tgz' } }, 'node_modules/eventual': { version: '0.1.0', resolved: 'file:vendor/eventual-0.1.0.tgz' } } }));
+    let registryCalls = 0;
+    const report = await collectUpdates(root, { package: async () => { registryCalls++; throw Error('must not inspect a local package'); }, skill: async () => { throw Error('offline'); }, node: async () => { throw Error('offline'); } });
+    assert.equal(registryCalls, 0);
+    assert.equal(report.packages[0].upstreamStatus, 'local-source');
+  } finally { assert.equal(path.dirname(root), path.resolve(os.tmpdir())); assert.ok(path.basename(root).startsWith('emdash-meta-local-')); await fs.rm(root, { recursive: true, force: true }); }
 });
 
 test('private site registry is idempotent, preserves rename/archive history and records inaccessible central registration', async () => {

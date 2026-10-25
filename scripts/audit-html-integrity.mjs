@@ -115,7 +115,8 @@ export function auditHTMLIntegrity(directory = 'dist') {
         } catch { fail(file, 'link', `Invalid internal URL: ${href}`); }
       }
       if (name === 'img') {
-        if (!attrs.alt?.trim()) fail(file, 'image-alt', 'Image requires a non-empty alt attribute');
+        if (attrs.alt === undefined) fail(file, 'image-alt', 'Image requires an alt attribute; use alt="" for decorative images');
+        else if (attrs.alt !== '' && !attrs.alt.trim()) fail(file, 'image-alt', 'Informative image alt text cannot contain only whitespace');
         const dimensions = /^\d+(?:\.\d+)?$/.test(attrs.width ?? '') && Number(attrs.width) > 0 && /^\d+(?:\.\d+)?$/.test(attrs.height ?? '') && Number(attrs.height) > 0;
         const ratio = attrs.style?.match(/(?:^|;)\s*aspect-ratio\s*:\s*(\d+(?:\.\d+)?)(?:\s*\/\s*(\d+(?:\.\d+)?))?\s*(?:;|$)/i);
         if (!dimensions && !(ratio && Number(ratio[1]) > 0 && Number(ratio[2] ?? 1) > 0)) fail(file, 'image-dimensions', 'Image requires positive width/height or inline aspect-ratio');
@@ -150,8 +151,18 @@ export async function auditBuildIntegrity(directory = 'dist', options = {}) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
-    if (process.argv.length > 3 || process.argv[2]?.startsWith('-')) throw Error('Usage: node scripts/audit-html-integrity.mjs [dist-or-rendered-html-directory]');
-    const report = await auditBuildIntegrity(process.argv[2]);
+    const options = { routes: [] };
+    let directory, routeSeen = false;
+    for (let index = 2; index < process.argv.length; index++) {
+      const flag = process.argv[index], value = process.argv[index + 1];
+      if (flag === '--route' && value && !value.startsWith('--')) { options.routes.push(value); routeSeen = true; index++; }
+      else if (flag === '--timeout-ms' && value && /^\d+$/.test(value) && options.timeoutMs === undefined) { options.timeoutMs = Number(value); index++; }
+      else if (flag === '--query-link-mode' && ['crawl', 'status-only'].includes(value) && options.queryLinkMode === undefined) { options.queryLinkMode = value; index++; }
+      else if (!directory && !flag.startsWith('-')) directory = flag;
+      else throw Error('Usage: node scripts/audit-html-integrity.mjs [dist] [--route <path>] [--timeout-ms <1-10000>] [--query-link-mode crawl|status-only]');
+    }
+    if (!routeSeen) options.routes = ['/'];
+    const report = await auditBuildIntegrity(directory, options);
     for (const error of report.errors) console.error(`${error.file} [${error.rule}] ${error.message}`);
     console.log(`HTML integrity: ${report.valid ? 'PASS' : 'FAIL'}; ${report.htmlFiles} HTML files; ${report.durationMs.toFixed(1)}ms.`);
     if (report.ssr) console.log(`SSR capture: ${report.ssr.resources} public responses; snapshots: ${report.ssr.directory}. Representative linked routes only; ${report.runtimeRoutes} runtime route patterns in the build.`);

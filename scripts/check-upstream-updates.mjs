@@ -11,6 +11,7 @@ export async function collectUpdates(root, lookup = {}) {
   const baseline = collectBaseline(root);
   const packageLookup = lookup.package ?? (name => get('https://registry.npmjs.org/' + encodeURIComponent(name)));
   const packages = await Promise.all(baseline.packages.map(async current => {
+    if (current.source === 'local') return { ...current, upstreamStatus: 'local-source', reason: 'Local file/link/workspace dependency; registry comparison skipped.' };
     try {
       const metadata = await packageLookup(current.name);
       const stable = Object.keys(metadata.versions).filter(v => tuple(v)).sort(compare);

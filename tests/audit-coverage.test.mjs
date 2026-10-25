@@ -18,7 +18,7 @@ function fixture(fn) {
   const put = (file, bytes) => { const full = path.join(root, file); fs.mkdirSync(path.dirname(full), { recursive: true }); fs.writeFileSync(full, bytes); };
   put('astro.config.mjs', config); put('package.json', JSON.stringify({ engines: { node: '>=22.22.2' } }));
   const manifest = JSON.parse(fs.readFileSync(new URL('../standards/baselines/0.1.1.json', import.meta.url)));
-  put('package-lock.json', JSON.stringify({ packages: Object.fromEntries(Object.entries(manifest.runtimeProfiles['node-sqlite'].dependencies).map(([name, v]) => ['node_modules/' + name, { version: v.replace('^', '') }])) }));
+  put('package-lock.json', JSON.stringify({ lockfileVersion: 3, packages: { '': { dependencies: manifest.runtimeProfiles['node-sqlite'].dependencies }, ...Object.fromEntries(Object.entries(manifest.runtimeProfiles['node-sqlite'].dependencies).map(([name, v]) => ['node_modules/' + name, { version: v.replace('^', '') }])) } }));
   for (const [group, source] of Object.entries(sources)) {
     const files = {};
     for (const skill of source.skills) { const file = skill + '/SKILL.md'; const bytes = Buffer.from('# Synthetic guidance\n'); put('.agents/skills/' + file, bytes); files[file] = normalizedHash(bytes); }

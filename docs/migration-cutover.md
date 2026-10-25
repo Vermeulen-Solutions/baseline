@@ -2,7 +2,7 @@
 
 This runbook defines the operational procedure for transitioning a production site from WordPress to EmDash. It covers the pre-cutover content freeze, snapshot-driven delta reconciliation, DNS switchover, and rollback safety.
 
-Before any production schema/content mutation, record a restorable database recovery point plus matching media/key receipts. Use [Cloudflare recovery](cloudflare-backup-restore.md) for D1/R2 and the full encryption-key list; site export does not protect authentication or plugin state. Missing recovery evidence blocks migration. Never reset production to repair import/login.
+Before a production schema/content migration, record a restorable database recovery point. Retain matching media/key recovery versions, reusing existing versions when the operation leaves them unchanged. Use [Cloudflare recovery](cloudflare-backup-restore.md) for D1/R2 and key details; site export does not protect authentication or plugin state. Missing recovery evidence relevant to a data-changing operation blocks that operation. Ordinary code deployments follow the site's deployment workflow. Never reset production to repair import/login.
 
 ## 1. The Migration Window and Content Freeze
 

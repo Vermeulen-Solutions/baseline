@@ -19,7 +19,7 @@ function fixture(fn) {
 function current(root) {
   const profile = JSON.parse(fs.readFileSync(baselineFile)).runtimeProfiles['node-sqlite'];
   fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ engines: { node: profile.nodeEngineRange }, scripts: { audit: 'node malicious-target.mjs' } }));
-  fs.writeFileSync(path.join(root, 'package-lock.json'), JSON.stringify({ packages: Object.fromEntries(Object.entries(profile.dependencies).map(([name, value]) => [`node_modules/${name}`, { version: value.replace(/^\^/, '') }])) }));
+  fs.writeFileSync(path.join(root, 'package-lock.json'), JSON.stringify({ packages: { '': { dependencies: Object.fromEntries(Object.entries(profile.dependencies).map(([name, value]) => [name, value.replace(/^\^/, '')])) }, ...Object.fromEntries(Object.entries(profile.dependencies).map(([name, value]) => [`node_modules/${name}`, { version: value.replace(/^\^/, '') }])) } }));
   fs.writeFileSync(path.join(root, '.env'), 'EXAMPLE_PRIVATE_VALUE=do-not-report-this\n');
   fs.writeFileSync(path.join(root, 'astro.config.mjs'), 'throw Error("target config must never execute")');
 }
@@ -45,6 +45,20 @@ test('degraded, malformed and absent evidence stay warnings/unverified; altered 
   assert.throws(() => auditSite({ root, standardsFile: changed }), /digest mismatch/);
   assert.equal(rule(auditSite({ root, dbSnapshot: path.join(parent, 'missing.sqlite') }), 'physical-schema').status, 'unverified');
   assert.equal(rule(auditSite({ root, runtime: 'cloudflare-d1-r2' }), 'runtime-profile').status, 'unverified');
+}));
+test('site standards diagnosis selects pnpm importers and withholds comparisons for local vendored sources', () => fixture(root => {
+  current(root);
+  const profile = JSON.parse(fs.readFileSync(baselineFile)).runtimeProfiles['node-sqlite'];
+  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ packageManager: 'pnpm@9.15.0', engines: { node: profile.nodeEngineRange }, dependencies: { astro: '7.4.0', emdash: '1.3.0', eventual: 'file:vendor/eventual-0.1.0.tgz' } }));
+  fs.writeFileSync(path.join(root, 'pnpm-lock.yaml'), `lockfileVersion: '9.0'\nimporters:\n  .:\n    dependencies:\n      astro:\n        specifier: 7.4.0\n        version: 7.4.0\n      emdash:\n        specifier: 1.3.0\n        version: 1.3.0\n      eventual:\n        specifier: file:vendor/eventual-0.1.0.tgz\n        version: file:vendor/eventual-0.1.0.tgz\npackages: {}\nsnapshots: {}\n`);
+  const report = auditSite({ root });
+  assert.equal(rule(report, 'package-evidence').status, 'pass');
+  assert.match(rule(report, 'package-evidence').observed, /pnpm.*alternate lockfile ignored/);
+  assert.equal(rule(report, 'dependency:astro').status, 'pass');
+  assert.equal(rule(report, 'dependency:emdash').status, 'pass');
+  const unsupported = JSON.parse(fs.readFileSync(path.join(root, 'package.json'))); unsupported.packageManager = 'yarn@4.5.0';
+  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(unsupported));
+  assert.equal(rule(auditSite({ root }), 'package-evidence').status, 'unverified');
 }));
 test('snapshot schema includes generated columns, detects 51 columns and leaves original DB bytes/tree unchanged', () => fixture((root, parent) => {
   current(root); const snapshot = path.join(root, 'offline.sqlite'); let db = new DatabaseSync(snapshot);

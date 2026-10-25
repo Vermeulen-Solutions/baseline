@@ -26,7 +26,7 @@ Test real keyboard paths, including moving focus into a disclosure, activation a
 
 ## Preserve contracts and label evidence honestly
 
-Compare original and final meaningful text, images/order, local destinations, dates, form names/types/required states and handlers. Keep imported cleanup narrowly grounded in observed artifacts and preserve substantive editorial content. Local HTTP audits should distinguish redirects from trailing-slash normalization, expected 404 states from failures, and unsupported HEAD from a failed GET.
+Compare original and final meaningful text, images/order, local destinations, dates, form names/types/required states and handlers. Keep imported cleanup narrowly grounded in observed artifacts and preserve substantive editorial content. Local HTTP audits should distinguish redirects from trailing-slash normalization, expected 404 states from failures, and unsupported HEAD from a failed GET. When deploying under an Astro sub-path (`base`), verify emitted HTML doesn't double-prefix links or assets (`grep -r "/base/base" dist`); internal paths already prefixed by Astro (`Astro.url.pathname`, pagination URLs) must not be passed through manual prefix helpers again.
 
 A feedback query is a presentation preview, not successful storage or mail delivery. Native invalid-form checks and early server validation can verify failure handling without creating records. Read-only CMS checks establish loading/field compatibility; they do not establish save round trips. Keep production tests within explicit authorization and avoid polluting content with visual fixtures.
 

@@ -10,6 +10,7 @@ import { skillFinding } from './audit-skills.mjs';
 import { assertReport } from './audit-report.mjs';
 import { runtimeEvidenceRules } from './audit-runtime-evidence.mjs';
 import { readTarget, readJSON, within, canonicalOutput, sha256 as digest, gitRead } from './audit-evidence.mjs';
+import { packageLockEvidence } from './package-lock-evidence.mjs';
 
 export const STANDARD = Object.freeze({ version: '0.1.1', commit: '28ccf82b3047eb615cd57ca55141751e0d29af11', sha256: 'a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4' });
 const starterRoot = fileURLToPath(new URL('../', import.meta.url));
@@ -48,15 +49,19 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
   const rules = [];
   const add = (id, status, expected, observed, { required = true, evidence = [], confidence = 'high', remediation = 'docs/site-standards-audit.md', applicability = runtime } = {}) => rules.push({ id, ruleVersion: 1, status, severity: required ? 'required' : 'recommendation', expected, observed, evidence, confidence, applicability, remediation, verification: 'Static diagnosis only; no target scripts, network, CMS, installs or deployments' });
   const pkg = readJSON(target, 'package.json');
-  const lock = readJSON(target, 'package-lock.json');
   const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
-  const packagesObserved = record(pkg.data) && record(lock.data?.packages);
-  add('package-evidence', packagesObserved ? 'pass' : 'unverified', 'Readable package object and npm package inventory', packagesObserved ? 'Observed; contents withheld' : 'Missing, invalid or refused evidence', { evidence: ['package.json', 'package-lock.json'] });
+  const lock = packageLockEvidence(target, pkg.data?.packageManager);
+  const packagesObserved = record(pkg.data) && lock.status === 'observed';
+  const packageEvidence = ['package.json', ...(lock.lockfile ? [lock.lockfile, ...(lock.alternateLockfile ? [lock.lockfile === 'package-lock.json' ? 'pnpm-lock.yaml' : 'package-lock.json'] : [])] : ['package-lock.json', 'pnpm-lock.yaml'])];
+  add('package-evidence', packagesObserved ? 'pass' : 'unverified', 'Readable package object and one supported npm or pnpm package inventory', packagesObserved ? `Observed ${lock.manager} inventory${lock.alternateLockfile ? ' selected by packageManager; alternate lockfile ignored' : ''}; contents withheld` : lock.reason ?? 'Missing, invalid, ambiguous or refused evidence', { evidence: packageEvidence });
   add('runtime-profile', runtime === 'node-sqlite' ? 'pass' : 'unverified', 'A certified source standards profile', manifest.runtimeProfiles[runtime].status, { evidence: ['standards/baselines/0.1.1.json'] });
   for (const [name, expectedRange] of Object.entries(manifest.runtimeProfiles['node-sqlite'].dependencies)) {
     const expected = expectedRange.replace(/^\^/, '');
-    const observed = version(lock.data?.packages?.[`node_modules/${name}`]?.version);
-    add(`dependency:${name}`, !observed ? 'unverified' : observed === expected ? 'pass' : 'warning', `Certified comparison version ${expected}`, observed ?? 'No valid locked version', { required: false, evidence: ['package-lock.json'], applicability: 'Static lockfile comparison, not runtime compatibility or an upgrade ceiling' });
+    const entry = lock.entries?.get(name);
+    const observed = entry?.version;
+    const status = !entry || entry.source === 'local' || !observed ? 'unverified' : observed === expected ? 'pass' : 'warning';
+    const observation = entry?.source === 'local' ? 'Resolved from a local package source; registry baseline comparison is not applicable' : observed ?? 'No valid direct lock entry';
+    add(`dependency:${name}`, status, `Certified comparison version ${expected}`, observation, { required: false, evidence: [lock.lockfile ?? 'package-lock.json'], applicability: 'Static lockfile comparison, not runtime compatibility or an upgrade ceiling' });
   }
   const engine = pkg.data?.engines?.node;
   const safeEngine = typeof engine === 'string' && /^[\d v^~<>=|.*x-]+$/.test(engine);
@@ -67,6 +72,7 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
     const result = readTarget(target, relative);
     hashes[relative] = result.bytes ? digest(result.bytes) : null;
   }
+  if (lock.lockfile === 'pnpm-lock.yaml' || lock.alternateLockfile) hashes['pnpm-lock.yaml'] = lock.lockfile === 'pnpm-lock.yaml' ? lock.sha256 ?? null : lock.alternateLockfileSHA256 ?? null;
   capabilityRules(readTarget(target, 'astro.config.mjs').bytes?.toString('utf8'), runtime, add);
   designSystemRules(target, add);
   const scripts = pkg.data?.scripts;

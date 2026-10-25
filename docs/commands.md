@@ -56,7 +56,7 @@ Review public routes, narrow reflow, keyboard focus, images and relevant editing
 | `npm run check:dev-tools` | All profiles | Check production development-tool isolation |
 | `npm run build:analyze` | Root EmDash | Build and inspect client JavaScript ownership |
 | `npm run start:local` | Root EmDash | Run the built Node artifact using the local .env |
-| `npm run audit:site -- --root ../my-site` | Root EmDash tooling | Diagnose a downstream repository without changing it |
+| `npm run audit:site -- --root ../my-site` | Root EmDash tooling | Diagnose an older npm- or pnpm-based downstream repository without changing it |
 
 Doctor accepts `-- --json`; use `npm --silent run doctor -- --json` for JSON-only output, or `node scripts/doctor.mjs --json` if npm itself cannot start. It bounds its probes and may report unavailable observations rather than a failure. NO_COLOR disables colored output. Inspection is optional, source-derived discovery with [declared pilot limits](project-inspection.md). See also [client bundle maintenance](client-bundles.md) and [downstream audits](site-standards-audit.md).
 

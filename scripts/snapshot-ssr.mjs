@@ -12,12 +12,13 @@ import { availableLoopbackPort } from './loopback-port.mjs';
  * No setup bypass, seeding, authentication or external redirect is performed.
  */
 export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), routes = ['/'],
-  timeoutMs = 3500, signal, onSpawn, maxResources = 64, maxBytes = 2_000_000 } = {}) {
+  timeoutMs = 3500, signal, onSpawn, maxResources = 64, maxBytes = 2_000_000, queryLinkMode = 'crawl' } = {}) {
   const started = performance.now(), root = path.resolve(cwd), artifact = path.resolve(root, directory);
   await assertReleaseArtifact(artifact);
   const entry = path.join(artifact, 'server/entry.mjs');
   if (!fs.statSync(entry).isFile()) throw Error('SSR snapshots require a Node standalone server/entry.mjs');
-  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || timeoutMs > 4000) throw Error('SSR capture deadline must be between 1 and 4000ms');
+  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || timeoutMs > 10000) throw Error('SSR capture deadline must be between 1 and 10000ms');
+  if (!['crawl', 'status-only'].includes(queryLinkMode)) throw Error('Query link mode must be crawl or status-only');
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(Error('SSR snapshot deadline exceeded')), timeoutMs);
   const interrupt = () => controller.abort(Error('SSR snapshot interrupted'));
@@ -54,8 +55,8 @@ export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), rou
     onSpawn?.(child);
     while (!address) { check(); await delay(15, undefined, { signal: controller.signal }); }
     const origin = `http://127.0.0.1:${address}`;
-    const resources = new Map(), queued = new Set(), queue = [];
-    const enqueue = route => {
+    const resources = new Map(), queued = new Set(), expandable = new Set(), inspectable = new Set(), queue = [];
+    const enqueue = (route, { expand = true, inspect = true } = {}) => {
       const url = new URL(route, origin);
       if (url.origin !== origin || url.username || url.password) throw Error('SSR capture only accepts local public routes');
       const key = url.pathname + url.search;
@@ -63,6 +64,8 @@ export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), rou
         if (queued.size >= maxResources) throw Error(`SSR link crawl exceeds ${maxResources} resources`);
         queued.add(key); queue.push(key);
       }
+      if (expand) expandable.add(key);
+      if (inspect) inspectable.add(key);
       return key;
     };
     for (const route of routes) enqueue(route);
@@ -90,6 +93,7 @@ export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), rou
         await response.body?.cancel();
         continue;
       }
+      if (!inspectable.has(route)) { await response.body?.cancel(); continue; }
       if (!response.headers.get('content-type')?.toLowerCase().includes('text/html')) {
         await response.body?.cancel(); continue;
       }
@@ -109,10 +113,14 @@ export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), rou
       let base = new URL(route, publicOrigin);
       const baseTag = tags.find(t => t.name === 'base' && t.attrs.href !== undefined);
       try { if (baseTag) base = new URL(baseTag.attrs.href, base); } catch { /* auditor reports malformed base */ }
-      for (const tag of tags) if (tag.name === 'a' && tag.attrs.href !== undefined) {
+      for (const tag of tags) if (expandable.has(route) && tag.name === 'a' && tag.attrs.href !== undefined) {
         try {
           const url = new URL(tag.attrs.href, base);
-          if ([origin, publicOrigin].includes(url.origin) && ['http:', 'https:'].includes(url.protocol)) enqueue(url.pathname + url.search);
+          if ([origin, publicOrigin].includes(url.origin) && ['http:', 'https:'].includes(url.protocol)) {
+            const discovered = url.pathname + url.search;
+            const followQuery = queryLinkMode === 'crawl' || !url.search;
+            enqueue(discovered, { expand: followQuery, inspect: followQuery });
+          }
         } catch (error) { if (error.message.startsWith('SSR link crawl')) throw error; }
       }
     }
@@ -157,8 +165,18 @@ export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), rou
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
-    if (process.argv.length > 3 || process.argv[2]?.startsWith('-')) throw Error('Usage: node scripts/snapshot-ssr.mjs [dist]');
-    const result = await snapshotSSR({ directory: process.argv[2] });
+    const options = { routes: [] };
+    let directory, routeSeen = false;
+    for (let index = 2; index < process.argv.length; index++) {
+      const flag = process.argv[index], value = process.argv[index + 1];
+      if (flag === '--route' && value && !value.startsWith('--')) { options.routes.push(value); routeSeen = true; index++; }
+      else if (flag === '--timeout-ms' && value && /^\d+$/.test(value) && options.timeoutMs === undefined) { options.timeoutMs = Number(value); index++; }
+      else if (flag === '--query-link-mode' && ['crawl', 'status-only'].includes(value) && options.queryLinkMode === undefined) { options.queryLinkMode = value; index++; }
+      else if (!directory && !flag.startsWith('-')) directory = flag;
+      else throw Error('Usage: node scripts/snapshot-ssr.mjs [dist] [--route <path>] [--timeout-ms <1-10000>] [--query-link-mode crawl|status-only]');
+    }
+    if (!routeSeen) options.routes = ['/'];
+    const result = await snapshotSSR({ ...options, directory });
     console.log(`SSR snapshots: ${result.htmlFiles} HTML files saved to ${result.directory} (${result.durationMs.toFixed(1)}ms).`);
   } catch (error) { console.error(`SSR snapshots: ${error.message}`); process.exitCode = 1; }
 }

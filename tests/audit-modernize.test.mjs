@@ -15,7 +15,7 @@ function fixture(fn, { prebuild = 'node scripts/prepare-assets.mjs' } = {}) {
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-recipe-')), root = path.join(parent, 'site'); fs.mkdirSync(root);
   const put = (file, bytes) => { const full = path.join(root, file); fs.mkdirSync(path.dirname(full), { recursive: true }); fs.writeFileSync(full, bytes); };
   put('package.json', JSON.stringify({ name: 'synthetic-recipe-fixture', private: true, scripts: { build: 'astro build', 'check:schema-budget': 'node scripts/check-schema-budget.mjs', ...(prebuild === null ? {} : { prebuild }) } }, null, 2) + '\n');
-  put('package-lock.json', JSON.stringify({ packages: { 'node_modules/astro': { version: '7.4.0' }, 'node_modules/emdash': { version: '1.3.0' } } }));
+  put('package-lock.json', JSON.stringify({ lockfileVersion: 3, packages: { '': { dependencies: { astro: '7.4.0', emdash: '1.3.0' } }, 'node_modules/astro': { version: '7.4.0' }, 'node_modules/emdash': { version: '1.3.0' } } }));
   put('.gitignore', 'node_modules/\ndata.db*\n*.marker\n');
   put('scripts/prepare-assets.mjs', "import fs from 'node:fs';fs.writeFileSync('prepared.marker','prepared');\n");
   for (const file of ['check-schema-budget.mjs', 'schema-column-budget.mjs']) put('scripts/' + file, fs.readFileSync(new URL('../scripts/' + file, import.meta.url)));
@@ -40,6 +40,18 @@ test('missing hook gets one preflight; already-current package is a zero-write n
   fixture(({ root, parent }) => { const plan = planModernization(root); assert.equal(plan.prebuildAfter, 'npm run check:schema-budget'); const file = writePlan(plan, path.join(parent, 'plan'), root); assert.equal(runModernization(root, file).status, 'applied'); }, { prebuild: null });
   fixture(({ root, parent, pkg }) => { const before = pkg(), plan = planModernization(root); assert.equal(plan.operation, 'already-current'); const file = writePlan(plan, path.join(parent, 'plan'), root); assert.equal(runModernization(root, file).status, 'already-current'); assert.deepEqual(pkg(), before); assert.equal(fs.existsSync(path.join(parent, 'plan/package.before.json')), false); }, { prebuild: 'npm run check:schema-budget' });
 });
+test('schema prebuild recipe accepts pnpm lock evidence and binds its bytes into the plan', () => fixture(({ root, parent, put, git, pkg }) => {
+  fs.rmSync(path.join(root, 'package-lock.json'));
+  put('pnpm-lock.yaml', `lockfileVersion: '9.0'\nimporters:\n  .:\n    dependencies:\n      astro:\n        specifier: 7.4.0\n        version: 7.4.0\n      emdash:\n        specifier: 1.3.0\n        version: 1.3.0\npackages: {}\nsnapshots: {}\n`);
+  git('add', '-A'); git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'use pnpm lockfile');
+  const originalLock = fs.readFileSync(path.join(root, 'pnpm-lock.yaml'));
+  const plan = planModernization(root); assert.equal(plan.lockfile, 'pnpm-lock.yaml'); assert.equal(plan.lockfileSHA256, sha256(originalLock));
+  const file = writePlan(plan, path.join(parent, 'pnpm-plan'), root);
+  assert.equal(runModernization(root, file).status, 'applied');
+  assert.deepEqual(fs.readFileSync(path.join(root, 'pnpm-lock.yaml')), originalLock);
+  assert.equal(runModernization(root, file, { rollback: true }).status, 'rolled-back');
+  assert.ok(pkg());
+}));
 test('reviewed legacy schema helpers retain plan, apply and rollback compatibility', () => fixture(({ root, parent, put, git, pkg }) => {
   put('scripts/check-schema-budget.mjs', fs.readFileSync(new URL('./fixtures/schema-budget-legacy.mjs', import.meta.url)));
   git('add', '.'); git('-c', 'user.name=Fixture', '-c', 'user.email=fixture@example.invalid', 'commit', '-qm', 'reviewed legacy helper');
