@@ -92,12 +92,12 @@ legacy entries and editor behavior for content work. Record failed attempts and
 remaining limits. A generated checklist, typecheck or build cannot establish
 all rendered, editor, provider or accessibility acceptance.
 
-If a tool refuses cleanup, keep the owned paths or process IDs and the exact
-refusal reason in the handoff. Continue independent work that remains permitted.
-A retry must address the stated concern through a narrower permitted action;
-switching shells or APIs for the same removal does not resolve a refusal. When
-no such action is available, report cleanup as pending instead of claiming it
-completed or repeatedly retrying it.
+If an approval or policy review rejects cleanup, keep the owned paths or process
+IDs and the exact rejection in the handoff. Continue independent permitted work.
+Retry only when a permitted change addresses the review's stated concern;
+switching shells or APIs alone does not address a rejection. Otherwise report
+cleanup as pending. Ordinary command errors, such as an unavailable executable,
+can use safe recovery within the task's existing authorization.
 
 If another session needs to continue, update the existing progress record with
 the requested outcome, changed paths, exact checks/results, pending decisions

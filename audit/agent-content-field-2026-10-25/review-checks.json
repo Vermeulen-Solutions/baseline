@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-25",
+  "platform": "win32",
+  "node": "24.21.0",
+  "npm": "10.5.0",
+  "reviewBase": "42e6405ab9718d5275be2ab542f784fa8219ed53",
+  "reference": {
+    "path": ".agents/skills/new-site-workflow/references/site-maintenance.md",
+    "lfSHA256": "3b6cfc88f85096aaaea0504faf94a0b98dd0436fa868cb8fdf1927f14fd2472a",
+    "change": "Limit the refusal rule to approval/policy review, and explicitly preserve safe ordinary-command recovery under existing authorization."
+  },
+  "planningCheck": {
+    "agent": "/root/maintenance_retry_review",
+    "context": "fresh, fork_turns none; paired-case request and revised reference only",
+    "requestSHA256": "a926953a041f0539b18bf35d5141feb09e3caaf6732a84d5f6dc12e186664b63",
+    "policyRejection": "Leave pending, retain identities and exact rejection, no mechanism-only retry.",
+    "executableNotFound": "Use available file API within verified authorized scope; verify removal before claiming completion.",
+    "result": "passed",
+    "mutations": false,
+    "limit": "Planning observations only; no actual deletion, rejection or broad runtime certification."
+  },
+  "validation": {
+    "doctor": { "exitCode": 0, "warnings": ["Windows launcher observability", "Expected dirty working tree"] },
+    "skillValidation": { "exitCode": 0, "pythonUtf8Mode": true },
+    "verifyFast": { "exitCode": 0, "tests": 182, "failures": 0 },
+    "verify": { "exitCode": 0, "unitTests": 182, "rehearsalTests": 136, "failures": 0, "astroFiles": 53, "errors": 0, "warnings": 0, "hints": 0 },
+    "freshBuild": { "exitCode": 0, "advisory": "Existing chunk-size warning over 500 kB." },
+    "htmlAudit": { "exitCode": 0, "htmlDocuments": 9, "publicSsrResponses": 10 },
+    "profiles": {
+      "exitCode": 0,
+      "static": { "independentInstall": true, "cleanNpmCi": true, "verify": "passed", "productionBuild": "passed", "fixtureBuild": "passed", "http": "passed", "cmsDatabasePackages": 0 },
+      "static-sveltia": { "independentInstall": true, "cleanNpmCi": true, "verify": "passed", "productionBuild": "passed", "fixtureBuild": "passed", "http": "passed", "cmsDatabasePackages": 0 },
+      "ownedTemporaryRootRemoved": true
+    }
+  },
+  "historicalEvidence": "Earlier protocol, implementation, source preservation, browser and repository-checks receipts remain bound to their original source and assumptions; they are not relabeled as a full implementation using this wording.",
+  "logs": "Local ignored .emdash/checks/pr16-* files."
+}

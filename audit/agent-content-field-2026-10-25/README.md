@@ -140,4 +140,20 @@ installed generated profiles. [Repository checks](repository-checks.json) bind
 the revised reference hash to those results. The existing bundle-size advisory
 remains.
 
+## PR review follow-up
+
+The initial PR head `42e6405ab9718d5275be2ab542f784fa8219ed53` used broad
+"tool refuses cleanup" wording. Review narrowed the trigger to an approval or
+policy review rejection and explicitly retained safe recovery for ordinary
+command errors within existing authorization. The original implementation and
+planning receipts above remain historical evidence for that initial head.
+
+A separate fresh-context [paired-case request](review-request.md) checked an
+unexplained policy rejection and an unavailable PowerShell executable. The
+[result](review-result.md) left the policy-refused action pending, while choosing
+the available file API for the ordinary launch failure and requiring verified
+removal before reporting completion. This was planning-only, with no deletion
+or other mutation. [Review checks](review-checks.json) bind the final reference
+to the follow-up validation.
+
 ![Reading time on the narrow detail](screenshots/after/detail-375.png)
