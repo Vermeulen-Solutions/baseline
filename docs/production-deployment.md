@@ -42,7 +42,9 @@ When deploying to Cloudflare Workers, Astro compiles templates for serverless ed
 
 ### Recovery and release gates
 
-Cloudflare recovery requires **D1 Time Travel/full SQL export + R2 media + the complete encryption-key rotation list**. Follow [Cloudflare backup and restore](cloudflare-backup-restore.md) for plan-specific retention, off-platform copies, key escrow and isolated drills. Record a current recovery bookmark and matching media/key receipts before applying migrations; missing evidence blocks release. A code rollback cannot recover these resources.
+Follow the site's normal verified build/deploy commands and EmDash's [update guide](https://docs.emdashcms.com/deployment/updating/) for upgrades. Preserve supported runtime `auto` migrations where configured. A separate `emdash migrate` pipeline and API token are needed only when the site's workflow or an actual migration requires them. Retain the previous compatible Worker artifact and smoke-check the deployed behavior.
+
+When an upgrade work order lists added core migrations, a migration is observed pending, or a release requires a data-changing project action, obtain a database recovery point before starting/deploying the application. On D1, record the current Time Travel bookmark with existing Wrangler authentication. Retain matching application/media/key recovery versions, reusing existing media/key versions when unchanged. A fresh R2 copy, extra backup bucket, independent offline escrow or full SQL export is not a blanket release requirement. See [Cloudflare backup and restore](cloudflare-backup-restore.md) for the applicable migration and recovery procedure.
 
 Follow [Edge cache and deploy lifecycle](edge-cache-lifecycle.md) for explicit 300-second HTML rules, no HTML SWR, client toolbar, seven-day asset carry-forward, asset exclusions, robots caching, placement and scheduled publication acceptance. Root Node caching stays disabled.
 
@@ -194,11 +196,9 @@ When rolling out Day-2 changes through staging:
 2. **Deploy to Staging:** Run `npx wrangler deploy --env staging` (and apply staging D1 migrations if schema changed).
 3. **Client Sign-off:** Share `staging.client-site.com` for client review and visual confirmation.
 4. **Promote to Production:**
-   * Record a current D1 Time Travel bookmark, UTC time, account/database IDs, media snapshot and key-vault version per [the recovery gate](cloudflare-backup-restore.md). Abort if unavailable.
-   * Build and inspect the EmDash migration target; apply core migrations with its reviewed fingerprint. Use Wrangler migrations only for site-owned SQL, with the same recovery gate.
-   * Deploy production worker: `npx wrangler deploy`
-   * Test production setup status, previous/current asset references, publish/purge and preview-versus-production configuration parity.
-   * Schedule a disposable post 5–10 minutes ahead; observe cron in `wrangler tail` and public list/detail visibility within the cache budget. Record UTC time, entry ID and logs; remove test content. Verify selected `triggers.crons`, scheduled handler, bindings and `objectCache.defaultTtl` (default one hour) against the publishing SLA. Leave acceptance pending until observed; configuration alone is insufficient.
+   * Follow the existing migration mode. If the release adds migrations, has known pending migrations or requires data-changing actions, record the applicable database recovery point before deployment. Use explicit migration commands only when the site's workflow or the migration requires them; reuse unchanged media/key recovery versions.
+   * Deploy the verified production Worker: `npx wrangler deploy`
+   * Smoke-check the changed routes and compare required environment bindings. Re-run publish/purge or scheduled-post acceptance when the release changes those behaviors or during initial launch acceptance.
 
 ---
 

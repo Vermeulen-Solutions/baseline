@@ -439,7 +439,7 @@ We want to deploy our latest changes to our Cloudflare Workers staging environme
 Please:
 1. Run `npm run verify` to confirm all lint, art direction, and typechecks pass.
 2. Run `npm run build` to compile the production edge bundle.
-3. Record staging recovery bookmark/media/key receipts, then inspect/apply EmDash core migrations to the explicit staging database with the reviewed target fingerprint (docs/cloudflare-backup-restore.md). Use Wrangler migrations only for site-owned SQL.
+3. Follow the site's existing migration mode and EmDash upgrade work order. Added/pending migrations or data-changing actions need a database recovery point before startup/deploy; on D1, record a Time Travel bookmark with existing Wrangler access. Use a separate migration command/token only if the site already uses that workflow or the migration requires it. Reuse existing media/key recovery versions when unchanged (docs/cloudflare-backup-restore.md).
 4. Deploy to the staging environment:
    `npx wrangler deploy --env staging`
 5. Verify the live staging URL (e.g. https://staging.client-site.com) and confirm `X-Robots-Tag: noindex` or `<meta name="robots" content="noindex">` is present.
@@ -468,10 +468,10 @@ We are ready to deploy our latest changes to Cloudflare Workers production.
 Please:
 1. Run `npm run verify` to confirm all lint, art direction, and typechecks pass.
 2. Run `npm run build` to compile the production edge bundle.
-3. Record the production recovery bookmark, media snapshot and key-vault version; fail before migration if any is missing. Inspect/apply EmDash core migrations using the exact account/database UUID and reviewed fingerprint (docs/cloudflare-backup-restore.md).
+3. Follow the site's existing migration mode and EmDash upgrade work order. Added/pending migrations or data-changing actions need a database recovery point before startup/deploy; on D1, record a Time Travel bookmark with existing Wrangler access. Use a separate migration command/token only if the site already uses that workflow or the migration requires it. Reuse existing media/key recovery versions when unchanged (docs/cloudflare-backup-restore.md).
 4. Deploy the updated worker and assets:
    `npx wrangler deploy`
-5. Verify production setup status, previous/current asset URLs, publish/purge, environment parity and an observed scheduled post per docs/edge-cache-lifecycle.md.
+5. Smoke-check changed production routes, assets and required bindings. Verify setup status when launching/changing authentication, and publish/purge or scheduled tasks when this release changes those features. Record unobserved acceptance honestly.
 ```
 
 ### Day-2 Emergency Deployment Rollback (Cloudflare Workers & D1)
@@ -483,8 +483,7 @@ An emergency occurred on our live Cloudflare Workers deployment: [Describe issue
 Please:
 1. Roll back the Cloudflare Worker to the previous stable release:
    `npx wrangler rollback`
-2. Restrict writes/setup paths and capture current state. Review loss of later writes, then follow docs/cloudflare-backup-restore.md to restore DB + matching media + encryption-key list + compatible code/config. Deliberately select the account/config/environment/database before restoring:
-   `npx wrangler d1 time-travel restore <database-binding> --timestamp="YYYY-MM-DDTHH:MM:SSZ"`
+2. Determine whether the release changed database/media state and whether the previous Worker can use the current database. If code rollback restores service, retain the current data. A database restore overwrites later writes: prepare the exact target, recovery bookmark and reconciliation plan before any separately authorized restore under docs/cloudflare-backup-restore.md. Restore media/keys only when their state also needs recovery.
 3. Verify that the production site has returned to stable operation.
 4. Report the rollback status and preserve local error logs for post-mortem debugging.
 ```

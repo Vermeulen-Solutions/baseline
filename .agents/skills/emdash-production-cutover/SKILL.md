@@ -5,7 +5,7 @@ description: Move an existing EmDash site on Cloudflare Workers from preview to 
 
 # EmDash production cutover
 
-Use this skill for the production domain transition of an existing Cloudflare Workers site. For initial hosting setup, Node-to-Cloudflare migration, or CMS data transfer, use `emdash-site-setup` first. Deploying code does not transfer CMS content.
+Use this skill only for the production domain transition of an existing Cloudflare Workers site. It is not the workflow for routine Worker code deployments. For initial hosting setup, Node-to-Cloudflare migration, or CMS data transfer, use `emdash-site-setup` first. Deploying code does not transfer CMS content.
 
 Perform only the requested work. A domain cutover does not require replacing a working email provider or third-party form service. Preserve established form requirements and integrations; consult `wordpress-to-emdash-content` when classifying a migrated form. Read [Native contact forms](references/contact-forms.md) only when implementing or replacing a form.
 
@@ -21,7 +21,7 @@ Inspect the repository and deployed configuration. Record the following in exist
 - Authentication mode, a working admin login, and recovery method. Distinguish built-in passkey/email login, OAuth, and Cloudflare Access.
 - Corporate mail provider and existing MX, SPF, DKIM, and DMARC records; sender domain, accepted From address, and current email provider.
 - Existing form behavior, trusted recipient source, and whether replacement is requested.
-- Previous deployment/version, routing and application configuration, and rollback procedure. Before any production mutation, follow `docs/cloudflare-backup-restore.md`: record the exact account/database UUID, current recovery bookmark/UTC time, matching media snapshot, full encryption-key escrow version and reviewed migration fingerprint. Missing evidence blocks release. Site export is not DR; never reset/reseed production or remove users to repair login.
+- Previous deployment/version, routing and application configuration, and rollback procedure. If the cutover also applies a database/content migration, follow the relevant migration recovery steps in `docs/cloudflare-backup-restore.md`. A domain-only change does not require a new media backup, key escrow receipt or D1 migration token. Record the previous routing/auth-origin settings and a practical rollback. Site export is not DR; never reset/reseed production or remove users to repair login.
 
 Check current official docs and installed APIs before using examples:
 
@@ -52,7 +52,7 @@ The custom domain must be an active Cloudflare-managed zone in the Worker's acco
 ]
 ```
 
-Before building/deploying, apply `docs/edge-cache-lifecycle.md` to the actual public routes: explicit HTML lifetimes, no HTML SWR, client toolbar, private/edit exclusions and asset-safe normalization. Use EmDash core migrations with managed production runtime `check` mode; Wrangler SQL migrations alone do not migrate EmDash. Run `npm run check:cache` locally when these contracts change; it exercises Node memory caching and does not certify Workers Cache.
+Before building/deploying, apply the site's adopted cache contracts in `docs/edge-cache-lifecycle.md` to the domain change: explicit HTML lifetimes, client toolbar, private/edit exclusions and asset-safe normalization. Preserve the existing migration mode; a domain cutover does not require adding a managed migration pipeline or changing runtime mode. Use EmDash core migration commands only when the site's workflow or a concrete migration requires them. Run `npm run check:cache` locally when these cache contracts change; its memory-cache rehearsal does not certify Workers Cache.
 
 Build cleanly and run `assets:retain` on the real adapter output using a persistent site/environment archive, then deploy the merged artifact through the project's explicit config/environment. A lock conflict blocks release; recover only after the owner is known stopped. Ignore quarantined pending generations, and cleanly rebuild processed/interrupted output instead of refreshing inherited asset ages. Verify site/TLS at the new hostname before changing its authentication origin. Custom Domains provision DNS/certificates; inspect conflicts and wait for provisioning. Keep permitted preview access during diagnosis.
 
