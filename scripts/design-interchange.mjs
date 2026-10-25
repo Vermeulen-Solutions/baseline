@@ -1,8 +1,7 @@
 import { readFile } from 'node:fs/promises';
-import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { lint } from '@google/design.md/linter';
 export function validateDesign(content) {
   const result = lint(content);
@@ -33,7 +32,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
       else if (process.argv.includes('--export')) {
         const format = option('--format') ?? 'css-vars';
         if (!['css-vars', 'css-tailwind', 'dtcg', 'json-tailwind'].includes(format)) throw Error('Unsupported export format');
-        process.stdout.write(execFileSync(process.execPath, [createRequire(import.meta.url).resolve('@google/design.md'), 'export', path.resolve(file), '--format', format], { encoding: 'utf8' }));
+        process.stdout.write(execFileSync(process.execPath, [fileURLToPath(import.meta.resolve('@google/design.md')), 'export', path.resolve(file), '--format', format], { encoding: 'utf8' }));
       } else console.log(JSON.stringify(report, null, 2));
     }
   } catch (error) { console.error(error.message); process.exitCode = 1; }

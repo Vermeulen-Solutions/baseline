@@ -1,0 +1,35 @@
+{
+  "checked": "2026-10-25",
+  "packages": {
+    "emdash": {
+      "version": "1.3.1",
+      "dependencies.zod": "4.5.4",
+      "dependencies.@emdash-cms/auth": "1.3.1",
+      "dependencies.@emdash-cms/plugin-types": "0.6.0"
+    },
+    "auth": {
+      "version": "1.3.1",
+      "dependencies.zod": "4.5.4"
+    },
+    "plugin-types": {
+      "version": "0.6.0",
+      "dependencies.zod": "4.5.4"
+    },
+    "design": {
+      "version": "0.4.0",
+      "dependencies.zod": "^3.24.0"
+    }
+  },
+  "bundledDesignZod": [
+    {
+      "entry": "index.js",
+      "containsZod32576BundleMarker": true,
+      "sha256": "874a6a4dde402f563882621f01b4789a7a12c64bc8a7abb1e18731e97eb271f0"
+    },
+    {
+      "entry": "linter/index.js",
+      "containsZod32576BundleMarker": true,
+      "sha256": "a76ab9c2ee8a1bc6ad709167c3c7f06e64a5e2253d9718d3c2a8c51824272423"
+    }
+  ]
+}
