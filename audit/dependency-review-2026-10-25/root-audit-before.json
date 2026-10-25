@@ -1,0 +1,304 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@emdash-cms/admin": {
+      "name": "@emdash-cms/admin",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@emdash-cms/plugin-types"
+      ],
+      "effects": [],
+      "range": "0.37.0 - 0.42.0 || >=1.0.1-rc.0",
+      "nodes": [
+        "node_modules/@emdash-cms/admin"
+      ],
+      "fixAvailable": true
+    },
+    "@emdash-cms/auth": {
+      "name": "@emdash-cms/auth",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "zod"
+      ],
+      "effects": [],
+      "range": "0.37.0 - 0.42.0 || >=1.0.1-rc.0",
+      "nodes": [
+        "node_modules/@emdash-cms/auth"
+      ],
+      "fixAvailable": {
+        "name": "@emdash-cms/auth",
+        "version": "0.36.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@emdash-cms/plugin-types": {
+      "name": "@emdash-cms/plugin-types",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "zod"
+      ],
+      "effects": [
+        "@emdash-cms/admin",
+        "@emdash-cms/registry-verification"
+      ],
+      "range": ">=0.3.1",
+      "nodes": [
+        "node_modules/@emdash-cms/plugin-types"
+      ],
+      "fixAvailable": true
+    },
+    "@emdash-cms/registry-verification": {
+      "name": "@emdash-cms/registry-verification",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@emdash-cms/plugin-types"
+      ],
+      "effects": [],
+      "range": ">=0.3.0",
+      "nodes": [
+        "node_modules/@emdash-cms/registry-verification"
+      ],
+      "fixAvailable": true
+    },
+    "@google/design.md": {
+      "name": "@google/design.md",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "zod"
+      ],
+      "effects": [],
+      "range": "*",
+      "nodes": [
+        "node_modules/@google/design.md"
+      ],
+      "fixAvailable": false
+    },
+    "body-parser": {
+      "name": "body-parser",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1243074,
+          "name": "body-parser",
+          "dependency": "body-parser",
+          "title": "body-parser vulnerable to Denial of Service via trailing bytes after a compressed request body",
+          "url": "https://github.com/advisories/GHSA-27r3-jxmh-p828",
+          "severity": "high",
+          "cwe": [
+            "CWE-248"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=2.0.0 <2.4.0"
+        }
+      ],
+      "effects": [],
+      "range": "2.0.0 - 2.3.0",
+      "nodes": [
+        "node_modules/body-parser"
+      ],
+      "fixAvailable": true
+    },
+    "emdash": {
+      "name": "emdash",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@emdash-cms/admin",
+        "@emdash-cms/auth",
+        "@emdash-cms/plugin-types",
+        "@emdash-cms/registry-verification",
+        "zod"
+      ],
+      "effects": [],
+      "range": "0.37.0 - 0.42.0 || >=1.0.1-rc.0",
+      "nodes": [
+        "node_modules/emdash"
+      ],
+      "fixAvailable": {
+        "name": "emdash",
+        "version": "0.36.0",
+        "isSemVerMajor": true
+      }
+    },
+    "fast-uri": {
+      "name": "fast-uri",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1243098,
+          "name": "fast-uri",
+          "dependency": "fast-uri",
+          "title": "fast-uri vulnerable to URI scheme spoofing via percent-encoded scheme decoding",
+          "url": "https://github.com/advisories/GHSA-w74x-v6f9-j3xg",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-172",
+            "CWE-180"
+          ],
+          "cvss": {
+            "score": 6.1,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N"
+          },
+          "range": ">=3.0.0 <3.1.9"
+        },
+        {
+          "source": 1243101,
+          "name": "fast-uri",
+          "dependency": "fast-uri",
+          "title": "fast-uri vulnerable to improper path equivalence in relative reference normalization",
+          "url": "https://github.com/advisories/GHSA-xhq7-xmqj-769h",
+          "severity": "low",
+          "cwe": [
+            "CWE-41"
+          ],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=3.0.0 <3.1.9"
+        },
+        {
+          "source": 1243104,
+          "name": "fast-uri",
+          "dependency": "fast-uri",
+          "title": "fast-uri vulnerable to host confusion via unchecked WHATWG host canonicalization",
+          "url": "https://github.com/advisories/GHSA-wjr9-j795-jxcr",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-20",
+            "CWE-436"
+          ],
+          "cvss": {
+            "score": 4.8,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:L/A:N"
+          },
+          "range": ">=3.1.3 <3.1.9"
+        },
+        {
+          "source": 1243107,
+          "name": "fast-uri",
+          "dependency": "fast-uri",
+          "title": "fast-uri vulnerable to scheme injection via an unescaped first-segment colon in suffix references",
+          "url": "https://github.com/advisories/GHSA-333x-w4r6-6crp",
+          "severity": "low",
+          "cwe": [
+            "CWE-41",
+            "CWE-116"
+          ],
+          "cvss": {
+            "score": 3.7,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:L/A:N"
+          },
+          "range": ">=3.0.0 <3.1.9"
+        }
+      ],
+      "effects": [],
+      "range": "3.0.0 - 3.1.8",
+      "nodes": [
+        "node_modules/fast-uri"
+      ],
+      "fixAvailable": true
+    },
+    "sharp": {
+      "name": "sharp",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        {
+          "source": 1241331,
+          "name": "sharp",
+          "dependency": "sharp",
+          "title": "sharp : Vulnerability in librsvg dependency CVE-2026-96889",
+          "url": "https://github.com/advisories/GHSA-wq5f-xc86-pv6w",
+          "severity": "high",
+          "cwe": [
+            "CWE-416",
+            "CWE-1395"
+          ],
+          "cvss": {
+            "score": 0,
+            "vectorString": null
+          },
+          "range": "<0.35.5"
+        }
+      ],
+      "effects": [],
+      "range": "<0.35.5",
+      "nodes": [
+        "node_modules/sharp"
+      ],
+      "fixAvailable": {
+        "name": "sharp",
+        "version": "0.35.5",
+        "isSemVerMajor": false
+      }
+    },
+    "zod": {
+      "name": "zod",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1243066,
+          "name": "zod",
+          "dependency": "zod",
+          "title": "Zod can exhaust memory while validating oversized constrained collections",
+          "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+          "severity": "high",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<4.6.6"
+        }
+      ],
+      "effects": [
+        "@emdash-cms/auth",
+        "@emdash-cms/plugin-types",
+        "@google/design.md",
+        "emdash"
+      ],
+      "range": "<4.6.6",
+      "nodes": [
+        "node_modules/@google/design.md/node_modules/zod",
+        "node_modules/zod"
+      ],
+      "fixAvailable": {
+        "name": "@emdash-cms/auth",
+        "version": "0.36.0",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 1,
+      "high": 9,
+      "critical": 0,
+      "total": 10
+    },
+    "dependencies": {
+      "prod": 531,
+      "dev": 223,
+      "optional": 144,
+      "peer": 5,
+      "peerOptional": 0,
+      "total": 900
+    }
+  }
+}

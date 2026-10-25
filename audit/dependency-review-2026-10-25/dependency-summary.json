@@ -1,0 +1,316 @@
+{
+  "date": "2026-10-25",
+  "node": "v24.21.0",
+  "npm": "10.5.0",
+  "platform": "win32",
+  "sourceBefore": "a2df5c86df9883c37c669f7e2e490f686bd8b0fe",
+  "installs": {
+    "root": {
+      "before": {
+        "counts": {
+          "info": 0,
+          "low": 0,
+          "moderate": 1,
+          "high": 9,
+          "critical": 0,
+          "total": 10
+        },
+        "affectedPackages": [
+          "@emdash-cms/admin",
+          "@emdash-cms/auth",
+          "@emdash-cms/plugin-types",
+          "@emdash-cms/registry-verification",
+          "@google/design.md",
+          "body-parser",
+          "emdash",
+          "fast-uri",
+          "sharp",
+          "zod"
+        ],
+        "versions": [
+          {
+            "path": "@emdash-cms/auth > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "@google/design.md",
+            "version": "0.4.0"
+          },
+          {
+            "path": "@google/design.md > zod",
+            "version": "3.25.76"
+          },
+          {
+            "path": "astro > sharp",
+            "version": "0.35.4"
+          },
+          {
+            "path": "astro > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "emdash > @emdash-cms/admin > @cloudflare/kumo > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "emdash > @emdash-cms/blocks > @cloudflare/kumo > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "emdash > @emdash-cms/plugin-types > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "emdash > @modelcontextprotocol/sdk > zod-to-json-schema > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "emdash > @modelcontextprotocol/sdk > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "emdash > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "sharp",
+            "version": "0.35.4"
+          }
+        ]
+      },
+      "after": {
+        "counts": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 7,
+          "critical": 0,
+          "total": 7
+        },
+        "affectedPackages": [
+          "@emdash-cms/admin",
+          "@emdash-cms/auth",
+          "@emdash-cms/plugin-types",
+          "@emdash-cms/registry-verification",
+          "@google/design.md",
+          "emdash",
+          "zod"
+        ],
+        "versions": [
+          {
+            "path": "@emdash-cms/auth > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "@google/design.md",
+            "version": "0.4.0"
+          },
+          {
+            "path": "@google/design.md > zod",
+            "version": "3.25.76"
+          },
+          {
+            "path": "astro > sharp",
+            "version": "0.35.5"
+          },
+          {
+            "path": "astro > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "emdash > @emdash-cms/admin > @cloudflare/kumo > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "emdash > @emdash-cms/blocks > @cloudflare/kumo > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "emdash > @emdash-cms/plugin-types > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "emdash > @modelcontextprotocol/sdk > ajv > fast-uri",
+            "version": "3.1.9"
+          },
+          {
+            "path": "emdash > @modelcontextprotocol/sdk > express > body-parser",
+            "version": "2.4.0"
+          },
+          {
+            "path": "emdash > @modelcontextprotocol/sdk > zod-to-json-schema > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "emdash > @modelcontextprotocol/sdk > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "emdash > zod",
+            "version": "4.5.4"
+          },
+          {
+            "path": "sharp",
+            "version": "0.35.5"
+          }
+        ]
+      }
+    },
+    "static": {
+      "before": {
+        "counts": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 3,
+          "critical": 0,
+          "total": 3
+        },
+        "affectedPackages": [
+          "@google/design.md",
+          "sharp",
+          "zod"
+        ],
+        "versions": [
+          {
+            "path": "@google/design.md",
+            "version": "0.4.0"
+          },
+          {
+            "path": "@google/design.md > zod",
+            "version": "3.25.76"
+          },
+          {
+            "path": "astro > sharp",
+            "version": "0.35.4"
+          },
+          {
+            "path": "astro > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "sharp",
+            "version": "0.35.4"
+          }
+        ]
+      },
+      "after": {
+        "counts": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 2,
+          "critical": 0,
+          "total": 2
+        },
+        "affectedPackages": [
+          "@google/design.md",
+          "zod"
+        ],
+        "versions": [
+          {
+            "path": "@google/design.md",
+            "version": "0.4.0"
+          },
+          {
+            "path": "@google/design.md > zod",
+            "version": "3.25.76"
+          },
+          {
+            "path": "astro > sharp",
+            "version": "0.35.5"
+          },
+          {
+            "path": "astro > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "sharp",
+            "version": "0.35.5"
+          }
+        ]
+      }
+    },
+    "static-sveltia": {
+      "before": {
+        "counts": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 3,
+          "critical": 0,
+          "total": 3
+        },
+        "affectedPackages": [
+          "@google/design.md",
+          "sharp",
+          "zod"
+        ],
+        "versions": [
+          {
+            "path": "@google/design.md",
+            "version": "0.4.0"
+          },
+          {
+            "path": "@google/design.md > zod",
+            "version": "3.25.76"
+          },
+          {
+            "path": "astro > sharp",
+            "version": "0.35.4"
+          },
+          {
+            "path": "astro > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "sharp",
+            "version": "0.35.4"
+          }
+        ]
+      },
+      "after": {
+        "counts": {
+          "info": 0,
+          "low": 0,
+          "moderate": 0,
+          "high": 2,
+          "critical": 0,
+          "total": 2
+        },
+        "affectedPackages": [
+          "@google/design.md",
+          "zod"
+        ],
+        "versions": [
+          {
+            "path": "@google/design.md",
+            "version": "0.4.0"
+          },
+          {
+            "path": "@google/design.md > zod",
+            "version": "3.25.76"
+          },
+          {
+            "path": "astro > sharp",
+            "version": "0.35.5"
+          },
+          {
+            "path": "astro > zod",
+            "version": "4.6.7"
+          },
+          {
+            "path": "sharp",
+            "version": "0.35.5"
+          }
+        ]
+      }
+    }
+  },
+  "changedSourceSHA256": {
+    "package.json": "789b616e348f703df12c151f5d94b14b8cfb8ab801f5053574b30a46d5c29fd4",
+    "package-lock.json": "c7f16d973158a14989281db029003c5e0f2f02dafc9fc9b2f064c8b0ff3f9ef7",
+    "scripts/design-interchange.mjs": "d998853e15b5767205984866772b5ff938199dcbec8702677b32fedaba3bc950",
+    "tests/design-interchange.test.mjs": "64174fd3882323dfb4c770d5ed9262db46436afc69bb8718eea80364513acb4b"
+  }
+}

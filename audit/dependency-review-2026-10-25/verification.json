@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-25",
+  "platform": "win32",
+  "node": "24.21.0",
+  "npm": "10.5.0",
+  "finalChecks": {
+    "doctor": { "exitCode": 0, "warning": "Outer Windows npm launcher is not observable; npm.cmd used." },
+    "npmCi": { "exitCode": 0 },
+    "verifyFast": { "exitCode": 0, "tests": 182, "failures": 0 },
+    "verify": { "exitCode": 0, "unitTests": 182, "rehearsalTests": 136, "failures": 0, "astroFiles": 53, "astroErrors": 0, "astroWarnings": 0, "astroHints": 0 },
+    "build": { "exitCode": 0, "advisory": "Existing chunk-size warning over 500 kB." },
+    "auditHtml": { "exitCode": 0, "htmlDocuments": 9, "publicSsrResponses": 10 },
+    "nativeImages": { "exitCode": 0, "environments": ["development", "built Node including media uploaded after build"] },
+    "designCheck": { "exitCode": 0, "errors": 0, "mapping": "current" },
+    "designExportCssVars": { "exitCode": 0, "regressionTest": "Checks actual exported primary/alias colors through the CLI." },
+    "devTools": { "exitCode": 0, "productionIsolation": "passed", "dependencyLocalZodResolution": "passed" },
+    "profiles": {
+      "exitCode": 0,
+      "static": { "independentInstall": true, "cleanNpmCi": true, "tests": 39, "verify": "passed", "productionBuild": "passed", "fixtureBuild": "passed", "http": "passed", "cmsDatabasePackages": 0 },
+      "static-sveltia": { "independentInstall": true, "cleanNpmCi": true, "tests": 40, "verify": "passed", "productionBuild": "passed", "fixtureBuild": "passed", "http": "passed", "cmsDatabasePackages": 0 }
+    },
+    "npmAudit": { "exitCode": 1, "remaining": "Root 7 high affected packages; static and static-sveltia 2 high each. Unresolved Zod paths remain visible." }
+  },
+  "initialAttempts": [
+    { "command": "verify:fast", "exitCode": 1, "reason": "Concurrent native-image check exposed its temporary route to the source-inventory assertion.", "resolution": "Reran after fixture cleanup; 182 tests passed." },
+    { "command": "verify", "exitCode": 1, "reason": "HTML 250-page audit measured 1163.4501ms, above its 1000ms limit, while independent profile installation was running.", "resolution": "Complete rerun after other checks finished passed all 318 tests and typecheck; the unchanged HTML test took approximately 301ms." },
+    { "command": "design:export --format css-vars", "exitCode": 1, "reason": "CommonJS resolution could not select the package's import-only export.", "resolution": "Used import.meta.resolve() with fileURLToPath(); actual CLI export and regression test passed." }
+  ],
+  "limits": ["No claim of a clean security audit", "No production deployment or request-abuse acceptance", "No glibc Linux exploit or binary acceptance", "No browser, editor or provider acceptance"]
+}

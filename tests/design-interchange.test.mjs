@@ -3,7 +3,20 @@ import assert from 'node:assert/strict';
 import { readFile, mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { validateDesign, checkMapping } from '../scripts/design-interchange.mjs';
+
+test('DESIGN.md CSS export invokes the package import entry point', () => {
+  const output = execFileSync(process.execPath, [
+    fileURLToPath(new URL('../scripts/design-interchange.mjs', import.meta.url)),
+    '--export', '--file', fileURLToPath(new URL('../audit/visual-concepts/neutral-interchange/DESIGN.md', import.meta.url)),
+    '--format', 'css-vars',
+  ], { encoding: 'utf8' });
+  assert.match(output, /:root\s*\{/);
+  assert.match(output, /--color-primary:\s*#005198;/);
+  assert.match(output, /--color-action-alias:\s*#005198;/);
+});
 test('pinned DESIGN.md bridge validates the neutral specimen and rejects typography/reference losses', async () => {
   const content = await readFile(new URL('../audit/visual-concepts/neutral-interchange/DESIGN.md', import.meta.url), 'utf8');
   assert.equal(validateDesign(content).summary.errors, 0);

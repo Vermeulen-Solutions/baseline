@@ -1,0 +1,161 @@
+{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@emdash-cms/admin": {
+      "name": "@emdash-cms/admin",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@emdash-cms/plugin-types"
+      ],
+      "effects": [],
+      "range": "0.37.0 - 0.42.0 || >=1.0.1-rc.0",
+      "nodes": [
+        "node_modules/@emdash-cms/admin"
+      ],
+      "fixAvailable": true
+    },
+    "@emdash-cms/auth": {
+      "name": "@emdash-cms/auth",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "zod"
+      ],
+      "effects": [],
+      "range": "0.37.0 - 0.42.0 || >=1.0.1-rc.0",
+      "nodes": [
+        "node_modules/@emdash-cms/auth"
+      ],
+      "fixAvailable": {
+        "name": "@emdash-cms/auth",
+        "version": "0.36.0",
+        "isSemVerMajor": true
+      }
+    },
+    "@emdash-cms/plugin-types": {
+      "name": "@emdash-cms/plugin-types",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "zod"
+      ],
+      "effects": [
+        "@emdash-cms/admin",
+        "@emdash-cms/registry-verification"
+      ],
+      "range": ">=0.3.1",
+      "nodes": [
+        "node_modules/@emdash-cms/plugin-types"
+      ],
+      "fixAvailable": true
+    },
+    "@emdash-cms/registry-verification": {
+      "name": "@emdash-cms/registry-verification",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        "@emdash-cms/plugin-types"
+      ],
+      "effects": [],
+      "range": ">=0.3.0",
+      "nodes": [
+        "node_modules/@emdash-cms/registry-verification"
+      ],
+      "fixAvailable": true
+    },
+    "@google/design.md": {
+      "name": "@google/design.md",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "zod"
+      ],
+      "effects": [],
+      "range": "*",
+      "nodes": [
+        "node_modules/@google/design.md"
+      ],
+      "fixAvailable": false
+    },
+    "emdash": {
+      "name": "emdash",
+      "severity": "high",
+      "isDirect": true,
+      "via": [
+        "@emdash-cms/admin",
+        "@emdash-cms/auth",
+        "@emdash-cms/plugin-types",
+        "@emdash-cms/registry-verification",
+        "zod"
+      ],
+      "effects": [],
+      "range": "0.37.0 - 0.42.0 || >=1.0.1-rc.0",
+      "nodes": [
+        "node_modules/emdash"
+      ],
+      "fixAvailable": {
+        "name": "emdash",
+        "version": "0.36.0",
+        "isSemVerMajor": true
+      }
+    },
+    "zod": {
+      "name": "zod",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1243066,
+          "name": "zod",
+          "dependency": "zod",
+          "title": "Zod can exhaust memory while validating oversized constrained collections",
+          "url": "https://github.com/advisories/GHSA-mrhx-c7xc-m3w5",
+          "severity": "high",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": "<4.6.6"
+        }
+      ],
+      "effects": [
+        "@emdash-cms/auth",
+        "@emdash-cms/plugin-types",
+        "@google/design.md",
+        "emdash"
+      ],
+      "range": "<4.6.6",
+      "nodes": [
+        "node_modules/@google/design.md/node_modules/zod",
+        "node_modules/zod"
+      ],
+      "fixAvailable": {
+        "name": "@emdash-cms/auth",
+        "version": "0.36.0",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 7,
+      "critical": 0,
+      "total": 7
+    },
+    "dependencies": {
+      "prod": 531,
+      "dev": 249,
+      "optional": 144,
+      "peer": 5,
+      "peerOptional": 0,
+      "total": 900
+    }
+  }
+}
