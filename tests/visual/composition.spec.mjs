@@ -7,6 +7,20 @@ test('behavior native disclosure keyboard, grouping and fragment reveal', async 
   await noOverflow(page);
 });
 
+test('behavior native disclosure reveals a target from a directly loaded fragment', async ({ page }) => {
+  await prepare(page, styleguide, page.visualProblems);
+  const details = page.locator('#specimen-disclosure');
+  const target = page.locator('#disclosure-reveal-target');
+  await expect(details).not.toHaveAttribute('open', '');
+  const targetUrl = new URL(page.url());
+  targetUrl.hash = 'disclosure-reveal-target';
+  await page.goto(targetUrl.href);
+  await expect(page).toHaveURL(/#disclosure-reveal-target$/);
+  await expect(details).toHaveAttribute('open', '');
+  await expect(target).toBeVisible();
+  await expect(target).toBeInViewport();
+});
+
 test('reflow intrinsic composition in wide/narrow/RTL hosts', async ({ page }, info) => {
   await prepare(page, styleguide, page.visualProblems);
   await info.attach('intrinsic-composition', { body: JSON.stringify(await intrinsicLayoutJourney(page)), contentType: 'application/json' });

@@ -98,10 +98,25 @@ try {
   await expect(page.getByText('1 of 1 complete',{exact:true})).toBeVisible();
   await page.getByRole('button',{name:'Done',exact:true}).click();
   await expect(page.getByRole('button',{name:'architecture-acceptance-6.png',exact:true})).toBeVisible({timeout:20000});
-  await page.screenshot({path:path.join(report,'admin-media.png'),fullPage:true});
+  await page.getByRole('button',{name:'architecture-acceptance-6.png',exact:true}).click();
+  const mediaDetails=page.getByRole('dialog',{name:'Media details'});
+  await expect(mediaDetails).toBeVisible();
+  const altText=mediaDetails.getByRole('textbox',{name:'Alt Text'});
+  const caption=mediaDetails.getByRole('textbox',{name:'Caption'});
+  await altText.fill('Synthetic architecture acceptance image');
+  await caption.fill('Uploaded through the disposable admin UI.');
+  const mediaUpdate=page.waitForResponse(response=>response.url().includes('/_emdash/api/media/')&&response.request().method()==='PUT',{timeout:15000});
+  await mediaDetails.getByRole('button',{name:'Save',exact:true}).click();
+  const mediaSaved=await mediaUpdate;expect(mediaSaved.status()).toBe(200);
+  await page.reload();
+  await expect(page.getByRole('button',{name:'architecture-acceptance-6.png',exact:true})).toBeVisible();
+  await page.getByRole('button',{name:'architecture-acceptance-6.png',exact:true}).click();
+  await expect(mediaDetails.getByRole('textbox',{name:'Alt Text'})).toHaveValue('Synthetic architecture acceptance image');
+  await expect(mediaDetails.getByRole('textbox',{name:'Caption'})).toHaveValue('Uploaded through the disposable admin UI.');
+  await mediaDetails.getByRole('button',{name:'Close',exact:true}).click();
   expect(errors).toEqual([]);
-  await fs.writeFile(path.join(report,'receipt.json'),JSON.stringify({case:'E01',freshSeed:true,workingContentTouched:false,entry:'pages/'+entryId,field:'content',seed:'supported disposable seed; dev session used by built editor; no API substitute for edit',uiSelected:true,uiTyped:true,blurSaveStatus:saved.status(),editorReload:true,uiPublish:true,anonymousPublicReload:true,nestedListsRetained:true,emptyFieldSelectable:true,adminNavigation:true,customCatalogIcon:'acorn: rendered path matches the installed package component',mediaLibraryUpload:{via:'built admin file picker and upload queue',filename:path.basename(uploadFile),completed:true,visibleInLibrary:true,storage:'fresh disposable local storage'},scope:'Node/SQLite built inline editor, admin and media upload; not provider/Workers certification'},null,2)+'\n');
-  console.log('E01 actual inline editor save/publish, anonymous render, empty field, admin navigation and Media Library upload passed.');
+  await fs.writeFile(path.join(report,'receipt.json'),JSON.stringify({case:'E01',freshSeed:true,workingContentTouched:false,entry:'pages/'+entryId,field:'content',seed:'supported disposable seed; dev session used by built editor; no API substitute for edit',uiSelected:true,uiTyped:true,blurSaveStatus:saved.status(),editorReload:true,uiPublish:true,anonymousPublicReload:true,nestedListsRetained:true,emptyFieldSelectable:true,adminNavigation:true,customCatalogIcon:'acorn: rendered path matches the installed package component',mediaLibraryUpload:{via:'built admin file picker and upload queue',filename:path.basename(uploadFile),completed:true,visibleInLibrary:true,metadataEditViaUi:{altText:true,caption:true,saveStatus:mediaSaved.status(),reloadVerified:true},storage:'fresh disposable local storage'},scope:'Node/SQLite built inline editor, admin and media metadata; not provider/Workers certification'},null,2)+'\n');
+  console.log('E01 actual inline editor save/publish, anonymous render, empty field, admin navigation, Media Library upload and alt/caption edit passed.');
 }catch(error){
   console.error('E01 failure:',error);
   await page.screenshot({path:path.join(report,'failure.png'),fullPage:true,timeout:5000}).catch(()=>{});
