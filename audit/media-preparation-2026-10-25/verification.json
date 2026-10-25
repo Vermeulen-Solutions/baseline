@@ -1,0 +1,151 @@
+{
+  "recordedAt": "2026-10-25T18:17:58.612Z",
+  "baseCommit": "0be2eb28499af692552946bbf67bc4b8e11062e9",
+  "sourceTreeDirty": true,
+  "context": "Verification used the recorded base commit plus working-tree animation fixes. Source hashes describe the checked implementation before the follow-up commit; no production deployment is claimed.",
+  "sourceHashPolicy": "LF-normalized text SHA-256; implementation sources remained fixed during the accepted checks. Evidence files were added after checks completed.",
+  "sourceHashes": {
+    "scripts/prepare-images.mjs": "239f7240b8de9db3b8c79300a0de9b282276ae55f38e2f49b27ceb7e14595cfc",
+    "scripts/prepare-image.mjs": "4283151bd4f602a2496afdce2f098e76c4d48740341f114e758923b60ee2c228",
+    "scripts/upload-prepared-media.mjs": "c76ec6f0c2eddfb8357bc4d37597dd7825bef637e389782f65039f465dc19380",
+    "scripts/rehearse-media-preparation.mjs": "f8a3e88f71d702453e2ede5af958a1e50c952d9d0f54ec6c3818d1e6dfaae202",
+    "scripts/verify-profiles.mjs": "910635948d64920bb6b00dce488d6a3c4989d1ed02d0565cf873c02a50360f55",
+    "scripts/inspect-project.mjs": "ba963114ce327e1594fdcd9f5f689a9aa1033dc1e03d29aa4de315a12bd51c4f",
+    "tests/media-preparation.test.mjs": "46197c078dc5b7955f15e1f86f302ba5b7d1be671eeb5b1bb1150d20ead583a6",
+    "tests/prepared-media-upload.test.mjs": "84bcb8717c6fb0c60925a8720e7663c997f8e0157e0ab30a86b3fb715fd98f39",
+    "tests/platform-profiles.test.mjs": "9de35ba02f07a4e01baaedef6d2bd7e8b0d375e115db26fa08484bbdaa6ab63d",
+    "tests/test-tiers.json": "cd6da7eef93b80d8097f0f1bc87fc0e573abd8c508f3a65355c437466932035e",
+    "AGENTS.md": "3afe852d366c86b37d1d3d522ad582789e6eab5bfccd8865efeb13e48f281cf5",
+    "profiles/static/project/AGENTS.md": "28a7eccf4716c0c6cdbb3f8fb4d5603fe4e67cd61572bcbc8d622fe788b821c0",
+    "profiles/manifests/shared.json": "d0a16eb27077fb76f30f3556bf93b5e2523751c87fcde9859e5562edb39bf4b9",
+    "profiles/manifests/emdash.json": "ce760d4c3c2e8e0e10c6db5ddead33b122e8df39faab4c643c03b80fa8f41eee",
+    "profiles/file-inventory.json": "8cb3fc2c5b1bd863482aa1b6471dc0bf09d62a7463d1342024db8886d1868866",
+    "package.json": "f5838efb3cd870e7d4ff55ea5c3f5abbf33bd38a8ab13447c0a909ac6a1a078e",
+    "package-lock.json": "23a2bc55141da90f7a375e65a5992abd1af559baafea2ff482606ad72ec331ab",
+    "docs/media-preparation.md": "8ca08d21630ae851fa804b2fdd3545d5fa3c42c79a3bf90bdc2a09e4131ee7c7",
+    "docs/README.md": "8845b1985a2451938c70df5c2ea7e641dae81b8e39ae54a23fcdb2e40fd8370f",
+    "docs/commands.md": "d1be9aa68cd2acfe5027939e7aa21edc5574c4c5cb6fe42507d1f428e0bf1314",
+    "docs/baseline-updates.md": "6e68cd2ab6ca2dc3b27e32b882931e7ad47185736e6209cc220690eff462728b",
+    "docs/editor-handoff.md": "7e4ca6b54eeb4127b5970eb60480b8e9937d9bd8d4539dc1e5b7b700e3290ca7",
+    "docs/image-delivery.md": "237939ea75d99684e0c6d22b14cb0a80309b6bc85c3c331440d5784f8d6efa24",
+    "docs/site-working-rules.md": "e2b7ecf9bbf21e75617b6a7e9fa281cf4440a70d6bc6e1f7c121ddcfd39f370b",
+    ".agents/skills/astro-site-design/SKILL.md": "59ef420165dc3da39d7dcef40230ed538e32304c9d4e3950a469a45bbb84d0da",
+    ".agents/skills/new-site-workflow/SKILL.md": "894ce7a7b65fd5c63de017b2cf76a8e1dc35a82ae5eea76cd0aaaf8feffcc865",
+    ".agents/skills/new-site-workflow/references/site-maintenance.md": "e4d592de3c193d3f59f0c97d3a3d1d4b4d8aae6714493f1465d9101c46c5a1e7"
+  },
+  "environment": {
+    "platform": "win32",
+    "node": "v24.21.0",
+    "npm": "10.5.0",
+    "sharp": "0.35.5"
+  },
+  "defaults": {
+    "preset": "photo",
+    "maxEdge": 2400,
+    "quality": 85,
+    "maxBytes": 1048576,
+    "reason": ""
+  },
+  "limits": {
+    "bytes": 33554432,
+    "pixels": 40000000,
+    "dimension": 20000,
+    "frames": 100,
+    "files": 1000,
+    "batchBytes": 1073741824
+  },
+  "checks": {
+    "doctor": "passed with shell/dirty-tree reminders",
+    "fast": {
+      "status": "passed",
+      "unitTests": 182
+    },
+    "acceptedVerify": {
+      "status": "passed",
+      "unitTests": 182,
+      "rehearsalTests": 146,
+      "total": 328,
+      "astroFiles": 53,
+      "errors": 0,
+      "warnings": 0,
+      "hints": 0
+    },
+    "productionBuild": "passed; existing admin large-chunk warning",
+    "htmlAudit": {
+      "status": "passed",
+      "files": 9,
+      "publicSSRResponses": 10
+    },
+    "profiles": [
+      {
+        "profile": "static",
+        "independentInstall": true,
+        "cleanInstall": true,
+        "databasePackages": 0,
+        "verify": "passed",
+        "production": "passed",
+        "fixtures": "passed",
+        "http": "passed",
+        "standaloneMediaPrepare": true,
+        "temporaryProjectRemoved": true
+      },
+      {
+        "profile": "static-sveltia",
+        "independentInstall": true,
+        "cleanInstall": true,
+        "databasePackages": 0,
+        "verify": "passed",
+        "production": "passed",
+        "fixtures": "passed",
+        "http": "passed",
+        "standaloneMediaPrepare": true,
+        "temporaryProjectRemoved": true
+      }
+    ],
+    "localCMS": "passed; see runtime-verification.json",
+    "diffCheck": "passed"
+  },
+  "example": {
+    "originalBytes": 19827263,
+    "preparedBytes": 484264,
+    "width": 2400,
+    "height": 1350,
+    "percentSaved": 97.56
+  },
+  "visualReview": {
+    "syntheticSourceAndPreparedPreviewsInspected": true,
+    "viewedPreparedHashMatchesAcceptedRuntime": true,
+    "scope": "Synthetic gradient/noise detail and actual native responsive HTTP delivery; no new client-specific visual, browser-editor or hosting-provider acceptance."
+  },
+  "regressionCoverage": [
+    "large PNG and portrait/EXIF normalization",
+    "lossless artwork, alpha and byte-identical compliant sources",
+    "GIF and explicitly detected APNG original preservation",
+    "review thresholds, oversized inputs and larger candidate refusal",
+    "source/archive/output/policy/linked-path resume refusal",
+    "stored-byte and metadata verification, deduplication mismatch, lost-response reconciliation and verified-byte accounting",
+    "independent static profiles without the CMS uploader"
+  ],
+  "developmentFailures": [
+    "Initial focused fixture cleanup hit Windows EPERM; fixture Sharp file caching was disabled and bounded cleanup retries were added.",
+    "The first AVIF comparison fixture was below the intended byte threshold; its size/quality was adjusted to exercise a genuinely larger conversion candidate.",
+    "Initial runtime GET hit ECONNRESET after synchronous CLI children; CLI invocations and rehearsal children now run asynchronously and accepted rehearsals passed.",
+    "Review found libvips exposes APNG as a single frame. PNG animation controls are now explicitly checked, preservation is required and the regression passes. Checks predating this fix were superseded."
+  ],
+  "cleanup": {
+    "acceptedRuntime": {
+      "ownedServerStopped": true,
+      "originalSourcesAndStagesRemoved": true,
+      "workingDatabaseCopied": false
+    },
+    "generatedProfilesRemoved": true,
+    "initialFailedFixtureRetained": true,
+    "localCleanupNote": ".emdash/checks/media-preparation-cleanup.json"
+  },
+  "limitsOfAcceptance": [
+    "Agent-assisted preparation/upload only; no interception of direct admin/Sveltia browser uploads.",
+    "No production or remote-proxy provider acceptance; protected byte readback may need EMDASH_HEADERS.",
+    "Stored originals and existing content references are not swept or automatically replaced.",
+    "Historical DESIGN.md retirement receipts remain historical; this does not refresh their source hashes."
+  ]
+}

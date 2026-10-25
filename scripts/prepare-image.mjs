@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { pathToFileURL } from 'node:url';
 import sharp from 'sharp';
-import { LIMITS, imageBytes, imageHash, imagePath, imagePolicy, requireImageFact } from './prepare-images.mjs';
+import { LIMITS, imageBytes, imageFrameCount, imageHash, imagePath, imagePolicy, requireImageFact } from './prepare-images.mjs';
 
 const formats = { jpeg: ['jpg', 'image/jpeg'], png: ['png', 'image/png'], webp: ['webp', 'image/webp'], avif: ['avif', 'image/avif'], heif: ['avif', 'image/avif'], gif: ['gif', 'image/gif'], tiff: ['tiff', 'image/tiff'] };
 export async function prepareImage({ source, output, policy }) {
@@ -17,10 +17,10 @@ export async function prepareImage({ source, output, policy }) {
   } else {
     const input = sharp(bytes, { animated: true, limitInputPixels: LIMITS.pixels, sequentialRead: true, failOn: 'warning' }), meta = await input.metadata();
     requireImageFact(formats[meta.format] && (meta.format !== 'heif' || meta.compression === 'av1'), 'Unsupported image type; provide a supported image export');
-    frames = meta.pages ?? 1;
+    frames = imageFrameCount(bytes, meta);
     const nativeHeight = meta.pageHeight ?? meta.height;
     width = meta.orientation >= 5 ? nativeHeight : meta.width; height = meta.orientation >= 5 ? meta.width : nativeHeight;
-    requireImageFact(width > 0 && height > 0 && width <= LIMITS.dimension && height <= LIMITS.dimension && meta.width * meta.height <= LIMITS.pixels && frames <= LIMITS.frames, 'Image dimensions, combined pixels or frames exceed the preparation limit');
+    requireImageFact(width > 0 && height > 0 && width <= LIMITS.dimension && height <= LIMITS.dimension && Math.max(meta.width * meta.height, width * height * frames) <= LIMITS.pixels, 'Image dimensions, combined pixels or frames exceed the preparation limit');
     await input.clone().stats();
     requireImageFact(policy.preset !== 'artwork' || !meta.depth || meta.depth === 'uchar', 'High-bit-depth artwork requires a reviewed preserve preset; WebP lossless encodes 8-bit pixels');
     [extension, mimeType] = formats[meta.format];

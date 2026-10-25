@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "status": "passed",
+  "scope": "Fresh owned local EmDash and synthetic sources; no production or working DB/media/env copied",
+  "steps": [
+    "greenfield preparation and actual CLI upload/get/stored-byte verification",
+    "repeat operation reverified without creating another item",
+    "actual deduplicated metadata mismatch required reconciliation and left the original unchanged",
+    "native EmDashImage rendered and served a WebP responsive candidate",
+    "new maintenance upload on the same site retained existing media IDs",
+    "source hash unchanged"
+  ],
+  "source": {
+    "bytes": 19827263,
+    "width": 3840,
+    "height": 2160,
+    "sha256": "bf84784bddd8831c882ea72ec83c3eaddc860d7c7367fcd80b4abf42d75d9d79"
+  },
+  "prepared": {
+    "sha256": "6bd4c8e1fe7fef47d0e84023362d51e22592b406d1dad43fb4496b5ceca77376",
+    "bytes": 484264,
+    "width": 2400,
+    "height": 1350,
+    "frames": 1,
+    "extension": "webp",
+    "mimeType": "image/webp",
+    "treatment": "photo-webp-srgb-oriented",
+    "issues": [],
+    "path": "upload/hero-0b9edc7c2919bfb9.webp"
+  },
+  "media": {
+    "initialRecords": 0,
+    "afterGreenfield": 1,
+    "afterMaintenance": 2,
+    "greenfieldID": "01KF0RDQG0DZE1HDD17M8YKM6R",
+    "storedBytesVerified": true,
+    "responsiveWidth": 480
+  },
+  "cleanup": {
+    "ownedServerStopped": true,
+    "originalSourcesAndStagesRemoved": true,
+    "workingDatabaseCopied": false
+  }
+}

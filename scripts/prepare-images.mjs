@@ -27,6 +27,25 @@ export function imageBytes(file, max = LIMITS.bytes) {
   return fs.readFileSync(absolute);
 }
 export const imageJSON = file => JSON.parse(imageBytes(file, 4 * 1024 * 1024).toString('utf8'));
+// libvips reports only the first APNG frame. Read its animation control chunk
+// before selecting a transform, so an unsupported animation cannot be flattened.
+export function imageFrameCount(bytes, metadata) {
+  let frames = metadata.pages ?? 1;
+  if (bytes.length >= 8 && bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) {
+    let declaredFrames = null, frameControls = 0;
+    for (let offset = 8; offset + 12 <= bytes.length;) {
+      const length = bytes.readUInt32BE(offset), type = bytes.toString('ascii', offset + 4, offset + 8);
+      requireImageFact(offset + length + 12 <= bytes.length, 'Invalid PNG chunk bounds');
+      if (type === 'acTL') { requireImageFact(length === 8 && declaredFrames === null, 'Invalid PNG animation control'); frames = declaredFrames = bytes.readUInt32BE(offset + 8); }
+      if (type === 'fcTL') frameControls++;
+      offset += length + 12;
+      if (type === 'IEND') break;
+    }
+    requireImageFact(declaredFrames === null ? frameControls === 0 : frameControls === declaredFrames, 'PNG animation frame count does not match its controls');
+  }
+  requireImageFact(Number.isInteger(frames) && frames > 0 && frames <= LIMITS.frames, 'Image frame count exceeds the preparation limit');
+  return frames;
+}
 export function imageOptions(argv, flags, booleans = []) {
   const options = {};
   for (let i = 0; i < argv.length; i++) {

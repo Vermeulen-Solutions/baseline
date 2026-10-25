@@ -91,6 +91,10 @@ preset. This is a passthrough decision, not SVG sanitization. PDF, video, HEIC a
 unsupported/corrupt inputs are rejected; provide a suitable source export or use
 the site's separate document/video workflow.
 
+PNG animation controls are checked explicitly because Sharp can report APNG as
+a single-frame PNG. Preserved animations keep their source bytes; integrate them
+with the native image component's `optimize={false}` option and verify playback.
+
 For mixed batches, prepare an override file such as:
 
 ```json

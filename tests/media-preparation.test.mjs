@@ -65,12 +65,16 @@ test('portrait, EXIF orientation and lossless artwork preserve dimensions, alpha
 
 test('mixed policies keep reviewed vectors/animations and isolate unsupported files and byte exceptions', () => fixture(async ({ source, projectRoot, out, put }) => {
   const animated = Buffer.from('47494638396101000100800000000000ffffff21ff0b4e45545343415045322e300301000000' + '21f904000a0000002c0000000001000100000202440100'.repeat(2) + '3b', 'hex');
-  put('animated.gif', animated); put('logo.svg', '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10"/></svg>'); put('broken.png', 'broken');
+  // Two valid 2×2 red/blue APNG frames. Sharp can expose only the first frame.
+  const apng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAYAAABytg0kAAAACGFjVEwAAAACAAAAAPONk3AAAAAaZmNUTAAAAAAAAAACAAAAAgAAAAAAAAAAAAEACgAA6FTcAAAAABFJREFUCJlj+M/A8B+EGWAMAEfKB/l5tH3SAAAAGmZjVEwAAAABAAAAAgAAAAIAAAAAAAAAAAABAAoAAHMnNtQAAAAUZmRBVAAAAAIImWNgYPj/H4KhDAA/0gf5OuHM3wAAAABJRU5ErkJggg==', 'base64');
+  put('animated.gif', animated); put('animated.png', apng); put('logo.svg', '<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10"><rect width="10" height="10"/></svg>'); put('broken.png', 'broken');
   const stage = out(), rejected = prepareImages({ source, out: stage }, { projectRoot });
-  assert.equal(rejected.rejected, 3); assert.equal(fs.readdirSync(path.join(stage, 'upload')).length, 0);
+  assert.equal(rejected.rejected, 4); assert.equal(fs.readdirSync(path.join(stage, 'upload')).length, 0);
   const reviewedStage = out();
   prepareImages({ source: path.join(source, 'animated.gif'), out: reviewedStage, preset: 'preserve', reason: 'Animation is required for this content' }, { projectRoot });
   const gif = verifyPreparedStage(reviewedStage, { projectRoot }).manifest.entries[0]; assert.equal(gif.output.frames, 2); assert.equal(gif.output.sha256, imageHash(animated));
+  const apngStage = out(); prepareImages({ source: path.join(source, 'animated.png'), out: apngStage, preset: 'preserve', reason: 'Reviewed animation must retain both PNG frames' }, { projectRoot });
+  const preservedPNG = verifyPreparedStage(apngStage, { projectRoot }).manifest.entries[0]; assert.equal(preservedPNG.output.frames, 2); assert.equal(preservedPNG.output.sha256, imageHash(apng));
   const vectorStage = out(); prepareImages({ source: path.join(source, 'logo.svg'), out: vectorStage, overrides: { 'logo.svg': { preset: 'preserve', reason: 'Reviewed source brand vector' } } }, { projectRoot });
   assert.equal(verifyPreparedStage(vectorStage, { projectRoot }).manifest.entries[0].output.mimeType, 'image/svg+xml');
   const noise = await sharp({ create: { width: 80, height: 80, channels: 3, noise: { type: 'gaussian', mean: 120, sigma: 60 } } }).png().toBuffer(); put('detail.png', noise);

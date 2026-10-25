@@ -3,7 +3,7 @@ import path from 'node:path';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { imageBytes, imageHash, imageJSON, imageOptions, imagePath, requireImageFact, safeImageKey, verifyPreparedStage, writeImageJSON, LIMITS } from './prepare-images.mjs';
+import { imageBytes, imageFrameCount, imageHash, imageJSON, imageOptions, imagePath, requireImageFact, safeImageKey, verifyPreparedStage, writeImageJSON, LIMITS } from './prepare-images.mjs';
 
 export function preparedMediaTarget(url) {
   const target = new URL(url);
@@ -84,7 +84,7 @@ export async function uploadPreparedMedia({ stage, url, metadata, adopt = {} }, 
           const info = await sharp(bytes, { animated: true, limitInputPixels: LIMITS.pixels }).metadata();
           const nativeHeight = info.pageHeight ?? info.height;
           const width = info.orientation >= 5 ? nativeHeight : info.width, height = info.orientation >= 5 ? info.width : nativeHeight;
-          requireImageFact(width === entry.output.width && height === entry.output.height && (info.pages ?? 1) === entry.output.frames, 'Stored image dimensions/frames differ');
+          requireImageFact(width === entry.output.width && height === entry.output.height && imageFrameCount(bytes, info) === entry.output.frames, 'Stored image dimensions/frames differ');
           requireImageFact((item.width == null || item.width === width) && (item.height == null || item.height === height), 'CMS dimension metadata differs from stored image');
         }
         receipt.entries[entry.path] = { status: 'verified', id, storageKey: key, sourceSHA256: entry.source.sha256, outputSHA256: entry.output.sha256, bytes: entry.output.bytes, width: entry.output.width, height: entry.output.height, metadata: values };
