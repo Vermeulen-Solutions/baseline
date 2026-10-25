@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-25",
+  "platform": "win32",
+  "node": "24.21.0",
+  "npm": "10.5.0",
+  "sourceBase": "874871141af693307ebbae1c6a6c65a05bf9b1a4",
+  "distributedReference": {
+    "path": ".agents/skills/new-site-workflow/references/site-maintenance.md",
+    "lfSHA256": "910308db3b647b547f3fbf4c74ee1a7a8f55341257f253798eec564f691db0bb"
+  },
+  "root": {
+    "doctor": { "exitCode": 0, "warning": "Windows launcher observability only; npm.cmd used." },
+    "skillValidation": { "exitCode": 0, "pythonUtf8Mode": true },
+    "verifyFast": { "exitCode": 0, "tests": 182, "failures": 0 },
+    "verify": { "exitCode": 0, "unitTests": 182, "rehearsalTests": 136, "failures": 0, "astroFiles": 53, "errors": 0, "warnings": 0, "hints": 0 },
+    "freshBuild": { "exitCode": 0, "advisory": "Existing client chunk-size warning over 500 kB." },
+    "htmlAudit": { "exitCode": 0, "htmlDocuments": 9, "publicSsrResponses": 10 }
+  },
+  "generatedProfiles": {
+    "exitCode": 0,
+    "static": { "independentInstall": true, "cleanNpmCi": true, "verify": "passed", "productionBuild": "passed", "fixtureBuild": "passed", "http": "passed", "cmsDatabasePackages": 0 },
+    "static-sveltia": { "independentInstall": true, "cleanNpmCi": true, "verify": "passed", "productionBuild": "passed", "fixtureBuild": "passed", "http": "passed", "cmsDatabasePackages": 0 },
+    "ownedTemporaryRootRemoved": true
+  },
+  "fixtureParentChecks": {
+    "verify": { "exitCode": 0, "tests": 40, "astroFiles": 35, "errors": 0, "warnings": 0, "hints": 0 },
+    "reviewedLoader": { "exitCode": 0, "cases": 11, "sourceRestored": true, "finalProductionBuildExitCode": 0 },
+    "frozenLoader": { "exitCode": 1, "reason": "Frozen null-rejection assumption exceeded the request's optional clearing requirement; see oracle-review.md.", "sourceRestored": true, "finalProductionBuildExitCode": 0 },
+    "browserBefore": { "exitCode": 0, "observations": 12, "chromium": "156.0.8078.4", "browserClosed": true, "previewStopped": true },
+    "browserAfter": { "exitCode": 0, "observations": 12, "referencePagesPreserved": true, "browserClosed": true, "previewStopped": true },
+    "preservation": { "originalFiles": 177, "byteUnchanged": 170, "changed": 7, "protectedUnchanged": 12 },
+    "workerPreview4378Listeners": 0
+  },
+  "cleanupGuidance": { "freshPlanningCheck": "passed", "runtimeImplementationUsedEarlierGuidance": true, "originalMechanismSwitch": "Workflow failure retained; identical deletion scope after blocked-by-policy refusal." },
+  "limits": ["No authenticated editor or provider acceptance", "No production deployment", "No general performance or productivity claim", "No clean security audit claim; unresolved Zod findings remain in issue 12"],
+  "logs": "Local ignored .emdash/checks/issue15-* files; no complete worker filesystem logs survive."
+}

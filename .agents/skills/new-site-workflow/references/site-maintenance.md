@@ -92,6 +92,13 @@ legacy entries and editor behavior for content work. Record failed attempts and
 remaining limits. A generated checklist, typecheck or build cannot establish
 all rendered, editor, provider or accessibility acceptance.
 
+If an approval or policy review rejects cleanup, keep the owned paths or process
+IDs and the exact rejection in the handoff. Continue independent permitted work.
+Retry only when a permitted change addresses the review's stated concern;
+switching shells or APIs alone does not address a rejection. Otherwise report
+cleanup as pending. Ordinary command errors, such as an unavailable executable,
+can use safe recovery within the task's existing authorization.
+
 If another session needs to continue, update the existing progress record with
 the requested outcome, changed paths, exact checks/results, pending decisions
 or acceptance, and the next executable action. Keep brief/design facts in their

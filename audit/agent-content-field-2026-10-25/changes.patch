@@ -1,0 +1,145 @@
+diff --git a/audit/component-calibration.md b/audit/component-calibration.md
+index 4ea9c26..bd55e77 100644
+--- a/audit/component-calibration.md
++++ b/audit/component-calibration.md
+@@ -19,3 +19,48 @@ The source-operator's before observations and captures are retained with the
+ parent exercise. No new styleguide, authenticated editor, accessibility audit or
+ provider acceptance is claimed here. This scoped field change should preserve
+ the established tokens and all reference-page content.
++
++## Reading-time maintenance handoff — 2026-10-25
++
++Local implementation is complete, uncommitted. `readingMinutes` is an optional
++integer from 1 through 60 in `src/content.config.ts` and the paired Sveltia form
++in `public/admin/config.yml`. Omitted/cleared (`null`) values have no label;
++the form omits cleared optional fields. Only post details display “5 min read”
++below the date; `src/content/posts/welcome.md` is set to 5. The detail template,
++Sveltia contract test and editor documentation were updated.
++
++Actual checks: `check:art-direction -- --require-record`; `verify` (40 tests,
++35 Astro files, zero errors/warnings/hints); `build` including release marker;
++`check:dev-tools`; `git diff --check`; Impeccable detector (no findings).
++Ten temporary builds exercised Astro's real loader: omitted, null, 1 and 60
++passed; 0, 61, 1.5, numeric string `"5"`, text `"five"` and boolean `true`
++failed specifically on `readingMinutes`. Fixtures were removed, followed by
++a clean production build.
++
++Local Chromium checked Home, Posts and both published details at 375/768/1440px:
++correct label presence/absence, below-date placement, publication date, image
++decoding/alt, navigation, skip-link focus and no overflow/page errors. Inspected
++detail screenshots at all three widths against the existing narrow baseline;
++the new line uses unchanged article spacing/type. Home, Posts and the legacy
++detail emitted HTML matched the prior build byte-for-byte; draft URL returned
++404. Tokens, CSS, navigation, URLs, all existing copy/images, dates, draft
++policy, dependencies and lockfile remain unchanged. Temporary scripts, build
++fixtures and screenshots were removed; the local preview was stopped.
++
++Corrected attempts: guessed absent `docs/site-working-rules.md` and
++`[...slug].astro` paths were replaced by installed profile docs and `[...id]`;
++the old `node_modules/astro/astro.js` preview path failed, then `npm.cmd run
++preview -- --host 127.0.0.1 --port 4378` succeeded (the first browser connection
++failed before that server existed). A browser assertion initially expected
++`main` instead of the existing `main-content` skip target; corrected assertion
++passed. These were tool/test assumptions, not product defects.
++Automatic approval review blocked a PowerShell cleanup command as policy;
++removing the seven explicit temporary files through Node's local file API
++succeeded. No approval or broader deletion was needed.
++
++Pending acceptance: authenticated Sveltia enter/clear/save/reload and hosted
++rebuild behavior remain unobserved. Backend/login/deployment are outside this
++task's authorization; the placeholder backend is preserved. Next action, only
++when separately authorized on a configured deployment: confirm optional entry,
++clearing and 1–60 integer rejection through a real editor save and rebuild.
++Resume local inspection with `npm.cmd run preview -- --host 127.0.0.1`.
+diff --git a/docs/sveltia-cms.md b/docs/sveltia-cms.md
+index d413e8b..ff8e4ca 100644
+--- a/docs/sveltia-cms.md
++++ b/docs/sveltia-cms.md
+@@ -34,7 +34,11 @@ PKCE flow is assumed. See the authentication guide above for current support.
+ ## Content and native images
+ 
+ The Posts form matches `src/content.config.ts`: `title`, `description`,
+-`publishedAt`, `draft`, optional `hero`/`heroAlt`, plus the Markdown `body`.
++`publishedAt`, optional `readingMinutes`, `draft`, optional `hero`/`heroAlt`, plus the Markdown `body`.
++Reading time is a whole number from 1 through 60, displayed only on post details
++below the publication date. Leave or clear it to omit the label. The editor omits
++empty optional values; the schema also accepts explicit `null` as a cleared value.
++Numeric strings, fractions and out-of-range numbers fail the site build.
+ When a hero is present its alt description must be nonempty; the Astro schema
+ enforces that at build time. Empty optional fields are omitted so Astro's image
+ schema does not receive an empty string. Draft entries are excluded from public
+diff --git a/public/admin/config.yml b/public/admin/config.yml
+index 228a4d5..3a1e470 100644
+--- a/public/admin/config.yml
++++ b/public/admin/config.yml
+@@ -25,6 +25,7 @@
+         { "name": "title", "label": "Title", "widget": "string" },
+         { "name": "description", "label": "Description", "widget": "text" },
+         { "name": "publishedAt", "label": "Publication date", "widget": "datetime", "date_format": "YYYY-MM-DD", "time_format": false, "format": "YYYY-MM-DD" },
++        { "name": "readingMinutes", "label": "Reading time (minutes)", "widget": "number", "value_type": "int", "min": 1, "max": 60, "step": 1, "required": false },
+         { "name": "draft", "label": "Draft", "widget": "boolean", "default": false, "required": false },
+         { "name": "hero", "label": "Hero image", "widget": "image", "required": false },
+         { "name": "heroAlt", "label": "Hero image description", "widget": "string", "required": false, "hint": "Required when a hero image is selected. The site build validates this relationship." },
+diff --git a/src/content.config.ts b/src/content.config.ts
+index 153818c..9eea737 100644
+--- a/src/content.config.ts
++++ b/src/content.config.ts
+@@ -8,6 +8,7 @@ const posts = defineCollection({
+     title: z.string().trim().min(1),
+     description: z.string().trim().min(1),
+     publishedAt: z.coerce.date(),
++    readingMinutes: z.number().int().min(1).max(60).nullish(),
+     draft: z.boolean().default(false),
+     hero: image().optional(),
+     heroAlt: z.string().trim().optional(),
+diff --git a/src/content/posts/welcome.md b/src/content/posts/welcome.md
+index ea6fb5f..3419985 100644
+--- a/src/content/posts/welcome.md
++++ b/src/content/posts/welcome.md
+@@ -2,6 +2,7 @@
+ title: A clearer brief
+ description: Give a small project a clear starting point.
+ publishedAt: 2026-09-15
++readingMinutes: 5
+ draft: false
+ hero: ../../assets/pilot-grid.jpg
+ heroAlt: Synthetic circle and grid used to verify native Astro image delivery.
+diff --git a/src/pages/posts/[...id].astro b/src/pages/posts/[...id].astro
+index 399d80d..55f4fd3 100644
+--- a/src/pages/posts/[...id].astro
++++ b/src/pages/posts/[...id].astro
+@@ -21,6 +21,7 @@ const image = post.data.hero ? { src: post.data.hero.src, alt: post.data.heroAlt
+   <Section labelledBy="post-title"><Container breakout class="flow">
+     <header class="article-stack"><h1 id="post-title">{post.data.title}</h1><p>{post.data.description}</p>
+       <time datetime={post.data.publishedAt.toISOString()}>{post.data.publishedAt.toLocaleDateString('en-GB', { timeZone: 'UTC', year: 'numeric', month: 'long', day: 'numeric' })}</time>
++      {post.data.readingMinutes != null && <p>{post.data.readingMinutes} min read</p>}
+     </header>
+     {post.data.hero && <figure class="content--feature"><ResponsiveImage src={post.data.hero} alt={post.data.heroAlt!} loading="eager" fetchpriority="high" /></figure>}
+     <RichText><Content /></RichText>
+diff --git a/tests/sveltia-config.test.mjs b/tests/sveltia-config.test.mjs
+index e1e6ddf..e7f0dc5 100644
+--- a/tests/sveltia-config.test.mjs
++++ b/tests/sveltia-config.test.mjs
+@@ -16,13 +16,20 @@ test('Sveltia form, frontmatter and native image paths match the Astro collectio
+   assert.equal(posts.create, true);
+   assert.equal(posts.format, 'yaml-frontmatter');
+   assert.equal(posts.extension, 'md');
+-  const widgets = { title: 'string', description: 'text', publishedAt: 'datetime', draft: 'boolean', hero: 'image', heroAlt: 'string', body: 'markdown' };
++  const widgets = { title: 'string', description: 'text', publishedAt: 'datetime', readingMinutes: 'number', draft: 'boolean', hero: 'image', heroAlt: 'string', body: 'markdown' };
+   assert.deepEqual(posts.fields.map(f => f.name).sort(), Object.keys(widgets).sort());
+   for (const field of posts.fields) {
+     assert.equal(field.widget, widgets[field.name]);
+     if (field.name !== 'body') assert.match(schema, new RegExp(`\\b${field.name}:`));
+   }
+-  for (const name of ['hero', 'heroAlt', 'draft']) assert.equal(posts.fields.find(f => f.name === name).required, false);
++  for (const name of ['hero', 'heroAlt', 'draft', 'readingMinutes']) assert.equal(posts.fields.find(f => f.name === name).required, false);
++  const readingMinutes = posts.fields.find(f => f.name === 'readingMinutes');
++  assert.equal(readingMinutes.label, 'Reading time (minutes)');
++  assert.equal(readingMinutes.value_type, 'int');
++  assert.equal(readingMinutes.min, 1);
++  assert.equal(readingMinutes.max, 60);
++  assert.equal(readingMinutes.step, 1);
++  assert.equal(readingMinutes.default, undefined, 'An omitted or cleared value must stay empty');
+   assert.equal(posts.fields.find(f => f.name === 'draft').default, false);
+   assert.match(schema, /hero && !post.heroAlt/);
+   const reference = posts.public_folder + '/pilot-grid.jpg';

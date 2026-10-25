@@ -1,0 +1,374 @@
+{
+  "phase": "after",
+  "platform": "win32",
+  "observations": [
+    {
+      "route": "/",
+      "width": 375,
+      "title": "Fieldnote Notes",
+      "text": "Notes for clearer teamwork\n\nShort, practical ideas for writing briefs and making team conversations useful.\n\nRecent Posts\nA clearer brief\n\nGive a small project a clear starting point.\n\nMake room in a check-in\n\nLeave space for questions and decisions.\n\nView all posts",
+      "geometry": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "images": [
+        {
+          "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+          "complete": true,
+          "width": 339
+        }
+      ],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    },
+    {
+      "route": "/posts/",
+      "width": 375,
+      "title": "Posts — Fieldnote Notes",
+      "text": "Posts\nA clearer brief\n\nGive a small project a clear starting point.\n\nMake room in a check-in\n\nLeave space for questions and decisions.",
+      "geometry": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "images": [
+        {
+          "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+          "complete": true,
+          "width": 339
+        }
+      ],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ],
+      "screenshot": "listing-375.png"
+    },
+    {
+      "route": "/posts/welcome/",
+      "width": 375,
+      "title": "A clearer brief — Fieldnote Notes",
+      "text": "A clearer brief\n\nGive a small project a clear starting point.\n\n15 September 2026\n\n5 min read\n\nStart with the outcome\n\nDescribe the change the project should make for the people using it.\n\nKeep the brief close to the work so the team can revisit its purpose as decisions change.\n\nThree useful questions\nWho needs the result?\nWhat should become easier?\nHow will the team recognize a useful outcome?\n\nA short brief can still make the important choices explicit.",
+      "geometry": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "images": [
+        {
+          "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+          "complete": true,
+          "width": 311
+        }
+      ],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ],
+      "screenshot": "detail-375.png"
+    },
+    {
+      "route": "/posts/check-ins/",
+      "width": 375,
+      "title": "Make room in a check-in — Fieldnote Notes",
+      "text": "Make room in a check-in\n\nLeave space for questions and decisions.\n\n1 September 2026\nMake the conversation useful\n\nAsk what needs attention, then make time for the answer.\n\nName decisions clearly and give each next step an owner.",
+      "geometry": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "images": [],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 768,
+      "title": "Fieldnote Notes",
+      "text": "Notes for clearer teamwork\n\nShort, practical ideas for writing briefs and making team conversations useful.\n\nRecent Posts\nA clearer brief\n\nGive a small project a clear starting point.\n\nMake room in a check-in\n\nLeave space for questions and decisions.\n\nView all posts",
+      "geometry": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "images": [
+        {
+          "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+          "complete": true,
+          "width": 345
+        }
+      ],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    },
+    {
+      "route": "/posts/",
+      "width": 768,
+      "title": "Posts — Fieldnote Notes",
+      "text": "Posts\nA clearer brief\n\nGive a small project a clear starting point.\n\nMake room in a check-in\n\nLeave space for questions and decisions.",
+      "geometry": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "images": [
+        {
+          "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+          "complete": true,
+          "width": 345
+        }
+      ],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    },
+    {
+      "route": "/posts/welcome/",
+      "width": 768,
+      "title": "A clearer brief — Fieldnote Notes",
+      "text": "A clearer brief\n\nGive a small project a clear starting point.\n\n15 September 2026\n\n5 min read\n\nStart with the outcome\n\nDescribe the change the project should make for the people using it.\n\nKeep the brief close to the work so the team can revisit its purpose as decisions change.\n\nThree useful questions\nWho needs the result?\nWhat should become easier?\nHow will the team recognize a useful outcome?\n\nA short brief can still make the important choices explicit.",
+      "geometry": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "images": [
+        {
+          "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+          "complete": true,
+          "width": 704
+        }
+      ],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    },
+    {
+      "route": "/posts/check-ins/",
+      "width": 768,
+      "title": "Make room in a check-in — Fieldnote Notes",
+      "text": "Make room in a check-in\n\nLeave space for questions and decisions.\n\n1 September 2026\nMake the conversation useful\n\nAsk what needs attention, then make time for the answer.\n\nName decisions clearly and give each next step an owner.",
+      "geometry": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "images": [],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "width": 1440,
+      "title": "Fieldnote Notes",
+      "text": "Notes for clearer teamwork\n\nShort, practical ideas for writing briefs and making team conversations useful.\n\nRecent Posts\nA clearer brief\n\nGive a small project a clear starting point.\n\nMake room in a check-in\n\nLeave space for questions and decisions.\n\nView all posts",
+      "geometry": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "images": [
+        {
+          "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+          "complete": true,
+          "width": 651
+        }
+      ],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    },
+    {
+      "route": "/posts/",
+      "width": 1440,
+      "title": "Posts — Fieldnote Notes",
+      "text": "Posts\nA clearer brief\n\nGive a small project a clear starting point.\n\nMake room in a check-in\n\nLeave space for questions and decisions.",
+      "geometry": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "images": [
+        {
+          "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+          "complete": true,
+          "width": 651
+        }
+      ],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ],
+      "screenshot": "listing-1440.png"
+    },
+    {
+      "route": "/posts/welcome/",
+      "width": 1440,
+      "title": "A clearer brief — Fieldnote Notes",
+      "text": "A clearer brief\n\nGive a small project a clear starting point.\n\n15 September 2026\n\n5 min read\n\nStart with the outcome\n\nDescribe the change the project should make for the people using it.\n\nKeep the brief close to the work so the team can revisit its purpose as decisions change.\n\nThree useful questions\nWho needs the result?\nWhat should become easier?\nHow will the team recognize a useful outcome?\n\nA short brief can still make the important choices explicit.",
+      "geometry": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "images": [
+        {
+          "alt": "Synthetic circle and grid used to verify native Astro image delivery.",
+          "complete": true,
+          "width": 800
+        }
+      ],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ],
+      "screenshot": "detail-1440.png"
+    },
+    {
+      "route": "/posts/check-ins/",
+      "width": 1440,
+      "title": "Make room in a check-in — Fieldnote Notes",
+      "text": "Make room in a check-in\n\nLeave space for questions and decisions.\n\n1 September 2026\nMake the conversation useful\n\nAsk what needs attention, then make time for the answer.\n\nName decisions clearly and give each next step an owner.",
+      "geometry": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "images": [],
+      "nav": [
+        {
+          "text": "Fieldnote Notes",
+          "href": "/"
+        },
+        {
+          "text": "Home",
+          "href": "/"
+        },
+        {
+          "text": "Posts",
+          "href": "/posts/"
+        }
+      ]
+    }
+  ],
+  "pageErrors": [],
+  "externalRequests": [],
+  "resource": {
+    "pid": 7740,
+    "browserClosed": true,
+    "serverStopped": true
+  },
+  "chromium": "156.0.8078.4",
+  "referencePagesPreserved": true,
+  "status": "pass"
+}

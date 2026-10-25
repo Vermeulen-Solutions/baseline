@@ -1,0 +1,99 @@
+{
+  "version": 1,
+  "date": "2026-10-25",
+  "sourceCommit": "874871141af693307ebbae1c6a6c65a05bf9b1a4",
+  "profile": "static-sveltia",
+  "fixture": "C:/dev/baseline-field-maintenance-20261025-run1",
+  "baselineCommit": "aac6e1a2f2065ecb4132d178c338897ddcb4ec8a",
+  "requestSHA256": "40762215715cf29a273eda26d93f8b38c39d511c5d5512a8c1921de9c54aa044",
+  "beforeHashesSHA256": "862651e31a044124a4a08e73d3bd3765517caa020c3017db120aeb20dad04e61",
+  "baseline": {
+    "tests": 40,
+    "astroFiles": 35,
+    "astroDiagnostics": 0,
+    "build": "passed",
+    "browserObservations": 12,
+    "widths": [
+      375,
+      768,
+      1440
+    ],
+    "sourceFiles": 177
+  },
+  "implementation": {
+    "freshContext": true,
+    "correctiveHints": false,
+    "task": "One optional readingMinutes field; no performance comparison."
+  },
+  "parentAcceptance": {
+    "valid": [
+      "omitted",
+      1,
+      60
+    ],
+    "invalid": [
+      0,
+      -1,
+      61,
+      1.5,
+      "5",
+      "five",
+      null
+    ],
+    "realAstroLoader": true,
+    "sveltia": {
+      "fieldName": "readingMinutes",
+      "widget": "number",
+      "required": false,
+      "valueType": "int",
+      "min": 1,
+      "max": 60,
+      "omitEmpty": true
+    },
+    "rendered": {
+      "value": 5,
+      "label": "5 min read",
+      "detailOnly": true,
+      "legacyOmission": true,
+      "draftExcluded": true,
+      "referencePagesPreserved": true
+    },
+    "protected": [
+      "src/styles/global.css",
+      "src/config/site.ts",
+      "src/lib/posts.ts",
+      "src/pages/index.astro",
+      "src/pages/posts/index.astro",
+      "src/content/posts/check-ins.md",
+      "src/content/posts/draft-planning.md",
+      "package.json",
+      "package-lock.json",
+      "AGENTS.md",
+      "baseline.config.json",
+      ".baseline/managed-files.json"
+    ],
+    "welcomeContent": "Only the requested field addition; existing frontmatter/body unchanged.",
+    "browser": {
+      "widths": [
+        375,
+        768,
+        1440
+      ],
+      "screenshots": true,
+      "overflow": false,
+      "images": "load",
+      "skipLink": "focuses main"
+    }
+  },
+  "limits": [
+    "Synthetic existing site",
+    "Instruction-scoped resources, not an enforced process/filesystem sandbox",
+    "No authenticated Sveltia save/clear/commit/rebuild certification",
+    "No new CLI or broad replay framework",
+    "One case cannot establish all profiles or general productivity"
+  ],
+  "operatorPreparationAttempts": [
+    "A gate invocation from the source cwd used an unsupported --root option and checked the source instead of the fixture; no source changes.",
+    "The first fixture record lane did not use an accepted named/custom prefix. Operator content preparation preceded the failed gate result being handled; the lane was corrected and all fixture checks rerun before freezing. These are preparation errors, not evaluating-agent outcomes."
+  ]
+}

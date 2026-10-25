@@ -14,3 +14,9 @@ audit/**/changes.patch -whitespace
 audit/agent-onboarding-2026-10-25/protocol.json text eol=lf
 audit/agent-onboarding-2026-10-25/prompts/*.md text eol=lf
 audit/agent-onboarding-2026-10-25/prepared-*.json text eol=lf
+# Frozen optional-field exercise inputs retain their recorded bytes.
+audit/agent-content-field-2026-10-25/protocol.json text eol=lf
+audit/agent-content-field-2026-10-25/request.md text eol=lf
+audit/agent-content-field-2026-10-25/cleanup-request.md text eol=lf
+audit/agent-content-field-2026-10-25/review-request.md text eol=lf
+audit/agent-content-field-2026-10-25/before/source-hashes.json text eol=lf
