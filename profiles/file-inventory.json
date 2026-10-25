@@ -144,6 +144,10 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/package-lock-evidence.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/audit-skills.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"

@@ -26,7 +26,8 @@
           "required": ["astro.config.mjs", "src/live.config.ts", "src/styles/global.css", "package-lock.json"],
           "properties": {
             "astro.config.mjs": { "$ref": "#/$defs/hashOrNull" }, "src/live.config.ts": { "$ref": "#/$defs/hashOrNull" },
-            "src/styles/global.css": { "$ref": "#/$defs/hashOrNull" }, "package-lock.json": { "$ref": "#/$defs/hashOrNull" }
+            "src/styles/global.css": { "$ref": "#/$defs/hashOrNull" }, "package-lock.json": { "$ref": "#/$defs/hashOrNull" },
+            "pnpm-lock.yaml": { "$ref": "#/$defs/hashOrNull" }
           }
         }
       }

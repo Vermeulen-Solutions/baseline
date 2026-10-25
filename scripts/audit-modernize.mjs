@@ -3,6 +3,7 @@ import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import { readTarget, readJSON, normalizedHash, sha256, gitRead, canonicalOutput, within } from './audit-evidence.mjs';
+import { packageLockEvidence } from './package-lock-evidence.mjs';
 
 class RecipeError extends Error {}
 
@@ -26,9 +27,9 @@ function workspace(root, allowedDirty = false) {
 }
 function candidate(root) {
   const input = readJSON(root, 'package.json');
-  const lock = readJSON(root, 'package-lock.json').data;
+  const lock = packageLockEvidence(root, input.data?.packageManager);
   if (!input.bytes || !input.data || !input.data.scripts || typeof input.data.scripts !== 'object' || Array.isArray(input.data.scripts)) throw new RecipeError('Readable package scripts required');
-  if (!/^7\.\d+\.\d+$/.test(lock?.packages?.['node_modules/astro']?.version ?? '') || !/^1\.\d+\.\d+$/.test(lock?.packages?.['node_modules/emdash']?.version ?? '')) throw new RecipeError('Recipe v1 supports Astro 7.x / EmDash 1.x source profiles only');
+  if (lock.status !== 'observed' || !/^7\.\d+\.\d+$/.test(lock.entries.get('astro')?.version ?? '') || lock.entries.get('astro')?.source !== 'registry' || !/^1\.\d+\.\d+$/.test(lock.entries.get('emdash')?.version ?? '') || lock.entries.get('emdash')?.source !== 'registry') throw new RecipeError('Recipe v1 supports locked registry Astro 7.x / EmDash 1.x source profiles only');
   const scripts = input.data.scripts;
   if (scripts.build !== 'astro build' || scripts['check:schema-budget'] !== 'node scripts/check-schema-budget.mjs') throw new RecipeError('Recipe requires the supported build and schema commands');
   const observedHelpers = {};
@@ -53,12 +54,12 @@ function candidate(root) {
     if (text.includes('\r\n')) next = next.replaceAll('\n', '\r\n');
     bytes = Buffer.from(next);
   }
-  return { beforeBytes: input.bytes, afterBytes: bytes, prebuildBefore: before, prebuildAfter: after, current, helperHashes: observedHelpers };
+  return { beforeBytes: input.bytes, afterBytes: bytes, prebuildBefore: before, prebuildAfter: after, current, helperHashes: observedHelpers, lockfile: lock.lockfile, lockfileSHA256: lock.sha256 };
 }
 function planHash(plan) { const { planId, ...payload } = plan; return sha256(JSON.stringify(payload)); }
 export function planModernization(root) {
   const state = workspace(root), update = candidate(state.target);
-  const plan = { schemaVersion: 1, recipe: RECIPE, targetId: sha256(process.platform === 'win32' ? state.target.toLowerCase() : state.target), revision: state.revision, branchSHA256: state.branchSHA256, helperHashes: update.helperHashes, packageBeforeSHA256: sha256(update.beforeBytes), packageAfterSHA256: sha256(update.afterBytes), prebuildBefore: update.prebuildBefore, prebuildAfter: update.prebuildAfter, operation: update.current ? 'already-current' : 'change' };
+  const plan = { schemaVersion: 1, recipe: RECIPE, targetId: sha256(process.platform === 'win32' ? state.target.toLowerCase() : state.target), revision: state.revision, branchSHA256: state.branchSHA256, helperHashes: update.helperHashes, lockfile: update.lockfile, lockfileSHA256: update.lockfileSHA256, packageBeforeSHA256: sha256(update.beforeBytes), packageAfterSHA256: sha256(update.afterBytes), prebuildBefore: update.prebuildBefore, prebuildAfter: update.prebuildAfter, operation: update.current ? 'already-current' : 'change' };
   return { ...plan, planId: planHash(plan) };
 }
 export function writePlan(plan, directory, root) {
@@ -84,7 +85,7 @@ export function runModernization(root, planFile, { rollback = false } = {}) {
   const targetId = sha256(process.platform === 'win32' ? state.target.toLowerCase() : state.target);
   if (plan.schemaVersion !== 1 || plan.recipe !== RECIPE || plan.planId !== planHash(plan) || plan.targetId !== targetId || plan.revision !== state.revision || plan.branchSHA256 !== state.branchSHA256) throw new RecipeError('Plan identity/revision/preconditions mismatch');
   const update = candidate(state.target), currentHash = sha256(update.beforeBytes);
-  if (JSON.stringify(plan.helperHashes) !== JSON.stringify(update.helperHashes)) throw new RecipeError('Plan identity/revision/preconditions mismatch');
+  if (JSON.stringify(plan.helperHashes) !== JSON.stringify(update.helperHashes) || plan.lockfile !== update.lockfile || plan.lockfileSHA256 !== update.lockfileSHA256) throw new RecipeError('Plan identity/revision/preconditions mismatch');
   const packageFile = path.join(state.target, 'package.json');
   if (plan.operation === 'already-current' && currentHash === plan.packageBeforeSHA256 && currentHash === plan.packageAfterSHA256) return { status: 'already-current', recipe: RECIPE, planId: plan.planId };
   const lock = path.join(directory, 'recipe.lock'), descriptor = fs.openSync(lock, 'wx');

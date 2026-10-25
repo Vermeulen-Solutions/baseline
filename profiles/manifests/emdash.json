@@ -29,6 +29,7 @@
     "scripts/audit-design-system.mjs",
     "scripts/audit-evidence.mjs",
     "scripts/audit-modernize.mjs",
+    "scripts/package-lock-evidence.mjs",
     "scripts/audit-report.mjs",
     "scripts/audit-runtime-evidence.mjs",
     "scripts/audit-site.mjs",
@@ -196,7 +197,8 @@
       "smol-toml",
       "@cloudflare/workers-types",
       "@emdash-cms/auth",
-      "ulidx"
+      "ulidx",
+      "yaml"
     ]
   },
   "pending": [

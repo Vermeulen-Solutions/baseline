@@ -272,6 +272,14 @@
       ],
       "versionSource": "package.json#/devDependencies/ulidx",
       "reason": "Explicit dependencies of the local scoped-token compatibility helper"
+    },
+    "yaml": {
+      "section": "devDependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/yaml",
+      "reason": "Bounded read-only parsing of downstream pnpm lockfiles in EmDash site audits"
     }
   }
 }

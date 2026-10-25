@@ -41,12 +41,13 @@ test('HTML auditor catches 404s, same-origin absolute links and broken anchors',
 
 test('HTML auditor checks delivered image metadata and ignores fake tags in raw text/comments', () => fixture({
   'index.html': `<!-- <img> --><script>const fake = '<img>';</script><style>/* <img> */</style><textarea><img></textarea>
-    <img width=320 height=200 alt="Photo > sunrise"><img style="aspect-ratio: 4 / 3" alt=Photo>
-    <img alt=Missing><img width=0 height=20 alt=Zero><img width=20 height=30 alt=" "><img style="aspect-ratio: 0" alt=Zero>`,
+    <img width=320 height=200 alt="Photo > sunrise"><img style="aspect-ratio: 4 / 3" alt=Photo><img width=20 height=10 alt="">
+    <img alt=Missing><img width=20 height=10><img width=0 height=20 alt=Zero><img width=20 height=30 alt=" "><img style="aspect-ratio: 0" alt=Zero>`,
 }, root => {
   const errors = auditHTMLIntegrity(root).errors;
   assert.equal(errors.filter(e => e.rule === 'image-dimensions').length, 3);
-  assert.equal(errors.filter(e => e.rule === 'image-alt').length, 1);
+  assert.equal(errors.filter(e => e.rule === 'image-alt').length, 2);
+  assert.ok(errors.some(e => e.rule === 'image-alt' && e.message.includes('alt=""')));
 }));
 
 test('HTML auditor validates JSON-LD syntax/context/types and canonical/OpenGraph URLs', () => fixture({
@@ -124,6 +125,18 @@ test('SSR snapshots capture and audit real responses, redirects, queries and 404
   const manifest = JSON.parse(fs.readFileSync(path.join(report.ssr.directory, '.ssr-snapshot.json'), 'utf8'));
   assert.ok(manifest.resources.some(r => r.url === '/sample/?view=full' && r.status === 200));
   assert.ok(manifest.resources.some(r => r.status === 404 && r.file));
+}));
+
+test('SSR query samples can be seeded explicitly and discovered query pages can be status-only', () => serverFixture(serverSource.replace("res.end(page('<h1 id=\"detail\">Sample</h1><a href=\"../#main\">Home</a>'));", "res.end(page('<h1 id=\"detail\">Sample</h1><a href=\"../#main\">Home</a><a href=\"/sample/?view=nested\">Nested query</a>'));"), async (root, artifact) => {
+  const report = await auditBuildIntegrity(artifact, { cwd: root, routes: ['/', '/sample/?view=cards'], queryLinkMode: 'status-only' });
+  assert.equal(report.valid, true, JSON.stringify(report.errors));
+  const manifest = JSON.parse(fs.readFileSync(path.join(report.ssr.directory, '.ssr-snapshot.json'), 'utf8'));
+  assert.ok(manifest.resources.some(resource => resource.url === '/sample/?view=full' && resource.status === 200));
+  assert.ok(manifest.resources.some(resource => resource.url === '/sample/?view=cards' && resource.status === 200));
+  assert.ok(manifest.resources.some(resource => resource.url === '/sample/?view=nested' && resource.status === 200 && !resource.file));
+  const cli = fileURLToPath(new URL('../scripts/audit-html-integrity.mjs', import.meta.url));
+  const command = spawnSync(process.execPath, [cli, artifact, '--route', '/', '--route', '/sample/?view=cards', '--query-link-mode', 'status-only', '--timeout-ms', '10000'], { cwd: root, encoding: 'utf8' });
+  assert.equal(command.status, 0, command.stderr);
 }));
 
 test('SSR audit detects rendered broken links, anchors, image dimensions and malformed JSON-LD', () => serverFixture(serverSource.replace('process.env.SNAPSHOT_BROKEN', 'true'), async (root, artifact) => {
