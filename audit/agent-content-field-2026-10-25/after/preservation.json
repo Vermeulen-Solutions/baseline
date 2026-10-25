@@ -1,0 +1,102 @@
+{
+  "status": "pass",
+  "beforeFiles": 177,
+  "unchangedFiles": 170,
+  "changed": [
+    "audit/component-calibration.md",
+    "docs/sveltia-cms.md",
+    "public/admin/config.yml",
+    "src/content.config.ts",
+    "src/content/posts/welcome.md",
+    "src/pages/posts/[...id].astro",
+    "tests/sveltia-config.test.mjs"
+  ],
+  "missing": [],
+  "protectedFiles": 12,
+  "welcomePreservation": "Only requested field line added; other frontmatter/body identical after LF normalization.",
+  "form": {
+    "backend": {
+      "name": "github",
+      "repo": "YOUR_GITHUB_OWNER/YOUR_REPOSITORY",
+      "branch": "main"
+    },
+    "media_folder": "src/assets",
+    "public_folder": "/src/assets",
+    "output": {
+      "omit_empty_optional_fields": true,
+      "encode_file_path": true
+    },
+    "collections": [
+      {
+        "name": "posts",
+        "label": "Posts",
+        "folder": "src/content/posts",
+        "create": true,
+        "extension": "md",
+        "format": "yaml-frontmatter",
+        "slug": "{{slug}}",
+        "media_folder": "/src/assets",
+        "public_folder": "../../assets",
+        "fields": [
+          {
+            "name": "title",
+            "label": "Title",
+            "widget": "string"
+          },
+          {
+            "name": "description",
+            "label": "Description",
+            "widget": "text"
+          },
+          {
+            "name": "publishedAt",
+            "label": "Publication date",
+            "widget": "datetime",
+            "date_format": "YYYY-MM-DD",
+            "time_format": false,
+            "format": "YYYY-MM-DD"
+          },
+          {
+            "name": "readingMinutes",
+            "label": "Reading time (minutes)",
+            "widget": "number",
+            "value_type": "int",
+            "min": 1,
+            "max": 60,
+            "step": 1,
+            "required": false
+          },
+          {
+            "name": "draft",
+            "label": "Draft",
+            "widget": "boolean",
+            "default": false,
+            "required": false
+          },
+          {
+            "name": "hero",
+            "label": "Hero image",
+            "widget": "image",
+            "required": false
+          },
+          {
+            "name": "heroAlt",
+            "label": "Hero image description",
+            "widget": "string",
+            "required": false,
+            "hint": "Required when a hero image is selected. The site build validates this relationship."
+          },
+          {
+            "name": "body",
+            "label": "Body",
+            "widget": "markdown"
+          }
+        ]
+      }
+    ]
+  },
+  "cmsDatabasePackages": 0,
+  "sourceCommit": "874871141af693307ebbae1c6a6c65a05bf9b1a4",
+  "fixtureBaselineCommit": "aac6e1a2f2065ecb4132d178c338897ddcb4ec8a",
+  "retainedFixture": "C:/dev/baseline-field-maintenance-20261025-run1"
+}

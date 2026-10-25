@@ -92,6 +92,13 @@ legacy entries and editor behavior for content work. Record failed attempts and
 remaining limits. A generated checklist, typecheck or build cannot establish
 all rendered, editor, provider or accessibility acceptance.
 
+If a tool refuses cleanup, keep the owned paths or process IDs and the exact
+refusal reason in the handoff. Continue independent work that remains permitted.
+A retry must address the stated concern through a narrower permitted action;
+switching shells or APIs for the same removal does not resolve a refusal. When
+no such action is available, report cleanup as pending instead of claiming it
+completed or repeatedly retrying it.
+
 If another session needs to continue, update the existing progress record with
 the requested outcome, changed paths, exact checks/results, pending decisions
 or acceptance, and the next executable action. Keep brief/design facts in their

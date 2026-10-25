@@ -1,0 +1,100 @@
+{
+  "reviewer": "parent-operated real Astro build boundary checks",
+  "oracle": "Reviewed optional-field clearing semantics; see oracle-review.md",
+  "cases": [
+    {
+      "name": "omitted",
+      "valid": true,
+      "exitCode": 0,
+      "renderedLabels": [],
+      "status": "pass"
+    },
+    {
+      "name": "lower",
+      "value": 1,
+      "valid": true,
+      "exitCode": 0,
+      "renderedLabels": [
+        "1 min read"
+      ],
+      "status": "pass"
+    },
+    {
+      "name": "upper",
+      "value": 60,
+      "valid": true,
+      "exitCode": 0,
+      "renderedLabels": [
+        "60 min read"
+      ],
+      "status": "pass"
+    },
+    {
+      "name": "zero",
+      "value": 0,
+      "valid": false,
+      "exitCode": 1,
+      "errorExcerpt": "[InvalidContentEntryDataError] posts → welcome data does not match collection schema.\n  readingMinutes: Too small: expected number to be >=1\n    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+      "status": "pass"
+    },
+    {
+      "name": "negative",
+      "value": -1,
+      "valid": false,
+      "exitCode": 1,
+      "errorExcerpt": "[InvalidContentEntryDataError] posts → welcome data does not match collection schema.\n  readingMinutes: Too small: expected number to be >=1\n    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+      "status": "pass"
+    },
+    {
+      "name": "above",
+      "value": 61,
+      "valid": false,
+      "exitCode": 1,
+      "errorExcerpt": "[InvalidContentEntryDataError] posts → welcome data does not match collection schema.\n  readingMinutes: Too big: expected number to be <=60\n    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+      "status": "pass"
+    },
+    {
+      "name": "fraction",
+      "value": 1.5,
+      "valid": false,
+      "exitCode": 1,
+      "errorExcerpt": "[InvalidContentEntryDataError] posts → welcome data does not match collection schema.\n  readingMinutes**: **readingMinutes: Expected type `\"int\"`, received `\"number\"`\n    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+      "status": "pass"
+    },
+    {
+      "name": "numeric-string",
+      "value": "5",
+      "valid": false,
+      "exitCode": 1,
+      "errorExcerpt": "[InvalidContentEntryDataError] posts → welcome data does not match collection schema.\n  readingMinutes**: **readingMinutes: Expected type `\"number\"`, received `\"string\"`\n    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+      "status": "pass"
+    },
+    {
+      "name": "text",
+      "value": "five",
+      "valid": false,
+      "exitCode": 1,
+      "errorExcerpt": "[InvalidContentEntryDataError] posts → welcome data does not match collection schema.\n  readingMinutes**: **readingMinutes: Expected type `\"number\"`, received `\"string\"`\n    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+      "status": "pass"
+    },
+    {
+      "name": "null",
+      "value": null,
+      "valid": true,
+      "exitCode": 0,
+      "renderedLabels": [],
+      "status": "pass"
+    },
+    {
+      "name": "empty-string",
+      "value": "",
+      "valid": false,
+      "exitCode": 1,
+      "errorExcerpt": "[InvalidContentEntryDataError] posts → welcome data does not match collection schema.\n  readingMinutes**: **readingMinutes: Expected type `\"number\"`, received `\"string\"`\n    https://docs.astro.build/en/reference/errors/invalid-content-entry-data-error/",
+      "status": "pass"
+    }
+  ],
+  "sourceRestored": true,
+  "status": "pass",
+  "finalBuildExitCode": 0
+}

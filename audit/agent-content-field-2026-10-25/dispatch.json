@@ -1,0 +1,14 @@
+{
+  "implementationAgent": "/root/content_field_implementation",
+  "implementationContext": "fresh, fork_turns none; saved request and generated existing-site fixture only",
+  "sourceCommit": "874871141af693307ebbae1c6a6c65a05bf9b1a4",
+  "fixtureBaselineCommit": "aac6e1a2f2065ecb4132d178c338897ddcb4ec8a",
+  "protocolSHA256": "79de11662da4b35f960bfe3317b653706d01c0624cc2f000898948e63630b453",
+  "requestSHA256": "40762215715cf29a273eda26d93f8b38c39d511c5d5512a8c1921de9c54aa044",
+  "correctiveImplementationHints": false,
+  "cleanupAgent": "/root/cleanup_handoff_check",
+  "cleanupContext": "fresh, fork_turns none; planning-only refusal transcript and revised reference",
+  "cleanupRequestSHA256": "4951d0d4fc2b19234ab9a932eb2a09d57eeee60256b5b8614a0b0c0f39c21205",
+  "revisedReferenceLFSHA256": "910308db3b647b547f3fbf4c74ee1a7a8f55341257f253798eec564f691db0bb",
+  "limits": "Resource access was scoped by instruction, not an enforced filesystem/process sandbox. No runtime/model/token-cost comparison."
+}
