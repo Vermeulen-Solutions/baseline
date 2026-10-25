@@ -104,6 +104,9 @@
     "baseline:inspect",
     "media:prepare"
   ],
+  "scriptOverrides": {
+    "lint": "npm run lint:scripts && npm run lint:templates"
+  },
   "checks": [
     "lint",
     "check:css",
