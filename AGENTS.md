@@ -102,6 +102,8 @@ for direction, implementation and rendered critique.
   Render editorial content through RichText. A seed is not a content migration.
 - Preserve navigation when adding routes, and use 301 redirects when renaming or
   removing existing public routes. Code deployment does not transfer CMS records/media.
+- Write documentation with unwrapped paragraphs (soft-wrapped / one line per paragraph)
+  or semantic line breaks; avoid artificial hard-wrapping at 80 columns.
 - Before changing the relevant behavior, read the task reference below. Detailed
   rules remain required for their scope; they are not optional suggestions.
 

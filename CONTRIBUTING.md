@@ -87,6 +87,9 @@ and npx.cmd. These launchers avoid execution-policy friction.
    editor/HTTP checks. Updating reference images requires explicit --update,
    reviewed PNG/manifest differences and an explanation. Never update goldens to
    hide an unexplained failure.
+6. Author Markdown documentation in `docs/` with unwrapped paragraphs (soft-wrapped /
+   one line per paragraph) or semantic line breaks rather than hard wrapping at
+   80 columns. `npm run check:docs` verifies documentation formatting.
 
 Set up the supplemental local Git hook once with `npm run setup:hooks`; it runs
 doctor and verify:fast, preserves existing hook managers and does not replace the

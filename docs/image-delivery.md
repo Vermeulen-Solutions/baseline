@@ -1,12 +1,6 @@
 # Native image delivery
 
-Before adding incoming images during initial creation or day-2 maintenance, use
-the general [media preparation workflow](media-preparation.md). It creates
-appropriately sized stored copies with Sharp before Media Library upload or
-static asset integration. Full-size source archives stay outside the library
-and Git. The delivery tools below then generate responsive versions from those
-stored images. The WordPress attachment workflow later in this guide remains
-specific to migration relationships and ingestion.
+Before adding incoming images during initial creation or day-2 maintenance, use the general [media preparation workflow](media-preparation.md). It creates appropriately sized stored copies with Sharp before Media Library upload or static asset integration. Full-size source archives stay outside the library and Git. The delivery tools below then generate responsive versions from those stored images. The WordPress attachment workflow later in this guide remains specific to migration relationships and ingestion.
 
 Use Astro `Image`, `Picture` or `getImage` rather than preparing a parallel set of rendition files. This starter's `ResponsiveImage` wraps `getImage` for photographic sources, source-width limits and browser fallback. It preserves originals smaller than 800 pixels and produces quality-90 WebP candidates for larger sources. `optimize={false}` retains original artwork/animated media. No resizing can restore detail absent from the source.
 
@@ -121,11 +115,7 @@ node --test tests/media-infrastructure.test.mjs
 node scripts/rehearse-infrastructure.mjs --out audit/phase-5-2026-10-16/new-rehearsal
 ```
 
-The media wrappers reject unknown arguments and do not implement `--help`.
-Use the explicit modes/flags above; `--apply-local` takes `--stage` and `--url`,
-not the inventory's `--manifest` or an `--uploads` path. Preparation/staging
-outputs stay under ignored `.emdash/backups/`; only identical preparation can
-resume into an existing stage.
+The media wrappers reject unknown arguments and do not implement `--help`. Use the explicit modes/flags above; `--apply-local` takes `--stage` and `--url`, not the inventory's `--manifest` or an `--uploads` path. Preparation/staging outputs stay under ignored `.emdash/backups/`; only identical preparation can resume into an existing stage.
 
 The runtime rehearsal is local-only and refuses CI. All Cloudflare transports are simulated; only a newly created loopback CMS is contacted. Run the full unit suite, typecheck and normal build before rollout. Real Worker/D1/R2 quotas, endpoint access, custom storage and post-build hosted media optimization still need separately authorized cloud acceptance.
 

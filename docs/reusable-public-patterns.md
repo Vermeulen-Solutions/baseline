@@ -4,15 +4,7 @@ These are neutral infrastructure, not a client theme. Choose brand tokens and a 
 
 ## Native structural composition
 
-Compose open-slot `Disclosure`, `Cluster` and `Sidebar` alongside `Section`,
-`Container`, `Grid` and `Card`. Disclosure delegates toggling, grouping and
-closed-content focus exclusion to native details/summary; Cluster wraps children,
-and Sidebar preserves main-first DOM order while adapting to its host's width.
-See [native composition](native-composition.md) for exact slots and semantic
-limits. Both foundations run the same production specimens; Markdown and
-Portable Text remain platform-owned. Existing sites follow the explicit
-[architecture upgrade](architecture-hardening-upgrade.md) before adopting shared
-specimens that import new paths.
+Compose open-slot `Disclosure`, `Cluster` and `Sidebar` alongside `Section`, `Container`, `Grid` and `Card`. Disclosure delegates toggling, grouping and closed-content focus exclusion to native details/summary; Cluster wraps children, and Sidebar preserves main-first DOM order while adapting to its host's width. See [native composition](native-composition.md) for exact slots and semantic limits. Both foundations run the same production specimens; Markdown and Portable Text remain platform-owned. Existing sites follow the explicit [architecture upgrade](architecture-hardening-upgrade.md) before adopting shared specimens that import new paths.
 
 ## Responsive media
 

@@ -59,9 +59,8 @@ Delta changes must be identified and reconciled deliberately using export snapsh
    ```sh
    npm run migration:verify -- --scope full --manifest audit/url-inventory.json
    ```
-   All required checks must pass (exit `0`) before proceeding to DNS switchover.
-5. **Acquire Pre-Cutover Backup Snapshot:**
-   For Node.js + SQLite deployments, acquire a verified SQLite backup via `.backup` or `VACUUM INTO` and archive current media and configuration per [Node.js Backup & Recovery](node-backup-restore.md). For Cloudflare, enforce the bookmark/media/key gate and setup-status, scheduler and cache-parity acceptance in [edge lifecycle](edge-cache-lifecycle.md).
+All required checks must pass (exit `0`) before proceeding to DNS switchover.
+5. **Acquire Pre-Cutover Backup Snapshot:** For Node.js + SQLite deployments, acquire a verified SQLite backup via `.backup` or `VACUUM INTO` and archive current media and configuration per [Node.js Backup & Recovery](node-backup-restore.md). For Cloudflare, enforce the bookmark/media/key gate and setup-status, scheduler and cache-parity acceptance in [edge lifecycle](edge-cache-lifecycle.md).
 
 ---
 

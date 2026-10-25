@@ -3,8 +3,7 @@
 This runbook defines backup acquisition, retention policy, and isolated restore drills for production EmDash sites running on the **Node.js + SQLite** foundation.
 
 > [!NOTE]
-> **Static Platform Profiles (`static` and `static-sveltia`):**
-> Static profiles store all content as Git-owned Markdown files and deploy to static hosts. For those profiles, Git commits and host deployment history provide disaster recovery. This runbook applies to the **EmDash Node.js + SQLite** profile.
+> **Static Platform Profiles (`static` and `static-sveltia`):** Static profiles store all content as Git-owned Markdown files and deploy to static hosts. For those profiles, Git commits and host deployment history provide disaster recovery. This runbook applies to the **EmDash Node.js + SQLite** profile.
 
 ---
 
@@ -29,8 +28,7 @@ Backup Bundle (YYYY-MM-DD-HHMM)
 ## 2. Safe SQLite Backup Acquisition
 
 > [!CAUTION]
-> **Never copy `data.db` directly while the Node process is running!**  
-> SQLite operates in WAL (Write-Ahead Logging) mode. When active, pending writes reside in `data.db-wal` and shared memory in `data.db-shm`. Running a naive file copy (`cp data.db backup.db`) produces a corrupted or torn database.
+> **Never copy `data.db` directly while the Node process is running!** SQLite operates in WAL (Write-Ahead Logging) mode. When active, pending writes reside in `data.db-wal` and shared memory in `data.db-shm`. Running a naive file copy (`cp data.db backup.db`) produces a corrupted or torn database.
 
 ### Supported Acquisition Methods
 

@@ -164,26 +164,11 @@ Nested list indentation, list-item rhythm and internal quote paragraphs are boun
 
 ## 6. Agent-First Token Calibration & WCAG Contrast Audit (`npm run design:tokens`)
 
-Start `npm run dev` and use its **Component calibration** path on the local origin
-printed by Astro. The path follows `base` and `trailingSlash`: generated static
-sites default to `/_styleguide/`, whose slashless variant returns 404. EmDash's
-default accepts `/_styleguide`. A release preview intentionally returns 404;
-use development or `npm run fixtures:build` followed by `npm run fixtures:serve`
-for calibration. Do not rebuild fixtures merely to recover from a missing slash.
+Start `npm run dev` and use its **Component calibration** path on the local origin printed by Astro. The path follows `base` and `trailingSlash`: generated static sites default to `/_styleguide/`, whose slashless variant returns 404. EmDash's default accepts `/_styleguide`. A release preview intentionally returns 404; use development or `npm run fixtures:build` followed by `npm run fixtures:serve` for calibration. Do not rebuild fixtures merely to recover from a missing slash.
 
-`npm run verify` continues to audit the installed site's real tokens, contrast,
-font loading, edit targets and source contracts after `--init-client`. Algorithm
-tests use fixed neutral specimens and synthetic exception lists; profile-generator
-rehearsals use a separate synthetic source. They do not restore starter exemptions
-or neutral colours in the client site. The production generator still refuses
-unreviewed source bytes.
+`npm run verify` continues to audit the installed site's real tokens, contrast, font loading, edit targets and source contracts after `--init-client`. Algorithm tests use fixed neutral specimens and synthetic exception lists; profile-generator rehearsals use a separate synthetic source. They do not restore starter exemptions or neutral colours in the client site. The production generator still refuses unreviewed source bytes.
 
-Byte-bound migration fixtures use LF checkouts through `.gitattributes`, keeping
-their reviewed hashes and reports unchanged on Windows. This does not rewrite
-files already checked out as CRLF. If updating an older checkout, inspect
-`git ls-files --eol tests/fixtures` and preserve local fixture edits before using
-a fresh checkout with the new attributes. Do not rebaseline evidence hashes to
-make a line-ending error pass.
+Byte-bound migration fixtures use LF checkouts through `.gitattributes`, keeping their reviewed hashes and reports unchanged on Windows. This does not rewrite files already checked out as CRLF. If updating an older checkout, inspect `git ls-files --eol tests/fixtures` and preserve local fixture edits before using a fresh checkout with the new attributes. Do not rebaseline evidence hashes to make a line-ending error pass.
 
 Baseline treats `src/styles/global.css` as the single source of truth for tokens, backed by an automated CLI engine (`scripts/design-system.mjs`) and live Vite HMR on `/_styleguide`:
 
@@ -192,7 +177,7 @@ Baseline treats `src/styles/global.css` as the single source of truth for tokens
    npm run design:tokens -- --list-lanes
    npm run design:tokens -- --lane editorial-paper --write
    ```
-   Available presets: `neutral`, `technical-systems`, `product-led-minimalism`, `editorial-paper`, and `luminous-futurism`.
+Available presets: `neutral`, `technical-systems`, `product-led-minimalism`, `editorial-paper`, and `luminous-futurism`.
 2. **Generate parametric fluid scales or WCAG-safe OKLCH brand palettes:**
    ```sh
    # Derive all --text-step-* and --spacing-* fluid clamp() tokens from mathematical ratios
@@ -210,7 +195,7 @@ Baseline treats `src/styles/global.css` as the single source of truth for tokens
    npm run design:tokens -- --write-calibration
    npm run test:design
    ```
-   This directly parses `src/styles/global.css`, verifies 14 WCAG contrast pairs across default, dark and restored-light contexts (including 4.5:1 text-link gates), checks fluid `clamp()` bounds, confirms `/_styleguide` swatch and `src/` consumer coverage, and writes a deterministic `## Token Calibration` section (bound to the LF-normalised SHA-256 of `src/styles/global.css`) into `audit/component-calibration.md`.
+This directly parses `src/styles/global.css`, verifies 14 WCAG contrast pairs across default, dark and restored-light contexts (including 4.5:1 text-link gates), checks fluid `clamp()` bounds, confirms `/_styleguide` swatch and `src/` consumer coverage, and writes a deterministic `## Token Calibration` section (bound to the LF-normalised SHA-256 of `src/styles/global.css`) into `audit/component-calibration.md`.
 
 ---
 
@@ -222,8 +207,7 @@ Core routes, collections, and long-form articles should use Baseline's zero-JS A
    ```sh
    npm install @perkyzz/emvb
    ```
-2. **Register in `astro.config.mjs` and pass `canvasStyles`:**
-   Pass your global stylesheet so the EmVB editor iframe and rendered blocks inherit Baseline's typography and CSS custom properties:
+2. **Register in `astro.config.mjs` and pass `canvasStyles`:** Pass your global stylesheet so the EmVB editor iframe and rendered blocks inherit Baseline's typography and CSS custom properties:
    ```js
    import { emvb } from "@perkyzz/emvb";
 
@@ -244,8 +228,7 @@ Core routes, collections, and long-form articles should use Baseline's zero-JS A
      <!-- Standard Astro template fallback -->
    )}
    ```
-4. **Synchronize tokens via MCP (`@perkyzz/emvb-mcp`):**
-   Agents can use `emvb_get_styles` and `emvb_update_styles` to align EmVB's site-styles palette and fluid typography scale with the OKLCH and `clamp()` tokens defined in `src/styles/global.css`.
+4. **Synchronize tokens via MCP (`@perkyzz/emvb-mcp`):** Agents can use `emvb_get_styles` and `emvb_update_styles` to align EmVB's site-styles palette and fluid typography scale with the OKLCH and `clamp()` tokens defined in `src/styles/global.css`.
 ## 8. Contextual spacing maintenance
 
 CSS remains the configuration source. Four regular `:root` aliases select the existing spacing scales: `--layout-section-padding`, `--layout-container-gap`, `--layout-content-gap`, and `--layout-grid-gap`. They are not additional Tailwind scales. Regional selectors can override these aliases intentionally; primitive modes and gap props apply locally.

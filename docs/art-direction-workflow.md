@@ -27,7 +27,7 @@ See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md) and
 
 ## 2. The Art Direction Record
 
-Before writing site-specific CSS or template markup, save an `## Art Direction Record` in `AGENTS.md`. 
+Before writing site-specific CSS or template markup, save an `## Art Direction Record` in `AGENTS.md`.
 
 The record must contain five specific elements:
 
@@ -99,7 +99,4 @@ npm run check:art-direction -- --require-record
 - **In CI Pipelines:** Automated CI runs `check:art-direction` against git commits. Commits that add visual CSS or templates under `src/` or `public/` without a valid Art Direction Record in `AGENTS.md` are automatically flagged.
 - **Exceptions:** Pure infrastructure changes or starter maintenance can be registered as hash-bound exceptions in `audit/design-gate-exceptions.json`.
 
-The pre-implementation order is an agent/developer instruction in `AGENTS.md`.
-CLI and CI inspect outcomes; they cannot prove the record existed before an
-edit, prevent writes, or establish human approval or visual quality. Saving the
-record means writing it to disk and does not require a commit.
+The pre-implementation order is an agent/developer instruction in `AGENTS.md`. CLI and CI inspect outcomes; they cannot prove the record existed before an edit, prevent writes, or establish human approval or visual quality. Saving the record means writing it to disk and does not require a commit.

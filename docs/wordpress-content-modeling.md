@@ -6,44 +6,16 @@ Baseline provides a structured methodology to turn that legacy sprawl into a cle
 
 ## EmDash 1.3 importer behavior
 
-Use EmDash's supported WordPress importer at `/_emdash/admin/import/wordpress`;
-Baseline does not ship a `scripts/migrate-wordpress.mjs` wrapper. Keep the source
-export, reviewed analysis/mappings and a target backup before importing. The
-following behavior is supplied by EmDash 1.3, not a custom Baseline migration:
+Use EmDash's supported WordPress importer at `/_emdash/admin/import/wordpress`; Baseline does not ship a `scripts/migrate-wordpress.mjs` wrapper. Keep the source export, reviewed analysis/mappings and a target backup before importing. The following behavior is supplied by EmDash 1.3, not a custom Baseline migration:
 
-- **ACF internal post types:** WXR imports skip `acf_field` and `acf_field_group`.
-  They are field definitions, not editorial collections. Audit accidental
-  collections from older imports before removing them; check dependencies and
-  preserve backups rather than automatically deleting anything.
-- **Imported links:** links to the source WordPress domain become root-relative
-  paths while retaining the source permalink structure. `/2024/05/example/` is
-  not automatically mapped to a new `/news/example/` route. Maintain an explicit
-  redirect/URL register and test links, fragments, queries and locale destinations
-  on representative imported content. Rewriting a URL is not media-byte transfer.
-- **Exporter ACF values:** the EmDash Exporter can import matching ACF fields;
-  repeaters, groups and relationships arrive as JSON. Relationship, post-object,
-  user and taxonomy values retain IDs rather than nested records. Treat this as
-  preservation input for the candidate register and normalized target model,
-  not proof that native relations have been modeled. Older over-expanded JSON
-  needs a reviewed repair; re-importing skips existing entries and will not fix it.
-- **Cloudflare challenges:** a challenged source returns `WP_SITE_CHALLENGE`
-  (HTTP 502) with an actionable explanation. Challenges on taxonomy/menu/settings/
-  media-list requests stop the import rather than silently producing an incomplete
-  site. Fix access for the authorized migration client using narrowly scoped source
-  protection rules, or use the supported offline WXR path. Retry analysis and
-  reconcile counts before execution; never classify a challenge as an empty source.
-- **Dynamic blocks:** unsupported server-rendered blocks can survive as HTML
-  placeholders containing the original block comments. They render no public
-  content until deliberately rebuilt; count and classify them during acceptance.
-- **Fidelity & Acceptance Matrix:** Consult the [WordPress Importer Fidelity Matrix](importer-fidelity-matrix.md)
-  for runtime-verified behavior on blocks, galleries, SEO overrides, and guest bylines.
-  Verify migrations programmatically with [Migration Acceptance](migration-acceptance.md),
-  [Content Inventories](migration-content-inventories.md), and the [Migration Cutover Runbook](migration-cutover.md).
+- **ACF internal post types:** WXR imports skip `acf_field` and `acf_field_group`. They are field definitions, not editorial collections. Audit accidental collections from older imports before removing them; check dependencies and preserve backups rather than automatically deleting anything.
+- **Imported links:** links to the source WordPress domain become root-relative paths while retaining the source permalink structure. `/2024/05/example/` is not automatically mapped to a new `/news/example/` route. Maintain an explicit redirect/URL register and test links, fragments, queries and locale destinations on representative imported content. Rewriting a URL is not media-byte transfer.
+- **Exporter ACF values:** the EmDash Exporter can import matching ACF fields; repeaters, groups and relationships arrive as JSON. Relationship, post-object, user and taxonomy values retain IDs rather than nested records. Treat this as preservation input for the candidate register and normalized target model, not proof that native relations have been modeled. Older over-expanded JSON needs a reviewed repair; re-importing skips existing entries and will not fix it.
+- **Cloudflare challenges:** a challenged source returns `WP_SITE_CHALLENGE` (HTTP 502) with an actionable explanation. Challenges on taxonomy/menu/settings/ media-list requests stop the import rather than silently producing an incomplete site. Fix access for the authorized migration client using narrowly scoped source protection rules, or use the supported offline WXR path. Retry analysis and reconcile counts before execution; never classify a challenge as an empty source.
+- **Dynamic blocks:** unsupported server-rendered blocks can survive as HTML placeholders containing the original block comments. They render no public content until deliberately rebuilt; count and classify them during acceptance.
+- **Fidelity & Acceptance Matrix:** Consult the [WordPress Importer Fidelity Matrix](importer-fidelity-matrix.md) for runtime-verified behavior on blocks, galleries, SEO overrides, and guest bylines. Verify migrations programmatically with [Migration Acceptance](migration-acceptance.md), [Content Inventories](migration-content-inventories.md), and the [Migration Cutover Runbook](migration-cutover.md).
 
-See the [1.3 release notes](https://github.com/emdash-cms/emdash/releases/tag/emdash%401.3.0)
-and [official migration guide](https://docs.emdashcms.com/migration/from-wordpress/).
-These operations apply to the `emdash` profile. Static profiles need their own
-reviewed extraction into native file collections.
+See the [1.3 release notes](https://github.com/emdash-cms/emdash/releases/tag/emdash%401.3.0) and [official migration guide](https://docs.emdashcms.com/migration/from-wordpress/). These operations apply to the `emdash` profile. Static profiles need their own reviewed extraction into native file collections.
 
 ---
 
@@ -153,10 +125,7 @@ npm run media:migrate-wp -- --prepare --source ./wp-uploads --source-id legacy-s
 npm run media:migrate-wp -- --apply-local --stage .emdash/backups/wp-prepared-001 --url http://127.0.0.1:4321
 ```
 
-The metadata file must use the reviewed `metadataVersion: 1` attachment format
-in [Native Image Delivery](image-delivery.md), not an arbitrary WordPress export.
-Use the actual local URL printed by Astro. Every output directory must be new;
-`--resume` applies only to an identical preparation stage.
+The metadata file must use the reviewed `metadataVersion: 1` attachment format in [Native Image Delivery](image-delivery.md), not an arbitrary WordPress export. Use the actual local URL printed by Astro. Every output directory must be new; `--resume` applies only to an identical preparation stage.
 
 1. **Preserves originals and identity:** hashes bytes, records attachment/locale/crop relationships and quarantines unresolved inputs. Filename suffixes do not authorize renaming or deleting originals; distinct metadata identities are not collapsed by equal bytes.
 2. **Separates artifacts:** inventory produces `manifest.json`; preparation produces `plan.json`, `prepared.json`, archived originals and prepared bytes. There is no generated `plan.md` or automatic clean-slug rewrite.

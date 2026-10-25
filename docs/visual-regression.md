@@ -54,31 +54,10 @@ Screenshots do not certify editor saves, Cloudflare, provider delivery or WCAG c
 
 ## Foundational interaction additions
 
-The functional selection also verifies public skip-link focus transfer, resolved
-field error relationships, and a developer-only `/_form-recovery` route with real
-invalid POST/repeated failure/correction flows, with and without document JavaScript
-or available session support. The normal artifact excludes the fixture and reserves
-its URL as 404. Native summary autofocus is an explicit response policy; manual
-screen-reader announcements remain untested. See [Phase 3](verification/interactions-phase-3.md).
+The functional selection also verifies public skip-link focus transfer, resolved field error relationships, and a developer-only `/_form-recovery` route with real invalid POST/repeated failure/correction flows, with and without document JavaScript or available session support. The normal artifact excludes the fixture and reserves its URL as 404. Native summary autofocus is an explicit response policy; manual screen-reader announcements remain untested. See [Phase 3](verification/interactions-phase-3.md).
 
-For both independently generated static profiles, run
-`npm run test:profiles -- --public-browser` locally. This adds public keyboard,
-no-JS, reduced-motion and narrow text-spacing checks to the existing HTTP pilot;
-it leaves Sveltia remote admin sign-in/publishing outside that mode. CI rejects
-the browser flag and retains ordinary HTTP-only profile verification.
+For both independently generated static profiles, run `npm run test:profiles -- --public-browser` locally. This adds public keyboard, no-JS, reduced-motion and narrow text-spacing checks to the existing HTTP pilot; it leaves Sveltia remote admin sign-in/publishing outside that mode. CI rejects the browser flag and retains ordinary HTTP-only profile verification.
 
-The shared composition specimens extend these local journeys with native
-Disclosure Enter/Space, closed-body tab exclusion, exclusive `name` groups, visible
-summary focus and real fragment reveal. Cluster/Sidebar checks measure wrapping
-inside narrow hosts at wide viewports, DOM/RTL keyboard order, long text, intrinsic
-media and absent supporting content. The no-JS, text-spacing and actual 200%/400%
-zoom cases exercise these production components too. Native toolbar Find, other
-browser engines and screen-reader output still require separate observations.
+The shared composition specimens extend these local journeys with native Disclosure Enter/Space, closed-body tab exclusion, exclusive `name` groups, visible summary focus and real fragment reveal. Cluster/Sidebar checks measure wrapping inside narrow hosts at wide viewports, DOM/RTL keyboard order, long text, intrinsic media and absent supporting content. The no-JS, text-spacing and actual 200%/400% zoom cases exercise these production components too. Native toolbar Find, other browser engines and screen-reader output still require separate observations.
 
-Disclosure keyboard journeys pace the native opening Enter and subsequent Tab
-events at 50ms so layout/scroll anchoring can settle before the next action,
-including with document JavaScript disabled. No script moves focus or repairs
-scroll position, and the visible/unobscured focus assertions remain strict.
-Failures include focus geometry for diagnosis. Phase 8's repeated downstream
-probe exposed the unpaced timing failure; its receipt retains both diagnostic
-and successful repeated results.
+Disclosure keyboard journeys pace the native opening Enter and subsequent Tab events at 50ms so layout/scroll anchoring can settle before the next action, including with document JavaScript disabled. No script moves focus or repairs scroll position, and the visible/unobscured focus assertions remain strict. Failures include focus geometry for diagnosis. Phase 8's repeated downstream probe exposed the unpaced timing failure; its receipt retains both diagnostic and successful repeated results.

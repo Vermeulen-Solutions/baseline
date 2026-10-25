@@ -1,18 +1,10 @@
 # Detailed site working rules
 
-These rules supplement [AGENTS.md](../AGENTS.md). Read the relevant sections before
-changing site presentation, content rendering or production behavior. The root
-instructions contain the essential first steps and route tasks here; this guide
-keeps detailed contracts out of that initial context.
+These rules supplement [AGENTS.md](../AGENTS.md). Read the relevant sections before changing site presentation, content rendering or production behavior. The root instructions contain the essential first steps and route tasks here; this guide keeps detailed contracts out of that initial context.
 
-Common design rules apply to both foundations. EmDash, CMS, database and server
-operations apply only to the EmDash profile. Generated static projects have their
-own profile-specific AGENTS.md and installed references.
+Common design rules apply to both foundations. EmDash, CMS, database and server operations apply only to the EmDash profile. Generated static projects have their own profile-specific AGENTS.md and installed references.
 
-For improvements to Baseline as a reusable starter, also read
-[CONTRIBUTING.md](../CONTRIBUTING.md). Maintainer work retains these implementation
-contracts; the client discovery process applies when building or redesigning a
-client site.
+For improvements to Baseline as a reusable starter, also read [CONTRIBUTING.md](../CONTRIBUTING.md). Maintainer work retains these implementation contracts; the client discovery process applies when building or redesigning a client site.
 
 ## Where to work
 

@@ -1,8 +1,6 @@
 # Capability and support boundaries
 
-Baseline supplies Astro project foundations, design primitives and agent workflows.
-Upstream capabilities and a successful build still need acceptance against the
-site's actual content, runtime and integrations.
+Baseline supplies Astro project foundations, design primitives and agent workflows. Upstream capabilities and a successful build still need acceptance against the site's actual content, runtime and integrations.
 
 ## Platform profiles
 
@@ -12,8 +10,7 @@ site's actual content, runtime and integrations.
 | `static` | Typed Astro Content Collections and Git-owned Markdown | Static `dist/`; no database or server adapter | Build/rebuild triggers, real 404s, URL/SEO behavior and native images on the chosen host |
 | `static-sveltia` | Same files edited by Sveltia and committed to GitHub | Same static site plus editor SPA; OAuth proxy or PAT authentication | Sign-in, repository/branch permissions, media upload and publication through the actual build/deploy path |
 
-Profile selects editing/runtime independently of Standard/Express delivery tracks.
-See [Platform Profiles](platform-profiles.md) for generation and hosting choices.
+Profile selects editing/runtime independently of Standard/Express delivery tracks. See [Platform Profiles](platform-profiles.md) for generation and hosting choices.
 
 ## Division of responsibility
 
@@ -35,24 +32,8 @@ See [Platform Profiles](platform-profiles.md) for generation and hosting choices
 - [Native forms evaluation](forms-adoption.md) distinguishes tested local storage/validation from external delivery, Workers and full accessibility/editor acceptance.
 - [Gallery migration case study](../audit/gallery-migration-case-study.md) is a privacy-edited architectural example, not a reproducible client receipt or universal importer guarantee.
 
-Root CI and generated-profile CI run on Ubuntu. Screenshot regression remains a
-local Windows Chromium workflow; screenshots do not prove editor saves, provider
-delivery or accessibility conformance. See [Visual regression](visual-regression.md).
+Root CI and generated-profile CI run on Ubuntu. Screenshot regression remains a local Windows Chromium workflow; screenshots do not prove editor saves, provider delivery or accessibility conformance. See [Visual regression](visual-regression.md).
 
-Migration guidance requires a reviewed URL inventory and content, media and
-behavioral checks. The [migration acceptance tool](migration-acceptance.md)
-collects bounded HTTP observations for declared URLs and references, and supports
-offline replay. Version 3 reconciles complete, hash-bound offline inventories,
-including unpublished records, against explicit entity mappings. It does not
-discover a complete legacy inventory, collect credentialed CMS data, verify
-editor workflows or synchronize deltas. See [inventory contracts](migration-content-inventories.md). Absent
-required evidence is unverified. Import retries can skip existing entries;
-see [WordPress content modeling](wordpress-content-modeling.md).
-Commerce, memberships, feeds, newsletters, analytics and consent behavior must be
-inventoried and preserved, replaced or deliberately excluded for each site.
+Migration guidance requires a reviewed URL inventory and content, media and behavioral checks. The [migration acceptance tool](migration-acceptance.md) collects bounded HTTP observations for declared URLs and references, and supports offline replay. Version 3 reconciles complete, hash-bound offline inventories, including unpublished records, against explicit entity mappings. It does not discover a complete legacy inventory, collect credentialed CMS data, verify editor workflows or synchronize deltas. See [inventory contracts](migration-content-inventories.md). Absent required evidence is unverified. Import retries can skip existing entries; see [WordPress content modeling](wordpress-content-modeling.md). Commerce, memberships, feeds, newsletters, analytics and consent behavior must be inventoried and preserved, replaced or deliberately excluded for each site.
 
-Cloudflare EmDash runtime certification and external-provider acceptance remain
-separate from static hosting pilots. Code deployment does not transfer the CMS
-database or media. Consult [production deployment](production-deployment.md),
-[database workflow](database-workflow.md) and [image delivery](image-delivery.md)
-for the shipped operational boundaries.
+Cloudflare EmDash runtime certification and external-provider acceptance remain separate from static hosting pilots. Code deployment does not transfer the CMS database or media. Consult [production deployment](production-deployment.md), [database workflow](database-workflow.md) and [image delivery](image-delivery.md) for the shipped operational boundaries.

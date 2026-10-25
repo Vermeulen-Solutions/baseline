@@ -9,10 +9,7 @@ Whether you use Claude Code, OpenAI Codex, Cursor, OpenCode, Windsurf, Antigravi
 3. **Model Context Protocol (MCP):** Open JSON-RPC standard for live framework documentation, community `DESIGN.md` systems, UI component sourcing, visual prototyping, and site content management (see [`.mcp.example.json`](../.mcp.example.json)).
 4. **Deterministic Shell Tooling:** Standard npm commands (`npm run ...`) runnable in any bash, PowerShell, or automated execution environment.
 
-For optional installed-project discovery, use `npm run baseline:inspect -- --json`
-after installing dependencies. It reports source-derived facts and paths without
-executing project configuration. See [scope and limits](project-inspection.md);
-it does not replace repository instructions, skills or verification.
+For optional installed-project discovery, use `npm run baseline:inspect -- --json` after installing dependencies. It reports source-derived facts and paths without executing project configuration. See [scope and limits](project-inspection.md); it does not replace repository instructions, skills or verification.
 
 ---
 
@@ -35,7 +32,7 @@ Checked against official documentation on 21 October 2026: [Codex MCP](https://l
 
 ## 1. Connecting Official Documentation via MCP
 
-Allow your coding assistant to consult live, up-to-date Astro and EmDash documentation without hallucinating deprecated APIs. 
+Allow your coding assistant to consult live, up-to-date Astro and EmDash documentation without hallucinating deprecated APIs.
 
 ### Claude Code and Cursor:
 
@@ -141,26 +138,15 @@ During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, con
 ```
 
 > [!TIP]
-> **Optional external tools:**
-> - All design MCPs are optional and absent from the default example. Use them when the brief calls for them; no tool-selection checkpoint is required. Local lane/token tooling and `/_styleguide` remain available without adding external services.
-> - Baseline ships no `DESIGN.md` validator or exporter. Reading design references needs no package installation. If a specific exchange requires validation/export, select and review that external tool separately. Google's `@google/design.md` and the community registry's `designmd` package are different tools, despite their shared binary name. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
+> **Optional external tools:** - All design MCPs are optional and absent from the default example. Use them when the brief calls for them; no tool-selection checkpoint is required. Local lane/token tooling and `/_styleguide` remain available without adding external services. - Baseline ships no `DESIGN.md` validator or exporter. Reading design references needs no package installation. If a specific exchange requires validation/export, select and review that external tool separately. Google's `@google/design.md` and the community registry's `designmd` package are different tools, despite their shared binary name. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---
 
 ## 3. Site-Level EmDash CMS MCP Setup
 
-Connect your MCP client's supported OAuth flow to `/_emdash/api/mcp`, sign in as
-the intended existing account and keep only the scopes needed for its task.
-EmDash checks both scopes and the account's role. Personal access tokens can also
-be created and revoked in **Admin → Users → API tokens**. Use these supported
-interfaces for hosted sites and D1. See the [MCP authentication and scope contract](https://docs.emdashcms.com/reference/mcp-server/).
+Connect your MCP client's supported OAuth flow to `/_emdash/api/mcp`, sign in as the intended existing account and keep only the scopes needed for its task. EmDash checks both scopes and the account's role. Personal access tokens can also be created and revoked in **Admin → Users → API tokens**. Use these supported interfaces for hosted sites and D1. See the [MCP authentication and scope contract](https://docs.emdashcms.com/reference/mcp-server/).
 
-For a local Node/SQLite instance, the compatibility helper below supports explicit
-account selection, a read-only plan, finite expiry and owner-bound revocation.
-It still accesses EmDash 1.3's token table directly: PAT creation is an admin UI
-route rather than a supported public REST operation in this version. Do not use
-this fallback to mutate production databases; follow the runtime's recovery
-procedure before any authorized production mutation.
+For a local Node/SQLite instance, the compatibility helper below supports explicit account selection, a read-only plan, finite expiry and owner-bound revocation. It still accesses EmDash 1.3's token table directly: PAT creation is an admin UI route rather than a supported public REST operation in this version. Do not use this fallback to mutate production databases; follow the runtime's recovery procedure before any authorized production mutation.
 
 ```bash
 # Help only; does not open or create a database:
@@ -179,30 +165,11 @@ npm run mcp:token -- --db data.db --user editor@example.test --revoke TOKEN_ID
 | `content-authoring` | Content and media reads/writes | Contributor |
 | `setup` | Core content/media/schema/settings writes, taxonomy and menu management | Admin |
 
-Presets never grant `admin`, plugin-tool or site-transfer scopes. `setup` is
-explicit elevated access. For narrower or advanced grants, use `--scopes` with
-an exact comma-separated list instead of `--preset`; invalid scopes and grants
-beyond the chosen account's role are rejected rather than silently expanded or
-clamped. For example, a Subscriber can hold `--scopes content:read,media:read`.
-In EmDash 1.3, `content:write` also grants taxonomy/menu writes for compatibility;
-publication, owned-content limits and draft visibility still follow the account
-role. A read-only token for an administrator may therefore read drafts.
+Presets never grant `admin`, plugin-tool or site-transfer scopes. `setup` is explicit elevated access. For narrower or advanced grants, use `--scopes` with an exact comma-separated list instead of `--preset`; invalid scopes and grants beyond the chosen account's role are rejected rather than silently expanded or clamped. For example, a Subscriber can hold `--scopes content:read,media:read`. In EmDash 1.3, `content:write` also grants taxonomy/menu writes for compatibility; publication, owned-content limits and draft visibility still follow the account role. A read-only token for an administrator may therefore read drafts.
 
-Draft read access is also broader than edit ownership: a Contributor can read
-another user's draft while being unable to edit it or publish their own draft.
-The authoring preset therefore does not isolate private drafts by owner. Use a
-Subscriber with the narrower read scopes above when access should cover only
-published content. These boundaries were exercised through live MCP in the
-[local role acceptance](../audit/autonomous-evaluation-2026-10-21/roles.md).
+Draft read access is also broader than edit ownership: a Contributor can read another user's draft while being unable to edit it or publish their own draft. The authoring preset therefore does not isolate private drafts by owner. Use a Subscriber with the narrower read scopes above when access should cover only published content. These boundaries were exercised through live MCP in the [local role acceptance](../audit/autonomous-evaluation-2026-10-21/roles.md).
 
-No account is selected or created automatically. `--db` must name an existing,
-non-linked local file; `--user` must resolve to one existing account. Without
-`--apply`, the helper opens the database read-only and returns a JSON plan with
-no secret. Creation returns the token once in JSON, its ID, owner, exact grants
-and expiry; only its hash is stored in the database. Expiry defaults to 30 days;
-override it with `--expires-at <future-ISO-timestamp>`. Keep the token in private
-client settings using the client schema above; do not commit the creation output.
-The legacy `--d1` SQL path is removed. Static profiles have no EmDash MCP endpoint.
+No account is selected or created automatically. `--db` must name an existing, non-linked local file; `--user` must resolve to one existing account. Without `--apply`, the helper opens the database read-only and returns a JSON plan with no secret. Creation returns the token once in JSON, its ID, owner, exact grants and expiry; only its hash is stored in the database. Expiry defaults to 30 days; override it with `--expires-at <future-ISO-timestamp>`. Keep the token in private client settings using the client schema above; do not commit the creation output. The legacy `--d1` SQL path is removed. Static profiles have no EmDash MCP endpoint.
 
 ---
 

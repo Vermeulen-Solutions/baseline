@@ -14,21 +14,14 @@ npm run audit:site -- --root ../my-site --evidence ../private-reports/capture/bu
 
 JSON goes to stdout unless `--out` names a **new directory outside the target**, including through symlinks. That directory receives JSON and Markdown. Keep real site reports private; never commit them to this template. No scheduler, network check or Actions job is installed.
 
-For a new Cloudflare D1 inspection snapshot, use the explicit-target adapter
-described in [Database Workflow](database-workflow.md):
+For a new Cloudflare D1 inspection snapshot, use the explicit-target adapter described in [Database Workflow](database-workflow.md):
 
 ```sh
 npm run db:pull-remote -- --config ./wrangler.jsonc --env preview --account <explicit-account-id> --database <explicit-database-uuid> --out .emdash/backups/d1-inspection-001
 npm run audit:site -- --root ../my-site --db-snapshot .emdash/backups/d1-inspection-001/inspection.sqlite --strict
 ```
 
-This separately requested export requires `CLOUDFLARE_API_TOKEN` and can
-temporarily affect the selected D1's query availability. Diagnosis itself stays
-offline. Reconstruction has a bounded SQL subset; unsupported exports remain
-unverified rather than being executed as arbitrary SQL. The legacy
-`db:export-d1` helper uses Wrangler context and defaults to remote; it does not
-provide the explicit config/environment/account contract of `db:pull-remote`.
-The example above stores its snapshot in the Baseline checkout, outside `../my-site`.
+This separately requested export requires `CLOUDFLARE_API_TOKEN` and can temporarily affect the selected D1's query availability. Diagnosis itself stays offline. Reconstruction has a bounded SQL subset; unsupported exports remain unverified rather than being executed as arbitrary SQL. The legacy `db:export-d1` helper uses Wrangler context and defaults to remote; it does not provide the explicit config/environment/account contract of `db:pull-remote`. The example above stores its snapshot in the Baseline checkout, outside `../my-site`.
 
 Baseline accepts either a closed binary SQLite database or a raw D1 SQL export via `--db-snapshot <file>` or `--d1-dump <dump.sql>`. When a SQL dump is supplied, schema DDL is ingested into an isolated scratch SQLite database to measure physical collection widths without requiring manual conversion or loading row data.
 

@@ -55,8 +55,4 @@ The fixture checks installed plugin and editor SEO resolution through actual ren
 
 Current check results are recorded in [the progress ledger](../../audit/architecture-implementation-progress.md).
 
-The later [Phase 8 rehearsal](architecture-hardening-phase-8.md) extends the
-current command with a tenth synthetic route for real LocalStorage-backed image
-delivery and native responsive candidate decoding. The nine-case receipts above
-remain historical Phase 1 observations; Media Library registration and real editor
-save/reload are still outside that automated scope.
+The later [Phase 8 rehearsal](architecture-hardening-phase-8.md) extends the current command with a tenth synthetic route for real LocalStorage-backed image delivery and native responsive candidate decoding. The nine-case receipts above remain historical Phase 1 observations; Media Library registration and real editor save/reload are still outside that automated scope.

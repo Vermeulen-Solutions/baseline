@@ -164,6 +164,10 @@
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/check-docs-format.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/check-docs-mcp.mjs": {
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"

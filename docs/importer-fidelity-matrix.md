@@ -1,18 +1,8 @@
 # WordPress importer fidelity matrix
 
-Tested **18 October 2026** with **Astro 7.4.0**, **EmDash 1.3.0**,
-**@emdash-cms/gutenberg-to-portable-text 1.3.0** and **Node 24.21.0**.
-This is evidence for the installed executable and the synthetic cases below,
-not certification of arbitrary WordPress themes, plugins or client exports.
+Tested **18 October 2026** with **Astro 7.4.0**, **EmDash 1.3.0**, **@emdash-cms/gutenberg-to-portable-text 1.3.0** and **Node 24.21.0**. This is evidence for the installed executable and the synthetic cases below, not certification of arbitrary WordPress themes, plugins or client exports.
 
-The installed package's bundled `.mjs` behavior differs from some accompanying
-TypeScript source and documentation: notably, the executed paths preserve
-published status and schedule the future-dated fixture. Do not infer behavior
-from a source-only read or version string. Each run records executable, fixture
-and harness SHA-256 values in `receipt.json`; the dated
-[verification record](../audit/importer-fidelity-rehearsal-2026-10-18.json)
-identifies the tested artifacts. Review this matrix whenever those artifacts or
-importer versions change.
+The installed package's bundled `.mjs` behavior differs from some accompanying TypeScript source and documentation: notably, the executed paths preserve published status and schedule the future-dated fixture. Do not infer behavior from a source-only read or version string. Each run records executable, fixture and harness SHA-256 values in `receipt.json`; the dated [verification record](../audit/importer-fidelity-rehearsal-2026-10-18.json) identifies the tested artifacts. Review this matrix whenever those artifacts or importer versions change.
 
 ## Run the rehearsal
 
@@ -27,61 +17,23 @@ node --test tests/importer-fidelity.test.mjs
 npm run verify
 ```
 
-Existing outputs are refused. The integration test runs in `npm test` / `verify`
-and needs no client credentials, WordPress server, network installation or
-remote HTTP requests. It uses installed dependencies via an owned temporary
-directory link; it is **not an independent npm installation**. It creates a
-fresh Node/SQLite Astro development instance and local media, drives real
-analysis/prepare/chunk/finalization/media/rewrite endpoints, reads the actual
-records, and anonymously renders them using native `getEmDashEntry()`,
-`getSeoMeta()` and `PortableText`. It stops its child/server, unlinks dependencies
-and removes only its verified temporary tree, including after failure.
+Existing outputs are refused. The integration test runs in `npm test` / `verify` and needs no client credentials, WordPress server, network installation or remote HTTP requests. It uses installed dependencies via an owned temporary directory link; it is **not an independent npm installation**. It creates a fresh Node/SQLite Astro development instance and local media, drives real analysis/prepare/chunk/finalization/media/rewrite endpoints, reads the actual records, and anonymously renders them using native `getEmDashEntry()`, `getSeoMeta()` and `PortableText`. It stops its child/server, unlinks dependencies and removes only its verified temporary tree, including after failure.
 
-The fixture uses explicit manual locale routing under
-`/view/<collection>/<locale>/<slug>` so CMS locale semantics can be checked
-independently of automatic prefix routing. It does not certify a client's
-theme, automatic Astro locale routing, production build/hosting, browser/editor
-save workflow or external provider behavior. The scheduled fixture is dated
-2032-01-01; update and review it before that date.
+The fixture uses explicit manual locale routing under `/view/<collection>/<locale>/<slug>` so CMS locale semantics can be checked independently of automatic prefix routing. It does not certify a client's theme, automatic Astro locale routing, production build/hosting, browser/editor save workflow or external provider behavior. The scheduled fixture is dated 2032-01-01; update and review it before that date.
 
 ### Evidence paths
 
-- **WXR:** real XML upload, analysis, additive prepare, taxonomy/content chunks,
-  section finalization, media copying and URL rewriting. A partial capture is
-  followed by the complete capture to exercise `skipExisting`.
-- **Exporter:** a loopback HTTP server supplies the documented `/emdash/v1`
-  analysis/content/media/taxonomy/menu payload shapes, with three records per
-  page to force content chunks. A first content chunk is interrupted, then a
-  fresh run skips existing entries and finishes. These are **protocol fixtures**;
-  no real WordPress/PHP installation, Exporter plugin version, application-password
-  provisioning or migration-key UI has been executed.
-- **Network isolation:** a child-only transport maps the one declared synthetic
-  public source origin to the owned loopback server and answers its DNS probe
-  synthetically. The installed SSRF validators remain active; production code is
-  unchanged. Other remote origins are refused, fonts are disabled, and no real
-  DNS/SSRF security or TLS interoperability claim is made.
-- **Oracles:** reviewed [Portable Text expectations](../tests/fixtures/importer-fidelity/expected-content.json)
-  retain structural content, mark definitions, order, captions and media IDs.
-  Comparison removes random PT keys and maps run-specific media URLs to source
-  attachment identities. It never replaces an expected body with the current
-  imported body. Stored media bytes are compared with the two source PNGs.
-- **Automation:** [integration test](../tests/importer-fidelity.test.mjs),
-  [harness](../scripts/rehearse-importer.mjs),
-  [WXR](../tests/fixtures/importer-fidelity/wordpress.xml) and
-  [Exporter inputs](../tests/fixtures/importer-fidelity/wordpress.json).
-  All entries, emails, origins, IDs and assets are synthetic.
+- **WXR:** real XML upload, analysis, additive prepare, taxonomy/content chunks, section finalization, media copying and URL rewriting. A partial capture is followed by the complete capture to exercise `skipExisting`.
+- **Exporter:** a loopback HTTP server supplies the documented `/emdash/v1` analysis/content/media/taxonomy/menu payload shapes, with three records per page to force content chunks. A first content chunk is interrupted, then a fresh run skips existing entries and finishes. These are **protocol fixtures**; no real WordPress/PHP installation, Exporter plugin version, application-password provisioning or migration-key UI has been executed.
+- **Network isolation:** a child-only transport maps the one declared synthetic public source origin to the owned loopback server and answers its DNS probe synthetically. The installed SSRF validators remain active; production code is unchanged. Other remote origins are refused, fonts are disabled, and no real DNS/SSRF security or TLS interoperability claim is made.
+- **Oracles:** reviewed [Portable Text expectations](../tests/fixtures/importer-fidelity/expected-content.json) retain structural content, mark definitions, order, captions and media IDs. Comparison removes random PT keys and maps run-specific media URLs to source attachment identities. It never replaces an expected body with the current imported body. Stored media bytes are compared with the two source PNGs.
+- **Automation:** [integration test](../tests/importer-fidelity.test.mjs), [harness](../scripts/rehearse-importer.mjs), [WXR](../tests/fixtures/importer-fidelity/wordpress.xml) and [Exporter inputs](../tests/fixtures/importer-fidelity/wordpress.json). All entries, emails, origins, IDs and assets are synthetic.
 
 ## Observed capability
 
-**Imported** means the declared fixture property was verified in stored data
-and, where listed, anonymous output. **Preserved for repair** means evidence
-survived but the intended function/output was not established.
-**Deliberately rebuilt** means an explicit fixture repair through supported
-APIs was verified separately. **Unsupported** means the selected path did not
-supply that property; it is never an implicit pass.
+**Imported** means the declared fixture property was verified in stored data and, where listed, anonymous output. **Preserved for repair** means evidence survived but the intended function/output was not established. **Deliberately rebuilt** means an explicit fixture repair through supported APIs was verified separately. **Unsupported** means the selected path did not supply that property; it is never an implicit pass.
 
-All automated rows below are asserted on every integration run. They describe
-the tested input/output property, not the whole migration.
+All automated rows below are asserted on every integration run. They describe the tested input/output property, not the whole migration.
 
 | Property | Input path | Observed result | Recovery or acceptance boundary | Evidence |
 | --- | --- | --- | --- | --- |
@@ -116,37 +68,16 @@ the tested input/output property, not the whole migration.
 
 The rehearsal verifies these transitions on the actual imported data:
 
-1. Initial F3 URL report fails on the retained-but-broken legacy link, while
-   shortcodes/raw builder markers are advisory. F4 fails the native SEO and
-   expected rebuilt-content policy. A stored fallback is **not** called an
-   executed dynamic block.
-2. Fixture-only supported API repairs resolve native SEO, replace the dynamic
-   payload with a declared static alternative, and rewrite the link. URL reports
-   and inventory assessments pass for both paths. Mappings explicitly document
-   singleton-group normalization, status conversions, separately verified WXR
-   sections, and the unsupported parent relationship. Passing these scoped
-   expectations does not waive real site requirements.
-3. A real target record is unpublished; a gallery position is removed and a
-   remaining media URL is changed to a missing file. F3 retains confirmed status
-   and asset failures and returns **2**, because required metadata on the missing
-   page is also unknown. F4 returns **1** for known status/content/media loss.
-4. Restoring through supported fresh-revision APIs produces passing F3 and F4
-   results again. A separate F4 run requiring parent preservation fails.
+1. Initial F3 URL report fails on the retained-but-broken legacy link, while shortcodes/raw builder markers are advisory. F4 fails the native SEO and expected rebuilt-content policy. A stored fallback is **not** called an executed dynamic block.
+2. Fixture-only supported API repairs resolve native SEO, replace the dynamic payload with a declared static alternative, and rewrite the link. URL reports and inventory assessments pass for both paths. Mappings explicitly document singleton-group normalization, status conversions, separately verified WXR sections, and the unsupported parent relationship. Passing these scoped expectations does not waive real site requirements.
+3. A real target record is unpublished; a gallery position is removed and a remaining media URL is changed to a missing file. F3 retains confirmed status and asset failures and returns **2**, because required metadata on the missing page is also unknown. F4 returns **1** for known status/content/media loss.
+4. Restoring through supported fresh-revision APIs produces passing F3 and F4 results again. A separate F4 run requiring parent preservation fails.
 
-The `http-*` subdirectories contain versioned manifests, observations, artifacts
-and JSON/Markdown URL reports. `inventory-*.json` files are **content-engine
-assessments**, not a full-scope CLI/editor acceptance certificate. Stored-content
-snapshots and `receipt.json` retain synthetic import results and classifications.
-No editor round trip or provider workflow was performed; those remain unverified.
-See [acceptance contracts](migration-acceptance.md) and
-[inventory contracts](migration-content-inventories.md) for exit precedence and
-the additional evidence required for a complete migration.
+The `http-*` subdirectories contain versioned manifests, observations, artifacts and JSON/Markdown URL reports. `inventory-*.json` files are **content-engine assessments**, not a full-scope CLI/editor acceptance certificate. Stored-content snapshots and `receipt.json` retain synthetic import results and classifications. No editor round trip or provider workflow was performed; those remain unverified. See [acceptance contracts](migration-acceptance.md) and [inventory contracts](migration-content-inventories.md) for exit precedence and the additional evidence required for a complete migration.
 
 ## Minimal upstream reproduction cases
 
-No installed EmDash file is patched and no parallel importer is introduced.
-These cases isolate observed defects/limits for upstream review; no issue or
-message is published automatically.
+No installed EmDash file is patched and no parallel importer is introduced. These cases isolate observed defects/limits for upstream review; no issue or message is published automatically.
 
 | Case | Minimal input / steps | Expected versus observed |
 | --- | --- | --- |
@@ -154,6 +85,4 @@ message is published automatically.
 | Guest byline duplication across invocations | Upload [first record](../tests/fixtures/importer-fidelity/repros/byline-first.xml), then [next record](../tests/fixtures/importer-fidelity/repros/byline-next.xml) to the same collection with skip-existing enabled and no user mapping | Both have the same source author. The shared importer path creates another guest byline in a later invocation; the main automated rehearsal reproduces this with partial/chunked imports. |
 | Nested gallery link loss | Import [one gallery](../tests/fixtures/importer-fidelity/repros/nested-gallery-link.xml); inspect native gallery JSON before media copying | Image order/captions survive; custom image destination does not. Rebuild linked-image semantics explicitly. |
 
-Do not extrapolate these fixtures to every plugin block, SEO schema, author
-configuration or migration input. Real source exports and operational acceptance
-remain necessary; final source reconciliation and recovery/handoff are F6/F7.
+Do not extrapolate these fixtures to every plugin block, SEO schema, author configuration or migration input. Real source exports and operational acceptance remain necessary; final source reconciliation and recovery/handoff are F6/F7.

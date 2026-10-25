@@ -1,6 +1,6 @@
 # Site Delivery Workflow
 
-Baseline uses a structured **7-stage delivery workflow** designed to keep developers and AI coding assistants disciplined. 
+Baseline uses a structured **7-stage delivery workflow** designed to keep developers and AI coding assistants disciplined.
 
 When building client websites with AI coding assistants, the most common failure mode is **"one-shot prompt chaos"**: asking the agent to generate discovery, content models, templates, and styles all at once. This leads to hallucinated schemas, generic styling, broken responsive layouts, and hardcoded UI copy that clients cannot edit.
 
@@ -8,12 +8,7 @@ The stages separate discovery, modeling, design and implementation, with written
 
 Platform Profile (`static`, `static-sveltia`, `emdash`) selects content/editing/runtime; Standard/Express selects delivery sequencing. Read [Platform Profiles](platform-profiles.md) before choosing a track. SQL budget, live-editor, registry and database deployment instructions below apply only to EmDash.
 
-Keep durable context in its established home, optionally adopting `PROJECT.md`
-from the supplied example. Working rules and the compact Art Direction Record
-stay in `AGENTS.md`; selected `DESIGN.md` references support the visual direction
-while source owns implemented values. Keep current progress in the existing
-tracker or a short handoff when useful. [Document scope](project-context.md)
-defines these boundaries without adding mandatory files or checkpoint stops.
+Keep durable context in its established home, optionally adopting `PROJECT.md` from the supplied example. Working rules and the compact Art Direction Record stay in `AGENTS.md`; selected `DESIGN.md` references support the visual direction while source owns implemented values. Keep current progress in the existing tracker or a short handoff when useful. [Document scope](project-context.md) defines these boundaries without adding mandatory files or checkpoint stops.
 
 ### Choosing Your Track: Standard (7 Stages) vs. Express (3 Checkpoints)
 

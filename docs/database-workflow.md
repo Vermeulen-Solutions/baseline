@@ -2,15 +2,7 @@
 
 These tools inspect structure and produce review artifacts. They never apply migrations, synchronize content, seed an existing site, select a Cloudflare binding implicitly or replace `./data.db`. The supported metadata adapter targets installed EmDash 1.3.0; unknown/pending migration names are unverified. Run against a closed, consistent offline SQLite snapshot, not a live-file copy. Sources over 64 MiB or accompanied by WAL/SHM/journal files are refused. Inspection uses a temporary read-only/query-only copy and reads schema/registry/migration metadata, not content rows.
 
-The contracts below cover `db:diff`, `db:export-seed` and `db:pull-remote`.
-Their wrappers reject unknown arguments and do not implement `--help`; consult
-these examples and the argument parsers in their scripts. The older
-`db:export-d1` command is a separate Wrangler-context exporter, defaults to remote
-and may infer the first configured database. It is not the explicit-target
-snapshot adapter, a deployment command or a restore mechanism. Likewise,
-`db:diff` follow-up suggestions do not change these contracts: seed export writes
-a new reviewed candidate, never updates `seed/seed.json` automatically, and
-exporting a remote database does not deploy local schema changes.
+The contracts below cover `db:diff`, `db:export-seed` and `db:pull-remote`. Their wrappers reject unknown arguments and do not implement `--help`; consult these examples and the argument parsers in their scripts. The older `db:export-d1` command is a separate Wrangler-context exporter, defaults to remote and may infer the first configured database. It is not the explicit-target snapshot adapter, a deployment command or a restore mechanism. Likewise, `db:diff` follow-up suggestions do not change these contracts: seed export writes a new reviewed candidate, never updates `seed/seed.json` automatically, and exporting a remote database does not deploy local schema changes.
 
 ## Inspect and compare
 

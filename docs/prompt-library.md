@@ -24,10 +24,7 @@ Check the installed profile and `package.json` before choosing commands. Handoff
 
 ## 1. Starting a New Site Project
 
-Start with the [README quickstart](../README.md#quickstart) to prepare a site
-folder and open it as a project in your assistant. Then use the matching profile
-prompt and choose Express or Standard. The track-specific prompts below expand
-the brief once your assistant has access to the project.
+Start with the [README quickstart](../README.md#quickstart) to prepare a site folder and open it as a project in your assistant. Then use the matching profile prompt and choose Express or Standard. The track-specific prompts below expand the brief once your assistant has access to the project.
 
 ### Express / Autonomous Mode Kickoff (3 Checkpoints — For Smaller Sites)
 Use this prompt for a straightforward greenfield site (`<= 6` routes, `<= 3` collections, single locale), consolidating decisions into up to three checkpoints while continuing the authorized build.
@@ -68,9 +65,7 @@ Begin with Stage 1 (Brief & Evidence Discovery), determine the profile, and comp
 
 ### Resuming a Prepared or Partly Built Site
 
-Open the existing site folder and use this prompt after an interruption. The
-agent should recover the brief and completed work from the project; the optional
-context records do not need to be created just to resume.
+Open the existing site folder and use this prompt after an interruption. The agent should recover the brief and completed work from the project; the optional context records do not need to be created just to resume.
 
 ```text
 Continue the authorized local website build in this project.
@@ -293,24 +288,11 @@ Please:
 
 ## 9. Brownfield Site Maintenance & Upgrades
 
-Start from the installed profile, `package.json`, the site's instructions and its
-existing decisions. Use the applicable checked-in skills and commands, and keep
-optional project records optional. A scoped maintenance request can proceed from
-its affected stage without restarting discovery. For changes spanning several
-surfaces, use `new-site-workflow`'s scoped maintenance guidance; isolated edits
-can use their specialist directly. These recipes reuse the
-[spacing contracts](design-framework.md#8-contextual-spacing-maintenance),
-[reviewed static updates](baseline-updates.md) and
-[EmDash skill synchronization](skill-synchronization.md).
+Start from the installed profile, `package.json`, the site's instructions and its existing decisions. Use the applicable checked-in skills and commands, and keep optional project records optional. A scoped maintenance request can proceed from its affected stage without restarting discovery. For changes spanning several surfaces, use `new-site-workflow`'s scoped maintenance guidance; isolated edits can use their specialist directly. These recipes reuse the [spacing contracts](design-framework.md#8-contextual-spacing-maintenance), [reviewed static updates](baseline-updates.md) and [EmDash skill synchronization](skill-synchronization.md).
 
 ### Bringing an Existing Site Up to Date
 
-Use this for a complete local catch-up, covering packages, agent guidance and
-Baseline capabilities. Open the target site or a current Baseline checkout with
-access to it. The [existing-site update workflow](baseline-updates.md#existing-site-update-workflow)
-owns the process, including sites too old to have today's helpers or receipts.
-For a read-only assessment, replace the request to apply updates with
-"diagnose and propose only; do not modify the target."
+Use this for a complete local catch-up, covering packages, agent guidance and Baseline capabilities. Open the target site or a current Baseline checkout with access to it. The [existing-site update workflow](baseline-updates.md#existing-site-update-workflow) owns the process, including sites too old to have today's helpers or receipts. For a read-only assessment, replace the request to apply updates with "diagnose and propose only; do not modify the target."
 
 ```text
 Bring this existing site up to date with applicable current Baseline capabilities.
