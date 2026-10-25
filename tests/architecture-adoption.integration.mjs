@@ -42,7 +42,7 @@ const added = {
   'src/lib/metadata.ts': 'profiles/static/project/src/lib/metadata.ts',
   'src/lib/json-ld.ts': 'profiles/static/project/src/lib/json-ld.ts',
   'tests/metadata.test.mjs': 'profiles/static/project/tests/metadata.test.mjs',
-  ...Object.fromEntries(['eslint.config.mjs', 'tests/template-lint.test.mjs', 'tests/fluid-tokens.test.mjs', 'src/components/Disclosure.astro', 'src/components/Cluster.astro', 'src/components/Sidebar.astro', 'src/components/dev/CompositionSpecimens.astro', 'src/dev/disclosure-prose.md', 'docs/design-framework.md', 'docs/native-composition.md', 'docs/baseline-updates.md'].map(file => [file, file])),
+  ...Object.fromEntries(['eslint.config.mjs', 'tests/template-lint.test.mjs', 'tests/fluid-tokens.test.mjs', 'src/components/Disclosure.astro', 'src/components/Cluster.astro', 'src/components/Sidebar.astro', 'src/components/Section.astro', 'src/components/Container.astro', 'src/components/Grid.astro', 'src/lib/layout-style.ts', 'src/components/dev/CompositionSpecimens.astro', 'src/dev/disclosure-prose.md', 'docs/design-framework.md', 'docs/native-composition.md', 'docs/baseline-updates.md'].map(file => [file, file])),
 };
 const manualPatches = ['astro.config.mjs', 'src/layouts/Base.astro', 'src/pages/index.astro', 'src/pages/404.astro', 'src/pages/posts/[...id].astro'];
 try {
@@ -78,19 +78,34 @@ try {
     assert.ok(!stage.entries.some(entry => /layouts\/Base|src\/pages|src\/config|public\/admin|package\.json/.test(entry.target)));
     for (const target of Object.keys(added).filter(target => !originalManaged.files[target])) assert.ok(!stage.entries.some(entry => entry.target === target), 'New membership cannot be added by sync');
     const synced = await applyBaseline({ root, commit: options['--to'] });
-    assert.deepEqual(synced.conflicts, customized ? ['src/styles/global.css'] : []);
+    const expectedMigrations = {
+      'src/styles/global.css': ['Automatic spacing CSS requires reviewed aliases, editorial boundaries and caller migration'],
+      'src/components/Section.astro': ['Missing local import: ../lib/layout-style'],
+      'src/components/Container.astro': ['Missing local import: ../lib/layout-style'],
+      'src/components/Grid.astro': ['Missing local import: ../lib/layout-style'],
+      'scripts/design-system.mjs': [
+        'Missing spacing alias: --layout-container-gap',
+        'Missing spacing alias: --layout-content-gap',
+        'Missing spacing alias: --layout-grid-gap',
+        'Missing spacing alias: --layout-section-padding',
+        'Undeclared direct package: postcss',
+      ],
+      'scripts/sync-baseline.mjs': ['Missing spacing alias: --layout-section-padding'],
+    };
+    assert.deepEqual(synced.conflicts, Object.keys(expectedMigrations));
+    assert.deepEqual(synced.migrations, expectedMigrations, `${profile}: bounded sync reports the exact reviewed spacing migration prerequisites`);
     for (const relative of protectedPaths) assert.equal(sha(await fs.readFile(path.join(root, relative))), before[relative], `${profile}: sync preserved ${relative}`);
     if (customized) assert.deepEqual(parseDesignTokens(await fs.readFile(path.join(root, 'src/styles/global.css'), 'utf8')).theme, themeBefore);
     assert.deepEqual(Object.keys(JSON.parse(await fs.readFile(path.join(root, '.baseline/managed-files.json'), 'utf8')).files), Object.keys(originalManaged.files));
     git(root, ['add', '.']); git(root, ['commit', '-m', 'Reviewed bounded synchronization subset']);
     const packageBefore = await fs.readFile(path.join(root, 'package.json'), 'utf8');
     const pkg = JSON.parse(packageBefore);
-    for (const name of ['eslint', 'eslint-plugin-astro', 'eslint-plugin-jsx-a11y-x', '@typescript-eslint/parser', 'parse5']) pkg.devDependencies[name] = canonical.devDependencies[name];
+    for (const name of ['eslint', 'eslint-plugin-astro', 'eslint-plugin-jsx-a11y-x', '@typescript-eslint/parser', '@types/node', 'parse5']) pkg.devDependencies[name] = canonical.devDependencies[name];
     pkg.engines = canonical.engines;
     Object.assign(pkg.scripts, { lint: canonical.scripts.lint, 'lint:scripts': canonical.scripts['lint:scripts'], 'lint:templates': 'eslint src --max-warnings 0', 'test:design': 'node --test tests/static-foundation.test.mjs tests/fluid-tokens.test.mjs' });
     await write(root, 'package.json', json(pkg));
     for (const [target, from] of Object.entries(added)) await write(root, target, upstream(from));
-    for (const target of [...manualPatches, ...(customized ? ['src/styles/global.css'] : [])]) {
+    for (const target of [...manualPatches, 'src/styles/global.css']) {
       if (target === 'src/styles/global.css') {
         // Reviewed reconciliation for this token-only synthetic fixture, not a
         // general merge algorithm. Refuse any additional local rule changes.
@@ -107,13 +122,21 @@ try {
     }
     // Retain the old receipt's membership/provenance; manual additions stay locally owned.
     assert.deepEqual(Object.keys(JSON.parse(await fs.readFile(path.join(root, '.baseline/managed-files.json'), 'utf8')).files), Object.keys(originalManaged.files));
-    const afterTheme = parseDesignTokens(await fs.readFile(path.join(root, 'src/styles/global.css'), 'utf8')).theme;
-    assert.deepEqual(afterTheme, themeBefore, 'All 31 calibrated theme values survive manual semantic CSS merge');
+    const afterTokens = parseDesignTokens(await fs.readFile(path.join(root, 'src/styles/global.css'), 'utf8'));
+    assert.deepEqual(afterTokens.theme, tokensBefore.theme, 'All calibrated theme values survive manual semantic CSS merge');
+    assert.deepEqual(afterTokens.dark, tokensBefore.dark, 'Dark-surface values survive manual semantic CSS merge');
+    for (const [name, value] of Object.entries(tokensBefore.root)) assert.equal(afterTokens.root[name], value, `Calibrated root token ${name} survives manual semantic CSS merge`);
+    assert.deepEqual(Object.fromEntries(['--layout-section-padding', '--layout-container-gap', '--layout-content-gap', '--layout-grid-gap'].map(name => [name, afterTokens.root[name]])), {
+      '--layout-section-padding': 'var(--spacing-section)',
+      '--layout-container-gap': 'var(--spacing-grid)',
+      '--layout-content-gap': 'var(--spacing-content)',
+      '--layout-grid-gap': 'var(--spacing-grid)',
+    }, 'Explicit shared spacing aliases are added alongside preserved client calibration');
     assert.equal(sha(await fs.readFile(path.join(root, 'src/config/site.ts'))), before['src/config/site.ts']);
     if (customized) assert.match(await fs.readFile(path.join(root, 'src/layouts/Base.astro'), 'utf8'), /data-client-wrapper="retained"/);
     const gates = JSON.parse(await fs.readFile(path.join(root, 'audit/design-gate-exceptions.json'), 'utf8'));
     const upstreamGates = JSON.parse(upstream('audit/design-gate-exceptions.json'));
-    for (const [target, from] of [...Object.entries(added), ...manualPatches.map(target => [target, 'profiles/static/project/' + target])]) {
+    for (const [target, from] of [...Object.entries(added), ...manualPatches.map(target => [target, 'profiles/static/project/' + target]), ['src/styles/global.css', 'src/styles/global.css']]) {
       if (!target.startsWith('src/')) continue;
       const bytes = await fs.readFile(path.join(root, target), 'utf8');
       const normalized = sha(bytes.replaceAll('\r\n', '\n'));
@@ -137,7 +160,7 @@ try {
       assert.equal(sha(await fs.readFile(path.join(root, 'public/admin/config.yml'))), before['public/admin/config.yml']);
     }
     assert.equal(sha(await fs.readFile(path.join(root, 'baseline.config.json'))), before['baseline.config.json']);
-    const result = { profile, root, customized, stage: stage.entries, applied: synced.applied, conflicts: synced.conflicts, manualFiles: Object.keys(added), cssReconciliation: customized ? 'Explicit token-only fixture reconciliation; arbitrary local rule edits rejected; sync conflict retained' : 'Unchanged shared CSS eligible through bounded sync', packageUpgrade: { before: sha(packageBefore), after: sha(await fs.readFile(path.join(root, 'package.json'))), explicitDevelopmentDependencies: ['eslint', 'eslint-plugin-astro', 'eslint-plugin-jsx-a11y-x', '@typescript-eslint/parser', 'parse5'], independentInstall: true, cleanInstall: true, databasePackages: 0 }, invariants: { managedMembershipUnchanged: true, originalProvenanceUnchanged: true, calibratedThemeValuesUnchanged: true, siteConfigAndContentPreserved: true, customWrapperAndNavigationPreserved: customized, sveltiaConfigurationPreserved: customized }, acceptance: 'verify/build/fixture/HTTP/public browser passed; Sveltia sign-in offered where applicable', additivePatchSHA256: sha(patch) };
+    const result = { profile, root, customized, stage: stage.entries, applied: synced.applied, conflicts: synced.conflicts, manualFiles: Object.keys(added), cssReconciliation: 'Explicit token-only synthetic fixture reconciliation; arbitrary local rule edits rejected; sync conflict retained', packageUpgrade: { before: sha(packageBefore), after: sha(await fs.readFile(path.join(root, 'package.json'))), explicitDevelopmentDependencies: ['eslint', 'eslint-plugin-astro', 'eslint-plugin-jsx-a11y-x', '@typescript-eslint/parser', '@types/node', 'parse5'], independentInstall: true, cleanInstall: true, databasePackages: 0 }, invariants: { managedMembershipUnchanged: true, originalProvenanceUnchanged: true, calibratedThemeValuesUnchanged: true, siteConfigAndContentPreserved: true, customWrapperAndNavigationPreserved: customized, sveltiaConfigurationPreserved: customized }, acceptance: 'verify/build/fixture/HTTP/public browser passed; Sveltia sign-in offered where applicable', additivePatchSHA256: sha(patch) };
     receipt.fixtures.push(result);
     await fs.writeFile(path.join(output, 'adoption.json'), json(receipt));
   }
