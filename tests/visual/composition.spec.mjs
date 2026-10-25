@@ -1,5 +1,6 @@
 import { test, expect, prepare, styleguide, noOverflow } from './helpers.mjs';
 import { disclosureJourney, intrinsicLayoutJourney } from '../journeys/composition.mjs';
+import { focusVisible } from '../journeys/public.mjs';
 
 test('behavior native disclosure keyboard, grouping and fragment reveal', async ({ page }, info) => {
   await prepare(page, styleguide, page.visualProblems);
@@ -19,6 +20,12 @@ test('behavior native disclosure reveals a target from a directly loaded fragmen
   await expect(details).toHaveAttribute('open', '');
   await expect(target).toBeVisible();
   await expect(target).toBeInViewport();
+  await page.keyboard.press('Tab');
+  const focused = page.locator(':focus-visible');
+  await expect(focused).toBeVisible();
+  await focusVisible(focused);
+  await expect(details).toHaveAttribute('open', '');
+  await expect(target).toBeVisible();
 });
 
 test('reflow intrinsic composition in wide/narrow/RTL hosts', async ({ page }, info) => {
