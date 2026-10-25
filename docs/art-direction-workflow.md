@@ -18,7 +18,7 @@ When transitioning from **Stage 3 (Content Architecture)** into **Stage 4 (Art D
 
 1. **Code-First & Aesthetic Lane Presets (Default — Zero Setup):** Pick an Aesthetic Lane below, record the Art Direction Record in `AGENTS.md`, apply and audit tokens in `src/styles/global.css` via `npm run design:tokens`, and inspect live on `/_styleguide`.
 2. **UX Flow & Anatomy Teardowns (`Nicelydone MCP` / `Refero.design`):** Inspect real production web screens to extract authentic UX details (secondary metadata, filter bars, dense tables, and varied section pacing) before styling.
-3. **Community `DESIGN.md` Systems & Visual Concepting (`designmd-mcp` + `Google Stitch` / `OpenDesign` / `Claude Design`):** Search 420+ free community `DESIGN.md` design systems on [designmd.ai/explore](https://designmd.ai/explore), generate 2–3 visual screen concepts in `audit/visual-concepts/`, and validate tokens via `@google/design.md`.
+3. **Community `DESIGN.md` Systems & Visual Concepting (`designmd-mcp` + `Google Stitch` / `OpenDesign` / `Claude Design`):** Browse community design references, generate 2–3 visual screen concepts in `audit/visual-concepts/`, and translate the selected direction into native CSS. `DESIGN.md` is optional; validate implemented tokens with `npm run design:tokens` and inspect `/_styleguide`.
 4. **Component Sourcing (`21st.dev MCP`):** Evaluate external Tailwind patterns on `/_styleguide` and adapt suitable ones to token-bound Astro components.
 
 See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md) and [AI Agent & Harness Configuration](agent-documentation.md) for 30-second MCP setup snippets.

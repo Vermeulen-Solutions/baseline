@@ -5,6 +5,15 @@ fresh-install findings from the static onboarding exercise. This review covers
 the root EmDash Node/SQLite application and independently installed `static` and
 `static-sveltia` projects. It does not certify production exposure or security.
 
+## Subsequent design-package retirement
+
+This review records the earlier compatible dependency remediation and its audit
+results. The subsequent focused maintenance change removes `@google/design.md`
+and its bridge from the default installation instead of waiting for an upstream
+release. See [existing-site adoption](baseline-updates.md#retiring-the-default-designmd-package).
+The original receipts remain historical evidence; EmDash's separate Zod path is
+not resolved by removing the design tool.
+
 ## Compatible changes
 
 | Package | Before → after | Dependency path and decision |

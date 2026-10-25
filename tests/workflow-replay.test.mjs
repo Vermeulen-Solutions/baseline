@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { commandPolicy, runOperation, mcpResult, processResult, cleanEnv, inventory } from '../scripts/workflow-replay-runner.mjs';
-import { prepare, validateDispatch, sourceHashes, archiveReplay, isPublicEvidence } from '../scripts/workflow-replay.mjs';
+import { prepare, validateDispatch, sourceHashes, sourceInputs, archiveReplay, isPublicEvidence } from '../scripts/workflow-replay.mjs';
 import { sourceChangeAllowed, captureCmsBaseline, compareCmsBaseline, hasUnapprovedLaunchDate } from '../scripts/workflow-replay-grade.mjs';
 import { execFileSync } from 'node:child_process';
 
@@ -74,8 +74,14 @@ test('dispatch requires every applicable green command and unchanged source', ()
 test('source preservation maps include added files and deleted tracked sources', async () => fixture(async site => {
   const git = argv => execFileSync('git', argv, { cwd: site, stdio: 'ignore' });
   git(['init', '--quiet']); git(['add', 'package.json']);
-  const before = sourceHashes(site); fs.writeFileSync(path.join(site, 'new.md'), 'new artifact'); fs.unlinkSync(path.join(site, 'package.json'));
+  const before = sourceHashes(site); assert.deepEqual(sourceInputs(site), before);
+  fs.writeFileSync(path.join(site, 'new.md'), 'new artifact'); fs.unlinkSync(path.join(site, 'package.json'));
   const after = sourceHashes(site); assert.equal(after['package.json'], null); assert.ok(after['new.md']); assert.ok(before['package.json']);
+  assert.deepEqual(sourceInputs(site), after);
+  fs.writeFileSync(path.join(site, '.mcp.json'), 'private configuration');
+  assert.deepEqual(sourceInputs(site), after, 'private inputs stay excluded');
+  fs.writeFileSync(path.join(site, 'package.json'), 'restored source');
+  assert.notDeepEqual(sourceInputs(site), after, 'restoring a deleted tracked input invalidates its frozen map');
 }));
 test('CMS baseline hashes every seeded content record plus menus and settings, allowing only the owned draft', async () => {
   const state = { posts: [{ id: 'existing', title: 'Before' }], menus: [{ id: 'main', items: ['home'] }], settings: { title: 'Fixture' } };

@@ -106,6 +106,36 @@ test('dependency inventory accounts for every root dependency and versions have 
   }
 });
 
+test('native design checks remain available without installing a DESIGN.md exchange tool', () => {
+  const lock = json('package-lock.json');
+  assert.ok(!Object.keys(lock.packages).some(name => name.endsWith('/@google/design.md')));
+  assert.equal(pkg.scripts['design:tokens'], 'node scripts/design-system.mjs');
+  for (const command of ['verify:fast', 'verify']) assert.ok(pkg.scripts[command].includes('npm run design:tokens'));
+  assert.ok(!pkg.scripts['test:design'].includes('design-interchange'));
+  for (const profile of PROFILE_IDS) {
+    const manifest = profileManifest(profile);
+    const packages = profilePackages(profile, pkg);
+    assert.ok(!Object.hasOwn({ ...packages.dependencies, ...packages.devDependencies }, '@google/design.md'), profile);
+    assert.ok(!manifest.files.includes('scripts/design-interchange.mjs'), profile);
+    for (const command of ['design:check', 'design:export']) {
+      assert.ok(!Object.hasOwn(pkg.scripts, command));
+      assert.ok(!manifest.scripts.includes(command), profile);
+    }
+    for (const check of ['check:art-direction', 'design:tokens']) assert.ok(manifest.checks.includes(check), profile);
+  }
+});
+
+test('shared image preparation ships to all profiles while CMS upload stays EmDash-only', () => {
+  for (const profile of PROFILE_IDS) {
+    const manifest = profileManifest(profile), packages = profilePackages(profile, pkg);
+    assert.ok(manifest.scripts.includes('media:prepare'), profile);
+    assert.ok(packages.devDependencies.sharp, profile);
+    for (const file of ['scripts/prepare-images.mjs', 'scripts/prepare-image.mjs', 'docs/media-preparation.md']) assert.ok(manifest.files.includes(file), profile);
+    assert.equal(manifest.scripts.includes('media:upload'), profile === 'emdash');
+    assert.equal(manifest.files.includes('scripts/upload-prepared-media.mjs'), profile === 'emdash');
+  }
+});
+
 test('source inventory covers the declared surface and shared presentation imports stay inside its allowlist', () => {
   const inventory = json('profiles/file-inventory.json');
   const collect = dir => fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? collect(`${dir}/${entry.name}`) : [`${dir}/${entry.name}`]);

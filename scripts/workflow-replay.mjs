@@ -53,9 +53,11 @@ export function sourceHashes(site) {
 }
 const HARNESS_FILES = ['workflow-replay.mjs', 'workflow-replay-runner.mjs', 'workflow-replay-grade.mjs', 'workflow-preview-host.mjs'];
 export function harnessHashes() { return Object.fromEntries(HARNESS_FILES.map(file => [file, hash(fs.readFileSync(path.join(ROOT, 'scripts', file)))])); }
-function sourceInputs() {
-  const files = git(ROOT, ['ls-files', '--cached', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean).filter(file => file !== '.mcp.json' && !file.startsWith('.vscode/') && !file.startsWith('.emdash/') && !file.startsWith('node_modules/') && !file.startsWith('audit/workflow-replay-'));
-  return Object.fromEntries(files.sort().map(file => { const target = noLinks(path.join(ROOT, file)); return [file, hash(fs.readFileSync(target))]; }));
+export function sourceInputs(repositoryRoot = ROOT) {
+  const files = git(repositoryRoot, ['ls-files', '--cached', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean).filter(file => file !== '.mcp.json' && !file.startsWith('.vscode/') && !file.startsWith('.emdash/') && !file.startsWith('node_modules/') && !file.startsWith('audit/workflow-replay-'));
+  // Track deletions explicitly, as sourceHashes does, so a dirty-source freeze can
+  // include a retired file and still detect its later restoration or removal.
+  return Object.fromEntries(files.sort().map(file => { const target = noLinks(path.join(repositoryRoot, file)); return [file, fs.existsSync(target) ? hash(fs.readFileSync(target)) : null]; }));
 }
 function assertInputsFrozen(state) {
   const current = sourceInputs();

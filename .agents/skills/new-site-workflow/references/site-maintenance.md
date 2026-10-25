@@ -25,6 +25,7 @@ Resolve only consequential missing choices; continue useful independent work.
 | Content field or type | Actual schema, existing entries, editor form, queries, detail/list templates and draft behavior | Valid/invalid values through the real loader or CMS; legacy entries still work; correct form/rendering and publication state |
 | Shared component | Component, imports/consumers, wrapper defaults, slots, editorial boundaries and edit attributes | Representative consumers and styleguide states; retained accessibility, content ownership and compatible defaults |
 | Public route | Route/content source, links, navigation owner, metadata and previous URL | Correct destination, discoverability, metadata and draft exclusion; 301 for a renamed or removed public URL |
+| Add or upload images | Installed profile, selected destination, source files, intended use, image policy and `docs/media-preparation.md` when installed | Prepared stored copies; source archive outside the library/Git; accurate metadata and verified stored bytes or static asset paths |
 
 Trace dependencies rather than changing every listed surface by default. State
 why a surface is unaffected when that matters to understanding the result.
@@ -78,6 +79,24 @@ CMS menu records. Keep new-install seed defaults separate from those live edits.
 Verify typing, save, reload and public/draft behavior when CMS edit targets change.
 
 ## Verification and a resumable handoff
+
+For a full Baseline catch-up, use the existing-site update workflow in
+`docs/baseline-updates.md` from a current published reference. Compare packages,
+skills/instructions and starter capabilities separately. Bounded sync cannot add
+new packages, scripts or managed paths, and EmDash skill synchronization does not
+update CMS site source. Older sites without helpers/receipts need reviewed manual
+integration, preserving original provenance. The versioned EmDash standards audit
+is useful diagnosis but does not enumerate every current Baseline capability.
+Record adopted, deferred and conflicting changes alongside actual acceptance.
+
+For image additions, use the general `media:prepare` workflow when installed;
+no WordPress source metadata is needed. Inspect photographic/artwork/preserve
+presets and any review findings before using eligible `upload/` copies. Static
+sites add prepared files to `src/assets/`; EmDash's `media:upload` records and
+verifies the selected instance's returned media IDs and stored bytes. Reconcile
+an ambiguous POST before retrying. This local workflow does not intercept client
+browser uploads or sweep existing media records. Older installed sites need the
+explicit tooling adoption in `docs/baseline-updates.md`.
 
 Use the installed instructions and `package.json` to select commands. Current
 static profiles provide `verify`, `build` and `check:dev-tools`; EmDash uses its

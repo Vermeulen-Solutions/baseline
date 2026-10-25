@@ -211,6 +211,11 @@ Report the checked components, viewports, surfaces/states and unresolved limitat
 
 ## Stage 5: implement representative pages
 
+Before adding incoming images, use the installed `media:prepare` workflow in
+`docs/media-preparation.md`; inspect eligible stored copies before static asset
+integration or EmDash upload/readback. Keep full-size originals outside the
+library and Git. Use this for greenfield content as well as later maintenance.
+
 **Static branch:** use the file-owned Base layout around shared `SiteShell.astro`, native `ResponsiveImage` metadata, Markdown RichText and static routes. Shared `Card` attribute bags need no edit proxies. Do not use CMS queries, cache hints or `Base content` bindings. Verify common styleguide specimens identically to EmDash; CMS-only specimens are inapplicable. The remaining CMS implementation instructions apply only to EmDash.
 
 
@@ -264,7 +269,17 @@ State whether the result is prepared configuration, a preview deployment or an o
 
 If the user requests only one stage, perform that stage without forcing a complete site build. Check its upstream inputs, state any consequential assumptions, and revisit downstream stages only when the change invalidates them. A later-stage request does not authorize inventing missing brand, content, or deployment decisions.
 
+For initial content imagery and later additions, follow the installed general `docs/media-preparation.md` workflow: prepare appropriate stored copies with `media:prepare`, inspect results, then add them to static `src/assets/` or upload eligible copies to the selected EmDash Media Library with verified readback. Preserve source archives outside the library and Git. This applies to greenfield sites and day-2 maintenance independently of WordPress migration; older sites need explicit tooling adoption before these commands are available.
+
 ### Scoped maintenance across site surfaces
+
+For "bring this site up to date with Baseline" or a full starter catch-up, follow
+the existing-site update workflow in `docs/baseline-updates.md` from the selected
+current published Baseline reference. It compares packages, skills/instructions
+and starter capabilities; neither a skill refresh nor an audit alone completes
+the request. Older sites may need the guide from a separate Baseline checkout.
+Continue compatible authorized local updates, preserve client decisions and
+provenance, and record adopted/deferred capabilities and actual acceptance.
 
 For a change spanning several files or disciplines, use this compact loop:
 

@@ -3,7 +3,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 
-const commands = ['dev', 'doctor', 'verify:fast', 'verify', 'lint', 'check:css', 'check:art-direction', 'design:tokens', 'test', 'typecheck', 'build', 'audit:html', 'test:visual', 'mcp:token'];
+const commands = ['dev', 'doctor', 'verify:fast', 'verify', 'lint', 'check:css', 'check:art-direction', 'design:tokens', 'test', 'typecheck', 'build', 'audit:html', 'test:visual', 'mcp:token', 'media:prepare', 'media:upload'];
 const components = ['Section', 'Container', 'Grid', 'Card', 'RichText', 'ResponsiveImage'];
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const assert = (condition, message) => { if (!condition) throw Error(message); };
@@ -110,6 +110,7 @@ export function inspectProject(directory = process.cwd()) {
     design: ['DESIGN.md', 'src/styles/global.css', 'src/layouts/Base.astro', 'src/layouts/SiteShell.astro', 'audit/component-calibration.md', 'docs/design-framework.md', 'docs/native-composition.md'],
     content: profile.foundation === 'emdash' ? ['src/live.config.ts', 'seed/seed.json'] : ['src/content.config.ts', 'src/content', 'src/config/site.ts'],
     editor: profile.id === 'static-sveltia' ? ['public/admin/config.yml', 'public/admin/index.html'] : [],
+    media: ['docs/media-preparation.md', 'scripts/prepare-images.mjs', ...(profile.foundation === 'emdash' ? ['scripts/upload-prepared-media.mjs'] : [])],
   };
   const skillsRoot = io.locate('.agents/skills'), skills = [];
   if (skillsRoot) {

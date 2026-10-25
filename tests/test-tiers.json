@@ -1,4 +1,12 @@
 {
+  "media-preparation.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Bounded Sharp subprocesses, real image encoding, original archives and resumable file preparation"
+  },
+  "prepared-media-upload.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Preparation and destination-bound upload receipts, byte/metadata readback and ambiguous POST recovery"
+  },
   "workflow-replay.test.mjs": {
     "tier": "unit",
     "reason": "Replay freeze, bounded worker operations, immutable telemetry, archive privacy, cleanup ownership and failure classification"
@@ -26,10 +34,6 @@
   "database-tooling.test.mjs": {
     "tier": "rehearsal",
     "reason": "Installed EmDash CLI, schema and database export lifecycle"
-  },
-  "design-interchange.test.mjs": {
-    "tier": "unit",
-    "reason": "Token interchange parsing and validation"
   },
   "design-workflow.test.mjs": {
     "tier": "unit",

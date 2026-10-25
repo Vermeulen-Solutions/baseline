@@ -20,6 +20,34 @@
   "defaultAction": "omit",
   "note": "Source classification, not an executable copy-all instruction. Only resolved manifest.files may be copied. Profile tests, visual baselines, docs, skills and local state are not implicitly shipped.",
   "files": {
+    "scripts/rehearse-media-preparation.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/prepare-images.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/prepare-image.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/media-preparation.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/media-preparation.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/upload-prepared-media.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/prepared-media-upload.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/workflow-replay-grade.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -175,10 +203,6 @@
     "scripts/db-export-seed.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
-    },
-    "scripts/design-interchange.mjs": {
-      "disposition": "shared",
-      "static": "copy"
     },
     "scripts/design-system.mjs": {
       "disposition": "shared",
@@ -466,10 +490,6 @@
     },
     "tests/database-tooling.test.mjs": {
       "disposition": "emdash-only",
-      "static": "omit-until-explicitly-allowlisted"
-    },
-    "tests/design-interchange.test.mjs": {
-      "disposition": "shared",
       "static": "omit-until-explicitly-allowlisted"
     },
     "tests/design-workflow.test.mjs": {

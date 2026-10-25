@@ -27,7 +27,7 @@ Editors log in at: `https://yourdomain.com/_emdash/admin`
 EmDash uses **Portable Text** instead of messy visual page builders (like Elementor or Divi):
 - **Headings & Hierarchy:** Use the block selector to choose Heading 2 and Heading 3. Heading 1 is reserved for the document title.
 - **Lists and Links:** Standard bullet and numbered lists are supported. When adding external links, the system automatically handles safe attributes.
-- **Images:** Insert images directly into the content stream. EmDash generates responsive image sizes automatically.
+- **Images:** For agent-assisted additions, follow [media preparation](media-preparation.md): prepare stored copies first, inspect them and upload those copies with accurate alt/caption information. EmDash generates responsive delivery sizes from the stored image. Direct browser uploads do not invoke the local preparation command; provide appropriately prepared files when uploading manually.
 - **Clean Content:** Copying and pasting from Google Docs or Word automatically strips unwanted inline styles and classes, ensuring brand design fidelity.
 
 ### Publishing & Scheduling

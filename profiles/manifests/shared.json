@@ -17,7 +17,6 @@
     "src/lib/partner.ts",
     "scripts/check-art-direction.mjs",
     "scripts/check-script-syntax.mjs",
-    "scripts/design-interchange.mjs",
     "scripts/assert-release-artifact.mjs",
     "scripts/design-system.mjs",
     "scripts/dev-tools-integration.mjs",
@@ -54,6 +53,10 @@
     "tests/spacing-tokens.test.mjs",
     "src/lib/layout-style.ts",
     "scripts/inspect-project.mjs",
+    "scripts/prepare-images.mjs",
+    "scripts/prepare-image.mjs",
+    "tests/media-preparation.test.mjs",
+    "docs/media-preparation.md",
     "docs/project-inspection.md",
     "PROJECT.example.md",
     "docs/project-context.md"
@@ -69,7 +72,6 @@
       "typescript",
       "sharp",
       "@fontsource/noto-sans",
-      "@google/design.md",
       "@playwright/test",
       "eslint",
       "eslint-plugin-astro",
@@ -90,8 +92,6 @@
     "lint",
     "test",
     "check:art-direction",
-    "design:check",
-    "design:export",
     "check:release-artifact",
     "verify",
     "design:tokens",
@@ -101,7 +101,8 @@
     "lint:scripts",
     "lint:templates",
     "check:css",
-    "baseline:inspect"
+    "baseline:inspect",
+    "media:prepare"
   ],
   "checks": [
     "lint",

@@ -1,0 +1,220 @@
+{
+  "recordedAt": "2026-10-25T16:09:55.675Z",
+  "baseCommit": "d86ecd58120917aa72eab34b8f723c5d094f1ef5",
+  "sourceTreeDirty": true,
+  "sourceHashPolicy": "LF-normalized text SHA-256 for modified tracked source; null means deleted. Checks completed before adding these evidence artifacts.",
+  "sourceHashes": {
+    ".agents/skills/astro-site-design/SKILL.md": "12b63f3e3c565230b803b764d8f7378ddda5bc38a60cd2bfcf24a93802ca249c",
+    ".agents/skills/site-art-direction/SKILL.md": "b47bd6e7e6bfc6cbd562b5a0c1fd7963e8891b3a99ea4a05dede0b47c9cb2869",
+    "docs/README.md": "a5fc8ea51c3e784006919bf83693ae5a01db92cd8c88b1bf7cc6450afbbae68c",
+    "docs/agent-documentation.md": "eb40ffa57a016cdbd82ddde8945a2b2019fdc50af516f70664cb349afc9c8223",
+    "docs/art-direction-workflow.md": "604a607266fd50613e306ed536931a7e70c123c5386ea08220d7dc826589f11f",
+    "docs/baseline-updates.md": "006ada466d71b678356b1107a96626807091b7febad44845f932910208190ce4",
+    "docs/dependency-review-2026-10-25.md": "6e204b3fbd17840ea5735a879c1e56522363e66692d5031381cb2a077a651e7e",
+    "docs/design-interchange.md": "a3bcd84ee7f3434a2fd8e5c74aefee14d68928d6d6c49c364d18b3b6a205ffc9",
+    "package-lock.json": "23a2bc55141da90f7a375e65a5992abd1af559baafea2ff482606ad72ec331ab",
+    "package.json": "01099526ae34661fdf5954add76cb36facca7010c30c0f185343bd6fb4f4af57",
+    "profiles/dependency-inventory.json": "b29e0df21ec308085ba4ced079584638daed62e844f8ade1f27e9fc876292ac0",
+    "profiles/file-inventory.json": "15b37fd79cdf75b71c86b3865fa77c478763fa0d5d674ee4486eb9dfea4420aa",
+    "profiles/manifests/shared.json": "7ec87b3b0b397fd64001ec193673c09f7e8283ca314bfc1ea059159d64faa9aa",
+    "scripts/design-interchange.mjs": null,
+    "scripts/verify-profiles.mjs": "44f44f91ac1f4e4276790703da40c20300f6caced909a5357c6e00c20e00b3f5",
+    "scripts/workflow-replay.mjs": "1738321c3f0d615e976a1d20ab6679246fa85f07fede0c9011dd62bca7858b02",
+    "standards/manifest.json": "c23aba1ef8653c9a427f4784098454ee63faca4affd8ff6ee7e964fd08b34412",
+    "tests/design-interchange.test.mjs": null,
+    "tests/platform-profiles.test.mjs": "4f2f865256288fe68b054e25a35da1d4bbee364aa180384ddc0373c8a8007189",
+    "tests/test-tiers.json": "f240eac695bc67b974ec9961f66a4481d603bb54f98fea61fceaebe3af0a18c7",
+    "tests/workflow-replay.test.mjs": "6d0aec7a97fed522b35346e7d5e5a7b6f4df10e893dfd06a31ce02a60b36e3c1"
+  },
+  "environment": {
+    "platform": "win32",
+    "node": "v24.21.0",
+    "npm": "10.5.0"
+  },
+  "lockfile": {
+    "removed": [
+      "node_modules/@google/design.md",
+      "node_modules/@google/design.md/node_modules/zod",
+      "node_modules/@types/debug",
+      "node_modules/@types/ms",
+      "node_modules/character-entities",
+      "node_modules/character-reference-invalid",
+      "node_modules/citty",
+      "node_modules/decode-named-character-reference",
+      "node_modules/escape-string-regexp",
+      "node_modules/estree-util-is-identifier-name",
+      "node_modules/estree-util-visit",
+      "node_modules/fault",
+      "node_modules/format",
+      "node_modules/is-alphabetical",
+      "node_modules/is-alphanumerical",
+      "node_modules/is-decimal",
+      "node_modules/is-hexadecimal",
+      "node_modules/longest-streak",
+      "node_modules/mdast-util-from-markdown",
+      "node_modules/mdast-util-frontmatter",
+      "node_modules/mdast-util-mdx",
+      "node_modules/mdast-util-mdx-expression",
+      "node_modules/mdast-util-mdx-jsx",
+      "node_modules/mdast-util-mdxjs-esm",
+      "node_modules/mdast-util-phrasing",
+      "node_modules/mdast-util-to-markdown",
+      "node_modules/mdast-util-to-string",
+      "node_modules/micromark",
+      "node_modules/micromark-core-commonmark",
+      "node_modules/micromark-extension-frontmatter",
+      "node_modules/micromark-extension-mdx-expression",
+      "node_modules/micromark-extension-mdx-jsx",
+      "node_modules/micromark-extension-mdx-md",
+      "node_modules/micromark-extension-mdxjs",
+      "node_modules/micromark-extension-mdxjs-esm",
+      "node_modules/micromark-factory-destination",
+      "node_modules/micromark-factory-label",
+      "node_modules/micromark-factory-mdx-expression",
+      "node_modules/micromark-factory-space",
+      "node_modules/micromark-factory-title",
+      "node_modules/micromark-factory-whitespace",
+      "node_modules/micromark-util-chunked",
+      "node_modules/micromark-util-classify-character",
+      "node_modules/micromark-util-combine-extensions",
+      "node_modules/micromark-util-decode-numeric-character-reference",
+      "node_modules/micromark-util-decode-string",
+      "node_modules/micromark-util-edit-map",
+      "node_modules/micromark-util-events-to-acorn",
+      "node_modules/micromark-util-html-tag-name",
+      "node_modules/micromark-util-normalize-identifier",
+      "node_modules/micromark-util-resolve-all",
+      "node_modules/micromark-util-subtokenize",
+      "node_modules/parse-entities",
+      "node_modules/parse-entities/node_modules/@types/unist",
+      "node_modules/remark-frontmatter",
+      "node_modules/remark-mdx",
+      "node_modules/remark-parse",
+      "node_modules/remark-stringify",
+      "node_modules/unist-util-position-from-estree"
+    ],
+    "added": [],
+    "versionChanges": []
+  },
+  "checks": {
+    "doctor": "passed with Windows launcher reminder",
+    "hooks": "installed",
+    "cleanInstall": "passed",
+    "fast": {
+      "passed": true,
+      "tests": 181
+    },
+    "design": {
+      "passed": true,
+      "tests": 33
+    },
+    "verify": {
+      "passed": true,
+      "unit": 181,
+      "rehearsal": 136,
+      "total": 317,
+      "astroFiles": 53,
+      "astroDiagnostics": 0
+    },
+    "build": "passed; existing large-chunk warning",
+    "html": {
+      "passed": true,
+      "files": 9,
+      "capturedPublicSSRResponses": 10
+    },
+    "diffCheck": "passed"
+  },
+  "initialFailure": "Fast unit archive test failed reading a deleted tracked bridge file; replay input maps now record null deletions and detect restoration. Final fast/full checks passed.",
+  "profiles": [
+    {
+      "profile": "static",
+      "independentInstall": true,
+      "cleanInstall": true,
+      "verify": "passed",
+      "astroDiagnostics": 0,
+      "productionBuild": "passed",
+      "productionIsolation": "passed",
+      "fixtureBuild": "passed",
+      "http": "passed",
+      "optionalProseReference": true,
+      "lockSHA256": "2877cc322102f9a53913395c7c9df573b6169b465ee7bf3e0774008321e96f49",
+      "packageSHA256": "663d7351bdf306e03dcfb15d34e2b34e37ce70169f3922fbeaf3bf6e4fe290eb",
+      "generation": {
+        "sourceCommit": "d86ecd58120917aa72eab34b8f723c5d094f1ef5",
+        "sourceTreeDirty": true,
+        "generatorVersion": "0.4.0",
+        "manifestSHA256": "223853b655f7a37c5edd7733fd36bd0f075e2f6bf19444c65416d72692c518bb"
+      }
+    },
+    {
+      "profile": "static-sveltia",
+      "independentInstall": true,
+      "cleanInstall": true,
+      "verify": "passed",
+      "astroDiagnostics": 0,
+      "productionBuild": "passed",
+      "productionIsolation": "passed",
+      "fixtureBuild": "passed",
+      "http": "passed",
+      "optionalProseReference": true,
+      "lockSHA256": "a186eb566820e1edfc031c5c1e8ad63b1fd228d276f19df027bc525d29bdda75",
+      "packageSHA256": "0fc83ab0674a87e787062d75a82768a7c7d5e1c228a5ccb573890dc4cab34a97",
+      "generation": {
+        "sourceCommit": "d86ecd58120917aa72eab34b8f723c5d094f1ef5",
+        "sourceTreeDirty": true,
+        "generatorVersion": "0.4.0",
+        "manifestSHA256": "e8dfc95d18e0a6d8fa8d592776f6dffbdc64ef37b91ef2420b2fcef46dada3b7"
+      }
+    }
+  ],
+  "audit": {
+    "root": {
+      "exitCode": 1,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 6,
+        "critical": 0,
+        "total": 6
+      },
+      "affectedPackages": [
+        "@emdash-cms/admin",
+        "@emdash-cms/auth",
+        "@emdash-cms/plugin-types",
+        "@emdash-cms/registry-verification",
+        "emdash",
+        "zod"
+      ]
+    },
+    "static": {
+      "exitCode": 0,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "affectedPackages": []
+    },
+    "static-sveltia": {
+      "exitCode": 0,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "affectedPackages": []
+    }
+  },
+  "limitations": [
+    "No production security acceptance; EmDash Zod findings remain.",
+    "HTTP verification only; no new browser, authenticated editor or hosting-provider acceptance.",
+    "Existing historical standards/audit artifacts remain unchanged."
+  ]
+}

@@ -92,12 +92,6 @@
       "offline": "unverified"
     },
     {
-      "id": "design-interchange",
-      "command": "npm run design:check",
-      "level": "advisory",
-      "availability": "optional; absent DESIGN.md is not applicable"
-    },
-    {
       "id": "schema-budget",
       "command": "npm run check:schema-budget",
       "level": "required-when-database-present",

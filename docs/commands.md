@@ -84,6 +84,16 @@ NO_COLOR disables colored output. Inspection is optional, source-derived discove
 with [declared pilot limits](project-inspection.md). See also
 [client bundle maintenance](client-bundles.md) and [downstream audits](site-standards-audit.md).
 
+## Image preparation
+
+| Command | Profiles | Purpose |
+| --- | --- | --- |
+| `npm run media:prepare -- --source <file-or-directory> --out <ignored-stage>` | All | Prepare stored image copies locally for greenfield builds or day-2 maintenance |
+| `npm run media:upload -- --stage <stage> --url <origin> --metadata <file>` | EmDash | Upload eligible prepared files and verify stored bytes/metadata with a destination-bound receipt |
+
+See [media preparation](media-preparation.md) for presets, per-file exceptions,
+profile-specific staging, editorial metadata and interrupted-upload recovery.
+
 ## CMS schema and migrations
 
 These commands belong to the root EmDash tooling, not generated static sites.

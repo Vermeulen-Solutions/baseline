@@ -11,6 +11,7 @@
 | Choose a setup and run your first local site | [Getting started](getting-started.md) |
 | Find a command or the final verification steps | [Command reference](commands.md) |
 | Build a site with your assistant | [Prompt library](prompt-library.md) · [Delivery workflow](site-delivery-workflow.md) |
+| Bring an older site up to date | [Update workflow](baseline-updates.md#existing-site-update-workflow) · [Copy-paste prompt](prompt-library.md#bringing-an-existing-site-up-to-date) |
 | Improve Baseline itself | [Contributor guide](../CONTRIBUTING.md) |
 
 ## Reference guides
@@ -19,7 +20,7 @@ Baseline provides two Astro foundations and three Platform Profiles: **`static`*
 
 - **[Platform Profiles](platform-profiles.md):** compare content editing, hosting, infrastructure costs and project generation.
 - **[Capability and Support Boundaries](support-boundaries.md):** upstream versus Baseline responsibilities, runtime expectations, tested scopes and site-specific acceptance.
-- **[Baseline Updates](baseline-updates.md):** stage profile-filtered shared source/skill updates while preserving client changes.
+- **[Baseline Updates](baseline-updates.md):** existing-site catch-up across dependencies, skills and starter capabilities, plus bounded static synchronization and explicit migrations that preserve client changes.
 - **[Architecture Hardening Upgrade](architecture-hardening-upgrade.md):** generator 0.4.0, explicit existing-site additions, reviewed static patch and preservation/rollback contracts.
 - **[Release and Adoption Acceptance](verification/architecture-hardening-phase-8.md):** current CMS/static rehearsals, downstream preservation evidence and explicit manual limits.
 - **[Real Downstream Update Rehearsal](verification/baseline-sync-rehearsal.md):** immutable GitHub updates, rename bridging and preserved design conflicts across both static profiles and provenance forms.
@@ -112,7 +113,7 @@ Explore the documentation guides below, organized by workflow, design architectu
 - **[Local Visual Regression Testing](visual-regression.md)**  
   Local-first Windows Chromium screenshot regression testing harness (`npm run test:visual`). Catch unintended layout reflows without Docker or consuming GitHub Actions runner quotas.
 - **[AI-Native Visual Design, Component Sourcing & DESIGN.md Interchange](design-interchange.md)**  
-  The 5-stage design pipeline: UX flow teardowns (`Nicelydone` / `Refero`), 420+ community `DESIGN.md` systems ([designmd.ai](https://designmd.ai/explore)), visual screen prototyping (`Google Stitch` / `Claude Design` / `OpenDesign`), high-craft component sourcing (`21st.dev MCP` → `/_styleguide` zero-JS transmutation), and offline `@google/design.md` token validation.
+  Optional UX references, `DESIGN.md` exchange, visual concepts and component sourcing, followed by native CSS token validation and rendered calibration. No external design package is required.
 
 ---
 
@@ -122,6 +123,8 @@ Explore the documentation guides below, organized by workflow, design architectu
 
 - **[Native Image Delivery](image-delivery.md)**  
   Native Astro 7.4 image optimization backed by EmDash's storage endpoint. Covers responsive WebP/AVIF generation, aspect ratio preservation, resumable WordPress media preparation (`media:migrate-wp`), and Cloudflare R2 staging.
+- **[Prepare Incoming Images](media-preparation.md)**
+  Local Sharp preparation for greenfield builds and day-2 additions on every profile, with prepared EmDash uploads and stored-byte verification.
 - **[Gallery Workflow](gallery-workflow.md)**  
   Progressively enhanced PhotoSwipe lightboxes embedded directly within Portable Text and custom gallery sections.
 

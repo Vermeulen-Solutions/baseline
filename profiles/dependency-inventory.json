@@ -100,16 +100,6 @@
       "versionSource": "package.json#/devDependencies/@fontsource/noto-sans",
       "reason": "Shared Astro presentation, design or verification tooling"
     },
-    "@google/design.md": {
-      "section": "devDependencies",
-      "profiles": [
-        "static",
-        "static-sveltia",
-        "emdash"
-      ],
-      "versionSource": "package.json#/devDependencies/@google/design.md",
-      "reason": "Shared Astro presentation, design or verification tooling"
-    },
     "@playwright/test": {
       "section": "devDependencies",
       "profiles": [

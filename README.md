@@ -255,6 +255,7 @@ Keep working through your assistant:
 | Resume unfinished work | “Continue the authorized local build from the current source and handoff, preserve established decisions, and report the preview and remaining acceptance.” |
 | Make a change | “Update [page or feature], following the site's existing design and content model.” |
 | Review the result | “Check the changed pages, run the applicable verification, and report anything still pending.” |
+| Bring an older site up to date | Use the [existing-site update prompt](docs/prompt-library.md#bringing-an-existing-site-up-to-date) to review and integrate dependencies, skills and Baseline features. |
 
 Your assistant can also open the component styleguide and guide you to the content
 editor when your setup includes one. The [command reference](docs/commands.md)

@@ -5,9 +5,17 @@ The compact gate record stays in `AGENTS.md`, CSS owns shipped values, and an
 optional adopted `PROJECT.md` holds the client brief rather than another design
 system. See [document scope and conflict handling](project-context.md).
 
+Baseline installs no `DESIGN.md` validator or exporter. The default path uses the
+Art Direction Record, `src/styles/global.css`, `npm run design:tokens` and rendered
+calibration on `/_styleguide`. External files and tools are optional aids to that
+workflow; they do not add another canonical token source.
+
 When an AI coding assistant is asked to "build a modern landing page" from a single text prompt, it almost always regresses to statistical averages: indigo-to-purple gradients, `Inter` everywhere, uniform `rounded-xl shadow-md` 3-column card rows, and thin, lifeless layouts lacking real-world UX details.
 
-Baseline replaces one-shot prompt guesswork with a **code-first, 5-stage visual design pipeline**. You do not need to spend weeks drawing static rectangles in Figma—instead, you combine real-world UX teardowns, community `DESIGN.md` systems ([designmd.ai](https://designmd.ai/explore)), generative screen prototyping (**Google Stitch**, **Claude Design**, **OpenDesign**), open Tailwind component registries (**21st.dev**), and live in-browser optical calibration.
+Baseline's design workflow starts with the brief, native CSS tokens and rendered
+calibration. The following optional research, concepting and component sources
+can help resolve particular design questions. Use the relevant steps without
+requiring any external service or token format.
 
 ---
 
@@ -16,7 +24,7 @@ Baseline replaces one-shot prompt guesswork with a **code-first, 5-stage visual 
 ```mermaid
 flowchart LR
     S1["1. UX Flow Research<br/>(Nicelydone / Refero)"] --> S2["2. System & Concepting<br/>(designmd.ai + Stitch / Claude)"]
-    S2 --> S3["3. Token Bridge<br/>(DESIGN.md → OKLCH/Clamp)"]
+    S2 --> S3["3. Translate Selected Direction<br/>(Native CSS Tokens)"]
     S3 --> S4["4. Component Quarantine<br/>(21st.dev MCP → /_styleguide)"]
     S4 --> S5["5. Token & Optical Calibration<br/>(design:tokens + /_styleguide + Impeccable)"]
 ```
@@ -53,27 +61,36 @@ When exploring visual mood, typography, and surface contrast, combine community 
 - **Claude Design / OpenDesign:** Rapidly prototype layout variations and typographic pairings.
 - **Why the Sandbox Matters:** Never paste raw AI-generated prototype HTML directly into `src/pages/`. AI visual generators frequently output fixed-width containers (`w-[1440px]`), hardcoded copy, and flat sRGB hex codes that bypass EmDash CMS bindings. Files in `audit/visual-concepts/` are exempt from the Art Direction Gate so you can iterate freely before committing to production code.
 
-### Step 3: The `DESIGN.md` Token Bridge & Fluid Upgrade
-In the wild, you will encounter two complementary forms of `DESIGN.md`:
-1. **Prose `DESIGN.md` (used by [designmd.ai](https://designmd.ai/what-is-design-md) & Google Stitch):** Pure markdown sections (`## Colors`, `## Typography`, `## Spacing`, `## Components`, `## Elevation`) that LLMs and Stitch read natively.
-2. **Frontmatter-Validated `DESIGN.md` (checked by `@google/design.md@0.4.0`):** Adds normative YAML token frontmatter (`colors`, `typography`, `rounded`) above the markdown prose so deterministic CLI scripts can lint and export tokens offline.
+### Step 3: Translate the Selected Direction into Native Tokens
 
-To bridge a chosen concept into Baseline's stylesheet:
-1. **Validate & Export Normative `DESIGN.md` Tokens:**
-   When using YAML frontmatter with Baseline's mapping sidecar, validate offline via the lockfile-pinned `@google/design.md` CLI:
-   ```sh
-   npm run design:check -- --file audit/visual-concepts/neutral-interchange/DESIGN.md --mapping audit/visual-concepts/neutral-interchange/mapping.json
-   ```
-   Export candidate CSS custom properties for review:
-   ```sh
-   npm run design:export -- --file audit/visual-concepts/neutral-interchange/DESIGN.md --format css-vars
-   ```
-2. **Upgrade Static Tokens to Fluid Physics:**
-   External `DESIGN.md` files specify static pixel sizes (`32px`) and sRGB hex codes (`#6366F1`). When merging into `src/styles/global.css`, upgrade colors into Baseline's **OKLCH gamut** and map font sizes/spacing into **mathematical fluid `clamp()` scales** (`320px` to `1280px` viewports).
+An external `DESIGN.md` may contain plain Markdown, structured YAML tokens or
+both. Read it as reference material. Baseline does not require a particular
+schema or parse it during verification.
 
-> [!CAUTION]
-> **CLI Binary Distinction (`@google/design.md` vs. `designmd.ai`):**
-> Baseline pins `@google/design.md@0.4.0` in `package.json`, which provides the local `designmd` binary used by `npm run design:check` and `npm run design:export`. The community registry at [designmd.ai/cli](https://designmd.ai/cli) *also* names its npm CLI package `designmd`. Do **not** install `designmd` into `package.json` (which would overwrite the validator). To query `designmd.ai`, either connect **`designmd-mcp`** (`npx -y designmd-mcp`) or run `npx --package=designmd designmd search "<query>"`.
+1. Review the selected concept against the brief and record the direction in
+   `AGENTS.md`. Preserve source provenance, rationale and any mapping decisions
+   alongside the reference under `audit/visual-concepts/<concept-name>/`.
+2. Translate suitable decisions into `src/styles/global.css` and components.
+   Preserve semantic roles, OKLCH colors, aliases, contextual surfaces and fluid
+   `clamp()` type/spacing scales. Avoid flattening these to exported fixed values.
+3. Run `npm run design:tokens`, then inspect and calibrate the rendered result on
+   `/_styleguide`. A valid exchange document cannot establish visual quality or
+   accessibility of the implemented site.
+
+If a specific handoff requires deterministic validation or export, choose a
+validator that supports the recipient's format. Review its version, dependency
+advisories and output limitations, and install it in a separate tooling workspace
+with its own package file and lockfile. Run it explicitly there and review any
+output before translation. No automatic install or network fallback is part of
+Baseline's build or checks. The former `design:check` and `design:export` commands
+have been retired; `design:tokens` remains the native audit.
+
+Google's [`@google/design.md`](https://github.com/google-labs-code/design.md) and
+the community registry's `designmd` package are different tools that both use
+the `designmd` binary name. Select the intended package explicitly when using
+either externally. The previously bundled Google 0.4.0 release has unresolved
+dependency findings recorded in [the dependency review](dependency-review-2026-10-25.md);
+its removal is not a recommendation to install that release elsewhere.
 
 ### Step 4: Component Sourcing (`21st.dev MCP`) & The Zero-JS Quarantine (`/_styleguide`)
 Once your macro design tokens are set in `src/styles/global.css`, your agent can query the **21st.dev MCP** registry to fetch polished, high-craft Tailwind component blueprints (e.g., bento grids, editorial timelines, interactive accordions, subtle spotlight cards, or split-sticky sections) rather than hallucinating complex UI from scratch.
@@ -188,15 +205,20 @@ Once your components are mounted on `/_styleguide` and representative routes:
 
 ---
 
-## 2. Specification & Token Mapping Details
+## 2. Historical Token Mapping Findings
 
-Baseline pins the lockfile-pinned `@google/design.md@0.4.0` CLI (using the Windows-compatible `designmd` alias) and the alpha specification at commit `9bf8eae`.
+The retired bridge used `@google/design.md@0.4.0` and the alpha specification at
+commit `9bf8eae`. These observations describe that reviewed version; they are not
+a compatibility promise for other releases or a requirement for current sites.
 
-A reference implementation with full sidecar mappings is checked into [`audit/visual-concepts/neutral-interchange/`](../audit/visual-concepts/neutral-interchange/).
+The historical neutral specimen and sidecar mappings remain in
+[`audit/visual-concepts/neutral-interchange/`](../audit/visual-concepts/neutral-interchange/)
+as reference evidence. They are not installed into generated sites or executed
+by the current checks.
 
 ### Observed Format Mappings & Schema Boundaries
 
-External token schemas often flatten modern CSS features. Baseline's mapping sidecar (`mapping.json`) accounts for these boundaries:
+The historical mapping sidecar (`mapping.json`) documented these boundaries:
 
 | Source Token / Case | `DESIGN.md` Representation | Observed Limitation in 0.4.0 |
 | :--- | :--- | :--- |
@@ -212,5 +234,5 @@ External token schemas often flatten modern CSS features. Baseline's mapping sid
 ## 3. Guiding Rules
 
 - **Source Code is Authoritative:** `src/styles/global.css` and Astro component templates own production values. `DESIGN.md` and external registries act as bridges, never runtime dependencies.
-- **No Direct Overwriting:** Never redirect `design:export` directly over `global.css`, and never paste un-quarantined registry components directly into `src/pages/`.
-- **Graceful Degradation (Zero Lock-In):** Every external MCP (`designmd-mcp`, `21st.dev`, `Stitch`, `Nicelydone`) is 100% optional. Baseline's local verification path (`npm run design:tokens`, `npm run design:check`, and `/_styleguide`) works completely offline without paid accounts.
+- **Review Exchange Output:** Never redirect an external export over `global.css`, and never paste un-quarantined registry components directly into `src/pages/`.
+- **Optional External Tools:** Every external MCP (`designmd-mcp`, `21st.dev`, `Stitch`, `Nicelydone`) is optional. Baseline's native token validation and `/_styleguide` calibration work without external design packages or paid accounts.

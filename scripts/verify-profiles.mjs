@@ -23,6 +23,8 @@ async function main() {
     for (const profile of profiles) {
       const root = path.join(temporary, profile);
       await initProfile({ profile, out: root });
+      // Optional prose references must not add a schema-validation or package requirement.
+      await fs.writeFile(path.join(root, 'DESIGN.md'), '# Design reference\n\nKeep the selected direction in AGENTS.md and implemented values in CSS.\n');
       // Explicit content fixture only inside this owned generated project. Never a source-template entry.
       const draftPath = 'src/content/posts/metadata-draft.md';
       const draft = '---\ntitle: PRIVATE METADATA DRAFT\ndescription: Must not be published\npublishedAt: 2026-01-01\ndraft: true\n---\nPrivate synthetic draft.\n';
@@ -31,7 +33,7 @@ async function main() {
       const gate = JSON.parse(await fs.readFile(gatePath, 'utf8'));
       gate.push({ path: draftPath, reason: 'Exact synthetic publication-filter fixture in the owned generated verification project only; no client visual implementation.', sha256: createHash('sha256').update(draft).digest('hex') });
       await fs.writeFile(gatePath, JSON.stringify(gate, null, 2) + '\n');
-      for (const args of [['install', '--no-audit', '--no-fund'], ['ci', '--no-audit', '--no-fund'], ['run', 'verify'], ['run', 'build'], ['run', 'check:dev-tools'], ['run', 'fixtures:build']]) {
+      for (const args of [['install', '--no-audit', '--no-fund'], ['ci', '--no-audit', '--no-fund'], ['run', 'media:prepare', '--', '--source', 'src/assets/pilot-grid.jpg', '--out', '.baseline/backups/preparation-smoke'], ['run', 'verify'], ['run', 'build'], ['run', 'check:dev-tools'], ['run', 'fixtures:build']]) {
         console.log(`[${profile}] npm ${args.join(' ')}`);
         const result = spawnNpmSync(args, { cwd: root, stdio: 'inherit', timeout: 300000, env: { ...process.env, SITE_URL: fixtureSite } });
         if (result.error) throw result.error;
@@ -41,6 +43,9 @@ async function main() {
       assert.ok(!Object.keys(lock.packages).some(name => /(?:^|\/)(?:@emdash-cms|emdash|[^/]*sqlite[^/]*|libsql|@libsql)(?:\/|$)/i.test(name)), 'CMS/database package in independent lockfile');
       assert.equal((await fs.lstat(path.join(root, 'node_modules'))).isSymbolicLink(), false);
       assert.ok(!Object.keys(lock.packages).some(name => name.endsWith('/@cloudflare/workers-types')), 'Workers plugin types in static lockfile');
+      assert.ok(!Object.keys(lock.packages).some(name => name.endsWith('/@google/design.md')), 'Optional design exchange package in independent lockfile');
+      for (const relative of ['scripts/upload-prepared-media.mjs', 'scripts/rehearse-media-preparation.mjs']) await assert.rejects(fs.stat(path.join(root, relative)), { code: 'ENOENT' });
+      await assert.rejects(fs.stat(path.join(root, 'scripts/design-interchange.mjs')), { code: 'ENOENT' });
       for (const relative of ['dist/server', 'data.db', 'seed', 'src/plugins', '.agents/skills/building-emdash-site']) await assert.rejects(fs.stat(path.join(root, relative)), { code: 'ENOENT' });
       if (profile === 'static-sveltia') {
         for (const relative of ['admin/index.html', 'admin/config.yml']) assert.deepEqual(await fs.readFile(path.join(root, 'dist', relative)), await fs.readFile(path.join(root, 'public', relative)));

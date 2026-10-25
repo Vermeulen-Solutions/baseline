@@ -303,6 +303,48 @@ can use their specialist directly. These recipes reuse the
 [reviewed static updates](baseline-updates.md) and
 [EmDash skill synchronization](skill-synchronization.md).
 
+### Bringing an Existing Site Up to Date
+
+Use this for a complete local catch-up, covering packages, agent guidance and
+Baseline capabilities. Open the target site or a current Baseline checkout with
+access to it. The [existing-site update workflow](baseline-updates.md#existing-site-update-workflow)
+owns the process, including sites too old to have today's helpers or receipts.
+For a read-only assessment, replace the request to apply updates with
+"diagnose and propose only; do not modify the target."
+
+```text
+Bring this existing site up to date with applicable current Baseline capabilities.
+
+Target site: [absolute path, or the current project]
+Baseline reference: [current Baseline checkout path, or resolve the published
+https://github.com/Vermeulen-Solutions/baseline repository]
+
+Follow the existing-site update workflow in docs/baseline-updates.md from the
+current Baseline reference. Resolve and record the published immutable commit
+used. Read the target's AGENTS.md, profile/receipts when present, package and
+lockfile, existing design/content decisions and local changes.
+
+Compare framework/package dependencies, agent skills and working instructions,
+and Baseline components, tooling, checks and newer capabilities. Record an
+adoption plan, then complete compatible local updates within this request.
+Use the installed platform's update path; explicitly integrate missing files,
+scripts and dependencies. Review conflicts and manually adapt client code.
+If an old site lacks update tools or provenance, compare source directly and
+review helper adoption without inventing receipts or replacing the template.
+
+Work on a maintenance branch or isolated checkout and preserve uncommitted work.
+Preserve branding, calibrated tokens, routes, content, CMS data/media, edit
+bindings, secrets and deployment/editor configuration. Establish separate data
+recovery before any required CMS migration. Keep optional or incompatible
+features deferred with reasons rather than changing the site's scope.
+
+Run applicable verification, build and HTML or production-isolation checks.
+Inspect affected pages in the browser and test editing/publication when affected
+and access permits. Record the Baseline revision, adopted changes, deferrals,
+conflicts, actual checks, pending acceptance and recovery point in the existing
+tracker or a short handoff. Leave a reviewable local diff. Do not deploy.
+```
+
 ### Running a Diagnostic Site Standards Audit
 Use this prompt to diagnose an existing downstream EmDash project against Baseline standards.
 

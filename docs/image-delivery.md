@@ -1,5 +1,13 @@
 # Native image delivery
 
+Before adding incoming images during initial creation or day-2 maintenance, use
+the general [media preparation workflow](media-preparation.md). It creates
+appropriately sized stored copies with Sharp before Media Library upload or
+static asset integration. Full-size source archives stay outside the library
+and Git. The delivery tools below then generate responsive versions from those
+stored images. The WordPress attachment workflow later in this guide remains
+specific to migration relationships and ingestion.
+
 Use Astro `Image`, `Picture` or `getImage` rather than preparing a parallel set of rendition files. This starter's `ResponsiveImage` wraps `getImage` for photographic sources, source-width limits and browser fallback. It preserves originals smaller than 800 pixels and produces quality-90 WebP candidates for larger sources. `optimize={false}` retains original artwork/animated media. No resizing can restore detail absent from the source.
 
 Site imagery belongs in `src/assets/` through explicit imports or in EmDash Media Library. Keep unchanged-URL public passthrough exceptions documented; do not download migration imagery straight into `public/`. CMS images use field dimensions or bounded metadata probing through EmDash's Storage API. The certified EmDash 1.3.0 profile supplies a storage-backed image endpoint, allowing local uploads after build. Preserve original URLs for downloads/PhotoSwipe and keep Portable Text/editor semantics intact. If transformation fails, the browser restores the original image.

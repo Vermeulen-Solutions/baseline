@@ -28,6 +28,12 @@ The first install creates a project-specific `package-lock.json`; commit it and
 use `npm ci` for subsequent clean installs. Dependency versions originate from
 Baseline's canonical package definition. No source lockfile is copied from EmDash.
 
+To bring an older site up to date, use the
+[existing-site update workflow and prompt](docs/baseline-updates.md#start-an-update).
+It covers dependencies, skills and starter capabilities. Bounded `sync:baseline`
+alone does not add new features, packages or scripts; local customizations and
+original generation provenance remain preserved.
+
 To resume an unfinished build, open this same project folder and ask:
 
 ```text

@@ -72,7 +72,11 @@ Base explicitly selects `SiteShell spacingPolicy="automatic-v2"`; shared SiteShe
 For day-2 spacing requests choose the smallest scope: existing `@theme` scale for global density, regular root `--layout-*` alias for a structural relationship, layered regional alias, primitive `gap`, then an explicit utility exception. Preview `npm run design:tokens -- --set "--root:--layout-grid-gap=calc(var(--spacing-grid) * 0.75)" --json`; review, then add `--write` (and `--write-calibration` for saved-source evidence). Keep CSS authoritative without panels or a second configuration store. See `docs/design-framework.md` and `docs/native-composition.md`; inspect affected pages/styleguide at narrow/intermediate/wide widths after verify/build.
 
 Store content imagery in `src/assets/` and use native Astro image processing with
-accurate alt text and native bounds. Reserve `public/` for deliberate unchanged
+accurate alt text and native bounds. During initial builds and day-2 maintenance,
+prepare incoming images with `npm run media:prepare`, inspect the manifest/output,
+and add eligible copies to `src/assets/`. Keep client originals in their source
+handoff or ignored `.baseline/backups/` archive. See `docs/media-preparation.md`.
+Reserve `public/` for deliberate unchanged
 URL assets, including the Sveltia admin SPA when selected. There is no media
 storage endpoint or live CMS editing canvas. Sveltia edits the same Markdown files,
 requires a rebuild to publish, and must keep its form paired with the native schema.

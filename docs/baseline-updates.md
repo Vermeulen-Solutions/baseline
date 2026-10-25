@@ -1,4 +1,104 @@
-# Updating generated static sites
+# Keeping an existing site up to date
+
+Use this workflow when asked to bring an older site up to date with Baseline.
+It covers framework dependencies, agent guidance and starter capabilities across
+`emdash`, `static` and `static-sveltia`. Updating one area does not update the others.
+New sites start with the current template or generator; existing sites adopt
+changes through reviewed maintenance. Revisit this workflow periodically or
+before substantial maintenance, using the previous adoption record as the start.
+
+## Start an update
+
+Open the site in your coding assistant, or open a current Baseline tooling
+checkout and supply the target site's path. For a site whose installed guidance
+predates this workflow, use the current published Baseline guide from a separate
+checkout; do not replace the site's instructions with the starter's AGENTS.md.
+The full copy-paste prompt is in the upstream
+[prompt library](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/prompt-library.md#bringing-an-existing-site-up-to-date).
+An installed site can also use this short request:
+
+```text
+Bring this site up to date with applicable current Baseline capabilities.
+Follow the existing-site update workflow in docs/baseline-updates.md from a
+current Baseline checkout. Compare dependencies, skills/instructions and
+starter features against a recorded published Baseline commit. Preserve this
+site's content, design, configuration and local work. Complete compatible
+local updates and verification, report adopted/deferred/conflicting changes
+and remaining acceptance, and do not deploy.
+```
+
+## Existing-site update workflow
+
+1. **Establish the target and recovery point.** Read the site's instructions,
+   package/lockfile, existing decisions and Git state. Read `baseline.config.json`
+   and managed receipts when present. On older sites without them, establish the
+   platform from actual dependencies, configuration and content ownership; do not
+   invent generation history or treat every receipt-free site as EmDash. Work on
+   a maintenance branch or isolated checkout, preserving uncommitted work. For
+   CMS changes that need data migration, establish consistent database/media
+   recovery separately from Git before making those changes.
+2. **Choose the reference and compare all three areas.** Resolve a published,
+   available immutable Baseline commit and inspect its guidance/source. Keep the
+   target's installed version and previous adoption notes distinct from that
+   reference. A dirty tooling checkout is not the published commit's exact bytes;
+   label local-only changes separately. Compare packages/runtime, skills and
+   working instructions, and components/tools/checks/features. Use official
+   package release and migration guidance for compatibility decisions. A newer
+   package than the reference supports is a separate compatibility review, not
+   automatic Baseline alignment.
+3. **Record a concrete adoption plan.** In the existing tracker or a short handoff,
+   identify the current state, proposed changes, prerequisites, verification and
+   deferred features with reasons. Include new paths, scripts, dependencies,
+   retired tooling and caller migrations; a shared-file diff alone is incomplete.
+   Adopt capabilities relevant to the site rather than installing every optional
+   feature. Continue compatible work covered by an update request; an audit-only
+   request remains read-only. Ask only for unresolved consequential choices or
+   actions outside the authorized scope.
+4. **Integrate by the installed platform.** Use the paths below. Preserve calibrated
+   tokens, client-owned wrappers/routes/navigation, content, secrets, hosting and
+   editor configuration. Review skill drift and instruction ownership; merge
+   working guidance without replacing site facts or its Art Direction Record.
+   Functional changes that preserve presentation retain the visual gate's scoped
+   exception; visual changes follow the site's actual design gate and calibration.
+   Seeds do not migrate live CMS content. Code deployment does not transfer data.
+5. **Verify the adopted result.** Select commands from the installed instructions
+   and package scripts. Current EmDash uses doctor, verify:fast, verify, build and
+   audit:html against the fresh build; current static profiles use verify, build
+   and check:dev-tools. Use npm.cmd/npx.cmd in Windows PowerShell. Review missing
+   checks as explicit tooling additions, not reasons to install CMS dependencies
+   in a static site. Inspect affected public pages and responsive behavior; when
+   editing/publication behavior changes, exercise real save/reload or Sveltia
+   publication when access permits and report unobserved acceptance as pending.
+6. **Leave an adoption record and reviewable diff.** Record the selected Baseline
+   SHA, target revision, adopted capabilities/package versions, unresolved
+   conflicts, deferrals and revisit triggers, actual check results, pending
+   acceptance and recovery point. Preserve original generation provenance. An
+   adoption note records partial adoption; it does not rewrite the managed receipt
+   or certify that every upstream feature is installed. Keep private site details
+   in the site's established private records. Prepare local changes for review;
+   publishing, deployment and ongoing monitoring need their own authorization.
+
+| Target | Integration path |
+| --- | --- |
+| Generated static / Sveltia with managed receipt | Stage bounded `sync:baseline` at the chosen SHA, review conflicts, then apply eligible files. Add packages, scripts, new paths and structural migrations explicitly. Preserve Sveltia repository/auth and schema/form pairing. |
+| EmDash template-derived site | Review and adapt source changes against client code. Use installed EmDash/site skill helpers for their own scope; `sync:baseline` is not a CMS source updater. Preserve SSR, live edit bindings, runtime/cache behavior and real content. |
+| Older site missing helpers or receipts | Compare source directly with the chosen upstream revision. Review/adopt required helper files and their dependencies together, or integrate manually. Do not run nonexistent commands, force a whole-template replacement, regenerate over the site or fabricate receipt hashes. |
+
+The optional `audit:site` command in a current Baseline tooling checkout diagnoses
+older EmDash sites without requiring them to install it. Its versioned standards
+checks are a starting point, not a complete comparison against today's features;
+follow its documented runtime/evidence limits. A full update still needs the
+three-area comparison above. See the upstream
+[audit guide](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/site-standards-audit.md).
+
+Dependency automation is also bounded: the root weekly workflow proposes
+in-range package/lockfile changes as a review artifact. Exact pins stay pinned;
+it does not merge updates, refresh skills or upgrade downstream sites. Static
+source proposals are manual and separate from dependency updates. See upstream
+[reviewed maintenance](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/automated-upstream-updates.md).
+There is no universal one-command migration for all historical site shapes.
+
+## Bounded synchronization for generated static sites
 
 `npm run sync:baseline` updates shared primitives, tokens, verification tools and
 the four selected shared skills in generated `static` and `static-sveltia` sites.
@@ -98,6 +198,67 @@ The root Baseline weekly update workflow similarly produces a dependency patch
 after verification, rather than directly pushing to `main` or suppressing failures.
 CMS skill updates remain explicit, staged operations documented in
 `docs/skill-synchronization.md` in the full EmDash repository.
+
+### General image preparation adoption
+
+Current generation ships `media:prepare` for greenfield builds and day-2 image
+additions on every profile. Existing sites need an explicit additive migration:
+copy/review `scripts/prepare-images.mjs`, `scripts/prepare-image.mjs`,
+`docs/media-preparation.md` and the portable `tests/media-preparation.test.mjs`;
+add `"media:prepare": "node scripts/prepare-images.mjs"` to package scripts.
+Adopt matching maintained skill/AGENTS guidance and classify tests where the
+installed suite uses tiers. The tools use the existing Sharp dependency; review
+the installed version and update the site's lockfile only if needed. Keep
+`.baseline/backups/` ignored in static sites and `.emdash/backups/` ignored in
+EmDash sites.
+
+EmDash templates additionally adopt `scripts/upload-prepared-media.mjs` and
+`"media:upload": "node scripts/upload-prepared-media.mjs"`. This wrapper uses the
+installed EmDash CLI and requires a version supporting the documented media
+commands. Run a disposable target upload/readback rehearsal before using it on
+the site's intended instance. Static installations do not acquire this CMS
+wrapper or its dependencies. Bounded sync does not add these new paths/commands
+or expand managed-file membership; review that provenance migration explicitly.
+Preserve client source archives, calibrated tokens, content and original
+generation provenance. Verify preparation, original preservation, output review
+and the applicable profile build/HTTP checks. Direct browser uploads retain their
+existing behavior; the local command is an agent-assisted workflow.
+
+### Retiring the default DESIGN.md package
+
+Current generation no longer installs `@google/design.md` or ships
+`scripts/design-interchange.mjs`, `design:check` or `design:export`. Native token
+validation, the Art Direction Record gate and rendered calibration are unchanged.
+Optional `DESIGN.md` references remain site-owned material; keep them and any
+useful mapping/rationale files.
+
+For an existing site, adopt this as an explicit package/tooling migration rather
+than expecting bounded sync to remove dependencies, commands or retired files:
+
+1. Save the current verified source and lockfile. Check whether the site uses the
+   bridge for a real external handoff. If needed, move that workflow into a
+   separately reviewed tooling workspace with its own dependencies and lockfile.
+2. Run `npm uninstall --save-dev @google/design.md` (`npm.cmd` in Windows
+   PowerShell). Review the package and lockfile diff; do not remove Zod packages
+   required by Astro or EmDash or add a major-version override.
+3. Remove `design:check`, `design:export` and the retired bridge script. Full
+   EmDash template copies also remove its dedicated test and any test command,
+   tier, inventory or standards entries that reference it. Keep all native design
+   and art-direction checks. Review the maintained skill/document changes from
+   the chosen revision so agents no longer require the removed commands.
+4. Review retired managed-file membership as a provenance migration; bounded sync
+   does not perform it. Preserve original generation provenance and calibrated
+   CSS, client content, references and unresolved local conflicts. Historical
+   standards snapshots and upgrade patches describe their original revisions;
+   apply this retirement after an older architecture patch if needed.
+5. Run the installed verification/design suites, build and applicable HTML or
+   production-isolation checks, then inspect `npm audit --json`. The removal
+   resolves only the design-package dependency path; independent findings,
+   including EmDash's Zod pin, need their own review.
+
+The native token checker remains the source of automated CSS checks. Add an
+exchange format or validator only when an actual recipient needs it; no second
+canonical token file or replacement token framework is introduced.
 
 Template accessibility lint is an additive tooling upgrade for older generated
 sites. Current generation includes `eslint.config.mjs`, portable regression tests,

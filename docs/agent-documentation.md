@@ -141,9 +141,9 @@ During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, con
 ```
 
 > [!TIP]
-> **Graceful Fallback & Binary Guard:**
+> **Optional external tools:**
 > - All design MCPs are optional and absent from the default example. Use them when the brief calls for them; no tool-selection checkpoint is required. Local lane/token tooling and `/_styleguide` remain available without adding external services.
-> - Baseline pins `@google/design.md@0.4.0` locally (`npm run design:check`) for offline frontmatter token linting. Always use `npx -y designmd-mcp` (or `npx --package=designmd designmd ...`) for the [designmd.ai](https://designmd.ai/explore) community registry so you do not overwrite the local `@google/design.md` binary. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
+> - Baseline ships no `DESIGN.md` validator or exporter. Reading design references needs no package installation. If a specific exchange requires validation/export, select and review that external tool separately. Google's `@google/design.md` and the community registry's `designmd` package are different tools, despite their shared binary name. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---
 

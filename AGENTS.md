@@ -91,7 +91,12 @@ for direction, implementation and rendered critique.
   Preserve the spacing hierarchy and avoid combining layout gaps with flow margins
   for the same relationship. Read the detailed layout contracts before changing them.
 - Store content images in src/assets/ or the EmDash Media Library; use native
-  Astro processing. public/ is for deliberate unchanged-URL assets.
+  Astro processing. Before adding/uploading new imagery in a greenfield build
+  or day-2 maintenance, use `npm run media:prepare`, inspect its results and use
+  eligible prepared copies. Keep full-size source archives outside the library
+  and Git. See [media preparation](docs/media-preparation.md); EmDash also has
+  `media:upload` for destination-bound upload/readback. public/ is for deliberate
+  unchanged-URL assets.
 - Keep CMS routes server-rendered. Use EmDash content/media APIs and field edit
   proxies; verify actual typing, save and reload when changing edit targets.
   Render editorial content through RichText. A seed is not a content migration.
