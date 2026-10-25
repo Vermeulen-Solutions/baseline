@@ -48,6 +48,32 @@ test('behavior ID-only media resolves through its provider and gallery utilities
   await expect(page.locator('.photo-gallery img')).toHaveCSS('max-width','100%');
 });
 
+test('behavior responsive media falls back to its original when an optimized rendition fails',async({page},info)=>{
+  test.skip(info.project.name!=='chromium-390','One network-fault recovery run');
+  const failedRenditions=[];
+  await page.route('**/*',route=>{
+    const url=new URL(route.request().url());
+    if(url.pathname.includes('/_astro/')&&/\.(?:webp|avif|png|jpe?g)$/i.test(url.pathname)||url.pathname==='/_image'&&url.searchParams.has('w')||url.pathname.includes('/_emdash/api/media/file/')&&(url.searchParams.has('w')||url.searchParams.has('width'))){failedRenditions.push(url.href);return route.abort();}
+    return route.continue();
+  });
+  await page.goto(process.env.VISUAL_ORIGIN+'/media-spacing-fixture');
+  const image=page.locator('#responsive-frame img');
+  await expect.poll(()=>failedRenditions.length).toBeGreaterThan(0);
+  await expect.poll(()=>image.evaluate(img=>img.complete&&img.naturalWidth>0&&img.currentSrc===new URL(img.dataset.originalSrc,document.baseURI).href)).toBe(true);
+  await expect.poll(()=>image.evaluate(img=>img.naturalWidth)).toBeGreaterThan(800);
+  await expect(image).not.toHaveAttribute('srcset');
+});
+
+test('behavior missing local media keeps its accessible alternative when storage returns 404',async({page},info)=>{
+  test.skip(info.project.name!=='chromium-390','One unavailable-media run');
+  await page.route('**/_emdash/api/media/file/**',route=>route.fulfill({status:404,contentType:'text/plain',body:'Unavailable'}));
+  await page.goto(process.env.VISUAL_ORIGIN+'/media-spacing-fixture');
+  const image=page.locator('#id-only-media img');
+  await expect(image).toHaveAttribute('alt','ID-only local image');
+  await expect(image).toHaveRole('img',{name:'ID-only local image'});
+  await expect.poll(()=>image.evaluate(img=>img.complete&&img.naturalWidth===0)).toBe(true);
+});
+
 test('V01/V15 image placement, calibrated gutters, breakout tracks and selected resources',async({page},info)=>{
   test.skip(info.project.name!=='chromium-390','Explicit 320/390/1280 placement matrix');
   const measurements=[];
