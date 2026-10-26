@@ -17,6 +17,9 @@ public Astro implementation stages. Their EmDash-only sections do not apply to
 this profile. Do not load CMS setup/modeling/plugin skills or add database,
 React, server-adapter or EmDash dependencies. `static-sveltia` adds the pinned
 admin SPA and paired form only; read `docs/sveltia-cms.md` for OAuth proxy/PAT setup.
+
+For an audit request, lead with an actionable follow-up plan and meaningful user decisions, using findings as supporting evidence. An audit alone does not authorize implementing the plan. Follow `new-site-workflow`'s **Audit requests and release completion** guidance: agree the implementation/release scope, then complete verification, commit, push and applicable deployment without repeated continuation prompts. Respect explicit audit-only or local-only scope.
+
 Keep site decisions in their established home: here by default, or in an explicitly
 adopted optional `PROJECT.md` linked here. Keep working rules and the compact Art
 Direction Record in this file. `PROJECT.md` holds brief, scope, ownership and

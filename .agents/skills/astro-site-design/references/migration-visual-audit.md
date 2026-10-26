@@ -48,9 +48,13 @@ Translate that record into a short design direction before building pages:
 
 This is a working design brief, not an approval gate. Make reasonable design decisions and test them in the rendered site. A reference screenshot is evidence for comparison, not a pixel-by-pixel specification unless the user explicitly requests one.
 
+When the user requests a route-by-route proposal or review, present it before changing those routes. Reuse settled approvals; ask only consequential unresolved choices. Distinguish refinement from significant overhaul within the brand or replacement of the visual world. The latter scopes use the representative-page concept pass in `site-art-direction`, including for an existing Baseline site, before broad implementation.
+
 #### Early-Baseline & Legacy Pattern -> Modern Baseline Upgrade Matrix
 
 When auditing either a legacy builder site (WordPress/Elementor/Blocksy) or an earlier-generation Baseline site, use this matrix to translate dated layout patterns into current Baseline primitives:
+
+Use the concrete patterns below as the modernization defaults to inspect and propose, not merely as optional inspiration. Apply the five-point rubric in `astro-site-design/SKILL.md`. When an accepted brand/composition or a route's actual function conflicts with a pattern, record the specific exception and rendered rationale. Capability flags and usage counts are useful diagnostic cues, but cannot replace that visual review or prove quality by themselves.
 
 | Observed Legacy / Early-Baseline Pattern | Modern Baseline Upgrade (`references/astro-primitives.md` & `references/landing-page-archetypes.md`) |
 | --- | --- |
@@ -87,13 +91,15 @@ When repeated items have per-instance IDs or divergent builder styles, compare s
 3. Exercise links and interactions that carry user intent, including forms, navigation, directions, and any functional image or code. Confirm labels and destinations against the source/configuration.
 4. Verify editorial behavior in EmDash: create or edit a representative record in every custom collection and confirm the public list/detail templates pick it up without hand-editing Astro pages.
 5. Run the project's relevant checks and build. Record routes or states that remain unverified, and do not report those as complete.
-6. Run the **5-Point Visual Self-Critique Rubric** across every redesigned route at `1440x900` and `390x844`: (1) **3-Tier Surface Depth** (Base -> Surface -> Elevated/Glass), (2) **4-Voice Typography** (`.eyebrow-telemetry` / `.font-accent` / `.tabular-nums`), (3) **Grid Rhythm & Asymmetry** (no consecutive identical 3-column card grids; use `.bento-grid`, `.grid-hairline`, or `<Sidebar>`), (4) **Tactile Action Hierarchy** (`.btn` + `.btn--secondary` + `.btn--ghost` with `.icon-nudge`), and (5) **Motion & Polish** (`data-reveal`, `data-sticky-header`, `<Card transitionName>`, and zero FOUC on `[data-surface-toggle]`).
+6. Run the **5-Point Visual Self-Critique Rubric** in `astro-site-design/SKILL.md` across every redesigned route at `1440x900` and `390x844`: (1) **3-Tier Surface Depth** (Base → Surface → Elevated/Glass), (2) **4-Voice Typography** (`.eyebrow-telemetry` / `.font-accent` / `.tabular-nums`), (3) **Grid Rhythm & Asymmetry** (no consecutive identical 3-column card grids; use `.bento-grid`, `.grid-hairline` or `<Sidebar>`), (4) **Tactile Action Hierarchy** (`.btn` + `.btn--secondary` + `.btn--ghost` with `.icon-nudge` and focus), and (5) **Motion & Polish** (`data-reveal`, `data-sticky-header`, `<Card transitionName>`, zero FOUC on `[data-surface-toggle]` and reduced-motion behavior). Evaluate all five checks; document a specific exception when the accepted direction or route function requires it rather than silently omitting a check. Check intermediate/narrow widths where layouts change, validate saved captures using `references/rollout-verification.md` and reconcile evidence with the route inventory before claiming completion.
 
 The acceptance bar is not pixel identity. It is complete route coverage, correct content and asset meaning, retained brand character, visible improvement on the source's documented design problems, functional interactions, responsive rendering, and maintainable templates for repeated content. A technically clean but generic or less compelling result fails this bar even when its content and routes are correct.
 
 ## Actionable Audit Handoff
 
 Once the visual audit and Preserve / Improve / Replace table are completed, do not leave the findings as an isolated document. Formulate them into immediate next actions:
+
+Lead the handoff with the recommended plan, reasons and consequential decisions; retain screenshots and the detailed report as supporting evidence. Apply `new-site-workflow`'s **Audit requests and release completion** policy: an audit alone does not authorize implementation. Include the applicable verification, commit/push/deploy endpoint and resolve targets/authority during plan selection, reusing existing authorization.
 1. **Translate repeated content into `audit/content-candidate-register.md` (Stage 3):** Repeated card grids, team rosters, or project sections become structured EmDash collections.
 2. **Translate visual cues into the Art Direction Record (Stage 4):** Anchored brand colors, typography pairings, and spatial density feed directly into the `AGENTS.md` Art Direction Record.
-3. **Present the next step prompt to the user:** Nudge the user to either review content candidates in Stage 3 or proceed to Stage 4 visual direction.
+3. **Report the next authorized action:** For an audit-only request, deliver findings and proposed next steps. When implementation is already requested, continue through the remaining authorized work; pause only for a consequential unresolved decision or unavailable required action. Do not make the user request continuation merely because the audit report is written.

@@ -18,6 +18,8 @@ intent from a Git remote, branch, package name or the presence of starter files.
 There is no persistent mode switch. Ask only if unresolved intent would materially
 change the work; continue authorized work when the intent is already clear.
 
+For an audit request in any Baseline workflow, lead with an actionable follow-up plan and the meaningful decisions it needs, using findings as supporting evidence. An audit alone does not authorize implementing its recommendations. Use `new-site-workflow`'s **Audit requests and release completion** guidance: agree the implementation/release scope, then carry approved changes through verification, commit, push and applicable deployment without repeated continuation prompts. Respect explicit audit-only or local-only scope.
+
 ## Establish the platform
 
 Use npm and the checked-in lockfile. Read baseline.config.json in generated sites;

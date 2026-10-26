@@ -6,11 +6,17 @@ Use this reference for an established-site redesign that spans several templates
 
 Maintain one execution register with task IDs, named routes/locales, evidence paths and checkpoints. Distinguish implemented, verified and deferred. Enumerate generated records from current content, not only source manifests or route files. Treat representative visual review and sibling coverage as separate checks. When a later batch resolves an earlier blocker, update the current status while retaining its historical failure evidence.
 
+Map every requested deliverable, including a route proposal or editor acceptance, to this register. Before final delivery reconcile it with actual source and observations using `new-site-workflow/references/site-maintenance.md` when installed. Do not count an attempted check, a generated report or a source-only annotation as the corresponding observed result.
+
 Separate public presentation, editorial accuracy, CMS editing, mail/integration operation and deployment. A source fact awaiting the owner is an explicit editorial follow-up; do not invent its replacement or label the whole site verified without naming the limit. User-approved concepts and existing scope remain authoritative when work resumes.
 
 ## Capture the rendered result
 
+Discover the browser capabilities available in the current harness. A native application failure does not establish that its built-in browser or a supported connector is unavailable. Use an available authorized alternative, following its documented APIs; do not install a new browser stack merely because a preferred surface failed. Distinguish ordinary tool errors from permission/policy denials. Never bypass a denial by switching APIs; continue independent permitted work and report an actual access blocker precisely.
+
 Before full-page capture, inspect actual font readiness and render a viewport frame. Scroll through lazy sections using supported browser actions, observe after each scroll, and return to the top. Check capture dimensions, claimed route/content, top and footer, loaded imagery and overflow. A screenshot filename is not evidence that its contents are valid.
+
+Distinguish the requested CSS viewport, the usable document width after scrollbars, and the saved image's physical dimensions/device scale. Verify the target tab's actual size after setting it; a browser-wide control may affect only the active tab. Compare layout before and after capture: some tools hide a scrollbar or resize the viewport during full-page capture, causing reflow or a right-clipped image. If those values change unexpectedly, settle the viewport and recapture, then validate file dimensions and inspect the saved pixels. Explain legitimate scale/rounding differences. Do not prescribe an unconditional double capture or change site gutters to compensate for a capture defect. Measure intended centered wrappers against their containing viewport/content area, separately from deliberate asymmetric children.
 
 Persist full accessibility snapshots when recording evidence; transient diff snapshots are useful during interaction but incomplete as standalone records. Keep capture batches within the tool timeout and save progress between batches. Recapture only evidence invalidated by changes or failures, rather than repeating the entire audit without cause.
 

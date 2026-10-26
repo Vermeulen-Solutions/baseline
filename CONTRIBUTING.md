@@ -120,6 +120,8 @@ or AGENTS.md. Impeccable is a separately licensed upstream snapshot: preserve it
 LICENSE/PROVENANCE and update deliberately. Checked-in mirror drift is pending
 review, not evidence of synchronization.
 
+Preserve the concrete selectors, CSS values, composition recipes, named tools and explicit decision checkpoints that encode a maintained skill's intent. These instructions must remain usable by faster or less capable models, without assuming expert inference. Resolve an overbroad rule with a scoped exception or a clearer default before removing its examples; explain any intentional removal. Structural validators and application tests do not establish equivalent model behavior. When evaluating a substantial rewrite, use representative tasks with the intended model/runtime when available and label untested behavioral claims honestly.
+
 Keep root AGENTS.md site-first, with a short route here for maintainer tasks.
 Generated static sites use profiles/static/project/AGENTS.md; their instructions
 must remain usable with only installed files. Do not add mandatory references to

@@ -4,7 +4,9 @@ This prompt library provides adaptable recipes for the documented Baseline workf
 
 Use these prompts to invoke specific Baseline features and workflows without having to remember internal commands or skill names.
 
-Check the installed profile and `package.json` before choosing commands. Handoffs report evidence and next steps; they do not require a reply unless a consequential decision or external-action authorization is missing. The kickoff prompts below request a complete local build. For a discovery-only or review-at-each-stage task, state that scope explicitly.
+Check the installed profile and `package.json` before choosing commands. Handoffs report evidence and next steps; they do not require a reply unless a consequential decision or external-action authorization is missing. The kickoff prompts below declare implementation and release scope; establish repository/branch, deployment target and authority during planning. For a local-only, discovery-only or review-at-each-stage task, state that scope explicitly.
+
+Audit requests should produce a recommended follow-up plan with meaningful user decisions, supported by findings; they do not authorize applying every recommendation. For implementation, agree the release endpoint early: verified changes committed, pushed and deployed to named targets where applicable. Carry authorized release steps through without another continuation prompt; retain any recipe's explicit audit-only or local-only boundary. Template/library changes can end at commit/push without a site deployment.
 
 ---
 
@@ -40,8 +42,9 @@ use npm.cmd and npx.cmd for all npm and npx commands.
 - Primary Audience: [E.g., Residential and cultural architecture clients]
 - Aesthetic Lane / Palette: [E.g., Editorial Paper / Product-Led Minimalism, or seed accent #1B4332]
 - Hosting & Locale: [E.g., Node.js + SQLite, single language (en)]
+- Release scope: [Repository/branch, deployment target and authorized commit/push/deploy actions, or explicitly local-only]
 
-Determine the profile first and work in its project directory. Complete the local site and verification, reporting Checkpoints A–C as you go. Continue authorized work without waiting for a reply at each checkpoint; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
+Determine the profile first and work in its project directory. Complete the site and verification, then the agreed commit/push/deploy steps and live acceptance, reporting Checkpoints A–C as you go. Continue authorized work without waiting for a reply at each checkpoint; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
 ```
 
 ### Standard Agency Mode Kickoff (Full 7 Stages — For Complex Sites & Migrations)
@@ -59,8 +62,9 @@ Here is the context for this project:
 - Primary Audience: [E.g., Prospective enterprise buyers / Creative directors]
 - Brand Assets Available: [E.g., SVGs in src/assets/, brand colors: #1A1A1A and #0055FF, typography: Inter + Newsreader]
 - Required Locales: [E.g., Single language (en) or Multilingual (en, de)]
+- Release scope: [Repository/branch, deployment target and authorized commit/push/deploy actions, or explicitly local-only]
 
-Begin with Stage 1 (Brief & Evidence Discovery), determine the profile, and complete the requested local site and verification. Report stage handoffs and continue authorized work; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
+Begin with Stage 1 (Brief & Evidence Discovery), determine the profile, and complete the requested site and verification, then the agreed commit/push/deploy steps and live acceptance. Report stage handoffs and continue authorized work; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
 ```
 
 ### Resuming a Prepared or Partly Built Site
@@ -79,9 +83,10 @@ Preserve established scope, supplied content, editing ownership and design
 decisions. Use the current project and its lockfile. Ask only for consequential
 missing decisions, and label reversible working assumptions.
 
-Complete the remaining local work and applicable verification, start the
-preview, and report its URL, actual checks and observations, and pending
-editor or launch acceptance. Keep deployment within the existing authorization.
+Complete the remaining implementation and applicable verification, start the
+preview, and finish the agreed commit/push/deploy and live checks within existing
+authorization. Report the actual revisions/URLs, observed acceptance and any
+concrete remaining decision or action. Respect an explicitly local-only scope.
 ```
 
 ### Evaluating & Installing Sandboxed Registry Plugins (Stage 2)
@@ -160,6 +165,11 @@ We are ready for Stage 4: Art Direction. Activate the site-art-direction skill.
 Brand goals and personality: [E.g., Editorial craftsmanship, technical precision, high-contrast typography, restrained color palette].
 
 Please:
+Before choosing the direction, explicitly ask whether to prototype with Pencil,
+Google Stitch, OpenDesign, Claude Design, designmd-mcp references or direct
+HTML/CSS concepts. Recommend based on the brief and tools actually available;
+reuse an existing answer and resolve any unavailable-tool fallback explicitly.
+
 1. Review .agents/skills/site-art-direction/references/aesthetic-lanes.md and propose 2-3 suitable Aesthetic Lanes.
 2. Formulate a Narrative Metaphor, Typography Pairing, and Token Physics (Canvas ground, Action/Accent colors, Borders, and Spatial Density).
 3. Propose 2-3 explicit Site Anti-Patterns (e.g., "No floating cards; no generic purple gradients; no icon pills").
@@ -226,14 +236,32 @@ Use this prompt once a representative page is rendering in the browser.
 ```markdown
 Activate the impeccable skill and perform a visual critique pass on our rendered [Homepage / About / Case Study] page.
 
-Please evaluate against the **5-Point Visual Self-Critique Rubric** and `impeccable`:
-1. **3-Tier Surface Depth**: Are we using Base Canvas (`--color-page`), Primary Surface (`--color-surface`), and Elevated/Glass (`--color-elevated` / `--surface-glass` / `.surface-spotlight`) with `1px` `--color-border` hairlines rather than flat 1-surface cards?
-2. **4-Voice Typography & Hierarchy**: Are display headings optically tracked, is body measure constrained to ~68ch, and are `--font-mono` (`.eyebrow-telemetry`, `.tabular-nums`, `.badge-pill`) and `--font-accent` (`.font-accent`) used to break up monotone hierarchy?
-3. **Spatial Pacing & Asymmetric Rhythm**: Does the page avoid consecutive uniform 3-column card grids by alternating with `.bento-grid`, `.grid-hairline`, `<Sidebar>` splits, or `.ui-specimen` frames?
-4. **Tactile Action Hierarchy & Focus**: Are primary `.btn`, `.btn--secondary`, and `.btn--ghost` (with `.icon-nudge`) paired clearly, and do cards preserve `.clickable-parent` / `.focus-parent` keyboard accessibility?
-5. **Viewports, Motion & Surface Switching**: Check mobile (`390x844`) and desktop (`1440x900`), `data-reveal` choreography, `data-sticky-header`, `<Card transitionName>` morphing, and FOUC-free `[data-surface-toggle]` switching.
+Apply the **5-Point Visual Self-Critique Rubric** in astro-site-design/SKILL.md:
+1. 3-Tier Surface Depth: Base (--color-page) -> Surface (--color-surface) ->
+   Elevated/Glass (--color-elevated, .surface-elevated, .surface-glass) with 1px
+   --color-border hairlines. Check a contrasting mid-page band/rhythm breaker.
+2. 4-Voice Typography: tracked --font-display headings, --font-body around 68ch,
+   selective italic .font-accent, .eyebrow-telemetry and .tabular-nums metadata.
+   On new landing pages, check at least three distinct roles above the fold.
+3. Grid Rhythm & Asymmetry: avoid consecutive equal 3-column card rows; inspect
+   12-column .bento-grid (8/4 or 7/5), .grid-hairline and Sidebar alternatives.
+4. Tactile Action Hierarchy: .btn, .btn--secondary, .btn--ghost, .icon-nudge and
+   .clickable-parent / .focus-parent keyboard accessibility.
+5. Motion & Polish: data-reveal, data-sticky-header, Card transitionName,
+   zero FOUC on surface controls, reduced motion and ordinary navigation fallback.
 
-Provide a concise list of high-impact refinements, and propose concrete token or markup edits to resolve them.
+Use these concrete defaults for new/replacement work. Evaluate every check
+against real content; document specific exceptions for an accepted existing
+direction or route function. Capability counts alone are not quality scores.
+
+Inspect mobile (390x844), desktop (1440x900) and relevant intermediate widths.
+Verify saved capture dimensions, loaded content and live geometry. Exercise
+adopted controls/transitions, keyboard focus and reduced motion; surface switching
+is in scope only when the site offers it. Use a supported available browser if
+the preferred native browser fails, without bypassing a permission/policy denial.
+
+Provide high-impact findings with route/viewport evidence and concrete edits.
+This request is a critique/proposal; do not assume permission for a redesign.
 ```
 
 ---
@@ -290,9 +318,32 @@ Please:
 
 Start from the installed profile, `package.json`, the site's instructions and its existing decisions. Use the applicable checked-in skills and commands, and keep optional project records optional. A scoped maintenance request can proceed from its affected stage without restarting discovery. For changes spanning several surfaces, use `new-site-workflow`'s scoped maintenance guidance; isolated edits can use their specialist directly. These recipes reuse the [spacing contracts](design-framework.md#8-contextual-spacing-maintenance), [reviewed static updates](baseline-updates.md) and [EmDash skill synchronization](skill-synchronization.md).
 
+Choose visual intensity separately from preservation and release authority: [primitive modernization and refinement](#modernizing-an-earlier-baseline-site-primitives--refinement) keeps the accepted visual direction; [significant redesign](#significant-redesign-of-an-existing-site) explores new composition or a replacement world within explicit brand limits. For multi-deliverable work, use the existing tracker to map each requested result to source, observed evidence and current status. Continue required authorized work before final delivery; report real blockers and named external acceptance separately.
+
+### Audit First, Then Choose the Follow-Up
+
+Use this across design, content/schema, dependencies, configuration or workflow reviews when you want informed choices before changes. The outcome is an actionable plan; detailed audit output supports it.
+
+```text
+Audit [aspect] of [project/site] before implementing changes.
+
+Inspect the actual source, installed setup and relevant runtime evidence.
+Lead with your recommended follow-up plan: what to change, why it matters,
+what to preserve, dependencies/tradeoffs and how each phase will be verified.
+Give me a few meaningful decisions or alternatives, with a recommendation.
+Keep the detailed report as supporting evidence; do not stop at findings.
+
+Wait for my selection before applying recommendations. Once selected, continue
+the agreed work through implementation and acceptance without repeated prompts
+to continue. Include commit, push and applicable deployment in the plan; establish
+the repository/branch, deployment target and release authority when we select it.
+Respect any explicit local-only scope. Report the actual released revision and
+live checks, or name the concrete remaining decision/action.
+```
+
 ### Bringing an Existing Site Up to Date
 
-Use this for a complete local catch-up, covering packages, agent guidance and Baseline capabilities. Open the target site or a current Baseline checkout with access to it. The [existing-site update workflow](baseline-updates.md#existing-site-update-workflow) owns the process, including sites too old to have today's helpers or receipts. For a read-only assessment, replace the request to apply updates with "diagnose and propose only; do not modify the target."
+Use this for a complete catch-up, covering packages, agent guidance and Baseline capabilities through the agreed release endpoint. Open the target site or a current Baseline checkout with access to it. The [existing-site update workflow](baseline-updates.md#existing-site-update-workflow) owns the process, including sites too old to have today's helpers or receipts. For a read-only assessment, replace the request to apply updates with "diagnose and propose only; do not modify the target."
 
 ```text
 Bring this existing site up to date with applicable current Baseline capabilities.
@@ -300,6 +351,8 @@ Bring this existing site up to date with applicable current Baseline capabilitie
 Target site: [absolute path, or the current project]
 Baseline reference: [current Baseline checkout path, or resolve the published
 https://github.com/Vermeulen-Solutions/baseline repository]
+Release scope: [repository/branch, deployment target and authorized actions;
+or explicitly local-only]
 
 Follow the existing-site update workflow in docs/baseline-updates.md from the
 current Baseline reference. Resolve and record the published immutable commit
@@ -324,7 +377,9 @@ Run applicable verification, build and HTML or production-isolation checks.
 Inspect affected pages in the browser and test editing/publication when affected
 and access permits. Record the Baseline revision, adopted changes, deferrals,
 conflicts, actual checks, pending acceptance and recovery point in the existing
-tracker or a short handoff. Leave a reviewable local diff. Do not deploy.
+tracker or a short handoff. Complete the agreed commit/push/deploy steps after
+verification, or retain a reviewable local diff when the scope is local-only.
+Do not infer release authority, production content writes or DNS cutover.
 ```
 
 ### Running a Diagnostic Site Standards Audit
@@ -338,10 +393,69 @@ Once the diagnosis completes:
 1. Summarize any failing scopes (design system tokens, schema budget, skill drift, adapter compatibility).
 2. Propose a phased, user-selectable modernization plan following Tracks 1 through 5.
 3. Wait for my selection before modifying any files in the target repository.
+4. Include verification, commit/push and applicable deployment in the selected
+   plan. Resolve the repository/branch, deployment target and release authority
+   at selection; then complete authorized release steps without another prompt.
 ```
 
-### Auditing & Redesigning an Earlier Baseline Site (Visual & Primitive Upgrade)
-Use this prompt when you have an existing site built on an earlier version of Baseline (for example, an older EmDash or static deployment) and want to backport the modern design-system primitives, audit its live visual quality, and upgrade its routes without losing its brand identity or CMS content.
+### Significant Redesign of an Existing Site
+
+Use this for a substantial visual overhaul of an existing Baseline or other site. The concept pass defines the new composition before broad implementation. Specify fixed identity elements independently of the permitted visual change; use a local-only release unless broader actions are authorized.
+
+```text
+Significantly redesign this existing site using new-site-workflow,
+site-art-direction, astro-site-design and the applicable Impeccable flow.
+
+Target site: [folder and preview URL]
+Baseline reference: [checkout path or immutable published revision]
+Visual intensity: [significant overhaul within the brand / replacement world]
+Preserve: [logo, palette/fonts if fixed, content, URLs, CMS/edit bindings,
+forms, integrations and hosting configuration]
+May change: [composition, hierarchy, navigation presentation, typography,
+surfaces, image treatment and motion; state the brand limits]
+Release scope: [repository/branch, deployment target and authorized actions;
+or explicitly local-only]
+
+Read installed instructions, profile, package scripts, lockfile, existing design
+decisions and current content. Use the site's package manager and supported tools.
+Inventory route archetypes and inspect the actual source at desktop and mobile.
+Preserve product truth and editing ownership. Do not treat the old composition
+as fixed unless listed above or mistake utility adoption for a redesign.
+
+Develop two or three materially different concepts for a representative page
+using real copy and available assets, including mobile intent. Compare audience
+fit, identity continuity, readability, function and maintainability. Resolve the
+direction decision before broad implementation; ask only consequential questions
+not already answered. Record which previous visual decisions are superseded.
+
+At the concept checkpoint, explicitly ask whether to use Pencil, Google Stitch,
+OpenDesign, Claude Design, designmd-mcp references or direct HTML/CSS prototypes.
+Recommend based on the brief and actual tool availability. Reuse an existing
+choice; resolve an unavailable-tool fallback rather than silently coding instead.
+
+Calibrate the selected system on the installed styleguide, implement one real
+page per archetype and critique it in the browser before rolling it out. Keep
+one requirement-to-evidence register in the existing tracker. Present requested
+route proposals before their implementation. Validate saved capture dimensions,
+loaded content, narrow/intermediate/wide layouts and changed interactions.
+If native-browser access fails, discover supported built-in/connector options;
+never bypass a policy denial. Test CMS save/reload when edit targets change,
+using an authorized isolated copy where appropriate.
+
+Run installed verification, build and release-isolation/HTML checks. Reconcile
+every deliverable before ending: distinguish implementation, automated checks,
+rendered behavior, editorial acceptance and deployment. Continue required work
+within existing authorization; name real blockers and unobserved acceptance.
+Finish the agreed commit/push/deploy steps and live acceptance; respect an
+explicitly local-only scope and identify when no site deployment applies.
+Keep content imports, production edits and DNS cutover separately authorized.
+```
+
+<a id="auditing--redesigning-an-earlier-baseline-site-visual--primitive-upgrade"></a>
+
+### Modernizing an Earlier Baseline Site (Primitives & Refinement)
+
+Use this to backport compatible primitives, audit rendered quality and refine routes within the accepted brand and composition. The legacy “Auditing & Redesigning” anchor above is retained for existing links. Use the significant-redesign recipe when the visual direction itself should change.
 
 ```markdown
 Audit and modernize the design of this earlier Baseline site while preserving its brand identity, content, and CMS bindings.
@@ -349,6 +463,11 @@ Audit and modernize the design of this earlier Baseline site while preserving it
 - Target site folder: [path/to/site, or current project]
 - Live / preview URL (optional): [e.g., https://my-site.workers.dev]
 - Baseline reference: [path/to/current-baseline, or https://github.com/Vermeulen-Solutions/baseline]
+- Release scope: [Repository/branch, deployment target and authorized commit/push/deploy actions, or explicitly local-only]
+
+Use the installed profile, scripts, package manager and lockfile. Preserve the
+accepted visual direction and record each requested deliverable in the existing
+tracker with its implementation, evidence and current status.
 
 Please follow the Early-Baseline upgrade playbook in `.agents/skills/new-site-workflow/references/site-maintenance.md` and `.agents/skills/astro-site-design/references/migration-visual-audit.md`:
 
@@ -357,12 +476,14 @@ Please follow the Early-Baseline upgrade playbook in `.agents/skills/new-site-wo
    - On static sites, inspect `src/styles/global.css`, `src/layouts/SiteShell.astro`, `src/layouts/Base.astro`, and `src/components/Card.astro` (or stage `npm run sync:baseline`).
 2. **Backport Modern Primitives Non-Destructively**:
    - Preserve the site's calibrated `@theme` palette, `--font-display`, `--font-body`, and `AGENTS.md` `## Art Direction Record`.
-   - Add `--font-mono` and `--font-accent` to `@theme`, merge the modern `@layer base` and `@layer components` utilities (3-tier surfaces `--color-elevated` / `--surface-glass`, 4-voice typography `.eyebrow-telemetry` / `.font-accent` / `.tabular-nums`, tactile `.btn--secondary` / `.btn--ghost` / `.icon-nudge`, `.bento-grid`, `.grid-hairline`, `.ui-specimen`, `[data-reveal]`, `[data-sticky-header]`, View Transitions), and sync `SiteShell.astro`, `Base.astro`, and `Card.astro`.
+   - Add missing `--font-mono` and `--font-accent`; merge compatible `@layer base` / `@layer components` primitives: `--color-elevated` / `--surface-glass`, `.eyebrow-telemetry` / `.font-accent` / `.tabular-nums`, `.btn--secondary` / `.btn--ghost` / `.icon-nudge`, `.bento-grid`, `.grid-hairline`, `.ui-specimen`, `[data-reveal]`, `[data-sticky-header]` and View Transition rules. Review/adapt `SiteShell.astro`, `Base.astro` and `Card.astro` without overwriting client wrappers or calibration. Use the concrete checklist; record specific brand/function exceptions. Audit flags/counts are diagnostic cues, not quality scores.
 3. **Visual Audit & Route-by-Route Upgrade Proposal**:
    - Inspect the rendered pages at desktop (`1440x900`) and mobile (`390x844`) against the **5-Point Visual Self-Critique Rubric** and the **Early-Baseline & Legacy Pattern -> Modern Baseline Upgrade Matrix**.
-   - Present a concise **Preserve / Improve / Upgrade** table per route (identifying flat 1-surface sections, 2-voice typography gaps, repetitive 3-column card rows that should become `.bento-grid` / `.grid-hairline` / `<Sidebar>` splits, and opportunities for `.ui-specimen` or `<Card transitionName>`).
+   - Present a concise **Preserve / Improve / Upgrade** table per route before editing routes. Identify actual problems, proposed remedies and reasons to retain or decline capabilities. Reuse settled decisions; resolve only consequential open choices before implementation.
 4. **Execute & Verify**:
-   - Apply the approved route upgrades, calibrate on `/_styleguide` (`audit/component-calibration.md`), preserve all EmDash `{...entry.edit.*}` proxies and URLs, and run `npm run verify` and `npm run build`.
+   - Apply the approved route upgrades, calibrate applicable primitives on `/_styleguide` (`audit/component-calibration.md`), preserve all EmDash `{...entry.edit.*}` proxies and URLs, and run the installed verification/build and HTML/release-isolation checks.
+   - Browser-test affected routes at the requested and relevant intermediate widths. Validate actual tab/capture dimensions and inspect saved pixels; exercise changed interactions and editor behavior when affected. If a native browser fails, discover supported built-in/connector alternatives without bypassing a policy denial.
+   - Reconcile every requested result with observed evidence before final delivery. Continue required authorized work; distinguish implemented, verified and explicitly deferred scope. Complete the agreed commit/push/deploy steps and live acceptance, or leave a local diff for explicitly local-only scope. Report concrete blockers and actual revisions/URLs; do not infer missing release authority or unrelated data/DNS permissions.
 ```
 
 ### Synchronizing Upstream Skills

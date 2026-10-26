@@ -17,6 +17,12 @@ reference grid, copy and navigation stay unchanged. “Add an optional field”
 keeps older entries valid and defines the public behavior when it is absent.
 Resolve only consequential missing choices; continue useful independent work.
 
+### Turn an audit into a delivery plan
+
+For an audit request, use `new-site-workflow`'s **Audit requests and release completion** policy. Lead with a recommended follow-up sequence, why it matters, the changes and boundaries, meaningful decisions and how success will be verified. Keep diagnostic detail behind those actions; producing a report is not a substitute for proposing what to do next. An audit-only request ends with that actionable plan for user selection, not unrequested code or CMS changes. Reuse any implementation scope already approved.
+
+Plan through release where applicable: verified changes, commit, push to the named branch, deployment to the named environment and live checks. Establish those targets and authority early; carry out authorized release steps after verification without another continuation prompt. Respect local-only scope and report genuinely missing authority precisely. A reusable-template or documentation change need not have a site deployment.
+
 ## Follow the affected surfaces
 
 | Request | Inspect before changing | Evidence for completion |
@@ -118,11 +124,25 @@ switching shells or APIs alone does not address a rejection. Otherwise report
 cleanup as pending. Ordinary command errors, such as an unavailable executable,
 can use safe recovery within the task's existing authorization.
 
-If another session needs to continue, update the existing progress record with the requested outcome, changed paths, exact checks/results, pending decisions or acceptance, and the next executable action. Keep brief/design facts in their established home. Completed local preparation can be handed off with live acceptance pending; that status does not imply deployment or publication.
+### Reconcile completion before handoff
+
+For a request with several deliverables, keep a compact requirement-to-evidence register in the existing tracker or handoff. Reuse its route inventory instead of creating a second required document. An isolated edit needs only a short equivalent record.
+
+| Requested result | Route / state / scope | Implementation or decision | Observed evidence | Status / remaining action |
+| --- | --- | --- | --- | --- |
+| Each user deliverable, including proposals and acceptance | Named URL, viewport, editor or provider state as applicable | Changed source or preserved decision | Actual check result, capture or round trip; distinguish attempted/failed checks | Planned, implemented, verified, blocked or explicitly deferred with reason and owner |
+
+Before a final response, reconcile every requested result against source and evidence. A proposal reconstructed after route edits does not satisfy a requested pre-implementation review. A passing build does not close browser, editorial or provider rows. Continue unfinished required work within existing authorization when supported tools/access remain available. Do not silently narrow the scope or label remaining acceptance as complete; if a real blocker requires user input or an external change, state it precisely and retain the next executable action. An agreed local-only deliverable may be complete with separately named launch acceptance pending.
+
+When resuming, reconcile historical limitations with later results: retain failed-attempt evidence, mark superseded captures/checks and update current status. Report implementation, local automated checks, rendered behavior, CMS acceptance and deployment separately. Keep brief/design facts in their established home; record what was committed, pushed or deployed only when observed.
 
 ## Upgrading an earlier Baseline site (design & primitive modernization)
 
 When asked to review, audit, or improve the design of a site built on an earlier version of Baseline (whether EmDash or static):
+
+First establish whether this is primitive modernization/refinement or a significant visual overhaul. Preserve the accepted direction for refinement. A larger redesign uses the concept pass in `site-art-direction` and stages 4–6 of `new-site-workflow`; backporting utilities alone is not an overhaul. Primitive flags and usage counts diagnose installed capabilities, not visual quality or mandatory per-route adoption.
+
+Use the implementation steps below only within the selected scope. When the request is to audit first, diagnose and present the follow-up plan before backporting primitives or editing routes.
 
 1. **Diagnose the installed primitive generation**:
    - On EmDash sites, run `npm run audit:site -- --root <site-path> --out <private-report-dir>` and inspect `design-system:tokens-and-rhythm` and `design-system:card-and-breakout` (`fourVoiceTypography`, `threeTierSurfaces`, `bentoAndSpecimenPrimitives`, `tactileActionVariants`, `cardTransitionMorphing`, `siteShellChoreography`, `expressivePrimitiveUsageCount`).
@@ -130,8 +150,8 @@ When asked to review, audit, or improve the design of a site built on an earlier
 2. **Backport shared primitives without overwriting client identity**:
    - Preserve the site's calibrated `@theme` palette, `--font-display`, `--font-body`, and `AGENTS.md` `## Art Direction Record`.
    - Add `--font-mono` and `--font-accent` to `@theme` in `src/styles/global.css`, and merge the modern `@layer base` and `@layer components` blocks (3-tier surface derivations `--color-elevated` / `--surface-glass`, 4-voice typography `.eyebrow-telemetry` / `.font-accent` / `.tabular-nums`, tactile `.btn--secondary` / `.btn--ghost` / `.icon-nudge`, `.bento-grid`, `.grid-hairline`, `.ui-specimen`, `[data-reveal]`, `[data-sticky-header]`, and View Transition rules).
-   - Sync `src/layouts/SiteShell.astro`, `src/layouts/Base.astro` (`surface` prop + `data-sticky-header`), and `src/components/Card.astro` (`transitionName` prop).
+   - Review and adapt `src/layouts/SiteShell.astro`, `src/layouts/Base.astro` (`surface` prop + `data-sticky-header`), and `src/components/Card.astro` (`transitionName` prop). Preserve client wrappers and installed defaults; do not overwrite them solely to make an audit flag pass.
 3. **Conduct a live visual & layout critique before editing routes**:
    - Capture or inspect the live site (or local preview) at desktop (`1440x900`) and mobile (`390x844`).
-   - Evaluate each key route against the **5-Point Visual Self-Critique Rubric** (`astro-site-design/references/astro-primitives.md`) and the **Early-Baseline & Legacy Pattern -> Modern Baseline Upgrade Matrix** (`astro-site-design/references/migration-visual-audit.md`) — looking for flat 1-surface pages, 2-voice typography that lacks `.eyebrow-telemetry` or `.font-accent` contrast, back-to-back 3-column card grids that should become `.bento-grid` / `.grid-hairline` / `<Sidebar>` splits, and missing View Transition morphing (`<Card transitionName>`).
-   - Present a concise **Preserve / Improve / Upgrade** proposal per route, then apply the approved template improvements, calibrate on `/_styleguide` (`audit/component-calibration.md`), and verify with `npm run verify` and `npm run build`.
+   - Evaluate each key route against the **5-Point Visual Self-Critique Rubric** in `astro-site-design/SKILL.md` and the **Early-Baseline & Legacy Pattern -> Modern Baseline Upgrade Matrix** (`astro-site-design/references/migration-visual-audit.md`) — explicitly checking flat 1-surface pages for `.surface-elevated` / `.surface-glass`, 2-voice typography for `.eyebrow-telemetry` / `.font-accent` / `.tabular-nums`, repeated 3-column rows for `.bento-grid` / `.grid-hairline` / `<Sidebar>` pacing, and list/detail pairs for `<Card transitionName>` morphing. Use these concrete defaults to diagnose and propose improvements; document a specific accepted-brand or route-function exception rather than silently skipping a check.
+   - Present the concise **Preserve / Improve / Upgrade** proposal per route before route changes. Reuse settled decisions and authorization; resolve only consequential open choices, then implement the approved scope. Calibrate applicable components on `/_styleguide` (`audit/component-calibration.md`), run installed verification/build commands, complete the affected browser/editor checks and reconcile the register above before delivery.
