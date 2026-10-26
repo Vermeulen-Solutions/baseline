@@ -12,9 +12,9 @@ This uses existing PostCSS, TypeScript and Playwright development dependencies a
 
 ## Sampling and output
 
-Default input is `src/styles/global.css`; repeated `--css` arguments replace it with ordered project-relative styles. No target JS/config is executed. The inert harness removes font loads, imports and ordinary declarations, maps default `@theme` into its theme layer, and preserves custom-property rules/layers/media conditions. It samples a span under the optional body context class at 390×844 and 1440×900, using a default surface, horizontal writing and a 16px root (`--root-font-px` changes that explicit assumption). Chromium resolves aliases, derived colors and fluid lengths; eight-bit sRGB samples retain alpha. This is token sampling, not the full page cascade or component geometry. Other CSS imports and non-default `@theme` directives are refused: supply reviewed explicit local CSS sources or inspect the actual rendered site instead.
+Default input is `src/styles/global.css`; repeated `--css` arguments replace it with ordered project-relative styles. No target JS/config is executed. The inert harness removes font loads, imports and ordinary declarations, while retaining `@property` syntax/inheritance/initial-value descriptors; maps default `@theme` into its theme layer; and preserves custom-property rules/layers/media conditions. It samples a span under the optional body context class at 390×844 and 1440×900, using a default surface, horizontal writing and a 16px root (`--root-font-px` changes that explicit assumption). Chromium resolves aliases, derived colors and fluid lengths; eight-bit sRGB samples retain alpha. Font- or line-height-relative lengths such as `em`, `ex`, `ch`, `cap`, `ic`, `lh`, `rex`, `rch`, `rcap`, `ric` and `rlh` are unresolved because the inert span does not reproduce the page's font metrics or element line heights. This is token sampling, not the full page cascade or component geometry. Other CSS imports and non-default `@theme` directives are refused: supply reviewed explicit local CSS sources or inspect the actual rendered site instead.
 
-`canvas-kit.json` records source hashes, declaration expressions/contexts, selected roles/classes, environment, font requests, declared component props and unresolved values. Independent `390.tokens.json` and `1440.tokens.json` collections use unique `site390/*` and `site1440/*` variables, avoiding dependence on scalar recomputation after a mode switch. Original production names remain in `codeSyntax.WEB`; samples are not a second production token authority.
+`canvas-kit.json` records source hashes, declaration expressions/contexts, selected roles/classes, environment, font requests, declared component props and unresolved values. Each token's `contextRisks` identifies conditional selectors or at-rules on that property and its `var()` dependencies; `contextReviewRequired` and the CLI's `conditionalRoles` surface these cases even when the default probe resolves a value. A warning is not proof that an alternative rule applies, and an empty list is not proof of complete cascade fidelity. `--context-class` sets classes on `body` only: it does not add HTML data attributes, ancestor elements, component classes to the probe, or infer which theme/route is intended. Compare flagged values and the assumed root size against the actual rendered page before importing or approving them. `sceneReady` only means required values were emitted, not that visual fidelity was verified. Independent `390.tokens.json` and `1440.tokens.json` collections use unique `site390/*` and `site1440/*` variables, avoiding dependence on scalar recomputation after a mode switch. Original production names remain in `codeSyntax.WEB`; samples are not a second production token authority.
 
 When comparing saved metadata, inspect the DTCG export and recorded source expressions. A combined CSS export may disambiguate duplicate CSS names across collections/role aliases by prefixing them. That output is not a replacement stylesheet or proof that a production property was renamed.
 
@@ -41,6 +41,16 @@ Fonts retain source stacks. Font declarations must be valid `font-family` syntax
 For OpenPencil, load its Baseline skill and bundled release-matched upstream reference. Inspect `import_design_tokens` and `render` schemas. Import each JSON as a separate `{ path, text }` file with `styles:false` into an agreed scratch document, then render matching JSX. Its JSON path is a payload label, not permission to expand filesystem roots. Inspect fonts, bounds, bindings and exported desktop/mobile views. Use the scoped properties/lint/diff loop, save `.fig` and verify recovery before implementation.
 
 For Penpot, map the source report through the documented Penpot variable/component APIs; this scope does not emit an executable Penpot bootstrapper. Direct Astro users can use the report without a canvas. Every path retains design selection, native `/_styleguide` calibration, route/browser acceptance and the authorized release endpoint.
+
+To rerun the local Chromium regressions for the sampler on Windows, use the already installed browser and run:
+
+```powershell
+$env:BASELINE_CANVAS_BROWSER_TESTS = '1'
+node --test tests/canvas-kit.test.mjs
+Remove-Item Env:BASELINE_CANVAS_BROWSER_TESTS
+```
+
+Those optional tests compare a real browser's page values with the kit for font-relative lengths, registered non-inherited properties and conditional/aliased declarations. The ordinary fast suite keeps its browser-free injected-sampler tests; these local checks do not run in CI or the site build.
 
 ## Headless saved-file checks
 

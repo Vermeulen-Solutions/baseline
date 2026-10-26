@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { canvasSource, canvasPayload, generateCanvasKit } from '../scripts/canvas-kit.mjs';
+import { canvasSource, canvasPayload, generateCanvasKit, sampleCanvasTokens, tokenContextRisks } from '../scripts/canvas-kit.mjs';
 import { auditDesignTokens } from '../scripts/design-system.mjs';
 import { ruleActionability } from '../scripts/audit-actionability.mjs';
 
@@ -62,6 +62,17 @@ test('explicit legacy-role mapping keeps ordered source identity and never renam
   assert.throws(()=>canvasSource(root,{roles:{'--color-page':'#fff'}}),/Invalid explicit/);
 }));
 
+test('registered properties keep inheritance descriptors and alias-dependent contexts are reported', () => fixture(async ({root,file}) => {
+  fs.writeFileSync(file, '@property --space { syntax: "<length>"; inherits: false; initial-value: 4px; } :root { --space: 20px; --spacing-container: var(--space); } html[data-surface="dark"] { --space: 40px; } .card { --spacing-container: 12px; }');
+  const source = canvasSource(root);
+  assert.match(source.css, /inherits:\s*false/);
+  assert.match(source.css, /initial-value:\s*4px/);
+  const risks = tokenContextRisks(source, '--spacing-container');
+  assert.ok(risks.some(risk => risk.name === '--space' && risk.contextPath.includes('html[data-surface="dark"]')));
+  assert.ok(risks.some(risk => risk.name === '--spacing-container' && risk.contextPath.includes('.card')));
+  assert.ok(risks.every(risk => risk.source === 'src/styles/global.css' && Number.isInteger(risk.line)));
+}));
+
 test('canvas scenes refuse mismatched required token types and unresolved font stacks', () => {
   const source = { declarations: [] };
   const sample = { width: 390, rootFontPx: 16, tokens: [
@@ -85,3 +96,36 @@ test('unknown audit rules and token failures require judgment/review, not automa
   assert.ok(report.diagnostics.some(item=>item.status==='advisory' && item.actionability==='design_judgment'));
   assert.ok(report.diagnostics.every(item=>item.actionability!=='mechanical_safe'));
 });
+
+// Full Chromium is intentionally local-only: profile/CI fast checks inject a sampler.
+// Run this test explicitly with BASELINE_CANVAS_BROWSER_TESTS=1 after installing Chromium.
+if (process.env.BASELINE_CANVAS_BROWSER_TESTS === '1') {
+  test('real browser sampling rejects font-relative guesses, honors @property and reports alternative contexts', () => fixture(async ({root,file}) => {
+    const { chromium } = await import('@playwright/test');
+    const browser = await chromium.launch({ channel: 'chromium', headless: true });
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+    try {
+      const emCss = ':root { --spacing-container: 2em } body { font-size: 20px }';
+      fs.writeFileSync(file, emCss);
+      const emSamples = await sampleCanvasTokens(canvasSource(root));
+      await page.setContent(`<style>${emCss}</style><span style="margin-left:var(--spacing-container)">test</span>`);
+      assert.equal(await page.locator('span').evaluate(element => getComputedStyle(element).marginLeft), '40px');
+      assert.ok(emSamples.samples.every(sample => sample.tokens.find(token => token.name === '--spacing-container').status === 'unresolved'));
+      assert.match(emSamples.samples[0].tokens[0].unresolvedReason, /font-relative/);
+
+      const registeredCss = '@property --spacing-container { syntax:"<length>"; inherits:false; initial-value:4px } :root { --spacing-container:20px }';
+      fs.writeFileSync(file, registeredCss);
+      const registered = await sampleCanvasTokens(canvasSource(root));
+      await page.setContent(`<style>${registeredCss}</style><span style="margin-left:var(--spacing-container)">test</span>`);
+      assert.equal(await page.locator('span').evaluate(element => getComputedStyle(element).marginLeft), '4px');
+      assert.ok(registered.samples.every(sample => sample.tokens.find(token => token.name === '--spacing-container').value === 4));
+
+      fs.writeFileSync(file, ':root { --color-text:#111; --brand-radius:4px; --radius-card:var(--brand-radius) } html[data-surface="dark"] { --color-text:#fff } .card { --brand-radius:12px }');
+      const contextual = await sampleCanvasTokens(canvasSource(root));
+      for (const sample of contextual.samples) {
+        assert.ok(sample.tokens.find(token => token.name === '--color-text').contextRisks.some(risk => risk.contextPath.includes('html[data-surface="dark"]')));
+        assert.ok(sample.tokens.find(token => token.name === '--radius-card').contextRisks.some(risk => risk.contextPath.includes('.card')));
+      }
+    } finally { await browser.close(); }
+  }));
+}

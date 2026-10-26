@@ -32,8 +32,15 @@ export function canvasSource(directory, { styles = ['src/styles/global.css'], ro
   });
   ast.walkAtRules('font-face', node => node.remove()); // Font availability is checked in the design tool, not inferred here.
   ast.walkDecls(decl => {
-    if (decl.prop.startsWith('--')) declarations.push({ name: decl.prop, expression: decl.value, source:locations.get(decl), line: decl.source.start.line, context: decl.parent.selector ?? `@${decl.parent.name} ${decl.parent.params}` });
-    if (!decl.prop.startsWith('--')) decl.remove();
+    if (decl.prop.startsWith('--')) {
+      const contextPath = [];
+      for (let parent = decl.parent; parent && parent.type !== 'root'; parent = parent.parent) contextPath.unshift(parent.type === 'rule' ? parent.selector : `@${parent.name} ${parent.params}`.trim());
+      declarations.push({ name: decl.prop, expression: decl.value, source:locations.get(decl), line: decl.source.start.line, context: decl.parent.selector ?? `@${decl.parent.name} ${decl.parent.params}`, contextPath });
+    }
+    // Registration changes inheritance and computed values. Preserve only its
+    // CSS descriptors; the inert harness still blocks every network request.
+    const propertyDescriptor = decl.parent.type === 'atrule' && decl.parent.name.toLowerCase() === 'property' && ['syntax', 'inherits', 'initial-value'].includes(decl.prop.toLowerCase());
+    if (!decl.prop.startsWith('--') && !propertyDescriptor) decl.remove();
   });
   if (!declarations.length || declarations.length > 1000) throw Error('Missing or excessive semantic token declarations');
   ast.walkAtRules('theme', node => {
@@ -43,6 +50,25 @@ export function canvasSource(directory, { styles = ['src/styles/global.css'], ro
   });
   for (const component of inspection.components.filter(component => component.exists)) inputs.push({ path: component.source, sha256: hash(sourceFile(root, component.source)) });
   return { root, css: ast.toString(), declarations, inputs, components: inspection.components, roles, contextClass };
+}
+
+/** Report potentially applicable selectors/conditions, including alias dependencies.
+ * This is a warning, not a claim that the inert probe reproduces a page's cascade. */
+export function tokenContextRisks(source, sourceName) {
+  const seen = new Set(), risks = [];
+  function visit(name) {
+    if (seen.has(name)) return;
+    seen.add(name);
+    for (const decl of source.declarations.filter(item => item.name === name)) {
+      const contextPath = decl.contextPath ?? [decl.context];
+      if (contextPath.some(part => part && ![':root', 'html', 'body', '@theme'].includes(part.trim()) && !/^@layer(?:\s|$)/i.test(part.trim()))) {
+        risks.push({ name, source: decl.source, line: decl.line, contextPath });
+      }
+      for (const match of decl.expression.matchAll(/\bvar\(\s*(--[\w-]+)/gi)) visit(match[1]);
+    }
+  }
+  visit(sourceName);
+  return risks;
 }
 
 /** Local inert CSS harness: no target JS/config, imports, font loads or network. Manual command only. */
@@ -81,6 +107,8 @@ export async function sampleCanvasTokens(source, rootFontPx = 16) {
               Object.assign(token, { status: 'resolved', type: 'color', value: rgba.map(value => value / 255), computedColor: a });
             }
             probe.style.removeProperty('color'); document.body.style.removeProperty('color');
+          } else if (expression && /\b(?:\d*\.?\d+(?:e[+-]?\d+)?)(?:em|ex|ch|cap|ic|lh|rex|rch|rcap|ric|rlh)\b/i.test(expression)) {
+            token.unresolvedReason = 'font-relative unit requires the actual element font or line height';
           } else if (expression && !/%|cq(?:w|h|i|b|min|max)\b|\b(?:auto|inherit|initial|unset|revert)\b/i.test(expression) && CSS.supports('margin-left', expression)) {
             probe.style.cssText = 'position:absolute;display:block;width:0;padding:0;border:0;margin:0;margin-left:var(' + sourceName + ')';
             const value = getComputedStyle(probe).marginLeft;
@@ -91,6 +119,7 @@ export async function sampleCanvasTokens(source, rootFontPx = 16) {
         }
         return { width, height: width === 390 ? 844 : 900, rootFontPx, writingMode: 'horizontal-tb', surface: 'default', tokens };
       }, { css: source.css, names: [...new Set([...source.declarations.map(decl => decl.name), ...Object.keys(source.roles)])].map(name=>({name,sourceName:source.roles[name]??name})), width, rootFontPx, contextClass:source.contextClass }));
+      for (const token of samples.at(-1).tokens) token.contextRisks = tokenContextRisks(source, token.sourceName);
     }
     return { browserVersion: browser.version(), samples };
   } finally { await browser.close(); }
@@ -146,7 +175,7 @@ export async function generateCanvasKit({ root = '.', out, rootFontPx = 16, styl
     files.set(`${payload.sample.width}.tokens.json`,JSON.stringify(payload.tokens,null,2)+'\n');
     if (payload.jsx) files.set(`${payload.sample.width}.jsx`,payload.jsx);
   }
-  const report = { schemaVersion:1, generatorSHA256:hash(fs.readFileSync(new URL(import.meta.url))), sourceInputs:source.inputs, roles, contextClass, mappingSHA256, components:source.components, browserVersion:sampled.browserVersion, samples:payloads.map(({sample,missing,fontMappings}) => ({...sample,missing,fontMappings,sceneReady:!missing.length})), limits:['Inert explicit local styles/default-surface samples; no target JS/config, CSS imports, font-face loads or network executed.', 'Root size, context class, role mapping and horizontal writing mode are explicit sampling assumptions, not inferred site acceptance.', 'sRGB colors are eight-bit browser samples; original expressions and source hashes are retained.', 'Canvas masters are semantic previews, not executable Astro components. Reuse accepted art direction and verify actual fonts, states and route/browser behavior.', 'Source-derived artifacts are a one-way scratch bootstrap, not a second token authority or authorization to overwrite existing canvas objects.'] };
+  const report = { schemaVersion:1, generatorSHA256:hash(fs.readFileSync(new URL(import.meta.url))), sourceInputs:source.inputs, roles, contextClass, mappingSHA256, components:source.components, browserVersion:sampled.browserVersion, samples:payloads.map(({sample,missing,fontMappings}) => ({...sample,missing,fontMappings,sceneReady:!missing.length,contextReviewRequired:sample.tokens.some(token => token.contextRisks?.length)})), limits:['Inert explicit local styles/default-surface samples; no target JS/config, CSS imports, font-face loads or network executed.', 'Root size, context class, role mapping and horizontal writing mode are explicit sampling assumptions, not inferred site acceptance. Conditional declarations require review even when values resolve.', 'sRGB colors are eight-bit browser samples; original expressions and source hashes are retained.', 'Canvas masters are semantic previews, not executable Astro components. Reuse accepted art direction and verify actual fonts, states and route/browser behavior.', 'Source-derived artifacts are a one-way scratch bootstrap, not a second token authority or authorization to overwrite existing canvas objects.'] };
   files.set('canvas-kit.json',JSON.stringify(report,null,2)+'\n');
   for (const input of source.inputs) if (hash(sourceFile(target,input.path)) !== input.sha256) throw Error('Source changed during sampling; output refused');
   fs.mkdirSync(destination);
@@ -166,7 +195,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
     }
     if(options.map){const file=path.resolve(options.map),bytes=sourceFile(path.dirname(file),path.basename(file));options.roles=JSON.parse(bytes.toString('utf8'));options.mappingSHA256=hash(bytes);delete options.map;}
     const report=await generateCanvasKit(options);
-    console.log(JSON.stringify({schemaVersion:report.schemaVersion,samples:report.samples.map(({width,sceneReady,missing})=>({width,sceneReady,missing}))},null,2));
+    console.log(JSON.stringify({schemaVersion:report.schemaVersion,samples:report.samples.map(({width,sceneReady,missing,contextReviewRequired,tokens})=>({width,sceneReady,missing,contextReviewRequired,conditionalRoles:tokens.filter(token=>token.contextRisks?.length).map(token=>token.name),unresolvedReasons:tokens.filter(token=>token.unresolvedReason).map(({name,unresolvedReason})=>({name,reason:unresolvedReason}))}))},null,2));
     if(report.samples.some(sample=>!sample.sceneReady))process.exitCode=1;
   } catch(error){console.error(error.message);process.exitCode=2;}
 }
