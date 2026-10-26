@@ -1,0 +1,17 @@
+{
+  "$extensions": { "dev.openpencil": { "collection": "Baseline review specimen", "mode": "Mobile 390", "default": true } },
+  "color-page": { "$type": "color", "$value": { "colorSpace": "srgb", "components": [0.98, 0.98, 0.99], "alpha": 1 } },
+  "color-surface": { "$type": "color", "$value": { "colorSpace": "srgb", "components": [1, 1, 1], "alpha": 1 } },
+  "color-elevated": { "$type": "color", "$value": { "colorSpace": "srgb", "components": [0.93, 0.95, 0.98], "alpha": 1 } },
+  "color-text": { "$type": "color", "$value": { "colorSpace": "srgb", "components": [0.12, 0.14, 0.19], "alpha": 1 } },
+  "color-action": { "$type": "color", "$value": { "colorSpace": "srgb", "components": [0.12, 0.29, 0.52], "alpha": 1 } },
+  "spacing-container": {
+    "$type": "dimension", "$value": { "value": 17.16693, "unit": "px" },
+    "$description": "390 CSS px viewport, 16px root; sampled from the neutral Baseline source, not a fixed production gutter.",
+    "$extensions": { "dev.openpencil": { "unit": "px", "codeSyntax": { "WEB": "var(--spacing-container)" }, "expression": "clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)" } }
+  },
+  "spacing-content": {
+    "$type": "dimension", "$value": { "value": 16.58267, "unit": "px" },
+    "$extensions": { "dev.openpencil": { "unit": "px", "codeSyntax": { "WEB": "var(--spacing-content)" }, "expression": "clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)" } }
+  }
+}

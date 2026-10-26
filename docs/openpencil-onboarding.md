@@ -14,6 +14,8 @@ Read the [upstream agent skill](https://github.com/open-pencil/open-pencil/blob/
 
 ## Practical acceptance
 
+The Baseline skill bundles a release-pinned upstream mechanics skill and authoring reference with license/provenance. Load those before creating JSX; use `get_codegen_prompt` when available and inspect installed schemas. Baseline's native Astro components and fluid CSS tokens take precedence over generic code-generation advice about fixed Tailwind values or framework controls. See [the concrete JSX/token recipe](../.agents/skills/openpencil-site-design/references/baseline-jsx-recipe.md) and [scoped review loop](../.agents/skills/openpencil-site-design/references/scoped-review.md). The docs index at [llms.txt](https://openpencil.dev/llms.txt) helps select specific pages without loading SDK internals into every session.
+
 1. Call `list_documents`; confirm the exact intended document/page before writes. Use returned `document_id` and `page_id` on tools that accept them. Global tools such as settings can have a different schema; do not add IDs blindly.
 2. Inspect existing nodes, fonts and variables. Create a bounded named concept using native flex/grid, real components and semantic variables. For wrapping titles, use Fill width plus height auto-resize; use Fixed/max-width where a measure is intentional. A long title revealed overflow in the trial until sizing was corrected.
 3. Inspect both tree and exported render. Query `get_font_status`; a requested family is not evidence that it loaded. Test 1440×900 and 390×844 intent, intermediate reflow/states in Astro and long content. Canvas height may extend beyond the sampled viewport to retain lower content.

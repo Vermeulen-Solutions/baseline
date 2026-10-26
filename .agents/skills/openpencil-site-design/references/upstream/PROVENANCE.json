@@ -1,0 +1,24 @@
+{
+  "files": [
+    {
+      "path": "SKILL.md",
+      "sha256": "cbd9426a62049f7b164b9ecbee66970d5802cb702c89c3aad35c3d338dda616d",
+      "sourcePath": "skills/open-pencil/SKILL.md"
+    },
+    {
+      "path": "references/design-authoring.md",
+      "sha256": "89ab088a03f69734484ba02599d88946036d26eacc661a21f4e97f35719b2f6b",
+      "sourcePath": "skills/open-pencil/references/design-authoring.md"
+    },
+    {
+      "path": "LICENSE.txt",
+      "sha256": "144ecf9417a43cca1cc2096acbac8b00beff9210191504709d586bf7552dcfa2",
+      "sourcePath": "skills/open-pencil/LICENSE.txt"
+    }
+  ],
+  "repository": "https://github.com/open-pencil/open-pencil",
+  "ownership": "Unmodified upstream snapshot; Baseline policy lives outside this directory. Refresh deliberately against the installed release; not managed by sync:emdash-skills.",
+  "release": "v0.16.0",
+  "commit": "ffe2fc5798468988a5943c5f5737905c3c7a28b5",
+  "reviewedOn": "2026-10-26"
+}

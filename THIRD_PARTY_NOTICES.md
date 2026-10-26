@@ -4,6 +4,7 @@ The root MIT license covers Vermeulen Solutions' starter contributions. It does 
 
 | Distributed material | License and provenance |
 | --- | --- |
+| OpenPencil mechanics skill and authoring reference | MIT, Danila Poyarkov. Unmodified `v0.16.0` snapshot at `ffe2fc5798468988a5943c5f5737905c3c7a28b5`; preserve `.agents/skills/openpencil-site-design/references/upstream/LICENSE.txt` and `PROVENANCE.json`. Baseline's adapter and recipes are maintained separately. |
 | EmDash-authored skills | MIT; upstream [EmDash repository](https://github.com/emdash-cms/emdash). The recorded mirror source is commit `b74679528630a7ffc0f0f45e73bab4e7c5e61abb` in `.emdash/upstream-skills.json`. The two already-modified local mirror files are not an exact upstream snapshot; review and contribute those changes upstream before claiming a clean sync. See `docs/licenses/emdash-MIT.txt`. |
 | Impeccable skill | Apache-2.0; bundled skill declares 4.3.1. Preserve `.agents/skills/impeccable/LICENSE`, `PROVENANCE.json` and `docs/licenses/impeccable-Apache-2.0.txt`. The distribution hash is recorded; upstream commit identity remains explicitly unverified. |
 | PhotoSwipe 5.4.4 | MIT, Dmitry Semenov. Exact installed notice copied to `docs/licenses/photoswipe-MIT.txt`; source [PhotoSwipe](https://github.com/dimsemenov/PhotoSwipe). |

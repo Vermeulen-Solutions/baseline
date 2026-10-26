@@ -221,6 +221,14 @@
     ".agents/skills/openpencil-site-design/SKILL.md",
     ".agents/skills/openpencil-site-design/agents/openai.yaml",
     ".agents/skills/openpencil-site-design/references/connection-and-api.md",
-    ".agents/skills/site-art-direction/references/design-iteration.md"
+    ".agents/skills/site-art-direction/references/design-iteration.md",
+    ".agents/skills/openpencil-site-design/assets/review-specimen.jsx",
+    ".agents/skills/openpencil-site-design/assets/review-tokens.json",
+    ".agents/skills/openpencil-site-design/references/baseline-jsx-recipe.md",
+    ".agents/skills/openpencil-site-design/references/scoped-review.md",
+    ".agents/skills/openpencil-site-design/references/upstream/LICENSE.txt",
+    ".agents/skills/openpencil-site-design/references/upstream/PROVENANCE.json",
+    ".agents/skills/openpencil-site-design/references/upstream/SKILL.md",
+    ".agents/skills/openpencil-site-design/references/upstream/references/design-authoring.md"
   ]
 }

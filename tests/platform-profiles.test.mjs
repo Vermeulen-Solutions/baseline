@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { BASELINE_REPOSITORY, BASELINE_PROVENANCE_REPOSITORIES, PROFILE_IDS, profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
 
@@ -123,6 +124,21 @@ test('Penpot and OpenPencil guidance ships complete on every profile without a r
         assert.ok(manifest.files.includes(target) || manifest.skillFiles.includes(target), `${profile}: unshipped reference ${target} in ${file}`);
       }
     }
+  }
+});
+
+test('bundled OpenPencil mechanics retain reviewed upstream bytes and license on every profile', () => {
+  const dir = '.agents/skills/openpencil-site-design/references/upstream';
+  const provenance = json(`${dir}/PROVENANCE.json`);
+  assert.equal(provenance.repository, 'https://github.com/open-pencil/open-pencil');
+  assert.match(provenance.commit, /^[a-f0-9]{40}$/);
+  assert.deepEqual(provenance.files.map(file => file.path).sort(), ['LICENSE.txt', 'SKILL.md', 'references/design-authoring.md']);
+  for (const record of provenance.files) {
+    assert.ok(safe(record.path));
+    assert.equal(record.sourcePath, `skills/open-pencil/${record.path}`);
+    const text = fs.readFileSync(path.join(root, dir, record.path), 'utf8').replaceAll('\r\n', '\n');
+    assert.equal(createHash('sha256').update(text).digest('hex'), record.sha256, `${record.path}: upstream drift needs explicit review`);
+    for (const profile of PROFILE_IDS) assert.ok(profileManifest(profile).skillFiles.includes(`${dir}/${record.path}`), profile);
   }
 });
 
