@@ -10,7 +10,7 @@ Baseline's design workflow starts with the brief, native CSS tokens and rendered
 
 ## Design surface and agent arrangement
 
-Choose direct Astro/browser or Penpot at the existing concept checkpoint, retaining explicit user preferences for OpenPencil, Pencil, Google Stitch, OpenDesign or Claude Design. Do not require multiple tools in sequence. Direct Astro is the no-service path; Penpot is the shared cloud-canvas path with `penpot-site-design` and [onboarding](penpot-onboarding.md); OpenPencil is the optional desktop path using its upstream API/skill. Keep concrete Baseline CSS/component recipes on every path. The same agent can design and implement. Another model/session is optional and uses a portable record of source tokens, selected boards, approval, content ownership, reflow/states and native mapping. A canvas is a design reference, not another authoritative token store or a substitute for browser verification.
+For new sites and substantial overhauls, recommend canvas-led iteration and offer **OpenPencil**, **Penpot** and **direct Astro/browser** explicitly. Prefer an already working user-preferred canvas; OpenPencil supports local files, Penpot supports a shared cloud artifact, and direct Astro remains a complete no-service option. Retain explicit preferences for Pencil, Google Stitch, OpenDesign or Claude Design. Follow `site-art-direction/references/design-iteration.md`: focused representative concepts → meaningful direction selection → native Astro proof → rollout, rather than a mandatory chain of tools or a full duplicate site in each surface. Penpot uses `penpot-site-design` and [onboarding](penpot-onboarding.md); OpenPencil uses its upstream skill/API and [onboarding](openpencil-onboarding.md). Same-agent work is complete; switching agents is optional. A canvas remains a design reference, with source CSS/content authority and real browser acceptance.
 
 ---
 
@@ -18,9 +18,9 @@ Choose direct Astro/browser or Penpot at the existing concept checkpoint, retain
 
 ```mermaid
 flowchart LR
-    S1["1. UX Flow Research<br/>(Nicelydone / Refero)"] --> S2["2. System & Concepting<br/>(designmd.ai + Stitch / Claude)"]
+    S1["1. Brief & optional UX research<br/>(Nicelydone / Refero)"] --> S2["2. Canvas-led concepts & selection<br/>(OpenPencil / Penpot; Astro when chosen)"]
     S2 --> S3["3. Translate Selected Direction<br/>(Native CSS Tokens)"]
-    S3 --> S4["4. Component Quarantine<br/>(21st.dev MCP → /_styleguide)"]
+    S3 --> S4["4. Optional component sourcing & quarantine<br/>(21st.dev MCP → /_styleguide)"]
     S4 --> S5["5. Token & Optical Calibration<br/>(design:tokens + /_styleguide + Impeccable)"]
 ```
 

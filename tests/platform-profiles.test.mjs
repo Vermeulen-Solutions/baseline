@@ -98,16 +98,18 @@ test('Penpot guidance ships complete on every profile without a runtime dependen
   const directory = '.agents/skills/penpot-site-design';
   const collect = dir => fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? collect(`${dir}/${entry.name}`) : [`${dir}/${entry.name}`]);
   const expected = collect(directory).sort();
+  const iterationReference = '.agents/skills/site-art-direction/references/design-iteration.md';
   assert.ok(expected.includes(`${directory}/assets/design-brief.md`));
   assert.ok(expected.includes(`${directory}/assets/design-handoff.md`));
   for (const profile of PROFILE_IDS) {
     const manifest = profileManifest(profile);
     assert.ok(manifest.skills.includes('penpot-site-design'), profile);
     assert.deepEqual(manifest.skillFiles.filter(file => file.startsWith(`${directory}/`)).sort(), expected, profile);
+    assert.ok(manifest.skillFiles.includes(iterationReference), profile);
     assert.ok(manifest.files.includes('docs/penpot-onboarding.md'), profile);
     const packages = profilePackages(profile, pkg);
     assert.ok(!Object.keys({ ...packages.dependencies, ...packages.devDependencies }).some(name => /penpot|open-pencil/.test(name)), profile);
-    for (const file of expected.filter(file => file.endsWith('.md'))) {
+    for (const file of [...expected.filter(file => file.endsWith('.md')), iterationReference]) {
       for (const [, href] of fs.readFileSync(path.join(root, file), 'utf8').matchAll(/\]\(([^)]+)\)/g)) {
         if (/^https?:/.test(href)) continue;
         const target = path.posix.normalize(path.posix.join(path.posix.dirname(file), href));

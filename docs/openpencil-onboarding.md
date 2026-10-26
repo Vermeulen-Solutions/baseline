@@ -1,6 +1,6 @@
 # Optional OpenPencil desktop path
 
-OpenPencil (`open-pencil/open-pencil`) is distinct from commercial Pencil and unrelated similarly named projects. It is an optional local canvas; direct Astro/browser and hosted Penpot remain supported. Use Baseline's existing art-direction, concrete CSS/component recipes and acceptance gates on every surface. Another agent is optional.
+OpenPencil (`open-pencil/open-pencil`) is distinct from commercial Pencil and unrelated similarly named projects. For new sites and substantial redesigns, recommend a canvas and offer OpenPencil, Penpot and direct Astro/browser explicitly. Prefer an already working user-preferred connection; use `site-art-direction/references/design-iteration.md` for focused concept edits followed by a representative Astro proof. Use Baseline's existing art-direction, concrete CSS/component recipes and acceptance gates on every surface. Another agent is optional.
 
 ## Setup
 
@@ -20,4 +20,4 @@ Read the [upstream agent skill](https://github.com/open-pencil/open-pencil/blob/
 4. Save to an agreed new local `.fig` path. Reopen and re-read components, variables, bindings and content. Stable document/tab IDs are session targets, not permanent file identity: a reopened file can have a different tab ID. Recover from file path plus node evidence and confirm current identifiers.
 5. For an optional handoff, provide source revision/brief, saved file, dated exports, selected versus draft status, original CSS expressions, responsive/states intent and native component mapping. Transfer the file through the user's chosen channel; a local artifact does not automatically appear on another machine. Do not claim a fresh-session test proves another model's performance or token savings.
 
-The trial established actual desktop editing, rendering, variables/components and save/recovery. It was a neutral synthetic exercise, not a full client redesign or a pixel-accuracy benchmark. Keep user-preferred tools available and choose from observed needs: direct Astro for immediate real-browser behavior, Penpot for a shared cloud artifact, OpenPencil for local file ownership and structured desktop authoring.
+The trial established actual desktop editing, rendering, variables/components and save/recovery. It was a neutral synthetic exercise, not a full client redesign or a pixel-accuracy benchmark. Keep user-preferred tools available: recommend canvas-led concept iteration with OpenPencil for local file ownership or Penpot for a shared cloud artifact, and retain direct Astro for a preferred real-browser workflow. This trial did not measure comparative speed or token use.

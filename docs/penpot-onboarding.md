@@ -1,6 +1,6 @@
 # Penpot onboarding for Baseline
 
-Choose a surface at the existing concept checkpoint: direct Astro/browser needs no design service; Penpot offers a shared cloud canvas; [OpenPencil is a local desktop alternative](openpencil-onboarding.md). One agent can complete any selected path. An optional second agent can design while the implementation agent later reads the same saved artifact. Neither setup changes Baseline's profile, runtime or content ownership. See the installed `penpot-site-design` skill and its portable brief/handoff templates.
+For a new site or substantial redesign, recommend canvas-led iteration at the existing concept checkpoint: Penpot offers a shared cloud canvas, [OpenPencil offers a local desktop canvas](openpencil-onboarding.md), and direct Astro/browser is a complete option when preferred. Reuse a working user-preferred connection; follow `site-art-direction/references/design-iteration.md` for focused edits and the transition into Astro. One agent can complete any selected path. An optional second agent can design while the implementation agent later reads the same saved artifact. Neither setup changes Baseline's profile, runtime or content ownership. See the installed `penpot-site-design` skill and its portable brief/handoff templates.
 
 ## Hosted setup
 

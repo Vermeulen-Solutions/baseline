@@ -7,14 +7,15 @@ Audit the Baseline design-workflow overhaul in C:\dev\emdash-baseline on codex/p
 
 User intent:
 - An audit should yield an actionable follow-up plan and meaningful user choices, not merely a long report or unapproved implementation.
-- Design must support direct Astro/browser, Penpot with one agent, optional sequential designer/implementation agents, and an explicitly chosen OpenPencil desktop alternative.
+- Recommend canvas-led iteration for new sites/substantial overhauls and offer OpenPencil, Penpot and direct Astro/browser explicitly. Reuse preferences/working connections and retain direct Astro as a complete option. Same-agent work is complete; sequential designer/implementation agents are optional.
 - Keep concrete CSS examples/selectors, named tools, precise checks and brief-led exceptions so weaker models have useful instructions. Do not replace specificity with vague advice or mandate every visual effect on every route.
 - Penpot and another agent must remain optional. A complete site task needs calibration, actual browser verification and the agreed commit/push/applicable deployment, rather than stopping at code/build/report.
+- The current practical recommendation for this user's agent-driven page composition is OpenPencil when local setup is acceptable, with Penpot preferred for shared cloud/client review or cross-machine handoff. Challenge that judgment against the evidence: different pilot authoring approaches do not establish a capability or design-quality gap, and speed/token savings were not measured.
 
 Inspect the full diff, docs/plans/design-iteration-and-penpot.md, docs/design-tool-comparison-2026-10-26.md, the new penpot-site-design skill/references/templates/metadata, onboarding guides, workflow/art-direction/Astro skills, root/static instructions, prompt library, manifests/inventory/updater and tests. Check for contradictory old routing or hidden onboarding prerequisites.
 
 Evaluate:
-1. Are surface choice and agent continuity genuinely independent? Are existing decisions reused, major concepts meaningfully reviewed, and small refinements kept within their accepted direction?
+1. Read .agents/skills/site-art-direction/references/design-iteration.md. Does the canvas-led recommendation support a comfortable focused visual-feedback loop, without forcing setup or a second agent, duplicating every route/library across surfaces, or claiming unmeasured speed/token savings? Are surface choice and agent continuity genuinely independent? Are existing decisions reused, major concepts meaningfully reviewed, and small refinements kept within their accepted direction?
 2. Is the Penpot skill discoverable and useful without loading every reference? Does it preserve original fluid CSS, contextual layout ownership, concrete 3-tier/4-voice/bento/action/motion recipes, actual native APIs and source/CMS ownership?
 3. Are connection instructions accurate for current hosted Penpot and the installed Codex/OpenCode versions? Verify official docs, private credential handling, sleeping-tab recovery, one active tab, target identity and hosted/local limits. Do not request or expose test keys.
 4. Does OpenPencil guidance distinguish the real project/version, app MCP versus an internal ACP agent, private local discovery, file roots, supported schemas, text wrapping, save/reopen and remapped IDs? Is the recommendation supported by evidence rather than hype?

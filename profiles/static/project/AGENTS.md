@@ -44,7 +44,7 @@ primitive controls. No settings panel or external-product terminology is needed.
 
 ## Design iteration surface
 
-At the existing new-site/significant-redesign concept checkpoint, choose direct Astro/browser or Penpot, reusing prior answers and retaining explicitly preferred alternatives such as OpenPencil, Pencil, Google Stitch, OpenDesign and Claude Design. Penpot uses the installed `penpot-site-design` skill; see `docs/penpot-onboarding.md`. Same-agent design/implementation is a complete path. A separate design agent and portable handoff are optional. Small refinements stay in the accepted direction without restarting discovery. Every surface still needs native component calibration and actual route/browser acceptance before the agreed release.
+At the existing new-site/significant-redesign concept checkpoint, recommend a dedicated design canvas and offer **OpenPencil**, **Penpot** and **direct Astro/browser** explicitly. Reuse the user's settled preference and an already working connection: OpenPencil suits local desktop/files, Penpot suits shared cloud access, and direct Astro suits a preferred real-browser/no-service workflow. Follow `site-art-direction` and its `references/design-iteration.md` for focused visual batches → selected direction → representative Astro proof → rollout. Retain explicitly preferred Pencil, Google Stitch, OpenDesign, Claude Design and designmd-mcp references. Penpot uses `penpot-site-design`; both canvas options have onboarding guides under `docs/`. Same-agent design/implementation is complete; another agent and portable handoff are optional. Small refinements reuse the accepted world. Preserve native calibration, actual route/browser acceptance and the agreed release endpoint.
 
 ## Shared design authority
 

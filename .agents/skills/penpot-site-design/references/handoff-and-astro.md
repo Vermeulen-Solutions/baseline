@@ -2,6 +2,8 @@
 
 Same-agent work can proceed from reviewed boards and existing context. A handoff packet is useful when changing sessions/models, pausing substantial work or preserving a selected direction; it is not another mandatory design stage. Both arrangements use the same art-direction and browser acceptance gates.
 
+Follow [the shared iteration loop](../../site-art-direction/references/design-iteration.md). Resolve composition in focused visual batches, then prove one representative route in Astro before rollout. Use an early browser spike only for a material feasibility uncertainty. Do not maintain the entire site in both surfaces throughout design, rebuild a component library for each edit, or produce a full handoff packet when a compact same-agent decision record is enough.
+
 ## Portable handoff
 
 Use the adjacent asset template. Include file/page/board IDs, a non-secret file link if useful, dated render/revision, selected versus draft concepts, actual approval evidence, fixed/changeable brand rules, real copy/assets and source ownership, original CSS expressions plus canvas samples, layout/reading order, component mapping, interactions/accessibility states, acceptance evidence and unresolved questions. Never include the MCP connection URL/key. Give the receiving model repository/skill access or attach the brief and mapping; do not assume it saw this chat.
