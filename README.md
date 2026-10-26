@@ -226,6 +226,11 @@ assumptions, and any steps still needing my involvement.
 The agent checks local requirements and handles the remaining setup commands. It should
 guide you through any machine setup or editor sign-in that needs your involvement.
 
+> [!TIP]
+> **Need a prompt for a specific task?** You don't have to search manually. Ask your coding assistant:
+> *“Find the best prompt in `docs/prompt-library.md` to [what you want to do], fill in the details for this project, and run it.”*
+> The [prompt library](docs/prompt-library.md) contains recipes for WordPress migrations, token calibration, layout refactoring, visual critique passes, local testing, production cutover, and upgrading earlier Baseline sites.
+
 **Optional references**
 
 - [More prompt examples](docs/prompt-library.md) for migrations and specific follow-up tasks.
@@ -255,6 +260,7 @@ Keep working through your assistant:
 | Resume unfinished work | “Continue the authorized local build from the current source and handoff, preserve established decisions, and report the preview and remaining acceptance.” |
 | Make a change | “Update [page or feature], following the site's existing design and content model.” |
 | Review the result | “Check the changed pages, run the applicable verification, and report anything still pending.” |
+| Find a recipe | “Find the best prompt in docs/prompt-library.md to [what you want to do] and adapt it for this site.” |
 | Bring an older site up to date | Use the [existing-site update prompt](docs/prompt-library.md#bringing-an-existing-site-up-to-date) to review and integrate dependencies, skills and Baseline features. |
 
 Your assistant can also open the component styleguide and guide you to the content
