@@ -1,5 +1,7 @@
 # Existing-site visual audit and page QA
 
+Respect machine findings' actionability: `bounded_recipe` still needs reviewed preconditions and authorized scope; `design_judgment` needs brief/rendered assessment; `verification_required` needs evidence; others default to manual review. Missing bento/breakout/dark-surface markers do not establish a design defect. Keep concrete alternatives and brief-led exceptions rather than applying every expressive pattern to raise counts. Newly emitted site audits use v3; current readers also accept legacy v2 reports.
+
 Use this workflow when rebuilding or modernizing an existing site, especially a WordPress site whose theme or page builder will not be carried forward. For this user's migrations, improvement is the default; faithful reproduction is an explicit direction. The source is essential evidence of content, function, and identity, but its builder-imposed layout is not the target quality bar. This workflow prevents a content import or a good-looking homepage from being mistaken for a complete migration.
 
 ## Before implementation

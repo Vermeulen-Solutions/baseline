@@ -61,7 +61,11 @@
     "PROJECT.example.md",
     "docs/project-context.md",
     "docs/penpot-onboarding.md",
-    "docs/openpencil-onboarding.md"
+    "docs/openpencil-onboarding.md",
+    "scripts/audit-actionability.mjs",
+    "scripts/canvas-kit.mjs",
+    "docs/canvas-kit.md",
+    "tests/canvas-kit.test.mjs"
   ],
   "packages": {
     "dependencies": [
@@ -104,7 +108,8 @@
     "lint:templates",
     "check:css",
     "baseline:inspect",
-    "media:prepare"
+    "media:prepare",
+    "design:canvas-kit"
   ],
   "scriptOverrides": {
     "lint": "npm run lint:scripts && npm run lint:templates"

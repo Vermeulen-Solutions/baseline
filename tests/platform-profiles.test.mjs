@@ -142,6 +142,16 @@ test('bundled OpenPencil mechanics retain reviewed upstream bytes and license on
   }
 });
 
+test('source canvas bootstrap ships across profiles as an optional command outside verification/build', () => {
+  for (const profile of PROFILE_IDS) {
+    const manifest=profileManifest(profile);
+    for(const file of ['scripts/canvas-kit.mjs','scripts/audit-actionability.mjs','scripts/inspect-project.mjs','docs/canvas-kit.md']) assert.ok(manifest.files.includes(file), `${profile}: ${file}`);
+    assert.ok(manifest.scripts.includes('design:canvas-kit'),profile);
+  }
+  assert.equal(pkg.scripts['design:canvas-kit'],'node scripts/canvas-kit.mjs');
+  for(const name of ['verify:fast','verify','build','prebuild','test','test:unit']) assert.ok(!pkg.scripts[name].includes('canvas-kit'),name);
+});
+
 test('dependency inventory accounts for every root dependency and versions have a single source', () => {
   const inventory = json('profiles/dependency-inventory.json').packages;
   assert.deepEqual(Object.keys(inventory).sort(), Object.keys({ ...pkg.dependencies, ...pkg.devDependencies }).sort());

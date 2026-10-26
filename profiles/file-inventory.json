@@ -1084,6 +1084,22 @@
     "docs/openpencil-onboarding.md": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/audit-actionability.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/canvas-kit.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/canvas-kit.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/canvas-kit.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

@@ -5,6 +5,8 @@ description: Design and iterate Baseline site concepts in Penpot through MCP, in
 
 # Penpot site design
 
+When available, the optional [source-derived canvas kit](../../../docs/canvas-kit.md) supplies sampled values, original CSS expressions and declared component contracts. Review actual CSS order/context and unresolved values. This release emits OpenPencil JSON/JSX plus a tool-neutral report: map the report with Penpot's documented variable/component APIs, not a guessed automatic importer. Manual source inspection remains complete.
+
 Use Penpot as a reviewable design surface inside Baseline's existing workflow. The same agent can design and implement; switching to another model is optional. Do not launch another agent or install/configure a client merely because a handoff is possible. Direct Astro/browser iteration remains a complete alternative. For OpenPencil, use [openpencil-site-design](../openpencil-site-design/SKILL.md) and [docs/openpencil-onboarding.md](../../../docs/openpencil-onboarding.md) when present; for another explicitly chosen tool, use that tool's installed documentation rather than Penpot APIs.
 
 ## Establish the task

@@ -1,5 +1,7 @@
 # Downstream site diagnosis and remediation
 
+New JSON uses schema v3 with an `actionability` on every rule. The current validator also reads archived v2 reports without rewriting them; older v2-only readers cannot consume v3. Adopt the reader/schema/imports together. `bounded_recipe` identifies a known plan/apply recipe, never universal safety or automatic permission; `design_judgment` needs brief/rendered assessment; `verification_required` needs evidence; `review_required` is the conservative default. Status/severity and strict-exit policy retain their meaning. Token audits preserve existing fields and add classified diagnostics; fluid advisories remain advisory. Zero primitive usage alone does not justify redesigning a route. Follow-up plans separate decision types while retaining concrete selectors and options.
+
 Start with a read-only diagnosis, review the findings, then select a supported recipe on a disposable copy or feature branch. Diagnosis never installs dependencies, evaluates target configuration, synchronizes skills, opens the live database, writes CMS content or deploys. No network is used. Remediation is a separate explicit command.
 
 ## Diagnose

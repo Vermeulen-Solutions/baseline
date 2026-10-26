@@ -121,7 +121,7 @@ function diagnose(label, evidence, snapshot) {
   command(`audit:site (${label})`, ['audit:site', '--', '--root', target, '--db-snapshot', snapshot, '--evidence', evidence, '--out', directory, '--strict']);
   assert.deepEqual(evidenceBinding(target), before); assert.equal(sha256(fs.readFileSync(snapshot)), dbHash);
   assert.deepEqual(databaseFiles(), originalDatabase, 'Diagnosis must preserve fixture DB and sidecars');
-  const report = JSON.parse(fs.readFileSync(path.join(directory, 'report.json'))); assert.equal(report.schemaVersion, 2);
+  const report = JSON.parse(fs.readFileSync(path.join(directory, 'report.json'))); assert.equal(report.schemaVersion, 3);
   for (const id of ['route-capture-evidence', 'editor-save-reload', 'physical-schema']) assert.equal(report.rules.find(rule => rule.id === id).status, 'pass', id);
   receipts[label] = { summary: report.summary, reportSHA256: sha256(fs.readFileSync(path.join(directory, 'report.json'))), sourceBinding: before, schemaWidths: report.rules.find(rule => rule.id === 'physical-schema').observed.physicalWidths };
   return report;

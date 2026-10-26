@@ -182,5 +182,9 @@
   "project-inspection.test.mjs": {
     "tier": "unit",
     "reason": "Read-only project facts, source parsing and input boundaries"
+  },
+  "canvas-kit.test.mjs": {
+    "tier": "unit",
+    "reason": "Source binding, refusal and actionability contracts with injected sampler; no browser launched in CI"
   }
 }

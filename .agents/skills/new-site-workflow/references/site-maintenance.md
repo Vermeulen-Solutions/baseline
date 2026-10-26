@@ -1,5 +1,7 @@
 # Scoped site maintenance
 
+Audit JSON v3 classifies findings as `bounded_recipe`, `design_judgment`, `verification_required` or `review_required`; current readers also accept legacy v2. Classification is not authorization or proof that a recipe's source/lock/revision preconditions hold. Treat zero expressive counts and fluid advisories as contextual leads; preserve suitable restrained layouts and explicit exceptions. Missing evidence calls for inspection, not invented data, replacement themes or automatic dependency/skill upgrades. Group the actionable plan accordingly while retaining the concrete recipes below and the user's existing implementation/release scope.
+
 Use the sections relevant to the request. This reference maps changes across
 site surfaces; the existing specialists own implementation. An isolated edit
 does not need a new workflow track or a separate planning document.

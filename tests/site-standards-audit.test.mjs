@@ -8,8 +8,27 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 import { auditSite, strictFailure, writeReports, markdownReport, STANDARD } from '../scripts/audit-site.mjs';
+import { validateReport } from '../scripts/audit-report.mjs';
 const script = new URL('../scripts/audit-site.mjs', import.meta.url);
 const baselineFile = new URL('../standards/baselines/0.1.1.json', import.meta.url);
+
+test('audit v3 classifications preserve legacy v2 validation and never imply unconditional safe writes', () => {
+  const report = auditSite({ root: fileURLToPath(new URL('../', import.meta.url)) });
+  assert.equal(report.schemaVersion, 3);
+  assert.deepEqual(validateReport(report), []);
+  assert.ok(report.rules.every(rule => ['bounded_recipe','design_judgment','verification_required','review_required'].includes(rule.actionability)));
+  assert.equal(report.rules.find(rule => rule.id === 'design-system:card-and-breakout').actionability, 'design_judgment');
+  assert.equal(report.rules.find(rule => rule.id === 'physical-schema').actionability, 'verification_required');
+  const legacy = structuredClone(report); legacy.schemaVersion = 2;
+  legacy.rules.forEach(rule => delete rule.actionability);
+  assert.deepEqual(validateReport(legacy), []);
+  assert.equal(strictFailure(legacy), strictFailure(report));
+  assert.match(markdownReport(legacy), /Design judgment/);
+  const invalid = structuredClone(report); invalid.rules[0].actionability = 'mechanical_safe';
+  assert.ok(validateReport(invalid).some(error => error.includes('actionability')));
+  const missing = structuredClone(report); delete missing.rules[0].actionability;
+  assert.ok(validateReport(missing).some(error => error.includes('actionability')));
+});
 function fixture(fn) {
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-audit-test-'));
   const root = path.join(parent, 'target'); fs.mkdirSync(root);
@@ -252,8 +271,11 @@ test('design-system drift rules detect brownfield CSS/Card gaps and pass on base
 
   const md = markdownReport(brownfield);
   assert.match(md, /## Recommended follow-up plan/);
-  assert.match(md, /Modernize design-system primitives & component quarantine/);
+  assert.match(md, /Review design-system primitives & component quarantine/);
   assert.match(md, /5-Point Visual Self-Critique Rubric/);
+  assert.match(md, /zero breakout\/surface\/expressive usage is not a design defect/);
+  assert.match(md, /Preserve a suitable restrained layout/);
+  assert.doesNotMatch(md, /\*\*Adopt breakout\/surface primitives/);
 
   // Verify baseline itself passes all three design-system rules
   const starterRoot = fileURLToPath(new URL('../', import.meta.url));

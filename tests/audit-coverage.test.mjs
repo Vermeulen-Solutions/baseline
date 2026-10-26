@@ -31,7 +31,7 @@ function fixture(fn) {
 
 test('complete offline fixture passes implemented required scopes, with explicit runtime/upstream unknowns', () => fixture(({ root, snapshot }) => {
   const report = auditSite({ root, dbSnapshot: snapshot });
-  assert.equal(report.schemaVersion, 2); assert.deepEqual(validateReport(report), []); assert.equal(strictFailure(report), false);
+  assert.equal(report.schemaVersion, 3); assert.deepEqual(validateReport(report), []); assert.equal(strictFailure(report), false);
   for (const id of ['capability:server', 'capability:adapter', 'capability:cms', 'capability:storage', 'skills:site', 'skills:emdash', 'physical-schema']) assert.equal(finding(report, id).status, 'pass', id);
   assert.equal(finding(report, 'capability:i18n').status, 'not-applicable');
   assert.equal(finding(report, 'capability:cache-hints').status, 'not-applicable');
@@ -65,7 +65,7 @@ test('traversal, linked managed roots, incomplete manifests and unsupported inve
   const external = path.join(parent, 'external'); fs.mkdirSync(external); fs.symlinkSync(external, path.join(root, '.agents/skills/new-site-workflow/linked'), process.platform === 'win32' ? 'junction' : 'dir');
   assert.equal(finding(auditSite({ root }), 'skills:site').status, 'unverified');
 }));
-test('report v2 rejects incompatible versions, unknown fields, invalid statuses, duplicates and incorrect totals', () => fixture(({ root }) => {
+test('report validation rejects incompatible versions, unknown fields, invalid statuses, duplicates and incorrect totals', () => fixture(({ root }) => {
   const original = auditSite({ root });
   const edits = [r => r.schemaVersion = 1, r => r.privateRoot = '/private/example', r => r.constructor = 'unexpected', r => r.rules[0].status = 'ok', r => r.rules[0].ruleVersion = 0, r => r.rules[0].evidence = ['/private/example'], r => r.rules.push(r.rules[0]), r => r.summary.pass++, r => r.rules[0].observed = { invalid: NaN }];
   for (const edit of edits) { const report = structuredClone(original); edit(report); assert.ok(validateReport(report).length); assert.throws(() => markdownReport(report), /schema v2/); }

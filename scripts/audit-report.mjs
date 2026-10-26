@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-const schema = JSON.parse(fs.readFileSync(new URL('../standards/site-audit-report.schema.json', import.meta.url), 'utf8'));
+const schemas = Object.fromEntries([2, 3].map(version => [version, JSON.parse(fs.readFileSync(new URL(`../standards/site-audit-report${version === 2 ? '.v2' : ''}.schema.json`, import.meta.url), 'utf8'))]));
 function checkVocabulary(rule) {
   const supported = ['$schema', '$id', 'title', '$defs', '$ref', 'type', 'const', 'enum', 'pattern', 'minimum', 'minItems', 'required', 'properties', 'additionalProperties', 'items'];
   if (Object.keys(rule).some(key => !supported.includes(key))) throw Error('Unsupported report schema keyword');
@@ -7,11 +7,13 @@ function checkVocabulary(rule) {
   for (const child of Object.values(rule.$defs ?? {})) checkVocabulary(child);
   if (rule.items) checkVocabulary(rule.items);
 }
-checkVocabulary(schema);
+Object.values(schemas).forEach(checkVocabulary);
 const kind = value => value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value === 'number' && Number.isInteger(value) ? 'integer' : typeof value;
 
 /** Validator for the deliberately bounded schema vocabulary in the shipped report contract. */
 export function validateReport(report) {
+  const schema = schemas[report?.schemaVersion];
+  if (!schema) return ['#/schemaVersion: unsupported version'];
   const errors = [];
   function check(rule, value, at) {
     if (rule.$ref) return check(schema.$defs[rule.$ref.replace('#/$defs/', '')], value, at);
@@ -40,4 +42,4 @@ export function validateReport(report) {
   }
   return errors;
 }
-export function assertReport(report) { if (validateReport(report).length) throw Error('Audit report does not match schema v2'); return report; }
+export function assertReport(report) { if (validateReport(report).length) throw Error('Audit report does not match supported schema v2/v3'); return report; }

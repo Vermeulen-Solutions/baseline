@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { tokenDiagnostics } from './audit-actionability.mjs';
 
 export const REQUIRED_THEME_TOKENS = [
   '--font-body',
@@ -613,6 +614,7 @@ export function auditDesignTokens(css) {
     contrast,
     fluid,
     spacing,
+    diagnostics: tokenDiagnostics({ errors, fluid }),
   };
 }
 
@@ -1336,6 +1338,11 @@ function main() {
   if (args.includes('--json')) {
     console.log(JSON.stringify({
       ...report,
+      diagnostics: [
+        ...report.diagnostics,
+        ...fontAudit.missingFamilies.map(family => ({ id: `font:${family}`, status: 'unverified', actionability: 'verification_required', message: `Inspect font source/availability: ${family}` })),
+        ...proxyAudit.issues.map((message,index) => ({ id: `edit-proxy:${index+1}`, status: 'fail', actionability: 'review_required', message })),
+      ],
       mode:hasMutationRequest ? (css===source ? "no-op" : saving ? "saved" : "preview") : "audit",
       changes:hasMutationRequest ? combinedOverrides : undefined,
       valid: allValid,

@@ -24,6 +24,7 @@ function loadStandard(file) {
 const version = value => typeof value === 'string' && /^\d+\.\d+\.\d+(?:-[a-zA-Z0-9.-]+)?$/.test(value) ? value : null;
 
 import { splitSQL } from './d1-snapshot.mjs';
+import { ruleActionability } from './audit-actionability.mjs';
 
 export function ingestSQLSchema(db, text) {
   db.exec('PRAGMA foreign_keys = OFF;');
@@ -47,7 +48,10 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
   const manifest = loadStandard(standardsFile);
   if (!Object.hasOwn(manifest.runtimeProfiles, runtime)) throw Error('Unknown runtime profile');
   const rules = [];
-  const add = (id, status, expected, observed, { required = true, evidence = [], confidence = 'high', remediation = 'docs/site-standards-audit.md', applicability = runtime } = {}) => rules.push({ id, ruleVersion: 1, status, severity: required ? 'required' : 'recommendation', expected, observed, evidence, confidence, applicability, remediation, verification: 'Static diagnosis only; no target scripts, network, CMS, installs or deployments' });
+  const add = (id, status, expected, observed, { required = true, evidence = [], confidence = 'high', remediation = 'docs/site-standards-audit.md', applicability = runtime } = {}) => {
+    const rule = { id, ruleVersion: 1, status, severity: required ? 'required' : 'recommendation', expected, observed, evidence, confidence, applicability, remediation, verification: 'Static diagnosis only; no target scripts, network, CMS, installs or deployments' };
+    rules.push({ ...rule, actionability: ruleActionability(rule) });
+  };
   const pkg = readJSON(target, 'package.json');
   const record = value => value !== null && typeof value === 'object' && !Array.isArray(value);
   const lock = packageLockEvidence(target, pkg.data?.packageManager);
@@ -134,7 +138,7 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
     const revision = command('rev-parse', '--verify', 'HEAD');
     git = { status: 'observed', revision: /^[a-f0-9]{40,64}$/.test(revision) ? revision : null, trackedDirty: Boolean(command('status', '--porcelain', '--untracked-files=no')), note: 'Untracked paths and repository remotes withheld' };
   } catch { /* An unavailable Git checkout is not a clean-tree assertion. */ }
-  return assertReport({ schemaVersion: 2, generatedAt: new Date().toISOString(), stage: 'static-diagnosis', target: { label: 'audited-repository', git, configurationSHA256: hashes }, standards: { ...STANDARD, source: 'Digest-verified offline manifest; original private Git history not required' }, runtime, mutationPolicy: 'No target writes, target script/config execution or network; explicit reports outside target and isolated temporary snapshot copy only', rules, summary: Object.fromEntries(['pass', 'fail', 'warning', 'unverified', 'not-applicable'].map(status => [status, rules.filter(rule => rule.status === status).length])) });
+  return assertReport({ schemaVersion: 3, generatedAt: new Date().toISOString(), stage: 'static-diagnosis', target: { label: 'audited-repository', git, configurationSHA256: hashes }, standards: { ...STANDARD, source: 'Digest-verified offline manifest; original private Git history not required' }, runtime, mutationPolicy: 'No target writes, target script/config execution or network; explicit reports outside target and isolated temporary snapshot copy only', rules, summary: Object.fromEntries(['pass', 'fail', 'warning', 'unverified', 'not-applicable'].map(status => [status, rules.filter(rule => rule.status === status).length])) });
 }
 
 export function strictFailure(report, { failsOnly = false } = {}) {
@@ -143,58 +147,36 @@ export function strictFailure(report, { failsOnly = false } = {}) {
 }
 export function followUpPlan(report) {
   assertReport(report);
-  const byId = Object.fromEntries(report.rules.map(r => [r.id, r]));
-  const items = [];
-
-  // Track 1: Required blockers & skill provenance
-  const skillFindings = ['skills:site', 'skills:emdash'].map(id => byId[id]).filter(r => r && r.status !== 'pass');
-  if (skillFindings.length) {
-    const hints = skillFindings.map(r => `${r.id} (${r.status}${r.observed?.missingSkillNames?.length ? `: missing ${r.observed.missingSkillNames.join(', ')}` : ''})`).join('; ');
-    items.push(`1. **Synchronize skills & provenance manifests (${hints})**: Run \`npm run sync:site-skills\` and \`npm run sync:emdash-skills\` on a feature branch, review staged diffs, and apply.`);
+  const byId = Object.fromEntries(report.rules.map(rule => [rule.id, rule]));
+  const groups = { verification_required: [], bounded_recipe: [], design_judgment: [], review_required: [] };
+  const add = (kind, text) => groups[kind].push(text);
+  const pending = ids => ids.map(id => byId[id]).filter(rule => rule && !['pass', 'not-applicable'].includes(rule.status));
+  const schema = byId['schema-prebuild'];
+  if (schema && !['pass', 'not-applicable'].includes(schema.status)) add(ruleActionability(schema), '**Evaluate schema prebuild recipe:** inspect the missing hook and the reviewed schema-budget-prebuild@1 plan. Its exact source/lock/revision preconditions must pass; preserve existing hooks and the package manager. Recipe classification is not permission to apply it or proof of eligibility.');
+  if (pending(['physical-schema']).length) {
+    if (byId['physical-schema'].status === 'fail') add('review_required', '**Review the measured schema failure:** plan a content-model/migration repair against the actual collection and runtime. Do not drop fields, reseed or treat a local snapshot as D1 parity; preserve content and verify the approved repair.');
+    else add('verification_required', '**Measure physical schema:** supply an explicitly scoped offline --db-snapshot or --d1-dump; local measurements do not establish D1 parity. Never create or reseed a database to clear this finding.');
   }
-  const schemaRule = byId['physical-schema'];
-  if (schemaRule && schemaRule.status !== 'pass') {
-    items.push(`1. **Measure physical schema (${schemaRule.status})**: Supply \`--db-snapshot <file.sqlite>\` or \`--d1-dump <export.sql>\` (via \`npm run db:export-d1\`) to verify all collection tables stay within the 50-column budget.`);
-  }
-
-  // Track 2: Design-system primitives, Card accessibility & component quarantine
-  const dsRules = ['design-system:tokens-and-rhythm', 'design-system:card-and-breakout', 'design-system:quarantine-hud']
-    .map(id => byId[id])
-    .filter(r => r && r.status !== 'pass');
-  if (dsRules.length) {
-    const details = dsRules.map(r => `${r.id} (${r.status})`).join(', ');
-    items.push(`2. **Modernize design-system primitives & component quarantine (${details})**: Align \`src/styles/global.css\` (\`interpolate-size\`, single \`.flow\` with duplicate-margin guard, \`.content-grid\` subgrid, \`[data-surface]\`, 4-voice typography \`--font-mono\`/\`--font-accent\`, 3-tier surfaces \`--color-elevated\`/\`--surface-glass\`, \`.bento-grid\`/\`.ui-specimen\`, tactile \`.btn--secondary\`/\`.btn--ghost\`, and tokenized \`clamp()\` in \`@theme\`), refactor whole-card \`<a>\` wrappers into semantic \`<article>\` + \`.clickable-parent\` with \`transitionName\` morphing, upgrade \`SiteShell.astro\` choreography (\`data-surface-toggle\`, \`data-sticky-header\`, \`data-vt-loading\`), and add \`/_styleguide\` (\`src/pages/_styleguide.astro\` + \`src/components/dev/Styleguide.astro\`).`);
-  }
-
-  // Track 3: Template adoption & component calibration
-  const cardObs = byId['design-system:card-and-breakout']?.observed;
-  const hudObs = byId['design-system:quarantine-hud']?.observed;
-  if (cardObs && typeof cardObs === 'object') {
-    if ((cardObs.breakoutPageCount ?? 0) === 0 || (cardObs.surfaceUsageCount ?? 0) === 0 || (cardObs.expressivePrimitiveUsageCount ?? 0) === 0 || (hudObs && !hudObs.calibrationRecord)) {
-      items.push(`3. **Adopt breakout/surface primitives in route templates & calibrate on \`/_styleguide\`** (\`breakoutPageCount: ${cardObs.breakoutPageCount ?? 0}\`, \`surfaceUsageCount: ${cardObs.surfaceUsageCount ?? 0}\`, \`expressivePrimitiveUsageCount: ${cardObs.expressivePrimitiveUsageCount ?? 0}\`, \`calibrationRecord: ${Boolean(hudObs?.calibrationRecord)}\`): Opt long-form editorial routes into \`<Container breakout>\` (\`.content-grid\`), apply \`data-surface="dark|muted|brand"\` and 3-tier surfaces (\`.surface-elevated\`, \`.surface-glass\`, \`.surface-spotlight\`) to contrasting sections, upgrade uniform card rows or flat heroes with 4-voice typography and asymmetric layouts (\`.bento-grid\`, \`.grid-hairline\`, \`.ui-specimen\`) using the 5-Point Visual Self-Critique Rubric, and record browser verification in \`audit/component-calibration.md\`.`);
-    }
-  }
-
-  // Track 4: Dependencies, Node policy & prebuild guard
-  const depWarnings = report.rules.filter(r => (r.id.startsWith('dependency:') || r.id === 'node-policy' || r.id === 'schema-prebuild') && r.status !== 'pass');
-  if (depWarnings.length) {
-    const summary = depWarnings.map(r => `${r.id}=${typeof r.observed === 'string' ? r.observed : r.status}`).join(', ');
-    items.push(`4. **Evaluate framework, Node policy & prebuild alignment (${summary})**: Review \`engines.node\` and lockfile versions against the certified baseline profile, and apply \`schema-budget-prebuild@1\` if missing.`);
-  }
-
-  // Track 5: Runtime, visual & editor verification
-  const runtimeUnverified = ['route-capture-evidence', 'editor-save-reload', 'visual-accessibility'].map(id => byId[id]).filter(r => r && r.status !== 'pass');
-  if (runtimeUnverified.length) {
-    items.push(`5. **Execute live browser & EmDash editor verification**: Inspect \`/_styleguide\` and representative public/editor routes across mobile and wide viewports, verify inline/admin editing round-trips, and run the site test suite before merging the modernization branch.`);
-  }
-
-  return items.length ? `\n## Recommended follow-up plan\n\n${items.join('\n')}\n` : '';
+  if (pending(['route-capture-evidence', 'editor-save-reload', 'visual-accessibility']).length) add('verification_required', '**Collect runtime and rendered evidence:** inspect /_styleguide and representative public/editor routes at narrow/intermediate/wide widths, including 390×844 and 1440×900; verify relevant keyboard/focus, content and editing roundtrips before claiming acceptance.');
+  if (pending(['skills:site', 'skills:emdash']).length) add('review_required', '**Review skill provenance:** inspect missing membership/source evidence and local drift first. Stage only an applicable intentional refresh, inspect exact conflicts/licenses and apply reviewed paths within the authorized scope; do not overwrite project-owned guidance to clear a diagnostic.');
+  const design = pending(['design-system:tokens-and-rhythm', 'design-system:card-and-breakout', 'design-system:quarantine-hud']);
+  if (design.length) add('design_judgment', '**Review design-system primitives & component quarantine:** compare installed capabilities and accepted calibration before selecting changes. Concrete candidates include --font-mono/--font-accent, --color-elevated/--surface-glass, .btn--secondary/.btn--ghost, semantic article cards with .clickable-parent and transitionName, .flow, .content-grid, and SiteShell data-sticky-header/data-vt-loading. Missing markers are inspection leads, not proof that every site needs every primitive; unsupported evidence needs investigation before editing.');
+  const observed = byId['design-system:card-and-breakout']?.observed;
+  if (observed && typeof observed === 'object' && ['breakoutPageCount', 'surfaceUsageCount', 'expressivePrimitiveUsageCount'].some(key => observed[key] === 0)) add('design_judgment', '**Assess route composition against the brief:** zero breakout/surface/expressive usage is not a design defect. Preserve a suitable restrained layout. Where a demonstrated hierarchy or pacing problem warrants it, consider <Container breakout>, .surface-elevated/.surface-glass, .eyebrow-telemetry/.tabular-nums, .bento-grid/.grid-hairline/.ui-specimen, and tactile actions using the 5-Point Visual Self-Critique Rubric. Compare rendered alternatives and record the selected change or a brief-led exception; do not force asymmetry, dark sections or motion to raise counts.');
+  if (byId['design-system:quarantine-hud']?.observed?.calibrationRecord === false) add('verification_required', '**Calibrate applicable primitives:** inspect /_styleguide and record actual rendered observations in audit/component-calibration.md; an absent record alone does not establish a visual defect.');
+  const dependencies = report.rules.filter(rule => (rule.id.startsWith('dependency:') || rule.id === 'node-policy') && !['pass', 'not-applicable'].includes(rule.status));
+  if (dependencies.length) add('review_required', '**Review dependency/runtime evidence:** baseline version differences are not automatic upgrade instructions. Inspect installed APIs, compatibility and deployment requirements before selecting a change.');
+  const covered = new Set(['schema-prebuild','physical-schema','route-capture-evidence','editor-save-reload','visual-accessibility','skills:site','skills:emdash','design-system:tokens-and-rhythm','design-system:card-and-breakout','design-system:quarantine-hud',...dependencies.map(rule => rule.id)]);
+  for (const rule of report.rules) if (!covered.has(rule.id) && !['pass','not-applicable'].includes(rule.status)) add(ruleActionability(rule), '**Inspect ' + rule.id + ':** ' + rule.status + '; use its recorded evidence and remediation reference before deciding on a change.');
+  const labels = { verification_required: 'Verification needed', bounded_recipe: 'Bounded remediation recipes', design_judgment: 'Design judgment', review_required: 'Manual review' };
+  const sections = Object.entries(groups).filter(([,items]) => items.length).map(([kind, items]) => '### ' + labels[kind] + '\n\n' + items.map(item => '- ' + item).join('\n'));
+  return sections.length ? '\n## Recommended follow-up plan\n\nClassification does not authorize changes. Reuse agreed implementation/release scope; resolve only consequential open decisions.\n\n' + sections.join('\n\n') + '\n' : '';
 }
 
 export function markdownReport(report) {
   assertReport(report);
   const cell = value => String(typeof value === 'object' ? JSON.stringify(value) : value).replaceAll('|', '\\|').replaceAll('\n', ' ');
-  return `# Site standards diagnosis\n\nStandards ${report.standards.version}; manifest SHA-256 ${report.standards.sha256}.\n\nDiagnostic scaffold; static passes do not certify the site. Missing evidence remains unverified.\n\n| Rule | Status | Severity | Observation |\n| --- | --- | --- | --- |\n${report.rules.map(rule => `| ${cell(rule.id)} | ${rule.status} | ${rule.severity} | ${cell(rule.observed)} |`).join('\n')}\n${followUpPlan(report)}`;
+  return `# Site standards diagnosis\n\nStandards ${report.standards.version}; manifest SHA-256 ${report.standards.sha256}.\n\nDiagnostic scaffold; static passes do not certify the site. Missing evidence remains unverified.\n\n| Rule | Status | Severity | Actionability | Observation |\n| --- | --- | --- | --- | --- |\n${report.rules.map(rule => `| ${cell(rule.id)} | ${rule.status} | ${rule.severity} | ${rule.actionability ?? ruleActionability(rule)} | ${cell(rule.observed)} |`).join('\n')}\n${followUpPlan(report)}`;
 }
 export function writeReports(report, out, target) {
   assertReport(report);

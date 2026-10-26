@@ -36,7 +36,7 @@ const rule = (report, id) => report.rules.find(item => item.id === id);
 test('hash-bound declared capture and editor round-trip evidence remains scoped, private and read-only', () => fixture(({ root, bundle, audit, git }) => {
   bundle.captures[0].viewport = { height: 844, width: 390 };
   const before = evidenceBinding(root), report = audit();
-  assert.equal(report.schemaVersion, 2); assert.equal(rule(report, 'route-capture-evidence').status, 'pass');
+  assert.equal(report.schemaVersion, 3); assert.equal(rule(report, 'route-capture-evidence').status, 'pass');
   assert.equal(rule(report, 'route-capture-evidence').observed.captureFacts[0].route, '/about');
   assert.equal(rule(report, 'editor-save-reload').status, 'pass'); assert.equal(rule(report, 'visual-accessibility').status, 'unverified');
   assert.deepEqual(evidenceBinding(root), before); assert.equal(git('status', '--porcelain').toString(), '');

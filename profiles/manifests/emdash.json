@@ -115,7 +115,10 @@
     "tests/production-hardening.test.mjs",
     "src/plugins/baseline-metadata/index.ts",
     "tests/asset-retention.test.mjs",
-    "tests/cache.integration.mjs"
+    "tests/cache.integration.mjs",
+    "standards/site-audit-report.schema.json",
+    "standards/site-audit-report.v2.schema.json",
+    "standards/baselines/0.1.1.json"
   ],
   "scripts": [
     "doctor",

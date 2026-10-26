@@ -90,7 +90,8 @@
     "assets:retain": "node scripts/retain-build-assets.mjs",
     "check:cache": "node tests/cache.integration.mjs",
     "baseline:inspect": "node scripts/inspect-project.mjs",
-    "workflow:replay": "node scripts/workflow-replay.mjs"
+    "workflow:replay": "node scripts/workflow-replay.mjs",
+    "design:canvas-kit": "node scripts/canvas-kit.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
