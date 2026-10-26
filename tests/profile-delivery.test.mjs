@@ -44,7 +44,7 @@ test('Sveltia is an additive dependency-free overlay with paired forms and stati
     const config = JSON.parse(await read('baseline.config.json'));
     assert.equal(config.platformProfile, 'static-sveltia');
     assert.equal(config.source.repository, 'https://github.com/Vermeulen-Solutions/baseline');
-    assert.deepEqual(config.skills, ['new-site-workflow', 'site-art-direction', 'astro-site-design', 'impeccable', 'penpot-site-design']);
+    assert.deepEqual(config.skills, ['new-site-workflow', 'site-art-direction', 'astro-site-design', 'impeccable', 'penpot-site-design', 'openpencil-site-design']);
   } finally {
     assert.equal(path.dirname(temp), path.resolve(os.tmpdir()));
     assert.ok(path.basename(temp).startsWith('baseline-sveltia-assembly-'));

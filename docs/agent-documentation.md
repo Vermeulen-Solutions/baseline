@@ -97,10 +97,12 @@ It does not load or validate your agent's configuration and cannot establish tha
 
 ## 2. Optional Design & UI Superpowers via MCP
 
-During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, connecting optional design MCPs unlocks a major leap in visual quality while keeping your workflow 100% code-first (no manual Figma drawing required):
+During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, connecting optional design MCPs supports canvas-led visual iteration, community design systems, and high-craft component blueprints while preserving native CSS tokens and real browser verification:
 
 | MCP / Reference Tool | Role in Baseline Workflow | Tier / Access |
 | :--- | :--- | :--- |
+| **[OpenPencil Desktop MCP](openpencil-onboarding.md)** (`@open-pencil/mcp`) | Local desktop canvas (`open-pencil/open-pencil`) and `.fig` file iteration via `openpencil-site-design` and declarative scene JSX. | Free / Local Desktop |
+| **[Penpot MCP](penpot-onboarding.md)** (`penpot-site-design`) | Shared cloud design canvas for browser review and cross-machine handoff via `penpot-site-design`. | Free / Cloud or Self-Hosted |
 | **[designmd.ai MCP](https://designmd.ai/mcp)** (`designmd-mcp`) | Search, browse, and download 420+ community `DESIGN.md` design systems ([designmd.ai/explore](https://designmd.ai/explore)) directly into `audit/visual-concepts/` or Google Stitch. | Free (Search requires no key; free key for download) |
 | **21st.dev MCP** (`@21st-dev/magic`) | Search, inspect, and fetch high-craft Tailwind component blueprints and micro-interactions directly into `/_styleguide` for zero-JS Astro transmutation. | Free / Open Registry |
 | **Google Stitch / OpenDesign** | Generate visual screen mockups from prompts and consume/emit `DESIGN.md` token files (`audit/visual-concepts/`). | Free / Built-in |
@@ -138,7 +140,7 @@ During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, con
 ```
 
 > [!TIP]
-> **Optional external tools:** - All design MCPs are optional and absent from the default example. Use them when the brief calls for them; no tool-selection checkpoint is required. Local lane/token tooling and `/_styleguide` remain available without adding external services. - Baseline ships no `DESIGN.md` validator or exporter. Reading design references needs no package installation. If a specific exchange requires validation/export, select and review that external tool separately. Google's `@google/design.md` and the community registry's `designmd` package are different tools, despite their shared binary name. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
+> **Optional external tools:** - All design MCPs are optional and absent from the default example. At the Stage 4 concept checkpoint for a new site or substantial overhaul, recommend canvas-led iteration once (offering **OpenPencil**, **Penpot**, and **direct Astro/browser** explicitly), reuse settled preferences and working connections, and skip the checkpoint for small refinements. Local lane/token tooling and `/_styleguide` remain available without adding external services. - Baseline ships no `DESIGN.md` validator or exporter. Reading design references needs no package installation. If a specific exchange requires validation/export, select and review that external tool separately. Google's `@google/design.md` and the community registry's `designmd` package are different tools, despite their shared binary name. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---
 

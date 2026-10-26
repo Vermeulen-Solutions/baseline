@@ -10,7 +10,7 @@ For this user's agent-driven Baseline work, the practical starting recommendatio
 
 ## What was implemented
 
-The Baseline-owned `penpot-site-design` skill now contains connection/API discipline, concrete Baseline token/component recipes, same-agent translation, optional handoff, a portable brief and a portable handoff template. Shared profile manifests ship it and both onboarding guides without adding a runtime package. The maintained-skill updater includes it but retains stage/review/conflict/recovery behavior. Root/static instructions, workflow/art-direction/Astro skills, design guides and prompt-library recipes distinguish surface selection from optional agent continuity. Existing detailed typography/surface/grid/action/motion recipes remain.
+The Baseline-owned `penpot-site-design` and `openpencil-site-design` skills now contain connection/API discipline, concrete Baseline token/component recipes, same-agent translation, optional handoff, a portable brief and a portable handoff template. Shared profile manifests ship both skills and both onboarding guides without adding a runtime package. The maintained-skill updater includes them while retaining stage/review/conflict/recovery behavior. Root/static instructions, workflow/art-direction/Astro skills, design guides and prompt-library recipes distinguish surface selection from optional agent continuity. Existing detailed typography/surface/grid/action/motion recipes remain.
 
 The [implementation plan](plans/design-iteration-and-penpot.md) records scope, acceptance and distribution/release decisions. Client Puplinge branding, content, CMS/Eventual and deployment were outside these template changes. No upstream EmDash or Impeccable skill files were edited.
 

@@ -65,8 +65,9 @@ test('a killed skill apply leaves a recoverable journal and binary corruption is
   } finally { assert.equal(path.dirname(root), path.resolve(os.tmpdir())); assert.ok(path.basename(root).startsWith('emdash-sync-test-')); await fs.rm(root, { recursive: true, force: true }); }
 });
 
-test('added Penpot membership stages without replacing existing local site guidance', async () => {
+test('added Penpot and OpenPencil membership stages without replacing existing local site guidance', async () => {
   assert.ok(sources.site.skills.includes('penpot-site-design'));
+  assert.ok(sources.site.skills.includes('openpencil-site-design'));
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-sync-test-'));
   try {
     const config = sources.site;
@@ -76,12 +77,14 @@ test('added Penpot membership stages without replacing existing local site guida
     const before = await inventory(path.join(root, '.agents', 'skills'), config.skills);
     const files = Object.fromEntries(config.skills.map(name => [name + '/SKILL.md', { bytes: Buffer.from('# Incoming\n'), mode: '100644' }]));
     files['penpot-site-design/assets/design-handoff.md'] = { bytes: Buffer.from('# Portable handoff\n'), mode: '100644' };
+    files['openpencil-site-design/references/connection-and-api.md'] = { bytes: Buffer.from('# OpenPencil API\n'), mode: '100644' };
     const candidate = { commitSha: 'c'.repeat(40), files };
     const report = await review(root, config, candidate);
     assert.deepEqual(report.conflicts, ['site-art-direction/SKILL.md']);
     const id = await stageSync(root, 'site', config, candidate, report);
     assert.deepEqual(await inventory(path.join(root, '.agents', 'skills'), config.skills), before);
     assert.equal(await fs.readFile(path.join(root, '.emdash/skill-sync', id, 'incoming/penpot-site-design/assets/design-handoff.md'), 'utf8'), '# Portable handoff\n');
+    assert.equal(await fs.readFile(path.join(root, '.emdash/skill-sync', id, 'incoming/openpencil-site-design/references/connection-and-api.md'), 'utf8'), '# OpenPencil API\n');
     await assert.rejects(applySync(root, 'site', id), /conflict|resolution/i);
     assert.deepEqual(await inventory(path.join(root, '.agents', 'skills'), config.skills), before);
   } finally { assert.equal(path.dirname(root), path.resolve(os.tmpdir())); assert.ok(path.basename(root).startsWith('emdash-sync-test-')); await fs.rm(root, { recursive: true, force: true }); }

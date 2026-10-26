@@ -166,7 +166,7 @@ We are ready for Stage 4: Art Direction. Activate the site-art-direction skill.
 Brand goals and personality: [E.g., Editorial craftsmanship, technical precision, high-contrast typography, restrained color palette].
 
 Please:
-Before choosing the direction, recommend a dedicated canvas and explicitly offer OpenPencil, Penpot and direct Astro/browser. Follow site-art-direction/references/design-iteration.md; reuse my preference and a working connection, and retain Pencil, Google Stitch, OpenDesign, Claude Design and designmd-mcp references when preferred. Resolve any unavailable-tool fallback explicitly. Use penpot-site-design for Penpot. Same-agent work is complete; another agent/handoff is optional.
+Before choosing the direction, recommend a dedicated canvas and explicitly offer OpenPencil, Penpot and direct Astro/browser. Follow site-art-direction/references/design-iteration.md; reuse my preference and a working connection, and retain Pencil, Google Stitch, OpenDesign, Claude Design and designmd-mcp references when preferred. Resolve any unavailable-tool fallback explicitly. Use openpencil-site-design for OpenPencil and penpot-site-design for Penpot. Same-agent work is complete; another agent/handoff is optional.
 
 1. Review .agents/skills/site-art-direction/references/aesthetic-lanes.md and propose 2-3 suitable Aesthetic Lanes.
 2. Formulate a Narrative Metaphor, Typography Pairing, and Token Physics (Canvas ground, Action/Accent colors, Borders, and Spatial Density).
@@ -649,7 +649,7 @@ Please:
 
 ## 10. Design Iteration: Astro, Penpot or OpenPencil
 
-For a new site or substantial overhaul, recommend a design canvas and offer OpenPencil, Penpot and direct Astro/browser explicitly. Use the shared `site-art-direction/references/design-iteration.md` at the existing concept checkpoint; reuse known preferences and working connections. See [Penpot onboarding](penpot-onboarding.md), [OpenPencil onboarding](openpencil-onboarding.md) and the `penpot-site-design` templates. Same-agent work is complete; direct Astro remains an explicit no-service option. Small refinements stay within the accepted world.
+For a new site or substantial overhaul, recommend a design canvas and offer OpenPencil, Penpot and direct Astro/browser explicitly. Use the shared `site-art-direction/references/design-iteration.md` at the existing concept checkpoint; reuse known preferences and working connections. See [Penpot onboarding](penpot-onboarding.md), [OpenPencil onboarding](openpencil-onboarding.md), `openpencil-site-design` and the `penpot-site-design` templates. Same-agent work is complete; direct Astro remains an explicit no-service option. Small refinements stay within the accepted world.
 
 ### Canvas-led kickoff, one agent
 
@@ -684,6 +684,6 @@ Read the attached Baseline handoff and relevant installed tool skill/API. Reconn
 ### OpenPencil design and implementation, same agent
 
 ```markdown
-Use the official open-pencil/open-pencil skill matching my desktop app/MCP release and Baseline's shared design-iteration loop. Keep one agent unless I request a handoff. Confirm document identity and live schemas; preserve existing designs and [fixed commitments]. Use native layout and reusable variables/components for representative concepts, show renders and iterate my feedback in focused batches. Check exact font availability and long-copy/mobile constraints. Resolve the direction choice and save to an agreed local .fig path; verify recovery when needed. Apply the actual Baseline token/component APIs, prove one native Astro route, then roll out with styleguide/browser acceptance and [authorized release endpoint]. Exported design JSX is not production Astro. Avoid a duplicate full site or repeated library rebuilds during canvas iteration.
+Use openpencil-site-design, the official open-pencil/open-pencil skill matching my desktop app/MCP release, and Baseline's shared design-iteration loop. Keep one agent unless I request a handoff. Confirm document identity and live schemas; preserve existing designs and [fixed commitments]. Use native layout and reusable variables/components for representative concepts, show renders and iterate my feedback in focused batches. Check exact font availability and long-copy/mobile constraints. Resolve the direction choice and save to an agreed local .fig path; verify recovery when needed. Apply the actual Baseline token/component APIs, prove one native Astro route, then roll out with styleguide/browser acceptance and [authorized release endpoint]. Exported design JSX is not production Astro. Avoid a duplicate full site or repeated library rebuilds during canvas iteration.
 ```
 

@@ -20,7 +20,7 @@ Ask about another agent only when the user wants that split. Same-agent design a
 
 ## 2. New Baseline-owned skill
 
-Create `.agents/skills/penpot-site-design/SKILL.md`, Codex discovery metadata and focused references for connection/API, Baseline mapping and design iteration, and optional handoff/Astro translation. Add portable brief and acceptance/handoff templates. The skill triggers for Penpot work in a Baseline site; it does not take ownership of CMS schemas, deployment, generic plugin installation or all frontend work.
+Create `.agents/skills/penpot-site-design/SKILL.md` and `.agents/skills/openpencil-site-design/SKILL.md`, Codex discovery metadata and focused references for connection/API, Baseline mapping and design iteration, and optional handoff/Astro translation. Add portable brief and acceptance/handoff templates. These skills trigger for Penpot or OpenPencil work in a Baseline site; they do not take ownership of CMS schemas, deployment, generic plugin installation or all frontend work.
 
 The skill must contain concrete examples, not just cross-links. Map Penpot variables/components to actual `Section`, `Container`, `Grid`, `Sidebar`, `Card` APIs and `.btn` variants; retain four typography roles, three surface tiers, `7/5` or `8/4` bento pacing, hairline rules, 1440/390 frames and meaningful interaction states. Use actual source values and fonts rather than neutral tokens on an existing branded site. Preserve fluid CSS expressions and contextual spacing ownership; a canvas measurement at one width is a sample, not a replacement token definition.
 

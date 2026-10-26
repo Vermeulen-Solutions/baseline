@@ -114,7 +114,7 @@ explicitly apply under [skill synchronization](docs/skill-synchronization.md).
 Preserve dirty mirrors and backups.
 
 Vermeulen-maintained skills include new-site-workflow, site-art-direction,
-penpot-site-design, astro-site-design, emdash-content-modeling and migration/setup guidance.
+penpot-site-design, openpencil-site-design, astro-site-design, emdash-content-modeling and migration/setup guidance.
 sync:site-skills distributes reviewed snapshots; it does not own client content
 or AGENTS.md. Impeccable is a separately licensed upstream snapshot: preserve its
 LICENSE/PROVENANCE and update deliberately. Checked-in mirror drift is pending

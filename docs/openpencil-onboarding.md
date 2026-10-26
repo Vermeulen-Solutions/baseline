@@ -1,6 +1,6 @@
 # Optional OpenPencil desktop path
 
-OpenPencil (`open-pencil/open-pencil`) is distinct from commercial Pencil and unrelated similarly named projects. For new sites and substantial redesigns, recommend a canvas and offer OpenPencil, Penpot and direct Astro/browser explicitly. Prefer an already working user-preferred connection; use `site-art-direction/references/design-iteration.md` for focused concept edits followed by a representative Astro proof. Use Baseline's existing art-direction, concrete CSS/component recipes and acceptance gates on every surface. Another agent is optional.
+OpenPencil (`open-pencil/open-pencil`) is distinct from commercial Pencil and unrelated similarly named projects. For new sites and substantial redesigns, recommend a canvas and offer OpenPencil, Penpot and direct Astro/browser explicitly. Prefer an already working user-preferred connection; use `openpencil-site-design` and `site-art-direction/references/design-iteration.md` for focused concept edits followed by a representative Astro proof. Use Baseline's existing art-direction, concrete CSS/component recipes and acceptance gates on every surface. Another agent is optional.
 
 ## Setup
 

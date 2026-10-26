@@ -75,33 +75,39 @@ test('older installed inventory preserves legacy primitives, calibrated tokens a
   assert.equal(await fs.readFile(cssPath,'utf8'),css);assert.equal(await fs.readFile(basePath,'utf8'),base);assert.deepEqual(await fs.readFile(packagePath),originalPackage);
   assert.deepEqual(Object.keys(JSON.parse(await fs.readFile(managedPath,'utf8')).files).sort(),beforeMembership);
 }));
-test('historical four-skill sites remain valid and cannot acquire Penpot through bounded sync', () => fixture(async root => {
+test('historical four-skill sites remain valid and cannot acquire Penpot or OpenPencil through bounded sync', () => fixture(async root => {
   const configPath = path.join(root, 'baseline.config.json');
   const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
-  config.skills = config.skills.filter(skill => skill !== 'penpot-site-design');
+  config.skills = config.skills.filter(skill => !['penpot-site-design', 'openpencil-site-design'].includes(skill));
   await fs.writeFile(configPath, JSON.stringify(config));
   const originalConfig = await fs.readFile(configPath);
   const managedPath = path.join(root, '.baseline/managed-files.json');
   const originalManaged = await fs.readFile(managedPath);
   // Even a mistakenly retained managed record must not widen installed skills.
   const target = '.agents/skills/penpot-site-design/SKILL.md';
+  const openpencilTarget = '.agents/skills/openpencil-site-design/SKILL.md';
   const originalSkill = await fs.readFile(path.join(root, target));
+  const originalOpenpencilSkill = await fs.readFile(path.join(root, openpencilTarget));
   const commit = '2'.repeat(40);
   const stage = await stageBaseline({ root, commit, readSource: async relative => {
     assert.ok(!relative.startsWith('.agents/skills/penpot-site-design/'));
+    assert.ok(!relative.startsWith('.agents/skills/openpencil-site-design/'));
     return fs.readFile(new URL(relative, source));
   } });
   assert.equal(stage.entries.length, 0);
   assert.deepEqual(await fs.readFile(managedPath), originalManaged);
-  stage.entries.push({ target });
-  await fs.writeFile(path.join(root, `.baseline/updates/${commit}/stage.json`), JSON.stringify(stage));
-  await assert.rejects(applyBaseline({ root, commit }), /membership/);
-  stage.entries.pop();
+  for (const extraTarget of [target, openpencilTarget]) {
+    stage.entries.push({ target: extraTarget });
+    await fs.writeFile(path.join(root, `.baseline/updates/${commit}/stage.json`), JSON.stringify(stage));
+    await assert.rejects(applyBaseline({ root, commit }), /membership/);
+    stage.entries.pop();
+  }
   await fs.writeFile(path.join(root, `.baseline/updates/${commit}/stage.json`), JSON.stringify(stage));
   await applyBaseline({ root, commit });
   assert.deepEqual(await fs.readFile(configPath), originalConfig);
   assert.deepEqual(JSON.parse(await fs.readFile(managedPath, 'utf8')).files, JSON.parse(originalManaged).files);
   assert.deepEqual(await fs.readFile(path.join(root, target)), originalSkill);
+  assert.deepEqual(await fs.readFile(path.join(root, openpencilTarget)), originalOpenpencilSkill);
 }));
 
 test('profile sync stages shared changes and skills, preserves calibrated tokens and excludes client files and packages', () => fixture(async root => {

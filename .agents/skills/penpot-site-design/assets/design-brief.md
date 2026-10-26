@@ -15,4 +15,4 @@
 - Asset generation permission/provenance:
 - Review decision needed, authorized next steps and release endpoint:
 
-Do not include credentials. Read `penpot-site-design` and its mapping/API references; design a representative composition, inspect/export it, fix concrete defects and present a meaningful choice before broad implementation. Keep the original fluid CSS expressions beside sampled canvas values. Do not invent facts or user approval.
+Do not include credentials. Read `penpot-site-design` or `openpencil-site-design` and its mapping/API references; design a representative composition, inspect/export it, fix concrete defects and present a meaningful choice before broad implementation. Keep the original fluid CSS expressions beside sampled canvas values. Do not invent facts or user approval.

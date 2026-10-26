@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenPencil Site Design"
+  short_description: "Iterate OpenPencil designs with Baseline and Astro"
+  default_prompt: "Use $openpencil-site-design to inspect the active document, iterate within the approved Baseline direction, and prepare or implement the reviewed design."

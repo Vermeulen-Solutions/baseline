@@ -125,7 +125,8 @@
     "site-art-direction",
     "astro-site-design",
     "impeccable",
-    "penpot-site-design"
+    "penpot-site-design",
+    "openpencil-site-design"
   ],
   "skillFiles": [
     ".agents/skills/astro-site-design/SKILL.md",
@@ -217,6 +218,9 @@
     ".agents/skills/penpot-site-design/references/baseline-recipes.md",
     ".agents/skills/penpot-site-design/references/connection-and-api.md",
     ".agents/skills/penpot-site-design/references/handoff-and-astro.md",
+    ".agents/skills/openpencil-site-design/SKILL.md",
+    ".agents/skills/openpencil-site-design/agents/openai.yaml",
+    ".agents/skills/openpencil-site-design/references/connection-and-api.md",
     ".agents/skills/site-art-direction/references/design-iteration.md"
   ]
 }

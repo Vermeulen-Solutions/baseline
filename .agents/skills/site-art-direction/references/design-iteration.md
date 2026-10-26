@@ -8,7 +8,7 @@ For new sites and substantial visual overhauls, recommend a dedicated design can
 
 | Choice | Recommend when | Setup and implementation boundary |
 | --- | --- | --- |
-| **OpenPencil** | The user wants a local desktop canvas and saved design file; especially useful when its app/MCP is already ready | Use the official version-matched `open-pencil/open-pencil` skill and live schemas. Save to an agreed file, recheck identifiers after reopening and transfer that file if changing machines. See [onboarding](../../../../docs/openpencil-onboarding.md) when supplied. |
+| **OpenPencil** | The user wants a local desktop canvas and saved design file; especially useful when its app/MCP is already ready | Use [openpencil-site-design](../../openpencil-site-design/SKILL.md) alongside the official version-matched `open-pencil/open-pencil` skill and live schemas. Save to an agreed file, recheck identifiers after reopening and transfer that file if changing machines. See [onboarding](../../../../docs/openpencil-onboarding.md) when supplied. |
 | **Penpot** | The user wants a shared cloud design artifact, browser access or sequential agents on different machines | Use [penpot-site-design](../../penpot-site-design/SKILL.md). Confirm the connected file/page and keep its MCP tab awake. See [onboarding](../../../../docs/penpot-onboarding.md) when supplied. |
 | **Direct Astro/browser** | The user prefers real-browser iteration, wants no design-service setup, or the important uncertainty is browser behavior | Use isolated concepts under `audit/visual-concepts/` and [astro-site-design](../../astro-site-design/SKILL.md). Retain the same concept review and direction selection before broad implementation. |
 

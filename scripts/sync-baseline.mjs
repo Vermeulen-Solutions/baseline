@@ -6,7 +6,8 @@ import { pathToFileURL } from 'node:url';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, null, 2) + '\n';
 const legacySkills = ['new-site-workflow', 'site-art-direction', 'astro-site-design', 'impeccable'];
-const skills = [...legacySkills, 'penpot-site-design'];
+const skills = [...legacySkills, 'penpot-site-design', 'openpencil-site-design'];
+const validSkillCounts = [legacySkills.length, legacySkills.length + 1, skills.length];
 // Keep this script self-contained: older generated sites cannot acquire new
 // module paths through bounded sync. Both provenance URLs identify this one repo;
 // downloads always use its canonical name, never a URL supplied by the site.
@@ -40,7 +41,7 @@ function selected(target, record, installedSkills) {
 }
 async function context(root) {
   const config = await readJSON(root, 'baseline.config.json');
-  const validSkills = Array.isArray(config.skills) && [legacySkills.length, skills.length].includes(config.skills.length) && new Set(config.skills).size === config.skills.length && legacySkills.every(s => config.skills.includes(s)) && config.skills.every(s => skills.includes(s));
+  const validSkills = Array.isArray(config.skills) && validSkillCounts.includes(config.skills.length) && new Set(config.skills).size === config.skills.length && legacySkills.every(s => config.skills.includes(s)) && config.skills.every(s => skills.includes(s));
   if (config.schemaVersion !== 1 || !['static', 'static-sveltia'].includes(config.platformProfile) || config.foundation !== 'static' || config.runtime !== 'static' || !repositories.includes(config.source?.repository) || !/^[a-f0-9]{40}$/.test(config.source.commit ?? '') || !validSkills) throw new Error('sync:baseline requires a generated static Platform Profile');
   const managed = await readJSON(root, '.baseline/managed-files.json');
   if (managed.schemaVersion !== 1 || !managed.files) throw new Error('Unsupported managed-file contract');

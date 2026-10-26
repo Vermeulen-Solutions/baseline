@@ -5,7 +5,7 @@ description: Design and iterate Baseline site concepts in Penpot through MCP, in
 
 # Penpot site design
 
-Use Penpot as a reviewable design surface inside Baseline's existing workflow. The same agent can design and implement; switching to another model is optional. Do not launch another agent or install/configure a client merely because a handoff is possible. Direct Astro/browser iteration remains a complete alternative. For OpenPencil or another explicitly chosen tool, use that tool's installed documentation rather than Penpot APIs.
+Use Penpot as a reviewable design surface inside Baseline's existing workflow. The same agent can design and implement; switching to another model is optional. Do not launch another agent or install/configure a client merely because a handoff is possible. Direct Astro/browser iteration remains a complete alternative. For OpenPencil, use [openpencil-site-design](../openpencil-site-design/SKILL.md) and [docs/openpencil-onboarding.md](../../../docs/openpencil-onboarding.md) when present; for another explicitly chosen tool, use that tool's installed documentation rather than Penpot APIs.
 
 ## Establish the task
 
