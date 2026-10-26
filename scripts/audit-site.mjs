@@ -163,15 +163,15 @@ export function followUpPlan(report) {
     .filter(r => r && r.status !== 'pass');
   if (dsRules.length) {
     const details = dsRules.map(r => `${r.id} (${r.status})`).join(', ');
-    items.push(`2. **Modernize design-system primitives & component quarantine (${details})**: Align \`src/styles/global.css\` (\`interpolate-size\`, single \`.flow\` with duplicate-margin guard, \`.content-grid\` subgrid, \`[data-surface]\`, tokenized \`clamp()\` in \`@theme\`), refactor whole-card \`<a>\` wrappers into semantic \`<article>\` + \`.clickable-parent\`, and add \`/_styleguide\` (\`src/pages/_styleguide.astro\` + \`src/components/dev/Styleguide.astro\`).`);
+    items.push(`2. **Modernize design-system primitives & component quarantine (${details})**: Align \`src/styles/global.css\` (\`interpolate-size\`, single \`.flow\` with duplicate-margin guard, \`.content-grid\` subgrid, \`[data-surface]\`, 4-voice typography \`--font-mono\`/\`--font-accent\`, 3-tier surfaces \`--color-elevated\`/\`--surface-glass\`, \`.bento-grid\`/\`.ui-specimen\`, tactile \`.btn--secondary\`/\`.btn--ghost\`, and tokenized \`clamp()\` in \`@theme\`), refactor whole-card \`<a>\` wrappers into semantic \`<article>\` + \`.clickable-parent\` with \`transitionName\` morphing, upgrade \`SiteShell.astro\` choreography (\`data-surface-toggle\`, \`data-sticky-header\`, \`data-vt-loading\`), and add \`/_styleguide\` (\`src/pages/_styleguide.astro\` + \`src/components/dev/Styleguide.astro\`).`);
   }
 
   // Track 3: Template adoption & component calibration
   const cardObs = byId['design-system:card-and-breakout']?.observed;
   const hudObs = byId['design-system:quarantine-hud']?.observed;
   if (cardObs && typeof cardObs === 'object') {
-    if ((cardObs.breakoutPageCount ?? 0) === 0 || (cardObs.surfaceUsageCount ?? 0) === 0 || (hudObs && !hudObs.calibrationRecord)) {
-      items.push(`3. **Adopt breakout/surface primitives in route templates & calibrate on \`/_styleguide\`** (\`breakoutPageCount: ${cardObs.breakoutPageCount ?? 0}\`, \`surfaceUsageCount: ${cardObs.surfaceUsageCount ?? 0}\`, \`calibrationRecord: ${Boolean(hudObs?.calibrationRecord)}\`): Opt long-form editorial routes into \`<Container breakout>\` (\`.content-grid\`), apply \`data-surface="dark|muted|brand"\` to contrasting sections, and record browser verification in \`audit/component-calibration.md\`.`);
+    if ((cardObs.breakoutPageCount ?? 0) === 0 || (cardObs.surfaceUsageCount ?? 0) === 0 || (cardObs.expressivePrimitiveUsageCount ?? 0) === 0 || (hudObs && !hudObs.calibrationRecord)) {
+      items.push(`3. **Adopt breakout/surface primitives in route templates & calibrate on \`/_styleguide\`** (\`breakoutPageCount: ${cardObs.breakoutPageCount ?? 0}\`, \`surfaceUsageCount: ${cardObs.surfaceUsageCount ?? 0}\`, \`expressivePrimitiveUsageCount: ${cardObs.expressivePrimitiveUsageCount ?? 0}\`, \`calibrationRecord: ${Boolean(hudObs?.calibrationRecord)}\`): Opt long-form editorial routes into \`<Container breakout>\` (\`.content-grid\`), apply \`data-surface="dark|muted|brand"\` and 3-tier surfaces (\`.surface-elevated\`, \`.surface-glass\`, \`.surface-spotlight\`) to contrasting sections, upgrade uniform card rows or flat heroes with 4-voice typography and asymmetric layouts (\`.bento-grid\`, \`.grid-hairline\`, \`.ui-specimen\`) using the 5-Point Visual Self-Critique Rubric, and record browser verification in \`audit/component-calibration.md\`.`);
     }
   }
 

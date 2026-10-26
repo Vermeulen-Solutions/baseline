@@ -251,13 +251,14 @@ test('auditFontLoading passes for system fonts and catches unloaded custom font 
   const unloadedCustomCss = applyTokenOverrides(css, {
     theme: {
       '--font-display': '"Unloaded Custom Display", ui-sans-serif, system-ui, sans-serif',
+      '--font-accent': '"Unloaded Accent Serif", Georgia, serif',
     },
   });
   const failedAudit = auditFontLoading(unloadedCustomCss, '.');
   assert.equal(failedAudit.valid, false);
-  assert.deepEqual(failedAudit.missingFamilies, ['Unloaded Custom Display']);
+  assert.deepEqual(failedAudit.missingFamilies, ['Unloaded Custom Display', 'Unloaded Accent Serif']);
 
-  const cssWithFontFace = `${unloadedCustomCss}\n@font-face { font-family: "Unloaded Custom Display"; src: local("Arial"); }\n`;
+  const cssWithFontFace = `${unloadedCustomCss}\n@font-face { font-family: "Unloaded Custom Display"; src: local("Arial"); }\n@font-face { font-family: "Unloaded Accent Serif"; src: local("Georgia"); }\n`;
   const loadedAudit = auditFontLoading(cssWithFontFace, '.');
   assert.equal(loadedAudit.valid, true);
 });

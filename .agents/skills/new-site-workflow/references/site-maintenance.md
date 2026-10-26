@@ -118,8 +118,20 @@ switching shells or APIs alone does not address a rejection. Otherwise report
 cleanup as pending. Ordinary command errors, such as an unavailable executable,
 can use safe recovery within the task's existing authorization.
 
-If another session needs to continue, update the existing progress record with
-the requested outcome, changed paths, exact checks/results, pending decisions
-or acceptance, and the next executable action. Keep brief/design facts in their
-established home. Completed local preparation can be handed off with live
-acceptance pending; that status does not imply deployment or publication.
+If another session needs to continue, update the existing progress record with the requested outcome, changed paths, exact checks/results, pending decisions or acceptance, and the next executable action. Keep brief/design facts in their established home. Completed local preparation can be handed off with live acceptance pending; that status does not imply deployment or publication.
+
+## Upgrading an earlier Baseline site (design & primitive modernization)
+
+When asked to review, audit, or improve the design of a site built on an earlier version of Baseline (whether EmDash or static):
+
+1. **Diagnose the installed primitive generation**:
+   - On EmDash sites, run `npm run audit:site -- --root <site-path> --out <private-report-dir>` and inspect `design-system:tokens-and-rhythm` and `design-system:card-and-breakout` (`fourVoiceTypography`, `threeTierSurfaces`, `bentoAndSpecimenPrimitives`, `tactileActionVariants`, `cardTransitionMorphing`, `siteShellChoreography`, `expressivePrimitiveUsageCount`).
+   - On static/Sveltia sites, run `npm run sync:baseline -- --ref <SHA>` (or inspect `src/styles/global.css`, `src/layouts/SiteShell.astro`, `src/layouts/Base.astro`, and `src/components/Card.astro`) to see which shared primitives are missing.
+2. **Backport shared primitives without overwriting client identity**:
+   - Preserve the site's calibrated `@theme` palette, `--font-display`, `--font-body`, and `AGENTS.md` `## Art Direction Record`.
+   - Add `--font-mono` and `--font-accent` to `@theme` in `src/styles/global.css`, and merge the modern `@layer base` and `@layer components` blocks (3-tier surface derivations `--color-elevated` / `--surface-glass`, 4-voice typography `.eyebrow-telemetry` / `.font-accent` / `.tabular-nums`, tactile `.btn--secondary` / `.btn--ghost` / `.icon-nudge`, `.bento-grid`, `.grid-hairline`, `.ui-specimen`, `[data-reveal]`, `[data-sticky-header]`, and View Transition rules).
+   - Sync `src/layouts/SiteShell.astro`, `src/layouts/Base.astro` (`surface` prop + `data-sticky-header`), and `src/components/Card.astro` (`transitionName` prop).
+3. **Conduct a live visual & layout critique before editing routes**:
+   - Capture or inspect the live site (or local preview) at desktop (`1440x900`) and mobile (`390x844`).
+   - Evaluate each key route against the **5-Point Visual Self-Critique Rubric** (`astro-site-design/references/astro-primitives.md`) and the **Early-Baseline & Legacy Pattern -> Modern Baseline Upgrade Matrix** (`astro-site-design/references/migration-visual-audit.md`) — looking for flat 1-surface pages, 2-voice typography that lacks `.eyebrow-telemetry` or `.font-accent` contrast, back-to-back 3-column card grids that should become `.bento-grid` / `.grid-hairline` / `<Sidebar>` splits, and missing View Transition morphing (`<Card transitionName>`).
+   - Present a concise **Preserve / Improve / Upgrade** proposal per route, then apply the approved template improvements, calibrate on `/_styleguide` (`audit/component-calibration.md`), and verify with `npm run verify` and `npm run build`.

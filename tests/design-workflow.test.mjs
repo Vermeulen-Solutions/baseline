@@ -116,8 +116,27 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
     '.content-grid', '.content--feature', '.content--wide', '.content--full', '.content--full-safe',
     '.clickable-parent::after', '.focus-parent:focus-within:has(:focus-visible)',
     ':where(:has(> .is-bg))', '.fade--bottom', '[data-surface="dark"]', '[data-surface="light"]',
+    '.eyebrow-telemetry', '.font-accent', '.tabular-nums', '.badge-pill', '.status-dot',
+    '.surface-elevated', '.surface-glass', '.surface-spotlight', '.grid-hairline',
+    '.bg-grid-blueprint', '.frame-crosshair', '.ui-specimen', '.ui-specimen__header',
+    '.stack-cards', '.stack-card', '.animate-card-in', '[data-reveal]', '.viz-bars', '.viz-bar',
+    '.btn', '.btn--secondary', '.btn--ghost', '.icon-nudge', '.bento-grid', '.bento-span-8',
+    '.surface-grain', '[data-sticky-header]', '.prose-dropcap', '.reel-snap',
+    '.vt-morph', '.svg-icon', '.skeleton-shimmer', 'html[data-vt-loading]', '.section-defer', '@starting-style',
+    '[data-surface-icon="dark"]', '[data-surface-icon="light"]', 'html[data-surface="dark"]', 'html[data-surface-switching]',
+    '::view-transition-old(root)', '::view-transition-new(root)',
   ]) {
     assert.ok(css.includes(selector), `Missing structural selector ${selector}`);
+  }
+  const siteShell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
+  for (const hook of ['baseline:surface', 'astro:before-preparation', 'astro:after-preparation', 'astro:before-swap', 'astro:after-swap', 'astro:page-load', '[data-reveal]', '[data-filter-root]', '[data-sticky-header]', 'data-surface-mode', 'data-surface-switching', 'data-vt-loading']) {
+    assert.ok(siteShell.includes(hook), `SiteShell must include declarative hook ${hook}`);
+  }
+  for (const basePath of ['src/layouts/Base.astro', 'profiles/static/project/src/layouts/Base.astro']) {
+    const baseSource = readFileSync(basePath, 'utf8');
+    assert.ok(baseSource.includes("surface?: 'light' | 'dark' | 'system'"), `${basePath} must accept surface prop`);
+    assert.ok(baseSource.includes('surface={surface}'), `${basePath} must forward surface prop to SiteShell`);
+    assert.ok(baseSource.includes('data-sticky-header'), `${basePath} must mark .site-header with data-sticky-header`);
   }
   const container = readFileSync('src/components/Container.astro', 'utf8');
   assert.ok(container.includes('breakout?: boolean;'));
@@ -130,6 +149,7 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   assert.ok(card.includes('titleEdit?: FieldAttributes'), 'Card must accept title annotation attributes');
   assert.ok(card.includes('descriptionEdit?: FieldAttributes'), 'Card must accept description annotation attributes');
   assert.ok(card.includes('actionEdit?: FieldAttributes'), 'Card must accept action annotation attributes');
+  assert.ok(card.includes('transitionName?: string'), 'Card must accept optional shared-element View Transition prefix');
   assert.ok(!/from ['"]emdash/.test(card), 'Shared Card must not require EmDash types');
   assert.ok(card.includes('[data-emdash-field]'), 'Card must elevate EmDash field annotations above .clickable-parent');
   assert.ok(css.includes('grid-template-columns: subgrid'), 'global.css must propagate .content-grid tracks into .flow / [data-emdash-field] via subgrid');

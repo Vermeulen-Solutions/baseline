@@ -14,15 +14,20 @@ interface Props extends Omit<HTMLAttributes<'article'>, 'title'> {
   titleEdit?: FieldAttributes;
   descriptionEdit?: FieldAttributes;
   actionEdit?: FieldAttributes;
+  /** Optional shared-element View Transition prefix; sets `<prefix>-media` and `<prefix>-title` view-transition-name. */
+  transitionName?: string;
   class?: string;
 }
 const { title: rawTitle, href: rawHref, action: rawAction, description: rawDescription, image, imageAlt = '', imageWidth, imageHeight, headingLevel = 3,
   layout = 'stacked', imageFit: rawFit, imageAspect: rawAspect, sizes,
-  titleEdit: rawTitleEdit, descriptionEdit: rawDescriptionEdit, actionEdit: rawActionEdit, class: className, ...rest } = Astro.props;
+  titleEdit: rawTitleEdit, descriptionEdit: rawDescriptionEdit, actionEdit: rawActionEdit, transitionName: rawTransitionName, class: className, ...rest } = Astro.props;
 const fieldAttributes = (value: unknown): FieldAttributes => value && typeof value === 'object' && !Array.isArray(value) ? value as FieldAttributes : {};
 const titleEdit = fieldAttributes(rawTitleEdit), descriptionEdit = fieldAttributes(rawDescriptionEdit), actionEdit = fieldAttributes(rawActionEdit);
 const imageFit = rawFit === 'contain' ? 'contain' : 'cover';
 const imageAspect = typeof rawAspect === 'string' && rawAspect.trim() ? rawAspect : '3 / 2';
+const transitionPrefix = typeof rawTransitionName === 'string' && /^[A-Za-z0-9_-]+$/.test(rawTransitionName.trim()) ? rawTransitionName.trim() : '';
+const mediaStyle = transitionPrefix ? { '--card-aspect': imageAspect, '--card-fit': imageFit, 'view-transition-name': `${transitionPrefix}-media` } : { '--card-aspect': imageAspect, '--card-fit': imageFit };
+const titleAttrs = transitionPrefix ? { ...titleEdit, style: [titleEdit.style, `view-transition-name: ${transitionPrefix}-title`].filter(Boolean).join('; ') } : titleEdit;
 const title = typeof rawTitle === 'string' ? rawTitle : '';
 const description = typeof rawDescription === 'string' ? rawDescription : '';
 const action = typeof rawAction === 'string' ? rawAction : '';
@@ -33,9 +38,9 @@ const hasTitleExtra = Astro.slots.has('title-extra');
 const hasDescription = Boolean(description || Astro.slots.has('default') || Object.keys(descriptionEdit || {}).length);
 ---
 <article data-editorial-island class:list={['card', { 'card--horizontal': layout === 'horizontal' && hasMedia, 'card--clickable': Boolean(href), 'focus-parent': Boolean(href) }, className]} {...rest}>
-  {hasMedia && <div class="card-media" style={{'--card-aspect':imageAspect,'--card-fit':imageFit}}><slot name="media">{image && <ResponsiveImage src={image} alt={imageAlt} width={imageWidth} height={imageHeight} sizes={sizes} />}</slot></div>}
+  {hasMedia && <div class="card-media" style={mediaStyle}><slot name="media">{image && <ResponsiveImage src={image} alt={imageAlt} width={imageWidth} height={imageHeight} sizes={sizes} />}</slot></div>}
   <div class="card-body">
-    {hasTitleExtra ? <div class="card-title-row"><Heading class="card-title" {...(titleEdit || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading><slot name="title-extra" /></div> : <Heading class="card-title" {...(titleEdit || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading>}
+    {hasTitleExtra ? <div class="card-title-row"><Heading class="card-title" {...(titleAttrs || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading><slot name="title-extra" /></div> : <Heading class="card-title" {...(titleAttrs || {})}>{href ? <a href={href} class="card-link clickable-parent">{title}</a> : title}</Heading>}
     {Astro.slots.has('metadata') && <div class="card-metadata"><slot name="metadata" /></div>}
     {hasDescription && <div class="card-description">{description && <p {...(descriptionEdit || {})}>{description}</p>}<slot /></div>}
     {action && <span class="card-action" {...(actionEdit || {})}>{action}<slot name="action-icon" /></span>}

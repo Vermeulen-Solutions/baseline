@@ -7,6 +7,8 @@ import { pathToFileURL } from 'node:url';
 export const REQUIRED_THEME_TOKENS = [
   '--font-body',
   '--font-display',
+  '--font-mono',
+  '--font-accent',
   '--text-step--1',
   '--text-step-0',
   '--text-step-1',
@@ -878,10 +880,11 @@ export function upsertCalibrationRecord(targetPath, css, cssPath = 'src/styles/g
     '',
     '## Component Specimens To Verify',
     '',
-    '- **Typography & Measure:** Check fluid steps and `--measure-reading` line lengths on `/_styleguide#typography`.',
-    '- **Controls & Focus States:** Check primary, disabled, invalid, and `:focus-visible` states on `/_styleguide#controls`.',
-    '- **Layout & Cards:** Check `Section`, `Container` (`reading`, `content`, `wide`, `breakout`), `Grid`, and `Card` (`stacked`, `horizontal`) on `/_styleguide#layout`.',
-    '- **Media & Editorial Flow:** Check native `ResponsiveImage`, `PartnersPanel`, `LogoTicker`, and `.flow` Markdown on the common specimens. For EmDash, also check `EditorialImage`, `PhotoGallery` and Portable Text in the platform extension.',
+    '- **Typography & Measure:** Check fluid steps, 4-voice roles (`--font-display`, `--font-accent` `.font-accent`, `--font-body`, `--font-mono` `.eyebrow-telemetry` / `.tabular-nums`), and `--measure-reading` line lengths on `/_styleguide#typography`.',
+    '- **Surfaces & Controls:** Check 3-tier surfaces (`--color-page`, `--color-surface`, `--color-elevated` / `.surface-elevated`), tactile `.btn` / `.btn--secondary` / `.btn--ghost` hierarchy, disabled/invalid, and `:focus-visible` states on `/_styleguide#palette` and `/_styleguide#controls`.',
+    '- **Layout, Bento & Cards:** Check `Section`, `Container` (`reading`, `content`, `wide`, `breakout`), `Grid`, `.bento-grid`, and `Card` (`stacked`, `horizontal`, optional `transitionName`) on `/_styleguide#layout`.',
+    '- **Media & Editorial Flow:** Check native `ResponsiveImage` (`loading="eager" fetchpriority="high"` on above-the-fold Hero media), `PartnersPanel`, `LogoTicker`, and `.flow` Markdown on the common specimens. For EmDash, also check `EditorialImage`, `PhotoGallery` and Portable Text in the platform extension.',
+    '- **Page Assembly & Self-Critique:** Read `.agents/skills/astro-site-design/references/astro-primitives.md` and `references/landing-page-archetypes.md` when assembling routes, then apply the 5-Point Visual Self-Critique Rubric (geometry alternation, rhythm-breaker band, 3+ typographic voices above the fold, action weight separation, and 375px/768px/1440px reflow).',
     '- **Evidence:** Record captures and observed results before marking component specimens verified. Token calculations alone do not verify rendered components.',
     '',
   ].join('\n');
@@ -998,7 +1001,12 @@ function walkFiles(dir, extFilter) {
  */
 export function auditFontLoading(css, rootDir = '.') {
   const tokens = parseDesignTokens(css);
-  const stacks = [tokens.theme['--font-body'], tokens.theme['--font-display']].filter(Boolean);
+  const stacks = [
+    tokens.theme['--font-body'],
+    tokens.theme['--font-display'],
+    tokens.theme['--font-mono'],
+    tokens.theme['--font-accent'],
+  ].filter(Boolean);
   const customFamilies = new Set();
 
   for (const stack of stacks) {
@@ -1025,7 +1033,7 @@ export function auditFontLoading(css, rootDir = '.') {
     searchblobs.push(readFileSync(f, 'utf8'));
   }
   const cssWithoutFontVars = String(css ?? '')
-    .replace(/--font-(?:body|display)\s*:[^;]+;/g, '');
+    .replace(/--font-(?:body|display|mono|accent)\s*:[^;]+;/g, '');
   searchblobs.push(cssWithoutFontVars);
   for (const f of walkFiles(join(root, 'src/styles'), '.css')) {
     if (resolve(f) !== resolve(join(root, 'src/styles/global.css'))) {
@@ -1359,6 +1367,8 @@ function main() {
       if (!report.valid) console.error(formatTokenDiagnostics(report, cssPath, css));
       const otherErrors = [...fontAudit.warnings, ...proxyAudit.issues];
       if (otherErrors.length) console.error('\nErrors:\n' + otherErrors.map(e => `- ${e}`).join('\n'));
+    } else {
+      console.log('👉 Next Step (Stage 4.5 -> 5): Calibrate on /_styleguide, then read .agents/skills/astro-site-design/references/astro-primitives.md and references/landing-page-archetypes.md before assembling routes.');
     }
   }
 

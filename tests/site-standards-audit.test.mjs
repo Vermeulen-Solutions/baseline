@@ -232,11 +232,18 @@ test('design-system drift rules detect brownfield CSS/Card gaps and pass on base
   assert.equal(tokensRule.observed.interpolateSize, false);
   assert.equal(tokensRule.observed.flowRuleCount, 2);
   assert.equal(tokensRule.observed.adHocClampCount, 1);
+  assert.equal(tokensRule.observed.fourVoiceTypography, false);
+  assert.equal(tokensRule.observed.threeTierSurfaces, false);
+  assert.equal(tokensRule.observed.bentoAndSpecimenPrimitives, false);
+  assert.equal(tokensRule.observed.tactileActionVariants, false);
 
   const cardRule = rule(brownfield, 'design-system:card-and-breakout');
   assert.equal(cardRule.status, 'warning');
   assert.equal(cardRule.observed.containerBreakout, false);
   assert.equal(cardRule.observed.wholeCardAnchorCount, 1);
+  assert.equal(cardRule.observed.cardTransitionMorphing, false);
+  assert.equal(cardRule.observed.siteShellChoreography, false);
+  assert.equal(cardRule.observed.expressivePrimitiveUsageCount, 0);
 
   const hudRule = rule(brownfield, 'design-system:quarantine-hud');
   assert.equal(hudRule.status, 'warning');
@@ -246,12 +253,19 @@ test('design-system drift rules detect brownfield CSS/Card gaps and pass on base
   const md = markdownReport(brownfield);
   assert.match(md, /## Recommended follow-up plan/);
   assert.match(md, /Modernize design-system primitives & component quarantine/);
+  assert.match(md, /5-Point Visual Self-Critique Rubric/);
 
   // Verify baseline itself passes all three design-system rules
   const starterRoot = fileURLToPath(new URL('../', import.meta.url));
   const baselineReport = auditSite({ root: starterRoot });
   assert.equal(rule(baselineReport, 'design-system:tokens-and-rhythm').status, 'pass');
+  assert.equal(rule(baselineReport, 'design-system:tokens-and-rhythm').observed.fourVoiceTypography, true);
+  assert.equal(rule(baselineReport, 'design-system:tokens-and-rhythm').observed.threeTierSurfaces, true);
+  assert.equal(rule(baselineReport, 'design-system:tokens-and-rhythm').observed.bentoAndSpecimenPrimitives, true);
+  assert.equal(rule(baselineReport, 'design-system:tokens-and-rhythm').observed.tactileActionVariants, true);
   assert.equal(rule(baselineReport, 'design-system:card-and-breakout').status, 'pass');
+  assert.equal(rule(baselineReport, 'design-system:card-and-breakout').observed.cardTransitionMorphing, true);
+  assert.equal(rule(baselineReport, 'design-system:card-and-breakout').observed.siteShellChoreography, true);
   assert.equal(rule(baselineReport, 'design-system:quarantine-hud').status, 'pass');
 }));
 

@@ -48,6 +48,19 @@ Translate that record into a short design direction before building pages:
 
 This is a working design brief, not an approval gate. Make reasonable design decisions and test them in the rendered site. A reference screenshot is evidence for comparison, not a pixel-by-pixel specification unless the user explicitly requests one.
 
+#### Early-Baseline & Legacy Pattern -> Modern Baseline Upgrade Matrix
+
+When auditing either a legacy builder site (WordPress/Elementor/Blocksy) or an earlier-generation Baseline site, use this matrix to translate dated layout patterns into current Baseline primitives:
+
+| Observed Legacy / Early-Baseline Pattern | Modern Baseline Upgrade (`references/astro-primitives.md` & `references/landing-page-archetypes.md`) |
+| --- | --- |
+| Flat 1-surface pages where cards and backgrounds share the same canvas | **3-Tier Surface Hierarchy**: Pair `data-surface="dark|muted|brand"` section breaks with `.surface-elevated`, `.surface-glass`, or `.surface-spotlight` cards and `1px` `--color-border` hairlines. |
+| 2-voice typography (`--font-display` + `--font-body` only) with generic bold subheads | **4-Voice Typography**: Add `--font-mono` (`.eyebrow-telemetry`, `.tabular-nums`, `.badge-pill` with `.status-dot`) for structured metadata/dates/counts and `--font-accent` (`.font-accent`) for editorial warmth or pull-quotes. |
+| Back-to-back uniform 3-column card rows (`<Grid min="18rem">`) | **Asymmetric Pacing**: Alternate uniform grids with 12-column `.bento-grid` (`8/4` or `7/5` splits), exposed `1px` `.grid-hairline` matrices, `<Sidebar>` narrative splits, or `.stack-cards` sticky sequences. |
+| Low-res screenshots, generic hero stock photos, or flat boxed callouts | **Live-Coded `.ui-specimen` or Editorial Frame**: Frame key workflows, schedules, or community highlights in a `.ui-specimen` window (`.ui-specimen__header`) or `.frame-crosshair` / `.prose-dropcap` editorial showcase. |
+| Single button style or unstyled text links for secondary actions | **3-Tier Tactile Actions**: Pair primary `.btn` with `.btn--secondary` (translucent surface + hairline border) and `.btn--ghost` with `<span class="icon-nudge">&rarr;</span>`. |
+| Abrupt page navigation or static header | **View Transitions & Scroll Choreography**: Pass `transitionName={`post-${slug}`}` on `<Card>` for shared-element morphing, enable `data-sticky-header` on `.site-header`, add `data-reveal` staggered entrances, and offer FOUC-free `[data-surface-toggle]` where appropriate. |
+
 ### 4. Verify content and asset meaning
 
 Screenshots establish appearance, not the meaning of every asset or behavior. For ambiguous assets and calls to action, inspect surrounding text, alt text/captions, clickable destinations, source media names, and relevant WordPress/plugin configuration. Record the verified role. Do not invent explanatory copy or functionality from visual resemblance alone.
@@ -74,6 +87,7 @@ When repeated items have per-instance IDs or divergent builder styles, compare s
 3. Exercise links and interactions that carry user intent, including forms, navigation, directions, and any functional image or code. Confirm labels and destinations against the source/configuration.
 4. Verify editorial behavior in EmDash: create or edit a representative record in every custom collection and confirm the public list/detail templates pick it up without hand-editing Astro pages.
 5. Run the project's relevant checks and build. Record routes or states that remain unverified, and do not report those as complete.
+6. Run the **5-Point Visual Self-Critique Rubric** across every redesigned route at `1440x900` and `390x844`: (1) **3-Tier Surface Depth** (Base -> Surface -> Elevated/Glass), (2) **4-Voice Typography** (`.eyebrow-telemetry` / `.font-accent` / `.tabular-nums`), (3) **Grid Rhythm & Asymmetry** (no consecutive identical 3-column card grids; use `.bento-grid`, `.grid-hairline`, or `<Sidebar>`), (4) **Tactile Action Hierarchy** (`.btn` + `.btn--secondary` + `.btn--ghost` with `.icon-nudge`), and (5) **Motion & Polish** (`data-reveal`, `data-sticky-header`, `<Card transitionName>`, and zero FOUC on `[data-surface-toggle]`).
 
 The acceptance bar is not pixel identity. It is complete route coverage, correct content and asset meaning, retained brand character, visible improvement on the source's documented design problems, functional interactions, responsive rendering, and maintainable templates for repeated content. A technically clean but generic or less compelling result fails this bar even when its content and routes are correct.
 

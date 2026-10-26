@@ -209,11 +209,11 @@ Use this prompt to build a new page template connected to EmDash.
 Let's implement the public template for the [Page Name, e.g., Case Studies / Blog Post / Team Directory] route at src/pages/[route].astro.
 
 Requirements:
-1. Use our layout primitives (<Section>, <Container>, <Grid>, and <Card>) according to our design tokens.
+1. Use our layout primitives (<Section>, <Container>, <Grid>, and <Card>) and expressive CSS utilities (`.bento-grid`, `.grid-hairline`, `.ui-specimen`, `.surface-elevated`, `.surface-glass`, `.surface-spotlight`, `.eyebrow-telemetry`, `.font-accent`, `.tabular-nums`, `.btn--secondary`, `.btn--ghost` with `.icon-nudge`) according to our design tokens and `.agents/skills/astro-site-design/references/astro-primitives.md`.
 2. Query the EmDash collection server-side.
-3. Pass page identity to Base.astro and spread visual editing proxies ({...entry.edit.field}) onto editable elements.
+3. Pass page identity to Base.astro, spread visual editing proxies ({...entry.edit.field}) onto editable elements, and pass `transitionName` on `<Card>` where list-to-detail morphing applies.
 4. If this is an editorial article with wide pull-quotes or galleries, use `<Container breakout>` and `.content-grid`.
-5. Ensure 0 KB of unnecessary client-side JavaScript.
+5. Run the 5-Point Visual Self-Critique Rubric and ensure 0 KB of unnecessary client-side JavaScript.
 ```
 
 ---
@@ -226,12 +226,12 @@ Use this prompt once a representative page is rendering in the browser.
 ```markdown
 Activate the impeccable skill and perform a visual critique pass on our rendered [Homepage / About / Case Study] page.
 
-Please evaluate:
-1. Visual hierarchy and typography contrast (are headings distinct, is body measure constrained to ~68ch?).
-2. Spatial pacing and rhythm between sections (does the layout feel repetitive or dynamic?).
-3. Surface contrast and action styling across light, muted, and dark backgrounds.
-4. Focus states and keyboard accessibility on cards (.clickable-parent / .focus-parent).
-5. Mobile viewports (320px–480px) and tablet transitions.
+Please evaluate against the **5-Point Visual Self-Critique Rubric** and `impeccable`:
+1. **3-Tier Surface Depth**: Are we using Base Canvas (`--color-page`), Primary Surface (`--color-surface`), and Elevated/Glass (`--color-elevated` / `--surface-glass` / `.surface-spotlight`) with `1px` `--color-border` hairlines rather than flat 1-surface cards?
+2. **4-Voice Typography & Hierarchy**: Are display headings optically tracked, is body measure constrained to ~68ch, and are `--font-mono` (`.eyebrow-telemetry`, `.tabular-nums`, `.badge-pill`) and `--font-accent` (`.font-accent`) used to break up monotone hierarchy?
+3. **Spatial Pacing & Asymmetric Rhythm**: Does the page avoid consecutive uniform 3-column card grids by alternating with `.bento-grid`, `.grid-hairline`, `<Sidebar>` splits, or `.ui-specimen` frames?
+4. **Tactile Action Hierarchy & Focus**: Are primary `.btn`, `.btn--secondary`, and `.btn--ghost` (with `.icon-nudge`) paired clearly, and do cards preserve `.clickable-parent` / `.focus-parent` keyboard accessibility?
+5. **Viewports, Motion & Surface Switching**: Check mobile (`390x844`) and desktop (`1440x900`), `data-reveal` choreography, `data-sticky-header`, `<Card transitionName>` morphing, and FOUC-free `[data-surface-toggle]` switching.
 
 Provide a concise list of high-impact refinements, and propose concrete token or markup edits to resolve them.
 ```
@@ -338,6 +338,31 @@ Once the diagnosis completes:
 1. Summarize any failing scopes (design system tokens, schema budget, skill drift, adapter compatibility).
 2. Propose a phased, user-selectable modernization plan following Tracks 1 through 5.
 3. Wait for my selection before modifying any files in the target repository.
+```
+
+### Auditing & Redesigning an Earlier Baseline Site (Visual & Primitive Upgrade)
+Use this prompt when you have an existing site built on an earlier version of Baseline (for example, an older EmDash or static deployment) and want to backport the modern design-system primitives, audit its live visual quality, and upgrade its routes without losing its brand identity or CMS content.
+
+```markdown
+Audit and modernize the design of this earlier Baseline site while preserving its brand identity, content, and CMS bindings.
+
+- Target site folder: [path/to/site, or current project]
+- Live / preview URL (optional): [e.g., https://my-site.workers.dev]
+- Baseline reference: [path/to/current-baseline, or https://github.com/Vermeulen-Solutions/baseline]
+
+Please follow the Early-Baseline upgrade playbook in `.agents/skills/new-site-workflow/references/site-maintenance.md` and `.agents/skills/astro-site-design/references/migration-visual-audit.md`:
+
+1. **Diagnose Installed Primitives**:
+   - On EmDash sites, run `npm run audit:site -- --root <site-path> --out <private-report-dir>` and inspect `design-system:tokens-and-rhythm` and `design-system:card-and-breakout` (`fourVoiceTypography`, `threeTierSurfaces`, `bentoAndSpecimenPrimitives`, `tactileActionVariants`, `cardTransitionMorphing`, `siteShellChoreography`, `expressivePrimitiveUsageCount`).
+   - On static sites, inspect `src/styles/global.css`, `src/layouts/SiteShell.astro`, `src/layouts/Base.astro`, and `src/components/Card.astro` (or stage `npm run sync:baseline`).
+2. **Backport Modern Primitives Non-Destructively**:
+   - Preserve the site's calibrated `@theme` palette, `--font-display`, `--font-body`, and `AGENTS.md` `## Art Direction Record`.
+   - Add `--font-mono` and `--font-accent` to `@theme`, merge the modern `@layer base` and `@layer components` utilities (3-tier surfaces `--color-elevated` / `--surface-glass`, 4-voice typography `.eyebrow-telemetry` / `.font-accent` / `.tabular-nums`, tactile `.btn--secondary` / `.btn--ghost` / `.icon-nudge`, `.bento-grid`, `.grid-hairline`, `.ui-specimen`, `[data-reveal]`, `[data-sticky-header]`, View Transitions), and sync `SiteShell.astro`, `Base.astro`, and `Card.astro`.
+3. **Visual Audit & Route-by-Route Upgrade Proposal**:
+   - Inspect the rendered pages at desktop (`1440x900`) and mobile (`390x844`) against the **5-Point Visual Self-Critique Rubric** and the **Early-Baseline & Legacy Pattern -> Modern Baseline Upgrade Matrix**.
+   - Present a concise **Preserve / Improve / Upgrade** table per route (identifying flat 1-surface sections, 2-voice typography gaps, repetitive 3-column card rows that should become `.bento-grid` / `.grid-hairline` / `<Sidebar>` splits, and opportunities for `.ui-specimen` or `<Card transitionName>`).
+4. **Execute & Verify**:
+   - Apply the approved route upgrades, calibrate on `/_styleguide` (`audit/component-calibration.md`), preserve all EmDash `{...entry.edit.*}` proxies and URLs, and run `npm run verify` and `npm run build`.
 ```
 
 ### Synchronizing Upstream Skills

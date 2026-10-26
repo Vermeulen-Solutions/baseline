@@ -26,6 +26,10 @@ export function designSystemRules(target, add) {
     const contentGridSubgrid = /grid-template-columns\s*:\s*subgrid\b/.test(css);
     const surfaceTokens = /\[data-surface=/.test(css);
     const focusAndClickableParent = /\.clickable-parent\b/.test(css) && /\.focus-parent\b/.test(css);
+    const fourVoiceTypography = /--font-mono\s*:/.test(css) && /--font-accent\s*:/.test(css);
+    const threeTierSurfaces = /--color-elevated\s*:/.test(css) && /--surface-glass\s*:/.test(css);
+    const bentoAndSpecimenPrimitives = /\.bento-grid\b/.test(css) && /\.ui-specimen\b/.test(css);
+    const tactileActionVariants = /\.btn--secondary\b/.test(css) && /\.btn--ghost\b/.test(css);
     const withoutRootAndTheme = css.replace(/@theme\s*\{[^}]*\}|:root\s*\{[^}]*\}/g, '');
     const adHocClampCount = (withoutRootAndTheme.match(/\bclamp\s*\(/g) ?? []).length;
 
@@ -38,12 +42,16 @@ export function designSystemRules(target, add) {
       contentGridSubgrid &&
       surfaceTokens &&
       focusAndClickableParent &&
+      fourVoiceTypography &&
+      threeTierSurfaces &&
+      bentoAndSpecimenPrimitives &&
+      tactileActionVariants &&
       adHocClampCount === 0;
 
     add(
       'design-system:tokens-and-rhythm',
       pass ? 'pass' : 'warning',
-      'Curated token matrix, flow spacing (.flow) duplicate-margin guard, .content-grid subgrid tracks, and surface/focus utilities in src/styles/global.css',
+      'Curated token matrix, 4-voice typography (--font-mono/--font-accent), 3-tier surfaces, .bento-grid/.ui-specimen, tactile .btn variants, .flow duplicate-margin guard, and .content-grid subgrid in src/styles/global.css',
       {
         interpolateSize,
         flowVerified,
@@ -53,6 +61,10 @@ export function designSystemRules(target, add) {
         contentGridSubgrid,
         surfaceTokens,
         focusAndClickableParent,
+        fourVoiceTypography,
+        threeTierSurfaces,
+        bentoAndSpecimenPrimitives,
+        tactileActionVariants,
         adHocClampCount,
       },
       { required: false, evidence: ['src/styles/global.css'], confidence: 'bounded-static', remediation: 'docs/reusable-public-patterns.md' }
@@ -66,8 +78,11 @@ export function designSystemRules(target, add) {
   let clickableParentCardCount = 0;
   let concentricMediaRadius = false;
   let cmsEditForwarding = false;
+  let cardTransitionMorphing = false;
+  let siteShellChoreography = false;
   let breakoutPageCount = 0;
   let surfaceUsageCount = 0;
+  let expressivePrimitiveUsageCount = 0;
 
   function scanAstroDir(relDir, depth = 0) {
     if (depth > 3) return [];
@@ -124,14 +139,28 @@ export function designSystemRules(target, add) {
         if (/\btitleEdit\b/.test(text) && /\bdescriptionEdit\b/.test(text) && /\bactionEdit\b/.test(text)) {
           cmsEditForwarding = true;
         }
+        if (/\btransitionName\b/.test(text)) {
+          cardTransitionMorphing = true;
+        }
+      }
+      const shellBytes = readTarget(target, 'src/layouts/SiteShell.astro').bytes;
+      if (shellBytes) {
+        const shellText = shellBytes.toString('utf8');
+        siteShellChoreography =
+          /\bdata-surface-toggle\b/.test(shellText) &&
+          /\bdata-sticky-header\b/.test(shellText) &&
+          /\bdata-vt-loading\b/.test(shellText);
       }
       for (const relFile of [...scanAstroDir('src/pages'), ...scanAstroDir('src/components')]) {
-        if (relFile === 'src/pages/_styleguide.astro' || relFile === 'src/components/Container.astro') continue;
+        if (relFile === 'src/pages/_styleguide.astro' || relFile === 'src/components/Container.astro' || relFile === 'src/components/dev/Styleguide.astro') continue;
         const pageBytes = readTarget(target, relFile).bytes;
         if (!pageBytes) continue;
         const pageText = pageBytes.toString('utf8');
         if (/<Container\b[^>]*\bbreakout\b|\bcontent-grid\b/.test(pageText)) breakoutPageCount++;
         if (/\bdata-surface=/.test(pageText)) surfaceUsageCount++;
+        if (/\b(?:bento-grid|ui-specimen|grid-hairline|surface-elevated|surface-glass|surface-spotlight|eyebrow-telemetry|font-accent|tabular-nums|data-reveal)\b/.test(pageText)) {
+          expressivePrimitiveUsageCount++;
+        }
       }
     }
   } catch {
@@ -142,7 +171,7 @@ export function designSystemRules(target, add) {
     add(
       'design-system:card-and-breakout',
       'unverified',
-      'Semantic <article> Card with .clickable-parent/.focus-parent, concentric --card-media-radius, CMS edit forwarding, and Container breakout',
+      'Semantic <article> Card with .clickable-parent/.focus-parent, concentric --card-media-radius, CMS edit forwarding, View Transition morphing, SiteShell choreography, and Container breakout',
       'src/components directory not observed',
       { required: false, evidence: ['src/components'], confidence: 'bounded-static', remediation: 'docs/reusable-public-patterns.md' }
     );
@@ -153,11 +182,13 @@ export function designSystemRules(target, add) {
       wholeCardAnchorCount === 0 &&
       clickableParentCardCount > 0 &&
       concentricMediaRadius &&
-      cmsEditForwarding;
+      cmsEditForwarding &&
+      cardTransitionMorphing &&
+      siteShellChoreography;
     add(
       'design-system:card-and-breakout',
       cardPass ? 'pass' : 'warning',
-      'Semantic <article> Card with .clickable-parent/.focus-parent, concentric --card-media-radius, CMS edit forwarding, and Container breakout',
+      'Semantic <article> Card with .clickable-parent/.focus-parent, concentric --card-media-radius, CMS edit forwarding, View Transition morphing, SiteShell choreography, and Container breakout',
       {
         containerBreakout,
         cardComponentCount,
@@ -165,8 +196,11 @@ export function designSystemRules(target, add) {
         clickableParentCardCount,
         concentricMediaRadius,
         cmsEditForwarding,
+        cardTransitionMorphing,
+        siteShellChoreography,
         breakoutPageCount,
         surfaceUsageCount,
+        expressivePrimitiveUsageCount,
       },
       { required: false, evidence: ['src/components'], confidence: 'bounded-static', remediation: 'docs/reusable-public-patterns.md' }
     );

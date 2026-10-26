@@ -24,9 +24,10 @@ interface Props {
 	breadcrumbs?: CreatePublicPageContextInput['breadcrumbs'];
 	/** Pass content reference for plugin page contributions on content pages */
 	content?: { collection: string; id: string; slug?: string | null };
+	surface?: 'light' | 'dark' | 'system';
 }
 
-const { title, pageTitle, description, image, canonical, content, pageType = 'website', articleMeta, seo, breadcrumbs } = Astro.props;
+const { title, pageTitle, description, image, canonical, content, pageType = 'website', articleMeta, seo, breadcrumbs, surface } = Astro.props;
 const { data: settings, cacheHint: settingsCacheHint } = await getSiteSettingsWithCacheHint();
 const { siteTitle, siteTagline, siteLogo } = resolveStarterSiteIdentity(settings);
 const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
@@ -59,11 +60,11 @@ const pageCtx = createPublicPageContext({
 });
 ---
 
-<SiteShell spacingPolicy="automatic-v2" title={fullTitle} metadataOwner="platform" lang={Astro.currentLocale ?? 'en'}>
+<SiteShell spacingPolicy="automatic-v2" title={fullTitle} metadataOwner="platform" lang={Astro.currentLocale ?? 'en'} surface={surface}>
 		<EmDashHead slot="head" page={pageCtx} />
 		<EmDashBodyStart slot="body-start" page={pageCtx} />
 
-		<header slot="header" class="site-header">
+		<header slot="header" class="site-header" data-sticky-header>
 			<nav class="site-nav" aria-label="Primary navigation">
 				<a class="site-brand" href="/" aria-label={`${siteTitle} home`}>
 					{siteLogo

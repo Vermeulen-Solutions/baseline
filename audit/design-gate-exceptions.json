@@ -26,12 +26,12 @@
   {
     "path": "src/styles/global.css",
     "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "735a233f3d62815611945b43fe138c59e1065e99beb5239ce52686da09e58db8"
+    "sha256": "f948c514508b5ae92edb816cfe751063c6ec0536e806ad231ba52c4baf369fcc"
   },
   {
     "path": "src/layouts/Base.astro",
     "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "3f14fd0d2f1e3a26eca7d959358ed1571c8dc54886d4ad2aa5df61983d6255dc"
+    "sha256": "a29a307771be6246d34ba6f9ceaea686d6a0e491fc93a4fd14543045ad9f27a4"
   },
   {
     "path": "src/components/Container.astro",
@@ -121,7 +121,7 @@
   {
     "path": "src/components/Card.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "c09457ad78392f6995b8190a58c7ed39fbbdd79d926e39056ff56d8c5b7d76db"
+    "sha256": "1d48366af82530edb6163f552f6b56a7cb7e5d73581ff10119bb0590f7e00060"
   },
   {
     "path": "src/components/PartnersPanel.astro",
@@ -172,7 +172,7 @@
   {
     "path": "src/dev/styleguide-fixtures.ts",
     "reason": "Shared synthetic coverage inventory and version for the new native/intrinsic production primitives; no client identity or token calibration. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "373687c914dde16acb6429e90fc0b31c7ffee8927111770071f5e2b5f27eb4b0"
+    "sha256": "6d704ea48f460712ef94ade91b74fa0b83cbcf380fd8d7b4983b4634290eaa9d"
   },
   {
     "path": "src/pages/_styleguide.astro",
@@ -247,7 +247,7 @@
   {
     "path": "src/layouts/SiteShell.astro",
     "reason": "Functional shared starter metadata ownership option; preserve the document/title/landmarks and backward-compatible static default while allowing a platform head to own description/canonical. No visual-system or client content change. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "c05c1b552ca9ef416e56a588a6fa4f9abf9ba80839c9487ae3b798afe7e3cb67"
+    "sha256": "3356c06e031ae9df0a5d178f9929edcd2f92a2e4ff01d1aa1992f11b0a112198"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -312,7 +312,7 @@
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
     "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "4df77f3d827d1f83664bf3b26eca1610243fef7d3e70bd26ee5e5c7138a4dfa8"
+    "sha256": "0225d5f4c808972f5d3de69a2cb2b6cb430be1d68f350580af3282647873514d"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",

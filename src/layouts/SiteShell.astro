@@ -10,12 +10,20 @@ interface Props {
   lang?: string;
   skipLinkLabel?: string;
   spacingPolicy?: 'legacy' | 'automatic-v2';
+  /** Optional initial root surface mode ('light' | 'dark' | 'system') for sites with a daylight/dark toggle. */
+  surface?: 'light' | 'dark' | 'system';
 }
 
-const { title, description, canonical, metadataOwner = 'shell', lang = 'en', skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy' } = Astro.props;
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', surface } = Astro.props;
 ---
 <!doctype html>
-<html lang={lang} data-spacing-policy={spacingPolicy === 'automatic-v2' ? 'automatic-v2' : 'legacy'} data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
+<html
+  lang={lang}
+  data-spacing-policy={spacingPolicy === 'automatic-v2' ? 'automatic-v2' : 'legacy'}
+  data-surface={surface === 'dark' || surface === 'light' ? surface : undefined}
+  data-surface-mode={surface === 'system' ? 'system' : undefined}
+  data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}
+>
   <head>
     <style is:inline>@layer theme, base, vendor, astro, components, utilities;</style>
     <meta charset="UTF-8" />
@@ -23,11 +31,148 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
     <title>{title}</title>
     {metadataOwner === 'shell' && description && <meta name="description" content={description} />}
     {metadataOwner === 'shell' && canonical && <link rel="canonical" href={canonical} />}
+    <script is:inline>
+      (() => {
+        const STORAGE_KEY = 'baseline:surface';
+        const resolveSurface = (root = document.documentElement) => {
+          try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved === 'dark' || saved === 'light') return saved;
+          } catch {}
+          if (root.getAttribute('data-surface-mode') === 'system') {
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+          }
+          return null;
+        };
+        const applySurface = (root = document.documentElement) => {
+          const resolved = resolveSurface(root);
+          if (resolved) root.setAttribute('data-surface', resolved);
+        };
+        applySurface(document.documentElement);
+        let vtTimer = 0;
+        const clearVtLoading = () => {
+          clearTimeout(vtTimer);
+          document.documentElement.removeAttribute('data-vt-loading');
+        };
+        document.addEventListener('astro:before-preparation', () => {
+          clearTimeout(vtTimer);
+          vtTimer = window.setTimeout(() => {
+            document.documentElement.setAttribute('data-vt-loading', '');
+          }, 180);
+        });
+        document.addEventListener('astro:after-preparation', clearVtLoading);
+        document.addEventListener('astro:before-swap', (event) => {
+          if (event && 'newDocument' in event && event.newDocument) {
+            applySurface(event.newDocument.documentElement);
+          }
+        });
+        document.addEventListener('astro:after-swap', () => {
+          clearVtLoading();
+          applySurface(document.documentElement);
+        });
+
+        const syncStickyHeader = () => {
+          const scrolled = window.scrollY > 16;
+          document.querySelectorAll('[data-sticky-header]').forEach((header) => {
+            header.toggleAttribute('data-scrolled', scrolled);
+          });
+        };
+        window.addEventListener('scroll', syncStickyHeader, { passive: true });
+
+        const initPage = () => {
+          syncStickyHeader();
+          const currentSurface = document.documentElement.getAttribute('data-surface');
+          document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
+            if (currentSurface) btn.setAttribute('aria-pressed', String(currentSurface === 'dark'));
+          });
+
+          const reveals = document.querySelectorAll('[data-reveal]');
+          if (reveals.length > 0) {
+            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            reveals.forEach((el) => {
+              const delay = el.getAttribute('data-reveal-delay');
+              if (delay && el instanceof HTMLElement) {
+                el.style.setProperty('--reveal-delay', /^\d+$/.test(delay) ? `${delay}ms` : delay);
+              }
+              if (reduced || !('IntersectionObserver' in window) || el.getBoundingClientRect().top < window.innerHeight * 0.92) {
+                el.classList.add('is-revealed');
+              }
+            });
+            document.documentElement.setAttribute('data-reveal-ready', '');
+            if (!reduced && 'IntersectionObserver' in window) {
+              const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                    entry.target.classList.add('is-revealed');
+                    observer.unobserve(entry.target);
+                  }
+                });
+              }, { threshold: 0.12 });
+              reveals.forEach((el) => {
+                if (!el.classList.contains('is-revealed')) observer.observe(el);
+              });
+            }
+          }
+        };
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', initPage, { once: true });
+        } else {
+          initPage();
+        }
+        document.addEventListener('astro:page-load', initPage);
+
+        document.addEventListener('click', (event) => {
+          const target = event.target instanceof Element ? event.target : null;
+          if (!target) return;
+
+          const surfaceBtn = target.closest('[data-surface-toggle]');
+          if (surfaceBtn) {
+            const current = document.documentElement.getAttribute('data-surface');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-surface-switching', '');
+            document.documentElement.setAttribute('data-surface', next);
+            void document.documentElement.offsetHeight;
+            document.documentElement.removeAttribute('data-surface-switching');
+            try { localStorage.setItem(STORAGE_KEY, next); } catch {}
+            document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
+              btn.setAttribute('aria-pressed', String(next === 'dark'));
+            });
+            return;
+          }
+
+          const filterBtn = target.closest('[data-filter-btn]');
+          if (filterBtn) {
+            const root = filterBtn.closest('[data-filter-root]');
+            const category = (filterBtn.getAttribute('data-filter-btn') || 'all').trim();
+            if (!root) return;
+            root.querySelectorAll('[data-filter-btn]').forEach((btn) => {
+              const active = btn === filterBtn;
+              btn.setAttribute('aria-pressed', String(active));
+              btn.toggleAttribute('data-active', active);
+            });
+            root.querySelectorAll('[data-filter-item]').forEach((item) => {
+              const raw = (item.getAttribute('data-filter-item') || '').trim();
+              const tokens = raw.split(/[\s,]+/).filter(Boolean);
+              const match = category === 'all' || tokens.includes(category);
+              if (match) {
+                item.removeAttribute('hidden');
+                item.classList.remove('animate-card-in');
+                if (item instanceof HTMLElement) void item.offsetWidth;
+                item.classList.add('animate-card-in');
+              } else {
+                item.setAttribute('hidden', '');
+              }
+            });
+          }
+        });
+      })();
+    </script>
     <slot name="head" />
   </head>
   <body>
     <slot name="body-start" />
-    <a class="skip-link" href="#main-content">{skipLinkLabel}</a>
+    <a class="skip-link" href="#main-content" data-astro-reload>{skipLinkLabel}</a>
     <slot name="header" />
     <main id="main-content" class="site-main" tabindex="-1"><slot /></main>
     <slot name="footer" />
