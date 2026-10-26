@@ -277,7 +277,7 @@ Use these guides as references for you or your coding assistant.
 | I want to… | Guide |
 | --- | --- |
 | Run setup commands myself or find the project files | [Getting started](docs/getting-started.md) |
-| Change the visual direction or layout | [Art direction](docs/art-direction-workflow.md) · [Design framework](docs/design-framework.md) |
+| Change the visual direction or layout | [Art direction](docs/art-direction-workflow.md) · [Design framework](docs/design-framework.md) · [Optional Penpot setup](docs/penpot-onboarding.md) |
 | Work with CMS content or move from WordPress | [Editorial editing](docs/emdash-editorial-canvas.md) · [WordPress content](docs/wordpress-content-modeling.md) |
 | Publish the site | [Platform and hosting choices](docs/platform-profiles.md) · [EmDash deployment](docs/production-deployment.md) |
 | Review Baseline or skill updates | [Site updates](docs/baseline-updates.md) · [Reviewed maintenance](docs/automated-upstream-updates.md) |

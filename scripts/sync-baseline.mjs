@@ -5,7 +5,8 @@ import { pathToFileURL } from 'node:url';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, null, 2) + '\n';
-const skills = ['new-site-workflow', 'site-art-direction', 'astro-site-design', 'impeccable'];
+const legacySkills = ['new-site-workflow', 'site-art-direction', 'astro-site-design', 'impeccable'];
+const skills = [...legacySkills, 'penpot-site-design'];
 // Keep this script self-contained: older generated sites cannot acquire new
 // module paths through bounded sync. Both provenance URLs identify this one repo;
 // downloads always use its canonical name, never a URL supplied by the site.
@@ -30,16 +31,17 @@ async function bytes(root, relative) {
   catch (e) { if (e.code === 'ENOENT') return null; throw e; }
 }
 const readJSON = async (root, relative) => JSON.parse(await fs.readFile(await file(root, relative), 'utf8'));
-function selected(target, record) {
+function selected(target, record, installedSkills) {
   // Installed membership is the update ceiling: upstream cannot add dependencies,
   // new skills, routes, content, settings, admin configuration or package scripts.
   if (!['shared', 'client-calibrated'].includes(record.ownership) || !record.source) return false;
-  if (target.startsWith('.agents/skills/')) return skills.some(s => target.startsWith(`.agents/skills/${s}/`)) && record.source === target;
+  if (target.startsWith('.agents/skills/')) return installedSkills.some(s => target.startsWith(`.agents/skills/${s}/`)) && record.source === target;
   return /^(src\/(?:components|layouts|lib|dev|assets|styles)\/|scripts\/)/.test(target) && !/emdash|sqlite|schema-budget|live\.config/i.test(target);
 }
 async function context(root) {
   const config = await readJSON(root, 'baseline.config.json');
-  if (config.schemaVersion !== 1 || !['static', 'static-sveltia'].includes(config.platformProfile) || config.foundation !== 'static' || config.runtime !== 'static' || !repositories.includes(config.source?.repository) || !/^[a-f0-9]{40}$/.test(config.source.commit ?? '') || !Array.isArray(config.skills) || config.skills.length !== skills.length || new Set(config.skills).size !== skills.length || config.skills.some(s => !skills.includes(s))) throw new Error('sync:baseline requires a generated static Platform Profile');
+  const validSkills = Array.isArray(config.skills) && [legacySkills.length, skills.length].includes(config.skills.length) && new Set(config.skills).size === config.skills.length && legacySkills.every(s => config.skills.includes(s)) && config.skills.every(s => skills.includes(s));
+  if (config.schemaVersion !== 1 || !['static', 'static-sveltia'].includes(config.platformProfile) || config.foundation !== 'static' || config.runtime !== 'static' || !repositories.includes(config.source?.repository) || !/^[a-f0-9]{40}$/.test(config.source.commit ?? '') || !validSkills) throw new Error('sync:baseline requires a generated static Platform Profile');
   const managed = await readJSON(root, '.baseline/managed-files.json');
   if (managed.schemaVersion !== 1 || !managed.files) throw new Error('Unsupported managed-file contract');
   for (const [target, record] of Object.entries(managed.files)) {
@@ -99,7 +101,7 @@ export async function stageBaseline({ root = process.cwd(), commit, readSource }
   });
   const entries = [], payloads = new Map();
   for (const [target, record] of Object.entries(managed.files)) {
-    if (!selected(target, record)) continue;
+    if (!selected(target, record, config.skills)) continue;
     const incoming = Buffer.from(await fetchSource(record.source));
     const incomingHash = hash(incoming);
     if (incomingHash === record.sha256) continue;
@@ -132,7 +134,7 @@ export async function applyBaseline({ root = process.cwd(), commit } = {}) {
   for (const entry of stage.entries) {
     safe(entry.target);
     const record = managed.files[entry.target];
-    if (seen.has(entry.target) || !record || !selected(entry.target, record) || entry.source !== record.source || entry.baseHash !== record.sha256 || !digest(entry.incomingHash)) throw new Error('Stage exceeds installed profile membership');
+    if (seen.has(entry.target) || !record || !selected(entry.target, record, config.skills) || entry.source !== record.source || entry.baseHash !== record.sha256 || !digest(entry.incomingHash)) throw new Error('Stage exceeds installed profile membership');
     seen.add(entry.target);
     const current = await bytes(root, entry.target);
     const currentHash = current === null ? null : hash(current);

@@ -21,6 +21,7 @@ Audit requests should produce a recommended follow-up plan with meaningful user 
 - [7. Local Visual Regression & Pre-Launch Checks (Stage 6)](#7-local-visual-regression--pre-launch-checks)
 - [8. Production Cutover & Corporate Email Safety (Stage 7)](#8-production-cutover--corporate-email-safety)
 - [9. Brownfield Site Maintenance & Upgrades](#9-brownfield-site-maintenance--upgrades)
+- [10. Design Iteration: Astro, Penpot or OpenPencil](#10-design-iteration-astro-penpot-or-openpencil)
 
 ---
 
@@ -165,10 +166,7 @@ We are ready for Stage 4: Art Direction. Activate the site-art-direction skill.
 Brand goals and personality: [E.g., Editorial craftsmanship, technical precision, high-contrast typography, restrained color palette].
 
 Please:
-Before choosing the direction, explicitly ask whether to prototype with Pencil,
-Google Stitch, OpenDesign, Claude Design, designmd-mcp references or direct
-HTML/CSS concepts. Recommend based on the brief and tools actually available;
-reuse an existing answer and resolve any unavailable-tool fallback explicitly.
+Before choosing the direction, explicitly ask whether to iterate directly in Astro/browser or use Penpot, retaining OpenPencil, Pencil, Google Stitch, OpenDesign, Claude Design and designmd-mcp references when preferred. Recommend based on the brief and actual access; reuse an existing answer and resolve any unavailable-tool fallback explicitly. Use penpot-site-design for Penpot. Same-agent design and implementation are complete; another agent/handoff is optional.
 
 1. Review .agents/skills/site-art-direction/references/aesthetic-lanes.md and propose 2-3 suitable Aesthetic Lanes.
 2. Formulate a Narrative Metaphor, Typography Pairing, and Token Physics (Canvas ground, Action/Accent colors, Borders, and Spatial Density).
@@ -428,10 +426,7 @@ fit, identity continuity, readability, function and maintainability. Resolve the
 direction decision before broad implementation; ask only consequential questions
 not already answered. Record which previous visual decisions are superseded.
 
-At the concept checkpoint, explicitly ask whether to use Pencil, Google Stitch,
-OpenDesign, Claude Design, designmd-mcp references or direct HTML/CSS prototypes.
-Recommend based on the brief and actual tool availability. Reuse an existing
-choice; resolve an unavailable-tool fallback rather than silently coding instead.
+At the concept checkpoint, explicitly choose direct Astro/browser or Penpot, retaining OpenPencil, Pencil, Google Stitch, OpenDesign, Claude Design and designmd-mcp references when preferred. Recommend based on actual access. Reuse an existing choice; resolve an unavailable-tool fallback rather than silently coding instead. Use penpot-site-design for Penpot. Same-agent work is complete; a separate design agent and portable handoff are optional.
 
 Calibrate the selected system on the installed styleguide, implement one real
 page per archetype and critique it in the browser before rolling it out. Keep
@@ -650,8 +645,39 @@ Please:
 4. Run `npm run dev` and confirm that local routes display the latest production content.
 ```
 
+---
 
+## 10. Design Iteration: Astro, Penpot or OpenPencil
 
+Use these at the existing design/concept checkpoint, not as extra mandatory stages. Reuse known surface/agent preferences. See [Penpot onboarding](penpot-onboarding.md), [OpenPencil onboarding](openpencil-onboarding.md) and the installed `penpot-site-design` templates. Different agents are optional; no design service is required for direct Astro.
 
+### Direct Astro/browser, one agent
 
+```markdown
+Follow new-site-workflow, site-art-direction and astro-site-design. I want to iterate directly in Astro/browser with this agent. Preserve [fixed branding/content/features], and explore [changeable scope] for [representative route]. For a substantial overhaul, show two or three materially different native concepts under audit/visual-concepts/ using real copy or labeled drafts, at 1440×900 and 390×844. Compare them with an actionable recommendation and the choice you need from me before broad implementation. Keep the concrete surface/type/rhythm/action/motion recipes and record justified exceptions. After selection, calibrate production primitives on /_styleguide and test real routes, intermediate reflow, keyboard and content states. Finish [authorized commit/push/deploy targets, or local-only].
+```
+
+### Penpot design and implementation, same agent
+
+```markdown
+Use penpot-site-design and Baseline's art-direction framework. Keep this task in one agent. First confirm the connected file/page matches [target]; onboard me only for the missing connection step. Read source CSS/component APIs and preserve [fixed commitments]. Develop bounded representative concepts for [scope], inspect structure and exports, fix defects and present a meaningful selection. Preserve fluid token expressions beside canvas samples and real content ownership. After my selection, implement natively in Astro, calibrate /_styleguide, browser-test affected routes at 390/768/1440 including important states, run installed checks and finish [authorized release endpoint]. Do not add another agent or require a redundant handoff packet.
+```
+
+### Optional design-agent handoff
+
+```markdown
+Prepare a portable design brief for another agent to iterate in [Penpot / OpenPencil] using Baseline's design framework. Include the actual direction, source token expressions/components, fixed/changeable commitments, representative real content/assets, 1440×900 and 390×844 intent, important states, concrete five-point recipes and accepted exceptions. Include or attach the relevant skill/reference files so the other agent has the instructions. Keep source copy/CMS, CSS and visual proposals distinct. No credentials. Do not message or launch another agent; I will transfer the brief. That agent should save selected/draft board IDs, dated evidence, approval status, native mapping and open questions in a portable handoff.
+```
+
+### Implement a reviewed canvas design
+
+```markdown
+Read the attached Baseline handoff and relevant installed tool skill/API. Reconnect privately and inspect the saved file/page/board IDs and current state against dated evidence. Reuse [approved choice and scope]; resolve any material newer-draft difference. Translate through actual Section/Container/Grid/Sidebar/Card APIs, source fluid tokens and the installed profile's real content bindings. Never paste absolute canvas markup into public routes. Calibrate on /_styleguide, implement one representative route, compare/fix browser output before rollout, then verify every affected route and relevant state. Finish [authorized commit/push/deploy endpoint]. Report any concrete acceptance limits rather than treating canvas exports or a successful build as browser proof.
+```
+
+### OpenPencil desktop alternative
+
+```markdown
+Use the official open-pencil/open-pencil skill matching my installed desktop app/MCP release, with Baseline's site-art-direction and astro-site-design rules. Inspect the app/document identity and live schemas first. Use native layout, variables/components and bounded named edits; inspect rendered exports and exact font availability. Preserve existing documents. Save the design to an agreed local .fig path and test fresh-session recovery. Apply Baseline's explicit token/component recipes and source ownership; exported JSX is a design representation, not production Astro. Keep this in one agent unless I request a handoff. Compare setup, iteration and Astro translation from observed results; do not assume parity from similarly named Pencil tools.
+```
 

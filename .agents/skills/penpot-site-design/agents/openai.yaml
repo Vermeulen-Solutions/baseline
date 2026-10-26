@@ -1,0 +1,4 @@
+interface:
+  display_name: "Penpot Site Design"
+  short_description: "Iterate Penpot designs with Baseline and Astro"
+  default_prompt: "Use $penpot-site-design to inspect the selected file, iterate within the approved Baseline direction, and prepare or implement the reviewed design."

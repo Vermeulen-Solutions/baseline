@@ -14,7 +14,11 @@ Baseline addresses this with an **Art Direction Gate** (`npm run check:art-direc
 
 ## 1. The Stage 4 Capability Prompt (Code-First or MCP-Assisted)
 
-When transitioning from **Stage 3 (Content Architecture)** into **Stage 4 (Art Direction)**, the agent presents a one-time, non-blocking capability prompt so you can choose your preferred creative path:
+When transitioning from **Stage 3 (Content Architecture)** into **Stage 4 (Art Direction)** for a new site or significant overhaul, resolve the surface choice once: direct Astro/browser or Penpot, retaining a named alternative such as OpenPencil, Pencil, Google Stitch, OpenDesign or Claude Design when preferred. Reuse prior answers and the accepted world for small refinements. Continue independent preparation while a consequential choice is pending; do not silently substitute another tool. These are alternative surfaces, not a mandatory multi-tool pipeline. Same-agent design and implementation are complete; another agent/session is an optional handoff with a portable brief and saved design evidence.
+
+**Penpot:** use the installed `penpot-site-design` skill and [hosted onboarding](penpot-onboarding.md). Confirm file/page identity, iterate bounded desktop/mobile concepts, inspect structure and exports, then translate the selected direction into real Astro components. **OpenPencil desktop:** use its official version-matched `open-pencil/open-pencil` skill/API and [MCP guidance](https://openpencil.dev/programmable/mcp-server), verify the document target, save a local artifact and inspect it again after reopening. Both retain Baseline's exact CSS recipes and source authority; canvas exports do not replace browser, content-binding or release acceptance.
+
+The following research and implementation aids remain optional:
 
 1. **Code-First & Aesthetic Lane Presets (Default — Zero Setup):** Pick an Aesthetic Lane below, record the Art Direction Record in `AGENTS.md`, apply and audit tokens in `src/styles/global.css` via `npm run design:tokens`, and inspect live on `/_styleguide`.
 2. **UX Flow & Anatomy Teardowns (`Nicelydone MCP` / `Refero.design`):** Inspect real production web screens to extract authentic UX details (secondary metadata, filter bars, dense tables, and varied section pacing) before styling.

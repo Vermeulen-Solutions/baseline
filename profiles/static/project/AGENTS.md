@@ -42,6 +42,10 @@ authorized autonomous build may use an explicit recommended assumption. Keep
 the current shell policy for both choices; custom layouts use tokens and explicit
 primitive controls. No settings panel or external-product terminology is needed.
 
+## Design iteration surface
+
+At the existing new-site/significant-redesign concept checkpoint, choose direct Astro/browser or Penpot, reusing prior answers and retaining explicitly preferred alternatives such as OpenPencil, Pencil, Google Stitch, OpenDesign and Claude Design. Penpot uses the installed `penpot-site-design` skill; see `docs/penpot-onboarding.md`. Same-agent design/implementation is a complete path. A separate design agent and portable handoff are optional. Small refinements stay in the accepted direction without restarting discovery. Every surface still needs native component calibration and actual route/browser acceptance before the agreed release.
+
 ## Shared design authority
 
 `src/styles/global.css`, the layout primitives, `SiteShell.astro`, `design:tokens`

@@ -1,5 +1,7 @@
 # Keeping an existing site up to date
 
+For optional Penpot design iteration, review/adopt the complete Baseline-owned `.agents/skills/penpot-site-design/` directory and `docs/penpot-onboarding.md` from a recorded revision, plus the relevant workflow routing changes. There is no runtime dependency or credential to copy. Existing generated receipts retain their bounded membership; use reviewed local additions or an explicit generator migration rather than silently expanding ownership. Direct Astro remains available without setup. See [skill synchronization](skill-synchronization.md).
+
 Use this workflow when asked to bring an older site up to date with Baseline. It covers framework dependencies, agent guidance and starter capabilities across `emdash`, `static` and `static-sveltia`. Updating one area does not update the others. New sites start with the current template or generator; existing sites adopt changes through reviewed maintenance. Revisit this workflow periodically or before substantial maintenance, using the previous adoption record as the start.
 
 ## Start an update

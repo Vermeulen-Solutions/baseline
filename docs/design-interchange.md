@@ -8,6 +8,10 @@ When an AI coding assistant is asked to "build a modern landing page" from a sin
 
 Baseline's design workflow starts with the brief, native CSS tokens and rendered calibration. The following optional research, concepting and component sources can help resolve particular design questions. Use the relevant steps without requiring any external service or token format.
 
+## Design surface and agent arrangement
+
+Choose direct Astro/browser or Penpot at the existing concept checkpoint, retaining explicit user preferences for OpenPencil, Pencil, Google Stitch, OpenDesign or Claude Design. Do not require multiple tools in sequence. Direct Astro is the no-service path; Penpot is the shared cloud-canvas path with `penpot-site-design` and [onboarding](penpot-onboarding.md); OpenPencil is the optional desktop path using its upstream API/skill. Keep concrete Baseline CSS/component recipes on every path. The same agent can design and implement. Another model/session is optional and uses a portable record of source tokens, selected boards, approval, content ownership, reflow/states and native mapping. A canvas is a design reference, not another authoritative token store or a substitute for browser verification.
+
 ---
 
 ## 1. The 5-Stage Design Alchemy Pipeline
@@ -20,15 +24,15 @@ flowchart LR
     S4 --> S5["5. Token & Optical Calibration<br/>(design:tokens + /_styleguide + Impeccable)"]
 ```
 
-### How the Tools Fit Together (Zero Overlap)
+### How the optional tools fit together
 
-Each optional tool in the ecosystem solves a different layer of the design problem:
+These tools overlap; select the smallest useful set for the task rather than treating them as required pipeline dependencies:
 
 | Layer | Tool / Service | What It Provides |
 | :--- | :--- | :--- |
 | **1. UX Flows & Anatomy** | **Nicelydone MCP** / **Refero.design** / **Kombai** | Real-world page flows, filter bars, secondary metadata, and empty states. |
 | **2. Macro Design System** | **[designmd.ai](https://designmd.ai/explore)** (`designmd-mcp`) | 420+ free community `DESIGN.md` design systems (colors, font pairings, elevation, guidelines). |
-| **3. Visual Screen Prototyping** | **Google Stitch** / **OpenDesign** / **Claude Design** | Generates visual screen mockups from prompts and consumes/emits `DESIGN.md` files. |
+| **3. Visual Screen Prototyping** | **Penpot** / **OpenPencil** / **Pencil** / **Google Stitch** / **OpenDesign** / **Claude Design** | Choose a shared canvas, local desktop artifact or generated concept according to the task; inspect actual capabilities and translate selected decisions into native Astro. |
 | **4. Micro-Component Blueprints** | **21st.dev MCP** (`@21st-dev/magic`) | High-craft Tailwind component structures & micro-interactions (transmuted to zero-JS Astro). |
 | **5. Token & Optical Calibration** | **`npm run design:tokens` + `/_styleguide` + `impeccable`** | Automated WCAG contrast & fluid scale verification, `/_styleguide` specimen checks, and UI critique. |
 

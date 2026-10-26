@@ -82,6 +82,8 @@ For a multi-page rollout, read [`references/rollout-verification.md`](references
 
 ## Implement and review in visual passes
 
+When Penpot is selected, use `penpot-site-design` for connection, bounded design iteration and optional session handoff. Read approved file/page/board IDs and dated evidence; distinguish selected boards from newer drafts, preserve source CSS expressions and content ownership, then translate through actual native component APIs. Same-agent work needs no duplicate packet. For OpenPencil or another explicitly preferred tool, inspect its actual API/upstream skill and use the same Baseline translation/acceptance rules. Direct Astro/browser design needs no external tool. No canvas export establishes browser behavior, CMS editability or release readiness.
+
 Do not treat the first implementation as finished. For a new design, compare against the brief and chosen visual direction. For a migration, use the source screenshots to verify content, identity, and behavior, then judge whether the new design solves the documented weaknesses; matching weak source styling is not success. Use `references/migration-visual-audit.md` for that comparison.
 
 1. Build the shared shell and representative page archetypes. Render them in the browser at desktop, mobile, and widths where layouts change. Inspect full pages, including lower sections and interaction states, before applying the design to every route.

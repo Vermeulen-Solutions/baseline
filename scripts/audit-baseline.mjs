@@ -29,7 +29,7 @@ export function collectBaseline(root, now = new Date()) {
     const run = (...args) => execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
     git = { revision: run('rev-parse', 'HEAD'), workingTree: run('status', '--short'), status: 'observed' };
   } catch { git = { status: 'unverified', reason: 'Git checkout unavailable.' }; }
-  const skills = ['building-emdash-site', 'creating-plugins', 'emdash-cli', 'new-site-workflow', 'site-art-direction', 'astro-site-design', 'emdash-content-modeling', 'impeccable', 'emdash-site-setup', 'wordpress-to-emdash-content', 'emdash-production-cutover'].map(name => {
+  const skills = ['building-emdash-site', 'creating-plugins', 'emdash-cli', 'new-site-workflow', 'site-art-direction', 'penpot-site-design', 'astro-site-design', 'emdash-content-modeling', 'impeccable', 'emdash-site-setup', 'wordpress-to-emdash-content', 'emdash-production-cutover'].map(name => {
     try {
       const source = readFileSync(path.join(root, '.agents', 'skills', name, 'SKILL.md'), 'utf8').replaceAll('\r\n', '\n');
       return { name, status: 'observed', sha256: createHash('sha256').update(source).digest('hex') };

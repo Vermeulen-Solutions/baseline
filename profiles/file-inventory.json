@@ -1076,6 +1076,14 @@
     "docs/project-context.md": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "docs/penpot-onboarding.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/openpencil-onboarding.md": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

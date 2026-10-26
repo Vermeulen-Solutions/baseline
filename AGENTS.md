@@ -63,6 +63,10 @@ specialists and never add CMS dependencies to satisfy an inapplicable check.
   checking upstream updates or refreshing an older checkout; follow
   [skill synchronization](docs/skill-synchronization.md).
 
+## Design iteration surface
+
+At the existing new-site/significant-redesign concept checkpoint, choose direct Astro/browser or Penpot, reusing prior answers and retaining explicitly preferred alternatives such as OpenPencil, Pencil, Google Stitch, OpenDesign and Claude Design. Penpot uses the installed `penpot-site-design` skill; see `docs/penpot-onboarding.md`. Same-agent design/implementation is a complete path. A separate design agent and portable handoff are optional. Small refinements stay in the accepted direction without restarting discovery. Every surface still needs native component calibration and actual route/browser acceptance before the agreed release.
+
 ## Before client-specific visual implementation
 
 Save one complete `## Art Direction Record` in this file before site-specific

@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 
 export const sources = {
   emdash: { repository: 'emdash-cms/emdash', prefix: 'skills/', manifest: 'upstream-skills.json', skills: ['building-emdash-site', 'creating-plugins', 'emdash-cli'] },
-  site: { repository: 'Vermeulen-Solutions/baseline', prefix: '.agents/skills/', manifest: 'site-skills.json', skills: ['new-site-workflow', 'site-art-direction', 'impeccable', 'astro-site-design', 'emdash-site-setup', 'emdash-content-modeling', 'wordpress-to-emdash-content', 'emdash-production-cutover'] },
+  site: { repository: 'Vermeulen-Solutions/baseline', prefix: '.agents/skills/', manifest: 'site-skills.json', skills: ['new-site-workflow', 'site-art-direction', 'penpot-site-design', 'impeccable', 'astro-site-design', 'emdash-site-setup', 'emdash-content-modeling', 'wordpress-to-emdash-content', 'emdash-production-cutover'] },
 };
 export const hash = value => createHash('sha256').update(value).digest('hex');
 const normalized = bytes => {

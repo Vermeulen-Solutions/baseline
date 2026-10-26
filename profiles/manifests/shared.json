@@ -59,7 +59,9 @@
     "docs/media-preparation.md",
     "docs/project-inspection.md",
     "PROJECT.example.md",
-    "docs/project-context.md"
+    "docs/project-context.md",
+    "docs/penpot-onboarding.md",
+    "docs/openpencil-onboarding.md"
   ],
   "packages": {
     "dependencies": [
@@ -122,7 +124,8 @@
     "new-site-workflow",
     "site-art-direction",
     "astro-site-design",
-    "impeccable"
+    "impeccable",
+    "penpot-site-design"
   ],
   "skillFiles": [
     ".agents/skills/astro-site-design/SKILL.md",
@@ -206,6 +209,13 @@
     ".agents/skills/new-site-workflow/references/site-maintenance.md",
     ".agents/skills/site-art-direction/SKILL.md",
     ".agents/skills/site-art-direction/agents/openai.yaml",
-    ".agents/skills/site-art-direction/references/aesthetic-lanes.md"
+    ".agents/skills/site-art-direction/references/aesthetic-lanes.md",
+    ".agents/skills/penpot-site-design/SKILL.md",
+    ".agents/skills/penpot-site-design/agents/openai.yaml",
+    ".agents/skills/penpot-site-design/assets/design-brief.md",
+    ".agents/skills/penpot-site-design/assets/design-handoff.md",
+    ".agents/skills/penpot-site-design/references/baseline-recipes.md",
+    ".agents/skills/penpot-site-design/references/connection-and-api.md",
+    ".agents/skills/penpot-site-design/references/handoff-and-astro.md"
   ]
 }
