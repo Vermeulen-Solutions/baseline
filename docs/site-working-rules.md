@@ -23,6 +23,9 @@ For improvements to Baseline as a reusable starter, also read [CONTRIBUTING.md](
 
 - `new-site-workflow`: required sequencing and handoffs for a complete new site or rebuild.
 - `site-art-direction`: brief-led visual direction before frontend implementation. Consult `references/aesthetic-lanes.md` to select an aesthetic lane and define the narrative metaphor.
+- `opendesign-site-design`: local HTML/CSS canvas with 154 bundled design systems, 188 examples, and `od lint` validation ([OpenDesign onboarding](opendesign-onboarding.md)).
+- `openpencil-site-design`: local desktop canvas for vector nodes, variable bindings, and `.fig` files ([OpenPencil onboarding](openpencil-onboarding.md)).
+- `penpot-site-design`: shared cloud design canvas for team collaboration and browser review ([Penpot onboarding](penpot-onboarding.md)).
 - `impeccable`: bounded visual critique and UI refinement after rendered pages are available.
 - `building-emdash-site`: content queries, schema, Portable Text, site features.
 - `emdash-cli`: current CLI operations and editing flow.
