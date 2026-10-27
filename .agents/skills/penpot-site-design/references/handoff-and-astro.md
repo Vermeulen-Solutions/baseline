@@ -10,6 +10,8 @@ Use the adjacent asset template. Include file/page/board IDs, a non-secret file 
 
 Finish a write batch before switching clients. The next session rechecks current file/page, reads boards by saved IDs, compares saved snapshot/packet to current state, then resumes the authorized scope. Do not depend on MCP `storage`, active selection, draft names alone or implicit user approval. If the file changed after acceptance, resolve the specific difference instead of silently implementing newer drafts. Test cold recovery with a fresh session; that establishes session portability, not quality across every model or subscription.
 
+Treat the sending agent's verification statements as leads, not proof: visually inspect the actual saved-and-reopened canvas and current exports for legibility and clipping, including accented text. Compare claimed token expressions, responsive samples, component APIs and CMS field semantics with the installed source and real schema; keep free-text fields free-text and do not invent statuses. Validate any supplied token interchange file with the actual importer and inspect the imported values: a `.json` filename or a valid JSON parse alone does not prove a DTCG token file is valid. Report discrepancies and reconcile them within the agreed scope before implementation; do not claim accessibility or editor acceptance without testing it in the real rendered context.
+
 ## Translate into Astro
 
 1. Save/check the accepted Art Direction Record before public visual implementation, retaining existing scope exceptions for isolated concepts. Read actual installed component APIs and source token expressions.

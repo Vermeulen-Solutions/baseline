@@ -5,7 +5,7 @@ description: Design and iterate Baseline site concepts in OpenPencil desktop thr
 
 # OpenPencil site design
 
-Use OpenPencil (`open-pencil/open-pencil`) as a reviewable local desktop design surface inside Baseline's existing workflow. It is distinct from commercial Pencil and unrelated similarly named projects. The same agent can design and implement; switching to another model is optional. Do not launch another agent or install/configure a client merely because a handoff is possible. Direct Astro/browser iteration remains a complete alternative. For Penpot, use [penpot-site-design](../penpot-site-design/SKILL.md) and [docs/penpot-onboarding.md](../../../docs/penpot-onboarding.md) when present.
+Use OpenPencil (`open-pencil/open-pencil`) as a reviewable local desktop design surface inside Baseline's existing workflow. It is distinct from commercial Pencil and unrelated similarly named projects. The same agent can design and implement; switching to another model is optional. Do not launch another agent or install/configure a client merely because a handoff is possible. Direct Astro/browser iteration remains a complete alternative. For Penpot, use [penpot-site-design](../penpot-site-design/SKILL.md) and [docs/penpot-onboarding.md](../../../docs/penpot-onboarding.md) when present; for OpenDesign, use [opendesign-site-design](../opendesign-site-design/SKILL.md) and [docs/opendesign-onboarding.md](../../../docs/opendesign-onboarding.md) when present.
 
 ## Establish the task
 

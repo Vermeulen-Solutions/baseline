@@ -78,7 +78,7 @@ test('older installed inventory preserves legacy primitives, calibrated tokens a
 test('historical four-skill sites remain valid and cannot acquire Penpot or OpenPencil through bounded sync', () => fixture(async root => {
   const configPath = path.join(root, 'baseline.config.json');
   const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
-  config.skills = config.skills.filter(skill => !['penpot-site-design', 'openpencil-site-design'].includes(skill));
+  config.skills = config.skills.filter(skill => !['penpot-site-design', 'openpencil-site-design', 'opendesign-site-design'].includes(skill));
   await fs.writeFile(configPath, JSON.stringify(config));
   const originalConfig = await fs.readFile(configPath);
   const managedPath = path.join(root, '.baseline/managed-files.json');

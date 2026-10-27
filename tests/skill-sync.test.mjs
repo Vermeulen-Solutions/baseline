@@ -68,6 +68,7 @@ test('a killed skill apply leaves a recoverable journal and binary corruption is
 test('added Penpot and OpenPencil membership stages without replacing existing local site guidance', async () => {
   assert.ok(sources.site.skills.includes('penpot-site-design'));
   assert.ok(sources.site.skills.includes('openpencil-site-design'));
+  assert.ok(sources.site.skills.includes('opendesign-site-design'));
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-sync-test-'));
   try {
     const config = sources.site;

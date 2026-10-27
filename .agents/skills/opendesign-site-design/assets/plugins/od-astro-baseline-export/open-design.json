@@ -1,0 +1,87 @@
+{
+  "$schema": "https://open-design.ai/schemas/plugin.v1.json",
+  "specVersion": "1.0.0",
+  "name": "od-astro-baseline-export",
+  "title": "Export to Baseline Astro",
+  "title_i18n": {
+    "en": "Export to Baseline Astro",
+    "fr": "Exporter vers Baseline Astro",
+    "de": "Nach Baseline Astro exportieren"
+  },
+  "version": "0.1.0",
+  "publishedAt": "2026-10-27T01:00:00Z",
+  "description": "Downstream export plugin for transmuting an accepted OpenDesign HTML/CSS artifact into Baseline zero-JS Astro primitives, global.css tokens, /_styleguide calibration, and EmDash CMS or static content bindings.",
+  "description_i18n": {
+    "en": "Downstream export plugin for transmuting an accepted OpenDesign HTML/CSS artifact into Baseline zero-JS Astro primitives, global.css tokens, /_styleguide calibration, and EmDash CMS or static content bindings."
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Vermeulen Solutions",
+    "url": "https://github.com/Vermeulen-Solutions/baseline"
+  },
+  "homepage": "https://github.com/Vermeulen-Solutions/baseline",
+  "tags": [
+    "scenario",
+    "export",
+    "downstream",
+    "handoff",
+    "astro",
+    "baseline",
+    "emdash"
+  ],
+  "compat": {
+    "agentSkills": [
+      {
+        "path": "./SKILL.md"
+      }
+    ]
+  },
+  "od": {
+    "kind": "scenario",
+    "taskKind": "tune-collab",
+    "scenario": "downstream-export",
+    "mode": "export",
+    "pipeline": {
+      "stages": [
+        {
+          "id": "handoff",
+          "atoms": [
+            "handoff"
+          ]
+        }
+      ]
+    },
+    "capabilities": [
+      "prompt:inject",
+      "fs:read",
+      "fs:write"
+    ],
+    "useCase": {
+      "query": {
+        "en": "Export the accepted OpenDesign artifact to a Baseline Astro route or reusable component. Preserve semantic global.css tokens, decompose into Section/Container/Grid/Card primitives on /_styleguide, and bind static Content Collections or EmDash live edit proxies."
+      },
+      "exampleOutputs": []
+    },
+    "inputs": [
+      {
+        "name": "targetRoute",
+        "type": "string",
+        "required": false,
+        "label": "Target Astro route or component",
+        "placeholder": "src/pages/index.astro"
+      },
+      {
+        "name": "platformProfile",
+        "type": "select",
+        "required": false,
+        "label": "Baseline Platform Profile",
+        "options": [
+          "emdash",
+          "static",
+          "static-sveltia"
+        ],
+        "default": "emdash"
+      }
+    ]
+  }
+}

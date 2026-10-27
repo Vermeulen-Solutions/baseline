@@ -6,8 +6,8 @@ import { pathToFileURL } from 'node:url';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const json = value => JSON.stringify(value, null, 2) + '\n';
 const legacySkills = ['new-site-workflow', 'site-art-direction', 'astro-site-design', 'impeccable'];
-const skills = [...legacySkills, 'penpot-site-design', 'openpencil-site-design'];
-const validSkillCounts = [legacySkills.length, legacySkills.length + 1, skills.length];
+const skills = [...legacySkills, 'penpot-site-design', 'openpencil-site-design', 'opendesign-site-design'];
+const validSkillCounts = [legacySkills.length, legacySkills.length + 1, legacySkills.length + 2, skills.length];
 // Keep this script self-contained: older generated sites cannot acquire new
 // module paths through bounded sync. Both provenance URLs identify this one repo;
 // downloads always use its canonical name, never a URL supplied by the site.

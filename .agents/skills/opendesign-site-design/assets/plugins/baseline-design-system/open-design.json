@@ -1,0 +1,98 @@
+{
+  "$schema": "https://open-design.ai/schemas/plugin.v1.json",
+  "specVersion": "1.0.0",
+  "name": "design-system-baseline-astro",
+  "title": "Baseline Astro Design System",
+  "title_i18n": {
+    "en": "Baseline Astro Design System",
+    "fr": "Système de design Baseline Astro",
+    "de": "Baseline Astro Designsystem"
+  },
+  "version": "0.1.0",
+  "publishedAt": "2026-10-27T01:00:00Z",
+  "description": "Baseline's token physics and structural HTML/CSS vocabulary for Astro and EmDash sites: 3-tier OKLCH surfaces, 4-voice fluid typography, Smart Spacing (.flow), asymmetric bento grids, and zero-JS accessible primitives.",
+  "description_i18n": {
+    "en": "Baseline's token physics and structural HTML/CSS vocabulary for Astro and EmDash sites: 3-tier OKLCH surfaces, 4-voice fluid typography, Smart Spacing (.flow), asymmetric bento grids, and zero-JS accessible primitives."
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Vermeulen Solutions",
+    "url": "https://github.com/Vermeulen-Solutions/baseline"
+  },
+  "homepage": "https://github.com/Vermeulen-Solutions/baseline",
+  "tags": [
+    "design-system",
+    "baseline",
+    "astro",
+    "emdash",
+    "fluid-tokens"
+  ],
+  "od": {
+    "kind": "scenario",
+    "taskKind": "new-generation",
+    "mode": "design-system",
+    "scenario": "design",
+    "surface": "web",
+    "useCase": {
+      "query": {
+        "en": "Generate a {{artifactKind}} using the Baseline Astro Design System ({{aestheticLane}} lane). Bind all colors, fluid typography, and spacing to Baseline's canonical --color-*, --text-step-*, and --spacing-* custom properties and structural classes as documented in DESIGN.md."
+      }
+    },
+    "inputs": [
+      {
+        "name": "artifactKind",
+        "label": "Artifact kind",
+        "type": "select",
+        "options": [
+          "landing page",
+          "section slice",
+          "editorial article",
+          "directory or schedule"
+        ],
+        "default": "section slice"
+      },
+      {
+        "name": "aestheticLane",
+        "label": "Aesthetic Lane",
+        "type": "select",
+        "options": [
+          "Editorial Paper",
+          "Product-Led Minimalism",
+          "Technical Systems",
+          "Luminous Futurism",
+          "Custom Brand"
+        ],
+        "default": "Editorial Paper"
+      },
+      {
+        "name": "brief",
+        "label": "Brief",
+        "type": "text",
+        "placeholder": "What is the visitor task, narrative metaphor, and real content shape?"
+      }
+    ],
+    "context": {
+      "designSystem": {
+        "primary": true
+      },
+      "assets": [
+        "./DESIGN.md"
+      ]
+    },
+    "pipeline": {
+      "stages": [
+        {
+          "id": "generate",
+          "atoms": [
+            "file-write",
+            "live-artifact"
+          ]
+        }
+      ]
+    },
+    "capabilities": [
+      "prompt:inject",
+      "fs:write"
+    ]
+  }
+}

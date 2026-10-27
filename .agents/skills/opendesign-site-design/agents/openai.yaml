@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpenDesign Site Design"
+  short_description: "Iterate OpenDesign HTML/CSS concepts with Baseline and Astro"
+  default_prompt: "Use $opendesign-site-design to inspect the active OpenDesign project, iterate HTML/CSS concepts with Baseline tokens and od lint/export, and translate the approved design into Astro."

@@ -62,6 +62,7 @@
     "docs/project-context.md",
     "docs/penpot-onboarding.md",
     "docs/openpencil-onboarding.md",
+    "docs/opendesign-onboarding.md",
     "scripts/audit-actionability.mjs",
     "scripts/canvas-kit.mjs",
     "docs/canvas-kit.md",
@@ -131,7 +132,8 @@
     "astro-site-design",
     "impeccable",
     "penpot-site-design",
-    "openpencil-site-design"
+    "openpencil-site-design",
+    "opendesign-site-design"
   ],
   "skillFiles": [
     ".agents/skills/astro-site-design/SKILL.md",
@@ -234,6 +236,14 @@
     ".agents/skills/openpencil-site-design/references/upstream/LICENSE.txt",
     ".agents/skills/openpencil-site-design/references/upstream/PROVENANCE.json",
     ".agents/skills/openpencil-site-design/references/upstream/SKILL.md",
-    ".agents/skills/openpencil-site-design/references/upstream/references/design-authoring.md"
+    ".agents/skills/openpencil-site-design/references/upstream/references/design-authoring.md",
+    ".agents/skills/opendesign-site-design/SKILL.md",
+    ".agents/skills/opendesign-site-design/agents/openai.yaml",
+    ".agents/skills/opendesign-site-design/assets/plugins/baseline-design-system/DESIGN.md",
+    ".agents/skills/opendesign-site-design/assets/plugins/baseline-design-system/open-design.json",
+    ".agents/skills/opendesign-site-design/assets/plugins/od-astro-baseline-export/SKILL.md",
+    ".agents/skills/opendesign-site-design/assets/plugins/od-astro-baseline-export/open-design.json",
+    ".agents/skills/opendesign-site-design/references/baseline-html-recipe.md",
+    ".agents/skills/opendesign-site-design/references/connection-and-cli.md"
   ]
 }

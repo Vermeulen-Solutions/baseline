@@ -40,6 +40,8 @@ Fonts retain source stacks. Font declarations must be valid `font-family` syntax
 
 For OpenPencil, load its Baseline skill and bundled release-matched upstream reference. Inspect `import_design_tokens` and `render` schemas. Import each JSON as a separate `{ path, text }` file with `styles:false` into an agreed scratch document, then render matching JSX. Its JSON path is a payload label, not permission to expand filesystem roots. Inspect fonts, bounds, bindings and exported desktop/mobile views. Use the scoped properties/lint/diff loop, save `.fig` and verify recovery before implementation.
 
+For OpenDesign, the kit also writes `open-design/DESIGN.md` (source-derived canonical custom properties and Astro primitive contracts), `open-design/open-design.json` (a design-system plugin manifest) and, only when every required role resolves, a zero-JS `open-design/specimen.html`. Install the folder with `od plugin install --source` as described in [opendesign-onboarding.md](opendesign-onboarding.md); it remains a disposable sampled proposal, not a token authority.
+
 For Penpot, map the source report through the documented Penpot variable/component APIs; this scope does not emit an executable Penpot bootstrapper. Direct Astro users can use the report without a canvas. Every path retains design selection, native `/_styleguide` calibration, route/browser acceptance and the authorized release endpoint.
 
 To rerun the local Chromium regressions for the sampler on Windows, use the already installed browser and run:

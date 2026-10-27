@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { canvasSource, canvasPayload, generateCanvasKit, sampleCanvasTokens, tokenContextRisks } from '../scripts/canvas-kit.mjs';
+import { canvasSource, canvasPayload, generateCanvasKit, openDesignPayload, sampleCanvasTokens, tokenContextRisks } from '../scripts/canvas-kit.mjs';
 import { auditDesignTokens } from '../scripts/design-system.mjs';
 import { ruleActionability } from '../scripts/audit-actionability.mjs';
 
@@ -30,7 +30,58 @@ test('canvas export samples inert source, retains exact expressions and refuses 
   const tokens=JSON.parse(fs.readFileSync(path.join(out,'390.tokens.json')));
   assert.equal(tokens.site390['spacing-container'].$extensions['dev.openpencil'].expression,'clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)');
   assert.equal(tokens.site390['spacing-container'].$extensions['dev.openpencil'].codeSyntax.WEB,'var(--spacing-container)');
+  assert.equal(report.openDesign.ready,false);
+  assert.deepEqual(report.openDesign.files,['open-design/open-design.json','open-design/DESIGN.md']);
+  assert.ok(fs.existsSync(path.join(out,'open-design','open-design.json')));
+  assert.ok(fs.existsSync(path.join(out,'open-design','DESIGN.md')));
+  assert.ok(!fs.existsSync(path.join(out,'open-design','specimen.html')));
+  const odDesignMd=fs.readFileSync(path.join(out,'open-design','DESIGN.md'),'utf8');
+  assert.match(odDesignMd,/--spacing-container: clamp\(1rem, calc\(0\.6667rem \+ 1\.6667vi\), 2rem\)/);
+  assert.match(odDesignMd,/Scene ready: `false`.*`--color-action`/);
 }));
+
+test('openDesignPayload emits DESIGN.md, open-design.json and a zero-JS specimen.html when all required tokens resolve', () => {
+  const source = {
+    inputs: [{ path: 'src/styles/global.css', sha256: 'abc123' }],
+    declarations: [
+      { name: '--color-page', expression: '#fffdf9', context: ':root' },
+      { name: '--spacing-container', expression: 'clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)', context: ':root' }
+    ],
+    components: [{ name: 'Section', source: 'src/components/Section.astro', exists: true, props: [{ name: 'spacing' }] }],
+    roles: {},
+    contextClass: ''
+  };
+  const requiredTokens = [
+    { name: '--color-page', status: 'resolved', type: 'color', value: [1, 0.992, 0.976, 1], computedColor: 'rgb(255, 253, 249)', resolvedExpression: '#fffdf9' },
+    { name: '--color-surface', status: 'resolved', type: 'color', value: [0.95, 0.94, 0.92, 1], computedColor: 'rgb(242, 240, 235)', resolvedExpression: '#f2f0eb' },
+    { name: '--color-text', status: 'resolved', type: 'color', value: [0.1, 0.1, 0.1, 1], computedColor: 'rgb(26, 26, 26)', resolvedExpression: '#1a1a1a' },
+    { name: '--color-action', status: 'resolved', type: 'color', value: [0.8, 0.3, 0.1, 1], computedColor: 'rgb(204, 77, 26)', resolvedExpression: '#cc4d1a' },
+    { name: '--color-on-action', status: 'resolved', type: 'color', value: [1, 1, 1, 1], computedColor: 'rgb(255, 255, 255)', resolvedExpression: '#ffffff' },
+    { name: '--color-border', status: 'resolved', type: 'color', value: [0.85, 0.85, 0.85, 1], computedColor: 'rgb(217, 217, 217)', resolvedExpression: '#d9d9d9' },
+    { name: '--spacing-container', status: 'resolved', type: 'length', value: 32, resolvedExpression: 'clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)' },
+    { name: '--spacing-content', status: 'resolved', type: 'length', value: 24, resolvedExpression: '1.5rem' },
+    { name: '--spacing-grid', status: 'resolved', type: 'length', value: 24, resolvedExpression: '1.5rem' },
+    { name: '--radius-card', status: 'resolved', type: 'length', value: 12, resolvedExpression: '0.75rem' },
+    { name: '--radius-control', status: 'resolved', type: 'length', value: 8, resolvedExpression: '0.5rem' },
+    { name: '--text-step-0', status: 'resolved', type: 'length', value: 16, resolvedExpression: '1rem' },
+    { name: '--text-step-1', status: 'resolved', type: 'length', value: 20, resolvedExpression: '1.25rem' },
+    { name: '--text-step-2', status: 'resolved', type: 'length', value: 32, resolvedExpression: '2rem' },
+    { name: '--font-display', status: 'resolved', type: 'font', value: 'Fraunces, serif', resolvedExpression: 'Fraunces, serif' },
+    { name: '--font-body', status: 'resolved', type: 'font', value: 'Plus Jakarta Sans, sans-serif', resolvedExpression: 'Plus Jakarta Sans, sans-serif' },
+    { name: '--font-accent', status: 'resolved', type: 'font', value: 'Instrument Serif, serif', resolvedExpression: 'Instrument Serif, serif' },
+    { name: '--font-mono', status: 'resolved', type: 'font', value: 'JetBrains Mono, monospace', resolvedExpression: 'JetBrains Mono, monospace' }
+  ];
+  const sample390 = { width: 390, rootFontPx: 16, tokens: requiredTokens };
+  const sample1440 = { width: 1440, rootFontPx: 16, tokens: requiredTokens };
+  const payload390 = { sample: sample390, ...canvasPayload(source, sample390) };
+  const payload1440 = { sample: sample1440, ...canvasPayload(source, sample1440) };
+  const od = openDesignPayload(source, [payload390, payload1440]);
+  assert.equal(od.ready, true);
+  assert.equal(od.manifest.od.mode, 'design-system');
+  assert.match(od.designMd, /clamp\(1rem, calc\(0\.6667rem \+ 1\.6667vi\), 2rem\)/);
+  assert.match(od.html, /data-od-id="canvas-kit-specimen"/);
+  assert.match(od.html, /letter-spacing:\s*0\.08em/);
+});
 
 test('existing/in-target/linked/imported outputs or inputs refuse before a browser is launched', () => fixture(async ({parent,root,file}) => {
   let called=false;const sampler=async()=>{called=true;throw Error('must not run')};

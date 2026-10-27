@@ -1085,6 +1085,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "docs/opendesign-onboarding.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "scripts/audit-actionability.mjs": {
       "disposition": "shared",
       "static": "copy"
