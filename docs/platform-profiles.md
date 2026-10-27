@@ -34,6 +34,8 @@ The generator resolves explicit file, dependency and skill allowlists plus profi
 
 The native Posts collection lives in `src/content.config.ts`. Static routes use `getStaticPaths()` and `render()`; drafts are excluded. Site identity/navigation live in `src/config/site.ts`. Sveltia's form must evolve with the same schema. See `docs/sveltia-cms.md` in a generated Sveltia project for authentication and native upload paths. Configure the new site's repository before signing in.
 
+All new profiles include `migration:wordpress` for one-time first-party exporter/WXR capture with media. Static output uses native Markdown/assets and a matching Sveltia form; EmDash output hands off to the native importer. See [WordPress dashboard migration](wordpress-migration.md) for scope, protected application and the additive adoption required by existing sites. The capture tools are development tooling and add no CMS/database runtime to static output.
+
 Design calibration is identical on both foundations: establish the real Art Direction Record, calibrate tokens and production primitives on `/_styleguide`, and record observed results. Static specimens use native Markdown/images; EmDash extends the common specimens with Portable Text and storage/gallery examples. Production builds exclude the route; fixture builds are nondeployable. Static hosting must serve missing paths as HTTP 404 with no SPA catch-all rewrite.
 
 Use `new-site-workflow`, `site-art-direction`, `astro-site-design` and `impeccable` on all profiles. Load EmDash setup/modeling/building/CLI specialists only on `emdash`. Profile changes require deliberate content/routing/auth migration; changing the profile ID in a receipt is not a migration.

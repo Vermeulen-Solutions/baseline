@@ -42,6 +42,10 @@ authorized autonomous build may use an explicit recommended assumption. Keep
 the current shell policy for both choices; custom layouts use tokens and explicit
 primitive controls. No settings panel or external-product terminology is needed.
 
+## WordPress migration
+
+For WordPress migrations, read `docs/wordpress-migration.md` and use the installed `migration:wordpress` capture → plan → apply workflow. Prefer the first-party WordPress exporter configured entirely through the client's dashboard; a local uploads-directory copy and FTP access are optional fallbacks. Preserve existing files, review source/mapped routes and unsupported content, and finish redirects, navigation, media and publication acceptance. Source captures remain private; the output uses native Markdown/assets and the matching Sveltia form. Do not load CMS migration specialists or add an EmDash runtime to perform this migration.
+
 ## Design iteration surface
 
 At the existing new-site/significant-redesign concept checkpoint, recommend a dedicated design canvas and offer **OpenPencil**, **OpenDesign**, **Penpot** and **direct Astro/browser** explicitly. Reuse the user's settled preference and an already working connection: OpenPencil suits local desktop/files, OpenDesign suits a local HTML/CSS canvas with bundled design systems and examples, Penpot suits shared cloud access, and direct Astro suits a preferred real-browser/no-service workflow. Follow `site-art-direction` and its `references/design-iteration.md` for focused visual batches → selected direction → representative Astro proof → rollout. Retain explicitly preferred Pencil, Google Stitch, Claude Design and designmd-mcp references. OpenPencil uses `openpencil-site-design`, OpenDesign uses `opendesign-site-design` and Penpot uses `penpot-site-design`; all canvas options have onboarding guides under `docs/`. Same-agent design/implementation is complete; another agent and portable handoff are optional. Small refinements reuse the accepted world. Preserve native calibration, actual route/browser acceptance and the agreed release endpoint.

@@ -6,6 +6,8 @@ Baseline provides a structured methodology to turn that legacy sprawl into a cle
 
 ## EmDash 1.3 importer behavior
 
+Start with [dashboard source capture and profile outputs](wordpress-migration.md). The first-party exporter and native media-copy step are the normal EmDash path; the client does not need FTP, a hosting control panel or a separately downloaded media ZIP. Static profiles use the shared capture with the native Markdown/assets adapter and their own content-model review.
+
 Use EmDash's supported WordPress importer at `/_emdash/admin/import/wordpress`; Baseline does not ship a `scripts/migrate-wordpress.mjs` wrapper. Keep the source export, reviewed analysis/mappings and a target backup before importing. The following behavior is supplied by EmDash 1.3, not a custom Baseline migration:
 
 - **ACF internal post types:** WXR imports skip `acf_field` and `acf_field_group`. They are field definitions, not editorial collections. Audit accidental collections from older imports before removing them; check dependencies and preserve backups rather than automatically deleting anything.
@@ -109,6 +111,8 @@ Make the administrative CMS intuitive for non-technical client editors:
 ---
 
 ## 5. Post-Import Media Preparation & Ingestion
+
+The native importer's media step already copies source attachments and rewrites matching URLs. The local-directory pipeline below is an additional option for a reviewed offline batch, explicit preparation or reference repair; do not run it blindly after a successful native media import or duplicate existing Media Library records. The portable capture's `media/` directory and `snapshot.json` preserve source evidence, but this older tool still needs its own reviewed version-1 attachment projection.
 
 WordPress imports often leave assets in an unfiled, flat media pool with messy filenames (e.g. `3206-Photo-team-scaled.jpg`) and unmigrated attachment references.
 

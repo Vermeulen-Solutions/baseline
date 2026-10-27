@@ -1104,6 +1104,34 @@
     "tests/canvas-kit.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/wordpress-io.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/wordpress-source.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/wordpress-markdown.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/wordpress-static.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/wordpress-migrate.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/wordpress-migration.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/wordpress-migration.md": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

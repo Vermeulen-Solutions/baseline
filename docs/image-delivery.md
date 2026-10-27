@@ -24,6 +24,8 @@ The former `media:organize` utility is retired and exits **2** without changing 
 
 ## WordPress media plan and preparation
 
+For a new migration, start with [dashboard source capture](wordpress-migration.md). The native EmDash importer can copy media from source URLs; static projects can capture and convert the same source without a CMS. The local uploads-directory pipeline below remains available for explicit offline batches and repairs and is not a required first step for every migration.
+
 The default command is read-only inventory. It recursively hashes an explicit uploads source, probes bounded raster pixels, and records ownership, dimensions, source/original/derivative relationships, locale, captions, alt, credit, provenance, aliases and usage. Nothing is deleted or downloaded. Use a stable source ID so retries retain attachment identity.
 
 ```sh

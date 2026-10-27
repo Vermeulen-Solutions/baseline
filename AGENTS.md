@@ -117,7 +117,7 @@ for direction, implementation and rendered critique.
 | --- | --- |
 | Tokens, layout, components, editorial rendering, images or day-2 visual changes | [Detailed site rules](docs/site-working-rules.md), [design framework](docs/design-framework.md), [native composition](docs/native-composition.md) |
 | CMS schema, queries, content or plugins | building-emdash-site, emdash-content-modeling, emdash-cli, or creating-plugins as applicable; verify APIs with configured EmDash docs MCP or live official docs |
-| WordPress migration | wordpress-to-emdash-content and the migration guidance in new-site-workflow; classify repeated content before routes and link audit/content-candidate-register.md here |
+| WordPress migration | [Dashboard source capture and profile outputs](docs/wordpress-migration.md), wordpress-to-emdash-content for EmDash, and the migration guidance in new-site-workflow; classify repeated content before routes and link audit/content-candidate-register.md here |
 | Languages/locales | [Internationalization](docs/internationalization.md): native row-per-locale groups, no duplicate language fields, prefixDefaultLocale: false |
 | Hosting, production data, cache or newsletters | emdash-site-setup or emdash-production-cutover as applicable, and [production runtime rules](docs/site-working-rules.md#production-runtime-hardening); never reset production to repair authentication/imports |
 | Reviewed starter/skill updates | [Baseline updates](docs/baseline-updates.md), [skill synchronization](docs/skill-synchronization.md); preserve local calibration and review conflicts |

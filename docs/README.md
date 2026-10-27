@@ -68,6 +68,8 @@ Production-tested components: `Card`, `CMSPartnersPanel`, `ResponsiveImage`, `Ed
 
 ## 🗄️ 3. Content Architecture & WordPress Migration
 
+- **[WordPress Dashboard Migration for Every Profile](wordpress-migration.md)** First-party exporter/WXR capture with media, native EmDash handoff and protected Markdown/assets/Sveltia output for static projects.
+
 *Relational modeling, schema safety, and client-friendly CMS administration.*
 
 - **[WordPress Content Modeling & Candidate Register](wordpress-content-modeling.md)**  

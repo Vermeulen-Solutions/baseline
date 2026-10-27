@@ -53,10 +53,12 @@ Everything unlisted is omitted. Never copy `.git`, `node_modules`, `.env*` (apar
 from a generated example), `.mcp.json`, `data.db*`, `uploads`, `.emdash` local state,
 build output, old audit evidence or visual baselines.
 
-Static excludes seeds, live collections, EmDash declarations, database/media
+Static excludes seeds, live collections, EmDash declarations, CMS database/media
 migration tooling, schema-budget npm hooks, server start commands, CMS skills,
 CMS endpoints, React and server adapters. Shared scripts that still assume these
 are classified `adapt-before-static`, not silently treated as portable.
+
+Portable `migration:wordpress` source capture and static conversion are explicitly shared, with `parse5` and `saxes` as development-only parsers. This is separate from the omitted CMS ingestion/database tools; see [dashboard migration](../docs/wordpress-migration.md).
 
 ## Presentation boundary
 

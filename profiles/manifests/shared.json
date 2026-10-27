@@ -66,7 +66,14 @@
     "scripts/audit-actionability.mjs",
     "scripts/canvas-kit.mjs",
     "docs/canvas-kit.md",
-    "tests/canvas-kit.test.mjs"
+    "tests/canvas-kit.test.mjs",
+    "scripts/wordpress-io.mjs",
+    "scripts/wordpress-source.mjs",
+    "scripts/wordpress-markdown.mjs",
+    "scripts/wordpress-static.mjs",
+    "scripts/wordpress-migrate.mjs",
+    "tests/wordpress-migration.test.mjs",
+    "docs/wordpress-migration.md"
   ],
   "packages": {
     "dependencies": [
@@ -87,7 +94,9 @@
       "@types/node",
       "postcss",
       "postcss-selector-parser",
-      "astro-eslint-parser"
+      "astro-eslint-parser",
+      "parse5",
+      "saxes"
     ]
   },
   "scripts": [
@@ -110,7 +119,8 @@
     "check:css",
     "baseline:inspect",
     "media:prepare",
-    "design:canvas-kit"
+    "design:canvas-kit",
+    "migration:wordpress"
   ],
   "scriptOverrides": {
     "lint": "npm run lint:scripts && npm run lint:templates"

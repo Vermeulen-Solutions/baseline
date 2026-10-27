@@ -23,6 +23,7 @@ const expectedSite = option('--site-url') || process.env.SITE_URL;
 const config = JSON.parse(await fs.readFile(path.join(root, 'baseline.config.json'), 'utf8'));
 assert.ok(['static', 'static-sveltia'].includes(config.platformProfile));
 const report = { platform: process.platform, independentDependencies: true, development: {}, production: {}, fixtures: {}, browser: 'not requested' };
+const wordpressFixture = await fs.stat(path.join(root, 'dist/migrated-article/index.html')).then(() => true, () => false);
 assert.equal((await fs.lstat(path.join(root, 'node_modules'))).isSymbolicLink(), false, 'Verify an independent installation, not the baseline node_modules');
 await assertReleaseArtifact(path.join(root, 'dist'));
 await assert.rejects(assertReleaseArtifact(path.join(root, 'dist-fixtures')), /Refusing fixture-enabled/);
@@ -139,6 +140,14 @@ try {
   const draft = await fetch(production + '/posts/metadata-draft/'); assert.equal(draft.status, 404);
   assert.ok(!(await draft.text()).includes('PRIVATE METADATA DRAFT'));
   report.production.draft = '404; excluded from public routes/listings';
+  if (wordpressFixture) {
+    const response = await fetch(production + '/migrated-article/'); assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.ok(html.includes('IMPORTED WORDPRESS BODY') && html.includes('Imported contextual caption.'));
+    assert.ok(!html.includes('wordpress-migration.example.test') && !html.includes('PRIVATE WORDPRESS SOURCE'));
+    report.production.wordpress = { status: 200, images: await images(production, html), metadata: await metadata(production, '/migrated-article/', html) };
+    for (const route of ['/hidden-wordpress/', '/private-source/']) assert.equal((await fetch(production + route)).status, 404);
+  }
   for (const method of ['GET', 'HEAD']) for (const suffix of ['', '/', '?fixtures=1']) {
     const response = await fetch(production + '/_styleguide' + suffix, { method, headers: { cookie: 'fixtures=1' } });
     assert.equal(response.status, 404); assert.ok(!(await response.text()).includes('data-styleguide-ready'));
@@ -187,9 +196,9 @@ try {
         if ([production, fixtures].includes(new URL(route.request().url()).origin)) return route.continue();
         errors.push('external request: ' + route.request().url()); return route.abort();
       });
-      for (const [origin, route] of [[production, '/'], [production, '/posts/welcome/'], [fixtures, '/_styleguide/']]) {
+      for (const [origin, route] of [[production, '/'], [production, '/posts/welcome/'], [fixtures, '/_styleguide/'], ...(wordpressFixture ? [[production, '/migrated-article/']] : [])]) {
         const response = await page.goto(origin + route); assert.equal(response.status(), 200);
-        await expect(page.locator('h1')).toHaveText(route === '/_styleguide/' ? 'Starter component styleguide' : 'Welcome');
+        await expect(page.locator('h1')).toHaveText(route === '/_styleguide/' ? 'Starter component styleguide' : route === '/migrated-article/' ? 'Imported WordPress page' : 'Welcome');
         await page.evaluate(() => document.fonts.ready);
         // Load below-the-fold lazy specimens before judging image failures or captures.
         await page.locator('img').evaluateAll(async images => {
@@ -234,6 +243,12 @@ try {
       assert.equal(post.status(), 200); await expect(page.locator('h1')).toHaveText('Welcome');
       const image = page.locator('main img').first(); await expect(image).toBeVisible();
       assert.ok(await image.evaluate(element => element.complete && element.naturalWidth > 0));
+      if (wordpressFixture) {
+        assert.equal((await page.goto(production + '/migrated-article/')).status(), 200);
+        await expect(page.locator('h1')).toHaveText('Imported WordPress page');
+        await page.locator('img').evaluateAll(async images => { images.forEach(image => { image.loading = 'eager'; }); await Promise.all(images.map(image => image.decode())); });
+        assert.equal(await page.locator('img').evaluateAll(images => images.filter(image => !image.complete || !image.naturalWidth).length), 0);
+      }
       assert.equal((await page.goto(fixtures + '/_styleguide/')).status(), 200);
       await skipLinkJourney(page, page.getByRole('button', { name: 'Native button', exact: true }));
       const composition = await disclosureJourney(page), layout = await intrinsicLayoutJourney(page);

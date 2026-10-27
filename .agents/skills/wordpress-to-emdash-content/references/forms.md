@@ -7,7 +7,7 @@ Use this reference after inventorying forms in WordPress and before implementing
 | Tier | Signs in the source workflow | Architecture |
 | --- | --- | --- |
 | **1: simple contact/inquiry** | Submission sends to one or more email recipients; no retained submission history is required; no cap, duplicate check, stock/seat count, queue, client inbox, or cross-submission rule. Ordinary required/email/range validation and lightweight show/hide fields are okay if server validation remains simple. | Native Astro HTML form with built-in browser constraints (`required`, `type="email"`, `min`, `max`, etc.) posts directly to a form-to-email SaaS endpoint. No Astro action or DB. |
-| **2: stateful workflow** | Hard total/per-person limits, remaining-seat display, duplicate detection, conditional server-side eligibility, waitlist/status management, a searchable/exportable inbox, or meaningful records that must persist. | Native Astro form → `src/actions/index.ts` Action with Zod → server-only submission service → EmDash collection entries kept private/unpublished → Resend notification. Use EmDash field uniqueness for race-safe dedupe and slot allocation for race-safe quotas. |
+| **2: stateful workflow** | Hard total/per-person limits, remaining-seat display, duplicate detection, conditional server-side eligibility, waitlist/status management, a searchable/exportable inbox, or meaningful records that must persist. | Evaluate the opt-in first-party forms plugin on its released version and target runtime. When it covers the audited workflow, use its native Astro rendering and plugin-owned inbox. For uncovered requirements, use native Astro form → Astro Action → server-only service → private EmDash collection entries and approved email delivery. Custom quotas and deduplication require atomic enforcement. |
 
 Do not select Tier 2 just because the WordPress plugin is feature-rich. Conversely, do not call a browser-only counter or client-side validation a replacement for a server-enforced capacity or eligibility rule.
 
@@ -82,7 +82,27 @@ Use ordinary Astro/Tailwind classes or the site's semantic form components for s
 
 The recipient is configured in the provider account, not trusted from a user-controlled input. The client should own that account/access key. A generic Astro `PUBLIC_*` variable is suitable only when the selected service explicitly documents a public browser key. Preserve the audited source interaction (for example, open the native form in an accessible modal if the source CTA opens a popup). Test every CTA, form validation, successful delivery, provider/network failure, and the requested on-site confirmation. Do not expose internal implementation/provider disclosures or an email `mailto:` address as form copy unless the client asks for that disclosure.
 
-## Tier 2 data model and EmDash admin inbox
+## Tier 2: choose native plugin or custom workflow
+
+Evaluate `@emdash-cms/plugin-forms` before building a custom submissions collection solely for a retained inbox or per-form cap. It remains an opt-in integration; do not add it to Baseline's default dependencies/configuration or replace an existing site's provider without an agreed migration. Its server-rendered Astro `Form`/`FormEmbed` components are native HTML, not the third-party embed widgets/iframes excluded above. Use the plugin's own supported submission route and inbox when selected; do not add a second Action, collection or counter to enforce the same cap.
+
+Release status checked on 27 October 2026: [design PR #4420](https://github.com/emdash-cms/emdash/pull/4420) is proposed and depends on the open [concurrency fix #4419](https://github.com/emdash-cms/emdash/pull/4419). A prototype exists, but this does not establish released support. Recheck the accepted design, release notes, actual package version, peers and target runtime before implementation. A merged design alone is insufficient. The owner monitors GitHub notifications manually; no automated release monitor is part of this preparation.
+
+The proposed cap counts one accepted submission as one place. Deletion and retention cleanup free places; read and archived submissions still count. It proposes a full-state message and optional remaining count. It does not cover group sizes consuming multiple places, per-session/option inventory, per-person/email deduplication, waitlists, scheduled opening/closing or payments. Confirm the released behavior and whether it matches the site's counting, cancellation and retention rules; do not assume a basic cap replaces these workflows.
+
+Before accepting a released implementation for a site, verify with synthetic submissions on the exact plugin/core versions and database adapter:
+
+- Concurrent requests for the final place accept exactly one submission, leave one stored record and reject the others with a clear full message. A stale page opened before capacity was reached must also be rejected on submit.
+- Full-state rendering, remaining counts when enabled, accessible error feedback and permitted input recovery work through the actual site component. A displayed count or disabled button is advisory; server enforcement is authoritative.
+- Invalid input, spam rejection and failed uploads/saves do not consume places or send acceptance notifications. Review recovery/reconciliation for interruption after a place is reserved.
+- Deletion, retention cleanup, archiving, pausing/resuming, raising/lowering/clearing the limit and an unlimited existing form follow the agreed counting rules. Check edits made while submissions are in flight.
+- The admin inbox/export, private submission access, notifications, retention and deployment-specific behavior satisfy the source workflow. Node/SQLite evidence does not certify Workers/D1.
+
+Record the chosen versions, results and any gaps. For Baseline's historical integration evidence and adoption limits, see `docs/forms-adoption.md` when present. Until a suitable release passes acceptance, retain the current workflow or explicitly scope the custom recipe below. Use a custom workflow when required rules remain uncovered; preserve its atomic quota/deduplication and privacy contracts rather than silently degrading those rules.
+
+## Tier 2 custom data model and EmDash admin inbox
+
+The following collection and Action recipes apply only when the custom workflow was selected above. Native-plugin submissions remain in the plugin's inbox and do not require this collection.
 
 Define the submissions collection as part of the site's EmDash schema (usually `seed/seed.json` for repeatable site setup, or Content Types for a deliberate live-site change). This is a fixed schema, not a runtime-created collection for each form. EmDash collections provide admin content lists/editors; collection search can search fields marked searchable. A seed is for initial setup and explicit seed application, not a migration that automatically runs on every deploy.
 
@@ -141,7 +161,7 @@ EmDash documents collection/field definitions through seed files and Content Typ
 - Keep any EmDash access token only in server environment secrets. Scope it to the smallest permitted content read/write capability; never serialize it into HTML, client JavaScript, public env variables, logs, or email links.
 - Define who may view/export submissions, retention/deletion, consent, and backup handling with the client. Do not store payment-card credentials, passwords, or unnecessary sensitive data in content fields.
 
-## Tier 2 Astro Action recipe
+## Tier 2 custom Astro Action recipe
 
 Astro Actions are documented in `src/actions/index.ts`; form actions use `accept: "form"`, Zod validation, and `ActionError`. The Action should orchestrate validation, durable reservation, submission persistence, and notification; put business rules in `src/lib/forms/` and persistence/provider details behind small services.
 
@@ -214,7 +234,7 @@ Quota correctness: a plain `COUNT(*) < limit` followed by `INSERT` can oversell 
 
 Do not use this Action as written without implementing and testing `formSubmissions` for the exact site adapter and the live EmDash OpenAPI. REST requests use the site's documented authentication and response envelope; the server token never goes to the browser. The OpenAPI contract is authoritative for content create/list payloads and pagination.
 
-## Remaining-count display
+## Custom remaining-count display
 
 At request time, query persisted submissions on the Astro server (or the same read service), not localStorage and not a client-only increment. Compute `remaining = max(0, limit - confirmedCount)` and render a visible textual status. Disable the submit button when the form is full for usability, but keep the Action-side atomic reservation because multiple users may submit concurrently after the page renders. On a failed/full Action result, retain user input and show an associated error summary. A cached/static page may show stale spots; use on-demand rendering or explicitly describe the count as approximate and refresh it client-side from a read-only, rate-limited endpoint.
 

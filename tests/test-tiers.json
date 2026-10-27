@@ -186,5 +186,9 @@
   "canvas-kit.test.mjs": {
     "tier": "unit",
     "reason": "Source binding, refusal and actionability contracts with injected sampler; no browser launched in CI"
+  },
+  "wordpress-migration.test.mjs": {
+    "tier": "unit",
+    "reason": "Bounded exporter/WXR capture, credential isolation, static conversion and conflict-preserving apply with synthetic sources"
   }
 }

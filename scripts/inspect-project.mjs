@@ -3,7 +3,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
 
-const commands = ['dev', 'doctor', 'verify:fast', 'verify', 'lint', 'check:css', 'check:art-direction', 'design:tokens', 'design:canvas-kit', 'test', 'typecheck', 'build', 'audit:html', 'test:visual', 'mcp:token', 'media:prepare', 'media:upload'];
+const commands = ['dev', 'doctor', 'verify:fast', 'verify', 'lint', 'check:css', 'check:art-direction', 'design:tokens', 'design:canvas-kit', 'test', 'typecheck', 'build', 'audit:html', 'test:visual', 'mcp:token', 'media:prepare', 'media:upload', 'migration:wordpress'];
 const components = ['Section', 'Container', 'Grid', 'Card', 'RichText', 'ResponsiveImage'];
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const assert = (condition, message) => { if (!condition) throw Error(message); };

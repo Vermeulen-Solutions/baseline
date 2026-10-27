@@ -61,7 +61,11 @@ Review public routes, narrow reflow, keyboard focus, images and relevant editing
 
 Doctor accepts `-- --json`; use `npm --silent run doctor -- --json` for JSON-only output, or `node scripts/doctor.mjs --json` if npm itself cannot start. It bounds its probes and may report unavailable observations rather than a failure. NO_COLOR disables colored output. Inspection is optional, source-derived discovery with [declared pilot limits](project-inspection.md). See also [client bundle maintenance](client-bundles.md) and [downstream audits](site-standards-audit.md).
 
-## Image preparation
+## WordPress source capture and conversion
+
+`npm run migration:wordpress -- --help` is available on all new profiles. Use `probe` or `capture` for the first-party WordPress exporter/WXR source, `plan` for the installed profile's output, and `apply` for a reviewed static plan. Supply migration credentials privately through the environment. See [dashboard migration](wordpress-migration.md) for output directories, conflict preservation, media handling, native EmDash handoff and existing-site adoption.
+
+## Image preparation commands
 
 | Command | Profiles | Purpose |
 | --- | --- | --- |

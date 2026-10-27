@@ -108,6 +108,16 @@ Please:
 
 ## 2. WordPress Migration & Content Modeling
 
+### Migrate with WordPress dashboard access
+
+Use this prompt when the client can access WordPress but has no FTP or hosting-panel access:
+
+```markdown
+Migrate [WordPress URL] into this Baseline project's installed profile. Follow docs/wordpress-migration.md and the migration stages in new-site-workflow. Guide me through installing the first-party EmDash Exporter and generating its migration key entirely in WordPress; use a private environment/secret channel for the key. If it cannot be installed, guide me through Tools → Export → All content. If the site uses Elementor, offer an Elementor Website Template kit export as an optional private design-reference handoff; skip it if I do not want to retain or reuse the design. Do not imply Baseline automatically imports the kit or require it for content/media migration. Do not require FTP or a separate media-download plugin for normal source capture.
+
+Capture content/media with migration:wordpress, inspect source coverage and plan the installed profile's output. On EmDash use the native wizard; on static/static-sveltia use the native Markdown/assets plan and matching editor form without adding a CMS runtime. Preserve local files and identify homepage/dynamic-route conflicts, unsupported blocks, custom content models, redirects, navigation, metadata and unpublished-content handling before application. Complete the authorized local migration and applicable rendered/verification checks; deployment and source retirement are separate scope.
+```
+
 ### Auditing Legacy Content & Finding Hidden Entities
 Use this prompt when migrating from a WordPress or legacy CMS export.
 
@@ -124,7 +134,7 @@ Please:
 ```
 
 ### Manifest-Driven Media Ingestion
-Use this prompt to prepare and ingest legacy media attachments.
+Use this supplemental prompt to prepare and ingest an explicit offline media batch or repair. Start ordinary migrations with the dashboard workflow above.
 
 ```markdown
 Help me migrate our WordPress media uploads to EmDash using npm run media:migrate-wp.

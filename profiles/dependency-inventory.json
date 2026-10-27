@@ -129,9 +129,9 @@
     "parse5": {
       "section": "devDependencies",
       "profiles": [
-        "emdash",
         "static",
-        "static-sveltia"
+        "static-sveltia",
+        "emdash"
       ],
       "versionSource": "package.json#/devDependencies/parse5",
       "reason": "Development-only structural HTML validation for migration tooling and portable static metadata/JSON-LD regression tests; no public runtime dependency."
@@ -280,6 +280,16 @@
       ],
       "versionSource": "package.json#/devDependencies/yaml",
       "reason": "Bounded read-only parsing of downstream pnpm lockfiles in EmDash site audits"
+    },
+    "saxes": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/saxes",
+      "reason": "Portable WordPress WXR parsing for one-time migration; no CMS runtime"
     }
   }
 }
