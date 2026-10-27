@@ -149,6 +149,8 @@ Cloudflare/D1/R2 integration remains a separately accepted scope, not a reason t
 provision resources for an ordinary contribution. Record checks actually run,
 failures and limitations; do not relabel historical receipts as fresh verification.
 
+Use real-site rehearsals to learn about the workflow as well as the product. Keep concise observations during an explicitly evaluated project and produce a phase-end retrospective with specific, prioritized improvements and acceptance criteria. Separate observations, temporary workarounds, proposed changes and fixes actually shipped. Questions requiring the user's decision belong directly in chat, in plain language with any necessary technical term explained; a report link alone does not ask them. Apply answered decisions to active project context and handoffs. Follow [project context](docs/project-context.md), retain identifiable evidence privately and upstream only sanitized reproductions. The retrospective does not authorize implementing its whole backlog.
+
 Contributions use the root [MIT license](LICENSE), with bundled materials'
 [third-party notices](THIRD_PARTY_NOTICES.md) retained. Participation follows the
 [Code of Conduct](CODE_OF_CONDUCT.md).
