@@ -4,14 +4,17 @@ import { pathToFileURL } from 'node:url';
 import { captureExporter, captureWXR, probeWordPress } from './wordpress-source.mjs';
 import { planStatic, applyStatic } from './wordpress-static.mjs';
 import { fact, readBundle, readBytes, jsonBytes, privateDirectory, writeBundle, WordPressMigrationError } from './wordpress-io.mjs';
+import { assessWordPress, assessSnapshot, assessmentMarkdown, assessmentReference } from './wordpress-assessment.mjs';
+import { wordpressAcceptance } from './wordpress-acceptance.mjs';
 
 const xml = value => String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const cdata = value => '<![CDATA[' + String(value ?? '').replace(/\]\]>/g, ']]]]><![CDATA[>') + ']]>';
 const element = (name, value) => '<' + name + '>' + xml(value) + '</' + name + '>';
 /** The native CMS remains the EmDash writer; the snapshot can supply a standard WXR input. */
-export function planEmdash({ capture, out, root = process.cwd() }) {
+export function planEmdash({ capture, out, root = process.cwd(), assessment }) {
   const bundle = readBundle(capture, 'baseline-wordpress-capture'), snapshot = JSON.parse(bundle.files.get('snapshot.json'));
   fact(snapshot.complete, 'Complete capture required for an EmDash handoff');
+  const reference = assessmentReference(assessment, bundle.sha256);
   const items = [], catalog = new Map();
   for (const record of snapshot.records) {
     const meta = Object.entries(record.meta ?? {}).map(([key, value]) => '<wp:postmeta>' + element('wp:meta_key', key) + '<wp:meta_value>' + cdata(typeof value === 'string' ? value : JSON.stringify(value)) + '</wp:meta_value></wp:postmeta>');
@@ -36,11 +39,16 @@ export function planEmdash({ capture, out, root = process.cwd() }) {
     snapshotFallback: 'Upload native-import.xml in the native wizard. This WXR handoff retains standard records, statuses, original HTML, terms, attachment URLs and raw postmeta. It does not provide full exporter parity for custom fields, locales, menus, settings or SEO.',
     media: 'The native importer downloads original source URLs again; the source must remain reachable. Captured local media is a recovery archive, not an automatic CMS upload.',
     sourceReview: 'Review actual mappings and source-specific unsupported behavior. No seed, SQL writes, production imports or publication is performed by this command.',
+    sourceExclusions: snapshot.sourceExclusions ?? [],
+    exclusionBoundary: 'Capture exclusions do not filter the live source endpoint. Apply equivalent scope decisions in native wizard mappings before importing through the preferred connection.',
   };
   const directory = privateDirectory(out, root);
   if (snapshot.source.kind === 'wxr' && bundle.files.has('source.xml')) handoff.snapshotFallback = 'Upload native-import.xml, which retains the original captured WXR bytes, in the native wizard. Source metadata fidelity remains subject to the native WXR importer contract.';
-  const receipt = writeBundle(directory, new Map([['native-import.xml', bundle.files.get('source.xml') ?? wxr], ['handoff.json', jsonBytes(handoff)]]), 'baseline-wordpress-emdash-handoff');
-  return { directory, sha256: receipt.sha256, records: snapshot.records.length, media: snapshot.media.length, next: handoff.importPath, exitCode: 0 };
+  const assessed = assessSnapshot(snapshot, { captureSHA256: bundle.sha256, ...(reference ? { designKit: reference.designKit } : {}) });
+  handoff.requiresContentRecovery = assessed.records.filter(record => record.elementor?.requiresRecovery && record.type !== 'elementor_library').map(record => record.key);
+  handoff.referenceOnly = assessed.records.filter(record => record.type === 'elementor_library').map(record => record.key);
+  const receipt = writeBundle(directory, new Map([['native-import.xml', bundle.files.get('source.xml') ?? wxr], ['handoff.json', jsonBytes(handoff)], ['assessment.json', jsonBytes(assessed)], ['assessment.md', assessmentMarkdown(assessed)]]), 'baseline-wordpress-emdash-handoff');
+  return { directory, sha256: receipt.sha256, records: snapshot.records.length, media: snapshot.media.length, contentRecovery: handoff.requiresContentRecovery.length, next: handoff.importPath, exitCode: handoff.requiresContentRecovery.length ? 1 : 0 };
 }
 
 const help = [
@@ -49,33 +57,48 @@ const help = [
   'npm run migration:wordpress -- capture --url https://wordpress.example --out <private-backup-dir>',
   '  Supply WORDPRESS_MIGRATION_KEY, or WORDPRESS_USER + WORDPRESS_APP_PASSWORD, in the environment.',
   '  --url may be omitted with a migration key. Repeated --media-origin https://cdn.example allows a media CDN.',
+  '  Explicit scoped capture: repeated --exclude-type <analyzed-post-type> --reason <scope-reason>. Exclusions remain reported.',
   'npm run migration:wordpress -- capture --wxr <export.xml> --out <private-backup-dir>',
+  'npm run migration:wordpress -- assess --capture <capture-dir> --out <new-assessment-dir> [--kit <kit.zip|template.json>]',
+  '  Or record --kit-decision skipped|unavailable --reason <concrete-reason>. Kit input is optional and private.',
   'npm run migration:wordpress -- plan --capture <capture-dir> --out <new-plan-dir> [--mapping <mapping.json>]',
   '  The installed target profile selects static conversion or the native EmDash handoff.',
+  '  Add --assessment <assessment-dir> to bind previously reviewed Elementor kit evidence.',
   'npm run migration:wordpress -- apply --stage <static-plan-dir> [--review <review.json>]',
+  'npm run migration:wordpress -- acceptance --capture <capture-dir> [--stage <static-plan-dir>] --url <target-origin> --production-origin <public-origin> --revision <target-revision> --out <new-dir> [--mapping <acceptance-mapping.json>]',
+  'npm run migration:verify -- --manifest <acceptance-dir>/acceptance.json --scope full',
+  '  Use repeated --asset-origin <origin> on acceptance when the target deliberately uses an asset CDN.',
   '  Plan and capture directories must be new directories under .baseline/backups or .emdash/backups.',
   'See docs/wordpress-migration.md. All steps are local tooling; apply never publishes or deploys.',
 ].join('\n');
 function argumentsOf(argv) {
   const [command, ...rest] = argv;
-  fact(['probe', 'capture', 'plan', 'apply'].includes(command), 'Choose probe, capture, plan or apply; use --help for usage');
-  const options = { command, mediaOrigins: [] };
+  fact(['probe', 'capture', 'assess', 'plan', 'apply', 'acceptance'].includes(command), 'Choose probe, capture, assess, plan, apply or acceptance; use --help for usage');
+  const options = { command, mediaOrigins: [], assetOrigins: [], excludeTypes: [] };
   for (let index = 0; index < rest.length; index += 2) {
     const flag = rest[index], value = rest[index + 1];
-    fact(['--url', '--wxr', '--out', '--capture', '--mapping', '--stage', '--review', '--media-origin'].includes(flag) && value && !value.startsWith('--'), 'Unknown or missing WordPress migration argument');
+    fact(['--url', '--wxr', '--out', '--capture', '--mapping', '--stage', '--review', '--media-origin', '--asset-origin', '--exclude-type', '--kit', '--kit-decision', '--reason', '--assessment', '--production-origin', '--revision'].includes(flag) && value && !value.startsWith('--'), 'Unknown or missing WordPress migration argument');
     if (flag === '--media-origin') options.mediaOrigins.push(value);
+    else if (flag === '--asset-origin') options.assetOrigins.push(value);
+    else if (flag === '--exclude-type') options.excludeTypes.push(value);
     else { const key = flag.slice(2); fact(!Object.hasOwn(options, key), 'Duplicate WordPress migration argument'); options[key] = value; }
   }
-  const allowed = { probe: ['url'], capture: ['url', 'wxr', 'out', 'mediaOrigins'], plan: ['capture', 'out', 'mapping'], apply: ['stage', 'review'] }[command];
-  for (const key of Object.keys(options)) fact(key === 'command' || key === 'mediaOrigins' && !options.mediaOrigins.length || allowed.includes(key), 'Argument does not apply to the selected operation');
+  const allowed = { probe: ['url'], capture: ['url', 'wxr', 'out', 'mediaOrigins', 'excludeTypes', 'reason'], assess: ['capture', 'out', 'kit', 'kit-decision', 'reason', 'stage'], plan: ['capture', 'out', 'mapping', 'assessment'], apply: ['stage', 'review'], acceptance: ['capture', 'out', 'stage', 'url', 'production-origin', 'revision', 'mapping', 'assetOrigins'] }[command];
+  for (const key of Object.keys(options)) fact(key === 'command' || ['mediaOrigins', 'assetOrigins', 'excludeTypes'].includes(key) && !options[key].length || allowed.includes(key), 'Argument does not apply to the selected operation');
   return options;
 }
 export async function runWordPress(argv, { root = process.cwd(), env = process.env, request } = {}) {
   if (argv.length === 1 && argv[0] === '--help') return { help, exitCode: 0 };
   const options = argumentsOf(argv);
   if (options.command === 'probe') { fact(options.url, 'Probe needs --url'); return { ...await probeWordPress(options.url, { request }), exitCode: 0 }; }
+  if (options.command === 'assess') { fact(options.capture && options.out, 'Assessment needs --capture and --out'); return assessWordPress({ ...options, root, kitDecision: options['kit-decision'] }); }
+  if (options.command === 'acceptance') {
+    fact(options.capture && options.out, 'Acceptance needs --capture and --out');
+    return wordpressAcceptance({ ...options, root, productionOrigin: options['production-origin'], mapping: options.mapping ? JSON.parse(readBytes(options.mapping)) : {} });
+  }
   if (options.command === 'capture') {
     fact(options.out && !(options.wxr && options.url), 'Capture needs --out and exactly one source');
+    fact(!options.wxr || !options.excludeTypes.length && !options.reason, 'WXR capture retains original scope; type exclusions apply only to exporter capture');
     const result = options.wxr ? await captureWXR({ ...options, root }, { request }) : await captureExporter({ ...options, root, env }, { request });
     return { directory: result.directory, sha256: result.sha256, records: result.records, media: result.media, failures: result.failures, exitCode: result.exitCode };
   }

@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { parseTree } from 'jsonc-parser';
-import { argumentsOf, bytesOf, newDirectory, isMain } from './infrastructure-io.mjs';
+import { argumentsOf, bytesOf, newDirectory, isMain } from './migration-local.mjs';
+import { backupRoot } from './wordpress-io.mjs';
 import { sha256, validateManifest, validateObservations } from '../standards/schemas/migration-acceptance.mjs';
 import { isArtifact } from '../standards/schemas/migration-acceptance.mjs';
 import { readContentInventory, reconcileContent, contentEvidence } from './migration-content.mjs';
@@ -16,6 +17,7 @@ export const HELP = `Usage: npm run migration:verify -- --manifest <file> [optio
   --scope url|full       Default: full. URL-only never certifies content/editor parity
   --format json|markdown|both  Default: both. Files in --out; stdout JSON unless markdown
   --out <new-directory>  Default: .emdash/migration-acceptance/<unique-run-id>/
+                        Static profiles use .baseline/backups/migration-acceptance/.
   --help                 Show usage; cannot be combined with other flags
 
 HTTP collection is anonymous, bounded and limited to manifest-declared origins.
@@ -80,7 +82,9 @@ export async function runMigration(options, { signal } = {}) {
   if (observations && validateObservations(observations, manifest).length) throw Error('Observations invalid or not bound to this manifest/capture/revision');
   const generatedAt = new Date().toISOString(), runId = 'run-' + randomUUID();
   // Reserve a new output before making any request; an existing --out never crawls.
-  const out = newDirectory(options.out ?? path.join('.emdash/migration-acceptance', runId));
+  const backups = backupRoot(process.cwd()), state = path.dirname(backups);
+  const resultRoot = path.basename(state) === '.baseline' ? backups : state;
+  const out = newDirectory(options.out ?? path.join(resultRoot, 'migration-acceptance', runId));
   if (!observations) observations = await collectMigrationHTTP(manifest, { directory: out, signal });
   let verifyArtifact = localEvidenceVerifier(options.observations ? path.dirname(path.resolve(options.observations)) : out);
   if (manifest.manifestVersion === 3 && options.scope === 'full') {

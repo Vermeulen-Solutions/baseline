@@ -63,7 +63,7 @@ Doctor accepts `-- --json`; use `npm --silent run doctor -- --json` for JSON-onl
 
 ## WordPress source capture and conversion
 
-`npm run migration:wordpress -- --help` is available on all new profiles. Use `probe` or `capture` for the first-party WordPress exporter/WXR source, `plan` for the installed profile's output, and `apply` for a reviewed static plan. Supply migration credentials privately through the environment. See [dashboard migration](wordpress-migration.md) for output directories, conflict preservation, media handling, native EmDash handoff and existing-site adoption.
+`npm run migration:wordpress -- --help` is available on all new profiles. Use `probe` or `capture` for the first-party WordPress exporter/WXR source, `assess` for source/field coverage and optional Elementor kit inspection, `plan` for the installed profile's output, and `apply` for a reviewed static plan. `acceptance` generates a reviewed manifest/checklist for the shared `migration:verify` engine. Supply migration credentials privately through the environment. See [dashboard migration](wordpress-migration.md) for output directories, conflict preservation, media handling, native EmDash handoff and existing-site adoption.
 
 ## Image preparation commands
 
@@ -83,7 +83,6 @@ These commands belong to the root EmDash tooling, not generated static sites.
 | `npm run check:schema-budget` | Measure physical collection width before build/typecheck |
 | `npm run db:diff` | Compare offline SQLite/D1 schema parity and column budgets |
 | `npm run media:migrate-wp` | Prepare/import WordPress media and stage media storage operations |
-| `npm run migration:verify -- --manifest <file>` | Collect bounded HTTP observations and reconcile offline inventories |
 | `npm run rehearse:importer` | Rehearse WordPress importer fidelity against synthetic fixtures |
 
 Read the [database workflow](database-workflow.md), [image delivery](image-delivery.md), [migration acceptance contract](migration-acceptance.md) and [importer fidelity matrix](importer-fidelity-matrix.md) before using their operations. Database/media writes and production migration remain separately scoped tasks. CMS content API/MCP setup and scoped local-token help are documented in [agent configuration](agent-documentation.md).

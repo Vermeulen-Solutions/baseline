@@ -77,18 +77,23 @@ function recordOf(item, origin) {
   };
 }
 
-export async function captureExporter({ url, env, out, root = process.cwd(), mediaOrigins = [] }, { request } = {}) {
+export async function captureExporter({ url, env, out, root = process.cwd(), mediaOrigins = [], excludeTypes = [], reason }, { request } = {}) {
   const { site, authorization } = connection({ url, env });
   const api = exporterAPI({ site, authorization, request });
   const probe = await api('probe', {}, false);
   fact(/^1\.(?:[2-9]|\d{2,})\./.test(probe.emdash_exporter ?? ''), 'Use EmDash Exporter 1.2.0 or later');
   const analysis = await api('analyze');
   fact(Array.isArray(analysis.post_types) && analysis.post_types.length <= 100 && Number.isInteger(analysis.attachments?.count), 'Invalid exporter analysis');
-  const records = [];
+  fact(Array.isArray(excludeTypes) && new Set(excludeTypes).size === excludeTypes.length && excludeTypes.every(name => name !== 'attachment' && analysis.post_types.some(type => type.name === name)), 'Excluded post types must be unique names from source analysis');
+  fact(!excludeTypes.length || typeof reason === 'string' && reason.trim().length >= 5, 'Excluding source types requires a concrete scope reason');
+  const records = [], sourceCoverage = [], sourceFailures = [], sourceExclusions = [];
   for (const type of analysis.post_types) {
     fact(/^[a-zA-Z0-9_-]+$/.test(type.name) && Number.isInteger(type.total), 'Invalid source post type');
     if (type.name === 'attachment') continue;
-    const items = await pages(api, 'content', { post_type: type.name, status: 'any' }, type.total);
+    if (excludeTypes.includes(type.name)) { sourceExclusions.push({ type: type.name, analyzed: type.total, reason }); sourceCoverage.push({ type: type.name, analyzed: type.total, captured: 0, matches: false, disposition: 'excluded', reason }); continue; }
+    const items = await pages(api, 'content', { post_type: type.name, status: 'any' });
+    sourceCoverage.push({ type: type.name, analyzed: type.total, captured: items.length, matches: type.total === items.length });
+    if (type.total !== items.length) sourceFailures.push({ code: 'source-count-mismatch', type: type.name, analyzed: type.total, captured: items.length, message: 'Exporter content differs from analysis. Review source query filters/exporter behavior; this partial capture cannot be applied.' });
     records.push(...items.map(item => recordOf(item, site.origin)));
     fact(records.length <= WP_LIMITS.items, 'Content item limit exceeded');
   }
@@ -99,8 +104,8 @@ export async function captureExporter({ url, env, out, root = process.cwd(), med
   extras.comments = await pages(api, 'comments', {});
   // Reconcile counts after collection; this cannot establish a transactional source snapshot.
   const after = await api('analyze');
-  fact(JSON.stringify(after.post_types?.map(type => [type.name, type.total, type.by_status])) === JSON.stringify(analysis.post_types.map(type => [type.name, type.total, type.by_status])) && after.attachments?.count === analysis.attachments.count, 'WordPress counts changed while capturing; retry after a source freeze');
-  return saveCapture({ version: 1, source: { kind: 'exporter', url: site.href, exporterVersion: probe.emdash_exporter }, capturedAt: new Date().toISOString(), records, media, analysis, extras }, { out, root, mediaOrigins, request });
+  fact(JSON.stringify(after.post_types?.filter(type => !excludeTypes.includes(type.name)).map(type => [type.name, type.total, type.by_status])) === JSON.stringify(analysis.post_types.filter(type => !excludeTypes.includes(type.name)).map(type => [type.name, type.total, type.by_status])) && after.attachments?.count === analysis.attachments.count, 'WordPress counts changed while capturing; retry after a source freeze');
+  return saveCapture({ version: 1, source: { kind: 'exporter', url: site.href, exporterVersion: probe.emdash_exporter }, capturedAt: new Date().toISOString(), records, media, analysis, extras, sourceCoverage, sourceFailures, sourceExclusions }, { out, root, mediaOrigins, request });
 }
 
 /** WXR parsing retains raw postmeta strings. It never evaluates PHP or expands entities/DTDs. */
@@ -159,7 +164,7 @@ export async function saveCapture(snapshot, { out, root = process.cwd(), mediaOr
   const directory = privateDirectory(out, root), source = new URL(snapshot.source.url);
   const allowedOrigins = new Set([source.origin, ...mediaOrigins.map(value => sourceURL(value).origin)]);
   const get = requester({ request, allowedOrigins, sourceOrigin: source.origin });
-  const files = new Map(sourceFiles), failures = []; let total = 0;
+  const files = new Map(sourceFiles), failures = [...(snapshot.sourceFailures ?? [])]; let total = 0;
   fact(snapshot.media.length <= WP_LIMITS.items, 'Media item limit exceeded');
   const seen = new Set();
   for (const item of snapshot.media) {

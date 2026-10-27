@@ -73,7 +73,20 @@
     "scripts/wordpress-static.mjs",
     "scripts/wordpress-migrate.mjs",
     "tests/wordpress-migration.test.mjs",
-    "docs/wordpress-migration.md"
+    "docs/wordpress-migration.md",
+    "scripts/wordpress-elementor.mjs",
+    "scripts/wordpress-assessment.mjs",
+    "scripts/wordpress-acceptance.mjs",
+    "scripts/migration-local.mjs",
+    "scripts/migration-verify.mjs",
+    "scripts/migration-http.mjs",
+    "scripts/migration-html.mjs",
+    "scripts/migration-report.mjs",
+    "scripts/migration-content.mjs",
+    "standards/schemas/migration-acceptance.mjs",
+    "standards/schemas/migration-content.mjs",
+    "docs/migration-acceptance.md",
+    "docs/migration-content-inventories.md"
   ],
   "packages": {
     "dependencies": [
@@ -96,7 +109,9 @@
       "postcss-selector-parser",
       "astro-eslint-parser",
       "parse5",
-      "saxes"
+      "saxes",
+      "jsonc-parser",
+      "parse-srcset"
     ]
   },
   "scripts": [
@@ -120,7 +135,8 @@
     "baseline:inspect",
     "media:prepare",
     "design:canvas-kit",
-    "migration:wordpress"
+    "migration:wordpress",
+    "migration:verify"
   ],
   "scriptOverrides": {
     "lint": "npm run lint:scripts && npm run lint:templates"

@@ -58,7 +58,7 @@ migration tooling, schema-budget npm hooks, server start commands, CMS skills,
 CMS endpoints, React and server adapters. Shared scripts that still assume these
 are classified `adapt-before-static`, not silently treated as portable.
 
-Portable `migration:wordpress` source capture and static conversion are explicitly shared, with `parse5` and `saxes` as development-only parsers. This is separate from the omitted CMS ingestion/database tools; see [dashboard migration](../docs/wordpress-migration.md).
+Portable `migration:wordpress` source capture, Elementor/source assessment and static conversion are explicitly shared alongside `migration:verify` and its HTTP/content-evidence contracts. Their `parse5`, `saxes`, `parse-srcset` and `jsonc-parser` parsers are development-only. The verifier's local I/O has no hosting/database configuration imports; CMS ingestion/database tools remain omitted. See [dashboard migration](../docs/wordpress-migration.md).
 
 ## Presentation boundary
 

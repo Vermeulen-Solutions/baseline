@@ -68,7 +68,7 @@ async function main() {
         gate.push({ path: relative, reason: 'Exact synthetic WordPress migration/draft-filter fixture in the owned generated verification project only; no client art direction.', sha256: createHash('sha256').update((await fs.readFile(path.join(root, relative))).toString('utf8').replaceAll('\r\n', '\n')).digest('hex') });
       }
       await fs.writeFile(gatePath, JSON.stringify(gate, null, 2) + '\n');
-      for (const args of [['install', '--no-audit', '--no-fund'], ['ci', '--no-audit', '--no-fund'], ['run', 'media:prepare', '--', '--source', 'src/assets/pilot-grid.jpg', '--out', '.baseline/backups/preparation-smoke'], ['run', 'verify'], ['run', 'build'], ['run', 'check:dev-tools'], ['run', 'fixtures:build']]) {
+      for (const args of [['install', '--no-audit', '--no-fund'], ['ci', '--no-audit', '--no-fund'], ['run', 'migration:wordpress', '--', 'assess', '--capture', '.baseline/backups/wp-capture', '--out', '.baseline/backups/wp-assessment'], ['run', 'migration:verify', '--', '--help'], ['run', 'media:prepare', '--', '--source', 'src/assets/pilot-grid.jpg', '--out', '.baseline/backups/preparation-smoke'], ['run', 'verify'], ['run', 'build'], ['run', 'check:dev-tools'], ['run', 'fixtures:build']]) {
         console.log(`[${profile}] npm ${args.join(' ')}`);
         const result = spawnNpmSync(args, { cwd: root, stdio: 'inherit', timeout: 300000, env: { ...process.env, SITE_URL: fixtureSite } });
         if (result.error) throw result.error;

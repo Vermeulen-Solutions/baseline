@@ -121,10 +121,12 @@
     "jsonc-parser": {
       "section": "devDependencies",
       "profiles": [
+        "static",
+        "static-sveltia",
         "emdash"
       ],
       "versionSource": "package.json#/devDependencies/jsonc-parser",
-      "reason": "EmDash runtime or infrastructure/audit tooling"
+      "reason": "Development-only portable migration acceptance parsing; no CMS or public runtime dependency."
     },
     "parse5": {
       "section": "devDependencies",
@@ -139,10 +141,12 @@
     "parse-srcset": {
       "section": "devDependencies",
       "profiles": [
+        "static",
+        "static-sveltia",
         "emdash"
       ],
       "versionSource": "package.json#/devDependencies/parse-srcset",
-      "reason": "Root migration HTTP tooling; responsive candidate parsing, not shipped to generated static projects"
+      "reason": "Development-only portable migration acceptance parsing; no CMS or public runtime dependency."
     },
     "sharp": {
       "section": "devDependencies",

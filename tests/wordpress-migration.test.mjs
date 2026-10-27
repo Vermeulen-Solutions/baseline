@@ -8,12 +8,38 @@ import { requester, publicAddress, publicRequest, readBundle, digest } from '../
 import { toMarkdown } from '../scripts/wordpress-markdown.mjs';
 import { planStatic, applyStatic, registerCollection, routePath, sveltiaCollection } from '../scripts/wordpress-static.mjs';
 import { planEmdash, runWordPress } from '../scripts/wordpress-migrate.mjs';
+import { analyzeElementor, kitJSONFiles, readElementorKit } from '../scripts/wordpress-elementor.mjs';
+import { assessWordPress } from '../scripts/wordpress-assessment.mjs';
+import { wordpressAcceptance } from '../scripts/wordpress-acceptance.mjs';
+import { collectMigrationHTTP } from '../scripts/migration-http.mjs';
+import { runMigration } from '../scripts/migration-verify.mjs';
+import { validateManifest } from '../standards/schemas/migration-acceptance.mjs';
+import { crc32, deflateRawSync } from 'node:zlib';
 
 const origin = 'https://wordpress.example.test';
 const key = 'em1.' + Buffer.from(JSON.stringify({ v: 1, url: origin, user: 'migration-editor', pass: 'private-application-password' })).toString('base64url');
 const record = (id = 1, extra = {}) => ({ key: 'post:' + id, id, type: 'post', status: 'publish', slug: 'article-' + id, title: 'A source title', html: '<p>Source <strong>body</strong>.</p>', excerpt: 'A source description.', permalink: origin + '/article-' + id + '/', date: '2026-10-01T10:00:00', modified: null, author: 'Source author', featuredMedia: null, locale: null, translationGroup: null, meta: {}, taxonomies: {}, ...extra });
 const response = (value, status = 200, type = 'application/json') => ({ status, headers: { 'content-type': type }, body: Buffer.isBuffer(value) ? value : Buffer.from(JSON.stringify(value)) });
 const page = items => ({ page: 1, pages: items.length ? 1 : 0, total: items.length, per_page: 100, items });
+const elementorData = [
+  { id: 'container', elType: 'container', settings: { padding_mobile: { top: '10' }, __globals__: { color: 'globals/colors?id=accent' } }, elements: [
+    { id: 'heading', elType: 'widget', widgetType: 'heading', settings: { title: 'Recovered source heading', header_size: 'h2' } },
+    { id: 'copy', elType: 'widget', widgetType: 'text-editor', settings: { editor: '<p>Copy from the source widget.</p>' } },
+    { id: 'image', elType: 'widget', widgetType: 'image', settings: { image: { id: 14, url: origin + '/wp-content/uploads/source.jpg' } } },
+    { id: 'query', elType: 'widget', widgetType: 'addon-post-grid', settings: { __dynamic__: { posts: 'dynamic data' }, template_id: 500 } },
+  ] },
+];
+function zip(entries) {
+  const local = [], central = []; let offset = 0;
+  for (const [name, raw] of entries) {
+    const data = Buffer.from(raw), packed = deflateRawSync(data), filename = Buffer.from(name), header = Buffer.alloc(30), directory = Buffer.alloc(46);
+    header.writeUInt32LE(0x04034b50); header.writeUInt16LE(20, 4); header.writeUInt16LE(8, 8); header.writeUInt32LE(crc32(data), 14); header.writeUInt32LE(packed.length, 18); header.writeUInt32LE(data.length, 22); header.writeUInt16LE(filename.length, 26);
+    directory.writeUInt32LE(0x02014b50); directory.writeUInt16LE(20, 6); directory.writeUInt16LE(8, 10); directory.writeUInt32LE(crc32(data), 16); directory.writeUInt32LE(packed.length, 20); directory.writeUInt32LE(data.length, 24); directory.writeUInt16LE(filename.length, 28); directory.writeUInt32LE(offset, 42);
+    local.push(header, filename, packed); central.push(directory, filename); offset += header.length + filename.length + packed.length;
+  }
+  const tail = Buffer.alloc(22), index = Buffer.concat(central); tail.writeUInt32LE(0x06054b50); tail.writeUInt16LE(entries.length, 8); tail.writeUInt16LE(entries.length, 10); tail.writeUInt32LE(index.length, 12); tail.writeUInt32LE(offset, 16);
+  return Buffer.concat([...local, index, tail]);
+}
 async function fixture(run, profile = 'static') {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-wordpress-test-'));
   fs.writeFileSync(path.join(root, '.gitignore'), '.baseline/backups/\n');
@@ -94,6 +120,26 @@ test('incomplete exporter pagination refuses instead of silently omitting conten
     return response({ page: 1, pages: 1, total: 2, items: [] });
   };
   await assert.rejects(captureExporter({ env: { WORDPRESS_MIGRATION_KEY: key }, out: out(), root }, { request }), /incomplete/);
+}));
+
+test('source count mismatches stay incomplete while explicit type deferrals preserve their scope', () => fixture(async ({ root, out }) => {
+  const requests = [];
+  const request = async url => {
+    const endpoint = url.pathname.split('/').at(-1); requests.push(endpoint + ':' + (url.searchParams.get('post_type') ?? ''));
+    if (endpoint === 'probe') return response({ emdash_exporter: '1.2.0' });
+    if (endpoint === 'analyze') return response({ post_types: [{ name: 'post', total: 1 }, { name: 'matchs', total: 22 }], attachments: { count: 0 } });
+    if (endpoint === 'content') { const type = url.searchParams.get('post_type'); return response(page([{ id: 1, post_type: type, title: 'Source title', status: 'publish', content: '<p>Source body</p>', permalink: origin + '/' + type + '/' }])); }
+    return response(page([]));
+  };
+  const incomplete = await captureExporter({ env: { WORDPRESS_MIGRATION_KEY: key }, root, out: out() }, { request });
+  assert.equal(incomplete.exitCode, 1); assert.equal(incomplete.failures[0].code, 'source-count-mismatch');
+  assert.throws(() => planStatic({ capture: incomplete.directory, root, out: out() }), /Complete capture/);
+  requests.length = 0;
+  const scoped = await captureExporter({ env: { WORDPRESS_MIGRATION_KEY: key }, root, out: out(), excludeTypes: ['matchs'], reason: 'External integration explicitly deferred by the owner.' }, { request });
+  assert.equal(scoped.exitCode, 0); assert.equal(requests.includes('content:matchs'), false);
+  const snapshot = JSON.parse(readBundle(scoped.directory, 'baseline-wordpress-capture').files.get('snapshot.json'));
+  assert.equal(snapshot.sourceExclusions[0].analyzed, 22); assert.equal(snapshot.complete, true); assert.equal(snapshot.records.length, 1);
+  await assert.rejects(captureExporter({ env: { WORDPRESS_MIGRATION_KEY: key }, root, out: out(), excludeTypes: ['matchs'] }, { request }), /reason/);
 }));
 
 const wxr = '<?xml version="1.0"?><rss xmlns:wp="http://wordpress.org/export/1.2/" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Source</title><link>' + origin + '</link><item><title>A &amp; B</title><link>' + origin + '/article/</link><wp:post_id>1</wp:post_id><wp:post_type>post</wp:post_type><wp:status>publish</wp:status><wp:post_name>article</wp:post_name><content:encoded><![CDATA[<p>Article body.</p>]]></content:encoded><wp:postmeta><wp:meta_key>custom</wp:meta_key><wp:meta_value><![CDATA[a:1:{untrusted PHP}]]></wp:meta_value></wp:postmeta></item></channel></rss>';
@@ -240,3 +286,91 @@ test('the distributed CLI rejects stray secrets/flags and provides a discoverabl
   const result = await runWordPress(['--help']);
   assert.match(result.help, /WORDPRESS_MIGRATION_KEY/);
 });
+
+test('Elementor inventory recovers copy and references without executing dynamic or custom widgets', () => {
+  const result = analyzeElementor(record(1, { html: '', meta: { _elementor_data: JSON.stringify(elementorData) } }));
+  assert.equal(result.data, 'available'); assert.equal(result.requiresRecovery, true);
+  assert.ok(result.candidateHTML.includes('Recovered source heading'));
+  assert.equal(result.media[0].id, 14); assert.equal(result.nodes[0].responsive.padding_mobile.top, '10');
+  assert.equal(result.templateReferences[0].id, '500'); assert.equal(result.unsupported[0].widget, 'addon-post-grid');
+  assert.equal(result.dynamic.length, 1); assert.ok(!result.candidateHTML.includes('dynamic data'));
+  assert.equal(analyzeElementor(record(1, { meta: { _elementor_data: '{broken' } })).requiresRecovery, true);
+  assert.equal(analyzeElementor(record()), null);
+  assert.equal(analyzeElementor(record(1, { html: '<h2>Present heading</h2>', meta: { _elementor_data: [{ elType: 'widget', widgetType: 'heading', settings: { title: 'Present heading' } }] } })).requiresRecovery, false);
+});
+
+test('kit reader inspects bounded JSON without extraction and rejects traversal, forged headers and corruption', () => {
+  const bytes = zip([['content/10.json', JSON.stringify({ content: elementorData, title: 'Source template' })], ['site-settings.json', '{"colors":["#123456"]}'], ['assets/photo.jpg', 'do not extract']]);
+  const files = kitJSONFiles(bytes); assert.equal(files.size, 2); assert.equal(files.has('assets/photo.jpg'), false);
+  assert.throws(() => kitJSONFiles(zip([['../escape.json', '{}']])), /Unsafe/);
+  const changed = Buffer.from(bytes); changed[44] ^= 255; assert.throws(() => kitJSONFiles(changed));
+  const excessive = zip([['entry.json', '{}']]); excessive.writeUInt32LE(20 * 1024 * 1024, excessive.indexOf(Buffer.from([0x50, 0x4b, 0x01, 0x02])) + 24);
+  assert.throws(() => kitJSONFiles(excessive), /bounds/);
+  const linked = zip([['link.json', '{}']]); linked.writeUInt32LE((0o120777 << 16) >>> 0, linked.indexOf(Buffer.from([0x50, 0x4b, 0x01, 0x02])) + 38);
+  assert.throws(() => kitJSONFiles(linked), /linked/);
+});
+
+test('source assessments retain optional kit bytes privately, bind captures and expose field dispositions', () => fixture(async ({ root, out, capture }) => {
+  const source = await capture([record(1, { meta: { _elementor_data: elementorData }, taxonomies: { category: [{ id: 3, slug: 'news', name: 'News' }] } }), record(2, { status: 'private' })]);
+  const kitFile = path.join(root, 'reference.zip'), bytes = zip([['content/10.json', JSON.stringify({ content: elementorData, title: 'Source template' })], ['site-settings.json', '{"colors":["#123456"]}']]);
+  fs.writeFileSync(kitFile, bytes); assert.equal(readElementorKit(kitFile).analysis.documents.length, 1);
+  const result = assessWordPress({ capture: source.directory, root, out: out(), kit: kitFile });
+  const bundle = readBundle(result.directory, 'baseline-wordpress-assessment'), report = JSON.parse(bundle.files.get('assessment.json'));
+  assert.equal(report.profile, 'static'); assert.equal(report.designKit.status, 'supplied'); assert.deepEqual(bundle.files.get('kit/source.zip'), bytes);
+  assert.equal(report.summary.elementorPages, 1); assert.equal(report.records[1].disposition, 'retained-private');
+  assert.ok(report.records[0].fields.some(field => field.name === 'taxonomies' && field.disposition === 'needs-conversion'));
+  assert.throws(() => assessWordPress({ capture: source.directory, root, out: out(), kitDecision: 'skipped' }), /reason/);
+  const skipped = assessWordPress({ capture: source.directory, root, out: out(), kitDecision: 'skipped', reason: 'The existing design will be replaced.' });
+  assert.equal(JSON.parse(readBundle(skipped.directory, 'baseline-wordpress-assessment').files.get('assessment.json')).designKit.status, 'skipped');
+  const other = await capture([record(3)]); assert.throws(() => planStatic({ capture: other.directory, root, out: out(), assessment: result.directory }), /another capture/);
+}));
+
+test('static planning blocks missing Elementor body even with review and makes taxonomy omissions explicit', () => fixture(async ({ root, out, capture }) => {
+  const source = await capture([record(1, { html: '', meta: { _elementor_data: elementorData } })]);
+  const plan = planStatic({ capture: source.directory, root, out: out() });
+  assert.ok(plan.findings.some(item => item.code === 'elementor-content' && item.severity === 'blocked'));
+  assert.throws(() => applyStatic({ stage: plan.directory, root, review: { planSHA256: plan.sha256, findings: plan.findings.map(finding => ({ id: finding.id, reason: 'This cannot waive missing source content.' })) } }), /blocks/);
+  const report = JSON.parse(readBundle(plan.directory, 'baseline-wordpress-static-plan').files.get('assessment.json'));
+  assert.equal(report.records[0].disposition, 'planned'); assert.equal(report.records[0].fields[0].disposition, 'needs-conversion');
+  const taxed = await capture([record(2, { taxonomies: { post_tag: [{ slug: 'tag', name: 'Tag' }] } })]);
+  assert.ok(planStatic({ capture: taxed.directory, root, out: out() }).findings.some(item => item.code === 'taxonomy-model'));
+  const templates = await capture([record(), record(8, { key: 'elementor_library:8', type: 'elementor_library', permalink: origin + '/?elementor_library=8', meta: { _elementor_data: elementorData } })]);
+  const templatePlan = planStatic({ capture: templates.directory, root, out: out() });
+  assert.equal(templatePlan.routes, 1);
+  assert.equal(JSON.parse(readBundle(templatePlan.directory, 'baseline-wordpress-static-plan').files.get('plan.json')).exclusions[0].key, 'elementor_library:8');
+}));
+
+test('generated acceptance binds mappings, redirects and private routes while keeping full parity unverified', () => fixture(async ({ root, out, capture }) => {
+  const source = await capture([record(), record(2, { status: 'private' })]);
+  const plan = planStatic({ capture: source.directory, root, out: out(), mapping: { version: 1, records: { 'post:1': { path: '/news/article/' } } } });
+  applyStatic({ stage: plan.directory, root });
+  const acceptance = wordpressAcceptance({ capture: source.directory, stage: plan.directory, root, out: out(), url: 'https://preview.example.test', productionOrigin: 'https://production.example.test', revision: 'local-test-1' });
+  const bundle = readBundle(acceptance.directory, 'baseline-wordpress-acceptance'), manifest = JSON.parse(bundle.files.get('acceptance.json'));
+  assert.deepEqual(validateManifest(manifest), []); assert.equal(manifest.urls[0].disposition, 'redirected');
+  assert.deepEqual(manifest.urls[0].expected.redirects, [{ status: 301, path: '/news/article/' }]);
+  assert.equal(manifest.urls[1].expected.status, 404);
+  const files = JSON.parse(bundle.files.get('planned-file-observations.json')); assert.ok(files.files.every(file => file.state === 'matches-plan'));
+  const evidence = out(); fs.mkdirSync(evidence, { recursive: true });
+  await collectMigrationHTTP(manifest, { directory: evidence, request: async (raw, options) => {
+    const url = new URL(raw);
+    if (url.pathname === '/article-1/') return new Response(null, { status: 301, headers: { location: '/news/article/' } });
+    if (url.pathname === '/article-2/') return new Response('Not found', { status: 404, headers: { 'content-type': 'text/html' } });
+    assert.equal(options.method, 'GET');
+    return new Response('<html><head><title>Article</title><meta name="description" content="A source description."><link rel="canonical" href="https://production.example.test/news/article/"></head><body>Source body.</body></html>', { headers: { 'content-type': 'text/html' } });
+  } });
+  const options = { manifest: path.join(acceptance.directory, 'acceptance.json'), observations: path.join(evidence, 'observations.json'), out: out(), scope: 'full', format: 'both' };
+  const verified = await runMigration(options); assert.equal(verified.report.exitCode, 2);
+  const urlOnly = await runMigration({ ...options, out: out(), scope: 'url' }); assert.equal(urlOnly.report.exitCode, 0);
+  const beforeCwd = process.cwd();
+  try {
+    process.chdir(root);
+    const defaults = await runMigration({ ...options, out: undefined, scope: 'url' });
+    assert.ok(defaults.out.startsWith(path.join(root, '.baseline/backups/migration-acceptance') + path.sep), 'Default static evidence stays under the existing ignored backup root');
+  } finally { process.chdir(beforeCwd); }
+  const changedSource = await capture([record(5)]);
+  assert.throws(() => wordpressAcceptance({ capture: changedSource.directory, stage: plan.directory, root, out: out(), url: 'https://preview.example.test', productionOrigin: 'https://production.example.test', revision: 'test' }), /differ/);
+  const custom = await capture([record(), record(4, { key: 'elementor_library:4', type: 'elementor_library' }), record(5, { key: 'custom_type:5', type: 'custom_type' })]);
+  const customResult = wordpressAcceptance({ capture: custom.directory, root, out: out(), url: 'https://preview.example.test', productionOrigin: 'https://production.example.test', revision: 'test' });
+  const customManifest = JSON.parse(readBundle(customResult.directory, 'baseline-wordpress-acceptance').files.get('acceptance.json'));
+  assert.deepEqual(validateManifest(customManifest), []); assert.equal(customManifest.urls[1].disposition, 'excluded');
+}));

@@ -4,6 +4,8 @@ import ts from 'typescript';
 import { fact, noLinks, inside, safeKey, readBytes, readBundle, privateDirectory, writeBundle, jsonBytes, digest, backupRoot, createFile } from './wordpress-io.mjs';
 import { toMarkdown, plainText } from './wordpress-markdown.mjs';
 import { prepareImages } from './prepare-images.mjs';
+import { analyzeElementor } from './wordpress-elementor.mjs';
+import { assessSnapshot, assessmentMarkdown, assessmentReference } from './wordpress-assessment.mjs';
 
 export const collectionModule = [
   "import { defineCollection } from 'astro:content';",
@@ -110,10 +112,11 @@ function routeConflicts(root, target, pathname) {
   }
 }
 
-export function planStatic({ capture, out, root = process.cwd(), mapping = {} }) {
+export function planStatic({ capture, out, root = process.cwd(), mapping = {}, assessment }) {
   root = noLinks(root);
   const profile = staticProfile(root), source = readBundle(capture, 'baseline-wordpress-capture');
   const snapshot = JSON.parse(source.files.get('snapshot.json'));
+  const sourceAssessment = assessmentReference(assessment, source.sha256);
   fact(snapshot.version === 1 && snapshot.complete && Array.isArray(snapshot.records) && Array.isArray(snapshot.media), 'Complete capture required before static conversion');
   fact(mapping && (!Object.keys(mapping).length || mapping.version === 1) && Object.keys(mapping).every(key => ['version', 'records', 'media'].includes(key)), 'Unsupported mapping document');
   for (const key of ['records', 'media']) fact(mapping[key] === undefined || mapping[key] && typeof mapping[key] === 'object' && !Array.isArray(mapping[key]), 'Mapping groups must be objects');
@@ -153,6 +156,7 @@ export function planStatic({ capture, out, root = process.cwd(), mapping = {} })
     const override = mapping.records?.[record.key] ?? {};
     fact(Object.keys(override).every(key => ['path', 'title', 'description', 'excludeReason'].includes(key)) && ['path', 'title', 'description', 'excludeReason'].every(key => override[key] === undefined || typeof override[key] === 'string'), 'Unsupported record mapping');
     if (override.excludeReason) { fact(Object.keys(override).length === 1 && typeof override.excludeReason === 'string' && override.excludeReason.trim().length >= 5, 'Exclusion needs a concrete reason and cannot also remap content'); exclusions.push({ key: record.key, reason: override.excludeReason }); continue; }
+    if (record.type === 'elementor_library') { fact(!Object.keys(override).length, 'Elementor templates are reference-only; rebuild their usage through native site components'); exclusions.push({ key: record.key, reason: 'Elementor template/settings retained privately for reconstruction; not an ordinary public page.' }); continue; }
     const permalink = record.permalink ? new URL(record.permalink) : null;
     fact(override.path || permalink && !permalink.search, 'Record needs an explicit mapping path: ' + record.key);
     const pathname = routePath(override.path ?? permalink.pathname), target = routeFile(pathname);
@@ -207,6 +211,11 @@ export function planStatic({ capture, out, root = process.cwd(), mapping = {} })
   }
   for (const record of published.filter(record => recordRoutes.has(record.key))) {
     const route = recordRoutes.get(record.key), override = mapping.records?.[record.key] ?? {};
+    const builder = analyzeElementor(record);
+    if (builder?.requiresRecovery) addFinding(record.key, 'elementor-content', 'Elementor content is missing from saved HTML or its layout data is unavailable. Recover/rebuild it from assessment.json and source evidence, or explicitly exclude this record from generic conversion.', 'blocked');
+    else if (builder) addFinding(record.key, 'elementor-layout', 'Elementor layout, responsive settings, dynamic widgets and interactions need a native rebuild and rendered review');
+    if (!plainText(record.html) && !builder && !/<(?:img|video|audio|picture)\b/i.test(record.html)) addFinding(record.key, 'empty-body', 'Saved source HTML contains no visible body; inspect templates and intentional empty pages before acceptance');
+    if (Object.values(record.taxonomies ?? {}).some(values => Array.isArray(values) && values.length)) addFinding(record.key, 'taxonomy-model', 'Taxonomy assignments remain in the private capture; model required categories/tags and their routes before acceptance');
     if (!['post', 'page'].includes(record.type)) addFinding(record.key, 'content-model', 'A custom post type is preserved as generic Markdown; confirm its content model');
     if (Object.keys(record.meta ?? {}).length || record.acf) addFinding(record.key, 'custom-fields', 'Raw custom fields remain in the private capture; map required values before migration acceptance');
     if (record.locale) addFinding(record.key, 'locale-routing', 'Source locale and translation group are retained; verify site language configuration and translated navigation');
@@ -230,6 +239,7 @@ export function planStatic({ capture, out, root = process.cwd(), mapping = {} })
     }
     const robots = Array.isArray(record.rankmath?.robots) ? record.rankmath.robots : [];
     const data = { title: plainText(title), seoTitle: seoTitle ? plainText(seoTitle) : undefined, description: plainText(description), draft: false, sourceId: String(record.id), sourceType: record.type, sourcePath, path: route.path, publishedAt: date(record.date), modifiedAt: date(record.modified), author: record.author || undefined, locale: record.locale || undefined, translationGroup: record.translationGroup ? String(record.translationGroup) : undefined, canonical, noindex: seo.noindex === true || seo.noindex === '1' || robots.includes('noindex'), nofollow: seo.nofollow === true || seo.nofollow === '1' || robots.includes('nofollow'), hero, heroAlt };
+    route.metadata = { description: data.description, canonical: data.canonical ?? null, noindex: data.noindex };
     if (!data.title) addFinding(record.key, 'title', 'A title is required', 'blocked');
     output('src/content/wordpress/' + route.id + '.md', frontmatter(data) + convert(record, destinations));
   }
@@ -264,6 +274,9 @@ export function planStatic({ capture, out, root = process.cwd(), mapping = {} })
     retainedUnpublished: snapshot.records.filter(record => record.status !== 'publish').map(record => ({ key: record.key, status: record.status })),
     note: 'Only selected published content and its referenced media are proposed. Draft/private/scheduled content, raw custom metadata, comments, menus and settings remain in the private capture; apply does not claim complete migration acceptance.',
   };
+  const assessed = assessSnapshot(snapshot, { profile, plan, captureSHA256: source.sha256, ...(sourceAssessment ? { designKit: sourceAssessment.designKit } : {}) });
+  payload.set('assessment.json', jsonBytes(assessed)); payload.set('assessment.md', assessmentMarkdown(assessed));
+  if (sourceAssessment) plan.assessmentSHA256 = sourceAssessment.sha256;
   payload.set('plan.json', jsonBytes(plan));
   const receipt = writeBundle(directory, payload, 'baseline-wordpress-static-plan');
   return { directory, sha256: receipt.sha256, routes: routes.length, media: used.size, findings, retainedUnpublished: plan.retainedUnpublished.length, exitCode: findings.length ? 1 : 0 };

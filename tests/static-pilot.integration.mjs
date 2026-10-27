@@ -13,6 +13,7 @@ import { disclosureJourney, intrinsicLayoutJourney } from './journeys/compositio
 import { assertReleaseArtifact } from '../scripts/assert-release-artifact.mjs';
 import { parse } from 'parse5';
 import sharp from 'sharp';
+import { pathToFileURL } from 'node:url';
 
 const option = name => { const i = process.argv.indexOf(name); return i < 0 ? undefined : process.argv[i + 1]; };
 const browserRequested = process.argv.includes('--browser') || process.argv.includes('--public-browser');
@@ -141,6 +142,19 @@ try {
   assert.ok(!(await draft.text()).includes('PRIVATE METADATA DRAFT'));
   report.production.draft = '404; excluded from public routes/listings';
   if (wordpressFixture) {
+    const { wordpressAcceptance } = await import(pathToFileURL(path.join(root, 'scripts/wordpress-acceptance.mjs')));
+    const { runMigration } = await import(pathToFileURL(path.join(root, 'scripts/migration-verify.mjs')));
+    const acceptance = wordpressAcceptance({
+      root, capture: path.join(root, '.baseline/backups/wp-capture'), stage: path.join(root, '.baseline/backups/wp-plan'),
+      url: production, productionOrigin: expectedSite, revision: 'independent-profile-build', out: path.join(root, '.baseline/backups/wp-http-acceptance'),
+      mapping: { version: 1, records: { 'page:101': { excludeReason: 'Synthetic draft-filter fixture explicitly excluded from publication.' } } },
+    });
+    const accepted = await runMigration({ manifest: path.join(acceptance.directory, 'acceptance.json'), out: path.join(root, '.baseline/backups/wp-http-result'), scope: 'full', format: 'both' });
+    assert.equal(accepted.report.exitCode, 2, 'HTTP cannot certify unobserved content/editor/design acceptance');
+    assert.deepEqual(accepted.report.checks.filter(check => check.category === 'url' && check.required && check.status !== 'pass').map(check => ({ id: check.id, status: check.status, reason: check.reason })), []);
+    const httpOnly = await runMigration({ manifest: path.join(acceptance.directory, 'acceptance.json'), observations: path.join(accepted.out, 'observations.json'), out: path.join(root, '.baseline/backups/wp-http-replay'), scope: 'url', format: 'both' });
+    assert.equal(httpOnly.report.exitCode, 0, 'Hash-bound HTTP evidence remains replayable independently');
+    report.production.wordpressAcceptance = { http: 'passed', fullParity: 'unverified; content/editor/design evidence required', replay: 'passed' };
     const response = await fetch(production + '/migrated-article/'); assert.equal(response.status, 200);
     const html = await response.text();
     assert.ok(html.includes('IMPORTED WORDPRESS BODY') && html.includes('Imported contextual caption.'));

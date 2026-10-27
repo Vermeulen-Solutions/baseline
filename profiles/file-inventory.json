@@ -241,24 +241,24 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "scripts/migration-report.mjs": {
-      "disposition": "adapt-before-static",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "scripts/migration-html.mjs": {
-      "disposition": "adapt-before-static",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "scripts/migration-http.mjs": {
-      "disposition": "adapt-before-static",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "scripts/migration-verify.mjs": {
-      "disposition": "adapt-before-static",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "standards/schemas/migration-acceptance.mjs": {
-      "disposition": "adapt-before-static",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "scripts/organize-media.mjs": {
       "disposition": "emdash-only",
@@ -785,12 +785,12 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "scripts/migration-content.mjs": {
-      "disposition": "adapt-before-static",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "standards/schemas/migration-content.mjs": {
-      "disposition": "adapt-before-static",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "tests/migration-content.test.mjs": {
       "disposition": "maintainer-only",
@@ -1130,6 +1130,30 @@
       "static": "copy"
     },
     "docs/wordpress-migration.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/wordpress-elementor.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/wordpress-assessment.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/wordpress-acceptance.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/migration-local.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/migration-acceptance.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/migration-content-inventories.md": {
       "disposition": "shared",
       "static": "copy"
     }

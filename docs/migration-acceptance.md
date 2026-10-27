@@ -9,7 +9,7 @@ The authoritative executable schemas are in [`standards/schemas/migration-accept
 ## Workflow and CLI
 
 1. Capture the reviewed source inventory and identify the target deployment or content revision. Fill in expectations; declare approved removals/exclusions.
-2. Save the manifest privately, normally in `.emdash/migration-acceptance/`. A tracked inventory such as `audit/url-inventory.json` must be sanitized first.
+2. Save the manifest privately, normally in `.emdash/migration-acceptance/` or `.baseline/backups/migration-acceptance/` for generated static profiles. These are also the profile-specific default report roots. `migration:wordpress acceptance` can generate a version-2 starting manifest from a capture and reviewed static plan/mappings; see [dashboard migration](wordpress-migration.md). A tracked inventory such as `audit/url-inventory.json` must be sanitized first.
 3. Run the CLI against the reviewed origins, or supply bound observations and their local artifacts for offline replay. A new output directory is reserved before collection; an existing destination never triggers requests.
 4. Review the JSON and Markdown report, including all exclusions, optional failures and unknowns. A passing URL report covers only its declared checks; it does not certify content/editor parity or discover unlisted legacy URLs.
 
@@ -32,7 +32,7 @@ npm run migration:verify -- --manifest tests/fixtures/migration-acceptance/manif
 | `--observations <file>` | Replay local observations offline; omit to collect live HTTP. Version must match the manifest, capture and target revision. |
 | `--scope url\|full` | Default `full`. `url` evaluates URL declarations only; content/editor checks are `not-applicable` and nonrequired in that scoped report. |
 | `--format json\|markdown\|both` | Default `both`. Selects output files; stdout is JSON for `json`/`both`, Markdown for `markdown`. npm itself prints a command banner; use the report file or invoke `node scripts/migration-verify.mjs` directly for machine-readable stdout. |
-| `--out <new-directory>` | Default `.emdash/migration-acceptance/run-<UUID>/`. Existing destinations and linked path components are refused. |
+| `--out <new-directory>` | Default `.emdash/migration-acceptance/run-<UUID>/`, or `.baseline/backups/migration-acceptance/run-<UUID>/` for static profiles. Existing destinations and linked path components are refused. |
 | `--help` | Usage only, exit 0, no report. Cannot be combined with other flags. |
 
 Duplicate/unknown flags and invalid values return 2. There is **no `--target` override**: edit the explicit manifest and rebind observations. There is **no `--strict` switch**: required declarations always govern acceptance. No install, deployment, media upload, redirect creation or CMS mutation occurs. Live collection issues anonymous GET/HEAD requests only; review origins and scope before running it against a real site.
@@ -169,7 +169,7 @@ Each request starts with fixed Accept/User-Agent headers, manual redirects, cred
 | Redirect hops in one chain, retaining budget across fallback | `maxRedirects: 10` |
 | Unique links and image URLs retained per page, each category | `maxReferencesPerPage: 100`; overflow is unverified, not silent success |
 
-HTML is parsed structurally with pinned direct `parse5@7.3.0`; responsive candidate strings use pinned direct `parse-srcset@1.0.2`. Both versions were already in the lockfile transitively; declaring them directly avoids relying on another package's dependency tree. They remain root development tooling and are omitted from generated static projects. See the upstream [parse5 API](https://parse5.js.org/functions/parse5.parse.html) and [srcset parser](https://github.com/albell/parse-srcset).
+HTML is parsed structurally with pinned direct `parse5@7.3.0`; responsive candidate strings use pinned direct `parse-srcset@1.0.2`. Both versions were already in the lockfile transitively; declaring them directly avoids relying on another package's dependency tree. The portable verifier and its development-only parsers now ship to generated static profiles without CMS/database dependencies. Existing sites require the additive adoption described in [dashboard migration](wordpress-migration.md). See the upstream [parse5 API](https://parse5.js.org/functions/parse5.parse.html) and [srcset parser](https://github.com/albell/parse-srcset).
 
 Parsing runs in an isolated worker with a 3-second deadline, 128 MiB JS heap and 100,000-node bound. Worker library diagnostics are not forwarded to stdout or reports. Resource failures become unverified. Scripts/styles/templates are not executed or treated as visible text. Title/description comparisons normalize HTML whitespace/entities; duplicate title/description/canonical tags fail. Canonicals resolve using the actual document/base URL and must match the declared production URL. Meta robots and HTTP X-Robots-Tag are combined; `all`/`none` are expanded, and agent-qualified restrictions are treated conservatively. Ambiguous directive syntax is unverified. Declared fragment IDs are checked in the parsed document, independently of HTTP request identity.
 
