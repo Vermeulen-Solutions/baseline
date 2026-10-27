@@ -217,8 +217,8 @@
   },
   {
     "path": "src/components/PhotoGallery.astro",
-    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "e179b2244741a2f63d55462b76c60eaea6bc628f1dfd6b5770e82b20ef0a9d91"
+    "reason": "Reusable gallery primitive: additive opt-in full-frame image fit preserves existing cover presentation; no client art direction or page assembly. Exact LF-normalized source; edits invalidate this exception.",
+    "sha256": "29bb7eb4675273654383002ec04d23a2b6f7bd1075d94ddefd2da1bba36ad850"
   },
   {
     "path": "src/utils/reference-overlay.ts",

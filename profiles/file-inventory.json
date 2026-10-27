@@ -1156,6 +1156,14 @@
     "docs/migration-content-inventories.md": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/check-migration-locale.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit"
+    },
+    "tests/migration-locale.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit"
     }
   }
 }

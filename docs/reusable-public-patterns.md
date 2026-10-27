@@ -81,10 +81,17 @@ Baseline emphasizes progressive enhancement: interactive widgets should remain f
 
 ### Justified `PhotoGallery` (CSS Flexbox Engine)
 
-`PhotoGallery.astro` renders fluid, uncropped justified photo rows without relying on JavaScript Masonry or Isotope libraries:
+`PhotoGallery.astro`, where installed, renders fluid justified photo rows without relying on JavaScript Masonry or Isotope libraries. Its existing `fit="cover"` default keeps fixed-height cropped previews for compatibility. Choose `fit="contain"` when complete portrait/landscape frames must remain visible; it sizes each image from its intrinsic proportions and disables the hover zoom that would crop its edges. The choice also works with `layout="grid"`. It is a template presentation prop, not an extra CMS field or a per-image CSS override:
+
+```astro
+<PhotoGallery value={entry.data.gallery} fit="contain" breakout={false} />
+```
+
 - **Pure CSS Flexbox Sizing:** Computes proportional `flex-grow` and aspect ratios on the server. Images share equal heights within each row, with leftover space absorbed cleanly by a trailing flex spacer.
 - **Progressive Enhancement:** PhotoSwipe 5 (MIT) is loaded only when a visitor clicks an image to open the full-screen touch lightbox. If JavaScript fails or is disabled, clicking simply navigates to the original image.
 - **Structured Data:** Generates Schema.org `ImageGallery` JSON-LD automatically for search engine rich results.
+
+Existing sites can adopt the updated component through a reviewed Baseline update, preserving their local calibration, and opt into `fit="contain"` per caller. Omitting the prop retains the previous look. Do not remove purposeful crops globally or paste more-specific host selectors over Astro's scoped component rules. The local browser regression checks rendered proportions for mixed native-media frames at 390/768/1440px, native field readback/rendering, lightbox keyboard/focus return and no-JavaScript original-image links. Offscreen painting can be enabled solely for capture, but actual visible layout/proportions must be tested without screenshot layout overrides. A green image request alone does not prove framing or editor acceptance.
 
 ## Focus and contextual surfaces
 

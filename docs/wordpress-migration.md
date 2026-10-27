@@ -13,9 +13,27 @@ For Elementor sites, make a dashboard-exported Website Template kit part of the 
 
 The kit is source evidence. `migration:wordpress assess --kit` now inspects its JSON and archives the original ZIP privately, without extracting or executing plugin/code assets. It reports page/template structure, widgets, candidate copy, image/link references, responsive overrides and global references alongside kit site settings. This does not automatically reproduce Elementor layouts or resolve dynamic tags/templates. Review the data alongside the live page and responsive screenshots to decide what to rebuild or intentionally retire. Keep the ZIP private because it can contain site content and design assets.
 
-For an EmDash destination, the normal path is to paste the key into the native EmDash import wizard at `/_emdash/admin/import/wordpress`. Review its mappings, import the content, then complete its media-copy and URL-rewrite steps. The shared capture below is also available for inventory, recovery and static conversion.
+For an EmDash destination, the normal path is to paste the key into the native EmDash import wizard at `/_emdash/admin/import/wordpress`. Complete the language preflight below before the full import. Review its mappings, import the content, then complete its media-copy and URL-rewrite steps. The shared capture below is also available for inventory, recovery and static conversion.
 
 If the exporter cannot be installed, use WordPress Tools → Export → All content and download the WXR XML. XML includes attachment URLs and metadata, not the files. Baseline can download those attachments while the source remains reachable. A source URL alone can probe the exporter; it cannot authorize access to private content.
+
+## Language preflight before importing
+
+Agree the default language and initial translated pages before setting up the destination or bulk importing. This applies to a single-language source too: French prose on a French-looking page does not prove the native content record is tagged French. A seed's language, the installation's default, the import destination, the editor selector and the public page can differ.
+
+For EmDash, configure Astro/EmDash's native default and supported locales first; follow [internationalization](internationalization.md), including `prefixDefaultLocale: false`. Keep translations as separate native rows linked by their translation group. Confirm the installed importer's actual locale behavior rather than assuming a particular language selector or import switch exists. Before the full import, use a small representative export in a disposable destination, or a supported scoped import; preserve the original source export. Read the imported record by its returned ID without a `--locale` filter, so a lookup filter cannot hide the wrong metadata. Use the installed native CLI:
+
+```sh
+# EmDash only; create an ignored archive directory first, then save this readback.
+npx emdash content get pages <imported-id> --raw --json --url http://localhost:4321 > .emdash/backups/locale-sample.json
+npm run migration:check-locale -- --input .emdash/backups/locale-sample.json --expected-locale fr
+```
+
+The read-only checker accepts native CLI items or successful REST content-get envelopes, individually or as a JSON array. It compares the actual top-level `locale`, never a custom `data.locale` field, page text, HTML `lang` or a template's locale. Missing, invalid or mismatched metadata fails with exit 1; output contains counts only. Exact locale codes matter: `fr` and `fr-CH` are not interchangeable. A passing result covers the supplied samples only and does not prove the configured default, every imported row, translation links or public routing. Check the editor's language and public route too; for multiple languages, inspect a sample in each language and its native translation group. Then reconcile all imported records after the batch.
+
+On an older EmDash site, adopt the checker and package command through a [reviewed Baseline update](baseline-updates.md) before running them. Until then, inspect the same native readbacks manually with the same stop rule; a missing command is not a successful language check. Do not install EmDash in a static project to obtain this helper.
+
+**Stop on a mismatch before continuing bulk import.** Correct the setup/mapping in the disposable trial and repeat. For an already populated destination, preserve the records and plan a supported locale repair with a backup; do not reset the CMS, silently reimport duplicates or add parallel `title_en`/`language` fields to conceal the error. Record the expected language, installed importer/core versions, sample IDs/readbacks and result privately. Static/Sveltia projects use their file schema and locale route mapping instead of this EmDash-only command; inspect frontmatter and actual generated routes for the same mistake.
 
 ## Capture once
 

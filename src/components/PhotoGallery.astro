@@ -10,6 +10,8 @@ interface Props {
   node?: unknown;
   locale?: 'fr' | 'en';
   layout?: 'justified' | 'grid';
+  /** contain keeps the full frame; cover preserves the existing cropped rows. */
+  fit?: 'cover' | 'contain';
   breakout?: 'feature' | 'wide' | 'full-safe' | false;
   title?: string;
 }
@@ -18,11 +20,13 @@ const {
   value,
   node,
   layout: rawLayout,
+  fit: rawFit,
   breakout: rawBreakout = 'feature',
   locale = Astro.currentLocale === 'fr' ? 'fr' : 'en',
   title,
 } = Astro.props;
 const layout = rawLayout === 'grid' ? 'grid' : 'justified';
+const fit = rawFit === 'contain' ? 'contain' : 'cover';
 const breakout = rawBreakout === 'feature' || rawBreakout === 'wide' || rawBreakout === 'full-safe' ? rawBreakout : false;
 
 const photos = albumPhotos(node ? [node] : value);
@@ -48,6 +52,7 @@ const jsonLd = galleryJsonLd(photos, {
   data-editorial-island
   data-photo-gallery
   data-layout={layout}
+  data-fit={fit === 'contain' ? fit : undefined}
   data-close={labels.close}
   data-next={labels.next}
   data-previous={labels.previous}
@@ -185,6 +190,11 @@ const jsonLd = galleryJsonLd(photos, {
     height: 100%;
     object-fit: cover;
   }
+
+  /* Opt in without host overrides that can lose to Astro's scoped selectors. */
+  .photo-gallery[data-fit="contain"] a { height: auto; }
+  .photo-gallery[data-fit="contain"] :global(img) { height: auto; object-fit: contain; }
+  .photo-gallery[data-fit="contain"] a:hover :global(img) { transform: none; }
 
   /* Grid Layout Fallback */
   .photo-gallery[data-layout="grid"] {

@@ -6,6 +6,24 @@ Use Astro `Image`, `Picture` or `getImage` rather than preparing a parallel set 
 
 Site imagery belongs in `src/assets/` through explicit imports or in EmDash Media Library. Keep unchanged-URL public passthrough exceptions documented; do not download migration imagery straight into `public/`. CMS images use field dimensions or bounded metadata probing through EmDash's Storage API. The certified EmDash 1.3.0 profile supplies a storage-backed image endpoint, allowing local uploads after build. Preserve original URLs for downloads/PhotoSwipe and keep Portable Text/editor semantics intact. If transformation fails, the browser restores the original image.
 
+## Native CMS fields and URL helpers are different inputs
+
+An EmDash image field is a media value, not a guaranteed URL string. It may contain `id`, `provider` and `meta.storageKey` without either `url` or `src`. Pass the complete value to the supported native component, which resolves provider URLs, dimensions, focal points and dark variants. Do not turn it into `entry.data.featured_image.url` or guess that the media ID is a storage filename. See the [native media rendering guide](https://docs.emdashcms.com/guides/media-library/#render-an-image-in-a-template).
+
+```astro
+---
+import { Image } from 'emdash/ui';
+const { entry } = Astro.props;
+---
+<div {...entry.edit.featured_image}>
+  <Image image={entry.data.featured_image} priority />
+</div>
+```
+
+This example is EmDash-only. Use `priority` for the principal above-fold image and let other images remain lazy. Keep the edit target on the enclosing field context and verify actual save/reload. Baseline's `EmDashImage.astro` is a URL-oriented helper for already resolved sources, such as a Portable Text/gallery renderer; its name does not mean it accepts an arbitrary native field object. `ResponsiveImage.astro` accepts an Astro asset import or a resolved URL plus dimensions. Static/Sveltia sites use those file-owned inputs and do not import `emdash/ui` or add CMS dependencies.
+
+Media acceptance must include a field saved and read back through the native CMS with its full reference shape, not just a successful upload or a hardcoded image URL. The local visual fixture does this with a synthetic draft, tests wrong-language metadata rejection on the same readback, and checks actual development/built image decoding. It never copies the working database or participant data.
+
 ## Hosting
 
 The baseline is Node/SQLite/local storage with native Sharp. Local development authorizes only localhost media-file paths. For a hosted site set `SITE_URL=https://your-site.example` in the build environment; the config uses that canonical origin for Astro `site` and the restricted CMS media pattern. Set it at build time, rebuild when changing domains, and verify custom storage base URLs separately. Do not authorize arbitrary remote URLs. Unapproved external sources retain originals.

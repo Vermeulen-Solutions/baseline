@@ -6,12 +6,14 @@ import { visualContract } from './contract.mjs';
 import sharp from 'sharp';
 import { localEmdashAdapter } from '../../scripts/media-ingest.mjs';
 import { chromium, expect } from '@playwright/test';
+import { checkMigrationLocale } from '../../scripts/check-migration-locale.mjs';
 
 export default async function setup() {
   const browsers = JSON.parse(await readFile('node_modules/playwright-core/browsers.json', 'utf8'));
   if (browsers.browsers.find(browser => browser.name === 'chromium').revision !== visualContract.chromiumRevision) throw new Error('Unexpected Chromium revision');
   const reportDir = path.resolve('.emdash/visual');
   await mkdir(reportDir, { recursive: true });
+  await writeFile(path.join(reportDir,'media-dev.json'),JSON.stringify({status:'running'})+'\n');
   let fixtureStage, fixtureOrigin;
   const site = await startVisualSite(process.cwd(), reportDir, { devOnly:process.env.VISUAL_DEV_ONLY === '1', prepareStage: async ({ stage, origin }) => {
     fixtureStage = stage; fixtureOrigin = origin;
@@ -78,15 +80,31 @@ import '../styles/global.css';
 import EditorialImage from '../components/EditorialImage.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
 import EmDashImage from '../components/EmDashImage.astro';
+import { Image } from 'emdash/ui';
 import media from '../dev/spacing-media.json';
 ---
 <html lang="en" data-spacing-policy="automatic-v2"><head><title>Media geometry</title></head><body>
 <div id="id-only-media" style="width:min(400px,100%)"><EditorialImage node={{ asset:{_ref:media.id}, alt:'ID-only local image', link:'#media-target' }} /></div>
+{media.field && <div id="native-field-media" style="width:min(400px,100%)"><Image image={media.field} priority /></div>}
 <div id="media-target">Link target</div>
 <PhotoGallery value={[{_type:'image',asset:{url:media.url},width:400,height:300,alt:'Gallery geometry'}]} />
 <div class="site-main"><div id="responsive-frame" style="width:min(800px,100%)"><EmDashImage src={media.largeUrl || ''} width={1600} height={1200} alt="Responsive resource geometry" /></div></div>
 <span hidden class="mt-0 mb-0 p-4 max-w-full gap-0"></span>
 </body></html>`);
+    await writeFile(path.join(stage, 'src/pages/gallery-fit-fixture.astro'), `---
+import SiteShell from '../layouts/SiteShell.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import media from '../dev/spacing-media.json';
+const landscape={_type:'image',asset:{url:media.url},width:400,height:300,alt:'Landscape fixture'};
+const portrait={_type:'image',asset:{url:media.portraitUrl},width:300,height:600,alt:'Portrait fixture'};
+const photos=[landscape,portrait,landscape,landscape,portrait];
+---
+<SiteShell title="Gallery fit contract" spacingPolicy="automatic-v2">
+<h1>Gallery fit contract</h1>
+<section id="contained"><h2>Full frames</h2><PhotoGallery value={photos} fit="contain" breakout={false} /></section>
+<section id="covered"><h2>Existing cover default</h2><PhotoGallery value={photos} breakout={false} /></section>
+<section id="contained-grid"><h2>Full frames in grid</h2><PhotoGallery value={photos} fit="contain" layout="grid" breakout={false} /></section>
+</SiteShell>`);
     await writeFile(path.join(stage, 'src/pages/primitive-edge.astro'), `---
 import EditorialImage from '../components/EditorialImage.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
@@ -126,15 +144,35 @@ import '../styles/global.css';
     const media = await adapter.upload(bytes, { entryId:'spacing-media', output:{mimeType:'image/png',width:400,height:300},probe:{extension:'png'},metadata:{alt:'ID-only local image',caption:''} });
     const largeBytes=await sharp({create:{width:1600,height:1200,channels:3,background:'#486b83'}}).png().toBuffer();
     const large=await adapter.upload(largeBytes,{entryId:'spacing-responsive',output:{mimeType:'image/png',width:1600,height:1200},probe:{extension:'png'},metadata:{alt:'Responsive resource geometry',caption:''}});
-    await writeFile(path.join(fixtureStage,'src/dev/spacing-media.json'),JSON.stringify({id:media.id,url:'/_emdash/api/media/file/'+encodeURIComponent(media.storageKey),largeUrl:'/_emdash/api/media/file/'+encodeURIComponent(large.storageKey)}));
+    const portraitBytes=await sharp({create:{width:300,height:600,channels:3,background:'#8f5740'}}).png().toBuffer();
+    const portrait=await adapter.upload(portraitBytes,{entryId:'gallery-portrait',output:{mimeType:'image/png',width:300,height:600},probe:{extension:'png'},metadata:{alt:'Portrait fixture',caption:''}});
     const browser = await chromium.launch({channel:'chromium'});
     try {
       const page = await browser.newPage({viewport:{width:390,height:844}});
+      await page.goto(fixtureOrigin+'/_emdash/api/auth/dev-bypass?redirect=/_emdash/admin');
+      await page.waitForURL('**/_emdash/admin');
+      const headers={'X-EmDash-Request':'1',Origin:fixtureOrigin};
+      const created=await page.request.post(fixtureOrigin+'/_emdash/api/content/posts',{headers,data:{slug:'native-field-contract',status:'draft',data:{title:'Bonjour — synthetic import sample',featured_image:{id:media.id,provider:'local',width:400,height:300,alt:'Native field round trip',meta:{storageKey:media.storageKey}}}}});
+      expect(created.status()).toBe(201);
+      const item=(await created.json()).data.item;
+      const readback=await page.request.get(fixtureOrigin+'/_emdash/api/content/posts/'+item.id);
+      expect(readback.status()).toBe(200);
+      const native=await readback.json();
+      expect(native.data.item.status).toBe('draft');
+      expect(checkMigrationLocale(native,'en').status).toBe('passed');
+      expect(checkMigrationLocale(native,'fr').status).toBe('failed');
+      await writeFile(path.join(fixtureStage,'src/dev/spacing-media.json'),JSON.stringify({id:media.id,url:'/_emdash/api/media/file/'+encodeURIComponent(media.storageKey),largeUrl:'/_emdash/api/media/file/'+encodeURIComponent(large.storageKey),portraitUrl:'/_emdash/api/media/file/'+encodeURIComponent(portrait.storageKey),field:native.data.item.data.featured_image}));
       await page.goto(fixtureOrigin+'/media-spacing-fixture');
       const image = page.locator('#id-only-media img');
       await expect(image).toHaveJSProperty('naturalWidth',400);
       await expect(page.locator('#id-only-media figure figure')).toHaveCount(0);
-      await writeFile(path.join(reportDir,'media-dev.json'),JSON.stringify({idOnlyLoaded:true,naturalWidth:400,nestedVendorFigures:0})+'\n');
+      const nativeImage=page.locator('#native-field-media img');
+      await expect.poll(()=>nativeImage.evaluate(img=>img.naturalWidth)).toBeGreaterThan(0);
+      expect(await nativeImage.evaluate(img=>img.naturalWidth)).toBeLessThanOrEqual(400);
+      await expect(nativeImage).toHaveAttribute('width','400');
+      await expect(nativeImage).toHaveAttribute('height','300');
+      await expect(nativeImage).toHaveAttribute('alt','Native field round trip');
+      await writeFile(path.join(reportDir,'media-dev.json'),JSON.stringify({status:'passed',idOnlyLoaded:true,naturalWidth:400,nestedVendorFigures:0,nativeFieldRoundTrip:true,nativeLocaleReadback:true,wrongExpectedLocaleRejected:true})+'\n');
     } finally { await browser.close(); }
   } });
   try {

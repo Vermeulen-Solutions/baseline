@@ -190,5 +190,9 @@
   "wordpress-migration.test.mjs": {
     "tier": "unit",
     "reason": "Bounded exporter/WXR capture, credential isolation, static conversion and conflict-preserving apply with synthetic sources"
+  },
+  "migration-locale.test.mjs": {
+    "tier": "unit",
+    "reason": "Bounded read-only native locale metadata checks, private CLI readbacks and fail-closed diagnostics"
   }
 }

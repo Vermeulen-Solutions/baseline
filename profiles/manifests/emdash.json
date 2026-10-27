@@ -118,7 +118,8 @@
     "tests/cache.integration.mjs",
     "standards/site-audit-report.schema.json",
     "standards/site-audit-report.v2.schema.json",
-    "standards/baselines/0.1.1.json"
+    "standards/baselines/0.1.1.json",
+    "scripts/check-migration-locale.mjs"
   ],
   "scripts": [
     "doctor",
@@ -169,7 +170,8 @@
     "build:analyze",
     "check:production-setup",
     "assets:retain",
-    "check:cache"
+    "check:cache",
+    "migration:check-locale"
   ],
   "checks": [
     "check:schema-budget"

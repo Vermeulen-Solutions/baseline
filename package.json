@@ -92,7 +92,8 @@
     "baseline:inspect": "node scripts/inspect-project.mjs",
     "workflow:replay": "node scripts/workflow-replay.mjs",
     "design:canvas-kit": "node scripts/canvas-kit.mjs",
-    "migration:wordpress": "node scripts/wordpress-migrate.mjs"
+    "migration:wordpress": "node scripts/wordpress-migrate.mjs",
+    "migration:check-locale": "node scripts/check-migration-locale.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
