@@ -20,7 +20,7 @@ For optional installed-project discovery, use `npm run baseline:inspect -- --jso
 | **OpenAI Codex** | `AGENTS.md` | `.agents/skills/` | `.codex/config.toml`, under `mcp_servers` |
 | **Claude Code** | Supported versions load `AGENTS.md` when no project `CLAUDE.md` takes precedence; see below | Native project skills use `.claude/skills/`; explicitly read Baseline's `.agents/skills/` when needed | Project `.mcp.json` |
 | **Cursor** | `AGENTS.md` | `.agents/skills/` or `.cursor/skills/` | Project `.cursor/mcp.json` |
-| **OpenCode** | `AGENTS.md` | `.agents/skills/` or `.opencode/skills/` | `opencode.json` / `opencode.jsonc`, under `mcp` |
+| **OpenCode** | `AGENTS.md` | `.agents/skills/` or `.opencode/skills/` | `opencode.json` / `opencode.jsonc`: `mcp` in v1, `mcp.servers` in v2 |
 
 For Claude Code versions before native `AGENTS.md` support, or projects already using `CLAUDE.md`, add `@AGENTS.md` to that file so the shared instructions remain included. Prefer that import over a Windows symlink. Keep Baseline's skills canonical in `.agents/skills/`; reading a skill explicitly does not require creating a second managed copy.
 
@@ -66,7 +66,7 @@ url = "https://docs.emdashcms.com/mcp"
 
 ### OpenCode Configuration:
 
-Merge these entries into `opencode.json` or `opencode.jsonc`. Its `mcp` object and `remote` transport value differ from the `mcpServers` / `http` example:
+Check `opencode --version` before merging entries into `opencode.json` or `opencode.jsonc`. OpenCode v1 places server names directly under `mcp` and uses the `remote` transport value:
 
 ```json
 {
@@ -82,6 +82,27 @@ Merge these entries into `opencode.json` or `opencode.jsonc`. Its `mcp` object a
   }
 }
 ```
+
+OpenCode v2 nests server names under `mcp.servers`:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "astro-docs": {
+        "type": "remote",
+        "url": "https://mcp.docs.astro.build/mcp"
+      },
+      "emdash-docs": {
+        "type": "remote",
+        "url": "https://docs.emdashcms.com/mcp"
+      }
+    }
+  }
+}
+```
+
+Both versions connect configured servers by default. To disable one, v1 uses `enabled: false`; v2 uses `disabled: true`. Both support `{env:NAME}` substitution. These layouts were checked against the official [v1](https://docs.opencode.ai/docs/mcp-servers/) and [v2](https://opencode.ai/v2/docs/mcp-servers) documentation on 27 October 2026; use your installed version's schema rather than mixing them.
 
 Omit `emdash-docs` for static profiles. In every client, inspect its MCP server/tool list and make a documentation search to verify the actual connection. In Codex, `codex mcp list` shows registered servers; a successful tool call verifies availability.
 

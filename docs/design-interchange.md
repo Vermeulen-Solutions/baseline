@@ -14,11 +14,11 @@ For new sites and substantial overhauls, choose a design iteration surface that 
 - **[OpenDesign](opendesign-onboarding.md):** Local HTML/CSS canvas (`opendesign-site-design`) with 154 bundled offline `DESIGN.md` systems, 188 layout examples, and `od lint` validation.
 - **[OpenPencil](openpencil-onboarding.md):** Local desktop canvas (`openpencil-site-design`) using `.fig` files, vector nodes, and semantic variable bindings.
 - **[Penpot](penpot-onboarding.md):** Shared cloud workspace (`penpot-site-design`) for multi-user browser review.
-- **Direct Astro:** Browser-native workflow in `src/pages/` and `src/styles/global.css` with live reload and `/_styleguide`.
+- **Direct Astro:** Explore isolated concepts under `audit/visual-concepts/` in the browser; after saving and checking the Art Direction Record, translate the selected concept into native CSS, `/_styleguide` and production routes.
 
 Baseline supports two execution models across all surfaces:
 - **Single-Agent Model:** The same agent explores concepts on the canvas and translates the approved direction into Astro.
-- **Agent Switch Model:** A design agent creates canvas concepts and exports a structured handoff packet (`references/handoff-packet-template.md`), which an implementation agent then translates into native Astro primitives and routes.
+- **Agent Switch Model:** A design agent receives the [portable design brief](../.agents/skills/penpot-site-design/assets/design-brief.md), creates canvas concepts and exports a [design handoff](../.agents/skills/penpot-site-design/assets/design-handoff.md), which an implementation agent then translates into native Astro primitives and routes.
 
 ---
 

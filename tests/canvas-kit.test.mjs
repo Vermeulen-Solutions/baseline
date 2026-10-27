@@ -71,8 +71,14 @@ test('openDesignPayload emits DESIGN.md, open-design.json and a zero-JS specimen
     { name: '--font-accent', status: 'resolved', type: 'font', value: 'Instrument Serif, serif', resolvedExpression: 'Instrument Serif, serif' },
     { name: '--font-mono', status: 'resolved', type: 'font', value: 'JetBrains Mono, monospace', resolvedExpression: 'JetBrains Mono, monospace' }
   ];
-  const sample390 = { width: 390, rootFontPx: 16, tokens: requiredTokens };
-  const sample1440 = { width: 1440, rootFontPx: 16, tokens: requiredTokens };
+  source.css = `:root { ${requiredTokens.map(token => `${token.name}: ${token.resolvedExpression};`).join(' ')} }
+@layer base { [data-surface="dark"] { --color-text: #ffffff; } }
+@media (min-width: 1000px) { body.site-design { --brand-page: #ffeecc; } }`;
+  source.roles = { '--color-page': '--brand-page', '--color-action': '--color-text', '--color-text': '--color-action' };
+  source.contextClass = 'site-design';
+  requiredTokens[0].contextRisks = [{ contextPath: ['body.site-design'] }];
+  const sample390 = { width: 390, rootFontPx: 20, tokens: requiredTokens };
+  const sample1440 = { width: 1440, rootFontPx: 20, tokens: requiredTokens };
   const payload390 = { sample: sample390, ...canvasPayload(source, sample390) };
   const payload1440 = { sample: sample1440, ...canvasPayload(source, sample1440) };
   const od = openDesignPayload(source, [payload390, payload1440]);
@@ -81,6 +87,16 @@ test('openDesignPayload emits DESIGN.md, open-design.json and a zero-JS specimen
   assert.match(od.designMd, /clamp\(1rem, calc\(0\.6667rem \+ 1\.6667vi\), 2rem\)/);
   assert.match(od.html, /data-od-id="canvas-kit-specimen"/);
   assert.match(od.html, /letter-spacing:\s*0\.08em/);
+  assert.equal(od.contextReviewRequired, true);
+  assert.ok(od.html.includes(source.css));
+  assert.ok(od.designMd.includes(source.css));
+  assert.match(od.designMd, /Root font size: `20px`/);
+  assert.match(od.designMd, /Context review required: `true`/);
+  assert.match(od.html, /font-size: 20px; writing-mode: horizontal-tb/);
+  assert.match(od.html, /<body class="site-design">/);
+  assert.match(od.html, /background: var\(--brand-page\)/);
+  assert.match(od.html, /color: var\(--color-action\)/);
+  assert.doesNotMatch(od.html, /<script\b/i);
 });
 
 test('existing/in-target/linked/imported outputs or inputs refuse before a browser is launched', () => fixture(async ({parent,root,file}) => {
@@ -151,6 +167,58 @@ test('unknown audit rules and token failures require judgment/review, not automa
 // Full Chromium is intentionally local-only: profile/CI fast checks inject a sampler.
 // Run this test explicitly with BASELINE_CANVAS_BROWSER_TESTS=1 after installing Chromium.
 if (process.env.BASELINE_CANVAS_BROWSER_TESTS === '1') {
+  test('OpenDesign specimen matches live sampled roles across media, layers, mapped body context and root sizes', () => fixture(async ({root,file}) => {
+    const baselineCSS = fs.readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+    const css = baselineCSS + `
+@layer base {
+  :root { --brand-page: #fff3e1; --color-text: #123456; }
+  body.site-design { --brand-page: #e2f1fa; --text-step-0: clamp(1rem, calc(0.5rem + 2vi), 2rem); }
+  @media (min-width: 1000px) { body.site-design { --brand-page: #eadcff; } }
+  [data-surface="dark"] { --color-text: #ffffff; }
+}
+@property --radius-control { syntax: "<length>"; inherits: false; initial-value: 7px; }
+:root { --radius-control: 19px; }
+.card { --radius-card: 22px; }`;
+    fs.writeFileSync(file,css);
+    const { chromium } = await import('@playwright/test');
+    const browser = await chromium.launch({channel:'chromium',headless:true});
+    try {
+      const page = await browser.newPage();
+      await page.route('**/*', route => route.abort());
+      for (const options of [{}, {roles:{'--color-page':'--brand-page','--color-action':'--color-text','--color-text':'--color-action'},contextClass:'site-design'}]) {
+        const source=canvasSource(root,options);
+        for (const rootFontPx of [16,20]) {
+          const sampled=await sampleCanvasTokens(source,rootFontPx);
+          const od=openDesignPayload(source,sampled.samples.map(sample=>({sample,...canvasPayload(source,sample)})));
+          assert.equal(od.ready,true);
+          assert.equal(od.contextReviewRequired,true);
+          for (const sample of sampled.samples) {
+            await page.setViewportSize({width:sample.width,height:sample.height});
+            await page.setContent(od.html);
+            const actual=await page.evaluate(()=>({
+              rootFont:getComputedStyle(document.documentElement).fontSize,
+              page:getComputedStyle(document.body).backgroundColor,
+              text:getComputedStyle(document.body).color,
+              fontSize:getComputedStyle(document.body).fontSize,
+              action:getComputedStyle(document.querySelector('.btn')).backgroundColor,
+              controlRadius:getComputedStyle(document.querySelector('.btn')).borderRadius,
+              cardRadius:getComputedStyle(document.querySelector('.card')).borderRadius
+            }));
+            const token=name=>sample.tokens.find(t=>t.name===name);
+            assert.equal(actual.rootFont,`${rootFontPx}px`);
+            assert.equal(actual.page,token('--color-page').computedColor);
+            assert.equal(actual.text,token('--color-text').computedColor);
+            assert.equal(actual.fontSize,`${token('--text-step-0').value}px`);
+            assert.equal(actual.action,token('--color-action').computedColor);
+            assert.equal(actual.controlRadius,`${token('--radius-control').value}px`);
+            assert.equal(actual.cardRadius,'22px');
+          }
+        }
+      }
+      assert.equal(fs.readFileSync(file,'utf8'),css);
+    } finally {await browser.close();}
+  }));
+
   test('real browser sampling rejects font-relative guesses, honors @property and reports alternative contexts', () => fixture(async ({root,file}) => {
     const { chromium } = await import('@playwright/test');
     const browser = await chromium.launch({ channel: 'chromium', headless: true });

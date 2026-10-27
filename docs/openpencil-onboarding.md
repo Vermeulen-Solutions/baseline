@@ -22,7 +22,7 @@ The installed `openpencil-site-design` skill bundles mechanics references and re
 
 ## The Agent Switch & Handoff Workflow
 
-When delegating design and coding to separate agents, use the portable templates in `openpencil-site-design` (`references/portable-brief-template.md` and `references/handoff-packet-template.md`):
+When delegating design and coding to separate agents, use the shared [portable design brief](../.agents/skills/penpot-site-design/assets/design-brief.md) and [design handoff](../.agents/skills/penpot-site-design/assets/design-handoff.md):
 
 1. **Design Agent Scope:** The design agent receives the brief and token rules, authors components in OpenPencil, iterates with visual feedback, and saves the verified `.fig` file.
 2. **Preparing the Handoff Packet:** The design agent exports high-resolution preview images (`1440×900` and `390×844`) and prepares a handoff summary containing:

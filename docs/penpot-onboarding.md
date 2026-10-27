@@ -21,7 +21,7 @@ url = "https://design.penpot.app/mcp/stream?userToken=YOUR_PRIVATE_TOKEN"
 
 ### OpenCode Configuration
 
-For OpenCode, configure the remote server in your private client config:
+Check `opencode --version` and use the schema for that major version in your private client config. OpenCode v1 places servers directly under `mcp`:
 
 ```json
 {
@@ -36,7 +36,23 @@ For OpenCode, configure the remote server in your private client config:
 }
 ```
 
-Store `PENPOT_MCP_URL` in your private environment for that process.
+OpenCode v2 places servers under `mcp.servers`; connections start automatically unless `disabled` is true:
+
+```json
+{
+  "mcp": {
+    "servers": {
+      "penpot": {
+        "type": "remote",
+        "url": "{env:PENPOT_MCP_URL}",
+        "oauth": false
+      }
+    }
+  }
+}
+```
+
+Store `PENPOT_MCP_URL` in your private environment for that process. Both versions support `{env:NAME}` substitution; shell `${NAME}` syntax is not expanded in JSON. Penpot uses the URL's query key rather than OpenCode's OAuth flow. See the official [v1](https://docs.opencode.ai/docs/mcp-servers/) and [v2](https://opencode.ai/v2/docs/mcp-servers) configuration guides. Reconnect and read the intended file/page to verify the actual connection.
 
 ## Connection Verification and Recovery
 
@@ -44,9 +60,11 @@ Store `PENPOT_MCP_URL` in your private environment for that process.
 2. **Reconnecting Inactive Tabs:** If the connection drops or the browser tab suspends, focus the Penpot tab, reconnect via **File -> MCP Server -> Connect**, and re-run the identity check.
 3. **Iterative Board Design:** Author representative desktop (`1440×900`) and mobile (`390×844`) boards with visual feedback rather than attempting full-site mockups in one pass.
 
+For expired keys, a wrong target file or an uncertain timed-out edit, use the [connection and recovery reference](../.agents/skills/penpot-site-design/references/connection-and-api.md). Inspect saved state before retrying a mutation.
+
 ## The Agent Switch & Handoff Workflow
 
-Baseline's `penpot-site-design` skill bundles portable brief and handoff templates (`references/portable-brief-template.md` and `references/handoff-packet-template.md`) for delegating work between design and coding agents:
+Use the shared [portable design brief](../.agents/skills/penpot-site-design/assets/design-brief.md) and [design handoff](../.agents/skills/penpot-site-design/assets/design-handoff.md) when delegating work between design and coding agents:
 
 1. **Design Agent Scope:** The design agent receives the brief and token rules, authors bounded desktop and mobile boards in Penpot, and captures exports for review.
 2. **Preparing the Handoff Packet:** When a direction is approved, the design agent prepares a structured handoff packet containing:

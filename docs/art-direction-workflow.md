@@ -19,11 +19,11 @@ When entering **Stage 4 (Art Direction)** for a new site or major redesign, choo
 - **OpenDesign (Local HTML/CSS canvas):** Uses the `opendesign-site-design` skill and [OpenDesign onboarding](opendesign-onboarding.md). Bundles 154 offline `DESIGN.md` systems, 188 layout examples, `od lint` validation, and native export to Baseline Astro.
 - **OpenPencil (Local desktop canvas):** Uses the `openpencil-site-design` skill and [OpenPencil onboarding](openpencil-onboarding.md). Iterates vector shapes, component nodes, and variable bindings in local `.fig` files.
 - **Penpot (Shared cloud canvas):** Uses the `penpot-site-design` skill and [Penpot onboarding](penpot-onboarding.md). Provides a collaborative web workspace ideal for client reviews.
-- **Direct Astro (Browser-native):** Work directly in `src/pages/`, `src/styles/global.css`, and `/_styleguide` using live browser reloading. Requires no external tools or accounts.
+- **Direct Astro (Browser-native):** Explore isolated concepts under `audit/visual-concepts/` with browser previews. After saving and checking the Art Direction Record, translate the selected concept into `src/styles/global.css`, `/_styleguide` and production routes. Requires no external tools or accounts.
 
 Baseline supports two execution models across all surfaces:
 - **Single-Agent Model:** The same agent iterates concepts on the canvas and translates the approved direction into Astro.
-- **Multi-Agent Model (Agent Switch):** A specialized design agent iterates on the canvas, produces a structured handoff packet (`handoff-packet-template.md`), and passes it to an implementation agent that translates the design into Astro primitives and routes.
+- **Multi-Agent Model (Agent Switch):** A specialized design agent receives the [portable design brief](../.agents/skills/penpot-site-design/assets/design-brief.md), iterates on the canvas, and passes the [design handoff](../.agents/skills/penpot-site-design/assets/design-handoff.md) to an implementation agent that translates the design into Astro primitives and routes.
 
 The core workflow proceeds through five focused steps:
 

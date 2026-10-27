@@ -41,9 +41,32 @@ node "<path-to>/daemon-cli.mjs" plugin doctor od-astro-baseline-export --json
 3. **Register artifact and export (`od artifacts create` & `od export`):**
    ```powershell
    node "<path-to>/daemon-cli.mjs" artifacts create --project client-concept-a --name concept-preview.html --input C:/path/to/concept.html
-   node "<path-to>/daemon-cli.mjs" export concept-preview.html --project client-concept-a --format image --out C:/path/to/desktop-1440.png
+   node "<path-to>/daemon-cli.mjs" export concept-preview.html --project client-concept-a --format image --out C:/path/to/default-viewport.png
    node "<path-to>/daemon-cli.mjs" export concept-preview.html --project client-concept-a --format pdf --out C:/path/to/concept-preview.pdf
    ```
+
+### Explicit desktop and mobile captures
+
+OpenDesign Desktop 0.26.1's `od export --help` offers format/output flags but no viewport width or height flags. For requested desktop/mobile viewports, call the daemon export endpoint with explicit `width` and `height`. Register the artifact first and keep Desktop running: visual exports use its bundled Chromium. The installed daemon accepts these dimensions in `POST /api/projects/<id>/export` and forwards them to the visual exporter.
+
+```powershell
+$designDaemon = $env:OD_DAEMON_URL.TrimEnd('/')
+$exportHeaders = @{ Origin = $designDaemon }
+if ($env:OD_TOOL_TOKEN) { $exportHeaders.Authorization = "Bearer $env:OD_TOOL_TOKEN" }
+foreach ($viewport in @(@{ width = 1440; height = 900 }, @{ width = 390; height = 844 })) {
+  $exportBody = @{
+    fileName = 'concept-preview.html'
+    format = 'image'
+    imageFormat = 'png'
+    deck = $false
+    width = $viewport.width
+    height = $viewport.height
+  } | ConvertTo-Json -Compress
+  Invoke-WebRequest -UseBasicParsing -Uri "$designDaemon/api/projects/client-concept-a/export" -Method Post -ContentType 'application/json' -Headers $exportHeaders -Body $exportBody -OutFile ("C:/path/to/preview-{0}x{1}.png" -f $viewport.width, $viewport.height)
+}
+```
+
+Use the actual daemon origin, owned project ID and output paths. Inspect each returned PNG and record its actual dimensions; a filename is not proof of a mobile capture. If the installed export API differs or visual export is unavailable, export standalone HTML with `od export ... --format html --out ...` and capture that HTML with an available browser at the requested viewport. Keep original fluid expressions, fonts and asset access consistent when comparing captures.
 
 ## Synchronizing external CLI projects with the OpenDesign Desktop UI
 

@@ -18,7 +18,7 @@ The generator evaluates ordered project CSS in an isolated Chromium browser cont
 
 - **`canvas-kit.json`:** Comprehensive diagnostic report recording source hashes, declaration contexts, font requests, and unresolved properties. Font-relative lengths (such as `em`, `ch`, `lh`) remain unresolved by design because the inert span does not reproduce font metrics or element line heights.
 - **`390.tokens.json` & `1440.tokens.json`:** Viewport-specific DTCG design token files with `site390/*` and `site1440/*` variable namespaces for OpenPencil, preserving both viewports simultaneously without relying on mode switching.
-- **`open-design/`:** Contains `DESIGN.md` (canonical tokens and Astro primitive contracts), `open-design.json` (design system manifest), and `specimen.html` (zero-JS preview) for OpenDesign Desktop.
+- **`open-design/`:** Contains `DESIGN.md` (token-only source cascade, sampled values, role mappings, root/context assumptions and Astro primitive contracts), `open-design.json` (design system manifest), and `specimen.html` (zero-JS preview) for OpenDesign Desktop. The preview preserves selectors, layers, media queries, aliases and property registrations, applies the selected root font size and body context class, and maps preview consumers to source variables. Conditional/component-specific values still need review against real routes; `ready` means required preview roles resolved. Incomplete roles omit `specimen.html` and are listed in `DESIGN.md` and `canvas-kit.json`.
 - **`.jsx` Previews:** Semantic Card component previews with Title, ShowMetadata properties, and Primary/Secondary/Ghost action variants for OpenPencil.
 
 ## Custom Role Mapping

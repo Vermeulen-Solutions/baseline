@@ -46,7 +46,7 @@ Read [penpot-site-design/references/baseline-recipes.md](../penpot-site-design/r
 3. Run the deterministic anti-slop linter after every edit batch:
    `od lint <artifact.html> --json`
    Fix all `P0` and `P1` findings before presenting the work—including uppercase labels without tracking (`all-caps-no-tracking`, require `letter-spacing >= 0.06em`), missing section anchors (`missing-section-anchor`, add `data-od-id` to top-level sections), contrast failures or unconstrained line lengths.
-4. Export headless Chromium renders at desktop (`1440×900`) and mobile (`390×844` or extended height) using `od export`, register the artifact in the project (`od artifacts create` or MCP `create_artifact`), and inspect the rendered PNGs for wrapping, alignment and visual hierarchy.
+4. Register the artifact in the project (`od artifacts create` or MCP `create_artifact`), then capture desktop (`1440×900`) and mobile (`390×844` or extended height) renders using the explicit-viewport procedure in [connection-and-cli.md](references/connection-and-cli.md#explicit-desktop-and-mobile-captures). The tested `od export` CLI does not expose viewport-size flags. Inspect the rendered PNGs for wrapping, alignment and visual hierarchy, and record their actual dimensions.
 
 ## Stage 4C: Handoff and translate to Astro
 
