@@ -8,9 +8,17 @@ When an AI coding assistant is asked to "build a modern landing page" from a sin
 
 Baseline's design workflow starts with the brief, native CSS tokens and rendered calibration. The following optional research, concepting and component sources can help resolve particular design questions. Use the relevant steps without requiring any external service or token format.
 
-## Design surface and agent arrangement
+## Design Surfaces
 
-For new sites and substantial overhauls, recommend canvas-led iteration and offer **OpenPencil**, **OpenDesign**, **Penpot** and **direct Astro/browser** explicitly. Prefer an already working user-preferred canvas; OpenPencil supports local files, OpenDesign supports a local HTML/CSS canvas with 154 bundled `DESIGN.md` systems and 188 examples (queried offline at Stage 4A research with `od plugin search`), Penpot supports a shared cloud artifact, and direct Astro remains a complete no-service option. Retain explicit preferences for Pencil, Google Stitch or Claude Design. OpenDesign uses `opendesign-site-design` and [onboarding](opendesign-onboarding.md); `npm run design:canvas-kit` also emits an `open-design/` kit. Follow `site-art-direction/references/design-iteration.md`: focused representative concepts → meaningful direction selection → native Astro proof → rollout, rather than a mandatory chain of tools or a full duplicate site in each surface. Penpot uses `penpot-site-design` and [onboarding](penpot-onboarding.md); OpenPencil uses `openpencil-site-design` (plus its upstream skill/API) and [onboarding](openpencil-onboarding.md). Same-agent work is complete; switching agents is optional. A canvas remains a design reference, with source CSS/content authority and real browser acceptance.
+For new sites and substantial overhauls, choose a design iteration surface that fits your workflow:
+- **[OpenDesign](opendesign-onboarding.md):** Local HTML/CSS canvas (`opendesign-site-design`) with 154 bundled offline `DESIGN.md` systems, 188 layout examples, and `od lint` validation.
+- **[OpenPencil](openpencil-onboarding.md):** Local desktop canvas (`openpencil-site-design`) using `.fig` files, vector nodes, and semantic variable bindings.
+- **[Penpot](penpot-onboarding.md):** Shared cloud workspace (`penpot-site-design`) for multi-user browser review.
+- **Direct Astro:** Browser-native workflow in `src/pages/` and `src/styles/global.css` with live reload and `/_styleguide`.
+
+Baseline supports two execution models across all surfaces:
+- **Single-Agent Model:** The same agent explores concepts on the canvas and translates the approved direction into Astro.
+- **Agent Switch Model:** A design agent creates canvas concepts and exports a structured handoff packet (`references/handoff-packet-template.md`), which an implementation agent then translates into native Astro primitives and routes.
 
 ---
 
@@ -18,23 +26,23 @@ For new sites and substantial overhauls, recommend canvas-led iteration and offe
 
 ```mermaid
 flowchart LR
-    S1["1. Brief & optional UX research<br/>(Nicelydone / Refero)"] --> S2["2. Canvas-led concepts & selection<br/>(OpenPencil / Penpot; Astro when chosen)"]
-    S2 --> S3["3. Translate Selected Direction<br/>(Native CSS Tokens)"]
-    S3 --> S4["4. Optional component sourcing & quarantine<br/>(21st.dev MCP → /_styleguide)"]
-    S4 --> S5["5. Token & Optical Calibration<br/>(design:tokens + /_styleguide + Impeccable)"]
+    S1["1. Brief & UX research<br/>(Nicelydone / Refero)"] --> S2["2. Concept iteration<br/>(OpenDesign / OpenPencil / Penpot / Astro)"]
+    S2 --> S3["3. Translate to native CSS<br/>(src/styles/global.css)"]
+    S3 --> S4["4. Component quarantine<br/>(21st.dev MCP -> /_styleguide)"]
+    S4 --> S5["5. Token calibration<br/>(design:tokens + /_styleguide)"]
 ```
 
 ### How the optional tools fit together
 
-These tools overlap; select the smallest useful set for the task rather than treating them as required pipeline dependencies:
+Select the tools that fit the project rather than treating every external service as a dependency:
 
 | Layer | Tool / Service | What It Provides |
 | :--- | :--- | :--- |
 | **1. UX Flows & Anatomy** | **Nicelydone MCP** / **Refero.design** / **Kombai** | Real-world page flows, filter bars, secondary metadata, and empty states. |
-| **2. Macro Design System** | **[designmd.ai](https://designmd.ai/explore)** (`designmd-mcp`) | 420+ free community `DESIGN.md` design systems (colors, font pairings, elevation, guidelines). |
-| **3. Visual Screen Prototyping** | **Penpot** / **OpenPencil** / **Pencil** / **Google Stitch** / **OpenDesign** / **Claude Design** | Choose a shared canvas, local desktop artifact or generated concept according to the task; inspect actual capabilities and translate selected decisions into native Astro. |
-| **4. Micro-Component Blueprints** | **21st.dev MCP** (`@21st-dev/magic`) | High-craft Tailwind component structures & micro-interactions (transmuted to zero-JS Astro). |
-| **5. Token & Optical Calibration** | **`npm run design:tokens` + `/_styleguide` + `impeccable`** | Automated WCAG contrast & fluid scale verification, `/_styleguide` specimen checks, and UI critique. |
+| **2. Design Systems** | **OpenDesign Catalog** / **[designmd.ai](https://designmd.ai/explore)** | 154 bundled offline systems in OpenDesign plus 420+ community `DESIGN.md` files via `designmd-mcp`. |
+| **3. Visual Prototyping** | **OpenDesign** / **OpenPencil** / **Penpot** / **Astro** | Bounded concept iteration on your chosen surface before translating to production code. |
+| **4. Component Blueprints** | **21st.dev MCP** (`@21st-dev/magic`) | High-craft Tailwind component structures transmuted to zero-JS Astro. |
+| **5. Token Calibration** | **`npm run design:tokens` + `/_styleguide`** | WCAG AA contrast, fluid typography and spacing verification, and visual proofing. |
 
 ---
 
@@ -47,24 +55,17 @@ Before inventing sections from scratch, ground your layout in real production UX
   - How does the page vary its **section pacing** (alternating dense multi-column index grids with spacious asymmetric feature spotlights)?
   - What empty, filter, or mobile disclosure states are needed?
 
-### Step 2: Macro Design Systems (`designmd.ai`) & Visual Concepting (`audit/visual-concepts/`)
-When exploring visual mood, typography, and surface contrast, combine community `DESIGN.md` systems with generative screen studies inside the isolated `audit/visual-concepts/<concept-name>/` sandbox:
-- **Browse or Query [designmd.ai/explore](https://designmd.ai/explore) (`designmd-mcp`):** Search 420+ curated community `DESIGN.md` files by tag (`minimal`, `dark`, `warm`, `landing-page`, `accessible`, `bold`) directly from your agent—searching works without an API key, and downloading uses a free key ([setup guide](agent-documentation.md)).
-- **Google Stitch + `DESIGN.md` Synergy:** Google Stitch natively reads and emits `DESIGN.md`. Your agent can download a starting `DESIGN.md` from `designmd.ai` (or author one from Baseline's Aesthetic Lanes), pass it to Stitch (`create_design_system_from_design_md` / `generate_screen_from_text`) to generate 2–3 visual screen concepts anchored in your **Narrative Metaphor**, and save the captures in `audit/visual-concepts/<concept-name>/`.
-- **Claude Design / OpenDesign:** Rapidly prototype layout variations and typographic pairings.
-- **Why the Sandbox Matters:** Never paste raw AI-generated prototype HTML directly into `src/pages/`. AI visual generators frequently output fixed-width containers (`w-[1440px]`), hardcoded copy, and flat sRGB hex codes that bypass EmDash CMS bindings. Files in `audit/visual-concepts/` are exempt from the Art Direction Gate so you can iterate freely before committing to production code.
+### Step 2: Design Systems & Visual Concepting (`audit/visual-concepts/`)
+When exploring visual mood, typography, and surface contrast, combine existing design systems with exploratory screen studies inside `audit/visual-concepts/<concept-name>/`:
+- **OpenDesign Bundled Catalog (Offline):** Search 154 bundled design systems and 188 HTML layout examples directly via `od plugin search <query> --json` or the OpenDesign Desktop catalog.
+- **Community References ([designmd.ai/explore](https://designmd.ai/explore) / `designmd-mcp`):** Search 420+ curated community `DESIGN.md` files by tag (`minimal`, `dark`, `warm`, `landing-page`, `accessible`, `bold`) directly from your agent.
+- **Prototype Sandboxes:** Never paste raw generated prototype HTML directly into `src/pages/`. Files in `audit/visual-concepts/` are exempt from the Art Direction Gate so you can explore freely before translating to production code.
 
 ### Step 3: Translate the Selected Direction into Native Tokens
 
-An external `DESIGN.md` may contain plain Markdown, structured YAML tokens or both. Read it as reference material. Baseline does not require a particular schema or parse it during verification.
-
-1. Review the selected concept against the brief and record the direction in `AGENTS.md`. Preserve source provenance, rationale and any mapping decisions alongside the reference under `audit/visual-concepts/<concept-name>/`.
-2. Translate suitable decisions into `src/styles/global.css` and components. Preserve semantic roles, OKLCH colors, aliases, contextual surfaces and fluid `clamp()` type/spacing scales. Avoid flattening these to exported fixed values.
-3. Run `npm run design:tokens`, then inspect and calibrate the rendered result on `/_styleguide`. A valid exchange document cannot establish visual quality or accessibility of the implemented site.
-
-If a specific handoff requires deterministic validation or export, choose a validator that supports the recipient's format. Review its version, dependency advisories and output limitations, and install it in a separate tooling workspace with its own package file and lockfile. Run it explicitly there and review any output before translation. No automatic install or network fallback is part of Baseline's build or checks. The former `design:check` and `design:export` commands have been retired; `design:tokens` remains the native audit.
-
-Google's [`@google/design.md`](https://github.com/google-labs-code/design.md) and the community registry's `designmd` package are different tools that both use the `designmd` binary name. Select the intended package explicitly when using either externally. The previously bundled Google 0.4.0 release has unresolved dependency findings recorded in [the dependency review](dependency-review-2026-10-25.md); its removal is not a recommendation to install that release elsewhere.
+1. Review the chosen concept against the brief and record the direction in `AGENTS.md` under `## Art Direction Record`.
+2. Translate suitable colors, typography, and spacing into `src/styles/global.css`. Preserve semantic roles (`--color-page`, `--color-surface`, `--color-elevated`), OKLCH definitions, and fluid `clamp()` scales (`--text-step-*`, `--spacing-*`).
+3. Run `npm run design:tokens` to audit token definitions and WCAG AA contrast, then inspect the rendered primitives on `/_styleguide`.
 
 ### Step 4: Component Sourcing (`21st.dev MCP`) & The Zero-JS Quarantine (`/_styleguide`)
 Once your macro design tokens are set in `src/styles/global.css`, your agent can query the **21st.dev MCP** registry to fetch polished, high-craft Tailwind component blueprints (e.g., bento grids, editorial timelines, interactive accordions, subtle spotlight cards, or split-sticky sections) rather than hallucinating complex UI from scratch.

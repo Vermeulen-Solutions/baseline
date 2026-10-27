@@ -1,28 +1,29 @@
-# Source-derived canvas bootstrap
+# Source-Derived Canvas Bootstrap
 
-Use this optional manual command after selecting a design surface. It emits a disposable kit outside the site, preserving CSS and Astro as the source of truth. It never edits site files, installs tooling, opens a design document or changes client configuration. Inspect source paths and declared component contracts with `baseline:inspect` first.
+The canvas kit generator (`scripts/canvas-kit.mjs`, run via `npm run design:canvas-kit`) extracts tokens and semantic preview components from an existing Baseline site into a disposable external folder. This allows design tools like OpenDesign and OpenPencil to bootstrap directly from verified project CSS without modifying site code.
 
 ```powershell
+# Basic extraction from default src/styles/global.css:
 npm.cmd run design:canvas-kit -- --out ../canvas-kit-001
-# Preserve the CSS load order of an existing site's actual layout:
+
+# Advanced extraction with explicit CSS load order and role mapping:
 node scripts/canvas-kit.mjs --root ../my-site --css src/styles/global.css --css src/styles/theme.css --context-class site-design --map ../site-role-map.json --out ../canvas-kit-002
 ```
 
-This uses existing PostCSS, TypeScript and Playwright development dependencies and an already installed full Chromium. `npx.cmd playwright install chromium` is a separate intentional setup step. The command is outside verify/build/CI. Missing browser tooling fails without publishing a kit; manual source mapping remains a complete alternative.
+The generator uses PostCSS, TypeScript, and Playwright Chromium. Ensure Playwright Chromium is installed (`npx playwright install chromium`) before running the command.
 
-## Sampling and output
+## Sampling and Output
 
-Default input is `src/styles/global.css`; repeated `--css` arguments replace it with ordered project-relative styles. No target JS/config is executed. The inert harness removes font loads, imports and ordinary declarations, while retaining `@property` syntax/inheritance/initial-value descriptors; maps default `@theme` into its theme layer; and preserves custom-property rules/layers/media conditions. It samples a span under the optional body context class at 390×844 and 1440×900, using a default surface, horizontal writing and a 16px root (`--root-font-px` changes that explicit assumption). Chromium resolves aliases, derived colors and fluid lengths; eight-bit sRGB samples retain alpha. Font- or line-height-relative lengths such as `em`, `ex`, `ch`, `cap`, `ic`, `lh`, `rex`, `rch`, `rcap`, `ric` and `rlh` are unresolved because the inert span does not reproduce the page's font metrics or element line heights. This is token sampling, not the full page cascade or component geometry. Other CSS imports and non-default `@theme` directives are refused: supply reviewed explicit local CSS sources or inspect the actual rendered site instead.
+The generator evaluates ordered project CSS in an isolated Chromium browser context across mobile (`390×844`) and desktop (`1440×900`) viewports with a 16px root (`--root-font-px` overrides the root font size). Chromium resolves aliases, derived colors, and fluid `clamp()` lengths into 8-bit sRGB values:
 
-`canvas-kit.json` records source hashes, declaration expressions/contexts, selected roles/classes, environment, font requests, declared component props and unresolved values. Each token's `contextRisks` identifies conditional selectors or at-rules on that property and its `var()` dependencies; `contextReviewRequired` and the CLI's `conditionalRoles` surface these cases even when the default probe resolves a value. A warning is not proof that an alternative rule applies, and an empty list is not proof of complete cascade fidelity. `--context-class` sets classes on `body` only: it does not add HTML data attributes, ancestor elements, component classes to the probe, or infer which theme/route is intended. Compare flagged values and the assumed root size against the actual rendered page before importing or approving them. `sceneReady` only means required values were emitted, not that visual fidelity was verified. Independent `390.tokens.json` and `1440.tokens.json` collections use unique `site390/*` and `site1440/*` variables, avoiding dependence on scalar recomputation after a mode switch. Original production names remain in `codeSyntax.WEB`; samples are not a second production token authority.
+- **`canvas-kit.json`:** Comprehensive diagnostic report recording source hashes, declaration contexts, font requests, and unresolved properties. Font-relative lengths (such as `em`, `ch`, `lh`) remain unresolved by design because the inert span does not reproduce font metrics or element line heights.
+- **`390.tokens.json` & `1440.tokens.json`:** Viewport-specific DTCG design token files with `site390/*` and `site1440/*` variable namespaces for OpenPencil, preserving both viewports simultaneously without relying on mode switching.
+- **`open-design/`:** Contains `DESIGN.md` (canonical tokens and Astro primitive contracts), `open-design.json` (design system manifest), and `specimen.html` (zero-JS preview) for OpenDesign Desktop.
+- **`.jsx` Previews:** Semantic Card component previews with Title, ShowMetadata properties, and Primary/Secondary/Ghost action variants for OpenPencil.
 
-When comparing saved metadata, inspect the DTCG export and recorded source expressions. A combined CSS export may disambiguate duplicate CSS names across collections/role aliases by prefixing them. That output is not a replacement stylesheet or proof that a production property was renamed.
+## Custom Role Mapping
 
-When required roles resolve, matching `.jsx` files provide a real Card with Title/ShowMetadata properties, a long-copy instance and Primary/Secondary/Ghost action variants. These are semantic previews with illustrative copy, not extracted Astro implementations. Fixed 240×48 calibration controls are not measured production dimensions. Use actual source-owned component/layout APIs when translating. Missing roles emit diagnostic/token files without inventing a scene (exit 1); invalid inputs, drift, linked paths and existing/in-target outputs refuse (exit 2). Complete kits exit 0. Never import over unchecked user-owned variables.
-
-## Existing names and fonts
-
-A role map is a JSON object of canonical canvas role → existing source custom property:
+If an existing site uses custom variable names for core roles, provide a JSON mapping file (`--map <path>`):
 
 ```json
 {
@@ -32,19 +33,17 @@ A role map is a JSON object of canonical canvas role → existing source custom 
 }
 ```
 
-Mapping is explicit, not a guessed fallback or reason to rename an accepted theme. Only custom-property names are allowed. The map/digest are recorded; unresolved names remain unresolved. Review meanings: a card radius is not automatically a control radius, and one heading token may not represent every heading level. Preserve actual CSS load order and sampling context.
+The mapping explicitly binds project-specific custom properties to canonical canvas roles. Unmapped properties remain unresolved.
 
-Fonts retain source stacks. Font declarations must be valid `font-family` syntax and required colors and lengths must resolve as the expected token type; otherwise the scene is withheld. Generic system stacks have explicitly recorded canvas samples (Arial, Georgia or Consolas); custom family requests are retained. No font is installed or certified. Check `get_font_status`/CLI `fonts` before judging wrapping, declare substitutions and verify production fonts in Astro.
+## Importing into Design Surfaces
 
-## Import and verify
+- **OpenDesign:** Install the emitted folder into OpenDesign Desktop using `od plugin install --source <path-to-open-design-folder>`. See [OpenDesign onboarding](opendesign-onboarding.md).
+- **OpenPencil:** Import `390.tokens.json` and `1440.tokens.json` via OpenPencil's `import_design_tokens` MCP tool, then render the accompanying JSX preview nodes. See [OpenPencil onboarding](openpencil-onboarding.md).
+- **Penpot:** Use the values in `canvas-kit.json` as a reference when establishing typography and color palettes in Penpot. See [Penpot onboarding](penpot-onboarding.md).
 
-For OpenPencil, load its Baseline skill and bundled release-matched upstream reference. Inspect `import_design_tokens` and `render` schemas. Import each JSON as a separate `{ path, text }` file with `styles:false` into an agreed scratch document, then render matching JSX. Its JSON path is a payload label, not permission to expand filesystem roots. Inspect fonts, bounds, bindings and exported desktop/mobile views. Use the scoped properties/lint/diff loop, save `.fig` and verify recovery before implementation.
+## Running Browser Sampler Tests
 
-For OpenDesign, the kit also writes `open-design/DESIGN.md` (source-derived canonical custom properties and Astro primitive contracts), `open-design/open-design.json` (a design-system plugin manifest) and, only when every required role resolves, a zero-JS `open-design/specimen.html`. Install the folder with `od plugin install --source` as described in [opendesign-onboarding.md](opendesign-onboarding.md); it remains a disposable sampled proposal, not a token authority.
-
-For Penpot, map the source report through the documented Penpot variable/component APIs; this scope does not emit an executable Penpot bootstrapper. Direct Astro users can use the report without a canvas. Every path retains design selection, native `/_styleguide` calibration, route/browser acceptance and the authorized release endpoint.
-
-To rerun the local Chromium regressions for the sampler on Windows, use the already installed browser and run:
+To run the full Chromium regression tests for the token sampler on Windows:
 
 ```powershell
 $env:BASELINE_CANVAS_BROWSER_TESTS = '1'
@@ -52,11 +51,11 @@ node --test tests/canvas-kit.test.mjs
 Remove-Item Env:BASELINE_CANVAS_BROWSER_TESTS
 ```
 
-Those optional tests compare a real browser's page values with the kit for font-relative lengths, registered non-inherited properties and conditional/aliased declarations. The ordinary fast suite keeps its browser-free injected-sampler tests; these local checks do not run in CI or the site build.
+These optional tests compare the sampler's emitted values against a live browser's computed styles for registered custom properties, fluid clamps, and contextual overrides.
 
-## Headless saved-file checks
+## Headless CLI Verification (OpenPencil)
 
-Prefer a version-matched external OpenPencil CLI for saved-file inspection before inventing parsers. It is optional and separate from site dependencies; inspect installed help. Tested Windows examples use the npm cache without altering the project lockfile:
+To inspect `.fig` design files without opening the desktop GUI, use the standalone `@open-pencil/cli`:
 
 ```powershell
 npm.cmd exec --yes --package=@open-pencil/cli@0.16.0 -- openpencil info C:/designs/review.fig --json
@@ -65,6 +64,4 @@ npm.cmd exec --yes --package=@open-pencil/cli@0.16.0 -- openpencil lint C:/desig
 npm.cmd exec --yes --package=@open-pencil/cli@0.16.0 -- openpencil diff files C:/designs/before.fig C:/designs/after.fig --json
 ```
 
-These read-only commands need no editor. `diff files` exits 1 for differences; inspect the result rather than treating that exit as a defect by itself. Use a separately owned closed copy for headless writes, never a file concurrently open for manual editing. Do not use `lint --fix` by default. Raster exports require fonts/renderer support: inspect diagnostics and use `--font-policy strict` when faithful fonts are an acceptance requirement. Canvas checks do not certify browser layout, accessibility or CMS bindings.
-
-Observed Windows/Node 24 limitation in CLI 0.16.0: `info`, `tokens`, `lint` and file diffs worked without the editor, but headless `eval` failed during CanvasKit initialization with a doubled drive-letter WASM path. Use desktop MCP for authoring/renders on that affected setup; do not patch installed packages or disable safeguards as an onboarding step. This is version/environment evidence, not a claim that headless authoring is unsupported everywhere. The desktop trial also exposed stale glyph rendering after reopen despite available-font diagnostics; follow the skill's scoped recovery and inspect both export and visible canvas before acceptance.
+Always run headless inspection on a closed copy of the `.fig` file rather than one actively open in the desktop editor. Note that `diff files` exits with code 1 when visual differences are detected.

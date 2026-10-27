@@ -1,30 +1,27 @@
-# Penpot onboarding for Baseline
+# Penpot Onboarding for Baseline
 
-For a new site or substantial redesign, recommend canvas-led iteration at the existing concept checkpoint: Penpot offers a shared cloud canvas, [OpenPencil offers a local desktop canvas](openpencil-onboarding.md), and direct Astro/browser is a complete option when preferred. Reuse a working user-preferred connection; follow `site-art-direction/references/design-iteration.md` for focused edits and the transition into Astro. One agent can complete any selected path. An optional second agent can design while the implementation agent later reads the same saved artifact. Neither setup changes Baseline's profile, runtime or content ownership. See the installed `penpot-site-design` skill and its portable brief/handoff templates.
+Penpot offers a collaborative cloud design canvas accessible in the browser, making it ideal for client reviews and shared inspection. For new sites and major redesigns, choose between [OpenDesign](opendesign-onboarding.md), [OpenPencil](openpencil-onboarding.md), [Penpot](penpot-onboarding.md), or direct Astro in the browser. Use `penpot-site-design` for concept iteration followed by representative Astro proofs.
 
-## Hosted setup
+Baseline supports two execution models: a single agent completing both design and implementation, or an **optional agent switch** where a design agent explores concepts in Penpot and an implementation agent translates the saved design into Astro.
 
-If already connected, skip to the read-only check. Otherwise follow [Penpot's current MCP guide](https://help.penpot.app/mcp/): sign in, enable MCP Server in account settings → Integrations, generate/copy the private connection URL, add it to your agent's MCP client, open the intended file and use File → MCP Server → Connect. Keep that browser tab awake. Only one tab can be active for the connection; re-check the file/page when switching clients. A working MCP transport without an awake connected file cannot edit the canvas.
+## Hosted Setup
 
-No local Penpot installation, hosted AI agent or additional model account is required for the remote MCP route; the chosen agent's own usage/cost still applies. Baseline makes no permanent free-tier quota guarantee for a third-party service. Consult current service terms for commercial limits rather than inferring them from a tool connection. The [develop source](https://github.com/penpot/penpot/tree/develop/mcp) includes local development instructions that can differ from the hosted release. Use those only for a deliberate local-server setup, not as a prerequisite for ordinary site work.
+Follow [Penpot's MCP guide](https://help.penpot.app/mcp/): sign in to your Penpot account, enable MCP Server in account settings (Integrations), generate a connection URL, add it to your agent's MCP configuration, open the target file in Penpot, and connect via **File -> MCP Server -> Connect**. Keep that browser tab active during editing: Penpot requires an active tab to handle incoming MCP commands.
 
-The remote URL contains a `userToken` credential. Keep it in private client configuration, never a tracked project config, prompt, screenshot, handoff or log. Examples below contain placeholders only. Do not paste the real URL into a shell command that will be recorded in history. The query credential is not an interchangeable `Authorization: Bearer` token. Do not change global settings automatically just to test a connection.
+The connection URL includes a private `userToken`. Keep it in private client configuration rather than committing credentials to repository files.
 
-## Codex
+### Codex Configuration
 
-Check the installed client's MCP settings/help. The current CLI supports `codex mcp add <name> --url <URL>`; a private TOML configuration avoids pasting a real URL into shell history:
+Add the connection to your private client settings (e.g. `~/.codex/config.toml`):
 
 ```toml
-# Private user config, NOT a file to commit to the site
 [mcp_servers.penpot]
-url = "https://design.penpot.app/mcp/stream?userToken=REPLACE_PRIVATELY"
+url = "https://design.penpot.app/mcp/stream?userToken=YOUR_PRIVATE_TOKEN"
 ```
 
-Use the client's private config location/settings and restart or reconnect as its version requires. Do not invent environment interpolation for the URL. `--bearer-token-env-var` configures a bearer header and does not replace Penpot's query key. Check the [official Codex MCP documentation](https://developers.openai.com/codex/mcp/) for your installed surface; desktop/CLI settings may differ. Confirm actual Penpot tools are visible before claiming setup works.
+### OpenCode Configuration
 
-## OpenCode
-
-Check `opencode --version` and `opencode mcp add --help`; client schemas evolve. The installed 1.17.11 CLI observed during the trial supports `opencode mcp add penpot --url <URL>`, but this example is not permission to expose the real URL in shell history. Prefer its private user config and current schema. The [v1 documentation](https://dev.opencode.ai/docs/mcp-servers/) uses:
+For OpenCode, configure the remote server in your private client config:
 
 ```json
 {
@@ -39,18 +36,26 @@ Check `opencode --version` and `opencode mcp add --help`; client schemas evolve.
 }
 ```
 
-Set `PENPOT_MCP_URL` privately for that client process. OpenCode documents `{env:NAME}` substitution; do not use shell `${NAME}` syntax in JSON. The [v2 schema](https://opencode.ai/v2/docs/mcp-servers) instead nests entries under `mcp.servers` and uses `disabled` rather than `enabled`. Do not mix schemas. Inspect your installed version's schema/help before choosing one; Baseline does not ship a universal credential-bearing OpenCode config. Hosted Penpot's connection key does not require the client's OAuth flow. A schema check is not proof of a model executing the full workflow.
+Store `PENPOT_MCP_URL` in your private environment for that process.
 
-## Connection acceptance and recovery
+## Connection Verification and Recovery
 
-Ask the agent: “Use `penpot-site-design`. Read the MCP overview/API, then report the current file/page names and IDs without changing anything.” Check the identity against the intended file, then authorize a small clearly named test board. Read its geometry/text back and inspect an exported render before continuing. Initialization and tool listing alone do not pass this test.
+1. **Verify Connection:** Ask the agent to use `penpot-site-design` to read the active file and page names before modifying boards.
+2. **Reconnecting Inactive Tabs:** If the connection drops or the browser tab suspends, focus the Penpot tab, reconnect via **File -> MCP Server -> Connect**, and re-run the identity check.
+3. **Iterative Board Design:** Author representative desktop (`1440×900`) and mobile (`390×844`) boards with visual feedback rather than attempting full-site mockups in one pass.
 
-If the agent reports no heartbeat/suspended tab, focus the Penpot tab; reconnect its MCP panel if needed, then retry read-only identity. If the wrong file is active, stop writes and connect the intended file. If authentication fails, renew the key privately. A retry after a timed-out mutation must first inspect whether it already committed. Keep each batch small and preserve user objects.
+## The Agent Switch & Handoff Workflow
 
-## Design, review and optional agent switch
+Baseline's `penpot-site-design` skill bundles portable brief and handoff templates (`references/portable-brief-template.md` and `references/handoff-packet-template.md`) for delegating work between design and coding agents:
 
-Give the design agent the portable brief plus Baseline's skill/mapping references, real copy/assets and source token expressions. Iterate representative desktop/mobile boards rather than asking for the entire site in one pass. Use the [official prompting guide](https://penpot.app/blog/penpot-ai-prompting-guide/) for role, constraints, bounded changes and review criteria. Preserve source `clamp()` expressions beside canvas samples; generic fixed-grid/React instructions are not Baseline's implementation contract.
+1. **Design Agent Scope:** The design agent receives the brief and token rules, authors bounded desktop and mobile boards in Penpot, and captures exports for review.
+2. **Preparing the Handoff Packet:** When a direction is approved, the design agent prepares a structured handoff packet containing:
+   - Target file, page, and board identifiers.
+   - Selected direction vs. draft concepts.
+   - Design token mappings to Baseline custom properties (`--color-*`, `--text-step-*`, `--spacing-*`).
+   - Component-to-primitive mapping (`<Section>`, `<Container>`, `<Grid>`, `<Card>`).
+   - Responsive and state intent (mobile drawer, hover states, dark surface variants).
+   - High-resolution exported board images for visual comparison.
+3. **Implementation Agent Scope:** The implementation agent reads the saved Penpot file and handoff packet, records the Art Direction Record in `AGENTS.md`, synchronizes `src/styles/global.css` (`npm run design:tokens`), calibrates components on `/_styleguide`, and implements the production Astro routes.
 
-If switching agents, finish the design batch and save a packet with target IDs, selected versus draft boards, approval evidence, dated renders, token expressions, native component mapping, responsive/states intent and open questions. Share repository/packet/design access through the user's chosen channel; do not send credentials. The next agent connects privately and re-reads the saved design. Same-agent work can use its existing context without creating a redundant packet. A cloud canvas saves design state, not the first agent's full conversation or a guarantee of lower token use.
-
-Remote asset tools cannot access arbitrary local filesystem paths. Inspect the live export/import schemas and use approved remote assets or a deliberate local-server workflow when necessary. Generated markup still requires native Astro translation, `/_styleguide` calibration, real browser checks and the selected profile's content bindings. A board export is evidence, not deployable page code.
+Single-agent workflows follow the same translation steps in a single continuous session without requiring a formal packet file.

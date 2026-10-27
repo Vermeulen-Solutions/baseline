@@ -8,25 +8,32 @@ One of the most persistent frustrations when building websites with AI coding as
 - Low-contrast light gray body text on white backgrounds
 - Monotonous page pacing (repeating the same 3-column card grid four times down the page)
 
-Baseline addresses this with an **Art Direction Gate** (`npm run check:art-direction`) and optional design tools ([designmd.ai](https://designmd.ai/explore), `Nicelydone`, `Google Stitch / OpenDesign`, and `21st.dev MCP`). `AGENTS.md` requires saving a complete Art Direction Record before site-specific visual implementation, then checking it with `--require-record`. The command validates the record and changed visual source; it does not enforce the timing of writes or certify design quality.
+Baseline addresses this with an **Art Direction Gate** (`npm run check:art-direction`) and optional design tools ([designmd.ai](https://designmd.ai/explore), `OpenDesign`, `OpenPencil`, `Penpot`, `Nicelydone`, and `21st.dev MCP`). `AGENTS.md` requires saving a complete Art Direction Record before site-specific visual implementation, then verifying it with `npm run check:art-direction -- --require-record`.
 
 ---
 
-## 1. The Stage 4 Capability Prompt (Code-First or MCP-Assisted)
+## 1. Choosing a Design Surface (Stage 4)
 
-When transitioning from **Stage 3 (Content Architecture)** into **Stage 4 (Art Direction)** for a new site or substantial overhaul, recommend a dedicated design canvas and offer **OpenPencil**, **Penpot** and **direct Astro/browser** explicitly. Follow the canonical `site-art-direction/references/design-iteration.md`: reuse settled preferences and working connections, iterate one representative slice in focused visual batches, resolve the direction and prove it in Astro before rollout. Keep Pencil, Google Stitch, OpenDesign and Claude Design available when preferred. Small refinements reuse their accepted world; another agent is optional. These are alternative surfaces, not a mandatory multi-tool pipeline or a claim that canvas work is always faster.
+When entering **Stage 4 (Art Direction)** for a new site or major redesign, choose a design iteration surface that matches the project's workflow:
 
-**Penpot:** use the installed `penpot-site-design` skill and [hosted onboarding](penpot-onboarding.md). Confirm file/page identity, iterate bounded desktop/mobile concepts, inspect structure and exports, then translate the selected direction into real Astro components. **OpenPencil desktop:** use the installed `openpencil-site-design` skill alongside its official version-matched `open-pencil/open-pencil` skill/API and [desktop onboarding](openpencil-onboarding.md), verify the document target, save a local artifact and inspect it again after reopening. Both retain Baseline's exact CSS recipes and source authority; canvas exports do not replace browser, content-binding or release acceptance.
+- **OpenDesign (Local HTML/CSS canvas):** Uses the `opendesign-site-design` skill and [OpenDesign onboarding](opendesign-onboarding.md). Bundles 154 offline `DESIGN.md` systems, 188 layout examples, `od lint` validation, and native export to Baseline Astro.
+- **OpenPencil (Local desktop canvas):** Uses the `openpencil-site-design` skill and [OpenPencil onboarding](openpencil-onboarding.md). Iterates vector shapes, component nodes, and variable bindings in local `.fig` files.
+- **Penpot (Shared cloud canvas):** Uses the `penpot-site-design` skill and [Penpot onboarding](penpot-onboarding.md). Provides a collaborative web workspace ideal for client reviews.
+- **Direct Astro (Browser-native):** Work directly in `src/pages/`, `src/styles/global.css`, and `/_styleguide` using live browser reloading. Requires no external tools or accounts.
 
-The core flow uses the selected concept surface and native foundation below. Research and external component aids remain optional:
+Baseline supports two execution models across all surfaces:
+- **Single-Agent Model:** The same agent iterates concepts on the canvas and translates the approved direction into Astro.
+- **Multi-Agent Model (Agent Switch):** A specialized design agent iterates on the canvas, produces a structured handoff packet (`handoff-packet-template.md`), and passes it to an implementation agent that translates the design into Astro primitives and routes.
 
-1. **Canvas-led concepts (recommended for new sites/overhauls):** Choose OpenPencil or Penpot using preference and actual access, iterate a representative page with visual feedback, then select a direction. Direct Astro/browser is a complete alternative when preferred. Use the shared iteration reference rather than repeating a discovery menu.
-2. **Native foundation (all paths):** Pick an Aesthetic Lane below, record the Art Direction Record in `AGENTS.md`, apply and audit tokens in `src/styles/global.css` via `npm run design:tokens`, and inspect live on `/_styleguide`.
-3. **UX Flow & Anatomy Teardowns (`Nicelydone MCP` / `Refero.design`):** Inspect real production web screens to extract authentic UX details (secondary metadata, filter bars, dense tables, and varied section pacing) before styling.
-4. **Community `DESIGN.md` Systems & Visual Concepting (`designmd-mcp` + `Google Stitch` / `OpenDesign` / `Claude Design`):** Browse community design references, generate 2–3 visual screen concepts in `audit/visual-concepts/`, and translate the selected direction into native CSS. `DESIGN.md` is optional; validate implemented tokens with `npm run design:tokens` and inspect `/_styleguide`.
-5. **Component Sourcing (`21st.dev MCP`):** Evaluate external Tailwind patterns on `/_styleguide` and adapt suitable ones to token-bound Astro components.
+The core workflow proceeds through five focused steps:
 
-See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md) and [AI Agent & Harness Configuration](agent-documentation.md) for 30-second MCP setup snippets.
+1. **Iterate concepts on your chosen surface:** Explore visual directions for a representative page slice (hero, card, typography), get feedback, and select the final direction.
+2. **Establish the native foundation:** Pick an Aesthetic Lane, write the Art Direction Record in `AGENTS.md`, set up tokens in `src/styles/global.css` via `npm run design:tokens`, and verify on `/_styleguide`.
+3. **Inspect real-world UX patterns (optional):** Extract structural layout patterns (timestamps, status badges, filter bars, section pacing) using `Nicelydone MCP` or `Refero.design`.
+4. **Explore design systems (optional):** Query OpenDesign's bundled offline systems (`od plugin search`) or community references via `designmd-mcp`, saving exploratory sandboxes to `audit/visual-concepts/`.
+5. **Source reusable components (optional):** Find high-craft patterns via `21st.dev MCP` and transmute them into zero-JS Astro components on `/_styleguide`.
+
+See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md) and [AI Agent & Harness Configuration](agent-documentation.md) for tool configuration.
 
 ---
 
@@ -104,4 +111,4 @@ npm run check:art-direction -- --require-record
 - **In CI Pipelines:** Automated CI runs `check:art-direction` against git commits. Commits that add visual CSS or templates under `src/` or `public/` without a valid Art Direction Record in `AGENTS.md` are automatically flagged.
 - **Exceptions:** Pure infrastructure changes or starter maintenance can be registered as hash-bound exceptions in `audit/design-gate-exceptions.json`.
 
-The pre-implementation order is an agent/developer instruction in `AGENTS.md`. CLI and CI inspect outcomes; they cannot prove the record existed before an edit, prevent writes, or establish human approval or visual quality. Saving the record means writing it to disk and does not require a commit.
+Saving the record to `AGENTS.md` satisfies the gate for local development; a git commit is not required.

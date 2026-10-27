@@ -22,11 +22,13 @@ Baseline ships two OpenDesign plugins inside the skill directory that validate c
 
 For an existing Baseline site redesign or component refinement, run `npm.cmd run design:canvas-kit -- --out ../canvas-kit-001` ([canvas-kit.md](canvas-kit.md)) to emit a site-derived `open-design/DESIGN.md`, `open-design/open-design.json` and `open-design/specimen.html` bound to the site's active `src/styles/global.css`.
 
-## Practical acceptance workflow
+## Practical Acceptance & The Agent Switch
 
 Follow the [HTML/CSS recipe](../.agents/skills/opendesign-site-design/references/baseline-html-recipe.md) when iterating concepts:
 
 1. **Stage 4A (Inspiration vs. Active Tokens):** For greenfield sites, search OpenDesign's local `design-systems` and `examples` catalog (`od plugin search <query> --json` or MCP `list_plugins`) for layout anatomy and aesthetic direction, then map chosen colors and fonts onto Baseline's `--color-*`, `--text-step-*` and `--spacing-*` custom properties. For existing sites, bind the extracted `design:canvas-kit` tokens.
 2. **Stage 4B (Project Creation, `od lint` & `od export`):** Create the project with an explicit lowercase slug `id` (`{ id, name }`). Author self-contained `.html` slices with `data-od-id` section anchors, run `od lint <file.html> --fail-on p1 --json` until `P0`/`P1` findings are `0`, register the artifact (`od artifacts create`), and export `1440×900` and `390×844` renders (`od export --format image`).
 3. **Desktop UI Sync:** When creating projects or tabs externally via CLI/MCP while the OpenDesign desktop window is open, press `Ctrl + R` (`View -> Reload`) inside OpenDesign Desktop (or open the local web sidecar URL in a browser) so the React sidebar reloads the updated SQLite/daemon state.
-4. **Stage 4C (Handoff to Astro):** Never copy raw prototype `<style>` blocks or full-page HTML directly into `src/pages/`. Save concept artifacts under `audit/visual-concepts/<concept-name>/`, update `AGENTS.md` and `src/styles/global.css` (`npm run design:tokens`), calibrate `<Section>`, `<Container>`, `<Grid>` and `<Card>` on `/_styleguide`, and verify real routes in a browser.
+4. **Stage 4C (Handoff & Agent Switch):** Baseline supports both single-agent workflows and multi-agent delegation:
+   - **Single-Agent Model:** The same agent runs design iteration in OpenDesign, verifies `od lint`, exports renders, updates `AGENTS.md` and `src/styles/global.css` (`npm run design:tokens`), and implements the Astro templates.
+   - **Multi-Agent Model (Agent Switch):** A design agent authors the OpenDesign concept and exports a handoff packet under `audit/visual-concepts/<concept-name>/` (including rendered images, HTML slices, and token mapping). An implementation agent then picks up the folder, seeds the Art Direction Record, calibrates components on `/_styleguide`, and builds the production Astro routes.

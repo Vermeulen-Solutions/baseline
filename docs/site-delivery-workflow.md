@@ -88,12 +88,12 @@ For EmDash, model your editorial data structure *before* creating page templates
 ## Stage 4: Art Direction, Visual Concepting & The Design Gate
 
 Before writing a single line of site-specific CSS or template HTML, establish a distinct visual identity to prevent default "generic AI landing page" output:
-- **Unified Stage 3 → Stage 4 Capability Prompt:** Your agent presents a single transition prompt offering Code-First Aesthetic Lanes, Brand Seed Palettes (`--seed-accent`), or optional MCP superpowers ([AI Agent & Harness Configuration](agent-documentation.md)).
+- **Design Surface & Optional Agent Switch:** Choose a design iteration surface ([OpenDesign](opendesign-onboarding.md), [OpenPencil](openpencil-onboarding.md), [Penpot](penpot-onboarding.md), or direct Astro). Work as a single agent or perform an optional agent switch using the portable handoff template ([Art Direction Workflow](art-direction-workflow.md)).
 - **Select an Aesthetic Lane:** Choose a lane from [Aesthetic Lanes](../.agents/skills/site-art-direction/references/aesthetic-lanes.md) (*Technical Systems*, *Product-Led Minimalism*, *Editorial Paper*, *Luminous Futurism*, or *Custom / existing brand*).
 - **Define Token Physics & Pacing Variance:** Set typography pairings, canvas ground, action/accent contrast, border philosophy, spatial density, and a **Section Rhythm Map** (so consecutive sections never repeat the same layout).
 - **Declare Anti-Patterns:** Write 2–3 explicit semicolon-separated bans (e.g. *"No floating rounded cards; no decorative icon pills; no purple gradients"*).
 - **Initialize & Verify the Gate:** Run `npm run design:tokens -- --init-client --lane <lane>` (which seeds `src/styles/global.css`, writes `## Art Direction Record` in `AGENTS.md`, writes `audit/component-calibration.md`, and prunes starter sample-page exceptions from `audit/design-gate-exceptions.json`), then verify with `npm run check:art-direction -- --require-record`.
-- **Ordering & Validation:** `AGENTS.md` requires the saved record before site-specific visual implementation. The normal gate validates changed visual source and the record against Git; CLI/CI cannot prove when it was saved or prevent earlier writes. Follow the exact exception policy in `AGENTS.md`.
+- **Ordering & Validation:** `AGENTS.md` requires saving the record before site-specific visual implementation. The gate validates changed visual source against Git; infrastructure exceptions must be registered in `audit/design-gate-exceptions.json`.
 - **Guides:** [Art Direction Workflow](art-direction-workflow.md) · [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---

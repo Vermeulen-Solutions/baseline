@@ -1,25 +1,36 @@
-# Optional OpenPencil desktop path
+# Optional OpenPencil Desktop Path
 
-OpenPencil (`open-pencil/open-pencil`) is distinct from commercial Pencil and unrelated similarly named projects. For new sites and substantial redesigns, recommend a canvas and offer OpenPencil, Penpot and direct Astro/browser explicitly. Prefer an already working user-preferred connection; use `openpencil-site-design` and `site-art-direction/references/design-iteration.md` for focused concept edits followed by a representative Astro proof. Use Baseline's existing art-direction, concrete CSS/component recipes and acceptance gates on every surface. Another agent is optional.
+OpenPencil (`open-pencil/open-pencil`) provides a local desktop canvas for vector shapes, component nodes, and variable bindings saved in local `.fig` files. For new sites and major redesigns, choose between [OpenDesign](opendesign-onboarding.md), [OpenPencil](openpencil-onboarding.md), [Penpot](penpot-onboarding.md), or direct Astro in the browser. Use `openpencil-site-design` for concept iteration followed by representative Astro proofs.
+
+Baseline supports two execution models: a single agent completing both design and implementation, or an **optional agent switch** where a design agent explores concepts in OpenPencil and an implementation agent translates the saved `.fig` design into Astro.
 
 ## Setup
 
-Use the [official releases](https://github.com/open-pencil/open-pencil/releases) for your OS and the [official MCP guide](https://openpencil.dev/programmable/mcp-server). Match app and MCP versions rather than assuming the latest documentation matches an older app. The practical Windows trial used app/MCP 0.16.0. Install the corresponding npm package outside the site runtime, for example `npm.cmd install -g @open-pencil/mcp@0.16.0`. The CLI (`@open-pencil/cli` at the matching version) is optional when MCP provides the required operations. Do not modify a site's package/lockfile to install canvas tooling.
+Download OpenPencil Desktop from the [official releases](https://github.com/open-pencil/open-pencil/releases) and consult the [official MCP guide](https://openpencil.dev/programmable/mcp-server). Install the matching global MCP package outside the site runtime (e.g. `npm install -g @open-pencil/mcp@0.16.0`). Never add OpenPencil packages to a site's `package.json` or lockfile.
 
-Open the desktop app with a document. Its production build starts the local server when the matching global MCP package is available. Register `openpencil-mcp` as a **stdio** server in the chosen client; it discovers the app/server. For Codex, inspect `codex mcp add --help` and use the supported stdio command form. On Windows inspect the actual npm launcher/PATH; a direct Node invocation of the installed `dist/stdio.mjs` entry can avoid shell-launcher ambiguity. Use your real installed path, not a copied username. Do not alter global client settings without the user's setup scope.
+Open the desktop app with an active document. OpenPencil starts a local server on port 7600 when the matching global MCP package is installed. Register `openpencil-mcp` as a **stdio** server in your MCP client configuration using the path to the installed `dist/stdio.mjs`.
 
-The default HTTP endpoint is loopback port 7600 and uses private discovery/authentication. Health is a transport check, not proof of document access. Prefer stdio discovery instead of pasting the private discovery token into tracked configs or disabling authentication. Respect the server's filesystem root; save in its allowed location or make a deliberate scoped setup change. Never loosen root/auth/CORS to make an example pass. Arbitrary `eval` is disabled by default; normal render/edit tools do not require enabling it.
+## Authoring and Translating Concepts
 
-Read the [upstream agent skill](https://github.com/open-pencil/open-pencil/blob/master/skills/open-pencil/SKILL.md) at a release matching the app. Inspect live tool schemas before calls. `render` accepts design JSX creating scene nodes, not React/browser DOM. Code exported from the canvas still needs native Astro translation, source content bindings and browser tests. [Coding agents inside OpenPencil](https://openpencil.dev/programmable/coding-agents) use additional agent/ACP setup; an external agent using MCP does not need to launch another agent inside the app. Do not configure subscriptions or API models just to inspect/edit from the current agent.
+The installed `openpencil-site-design` skill bundles mechanics references and recipes. See [the concrete JSX/token recipe](../.agents/skills/openpencil-site-design/references/baseline-jsx-recipe.md) and [scoped review loop](../.agents/skills/openpencil-site-design/references/scoped-review.md). Follow these practices when authoring concepts:
 
-## Practical acceptance
+1. **Tool Invocation & Schemas:** Use `get_codegen_prompt` when available. Note that OpenPencil's `render` tool accepts declarative scene JSX creating vector and component nodes, not browser DOM elements.
+2. **Document Identification:** Call `list_documents` and verify the active `document_id` and `page_id` before creating or updating nodes.
+3. **Layout Sizing:** Use native autolayout (flex/grid) with semantic variables. For wrapping headings, set width to Fill and height to auto-resize. Use fixed or max-width only where a strict measure is intentional.
+4. **Review Trees and Renders:** Inspect both the node tree and exported renders at `1440×900` and `390×844`. Check `get_font_status` to ensure requested font families are available.
+5. **Save Local Files:** Save concepts to a local `.fig` path. Reopen and verify that components, variables, and content load correctly.
 
-The Baseline skill bundles a release-pinned upstream mechanics skill and authoring reference with license/provenance. Load those before creating JSX; use `get_codegen_prompt` when available and inspect installed schemas. Baseline's native Astro components and fluid CSS tokens take precedence over generic code-generation advice about fixed Tailwind values or framework controls. See [the concrete JSX/token recipe](../.agents/skills/openpencil-site-design/references/baseline-jsx-recipe.md) and [scoped review loop](../.agents/skills/openpencil-site-design/references/scoped-review.md). The docs index at [llms.txt](https://openpencil.dev/llms.txt) helps select specific pages without loading SDK internals into every session.
+## The Agent Switch & Handoff Workflow
 
-1. Call `list_documents`; confirm the exact intended document/page before writes. Use returned `document_id` and `page_id` on tools that accept them. Global tools such as settings can have a different schema; do not add IDs blindly.
-2. Inspect existing nodes, fonts and variables. Create a bounded named concept using native flex/grid, real components and semantic variables. For wrapping titles, use Fill width plus height auto-resize; use Fixed/max-width where a measure is intentional. A long title revealed overflow in the trial until sizing was corrected.
-3. Inspect both tree and exported render. Query `get_font_status`; a requested family is not evidence that it loaded. Test 1440×900 and 390×844 intent, intermediate reflow/states in Astro and long content. Canvas height may extend beyond the sampled viewport to retain lower content.
-4. Save to an agreed new local `.fig` path. Reopen and re-read components, variables, bindings and content. Stable document/tab IDs are session targets, not permanent file identity: a reopened file can have a different tab ID. Recover from file path plus node evidence and confirm current identifiers.
-5. For an optional handoff, provide source revision/brief, saved file, dated exports, selected versus draft status, original CSS expressions, responsive/states intent and native component mapping. Transfer the file through the user's chosen channel; a local artifact does not automatically appear on another machine. Do not claim a fresh-session test proves another model's performance or token savings.
+When delegating design and coding to separate agents, use the portable templates in `openpencil-site-design` (`references/portable-brief-template.md` and `references/handoff-packet-template.md`):
 
-The trial established actual desktop editing, rendering, variables/components and save/recovery. It was a neutral synthetic exercise, not a full client redesign or a pixel-accuracy benchmark. Keep user-preferred tools available: recommend canvas-led concept iteration with OpenPencil for local file ownership or Penpot for a shared cloud artifact, and retain direct Astro for a preferred real-browser workflow. This trial did not measure comparative speed or token use.
+1. **Design Agent Scope:** The design agent receives the brief and token rules, authors components in OpenPencil, iterates with visual feedback, and saves the verified `.fig` file.
+2. **Preparing the Handoff Packet:** The design agent exports high-resolution preview images (`1440×900` and `390×844`) and prepares a handoff summary containing:
+   - Target `.fig` file path and active page/node identifiers.
+   - Selected concept direction and rationale.
+   - Variable mappings to Baseline custom properties (`--color-*`, `--text-step-*`, `--spacing-*`).
+   - Component-to-primitive mapping (`<Section>`, `<Container>`, `<Grid>`, `<Card>`).
+   - Responsive layout behaviors across mobile and desktop.
+3. **Implementation Agent Scope:** The implementation agent reads the saved `.fig` file and handoff summary, records the Art Direction Record in `AGENTS.md`, synchronizes tokens in `src/styles/global.css`, calibrates primitives on `/_styleguide`, and implements the Astro routes.
+
+Single-agent workflows follow the same translation steps in a single continuous session.

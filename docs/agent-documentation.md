@@ -101,13 +101,13 @@ During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, con
 
 | MCP / Reference Tool | Role in Baseline Workflow | Tier / Access |
 | :--- | :--- | :--- |
-| **[OpenPencil Desktop MCP](openpencil-onboarding.md)** (`@open-pencil/mcp`) | Local desktop canvas (`open-pencil/open-pencil`) and `.fig` file iteration via `openpencil-site-design` and declarative scene JSX. | Free / Local Desktop |
-| **[Penpot MCP](penpot-onboarding.md)** (`penpot-site-design`) | Shared cloud design canvas for browser review and cross-machine handoff via `penpot-site-design`. | Free / Cloud or Self-Hosted |
-| **[designmd.ai MCP](https://designmd.ai/mcp)** (`designmd-mcp`) | Search, browse, and download 420+ community `DESIGN.md` design systems ([designmd.ai/explore](https://designmd.ai/explore)) directly into `audit/visual-concepts/` or Google Stitch. | Free (Search requires no key; free key for download) |
-| **21st.dev MCP** (`@21st-dev/magic`) | Search, inspect, and fetch high-craft Tailwind component blueprints and micro-interactions directly into `/_styleguide` for zero-JS Astro transmutation. | Free / Open Registry |
-| **Google Stitch / OpenDesign** | Generate visual screen mockups from prompts and consume/emit `DESIGN.md` token files (`audit/visual-concepts/`). | Free / Built-in |
+| **[OpenDesign MCP](opendesign-onboarding.md)** (`opendesign-site-design`) | Local HTML/CSS canvas with 154 bundled design systems, 188 layout examples, `od lint` validation, and native export to Baseline Astro. | Free / Local Desktop |
+| **[OpenPencil Desktop MCP](openpencil-onboarding.md)** (`openpencil-site-design`) | Local desktop canvas (`open-pencil/open-pencil`) and `.fig` file iteration via declarative scene JSX. | Free / Local Desktop |
+| **[Penpot MCP](penpot-onboarding.md)** (`penpot-site-design`) | Shared cloud design canvas for browser review and team collaboration. | Free / Cloud or Self-Hosted |
+| **[designmd.ai MCP](https://designmd.ai/mcp)** (`designmd-mcp`) | Search, browse, and download 420+ community `DESIGN.md` design systems ([designmd.ai/explore](https://designmd.ai/explore)) directly into `audit/visual-concepts/`. | Free (Search requires no key; free key for download) |
+| **21st.dev MCP** (`@21st-dev/magic`) | Search, inspect, and fetch high-craft Tailwind component blueprints directly into `/_styleguide` for zero-JS Astro transmutation. | Free / Open Registry |
 | **Nicelydone MCP / Refero.design** | Inspect real-world web and SaaS UX screens, user flows, filter bars, and onboarding patterns during discovery. | Freemium / Web |
-| **Official Figma MCP** *(Optional)* | Inspect layers and layout tokens if a client happens to hand off an existing Figma file. | Free |
+| **Official Figma MCP** *(Optional)* | Inspect layers and layout tokens if a client hands off an existing Figma file. | Free |
 
 ### Enabling `designmd-mcp`, `21st-dev`, and `nicelydone` in `.mcp.json`:
 
@@ -140,7 +140,7 @@ During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, con
 ```
 
 > [!TIP]
-> **Optional external tools:** - All design MCPs are optional and absent from the default example. At the Stage 4 concept checkpoint for a new site or substantial overhaul, recommend canvas-led iteration once (offering **OpenPencil**, **Penpot**, and **direct Astro/browser** explicitly), reuse settled preferences and working connections, and skip the checkpoint for small refinements. Local lane/token tooling and `/_styleguide` remain available without adding external services. - Baseline ships no `DESIGN.md` validator or exporter. Reading design references needs no package installation. If a specific exchange requires validation/export, select and review that external tool separately. Google's `@google/design.md` and the community registry's `designmd` package are different tools, despite their shared binary name. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
+> **Optional design tools:** All external design tools and MCPs are optional. At the Stage 4 concept checkpoint for a new site or substantial overhaul, choose between **OpenDesign**, **OpenPencil**, **Penpot**, or **direct Astro in the browser**. Local lane and token tooling (`npm run design:tokens`) and `/_styleguide` remain available without any external services. See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
 
 ---
 

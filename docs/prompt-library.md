@@ -166,7 +166,7 @@ We are ready for Stage 4: Art Direction. Activate the site-art-direction skill.
 Brand goals and personality: [E.g., Editorial craftsmanship, technical precision, high-contrast typography, restrained color palette].
 
 Please:
-Before choosing the direction, recommend a dedicated canvas and explicitly offer OpenPencil, Penpot and direct Astro/browser. Follow site-art-direction/references/design-iteration.md; reuse my preference and a working connection, and retain Pencil, Google Stitch, OpenDesign, Claude Design and designmd-mcp references when preferred. Resolve any unavailable-tool fallback explicitly. Use openpencil-site-design for OpenPencil and penpot-site-design for Penpot. Same-agent work is complete; another agent/handoff is optional.
+Before choosing the direction, recommend a design iteration surface (OpenDesign, OpenPencil, Penpot, or direct Astro in the browser) and follow `site-art-direction/references/design-iteration.md`. Use `opendesign-site-design` for OpenDesign, `openpencil-site-design` for OpenPencil, or `penpot-site-design` for Penpot.
 
 1. Review .agents/skills/site-art-direction/references/aesthetic-lanes.md and propose 2-3 suitable Aesthetic Lanes.
 2. Formulate a Narrative Metaphor, Typography Pairing, and Token Physics (Canvas ground, Action/Accent colors, Borders, and Spatial Density).
@@ -426,7 +426,7 @@ fit, identity continuity, readability, function and maintainability. Resolve the
 direction decision before broad implementation; ask only consequential questions
 not already answered. Record which previous visual decisions are superseded.
 
-At the concept checkpoint, recommend a design canvas and explicitly offer OpenPencil, Penpot and direct Astro/browser. Follow site-art-direction/references/design-iteration.md: focused representative concepts, visual feedback, selected direction, then a native Astro proof and rollout. Retain Pencil, Google Stitch, OpenDesign, Claude Design and designmd-mcp references when preferred. Reuse an existing choice; resolve an unavailable-tool fallback explicitly. Same-agent work is complete; another agent/handoff is optional.
+At the concept checkpoint, recommend a design iteration surface (OpenDesign, OpenPencil, Penpot, or direct Astro in the browser) and follow `site-art-direction/references/design-iteration.md` to iterate focused representative concepts before proving the direction in Astro. Use `opendesign-site-design` for OpenDesign, `openpencil-site-design` for OpenPencil, or `penpot-site-design` for Penpot.
 
 Calibrate the selected system on the installed styleguide, implement one real
 page per archetype and critique it in the browser before rolling it out. Keep
