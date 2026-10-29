@@ -27,6 +27,8 @@ Backup Bundle (YYYY-MM-DD-HHMM)
 
 ## 2. Safe SQLite Backup Acquisition
 
+First resolve the database from the actual runtime configuration, not a familiar filename. A valid SQLite file under `.emdash/` can be unrelated to the live CMS. Verify native tables and a reviewed nonzero content inventory before accepting a populated-site backup. A missing source must fail without creating a database. After consistent acquisition, `npm run db:check-backup -- --config astro.config.mjs --snapshot <closed-backup> --expected <private-counts.json>` checks configured identity, source/snapshot integrity and native inventory without writing either database. See [release trust checks](release-trust.md) for supported literal configuration, explicit dynamic-target handling, empty-site choice and limitations. Matching counts do not prove content equality or replace an isolated restore drill.
+
 > [!CAUTION]
 > **Never copy `data.db` directly while the Node process is running!** SQLite operates in WAL (Write-Ahead Logging) mode. When active, pending writes reside in `data.db-wal` and shared memory in `data.db-shm`. Running a naive file copy (`cp data.db backup.db`) produces a corrupted or torn database.
 
@@ -39,14 +41,15 @@ Always capture the filename in a shell variable once so verification checks the 
 
 ```sh
 # Define destination file once
+SOURCE_DATABASE="./data.db" # Replace with the verified configured source, not a guessed default.
 BACKUP_FILE="backups/db-$(date +%Y%m%d-%H%M%S).sqlite"
 mkdir -p "$(dirname "$BACKUP_FILE")"
 
 # Acquire consistent snapshot
-sqlite3 ./data.db ".backup '$BACKUP_FILE'"
+sqlite3 -readonly "$SOURCE_DATABASE" ".backup '$BACKUP_FILE'"
 
 # Verify integrity immediately on the acquired file
-sqlite3 "$BACKUP_FILE" "PRAGMA integrity_check;"
+sqlite3 -readonly "$BACKUP_FILE" "PRAGMA integrity_check;"
 # Must output: ok
 ```
 

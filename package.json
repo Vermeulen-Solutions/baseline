@@ -93,7 +93,9 @@
     "workflow:replay": "node scripts/workflow-replay.mjs",
     "design:canvas-kit": "node scripts/canvas-kit.mjs",
     "migration:wordpress": "node scripts/wordpress-migrate.mjs",
-    "migration:check-locale": "node scripts/check-migration-locale.mjs"
+    "migration:check-locale": "node scripts/check-migration-locale.mjs",
+    "db:check-backup": "node scripts/check-backup.mjs",
+    "check:hosted-auth": "node scripts/check-hosted-auth.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",

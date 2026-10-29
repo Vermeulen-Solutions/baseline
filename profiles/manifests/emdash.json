@@ -119,7 +119,12 @@
     "standards/site-audit-report.schema.json",
     "standards/site-audit-report.v2.schema.json",
     "standards/baselines/0.1.1.json",
-    "scripts/check-migration-locale.mjs"
+    "scripts/check-migration-locale.mjs",
+    "scripts/check-backup.mjs",
+    "scripts/check-hosted-auth.mjs",
+    "tests/backup-check.test.mjs",
+    "tests/hosted-auth.test.mjs",
+    "docs/release-trust.md"
   ],
   "scripts": [
     "doctor",
@@ -171,7 +176,9 @@
     "check:production-setup",
     "assets:retain",
     "check:cache",
-    "migration:check-locale"
+    "migration:check-locale",
+    "db:check-backup",
+    "check:hosted-auth"
   ],
   "checks": [
     "check:schema-budget"

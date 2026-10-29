@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import { readdirSync, mkdtempSync, writeFileSync, readFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { testFiles } from '../scripts/run-tests.mjs';
+import { testFiles, testEnvironment } from '../scripts/run-tests.mjs';
 import { availableLoopbackPort, listenLoopback } from '../scripts/loopback-port.mjs';
 import { createServer } from 'node:http';
 import { npmInvocation, execNpmSync, spawnNpmSync } from '../scripts/process-runner.mjs';
 import { exportD1Database } from '../scripts/d1-export.mjs';
-import { spawnSync } from 'node:child_process';
+import { spawnSync, execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 import { diagnose, shellCheck, supportsNode } from '../scripts/doctor.mjs';
@@ -55,6 +55,40 @@ test('loopback fixtures bind Fetch-safe ports, retry collisions and release rese
 
 const scriptPath = name => fileURLToPath(new URL(`../scripts/${name}`, import.meta.url));
 const runGate = (name, args = [], options = {}) => spawnSync(process.execPath, [scriptPath(name), ...args], { encoding: 'utf8', ...options });
+
+test('test subprocesses strip inherited Git hook locations, index and config without changing the caller', () => {
+  const environment = { PATH:'synthetic-path', CI:'true', GIT_DIR:'private-gitdir', GIT_COMMON_DIR:'private-common', GIT_INDEX_FILE:'private-index', GIT_WORK_TREE:'private-worktree', GIT_CONFIG_COUNT:'1', GIT_CONFIG_KEY_0:'core.bare', GIT_CONFIG_VALUE_0:'true', git_dir:'case-insensitive-location' };
+  assert.deepEqual(testEnvironment(environment), {PATH:'synthetic-path',CI:'true'});
+  assert.equal(environment.GIT_DIR,'private-gitdir');
+});
+
+test('a linked-worktree hook environment cannot redirect a foreign Git fixture into the source repository', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(),'baseline-hook-isolation-'));
+  const git = (args,cwd) => execFileSync('git',args,{cwd,env:testEnvironment(),encoding:'utf8',stdio:['ignore','pipe','pipe']}).trim();
+  try {
+    const main = path.join(directory,'main'), linked = path.join(directory,'linked'), foreign = path.join(directory,'foreign.git');
+    mkdirSync(main); git(['init','--quiet'],main);
+    writeFileSync(path.join(main,'tracked'),'original'); git(['add','tracked'],main); git(['-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','--quiet','-m','initial'],main);
+    git(['worktree','add','--quiet','-b','isolated-hook',linked],main);
+    mkdirSync(path.join(linked,'tests'));
+    writeFileSync(path.join(linked,'tests/test-tiers.json'),JSON.stringify({'probe.test.mjs':{tier:'unit',reason:'synthetic isolation probe'}}));
+    writeFileSync(path.join(linked,'tests/probe.test.mjs'),`import test from 'node:test';import assert from 'node:assert/strict';import {execFileSync} from 'node:child_process';test('foreign init stays foreign',()=>{assert.equal(process.env.GIT_DIR,undefined);assert.equal(process.env.GIT_INDEX_FILE,undefined);execFileSync('git',['init','--bare','--quiet',${JSON.stringify(foreign)}],{stdio:'pipe'});});`);
+    writeFileSync(path.join(linked,'tracked'),'staged edit'); git(['add','tracked'],linked);
+    const metadata = git(['rev-parse','--absolute-git-dir'],linked), index = path.join(metadata,'index'), before = readFileSync(index), head = git(['rev-parse','HEAD'],linked);
+    const nestedEnvironment = {...process.env,GIT_DIR:metadata,GIT_COMMON_DIR:path.join(main,'.git'),GIT_WORK_TREE:linked,GIT_INDEX_FILE:index};
+    delete nestedEnvironment.NODE_TEST_CONTEXT;
+    const result = runGate('run-tests.mjs',['--tier','unit'],{cwd:linked,env:nestedEnvironment});
+    assert.equal(result.status,0,result.stdout+result.stderr);
+    assert.ok(existsSync(foreign),result.stdout+result.stderr);
+    assert.deepEqual(readFileSync(index),before); assert.equal(git(['rev-parse','HEAD'],linked),head);
+    assert.equal(git(['config','--get','core.bare'],main),'false'); assert.equal(git(['rev-parse','--is-bare-repository'],foreign),'true');
+    assert.equal(git(['diff','--cached','--name-only'],linked),'tracked');
+  } finally {
+    assert.equal(path.dirname(path.resolve(directory)),path.resolve(os.tmpdir()));
+    assert.match(path.basename(directory),/^baseline-hook-isolation-/);
+    rmSync(directory,{recursive:true,force:true});
+  }
+});
 
 test('doctor evaluates the declared Node alternatives without semver dependencies', () => {
   const range = JSON.parse(readFileSync('package.json', 'utf8')).engines.node;

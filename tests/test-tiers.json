@@ -194,5 +194,13 @@
   "migration-locale.test.mjs": {
     "tier": "unit",
     "reason": "Bounded read-only native locale metadata checks, private CLI readbacks and fail-closed diagnostics"
+  },
+  "backup-check.test.mjs": {
+    "tier": "rehearsal",
+    "reason": "Neutral SQLite backup/restore and the installed native EmDash CLI seed contract; rejects wrong/missing stores without creation"
+  },
+  "hosted-auth.test.mjs": {
+    "tier": "unit",
+    "reason": "Offline native response fixtures, warning refusal and installed verification guard ordering; no credential creation or network"
   }
 }
