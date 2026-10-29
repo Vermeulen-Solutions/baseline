@@ -101,6 +101,8 @@ Site packages exclude users, credentials, secrets, plugin state/storage/settings
 
 ## Deploy and verify
 
+Before handing a new hosted sign-in to its owner, inspect the complete successful build log for missing-session-driver warnings. Native EmDash uses Astro sessions: retain the supported adapter driver (Node filesystem or Cloudflare KV), or configure a supported explicit driver. Do not disable sessions because the CMS has its own user records. Check the effective deployed session binding; a successful build or a reachable setup SPA alone is insufficient. If the installed Baseline provides `check:hosted-auth`, use its version-bound non-consuming preflight with the full release log before owner setup. It proves session presence/validation only, not a successful KV write or passkey. Protected/redirected probes remain unverified until tested through authorized access; do not weaken protection to make a check pass. The owner creates their credential, then verify real login and native setup-status lockdown. Never reset existing users or data to repair authentication.
+
 The deployment agent owns configuration and verification within the user's existing authorization. Use repository configuration, existing Wrangler authentication and supported APIs; complete routine Cloudflare work with available access. Ask for missing inputs only when the requested operation needs them. Run and record the checks applicable to this release.
 
 For an authorized Cloudflare deployment with authenticated Wrangler, first distinguish a routine code release from a migration, first-time production bootstrap or domain cutover:

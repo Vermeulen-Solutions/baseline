@@ -1164,6 +1164,26 @@
     "tests/migration-locale.test.mjs": {
       "disposition": "emdash-only",
       "static": "omit"
+    },
+    "scripts/check-backup.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-hosted-auth.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/backup-check.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/hosted-auth.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "docs/release-trust.md": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

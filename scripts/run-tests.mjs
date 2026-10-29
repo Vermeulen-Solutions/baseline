@@ -2,6 +2,12 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
+// Hooks export repository/index locations. Git fixtures must discover their own
+// repository from cwd, never inherit the committing worktree's metadata or index.
+export function testEnvironment(environment = process.env) {
+  return Object.fromEntries(Object.entries(environment).filter(([key]) => !/^GIT_/i.test(key)));
+}
+
 export function testFiles(tier, directory = 'tests') {
   if (!['unit', 'rehearsal'].includes(tier)) throw new Error('Use --tier unit or --tier rehearsal.');
   const inventory = JSON.parse(readFileSync(`${directory}/test-tiers.json`, 'utf8'));
@@ -25,7 +31,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     for (const tier of tiers) {
       const files = testFiles(tier), concurrency = tier === 'unit' ? 2 : 1;
       console.log(`Running ${files.length} ${tier} test files (concurrency ${concurrency}).`);
-      const result = spawnSync(process.execPath, ['--test', `--test-concurrency=${concurrency}`, ...files], { stdio: 'inherit' });
+      const result = spawnSync(process.execPath, ['--test', `--test-concurrency=${concurrency}`, ...files], { stdio: 'inherit', env: testEnvironment() });
       if (result.error) throw result.error;
       if (result.status !== 0) { process.exitCode = result.status ?? 1; break; }
     }
