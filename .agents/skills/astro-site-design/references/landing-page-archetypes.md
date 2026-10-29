@@ -15,13 +15,57 @@ Match the page's primary visitor intent to the appropriate structural archetype 
 | **Pre-launch / Waitlist** | Build anticipation and gather early signups | Form first, milestones/roadmap, teaser features | High-contrast hero with email input above fold, timeline grid, feature preview cards |
 | **Subscription** | Sell ongoing recurring value (SaaS or membership) | Trust strip, plan cards with billing toggle, retention/practices, updates | `<LogoTicker>` marquee, multi-tier pricing with monthly/yearly state, FAQ, newsletter signup band |
 
-## Conversion copywriting rules
+## Strategic intake and funnel qualification
 
-High-converting pages succeed on clarity, not decorative excess. When drafting or refining page copy:
-- **Message matching:** The main `<h1>` headline must immediately reiterate the promise made in the external ad, email, search query, or link that brought the visitor.
-- **Single primary action:** Choose one primary user action per page. Repeat that action across the hero, after the social proof, and in the closing banner using the **exact same button label**.
-- **Evidence over claims:** Replace generic superlatives with verifiable facts, real quotes, and specific numbers. Every logo must represent a real partner or client with informative `alt` text.
-- **Explicit expectation setting:** State clearly what happens after submitting or clicking (what is delivered, delivery time, privacy terms, and how to cancel or unsubscribe).
+Gather these essentials before drafting copy or assembling layouts. Ask only for what is missing in a single batch, or make one-line reversible working assumptions when rapid autonomous execution is authorized:
+
+- **Purpose & Primary Action:** Identify the ONE primary conversion action (e.g., start trial, schedule demo, download spec, purchase, or join waitlist) and the exact deliverable the visitor receives. Avoid competing calls to action above the fold.
+- **Audience & Traffic Context:** Define the ICP (Ideal Customer Profile), their core burning pain, their top three objections to converting today, and the incoming traffic channel (paid campaign, organic search, referral, or newsletter) to ensure immediate message matching.
+- **Verifiable Proof & Risk Reversal:** Catalog real customer quotes, client logos with descriptive alt text, verified performance metrics, case study milestones, and risk-reversal terms (e.g., 30-day money-back guarantee, cancel anytime, or no credit card required).
+- **Indexing Intent:** Distinguish evergreen organic pages (indexable, structured for AEO/SEO) from time-bound campaign landing pages (set to `noindex, nofollow` to concentrate ad conversion without duplicate content dilution).
+
+## Conversion copywriting engine
+
+High-converting pages succeed on clarity, precision, and outcome-led arguments rather than decorative excess or empty buzzwords:
+
+### Tested headline formulas
+Replace vague AI-slop headlines (such as "Empowering your business with intelligent synergy") with deterministic formulas:
+- **`{Outcome} without {Pain / Friction}`:** e.g., *"Deterministic edge deployments without container cold starts."*
+- **`The {Category} for {Specific Audience}`:** e.g., *"The relational CMS engineered for editorial teams who publish hourly."*
+- **`Ship {Result} in {Timeframe}`:** e.g., *"Cut monthly billing reconciliation from five days to two hours."*
+
+### Subheadline & lead prose contract
+Keep the subheadline to exactly one or two concise sentences. Clarify *how* the outcome is achieved and *who* it serves. Apply `text-wrap: balance` to headings and `text-wrap: pretty` to lead prose; avoid orphaned terminal words or awkward line breaks.
+
+### Action-oriented CTA triggers
+Compose button labels using an active verb paired with the concrete outcome or deliverable. Never use generic labels like "Submit", "Get Started", or "Learn More":
+- ✅ *"Start 14-day trial"* / *"Download technical spec"* / *"Book architecture review"* / *"Deploy to Cloudflare"*
+- Place risk reversals (e.g., `No credit card required • Cancel anytime`) directly adjacent to primary CTA triggers to eliminate micro-friction.
+- Repeat the exact same primary action label across the hero, mid-page proof, and closing conversion banner.
+
+### Benefit-first capability points
+Features explain what the mechanism does; benefits explain what that capability unlocks for the visitor. Format feature points as outcome-first pairs:
+- **Pattern:** `**[Bold Outcome Benefit]** — [Concrete mechanism, technical proof, or verifiable metric].`
+- **Example:** `**Sub-millisecond routing** — P99 latency under 1.4ms across 38 global edge PoPs without cold starts.`
+
+### Objection elimination sequence
+Treat objections as essential section arguments rather than an afterthought. Map each major objection directly to a section:
+1. *Skepticism about claims* → Concrete customer quote or verifiable metric ledger immediately following the hero.
+2. *Complexity or friction of adoption* → Clear 3-step "How it works" process walkthrough.
+3. *Vendor lock-in or migration anxiety* → Explicit data portability guarantee and technical comparison matrix.
+4. *Edge cases and terms* → Structured native `<Disclosure>` FAQ accordion ordered by objection severity.
+
+## Deterministic section build order
+
+When generating or refactoring a landing page, assemble sections in this deterministic sequence to preserve token discipline, prevent layout regressions, and keep diffs reviewable:
+
+1. **Hero & Value Proposition:** Single `<h1>`, subheadline, primary CTA with adjacent risk reversal, and a live-coded `.ui-specimen` or framed visual.
+2. **Proof & Telemetry Strip:** Zero-JS `<LogoTicker>` marquee or 4-cell `.grid-hairline` metric ledger (`.tabular-nums`).
+3. **Problem-to-Solution Transition:** Contrast the incumbent friction with the deterministic new model.
+4. **Feature & Capability Variance:** Alternating structural geometries (e.g., asymmetric `.bento-grid`, sticky `<Sidebar>` narrative, or `.grid-hairline` matrix).
+5. **Objection Elimination & FAQ:** Native `<details class="disclosure">` accordion answering top objections, backed by Schema.org `FAQPage` JSON-LD for answer engine optimization (AEO).
+6. **Closing Conversion Banner:** Inverted high-contrast focal band (`<Section data-surface="dark" class="surface-spotlight">`) with the repeated primary CTA.
+7. **Footer & Compliance:** Semantic landmarks, privacy/terms links, and skip link targets.
 
 ## Section composition with Baseline primitives
 

@@ -21,6 +21,7 @@ When evidence is incomplete, make reversible working assumptions and label them.
 
 When a site includes non-trivial interactive flows, directories, schedules, pricing structures, or multi-step forms, avoid inventing layouts from statistical LLM averages:
 
+- **Conversion & Funnel Qualification:** When designing marketing, product, or landing pages, anchor intake in the four core vectors (purpose & single primary action, target ICP objections, verifiable proof inventory, and indexing intent) detailed in `astro-site-design/references/landing-page-archetypes.md`.
 - **UX Flow Teardowns (Optional):** If `Nicelydone MCP`, `Refero.design`, or `Kombai Gallery` is available (or via targeted web reference lookup), inspect real production web screens for the target archetype.
 - **Extract Structural Anatomy, Not Branding:** Note what secondary metadata (timestamps, status badges, tabular counts, hairline dividers), filter controls, empty states, and disclosure patterns make the interface credible and scannable.
 - **Plan Section Pacing Variance:** Map how consecutive sections on a primary route will vary in geometry and density (e.g., alternating an asymmetric split hero with a compact tabular index, a dark-surface editorial spotlight, and a variable-span bento grid) rather than repeating identical 3-column card rows.
