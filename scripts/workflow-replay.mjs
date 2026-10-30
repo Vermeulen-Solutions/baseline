@@ -46,8 +46,9 @@ export const SCENARIOS = Object.freeze({
   },
 });
 export function sourceHashes(site) {
+  const verified = new Set();
   return Object.fromEntries(git(site, ['ls-files', '--cached', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean).sort().map(file => {
-    const target = noLinks(path.join(site, file));
+    const target = noLinks(path.join(site, file), verified);
     return [file, fs.existsSync(target) ? hash(fs.readFileSync(target)) : null];
   }));
 }
@@ -57,7 +58,8 @@ export function sourceInputs(repositoryRoot = ROOT) {
   const files = git(repositoryRoot, ['ls-files', '--cached', '--others', '--exclude-standard', '-z']).split('\0').filter(Boolean).filter(file => file !== '.mcp.json' && !file.startsWith('.vscode/') && !file.startsWith('.emdash/') && !file.startsWith('node_modules/') && !file.startsWith('audit/workflow-replay-'));
   // Track deletions explicitly, as sourceHashes does, so a dirty-source freeze can
   // include a retired file and still detect its later restoration or removal.
-  return Object.fromEntries(files.sort().map(file => { const target = noLinks(path.join(repositoryRoot, file)); return [file, fs.existsSync(target) ? hash(fs.readFileSync(target)) : null]; }));
+  const verified = new Set();
+  return Object.fromEntries(files.sort().map(file => { const target = noLinks(path.join(repositoryRoot, file), verified); return [file, fs.existsSync(target) ? hash(fs.readFileSync(target)) : null]; }));
 }
 function assertInputsFrozen(state) {
   const current = sourceInputs();

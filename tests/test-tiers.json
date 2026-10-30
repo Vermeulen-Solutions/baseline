@@ -52,8 +52,8 @@
     "reason": "Form input and recovery contracts"
   },
   "importer-fidelity.test.mjs": {
-    "tier": "rehearsal",
-    "reason": "Installed importer endpoints, SQLite and HTTP rendering"
+    "tier": "unit",
+    "reason": "Synthetic WXR/Exporter oracles; installed-endpoint rehearsal runs once in the migration pilot"
   },
   "justified-gallery.test.mjs": {
     "tier": "unit",

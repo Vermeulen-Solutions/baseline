@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readdirSync, mkdtempSync, writeFileSync, readFileSync, existsSync, mkdirSync, rmSync } from 'node:fs';
+import { readdirSync, mkdtempSync, writeFileSync, readFileSync, existsSync, mkdirSync, rmSync, renameSync, symlinkSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { noLinks } from '../scripts/infrastructure-io.mjs';
 import { testFiles, testEnvironment } from '../scripts/run-tests.mjs';
 import { availableLoopbackPort, listenLoopback } from '../scripts/loopback-port.mjs';
 import { createServer } from 'node:http';
@@ -23,6 +24,19 @@ test('test tiers are a disjoint exhaustive partition and stale inventories fail 
     writeFileSync(path.join(directory, 'test-tiers.json'), '{}');
     writeFileSync(path.join(directory, 'new.test.mjs'), '');
     assert.throws(() => testFiles('unit', directory), /inventory is stale/);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('link checks reuse verified folders only within one operation and still refuse later swaps', () => {
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'no-links-'));
+  const nested = path.join(directory, 'a', 'b'), file = path.join(nested, 'record.txt'), outside = path.join(directory, 'outside');
+  try {
+    mkdirSync(nested, { recursive: true }); mkdirSync(outside); writeFileSync(file, 'record'); writeFileSync(path.join(outside, 'record.txt'), 'outside');
+    assert.equal(noLinks(file, new Set()), file);
+    renameSync(nested, path.join(directory, 'a', 'b-real'));
+    symlinkSync(outside, nested, process.platform === 'win32' ? 'junction' : 'dir');
+    assert.throws(() => noLinks(file), /Linked paths are refused/);
+    assert.throws(() => noLinks(file, new Set()), /Linked paths are refused/);
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });
 

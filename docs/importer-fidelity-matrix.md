@@ -13,11 +13,11 @@ npm run rehearse:importer
 # Keep a specific new private/local evidence directory.
 npm run rehearse:importer -- --out .emdash/migration-acceptance/my-importer-rehearsal
 
-node --test tests/importer-fidelity.test.mjs
+node --test tests/migration-pilot.test.mjs
 npm run verify
 ```
 
-Existing outputs are refused. The integration test runs in `npm test` / `verify` and needs no client credentials, WordPress server, network installation or remote HTTP requests. It uses installed dependencies via an owned temporary directory link; it is **not an independent npm installation**. It creates a fresh Node/SQLite Astro development instance and local media, drives real analysis/prepare/chunk/finalization/media/rewrite endpoints, reads the actual records, and anonymously renders them using native `getEmDashEntry()`, `getSeoMeta()` and `PortableText`. It stops its child/server, unlinks dependencies and removes only its verified temporary tree, including after failure.
+Existing outputs are refused. The integrated rehearsal runs once per suite through the migration pilot test, so it is part of `npm test` / `verify` and needs no client credentials, WordPress server, network installation or remote HTTP requests. The rehearsal uses installed dependencies via an owned temporary directory link; it is **not an independent npm installation**. It creates a fresh Node/SQLite Astro development instance and local media, drives real analysis/prepare/chunk/finalization/media/rewrite endpoints, reads the actual records, and anonymously renders them using native `getEmDashEntry()`, `getSeoMeta()` and `PortableText`. It stops its child/server, unlinks dependencies and removes only its verified temporary tree, including after failure. The oracle checks in `tests/importer-fidelity.test.mjs` stay in the fast unit tier.
 
 The fixture uses explicit manual locale routing under `/view/<collection>/<locale>/<slug>` so CMS locale semantics can be checked independently of automatic prefix routing. It does not certify a client's theme, automatic Astro locale routing, production build/hosting, browser/editor save workflow or external provider behavior. The scheduled fixture is dated 2032-01-01; update and review it before that date.
 
@@ -27,7 +27,7 @@ The fixture uses explicit manual locale routing under `/view/<collection>/<local
 - **Exporter:** a loopback HTTP server supplies the documented `/emdash/v1` analysis/content/media/taxonomy/menu payload shapes, with three records per page to force content chunks. A first content chunk is interrupted, then a fresh run skips existing entries and finishes. These are **protocol fixtures**; no real WordPress/PHP installation, Exporter plugin version, application-password provisioning or migration-key UI has been executed.
 - **Network isolation:** a child-only transport maps the one declared synthetic public source origin to the owned loopback server and answers its DNS probe synthetically. The installed SSRF validators remain active; production code is unchanged. Other remote origins are refused, fonts are disabled, and no real DNS/SSRF security or TLS interoperability claim is made.
 - **Oracles:** reviewed [Portable Text expectations](../tests/fixtures/importer-fidelity/expected-content.json) retain structural content, mark definitions, order, captions and media IDs. Comparison removes random PT keys and maps run-specific media URLs to source attachment identities. It never replaces an expected body with the current imported body. Stored media bytes are compared with the two source PNGs.
-- **Automation:** [integration test](../tests/importer-fidelity.test.mjs), [harness](../scripts/rehearse-importer.mjs), [WXR](../tests/fixtures/importer-fidelity/wordpress.xml) and [Exporter inputs](../tests/fixtures/importer-fidelity/wordpress.json). All entries, emails, origins, IDs and assets are synthetic.
+- **Automation:** [integrated rehearsal](../tests/migration-pilot.test.mjs), [oracle checks](../tests/importer-fidelity.test.mjs), [harness](../scripts/rehearse-importer.mjs), [WXR](../tests/fixtures/importer-fidelity/wordpress.xml) and [Exporter inputs](../tests/fixtures/importer-fidelity/wordpress.json). All entries, emails, origins, IDs and assets are synthetic.
 
 ## Observed capability
 

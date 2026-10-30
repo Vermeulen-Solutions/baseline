@@ -54,6 +54,8 @@ export async function runMigrationPilot({ out, signal } = {}) {
   assert.equal(importerReceipt.status, 'passed');
   receipt.stages.importerFidelity = {
     status: importerReceipt.status,
+    externalNetworkRequests: importerReceipt.externalNetworkRequests,
+    cleanup: importerReceipt.cleanup,
     observations: importerReceipt.observations
   };
 

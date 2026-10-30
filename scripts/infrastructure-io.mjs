@@ -19,11 +19,16 @@ export function argumentsOf(values, flags = [], booleans = []) {
   }
   return result;
 }
-export function noLinks(file) {
+// `verified` is a per-operation memo for callers checking many files in one
+// pass: each directory is lstat'ed once instead of once per file. It must not
+// outlive that operation, because a directory swapped for a link afterwards
+// still has to be refused on the next pass.
+export function noLinks(file, verified) {
   const absolute = path.resolve(file), parsed = path.parse(absolute); let current = parsed.root;
   for (const part of absolute.slice(parsed.root.length).split(path.sep).filter(Boolean)) {
     current = path.join(current, part);
-    if (fs.existsSync(current)) requireFact(!fs.lstatSync(current).isSymbolicLink(), 'Linked paths are refused');
+    if (verified?.has(current)) continue;
+    if (fs.existsSync(current)) { requireFact(!fs.lstatSync(current).isSymbolicLink(), 'Linked paths are refused'); verified?.add(current); }
     else { try { fs.lstatSync(current); throw new ToolError('Dangling link refused'); } catch (error) { if (error.code !== 'ENOENT') throw error; } }
   }
   return absolute;

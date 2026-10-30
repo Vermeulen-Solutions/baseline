@@ -11,7 +11,13 @@ test('integrated migration pilot runs full lifecycle rehearsal and passes', { ti
     const { receipt, out } = await runMigrationPilot({ out: path.join(tmpDir, 'evidence'), signal: t.signal });
     assert.equal(receipt.status, 'passed');
     assert.equal(receipt.stages.defectVerification.exitCode, 2);
-    assert.equal(receipt.stages.importerFidelity.status, 'passed');
+    const importer = receipt.stages.importerFidelity;
+    assert.equal(importer.status, 'passed');
+    assert.equal(importer.externalNetworkRequests, 0);
+    assert.equal(importer.observations.acceptance.restorationHTTP, 0);
+    assert.equal(importer.observations.acceptance.deliberateLossInventory, 1);
+    assert.equal(importer.observations.retrySemantics.changedSlugCreatesExtraEntity, true);
+    assert.equal(importer.cleanup.disposableDatabaseAndMediaRemoved, true);
     assert.equal(receipt.stages.deltaReconciliation.slugChanges, 1);
     assert.equal(receipt.stages.recoveryRehearsal.integrityCheck, 'ok');
     assert.ok(fs.existsSync(path.join(out, 'receipt.json')));
