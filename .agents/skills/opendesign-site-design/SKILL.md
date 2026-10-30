@@ -39,6 +39,10 @@ Read [references/connection-and-cli.md](references/connection-and-cli.md) before
 
 ## Stage 4B: Iterate HTML/CSS slices, lint and export
 
+The review entry must show rendered choices, not a file grid of versions or generic code thumbnails. Keep one clearly named current comparison artifact with the intended two or three alternatives, desktop/mobile comparison and full-page inspection; retain iterations separately as history. Reuse/update that entry through the supported write/update operation. Assets must remain self-contained or durably reachable when the Astro dev server closes; discover the active daemon port rather than reusing a stale URL.
+
+Before calling a comparison ready, open the exact project/artifact in the selected desktop app, verify choices and mobile/full-page controls there, and retain actual-app evidence. Registration, lint and exports alone are insufficient. Give the opening path and Ctrl+R refresh directly in chat, not only in a README. Record actual export dimensions/device scale and incomplete paint rather than assuming requested height equals viewport-only output. A blocked app check stays unverified; do not ask the owner to choose unseen concepts.
+
 Read [penpot-site-design/references/baseline-recipes.md](../penpot-site-design/references/baseline-recipes.md) and [references/baseline-html-recipe.md](references/baseline-html-recipe.md) before authoring an artifact.
 
 1. Build self-contained HTML/CSS artifacts (`.html`) inside the OpenDesign project for a representative page or section slice. Use fluid `clamp()` typography and spacing, native CSS Grid/Flexbox, semantic HTML landmarks (`<section data-od-id="...">`, `<article>`, `<header>`) and Baseline's class vocabulary (`.container`, `.bento-grid`, `.card`, `.flow`, `.btn`, `.btn--secondary`, `.btn--ghost`, `.eyebrow-telemetry`, `.font-accent`, `.tabular-nums`, `.ui-specimen`).

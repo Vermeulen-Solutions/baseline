@@ -1,5 +1,7 @@
 # WordPress migration on every Baseline profile
 
+For EmDash editor-facing library/link/semantic review and interruption/resume ownership, use `docs/migration-review.md` when installed. Reuse the existing capture and phase receipts; native import, prepared media and supplemental mapping have different owners. Static profiles retain their Markdown/file and rendered acceptance without adding CMS tools; this EmDash-only companion is omitted from static distributions.
+
 Start with the WordPress dashboard. FTP, a hosting control panel and a local uploads-directory copy are not normal migration prerequisites. Use the first-party EmDash Exporter to capture content and media, then choose the output for the installed Baseline profile. The portable tools contain no EmDash runtime or database dependency.
 
 ## What the client does

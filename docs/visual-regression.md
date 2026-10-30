@@ -33,6 +33,8 @@ Bootstrap verifies a clean normal build (healthy public content, styleguide GET/
 
 ## Browser states and sensitivity
 
+The neutral review-proof fixture checks French/English split copy at 320/768/1440/2293/3840px in full-width and constrained parents. A deliberate double viewport-offset defect must squeeze copy before removal restores readable measure; screenshots are supplemental artifacts, not new goldens. Another test reuses the built gallery before/after root typecheck to exercise the browser handoff without mutable dev imports. Existing isolated server/teardown ownership is retained; no second preview framework or CI browser job. These fixtures do not certify a client composition or another engine.
+
 - Static captures disable animations/caret. Separate no-preference tests prove real CSS motion advances, keyboard/touch-compatible native checkbox stop/resume, hover/focus pause, equal adjacent tracks at start/mid/end, viewport edge coverage and visible logo content, short/wide RTL tracks, reduced-motion/print fallback and empty omission. Adjacent tracks alone do not prove viewport coverage: visual review caught and corrected the RTL animation rule losing to the checked-state shorthand. Animation frames are explicitly sought/paused only after behavior checks for deterministic targeted stills.
 - A JavaScript-disabled context verifies a page-script sentinel does not run, native controls/ticker still work and gallery links navigate to the original image. Native paint/readiness avoids page-JS frame callbacks in this mode.
 - A 320px text-spacing case applies line height 1.5, letter spacing .12em, word spacing .16em and paragraph spacing 2em. It checks page overflow and keyboard usability; code/table wrappers may intentionally scroll internally.

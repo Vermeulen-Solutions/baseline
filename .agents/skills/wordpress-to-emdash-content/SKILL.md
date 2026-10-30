@@ -107,6 +107,12 @@ Before public handoff:
 
 ## Verify and hand off
 
+Include editor-facing library organization and independently managed link records in acceptance. Plan descriptive filenames and useful native folders before upload; read back filename/folder/alt/caption metadata and partner/club/download destinations, then inspect native browsing/search and public links. Preparation, stored-byte savings and responsive delivery are separate outcomes. Before declaring an operation blocked, inspect installed APIs and established project patterns; a version-specific metadata repair needs its own recovery/rehearsal plan and must not revive the retired generic SQL organizer. Where installed, `migration:check-library` checks supplied native expectations/readbacks without writes; see `docs/migration-review.md`.
+
+Inspect article headings, paragraphs, lists, credits, galleries and blank blocks, not only wording/route counts. Where installed, `migration:check-editorial` supplies bounded Portable Text/HTML advisories and optional normalized text comparison; intentional poetry remains explicit. Never auto-rewrite ambiguous prose or call a clear scan editorial approval. Preserve source/history, dates/bylines and ordered media, then verify actual native save/reload/publication and the rendered route after normalization.
+
+Resume from the existing source capture, operator plan and phase receipts. Separate native importer ownership from supplemental prepared-media mapping; reconcile native operation status and current destination IDs/revisions before retrying uncertain writes. Do not reset a populated target or blindly reimport to bypass a missing receipt. Link exclusions/conflicts and refresh the existing checkpoint at promotion, without a second orchestration system.
+
 ### Gallery migration acceptance
 
 For galleries, distinguish the Media Library assets, album/image membership and order, the editing workflow, and public presentation. Inspect the installed EmDash version: native Portable Text gallery blocks support bulk media selection and contextual captions/alt; image repeater support is version-dependent. Do not assume a separate `gallery` schema field exists or install a plugin just because an older source says native galleries are unavailable.

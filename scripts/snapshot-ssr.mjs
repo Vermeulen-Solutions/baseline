@@ -18,6 +18,7 @@ export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), rou
   const entry = path.join(artifact, 'server/entry.mjs');
   if (!fs.statSync(entry).isFile()) throw Error('SSR snapshots require a Node standalone server/entry.mjs');
   if (!Number.isFinite(timeoutMs) || timeoutMs <= 0 || timeoutMs > 10000) throw Error('SSR capture deadline must be between 1 and 10000ms');
+  if (!Number.isSafeInteger(maxResources) || maxResources < 2 || maxResources > 512) throw Error('SSR resource budget must be an integer between 2 and 512');
   if (!['crawl', 'status-only'].includes(queryLinkMode)) throw Error('Query link mode must be crawl or status-only');
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(Error('SSR snapshot deadline exceeded')), timeoutMs);
@@ -138,7 +139,7 @@ export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), rou
     }
     if (resolve(missing)?.status !== 404 || !resolve(missing)?.file) throw Error('SSR missing route must render an HTML error page with status 404');
     if (![...resources.values()].some(r => r.url !== '/' && r.status === 200 && r.file)) throw Error('SSR capture needs a linked published sample page or post');
-    fs.writeFileSync(path.join(out, '.ssr-snapshot.json'), JSON.stringify({ version: 1, origin, resources: [...resources.values()] }, null, 2) + '\n');
+    fs.writeFileSync(path.join(out, '.ssr-snapshot.json'), JSON.stringify({ version: 1, origin, limits:{maxResources,maxBytes,timeoutMs}, resources: [...resources.values()] }, null, 2) + '\n');
     check();
     result = { directory: out, htmlFiles: pageCount, resources: resources.size };
     return result;
@@ -171,9 +172,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       const flag = process.argv[index], value = process.argv[index + 1];
       if (flag === '--route' && value && !value.startsWith('--')) { options.routes.push(value); routeSeen = true; index++; }
       else if (flag === '--timeout-ms' && value && /^\d+$/.test(value) && options.timeoutMs === undefined) { options.timeoutMs = Number(value); index++; }
+      else if (flag === '--max-resources' && value && /^\d+$/.test(value) && options.maxResources === undefined) { options.maxResources = Number(value); index++; }
       else if (flag === '--query-link-mode' && ['crawl', 'status-only'].includes(value) && options.queryLinkMode === undefined) { options.queryLinkMode = value; index++; }
       else if (!directory && !flag.startsWith('-')) directory = flag;
-      else throw Error('Usage: node scripts/snapshot-ssr.mjs [dist] [--route <path>] [--timeout-ms <1-10000>] [--query-link-mode crawl|status-only]');
+      else throw Error('Usage: node scripts/snapshot-ssr.mjs [dist] [--route <path>] [--timeout-ms <1-10000>] [--max-resources <2-512>] [--query-link-mode crawl|status-only]');
     }
     if (!routeSeen) options.routes = ['/'];
     const result = await snapshotSSR({ ...options, directory });

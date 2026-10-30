@@ -25,8 +25,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Starter infrastructure: cascade-layer split, section-owned page rhythm, zero-specificity container/grid defaults and RichText flow ownership; existing tokens, palette and reduced-motion accessibility remain intact, with no client visual direction. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "f948c514508b5ae92edb816cfe751063c6ec0536e806ad231ba52c4baf369fcc"
+    "reason": "Neutral shared foundation: existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header; no client palette/type/layout direction. Exact LF-normalized source hash.",
+    "sha256": "5188be46e8c3a0b1f1436f18650b82a9406cd4285bdf91714000735632df7472"
   },
   {
     "path": "src/layouts/Base.astro",

@@ -82,6 +82,8 @@ These commands belong to the root EmDash tooling, not generated static sites.
 | --- | --- |
 | `npm run check:schema-budget` | Measure physical collection width before build/typecheck |
 | `npm run db:diff` | Compare offline SQLite/D1 schema parity and column budgets |
+| `npm run migration:check-library -- --help` | Compare supplied native media/folder/link readbacks with reviewed expectations |
+| `npm run migration:check-editorial -- --help` | Flag suspicious Portable Text/HTML structure and changed wording without rewriting prose |
 | `npm run db:check-backup -- --help` | Check an existing Node snapshot against the configured source and reviewed native inventory; never creates a database |
 | `npm run check:hosted-auth -- --help` | Probe installed EmDash 1.3.0 session/validation guards with no credentials before owner setup |
 | `npm run media:migrate-wp` | Prepare/import WordPress media and stage media storage operations |

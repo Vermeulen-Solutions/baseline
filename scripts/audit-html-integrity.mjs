@@ -157,11 +157,13 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       const flag = process.argv[index], value = process.argv[index + 1];
       if (flag === '--route' && value && !value.startsWith('--')) { options.routes.push(value); routeSeen = true; index++; }
       else if (flag === '--timeout-ms' && value && /^\d+$/.test(value) && options.timeoutMs === undefined) { options.timeoutMs = Number(value); index++; }
+      else if (flag === '--max-resources' && value && /^\d+$/.test(value) && options.maxResources === undefined) { options.maxResources = Number(value); index++; }
       else if (flag === '--query-link-mode' && ['crawl', 'status-only'].includes(value) && options.queryLinkMode === undefined) { options.queryLinkMode = value; index++; }
       else if (!directory && !flag.startsWith('-')) directory = flag;
-      else throw Error('Usage: node scripts/audit-html-integrity.mjs [dist] [--route <path>] [--timeout-ms <1-10000>] [--query-link-mode crawl|status-only]');
+      else throw Error('Usage: node scripts/audit-html-integrity.mjs [dist] [--route <path>] [--timeout-ms <1-10000>] [--max-resources <2-512>] [--query-link-mode crawl|status-only]');
     }
     if (!routeSeen) options.routes = ['/'];
+    if (options.maxResources !== undefined && (!Number.isSafeInteger(options.maxResources) || options.maxResources < 2 || options.maxResources > 512)) throw Error('SSR resource budget must be an integer between 2 and 512');
     const report = await auditBuildIntegrity(directory, options);
     for (const error of report.errors) console.error(`${error.file} [${error.rule}] ${error.message}`);
     console.log(`HTML integrity: ${report.valid ? 'PASS' : 'FAIL'}; ${report.htmlFiles} HTML files; ${report.durationMs.toFixed(1)}ms.`);

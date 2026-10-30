@@ -160,6 +160,19 @@ test('SSR finally kills a hung server on deadline and cleans signal listeners', 
   assert.ok(performance.now() - started < 3000);
 }));
 
+test('SSR resource budgets keep the 64 default and expose a bounded larger CLI crawl without extending deadlines', () => serverFixture(serverSource.replace("'<a href=\"/sample/?view=full#detail\">Sample</a>", "Array.from({length:70},(_,i)=>'<a href=\"/sample/?item='+i+'\">Item</a>').join('')+'<a href=\"/sample/?view=full#detail\">Sample</a>"), async (root, artifact) => {
+  await assert.rejects(snapshotSSR({directory:artifact,cwd:root}), /exceeds 64/);
+  const report = await auditBuildIntegrity(artifact,{cwd:root,maxResources:160,timeoutMs:10000});
+  assert.equal(report.valid,true); assert.ok(report.ssr.resources > 64);
+  const cli=fileURLToPath(new URL('../scripts/audit-html-integrity.mjs',import.meta.url));
+  const passed=spawnSync(process.execPath,[cli,artifact,'--max-resources','160','--timeout-ms','10000'],{cwd:root,encoding:'utf8'});
+  assert.equal(passed.status,0,passed.stderr);
+  for(const budget of [0,1,513,Infinity,1.5]) await assert.rejects(snapshotSSR({directory:artifact,cwd:root,maxResources:budget}),/resource budget/);
+  for(const args of [['--max-resources','513'],['--max-resources','2','--max-resources','3'],['--max-resources','not-a-number']]) {
+    const result=spawnSync(process.execPath,[cli,artifact,...args],{cwd:root,encoding:'utf8'}); assert.equal(result.status,1);
+  }
+}));
+
 test('SSR finally kills the server on caller failure and refuses external redirects', () => serverFixture(serverSource.replace("location:'/sample/'", "location:'https://external.invalid/'"), async (root, artifact) => {
   let child;
   await assert.rejects(snapshotSSR({ directory: artifact, cwd: root, onSpawn: process => { child = process; } }), /External redirect/);

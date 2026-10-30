@@ -108,6 +108,10 @@ For image delivery, verify the installed Astro image service and EmDash storage 
 
 ## Engineering verification loop
 
+Responsive acceptance includes the user's failed viewport, intermediate reflow and a case beyond the content maximum where relevant. Inspect copy width, heading groups, action wrapping, image crops and gutters alongside overflow. Check viewport-derived offsets inside a constrained native specimen and their full-width route. Preserve gallery frames and check regional contrast, not only loaded-image counts. Use real content in the selected languages; this is not a fixed heading-line-count rule.
+
+After checks/builds that refresh compiler state, use a fixed built artifact in an owned process for final browser review. Preserve the review site's data and record artifact/revision, origin and runtime; stop only the owned process. Do not count an earlier browser pass against a changed build or call a stale dev import a product defect. Reuse existing isolated visual/SSR lifecycles rather than adding a competing preview service.
+
 For the EmDash foundation, preflight with `npm.cmd run doctor`, use
 `npm.cmd run verify:fast` during edits, then run `npm.cmd run verify`,
 `npm.cmd run build`, and `npm.cmd run audit:html` against that fresh build

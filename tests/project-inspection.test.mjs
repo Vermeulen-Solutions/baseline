@@ -68,6 +68,18 @@ test('inspection never executes config or reads environment values, and dynamic 
   assert.equal(inspectProject(directory).runtime.output, 'unknown');
 }));
 
+test('an explicit Worker overlay preserves default Node inspection and source ownership without executing either target',()=>fixture((directory,write)=>{
+  write('package.json',{dependencies:{emdash:'1.3.0'},scripts:{build:'astro build','build:worker':'astro build --config astro.cloudflare.config.mjs'}});
+  const node=`import {defineConfig} from 'astro/config'; import adapter from '@astrojs/node'; import cms,{local} from 'emdash/astro'; import {sqlite} from 'emdash/db'; export default defineConfig({output:'server',adapter:adapter({mode:'standalone'}),integrations:[cms({database:sqlite({url:'file:./data.db'}),storage:local({directory:'./uploads'})})]});`;
+  write('astro.config.mjs',node);
+  write('astro.cloudflare.config.mjs',`throw Error('must not evaluate an unselected target'); export default {...base,adapter:worker(),outDir:'./dist-cloudflare',cacheDir:'./.astro-cloudflare'};`);
+  const before=fs.readFileSync(path.join(directory,'astro.cloudflare.config.mjs'));
+  const report=inspectProject(directory);
+  assert.deepEqual([report.runtime.adapter,report.runtime.database,report.runtime.storage],['node','sqlite','local']);
+  assert.equal(fs.readFileSync(path.join(directory,'astro.config.mjs'),'utf8'),node);
+  assert.deepEqual(fs.readFileSync(path.join(directory,'astro.cloudflare.config.mjs')),before);
+}));
+
 test('declared prop observations refresh with source and do not invent inherited APIs', () => fixture((directory, write) => {
   write('src/components/Grid.astro', `---\ninterface Props extends Imported { gap?: string; size: 'small' | 'large' }\n---\n<slot/>`);
   let grid = inspectProject(directory).components.find(item => item.name === 'Grid');

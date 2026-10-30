@@ -124,7 +124,12 @@
     "scripts/check-hosted-auth.mjs",
     "tests/backup-check.test.mjs",
     "tests/hosted-auth.test.mjs",
-    "docs/release-trust.md"
+    "docs/release-trust.md",
+    "scripts/check-migration-library.mjs",
+    "scripts/check-editorial-content.mjs",
+    "tests/migration-review.test.mjs",
+    "docs/migration-review.md",
+    "docs/runtime-targets.md"
   ],
   "scripts": [
     "doctor",
@@ -178,7 +183,9 @@
     "check:cache",
     "migration:check-locale",
     "db:check-backup",
-    "check:hosted-auth"
+    "check:hosted-auth",
+    "migration:check-library",
+    "migration:check-editorial"
   ],
   "checks": [
     "check:schema-budget"

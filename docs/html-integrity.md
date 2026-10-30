@@ -12,9 +12,11 @@ For a query-driven page, seed representative public URLs explicitly instead of r
 npm.cmd run audit:html -- --route / --route "/agenda/?view=cards" --route "/agenda/?view=timeline" --query-link-mode status-only --timeout-ms 10000
 ```
 
-The default capture deadline is 3.5 seconds and can be raised to at most 10 seconds with `--timeout-ms`; forced shutdown follows after a 250ms grace period. Capture is bounded to 64 response URLs and 2 MB per HTML response. Deadline/limit failures exit nonzero and keep partial diagnostics. This is a representative public crawl, not authentication, browser, or whole-site coverage.
+The default deadline is 3.5 seconds, capped at 10 seconds with `--timeout-ms`; forced shutdown follows after 250ms. Capture defaults to 64 response URLs and 2 MB per HTML response. For a reviewed media-rich crawl use `npm run audit:html -- --max-resources 160 --timeout-ms 10000`: only integers from 2 through 512 are accepted. The same flag works on `snapshot-ssr.mjs`. Raising it does not extend deadlines or waive missing-route/linked-page, redirect, byte or origin checks. Failures exit nonzero and keep partial diagnostics. This is a representative public crawl, not authentication, browser or whole-site coverage.
 
 The image audit requires an `alt` attribute. Informative images need meaningful text; decorative images may use the valid empty form `alt=""`. Whitespace-only text is rejected.
+
+The SSR audit's origin is temporary and its owned process is stopped before the command returns. It is not an owner review link. After final source checks/build, start the reviewed built artifact in a separately owned loopback process for browser acceptance, record the printed origin/runtime and artifact/revision in the existing evidence home, then stop only that process. Keep a client's mutable dev server separate; never reuse an old captured origin or terminate unrelated Node processes to clear a port. The existing visual harness follows this built-artifact pattern in an isolated fresh app and records source revision/dirty state, origin, runtime and entry/CSS/seed hashes.
 
 Local HTTP/browser harnesses share `scripts/loopback-port.mjs`. They bind only 127.0.0.1 and use the dynamic/private port range to avoid Fetch/browser-blocked ports, including on Windows machines where `PORT=0` can return a lower number. Occupied or excluded ports are retried a bounded number of times. A child process must bind after reservation release, so a cross-process race remains possible and must fail readiness clearly. Performance deadlines are unchanged.
 

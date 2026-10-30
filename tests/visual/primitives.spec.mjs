@@ -1,4 +1,47 @@
 import { test, expect } from '@playwright/test';
+import { spawnNpmSync } from '../../scripts/process-runner.mjs';
+
+test('behavior: a built gallery survives root typecheck without stale development imports',async({page},info)=>{
+  test.skip(info.project.name!=='chromium-1440','One owned artifact/verification handoff');
+  test.setTimeout(120000);
+  const response=await page.goto(process.env.VISUAL_ORIGIN+'/gallery-fit-fixture'); expect(response.status()).toBe(200);
+  const first=page.locator('#contained a[data-lightbox]').first();
+  await first.press('Enter'); await expect(page.locator('.pswp--open')).toBeVisible(); await page.keyboard.press('Escape');
+  const checked=spawnNpmSync(['run','typecheck'],{cwd:process.cwd(),encoding:'utf8',timeout:90000,env:{...process.env,ASTRO_TEST_FIXTURES:'0'}});
+  expect(checked.status,checked.stdout+checked.stderr).toBe(0);
+  await first.press('Enter'); await expect(page.locator('.pswp--open')).toBeVisible();
+  await page.keyboard.press('ArrowRight'); await expect(page.locator('.pswp__counter')).toHaveText(/^2\s*\/\s*5$/);
+  await page.keyboard.press('Escape'); await expect(first).toBeFocused();
+});
+
+test('behavior: responsive review catches squeezed wide copy and checks constrained placement',async({page},info)=>{
+  test.skip(info.project.name!=='chromium-1440','One explicit viewport matrix avoids triplicating identical coverage');
+  const measure=()=>page.locator('.proof-copy').evaluateAll(elements=>elements.map(element=>{
+    const rect=element.getBoundingClientRect(),style=getComputedStyle(element);
+    return {width:rect.width-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight),right:rect.right};
+  }));
+  for(const language of ['fr','en']) for(const width of [320,768,1440,2293,3840]) {
+    await page.setViewportSize({width,height:1000});
+    const response=await page.goto(process.env.VISUAL_ORIGIN+'/review-proof?lang='+language); expect(response.status()).toBe(200);
+    await page.evaluate(async()=>{await document.fonts.ready;await Promise.all([...document.images].map(image=>image.decode()));});
+    const copies=await measure();
+    expect(copies.every(copy=>copy.width>=Math.min(260,width-40))).toBe(true);
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);
+    for(const action of await page.locator('.proof-action').all()) { const rect=await action.boundingBox(); expect(rect.width).toBeGreaterThanOrEqual(44); expect(rect.height).toBeGreaterThanOrEqual(44); expect(rect.width).toBeLessThanOrEqual(width); expect(await action.evaluate(element=>element.scrollWidth<=element.clientWidth+1)).toBe(true); }
+    if(width===2293 && language==='fr') {
+      const affected=page.locator('#full .proof-copy');
+      // CSSOM injection keeps the application's inline-style CSP intact.
+      await affected.evaluate(element=>{
+        const rootSize=parseFloat(getComputedStyle(document.documentElement).fontSize);
+        element.style.setProperty('padding-inline',Math.max(rootSize,(innerWidth-72*rootSize)/2)+'px','important');
+      });
+      await expect.poll(async()=>(await measure())[0].width).toBeLessThan(200);
+      await affected.evaluate(element=>element.style.removeProperty('padding-inline'));
+      await expect.poll(async()=>(await measure())[0].width).toBeGreaterThan(300);
+      await page.screenshot({path:info.outputPath('responsive-wide-and-boxed.png'),fullPage:true});
+    }
+  }
+});
 
 test('behavior: malformed CMS media and native disclosure state remain usable', async ({ page }) => {
   const errors = [];

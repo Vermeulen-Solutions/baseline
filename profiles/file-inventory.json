@@ -1184,6 +1184,26 @@
     "docs/release-trust.md": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-migration-library.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-editorial-content.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/migration-review.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "docs/migration-review.md": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "docs/runtime-targets.md": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

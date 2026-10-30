@@ -7,6 +7,10 @@ import sharp from 'sharp';
 import { localEmdashAdapter } from '../../scripts/media-ingest.mjs';
 import { chromium, expect } from '@playwright/test';
 import { checkMigrationLocale } from '../../scripts/check-migration-locale.mjs';
+import { writeReviewProof } from './review-proof.mjs';
+import { execFileSync } from 'node:child_process';
+import { testEnvironment } from '../../scripts/run-tests.mjs';
+import { checkMigrationLibrary } from '../../scripts/check-migration-library.mjs';
 
 export default async function setup() {
   const browsers = JSON.parse(await readFile('node_modules/playwright-core/browsers.json', 'utf8'));
@@ -17,6 +21,7 @@ export default async function setup() {
   let fixtureStage, fixtureOrigin;
   const site = await startVisualSite(process.cwd(), reportDir, { devOnly:process.env.VISUAL_DEV_ONLY === '1', prepareStage: async ({ stage, origin }) => {
     fixtureStage = stage; fixtureOrigin = origin;
+    await writeReviewProof(stage);
     await copyFile('profiles/static/project/src/components/RichText.astro',path.join(stage,'src/components/StaticRichText.astro'));
     await writeFile(path.join(stage,'src/pages/editorial-spacing-fixture.astro'), `---
 import SiteShell from '../layouts/SiteShell.astro';
@@ -152,6 +157,10 @@ import '../styles/global.css';
       await page.goto(fixtureOrigin+'/_emdash/api/auth/dev-bypass?redirect=/_emdash/admin');
       await page.waitForURL('**/_emdash/admin');
       const headers={'X-EmDash-Request':'1',Origin:fixtureOrigin};
+      const libraryResponse=await page.request.get(fixtureOrigin+'/_emdash/api/media/'+media.id);
+      expect(libraryResponse.status()).toBe(200);
+      const libraryItem=(await libraryResponse.json()).data.item;
+      expect(checkMigrationLibrary({reviewVersion:1,media:[{expected:{id:media.id,filename:'spacing-media.png',folderId:null,organizationReason:'Deliberate unfiled synthetic fixture',alt:'ID-only local image',caption:''},actual:libraryItem}],folders:[],links:[]}).status).toBe('passed');
       const created=await page.request.post(fixtureOrigin+'/_emdash/api/content/posts',{headers,data:{slug:'native-field-contract',status:'draft',data:{title:'Bonjour — synthetic import sample',featured_image:{id:media.id,provider:'local',width:400,height:300,alt:'Native field round trip',meta:{storageKey:media.storageKey}}}}});
       expect(created.status()).toBe(201);
       const item=(await created.json()).data.item;
@@ -172,13 +181,19 @@ import '../styles/global.css';
       await expect(nativeImage).toHaveAttribute('width','400');
       await expect(nativeImage).toHaveAttribute('height','300');
       await expect(nativeImage).toHaveAttribute('alt','Native field round trip');
-      await writeFile(path.join(reportDir,'media-dev.json'),JSON.stringify({status:'passed',idOnlyLoaded:true,naturalWidth:400,nestedVendorFigures:0,nativeFieldRoundTrip:true,nativeLocaleReadback:true,wrongExpectedLocaleRejected:true})+'\n');
+      await writeFile(path.join(reportDir,'media-dev.json'),JSON.stringify({status:'passed',idOnlyLoaded:true,naturalWidth:400,nestedVendorFigures:0,nativeFieldRoundTrip:true,nativeLocaleReadback:true,nativeLibraryReadback:true,wrongExpectedLocaleRejected:true})+'\n');
     } finally { await browser.close(); }
   } });
   try {
     process.env.VISUAL_ORIGIN = site.origin;
     const hash = async file => createHash('sha256').update(await readFile(file)).digest('hex');
-    await writeFile(path.join(reportDir, 'environment.json'), JSON.stringify({ ...visualContract, observedNode: process.versions.node, platform: process.platform, arch: process.arch, seedSHA256: await hash(path.join(fixtureStage,'seed/seed.json')), sourceCSS_SHA256: await hash(path.join(fixtureStage,'src/styles/global.css')) }, null, 2) + '\n');
+    let sourceRevision=null,sourceDirty=null;
+    try {
+      const git=args=>execFileSync('git',args,{cwd:process.cwd(),env:testEnvironment(),encoding:'utf8',stdio:['ignore','pipe','pipe']}).trim();
+      sourceRevision=git(['rev-parse','HEAD']); sourceDirty=Boolean(git(['status','--porcelain']));
+    } catch { /* A source archive has no Git identity; keep that explicitly unknown. */ }
+    const devOnly=process.env.VISUAL_DEV_ONLY==='1';
+    await writeFile(path.join(reportDir, 'environment.json'), JSON.stringify({ ...visualContract, observedNode: process.versions.node, platform: process.platform, arch: process.arch, runtime:devOnly?'astro-dev':'node-standalone-fixture',origin:site.origin,sourceRevision,sourceDirty,artifactEntrySHA256:devOnly?null:await hash(path.join(fixtureStage,'dist-fixtures/server/entry.mjs')),seedSHA256: await hash(path.join(fixtureStage,'seed/seed.json')), sourceCSS_SHA256: await hash(path.join(fixtureStage,'src/styles/global.css')) }, null, 2) + '\n');
     return site.cleanup;
   } catch (error) { await site.cleanup(); throw error; }
 }

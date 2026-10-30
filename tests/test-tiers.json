@@ -202,5 +202,9 @@
   "hosted-auth.test.mjs": {
     "tier": "unit",
     "reason": "Offline native response fixtures, warning refusal and installed verification guard ordering; no credential creation or network"
+  },
+  "migration-review.test.mjs": {
+    "tier": "unit",
+    "reason": "Read-only native media/link expectations and advisory Portable Text/HTML semantics; no client data or API writes"
   }
 }
