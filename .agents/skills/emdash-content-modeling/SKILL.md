@@ -132,6 +132,7 @@ Once new structures are verified live:
 - [ ] Primary navigation and mobile disclosures display items in the correct designated order.
 - [ ] Remote D1 has all relational rows and junction references (`_emdash_content_references`).
 - [ ] `seed/seed.json` reflects the evolved schema and content items.
+- [ ] Concurrent edits pass the current `_rev`; a `409 CONFLICT` means re-read fresh raw state, preserve unrelated values and reconcile before retrying. Never remove `_rev` to force a write.
 - [ ] Cloudflare Worker is built and deployed (`build:cloudflare` + `deploy:cloudflare`) when Cloudflare hosting is used.
 
 ---

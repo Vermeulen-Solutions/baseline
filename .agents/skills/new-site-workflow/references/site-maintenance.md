@@ -97,6 +97,31 @@ integration, preserving original provenance. The versioned EmDash standards audi
 is useful diagnosis but does not enumerate every current Baseline capability.
 Record adopted, deferred and conflicting changes alongside actual acceptance.
 
+### Framework upgrade checks
+
+When a site upgrade changes EmDash, Astro or the Cloudflare adapter, apply the
+installed release notes and verify:
+
+- The core package, its exact companions, the Cloudflare adapter and any
+  `@emdash-cms/sandbox-workerd` install resolve one `emdash` version
+  (`npm ls emdash` / `pnpm why emdash`). The sandbox runner vendors its own core.
+- Every Astro config, including a separate Worker config, passes the canonical
+  origin through `emdash({ siteUrl })`; runtime `EMDASH_SITE_URL` is not enough.
+- The release's public-HTML cache policy is present. EmDash 1.4 removed
+  automatic page validators; preserve private/no-store and site policies.
+- Site-owned version guards and format assumptions were re-read. A helper written
+  for the old core version is not automatically compatible.
+- Starter-derived rehearsals are treated as templates. Readiness text, collection
+  slugs and expected content may not exist in a replaced site.
+- A D1 Time Travel bookmark is recorded before deployment; `wrangler d1 export`
+  cannot dump EmDash FTS5 databases. Explicit local rehearsals that refuse
+  `CI`/`GITHUB_ACTIONS` are run with the variable unset, not with a weakened guard.
+- The exact branch, build/deploy command, deployed version and
+  `/_emdash/api/health` result are recorded; every exposed hostname is checked.
+
+See `docs/emdash-1.4-upgrade.md` for current version behavior and
+`docs/cloudflare-backup-restore.md` for recovery.
+
 For image additions, use the general `media:prepare` workflow when installed;
 no WordPress source metadata is needed. Inspect photographic/artwork/preserve
 presets and any review findings before using eligible `upload/` copies. Static

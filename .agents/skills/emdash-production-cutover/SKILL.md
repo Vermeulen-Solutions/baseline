@@ -15,7 +15,7 @@ The deployment agent owns the configuration and checks below within existing aut
 
 Inspect the repository and deployed configuration. Record the following in existing deployment notes, or `audit/production-cutover.md` when no suitable record exists:
 
-- Cloudflare account, zone, Worker, and Wrangler environment; installed Astro, Cloudflare adapter, EmDash, and Wrangler versions.
+- Cloudflare account, zone, Worker, and Wrangler environment; installed Astro, Cloudflare adapter, EmDash, and Wrangler versions. Confirm the running EmDash version from `GET /_emdash/api/health`; do not infer it from a deployment date. Verify one installed core copy when a sandbox runner or the Cloudflare adapter is present.
 - Current and target origins, canonical hostname (apex or `www`), and required aliases.
 - Explicit `siteUrl`, `EMDASH_SITE_URL`, `SITE_URL`, Astro `site`, and CMS Site URL settings; identify conflicting overrides.
 - Authentication mode, a working admin login, and recovery method. Distinguish built-in passkey/email login, OAuth, and Cloudflare Access.
@@ -30,6 +30,8 @@ Check current official docs and installed APIs before using examples:
 - [Email domains](https://developers.cloudflare.com/email-service/configuration/domains/), [subdomains](https://developers.cloudflare.com/email-service/configuration/subdomains/), and [pricing](https://developers.cloudflare.com/email-service/platform/pricing/).
 
 Use the project's package manager and build/deployment scripts. Modify the selected Wrangler environment without replacing unrelated bindings, secrets, routes, or settings. Inspect configuration changes before deploying. Proceed within existing authorization; if live deployment or DNS changes are outside the request, prepare the concrete diff and procedure before requesting approval.
+
+`wrangler d1 export` cannot dump an EmDash database that contains FTS5 virtual tables. Do not drop FTS tables or treat the failed export as a missing recovery point; use a Time Travel bookmark for the short-term recovery point and an FTS-aware copy path only when longer retention requires one. `wrangler d1 time-travel info` acts on remote databases; it does not take `--remote`.
 
 ## Cutover sequence
 
@@ -116,7 +118,7 @@ Workers Paid permits arbitrary recipients subject to quotas, suppression rules, 
 
 Run appropriate repository typecheck/build and existing relevant checks before deploying changed code. Record observed results, unresolved limitations, and rollback instructions. Complete only applicable checks:
 
-- Production serves the expected site with valid TLS; aliases preserve paths/queries without loops.
+- Production serves the expected site with valid TLS; aliases preserve paths/queries without loops. `GET /_emdash/api/health` reports the intended EmDash version on every exposed hostname; public HTML carries the intended cache policy and the admin login flow is intact.
 - Effective canonical URL sources, magic links, canonical tags, sitemap, and robots references use the intended domain. Run `npm run migration:verify -- --scope url --manifest audit/url-inventory.json` against production to verify response statuses, canonicals, and image assets.
 - For WordPress migrations, follow `docs/migration-cutover.md` for the content freeze (`T_freeze`), delta reconciliation, and rollback procedures. For Node deployments, follow `docs/node-backup-restore.md` for consistent SQLite backup acquisition.
 - Fresh admin login works through the configured mode; replacement passkey login works when required. Complete `docs/editor-handoff.md` for client roles and peripheral checklist signoff.

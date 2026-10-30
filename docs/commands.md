@@ -95,7 +95,7 @@ The backup/authentication checks are EmDash-only opt-in commands; they do not ce
 
 ## Visual regression and maintenance
 
-`npm run test:visual` uses the pinned local Windows renderer and reviewed image references. Follow [visual regression](visual-regression.md); screenshot comparisons do not run in automated CI or production builds.
+`npm run test:visual` uses the pinned local Windows renderer and reviewed image references. Follow [visual regression](visual-regression.md); screenshot comparisons do not run in automated CI or production builds. `npm run check:cache` is the explicit local production cache/build rehearsal for the Node foundation; it refuses CI/GitHub Actions and does not certify Workers cache. When a shell exports `CI=true`, unset it for that local run rather than weakening the guard.
 
 Root `npm run check:ci-fast` measures the fast checks plus a normal build/release gate, enforces the 60-second budget and writes .emdash/checks/ci-fast.{json,log}. `npm run test:profiles` independently installs/verifies/builds/HTTP-checks both generated static profiles. These are maintainer tools rather than generated-site delivery prerequisites.
 

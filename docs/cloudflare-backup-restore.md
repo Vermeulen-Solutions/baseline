@@ -14,7 +14,7 @@ Retain existing media backups and key-list recovery copies as site operations. R
 
 ## 1. Database recovery
 
-[D1 Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/) is automatic on supported production databases. Its retention is **7 days on Free, 30 days on Paid**; verify the actual plan and storage generation. A bookmark names a recovery point. An off-platform SQL export is useful for longer retention, account loss or an isolated restore rehearsal; choose its cadence from the site's recovery goals rather than requiring it for every deployment. Exports can affect D1 query availability, so plan an appropriate window for large databases.
+[D1 Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/) is automatic on supported production databases. Its retention is **7 days on Free, 30 days on Paid**; verify the actual plan and storage generation. A bookmark names a recovery point. An off-platform SQL export is useful for longer retention, account loss or an isolated restore rehearsal; choose its cadence from the site's recovery goals rather than requiring it for every deployment. Exports can affect D1 query availability, so plan an appropriate window for large databases. `wrangler d1 export` cannot dump a database containing FTS5 virtual tables, which EmDash creates. Do not drop FTS tables or treat the export error as a missing recovery point; use Time Travel for the short-term point and an FTS-aware copy path only when longer retention requires one.
 
 For a site that already uses an explicit migration command, or when the installed EmDash release requires one:
 
@@ -23,7 +23,7 @@ For a site that already uses an explicit migration command, or when the installe
 3. Retain matching media/key recovery versions; copy them again when this operation changes those resources. A core migration that leaves media and keys untouched does not require a fresh R2 snapshot or a new key-vault receipt.
 4. Serialize migrations by account + database UUID. Apply core migrations with the reviewed fingerprint, deploy, then run `migrate --check`. Wrangler SQL migrations are a separate mechanism for site-owned SQL; they do not replace EmDash core migrations.
 
-The explicit migration CLI requires the selected account ID and a scoped `CLOUDFLARE_API_TOKEN` with D1 Edit permission. Normal `wrangler deploy` uses Wrangler's configured authentication and does not require that separate migration token. Use this sequence only for the explicit migration workflow. Set tokens securely; replace placeholders and never put secrets or SQL content in tracked receipts. PowerShell uses `npx.cmd`.
+The explicit migration CLI requires the selected account ID and a scoped `CLOUDFLARE_API_TOKEN` with D1 Edit permission. Normal `wrangler deploy` uses Wrangler's configured authentication and does not require that separate migration token. Use this sequence only for the explicit migration workflow. Set tokens securely; replace placeholders and never put secrets or SQL content in tracked receipts. `wrangler d1 time-travel info` acts on remote databases; do not add a `--remote` flag. PowerShell uses `npx.cmd`.
 
 ```sh
 npx wrangler d1 time-travel info <database-uuid> --config wrangler.jsonc --env production --json

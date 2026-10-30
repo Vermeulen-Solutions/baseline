@@ -35,6 +35,21 @@ and remaining acceptance, and do not deploy.
 | EmDash template-derived site | Review and adapt source changes against client code. Use installed EmDash/site skill helpers for their own scope; `sync:baseline` is not a CMS source updater. Preserve SSR, live edit bindings, runtime/cache behavior and real content. |
 | Older site missing helpers or receipts | Compare source directly with the chosen upstream revision. Review/adopt required helper files and their dependencies together, or integrate manually. Do not run nonexistent commands, force a whole-template replacement, regenerate over the site or fabricate receipt hashes. |
 
+### Framework upgrade checks
+
+When an update changes EmDash, Astro or the Cloudflare adapter, apply the installed release notes and these checks before treating the site as upgraded:
+
+- Pin core, its exact admin/blocks/auth/Gutenberg companions, the Cloudflare adapter and any sandbox runner together. `@emdash-cms/sandbox-workerd` vendors an exact core dependency; `npm ls emdash` or `pnpm why emdash` must show one installed version.
+- Pass the canonical origin through `emdash({ siteUrl })` in every Astro config, including a separate Worker config. Runtime `EMDASH_SITE_URL` does not cover build-time origin behavior.
+- Add the release's public-HTML cache policy. EmDash 1.4 removed automatic page validators; preserve existing private/no-store and deliberate site policies rather than overwriting them.
+- Re-read site-owned version guards and format assumptions. A helper written for the previous core version is not automatically compatible.
+- Treat starter-derived rehearsals as templates, not site acceptance. Readiness text, collection slugs and expected content may not exist in a replaced site.
+- Explicit local rehearsals may refuse to run when `CI` or `GITHUB_ACTIONS` is set. Remove the variable for that local run; do not weaken the guard.
+- Record the exact branch, build/deploy command and a D1 Time Travel bookmark before deployment. `wrangler d1 export` cannot dump EmDash FTS5 databases.
+- After deployment, verify `/_emdash/api/health`, the public cache headers, admin login flow and every exposed hostname.
+
+See [EmDash 1.4 upgrade](emdash-1.4-upgrade.md) for current version-specific behavior and [Cloudflare recovery](cloudflare-backup-restore.md) for bookmark and restore procedure.
+
 The optional `audit:site` command in a current Baseline tooling checkout diagnoses older EmDash sites without requiring them to install it. Its read-only inventory supports npm and pnpm lockfiles and marks local file/link/workspace packages separately from registry packages. Its versioned standards checks are a starting point, not a complete comparison against today's features; follow its documented runtime/evidence limits. A full update still needs the three-area comparison above. See the upstream [audit guide](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/site-standards-audit.md).
 
 Dependency automation is also bounded: the root weekly workflow proposes in-range package/lockfile changes as a review artifact. Exact pins stay pinned; it does not merge updates, refresh skills or upgrade downstream sites. Static source proposals are manual and separate from dependency updates. See upstream [reviewed maintenance](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/automated-upstream-updates.md). There is no universal one-command migration for all historical site shapes.
