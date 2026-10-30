@@ -6,7 +6,7 @@ import { checkHostedAuth, checkAuthBuildLog } from '../scripts/check-hosted-auth
 const buildLog = '[WARN] Some chunks are larger than 500 kB\n[build] Complete!';
 const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 const error = code => ({ success: false, error: { code, message: 'synthetic' } });
-const input = { origin: 'https://preview.example.test', version: '1.3.0', buildLog };
+const input = { origin: 'https://preview.example.test', version: '1.4.0', buildLog };
 
 test('missing-session warnings and incomplete logs stop before the network; unrelated warnings do not', async () => {
   for (const warning of ['Astro sessions are disabled (`session: false`), but EmDash stores signed-in users in the Astro session.', 'No Astro session driver is configured, but EmDash stores signed-in users in the Astro session.', 'Sign-in needs an Astro session driver']) {
@@ -43,9 +43,9 @@ test('session failures, blocked/redirected/SPAs, oversized responses and unsuppo
   for (const origin of ['http://example.test', 'https://user:secret@example.test', 'https://example.test/path']) await assert.rejects(checkHostedAuth({ ...input, origin, fetcher: () => assert.fail('invalid origin') }));
 });
 
-test('the installed 1.3.0 native verification route guards session and nonce before credential writes', () => {
+test('the installed 1.4.0 native verification route guards session and nonce before credential writes', () => {
   const pkg = JSON.parse(fs.readFileSync(new URL('../node_modules/emdash/package.json', import.meta.url), 'utf8'));
-  assert.equal(pkg.version, '1.3.0');
+  assert.equal(pkg.version, '1.4.0');
   const route = fs.readFileSync(new URL('../node_modules/emdash/dist/astro/routes/api/setup/admin-verify.mjs', import.meta.url), 'utf8');
   const session = route.indexOf('if (!session)'), nonce = route.indexOf('if (!setupState.nonce'), parse = route.indexOf('await parseBody'), create = route.indexOf('await createFirstAdmin');
   assert.ok(session > 0 && nonce > session && parse > nonce && create > parse);

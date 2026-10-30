@@ -93,7 +93,7 @@ test('preparation archives originals, resumes verified files safely and refuses 
 }));
 function fakeCMS() {
   const records = new Map(), objects = new Map(); let uploads = 0, ambiguous = false;
-  return { records, objects, count: () => uploads, ambiguous: value => ambiguous = value, identity: { adapter: 'emdash-1.3.0/rest-media-v1', origin: 'http://127.0.0.1:12345' }, get: async id => records.get(id), bytes: async key => objects.get(key), upload: async (bytes, entry) => {
+  return { records, objects, count: () => uploads, ambiguous: value => ambiguous = value, identity: { adapter: 'emdash-1.4.0/rest-media-v1', origin: 'http://127.0.0.1:12345' }, get: async id => records.get(id), bytes: async key => objects.get(key), upload: async (bytes, entry) => {
     const id = 'synthetic-' + ++uploads, storageKey = 'native/nested/' + id + '.png';
     const item = { id, storageKey, filename: id + '.png', mimeType: entry.output.mimeType, width: entry.output.width, height: entry.output.height, alt: entry.metadata.alt, caption: entry.metadata.caption };
     records.set(id, item); objects.set(storageKey, bytes); if (ambiguous) throw Error('Connection lost after create'); return item;

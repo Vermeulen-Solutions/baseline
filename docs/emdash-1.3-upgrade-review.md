@@ -1,5 +1,7 @@
 # EmDash 1.3 adoption and verification
 
+Historical 1.3 review. The current implementation pins EmDash 1.4.0; use [the 1.4 upgrade guide](emdash-1.4-upgrade.md) for new work and existing-site adoption. Earlier receipts below keep their original scope.
+
 This guide applies to the `emdash` Platform Profile. Static and Sveltia sites do not acquire EmDash settings, admin callbacks, permissions or database adapters. The release reference is [EmDash 1.3.0](https://github.com/emdash-cms/emdash/releases/tag/emdash%401.3.0); consult the installed package as well as current documentation when adapting code.
 
 ## Native AI-training opt-out

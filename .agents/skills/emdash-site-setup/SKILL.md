@@ -63,6 +63,8 @@ EmDash and Cloudflare interfaces change. Before using commands or configuration,
 
 Check the joint runtime requirements: this starter's Astro 7.4 baseline requires Node.js 22.22 or later, even when EmDash alone advertises 22.16. Prefer one supported package manager consistently within the generated project. Examples in current docs include the interactive `npm create emdash@latest` flow and the Cloudflare blog scaffold `npm create emdash@latest <site-name> -- --template cloudflare:blog --pm pnpm --yes`; verify the desired template and flags before using them. Use `docs/skill-synchronization.md` for staged updates; never overwrite dirty mirrors. Finish a new-site workflow with reviewed private registration or its explicit pending artifact under `docs/site-registry.md`.
 
+Baseline currently pins EmDash/auth 1.4.0; use docs/emdash-1.4-upgrade.md for upgrade behavior. Workers need matching @emdash-cms/cloudflare@1.4.0 (not a default Node dependency). Adapter 15 uses cloudflare.config.ts for Worker Loader and requires the EmDash Cloudflare 1.4.0 support; do not mix that setup into adapter 14 blindly. Native Forms 0.2.12 is evaluated opt-in, not part of the default dependencies.
+
 ## Scaffold and configure
 
 1. Scaffold into a new directory using the current official template command. Preserve the generated project structure and package manager unless there is a concrete reason to change them.

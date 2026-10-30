@@ -457,8 +457,8 @@
   },
   {
     "path": "src/middleware.ts",
-    "reason": "Functional starter request policy: opt-in page canonical redirects and bounded robots browser caching; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "aefd3f11fed3b4f96c782212294973890c3fd65b4f28d90af20c47d49aaa2740"
+    "reason": "Functional starter request policy: opt-in page redirects, bounded robots caching and explicit browser revalidation for public HTML without an existing policy/session cookie; no client visual implementation. Exact LF-normalized source hash.",
+    "sha256": "b06ee97c035f01d0321e9f49a8e4417c5eb557204042530782eee28a6549349e"
   },
   {
     "path": "src/plugins/baseline-metadata/index.ts",

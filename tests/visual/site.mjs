@@ -10,7 +10,7 @@ import assert from 'node:assert/strict';
 import { assertReleaseArtifact } from '../../scripts/assert-release-artifact.mjs';
 import { visualContract } from './contract.mjs';
 
-export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, afterReleaseBuild, devOnly = false, releaseOnly = false, expectWelcome = true, fixedClock = true } = {}) {
+export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, afterReleaseBuild, devOnly = false, releaseOnly = false, expectWelcome = true, fixedClock = true, dependencyRoot = root } = {}) {
   const stage = await mkdtemp(path.join(tmpdir(), 'emdash-visual-'));
   let child, cleaned = false, cancelled = false;
   const logs = [];
@@ -52,7 +52,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
   async function build(fixtures) {
     const target = launch(['node_modules/astro/bin/astro.mjs', 'build'], fixtures ? { ASTRO_TEST_FIXTURES: '1' } : {});
     const timeout = setTimeout(() => target.kill('SIGKILL'), 180000); timeout.unref();
-    try { const [code] = await once(target, 'exit'); assert.equal(code, 0, logs.slice(-15).join('')); } finally { clearTimeout(timeout); child = undefined; }
+    try { const [code] = await once(target, 'exit'); assert.equal(code, 0, logs.slice(-15).join('')); } finally { clearTimeout(timeout); child = undefined; await mkdir(reportDir, {recursive:true}); await writeFile(path.join(reportDir, 'build.log'), logs.join('')); }
   }
   async function cleanup() {
     if (cleaned) return; cleaned = true;
@@ -90,7 +90,7 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     await copyFile(path.join(root, 'scripts/dev-tools-integration.mjs'), path.join(stage, 'scripts/dev-tools-integration.mjs'));
     await copyFile(path.join(root, 'scripts/dev-tools-middleware.mjs'), path.join(stage, 'scripts/dev-tools-middleware.mjs'));
     for (const name of ['client-bundles.mjs', 'process-runner.mjs']) await copyFile(path.join(root, 'scripts', name), path.join(stage, 'scripts', name));
-    await symlink(path.join(root, 'node_modules'), path.join(stage, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
+    await symlink(path.join(dependencyRoot, 'node_modules'), path.join(stage, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
     // Trusted local rehearsals can add synthetic source/seed fixtures only to this owned copy.
     await prepareStage?.({ stage, origin });
     // Seed is the checked-in public starter fixture; supported dev setup applies its sample content.

@@ -21,6 +21,8 @@ Early fixture attempts caught a wrong asset path, an unintended second main land
 
 ## Broader visual limits and the focus repair
 
+This section records the earlier workflow release. The subsequent [EmDash 1.4 and visual-reference follow-up](emdash-1.4-upgrade-20261030.md) diagnoses and resolves its ticker reference limitation; the earlier attempt is retained below as historical evidence.
+
 The initial broader functional run stopped at three failures: a skip link obscured by the sticky header, plus `ticker-active` and `ticker-reduced` golden mismatches at 390px. A controlled run of the earlier committed `62d8eab` source reproduced all three. The header sits at layer 40 while the skip link was at 10. Raising the neutral shared skip link to 100 repaired actual keyboard visibility, verified on all three standard viewports. Its exact source exception hash was refreshed; no client art direction or inactive-page layout was changed.
 
 The two unrelated ticker reference differences remain: a one-pixel capture-height difference and raster differences under the same pinned renderer. **The complete visual suite is not claimed green.** Existing goldens, zero-pixel tolerance and renderer policy were preserved; they were not refreshed to hide these failures. Separate ticker/reference calibration remains a known acceptance limit outside these workflow changes. The earlier comparison and failed-run diagnostics are retained privately in `.emdash/backups/workflow-batches-2-3/` (and the earlier-source worktree's matching private directory).

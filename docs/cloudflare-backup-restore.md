@@ -1,5 +1,7 @@
 # Cloudflare recovery: database, media and encryption keys
 
+For EmDash 1.4.0, failed Workers auto migrations return 503 instead of the potentially empty 200 responses in 1.3.0. Large migrations may require explicit native `emdash migrate` before promotion; follow the actual migration status/error and preserve a recovery point. See [the 1.4 upgrade guide](emdash-1.4-upgrade.md).
+
 Applies to disaster-recovery planning and operations that change or restore EmDash Workers/D1/R2 data. The root remains Node/SQLite; use [Node recovery](node-backup-restore.md) there. Assign an owner, RPO (maximum lost writes), RTO (time to restore), backup cadence and restore-drill cadence when the site's data needs a recovery plan.
 
 For normal deployments and dependency upgrades, follow the site's configured deployment workflow and EmDash's [update guide](https://docs.emdashcms.com/deployment/updating/) or [v1 upgrade guide](https://docs.emdashcms.com/upgrade-to-v1/). Keep the supported `auto` migration mode when that is how the site operates. A separate `emdash migrate` pipeline and its API token are optional unless the site's configuration, upgrade work order or an actual migration error requires them. Do not introduce a managed migration pipeline merely because an EmDash version changed.

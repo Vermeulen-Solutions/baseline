@@ -29,6 +29,8 @@ Baseline provides two Astro foundations and three Platform Profiles: **`static`*
 - **[Maintaining Baseline](../CONTRIBUTING.md):** contributor and agent guidance for improving the reusable starter, generators, distribution and checks.
 - **[Platform Profile Verification](verification/platform-profiles.md):** milestone test results, reproduction commands and verification scope.
 
+Current EmDash pin: 1.4.0; see [the upgrade and adoption guide](emdash-1.4-upgrade.md). Native Forms 0.2.12 remains opt-in.
+
 CMS modeling, deployment, registry and migration guides below apply to `emdash` unless stated otherwise. Static Sveltia projects include their own `docs/sveltia-cms.md` for repository configuration, OAuth proxy/PAT options and native media paths.
 
 Explore the documentation guides below, organized by workflow, design architecture, and tooling:

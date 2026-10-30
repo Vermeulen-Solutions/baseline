@@ -25,7 +25,7 @@ export function localEmdashAdapter({ url, token, devBypass = false, request = fe
   }
   async function item(response) { const value = JSON.parse((await boundedBody(response, 1024 * 1024)).toString('utf8')); requireFact(value.success === true && value.data?.item, 'Unsupported EmDash media response'); return value.data.item; }
   return {
-    identity: { adapter: 'emdash-1.3.0/rest-media-v1', origin: base.origin },
+    identity: { adapter: 'emdash-1.4.0/rest-media-v1', origin: base.origin },
     get: async id => item(await call('/_emdash/api/media/' + encodeURIComponent(id))),
     bytes: async key => { requireFact(safeKey(key), 'Unsafe returned CMS storage key'); return boundedBody(await call('/_emdash/api/media/file/' + key.split('/').map(encodeURIComponent).join('/')), 32 * 1024 * 1024); },
     upload: async (bytes, entry) => {
@@ -61,7 +61,7 @@ async function verifyItem(adapter, entry, id) {
 }
 export async function ingestPrepared(stage, adapter, { adopt = {} } = {}) {
   const { directory, state } = loadPrepared(stage), file = path.join(directory, 'ingestion.json');
-  requireFact(adapter?.identity?.adapter === 'emdash-1.3.0/rest-media-v1', 'Supported explicit EmDash target required');
+  requireFact(adapter?.identity?.adapter === 'emdash-1.4.0/rest-media-v1', 'Supported explicit EmDash target required');
   const lock = fs.openSync(path.join(directory, 'ingest.lock'), 'wx');
   try {
     const ledger = fs.existsSync(file) ? jsonOf(file) : { ingestionVersion: 1, planId: state.planId, target: adapter.identity, entries: {} };

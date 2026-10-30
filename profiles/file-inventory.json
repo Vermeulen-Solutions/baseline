@@ -1204,6 +1204,10 @@
     "docs/runtime-targets.md": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/forms.integration.mjs": {
+      "disposition": "maintainer-only",
+      "reason": "Opt-in network-installed native forms/browser evaluation, never a generated-site dependency"
     }
   }
 }

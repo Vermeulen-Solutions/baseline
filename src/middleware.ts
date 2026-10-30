@@ -13,5 +13,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
     headers.set('Cache-Control', 'public, max-age=3600, must-revalidate');
     return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   }
+  if (['GET', 'HEAD'].includes(context.request.method) && response.status === 200 && response.headers.get('content-type')?.includes('text/html') && !response.headers.has('Cache-Control') && !response.headers.has('Set-Cookie') && !context.url.pathname.startsWith('/_') && !context.url.pathname.startsWith('/api/')) {
+    const headers = new Headers(response.headers);
+    headers.set('Cache-Control', 'no-cache');
+    return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+  }
   return response;
 });

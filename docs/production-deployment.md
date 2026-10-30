@@ -1,5 +1,7 @@
 # Production Deployment & Cloudflare Cutover
 
+Current EmDash target: core/auth 1.4.0, with matching Cloudflare adapter 1.4.0 on Workers only. Auto migrations can return 503 until complete; large migrations may require explicit native migrate before promotion. Review [the 1.4 upgrade guide](emdash-1.4-upgrade.md) before upgrading an existing site.
+
 Baseline sites can be deployed in two primary configurations:
 1. **Node.js (Default Baseline):** Standalone Node server with SQLite and local media storage. Ideal for VPS hosting, Docker containers, Railway, Fly.io, or traditional infrastructure.
 2. **Cloudflare Workers (Optional Target):** Serverless edge execution using Cloudflare Workers, Cloudflare D1 (SQLite at the edge), and Cloudflare R2 (object storage).

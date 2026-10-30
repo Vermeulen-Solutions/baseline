@@ -46,6 +46,7 @@ export default defineConfig({
       devTools({ fixtures: testFixtures }),
       react(),
       emdash({
+          siteUrl: siteUrl,
           plugins: [{
               id: 'baseline-metadata', version: '0.1.0', format: 'native',
               entrypoint: fileURLToPath(new URL('./src/plugins/baseline-metadata/index.ts', import.meta.url)).replaceAll('\\', '/'),

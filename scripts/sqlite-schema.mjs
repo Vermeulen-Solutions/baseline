@@ -6,7 +6,7 @@ import { MIGRATION_NAMES } from 'emdash';
 import { bytesOf, requireFact, sha256, writeJSON } from './infrastructure-io.mjs';
 
 const quoted = name => '"' + name.replaceAll('"', '""') + '"';
-const catalog = JSON.parse(fs.readFileSync(new URL('../standards/emdash-1.3.0-database-tables.json', import.meta.url)));
+const catalog = JSON.parse(fs.readFileSync(new URL('../standards/emdash-1.4.0-database-tables.json', import.meta.url)));
 const sort = rows => rows.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b), 'en'));
 export const affinity = type => /INT/i.test(type) ? 'INTEGER' : /CHAR|CLOB|TEXT/i.test(type) ? 'TEXT' : /BLOB/i.test(type) || !type ? 'BLOB' : /REAL|FLOA|DOUB/i.test(type) ? 'REAL' : 'NUMERIC';
 /** Bounded SQL lexer: literals stay exact, identifiers/keywords normalize; never evaluates SQL. */
@@ -134,11 +134,11 @@ export function inspectSQLite(file) {
     requireFact(db.prepare('PRAGMA integrity_check').all().every(row => Object.values(row)[0] === 'ok'), 'SQLite integrity check failed');
     requireFact(db.prepare('PRAGMA foreign_key_check').all().length === 0, 'SQLite foreign key check failed');
     const schema = schemaOf(db);
-    return { schemaVersion: 1, adapter: 'emdash-1.3.0/sqlite-metadata-v1', sourceSHA256: sha256(source), sqliteVersion: db.prepare('SELECT sqlite_version() AS version').get().version, schema, schemaSHA256: sha256(JSON.stringify(schema)) };
+    return { schemaVersion: 1, adapter: 'emdash-1.4.0/sqlite-metadata-v1', sourceSHA256: sha256(source), sqliteVersion: db.prepare('SELECT sqlite_version() AS version').get().version, schema, schemaSHA256: sha256(JSON.stringify(schema)) };
   } finally { db?.close(); requireFact(path.dirname(scratch) === path.resolve(os.tmpdir()) && path.basename(scratch).startsWith('baseline-db-inspect-'), 'Unsafe scratch cleanup'); fs.rmSync(scratch, { recursive: true, force: true }); }
 }
 export function compareSchemas(left, right) {
-  for (const snapshot of [left, right]) requireFact(snapshot?.schemaVersion === 1 && snapshot.adapter === 'emdash-1.3.0/sqlite-metadata-v1' && snapshot.schemaSHA256 === sha256(JSON.stringify(snapshot.schema)), 'Invalid schema snapshot contract/digest');
+  for (const snapshot of [left, right]) requireFact(snapshot?.schemaVersion === 1 && snapshot.adapter === 'emdash-1.4.0/sqlite-metadata-v1' && snapshot.schemaSHA256 === sha256(JSON.stringify(snapshot.schema)), 'Invalid schema snapshot contract/digest');
   const comparable = schema => ({ ...schema, tables: schema.tables.filter(table => table.owner !== 'engine') });
   const equal = JSON.stringify(comparable(left.schema)) === JSON.stringify(comparable(right.schema));
   const unknown = [...new Set([...left.schema.unknown, ...right.schema.unknown])];

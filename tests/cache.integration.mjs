@@ -5,6 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { startVisualSite } from './visual/site.mjs';
+import { checkHostedAuth } from '../scripts/check-hosted-auth.mjs';
 import { retainBuildAssets } from '../scripts/retain-build-assets.mjs';
 
 assert.ok(!process.env.CI && !process.env.GITHUB_ACTIONS, 'Cache production rehearsal is an explicit local check');
@@ -51,6 +52,9 @@ try {
       receipt.builds.push({ current: retained.current, retained: retained.retained });
     },
   });
+  const authProbe = await checkHostedAuth({ origin, version: '1.4.0', buildLog: await readFile(path.join(reportDir, 'build.log'), 'utf8') });
+  assert.equal(authProbe.setupLocked, true);
+  receipt.checks.push('native non-consuming hosted-auth contract reaches completed setup on built 1.4.0');
   const api = async (route, method = 'GET', body) => {
     const response = await fetch(origin + '/_emdash/api/' + route, {
       method, headers: { Authorization: 'Bearer ' + token, ...(body ? { 'Content-Type': 'application/json' } : {}) },
@@ -123,18 +127,20 @@ try {
   const before = await warm('/cache-deploy');
   const styles = html => [...html.matchAll(/<link\b[^>]*href="([^"]+)"/g)].map(match => match[1]).filter(url => url.startsWith('/_astro/') && url.endsWith('.css'));
   const oldStyles = styles(before.html); assert.ok(oldStyles.length);
-  const modified = before.headers.get('last-modified'); assert.ok(modified);
+  const modified = before.headers.get('last-modified'); assert.equal(modified, null, 'EmDash 1.4 hints supply no automatic page validator');
+  assert.equal(before.headers.get('cache-control'), 'no-cache', 'Browser freshness is explicit and independent of the route cache');
   await site.rebuildRelease(async ({ stage }) => { await writeFile(path.join(stage, 'src/pages/cache-deploy.astro'), proofPage('green')); });
-  const after = await page('/cache-deploy', { headers: { 'If-Modified-Since': modified } });
+  const after = await page('/cache-deploy', { headers: { 'If-Modified-Since': 'Wed, 01 Jan 2031 00:00:00 GMT' } });
   assert.equal(after.status, 200, 'a code-only deploy cannot answer stale HTML with 304');
-  assert.notEqual(after.headers.get('last-modified'), modified);
+  assert.equal(after.headers.get('last-modified'), null);
+  assert.equal(after.headers.get('cache-control'), 'no-cache');
   assert.ok(styles(after.html).some(url => !oldStyles.includes(url)), 'the rebuild actually changed a stylesheet hash');
   for (const url of new Set([...oldStyles, ...styles(after.html)])) {
     const response = await fetch(origin + url); assert.equal(response.status, 200, url);
     assert.match(response.headers.get('content-type'), /text\/css/);
   }
   assert.ok(receipt.builds[1].retained > 0);
-  receipt.checks.push('real code rebuild changes validators and CSS hashes while retained old/current assets both load');
+  receipt.checks.push('real code rebuild ignores obsolete conditional timestamps and changes CSS hashes while retained old/current assets both load');
   receipt.validators = { before: modified, after: after.headers.get('last-modified'), oldStyles, newStyles: styles(after.html) };
   receipt.status = 'passed';
 } catch (error) {

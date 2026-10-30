@@ -4,6 +4,8 @@ Use Node **24.21.0**, npm/lockfile, **@playwright/test 1.64.1**, bundled full Ch
 
 This starter suite certifies the stated fixture font, not operating-system font fallback. A client site must replace the renderer font contract with its actual licensed brand faces and review new baselines; the neutral override must not conceal a client typography change.
 
+Run build-heavy browser rehearsals, full verification and independent profile installations sequentially on the local Windows renderer. Overlapping them can exhaust bounded startup deadlines and invalidate timing conclusions; an isolated rerun must pass before release.
+
 ## Run and review
 
 ```sh

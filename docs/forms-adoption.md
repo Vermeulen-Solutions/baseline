@@ -1,4 +1,20 @@
-# Native forms decision — 15 October 2026
+# Native forms adoption
+
+Current target: **@emdash-cms/plugin-forms 0.2.12 with EmDash 1.4.0**. Use the native plugin when it fits; it remains opt-in. The earlier 0.2.10 evidence below is historical and does not certify later releases. See [the 1.4 upgrade guide](emdash-1.4-upgrade.md).
+
+## Current evaluation — 30 October 2026
+
+Configure the actual canonical public origin through `SITE_URL`, passed to both Astro and the EmDash integration. The browser rehearsal uses native Origin handling, without custom request headers or interception. API-only probes with `X-EmDash-Request` do not certify a visitor submission.
+
+The fresh local rehearsal uses native npm registration on core 1.4.0 and plugin 0.2.12 in a disposable Node/SQLite app. It installs a separate dependency tree, seeds only synthetic data, then builds the actual SSR/public client/admin. Root package/configuration and working content remain unchanged by the forms test. Run locally with `node tests/forms.integration.mjs`; private receipts and failures remain under .emdash/checks/forms-*.
+
+0.2.12 changes required select placeholders and empty textarea initialization, preserves custom submit labels after requests, and allows Editors to read every form/submission. Editors can still see the submitted content, including email/name fields: only IP/user-agent/referer metadata and configured webhook credentials are hidden. Form/submission mutations, deletion and exports remain Admin-only. Verify this boundary against a site's privacy expectations before giving Editors access.
+
+Instant notification Reply-To now uses a plain valid visitor email when present. Inspect the actual delivery provider; no real notification, webhook or Turnstile provider is certified by this local rehearsal. Recovery still needs the starter's bounded allowlist/TTL review, and retention/cleanup must be selected deliberately. The test selects seven days, without claiming to wait for scheduled cleanup. Native submission caps remain unpublished in this package; the existing stop condition below still applies.
+
+The historical capability table below records the older evaluation. Do not treat all of it as freshly retested merely because the current package builds. The 1.4 release evidence lists the actual new checks and remaining limits.
+
+## Historical decision — 15 October 2026
 
 Decision: `@emdash-cms/plugin-forms@0.2.10` is an opt-in native integration. Keep FormError and the starter's bounded form-recovery utilities. Do not add the plugin to the default package/configuration or replace an existing site's providers as part of this upgrade. The obsolete `@emdash/plugin-forms` package name is incorrect.
 

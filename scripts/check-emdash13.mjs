@@ -1,44 +1,44 @@
-// Optional local integration rehearsal. Never targets an existing CMS/database.
+// Optional local built integration rehearsal. Never targets an existing CMS/database.
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
 import { createHash, randomBytes } from 'node:crypto';
-import { spawn, execFileSync } from 'node:child_process';
-import { once } from 'node:events';
-import { availableLoopbackPort } from './loopback-port.mjs';
+import { execFileSync } from 'node:child_process';
 import { chromium, expect as baseExpect } from '@playwright/test';
-
+import { startVisualSite } from '../tests/visual/site.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
-const report = path.join(root, 'audit/emdash-1.3-review-2026-10-18');
-assert.ok(!process.env.CI, 'Run this browser rehearsal locally, not in screenshot CI');
-await fs.mkdir(path.join(root, '.emdash/checks'), { recursive: true });
-const stage = await fs.mkdtemp(path.join(root, '.emdash/checks/emdash13-'));
-const site = path.join(stage, 'site');
-await fs.mkdir(site);
-await fs.mkdir(report, { recursive: true });
-const expect = baseExpect.configure({ timeout: 20000 });
-const receipt = { schemaVersion: 1, node: process.versions.node, platform: process.platform, startedAt: new Date().toISOString(), emdash: JSON.parse(await fs.readFile(path.join(root, 'node_modules/emdash/package.json'), 'utf8')).version, copiedWorkingDatabase: false, independentInstall: false, authentication: 'Synthetic users and session provisioning only in the disposable fixture; native request middleware and permissions active', checks: [], passed: false };
-const hashes = {};
-receipt.sourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-receipt.sourceTreeDirty = Boolean(execFileSync('git', ['status', '--porcelain'], { cwd: root, encoding: 'utf8' }).trim());
-for (const relative of ['scripts/check-emdash13.mjs', 'src/layouts/Base.astro', 'src/layouts/SiteShell.astro', 'src/components/RichText.astro', 'src/components/Card.astro']) hashes[relative] = createHash('sha256').update(await fs.readFile(path.join(root, relative))).digest('hex');
-for (const relative of ['src', 'seed', 'astro.config.mjs', 'package.json', 'tsconfig.json', 'emdash-env.d.ts', 'scripts/dev-tools-integration.mjs', 'scripts/dev-tools-middleware.mjs', 'scripts/client-bundles.mjs', 'scripts/process-runner.mjs']) {
-  const target = path.join(site, relative);
-  await fs.mkdir(path.dirname(target), { recursive: true });
-  await fs.cp(path.join(root, relative), target, { recursive: true });
-  if (!['src', 'seed'].includes(relative)) hashes[relative] = createHash('sha256').update(await fs.readFile(target)).digest('hex');
-}
-await fs.mkdir(path.join(site, 'public'), { recursive: true });
-await fs.symlink(path.join(root, 'node_modules'), path.join(site, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
-// Authentication provisioning is deliberately absent from Baseline src/. The
-// fixture uses the installed auth adapter and normal Astro user sessions.
-const key = randomBytes(32).toString('hex');
-await fs.mkdir(path.join(site, 'src/pages/_emdash/api'), { recursive: true });
-await fs.writeFile(path.join(site, 'src/pages/_emdash/api/fixture-auth.ts'), `import {createKyselyAdapter} from '@emdash-cms/auth/adapters/kysely';
+assert.ok(!process.env.CI && !process.env.GITHUB_ACTIONS, 'Run this browser rehearsal locally');
+await fs.mkdir(path.join(root,'.emdash/checks'),{recursive:true});
+const report = await fs.mkdtemp(path.join(root,'.emdash/checks/emdash-current-'));
+console.log('Current-version rehearsal report: '+report);
+const expect = baseExpect.configure({timeout:20000});
+const receipt={schemaVersion:1,node:process.versions.node,platform:process.platform,startedAt:new Date().toISOString(),emdash:JSON.parse(await fs.readFile(path.join(root,'node_modules/emdash/package.json'))).version,copiedWorkingDatabase:false,independentInstall:false,runtime:'Built Node/SQLite after disposable native dev session provisioning',checks:[],passed:false};
+const hashes={};
+receipt.sourceCommit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
+receipt.sourceTreeDirty=Boolean(execFileSync('git',['status','--porcelain'],{cwd:root,encoding:'utf8'}).trim());
+for(const relative of ['scripts/check-emdash13.mjs','tests/visual/site.mjs','package-lock.json','astro.config.mjs','seed/seed.json','src/layouts/Base.astro','src/layouts/SiteShell.astro','src/components/RichText.astro','src/components/Card.astro'])hashes[relative]=createHash('sha256').update(await fs.readFile(path.join(root,relative))).digest('hex');
+const key=randomBytes(32).toString('hex');
+let owned,origin,browser,admin,activePage;
+const actors={};
+const check=(name,details)=>{receipt.checks.push({name,passed:true,...details});console.log('PASS '+name)};
+  const request = async (context, endpoint, options = {}, status) => {
+    const response = await context.request.fetch(origin + endpoint, { ...options, headers: { origin, referer: origin + '/', 'X-EmDash-Request': '1', ...options.headers } });
+    const body = await response.json();
+    if (status) assert.equal(response.status(), status, endpoint + ': ' + JSON.stringify(body));
+    else assert.ok(response.ok() && body.success, endpoint + ': ' + JSON.stringify(body));
+    return { status: response.status(), body, data: body.data };
+  };
+
+try {
+  owned = await startVisualSite(root,report,{releaseOnly:true,fixedClock:false,
+    async prepareStage({stage,origin:url}) {
+      origin=url;
+      await fs.mkdir(path.join(stage, 'src/pages/_emdash/api'), { recursive: true });
+await fs.writeFile(path.join(stage, 'src/pages/_emdash/api/fixture-auth.ts'), `import {createKyselyAdapter} from '@emdash-cms/auth/adapters/kysely';
 export const prerender = false;
 export async function GET({request, url, locals, session}) {
-  if (!import.meta.env.DEV || locals.user?.role !== 50 || request.headers.get('x-fixture-key') !== process.env.EMDASH13_FIXTURE_KEY) return new Response(null, {status:404});
+  if (!import.meta.env.DEV || locals.user?.role !== 50 || request.headers.get('x-fixture-key') !== ${JSON.stringify(key)}) return new Response(null, {status:404});
   const name = url.searchParams.get('name'), role = Number(url.searchParams.get('role'));
   if (!['Contributor A','Contributor B','Revision Editor'].includes(name) || ![20,40].includes(role)) return new Response(null,{status:400});
   const adapter = createKyselyAdapter(locals.emdash.db);
@@ -48,43 +48,17 @@ export async function GET({request, url, locals, session}) {
   return Response.json({id:user.id,name:user.name,role:user.role});
 }
 `);
-// Astro ignores underscore-prefixed source routes unless explicitly injected.
-const configPath = path.join(site, 'astro.config.mjs');
-const config = await fs.readFile(configPath, 'utf8');
-assert.equal(config.split('integrations: [').length, 2);
-await fs.writeFile(configPath, config.replace('integrations: [', `integrations: [
-  { name: 'emdash13-disposable-auth', hooks: { 'astro:config:setup': ({injectRoute}) => injectRoute({pattern:'/_emdash/api/fixture-auth',entrypoint:new URL('./src/pages/_emdash/api/fixture-auth.ts',import.meta.url),prerender:false}) } },`).replace('vite: {', `vite: { server: { fs: { allow: ${JSON.stringify([site, path.join(root, 'node_modules')])} } },`));
-const port = await availableLoopbackPort();
-const origin = `http://127.0.0.1:${port}`;
-const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => /^(PATH|PATHEXT|SYSTEMROOT|WINDIR|COMSPEC|TEMP|TMP|HOME|USERPROFILE|LOCALAPPDATA|APPDATA)$/i.test(name)));
-Object.assign(env, { EMDASH_ENCRYPTION_KEY: 'emdash_enc_v1_' + randomBytes(32).toString('base64url'), EMDASH13_FIXTURE_KEY: key });
-let server, browser, activePage;
-const logs = [];
-const check = (name, details) => { receipt.checks.push({ name, passed: true, ...details }); console.log('PASS ' + name); };
-try {
-  console.log('Starting disposable Node/SQLite server');
-  server = spawn(process.execPath, [path.join(root, 'node_modules/astro/bin/astro.mjs'), 'dev', '--host', '127.0.0.1', '--port', String(port)], { cwd: site, env, stdio: ['ignore', 'pipe', 'pipe'] });
-  for (const stream of [server.stdout, server.stderr]) stream.on('data', chunk => logs.push(String(chunk)));
-  const deadline = Date.now() + 120000;
-  let ready = false;
-  while (Date.now() < deadline) {
-    if (server.exitCode !== null) throw new Error('Disposable dev server exited');
-    try { if ((await fetch(origin + '/', { signal: AbortSignal.timeout(15000) })).ok) { ready = true; break; } } catch {}
-    await new Promise(resolve => setTimeout(resolve, 250));
-  }
-  assert.ok(ready, 'Disposable CMS server readiness');
-  console.log('Server ready; provisioning isolated sessions');
-  browser = await chromium.launch({ headless: true });
-  const admin = await browser.newContext({ viewport: { width: 1440, height: 1000 }, locale: 'en-US' });
-  await admin.request.get(origin + '/_emdash/api/setup/dev-bypass?content=0&redirect=/_emdash/admin');
-  const request = async (context, endpoint, options = {}, status) => {
-    const response = await context.request.fetch(origin + endpoint, { ...options, headers: { origin, referer: origin + '/', 'X-EmDash-Request': '1', ...options.headers } });
-    const body = await response.json();
-    if (status) assert.equal(response.status(), status, endpoint + ': ' + JSON.stringify(body));
-    else assert.ok(response.ok() && body.success, endpoint + ': ' + JSON.stringify(body));
-    return { status: response.status(), body, data: body.data };
-  };
-  const actors = {};
+
+      const configPath=path.join(stage,'astro.config.mjs');
+      const config=(await fs.readFile(configPath,'utf8')).replace('const siteUrl = process.env.SITE_URL || env.SITE_URL;','const siteUrl = '+JSON.stringify(url)+';');
+      assert.equal(config.split('integrations: [').length,2);
+      await fs.writeFile(configPath,config.replace('integrations: [',`integrations: [{name:'disposable-role-auth',hooks:{'astro:config:setup':({injectRoute})=>injectRoute({pattern:'/_emdash/api/fixture-auth',entrypoint:new URL('./src/pages/_emdash/api/fixture-auth.ts',import.meta.url),prerender:false})}},`));
+    },
+    async onDevReady() {
+        browser = await chromium.launch({ headless: true });
+  admin = await browser.newContext({ viewport: { width: 1440, height: 1000 }, locale: 'en-US' });
+  await admin.request.get(origin + '/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin');
+
   for (const [name, role] of [['Contributor A', 20], ['Contributor B', 20], ['Revision Editor', 40]]) {
     const context = await browser.newContext({ locale: 'en-US', viewport: { width: 1440, height: 1000 } });
     await context.request.get(origin + '/_emdash/api/setup/dev-bypass?content=0');
@@ -93,16 +67,26 @@ try {
     const user = await response.json(); assert.equal(user.role, role);
     actors[name] = { context, user };
   }
+
+    }
+  });
+  assert.equal((await admin.request.get(origin+'/_emdash/api/fixture-auth',{headers:{'x-fixture-key':key}})).status(),404,'Fixture session provisioning is absent from the release runtime');
   const a = actors['Contributor A'], b = actors['Contributor B'], editor = actors['Revision Editor'];
   const content = text => [{ _type: 'block', _key: 'paragraph', style: 'normal', markDefs: [], children: [{ _type: 'span', _key: 'span', text, marks: [] }] }];
   const create = async (context, slug, text) => (await request(context, '/_emdash/api/content/posts', { method: 'POST', data: { slug, data: { title: slug, content: content(text) } } })).data.item;
-  const get = async id => (await request(admin, '/_emdash/api/content/posts/' + id)).data.item;
+  const get = async id => { const {data} = await request(admin, '/_emdash/api/content/posts/' + id); return {...data.item, _rev:data._rev}; };
   const update = async (context, id, text, status) => {
     const item = await get(id);
     return request(context, '/_emdash/api/content/posts/' + id, { method: 'PUT', data: { _rev: item._rev, data: { content: content(text) } } }, status);
   };
   const own = await create(a.context, 'contributor-own', 'Own original');
   const other = await create(b.context, 'contributor-other', 'Other original');
+  const oldState = await get(other.id);
+  await request(admin, '/_emdash/api/content/posts/' + other.id, {method:'PUT',data:{_rev:oldState._rev,data:{featured_image:''}}});
+  assert.equal((await get(other.id)).data.featured_image, null);
+  const stale = await request(admin, '/_emdash/api/content/posts/' + other.id, {method:'PUT',data:{_rev:oldState._rev,data:{title:'Stale write'}}},409);
+  assert.notEqual((await get(other.id)).data.title, 'Stale write');
+  check('canonical-empty-image-and-stale-revision-refusal', {emptyImage:null,staleStatus:stale.status});
   assert.equal((await get(own.id)).authorId, a.user.id);
   await update(a.context, own.id, 'Own changed');
   assert.ok(JSON.stringify((await get(own.id)).data).includes('Own changed'));
@@ -172,8 +156,11 @@ try {
   await expect(activePage.locator('.tiptap:visible')).toContainText('Original revision wording');
   await expect(activePage.getByRole('button', { name: 'Back to editing', exact: true })).toHaveCount(0);
   check('standard-admin-restore-refresh', { restoredCanonicalDraft: true, returnedToEditing: true });
+  // A fresh tab separates public editing from the admin's restore/leave-page guard.
+  // The restored draft was already read back above; no unsaved text is discarded.
+  activePage = await editor.context.newPage();
   // Toolbar and link acceptance is performed on the real public post template.
-  await activePage.goto(origin + '/posts/revision-review');
+  await activePage.goto(origin + '/posts/revision-review', {waitUntil:'domcontentloaded',timeout:60000});
   await activePage.locator('.emdash-tb-toggle').click();
   await expect(activePage.locator('.tiptap')).toBeVisible({ timeout: 60000 });
   const selectText = async () => {
@@ -222,17 +209,15 @@ try {
 } catch (error) {
   receipt.error = error.stack;
   if (activePage) {
-    await fs.writeFile(path.join(report, 'failure-ui.txt'), await activePage.locator('body').innerText()).catch(() => {});
-    await fs.writeFile(path.join(report, 'failure-body.html'), await activePage.locator('.article-body').innerHTML()).catch(() => {});
+    await activePage.locator('body').innerText({timeout:1500}).then(text=>fs.writeFile(path.join(report,'failure-ui.txt'),text)).catch(()=>{});
+    await activePage.locator('.article-body').innerHTML({timeout:1500}).then(text=>fs.writeFile(path.join(report,'failure-body.html'),text)).catch(()=>{});
     await activePage.screenshot({ path: path.join(report, 'failure.png'), fullPage: true }).catch(() => {});
   }
   throw error;
 } finally {
   await browser?.close();
-  if (server && server.exitCode === null) { const done = once(server, 'exit'); server.kill(); await done; }
-  await fs.writeFile(path.join(report, 'server.log'), logs.join(''));
-  Object.assign(receipt, { completedAt: new Date().toISOString(), serverStopped: !server || server.exitCode !== null || server.signalCode !== null, sourceHashes: hashes, fixtureDirectory: path.relative(root, stage).replaceAll('\\', '/') });
+  await owned?.cleanup();
+  Object.assign(receipt,{completedAt:new Date().toISOString(),sourceHashes:hashes,cleanup:'Owned built app/server/dependency junction removed; working CMS untouched'});
   await fs.writeFile(path.join(report, 'verification.json'), JSON.stringify(receipt, null, 2) + '\n');
   if (receipt.passed) for (const name of ['failure-ui.txt', 'failure.png', 'failure-body.html']) await fs.unlink(path.join(report, name)).catch(error => { if (error.code !== 'ENOENT') throw error; });
-  await fs.unlink(path.join(site, 'node_modules'));
 }
