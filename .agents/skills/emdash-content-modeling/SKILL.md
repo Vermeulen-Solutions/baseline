@@ -25,7 +25,11 @@ Do not bury entities in unstructured JSON repeaters, ad-hoc text fields, or deli
 | **Dedicated Collection + Relation** | Entity is shared, cross-linked, filtered, or has its own metadata (e.g. Locations/Venues, Schedule Sessions, People/Team Members, Documents, Partners). | Distinct collection + `_emdash_relations` + `_emdash_content_references` |
 | **Strict Select / Enum Field** | Value belongs to a closed, predictable set (e.g. Status: `draft`/`published`/`archived`; Tiers: `platinum`/`gold`/`community`; Days: `monday`–`sunday`; Categories: `article`/`case-study`/`announcement`). | Field `type: "select"` with explicit `options: [...]` |
 | **Repeater Field** | Lightweight, strictly private sub-items that never need to be linked elsewhere or shared between parents. | Field `type: "repeater"` |
+| **Versioned Blocks Composition** | Editors need to add, remove or reorder predefined page sections, with each section's content owned by that page. | Field `type: "blocks"` with bounded `allowedTypes`; block types start at version 1. Follow [versioned-blocks.md](references/versioned-blocks.md). |
+| **Fixed Fields + Page Template** | Pages follow a stable section structure; editors change content within that structure. | Typed collection fields rendered by a reusable Astro page template. |
 | **Rich Text / Portable Text** | Unstructured narrative copy, long-form editorial content. | Field `type: "rich_text"` |
+
+Choose blocks from editorial needs, not merely because a design contains reusable Astro sections. Derive the allowed section types and fields from the site's brief, real content and established design; avoid installing a generic catalogue on every site. Keep independently managed/shared entities in collections and ordinary narrative in Portable Text. When blocks are selected during an authorized site build, implementation includes their schema, version-1 Astro renderers, canonical field map and representative content; a schema-only definition does not complete the feature.
 
 ### Entity Variant & Sub-Category Decomposition (First-Class Records)
 When an organization has multiple distinct variants, sub-teams, or cohorts within a high-level category (e.g. specialized departments within an agency, distinct squad age-cohorts in a sports club, or distinct service packages):
