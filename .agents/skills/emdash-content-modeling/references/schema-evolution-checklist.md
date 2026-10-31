@@ -2,6 +2,8 @@
 
 This reference provides concrete patterns for evolving an EmDash content model on a live site without downtime or data corruption.
 
+For `blocks` fields and retained block-type versions, use [versioned-blocks.md](versioned-blocks.md) instead of the relational SQL examples below. Block schema updates, activation and stored-content migration are separate native API operations.
+
 ## 1. Relational Junction Queries in EmDash
 
 When querying parent entries with child references (e.g. `events` with child `sessions`, `speakers`, `documents`):
