@@ -410,6 +410,8 @@ Once the diagnosis completes:
 
 Use this for a substantial visual overhaul of an existing Baseline or other site. The concept pass defines the new composition before broad implementation. Specify fixed identity elements independently of the permitted visual change; use a local-only release unless broader actions are authorized.
 
+This remains the right recipe when revisiting an already completed redesign: reopen its visual direction while preserving the working site's content and functionality. Resume at art direction rather than repeating the initial migration. Reuse the selected design surface, or resolve a new preference if the user wants to change it. The [OpenDesign recipe](#opendesign-design-and-implementation-same-agent) supplies tool-specific execution; it does not replace the preservation and release scope below.
+
 ```text
 Significantly redesign this existing site using new-site-workflow,
 site-art-direction, astro-site-design and the applicable Impeccable flow.
@@ -430,13 +432,20 @@ Inventory route archetypes and inspect the actual source at desktop and mobile.
 Preserve product truth and editing ownership. Do not treat the old composition
 as fixed unless listed above or mistake utility adoption for a redesign.
 
+Research a small relevant reference shortlist before presenting concepts.
+With OpenDesign, search its bundled design systems/examples and read relevant
+parts of shortlisted DESIGN.md files or layout sources. Show the names and
+links/paths, what was inspected, which ideas inform each concept and which
+stylistic choices are excluded by our brief. Put this explanation directly in
+chat and alongside the concept comparison; disclose partial reads or previews.
+
 Develop two or three materially different concepts for a representative page
 using real copy and available assets, including mobile intent. Compare audience
 fit, identity continuity, readability, function and maintainability. Resolve the
 direction decision before broad implementation; ask only consequential questions
 not already answered. Record which previous visual decisions are superseded.
 
-At the concept checkpoint, recommend a design iteration surface (OpenDesign, OpenPencil, Penpot, or direct Astro in the browser) and follow `site-art-direction/references/design-iteration.md` to iterate focused representative concepts before proving the direction in Astro. Use `opendesign-site-design` for OpenDesign, `openpencil-site-design` for OpenPencil, or `penpot-site-design` for Penpot.
+At the concept checkpoint, reuse our selected design surface. If unresolved, recommend a design iteration surface (OpenDesign, OpenPencil, Penpot, or direct Astro in the browser). Follow `site-art-direction/references/design-iteration.md` to iterate focused representative concepts before proving the direction in Astro. Use `opendesign-site-design` for OpenDesign, `openpencil-site-design` for OpenPencil, or `penpot-site-design` for Penpot.
 
 Calibrate the selected system on the installed styleguide, implement one real
 page per archetype and critique it in the browser before rolling it out. Keep
@@ -676,7 +685,7 @@ Follow new-site-workflow, site-art-direction and astro-site-design. I want to it
 ### OpenDesign design and implementation, same agent
 
 ```markdown
-Use opendesign-site-design and Baseline's design-iteration workflow. Keep this task in one agent unless I request a handoff. Confirm the local OpenDesign daemon is running; search bundled design systems and examples during Stage 4A research. Author zero-JS HTML/CSS slices with data-od-id section anchors, validate with `od lint --fail-on p1`, export 1440×900 and 390×844 renders, and iterate based on my feedback. Resolve the direction selection, translate components into Baseline Astro primitives, calibrate on /_styleguide, and complete the routes. Finish [authorized commit/push/deploy targets, or local-only].
+Use opendesign-site-design and Baseline's design-iteration workflow. Keep this task in one agent unless I request a handoff. Confirm the local OpenDesign daemon is running; search bundled design systems and examples during Stage 4A research and read relevant parts of the shortlisted sources. Present the named references with links/paths, the extent of inspection, their concrete influence on each concept and what our brief rules out, directly in chat and with the comparison. Author zero-JS HTML/CSS slices with data-od-id section anchors, validate with `od lint --fail-on p1`, export 1440×900 and 390×844 renders, and iterate based on my feedback. Resolve the direction selection, translate components into Baseline Astro primitives, calibrate on /_styleguide, and complete the routes. Finish [authorized commit/push/deploy targets, or local-only].
 ```
 
 ### OpenPencil design and implementation, same agent
