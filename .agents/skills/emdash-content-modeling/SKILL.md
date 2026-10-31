@@ -1,11 +1,13 @@
 ---
 name: emdash-content-modeling
-description: Architect, normalize, refine, and migrate EmDash content models for both greenfield builds and active brownfield sites. Covers relational design vs embedded fields, enum constraints, entity variant decomposition, schema migration scripts, dual-read template compatibility, multi-database parity (SQLite, D1, seed), field pruning, and menu synchronization.
+description: Architect, normalize, refine, and migrate EmDash content models for both greenfield builds and active brownfield sites. Covers relational design vs embedded fields, versioned block rendering and evolution, enum constraints, entity variant decomposition, schema migration scripts, dual-read template compatibility, multi-database parity (SQLite, D1, seed), field pruning, and menu synchronization.
 ---
 
 # EmDash Content Modeling & Schema Evolution
 
 Design and evolve content schemas, relationships, and data pipelines for Astro + EmDash sites.
+
+For a versioned `blocks` field, read [references/versioned-blocks.md](references/versioned-blocks.md) before designing renderers or changing its block types/content. It covers exhaustive retained-version dispatch, fingerprint-bound schema updates, activation, and identity-preserving content migration. Use the native block schema/content APIs for this path; the relational SQL protocol below does not apply to block-type registry records. Keep the existing seed/CLI workflow for site setup and reproducibility; a changed seed is not a live migration.
 
 This skill operates in two distinct situations:
 1. **Greenfield Architecture:** Designing clean, normalized collections, fields, and relations during initial site setup (Stage 3 of `new-site-workflow`).
