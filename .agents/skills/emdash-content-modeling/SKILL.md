@@ -46,6 +46,12 @@ When an organization has multiple distinct variants, sub-teams, or cohorts withi
 - Cross-collection relations link parents and children via `translation_group`s so that referencing an item automatically resolves to the matching locale row in public queries.
 - Never duplicate fields with language suffixes (avoid `title_en`, `description_en` columns).
 
+### SSR Query Hygiene: Parallelization, Scoped References & Zero N+1 Waterfalls
+- **Parallelize independent queries (`Promise.all`):** In `Base.astro`, shared page shells, and route templates, always wrap independent `getSiteSettingsWithCacheHint`, `getMenuWithCacheHint`, `getEmDashCollection`, and `getEmDashEntry` calls in `Promise.all([...])`. Sequential `await` statements multiply D1/SQLite round-trip latency during cold SSR renders and logged-in admin browsing.
+- **Scope relational hydration (`references`):** `getEmDashEntry(collection, slug, { locale, references: { ... } })` hydrates **all** registered relational fields by default unless `references` is specified. On directory, card-index, or schedule pages that iterate over many entries, pass an explicit `references` filter containing only the relations rendered by that template (e.g., `{ references: { coaches: { limit: 100 } } }` or `{ references: { training_sessions: { limit: 100 }, coaches: { limit: 100 }, managers: { limit: 100 } } }` without `documents`).
+- **Eliminate N+1 inverse lookups & lazy-load fallbacks:** Never run a per-entry `getEmDashCollection('people', ...)` or fallback full-table scan when the parent entry's relation (`entry.data.coaches`, `entry.data.managers`, `entry.data.documents`) is already populated. Guard fallback collection scans behind an explicit empty check (`if (!hydratedItems.length)`).
+- **Preserve media `{ width, height }` metadata:** When mapping CMS media objects (`photo()`, `photoUrl()`, or custom media helpers), always record `{ width, height }` via `rememberImageDimensions(url, width, height)` so `imageSource()` never downloads raw image bytes from R2/storage during SSR just to inspect dimensions.
+
 ---
 
 ## 2. Brownfield Evolution Protocol (Existing Live Sites)

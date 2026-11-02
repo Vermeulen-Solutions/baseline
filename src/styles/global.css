@@ -308,7 +308,7 @@
 
 	::view-transition-old(root),
 	::view-transition-new(root) {
-		animation-duration: 180ms;
+		animation-duration: 250ms;
 		animation-timing-function: var(--ease-smooth);
 	}
 

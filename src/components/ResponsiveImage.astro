@@ -22,7 +22,7 @@ if (optimize === true && nativeWidth && nativeHeight && image.widths.length) {
       width: Math.min(800, nativeWidth),
       height: Math.round(Math.min(800, nativeWidth) * nativeHeight / nativeWidth),
       widths: image.widths,
-      sizes, layout: 'none', format: 'webp', quality: 90, fit: 'contain',
+      sizes, layout: 'none', format: 'webp', quality: 80, fit: 'contain',
     });
     if (optimized.src === image.original) optimized = undefined;
   } catch { /* Keep the original when its source cannot be processed. */ }

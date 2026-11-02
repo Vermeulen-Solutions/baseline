@@ -1208,6 +1208,41 @@
     "tests/forms.integration.mjs": {
       "disposition": "maintainer-only",
       "reason": "Opt-in network-installed native forms/browser evaluation, never a generated-site dependency"
+    },
+    "src/lib/public-feed-cache.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted",
+      "reason": "Optional SSR feed-cache integration; no static output runtime or automatic installation"
+    },
+    "src/lib/private-safe-memory-cache.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted",
+      "reason": "Optional SSR feed-cache integration; no static output runtime or automatic installation"
+    },
+    "tests/public-feed-cache.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted",
+      "reason": "Optional SSR feed-cache integration; no static output runtime or automatic installation"
+    },
+    "tests/private-safe-memory-cache.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted",
+      "reason": "Optional SSR feed-cache integration; no static output runtime or automatic installation"
+    },
+    "docs/public-feed-cache-integration.md": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted",
+      "reason": "Optional SSR integration guidance; no static runtime or implicit plugin adoption"
+    },
+    "src/lib/cloudflare-cache-provider.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted",
+      "reason": "Optional SSR and Cloudflare Workers edge cache integration; no static output runtime"
+    },
+    "tests/cloudflare-cache-provider.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted",
+      "reason": "Optional SSR and Cloudflare Workers edge cache integration; no static output runtime"
     }
   }
 }

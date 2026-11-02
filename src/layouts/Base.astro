@@ -28,7 +28,13 @@ interface Props {
 }
 
 const { title, pageTitle, description, image, canonical, content, pageType = 'website', articleMeta, seo, breadcrumbs, surface } = Astro.props;
-const { data: settings, cacheHint: settingsCacheHint } = await getSiteSettingsWithCacheHint();
+const [
+	{ data: settings, cacheHint: settingsCacheHint },
+	{ data: menu, cacheHint: menuCacheHint },
+] = await Promise.all([
+	getSiteSettingsWithCacheHint(),
+	getMenuWithCacheHint("primary"),
+]);
 const { siteTitle, siteTagline, siteLogo } = resolveStarterSiteIdentity(settings);
 const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
 const pageDescription = description ?? siteTagline;
@@ -36,7 +42,6 @@ const siteUrl = resolvePublicSiteUrl(settings.url, Astro.site, Astro.url);
 // Undefined uses the public default; explicit null lets error pages opt out.
 const pageCanonical = canonical === undefined ? defaultCanonicalUrl(siteUrl, Astro.url.pathname) : canonical;
 
-const { data: menu, cacheHint: menuCacheHint } = await getMenuWithCacheHint("primary");
 if (Astro.cache?.enabled) {
 	Astro.cache.set(settingsCacheHint);
 	Astro.cache.set(menuCacheHint);

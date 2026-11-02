@@ -2,13 +2,30 @@ export type Photo = { _type: 'image'; _key: string; asset: { _type: 'reference';
 const record = (v: unknown): Record<string, any> => v && typeof v === 'object' && !Array.isArray(v) ? v : {};
 const text = (v: unknown) => typeof v === 'string' ? v : '';
 const dimension = (v: unknown) => typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : undefined;
+const knownDimensions = new Map<string, { width: number; height: number }>();
+
+export function rememberImageDimensions(src: string | undefined, width?: unknown, height?: unknown): void {
+  const w = Number(width);
+  const h = Number(height);
+  if (!src || !Number.isFinite(w) || w <= 0 || !Number.isFinite(h) || h <= 0) return;
+  knownDimensions.set(src, { width: Math.round(w), height: Math.round(h) });
+}
+
+export function getKnownImageDimensions(src: string | undefined): { width?: number; height?: number } {
+  if (!src) return {};
+  return knownDimensions.get(src) ?? {};
+}
+
 export function photo(value: unknown, key = ''): Photo | null {
   const n = record(value), a = record(n.asset || value), meta = record(a.meta);
   const id = text(a._ref || a.id);
   const storageKey = text(meta.storageKey);
   const url = text(a.url || a.src) || (storageKey ? `/_emdash/api/media/file/${encodeURIComponent(storageKey)}` : '');
   if (!id && !url) return null;
-  return { _type: 'image', _key: text(n._key) || key, asset: { _type: 'reference', _ref: id, url: url || undefined, provider: text(a.provider) || 'local' }, alt: text(n.alt ?? a.alt), caption: text(n.caption), width: dimension(n.width ?? a.width), height: dimension(n.height ?? a.height) };
+  const width = dimension(n.width ?? a.width);
+  const height = dimension(n.height ?? a.height);
+  if (url && width && height) rememberImageDimensions(url, width, height);
+  return { _type: 'image', _key: text(n._key) || key, asset: { _type: 'reference', _ref: id, url: url || undefined, provider: text(a.provider) || 'local' }, alt: text(n.alt ?? a.alt), caption: text(n.caption), width, height };
 }
 export function albumPhotos(value: unknown): Photo[] {
   if (!Array.isArray(value)) return [];
@@ -22,10 +39,17 @@ export function photoUrl(p: Photo, resolve?: (key: string) => string): string {
   const url = p.asset.url || '';
   if (url.startsWith('/_emdash/api/media/file/')) {
     const key = url.slice('/_emdash/api/media/file/'.length);
-    if (resolve && /^[A-Za-z0-9._-]+$/.test(key)) return resolve(key);
+    const resolved = resolve && /^[A-Za-z0-9._-]+$/.test(key) ? resolve(key) : url;
+    if (p.width && p.height) {
+      rememberImageDimensions(url, p.width, p.height);
+      rememberImageDimensions(resolved, p.width, p.height);
+    }
+    return resolved;
+  }
+  if (/^https?:\/\//i.test(url) || (url.startsWith('/') && !url.startsWith('//'))) {
+    if (p.width && p.height) rememberImageDimensions(url, p.width, p.height);
     return url;
   }
-  if (/^https?:\/\//i.test(url) || (url.startsWith('/') && !url.startsWith('//'))) return url;
   return '';
 }
 

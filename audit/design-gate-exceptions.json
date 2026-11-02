@@ -26,12 +26,12 @@
   {
     "path": "src/styles/global.css",
     "reason": "Neutral shared foundation: existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header; no client palette/type/layout direction. Exact LF-normalized source hash.",
-    "sha256": "5188be46e8c3a0b1f1436f18650b82a9406cd4285bdf91714000735632df7472"
+    "sha256": "0b87c68d18c564919536c02025ae44f5c769567ffe6a89d65e3964d2f87bbeef"
   },
   {
     "path": "src/layouts/Base.astro",
     "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "a29a307771be6246d34ba6f9ceaea686d6a0e491fc93a4fd14543045ad9f27a4"
+    "sha256": "12d7a35ba52e969fe8db6bc6b6ff2f6bf81e8c172f458edcddbbb1f2b80a4162"
   },
   {
     "path": "src/components/Container.astro",
@@ -96,7 +96,7 @@
   {
     "path": "src/lib/photo-gallery.ts",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "4f26f41d4392bf36fa85a8f0a789f1408f055c376236c50b570347561a59c233"
+    "sha256": "1b1f27bb776cc1511d346e746c8debf0ada30c8f3d87902eec5ee103aeab7cd5"
   },
   {
     "path": "src/lib/justified-gallery.ts",
@@ -106,7 +106,7 @@
   {
     "path": "src/components/ResponsiveImage.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "70fa7a7f2647548136d2a36e93833829777539030325bd043f9fa7e75abfca7a"
+    "sha256": "923e08723a22287cd51e2cec1743d4b89d140905024338ccc13aa6e5ba81e432"
   },
   {
     "path": "src/components/EditorialImage.astro",
@@ -162,7 +162,7 @@
   {
     "path": "src/lib/image-source.ts",
     "reason": "Authorized neutral starter image infrastructure backport; preserves presentation, no client theme or content. Any edit invalidates this exact exception.",
-    "sha256": "35e1ccab9f3e4d1ffd572c80c337caee6976d2a5f39bdd9a61b5be928e1d080e"
+    "sha256": "9d7300c82b8aae21250fcaa169483e3ab2ce6a1c8b4a3797c3d5f5f7920234d2"
   },
   {
     "path": "src/assets/styleguide-grid.svg",
@@ -247,7 +247,7 @@
   {
     "path": "src/layouts/SiteShell.astro",
     "reason": "Functional shared starter metadata ownership option; preserve the document/title/landmarks and backward-compatible static default while allowing a platform head to own description/canonical. No visual-system or client content change. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "3356c06e031ae9df0a5d178f9929edcd2f92a2e4ff01d1aa1992f11b0a112198"
+    "sha256": "e0d86e030d5ef65da21617d6dfc7ec11fbd0d207e1e2a21571f0c724f83690e8"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -458,11 +458,26 @@
   {
     "path": "src/middleware.ts",
     "reason": "Functional starter request policy: opt-in page redirects, bounded robots caching and explicit browser revalidation for public HTML without an existing policy/session cookie; no client visual implementation. Exact LF-normalized source hash.",
-    "sha256": "b06ee97c035f01d0321e9f49a8e4417c5eb557204042530782eee28a6549349e"
+    "sha256": "70b4873507b3af859e12bbd8fb08fa4ab8edaa267e9afc640c044f803e0d3305"
   },
   {
     "path": "src/plugins/baseline-metadata/index.ts",
     "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
     "sha256": "52c4b4b773ad17d9edc716dba62b490086468ac1f8a411a9ebed9ec18f6811e5"
+  },
+  {
+    "path": "src/lib/public-feed-cache.ts",
+    "reason": "Optional SSR cache infrastructure only; no visual tokens, markup or presentation changes.",
+    "sha256": "142a024c4cfd759d3ee82e8759cdf55c2b68067a59e1290089ab29ad8eb5d3b3"
+  },
+  {
+    "path": "src/lib/private-safe-memory-cache.mjs",
+    "reason": "Optional SSR cache infrastructure only; no visual tokens, markup or presentation changes.",
+    "sha256": "f01a3c3976de5ce3c33c1255744e705905c16d23f881009f27de29d774324a07"
+  },
+  {
+    "path": "src/lib/cloudflare-cache-provider.mjs",
+    "reason": "Optional SSR and Cloudflare Workers edge cache infrastructure only; no visual tokens, markup or presentation changes.",
+    "sha256": "123382c6a12c25c43a81f2a06575a40b790c8dbcdb23823343514d1097eaa81d"
   }
 ]
