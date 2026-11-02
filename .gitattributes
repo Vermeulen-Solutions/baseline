@@ -16,3 +16,5 @@ scripts/** linguist-vendored
 tests/** linguist-vendored
 audit/** linguist-vendored
 .agents/** linguist-vendored
+profiles/** linguist-vendored
+standards/** linguist-vendored
