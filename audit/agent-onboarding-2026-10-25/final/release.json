@@ -1,4 +1,0 @@
-{
-  "command": "npm.cmd run check:dev-tools",
-  "exitCode": 0
-}

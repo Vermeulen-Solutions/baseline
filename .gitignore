@@ -43,3 +43,8 @@ test-results/
 .emdash/site-audits/
 .emdash/runtime-logs/
 .emdash/migration-acceptance/
+
+# Transient audit trial runs and trace dumps
+audit/**/trials/
+audit/**/trace.jsonl
+audit/**/*.log
