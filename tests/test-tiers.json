@@ -206,5 +206,17 @@
   "migration-review.test.mjs": {
     "tier": "unit",
     "reason": "Read-only native media/link expectations and advisory Portable Text/HTML semantics; no client data or API writes"
+  },
+  "public-feed-cache.test.mjs": {
+    "tier": "unit",
+    "reason": "Request-owned evidence aggregation, absolute render/part expiry and fail-closed resolver contracts"
+  },
+  "private-safe-memory-cache.test.mjs": {
+    "tier": "unit",
+    "reason": "Native memory HTML HIT/invalidation and pre-lookup auth/cookie/query bypass; no external service"
+  },
+  "cloudflare-cache-provider.test.mjs": {
+    "tier": "unit",
+    "reason": "Cloudflare Workers caches.default HTML/image edge caching and cookie-safe admin bypass; no external service"
   }
 }

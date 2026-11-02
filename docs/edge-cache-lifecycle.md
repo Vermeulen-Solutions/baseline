@@ -4,19 +4,21 @@ The Node/SQLite starter enables no cache provider by default. This is the option
 
 ## Explicit route policy
 
-Use `cacheCloudflare()` from `@astrojs/cloudflare/cache`, not the removed `cloudflareCache()`. In a Cloudflare site, configure `cache: { provider: cacheCloudflare() }`, `toolbar: 'client'` inside `emdash(...)`, and an explicit rule for **every** public route. For example:
+Use `src/lib/cloudflare-cache-provider.mjs` (wrapping `cacheCloudflare()` from `@astrojs/cloudflare/cache`) on Cloudflare Workers, or `src/lib/private-safe-memory-cache.mjs` on Node.js, not the removed `cloudflareCache()`. In a Cloudflare site, configure `cache: { provider: { entrypoint: './src/lib/cloudflare-cache-provider.mjs' } }`, `toolbar: 'client'` inside `emdash(...)`, and an explicit rule for **every** public route. Choose a sensible public HTML `maxAge` based on the site's publishing cadence (for example `3600` seconds / 1 hour for clubs, associations, portfolios and agency sites, or `300` seconds / 5 minutes for frequent editorial publications — never 15 seconds unless live real-time scores require it). For example:
 
 ```js
 routeRules: {
-  '/': { maxAge: 300, swr: 0, tags: ['posts', 'pages', 'all'] },
-  '/posts': { maxAge: 300, swr: 0, tags: ['posts', 'all'] },
-  '/posts/[slug]': { maxAge: 300, swr: 0, tags: ['posts', 'all'] },
-  '/category/[slug]': { maxAge: 300, swr: 0, tags: ['posts', 'all'] },
-  '/tag/[slug]': { maxAge: 300, swr: 0, tags: ['posts', 'all'] },
-  '/[slug]': { maxAge: 300, swr: 0, tags: ['pages', 'all'] },
+  '/': { maxAge: 3600, swr: 0, tags: ['posts', 'pages', 'all'] },
+  '/posts': { maxAge: 3600, swr: 0, tags: ['posts', 'all'] },
+  '/posts/[slug]': { maxAge: 3600, swr: 0, tags: ['posts', 'all'] },
+  '/category/[slug]': { maxAge: 3600, swr: 0, tags: ['posts', 'all'] },
+  '/tag/[slug]': { maxAge: 3600, swr: 0, tags: ['posts', 'all'] },
+  '/[slug]': { maxAge: 3600, swr: 0, tags: ['pages', 'all'] },
   '/robots.txt': { maxAge: 3600, swr: 0, tags: ['emdash:settings', 'all'] },
 }
 ```
+
+On `*.workers.dev` preview/staging domains, Cloudflare's outer CDN layer does not automatically cache Worker HTML based on `CDN-Cache-Control` alone, and if outer CDN caching is forced without a cookie key it can serve cached anonymous HTML to cookie-bearing admin requests. `src/lib/cloudflare-cache-provider.mjs` solves both problems: it bypasses cache lookup whenever `Authorization`, `Cookie` or a query string is present, stores anonymous `200` HTML responses directly in the Worker's edge Cache API (`caches.default`) for `maxAge` seconds, and sets `Cloudflare-CDN-Cache-Control: no-store` on HTML responses so the outer CDN always lets the Worker inspect cookies first. It also caches `GET`/`HEAD` `200` responses for `/_image` and `/_emdash/api/media/file/*` in `caches.default` with `Cache-Control: public, max-age=31536000, immutable` (overriding EmDash's default `max-age=0, must-revalidate` media header).
 
 Adapt rules to the site's inventory, including sitemaps and locale routes. Never use a root catch-all (`/[...slug]`) that catches admin/API paths. An EmDash settings/menu hint alone can make an unruled response cacheable with the provider's default lifetime (currently two hours for 200). Hints do not set a TTL. Register all entry, collection, settings, menu, taxonomy and widget hints; if a lookup has no supported hint, opt out with `Astro.cache.set(false)`.
 

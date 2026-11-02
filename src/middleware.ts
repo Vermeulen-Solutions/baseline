@@ -1,12 +1,49 @@
 import { defineMiddleware } from 'astro:middleware';
 import { normalizedPageLocation } from './lib/page-url';
 
+const IMMUTABLE_MEDIA_CACHE = 'public, max-age=31536000, immutable';
+
 export const onRequest = defineMiddleware(async (context, next) => {
   if (import.meta.env.NORMALIZE_PAGE_URLS === '1') {
     const location = normalizedPageLocation(context.url, context.request.method);
     if (location) return context.redirect(location, 301);
   }
+  const isMediaRoute = ['GET', 'HEAD'].includes(context.request.method) &&
+    (context.url.pathname === '/_image' ||
+      context.url.pathname.startsWith('/_emdash/api/media/file/') ||
+      context.url.pathname.endsWith('/publicEventImage'));
+  const edgeCache = typeof caches !== 'undefined' && (caches as any).default ? (caches as any).default : null;
+  if (isMediaRoute && edgeCache && context.request.method === 'GET') {
+    try {
+      const cached = await edgeCache.match(context.request.url);
+      if (cached) {
+        const headers = new Headers(cached.headers);
+        headers.set('Cache-Control', IMMUTABLE_MEDIA_CACHE);
+        headers.delete('CDN-Cache-Control');
+        headers.delete('Cloudflare-CDN-Cache-Control');
+        headers.set('X-Astro-Cache', 'HIT');
+        return new Response(cached.body, { status: cached.status, statusText: cached.statusText, headers });
+      }
+    } catch {}
+  }
   const response = await next();
+  if (isMediaRoute && response.status === 200) {
+    const body = edgeCache && context.request.method === 'GET' ? await response.arrayBuffer() : response.body;
+    const headers = new Headers(response.headers);
+    headers.set('Cache-Control', IMMUTABLE_MEDIA_CACHE);
+    headers.delete('CDN-Cache-Control');
+    headers.delete('Cloudflare-CDN-Cache-Control');
+    const out = new Response(body, { status: response.status, statusText: response.statusText, headers });
+    if (edgeCache && context.request.method === 'GET') {
+      try {
+        const putPromise = edgeCache.put(context.request.url, out.clone());
+        const waitUntil = (context.locals as any)?.runtime?.ctx?.waitUntil;
+        if (typeof waitUntil === 'function') waitUntil(putPromise);
+        else putPromise.catch(() => {});
+      } catch {}
+    }
+    return out;
+  }
   if (context.url.pathname === '/robots.txt' && response.status === 200) {
     // Native 1.3 route uses 24h browser caching. Cap it without replacing its body.
     const headers = new Headers(response.headers);
