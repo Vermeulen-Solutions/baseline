@@ -1,6 +1,6 @@
 # Reviewed upstream maintenance
 
-Baseline maintenance workflows produce patches for review. They run with `contents: read`; they do not push commits, open or merge pull requests, or create failure-notification issues. No workflow write permissions or automatic PR approval settings are required. Follow the corresponding Actions run for failures.
+Baseline maintenance workflows produce verified proposals for review. The root upstream dependency review runs weekly; when updates pass verification, it opens or updates a Pull Request on `automation/upstream-dependency-update` (or an Issue if Pull Request creation is restricted by repository policy) pointing to review documentation and changed packages. Generated static profile maintenance workflows remain manual and read-only.
 
 ## Root Baseline dependency proposals
 
@@ -14,9 +14,9 @@ It installs the existing lockfile with `npm ci --no-audit --no-fund`, proposes i
 
 The candidate checkout runs `npm run verify`, `npm run build`, and `npm run test:profiles`. Root verification includes script syntax, art direction, token audits, unit tests, Astro typecheck and the applicable schema budget preflight. Both generated static profiles receive independent installation, verification, builds and HTTP checks. The workflow does not fabricate a SQLite dummy table or run screenshot regression.
 
-The final steps attempt to upload `upstream-dependency-review`, containing `upstream-update.patch` from `git diff --binary`, even when an earlier step fails. An artifact's existence is not a passing result: inspect every verification step and the proposed diff. An unchanged candidate can produce an empty patch. Download artifacts from the corresponding Actions run.
+The final steps upload `upstream-dependency-review` containing `upstream-update.patch` from `git diff --binary`. When all verification checks pass and updates are proposed, the workflow stages the updates on `automation/upstream-dependency-update` and opens or updates a Pull Request with verification evidence and review guidelines. If GitHub Actions PR creation is restricted under repository settings, it opens an Issue instead. An unchanged candidate produces an empty patch and creates neither a branch nor a notification.
 
-On a clean maintenance branch, inspect the patch, check its applicability with `git apply --check <patch>`, and apply reviewed changes with `git apply <patch>`. Run clean installation and the same checks locally before committing. Review the package and lockfile together; use the repository's normal commit/PR process. Failed candidates remain proposals and require investigation before adoption.
+Inspect the Pull Request (or download the artifact from the Actions run), review changelogs against [starter meta-review](starter-meta-review.md), and merge when satisfied. Failed candidate runs remain proposals, upload diagnostic artifacts, and do not open a Pull Request.
 
 ## Generated static-site source proposals
 
