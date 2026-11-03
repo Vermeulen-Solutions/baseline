@@ -7,6 +7,8 @@ import {
   getInstalledProfile,
   isExecutableScheme,
   hasCredentials,
+  normalizeToCRLF,
+  encodePlainTextFormData,
   sanitizeFormValue,
   validateFormField,
   formatFormErrors,
@@ -71,52 +73,135 @@ test('resolveFormTransport & resolveFormAction reject executable schemes and cre
 test('resolveFormTransport strictly preserves profile boundaries and normalizes URL protocols', () => {
   // Static profile: strictly requires HTTPS external URLs
   const externalUrl = 'https://api.formspree.io/f/xyz123';
-  assert.equal(
-    resolveFormAction(externalUrl, 'static'),
-    externalUrl,
-    'Static profile must accept external HTTPS form endpoints'
-  );
+  for (const staticProfile of ['static', 'static-sveltia']) {
+    assert.equal(
+      resolveFormAction(externalUrl, staticProfile),
+      externalUrl,
+      `${staticProfile} profile must accept external HTTPS form endpoints`
+    );
 
-  // Static profile: rejects HTTP regardless of scheme format (http:// or http:)
-  assert.equal(
-    resolveFormAction('http://insecure.test/api', 'static'),
-    '',
-    'Static profile must reject insecure http:// endpoints'
-  );
-  assert.equal(
-    resolveFormAction('http:outside.test/form', 'static'),
-    '',
-    'Static profile must reject http:without-slashes endpoints'
-  );
+    // Rejects HTTP regardless of scheme format (http:// or http:)
+    assert.equal(
+      resolveFormAction('http://insecure.test/api', staticProfile),
+      '',
+      `${staticProfile} profile must reject insecure http:// endpoints`
+    );
+    assert.equal(
+      resolveFormAction('http:outside.test/form', staticProfile),
+      '',
+      `${staticProfile} profile must reject http:without-slashes endpoints`
+    );
 
-  // Static profile: refuses relative server action routes
-  assert.equal(
-    resolveFormAction({ profile: 'static', endpoint: '/_actions/contact' }),
-    '',
-    'Static profile must refuse local /_actions routes'
-  );
-  assert.equal(
-    resolveFormAction({ profile: 'static', actionName: 'contact' }),
-    '',
-    'Static profile must refuse actionName to prevent server promotion'
-  );
+    // Rejects protocol-relative URLs (which submit plain HTTP from HTTP documents)
+    assert.equal(
+      resolveFormAction('//outside.test/form', staticProfile),
+      '',
+      `${staticProfile} profile must reject protocol-relative // destinations`
+    );
 
-  // Server / EmDash profile: distinguishes native fallback (?_action=...) from enhanced RPC (/_actions/...)
-  const emdashTransport = resolveFormTransport({ profile: 'emdash', actionName: 'contact' });
-  assert.equal(
-    emdashTransport.action,
-    '?_action=contact',
-    'Native form action must target query string (?_action=contact) to preserve zero-JS HTML fallback'
-  );
-  assert.equal(
-    emdashTransport.rpcAction,
-    '/_actions/contact',
-    'Enhanced RPC action must target /_actions/contact for JSON fetch calls'
-  );
+    // Rejects backslash network references
+    assert.equal(
+      resolveFormAction('\\\\outside.test\\form', staticProfile),
+      '',
+      `${staticProfile} profile must reject backslash network destinations`
+    );
+
+    // Refuses local /_actions routes and path traversal variants
+    assert.equal(
+      resolveFormAction({ profile: staticProfile, endpoint: '/_actions/contact' }),
+      '',
+      `${staticProfile} profile must refuse local /_actions routes`
+    );
+    assert.equal(
+      resolveFormAction('./_actions/contact', staticProfile),
+      '',
+      `${staticProfile} profile must refuse ./_actions path traversal`
+    );
+    assert.equal(
+      resolveFormAction('/x/../_actions/contact', staticProfile),
+      '',
+      `${staticProfile} profile must refuse /x/../_actions path traversal`
+    );
+
+    // Refuses action queries regardless of query parameter position
+    assert.equal(
+      resolveFormAction('?lang=en&_action=contact', staticProfile),
+      '',
+      `${staticProfile} profile must refuse non-leading _action query parameters`
+    );
+    assert.equal(
+      resolveFormAction('?foo=1&_action=test', staticProfile),
+      '',
+      `${staticProfile} profile must refuse _action query parameter`
+    );
+    assert.equal(
+      resolveFormAction('?foo=1&_astroAction=test', staticProfile),
+      '',
+      `${staticProfile} profile must refuse _astroAction query parameter`
+    );
+
+    // Refuses actionName to prevent server promotion
+    assert.equal(
+      resolveFormAction({ profile: staticProfile, actionName: 'contact' }),
+      '',
+      `${staticProfile} profile must refuse actionName to prevent server promotion`
+    );
+
+    // Static profile is authoritative: caller configuration cannot widen to emdash
+    const callerOverride = resolveFormTransport({ profile: 'emdash', actionName: 'contact' }, staticProfile);
+    assert.equal(
+      callerOverride.action,
+      '',
+      `${staticProfile} profile must be authoritative and reject caller profile: emdash action override`
+    );
+    assert.equal(
+      callerOverride.rpcAction,
+      undefined,
+      `${staticProfile} profile must not emit RPC action endpoint on caller override`
+    );
+
+    const callerEndpointOverride = resolveFormTransport(
+      { profile: 'emdash', endpoint: 'http://outside.test/form' },
+      staticProfile
+    );
+    assert.equal(
+      callerEndpointOverride.action,
+      '',
+      `${staticProfile} profile must reject caller profile: emdash insecure endpoint override`
+    );
+  }
 
   // Profile auto-detection helper exists and returns known profile
   const detected = getInstalledProfile();
   assert.ok(['static', 'static-sveltia', 'emdash'].includes(detected));
+
+  // Server / EmDash profile: distinguishes native fallback (?_action=...) from enhanced RPC (/_actions/...)
+  if (detected === 'emdash') {
+    const emdashTransport = resolveFormTransport({ profile: 'emdash', actionName: 'contact' });
+    assert.equal(
+      emdashTransport.action,
+      '?_action=contact',
+      'Native form action must target query string (?_action=contact) to preserve zero-JS HTML fallback'
+    );
+    assert.equal(
+      emdashTransport.rpcAction,
+      '/_actions/contact',
+      'Enhanced RPC action must target /_actions/contact for JSON fetch calls'
+    );
+  } else {
+    // In an installed static project, caller attempting profile: 'emdash' must be refused
+    const staticInstalledTransport = resolveFormTransport({ profile: 'emdash', actionName: 'contact' });
+    assert.equal(
+      staticInstalledTransport.action,
+      '',
+      'Installed static environment must reject caller profile: emdash action override'
+    );
+    assert.equal(
+      staticInstalledTransport.rpcAction,
+      undefined,
+      'Installed static environment must not emit RPC action endpoint'
+    );
+  }
 });
 
 test('sanitizeFormValue trims whitespace and enforces payload length ceilings', () => {
@@ -159,6 +244,30 @@ test('formatFormErrors maps error dictionaries to FormError accessible schema', 
   ]);
 });
 
+test('encodePlainTextFormData complies with WHATWG HTML form submission spec', () => {
+  // LF normalization to CRLF
+  assert.equal(normalizeToCRLF('hello\nworld'), 'hello\r\nworld');
+  // CR normalization to CRLF
+  assert.equal(normalizeToCRLF('hello\rworld'), 'hello\r\nworld');
+  // Pre-existing CRLF idempotence
+  assert.equal(normalizeToCRLF('hello\r\nworld'), 'hello\r\nworld');
+  // Mixed line breaks
+  assert.equal(normalizeToCRLF('a\nb\r\nc\rd'), 'a\r\nb\r\nc\r\nd');
+
+  // Serialization of string fields and File entries
+  const entries = [
+    ['subject', 'Feedback Form'],
+    ['message', 'Line 1\nLine 2\r\nLine 3'],
+    ['attachment', { name: 'document.pdf', size: 1024, type: 'application/pdf' }],
+  ];
+
+  const serialized = encodePlainTextFormData(entries);
+  assert.equal(
+    serialized,
+    'subject=Feedback Form\r\nmessage=Line 1\r\nLine 2\r\nLine 3\r\nattachment=document.pdf\r\n'
+  );
+});
+
 test('Form.astro primitive complies with 0 KB JS fallback, unique error summary IDs, and in-flight/submitter semantics', () => {
   const component = readFileSync('src/components/Form.astro', 'utf8');
 
@@ -195,9 +304,11 @@ test('Form.astro primitive complies with 0 KB JS fallback, unique error summary 
   assert.ok(component.includes('formaction'), 'Must inspect submitter formaction override');
   assert.ok(component.includes('formenctype'), 'Must inspect submitter formenctype override');
 
-  // GET and text/plain encoding support
+  // GET and text/plain encoding support with WHATWG CRLF and File name serialization
   assert.ok(component.includes("effectiveMethod === 'GET'"), 'Must handle effective GET method without request body');
   assert.ok(component.includes("effectiveEnctype === 'text/plain'"), 'Must handle text/plain encoding format');
+  assert.ok(component.includes('normalizeCRLF'), 'text/plain submission must normalize line breaks to CRLF');
+  assert.ok(component.includes("'name' in val"), 'text/plain submission must serialize File objects as filename');
 
   // CSS contracts
   assert.ok(component.includes('@layer components'), 'Styles must belong to @layer components');

@@ -178,11 +178,20 @@ const transport = resolveFormTransport(actionProp, installedProfile);
             if (effectiveEnctype === 'multipart/form-data') {
               requestInit.body = formData;
             } else if (effectiveEnctype === 'text/plain') {
+              // Normalize line breaks to CRLF and serialize File entries as filename per WHATWG HTML spec
+              const normalizeCRLF = (str: string) =>
+                str.replace(/\r\n/g, '\n').replace(/\r/g, '\n').replace(/\n/g, '\r\n');
               let plainText = '';
               for (const [key, val] of formData.entries()) {
+                let stringVal = '';
                 if (typeof val === 'string') {
-                  plainText += `${key}=${val}\r\n`;
+                  stringVal = val;
+                } else if (val && typeof val === 'object' && 'name' in val) {
+                  stringVal = String((val as { name: unknown }).name || '');
                 }
+                const normKey = normalizeCRLF(key);
+                const normVal = normalizeCRLF(stringVal);
+                plainText += `${normKey}=${normVal}\r\n`;
               }
               requestInit.body = plainText;
               requestHeaders['Content-Type'] = 'text/plain';
