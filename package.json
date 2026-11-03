@@ -103,7 +103,7 @@
   "dependencies": {
     "@astrojs/node": "11.1.8",
     "@astrojs/react": "7.1.0",
-    "@tailwindcss/vite": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.4",
     "astro": "7.4.0",
     "emdash": "1.4.0",
     "photoswipe": "^5.4.4",
@@ -112,7 +112,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@astrojs/check": "^0.9.10",
+    "@astrojs/check": "^0.9.12",
     "@cloudflare/workers-types": "5.20261019.1",
     "@emdash-cms/auth": "1.4.0",
     "@fontsource/noto-sans": "5.3.0",
