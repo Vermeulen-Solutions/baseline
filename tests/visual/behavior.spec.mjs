@@ -419,18 +419,9 @@ test('behavior directional transitions, targeted replacement, and persistent ele
     liveAudio.setAttribute('data-astro-transition-persist', 'global-player');
     liveAudio.setAttribute('data-vt-persist', 'global-player');
     liveAudio.src = wav;
-    document.body.appendChild(liveAudio);
 
-    // Real playback: start audio and wait for canplay
-    await new Promise((resolve) => {
-      if (liveAudio.readyState >= 2) return resolve();
-      liveAudio.oncanplay = resolve;
-      setTimeout(resolve, 500);
-    });
-    await liveAudio.play();
-    const liveAudioPlayingBeforeSwap = !liveAudio.paused && liveAudio.readyState >= 2;
-
-    // 3. Set up targeted container in the live page for replacement
+    // 3. Set up targeted container in the live page for replacement, placing liveAudio INSIDE it
+    // This directly exercises connected-DOM lifting to documentElement and transplantation back into target
     const testContainer = document.createElement('div');
     testContainer.id = 'targeted-test-container';
     testContainer.setAttribute('data-vt-replace', '');
@@ -442,7 +433,17 @@ test('behavior directional transitions, targeted replacement, and persistent ele
       </div>
       <p id="main-body-text">Initial Main Content</p>
     `;
+    testContainer.appendChild(liveAudio);
     document.body.appendChild(testContainer);
+
+    // Real playback: start audio and wait for canplay
+    await new Promise((resolve) => {
+      if (liveAudio.readyState >= 2) return resolve();
+      liveAudio.oncanplay = resolve;
+      setTimeout(resolve, 500);
+    });
+    await liveAudio.play();
+    const liveAudioPlayingBeforeSwap = !liveAudio.paused && liveAudio.readyState >= 2;
 
     const forwardLink = document.getElementById('forwardLink');
     const backLinkOverride = document.getElementById('backLinkOverride');
@@ -572,6 +573,10 @@ test('behavior directional transitions, targeted replacement, and persistent ele
       } catch {}
     }
 
+    // Cleanup targeted test container & live audio before topology test so only isolated topo targets exist
+    document.getElementById('targeted-test-container')?.remove();
+    liveAudio.remove();
+
     // 6. [P2/P3 Topology Verification]: Distinct incoming matches that overlap must fall back before mutation
     const tempContainerA = document.createElement('div');
     tempContainerA.id = 'topo-test-a';
@@ -603,10 +608,6 @@ test('behavior directional transitions, targeted replacement, and persistent ele
     Object.defineProperty(pageShowEv, 'persisted', { value: true });
     window.dispatchEvent(pageShowEv);
     const dirAfterBFCache = document.documentElement.getAttribute('data-vt-direction');
-
-    // Cleanup test container & audio
-    document.getElementById('targeted-test-container')?.remove();
-    liveAudio.remove();
 
     return {
       swapApiInstalled,
