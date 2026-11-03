@@ -13,6 +13,7 @@
     "src/components/LogoTicker.astro",
     "src/components/FormError.astro",
     "src/lib/public-link.ts",
+    "src/lib/reading-time.ts",
     "src/lib/responsive-image.ts",
     "src/lib/partner.ts",
     "scripts/check-art-direction.mjs",

@@ -1,5 +1,10 @@
 [
   {
+    "path": "src/lib/reading-time.ts",
+    "reason": "Non-visual editorial calculation utility: locale-aware word count and reading time estimation. No client styling, layout, or visual presentation. Exact LF-normalized source hash.",
+    "sha256": "4fd0e1e260823e1f0ddeaaea3fe3523fdeefbc31c47316dc12bdf5925b422a48"
+  },
+  {
     "path": "src/components/TweaksBar.astro",
     "reason": "Removed TweaksBar Dev HUD component in favor of the streamlined agent-first design system workflow.",
     "sha256": "41948d6441b3efa9d42df957a15c72ea439d1be9889cfd087f5c3ab17135a828",

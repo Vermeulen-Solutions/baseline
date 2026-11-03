@@ -436,6 +436,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/lib/reading-time.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/lib/responsive-image.ts": {
       "disposition": "shared",
       "static": "copy"
@@ -549,6 +553,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "tests/presentation-boundaries.test.mjs": {
+      "disposition": "shared",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/reading-time.test.mjs": {
       "disposition": "shared",
       "static": "omit-until-explicitly-allowlisted"
     },

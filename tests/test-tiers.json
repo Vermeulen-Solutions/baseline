@@ -11,6 +11,10 @@
     "tier": "rehearsal",
     "reason": "Preparation and destination-bound upload receipts, byte/metadata readback and ambiguous POST recovery"
   },
+  "reading-time.test.mjs": {
+    "tier": "unit",
+    "reason": "Locale-aware reading time and prose extraction contract"
+  },
   "workflow-replay.test.mjs": {
     "tier": "unit",
     "reason": "Replay freeze, bounded worker operations, immutable telemetry, archive privacy, cleanup ownership and failure classification"
