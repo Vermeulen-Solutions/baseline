@@ -965,7 +965,11 @@
 	}
 
 	.skeleton-shimmer {
-		border-radius: var(--radius-control);
+		display: block;
+		inline-size: var(--skeleton-width, 100%);
+		block-size: var(--skeleton-height, auto);
+		aspect-ratio: var(--skeleton-aspect-ratio, auto);
+		border-radius: var(--skeleton-radius, var(--radius-control));
 		background: linear-gradient(
 			90deg,
 			var(--color-elevated) 25%,
@@ -974,6 +978,43 @@
 		);
 		background-size: 200% 100%;
 		animation: baseline-shimmer 1.8s var(--ease-smooth) infinite;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.skeleton-shimmer--text {
+		--skeleton-height: 1em;
+		--skeleton-radius: var(--radius-control, 4px);
+		margin-block: 0.25em;
+	}
+
+	.skeleton-shimmer--circle {
+		--skeleton-radius: 9999px;
+		--skeleton-aspect-ratio: 1 / 1;
+		--skeleton-width: var(--skeleton-size, 3rem);
+		--skeleton-height: var(--skeleton-size, 3rem);
+	}
+
+	.skeleton-shimmer--card {
+		--skeleton-height: var(--skeleton-height, 12rem);
+		--skeleton-radius: var(--card-radius, var(--radius-container, 12px));
+	}
+
+	:where([aria-busy="true"]) {
+		cursor: progress;
+	}
+
+	:where([aria-busy="true"]) :where(.skeleton-shimmer) {
+		pointer-events: none;
+		user-select: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.skeleton-shimmer {
+			animation: none;
+			background: var(--color-elevated);
+			opacity: 0.85;
+		}
 	}
 
 	@keyframes baseline-vt-progress {

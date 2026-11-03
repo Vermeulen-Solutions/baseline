@@ -352,6 +352,10 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "src/components/Form.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/components/FormError.astro": {
       "disposition": "shared",
       "static": "copy"
@@ -411,6 +415,10 @@
     "src/lib/form-recovery.ts": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/form-transport.ts": {
+      "disposition": "shared",
+      "static": "copy"
     },
     "src/lib/image-source.ts": {
       "disposition": "emdash-only",
@@ -531,6 +539,10 @@
     "tests/form-recovery.test.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/forms-skeletons.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     },
     "tests/justified-gallery.test.mjs": {
       "disposition": "emdash-only",

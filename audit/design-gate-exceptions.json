@@ -1,5 +1,15 @@
 [
   {
+    "path": "src/lib/form-transport.ts",
+    "reason": "Non-visual transport utility: profile-aware form action resolver, input bounds sanitizer and accessible error formatting. Exact LF-normalized source hash.",
+    "sha256": "42272b9be360589610b611e4591e4848161427d1c5c2628f7a7d3ec91a40fd87"
+  },
+  {
+    "path": "src/components/Form.astro",
+    "reason": "Functional starter infrastructure: accessible dual-transport form primitive with 0 KB JS baseline and inline progressive enhancement. Exact LF-normalized source hash.",
+    "sha256": "e9d1f3bf3492d7a0c0c664af5e4d2aba06ccb6ca67e22c69abed3646a35032ca"
+  },
+  {
     "path": "src/lib/publication-feed.ts",
     "reason": "Non-visual syndication utility: publication-aware RSS 2.0 feed generator with XML escaping and RFC-822 date formatting. Exact LF-normalized source hash.",
     "sha256": "659aae813600c97eb9c8ab4a05789d497360eb7e61ff9762476030d7d5960203"
@@ -41,7 +51,7 @@
   {
     "path": "src/styles/global.css",
     "reason": "Neutral shared foundation: existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header; no client palette/type/layout direction. Exact LF-normalized source hash.",
-    "sha256": "0b87c68d18c564919536c02025ae44f5c769567ffe6a89d65e3964d2f87bbeef"
+    "sha256": "8ba387e1f14e778403ceaa67c6306fb11bc88c3d4fdab6dcc307b5553b652617"
   },
   {
     "path": "src/layouts/Base.astro",

@@ -181,7 +181,8 @@ test('zoom actual Chromium page zoom at 200% and 400%', async ({}, info) => {
 });
 
 test('behavior SiteShell inline script, rapid card morph, and lifecycle teardown in Chromium', async ({ page }, info) => {
-  test.skip(info.project.name !== 'chromium-1280', 'Run once on standard 1280px viewport');
+  test.skip(info.project.name !== 'chromium-1440', 'Run once on standard desktop viewport');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
   const problems = observe(page);
   const shell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
   const scripts = [...shell.matchAll(/<script is:inline>([\s\S]*?)<\/script>/g)].map(m => m[1]);

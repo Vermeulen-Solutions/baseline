@@ -1,0 +1,188 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+import { randomUUID } from 'node:crypto';
+import { resolveFormAction, type FormActionConfig } from '../lib/form-transport';
+
+export interface Props extends Omit<HTMLAttributes<'form'>, 'action'> {
+  /** Target endpoint string or Action handler */
+  action?: FormActionConfig;
+  /** HTTP method; defaults to POST */
+  method?: string;
+  /** Whether to progressively enhance with fetch and accessible feedback */
+  enhance?: boolean;
+  /** Custom success message (renders in default slot if no custom success provided) */
+  successMessage?: string;
+  /** Custom error message fallback */
+  errorMessage?: string;
+}
+
+const {
+  id: rawId,
+  action: actionProp,
+  method = 'POST',
+  enhance = true,
+  successMessage = 'Thank you! Your submission has been received.',
+  errorMessage = 'An error occurred while submitting the form. Please try again.',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId : `form-${randomUUID()}`;
+const resolvedAction = resolveFormAction(actionProp);
+---
+
+<div id={`${id}-container`} class:list={['form-container', className]} data-form-container>
+  <div
+    data-form-success
+    class="form-success flow"
+    role="status"
+    aria-live="polite"
+    hidden
+  >
+    <slot name="success">
+      <p>{successMessage}</p>
+    </slot>
+  </div>
+
+  <form
+    id={id}
+    method={method.toUpperCase()}
+    action={resolvedAction || undefined}
+    data-form-enhanced={enhance ? '' : undefined}
+    data-error-message={errorMessage}
+    class="flow"
+    {...rest}
+  >
+    <div data-form-errors-slot>
+      <slot name="errors" />
+    </div>
+
+    <slot />
+  </form>
+</div>
+
+<script>
+  function setupForms() {
+    document.querySelectorAll<HTMLFormElement>('form[data-form-enhanced]').forEach((form) => {
+      if (form.dataset.formBound) return;
+      form.dataset.formBound = 'true';
+
+      const container = form.closest('[data-form-container]');
+      const successBox = container?.querySelector<HTMLElement>('[data-form-success]');
+      const errorsSlot = form.querySelector<HTMLElement>('[data-form-errors-slot]');
+      const defaultErrorMsg = form.dataset.errorMessage || 'An error occurred while submitting the form. Please try again.';
+
+      form.addEventListener('submit', async (event) => {
+        // Native constraint validation
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        const actionUrl = form.getAttribute('action');
+        if (!actionUrl || actionUrl === '#') return;
+
+        event.preventDefault();
+
+        const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"], input[type="submit"]');
+        const originalBtnText = submitBtn ? submitBtn.textContent : '';
+
+        // Clean previous errors
+        if (errorsSlot) {
+          const oldErrors = errorsSlot.querySelector('#form-errors');
+          if (oldErrors) oldErrors.remove();
+        }
+
+        // Set aria-busy and disabled state
+        form.setAttribute('aria-busy', 'true');
+        if (submitBtn) {
+          submitBtn.setAttribute('disabled', 'true');
+          submitBtn.setAttribute('aria-disabled', 'true');
+        }
+
+        try {
+          const formData = new FormData(form);
+          const response = await fetch(actionUrl, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              Accept: 'application/json',
+            },
+          });
+
+          if (!response.ok) {
+            let errorData: { message?: string } | null = null;
+            try {
+              errorData = await response.json();
+            } catch {
+              // Ignore non-JSON body parse failure
+            }
+            throw new Error((errorData && errorData.message) || defaultErrorMsg);
+          }
+
+          // Transition to success state
+          form.style.display = 'none';
+          if (successBox) {
+            successBox.removeAttribute('hidden');
+            successBox.setAttribute('tabindex', '-1');
+            successBox.focus();
+          }
+        } catch (err: unknown) {
+          form.removeAttribute('aria-busy');
+          if (submitBtn) {
+            submitBtn.removeAttribute('disabled');
+            submitBtn.removeAttribute('aria-disabled');
+            if (originalBtnText) submitBtn.textContent = originalBtnText;
+          }
+
+          if (errorsSlot) {
+            const errorDiv = document.createElement('div');
+            errorDiv.id = 'form-errors';
+            errorDiv.setAttribute('role', 'alert');
+            errorDiv.setAttribute('aria-live', 'assertive');
+            errorDiv.className = 'form-errors';
+            errorDiv.setAttribute('tabindex', '-1');
+
+            const errorP = document.createElement('p');
+            errorP.textContent = err instanceof Error ? err.message : defaultErrorMsg;
+            errorDiv.appendChild(errorP);
+            errorsSlot.appendChild(errorDiv);
+
+            errorDiv.focus();
+          }
+        }
+      });
+    });
+  }
+
+  setupForms();
+  document.addEventListener('astro:page-load', setupForms);
+</script>
+
+<style>
+@layer components {
+  :where([aria-busy="true"]) {
+    pointer-events: none;
+  }
+
+  .form-container {
+    inline-size: 100%;
+    max-inline-size: var(--width-reading, 65ch);
+  }
+
+  .form-success {
+    padding: var(--spacing-content, 1.5rem);
+    border: 1px solid var(--color-border, #ccc);
+    border-radius: var(--radius-card, 0.5rem);
+    background: var(--color-surface, #fff);
+  }
+
+  .form-errors {
+    padding: var(--spacing-content, 1rem);
+    border: 1px solid var(--color-accent, #c00);
+    border-radius: var(--radius-control, 0.25rem);
+    background: var(--color-surface-elevated, #fff0f0);
+    color: var(--color-accent, #c00);
+  }
+}
+</style>

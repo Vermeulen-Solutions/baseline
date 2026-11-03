@@ -63,6 +63,10 @@
     "tier": "unit",
     "reason": "Form input and recovery contracts"
   },
+  "forms-skeletons.test.mjs": {
+    "tier": "unit",
+    "reason": "Dual-transport form resolution, progressive enhancement contracts, and skeleton geometry token physics"
+  },
   "importer-fidelity.test.mjs": {
     "tier": "unit",
     "reason": "Synthetic WXR/Exporter oracles; installed-endpoint rehearsal runs once in the migration pilot"
