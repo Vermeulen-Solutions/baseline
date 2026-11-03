@@ -985,6 +985,7 @@
 	.skeleton-shimmer--text {
 		--skeleton-height: 1em;
 		--skeleton-radius: var(--radius-control, 4px);
+		min-block-size: var(--skeleton-height, 1em);
 		margin-block: 0.25em;
 	}
 
@@ -993,11 +994,14 @@
 		--skeleton-aspect-ratio: 1 / 1;
 		--skeleton-width: var(--skeleton-size, 3rem);
 		--skeleton-height: var(--skeleton-size, 3rem);
+		min-inline-size: var(--skeleton-width, 3rem);
+		min-block-size: var(--skeleton-height, 3rem);
 	}
 
 	.skeleton-shimmer--card {
-		--skeleton-height: var(--skeleton-height, 12rem);
+		--skeleton-height: var(--skeleton-card-height, 12rem);
 		--skeleton-radius: var(--card-radius, var(--radius-container, 12px));
+		min-block-size: var(--skeleton-height, 12rem);
 	}
 
 	:where([aria-busy="true"]) {

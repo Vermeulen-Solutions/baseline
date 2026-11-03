@@ -3,12 +3,16 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import {
   resolveFormAction,
+  resolveFormTransport,
+  isExecutableScheme,
+  hasCredentials,
   sanitizeFormValue,
   validateFormField,
   formatFormErrors,
 } from '../src/lib/form-transport.ts';
+import { profileManifest } from '../profiles/contract.mjs';
 
-test('skeleton shimmer defines geometry tokens, accessible busy states, and reduced motion fallback', () => {
+test('skeleton shimmer defines geometry tokens, non-cyclic card height, accessible busy states, and reduced motion fallback', () => {
   const css = readFileSync('src/styles/global.css', 'utf8');
 
   // Geometry tokens
@@ -17,10 +21,18 @@ test('skeleton shimmer defines geometry tokens, accessible busy states, and redu
   assert.ok(css.includes('--skeleton-radius'), 'CSS must define --skeleton-radius');
   assert.ok(css.includes('--skeleton-aspect-ratio'), 'CSS must define --skeleton-aspect-ratio');
 
-  // Variants
+  // Variants & non-cyclic card height
   assert.ok(css.includes('.skeleton-shimmer--text'), 'CSS must define .skeleton-shimmer--text variant');
   assert.ok(css.includes('.skeleton-shimmer--circle'), 'CSS must define .skeleton-shimmer--circle variant');
   assert.ok(css.includes('.skeleton-shimmer--card'), 'CSS must define .skeleton-shimmer--card variant');
+  assert.ok(
+    !css.includes('--skeleton-height: var(--skeleton-height'),
+    'Card skeleton must not declare a cyclic self-reference on --skeleton-height'
+  );
+  assert.ok(
+    css.includes('min-block-size: var(--skeleton-height'),
+    'Card skeleton must declare min-block-size to prevent collapsing to 0px'
+  );
 
   // Accessibility & busy semantics
   assert.ok(css.includes(':where([aria-busy="true"])'), 'CSS must style [aria-busy="true"]');
@@ -35,29 +47,67 @@ test('skeleton shimmer defines geometry tokens, accessible busy states, and redu
   assert.ok(reducedCss.includes('background: var(--color-elevated)'), 'Reduced motion must fall back to static elevated background');
 });
 
-test('resolveFormAction strictly preserves profile boundaries and transport modes', () => {
-  // Static profile: accepts full external HTTPS URLs
+test('resolveFormTransport & resolveFormAction reject executable schemes and credentials', () => {
+  // Executable schemes
+  assert.ok(isExecutableScheme('javascript:alert(1)'));
+  assert.ok(isExecutableScheme('  java\tscript:alert(2)  '));
+  assert.ok(isExecutableScheme('data:text/html,<script>alert(1)</script>'));
+  assert.ok(isExecutableScheme('vbscript:msgbox(1)'));
+  assert.ok(!isExecutableScheme('https://example.com/api'));
+  assert.ok(!isExecutableScheme('/api/contact'));
+
+  // Credentials in URLs
+  assert.ok(hasCredentials('https://admin:secret@example.com/api'));
+  assert.ok(!hasCredentials('https://example.com/api'));
+  assert.ok(!hasCredentials('/api/contact'));
+
+  // Rejection via resolveFormAction
+  assert.equal(resolveFormAction('javascript:alert(1)', 'static'), '');
+  assert.equal(resolveFormAction('javascript:alert(1)', 'emdash'), '');
+  assert.equal(resolveFormAction('https://user:pass@example.com/api', 'static'), '');
+  assert.equal(resolveFormAction({ endpoint: 'data:text/html,evil' }, 'emdash'), '');
+});
+
+test('resolveFormTransport strictly preserves profile boundaries and distinguishes native vs RPC action', () => {
+  // Static profile: strictly requires HTTPS external URLs
   const externalUrl = 'https://api.formspree.io/f/xyz123';
   assert.equal(
-    resolveFormAction({ profile: 'static', endpoint: externalUrl }),
+    resolveFormAction(externalUrl, 'static'),
     externalUrl,
     'Static profile must accept external HTTPS form endpoints'
   );
+  assert.equal(
+    resolveFormAction('http://insecure.test/api', 'static'),
+    '',
+    'Static profile must reject insecure HTTP external endpoints'
+  );
 
-  // Static profile: refuses relative server action routes without promotion
+  // Static profile: refuses relative server action routes
   assert.equal(
     resolveFormAction({ profile: 'static', endpoint: '/_actions/contact' }),
     '',
-    'Static profile must refuse local /_actions routes to avoid silent server promotion'
+    'Static profile must refuse local /_actions routes'
   );
-
-  // Server / EmDash profile: accepts local actions and routes
   assert.equal(
-    resolveFormAction({ profile: 'emdash', actionName: 'contact' }),
-    '/_actions/contact',
-    'EmDash profile must resolve Astro Actions paths'
+    resolveFormAction({ profile: 'static', actionName: 'contact' }),
+    '',
+    'Static profile must refuse actionName to prevent server promotion'
   );
 
+  // Server / EmDash profile: distinguishes native fallback (?_action=...) from enhanced RPC (/_actions/...)
+  const emdashTransport = resolveFormTransport({ profile: 'emdash', actionName: 'contact' });
+  assert.equal(
+    emdashTransport.action,
+    '?_action=contact',
+    'Native form action must target query string (?_action=contact) to preserve zero-JS HTML fallback'
+  );
+  assert.equal(
+    emdashTransport.rpcAction,
+    '/_actions/contact',
+    'Enhanced RPC action must target /_actions/contact for JSON fetch calls'
+  );
+
+  // Custom API endpoint on EmDash
   assert.equal(
     resolveFormAction({ profile: 'emdash', endpoint: '/api/contact' }),
     '/api/contact',
@@ -74,19 +124,23 @@ test('sanitizeFormValue trims whitespace and enforces payload length ceilings', 
   assert.equal(sanitizeFormValue(longString, 2000).length, 2000, 'Payload values must be capped at maxLength');
 });
 
-test('validateFormField enforces bounds, required constraints, and format patterns', () => {
-  const nameRule = { required: true, minLength: 2, maxLength: 50, fieldName: 'Name' };
-  assert.equal(validateFormField('', nameRule), 'Name is required.');
-  assert.equal(validateFormField('a', nameRule), 'Name must be at least 2 characters.');
-  assert.equal(validateFormField('Valid Name', nameRule), null);
+test('validateFormField enforces bounds before truncation and handles stateful regexes deterministically', () => {
+  // Max length check must NOT truncate before measuring length
+  const codeRule = { required: true, maxLength: 3, fieldName: 'Code' };
+  assert.equal(
+    validateFormField('123456', codeRule),
+    'Code cannot exceed 3 characters.',
+    'Length validation must run on untruncated input'
+  );
+  assert.equal(validateFormField('123', codeRule), null);
 
-  const emailRule = {
-    required: true,
-    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-    fieldName: 'Email',
-  };
-  assert.equal(validateFormField('not-an-email', emailRule), 'Enter a valid format for email.');
-  assert.equal(validateFormField('person@example.test', emailRule), null);
+  // Stateful regexes (with /g flag) must not alternate success/failure
+  const statefulPattern = /^ok$/g;
+  const statusRule = { fieldName: 'Status', pattern: statefulPattern };
+  assert.equal(validateFormField('ok', statusRule), null, 'First match with /g pattern');
+  assert.equal(validateFormField('ok', statusRule), null, 'Second successive match with /g pattern must also succeed');
+  assert.equal(validateFormField('invalid', statusRule), 'Enter a valid format for status.');
+  assert.equal(validateFormField('ok', statusRule), null, 'Subsequent match with /g pattern must succeed');
 });
 
 test('formatFormErrors maps error dictionaries to FormError accessible schema', () => {
@@ -101,29 +155,50 @@ test('formatFormErrors maps error dictionaries to FormError accessible schema', 
   ]);
 });
 
-test('Form.astro primitive complies with 0 KB JS fallback and accessible enhancement contracts', () => {
+test('profiles manifest distribution includes Form, transport, and tests in static profiles', () => {
+  const staticManifest = profileManifest('static');
+  const sveltiaManifest = profileManifest('static-sveltia');
+
+  assert.ok(staticManifest.files.includes('src/components/Form.astro'), 'static profile must include Form.astro');
+  assert.ok(staticManifest.files.includes('src/lib/form-transport.ts'), 'static profile must include form-transport.ts');
+  assert.ok(staticManifest.files.includes('tests/forms-skeletons.test.mjs'), 'static profile must include forms-skeletons test');
+
+  assert.ok(sveltiaManifest.files.includes('src/components/Form.astro'), 'static-sveltia profile must include Form.astro');
+  assert.ok(sveltiaManifest.files.includes('src/lib/form-transport.ts'), 'static-sveltia profile must include form-transport.ts');
+  assert.ok(sveltiaManifest.files.includes('tests/forms-skeletons.test.mjs'), 'static-sveltia profile must include forms-skeletons test');
+});
+
+test('Form.astro primitive complies with 0 KB JS fallback, unique error summary IDs, and in-flight/submitter semantics', () => {
   const component = readFileSync('src/components/Form.astro', 'utf8');
 
   // Semantic structure
   assert.ok(component.includes('<form'), 'Must render semantic <form>');
   assert.ok(component.includes('method={method.toUpperCase()}'), 'Form method must default to uppercase string');
-  assert.ok(component.includes('action={resolvedAction'), 'Must bind resolved action');
+  assert.ok(component.includes('action={transport.action'), 'Must bind transport action');
+  assert.ok(component.includes('data-form-rpc={transport.rpcAction'), 'Must bind transport RPC endpoint');
 
-  // Accessible announcements
+  // Accessible announcements & unique IDs
   assert.ok(component.includes('role="status"'), 'Must render role="status" for live success announcement');
   assert.ok(component.includes('aria-live="polite"'), 'Success status must be polite');
   assert.ok(component.includes('data-form-success'), 'Success element must be marked data-form-success');
   assert.ok(component.includes("role") && component.includes("'alert'"), 'Error summary must declare role="alert"');
-  assert.ok(component.includes("id = 'form-errors'") || component.includes("'form-errors'"), 'Error summary must use #form-errors ID for linking');
+  assert.ok(
+    component.includes('`${form.id}-errors`'),
+    'Error summary ID must be dynamically derived from form.id to prevent duplicate DOM IDs'
+  );
 
-  // Native constraint checking before JS fetch
-  assert.ok(component.includes('form.checkValidity()'), 'Progressive enhancement must check native constraints first');
-  assert.ok(component.includes('form.reportValidity()'), 'Invalid native constraints must report validity');
+  // In-flight guard & submitter capture
+  assert.ok(component.includes("dataset.formSubmitting === 'true'"), 'Must guard against concurrent/duplicate in-flight submissions');
+  assert.ok(component.includes('new FormData(form, submitter'), 'Must capture submitter in FormData before disabling controls');
+  assert.ok(component.includes('button:not([type="button"]):not([type="reset"])'), 'Must select all submit buttons');
 
-  // Busy state and submit button protection
-  assert.ok(component.includes("form.setAttribute('aria-busy', 'true')"), 'In-flight submission must set aria-busy="true"');
-  assert.ok(component.includes("submitBtn.setAttribute('disabled', 'true')"), 'Submit button must be disabled during submission');
-  assert.ok(component.includes("form.removeAttribute('aria-busy')"), 'Completion must clear aria-busy');
+  // Submitter overrides and effective method / action
+  assert.ok(component.includes('formmethod'), 'Must inspect submitter formmethod override');
+  assert.ok(component.includes('formaction'), 'Must inspect submitter formaction override');
+  assert.ok(component.includes('formenctype'), 'Must inspect submitter formenctype override');
+
+  // GET method parameter serialization
+  assert.ok(component.includes("effectiveMethod === 'GET'"), 'Must handle effective GET method without request body');
 
   // CSS contracts
   assert.ok(component.includes('@layer components'), 'Styles must belong to @layer components');

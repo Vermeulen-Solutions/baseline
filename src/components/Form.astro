@@ -1,7 +1,7 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
 import { randomUUID } from 'node:crypto';
-import { resolveFormAction, type FormActionConfig } from '../lib/form-transport';
+import { resolveFormTransport, type FormActionConfig } from '../lib/form-transport';
 
 export interface Props extends Omit<HTMLAttributes<'form'>, 'action'> {
   /** Target endpoint string or Action handler */
@@ -28,7 +28,7 @@ const {
 } = Astro.props;
 
 const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId : `form-${randomUUID()}`;
-const resolvedAction = resolveFormAction(actionProp);
+const transport = resolveFormTransport(actionProp);
 ---
 
 <div id={`${id}-container`} class:list={['form-container', className]} data-form-container>
@@ -47,7 +47,8 @@ const resolvedAction = resolveFormAction(actionProp);
   <form
     id={id}
     method={method.toUpperCase()}
-    action={resolvedAction || undefined}
+    action={transport.action || undefined}
+    data-form-rpc={transport.rpcAction || undefined}
     data-form-enhanced={enhance ? '' : undefined}
     data-error-message={errorMessage}
     class="flow"
@@ -79,36 +80,112 @@ const resolvedAction = resolveFormAction(actionProp);
           return;
         }
 
-        const actionUrl = form.getAttribute('action');
-        if (!actionUrl || actionUrl === '#') return;
-
-        event.preventDefault();
-
-        const submitBtn = form.querySelector<HTMLButtonElement>('button[type="submit"], input[type="submit"]');
-        const originalBtnText = submitBtn ? submitBtn.textContent : '';
-
-        // Clean previous errors
-        if (errorsSlot) {
-          const oldErrors = errorsSlot.querySelector('#form-errors');
-          if (oldErrors) oldErrors.remove();
+        // Prevent duplicate concurrent / keyboard submissions
+        if (form.dataset.formSubmitting === 'true') {
+          event.preventDefault();
+          return;
         }
 
-        // Set aria-busy and disabled state
+        // Determine submitter and effective method, action, and enctype overrides
+        const submitter = event.submitter as (HTMLButtonElement | HTMLInputElement | null);
+        const effectiveMethod = (
+          submitter?.getAttribute('formmethod') ||
+          form.getAttribute('method') ||
+          'POST'
+        ).toUpperCase();
+
+        const overrideAction = submitter?.getAttribute('formaction');
+        const effectiveAction = overrideAction || form.dataset.formRpc || form.getAttribute('action');
+        const effectiveEnctype = submitter?.getAttribute('formenctype') || form.getAttribute('enctype') || 'application/x-www-form-urlencoded';
+
+        if (!effectiveAction || effectiveAction === '#') return;
+
+        event.preventDefault();
+        form.dataset.formSubmitting = 'true';
+
+        // Capture FormData before disabling controls (disabled controls are omitted from FormData)
+        const formData = new FormData(form, submitter || undefined);
+
+        // Track and disable all submit buttons / controls in the form
+        const submitControls = Array.from(
+          form.querySelectorAll<HTMLButtonElement | HTMLInputElement>(
+            'button:not([type="button"]):not([type="reset"]), input[type="submit"], input[type="image"]'
+          )
+        );
+        const priorStates = submitControls.map((ctrl) => ({
+          ctrl,
+          disabled: ctrl.disabled,
+          ariaDisabled: ctrl.getAttribute('aria-disabled'),
+        }));
+
+        submitControls.forEach((ctrl) => {
+          ctrl.setAttribute('disabled', 'true');
+          ctrl.setAttribute('aria-disabled', 'true');
+        });
+
+        // Clean previous errors
+        const errorSummaryId = `${form.id}-errors`;
+        if (errorsSlot) {
+          const oldErrors = errorsSlot.querySelector(`#${errorSummaryId}`);
+          if (oldErrors) oldErrors.remove();
+        }
+        form.removeAttribute('aria-invalid');
+        form.removeAttribute('aria-errormessage');
+
+        // Set aria-busy
         form.setAttribute('aria-busy', 'true');
-        if (submitBtn) {
-          submitBtn.setAttribute('disabled', 'true');
-          submitBtn.setAttribute('aria-disabled', 'true');
+
+        function restoreControls() {
+          form.removeAttribute('aria-busy');
+          delete form.dataset.formSubmitting;
+          priorStates.forEach(({ ctrl, disabled, ariaDisabled }) => {
+            if (disabled) {
+              ctrl.setAttribute('disabled', 'true');
+            } else {
+              ctrl.removeAttribute('disabled');
+            }
+            if (ariaDisabled !== null) {
+              ctrl.setAttribute('aria-disabled', ariaDisabled);
+            } else {
+              ctrl.removeAttribute('aria-disabled');
+            }
+          });
         }
 
         try {
-          const formData = new FormData(form);
-          const response = await fetch(actionUrl, {
-            method: 'POST',
-            body: formData,
-            headers: {
-              Accept: 'application/json',
-            },
-          });
+          let requestUrl = effectiveAction;
+          const requestHeaders: Record<string, string> = {
+            Accept: 'application/json',
+          };
+          const requestInit: RequestInit = {
+            method: effectiveMethod,
+            headers: requestHeaders,
+          };
+
+          if (effectiveMethod === 'GET') {
+            const url = new URL(effectiveAction, window.location.href);
+            for (const [key, val] of formData.entries()) {
+              if (typeof val === 'string') {
+                url.searchParams.append(key, val);
+              }
+            }
+            requestUrl = url.toString();
+          } else {
+            if (effectiveEnctype === 'multipart/form-data') {
+              requestInit.body = formData;
+            } else {
+              const params = new URLSearchParams();
+              for (const [key, val] of formData.entries()) {
+                if (typeof val === 'string') {
+                  params.append(key, val);
+                }
+              }
+              requestInit.body = params;
+              requestHeaders['Content-Type'] = 'application/x-www-form-urlencoded';
+            }
+          }
+
+          const response = await fetch(requestUrl, requestInit);
 
           if (!response.ok) {
             let errorData: { message?: string } | null = null;
@@ -121,6 +198,8 @@ const resolvedAction = resolveFormAction(actionProp);
           }
 
           // Transition to success state
+          form.removeAttribute('aria-busy');
+          delete form.dataset.formSubmitting;
           form.style.display = 'none';
           if (successBox) {
             successBox.removeAttribute('hidden');
@@ -128,16 +207,11 @@ const resolvedAction = resolveFormAction(actionProp);
             successBox.focus();
           }
         } catch (err: unknown) {
-          form.removeAttribute('aria-busy');
-          if (submitBtn) {
-            submitBtn.removeAttribute('disabled');
-            submitBtn.removeAttribute('aria-disabled');
-            if (originalBtnText) submitBtn.textContent = originalBtnText;
-          }
+          restoreControls();
 
           if (errorsSlot) {
             const errorDiv = document.createElement('div');
-            errorDiv.id = 'form-errors';
+            errorDiv.id = errorSummaryId;
             errorDiv.setAttribute('role', 'alert');
             errorDiv.setAttribute('aria-live', 'assertive');
             errorDiv.className = 'form-errors';
@@ -148,6 +222,8 @@ const resolvedAction = resolveFormAction(actionProp);
             errorDiv.appendChild(errorP);
             errorsSlot.appendChild(errorDiv);
 
+            form.setAttribute('aria-invalid', 'true');
+            form.setAttribute('aria-errormessage', errorSummaryId);
             errorDiv.focus();
           }
         }
