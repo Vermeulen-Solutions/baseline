@@ -12,6 +12,8 @@ export interface RssFeedOptions {
   title: string;
   description: string;
   siteUrl: string | URL;
+  basePath?: string;
+  channelLink?: string;
   feedPath?: string;
   language?: string;
   items: RssFeedItem[];
@@ -38,12 +40,18 @@ export function isPublicationEligible(
   return true;
 }
 
-/** Escapes XML special characters and strips invalid control characters. */
+/** Escapes XML special characters and strips invalid XML 1.0 characters. */
 export function escapeXml(value: unknown): string {
   if (value === null || value === undefined) return '';
-  const str = String(value);
-  // Strip XML 1.0 disallowed control characters
-  const clean = str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
+  let str = String(value);
+  // Strip unpaired / isolated surrogates
+  str = str.replace(/(?:[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?<![\uD800-\uDBFF])[\uDC00-\uDFFF])/g, '');
+  if (typeof str.toWellFormed === 'function') {
+    str = str.toWellFormed();
+  }
+  // XML 1.0 5th edition Char grammar:
+  // Char ::= #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]
+  const clean = str.replace(/[^\t\n\r\u0020-\uD7FF\uE000-\uFFFD\u{10000}-\u{10FFFF}]/gu, '');
   return clean
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -59,10 +67,18 @@ export function formatRfc822Date(dateInput: Date | string | number): string {
   return date.toUTCString();
 }
 
-/** Resolves and validates an absolute HTTP/HTTPS URL without credentials. */
-export function resolveFeedUrl(urlOrPath: string, siteUrl: string | URL): string {
-  const base = typeof siteUrl === 'string' ? new URL(siteUrl) : siteUrl;
-  const resolved = new URL(urlOrPath, base);
+/** Resolves and validates an absolute HTTP/HTTPS URL with deployment base path awareness without credentials. */
+export function resolveFeedUrl(urlOrPath: string, siteUrl: string | URL, basePath = '/'): string {
+  const base = typeof siteUrl === 'string' ? new URL(siteUrl) : new URL(siteUrl.href);
+  const basePrefix = (base.pathname !== '/' ? base.pathname : (basePath || '/')).replace(/\/+$/, '');
+  let resolved: URL;
+  if (/^[a-z][a-z0-9+.-]*:/i.test(urlOrPath)) {
+    resolved = new URL(urlOrPath);
+  } else {
+    const cleanPath = urlOrPath.replace(/^\/+/, '');
+    const combined = basePrefix ? `${basePrefix}/${cleanPath}` : `/${cleanPath}`;
+    resolved = new URL(combined, base.origin);
+  }
   if (!['http:', 'https:'].includes(resolved.protocol) || resolved.username || resolved.password) {
     throw new Error('Feed URLs must use HTTP(S) without credentials.');
   }
@@ -72,12 +88,12 @@ export function resolveFeedUrl(urlOrPath: string, siteUrl: string | URL): string
 
 /** Generates a compliant RSS 2.0 XML document. */
 export function generateRssFeed(options: RssFeedOptions): string {
-  const { title, description, siteUrl, feedPath = '/rss.xml', language, items } = options;
-  const rootUrl = resolveFeedUrl('/', siteUrl).replace(/\/+$/, '');
-  const feedUrl = resolveFeedUrl(feedPath, siteUrl);
+  const { title, description, siteUrl, basePath = '/', channelLink, feedPath = '/rss.xml', language, items } = options;
+  const channelUrl = channelLink ? resolveFeedUrl(channelLink, siteUrl, basePath) : resolveFeedUrl('/', siteUrl, basePath);
+  const feedUrl = resolveFeedUrl(feedPath, siteUrl, basePath);
 
   const channelItems = items.map(item => {
-    const itemUrl = resolveFeedUrl(item.link, siteUrl);
+    const itemUrl = resolveFeedUrl(item.link, siteUrl, basePath);
     const guid = item.guid ? escapeXml(item.guid) : itemUrl;
     const isPermaLink = !item.guid || item.guid === itemUrl;
     const pubDateStr = formatRfc822Date(item.pubDate);
@@ -108,7 +124,7 @@ export function generateRssFeed(options: RssFeedOptions): string {
     '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">',
     '  <channel>',
     `    <title>${escapeXml(title)}</title>`,
-    `    <link>${escapeXml(rootUrl)}/</link>`,
+    `    <link>${escapeXml(channelUrl)}</link>`,
     `    <description>${escapeXml(description)}</description>`,
     `    <atom:link href="${escapeXml(feedUrl)}" rel="self" type="application/rss+xml"/>`,
   ];

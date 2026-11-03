@@ -4,6 +4,7 @@ import { SaxesParser } from 'saxes';
 import { generateRssFeed, isPublicationEligible, escapeXml, resolveFeedUrl } from '../src/lib/publication-feed.ts';
 import { generateSitemapXml, formatW3cDate } from '../src/lib/sitemap.ts';
 
+// Saxes validates XML well-formedness and namespace handling (not full XSD schema validation).
 function parseXmlString(xml) {
   return new Promise((resolve, reject) => {
     const parser = new SaxesParser({ xmlns: true });
@@ -44,22 +45,40 @@ test('isPublicationEligible respects draft flags and scheduled publication dates
   assert.equal(isPublicationEligible({ draft: false, publishedAt: 'not-a-date' }), false);
 });
 
-test('escapeXml escapes entities and strips XML 1.0 disallowed control characters', () => {
-  const dirty = 'Special & characters <tag> "quoted" \'single\' \x00\x08\x1F text';
+test('escapeXml escapes entities, preserves emoji, and filters XML 1.0 disallowed characters', async () => {
+  const dirty = 'Special & characters <tag> "quoted" \'single\' \x00\x08\x1F \uFFFE \uFFFF \uD800 🚀 emoji';
   const clean = escapeXml(dirty);
-  assert.equal(clean, 'Special &amp; characters &lt;tag&gt; &quot;quoted&quot; &apos;single&apos;  text');
+  assert.ok(clean.includes('&amp;'));
+  assert.ok(clean.includes('&lt;tag&gt;'));
+  assert.ok(clean.includes('&quot;quoted&quot;'));
+  assert.ok(clean.includes('&apos;single&apos;'));
+  assert.ok(clean.includes('🚀'));
+  assert.ok(!clean.includes('\uFFFE'));
+  assert.ok(!clean.includes('\uFFFF'));
+  assert.ok(!clean.includes('\uD800'));
+
+  // Assert parseable without error
+  await parseXmlString(`<root>${clean}</root>`);
+
   assert.equal(escapeXml(null), '');
   assert.equal(escapeXml(undefined), '');
 });
 
-test('resolveFeedUrl produces valid absolute URLs and rejects credentials and unsafe schemes', () => {
-  const siteUrl = 'https://example.com/blog/';
-  assert.equal(resolveFeedUrl('/posts/story/', siteUrl), 'https://example.com/posts/story/');
-  assert.equal(resolveFeedUrl('posts/story/', siteUrl), 'https://example.com/blog/posts/story/');
-  assert.equal(resolveFeedUrl('https://other.com/ext#fragment', siteUrl), 'https://other.com/ext');
+test('resolveFeedUrl resolves base paths and rejects credentials and unsafe schemes', () => {
+  // Site URL with subpath
+  const siteUrlWithBase = 'https://example.com/blog/';
+  assert.equal(resolveFeedUrl('/posts/story/', siteUrlWithBase), 'https://example.com/blog/posts/story/');
+  assert.equal(resolveFeedUrl('posts/story/', siteUrlWithBase), 'https://example.com/blog/posts/story/');
+  assert.equal(resolveFeedUrl('/', siteUrlWithBase), 'https://example.com/blog/');
 
-  assert.throws(() => resolveFeedUrl('javascript:alert(1)', siteUrl), /HTTP\(S\)/);
-  assert.throws(() => resolveFeedUrl('https://user:pass@example.com/path', siteUrl), /credentials/);
+  // Origin-only siteUrl with routing.base parameter
+  const originSiteUrl = 'https://example.com';
+  assert.equal(resolveFeedUrl('/posts/story/', originSiteUrl, '/blog/'), 'https://example.com/blog/posts/story/');
+  assert.equal(resolveFeedUrl('/', originSiteUrl, '/blog/'), 'https://example.com/blog/');
+  assert.equal(resolveFeedUrl('https://other.com/ext#fragment', originSiteUrl), 'https://other.com/ext');
+
+  assert.throws(() => resolveFeedUrl('javascript:alert(1)', originSiteUrl), /HTTP\(S\)/);
+  assert.throws(() => resolveFeedUrl('https://user:pass@example.com/path', originSiteUrl), /credentials/);
 });
 
 test('generateRssFeed produces strictly valid, parseable RSS 2.0 XML with atom self-link', async () => {
@@ -151,4 +170,29 @@ test('generateSitemapXml produces strictly valid Sitemap 0.9 with xhtml alternat
 
   // Check alternate links
   assert.ok(xml.includes('<xhtml:link rel="alternate" hreflang="nl" href="https://example.com/nl/"/>'));
+});
+
+test('generateSitemapXml enforces host scope for <loc> while allowing cross-domain alternates', () => {
+  // Reject <loc> pointing to foreign host
+  assert.throws(() => {
+    generateSitemapXml({
+      siteUrl: 'https://example.com',
+      items: [{ url: 'https://other-domain.test/external-page' }],
+    });
+  }, /Sitemap <loc> must belong to the site origin/);
+
+  // Allow cross-domain alternates
+  const xml = generateSitemapXml({
+    siteUrl: 'https://example.com',
+    items: [
+      {
+        url: '/page/',
+        alternates: [
+          { lang: 'fr', url: 'https://example.fr/page/' },
+        ],
+      },
+    ],
+  });
+  assert.ok(xml.includes('<loc>https://example.com/page/</loc>'));
+  assert.ok(xml.includes('<xhtml:link rel="alternate" hreflang="fr" href="https://example.fr/page/"/>'));
 });

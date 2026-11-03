@@ -17,6 +17,7 @@ export interface SitemapItem {
 
 export interface SitemapOptions {
   siteUrl: string | URL;
+  basePath?: string;
   items: SitemapItem[];
 }
 
@@ -29,10 +30,16 @@ export function formatW3cDate(dateInput: Date | string | number): string {
 
 /** Generates a compliant XML sitemap 0.9 document with xhtml alternate language support. */
 export function generateSitemapXml(options: SitemapOptions): string {
-  const { siteUrl, items } = options;
+  const { siteUrl, items, basePath = '/' } = options;
+  const base = typeof siteUrl === 'string' ? new URL(siteUrl) : new URL(siteUrl.href);
+  const siteOrigin = base.origin;
 
   const urlElements = items.map(item => {
-    const loc = resolveFeedUrl(item.url, siteUrl);
+    const loc = resolveFeedUrl(item.url, siteUrl, basePath);
+    const locUrl = new URL(loc);
+    if (locUrl.origin !== siteOrigin) {
+      throw new Error(`Sitemap <loc> must belong to the site origin (${siteOrigin}), received: ${locUrl.origin}`);
+    }
     const lines = [
       '  <url>',
       `    <loc>${escapeXml(loc)}</loc>`,
@@ -53,7 +60,7 @@ export function generateSitemapXml(options: SitemapOptions): string {
 
     if (item.alternates && Array.isArray(item.alternates)) {
       for (const alt of item.alternates) {
-        const altUrl = resolveFeedUrl(alt.url, siteUrl);
+        const altUrl = resolveFeedUrl(alt.url, siteUrl, basePath);
         lines.push(`    <xhtml:link rel="alternate" hreflang="${escapeXml(alt.lang)}" href="${escapeXml(altUrl)}"/>`);
       }
     }

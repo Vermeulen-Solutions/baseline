@@ -70,21 +70,68 @@ test('readingTime handles custom WPM and invalid WPM boundaries gracefully', () 
   assert.equal(fast.minutes, 1);
   assert.equal(fast.timeMs, 60000);
 
-  // Invalid WPM (0, negative, NaN, Infinity) falls back to default 200 WPM
-  for (const badWpm of [0, -50, NaN, Infinity, -Infinity, 'fast']) {
+  // Invalid WPM (0, negative, NaN, Infinity, Number.MIN_VALUE) falls back to default 200 WPM
+  for (const badWpm of [0, -50, NaN, Infinity, -Infinity, Number.MIN_VALUE, 'fast']) {
     const fallback = readingTime(words, { wordsPerMinute: badWpm });
     assert.equal(fallback.words, 100);
     assert.equal(fallback.minutes, 1);
     assert.equal(fallback.timeMs, 30000);
+    assert.notEqual(fallback.text, 'Infinity min read');
   }
 });
 
-test('readingTime supports Intl.Segmenter with multilingual and non-space-delimited text', () => {
+test('stripFormatting handles tilde fences, language identifiers, and HTML entities', () => {
+  // Tilde-fenced code
+  const tildeMarkdown = `Intro paragraph.
+~~~typescript
+const x: number = 42;
+~~~
+Outro paragraph.`;
+
+  const withoutCode = stripFormatting(tildeMarkdown, { countCode: false });
+  assert.ok(!withoutCode.includes('42'));
+  assert.ok(withoutCode.includes('Intro paragraph'));
+  assert.ok(withoutCode.includes('Outro paragraph'));
+
+  // When counting code, language identifiers like 'typescript' or 'js' should not be counted
+  const withCode = stripFormatting(tildeMarkdown, { countCode: true });
+  assert.ok(withCode.includes('42'));
+  assert.ok(!withCode.includes('typescript'));
+
+  // HTML entities should be stripped, not counted as words
+  const entityText = 'Tom &amp; Jerry &nbsp; friends';
+  const entityRes = readingTime(entityText);
+  assert.equal(entityRes.words, 3, `Expected exactly 3 words ('Tom', 'Jerry', 'friends'), got ${entityRes.words}`);
+});
+
+test('readingTime supports Intl.Segmenter with multilingual, invalid locale fallback and Portable Text', () => {
   // Japanese text without spaces
   const japanese = '吾輩は猫である。名前はまだ無い。どこで生れたかとんと見当がつかぬ。';
   const jaResult = readingTime(japanese, { locale: 'ja' });
   assert.ok(jaResult.words > 5, `Expected Japanese word segmentation > 5, got ${jaResult.words}`);
   assert.equal(jaResult.minutes, 1);
+
+  // Malformed locale fallback: retries fallback segmenter and still segments Japanese into multiple words
+  const malformedResult = readingTime(japanese, { locale: 'invalid_locale_xyz' });
+  assert.ok(malformedResult.words > 1, `Expected fallback segmenter on Japanese > 1 word, got ${malformedResult.words}`);
+
+  // Portable Text block array input
+  const portableText = [
+    {
+      _type: 'block',
+      children: [
+        { _type: 'span', text: 'First block heading' },
+      ],
+    },
+    {
+      _type: 'block',
+      children: [
+        { _type: 'span', text: 'Second block paragraph text' },
+      ],
+    },
+  ];
+  const ptResult = readingTime(portableText);
+  assert.equal(ptResult.words, 7); // First block heading (3) + Second block paragraph text (4)
 
   // Dutch text with contractions and accents
   const dutch = "Het is 's ochtends vroeg en we gaan naar de tentoonstelling van moderne kunst.";

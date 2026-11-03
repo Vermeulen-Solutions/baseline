@@ -2,17 +2,17 @@
   {
     "path": "src/lib/publication-feed.ts",
     "reason": "Non-visual syndication utility: publication-aware RSS 2.0 feed generator with XML escaping and RFC-822 date formatting. Exact LF-normalized source hash.",
-    "sha256": "61a5b42d5844fba6e41418055ef9cc28ce29e60180f619cbc12d856b8676a981"
+    "sha256": "65049a6090c12e41529e443679501804245b318b7d0ab18ddc488a5c0bbe1a10"
   },
   {
     "path": "src/lib/sitemap.ts",
     "reason": "Non-visual search index utility: publication-aware XML sitemap 0.9 generator with W3C dates and multi-locale alternate links. Exact LF-normalized source hash.",
-    "sha256": "56e44b4c4a38ebbf6065ce88fe2d90630f86133c15e1795780cd126ec3c3fa48"
+    "sha256": "0ab808e98e3514cca93ed45131408e12048f806a7744e7884c0c7d7a7768df4d"
   },
   {
     "path": "src/lib/reading-time.ts",
     "reason": "Non-visual editorial calculation utility: locale-aware word count and reading time estimation. No client styling, layout, or visual presentation. Exact LF-normalized source hash.",
-    "sha256": "4fd0e1e260823e1f0ddeaaea3fe3523fdeefbc31c47316dc12bdf5925b422a48"
+    "sha256": "ecfbb3f6325c6cec2d6a8e5aaf7cd783e3e5e945d78120268e4ad9fbe8266702"
   },
   {
     "path": "src/components/TweaksBar.astro",
@@ -262,7 +262,7 @@
   {
     "path": "src/layouts/SiteShell.astro",
     "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, and deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail); preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "dd462baaafc30615a9bf01388cfd80b3c0f4c1e6e01fe6d43b103378f5d651a0"
+    "sha256": "be0fe320ffd4f2dd816d747ce2bc174078856bf402495dfe176bcecc1d2c7d1a"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -336,13 +336,13 @@
   },
   {
     "path": "profiles/static/project/src/pages/rss.xml.ts",
-    "reason": "Functional static starter syndication route: publication-aware RSS 2.0 XML endpoint. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "9be8cf2002263db7995ab5c62e292d049478645c5827a4186c2f67fd61d02cd7"
+    "reason": "Functional static starter syndication route: publication-aware RSS 2.0 XML endpoint with base-path and origin enforcement. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "27fb57f08f7691948415b928431e2798bff50373475521237ccc207379ec7177"
   },
   {
     "path": "profiles/static/project/src/pages/sitemap.xml.ts",
-    "reason": "Functional static starter search indexing route: publication-aware XML sitemap endpoint. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "7999fbbc15eb15b4159b428bd3216aaf5791425a323f909fed6ad92d1fdc3293"
+    "reason": "Functional static starter search indexing route: publication-aware XML sitemap endpoint with host-scope and origin enforcement. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "b42b0767f945a8db4f782fdbf2870f80193455c616312eef0aa2b4e52eba33d7"
   },
   {
     "path": "profiles/static/project/src/pages/404.astro",

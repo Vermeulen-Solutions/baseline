@@ -51,8 +51,9 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         applySurface(document.documentElement);
         let vtTimer = 0;
         let savedScroll = null;
-        let pendingNoScroll = false;
         let activeMorphCard = null;
+        let activeNavToken = 0;
+        let activeTransitionPending = false;
         const warmedPages = new Map();
         const warmedImages = new Map();
         const warmImage = (src, srcset, sizes) => {
@@ -131,14 +132,27 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           });
         };
         document.addEventListener('astro:before-preparation', (event) => {
+          const navToken = ++activeNavToken;
+          const signal = event && 'signal' in event ? event['signal'] : undefined;
           clearTimeout(vtTimer);
           vtTimer = window.setTimeout(() => {
-            document.documentElement.setAttribute('data-vt-loading', '');
+            if (navToken === activeNavToken) {
+              document.documentElement.setAttribute('data-vt-loading', '');
+            }
           }, 600);
 
-          if (pendingNoScroll || document.querySelector('meta[name="vt-noscroll"], [data-vt-noscroll-page]')) {
-            savedScroll = { left: window.scrollX, top: window.scrollY };
-          }
+          // Derive NoScroll intent directly from the event's sourceElement or page declaration
+          const sourceEl = event && 'sourceElement' in event && event['sourceElement'] instanceof Element ? event['sourceElement'] : null;
+          const isNoScroll = Boolean(
+            sourceEl?.hasAttribute('data-vt-noscroll') ||
+            sourceEl?.closest('[data-vt-noscroll]') ||
+            document.querySelector('meta[name="vt-noscroll"], [data-vt-noscroll-page]')
+          );
+          savedScroll = isNoScroll ? { left: window.scrollX, top: window.scrollY } : null;
+
+          // Derive active card morphing intent directly from the source element
+          const card = sourceEl?.closest('[data-vt-card], .card.card--clickable, .card');
+          activeMorphCard = card && card.querySelector('.card-media, [data-vt-media]') ? card : null;
 
           const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           let leavingHero = false;
@@ -170,22 +184,35 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           if (event && 'loader' in event && typeof event.loader === 'function') {
             const originalLoader = event.loader;
             event.loader = async () => {
+              if (signal?.aborted || navToken !== activeNavToken) return;
               try {
-                // Deterministic asynchronous latency & failure testing (?_vt_delay=<ms> or ?_vt_fail=true)
-                const destUrl = event.to ? new URL(event.to, location.href) : null;
-                const delayParam = destUrl?.searchParams?.get('_vt_delay') ?? window['__BASELINE_VT_DELAY__'];
-                if (delayParam) {
-                  const ms = parseInt(String(delayParam), 10);
-                  if (Number.isFinite(ms) && ms > 0) {
-                    await new Promise((resolve) => setTimeout(resolve, ms));
+                // Development-only deterministic latency & failure testing (excluded from production builds)
+                if (import.meta.env.DEV) {
+                  const destUrl = event.to ? new URL(event.to, location.href) : null;
+                  const delayParam = destUrl?.searchParams?.get('_vt_delay') ?? window['__BASELINE_VT_DELAY__'];
+                  if (delayParam) {
+                    const ms = Math.min(Math.max(0, parseInt(String(delayParam), 10) || 0), 10000);
+                    if (ms > 0) {
+                      await new Promise((resolve, reject) => {
+                        const timer = setTimeout(resolve, ms);
+                        signal?.addEventListener('abort', () => {
+                          clearTimeout(timer);
+                          reject(new DOMException('Navigation aborted', 'AbortError'));
+                        }, { once: true });
+                      });
+                    }
+                  }
+                  const failParam = destUrl?.searchParams?.get('_vt_fail') ?? window['__BASELINE_VT_FAIL__'];
+                  const shouldFail = failParam === true || failParam === 'true' || failParam === '1';
+                  if (shouldFail) {
+                    throw new Error('Deterministic ViewTransition failure injection');
                   }
                 }
-                const failParam = destUrl?.searchParams?.get('_vt_fail') ?? window['__BASELINE_VT_FAIL__'];
-                if (failParam) {
-                  throw new Error('Deterministic ViewTransition failure injection');
-                }
 
+                if (signal?.aborted || navToken !== activeNavToken) return;
                 await originalLoader();
+                if (signal?.aborted || navToken !== activeNavToken) return;
+
                 if ('newDocument' in event && event.newDocument) {
                   if (!reducedMotion) {
                     if (activeMorphCard) {
@@ -222,8 +249,11 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                   ]);
                 }
               } catch (err) {
-                clearVtLoading();
-                cleanupMorphNames();
+                if (navToken === activeNavToken) {
+                  clearVtLoading();
+                  cleanupMorphNames();
+                  savedScroll = null;
+                }
                 throw err;
               }
             };
@@ -231,13 +261,21 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         });
         document.addEventListener('astro:after-preparation', () => {
           clearVtLoading();
-          if (pendingNoScroll && !savedScroll) {
-            savedScroll = { left: window.scrollX, top: window.scrollY };
-          }
         });
         document.addEventListener('astro:before-swap', (event) => {
           if (event && 'newDocument' in event && event.newDocument) {
             applySurface(event.newDocument.documentElement);
+          }
+          const currentNav = activeNavToken;
+          const vt = event && 'viewTransition' in event ? event['viewTransition'] : null;
+          if (vt && typeof vt.finished?.finally === 'function') {
+            activeTransitionPending = true;
+            vt.finished.finally(() => {
+              activeTransitionPending = false;
+              if (currentNav === activeNavToken) {
+                cleanupMorphNames();
+              }
+            });
           }
         });
         document.addEventListener('astro:after-swap', () => {
@@ -247,7 +285,6 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
             window.scrollTo({ left: savedScroll.left, top: savedScroll.top, behavior: 'instant' });
             savedScroll = null;
           }
-          pendingNoScroll = false;
         });
 
         const syncStickyHeader = () => {
@@ -259,7 +296,9 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         window.addEventListener('scroll', syncStickyHeader, { passive: true });
 
         const initPage = () => {
-          cleanupMorphNames();
+          if (!activeTransitionPending) {
+            cleanupMorphNames();
+          }
           syncStickyHeader();
           const currentSurface = document.documentElement.getAttribute('data-surface');
           document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
@@ -305,17 +344,6 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         document.addEventListener('click', (event) => {
           const target = event.target instanceof Element ? event.target : null;
           if (!target) return;
-
-          const link = target.closest('a[href]');
-          if (link instanceof HTMLAnchorElement) {
-            if (link.hasAttribute('data-vt-noscroll') || link.closest('[data-vt-noscroll]')) {
-              pendingNoScroll = true;
-            }
-            const card = link.closest('[data-vt-card], .card.card--clickable, .card');
-            if (card && card.querySelector('.card-media, [data-vt-media]')) {
-              activeMorphCard = card;
-            }
-          }
 
           const surfaceBtn = target.closest('[data-surface-toggle]');
           if (surfaceBtn) {

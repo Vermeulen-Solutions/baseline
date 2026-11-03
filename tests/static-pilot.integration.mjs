@@ -141,6 +141,28 @@ try {
   const draft = await fetch(production + '/posts/metadata-draft/'); assert.equal(draft.status, 404);
   assert.ok(!(await draft.text()).includes('PRIVATE METADATA DRAFT'));
   report.production.draft = '404; excluded from public routes/listings';
+
+  // Verify public XML endpoints (status, content-type, root tags, draft exclusion, configured origin)
+  const rssRes = await fetch(production + '/rss.xml');
+  assert.equal(rssRes.status, 200, '/rss.xml status');
+  const rssText = await rssRes.text();
+  assert.ok(rssText.includes('<rss version="2.0"'), '/rss.xml root tag');
+  assert.ok(!rssText.includes('PRIVATE METADATA DRAFT'), '/rss.xml excludes drafts');
+  if (expectedSite) {
+    assert.ok(rssText.includes(expectedSite), '/rss.xml includes configured origin');
+  }
+  report.production.rss = '200; valid RSS 2.0 with draft exclusion';
+
+  const sitemapRes = await fetch(production + '/sitemap.xml');
+  assert.equal(sitemapRes.status, 200, '/sitemap.xml status');
+  const sitemapText = await sitemapRes.text();
+  assert.ok(sitemapText.includes('<urlset'), '/sitemap.xml root tag');
+  assert.ok(!sitemapText.includes('PRIVATE METADATA DRAFT'), '/sitemap.xml excludes drafts');
+  if (expectedSite) {
+    assert.ok(sitemapText.includes(expectedSite), '/sitemap.xml includes configured origin');
+  }
+  report.production.sitemap = '200; valid Sitemap 0.9 with host-scoped loc';
+
   if (wordpressFixture) {
     const { wordpressAcceptance } = await import(pathToFileURL(path.join(root, 'scripts/wordpress-acceptance.mjs')));
     const { runMigration } = await import(pathToFileURL(path.join(root, 'scripts/migration-verify.mjs')));

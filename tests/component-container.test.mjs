@@ -45,7 +45,8 @@ let containerMod;
 let disclosureMod;
 
 test.before(async () => {
-  const viteConfig = await getViteConfig({})({});
+  // Use a minimal CMS-free configuration (configFile: false) so primitive rendering tests retain isolation
+  const viteConfig = await getViteConfig({}, { configFile: false })({ command: 'serve', mode: 'development' });
   server = await createServer({
     ...viteConfig,
     server: { middlewareMode: true },

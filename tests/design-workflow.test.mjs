@@ -133,10 +133,12 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
     'baseline:surface', 'astro:before-preparation', 'astro:after-preparation', 'astro:before-swap', 'astro:after-swap', 'astro:page-load',
     '[data-reveal]', '[data-filter-root]', '[data-sticky-header]', 'data-surface-mode', 'data-surface-switching',
     'data-vt-loading', 'data-vt-noscroll', 'hero-media', 'hero-title',
-    '_vt_delay', '_vt_fail', '__BASELINE_VT_DELAY__', '__BASELINE_VT_FAIL__'
+    '_vt_delay', '_vt_fail', '__BASELINE_VT_DELAY__', '__BASELINE_VT_FAIL__',
+    'activeNavToken', 'activeTransitionPending'
   ]) {
     assert.ok(siteShell.includes(hook), `SiteShell must include declarative hook ${hook}`);
   }
+  assert.ok(siteShell.includes('if (import.meta.env.DEV)'), 'SiteShell must guard fault injection behind import.meta.env.DEV');
   for (const basePath of ['src/layouts/Base.astro', 'profiles/static/project/src/layouts/Base.astro']) {
     const baseSource = readFileSync(basePath, 'utf8');
     assert.ok(baseSource.includes("surface?: 'light' | 'dark' | 'system'"), `${basePath} must accept surface prop`);
