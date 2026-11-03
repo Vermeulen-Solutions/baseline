@@ -1,5 +1,15 @@
 [
   {
+    "path": "src/lib/publication-feed.ts",
+    "reason": "Non-visual syndication utility: publication-aware RSS 2.0 feed generator with XML escaping and RFC-822 date formatting. Exact LF-normalized source hash.",
+    "sha256": "61a5b42d5844fba6e41418055ef9cc28ce29e60180f619cbc12d856b8676a981"
+  },
+  {
+    "path": "src/lib/sitemap.ts",
+    "reason": "Non-visual search index utility: publication-aware XML sitemap 0.9 generator with W3C dates and multi-locale alternate links. Exact LF-normalized source hash.",
+    "sha256": "56e44b4c4a38ebbf6065ce88fe2d90630f86133c15e1795780cd126ec3c3fa48"
+  },
+  {
     "path": "src/lib/reading-time.ts",
     "reason": "Non-visual editorial calculation utility: locale-aware word count and reading time estimation. No client styling, layout, or visual presentation. Exact LF-normalized source hash.",
     "sha256": "4fd0e1e260823e1f0ddeaaea3fe3523fdeefbc31c47316dc12bdf5925b422a48"
@@ -322,7 +332,17 @@
   {
     "path": "profiles/static/project/src/lib/posts.ts",
     "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "1ad28febc56a1b7b04a2bbb69c3130762c232a226982dfe92b280aa59dd5c48d"
+    "sha256": "e0b9a19fb5021bae4974ab107cdd0ead400e5c34c074d0bcbb97a1d3f049d5c4"
+  },
+  {
+    "path": "profiles/static/project/src/pages/rss.xml.ts",
+    "reason": "Functional static starter syndication route: publication-aware RSS 2.0 XML endpoint. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "9be8cf2002263db7995ab5c62e292d049478645c5827a4186c2f67fd61d02cd7"
+  },
+  {
+    "path": "profiles/static/project/src/pages/sitemap.xml.ts",
+    "reason": "Functional static starter search indexing route: publication-aware XML sitemap endpoint. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "7999fbbc15eb15b4159b428bd3216aaf5791425a323f909fed6ad92d1fdc3293"
   },
   {
     "path": "profiles/static/project/src/pages/404.astro",

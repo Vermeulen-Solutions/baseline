@@ -113,6 +113,14 @@
       "target": "src/pages/_styleguide.astro"
     },
     {
+      "source": "profiles/static/project/src/pages/rss.xml.ts",
+      "target": "src/pages/rss.xml.ts"
+    },
+    {
+      "source": "profiles/static/project/src/pages/sitemap.xml.ts",
+      "target": "src/pages/sitemap.xml.ts"
+    },
+    {
       "source": "profiles/static/project/tests/static-foundation.test.mjs",
       "target": "tests/static-foundation.test.mjs"
     },

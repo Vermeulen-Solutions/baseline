@@ -51,6 +51,10 @@
     "tier": "unit",
     "reason": "Tier partition and infrastructure CLI contracts"
   },
+  "feeds-sitemap.test.mjs": {
+    "tier": "unit",
+    "reason": "Publication-aware RSS 2.0 and Sitemap 0.9 XML contracts and eligibility"
+  },
   "fluid-tokens.test.mjs": {
     "tier": "unit",
     "reason": "Fluid scale mathematics"
