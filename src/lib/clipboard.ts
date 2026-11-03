@@ -20,13 +20,23 @@ export async function copyText(text: string, options?: CopyTextOptions): Promise
       }
       return;
     } catch (err) {
-      if ((err as Error)?.name === 'AbortError') throw err;
+      if (options?.signal?.aborted || (err as Error)?.name === 'AbortError') {
+        throw new DOMException('Copy operation aborted', 'AbortError');
+      }
       // Fall through to legacy execCommand fallback on clipboard writeText failure
     }
   }
 
   // 2. Legacy execCommand('copy') fallback
+  if (options?.signal?.aborted) {
+    throw new DOMException('Copy operation aborted', 'AbortError');
+  }
+
   if (typeof document !== 'undefined') {
+    if (options?.signal?.aborted) {
+      throw new DOMException('Copy operation aborted', 'AbortError');
+    }
+
     const previousActive = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const selection = typeof document.getSelection === 'function' ? document.getSelection() : null;
     const previousRange = selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
@@ -43,8 +53,14 @@ export async function copyText(text: string, options?: CopyTextOptions): Promise
 
     document.body.appendChild(textarea);
     try {
+      if (options?.signal?.aborted) {
+        throw new DOMException('Copy operation aborted', 'AbortError');
+      }
       textarea.select();
       textarea.setSelectionRange(0, textarea.value.length);
+      if (options?.signal?.aborted) {
+        throw new DOMException('Copy operation aborted', 'AbortError');
+      }
       // Fallback for non-secure contexts or legacy browsers
       const doc = document as Document & { execCommand?: (cmd: string) => boolean };
       const successful = typeof doc.execCommand === 'function' ? doc.execCommand('copy') : false;
@@ -56,16 +72,18 @@ export async function copyText(text: string, options?: CopyTextOptions): Promise
       }
       return;
     } finally {
-      document.body.removeChild(textarea);
+      if (textarea.parentNode) {
+        textarea.parentNode.removeChild(textarea);
+      }
       // Conditionally restore focus and selection without overwriting user navigation
-      if (previousActive && previousActive.isConnected) {
+      if (!options?.signal?.aborted && previousActive && previousActive.isConnected) {
         if (document.activeElement === textarea || document.activeElement === document.body || document.activeElement === null) {
           try {
             previousActive.focus();
           } catch {}
         }
       }
-      if (selection && previousRange) {
+      if (!options?.signal?.aborted && selection && previousRange) {
         try {
           selection.removeAllRanges();
           selection.addRange(previousRange);

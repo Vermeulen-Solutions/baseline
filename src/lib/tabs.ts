@@ -223,12 +223,34 @@ export class TabsController {
 const activeControllers = new WeakMap<HTMLElement, TabsController>();
 
 /**
- * Teardown all registered tabs controllers, optionally preserving persisted elements across View Transitions.
+ * Destroys any registered controller whose root element is no longer connected to the DOM.
  */
-export function teardownTabs(preservePersisted = true) {
+export function purgeDisconnectedTabs(): void {
   for (const controller of Array.from(liveControllers)) {
-    const isPersisted = preservePersisted && Boolean(controller.root.closest('[data-astro-transition-persist]'));
-    if (!isPersisted) {
+    if (!controller.root.isConnected) {
+      controller.destroy();
+    }
+  }
+}
+
+/**
+ * Teardown all registered tabs controllers, preserving persisted elements only if
+ * a matching counterpart exists in the destination document.
+ */
+export function teardownTabs(preservePersisted = true, newDocument?: Document) {
+  for (const controller of Array.from(liveControllers)) {
+    if (!controller.root.isConnected) {
+      controller.destroy();
+      continue;
+    }
+    const persistEl = controller.root.closest('[data-astro-transition-persist]');
+    const persistKey = persistEl?.getAttribute('data-astro-transition-persist');
+    const willSurvive =
+      preservePersisted &&
+      Boolean(persistKey) &&
+      Boolean(newDocument?.querySelector(`[data-astro-transition-persist="${persistKey}"]`));
+
+    if (!willSurvive) {
       controller.destroy();
     }
   }
@@ -238,6 +260,7 @@ export function teardownTabs(preservePersisted = true) {
  * Returns number of active controllers registered for a given syncKey.
  */
 export function getActiveSyncCount(syncKey: string): number {
+  purgeDisconnectedTabs();
   return syncRegistries.get(syncKey)?.size ?? 0;
 }
 
@@ -245,6 +268,7 @@ export function getActiveSyncCount(syncKey: string): number {
  * Scans and initializes all tabs within a given container.
  */
 export function initTabs(container: Document | HTMLElement = document) {
+  purgeDisconnectedTabs();
   const elements = container.querySelectorAll<HTMLElement>('[data-tabs-id]');
   elements.forEach((el) => {
     const existing = activeControllers.get(el);
@@ -261,7 +285,23 @@ export function initTabs(container: Document | HTMLElement = document) {
   });
 }
 
-// Lifecycle hook for Astro ClientRouter navigation
+// Lifecycle hooks for Astro ClientRouter navigation and DOM reconciliation
 if (typeof document !== 'undefined') {
-  document.addEventListener('astro:before-swap', () => teardownTabs(true));
+  document.addEventListener('astro:before-swap', (event) => {
+    const newDoc = (event as unknown as { newDocument?: Document }).newDocument;
+    teardownTabs(true, newDoc);
+  });
+
+  document.addEventListener('astro:after-swap', () => {
+    purgeDisconnectedTabs();
+  });
+
+  try {
+    const observer = new MutationObserver(() => {
+      purgeDisconnectedTabs();
+    });
+    if (document.body) {
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
+  } catch {}
 }

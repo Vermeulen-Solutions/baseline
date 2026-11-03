@@ -30,16 +30,16 @@ const systemLabel = labels.system || 'System';
 </div>
 
 <script>
-  import { getStoredThemePreference, applyTheme } from '../lib/theme';
+  import { resolveEffectiveTheme, applyTheme } from '../lib/theme';
   import type { ThemePreference } from '../lib/theme';
 
   function initThemeSelects() {
     const selects = document.querySelectorAll<HTMLSelectElement>('[data-theme-select]');
     if (selects.length === 0) return;
 
-    const currentPref = getStoredThemePreference();
+    const { preference } = resolveEffectiveTheme();
     selects.forEach((select) => {
-      select.value = currentPref;
+      select.value = preference ?? 'system';
 
       if ((select as unknown as { _themeInit?: boolean })._themeInit) return;
       (select as unknown as { _themeInit?: boolean })._themeInit = true;

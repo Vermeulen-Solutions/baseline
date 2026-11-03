@@ -3,10 +3,18 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { resolvePublicCapabilities } from '../src/lib/capabilities.ts';
 import { resolveLocale, getLocaleDirection } from '../src/lib/locale.ts';
-import { resolveTheme } from '../src/lib/theme.ts';
-import { extractCopyableText } from '../src/lib/clipboard.ts';
+import {
+  resolveTheme,
+  getPageThemeDefault,
+  resolveEffectiveTheme,
+  getStoredThemePreference,
+  setStoredThemePreference,
+  clearStoredThemePreference,
+  applyTheme,
+} from '../src/lib/theme.ts';
+import { extractCopyableText, copyText } from '../src/lib/clipboard.ts';
 import { announce } from '../src/lib/announce.ts';
-import { TabsController } from '../src/lib/tabs.ts';
+import { TabsController, teardownTabs, getActiveSyncCount } from '../src/lib/tabs.ts';
 
 test('resolvePublicCapabilities derives authoritative profile, normalizes base, and excludes secrets', () => {
   // Test explicit profile enforcement and trailing slash stripping on base
@@ -246,5 +254,118 @@ test('TabsController registers and tears down cleanly with AbortController', () 
 
   ctrl.destroy();
   assert.equal(ctrl.isDestroyed, true);
+});
+
+test('theme controller preserves page-declared and unset defaults when storage is empty', () => {
+  const storageMap = new Map();
+  globalThis.window = {
+    localStorage: {
+      getItem(key) { return storageMap.get(key) ?? null; },
+      setItem(key, val) { storageMap.set(key, String(val)); },
+      removeItem(key) { storageMap.delete(key); },
+    },
+    matchMedia() {
+      return { matches: false, addEventListener() {} };
+    },
+  };
+
+  // Clear any storage state
+  clearStoredThemePreference();
+  assert.equal(getStoredThemePreference(), null);
+
+  // 1. Page declared surface="light" (data-surface-default="light")
+  const mockLightRoot = {
+    getAttribute(attr) {
+      if (attr === 'data-surface-default') return 'light';
+      return null;
+    },
+    setAttribute() {},
+    removeAttribute() {},
+  };
+  assert.equal(getPageThemeDefault(mockLightRoot), 'light');
+  const lightResolved = resolveEffectiveTheme(mockLightRoot);
+  assert.equal(lightResolved.preference, 'light');
+  assert.equal(lightResolved.surface, 'light');
+
+  // 2. Page declared surface="dark" (data-surface-default="dark")
+  const mockDarkRoot = {
+    getAttribute(attr) {
+      if (attr === 'data-surface-default') return 'dark';
+      return null;
+    },
+    setAttribute() {},
+    removeAttribute() {},
+  };
+  assert.equal(getPageThemeDefault(mockDarkRoot), 'dark');
+  const darkResolved = resolveEffectiveTheme(mockDarkRoot);
+  assert.equal(darkResolved.preference, 'dark');
+  assert.equal(darkResolved.surface, 'dark');
+
+  // 3. Page with unset surface (neither data-surface nor data-surface-mode)
+  const mockUnsetRoot = {
+    getAttribute() {
+      return null;
+    },
+    setAttribute() {},
+    removeAttribute() {},
+  };
+  assert.equal(getPageThemeDefault(mockUnsetRoot), null);
+  const unsetResolved = resolveEffectiveTheme(mockUnsetRoot);
+  assert.equal(unsetResolved.preference, null);
+  assert.equal(unsetResolved.surface, null);
+
+  // 4. Page with system surface
+  const mockSystemRoot = {
+    getAttribute(attr) {
+      if (attr === 'data-surface-mode') return 'system';
+      return null;
+    },
+    setAttribute() {},
+    removeAttribute() {},
+  };
+  assert.equal(getPageThemeDefault(mockSystemRoot), 'system');
+  const systemResolved = resolveEffectiveTheme(mockSystemRoot);
+  assert.equal(systemResolved.preference, 'system');
+  assert.ok(systemResolved.surface === 'dark' || systemResolved.surface === 'light');
+
+  // 5. Stored preference overrides page default
+  setStoredThemePreference('dark');
+  const overridden = resolveEffectiveTheme(mockLightRoot);
+  assert.equal(overridden.preference, 'dark');
+  assert.equal(overridden.surface, 'dark');
+  clearStoredThemePreference();
+});
+
+test('copyText aborts immediately and does not invoke legacy execCommand fallback', async () => {
+  let execCommandCalled = false;
+  globalThis.document = {
+    activeElement: null,
+    body: {
+      appendChild() {},
+      removeChild() {},
+    },
+    createElement() {
+      return {
+        setAttribute() {},
+        style: {},
+        select() {},
+        setSelectionRange() {},
+        parentNode: { removeChild() {} },
+      };
+    },
+    execCommand() {
+      execCommandCalled = true;
+      return true;
+    },
+  };
+
+  const ac = new AbortController();
+  ac.abort();
+
+  await assert.rejects(
+    () => copyText('abort test', { signal: ac.signal }),
+    (err) => err.name === 'AbortError'
+  );
+  assert.equal(execCommandCalled, false, 'execCommand must not be called when operation is aborted');
 });
 

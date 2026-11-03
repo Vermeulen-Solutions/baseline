@@ -71,6 +71,16 @@ if (!targetId) {
     button._opToken = (button._opToken || 0) + 1;
   }
 
+  function resetCopyButton(button: CopyButtonElement) {
+    cancelPendingOperations(button);
+    button.removeAttribute('data-state');
+    const initialLabel = button.getAttribute('data-initial-label') || 'Copy to clipboard';
+    const textSpan = button.querySelector<HTMLElement>('[data-copy-text]');
+    if (textSpan && textSpan.textContent !== initialLabel) {
+      textSpan.textContent = initialLabel;
+    }
+  }
+
   function initCopyButtons() {
     const buttons = document.querySelectorAll<CopyButtonElement>('[data-copy-button]');
 
@@ -87,7 +97,6 @@ if (!targetId) {
         const timeoutMs = parseInt(button.getAttribute('data-timeout') || '2000', 10);
         const textSpan = button.querySelector<HTMLElement>('[data-copy-text]');
         const copiedLabel = button.getAttribute('data-copied-label') || 'Copied!';
-        const initialLabel = button.getAttribute('data-initial-label') || 'Copy to clipboard';
         const excludeSelector = button.getAttribute('data-exclude-selector') || undefined;
 
         if (!targetId) return;
@@ -115,9 +124,7 @@ if (!targetId) {
 
           button._resetTimer = window.setTimeout(() => {
             if (button._opToken !== opToken || !button.isConnected) return;
-            button.removeAttribute('data-state');
-            if (textSpan) textSpan.textContent = initialLabel;
-            delete button._resetTimer;
+            resetCopyButton(button);
           }, timeoutMs);
         } catch (err) {
           if (ac.signal.aborted || button._opToken !== opToken || !button.isConnected) return;
@@ -128,9 +135,7 @@ if (!targetId) {
 
           button._resetTimer = window.setTimeout(() => {
             if (button._opToken !== opToken || !button.isConnected) return;
-            button.removeAttribute('data-state');
-            if (textSpan) textSpan.textContent = initialLabel;
-            delete button._resetTimer;
+            resetCopyButton(button);
           }, timeoutMs);
         }
       });
@@ -141,11 +146,27 @@ if (!targetId) {
     initCopyButtons();
     document.addEventListener('astro:page-load', initCopyButtons);
     document.addEventListener('astro:before-swap', () => {
-      document.querySelectorAll<CopyButtonElement>('[data-copy-button]').forEach((btn) => {
-        cancelPendingOperations(btn);
-        btn.removeAttribute('data-state');
-      });
+      document.querySelectorAll<CopyButtonElement>('[data-copy-button]').forEach(resetCopyButton);
     });
+
+    try {
+      const disconnectObserver = new MutationObserver((mutations) => {
+        for (const m of mutations) {
+          m.removedNodes.forEach((node) => {
+            if (node instanceof HTMLElement) {
+              if (node.hasAttribute('data-copy-button')) {
+                resetCopyButton(node as CopyButtonElement);
+              }
+              node.querySelectorAll<CopyButtonElement>('[data-copy-button]').forEach(resetCopyButton);
+            }
+          });
+        }
+      });
+
+      if (document.body) {
+        disconnectObserver.observe(document.body, { childList: true, subtree: true });
+      }
+    } catch {}
   }
 </script>
 

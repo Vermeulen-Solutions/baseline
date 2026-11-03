@@ -25,6 +25,7 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
   dir={resolvedDir}
   data-spacing-policy={spacingPolicy === 'automatic-v2' ? 'automatic-v2' : 'legacy'}
   data-surface={surface === 'dark' || surface === 'light' ? surface : undefined}
+  data-surface-default={surface === 'dark' || surface === 'light' || surface === 'system' ? surface : undefined}
   data-surface-mode={surface === 'system' ? 'system' : undefined}
   data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}
 >
@@ -37,8 +38,10 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
     {metadataOwner === 'shell' && canonical && <link rel="canonical" href={canonical} />}
     <script>
       import { swapFunctions } from 'astro:transitions/client';
+      import { initThemeController } from '../lib/theme';
       if (typeof window !== 'undefined') {
         Object.assign(window, { __astro_swap: swapFunctions });
+        initThemeController();
       }
     </script>
     {import.meta.env.DEV && (
@@ -80,48 +83,31 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
     <script is:inline>
       (() => {
         const STORAGE_KEY = 'baseline:surface';
-        const isSystemDark = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const resolveSurfaceMode = () => {
+        const applySurface = (root = document.documentElement) => {
+          if (typeof window !== 'undefined' && typeof window.__baseline_applyTheme === 'function') {
+            window.__baseline_applyTheme(undefined, { root, persist: false });
+            return;
+          }
           let saved = null;
           try { saved = localStorage.getItem(STORAGE_KEY); } catch {}
-          if (saved === 'dark' || saved === 'light') {
-            return { pref: saved, mode: null, surface: saved };
-          }
-          return { pref: 'system', mode: 'system', surface: isSystemDark() ? 'dark' : 'light' };
-        };
-        const applySurface = (root = document.documentElement) => {
-          const { pref, mode, surface } = resolveSurfaceMode(root);
-          if (mode === 'system') {
+          const pageDefault = root.getAttribute('data-surface-default') || (root.getAttribute('data-surface-mode') === 'system' ? 'system' : null);
+          const effective = saved || pageDefault;
+          if (effective === 'dark' || effective === 'light') {
+            root.setAttribute('data-surface', effective);
+            root.removeAttribute('data-surface-mode');
+          } else if (effective === 'system') {
             root.setAttribute('data-surface-mode', 'system');
+            root.setAttribute('data-surface', window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
           } else {
+            root.removeAttribute('data-surface');
             root.removeAttribute('data-surface-mode');
           }
-          root.setAttribute('data-surface', surface);
+          const surf = root.getAttribute('data-surface');
           document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
-            btn.setAttribute('aria-pressed', String(surface === 'dark'));
-          });
-          document.querySelectorAll('[data-theme-select]').forEach((sel) => {
-            if (sel.value !== pref) sel.value = pref;
+            btn.setAttribute('aria-pressed', String(surf === 'dark'));
           });
         };
         applySurface(document.documentElement);
-
-        try {
-          const mql = window.matchMedia('(prefers-color-scheme: dark)');
-          mql.addEventListener('change', () => {
-            let saved = null;
-            try { saved = localStorage.getItem(STORAGE_KEY); } catch {}
-            if (!saved || saved === 'system' || document.documentElement.getAttribute('data-surface-mode') === 'system') {
-              applySurface(document.documentElement);
-            }
-          });
-        } catch {}
-
-        window.addEventListener('storage', (event) => {
-          if (event.key === STORAGE_KEY) {
-            applySurface(document.documentElement);
-          }
-        });
         let vtTimer = 0;
         let savedScroll = null;
         let activeMorphCard = null;

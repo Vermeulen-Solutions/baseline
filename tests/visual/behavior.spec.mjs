@@ -715,41 +715,50 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
 
   // 1. Verify ThemeSelect, OS scheme changes, and cross-tab storage synchronization
   const themeSelect = page.locator('#fixture-theme-select');
+  // Initial page has unset surface default and empty storage: root attributes must not be polluted
   await expect(themeSelect).toHaveValue('system');
-  await expect(page.locator('html')).toHaveAttribute('data-surface-mode', 'system');
+  await expect(page.locator('html')).not.toHaveAttribute('data-surface');
+  await expect(page.locator('html')).not.toHaveAttribute('data-surface-mode');
 
-  // Select Dark
+  // Verify unset page default is preserved under dark OS without ThemeSelect action
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await expect(page.locator('html')).not.toHaveAttribute('data-surface');
+  await expect(page.locator('html')).not.toHaveAttribute('data-surface-mode');
+
+  // Select Dark explicitly
   await themeSelect.selectOption('dark');
   await expect(page.locator('html')).toHaveAttribute('data-surface', 'dark');
   await expect(page.locator('html')).not.toHaveAttribute('data-surface-mode');
   expect(await page.evaluate(() => localStorage.getItem('baseline:surface'))).toBe('dark');
 
-  // Select System
+  // Select System explicitly
   await themeSelect.selectOption('system');
   await expect(page.locator('html')).toHaveAttribute('data-surface-mode', 'system');
-  expect(await page.evaluate(() => localStorage.getItem('baseline:surface'))).toBe(null);
+  await expect(page.locator('html')).toHaveAttribute('data-surface', 'dark'); // follows dark OS
+  expect(await page.evaluate(() => localStorage.getItem('baseline:surface'))).toBe('system');
 
-  // System OS color scheme emulation
-  await page.emulateMedia({ colorScheme: 'dark' });
-  await expect(page.locator('html')).toHaveAttribute('data-surface', 'dark');
+  // System OS color scheme emulation under system mode
   await page.emulateMedia({ colorScheme: 'light' });
   await expect(page.locator('html')).toHaveAttribute('data-surface', 'light');
-
-  // Cross-tab storage synchronization
-  await page.evaluate(() => {
-    localStorage.setItem('baseline:surface', 'dark');
-    window.dispatchEvent(new StorageEvent('storage', { key: 'baseline:surface', newValue: 'dark' }));
-  });
-  await expect(themeSelect).toHaveValue('dark');
+  await page.emulateMedia({ colorScheme: 'dark' });
   await expect(page.locator('html')).toHaveAttribute('data-surface', 'dark');
 
-  // Cross-tab storage removal (reset to system)
+  // Cross-tab storage synchronization: switch to light
+  await page.evaluate(() => {
+    localStorage.setItem('baseline:surface', 'light');
+    window.dispatchEvent(new StorageEvent('storage', { key: 'baseline:surface', newValue: 'light' }));
+  });
+  await expect(themeSelect).toHaveValue('light');
+  await expect(page.locator('html')).toHaveAttribute('data-surface', 'light');
+
+  // Removing storage restores page declared default (unset on fixture)
   await page.evaluate(() => {
     localStorage.removeItem('baseline:surface');
     window.dispatchEvent(new StorageEvent('storage', { key: 'baseline:surface', newValue: null }));
   });
   await expect(themeSelect).toHaveValue('system');
-  await expect(page.locator('html')).toHaveAttribute('data-surface-mode', 'system');
+  await expect(page.locator('html')).not.toHaveAttribute('data-surface');
+  await expect(page.locator('html')).not.toHaveAttribute('data-surface-mode');
 
   // 2. Verify Tabs WAI-ARIA initial state and roving tabindex
   const t1Npm = page.locator('#tabset-1 [role="tab"][data-tab-value="npm"]');
@@ -807,10 +816,32 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   expect(printPanelDisplays).toEqual(['block', 'block']);
   await page.emulateMedia({ media: 'screen' });
 
-  // 5. Verify ClientRouter navigation and teardown
+  // 5. Verify ClientRouter navigation, document identity survival, and component teardown
+  const docHandle = await page.evaluateHandle(() => document);
+  await page.evaluate(() => {
+    window.__clientRouterSwapEvents = [];
+    document.addEventListener('astro:before-swap', () => {
+      window.__clientRouterSwapEvents.push('before-swap');
+    });
+    document.addEventListener('astro:after-swap', () => {
+      window.__clientRouterSwapEvents.push('after-swap');
+    });
+  });
+
   await page.locator('#nav-to-b').click();
   await page.waitForSelector('#page-b-marker');
   expect(await page.locator('#fixture-heading').textContent()).toContain('Page B');
+
+  // Assert document identity survived (proves ClientRouter SPA navigation without full reload)
+  const isDocPreserved = await page.evaluate((d) => d === document, docHandle);
+  expect(isDocPreserved).toBe(true);
+
+  // Assert lifecycle swap events actually fired
+  const swapEvents = await page.evaluate(() => window.__clientRouterSwapEvents);
+  expect(swapEvents).toEqual(['before-swap', 'after-swap']);
+
+  // Assert tabs were torn down on Page B (Page B has 0 tabs in DOM)
+  expect(await page.locator('[data-tabs-id]').count()).toBe(0);
 
   // Announcer on Page B must be pristine without lingering copy messages
   const politeOnB = await page.locator('#site-announcer [data-announcer-polite]').textContent();
@@ -819,6 +850,12 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   // Navigate back to Page A and verify re-initialization
   await page.locator('#nav-to-a').click();
   await page.waitForSelector('#p1-npm-content');
+  expect(await page.locator('#fixture-heading').textContent()).toContain('Page A');
+
+  // Document identity still preserved across second navigation
+  expect(await page.evaluate((d) => d === document, docHandle)).toBe(true);
+
+  // Verify returning components initialize once without duplicate listeners
   await expect(page.locator('#tabset-1 [role="tab"][data-tab-value="npm"]')).toHaveAttribute('aria-selected', 'true');
   await page.locator('#tabset-1 [role="tab"][data-tab-value="npm"]').focus();
   await page.keyboard.press('ArrowRight');

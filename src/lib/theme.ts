@@ -14,9 +14,9 @@ export function resolveTheme(preference: ThemePreference, systemDark: boolean): 
 
 /**
  * Safely retrieves the stored theme preference from localStorage.
- * Defaults to 'system' if unconfigured, unavailable, or threw an exception.
+ * Returns null if unconfigured, unavailable, or threw an exception.
  */
-export function getStoredThemePreference(): ThemePreference {
+export function getStoredThemePreference(): ThemePreference | null {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
@@ -27,7 +27,41 @@ export function getStoredThemePreference(): ThemePreference {
   } catch {
     // LocalStorage access may throw in private browsing or restrictive sandboxes
   }
-  return 'system';
+  return null;
+}
+
+/**
+ * Reads the page's declared surface default from HTML root attributes.
+ */
+export function getPageThemeDefault(root: Element = document.documentElement): ThemePreference | null {
+  if (typeof document === 'undefined') return null;
+  const def = root.getAttribute('data-surface-default');
+  if (def === 'system' || def === 'dark' || def === 'light') return def;
+  if (root.getAttribute('data-surface-mode') === 'system') return 'system';
+  return null;
+}
+
+/**
+ * Resolves effective theme preference and surface given stored user preferences and page defaults.
+ */
+export function resolveEffectiveTheme(root: Element = document.documentElement): {
+  preference: ThemePreference | null;
+  surface: 'light' | 'dark' | null;
+} {
+  const stored = getStoredThemePreference();
+  const pageDefault = getPageThemeDefault(root);
+  const effectivePref = stored ?? pageDefault;
+  if (!effectivePref) {
+    return { preference: null, surface: null };
+  }
+  const systemDark =
+    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : false;
+  return {
+    preference: effectivePref,
+    surface: resolveTheme(effectivePref, systemDark),
+  };
 }
 
 /**
@@ -37,7 +71,8 @@ export function setStoredThemePreference(preference: ThemePreference): boolean {
   try {
     if (typeof window !== 'undefined' && window.localStorage) {
       if (preference === 'system') {
-        window.localStorage.removeItem(THEME_STORAGE_KEY);
+        // Explicit system preference is stored to distinguish from unset page default
+        window.localStorage.setItem(THEME_STORAGE_KEY, 'system');
       } else {
         window.localStorage.setItem(THEME_STORAGE_KEY, preference);
       }
@@ -50,40 +85,60 @@ export function setStoredThemePreference(preference: ThemePreference): boolean {
 }
 
 /**
+ * Clears stored theme preference from localStorage.
+ */
+export function clearStoredThemePreference(): boolean {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      window.localStorage.removeItem(THEME_STORAGE_KEY);
+      return true;
+    }
+  } catch {}
+  return false;
+}
+
+/**
  * Applies a theme preference to the document, resolving against system state,
  * persisting to storage, and synchronizing all selects, toggles, and document attributes.
+ *
+ * If preference is omitted, re-syncs the document using current storage and page defaults.
  */
 export function applyTheme(
-  preference: ThemePreference,
-  options?: { persist?: boolean }
-): { preference: ThemePreference; surface: 'light' | 'dark' } {
+  preference?: ThemePreference | null,
+  options?: { persist?: boolean; root?: HTMLElement }
+): { preference: ThemePreference | null; surface: 'light' | 'dark' | null } {
   if (typeof document === 'undefined') {
-    return { preference, surface: 'light' };
+    return { preference: preference ?? null, surface: 'light' };
   }
 
-  const systemDark =
-    typeof window !== 'undefined' && typeof window.matchMedia === 'function'
-      ? window.matchMedia('(prefers-color-scheme: dark)').matches
-      : false;
+  const root = options?.root ?? document.documentElement;
 
-  const surface = resolveTheme(preference, systemDark);
-  const root = document.documentElement;
+  if (preference !== undefined) {
+    if (preference === null) {
+      if (options?.persist !== false) clearStoredThemePreference();
+    } else {
+      if (options?.persist !== false) setStoredThemePreference(preference);
+    }
+  }
 
-  if (preference === 'system') {
+  const { preference: effectivePref, surface } = resolveEffectiveTheme(root);
+
+  if (effectivePref === null) {
+    root.removeAttribute('data-surface');
+    root.removeAttribute('data-surface-mode');
+  } else if (effectivePref === 'system') {
     root.setAttribute('data-surface-mode', 'system');
+    if (surface) root.setAttribute('data-surface', surface);
   } else {
     root.removeAttribute('data-surface-mode');
-  }
-  root.setAttribute('data-surface', surface);
-
-  if (options?.persist !== false) {
-    setStoredThemePreference(preference);
+    if (surface) root.setAttribute('data-surface', surface);
   }
 
   // Synchronize all theme select controls on the page
   document.querySelectorAll<HTMLSelectElement>('[data-theme-select]').forEach((select) => {
-    if (select.value !== preference) {
-      select.value = preference;
+    const targetValue = effectivePref ?? 'system';
+    if (select.value !== targetValue) {
+      select.value = targetValue;
     }
   });
 
@@ -94,9 +149,61 @@ export function applyTheme(
 
   document.dispatchEvent(
     new CustomEvent('baseline:theme-change', {
-      detail: { preference, surface },
+      detail: { preference: effectivePref, surface },
     })
   );
 
-  return { preference, surface };
+  if (typeof window !== 'undefined') {
+    (window as unknown as { __baseline_applyTheme?: typeof applyTheme }).__baseline_applyTheme = applyTheme;
+  }
+
+  return { preference: effectivePref, surface };
+}
+
+let themeControllerInitialized = false;
+
+/**
+ * Initializes listeners for OS prefers-color-scheme changes, storage synchronization,
+ * ClientRouter navigation, and surface toggle interactions.
+ */
+export function initThemeController() {
+  if (typeof window === 'undefined' || themeControllerInitialized) return;
+  themeControllerInitialized = true;
+
+  // 1. Listen for OS color-scheme changes (only affects 'system' mode)
+  try {
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    mql.addEventListener('change', () => {
+      const root = document.documentElement;
+      if (root.getAttribute('data-surface-mode') === 'system') {
+        applyTheme(undefined, { persist: false });
+      }
+    });
+  } catch {}
+
+  // 2. Listen for cross-tab storage changes
+  window.addEventListener('storage', (event) => {
+    if (event.key === THEME_STORAGE_KEY) {
+      applyTheme(undefined, { persist: false });
+    }
+  });
+
+  // 3. Re-synchronize on ClientRouter swaps
+  document.addEventListener('astro:after-swap', () => {
+    applyTheme(undefined, { persist: false });
+  });
+
+  // 4. Delegated surface toggle handler
+  document.addEventListener('click', (event) => {
+    const target = event.target as Element | null;
+    const toggle = target?.closest?.('[data-surface-toggle]');
+    if (!toggle) return;
+    event.preventDefault();
+    const currentSurface = document.documentElement.getAttribute('data-surface');
+    const nextSurface = currentSurface === 'dark' ? 'light' : 'dark';
+    applyTheme(nextSurface);
+  });
+
+  // Initial synchronization for controls and state
+  applyTheme(undefined, { persist: false });
 }
