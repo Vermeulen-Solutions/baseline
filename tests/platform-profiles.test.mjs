@@ -218,3 +218,12 @@ test('source inventory covers the declared surface and shared presentation impor
     }
   }
 });
+
+test('shared form primitive and portable tests ship to all profiles in manifest', () => {
+  for (const profile of ['static', 'static-sveltia']) {
+    const manifest = profileManifest(profile);
+    assert.ok(manifest.files.includes('src/components/Form.astro'), `${profile} must include Form.astro`);
+    assert.ok(manifest.files.includes('src/lib/form-transport.ts'), `${profile} must include form-transport.ts`);
+    assert.ok(manifest.files.includes('tests/forms-skeletons.test.mjs'), `${profile} must include forms-skeletons.test.mjs`);
+  }
+});

@@ -1,3 +1,7 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 /**
  * Profile-aware form transport resolver and bounds validator.
  * Provides progressive enhancement contracts for both static and server/EmDash profiles.
@@ -34,6 +38,45 @@ export interface FormTransportResolution {
 }
 
 /**
+ * Derives the active platform profile by inspecting baseline.config.json.
+ * Inspects both current working directory and relative source root.
+ * Defaults to 'emdash' if baseline.config.json is absent (maintainer root / CMS).
+ */
+export function getInstalledProfile(): 'static' | 'static-sveltia' | 'emdash' {
+  try {
+    const candidates = [
+      path.resolve(process.cwd(), 'baseline.config.json'),
+    ];
+    if (typeof import.meta !== 'undefined' && import.meta.url) {
+      try {
+        const fileDir = path.dirname(fileURLToPath(import.meta.url));
+        candidates.push(path.resolve(fileDir, '../../baseline.config.json'));
+      } catch {
+        // Ignore URL conversion error
+      }
+    }
+
+    for (const configPath of candidates) {
+      if (fs.existsSync(configPath)) {
+        const parsed = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+        if (parsed && typeof parsed.platformProfile === 'string') {
+          const p = parsed.platformProfile.toLowerCase();
+          if (p === 'static' || p === 'static-sveltia') {
+            return p;
+          }
+        }
+        if (parsed && parsed.foundation === 'static') {
+          return 'static';
+        }
+      }
+    }
+  } catch {
+    // Ignore read errors
+  }
+  return 'emdash';
+}
+
+/**
  * Checks whether a candidate URL or action uses an executable or forbidden scheme.
  * Strips whitespace and control characters to prevent evasion (e.g. `java\0script:`).
  */
@@ -62,71 +105,135 @@ export function hasCredentials(candidate: string): boolean {
 }
 
 /**
+ * Parses and normalizes a candidate form action URL/path.
+ * Detects protocol, credentials, and whether the destination is an absolute external URL.
+ */
+function parseNormalizedAction(candidate: string): {
+  isAbsolute: boolean;
+  protocol: string;
+  hasCredentials: boolean;
+  raw: string;
+} | null {
+  const trimmed = candidate.trim();
+  if (!trimmed || isExecutableScheme(trimmed) || hasCredentials(trimmed)) {
+    return null;
+  }
+
+  // Network-path reference (e.g. //outside.test/form)
+  if (trimmed.startsWith('//')) {
+    return {
+      isAbsolute: true,
+      protocol: 'https:',
+      hasCredentials: false,
+      raw: trimmed,
+    };
+  }
+
+  try {
+    const parsed = new URL(trimmed);
+    return {
+      isAbsolute: true,
+      protocol: parsed.protocol.toLowerCase(),
+      hasCredentials: Boolean(parsed.username || parsed.password),
+      raw: trimmed,
+    };
+  } catch {
+    // If it has a scheme prefix (like http:outside.test/form or foo:bar)
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
+      try {
+        const parsedWithBase = new URL(trimmed, 'https://heuristic.test');
+        return {
+          isAbsolute: parsedWithBase.origin !== 'https://heuristic.test',
+          protocol: parsedWithBase.protocol.toLowerCase(),
+          hasCredentials: Boolean(parsedWithBase.username || parsedWithBase.password),
+          raw: trimmed,
+        };
+      } catch {
+        return null;
+      }
+    }
+
+    // Relative path (e.g. /api/contact, ?_action=contact, ./submit)
+    return {
+      isAbsolute: false,
+      protocol: '',
+      hasCredentials: false,
+      raw: trimmed,
+    };
+  }
+}
+
+/**
  * Resolves full transport configuration distinguishing native HTML fallback
- * from enhanced RPC endpoints.
+ * from enhanced RPC endpoints, enforcing profile boundaries and URL protocol safety.
  */
 export function resolveFormTransport(
   config?: FormActionConfig,
-  defaultProfile: 'static' | 'static-sveltia' | 'emdash' = 'emdash'
+  defaultProfile?: 'static' | 'static-sveltia' | 'emdash'
 ): FormTransportResolution {
   if (!config) {
     return { action: '' };
   }
 
+  const effectiveProfile =
+    (typeof config === 'object' && config !== null && config.profile) ||
+    defaultProfile ||
+    getInstalledProfile();
+
   // Handle string input
   if (typeof config === 'string') {
-    const trimmed = config.trim();
-    if (!trimmed || isExecutableScheme(trimmed) || hasCredentials(trimmed)) {
+    const parsed = parseNormalizedAction(config);
+    if (!parsed) {
       return { action: '' };
     }
 
-    const isAbsolute = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//i.test(trimmed);
-
-    if (defaultProfile === 'static' || defaultProfile === 'static-sveltia') {
-      if (isAbsolute) {
+    if (effectiveProfile === 'static' || effectiveProfile === 'static-sveltia') {
+      if (parsed.isAbsolute) {
         // Static profile strictly requires HTTPS external endpoints
-        return /^https:\/\//i.test(trimmed) ? { action: trimmed } : { action: '' };
+        return parsed.protocol === 'https:' ? { action: parsed.raw } : { action: '' };
       }
       // Relative path: reject /_actions and query action triggers in static
-      if (trimmed.startsWith('/_actions') || trimmed.startsWith('?_action=')) {
+      if (parsed.raw.startsWith('/_actions') || parsed.raw.startsWith('?_action=')) {
         return { action: '' };
       }
-      return { action: trimmed };
+      return { action: parsed.raw };
     }
 
     // emdash profile
-    if (isAbsolute) {
-      return /^https?:\/\//i.test(trimmed) ? { action: trimmed } : { action: '' };
+    if (parsed.isAbsolute) {
+      return parsed.protocol === 'https:' || parsed.protocol === 'http:'
+        ? { action: parsed.raw }
+        : { action: '' };
     }
-    return { action: trimmed };
+    return { action: parsed.raw };
   }
 
   // Handle FormEndpointConfig object
-  const profile = config.profile || defaultProfile;
   const endpoint = (config.endpoint || '').trim();
 
   // If endpoint is explicitly provided
   if (endpoint) {
-    if (isExecutableScheme(endpoint) || hasCredentials(endpoint)) {
+    const parsed = parseNormalizedAction(endpoint);
+    if (!parsed) {
       return { action: '' };
     }
 
-    const isAbsolute = /^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//i.test(endpoint);
-
-    if (profile === 'static' || profile === 'static-sveltia') {
-      if (isAbsolute) {
-        return /^https:\/\//i.test(endpoint) ? { action: endpoint } : { action: '' };
+    if (effectiveProfile === 'static' || effectiveProfile === 'static-sveltia') {
+      if (parsed.isAbsolute) {
+        return parsed.protocol === 'https:' ? { action: parsed.raw } : { action: '' };
       }
-      if (endpoint.startsWith('/_actions') || endpoint.startsWith('?_action=')) {
+      if (parsed.raw.startsWith('/_actions') || parsed.raw.startsWith('?_action=')) {
         return { action: '' };
       }
-      return { action: endpoint };
+      return { action: parsed.raw };
     }
 
-    if (isAbsolute) {
-      return /^https?:\/\//i.test(endpoint) ? { action: endpoint } : { action: '' };
+    if (parsed.isAbsolute) {
+      return parsed.protocol === 'https:' || parsed.protocol === 'http:'
+        ? { action: parsed.raw }
+        : { action: '' };
     }
-    return { action: endpoint };
+    return { action: parsed.raw };
   }
 
   // Action resolution for astro:actions
@@ -143,7 +250,7 @@ export function resolveFormTransport(
 
   if (resolvedActionName) {
     // Static profiles cannot resolve or execute server actions
-    if (profile === 'static' || profile === 'static-sveltia') {
+    if (effectiveProfile === 'static' || effectiveProfile === 'static-sveltia') {
       return { action: '' };
     }
 
@@ -163,7 +270,7 @@ export function resolveFormTransport(
  */
 export function resolveFormAction(
   config?: FormActionConfig,
-  defaultProfile: 'static' | 'static-sveltia' | 'emdash' = 'emdash'
+  defaultProfile?: 'static' | 'static-sveltia' | 'emdash'
 ): string {
   return resolveFormTransport(config, defaultProfile).action;
 }

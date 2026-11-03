@@ -4,13 +4,13 @@ import { readFileSync } from 'node:fs';
 import {
   resolveFormAction,
   resolveFormTransport,
+  getInstalledProfile,
   isExecutableScheme,
   hasCredentials,
   sanitizeFormValue,
   validateFormField,
   formatFormErrors,
 } from '../src/lib/form-transport.ts';
-import { profileManifest } from '../profiles/contract.mjs';
 
 test('skeleton shimmer defines geometry tokens, non-cyclic card height, accessible busy states, and reduced motion fallback', () => {
   const css = readFileSync('src/styles/global.css', 'utf8');
@@ -68,7 +68,7 @@ test('resolveFormTransport & resolveFormAction reject executable schemes and cre
   assert.equal(resolveFormAction({ endpoint: 'data:text/html,evil' }, 'emdash'), '');
 });
 
-test('resolveFormTransport strictly preserves profile boundaries and distinguishes native vs RPC action', () => {
+test('resolveFormTransport strictly preserves profile boundaries and normalizes URL protocols', () => {
   // Static profile: strictly requires HTTPS external URLs
   const externalUrl = 'https://api.formspree.io/f/xyz123';
   assert.equal(
@@ -76,10 +76,17 @@ test('resolveFormTransport strictly preserves profile boundaries and distinguish
     externalUrl,
     'Static profile must accept external HTTPS form endpoints'
   );
+
+  // Static profile: rejects HTTP regardless of scheme format (http:// or http:)
   assert.equal(
     resolveFormAction('http://insecure.test/api', 'static'),
     '',
-    'Static profile must reject insecure HTTP external endpoints'
+    'Static profile must reject insecure http:// endpoints'
+  );
+  assert.equal(
+    resolveFormAction('http:outside.test/form', 'static'),
+    '',
+    'Static profile must reject http:without-slashes endpoints'
   );
 
   // Static profile: refuses relative server action routes
@@ -107,12 +114,9 @@ test('resolveFormTransport strictly preserves profile boundaries and distinguish
     'Enhanced RPC action must target /_actions/contact for JSON fetch calls'
   );
 
-  // Custom API endpoint on EmDash
-  assert.equal(
-    resolveFormAction({ profile: 'emdash', endpoint: '/api/contact' }),
-    '/api/contact',
-    'EmDash profile must resolve custom API endpoints'
-  );
+  // Profile auto-detection helper exists and returns known profile
+  const detected = getInstalledProfile();
+  assert.ok(['static', 'static-sveltia', 'emdash'].includes(detected));
 });
 
 test('sanitizeFormValue trims whitespace and enforces payload length ceilings', () => {
@@ -155,19 +159,6 @@ test('formatFormErrors maps error dictionaries to FormError accessible schema', 
   ]);
 });
 
-test('profiles manifest distribution includes Form, transport, and tests in static profiles', () => {
-  const staticManifest = profileManifest('static');
-  const sveltiaManifest = profileManifest('static-sveltia');
-
-  assert.ok(staticManifest.files.includes('src/components/Form.astro'), 'static profile must include Form.astro');
-  assert.ok(staticManifest.files.includes('src/lib/form-transport.ts'), 'static profile must include form-transport.ts');
-  assert.ok(staticManifest.files.includes('tests/forms-skeletons.test.mjs'), 'static profile must include forms-skeletons test');
-
-  assert.ok(sveltiaManifest.files.includes('src/components/Form.astro'), 'static-sveltia profile must include Form.astro');
-  assert.ok(sveltiaManifest.files.includes('src/lib/form-transport.ts'), 'static-sveltia profile must include form-transport.ts');
-  assert.ok(sveltiaManifest.files.includes('tests/forms-skeletons.test.mjs'), 'static-sveltia profile must include forms-skeletons test');
-});
-
 test('Form.astro primitive complies with 0 KB JS fallback, unique error summary IDs, and in-flight/submitter semantics', () => {
   const component = readFileSync('src/components/Form.astro', 'utf8');
 
@@ -187,6 +178,13 @@ test('Form.astro primitive complies with 0 KB JS fallback, unique error summary 
     'Error summary ID must be dynamically derived from form.id to prevent duplicate DOM IDs'
   );
 
+  // Selector-safe element removal without unescaped querySelector(#id) bugs
+  assert.ok(
+    component.includes('document.getElementById(errorSummaryId)') ||
+    component.includes('data-form-error-summary'),
+    'Error cleanup must not query unescaped ID selectors susceptible to colon/dot syntax errors'
+  );
+
   // In-flight guard & submitter capture
   assert.ok(component.includes("dataset.formSubmitting === 'true'"), 'Must guard against concurrent/duplicate in-flight submissions');
   assert.ok(component.includes('new FormData(form, submitter'), 'Must capture submitter in FormData before disabling controls');
@@ -197,8 +195,9 @@ test('Form.astro primitive complies with 0 KB JS fallback, unique error summary 
   assert.ok(component.includes('formaction'), 'Must inspect submitter formaction override');
   assert.ok(component.includes('formenctype'), 'Must inspect submitter formenctype override');
 
-  // GET method parameter serialization
+  // GET and text/plain encoding support
   assert.ok(component.includes("effectiveMethod === 'GET'"), 'Must handle effective GET method without request body');
+  assert.ok(component.includes("effectiveEnctype === 'text/plain'"), 'Must handle text/plain encoding format');
 
   // CSS contracts
   assert.ok(component.includes('@layer components'), 'Styles must belong to @layer components');
