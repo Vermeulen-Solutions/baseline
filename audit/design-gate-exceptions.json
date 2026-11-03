@@ -50,8 +50,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Neutral shared foundation: existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header; no client palette/type/layout direction. Exact LF-normalized source hash.",
-    "sha256": "4b5407bd16525b99cef71bf44990a7f14557c11b570e6299bc9db67807d49ad6"
+    "reason": "Neutral shared foundation: existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback; no client palette/type/layout direction. Exact LF-normalized source hash.",
+    "sha256": "aebe79d673e044e4daf02afc3b689253bb504fd459be438671e6ce1f659b3387"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -271,8 +271,8 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, and deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail); preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "db6c95c96b0c7731bb8180e7b34b922c70265fc9b45ea129eb4d289264d9a7cf"
+    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), and deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail); preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "cb8c0324c329641fa28815ab4f1b8a00e50bfe7f0ae2ae1283289e2340ecbf83"
   },
   {
     "path": "src/components/EmDashImage.astro",

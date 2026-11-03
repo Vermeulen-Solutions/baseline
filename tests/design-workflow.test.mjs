@@ -125,6 +125,7 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
     '.vt-morph', '.svg-icon', '.skeleton-shimmer', 'html[data-vt-loading]', '.section-defer', '@starting-style',
     '[data-surface-icon="dark"]', '[data-surface-icon="light"]', 'html[data-surface="dark"]', 'html[data-surface-switching]',
     '::view-transition-old(root)', '::view-transition-new(root)',
+    ':root[data-vt-direction="forward"]', ':root[data-vt-direction="back"]',
   ]) {
     assert.ok(css.includes(selector), `Missing structural selector ${selector}`);
   }
@@ -134,7 +135,8 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
     '[data-reveal]', '[data-filter-root]', '[data-sticky-header]', 'data-surface-mode', 'data-surface-switching',
     'data-vt-loading', 'data-vt-noscroll', 'hero-media', 'hero-title',
     '_vt_delay', '_vt_fail', '__BASELINE_VT_DELAY__', '__BASELINE_VT_FAIL__',
-    'activeNavToken', 'activeTransitionPending'
+    'activeNavToken', 'activeTransitionPending',
+    'data-vt-direction', 'data-vt-replace', 'data-vt-persist', 'activeDirection'
   ]) {
     assert.ok(siteShell.includes(hook), `SiteShell must include declarative hook ${hook}`);
   }
@@ -230,4 +232,26 @@ test('SiteShell inline script excludes import.meta from production and isolates 
   assert.ok(mainScript.includes('pageshow'), 'SiteShell must attach pageshow listener for BFCache restoration');
   assert.ok(mainScript.includes('event.persisted'), 'BFCache restoration must check event.persisted');
   assert.ok(mainScript.includes("signal.addEventListener('abort'"), 'SiteShell must bind signal abort listener to navigation teardown');
+
+  // Directional navigation (TurnSignal)
+  assert.ok(mainScript.includes('data-vt-direction'), 'SiteShell must set data-vt-direction attribute');
+  assert.ok(mainScript.includes('clearDirection'), 'SiteShell must define clearDirection helper');
+  assert.ok(mainScript.includes('activeDirection'), 'SiteShell must track activeDirection state');
+
+  // Targeted swap and persistent element swap (ReplacementSwap)
+  assert.ok(mainScript.includes('data-vt-replace'), 'SiteShell must support targeted container replacement via data-vt-replace');
+  assert.ok(mainScript.includes('data-vt-persist'), 'SiteShell must preserve interactive elements via data-vt-persist');
+});
+
+test('global.css defines directional navigation keyframes and reduced-motion fallback', () => {
+  const css = readFileSync('src/styles/global.css', 'utf8');
+  for (const kf of ['vt-slide-out-left', 'vt-slide-in-right', 'vt-slide-out-right', 'vt-slide-in-left']) {
+    assert.ok(css.includes(`@keyframes ${kf}`), `Missing directional keyframe ${kf}`);
+  }
+  assert.ok(css.includes(':root[data-vt-direction="forward"]::view-transition-old(root)'));
+  assert.ok(css.includes(':root[data-vt-direction="forward"]::view-transition-new(root)'));
+  assert.ok(css.includes(':root[data-vt-direction="back"]::view-transition-old(root)'));
+  assert.ok(css.includes(':root[data-vt-direction="back"]::view-transition-new(root)'));
+  assert.ok(css.includes(':root[data-vt-direction]::view-transition-old(root)'));
+  assert.ok(css.includes(':root[data-vt-direction]::view-transition-new(root)'));
 });

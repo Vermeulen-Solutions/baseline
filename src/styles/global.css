@@ -312,6 +312,44 @@
 		animation-timing-function: var(--ease-smooth);
 	}
 
+	@keyframes vt-slide-out-left {
+		from { transform: translateX(0); opacity: 1; }
+		to { transform: translateX(-1.5rem); opacity: 0; }
+	}
+	@keyframes vt-slide-in-right {
+		from { transform: translateX(1.5rem); opacity: 0; }
+		to { transform: translateX(0); opacity: 1; }
+	}
+	@keyframes vt-slide-out-right {
+		from { transform: translateX(0); opacity: 1; }
+		to { transform: translateX(1.5rem); opacity: 0; }
+	}
+	@keyframes vt-slide-in-left {
+		from { transform: translateX(-1.5rem); opacity: 0; }
+		to { transform: translateX(0); opacity: 1; }
+	}
+
+	:root[data-vt-direction="forward"]::view-transition-old(root) {
+		animation: 180ms var(--ease-smooth) both vt-slide-out-left;
+	}
+	:root[data-vt-direction="forward"]::view-transition-new(root) {
+		animation: 240ms var(--ease-smooth) both vt-slide-in-right;
+	}
+
+	:root[data-vt-direction="back"]::view-transition-old(root) {
+		animation: 180ms var(--ease-smooth) both vt-slide-out-right;
+	}
+	:root[data-vt-direction="back"]::view-transition-new(root) {
+		animation: 240ms var(--ease-smooth) both vt-slide-in-left;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		:root[data-vt-direction]::view-transition-old(root),
+		:root[data-vt-direction]::view-transition-new(root) {
+			animation: none !important;
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		*,
 		*::before,

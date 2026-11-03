@@ -91,10 +91,16 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         let activeNavToken = 0;
         let activePreparedNavToken = 0;
         let activeTransitionPending = false;
+        let activeDirection = null;
         let currentViewTransition = null;
         let currentAssignedElements = [];
         let inFlightWarmAbort = null;
         let hoverTimer = 0;
+        const escapeSelector = (s) => (typeof CSS !== 'undefined' && typeof CSS.escape === 'function' ? CSS.escape(s) : s.replace(/([^\w-])/g, '\\$1'));
+        const clearDirection = () => {
+          document.documentElement.removeAttribute('data-vt-direction');
+          activeDirection = null;
+        };
         const MAX_WARMED = 30;
         const warmedPages = new Map();
         const warmedImages = new Map();
@@ -239,6 +245,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
               if (navToken === activeNavToken) {
                 clearVtLoading();
                 cleanupMorphNames();
+                clearDirection();
                 savedScroll = null;
               }
             }, { once: true });
@@ -263,6 +270,35 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           // Derive active card morphing intent directly from the source element
           const card = sourceEl?.closest('[data-vt-card], .card.card--clickable, .card');
           activeMorphCard = card && card.querySelector('.card-media, [data-vt-media]') ? card : null;
+
+          // Derive navigation direction (TurnSignal pattern): honors explicit data-vt-direction, router direction, or path depth
+          let direction = 'forward';
+          if (event && 'direction' in event && (event['direction'] === 'back' || event['direction'] === 'backward')) {
+            direction = 'back';
+          } else if (event && 'direction' in event && event['direction'] === 'forward') {
+            direction = 'forward';
+          } else {
+            const overrideDir = sourceEl?.closest('[data-vt-direction]')?.getAttribute('data-vt-direction');
+            if (overrideDir === 'back' || overrideDir === 'backward') {
+              direction = 'back';
+            } else if (overrideDir === 'forward') {
+              direction = 'forward';
+            } else {
+              const fromUrl = event && 'from' in event && event.from ? new URL(event.from, location.href) : location;
+              const toUrl = event && 'to' in event && event.to ? new URL(event.to, fromUrl.href || location.href) : null;
+              if (toUrl && toUrl.origin === fromUrl.origin) {
+                const fromDepth = fromUrl.pathname.replace(/\/+$/, '').split('/').filter(Boolean).length;
+                const toDepth = toUrl.pathname.replace(/\/+$/, '').split('/').filter(Boolean).length;
+                if (toDepth < fromDepth) {
+                  direction = 'back';
+                } else if (toDepth > fromDepth) {
+                  direction = 'forward';
+                }
+              }
+            }
+          }
+          activeDirection = direction;
+          document.documentElement.setAttribute('data-vt-direction', direction);
 
           const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           let leavingHero = false;
@@ -340,6 +376,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                 if (navToken === activeNavToken) {
                   clearVtLoading();
                   cleanupMorphNames();
+                  clearDirection();
                   savedScroll = null;
                 }
                 throw err;
@@ -355,7 +392,86 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         document.addEventListener('astro:before-swap', (event) => {
           if (event && 'newDocument' in event && event.newDocument) {
             applySurface(event.newDocument.documentElement);
+            if (activeDirection) {
+              event.newDocument.documentElement.setAttribute('data-vt-direction', activeDirection);
+            }
           }
+
+          // Targeted Replacement Swap & Persistent Element Swap
+          const newDoc = event && 'newDocument' in event ? event.newDocument : null;
+          if (newDoc && typeof event.swap === 'function') {
+            const replaceTargets = Array.from(document.querySelectorAll('[data-vt-replace]'));
+            const persistElements = Array.from(document.querySelectorAll('[data-vt-persist]'));
+
+            if (replaceTargets.length > 0 || persistElements.length > 0) {
+              const defaultSwap = event.swap;
+
+              event.swap = () => {
+                let canTargetedSwap = replaceTargets.length > 0;
+                const pairs = [];
+                if (canTargetedSwap) {
+                  for (const currentEl of replaceTargets) {
+                    const tag = currentEl.getAttribute('data-vt-replace');
+                    const selector = tag
+                      ? `[data-vt-replace="${escapeSelector(tag)}"]`
+                      : (currentEl.id ? `#${escapeSelector(currentEl.id)}` : currentEl.tagName.toLowerCase());
+                    const incomingEl = newDoc.querySelector(selector);
+                    if (incomingEl) {
+                      pairs.push({ currentEl, incomingEl });
+                    } else {
+                      canTargetedSwap = false;
+                      break;
+                    }
+                  }
+                }
+
+                if (canTargetedSwap && pairs.length > 0) {
+                  // If persistent elements are inside targeted containers, transplant them so their live state survives
+                  persistElements.forEach((persistEl) => {
+                    if (replaceTargets.some((target) => target.contains(persistEl))) {
+                      const key = persistEl.getAttribute('data-vt-persist');
+                      const selector = key
+                        ? `[data-vt-persist="${escapeSelector(key)}"]`
+                        : (persistEl.id ? `#${escapeSelector(persistEl.id)}` : null);
+                      if (selector) {
+                        const incomingPersist = newDoc.querySelector(selector);
+                        if (incomingPersist && incomingPersist !== persistEl) {
+                          incomingPersist.replaceWith(persistEl);
+                        }
+                      }
+                    }
+                  });
+
+                  // Targeted replacement: replace only the marked containers
+                  pairs.forEach(({ currentEl, incomingEl }) => {
+                    currentEl.replaceWith(incomingEl);
+                  });
+
+                  // Synchronize head metadata and title from incoming document
+                  document.title = newDoc.title;
+                  if (newDoc.documentElement.lang) {
+                    document.documentElement.lang = newDoc.documentElement.lang;
+                  }
+                } else {
+                  // Full / default swap: transplant live persistent elements into newDoc so they survive defaultSwap
+                  persistElements.forEach((persistEl) => {
+                    const key = persistEl.getAttribute('data-vt-persist');
+                    const selector = key
+                      ? `[data-vt-persist="${escapeSelector(key)}"]`
+                      : (persistEl.id ? `#${escapeSelector(persistEl.id)}` : null);
+                    if (selector) {
+                      const incomingPersist = newDoc.querySelector(selector);
+                      if (incomingPersist && incomingPersist !== persistEl) {
+                        incomingPersist.replaceWith(persistEl);
+                      }
+                    }
+                  });
+                  defaultSwap();
+                }
+              };
+            }
+          }
+
           const currentNav = activeNavToken;
           const vt = event && 'viewTransition' in event ? event['viewTransition'] : null;
           if (vt && typeof vt.finished?.finally === 'function') {
@@ -367,6 +483,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                 if (currentNav === activeNavToken) {
                   activeTransitionPending = false;
                   cleanupMorphNames();
+                  clearDirection();
                 }
               }
             });
@@ -375,6 +492,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
             activeTransitionPending = false;
             if (currentNav === activeNavToken) {
               cleanupMorphNames();
+              clearDirection();
             }
           }
         });
@@ -401,6 +519,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
             currentViewTransition = null;
             activeTransitionPending = false;
             cleanupMorphNames();
+            clearDirection();
             applySurface(document.documentElement);
             syncStickyHeader();
           }
@@ -418,6 +537,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         const initPage = () => {
           if (!activeTransitionPending && !currentViewTransition) {
             cleanupMorphNames();
+            clearDirection();
           }
           syncStickyHeader();
           const currentSurface = document.documentElement.getAttribute('data-surface');
