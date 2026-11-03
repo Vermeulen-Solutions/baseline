@@ -1,4 +1,8 @@
 {
+  "component-container.test.mjs": {
+    "tier": "unit",
+    "reason": "Container API semantic component rendering, heading structure, link ownership, and proxy assertions"
+  },
   "media-preparation.test.mjs": {
     "tier": "rehearsal",
     "reason": "Bounded Sharp subprocesses, real image encoding, original archives and resumable file preparation"
