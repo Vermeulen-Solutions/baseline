@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import tailwindcss from "@tailwindcss/vite";
 import { loadEnv } from "vite";
 import devTools from "./scripts/dev-tools-integration.mjs";
+import baselineFeatures from "./scripts/baseline-features-integration.mjs";
 import { namedIconImports, clientBundleReport } from "./scripts/client-bundles.mjs";
 
 const env = loadEnv(process.env.NODE_ENV || "development", process.cwd(), "");
@@ -43,6 +44,7 @@ export default defineConfig({
 	},
 
   integrations: [
+      baselineFeatures(),
       devTools({ fixtures: testFixtures }),
       react(),
       emdash({

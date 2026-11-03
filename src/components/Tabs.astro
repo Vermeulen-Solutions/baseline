@@ -1,0 +1,191 @@
+---
+import type { TabDefinition } from '../lib/tabs';
+
+export interface Props {
+  id: string;
+  label: string;
+  items: readonly TabDefinition[];
+  defaultValue?: string;
+  orientation?: 'horizontal' | 'vertical';
+  activation?: 'automatic' | 'manual';
+  syncKey?: string;
+  persist?: boolean;
+}
+
+const {
+  id,
+  label,
+  items = [],
+  defaultValue,
+  orientation = 'horizontal',
+  activation = 'automatic',
+  syncKey,
+  persist = false,
+} = Astro.props as Props;
+
+if (!id) {
+  throw new Error('Tabs component requires an explicit "id" prop.');
+}
+
+if (!label) {
+  throw new Error('Tabs component requires an explicit "label" prop for accessibility.');
+}
+
+if (!items || items.length === 0) {
+  throw new Error('Tabs component requires a non-empty "items" array.');
+}
+
+const seenValues = new Set<string>();
+for (const item of items) {
+  if (!item.value) {
+    throw new Error('Each tab item must specify a non-empty "value".');
+  }
+  if (!item.label) {
+    throw new Error(`Tab item "${item.value}" must have a non-empty "label".`);
+  }
+  if (seenValues.has(item.value)) {
+    throw new Error(`Duplicate tab item value "${item.value}" detected in Tabs "${id}".`);
+  }
+  seenValues.add(item.value);
+}
+
+if (persist && !syncKey) {
+  throw new Error('Tabs with "persist: true" require a "syncKey" prop.');
+}
+
+const defaultVal = defaultValue && seenValues.has(defaultValue) ? defaultValue : items[0].value;
+---
+
+<div
+  class="tabs"
+  data-tabs-id={id}
+  data-default-value={defaultVal}
+  data-orientation={orientation}
+  data-activation={activation}
+  data-sync-key={syncKey}
+  data-persist={persist ? 'true' : 'false'}
+>
+  <div
+    class="tabs__list"
+    role="tablist"
+    aria-label={label}
+    aria-orientation={orientation}
+    data-tabs-list={id}
+  >
+    {items.map((item) => {
+      const tabId = `${id}-tab-${item.value}`;
+      const panelId = `${id}-panel-${item.value}`;
+      const isSelected = item.value === defaultVal;
+      return (
+        <button
+          type="button"
+          role="tab"
+          id={tabId}
+          aria-controls={panelId}
+          aria-selected={isSelected ? 'true' : 'false'}
+          tabindex={isSelected ? 0 : -1}
+          data-tab-value={item.value}
+          class="tabs__tab"
+        >
+          {item.label}
+        </button>
+      );
+    })}
+  </div>
+  <div class="tabs__panels" data-tabs-panels={id}>
+    {items.map((item) => {
+      const tabId = `${id}-tab-${item.value}`;
+      const panelId = `${id}-panel-${item.value}`;
+      return (
+        <div
+          id={panelId}
+          role="tabpanel"
+          aria-labelledby={tabId}
+          tabindex={item.panelTabIndex ?? 0}
+          data-tab-value={item.value}
+          data-tab-panel={id}
+          class="tabs__panel"
+        >
+          <slot name={item.value} />
+        </div>
+      );
+    })}
+  </div>
+</div>
+
+<script>
+  import { initTabs } from '../lib/tabs';
+
+  if (typeof document !== 'undefined') {
+    initTabs(document);
+    document.addEventListener('astro:page-load', () => initTabs(document));
+  }
+</script>
+
+<style>
+  @layer components {
+    .tabs {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs, 0.5rem);
+      margin-block: var(--space-sm, 1rem);
+    }
+
+    .tabs[data-orientation="vertical"] {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+
+    .tabs__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2xs, 0.25rem);
+      border-bottom: 1px solid var(--surface-border, currentColor);
+      padding-bottom: var(--space-2xs, 0.25rem);
+    }
+
+    .tabs[data-orientation="vertical"] .tabs__list {
+      flex-direction: column;
+      border-bottom: none;
+      border-right: 1px solid var(--surface-border, currentColor);
+      padding-right: var(--space-xs, 0.5rem);
+      padding-bottom: 0;
+    }
+
+    .tabs__tab {
+      padding: var(--space-2xs, 0.25rem) var(--space-sm, 0.75rem);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm, 0.25rem);
+      color: inherit;
+      font: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 120ms ease, border-color 120ms ease;
+    }
+
+    .tabs__tab:hover {
+      background: color-mix(in oklch, currentColor 8%, transparent);
+    }
+
+    .tabs__tab[aria-selected="true"] {
+      background: var(--surface-elevated, color-mix(in oklch, currentColor 12%, transparent));
+      border-color: var(--surface-border, currentColor);
+    }
+
+    .tabs__panels {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .tabs__panel {
+      padding: var(--space-xs, 0.5rem) 0;
+    }
+
+    /* Progressive enhancement: hide inactive panels only after enhancement */
+    :where([data-tabs-enhanced="true"]) :where(.tabs__panel[hidden]) {
+      display: none !important;
+    }
+  }
+</style>

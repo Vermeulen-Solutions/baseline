@@ -156,6 +156,10 @@
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/baseline-features-integration.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "scripts/check-art-direction.mjs": {
       "disposition": "shared",
       "static": "copy"
@@ -332,6 +336,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/components/Announcer.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/components/CMSPartnersPanel.astro": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -341,6 +349,10 @@
       "static": "copy"
     },
     "src/components/Container.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/CopyButton.astro": {
       "disposition": "shared",
       "static": "copy"
     },
@@ -412,6 +424,18 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/lib/announce.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/capabilities.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/clipboard.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/lib/form-recovery.ts": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -427,6 +451,10 @@
     "src/lib/justified-gallery.ts": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/locale.ts": {
+      "disposition": "shared",
+      "static": "copy"
     },
     "src/lib/partner.ts": {
       "disposition": "shared",
@@ -457,6 +485,14 @@
       "static": "copy"
     },
     "src/lib/sitemap.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/tabs.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/theme.ts": {
       "disposition": "shared",
       "static": "copy"
     },
@@ -523,6 +559,10 @@
     "tests/component-container.test.mjs": {
       "disposition": "shared",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/components-primitives.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     },
     "tests/database-tooling.test.mjs": {
       "disposition": "emdash-only",
@@ -940,6 +980,14 @@
       "static": "copy"
     },
     "src/components/Sidebar.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Tabs.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/ThemeSelect.astro": {
       "disposition": "shared",
       "static": "copy"
     },

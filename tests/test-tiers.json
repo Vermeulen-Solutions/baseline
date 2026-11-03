@@ -67,6 +67,10 @@
     "tier": "unit",
     "reason": "Dual-transport form resolution, progressive enhancement contracts, and skeleton geometry token physics"
   },
+  "components-primitives.test.mjs": {
+    "tier": "unit",
+    "reason": "Capabilities virtual facts, locale canonicalization/direction, theme resolution, tabs ARIA contracts, and announcer/clipboard routing"
+  },
   "importer-fidelity.test.mjs": {
     "tier": "unit",
     "reason": "Synthetic WXR/Exporter oracles; installed-endpoint rehearsal runs once in the migration pilot"

@@ -1,0 +1,147 @@
+---
+export interface Props {
+  targetId: string;
+  label?: string;
+  copiedLabel?: string;
+  copiedMessage?: string;
+  errorMessage?: string;
+  announcerId?: string;
+  source?: 'text' | 'value';
+  timeout?: number;
+}
+
+const {
+  targetId,
+  label = 'Copy to clipboard',
+  copiedLabel = 'Copied!',
+  copiedMessage = 'Copied to clipboard',
+  errorMessage = 'Failed to copy',
+  announcerId = 'site-announcer',
+  source = 'text',
+  timeout = 2000,
+} = Astro.props as Props;
+
+if (!targetId) {
+  throw new Error('CopyButton requires an explicit "targetId" prop.');
+}
+---
+
+<button
+  type="button"
+  class="copy-button"
+  data-copy-button
+  data-target-id={targetId}
+  data-initial-label={label}
+  data-copied-label={copiedLabel}
+  data-copied-message={copiedMessage}
+  data-error-message={errorMessage}
+  data-announcer-id={announcerId}
+  data-source={source}
+  data-timeout={timeout}
+  aria-label={label}
+>
+  <span class="copy-button__text" data-copy-text>{label}</span>
+</button>
+
+<script>
+  import { copyText, extractCopyableText } from '../lib/clipboard';
+  import { announce } from '../lib/announce';
+
+  interface CopyButtonElement extends HTMLButtonElement {
+    _resetTimer?: number;
+  }
+
+  function initCopyButtons() {
+    const buttons = document.querySelectorAll<CopyButtonElement>('[data-copy-button]');
+
+    buttons.forEach((button) => {
+      if ((button as unknown as { _copyInit?: boolean })._copyInit) return;
+      (button as unknown as { _copyInit?: boolean })._copyInit = true;
+
+      button.addEventListener('click', async () => {
+        const targetId = button.getAttribute('data-target-id');
+        const copiedMessage = button.getAttribute('data-copied-message') || 'Copied to clipboard';
+        const errorMessage = button.getAttribute('data-error-message') || 'Failed to copy';
+        const announcerId = button.getAttribute('data-announcer-id') || 'site-announcer';
+        const source = (button.getAttribute('data-source') as 'text' | 'value') || 'text';
+        const timeoutMs = parseInt(button.getAttribute('data-timeout') || '2000', 10);
+        const textSpan = button.querySelector<HTMLElement>('[data-copy-text]');
+        const copiedLabel = button.getAttribute('data-copied-label') || 'Copied!';
+        const initialLabel = button.getAttribute('data-initial-label') || 'Copy to clipboard';
+
+        if (!targetId) return;
+        const target = document.getElementById(targetId);
+        if (!target) return;
+
+        const textToCopy = extractCopyableText(target, source);
+        if (!textToCopy) return;
+
+        if (button._resetTimer) {
+          clearTimeout(button._resetTimer);
+        }
+
+        try {
+          await copyText(textToCopy);
+          button.setAttribute('data-state', 'copied');
+          if (textSpan) textSpan.textContent = copiedLabel;
+          announce(announcerId, copiedMessage, { priority: 'polite' });
+
+          button._resetTimer = window.setTimeout(() => {
+            button.removeAttribute('data-state');
+            if (textSpan) textSpan.textContent = initialLabel;
+            delete button._resetTimer;
+          }, timeoutMs);
+        } catch {
+          button.setAttribute('data-state', 'error');
+          if (textSpan) textSpan.textContent = errorMessage;
+          announce(announcerId, errorMessage, { priority: 'assertive' });
+
+          button._resetTimer = window.setTimeout(() => {
+            button.removeAttribute('data-state');
+            if (textSpan) textSpan.textContent = initialLabel;
+            delete button._resetTimer;
+          }, timeoutMs);
+        }
+      });
+    });
+  }
+
+  if (typeof document !== 'undefined') {
+    initCopyButtons();
+    document.addEventListener('astro:page-load', initCopyButtons);
+  }
+</script>
+
+<style>
+  @layer components {
+    .copy-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3xs, 0.25rem);
+      padding: var(--space-3xs, 0.25rem) var(--space-2xs, 0.5rem);
+      font: inherit;
+      font-size: var(--text-sm, 0.875rem);
+      color: inherit;
+      background: var(--surface-elevated, transparent);
+      border: 1px solid var(--surface-border, currentColor);
+      border-radius: var(--radius-sm, 0.25rem);
+      cursor: pointer;
+      user-select: none;
+      transition: background 150ms ease, border-color 150ms ease;
+    }
+
+    .copy-button:hover {
+      background: color-mix(in oklch, currentColor 8%, transparent);
+    }
+
+    .copy-button[data-state="copied"] {
+      border-color: var(--color-action, currentColor);
+    }
+
+    .copy-button[data-state="error"] {
+      border-color: #e53e3e;
+      color: #e53e3e;
+    }
+  }
+</style>

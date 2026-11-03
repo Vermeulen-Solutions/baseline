@@ -8,17 +8,19 @@ interface Props {
   /** Platform heads own description/canonical when using EmDashHead or a static metadata renderer. */
   metadataOwner?: 'shell' | 'platform';
   lang?: string;
+  dir?: 'ltr' | 'rtl';
   skipLinkLabel?: string;
   spacingPolicy?: 'legacy' | 'automatic-v2';
   /** Optional initial root surface mode ('light' | 'dark' | 'system') for sites with a daylight/dark toggle. */
   surface?: 'light' | 'dark' | 'system';
 }
 
-const { title, description, canonical, metadataOwner = 'shell', lang = 'en', skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', surface } = Astro.props;
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir = 'ltr', skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', surface } = Astro.props;
 ---
 <!doctype html>
 <html
   lang={lang}
+  dir={dir}
   data-spacing-policy={spacingPolicy === 'automatic-v2' ? 'automatic-v2' : 'legacy'}
   data-surface={surface === 'dark' || surface === 'light' ? surface : undefined}
   data-surface-mode={surface === 'system' ? 'system' : undefined}
@@ -80,6 +82,9 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           try {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved === 'dark' || saved === 'light') return saved;
+            if (saved === 'system') {
+              return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
           } catch {}
           if (root.getAttribute('data-surface-mode') === 'system') {
             return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -91,6 +96,23 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           if (resolved) root.setAttribute('data-surface', resolved);
         };
         applySurface(document.documentElement);
+
+        try {
+          const mql = window.matchMedia('(prefers-color-scheme: dark)');
+          mql.addEventListener('change', () => {
+            let saved = null;
+            try { saved = localStorage.getItem(STORAGE_KEY); } catch {}
+            if (!saved || saved === 'system' || document.documentElement.getAttribute('data-surface-mode') === 'system') {
+              applySurface(document.documentElement);
+            }
+          });
+        } catch {}
+
+        window.addEventListener('storage', (event) => {
+          if (event.key === STORAGE_KEY) {
+            applySurface(document.documentElement);
+          }
+        });
         let vtTimer = 0;
         let savedScroll = null;
         let activeMorphCard = null;

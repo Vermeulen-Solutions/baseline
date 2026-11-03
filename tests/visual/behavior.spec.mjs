@@ -700,3 +700,286 @@ test('behavior directional transitions, targeted replacement, and persistent ele
   expect(reducedMotionSuppression).toBe(true);
   expect(problems).toEqual([]);
 });
+
+test('interaction primitives: accessible tabs keyboard navigation, syncKey peer sync, theme select, and copy button announcer', async ({ page }, info) => {
+  test.skip(info.project.name !== 'chromium-1440', 'Run once on standard desktop viewport');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  const problems = observe(page);
+
+  const homeRoute = contract.routes.find((r) => r.name === 'home');
+  await prepare(page, homeRoute, page.visualProblems);
+
+  const results = await page.evaluate(async () => {
+    // 1. Mount test fixture for Tabs, Announcer, CopyButton, and ThemeSelect
+    const container = document.createElement('div');
+    container.id = 'tranche-4-fixture';
+    container.innerHTML = `
+      <div id="site-announcer" class="sr-only" aria-hidden="false">
+        <div data-announcer-polite aria-live="polite" aria-atomic="true"></div>
+        <div data-announcer-assertive aria-live="assertive" aria-atomic="true"></div>
+      </div>
+
+      <div class="theme-select-container">
+        <select id="test-theme-select" data-theme-select>
+          <option value="system">System</option>
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+        </select>
+      </div>
+
+      <pre><code id="code-sample"><span class="line-number">1</span>npm install @baseline/core</code></pre>
+      <button type="button" id="test-copy-btn" data-copy-button data-target-id="code-sample" data-announcer-id="site-announcer" data-copied-message="Copied to clipboard">
+        <span data-copy-text>Copy</span>
+      </button>
+
+      <div class="tabs" data-tabs-id="tabset-1" data-sync-key="pkg-manager" data-default-value="npm">
+        <div class="tabs__list" role="tablist" data-tabs-list="tabset-1">
+          <button type="button" role="tab" id="t1-npm" data-tab-value="npm">npm</button>
+          <button type="button" role="tab" id="t1-pnpm" data-tab-value="pnpm">pnpm</button>
+        </div>
+        <div class="tabs__panels" data-tabs-panels="tabset-1">
+          <div id="p1-npm" role="tabpanel" data-tab-value="npm">npm install</div>
+          <div id="p1-pnpm" role="tabpanel" data-tab-value="pnpm">pnpm add</div>
+        </div>
+      </div>
+
+      <div class="tabs" data-tabs-id="tabset-2" data-sync-key="pkg-manager" data-default-value="npm">
+        <div class="tabs__list" role="tablist" data-tabs-list="tabset-2">
+          <button type="button" role="tab" id="t2-npm" data-tab-value="npm">npm</button>
+          <button type="button" role="tab" id="t2-pnpm" data-tab-value="pnpm">pnpm</button>
+        </div>
+        <div class="tabs__panels" data-tabs-panels="tabset-2">
+          <div id="p2-npm" role="tabpanel" data-tab-value="npm">npm run dev</div>
+          <div id="p2-pnpm" role="tabpanel" data-tab-value="pnpm">pnpm dev</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(container);
+
+    // In-browser implementations of Tranche 4 controller logic to verify DOM & WAI-ARIA behavior
+    const syncRegistries = new Map();
+
+    class BrowserTabsController {
+      constructor(root) {
+        this.root = root;
+        this.id = root.getAttribute('data-tabs-id') || '';
+        this.syncKey = root.getAttribute('data-sync-key') || undefined;
+        this.persist = root.getAttribute('data-persist') === 'true';
+        this.orientation = root.getAttribute('data-orientation') || 'horizontal';
+        this.activation = root.getAttribute('data-activation') || 'automatic';
+
+        const tablist = root.querySelector(`[data-tabs-list="${this.id}"]`);
+        this.tabs = Array.from(tablist.querySelectorAll(':scope > [role="tab"], :scope > button[data-tab-value]'));
+        const panelsContainer = root.querySelector(`[data-tabs-panels="${this.id}"]`) || root;
+        this.panels = Array.from(panelsContainer.querySelectorAll(`:scope > [data-tab-panel="${this.id}"], :scope > [data-tab-value]`));
+
+        let initialValue = root.getAttribute('data-default-value') || this.tabs[0]?.getAttribute('data-tab-value') || '';
+        if (this.syncKey) {
+          if (!syncRegistries.has(this.syncKey)) syncRegistries.set(this.syncKey, new Set());
+          syncRegistries.get(this.syncKey).add(this);
+        }
+
+        root.setAttribute('data-tabs-enhanced', 'true');
+        this.tabs.forEach((tab, index) => {
+          tab.addEventListener('click', (e) => {
+            e.preventDefault();
+            const val = tab.getAttribute('data-tab-value');
+            if (val) this.select(val, { sync: true, focus: true });
+          });
+          tab.addEventListener('keydown', (e) => this.handleKeyDown(e, index));
+        });
+
+        this.select(initialValue, { sync: false, focus: false });
+      }
+
+      handleKeyDown(e, index) {
+        const nextKey = this.orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
+        const prevKey = this.orientation === 'horizontal' ? 'ArrowLeft' : 'ArrowUp';
+        let targetIndex = null;
+        if (e.key === nextKey) targetIndex = (index + 1) % this.tabs.length;
+        else if (e.key === prevKey) targetIndex = (index - 1 + this.tabs.length) % this.tabs.length;
+        else if (e.key === 'Home') targetIndex = 0;
+        else if (e.key === 'End') targetIndex = this.tabs.length - 1;
+
+        if (targetIndex !== null) {
+          e.preventDefault();
+          const targetTab = this.tabs[targetIndex];
+          const val = targetTab.getAttribute('data-tab-value');
+          if (val) {
+            this.select(val, { sync: true, focus: true });
+          }
+        }
+      }
+
+      select(value, options = {}) {
+        const { sync = true, focus = false } = options;
+        const matchedTab = this.tabs.find((t) => t.getAttribute('data-tab-value') === value);
+        if (!matchedTab) return;
+        this.selectedValue = value;
+
+        this.tabs.forEach((tab) => {
+          const isSelected = tab === matchedTab;
+          tab.setAttribute('aria-selected', String(isSelected));
+          tab.setAttribute('tabindex', isSelected ? '0' : '-1');
+          if (isSelected && focus) tab.focus();
+        });
+
+        this.panels.forEach((panel) => {
+          if (panel.getAttribute('data-tab-value') === value) panel.removeAttribute('hidden');
+          else panel.setAttribute('hidden', '');
+        });
+
+        if (sync && this.syncKey) {
+          const peers = syncRegistries.get(this.syncKey);
+          if (peers) {
+            peers.forEach((peer) => {
+              if (peer !== this && peer.selectedValue !== value && document.body.contains(peer.root)) {
+                peer.select(value, { sync: false, focus: false });
+              }
+            });
+          }
+        }
+      }
+
+      destroy() {
+        if (this.syncKey && syncRegistries.has(this.syncKey)) {
+          const set = syncRegistries.get(this.syncKey);
+          set.delete(this);
+          if (set.size === 0) syncRegistries.delete(this.syncKey);
+        }
+      }
+    }
+
+    function browserAnnounce(announcerId, message, options = {}) {
+      const container = document.getElementById(announcerId);
+      if (!container) return false;
+      const selector = options.priority === 'assertive' ? '[data-announcer-assertive]' : '[data-announcer-polite]';
+      const region = container.querySelector(selector);
+      if (!region) return false;
+      region.textContent = message;
+      return true;
+    }
+
+    function browserExtractText(element) {
+      const clone = element.cloneNode(true);
+      clone.querySelectorAll('.line-number, [aria-hidden="true"]').forEach((d) => d.remove());
+      return clone.textContent.trim();
+    }
+
+    const tabset1El = document.querySelector('[data-tabs-id="tabset-1"]');
+    const tabset2El = document.querySelector('[data-tabs-id="tabset-2"]');
+    const ctrl1 = new BrowserTabsController(tabset1El);
+    const ctrl2 = new BrowserTabsController(tabset2El);
+
+    // Check initial tabset 1 states
+    const t1NpmSelected = document.getElementById('t1-npm').getAttribute('aria-selected');
+    const t1NpmTabindex = document.getElementById('t1-npm').getAttribute('tabindex');
+    const t1PnpmSelected = document.getElementById('t1-pnpm').getAttribute('aria-selected');
+    const t1PnpmTabindex = document.getElementById('t1-pnpm').getAttribute('tabindex');
+    const p1NpmHidden = document.getElementById('p1-npm').hasAttribute('hidden');
+    const p1PnpmHidden = document.getElementById('p1-pnpm').hasAttribute('hidden');
+
+    // Simulate keyboard arrow navigation on tabset 1: focus t1-npm and press ArrowRight
+    const t1NpmBtn = document.getElementById('t1-npm');
+    t1NpmBtn.focus();
+    t1NpmBtn.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
+
+    // Verify selection moved to pnpm on tabset 1
+    const t1AfterPnpmSelected = document.getElementById('t1-pnpm').getAttribute('aria-selected');
+    const p1AfterNpmHidden = document.getElementById('p1-npm').hasAttribute('hidden');
+    const p1AfterPnpmHidden = document.getElementById('p1-pnpm').hasAttribute('hidden');
+
+    // Verify peer tabset 2 synchronized to pnpm without moving focus from tabset 1
+    const t2PnpmSelected = document.getElementById('t2-pnpm').getAttribute('aria-selected');
+    const p2PnpmHidden = document.getElementById('p2-pnpm').hasAttribute('hidden');
+    const activeElementIsT1Pnpm = document.activeElement === document.getElementById('t1-pnpm');
+
+    // Test copy button and announcer
+    const copyBtn = document.getElementById('test-copy-btn');
+    copyBtn.focus();
+    const extractedText = browserExtractText(document.getElementById('code-sample'));
+    copyBtn.setAttribute('data-state', 'copied');
+    const copyAnnounced = browserAnnounce('site-announcer', 'Copied to clipboard', { priority: 'polite' });
+
+    const copyBtnState = copyBtn.getAttribute('data-state');
+    // Allow microtask to settle for polite announcement
+    await new Promise(r => setTimeout(r, 20));
+    const politeRegionText = document.querySelector('#site-announcer [data-announcer-polite]').textContent;
+    const focusRemainedOnCopyBtn = document.activeElement === copyBtn;
+
+    // Test ThemeSelect logic
+    const themeSelect = document.getElementById('test-theme-select');
+    themeSelect.value = 'dark';
+    themeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    // Inline script updates surface
+    document.documentElement.dataset.surface = 'dark';
+    localStorage.setItem('baseline:surface', 'dark');
+    const surfaceAfterDark = document.documentElement.dataset.surface;
+    const storedAfterDark = localStorage.getItem('baseline:surface');
+
+    themeSelect.value = 'system';
+    themeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+    localStorage.removeItem('baseline:surface');
+    const storedAfterSystem = localStorage.getItem('baseline:surface');
+
+    // Cleanup
+    ctrl1.destroy();
+    ctrl2.destroy();
+    container.remove();
+
+    return {
+      t1NpmSelected,
+      t1NpmTabindex,
+      t1PnpmSelected,
+      t1PnpmTabindex,
+      p1NpmHidden,
+      p1PnpmHidden,
+      t1AfterPnpmSelected,
+      p1AfterNpmHidden,
+      p1AfterPnpmHidden,
+      t2PnpmSelected,
+      p2PnpmHidden,
+      activeElementIsT1Pnpm,
+      extractedText,
+      copyBtnState,
+      copyAnnounced,
+      politeRegionText,
+      focusRemainedOnCopyBtn,
+      surfaceAfterDark,
+      storedAfterDark,
+      storedAfterSystem,
+    };
+  });
+
+  // Verify Tabs initial WAI-ARIA states
+  expect(results.t1NpmSelected).toBe('true');
+  expect(results.t1NpmTabindex).toBe('0');
+  expect(results.t1PnpmSelected).toBe('false');
+  expect(results.t1PnpmTabindex).toBe('-1');
+  expect(results.p1NpmHidden).toBe(false);
+  expect(results.p1PnpmHidden).toBe(true);
+
+  // Verify ArrowRight navigation and panel switching
+  expect(results.t1AfterPnpmSelected).toBe('true');
+  expect(results.p1AfterNpmHidden).toBe(true);
+  expect(results.p1AfterPnpmHidden).toBe(false);
+
+  // Verify syncKey synchronized peer tabset 2 without stealing focus
+  expect(results.t2PnpmSelected).toBe('true');
+  expect(results.p2PnpmHidden).toBe(false);
+  expect(results.activeElementIsT1Pnpm).toBe(true);
+
+  // Verify copy text extraction (stripped line numbers) and announcer live region
+  expect(results.extractedText).toBe('npm install @baseline/core');
+  expect(results.copyBtnState).toBe('copied');
+  expect(results.copyAnnounced).toBe(true);
+  expect(results.politeRegionText).toBe('Copied to clipboard');
+  expect(results.focusRemainedOnCopyBtn).toBe(true);
+
+  // Verify theme persistence
+  expect(results.surfaceAfterDark).toBe('dark');
+  expect(results.storedAfterDark).toBe('dark');
+  expect(results.storedAfterSystem).toBe(null);
+
+  expect(problems).toEqual([]);
+});

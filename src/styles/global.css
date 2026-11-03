@@ -1142,4 +1142,38 @@
 	:where([data-spacing-policy="automatic-v2"]) :where(.site-main .content-grid .content--full-safe) { padding-inline: 0; }
 	:where([data-spacing-policy="automatic-v2"]) :where(.section, .container-shell, .grid-auto) > :where(*) { min-inline-size: 0; }
 
+	/* High-contrast forced-colors mode contracts: use system colors for interactive boundaries */
+	@media (forced-colors: active) {
+		:where(:focus-visible) {
+			outline: 2px solid Highlight !important;
+			outline-offset: 2px;
+		}
+		:where(.btn, button, [role="button"], select, input, textarea) {
+			border: 1px solid ButtonBorder !important;
+		}
+		:where(:disabled, [aria-disabled="true"]) {
+			color: GrayText !important;
+			border-color: GrayText !important;
+		}
+	}
+
+	/* Print media contracts: opt-in print content mode reveals component-managed tabpanels */
+	@media print {
+		:where(.skip-link, nav, [role="navigation"], [data-theme-select], .theme-select-container) {
+			display: none !important;
+		}
+		:where([data-print-content]) :where([role="tabpanel"][hidden]) {
+			display: block !important;
+		}
+	}
+
+	/* RTL and Bidirectional text isolation contracts for code elements */
+	:where(pre) {
+		direction: ltr !important;
+		text-align: start !important;
+	}
+	:where(code) {
+		direction: auto;
+	}
+
 }

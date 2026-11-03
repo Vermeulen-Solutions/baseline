@@ -1,5 +1,55 @@
 [
   {
+    "path": "src/lib/capabilities.ts",
+    "reason": "Non-visual capabilities utility: pure resolver for platform profile and browser-safe public facts; zero secrets or filesystem paths exposed. Exact LF-normalized source hash.",
+    "sha256": "cca362711b85619d0b5fcf121977aada7ee1ca64187de44732583ff69c689008"
+  },
+  {
+    "path": "src/lib/locale.ts",
+    "reason": "Non-visual locale utility: canonicalize BCP-47 tags via Intl.Locale, script subtag direction resolution (e.g. az-Arab -> rtl), key/tag separation. Exact LF-normalized source hash.",
+    "sha256": "f1229a4dac5ff8d44430b58f6712a15678bb03409a5646dff552bd28fb9d09f2"
+  },
+  {
+    "path": "src/lib/theme.ts",
+    "reason": "Non-visual theme utility: pure theme resolver and safe localStorage preference accessor with exception handling. Exact LF-normalized source hash.",
+    "sha256": "25910cf19e6da107c35a9eb974131ffbee60b730b2aff2c7662cf7ab7cf4afd1"
+  },
+  {
+    "path": "src/lib/tabs.ts",
+    "reason": "Functional interaction primitive: client controller for WAI-ARIA tabs with roving tabindex, arrow navigation, syncKey peer synchronization, and reconnection. Exact LF-normalized source hash.",
+    "sha256": "9300759a1aa51ed7b59c6d5f9e1af96d7f741bddeb8886d59e59844f8f57ecec"
+  },
+  {
+    "path": "src/lib/announce.ts",
+    "reason": "Non-visual accessibility utility: dual-channel polite and assertive live region messaging with signal abort support. Exact LF-normalized source hash.",
+    "sha256": "1ea2045f076cddeaa464442ee67cec0127c071ff5b6905a53feb5b353c1b763d"
+  },
+  {
+    "path": "src/lib/clipboard.ts",
+    "reason": "Non-visual clipboard utility: asynchronous clipboard API with off-screen execCommand fallback and decoration stripping. Exact LF-normalized source hash.",
+    "sha256": "eade11e7b024e3173f3ff141a0a60fe22acd3d00797859d32c61e90e78694d8c"
+  },
+  {
+    "path": "src/components/ThemeSelect.astro",
+    "reason": "Functional accessibility primitive: native select element synchronizing with system color scheme and baseline:surface across tabs. Exact LF-normalized source hash.",
+    "sha256": "3478b0ed5db16371907e1c4f3a093fa37e7937daa7a244f7954370e44a536a11"
+  },
+  {
+    "path": "src/components/Tabs.astro",
+    "reason": "Functional interaction primitive: WAI-ARIA tablist with 0-KB JS visible fallback, named panel slots, and progressive enhancement. Exact LF-normalized source hash.",
+    "sha256": "6af30074b66b218576b456aa6a4b8fcd24b9c134b4747b8786b50b529d52fae1"
+  },
+  {
+    "path": "src/components/Announcer.astro",
+    "reason": "Functional accessibility primitive: dual polite and assertive live region container for assistive technologies. Exact LF-normalized source hash.",
+    "sha256": "fa59a236f6c59f862aee18a5b4afebd839f0288ba2510b199c03504063ef42bf"
+  },
+  {
+    "path": "src/components/CopyButton.astro",
+    "reason": "Functional interaction primitive: accessible copy-to-clipboard button targeting element text/value with timeout cleanup. Exact LF-normalized source hash.",
+    "sha256": "c64fc61cdb042a0e9c6899970db2775d8c8fb23ff00bbbb20b606e00f322bef9"
+  },
+  {
     "path": "src/lib/form-transport.ts",
     "reason": "Non-visual transport utility: profile-aware form action resolver, input bounds sanitizer and accessible error formatting. Exact LF-normalized source hash.",
     "sha256": "f89857bc8f2d66fd7bdf47eafe8e8e765fd7e49fa1f419307f6804e2079cadff"
@@ -50,8 +100,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Neutral shared foundation: existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback; no client palette/type/layout direction. Exact LF-normalized source hash.",
-    "sha256": "aebe79d673e044e4daf02afc3b689253bb504fd459be438671e6ce1f659b3387"
+    "reason": "Neutral shared foundation: existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Exact LF-normalized source hash.",
+    "sha256": "587ca77e68280258349a4eceeb2d89d897c6de97cf263c8b3a43f723347a1358"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -222,8 +272,8 @@
   },
   {
     "path": "src/env.d.ts",
-    "reason": "Starter infrastructure only: optional Workers binding types and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "a6d0421e90e49566b8536622c3a6ae057fcfbf30caa3e303481203de5e4d4db4"
+    "reason": "Starter infrastructure only: optional Workers binding types, baseline capabilities virtual module typing, and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "e38d3e0c1f41d2ddb1ea96f78b80b0e3293095842e5ff3e19dab45e77056a09e"
   },
   {
     "path": "src/assets/styleguide-small.svg",
@@ -271,8 +321,8 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), and deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail); preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "a3253a1ecbe766ba652ab4da70aad6bc64a834ed87b3d4a54741e031974d5792"
+    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync; preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "c685f8eeb3b7dc9a575ef696c34a7dfdcf1752db97eef5f5b446a6e01317fe1c"
   },
   {
     "path": "src/components/EmDashImage.astro",

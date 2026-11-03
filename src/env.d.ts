@@ -15,3 +15,11 @@ interface CloudflareBindings {
 declare namespace Cloudflare {
   interface Env extends CloudflareBindings {}
 }
+
+declare module 'virtual:baseline/capabilities' {
+  import type { PublicCapabilities } from './lib/capabilities';
+  export const capabilities: PublicCapabilities;
+  const defaultExport: PublicCapabilities;
+  export default defaultExport;
+}
+

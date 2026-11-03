@@ -225,5 +225,16 @@ test('shared form primitive and portable tests ship to all profiles in manifest'
     assert.ok(manifest.files.includes('src/components/Form.astro'), `${profile} must include Form.astro`);
     assert.ok(manifest.files.includes('src/lib/form-transport.ts'), `${profile} must include form-transport.ts`);
     assert.ok(manifest.files.includes('tests/forms-skeletons.test.mjs'), `${profile} must include forms-skeletons.test.mjs`);
+    assert.ok(manifest.files.includes('src/components/Tabs.astro'), `${profile} must include Tabs.astro`);
+    assert.ok(manifest.files.includes('src/components/ThemeSelect.astro'), `${profile} must include ThemeSelect.astro`);
+    assert.ok(manifest.files.includes('src/components/CopyButton.astro'), `${profile} must include CopyButton.astro`);
+    assert.ok(manifest.files.includes('src/components/Announcer.astro'), `${profile} must include Announcer.astro`);
+    assert.ok(manifest.files.includes('src/lib/capabilities.ts'), `${profile} must include capabilities.ts`);
+    assert.ok(manifest.files.includes('src/lib/locale.ts'), `${profile} must include locale.ts`);
+    assert.ok(manifest.files.includes('src/lib/theme.ts'), `${profile} must include theme.ts`);
+    assert.ok(manifest.files.includes('src/lib/tabs.ts'), `${profile} must include tabs.ts`);
+    assert.ok(manifest.files.includes('src/lib/announce.ts'), `${profile} must include announce.ts`);
+    assert.ok(manifest.files.includes('src/lib/clipboard.ts'), `${profile} must include clipboard.ts`);
+    assert.ok(manifest.files.includes('tests/components-primitives.test.mjs'), `${profile} must include components-primitives.test.mjs`);
   }
 });

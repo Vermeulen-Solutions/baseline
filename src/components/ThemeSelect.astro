@@ -1,0 +1,114 @@
+---
+export interface ThemeSelectProps {
+  id?: string;
+  label?: string;
+  labels?: {
+    light?: string;
+    dark?: string;
+    system?: string;
+  };
+}
+
+const {
+  id = 'theme-select',
+  label = 'Select theme',
+  labels = {},
+} = Astro.props as ThemeSelectProps;
+
+const lightLabel = labels.light || 'Light';
+const darkLabel = labels.dark || 'Dark';
+const systemLabel = labels.system || 'System';
+---
+
+<div class="theme-select-container">
+  <label for={id} class="sr-only">{label}</label>
+  <select id={id} class="theme-select" data-theme-select>
+    <option value="system">{systemLabel}</option>
+    <option value="light">{lightLabel}</option>
+    <option value="dark">{darkLabel}</option>
+  </select>
+</div>
+
+<script>
+  function initThemeSelects() {
+    const selects = document.querySelectorAll<HTMLSelectElement>('[data-theme-select]');
+    if (selects.length === 0) return;
+
+    let stored: string | null = null;
+    try {
+      stored = localStorage.getItem('baseline:surface');
+    } catch {
+      // Ignore storage access error
+    }
+    const currentPref = stored === 'light' || stored === 'dark' ? stored : 'system';
+
+    selects.forEach((select) => {
+      select.value = currentPref;
+    });
+
+    function applySurface(pref: string) {
+      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const effective = pref === 'system' ? (systemDark ? 'dark' : 'light') : pref;
+      document.documentElement.dataset.surface = effective;
+      try {
+        if (pref === 'system') {
+          localStorage.removeItem('baseline:surface');
+        } else {
+          localStorage.setItem('baseline:surface', pref);
+        }
+      } catch {
+        // Ignore storage write error
+      }
+    }
+
+    selects.forEach((select) => {
+      // Guard against duplicate listener registration
+      if ((select as unknown as { _themeInit?: boolean })._themeInit) return;
+      (select as unknown as { _themeInit?: boolean })._themeInit = true;
+
+      select.addEventListener('change', (e) => {
+        const val = (e.target as HTMLSelectElement).value;
+        applySurface(val);
+        // Sync sibling selects if multiple exist on the page
+        selects.forEach((other) => {
+          if (other !== select) other.value = val;
+        });
+      });
+    });
+  }
+
+  // Run on initial load and client-router navigation
+  if (typeof document !== 'undefined') {
+    initThemeSelects();
+    document.addEventListener('astro:page-load', initThemeSelects);
+  }
+</script>
+
+<style>
+  @layer components {
+    .theme-select-container {
+      display: inline-flex;
+      align-items: center;
+    }
+    .theme-select {
+      padding: var(--space-2xs, 0.25rem) var(--space-xs, 0.5rem);
+      border: 1px solid var(--surface-border, currentColor);
+      border-radius: var(--radius-sm, 0.25rem);
+      background: var(--surface-elevated, transparent);
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+  }
+</style>
