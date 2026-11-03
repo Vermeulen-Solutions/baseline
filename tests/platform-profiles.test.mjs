@@ -236,6 +236,14 @@ test('shared form primitive and portable tests ship to all profiles in manifest'
     assert.ok(manifest.files.includes('src/lib/announce.ts'), `${profile} must include announce.ts`);
     assert.ok(manifest.files.includes('src/lib/clipboard.ts'), `${profile} must include clipboard.ts`);
     assert.ok(manifest.files.includes('tests/components-primitives.test.mjs'), `${profile} must include components-primitives.test.mjs`);
+    assert.ok(manifest.files.includes('src/components/Heading.astro'), `${profile} must include Heading.astro`);
+    assert.ok(manifest.files.includes('src/components/TableOfContents.astro'), `${profile} must include TableOfContents.astro`);
+    assert.ok(manifest.files.includes('src/components/Callout.astro'), `${profile} must include Callout.astro`);
+    assert.ok(manifest.files.includes('src/components/Steps.astro'), `${profile} must include Steps.astro`);
+    assert.ok(manifest.files.includes('src/lib/headings.ts'), `${profile} must include headings.ts`);
+    assert.ok(manifest.files.includes('src/lib/toc.ts'), `${profile} must include toc.ts`);
+    assert.ok(manifest.files.includes('src/lib/emdash-headings.ts'), `${profile} must include emdash-headings.ts`);
+    assert.ok(manifest.files.includes('tests/content-navigation.test.mjs'), `${profile} must include content-navigation.test.mjs`);
   }
 });
 

@@ -496,6 +496,18 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/lib/headings.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/toc.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/emdash-headings.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/lib/theme.ts": {
       "disposition": "shared",
       "static": "copy"
@@ -565,6 +577,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "tests/components-primitives.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/content-navigation.test.mjs": {
       "disposition": "shared",
       "static": "copy"
     },
@@ -988,6 +1004,22 @@
       "static": "copy"
     },
     "src/components/Tabs.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Heading.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/TableOfContents.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Callout.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Steps.astro": {
       "disposition": "shared",
       "static": "copy"
     },

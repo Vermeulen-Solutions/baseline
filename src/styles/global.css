@@ -369,6 +369,9 @@
 		[data-print-content] :where([role="tabpanel"], .tabs__panel) {
 			display: block !important;
 		}
+		:where(.callout, .steps__item) {
+			break-inside: avoid;
+		}
 	}
 
 	/* RTL and Bidirectional text isolation contracts for code elements */

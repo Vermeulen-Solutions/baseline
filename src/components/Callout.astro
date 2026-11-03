@@ -1,0 +1,131 @@
+---
+export type CalloutKind = 'note' | 'tip' | 'caution' | 'danger';
+
+export interface CalloutProps {
+  id?: string;
+  kind?: CalloutKind;
+  title: string;
+  class?: string;
+}
+
+const {
+  id,
+  kind = 'note',
+  title,
+  class: className,
+} = Astro.props as CalloutProps;
+
+if (!title || typeof title !== 'string' || !title.trim()) {
+  throw new Error('Callout component requires a non-empty "title" prop.');
+}
+
+const validKinds = new Set<CalloutKind>(['note', 'tip', 'caution', 'danger']);
+const normalizedKind: CalloutKind = validKinds.has(kind) ? kind : 'note';
+---
+
+<aside
+  id={id}
+  class:list={['callout', `callout--${normalizedKind}`, className]}
+  data-callout-kind={normalizedKind}
+>
+  <p class="callout__title">
+    <span class="callout__icon" aria-hidden="true">
+      {normalizedKind === 'note' && (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      )}
+      {normalizedKind === 'tip' && (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+      )}
+      {normalizedKind === 'caution' && (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      )}
+      {normalizedKind === 'danger' && (
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      )}
+    </span>
+    <span class="callout__title-text">{title}</span>
+  </p>
+  <div class="callout__content">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  @layer components {
+    .callout {
+      --callout-accent: var(--color-action, #0969da);
+      --callout-bg: color-mix(in oklch, var(--callout-accent) 6%, var(--color-surface, #ffffff));
+      --callout-border: color-mix(in oklch, var(--callout-accent) 25%, transparent);
+
+      padding: calc(var(--spacing-content, 1.5rem) * 0.75);
+      border-radius: var(--radius-control, 6px);
+      border: 1px solid var(--callout-border);
+      border-inline-start: 4px solid var(--callout-accent);
+      background: var(--callout-bg);
+      margin-block: var(--spacing-content, 1.5rem);
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing-content, 1.5rem) * 0.5);
+    }
+
+    .callout--note {
+      --callout-accent: oklch(55% 0.14 240);
+    }
+
+    .callout--tip {
+      --callout-accent: oklch(58% 0.16 145);
+    }
+
+    .callout--caution {
+      --callout-accent: oklch(65% 0.16 75);
+    }
+
+    .callout--danger {
+      --callout-accent: oklch(55% 0.20 28);
+    }
+
+    .callout__title {
+      font-weight: 600;
+      font-size: var(--text-step-0, 1rem);
+      color: var(--color-text, currentColor);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0;
+      line-height: 1.25;
+    }
+
+    .callout__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--callout-accent);
+      flex-shrink: 0;
+    }
+
+    .callout__content {
+      font-size: var(--text-step--1, 0.9375rem);
+      line-height: 1.6;
+      color: var(--color-text, currentColor);
+    }
+
+    .callout__content > :first-child {
+      margin-top: 0;
+    }
+
+    .callout__content > :last-child {
+      margin-bottom: 0;
+    }
+
+    @media (forced-colors: active) {
+      .callout {
+        border: 2px solid CanvasText !important;
+        border-inline-start-width: 4px !important;
+        background: Canvas !important;
+      }
+      .callout__icon {
+        color: CanvasText !important;
+      }
+    }
+  }
+</style>

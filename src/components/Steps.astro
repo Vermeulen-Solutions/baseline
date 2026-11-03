@@ -1,0 +1,156 @@
+---
+/* eslint-disable astro/jsx-a11y/no-redundant-roles */
+export interface StepDefinition {
+  value: string;
+  title?: string;
+  number?: number;
+}
+
+export interface StepsProps {
+  id?: string;
+  label?: string;
+  start?: number;
+  items: readonly StepDefinition[];
+  class?: string;
+}
+
+const {
+  id,
+  label = 'Step by step instructions',
+  start = 1,
+  items = [],
+  class: className,
+} = Astro.props as StepsProps;
+
+if (!items || items.length === 0) {
+  throw new Error('Steps component requires a non-empty "items" array.');
+}
+---
+
+<ol
+  id={id}
+  class:list={['steps', className]}
+  aria-label={label}
+  start={start}
+  role="list"
+  style={start !== 1 ? `--steps-start: ${start};` : undefined}
+>
+  {items.map((item, index) => {
+    const stepNumber = item.number ?? (start + index);
+    return (
+      <li class="steps__item" data-step={stepNumber}>
+        <div class="steps__marker" aria-hidden="true">
+          <span class="steps__number">{stepNumber}</span>
+        </div>
+        <div class="steps__body">
+          {item.title && <p class="steps__title">{item.title}</p>}
+          <div class="steps__content">
+            <slot name={item.value} />
+          </div>
+        </div>
+      </li>
+    );
+  })}
+</ol>
+
+<style>
+  @layer components {
+    .steps {
+      --steps-marker-size: 1.75rem;
+      --steps-line-width: 2px;
+      --steps-line-color: var(--color-border, #e5e7eb);
+      --steps-accent: var(--color-action, #0969da);
+      --steps-marker-bg: var(--color-surface, #ffffff);
+
+      list-style: none;
+      padding: 0;
+      margin: var(--spacing-content, 1.5rem) 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .steps__item {
+      display: grid;
+      grid-template-columns: var(--steps-marker-size) 1fr;
+      column-gap: calc(var(--spacing-content, 1.5rem) * 0.75);
+      position: relative;
+      padding-bottom: var(--spacing-content, 1.5rem);
+    }
+
+    .steps__item:last-child {
+      padding-bottom: 0;
+    }
+
+    /* Vertical connector line between step markers */
+    .steps__item::before {
+      content: '';
+      position: absolute;
+      left: calc(var(--steps-marker-size) / 2 - var(--steps-line-width) / 2);
+      top: var(--steps-marker-size);
+      bottom: 0;
+      width: var(--steps-line-width);
+      background: var(--steps-line-color);
+    }
+
+    .steps__item:last-child::before {
+      display: none;
+    }
+
+    .steps__marker {
+      width: var(--steps-marker-size);
+      height: var(--steps-marker-size);
+      border-radius: 50%;
+      border: var(--steps-line-width) solid var(--steps-accent);
+      background: var(--steps-marker-bg);
+      color: var(--steps-accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.8125rem;
+      line-height: 1;
+      z-index: 1;
+      flex-shrink: 0;
+    }
+
+    .steps__body {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      min-width: 0;
+    }
+
+    .steps__title {
+      font-weight: 600;
+      font-size: var(--text-step-0, 1rem);
+      color: var(--color-text, currentColor);
+      margin: 0;
+      line-height: 1.35;
+    }
+
+    .steps__content {
+      font-size: var(--text-step--1, 0.9375rem);
+      line-height: 1.6;
+      color: var(--color-text, currentColor);
+    }
+
+    .steps__content > :first-child {
+      margin-top: 0;
+    }
+
+    .steps__content > :last-child {
+      margin-bottom: 0;
+    }
+
+    @media (forced-colors: active) {
+      .steps__marker {
+        border-color: Highlight !important;
+        color: Highlight !important;
+        background: Canvas !important;
+      }
+      .steps__item::before {
+        background: CanvasText !important;
+      }
+    }
+  }
+</style>

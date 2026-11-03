@@ -4,6 +4,10 @@ import ThemeSelect from '../components/ThemeSelect.astro';
 import Tabs from '../components/Tabs.astro';
 import CopyButton from '../components/CopyButton.astro';
 import Announcer from '../components/Announcer.astro';
+import Heading from '../components/Heading.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import Callout from '../components/Callout.astro';
+import Steps from '../components/Steps.astro';
 import { ClientRouter } from 'astro:transitions';
 
 if (!import.meta.env.DEV && !import.meta.env.STARTER_TEST_FIXTURES) {
@@ -95,6 +99,60 @@ const title = isPageB ? 'Primitives Fixture - Page B' : 'Primitives Fixture - Pa
           announcerId="site-announcer"
           label="Copy code"
         />
+
+        <TableOfContents
+          id="fixture-toc"
+          label="On this page"
+          contentId="fixture-content-a"
+          headings={[
+            { id: 'section-architecture', text: 'Architecture Overview', depth: 2 },
+            { id: 'section-primitives', text: 'Core Primitives', depth: 3 },
+            { id: 'section-execution', text: 'Execution Guide', depth: 2 },
+          ]}
+          spy={true}
+        />
+
+        <div class="flow" style="margin-top: 2rem;">
+          <Heading level={2} id="section-architecture" anchor anchorLabel="Direct link to Architecture Overview">
+            Architecture Overview
+          </Heading>
+          <p id="para-arch">
+            Baseline adheres to the Triple Filter: multi-profile portability, zero runtime dependencies, and platform primitives over opinionated art direction.
+          </p>
+          <Callout id="fixture-callout" kind="tip" title="Architecture Principle">
+            <p id="fixture-callout-text">Portability means preserved boundaries, not identical runtime features.</p>
+          </Callout>
+
+          <div id="long-spacer-1" style="height: 600px; padding: 1rem; background: color-mix(in oklch, currentColor 3%, transparent); border-radius: var(--radius-card);">
+            <p>Extended reading content ensuring that scrolling past the heading does not drop the active highlight in the table of contents.</p>
+          </div>
+
+          <Heading level={3} id="section-primitives" anchor anchorLabel="Direct link to Core Primitives">
+            Core Primitives
+          </Heading>
+          <Steps
+            id="fixture-steps"
+            label="Primitive Setup Steps"
+            items={[
+              { value: 'step-headings', title: 'Mount Headings' },
+              { value: 'step-toc', title: 'Attach Table of Contents' },
+            ]}
+          >
+            <p slot="step-headings" id="step-headings-content">Render semantic h1-h6 elements with accessible permalink anchors.</p>
+            <p slot="step-toc" id="step-toc-content">Progressively enhance with zero-JS nested ol fallback and pure-DOM scroll spy.</p>
+          </Steps>
+
+          <div id="long-spacer-2" style="height: 600px; padding: 1rem; background: color-mix(in oklch, currentColor 3%, transparent); border-radius: var(--radius-card);">
+            <p>Second extended reading section to verify scroll spy transitions between subsections and major sections.</p>
+          </div>
+
+          <Heading level={2} id="section-execution" anchor anchorLabel="Direct link to Execution Guide">
+            Execution Guide
+          </Heading>
+          <p id="para-exec">
+            Execute verification commands to ensure zero console errors across all profiles.
+          </p>
+        </div>
       </div>
     ) : (
       <div id="fixture-content-b" class="flow">

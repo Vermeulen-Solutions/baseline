@@ -938,5 +938,65 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   await expect(page.locator('#test-copy-btn')).not.toHaveAttribute('data-state', 'copied');
   await expect(page.locator('#test-copy-btn [data-copy-text]')).toHaveText('Copy code');
 
+  // 7. Verify Content Navigation: Heading anchors, TableOfContents scroll spy, Callout, and Steps
+  // A. Heading permalink
+  const archHeading = page.locator('#section-architecture');
+  await expect(archHeading).toHaveClass(/heading-target/);
+  const archAnchor = archHeading.locator('a.heading-anchor');
+  await expect(archAnchor).toHaveAttribute('href', '#section-architecture');
+  await expect(archAnchor).toHaveAttribute('aria-label', 'Direct link to Architecture Overview');
+
+  // Click permalink anchor and assert URL hash changes without full page reload
+  await archAnchor.click();
+  expect(page.url()).toContain('#section-architecture');
+
+  // B. Callout: verify semantic <aside>, no role="alert", styled title, and slot content
+  const callout = page.locator('#fixture-callout');
+  await expect(callout).toHaveClass(/callout--tip/);
+  const calloutRole = await callout.getAttribute('role');
+  expect(calloutRole).toBeNull(); // Must NOT carry role="alert"
+  await expect(callout.locator('.callout__title')).toHaveText(/Architecture Principle/);
+  await expect(callout.locator('#fixture-callout-text')).toContainText('Portability means preserved boundaries');
+
+  // C. Steps: verify semantic <ol role="list">, numbered markers, and named slot content
+  const steps = page.locator('#fixture-steps');
+  await expect(steps).toHaveAttribute('role', 'list');
+  const stepItems = steps.locator('li.steps__item');
+  expect(await stepItems.count()).toBe(2);
+  await expect(stepItems.nth(0).locator('.steps__number')).toHaveText('1');
+  await expect(stepItems.nth(0).locator('#step-headings-content')).toContainText('Render semantic h1-h6');
+  await expect(stepItems.nth(1).locator('.steps__number')).toHaveText('2');
+  await expect(stepItems.nth(1).locator('#step-toc-content')).toContainText('Progressively enhance');
+
+  // D. TableOfContents and Scroll Spy: verify nested structure and dead-zone-free highlighting
+  const tocNav = page.locator('#fixture-toc');
+  await expect(tocNav).toHaveAttribute('aria-label', 'On this page');
+  const tocLinks = tocNav.locator('a[data-toc-link]');
+  expect(await tocLinks.count()).toBe(3);
+
+  // Link 0 (Architecture Overview) should be active when scrolled near top
+  const archLink = tocNav.locator('a[href="#section-architecture"]');
+  const primLink = tocNav.locator('a[href="#section-primitives"]');
+  const execLink = tocNav.locator('a[href="#section-execution"]');
+
+  // Scroll into the long spacer below architecture heading (reading the long paragraph)
+  await page.locator('#long-spacer-1').evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  await page.waitForTimeout(100);
+  // In the dead zone between headings, the architecture link MUST remain active!
+  await expect(archLink).toHaveAttribute('aria-current', 'location');
+  await expect(primLink).not.toHaveAttribute('aria-current', 'location');
+
+  // Scroll into primitives heading (aligned to top)
+  await page.locator('#section-primitives').evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  await page.waitForTimeout(100);
+  await expect(primLink).toHaveAttribute('aria-current', 'location');
+  await expect(archLink).not.toHaveAttribute('aria-current', 'location');
+
+  // Scroll to bottom of page (execution heading)
+  await page.locator('#section-execution').evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  await page.waitForTimeout(100);
+  await expect(execLink).toHaveAttribute('aria-current', 'location');
+  await expect(primLink).not.toHaveAttribute('aria-current', 'location');
+
   expect(problems).toEqual([]);
 });

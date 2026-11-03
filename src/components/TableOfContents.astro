@@ -1,0 +1,165 @@
+---
+/* eslint-disable astro/jsx-a11y/no-redundant-roles */
+import type { HeadingRecord, HeadingDepth } from '../lib/headings';
+import { buildToc } from '../lib/headings';
+
+export interface TableOfContentsProps {
+  id?: string;
+  label?: string;
+  contentId: string;
+  headings: readonly HeadingRecord[];
+  minDepth?: HeadingDepth;
+  maxDepth?: HeadingDepth;
+  spy?: boolean;
+  offsetIds?: readonly string[];
+  class?: string;
+}
+
+const {
+  id = 'toc',
+  label = 'Table of contents',
+  contentId,
+  headings = [],
+  minDepth = 2,
+  maxDepth = 3,
+  spy = true,
+  offsetIds = [],
+  class: className,
+} = Astro.props as TableOfContentsProps;
+
+const tocNodes = buildToc(headings, { minDepth, maxDepth });
+---
+
+{tocNodes.length > 0 && (
+  <nav
+    id={id}
+    class:list={['toc', className]}
+    aria-label={label}
+    data-toc-spy={spy ? '' : undefined}
+    data-content-id={contentId}
+    data-offset-ids={offsetIds.length > 0 ? offsetIds.join(',') : undefined}
+  >
+    <p class="toc__title" id={`${id}-title`}>{label}</p>
+    <ol class="toc__list" role="list">
+      {tocNodes.map((node) => (
+        <li class="toc__item" data-depth={node.depth}>
+          <a href={`#${node.id}`} class="toc__link" data-toc-link>
+            {node.text}
+          </a>
+          {node.children && node.children.length > 0 && (
+            <ol class="toc__list toc__list--nested" role="list">
+              {node.children.map((child) => (
+                <li class="toc__item" data-depth={child.depth}>
+                  <a href={`#${child.id}`} class="toc__link" data-toc-link>
+                    {child.text}
+                  </a>
+                  {child.children && child.children.length > 0 && (
+                    <ol class="toc__list toc__list--nested" role="list">
+                      {child.children.map((grandChild) => (
+                        <li class="toc__item" data-depth={grandChild.depth}>
+                          <a href={`#${grandChild.id}`} class="toc__link" data-toc-link>
+                            {grandChild.text}
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                </li>
+              ))}
+            </ol>
+          )}
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
+
+{spy && (
+  <script>
+    import { initToc } from '../lib/toc';
+    if (typeof document !== 'undefined') {
+      initToc(document);
+    }
+  </script>
+)}
+
+<style>
+  @layer components {
+    .toc {
+      font-size: var(--text-step--1, 0.875rem);
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+      gap: calc(var(--spacing-content, 1.5rem) * 0.5);
+    }
+
+    .toc__title {
+      font-weight: 600;
+      color: var(--color-muted, currentColor);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.75rem;
+      margin: 0;
+    }
+
+    .toc__list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .toc__list--nested {
+      padding-inline-start: 0.875rem;
+      margin-inline-start: 0.125rem;
+      border-inline-start: 1px solid var(--color-border, currentColor);
+      gap: 0.2rem;
+      margin-top: 0.25rem;
+    }
+
+    .toc__item {
+      margin: 0;
+      padding: 0;
+    }
+
+    .toc__link {
+      display: block;
+      padding: 0.15rem 0.5rem;
+      color: var(--color-muted, currentColor);
+      text-decoration: none;
+      border-radius: var(--radius-control, 4px);
+      border-inline-start: 2px solid transparent;
+      transition: color var(--duration-fast, 120ms) ease,
+                  background var(--duration-fast, 120ms) ease,
+                  border-color var(--duration-fast, 120ms) ease;
+    }
+
+    .toc__link:hover {
+      color: var(--color-text, currentColor);
+      background: color-mix(in oklch, currentColor 5%, transparent);
+    }
+
+    .toc__link:focus-visible {
+      outline: 2px solid var(--color-focus, currentColor);
+      outline-offset: 1px;
+    }
+
+    .toc__link[aria-current="location"],
+    .toc__link.is-active {
+      color: var(--color-action, #0969da);
+      font-weight: 600;
+      border-inline-start-color: var(--color-action, #0969da);
+      background: color-mix(in oklch, var(--color-action, currentColor) 8%, transparent);
+    }
+
+    @media (forced-colors: active) {
+      .toc__link[aria-current="location"],
+      .toc__link.is-active {
+        color: Highlight !important;
+        border-inline-start-color: Highlight !important;
+      }
+    }
+  }
+</style>

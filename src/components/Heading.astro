@@ -1,0 +1,80 @@
+---
+import type { HeadingDepth } from '../lib/headings';
+
+export interface HeadingProps {
+  id: string;
+  level: HeadingDepth;
+  anchor?: boolean;
+  anchorLabel?: string;
+  class?: string;
+}
+
+const {
+  id,
+  level = 2,
+  anchor = false,
+  anchorLabel,
+  class: className,
+} = Astro.props as HeadingProps;
+
+const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+---
+
+<Tag id={id} class:list={['heading-target', className]}>
+  <slot />
+  {anchor && (
+    <a
+      href={`#${id}`}
+      class="heading-anchor"
+      aria-label={anchorLabel || 'Direct link to this section'}
+      tabindex="0"
+    >
+      <span class="heading-anchor__symbol" aria-hidden="true">#</span>
+    </a>
+  )}
+</Tag>
+
+<style>
+  @layer components {
+    .heading-target {
+      scroll-margin-top: calc(var(--header-height, 4rem) + var(--spacing-content, 1.5rem));
+      position: relative;
+    }
+
+    .heading-anchor {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-inline-start: calc(var(--spacing-content, 1.5rem) * 0.25);
+      text-decoration: none;
+      opacity: 0;
+      color: var(--color-muted, currentColor);
+      transition: opacity var(--duration-fast, 150ms) var(--ease-standard, ease);
+    }
+
+    .heading-target:hover .heading-anchor,
+    .heading-anchor:focus-visible {
+      opacity: 1;
+    }
+
+    .heading-anchor:focus-visible {
+      outline: 2px solid var(--color-focus, currentColor);
+      outline-offset: 2px;
+      border-radius: var(--radius-sm, 2px);
+    }
+
+    .heading-anchor__symbol {
+      font-size: 0.85em;
+      line-height: 1;
+    }
+
+    @media (forced-colors: active) {
+      .heading-anchor {
+        opacity: 1;
+      }
+      .heading-anchor:focus-visible {
+        outline: 2px solid Highlight;
+      }
+    }
+  }
+</style>

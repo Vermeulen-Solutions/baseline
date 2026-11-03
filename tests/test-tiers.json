@@ -71,6 +71,10 @@
     "tier": "unit",
     "reason": "Capabilities virtual facts, locale canonicalization/direction, theme resolution, tabs ARIA contracts, and announcer/clipboard routing"
   },
+  "content-navigation.test.mjs": {
+    "tier": "unit",
+    "reason": "Headings tree hierarchy and depth filtering, URL-safe slugification, Portable Text stable key mapping, and Callout/Steps/TOC semantic component contracts"
+  },
   "importer-fidelity.test.mjs": {
     "tier": "unit",
     "reason": "Synthetic WXR/Exporter oracles; installed-endpoint rehearsal runs once in the migration pilot"
