@@ -1,6 +1,7 @@
 import { chromium } from '@playwright/test';
 import path from 'node:path';
 import { readFileSync } from 'node:fs';
+import { resolveFormAction } from '../../src/lib/form-transport.ts';
 import { test, expect, prepare, settlePage, noOverflow, galleryCaptionsFit, styleguide, observe } from './helpers.mjs';
 import { visualContract as contract } from './contract.mjs';
 import { skipLinkJourney, fieldErrorJourney } from '../journeys/public.mjs';
@@ -302,5 +303,44 @@ test('behavior SiteShell inline script, rapid card morph, and lifecycle teardown
   expect(result.hasLoadingAfterBFCache).toBe(false);
   expect(result.nameAfterBFCache).toBe('');
   expect(result.reverseMorphWorked).toBe(true);
+  expect(problems).toEqual([]);
+});
+
+test('behavior Form rejects protocol-relative and control-character external destinations in Chromium', async ({ page }, info) => {
+  test.skip(info.project.name !== 'chromium-1440', 'Run once on standard desktop viewport');
+  const problems = observe(page);
+  const interceptedRequests = [];
+  page.on('request', (req) => {
+    interceptedRequests.push(req.url());
+  });
+
+  // Verify that evasion strings with tab, CR, LF are rejected for both static profiles
+  const staticAction = resolveFormAction('/\t/outside.test/form', 'static');
+  const staticSveltiaAction = resolveFormAction({ endpoint: '/\r/outside.test/form' }, 'static-sveltia');
+  const staticLFAction = resolveFormAction('/\n/outside.test/form', 'static');
+
+  expect(staticAction).toBe('');
+  expect(staticSveltiaAction).toBe('');
+  expect(staticLFAction).toBe('');
+
+  // Render a document with a native form whose action was resolved via resolveFormAction
+  await page.setContent(`
+    <!DOCTYPE html>
+    <html>
+      <body>
+        <form id="evasion-form" method="POST" action="${staticAction}">
+          <input type="text" name="notes" value="safe" />
+          <button id="submit-btn" type="submit">Submit</button>
+        </form>
+      </body>
+    </html>
+  `);
+
+  await page.click('#submit-btn');
+  await page.waitForTimeout(100);
+
+  // Assert no network requests were dispatched to outside.test
+  const leaked = interceptedRequests.filter(url => url.includes('outside.test'));
+  expect(leaked).toEqual([]);
   expect(problems).toEqual([]);
 });

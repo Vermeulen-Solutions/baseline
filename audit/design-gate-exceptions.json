@@ -2,7 +2,7 @@
   {
     "path": "src/lib/form-transport.ts",
     "reason": "Non-visual transport utility: profile-aware form action resolver, input bounds sanitizer and accessible error formatting. Exact LF-normalized source hash.",
-    "sha256": "a7bd29d14033db4c6c30b2e1b678b433042a280aa800f92a78a5174079f4033d"
+    "sha256": "f89857bc8f2d66fd7bdf47eafe8e8e765fd7e49fa1f419307f6804e2079cadff"
   },
   {
     "path": "src/components/Form.astro",

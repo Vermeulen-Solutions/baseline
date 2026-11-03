@@ -99,6 +99,38 @@ test('resolveFormTransport strictly preserves profile boundaries and normalizes 
       `${staticProfile} profile must reject protocol-relative // destinations`
     );
 
+    // Rejects protocol-relative URLs with embedded tab, CR, LF, or control characters
+    assert.equal(
+      resolveFormAction('/\t/outside.test/form', staticProfile),
+      '',
+      `${staticProfile} profile must reject embedded tab evasion in form action`
+    );
+    assert.equal(
+      resolveFormAction('/\r/outside.test/form', staticProfile),
+      '',
+      `${staticProfile} profile must reject embedded CR evasion in form action`
+    );
+    assert.equal(
+      resolveFormAction('/\n/outside.test/form', staticProfile),
+      '',
+      `${staticProfile} profile must reject embedded LF evasion in form action`
+    );
+    assert.equal(
+      resolveFormAction({ endpoint: '/\t/outside.test/form' }, staticProfile),
+      '',
+      `${staticProfile} profile must reject embedded tab evasion in endpoint config`
+    );
+    assert.equal(
+      resolveFormAction({ endpoint: '/\r/outside.test/form' }, staticProfile),
+      '',
+      `${staticProfile} profile must reject embedded CR evasion in endpoint config`
+    );
+    assert.equal(
+      resolveFormAction({ endpoint: '/\n/outside.test/form' }, staticProfile),
+      '',
+      `${staticProfile} profile must reject embedded LF evasion in endpoint config`
+    );
+
     // Rejects backslash network references
     assert.equal(
       resolveFormAction('\\\\outside.test\\form', staticProfile),

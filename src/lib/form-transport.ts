@@ -121,6 +121,12 @@ function parseNormalizedAction(candidate: string): {
     return null;
   }
 
+  // Reject embedded ASCII tab, CR, LF, and control characters before classification.
+  // Browsers strip \t, \r, and \n during URL resolution, turning e.g. "/\t/outside.test/form" into "//outside.test/form"
+  if (/[\t\r\n\x00-\x1f\x7f]/.test(trimmed)) {
+    return null;
+  }
+
   // Reject backslashes (Windows path artifacts or network share references like \\outside.test\form)
   if (trimmed.includes('\\')) {
     return null;
@@ -174,11 +180,13 @@ function parseNormalizedAction(candidate: string): {
 
     // Relative path (e.g. /api/contact, ./_actions/contact, /x/../_actions/contact, ?lang=en&_action=contact)
     try {
-      const parsedRelative = new URL(trimmed, 'https://heuristic-base.test');
+      const BASE_ORIGIN = 'https://heuristic-base.test';
+      const parsedRelative = new URL(trimmed, BASE_ORIGIN);
+      const isExternal = parsedRelative.origin !== BASE_ORIGIN;
       return {
-        isAbsolute: false,
-        protocol: '',
-        hasCredentials: false,
+        isAbsolute: isExternal,
+        protocol: isExternal ? '' : '',
+        hasCredentials: Boolean(parsedRelative.username || parsedRelative.password),
         raw: trimmed,
         pathname: parsedRelative.pathname,
         searchParams: parsedRelative.searchParams,
