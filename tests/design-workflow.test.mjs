@@ -276,3 +276,75 @@ test('SiteShell inline script and rapid card morph execute in Chromium without e
 
   await browser.close();
 });
+
+test('SiteShell prefetch policy and navigation lifecycle teardown verify in Chromium', async () => {
+  const shell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
+  const mainScript = shell.match(/<script is:inline>([\s\S]*?)<\/script>/)[1];
+
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+  const pageErrors = [];
+  page.on('pageerror', (err) => pageErrors.push(err.message));
+
+  await page.setContent(`
+    <!DOCTYPE html>
+    <html>
+      <head><script>${mainScript}</script></head>
+      <body>
+        <a id="link1" href="/posts/a/">Valid</a>
+        <a id="linkOptOut" href="/posts/b/" data-astro-prefetch="false">Opt Out</a>
+        <a id="linkReload" href="/posts/c/" data-astro-reload>Reload</a>
+        <a id="linkAction" href="/_actions/submit">Action</a>
+        <div id="cardA" class="card" data-vt-card>
+          <div class="card-media">Img A</div>
+          <div class="card-title">Title A</div>
+        </div>
+      </body>
+    </html>
+  `);
+
+  assert.deepEqual(pageErrors, [], 'No runtime syntax errors on load in Chromium');
+
+  const lifecycleResult = await page.evaluate(async () => {
+    const cardA = document.getElementById('cardA');
+    const controller = new AbortController();
+
+    // 1. Test Navigation Abort Teardown
+    const ev = new Event('astro:before-preparation');
+    ev.sourceElement = cardA;
+    ev.signal = controller.signal;
+    document.dispatchEvent(ev);
+
+    const nameBefore = cardA.querySelector('.card-media').style.viewTransitionName;
+
+    // Trigger abort
+    controller.abort();
+
+    const nameAfterAbort = cardA.querySelector('.card-media').style.viewTransitionName;
+
+    // 2. Test BFCache restoration (pageshow persisted: true)
+    document.documentElement.setAttribute('data-vt-loading', '');
+    cardA.querySelector('.card-media').style.viewTransitionName = 'hero-media';
+
+    const pageShowEv = new Event('pageshow');
+    Object.defineProperty(pageShowEv, 'persisted', { value: true });
+    window.dispatchEvent(pageShowEv);
+
+    const hasLoadingAfterBFCache = document.documentElement.hasAttribute('data-vt-loading');
+    const nameAfterBFCache = cardA.querySelector('.card-media').style.viewTransitionName;
+
+    return {
+      nameBefore,
+      nameAfterAbort,
+      hasLoadingAfterBFCache,
+      nameAfterBFCache,
+    };
+  });
+
+  assert.equal(lifecycleResult.nameBefore, 'hero-media');
+  assert.equal(lifecycleResult.nameAfterAbort, '', 'Aborted navigation immediately tears down assigned morph names');
+  assert.equal(lifecycleResult.hasLoadingAfterBFCache, false, 'BFCache restoration clears data-vt-loading');
+  assert.equal(lifecycleResult.nameAfterBFCache, '', 'BFCache restoration clears leftover morph names');
+
+  await browser.close();
+});

@@ -130,6 +130,8 @@ and `npm run audit:html` against that fresh build before handoff. Use npm.cmd
 and npx.cmd in Windows PowerShell. The HTML audit checks emitted HTML and captures
 linked public SSR routes; see [HTML integrity](docs/html-integrity.md).
 
+Build success is not runtime acceptance: emitted HTML strings do not prove that browser scripts parse or execute. When modifying client-side scripts, router hooks (`astro:before-preparation`, `astro:before-swap`, `astro:after-swap`, `astro:page-load`), View Transitions, or interactive state machines, launch headless Chromium (via the installed Playwright runner) against the build or rendered route. Listen to `pageerror` and `console.error` to ensure zero syntax or runtime exceptions, and adversarially probe asynchronous state transitions (rapid overlapping clicks, aborted navigation, BFCache restoration).
+
 Set up the local supplemental hook once with `npm run setup:hooks`. Run visual
 regression only locally on Windows as described in [visual regression](docs/visual-regression.md),
 never in automated CI or production builds. Inspect actual rendered behavior for

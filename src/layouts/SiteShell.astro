@@ -56,6 +56,9 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         let activeTransitionPending = false;
         let currentViewTransition = null;
         let currentAssignedElements = [];
+        let inFlightWarmAbort = null;
+        let hoverTimer = 0;
+        const MAX_WARMED = 30;
         const warmedPages = new Map();
         const warmedImages = new Map();
         const warmImage = (src, srcset, sizes) => {
@@ -77,6 +80,10 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
               img.onerror = done;
             }
           });
+          if (warmedImages.size >= MAX_WARMED) {
+            const firstKey = warmedImages.keys().next().value;
+            if (firstKey) warmedImages.delete(firstKey);
+          }
           warmedImages.set(key, promise);
           return promise;
         };
@@ -92,34 +99,61 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
             )
           );
         };
+        const isPrefetchEligible = (target, url) => {
+          if (!target || !(target instanceof HTMLAnchorElement)) return false;
+          if (target.target && target.target !== '_self') return false;
+          if (target.hasAttribute('download') || target.hasAttribute('data-astro-reload')) return false;
+          if (target.getAttribute('data-astro-prefetch') === 'false' || target.closest('[data-astro-prefetch="false"]')) return false;
+          const conn = navigator['connection'];
+          if (conn && (conn.saveData === true || /2g/.test(conn.effectiveType || ''))) return false;
+          if (url.origin !== location.origin || url.search || url.hash) return false;
+          if (url.pathname.startsWith('/_') || url.pathname.startsWith('/api/') || url.pathname.startsWith('/admin')) return false;
+          if (url.pathname === location.pathname) return false;
+          return true;
+        };
         const warmPage = (href) => {
           if (!document.querySelector('meta[name="astro-view-transitions-enabled"]')) return;
           if (new URLSearchParams(location.search).has('_edit') || document.getElementById('emdash-toolbar')) return;
           if (warmedPages.has(href)) return;
-          const promise = fetch(href, { credentials: 'same-origin' })
+          if (inFlightWarmAbort) {
+            inFlightWarmAbort.abort();
+          }
+          const abortController = new AbortController();
+          inFlightWarmAbort = abortController;
+          const promise = fetch(href, { credentials: 'same-origin', signal: abortController.signal, priority: 'low' })
             .then((res) => (res.ok ? res.text() : ''))
             .then((html) => {
-              if (!html) return;
+              if (!html || abortController.signal.aborted) return;
               const doc = new DOMParser().parseFromString(html, 'text/html');
               return warmDocumentImages(doc);
             })
-            .catch(() => {});
+            .catch(() => {})
+            .finally(() => {
+              if (inFlightWarmAbort === abortController) {
+                inFlightWarmAbort = null;
+              }
+            });
+          if (warmedPages.size >= MAX_WARMED) {
+            const firstKey = warmedPages.keys().next().value;
+            if (firstKey) warmedPages.delete(firstKey);
+          }
           warmedPages.set(href, promise);
         };
-        let hoverTimer = 0;
         document.addEventListener('pointerover', (event) => {
           const target = event.target instanceof Element ? event.target.closest('a[href]') : null;
           if (!target || !(target instanceof HTMLAnchorElement)) return;
-          if (target.target && target.target !== '_self') return;
-          if (target.hasAttribute('download') || target.hasAttribute('data-astro-reload')) return;
           try {
             const url = new URL(target.href, location.href);
-            if (url.origin !== location.origin || url.search || url.hash) return;
-            if (url.pathname.startsWith('/_') || url.pathname.startsWith('/api/')) return;
-            if (url.pathname === location.pathname) return;
+            if (!isPrefetchEligible(target, url)) return;
             clearTimeout(hoverTimer);
             hoverTimer = window.setTimeout(() => warmPage(url.href), 20);
           } catch {}
+        }, { passive: true });
+        document.addEventListener('pointerout', (event) => {
+          const target = event.target instanceof Element ? event.target.closest('a[href]') : null;
+          if (target) {
+            clearTimeout(hoverTimer);
+          }
         }, { passive: true });
         const clearAssignedElements = () => {
           for (const item of currentAssignedElements) {
@@ -152,8 +186,26 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           const navToken = ++activeNavToken;
           const signal = event && 'signal' in event ? event['signal'] : undefined;
 
+          // Cancel any pending hover warming or in-flight warmup fetches so the active navigation has full priority
+          clearTimeout(hoverTimer);
+          if (inFlightWarmAbort) {
+            inFlightWarmAbort.abort();
+            inFlightWarmAbort = null;
+          }
+
           // Superseding preparation must release existing assignments immediately so two cards never collide
           clearAssignedElements();
+
+          // Bind signal abort handler to cleanly tear down loading and morph state if navigation is aborted
+          if (signal) {
+            signal.addEventListener('abort', () => {
+              if (navToken === activeNavToken) {
+                clearVtLoading();
+                cleanupMorphNames();
+                savedScroll = null;
+              }
+            }, { once: true });
+          }
 
           clearTimeout(vtTimer);
           vtTimer = window.setTimeout(() => {
@@ -273,6 +325,12 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                 }
               }
             });
+          } else {
+            currentViewTransition = null;
+            activeTransitionPending = false;
+            if (currentNav === activeNavToken) {
+              cleanupMorphNames();
+            }
           }
         });
         document.addEventListener('astro:after-swap', () => {
@@ -291,6 +349,26 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           });
         };
         window.addEventListener('scroll', syncStickyHeader, { passive: true });
+
+        window.addEventListener('pageshow', (event) => {
+          if (event.persisted) {
+            clearVtLoading();
+            currentViewTransition = null;
+            activeTransitionPending = false;
+            cleanupMorphNames();
+            applySurface(document.documentElement);
+            syncStickyHeader();
+          }
+        });
+
+        window.addEventListener('pagehide', () => {
+          clearTimeout(hoverTimer);
+          clearVtLoading();
+          if (inFlightWarmAbort) {
+            inFlightWarmAbort.abort();
+            inFlightWarmAbort = null;
+          }
+        });
 
         const initPage = () => {
           if (!activeTransitionPending && !currentViewTransition) {
