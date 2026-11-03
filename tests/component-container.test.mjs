@@ -61,7 +61,13 @@ test.before(async () => {
 });
 
 test.after(async () => {
-  if (server) await server.close();
+  if (server) {
+    const readyPromise = server[Symbol.for('astro.devServerAppReady')];
+    if (readyPromise) {
+      try { await readyPromise; } catch {}
+    }
+    await server.close();
+  }
 });
 
 test('Card renders semantic article, heading hierarchy, clickable parent and attribute proxies', async () => {

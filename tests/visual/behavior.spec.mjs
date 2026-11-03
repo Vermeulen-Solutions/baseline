@@ -1,5 +1,6 @@
 import { chromium } from '@playwright/test';
 import path from 'node:path';
+import { readFileSync } from 'node:fs';
 import { test, expect, prepare, settlePage, noOverflow, galleryCaptionsFit, styleguide, observe } from './helpers.mjs';
 import { visualContract as contract } from './contract.mjs';
 import { skipLinkJourney, fieldErrorJourney } from '../journeys/public.mjs';
@@ -177,4 +178,128 @@ test('zoom actual Chromium page zoom at 200% and 400%', async ({}, info) => {
     await info.attach('actual-page-zoom', { body: JSON.stringify(measurements), contentType: 'application/json' });
     expect(problems, 'zoom runtime/network health').toEqual([]);
   } finally { await context.close(); }
+});
+
+test('behavior SiteShell inline script, rapid card morph, and lifecycle teardown in Chromium', async ({ page }, info) => {
+  test.skip(info.project.name !== 'chromium-1280', 'Run once on standard 1280px viewport');
+  const problems = observe(page);
+  const shell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
+  const scripts = [...shell.matchAll(/<script is:inline>([\s\S]*?)<\/script>/g)].map(m => m[1]);
+
+  await page.setContent(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        ${scripts.map(s => `<script>${s}</script>`).join('\n')}
+      </head>
+      <body>
+        <a id="link1" href="/posts/a/">Valid</a>
+        <a id="linkOptOut" href="/posts/b/" data-astro-prefetch="false">Opt Out</a>
+        <a id="linkReload" href="/posts/c/" data-astro-reload>Reload</a>
+        <a id="linkAction" href="/_actions/submit">Action</a>
+        <div id="cardA" class="card" data-vt-card>
+          <div class="card-media">Img A</div>
+          <div class="card-title">Title A</div>
+        </div>
+        <div id="cardB" class="card" data-vt-card>
+          <div class="card-media">Img B</div>
+          <div class="card-title">Title B</div>
+        </div>
+        <div id="articleHero" data-vt-hero-media>Article Hero Img</div>
+        <div id="post-title">Article Title</div>
+      </body>
+    </html>
+  `);
+
+  const result = await page.evaluate(async () => {
+    const cardA = document.getElementById('cardA');
+    const cardB = document.getElementById('cardB');
+
+    // 1. Rapid card morph: Navigation 1 on Card A
+    const evA = new Event('astro:before-preparation');
+    evA.sourceElement = cardA;
+    document.dispatchEvent(evA);
+    const aInitial = cardA.querySelector('.card-media').style.viewTransitionName;
+
+    // Rapid superseding Navigation 2 on Card B
+    const evB = new Event('astro:before-preparation');
+    evB.sourceElement = cardB;
+    document.dispatchEvent(evB);
+    const aAfterB = cardA.querySelector('.card-media').style.viewTransitionName;
+    const bAfterB = cardB.querySelector('.card-media').style.viewTransitionName;
+
+    let vtStatus = 'OK';
+    try {
+      if (document.startViewTransition) {
+        const vt = document.startViewTransition(() => {});
+        await vt.ready;
+      }
+    } catch (err) {
+      vtStatus = err.message;
+    }
+
+    // 2. Navigation abort signal teardown
+    const controller = new AbortController();
+    const evAbort = new Event('astro:before-preparation');
+    evAbort.sourceElement = cardA;
+    evAbort.signal = controller.signal;
+    document.dispatchEvent(evAbort);
+    const nameBeforeAbort = cardA.querySelector('.card-media').style.viewTransitionName;
+    controller.abort();
+    const nameAfterAbort = cardA.querySelector('.card-media').style.viewTransitionName;
+
+    // 3. BFCache restoration (pageshow persisted: true)
+    document.documentElement.setAttribute('data-vt-loading', '');
+    cardA.querySelector('.card-media').style.viewTransitionName = 'hero-media';
+    const pageShowEv = new Event('pageshow');
+    Object.defineProperty(pageShowEv, 'persisted', { value: true });
+    window.dispatchEvent(pageShowEv);
+    const hasLoadingAfterBFCache = document.documentElement.hasAttribute('data-vt-loading');
+    const nameAfterBFCache = cardA.querySelector('.card-media').style.viewTransitionName;
+
+    // 4. Reverse morphing using event.from source URL
+    let reverseMorphWorked = false;
+    const evReverse = new Event('astro:before-preparation');
+    evReverse.from = new URL('http://localhost:4321/posts/welcome/');
+    evReverse.to = new URL('http://localhost:4321/');
+    const mockDestDoc = document.implementation.createHTMLDocument();
+    mockDestDoc.body.innerHTML = `
+      <div id="destCard" class="card" data-vt-card>
+        <a href="/posts/welcome/" class="card-link">Post</a>
+        <div class="card-media">Card Img</div>
+        <div class="card-title">Card Title</div>
+      </div>
+    `;
+    evReverse.newDocument = mockDestDoc;
+    evReverse.loader = () => Promise.resolve();
+    document.dispatchEvent(evReverse);
+    await evReverse.loader();
+    const destCardMedia = mockDestDoc.querySelector('.card-media');
+    if (destCardMedia && destCardMedia.style.viewTransitionName === 'hero-media') {
+      reverseMorphWorked = true;
+    }
+
+    return {
+      aInitial,
+      aAfterB,
+      bAfterB,
+      vtStatus,
+      nameBeforeAbort,
+      nameAfterAbort,
+      hasLoadingAfterBFCache,
+      nameAfterBFCache,
+      reverseMorphWorked,
+    };
+  });
+
+  expect(result.aInitial).toBe('hero-media');
+  expect(result.aAfterB).toBe('');
+  expect(result.bAfterB).toBe('hero-media');
+  expect(result.vtStatus).toBe('OK');
+  expect(result.nameBeforeAbort).toBe('hero-media');
+  expect(result.nameAfterAbort).toBe('');
+  expect(result.hasLoadingAfterBFCache).toBe(false);
+  expect(result.nameAfterBFCache).toBe('');
+  expect(result.reverseMorphWorked).toBe(true);
+  expect(problems).toEqual([]);
 });

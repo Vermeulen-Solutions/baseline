@@ -31,6 +31,42 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
     <title>{title}</title>
     {metadataOwner === 'shell' && description && <meta name="description" content={description} />}
     {metadataOwner === 'shell' && canonical && <link rel="canonical" href={canonical} />}
+    {import.meta.env.DEV && (
+      <script is:inline>
+        // Development-only deterministic latency & failure testing hooks (excluded from production builds)
+        // Registered before the main shell script so injected delays and errors are wrapped by the main loader's try/catch
+        document.addEventListener('astro:before-preparation', (event) => {
+          if (event && 'loader' in event && typeof event.loader === 'function') {
+            const originalLoader = event.loader;
+            event.loader = async () => {
+              if (event.signal?.aborted) {
+                throw new DOMException('Navigation aborted', 'AbortError');
+              }
+              const destUrl = event.to ? new URL(event.to, location.href) : null;
+              const delayParam = destUrl?.searchParams?.get('_vt_delay') ?? window['__BASELINE_VT_DELAY__'];
+              if (delayParam) {
+                const ms = Math.min(Math.max(0, parseInt(String(delayParam), 10) || 0), 10000);
+                if (ms > 0) {
+                  await new Promise((resolve, reject) => {
+                    const timer = setTimeout(resolve, ms);
+                    event.signal?.addEventListener('abort', () => {
+                      clearTimeout(timer);
+                      reject(new DOMException('Navigation aborted', 'AbortError'));
+                    }, { once: true });
+                  });
+                }
+              }
+              const failParam = destUrl?.searchParams?.get('_vt_fail') ?? window['__BASELINE_VT_FAIL__'];
+              const shouldFail = failParam === true || failParam === 'true' || failParam === '1';
+              if (shouldFail) {
+                throw new Error('Deterministic ViewTransition failure injection');
+              }
+              return originalLoader();
+            };
+          }
+        });
+      </script>
+    )}
     <script is:inline>
       (() => {
         const STORAGE_KEY = 'baseline:surface';
@@ -53,6 +89,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         let savedScroll = null;
         let activeMorphCard = null;
         let activeNavToken = 0;
+        let activePreparedNavToken = 0;
         let activeTransitionPending = false;
         let currentViewTransition = null;
         let currentAssignedElements = [];
@@ -270,11 +307,12 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                         destTitle.style.viewTransitionName = 'hero-title';
                       }
                     } else if (leavingHero) {
-                      const currentPath = location.pathname.replace(/\/+$/, '') || '/';
+                      const sourceUrl = event && 'from' in event && event.from ? event.from : location;
+                      const fromPath = (sourceUrl.pathname || '').replace(/\/+$/, '') || '/';
                       const targetCard = event.newDocument.querySelector(
-                        `[data-vt-card] a[href="${currentPath}"], [data-vt-card] a[href="${currentPath}/"], ` +
-                        `a[href="${currentPath}"].card-link, a[href="${currentPath}/"].card-link, ` +
-                        `a[href="${currentPath}"].clickable-parent, a[href="${currentPath}/"].clickable-parent`
+                        `[data-vt-card] a[href="${fromPath}"], [data-vt-card] a[href="${fromPath}/"], ` +
+                        `a[href="${fromPath}"].card-link, a[href="${fromPath}/"].card-link, ` +
+                        `a[href="${fromPath}"].clickable-parent, a[href="${fromPath}/"].clickable-parent`
                       )?.closest('[data-vt-card], .card');
                       if (targetCard) {
                         const cardMedia = targetCard.querySelector('.card-media, [data-vt-media]');
@@ -292,6 +330,11 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                     warmDocumentImages(event.newDocument),
                     new Promise((resolve) => setTimeout(resolve, 80)),
                   ]);
+                  if (signal?.aborted || navToken !== activeNavToken) {
+                    if (typeof event.preventDefault === 'function') event.preventDefault();
+                    return;
+                  }
+                  activePreparedNavToken = navToken;
                 }
               } catch (err) {
                 if (navToken === activeNavToken) {
@@ -305,7 +348,9 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           }
         });
         document.addEventListener('astro:after-preparation', () => {
-          clearVtLoading();
+          if (activePreparedNavToken === activeNavToken) {
+            clearVtLoading();
+          }
         });
         document.addEventListener('astro:before-swap', (event) => {
           if (event && 'newDocument' in event && event.newDocument) {
@@ -462,38 +507,6 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         });
       })();
     </script>
-    {import.meta.env.DEV && (
-      <script is:inline>
-        // Development-only deterministic latency & failure testing hooks (excluded from production builds)
-        document.addEventListener('astro:before-preparation', (event) => {
-          if (event && 'loader' in event && typeof event.loader === 'function') {
-            const originalLoader = event.loader;
-            event.loader = async () => {
-              const destUrl = event.to ? new URL(event.to, location.href) : null;
-              const delayParam = destUrl?.searchParams?.get('_vt_delay') ?? window['__BASELINE_VT_DELAY__'];
-              if (delayParam) {
-                const ms = Math.min(Math.max(0, parseInt(String(delayParam), 10) || 0), 10000);
-                if (ms > 0) {
-                  await new Promise((resolve, reject) => {
-                    const timer = setTimeout(resolve, ms);
-                    event.signal?.addEventListener('abort', () => {
-                      clearTimeout(timer);
-                      reject(new DOMException('Navigation aborted', 'AbortError'));
-                    }, { once: true });
-                  });
-                }
-              }
-              const failParam = destUrl?.searchParams?.get('_vt_fail') ?? window['__BASELINE_VT_FAIL__'];
-              const shouldFail = failParam === true || failParam === 'true' || failParam === '1';
-              if (shouldFail) {
-                throw new Error('Deterministic ViewTransition failure injection');
-              }
-              return originalLoader();
-            };
-          }
-        });
-      </script>
-    )}
     <slot name="head" />
   </head>
   <body>
