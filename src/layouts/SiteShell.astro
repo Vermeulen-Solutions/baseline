@@ -101,6 +101,118 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           document.documentElement.removeAttribute('data-vt-direction');
           activeDirection = null;
         };
+
+        // Swap helpers & script execution tracker for seamless transition swap pipeline
+        const executedScriptKeys = new Set();
+        const getScriptKey = (s) => (s.src ? new URL(s.src, location.href).href : s.textContent || '');
+        for (const s of document.scripts) {
+          executedScriptKeys.add(getScriptKey(s));
+          s.dataset.astroExec = '';
+        }
+
+        const createExecutableScript = (script) => {
+          const fresh = document.createElement('script');
+          fresh.textContent = script.textContent;
+          for (const attr of script.attributes) {
+            fresh.setAttribute(attr.name, attr.value);
+          }
+          fresh.dataset.astroExec = '';
+          return fresh;
+        };
+
+        const deselectScriptsFallback = (doc) => {
+          for (const s of doc.scripts) {
+            if (!s.hasAttribute('data-astro-rerun') && executedScriptKeys.has(getScriptKey(s))) {
+              s.dataset.astroExec = '';
+            }
+          }
+        };
+
+        const swapRootAttributesFallback = (newDoc) => {
+          const nonOverridable = ['data-astro-transition', 'data-astro-transition-fallback'];
+          const root = document.documentElement;
+          const preserved = [...root.attributes].filter(({ name }) => {
+            root.removeAttribute(name);
+            return nonOverridable.includes(name);
+          });
+          [...newDoc.documentElement.attributes, ...preserved].forEach(({ name, value }) => {
+            root.setAttribute(name, value);
+          });
+        };
+
+        const swapHeadElementsFallback = (newDoc) => {
+          if (newDoc.title) {
+            document.title = newDoc.title;
+          }
+          const PERSIST_ATTR = 'data-astro-transition-persist';
+          const isPersisted = (el) => {
+            const id = el.getAttribute(PERSIST_ATTR);
+            if (id && newDoc.head.querySelector(`[${PERSIST_ATTR}="${escapeSelector(id)}"]`)) return true;
+            if (el.matches('link[rel=stylesheet]')) {
+              const href = el.getAttribute('href');
+              return Boolean(href && newDoc.head.querySelector(`link[rel=stylesheet][href="${escapeSelector(href)}"]`));
+            }
+            if (el.tagName === 'STYLE' && el.textContent) {
+              for (const s of newDoc.head.querySelectorAll('style')) {
+                if (s.textContent === el.textContent) return true;
+              }
+            }
+            if (el.matches('link[rel=preload][as=font]')) {
+              const href = el.getAttribute('href');
+              return Boolean(href && newDoc.head.querySelector(`link[rel=preload][as=font][href="${escapeSelector(href)}"]`));
+            }
+            return false;
+          };
+
+          for (const el of Array.from(document.head.children)) {
+            if (isPersisted(el)) {
+              const id = el.getAttribute(PERSIST_ATTR);
+              const match = id
+                ? newDoc.head.querySelector(`[${PERSIST_ATTR}="${escapeSelector(id)}"]`)
+                : (el.matches('link[rel=stylesheet]')
+                  ? newDoc.head.querySelector(`link[rel=stylesheet][href="${escapeSelector(el.getAttribute('href'))}"]`)
+                  : null);
+              match?.remove();
+            } else {
+              el.remove();
+            }
+          }
+
+          for (const child of Array.from(newDoc.head.childNodes)) {
+            if (child.nodeType === 1 || child.nodeType === 8) {
+              if (child.tagName === 'SCRIPT') {
+                const script = child;
+                if (script.dataset.astroExec === undefined) {
+                  const type = script.getAttribute('type');
+                  if (!type || type === 'module' || type === 'text/javascript') {
+                    const fresh = createExecutableScript(script);
+                    executedScriptKeys.add(getScriptKey(fresh));
+                    document.head.appendChild(fresh);
+                    continue;
+                  }
+                }
+              }
+              document.head.appendChild(document.adoptNode(child));
+            }
+          }
+        };
+
+        const saveFocusFallback = () => {
+          const activeEl = document.activeElement;
+          if (activeEl?.closest?.('[data-astro-transition-persist], [data-vt-persist]')) {
+            if (activeEl instanceof HTMLInputElement || activeEl instanceof HTMLTextAreaElement) {
+              const start = activeEl.selectionStart;
+              const end = activeEl.selectionEnd;
+              return () => {
+                activeEl.focus();
+                if (typeof start === 'number') activeEl.selectionStart = start;
+                if (typeof end === 'number') activeEl.selectionEnd = end;
+              };
+            }
+            return () => activeEl.focus();
+          }
+          return () => {};
+        };
         const MAX_WARMED = 30;
         const warmedPages = new Map();
         const warmedImages = new Map();
@@ -271,12 +383,18 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           const card = sourceEl?.closest('[data-vt-card], .card.card--clickable, .card');
           activeMorphCard = card && card.querySelector('.card-media, [data-vt-media]') ? card : null;
 
-          // Derive navigation direction (TurnSignal pattern): honors explicit data-vt-direction, router direction, or path depth
+          // Derive navigation direction (TurnSignal pattern):
+          // History traversal (popstate / back-forward buttons) uses router direction.
+          // Push / replace navigation (link clicks, form submissions, navigate) uses anchor override, then path depth.
           let direction = 'forward';
-          if (event && 'direction' in event && (event['direction'] === 'back' || event['direction'] === 'backward')) {
-            direction = 'back';
-          } else if (event && 'direction' in event && event['direction'] === 'forward') {
-            direction = 'forward';
+          const isHistoryTraversal = Boolean(
+            event && 'navigationType' in event && event.navigationType === 'traverse'
+          );
+
+          if (isHistoryTraversal) {
+            direction = (event && 'direction' in event && (event.direction === 'back' || event.direction === 'backward'))
+              ? 'back'
+              : 'forward';
           } else {
             const overrideDir = sourceEl?.closest('[data-vt-direction]')?.getAttribute('data-vt-direction');
             if (overrideDir === 'back' || overrideDir === 'backward') {
@@ -293,7 +411,11 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                   direction = 'back';
                 } else if (toDepth > fromDepth) {
                   direction = 'forward';
+                } else {
+                  direction = 'forward';
                 }
+              } else {
+                direction = 'forward';
               }
             }
           }
@@ -397,78 +519,172 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
             }
           }
 
-          // Targeted Replacement Swap & Persistent Element Swap
+          // Targeted Replacement Swap & Connected-DOM Persistent Element Handling
           const newDoc = event && 'newDocument' in event ? event.newDocument : null;
           if (newDoc && typeof event.swap === 'function') {
-            const replaceTargets = Array.from(document.querySelectorAll('[data-vt-replace]'));
-            const persistElements = Array.from(document.querySelectorAll('[data-vt-persist]'));
+            // Synchronize data-astro-transition-persist from data-vt-persist so native Astro swap recognizes it
+            document.querySelectorAll('[data-vt-persist]').forEach((el) => {
+              if (!el.hasAttribute('data-astro-transition-persist')) {
+                const val = el.getAttribute('data-vt-persist') || el.id || '';
+                if (val) el.setAttribute('data-astro-transition-persist', val);
+              }
+            });
+            newDoc.querySelectorAll('[data-vt-persist]').forEach((el) => {
+              if (!el.hasAttribute('data-astro-transition-persist')) {
+                const val = el.getAttribute('data-vt-persist') || el.id || '';
+                if (val) el.setAttribute('data-astro-transition-persist', val);
+              }
+            });
 
-            if (replaceTargets.length > 0 || persistElements.length > 0) {
+            const allTargets = Array.from(document.querySelectorAll('[data-vt-replace]'));
+
+            if (allTargets.length > 0) {
               const defaultSwap = event.swap;
 
-              event.swap = () => {
-                let canTargetedSwap = replaceTargets.length > 0;
-                const pairs = [];
-                if (canTargetedSwap) {
-                  for (const currentEl of replaceTargets) {
-                    const tag = currentEl.getAttribute('data-vt-replace');
-                    const selector = tag
-                      ? `[data-vt-replace="${escapeSelector(tag)}"]`
-                      : (currentEl.id ? `#${escapeSelector(currentEl.id)}` : currentEl.tagName.toLowerCase());
-                    const incomingEl = newDoc.querySelector(selector);
-                    if (incomingEl) {
-                      pairs.push({ currentEl, incomingEl });
-                    } else {
-                      canTargetedSwap = false;
-                      break;
-                    }
-                  }
+              // Validate pairing before mutation: handle outermost targets only
+              const outermostTargets = allTargets.filter((target) =>
+                !allTargets.some((other) => other !== target && other.contains(target))
+              );
+
+              let isPairingValid = outermostTargets.length > 0;
+              const pairs = [];
+              const matchedIncomingElements = new Set();
+              const matchedCurrentSelectors = new Set();
+
+              for (const currentEl of outermostTargets) {
+                const rawKey = currentEl.getAttribute('data-vt-replace')?.trim();
+                let selector;
+                if (rawKey) {
+                  selector = `[data-vt-replace="${escapeSelector(rawKey)}"]`;
+                } else if (currentEl.id) {
+                  selector = `#${escapeSelector(currentEl.id)}`;
+                } else {
+                  selector = `${currentEl.tagName.toLowerCase()}[data-vt-replace]`;
                 }
 
-                if (canTargetedSwap && pairs.length > 0) {
-                  // If persistent elements are inside targeted containers, transplant them so their live state survives
-                  persistElements.forEach((persistEl) => {
-                    if (replaceTargets.some((target) => target.contains(persistEl))) {
-                      const key = persistEl.getAttribute('data-vt-persist');
+                if (matchedCurrentSelectors.has(selector) || document.querySelectorAll(selector).length !== 1) {
+                  isPairingValid = false;
+                  break;
+                }
+                matchedCurrentSelectors.add(selector);
+
+                const incomingMatches = newDoc.querySelectorAll(selector);
+                if (incomingMatches.length !== 1) {
+                  isPairingValid = false;
+                  break;
+                }
+
+                const incomingEl = incomingMatches[0];
+                if (matchedIncomingElements.has(incomingEl)) {
+                  isPairingValid = false;
+                  break;
+                }
+                matchedIncomingElements.add(incomingEl);
+
+                pairs.push({ currentEl, incomingEl });
+              }
+
+              if (isPairingValid && pairs.length > 0) {
+                event.swap = () => {
+                  const swapApi = (typeof window !== 'undefined' && window.__astro_swap) || null;
+
+                  // 1. Deselect scripts that should not re-run
+                  if (swapApi && typeof swapApi.deselectScripts === 'function') {
+                    swapApi.deselectScripts(newDoc);
+                  } else {
+                    deselectScriptsFallback(newDoc);
+                  }
+
+                  // 2. Synchronize root attributes (lang, class, data-surface, dir, etc.)
+                  if (swapApi && typeof swapApi.swapRootAttributes === 'function') {
+                    swapApi.swapRootAttributes(newDoc);
+                  } else {
+                    swapRootAttributesFallback(newDoc);
+                  }
+                  if (activeDirection) {
+                    document.documentElement.setAttribute('data-vt-direction', activeDirection);
+                  }
+                  applySurface(document.documentElement);
+
+                  // 3. Synchronize head elements (metadata, title, styles, stylesheets, font preloads, new scripts)
+                  if (swapApi && typeof swapApi.swapHeadElements === 'function') {
+                    swapApi.swapHeadElements(newDoc);
+                  } else {
+                    swapHeadElementsFallback(newDoc);
+                  }
+
+                  // 4. Save focus if focused element is persisted
+                  let restoreFocus = () => {};
+                  if (swapApi && typeof swapApi.saveFocus === 'function') {
+                    restoreFocus = swapApi.saveFocus();
+                  } else {
+                    restoreFocus = saveFocusFallback();
+                  }
+
+                  // 5. Connected-DOM persistent element handling inside replaced containers
+                  const docEl = document.documentElement;
+                  const moveBefore = typeof docEl.moveBefore === 'function' ? (p, n, c) => p.moveBefore(n, c) : null;
+                  const persistPairs = [];
+
+                  for (const { currentEl, incomingEl } of pairs) {
+                    const persistentInside = Array.from(
+                      currentEl.querySelectorAll('[data-astro-transition-persist], [data-vt-persist]')
+                    );
+                    for (const persistEl of persistentInside) {
+                      const key = persistEl.getAttribute('data-astro-transition-persist') || persistEl.getAttribute('data-vt-persist');
                       const selector = key
-                        ? `[data-vt-persist="${escapeSelector(key)}"]`
+                        ? `[data-astro-transition-persist="${escapeSelector(key)}"], [data-vt-persist="${escapeSelector(key)}"]`
                         : (persistEl.id ? `#${escapeSelector(persistEl.id)}` : null);
-                      if (selector) {
-                        const incomingPersist = newDoc.querySelector(selector);
-                        if (incomingPersist && incomingPersist !== persistEl) {
-                          incomingPersist.replaceWith(persistEl);
+                      if (!selector) continue;
+                      const targetInIncoming = incomingEl.querySelector(selector);
+                      if (targetInIncoming) {
+                        persistPairs.push({ persistEl, targetInIncoming });
+                        // Lift to documentElement so it stays connected to document and does not pause/reset playback
+                        if (moveBefore) {
+                          moveBefore(docEl, persistEl, null);
+                        } else {
+                          docEl.appendChild(persistEl);
                         }
                       }
                     }
-                  });
 
-                  // Targeted replacement: replace only the marked containers
-                  pairs.forEach(({ currentEl, incomingEl }) => {
+                    // Swap the container in the live document
                     currentEl.replaceWith(incomingEl);
-                  });
-
-                  // Synchronize head metadata and title from incoming document
-                  document.title = newDoc.title;
-                  if (newDoc.documentElement.lang) {
-                    document.documentElement.lang = newDoc.documentElement.lang;
                   }
-                } else {
-                  // Full / default swap: transplant live persistent elements into newDoc so they survive defaultSwap
-                  persistElements.forEach((persistEl) => {
-                    const key = persistEl.getAttribute('data-vt-persist');
-                    const selector = key
-                      ? `[data-vt-persist="${escapeSelector(key)}"]`
-                      : (persistEl.id ? `#${escapeSelector(persistEl.id)}` : null);
-                    if (selector) {
-                      const incomingPersist = newDoc.querySelector(selector);
-                      if (incomingPersist && incomingPersist !== persistEl) {
-                        incomingPersist.replaceWith(persistEl);
+
+                  // Move lifted persistent elements into incoming container at the position of their targets
+                  for (const { persistEl, targetInIncoming } of persistPairs) {
+                    if (moveBefore) {
+                      moveBefore(targetInIncoming.parentNode, persistEl, targetInIncoming);
+                      targetInIncoming.remove();
+                    } else {
+                      targetInIncoming.replaceWith(persistEl);
+                    }
+                  }
+
+                  // 6. Execute any newly inserted scripts in replaced containers if router doesn't
+                  for (const { incomingEl } of pairs) {
+                    for (const script of incomingEl.querySelectorAll('script')) {
+                      if (script.dataset.astroExec === undefined) {
+                        const type = script.getAttribute('type');
+                        if (!type || type === 'module' || type === 'text/javascript') {
+                          const fresh = createExecutableScript(script);
+                          executedScriptKeys.add(getScriptKey(fresh));
+                          script.replaceWith(fresh);
+                        }
                       }
                     }
-                  });
-                  defaultSwap();
-                }
-              };
+                  }
+
+                  // 7. Restore focus
+                  if (typeof restoreFocus === 'function') {
+                    restoreFocus();
+                  }
+                };
+              } else {
+                // If pairing is ambiguous or unsupported, safely fall back to defaultSwap
+                event.swap = defaultSwap;
+              }
             }
           }
 

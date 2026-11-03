@@ -272,7 +272,7 @@
   {
     "path": "src/layouts/SiteShell.astro",
     "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), and deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail); preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "cb8c0324c329641fa28815ab4f1b8a00e50bfe7f0ae2ae1283289e2340ecbf83"
+    "sha256": "b11db28f565438a273d64a984f8b242da361bc7a037b3a2aec356251e6a162f7"
   },
   {
     "path": "src/components/EmDashImage.astro",

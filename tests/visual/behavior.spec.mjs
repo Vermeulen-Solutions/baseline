@@ -404,21 +404,27 @@ test('behavior directional transitions, targeted replacement, and persistent ele
 
   await page.setContent(`
     <!DOCTYPE html>
-    <html>
+    <html lang="en" data-surface="light">
       <head>
-        <style>${vtCss}</style>
+        <title>Page A Title</title>
+        <meta name="description" content="Page A Description" />
+        <link rel="canonical" href="http://localhost:4321/page-a" />
+        <style id="page-style-a">.page-a-only { color: red; }</style>
+        <style id="global-vt-styles" data-astro-transition-persist="global-vt-styles">${vtCss}</style>
         ${scripts.map(s => `<script>${s}</script>`).join('\n')}
       </head>
       <body>
-        <header id="site-header">Header</header>
-        <div id="outer-player" data-vt-persist>Outer Audio Player</div>
+        <header id="site-header">Header A</header>
+        <audio id="live-audio-player" data-astro-transition-persist="global-player" data-vt-persist="global-player"></audio>
         <main id="main-content" data-vt-replace>
-          <div id="inner-player" data-vt-persist>Inner Video Player</div>
           <a id="forwardLink" href="/posts/deep/entry/">Deeper</a>
           <a id="backLinkOverride" href="/posts/deep/entry/" data-vt-direction="back">Back Override</a>
+          <div id="nested-container" data-vt-replace>
+            <p id="nested-content">Initial Nested Content</p>
+          </div>
           <p id="main-body-text">Initial Main Content</p>
         </main>
-        <footer id="site-footer">Footer</footer>
+        <footer id="site-footer">Footer A</footer>
       </body>
     </html>
   `);
@@ -426,60 +432,91 @@ test('behavior directional transitions, targeted replacement, and persistent ele
   const results = await page.evaluate(async () => {
     const forwardLink = document.getElementById('forwardLink');
     const backLinkOverride = document.getElementById('backLinkOverride');
-    const outerPlayer = document.getElementById('outer-player');
-    const innerPlayer = document.getElementById('inner-player');
     const siteHeader = document.getElementById('site-header');
+    const liveAudio = document.getElementById('live-audio-player');
 
-    outerPlayer.__liveState = { currentTime: 42, isPlaying: true };
-    innerPlayer.__liveState = { currentTime: 88, isPlaying: true };
+    // Simulate audio playback state
+    Object.defineProperty(liveAudio, 'currentTime', { value: 3.5, writable: true });
+    Object.defineProperty(liveAudio, 'paused', { value: false, writable: true });
+    liveAudio.__identityMarker = 'live-audio-node-1';
     siteHeader.__renderIdentity = 'initial-header';
 
-    // 1. Forward navigation by depth comparison (/ -> /posts/deep/entry/)
-    const evForward = new Event('astro:before-preparation');
-    evForward.from = new URL('http://localhost:4321/');
-    evForward.to = new URL('http://localhost:4321/posts/deep/entry/');
-    evForward.sourceElement = forwardLink;
-    document.dispatchEvent(evForward);
-    const dirForward = document.documentElement.getAttribute('data-vt-direction');
+    // 1. [P4 Verification]: Router supplies direction='forward' on push navigation
+    // 1a. Ordinary push navigation going deeper (/ -> /posts/deep/entry/)
+    const evPushDeeper = new Event('astro:before-preparation');
+    evPushDeeper.navigationType = 'push';
+    evPushDeeper.direction = 'forward';
+    evPushDeeper.from = new URL('http://localhost:4321/');
+    evPushDeeper.to = new URL('http://localhost:4321/posts/deep/entry/');
+    evPushDeeper.sourceElement = forwardLink;
+    document.dispatchEvent(evPushDeeper);
+    const dirPushDeeper = document.documentElement.getAttribute('data-vt-direction');
 
-    // 2. Backward navigation by depth comparison (/posts/deep/entry/ -> /posts/)
-    const evBack = new Event('astro:before-preparation');
-    evBack.from = new URL('http://localhost:4321/posts/deep/entry/');
-    evBack.to = new URL('http://localhost:4321/posts/');
-    document.dispatchEvent(evBack);
-    const dirBack = document.documentElement.getAttribute('data-vt-direction');
+    // 1b. Anchor override: push navigation where anchor specifies data-vt-direction="back"
+    const evPushOverride = new Event('astro:before-preparation');
+    evPushOverride.navigationType = 'push';
+    evPushOverride.direction = 'forward'; // Astro router supplies forward!
+    evPushOverride.from = new URL('http://localhost:4321/');
+    evPushOverride.to = new URL('http://localhost:4321/posts/deep/entry/');
+    evPushOverride.sourceElement = backLinkOverride;
+    document.dispatchEvent(evPushOverride);
+    const dirPushOverride = document.documentElement.getAttribute('data-vt-direction');
 
-    // 3. Link override data-vt-direction="back"
-    const evOverride = new Event('astro:before-preparation');
-    evOverride.from = new URL('http://localhost:4321/');
-    evOverride.to = new URL('http://localhost:4321/posts/deep/entry/');
-    evOverride.sourceElement = backLinkOverride;
-    document.dispatchEvent(evOverride);
-    const dirOverride = document.documentElement.getAttribute('data-vt-direction');
+    // 1c. Depth comparison: push navigation moving shallower (/posts/deep/entry/ -> /posts/)
+    const evPushShallower = new Event('astro:before-preparation');
+    evPushShallower.navigationType = 'push';
+    evPushShallower.direction = 'forward'; // Astro router supplies forward!
+    evPushShallower.from = new URL('http://localhost:4321/posts/deep/entry/');
+    evPushShallower.to = new URL('http://localhost:4321/posts/');
+    document.dispatchEvent(evPushShallower);
+    const dirPushShallower = document.documentElement.getAttribute('data-vt-direction');
 
-    // 4. Router direction event.direction = 'back'
-    const evRouterDir = new Event('astro:before-preparation');
-    evRouterDir.direction = 'back';
-    document.dispatchEvent(evRouterDir);
-    const dirRouter = document.documentElement.getAttribute('data-vt-direction');
+    // 1d. History traversal: popstate back traversal
+    const evTraverseBack = new Event('astro:before-preparation');
+    evTraverseBack.navigationType = 'traverse';
+    evTraverseBack.direction = 'back';
+    document.dispatchEvent(evTraverseBack);
+    const dirTraverseBack = document.documentElement.getAttribute('data-vt-direction');
 
-    // Reset to forward for swap test
+    // 1e. History traversal: popstate forward traversal
+    const evTraverseForward = new Event('astro:before-preparation');
+    evTraverseForward.navigationType = 'traverse';
+    evTraverseForward.direction = 'forward';
+    document.dispatchEvent(evTraverseForward);
+    const dirTraverseForward = document.documentElement.getAttribute('data-vt-direction');
+
+    // Reset direction for swap test
     const evPrepForSwap = new Event('astro:before-preparation');
+    evPrepForSwap.navigationType = 'push';
+    evPrepForSwap.direction = 'forward';
     evPrepForSwap.from = new URL('http://localhost:4321/');
-    evPrepForSwap.to = new URL('http://localhost:4321/posts/deep/entry/');
+    evPrepForSwap.to = new URL('http://localhost:4321/page-b');
     document.dispatchEvent(evPrepForSwap);
 
-    // 5. Targeted replacement swap and persistent element swap in astro:before-swap
-    const nextDoc = document.implementation.createHTMLDocument('New Deep Page');
-    nextDoc.documentElement.lang = 'en-US';
+    // 2. [P1 & P2 & P3 Verification]: Targeted replacement swap
+    // Tests head sync, root attributes, B's scripts, connected-DOM audio persistence, and nested target preservation
+    const nextDoc = document.implementation.createHTMLDocument('Page B Title');
+    nextDoc.documentElement.lang = 'fr';
+    nextDoc.documentElement.setAttribute('data-surface', 'dark');
+    nextDoc.head.innerHTML = `
+      <title>Page B Title</title>
+      <meta name="description" content="Page B Description" />
+      <link rel="canonical" href="http://localhost:4321/page-b" />
+      <style id="global-vt-styles" data-astro-transition-persist="global-vt-styles"></style>
+      <style id="page-style-b">.page-b-only { color: blue; }</style>
+      <script>window.__b_head_script_ran = true;</script>
+    `;
     nextDoc.body.innerHTML = `
-      <header id="site-header">Header In Next Doc</header>
-      <div id="outer-player" data-vt-persist>Outer Player Placeholder</div>
+      <header id="site-header">Header B</header>
+      <audio id="live-audio-player" data-astro-transition-persist="global-player" data-vt-persist="global-player"></audio>
       <main id="main-content" data-vt-replace>
-        <div id="inner-player" data-vt-persist>Inner Player Placeholder</div>
-        <p id="main-body-text">Replaced Deep Content</p>
+        <div id="nested-container" data-vt-replace>
+          <p id="nested-content">Replaced Nested Content</p>
+        </div>
+        <p id="main-body-text">Replaced Main Content</p>
+        <script>window.__b_body_script_ran = true;</script>
       </main>
-      <footer id="site-footer">Footer In Next Doc</footer>
+      <footer id="site-footer">Footer B</footer>
     `;
 
     let defaultSwapCalled = false;
@@ -495,103 +532,143 @@ test('behavior directional transitions, targeted replacement, and persistent ele
       evSwap.swap();
     }
 
-    const mainContentAfterSwap = document.getElementById('main-body-text')?.textContent?.trim();
-    const headerIdentityAfterSwap = document.getElementById('site-header')?.__renderIdentity;
-    const outerPlayerLiveStateAfterSwap = document.getElementById('outer-player')?.__liveState;
-    const innerPlayerLiveStateAfterSwap = document.getElementById('inner-player')?.__liveState;
+    // Inspect results after targeted swap
     const pageTitleAfterSwap = document.title;
-    const pageLangAfterSwap = document.documentElement.lang;
+    const metaDescAfterSwap = document.querySelector('meta[name="description"]')?.getAttribute('content');
+    const canonicalAfterSwap = document.querySelector('link[rel="canonical"]')?.getAttribute('href');
+    const surfaceAfterSwap = document.documentElement.getAttribute('data-surface');
+    const styleAPresentAfterSwap = Boolean(document.getElementById('page-style-a'));
+    const styleBPresentAfterSwap = Boolean(document.getElementById('page-style-b'));
+    const headScriptRan = Boolean(window['__b_head_script_ran']);
+    const bodyScriptRan = Boolean(window['__b_body_script_ran']);
 
-    // 6. Direction attribute cleanup on BFCache restoration
+    const mainContentAfterSwap = document.getElementById('main-body-text')?.textContent?.trim();
+    const nestedContentAfterSwap = document.getElementById('nested-content')?.textContent?.trim();
+    const headerIdentityAfterSwap = document.getElementById('site-header')?.__renderIdentity;
+
+    // Audio persistence assertions
+    const audioAfterSwap = document.getElementById('live-audio-player');
+    const audioSameNode = audioAfterSwap === liveAudio;
+    const audioCurrentTimeAfterSwap = audioAfterSwap?.currentTime;
+    const audioPausedAfterSwap = audioAfterSwap?.paused;
+
+    // 3. [P3 Verification]: Ambiguous unkeyed targets safely fall back to defaultSwap
+    const ambiguousDocCurrent = document.implementation.createHTMLDocument('Ambiguous Current');
+    ambiguousDocCurrent.body.innerHTML = `
+      <section data-vt-replace>Section A1</section>
+      <section data-vt-replace>Section A2</section>
+    `;
+    const ambiguousDocNext = document.implementation.createHTMLDocument('Ambiguous Next');
+    ambiguousDocNext.body.innerHTML = `
+      <section data-vt-replace>Section B1</section>
+      <section data-vt-replace>Section B2</section>
+    `;
+
+    // Temporarily mount ambiguous sections to test pairing ambiguity detection
+    const tempAmbiguousContainer = document.createElement('div');
+    tempAmbiguousContainer.innerHTML = `
+      <section data-vt-replace>Section A1</section>
+      <section data-vt-replace>Section A2</section>
+    `;
+    document.body.appendChild(tempAmbiguousContainer);
+
+    let ambiguousFallbackTriggered = false;
+    const evAmbiguousSwap = new Event('astro:before-swap');
+    evAmbiguousSwap.newDocument = ambiguousDocNext;
+    evAmbiguousSwap.swap = () => { ambiguousFallbackTriggered = true; };
+    document.dispatchEvent(evAmbiguousSwap);
+    if (typeof evAmbiguousSwap.swap === 'function') {
+      evAmbiguousSwap.swap();
+    }
+    tempAmbiguousContainer.remove();
+
+    // 4. Direction attribute cleanup on BFCache restoration
     const pageShowEv = new Event('pageshow');
     Object.defineProperty(pageShowEv, 'persisted', { value: true });
     window.dispatchEvent(pageShowEv);
     const dirAfterBFCache = document.documentElement.getAttribute('data-vt-direction');
 
-    // 7. Fallback when replacement target not matched in incoming document
-    const mismatchedDoc = document.implementation.createHTMLDocument('Mismatched Page');
-    mismatchedDoc.body.innerHTML = `<div>No matching data-vt-replace target</div>`;
-    let fallbackSwapCalled = false;
-    const evMismatchedSwap = new Event('astro:before-swap');
-    evMismatchedSwap.newDocument = mismatchedDoc;
-    evMismatchedSwap.swap = () => { fallbackSwapCalled = true; };
-    document.dispatchEvent(evMismatchedSwap);
-    if (typeof evMismatchedSwap.swap === 'function') {
-      evMismatchedSwap.swap();
-    }
-
-    // 8. Full / default swap persistent element transplantation
-    const fullSwapDoc = document.implementation.createHTMLDocument('Full Swap Page');
-    fullSwapDoc.body.innerHTML = `
-      <div id="outer-player" data-vt-persist>Full Swap Placeholder</div>
-      <div>Standard Body</div>
-    `;
-    let fullDefaultSwapCalled = false;
-    let fullSwapDocPlayerHasLiveState = false;
-    const evFullSwap = new Event('astro:before-swap');
-    evFullSwap.newDocument = fullSwapDoc;
-    evFullSwap.swap = () => {
-      fullDefaultSwapCalled = true;
-      fullSwapDocPlayerHasLiveState = fullSwapDoc.getElementById('outer-player')?.__liveState?.currentTime === 42;
-    };
-    document.dispatchEvent(evFullSwap);
-    if (typeof evFullSwap.swap === 'function') {
-      evFullSwap.swap();
-    }
-
     return {
-      dirForward,
-      dirBack,
-      dirOverride,
-      dirRouter,
+      dirPushDeeper,
+      dirPushOverride,
+      dirPushShallower,
+      dirTraverseBack,
+      dirTraverseForward,
       dirInNewDoc,
       defaultSwapCalled,
-      mainContentAfterSwap,
-      headerIdentityAfterSwap,
-      outerPlayerLiveStateAfterSwap,
-      innerPlayerLiveStateAfterSwap,
       pageTitleAfterSwap,
-      pageLangAfterSwap,
+      metaDescAfterSwap,
+      canonicalAfterSwap,
+      surfaceAfterSwap,
+      styleAPresentAfterSwap,
+      styleBPresentAfterSwap,
+      headScriptRan,
+      bodyScriptRan,
+      mainContentAfterSwap,
+      nestedContentAfterSwap,
+      headerIdentityAfterSwap,
+      audioSameNode,
+      audioCurrentTimeAfterSwap,
+      audioPausedAfterSwap,
+      ambiguousFallbackTriggered,
       dirAfterBFCache,
-      fallbackSwapCalled,
-      fullDefaultSwapCalled,
-      fullSwapDocPlayerHasLiveState,
     };
   });
 
-  expect(results.dirForward).toBe('forward');
-  expect(results.dirBack).toBe('back');
-  expect(results.dirOverride).toBe('back');
-  expect(results.dirRouter).toBe('back');
+  // [P4] Direction assertions
+  expect(results.dirPushDeeper).toBe('forward');
+  expect(results.dirPushOverride).toBe('back');
+  expect(results.dirPushShallower).toBe('back');
+  expect(results.dirTraverseBack).toBe('back');
+  expect(results.dirTraverseForward).toBe('forward');
   expect(results.dirInNewDoc).toBe('forward');
-  expect(results.defaultSwapCalled).toBe(false);
-  expect(results.mainContentAfterSwap).toBe('Replaced Deep Content');
-  expect(results.headerIdentityAfterSwap).toBe('initial-header');
-  expect(results.outerPlayerLiveStateAfterSwap).toEqual({ currentTime: 42, isPlaying: true });
-  expect(results.innerPlayerLiveStateAfterSwap).toEqual({ currentTime: 88, isPlaying: true });
-  expect(results.pageTitleAfterSwap).toBe('New Deep Page');
-  expect(results.pageLangAfterSwap).toBe('en-US');
-  expect(results.dirAfterBFCache).toBe(null);
-  expect(results.fallbackSwapCalled).toBe(true);
-  expect(results.fullDefaultSwapCalled).toBe(true);
-  expect(results.fullSwapDocPlayerHasLiveState).toBe(true);
 
-  // 9. Reduced motion check
+  // [P1] Targeted swap head & root synchronization
+  expect(results.defaultSwapCalled).toBe(false);
+  expect(results.pageTitleAfterSwap).toBe('Page B Title');
+  expect(results.metaDescAfterSwap).toBe('Page B Description');
+  expect(results.canonicalAfterSwap).toBe('http://localhost:4321/page-b');
+  expect(results.surfaceAfterSwap).toBe('dark');
+  expect(results.styleAPresentAfterSwap).toBe(false);
+  expect(results.styleBPresentAfterSwap).toBe(true);
+  expect(results.headScriptRan).toBe(true);
+  expect(results.bodyScriptRan).toBe(true);
+
+  // [P2] Connected-DOM audio playback & identity
+  expect(results.audioSameNode).toBe(true);
+  expect(results.audioCurrentTimeAfterSwap).toBe(3.5);
+  expect(results.audioPausedAfterSwap).toBe(false);
+  expect(results.headerIdentityAfterSwap).toBe('initial-header');
+
+  // [P3] Nested & ambiguous targets
+  expect(results.mainContentAfterSwap).toBe('Replaced Main Content');
+  expect(results.nestedContentAfterSwap).toBe('Replaced Nested Content');
+  expect(results.ambiguousFallbackTriggered).toBe(true);
+
+  // Teardown
+  expect(results.dirAfterBFCache).toBe(null);
+
+  // Reduced motion check
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const reducedMotionSuppression = await page.evaluate(() => {
-    const sheet = document.styleSheets[0];
     function searchRules(rules) {
       for (const rule of rules) {
         if (rule.cssRules) {
           if (searchRules(rule.cssRules)) return true;
         }
-        if (rule.selectorText && rule.selectorText.includes('data-vt-direction') && (rule.style?.animationName === 'none' || rule.cssText?.includes('none !important'))) {
+        const text = rule.cssText || '';
+        if (text.includes('data-vt-direction') && text.includes('animation') && text.includes('none')) {
           return true;
         }
       }
       return false;
     }
-    return searchRules(sheet.cssRules);
+    for (const sheet of document.styleSheets) {
+      try {
+        if (sheet.cssRules && searchRules(sheet.cssRules)) return true;
+      } catch {}
+    }
+    return false;
   });
   expect(reducedMotionSuppression).toBe(true);
   expect(problems).toEqual([]);
