@@ -75,6 +75,11 @@ test('resolveFeedUrl resolves base paths and rejects credentials and unsafe sche
   const originSiteUrl = 'https://example.com';
   assert.equal(resolveFeedUrl('/posts/story/', originSiteUrl, '/blog/'), 'https://example.com/blog/posts/story/');
   assert.equal(resolveFeedUrl('/', originSiteUrl, '/blog/'), 'https://example.com/blog/');
+  // Ensure already-prefixed inputs from routePath/postUrl do not double-prepend base
+  assert.equal(resolveFeedUrl('/blog/', originSiteUrl, '/blog/'), 'https://example.com/blog/');
+  assert.equal(resolveFeedUrl('/blog/rss.xml', originSiteUrl, '/blog/'), 'https://example.com/blog/rss.xml');
+  assert.equal(resolveFeedUrl('/blog/posts/welcome/', originSiteUrl, '/blog/'), 'https://example.com/blog/posts/welcome/');
+  assert.equal(resolveFeedUrl('/rss.xml', originSiteUrl, '/blog/'), 'https://example.com/blog/rss.xml');
   assert.equal(resolveFeedUrl('https://other.com/ext#fragment', originSiteUrl), 'https://other.com/ext');
 
   assert.throws(() => resolveFeedUrl('javascript:alert(1)', originSiteUrl), /HTTP\(S\)/);

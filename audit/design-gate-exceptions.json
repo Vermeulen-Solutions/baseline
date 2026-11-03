@@ -2,7 +2,7 @@
   {
     "path": "src/lib/publication-feed.ts",
     "reason": "Non-visual syndication utility: publication-aware RSS 2.0 feed generator with XML escaping and RFC-822 date formatting. Exact LF-normalized source hash.",
-    "sha256": "65049a6090c12e41529e443679501804245b318b7d0ab18ddc488a5c0bbe1a10"
+    "sha256": "659aae813600c97eb9c8ab4a05789d497360eb7e61ff9762476030d7d5960203"
   },
   {
     "path": "src/lib/sitemap.ts",
@@ -12,7 +12,7 @@
   {
     "path": "src/lib/reading-time.ts",
     "reason": "Non-visual editorial calculation utility: locale-aware word count and reading time estimation. No client styling, layout, or visual presentation. Exact LF-normalized source hash.",
-    "sha256": "ecfbb3f6325c6cec2d6a8e5aaf7cd783e3e5e945d78120268e4ad9fbe8266702"
+    "sha256": "ae823612424e63b3ebd6ef17ea37d36c76011c9e54f96b7c3b7f69d48cfa1796"
   },
   {
     "path": "src/components/TweaksBar.astro",
@@ -262,7 +262,7 @@
   {
     "path": "src/layouts/SiteShell.astro",
     "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, and deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail); preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "be0fe320ffd4f2dd816d747ce2bc174078856bf402495dfe176bcecc1d2c7d1a"
+    "sha256": "0b4b5d31ea22f8403638a4e4bab317f3f18ae8286435472655f5c1a6890c57ec"
   },
   {
     "path": "src/components/EmDashImage.astro",

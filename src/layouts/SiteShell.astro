@@ -54,6 +54,8 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         let activeMorphCard = null;
         let activeNavToken = 0;
         let activeTransitionPending = false;
+        let currentViewTransition = null;
+        let currentAssignedElements = [];
         const warmedPages = new Map();
         const warmedImages = new Map();
         const warmImage = (src, srcset, sizes) => {
@@ -119,12 +121,27 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
             hoverTimer = window.setTimeout(() => warmPage(url.href), 20);
           } catch {}
         }, { passive: true });
+        const clearAssignedElements = () => {
+          for (const item of currentAssignedElements) {
+            if (item.element instanceof HTMLElement) {
+              item.element.style.viewTransitionName = item.prevValue;
+            }
+          }
+          currentAssignedElements = [];
+          activeMorphCard = null;
+        };
+        const assignTransitionName = (el, name) => {
+          if (el instanceof HTMLElement && !el.style.viewTransitionName) {
+            currentAssignedElements.push({ element: el, prevValue: el.style.viewTransitionName });
+            el.style.viewTransitionName = name;
+          }
+        };
         const clearVtLoading = () => {
           clearTimeout(vtTimer);
           document.documentElement.removeAttribute('data-vt-loading');
         };
         const cleanupMorphNames = () => {
-          activeMorphCard = null;
+          clearAssignedElements();
           document.querySelectorAll('.card-media, [data-vt-media], .card-title, [data-vt-title], [data-vt-hero-media], [data-vt-hero-title], .article-stack img, .content--feature img, #post-title').forEach((el) => {
             if (el instanceof HTMLElement && (el.style.viewTransitionName === 'hero-media' || el.style.viewTransitionName === 'hero-title')) {
               el.style.viewTransitionName = '';
@@ -134,6 +151,10 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         document.addEventListener('astro:before-preparation', (event) => {
           const navToken = ++activeNavToken;
           const signal = event && 'signal' in event ? event['signal'] : undefined;
+
+          // Superseding preparation must release existing assignments immediately so two cards never collide
+          clearAssignedElements();
+
           clearTimeout(vtTimer);
           vtTimer = window.setTimeout(() => {
             if (navToken === activeNavToken) {
@@ -161,21 +182,17 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
             if (activeMorphCard) {
               const media = activeMorphCard.querySelector('.card-media, [data-vt-media]');
               const title = activeMorphCard.querySelector('.card-title, [data-vt-title]');
-              if (media instanceof HTMLElement && !media.style.viewTransitionName) {
-                media.style.viewTransitionName = 'hero-media';
-              }
-              if (title instanceof HTMLElement && !title.style.viewTransitionName) {
-                title.style.viewTransitionName = 'hero-title';
-              }
+              assignTransitionName(media, 'hero-media');
+              assignTransitionName(title, 'hero-title');
             } else {
               const heroMedia = document.querySelector('[data-vt-hero-media], [data-vt-media], .article-stack img, .content--feature img');
               const heroTitle = document.querySelector('[data-vt-hero-title], [data-vt-title], #post-title');
               if (heroMedia instanceof HTMLElement && !heroMedia.style.viewTransitionName) {
-                heroMedia.style.viewTransitionName = 'hero-media';
+                assignTransitionName(heroMedia, 'hero-media');
                 leavingHero = true;
               }
               if (heroTitle instanceof HTMLElement && !heroTitle.style.viewTransitionName) {
-                heroTitle.style.viewTransitionName = 'hero-title';
+                assignTransitionName(heroTitle, 'hero-title');
                 leavingHero = true;
               }
             }
@@ -186,30 +203,6 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
             event.loader = async () => {
               if (signal?.aborted || navToken !== activeNavToken) return;
               try {
-                // Development-only deterministic latency & failure testing (excluded from production builds)
-                if (import.meta.env.DEV) {
-                  const destUrl = event.to ? new URL(event.to, location.href) : null;
-                  const delayParam = destUrl?.searchParams?.get('_vt_delay') ?? window['__BASELINE_VT_DELAY__'];
-                  if (delayParam) {
-                    const ms = Math.min(Math.max(0, parseInt(String(delayParam), 10) || 0), 10000);
-                    if (ms > 0) {
-                      await new Promise((resolve, reject) => {
-                        const timer = setTimeout(resolve, ms);
-                        signal?.addEventListener('abort', () => {
-                          clearTimeout(timer);
-                          reject(new DOMException('Navigation aborted', 'AbortError'));
-                        }, { once: true });
-                      });
-                    }
-                  }
-                  const failParam = destUrl?.searchParams?.get('_vt_fail') ?? window['__BASELINE_VT_FAIL__'];
-                  const shouldFail = failParam === true || failParam === 'true' || failParam === '1';
-                  if (shouldFail) {
-                    throw new Error('Deterministic ViewTransition failure injection');
-                  }
-                }
-
-                if (signal?.aborted || navToken !== activeNavToken) return;
                 await originalLoader();
                 if (signal?.aborted || navToken !== activeNavToken) return;
 
@@ -269,11 +262,15 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           const currentNav = activeNavToken;
           const vt = event && 'viewTransition' in event ? event['viewTransition'] : null;
           if (vt && typeof vt.finished?.finally === 'function') {
+            currentViewTransition = vt;
             activeTransitionPending = true;
             vt.finished.finally(() => {
-              activeTransitionPending = false;
-              if (currentNav === activeNavToken) {
-                cleanupMorphNames();
+              if (currentViewTransition === vt) {
+                currentViewTransition = null;
+                if (currentNav === activeNavToken) {
+                  activeTransitionPending = false;
+                  cleanupMorphNames();
+                }
               }
             });
           }
@@ -296,7 +293,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         window.addEventListener('scroll', syncStickyHeader, { passive: true });
 
         const initPage = () => {
-          if (!activeTransitionPending) {
+          if (!activeTransitionPending && !currentViewTransition) {
             cleanupMorphNames();
           }
           syncStickyHeader();
@@ -387,6 +384,38 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
         });
       })();
     </script>
+    {import.meta.env.DEV && (
+      <script is:inline>
+        // Development-only deterministic latency & failure testing hooks (excluded from production builds)
+        document.addEventListener('astro:before-preparation', (event) => {
+          if (event && 'loader' in event && typeof event.loader === 'function') {
+            const originalLoader = event.loader;
+            event.loader = async () => {
+              const destUrl = event.to ? new URL(event.to, location.href) : null;
+              const delayParam = destUrl?.searchParams?.get('_vt_delay') ?? window['__BASELINE_VT_DELAY__'];
+              if (delayParam) {
+                const ms = Math.min(Math.max(0, parseInt(String(delayParam), 10) || 0), 10000);
+                if (ms > 0) {
+                  await new Promise((resolve, reject) => {
+                    const timer = setTimeout(resolve, ms);
+                    event.signal?.addEventListener('abort', () => {
+                      clearTimeout(timer);
+                      reject(new DOMException('Navigation aborted', 'AbortError'));
+                    }, { once: true });
+                  });
+                }
+              }
+              const failParam = destUrl?.searchParams?.get('_vt_fail') ?? window['__BASELINE_VT_FAIL__'];
+              const shouldFail = failParam === true || failParam === 'true' || failParam === '1';
+              if (shouldFail) {
+                throw new Error('Deterministic ViewTransition failure injection');
+              }
+              return originalLoader();
+            };
+          }
+        });
+      </script>
+    )}
     <slot name="head" />
   </head>
   <body>

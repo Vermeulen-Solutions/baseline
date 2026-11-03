@@ -133,6 +133,19 @@ test('readingTime supports Intl.Segmenter with multilingual, invalid locale fall
   const ptResult = readingTime(portableText);
   assert.equal(ptResult.words, 7); // First block heading (3) + Second block paragraph text (4)
 
+  // Portable Text with split spans within a single block (e.g. bolded partial word "hel" + "lo world")
+  const splitSpanBlock = [
+    {
+      _type: 'block',
+      children: [
+        { _type: 'span', text: 'hel' },
+        { _type: 'span', text: 'lo world' },
+      ],
+    },
+  ];
+  const splitResult = readingTime(splitSpanBlock);
+  assert.equal(splitResult.words, 2, `Expected exactly 2 words ('hello', 'world'), got ${splitResult.words}`);
+
   // Dutch text with contractions and accents
   const dutch = "Het is 's ochtends vroeg en we gaan naar de tentoonstelling van moderne kunst.";
   const nlResult = readingTime(dutch, { locale: 'nl' });

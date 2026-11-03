@@ -1,6 +1,7 @@
 import { inspectSourceTree } from '../scripts/css-contracts.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { chromium } from '@playwright/test';
 import { AESTHETIC_LANES, parseDesignTokens, auditDesignTokens, applyTokenOverrides } from '../scripts/design-system.mjs';
 import { validateRecord, matchesException, matchesDeletionException, isVisualPath } from '../scripts/check-art-direction.mjs';
 import { createHash } from 'node:crypto';
@@ -138,7 +139,7 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   ]) {
     assert.ok(siteShell.includes(hook), `SiteShell must include declarative hook ${hook}`);
   }
-  assert.ok(siteShell.includes('if (import.meta.env.DEV)'), 'SiteShell must guard fault injection behind import.meta.env.DEV');
+  assert.ok(siteShell.includes('import.meta.env.DEV'), 'SiteShell must guard fault injection behind import.meta.env.DEV');
   for (const basePath of ['src/layouts/Base.astro', 'profiles/static/project/src/layouts/Base.astro']) {
     const baseSource = readFileSync(basePath, 'utf8');
     assert.ok(baseSource.includes("surface?: 'light' | 'dark' | 'system'"), `${basePath} must accept surface prop`);
@@ -197,5 +198,81 @@ test('cascade layers and automatic spacing contracts stay enforceable', () => {
   const richText = readFileSync('src/components/RichText.astro', 'utf8');
   assert.ok(richText.includes('flow?: boolean'), 'RichText must expose a flow opt-out');
   assert.ok(richText.includes("flow && 'flow'"), 'RichText must apply flow by default');
+});
 
+test('SiteShell inline script excludes import.meta from production and isolates transition ownership', () => {
+  const shell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
+  const mainScriptMatch = shell.match(/<script is:inline>([\s\S]*?)<\/script>/);
+  assert.ok(mainScriptMatch, 'SiteShell must have a main inline script');
+  const mainScript = mainScriptMatch[1];
+  assert.ok(!mainScript.includes('import.meta'), 'Main inline script must not contain import.meta, preventing runtime syntax errors');
+  assert.ok(shell.includes('{import.meta.env.DEV &&'), 'Dev fault injection must be guarded in frontmatter so it is excluded from production');
+  assert.ok(mainScript.includes('clearAssignedElements'), 'SiteShell must clear assigned morph elements when superseding preparation');
+  assert.ok(mainScript.includes('currentViewTransition'), 'SiteShell must track active transition ownership');
+});
+
+test('SiteShell inline script and rapid card morph execute in Chromium without error', async () => {
+  const shell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
+  const mainScript = shell.match(/<script is:inline>([\s\S]*?)<\/script>/)[1];
+
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+  const pageErrors = [];
+  page.on('pageerror', (err) => pageErrors.push(err.message));
+
+  await page.setContent(`
+    <!DOCTYPE html>
+    <html>
+      <head><script>${mainScript}</script></head>
+      <body>
+        <div id="cardA" class="card" data-vt-card>
+          <div class="card-media">Img A</div>
+          <div class="card-title">Title A</div>
+        </div>
+        <div id="cardB" class="card" data-vt-card>
+          <div class="card-media">Img B</div>
+          <div class="card-title">Title B</div>
+        </div>
+      </body>
+    </html>
+  `);
+
+  assert.deepEqual(pageErrors, [], 'No runtime syntax or execution errors on load in Chromium');
+
+  const raceResult = await page.evaluate(async () => {
+    const cardA = document.getElementById('cardA');
+    const cardB = document.getElementById('cardB');
+
+    // Navigation 1 on Card A
+    const evA = new Event('astro:before-preparation');
+    evA.sourceElement = cardA;
+    document.dispatchEvent(evA);
+    const aInitial = cardA.querySelector('.card-media').style.viewTransitionName;
+
+    // Rapid superseding Navigation 2 on Card B
+    const evB = new Event('astro:before-preparation');
+    evB.sourceElement = cardB;
+    document.dispatchEvent(evB);
+    const aAfterB = cardA.querySelector('.card-media').style.viewTransitionName;
+    const bAfterB = cardB.querySelector('.card-media').style.viewTransitionName;
+
+    let vtStatus = 'OK';
+    try {
+      if (document.startViewTransition) {
+        const vt = document.startViewTransition(() => {});
+        await vt.ready;
+      }
+    } catch (err) {
+      vtStatus = err.message;
+    }
+
+    return { aInitial, aAfterB, bAfterB, vtStatus };
+  });
+
+  assert.equal(raceResult.aInitial, 'hero-media');
+  assert.equal(raceResult.aAfterB, '');
+  assert.equal(raceResult.bAfterB, 'hero-media');
+  assert.equal(raceResult.vtStatus, 'OK');
+
+  await browser.close();
 });

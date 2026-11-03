@@ -13,20 +13,22 @@ export interface ReadingTimeResult {
 
 const DEFAULT_WPM = 200;
 
-/** Extracts clean text from Sanity/EmDash Portable Text block structures. */
+/** Extracts clean text from Sanity/EmDash Portable Text block structures. Concatenates spans within blocks without separators to preserve formatted words. */
 export function extractPortableText(blocks: unknown): string {
   if (!Array.isArray(blocks)) return '';
-  const parts: string[] = [];
+  const blockTexts: string[] = [];
   for (const block of blocks) {
     if (block && typeof block === 'object' && Array.isArray((block as any).children)) {
+      const spanTexts: string[] = [];
       for (const child of (block as any).children) {
         if (child && typeof child.text === 'string') {
-          parts.push(child.text);
+          spanTexts.push(child.text);
         }
       }
+      blockTexts.push(spanTexts.join(''));
     }
   }
-  return parts.join('\n');
+  return blockTexts.join('\n');
 }
 
 /** Strips Markdown syntax, HTML elements, HTML entities, and optionally code blocks to extract clean prose. */
@@ -65,12 +67,15 @@ export function readingTime(
   options: ReadingTimeOptions = {}
 ): ReadingTimeResult {
   let sourceText = '';
+  let isPortableText = false;
   if (typeof content === 'string') {
     sourceText = content;
   } else if (Array.isArray(content)) {
     sourceText = extractPortableText(content);
+    isPortableText = true;
   } else if (content && typeof content === 'object') {
     sourceText = extractPortableText([content]);
+    isPortableText = true;
   }
 
   if (!sourceText.trim()) {
@@ -86,7 +91,10 @@ export function readingTime(
   const locale = typeof options.locale === 'string' && options.locale.trim() ? options.locale.trim() : 'en';
   const countCode = options.countCode === true;
 
-  const clean = stripFormatting(sourceText, { countCode });
+  // Portable Text extraction already yields literal prose without markdown formatting
+  const clean = isPortableText
+    ? sourceText.replace(/\s+/g, ' ').trim()
+    : stripFormatting(sourceText, { countCode });
   if (!clean) {
     return { words: 0, minutes: 0, timeMs: 0, text: '< 1 min read' };
   }

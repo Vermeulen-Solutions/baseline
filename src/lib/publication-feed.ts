@@ -75,9 +75,17 @@ export function resolveFeedUrl(urlOrPath: string, siteUrl: string | URL, basePat
   if (/^[a-z][a-z0-9+.-]*:/i.test(urlOrPath)) {
     resolved = new URL(urlOrPath);
   } else {
-    const cleanPath = urlOrPath.replace(/^\/+/, '');
-    const combined = basePrefix ? `${basePrefix}/${cleanPath}` : `/${cleanPath}`;
-    resolved = new URL(combined, base.origin);
+    let pathWithSlash = urlOrPath.startsWith('/') ? urlOrPath : `/${urlOrPath}`;
+    const cleanPrefix = basePrefix.replace(/^\/+|\/+$/g, '');
+    if (cleanPrefix) {
+      const normBase = `/${cleanPrefix}`;
+      if (pathWithSlash === normBase || pathWithSlash.startsWith(`${normBase}/`)) {
+        // Path is already prefixed with deployment base
+      } else {
+        pathWithSlash = `${normBase}${pathWithSlash}`;
+      }
+    }
+    resolved = new URL(pathWithSlash, base.origin);
   }
   if (!['http:', 'https:'].includes(resolved.protocol) || resolved.username || resolved.password) {
     throw new Error('Feed URLs must use HTTP(S) without credentials.');
