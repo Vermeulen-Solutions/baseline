@@ -129,7 +129,12 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
     assert.ok(css.includes(selector), `Missing structural selector ${selector}`);
   }
   const siteShell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
-  for (const hook of ['baseline:surface', 'astro:before-preparation', 'astro:after-preparation', 'astro:before-swap', 'astro:after-swap', 'astro:page-load', '[data-reveal]', '[data-filter-root]', '[data-sticky-header]', 'data-surface-mode', 'data-surface-switching', 'data-vt-loading', 'data-vt-noscroll', 'hero-media', 'hero-title']) {
+  for (const hook of [
+    'baseline:surface', 'astro:before-preparation', 'astro:after-preparation', 'astro:before-swap', 'astro:after-swap', 'astro:page-load',
+    '[data-reveal]', '[data-filter-root]', '[data-sticky-header]', 'data-surface-mode', 'data-surface-switching',
+    'data-vt-loading', 'data-vt-noscroll', 'hero-media', 'hero-title',
+    '_vt_delay', '_vt_fail', '__BASELINE_VT_DELAY__', '__BASELINE_VT_FAIL__'
+  ]) {
     assert.ok(siteShell.includes(hook), `SiteShell must include declarative hook ${hook}`);
   }
   for (const basePath of ['src/layouts/Base.astro', 'profiles/static/project/src/layouts/Base.astro']) {

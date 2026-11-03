@@ -122,6 +122,14 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           clearTimeout(vtTimer);
           document.documentElement.removeAttribute('data-vt-loading');
         };
+        const cleanupMorphNames = () => {
+          activeMorphCard = null;
+          document.querySelectorAll('.card-media, [data-vt-media], .card-title, [data-vt-title], [data-vt-hero-media], [data-vt-hero-title], .article-stack img, .content--feature img, #post-title').forEach((el) => {
+            if (el instanceof HTMLElement && (el.style.viewTransitionName === 'hero-media' || el.style.viewTransitionName === 'hero-title')) {
+              el.style.viewTransitionName = '';
+            }
+          });
+        };
         document.addEventListener('astro:before-preparation', (event) => {
           clearTimeout(vtTimer);
           vtTimer = window.setTimeout(() => {
@@ -162,41 +170,61 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           if (event && 'loader' in event && typeof event.loader === 'function') {
             const originalLoader = event.loader;
             event.loader = async () => {
-              await originalLoader();
-              if ('newDocument' in event && event.newDocument) {
-                if (!reducedMotion) {
-                  if (activeMorphCard) {
-                    const destMedia = event.newDocument.querySelector('[data-vt-hero-media], [data-vt-media], .article-stack img, .content--feature img');
-                    const destTitle = event.newDocument.querySelector('[data-vt-hero-title], [data-vt-title], #post-title');
-                    if (destMedia instanceof HTMLElement && !destMedia.style.viewTransitionName) {
-                      destMedia.style.viewTransitionName = 'hero-media';
-                    }
-                    if (destTitle instanceof HTMLElement && !destTitle.style.viewTransitionName) {
-                      destTitle.style.viewTransitionName = 'hero-title';
-                    }
-                  } else if (leavingHero) {
-                    const currentPath = location.pathname.replace(/\/+$/, '') || '/';
-                    const targetCard = event.newDocument.querySelector(
-                      `[data-vt-card] a[href="${currentPath}"], [data-vt-card] a[href="${currentPath}/"], ` +
-                      `a[href="${currentPath}"].card-link, a[href="${currentPath}/"].card-link, ` +
-                      `a[href="${currentPath}"].clickable-parent, a[href="${currentPath}/"].clickable-parent`
-                    )?.closest('[data-vt-card], .card');
-                    if (targetCard) {
-                      const cardMedia = targetCard.querySelector('.card-media, [data-vt-media]');
-                      const cardTitle = targetCard.querySelector('.card-title, [data-vt-title]');
-                      if (cardMedia instanceof HTMLElement && !cardMedia.style.viewTransitionName) {
-                        cardMedia.style.viewTransitionName = 'hero-media';
+              try {
+                // Deterministic asynchronous latency & failure testing (?_vt_delay=<ms> or ?_vt_fail=true)
+                const destUrl = event.to ? new URL(event.to, location.href) : null;
+                const delayParam = destUrl?.searchParams?.get('_vt_delay') ?? window['__BASELINE_VT_DELAY__'];
+                if (delayParam) {
+                  const ms = parseInt(String(delayParam), 10);
+                  if (Number.isFinite(ms) && ms > 0) {
+                    await new Promise((resolve) => setTimeout(resolve, ms));
+                  }
+                }
+                const failParam = destUrl?.searchParams?.get('_vt_fail') ?? window['__BASELINE_VT_FAIL__'];
+                if (failParam) {
+                  throw new Error('Deterministic ViewTransition failure injection');
+                }
+
+                await originalLoader();
+                if ('newDocument' in event && event.newDocument) {
+                  if (!reducedMotion) {
+                    if (activeMorphCard) {
+                      const destMedia = event.newDocument.querySelector('[data-vt-hero-media], [data-vt-media], .article-stack img, .content--feature img');
+                      const destTitle = event.newDocument.querySelector('[data-vt-hero-title], [data-vt-title], #post-title');
+                      if (destMedia instanceof HTMLElement && !destMedia.style.viewTransitionName) {
+                        destMedia.style.viewTransitionName = 'hero-media';
                       }
-                      if (cardTitle instanceof HTMLElement && !cardTitle.style.viewTransitionName) {
-                        cardTitle.style.viewTransitionName = 'hero-title';
+                      if (destTitle instanceof HTMLElement && !destTitle.style.viewTransitionName) {
+                        destTitle.style.viewTransitionName = 'hero-title';
+                      }
+                    } else if (leavingHero) {
+                      const currentPath = location.pathname.replace(/\/+$/, '') || '/';
+                      const targetCard = event.newDocument.querySelector(
+                        `[data-vt-card] a[href="${currentPath}"], [data-vt-card] a[href="${currentPath}/"], ` +
+                        `a[href="${currentPath}"].card-link, a[href="${currentPath}/"].card-link, ` +
+                        `a[href="${currentPath}"].clickable-parent, a[href="${currentPath}/"].clickable-parent`
+                      )?.closest('[data-vt-card], .card');
+                      if (targetCard) {
+                        const cardMedia = targetCard.querySelector('.card-media, [data-vt-media]');
+                        const cardTitle = targetCard.querySelector('.card-title, [data-vt-title]');
+                        if (cardMedia instanceof HTMLElement && !cardMedia.style.viewTransitionName) {
+                          cardMedia.style.viewTransitionName = 'hero-media';
+                        }
+                        if (cardTitle instanceof HTMLElement && !cardTitle.style.viewTransitionName) {
+                          cardTitle.style.viewTransitionName = 'hero-title';
+                        }
                       }
                     }
                   }
+                  await Promise.race([
+                    warmDocumentImages(event.newDocument),
+                    new Promise((resolve) => setTimeout(resolve, 80)),
+                  ]);
                 }
-                await Promise.race([
-                  warmDocumentImages(event.newDocument),
-                  new Promise((resolve) => setTimeout(resolve, 80)),
-                ]);
+              } catch (err) {
+                clearVtLoading();
+                cleanupMorphNames();
+                throw err;
               }
             };
           }
@@ -229,15 +257,6 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           });
         };
         window.addEventListener('scroll', syncStickyHeader, { passive: true });
-
-        const cleanupMorphNames = () => {
-          activeMorphCard = null;
-          document.querySelectorAll('.card-media, [data-vt-media], .card-title, [data-vt-title], [data-vt-hero-media], [data-vt-hero-title], .article-stack img, .content--feature img, #post-title').forEach((el) => {
-            if (el instanceof HTMLElement && (el.style.viewTransitionName === 'hero-media' || el.style.viewTransitionName === 'hero-title')) {
-              el.style.viewTransitionName = '';
-            }
-          });
-        };
 
         const initPage = () => {
           cleanupMorphNames();
