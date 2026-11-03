@@ -36,7 +36,10 @@ export function resolvePublicCapabilities(
 ): PublicCapabilities {
   const profile = explicitProfile || getInstalledPlatformProfile();
 
-  const baseRaw = astroConfig?.base || '/';
+  let baseRaw = (astroConfig?.base || '/').trim();
+  if (!baseRaw.startsWith('/')) {
+    baseRaw = '/' + baseRaw;
+  }
   const normalizedBase = baseRaw === '/' ? '/' : baseRaw.replace(/\/+$/, '');
   const trailingSlash = astroConfig?.trailingSlash || 'ignore';
 
@@ -45,8 +48,11 @@ export function resolvePublicCapabilities(
 
   let search: false | SearchBuildOptions = false;
   if (options?.search && options.search.engine === 'pagefind') {
-    const rawBundlePath = options.search.bundlePath || '_pagefind';
-    const bundlePath = rawBundlePath.replace(/^\/+/, '').replace(/\/+$/, '');
+    let bundlePath = (options.search.bundlePath || '_pagefind').replaceAll('\\', '/');
+    bundlePath = bundlePath.replace(/^\/+/, '').replace(/\/+$/, '');
+    if (/^[a-zA-Z]:|\.\./.test(bundlePath)) {
+      throw new Error(`Invalid search bundlePath "${options.search.bundlePath}": must be a relative public URL path without drive letters or traversal`);
+    }
     search = {
       engine: 'pagefind',
       bundlePath,

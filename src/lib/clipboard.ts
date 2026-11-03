@@ -27,6 +27,10 @@ export async function copyText(text: string, options?: CopyTextOptions): Promise
 
   // 2. Legacy execCommand('copy') fallback
   if (typeof document !== 'undefined') {
+    const previousActive = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const selection = typeof document.getSelection === 'function' ? document.getSelection() : null;
+    const previousRange = selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null;
+
     const textarea = document.createElement('textarea');
     textarea.value = text;
     // Position off-screen without causing page layout shifts or focus scrolling
@@ -53,23 +57,54 @@ export async function copyText(text: string, options?: CopyTextOptions): Promise
       return;
     } finally {
       document.body.removeChild(textarea);
+      // Conditionally restore focus and selection without overwriting user navigation
+      if (previousActive && previousActive.isConnected) {
+        if (document.activeElement === textarea || document.activeElement === document.body || document.activeElement === null) {
+          try {
+            previousActive.focus();
+          } catch {}
+        }
+      }
+      if (selection && previousRange) {
+        try {
+          selection.removeAllRanges();
+          selection.addRange(previousRange);
+        } catch {}
+      }
     }
   }
 
   throw new Error('Clipboard access is not available in this environment');
 }
 
+export const DEFAULT_COPY_EXCLUDE_SELECTOR =
+  '[data-copy-exclude], [data-prompt], .prompt, .line-number, .line-numbers, [data-line-number], [aria-hidden="true"]';
+
+export interface ExtractCopyableTextOptions {
+  source?: 'text' | 'value';
+  excludeSelector?: string;
+}
+
 /**
- * Extracts plain text from a DOM element, stripping line numbers or decorative prompt markers.
+ * Extracts plain text from a DOM element, stripping designated decorative markers and line numbers.
+ * Uses an explicit removable-decoration contract rather than stripping legitimate code symbols.
  */
-export function extractCopyableText(element: HTMLElement, source: 'text' | 'value' = 'text'): string {
+export function extractCopyableText(
+  element: HTMLElement,
+  optionsOrSource: 'text' | 'value' | ExtractCopyableTextOptions = 'text'
+): string {
+  const options: ExtractCopyableTextOptions =
+    typeof optionsOrSource === 'string' ? { source: optionsOrSource } : optionsOrSource;
+  const source = options.source || 'text';
+  const excludeSelector = options.excludeSelector || DEFAULT_COPY_EXCLUDE_SELECTOR;
+
   if (source === 'value' && 'value' in element && typeof (element as HTMLInputElement).value === 'string') {
     return (element as HTMLInputElement).value;
   }
 
-  // Clone element to strip line numbers or decorations without mutating the live DOM
+  // Clone element to strip designated decorations without mutating the live DOM
   const clone = element.cloneNode(true) as HTMLElement;
-  const decorations = clone.querySelectorAll('.line-number, .line-numbers, [data-line-number], [aria-hidden="true"]');
+  const decorations = clone.querySelectorAll(excludeSelector);
   decorations.forEach((d) => d.remove());
 
   return clone.textContent || '';

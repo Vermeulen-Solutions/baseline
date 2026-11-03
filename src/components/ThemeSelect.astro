@@ -30,49 +30,23 @@ const systemLabel = labels.system || 'System';
 </div>
 
 <script>
+  import { getStoredThemePreference, applyTheme } from '../lib/theme';
+  import type { ThemePreference } from '../lib/theme';
+
   function initThemeSelects() {
     const selects = document.querySelectorAll<HTMLSelectElement>('[data-theme-select]');
     if (selects.length === 0) return;
 
-    let stored: string | null = null;
-    try {
-      stored = localStorage.getItem('baseline:surface');
-    } catch {
-      // Ignore storage access error
-    }
-    const currentPref = stored === 'light' || stored === 'dark' ? stored : 'system';
-
+    const currentPref = getStoredThemePreference();
     selects.forEach((select) => {
       select.value = currentPref;
-    });
 
-    function applySurface(pref: string) {
-      const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const effective = pref === 'system' ? (systemDark ? 'dark' : 'light') : pref;
-      document.documentElement.dataset.surface = effective;
-      try {
-        if (pref === 'system') {
-          localStorage.removeItem('baseline:surface');
-        } else {
-          localStorage.setItem('baseline:surface', pref);
-        }
-      } catch {
-        // Ignore storage write error
-      }
-    }
-
-    selects.forEach((select) => {
-      // Guard against duplicate listener registration
       if ((select as unknown as { _themeInit?: boolean })._themeInit) return;
       (select as unknown as { _themeInit?: boolean })._themeInit = true;
 
       select.addEventListener('change', (e) => {
-        const val = (e.target as HTMLSelectElement).value;
-        applySurface(val);
-        // Sync sibling selects if multiple exist on the page
-        selects.forEach((other) => {
-          if (other !== select) other.value = val;
-        });
+        const val = (e.target as HTMLSelectElement).value as ThemePreference;
+        applyTheme(val, { persist: true });
       });
     });
   }
@@ -91,12 +65,13 @@ const systemLabel = labels.system || 'System';
       align-items: center;
     }
     .theme-select {
-      padding: var(--space-2xs, 0.25rem) var(--space-xs, 0.5rem);
-      border: 1px solid var(--surface-border, currentColor);
-      border-radius: var(--radius-sm, 0.25rem);
-      background: var(--surface-elevated, transparent);
-      color: inherit;
+      padding: calc(var(--spacing-content) * 0.25) calc(var(--spacing-content) * 0.5);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-control);
+      background: var(--color-surface);
+      color: var(--color-text);
       font: inherit;
+      font-size: var(--text-step--1);
       cursor: pointer;
     }
     .sr-only {

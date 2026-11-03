@@ -109,8 +109,12 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     await startRelease();
     for (const method of ['GET', 'HEAD']) assert.equal((await request('/_styleguide?fixtures=1', { method, headers: { cookie: 'fixtures=1' } })).status, 404);
     for (const method of ['GET', 'HEAD', 'POST']) assert.equal((await request('/_form-recovery?fixtures=1', { method, headers: { cookie: 'fixtures=1' } })).status, 404);
+    for (const method of ['GET', 'HEAD']) assert.equal((await request('/_primitives-fixture?fixtures=1', { method, headers: { cookie: 'fixtures=1' } })).status, 404);
     for (const file of await readdir(path.join(stage, 'dist/server'), { recursive: true })) {
-      if (/\.(?:m?js|html)$/.test(file)) assert.ok(!(await readFile(path.join(stage, 'dist/server', file), 'utf8')).includes('data-form-recovery-fixture'), 'Form fixture must not be compiled into a release chunk');
+      if (/\.(?:m?js|html)$/.test(file)) {
+        assert.ok(!(await readFile(path.join(stage, 'dist/server', file), 'utf8')).includes('data-form-recovery-fixture'), 'Form fixture must not be compiled into a release chunk');
+        assert.ok(!(await readFile(path.join(stage, 'dist/server', file), 'utf8')).includes('data-primitives-fixture'), 'Primitives fixture must not be compiled into a release chunk');
+      }
     }
     if (releaseOnly) {
       await mkdir(reportDir, { recursive: true });

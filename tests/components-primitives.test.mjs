@@ -9,8 +9,8 @@ import { announce } from '../src/lib/announce.ts';
 import { TabsController } from '../src/lib/tabs.ts';
 
 test('resolvePublicCapabilities derives authoritative profile, normalizes base, and excludes secrets', () => {
-  // Test explicit profile enforcement
-  const staticCaps = resolvePublicCapabilities({}, { base: '/blog/' }, 'static');
+  // Test explicit profile enforcement and trailing slash stripping on base
+  const staticCaps = resolvePublicCapabilities({}, { base: 'blog/' }, 'static');
   assert.equal(staticCaps.profile, 'static');
   assert.equal(staticCaps.base, '/blog');
   assert.equal(staticCaps.trailingSlash, 'ignore');
@@ -18,17 +18,20 @@ test('resolvePublicCapabilities derives authoritative profile, normalizes base, 
   assert.equal(staticCaps.callouts, false);
   assert.equal(staticCaps.search, false);
 
-  // Test root base normalization
+  // Test root base normalization and empty base
   const rootCaps = resolvePublicCapabilities({}, { base: '/' }, 'emdash');
   assert.equal(rootCaps.base, '/');
   assert.equal(rootCaps.profile, 'emdash');
+
+  const emptyBase = resolvePublicCapabilities({}, { base: '' }, 'static');
+  assert.equal(emptyBase.base, '/');
 
   // Test feature flags and search bundle path normalization
   const searchCaps = resolvePublicCapabilities(
     {
       headingLinks: true,
       callouts: true,
-      search: { engine: 'pagefind', bundlePath: '/assets/pagefind/' },
+      search: { engine: 'pagefind', bundlePath: '\\assets\\pagefind\\' },
     },
     { base: '/docs', trailingSlash: 'always' },
     'static-sveltia'
@@ -40,6 +43,10 @@ test('resolvePublicCapabilities derives authoritative profile, normalizes base, 
   assert.ok(searchCaps.search);
   assert.equal(searchCaps.search.engine, 'pagefind');
   assert.equal(searchCaps.search.bundlePath, 'assets/pagefind');
+
+  // Test that Windows filesystem bundle paths or directory traversal throw
+  assert.throws(() => resolvePublicCapabilities({ search: { engine: 'pagefind', bundlePath: 'C:\\dist\\pagefind' } }));
+  assert.throws(() => resolvePublicCapabilities({ search: { engine: 'pagefind', bundlePath: '../secret/pagefind' } }));
 
   // Verify no server secrets or filesystem paths exist in returned object
   const keys = Object.keys(searchCaps);
@@ -110,16 +117,16 @@ test('CSS contracts enforce forced-colors, print contracts, and code block RTL i
   // Print media contracts
   assert.ok(css.includes('@media print'), 'Must include print media query');
   assert.ok(css.includes('[data-print-content]'), 'Must support opt-in [data-print-content]');
-  assert.ok(css.includes('[role="tabpanel"][hidden]'), 'Print contract must reveal component-managed tabpanels');
+  assert.ok(css.includes('.tabs__panel'), 'Print contract must reveal component-managed tabpanels');
 
   // RTL code block isolation
   assert.ok(css.includes(':where(pre)'), 'Must target pre for code isolation');
   assert.ok(css.includes('direction: ltr !important'), 'Pre elements must enforce direction: ltr');
   assert.ok(css.includes('text-align: start !important'), 'Pre elements must enforce text-align: start');
-  assert.ok(css.includes('direction: auto'), 'Inline code elements must declare direction: auto');
+  assert.ok(!css.includes('direction: auto'), 'CSS direction: auto is invalid and must not be present');
 });
 
-test('Announcer routes messages to polite and assertive channels and handles cancellation', () => {
+test('Announcer routes messages to polite and assertive channels, inspects DOM updates, and handles cancellation', async () => {
   let politeText = '';
   let assertiveText = '';
 
@@ -148,35 +155,63 @@ test('Announcer routes messages to polite and assertive channels and handles can
     },
   };
 
-  // Test polite announcement (default)
+  // Test polite announcement: region is cleared synchronously and populated via microtask
   const ok1 = announce('test-announcer', 'Action succeeded');
   assert.equal(ok1, true);
+  assert.equal(politeText, '', 'Polite region must be cleared synchronously before announcement');
+
+  await new Promise((resolve) => queueMicrotask(resolve));
+  assert.equal(politeText, 'Action succeeded', 'Polite region must receive announcement after microtask');
+
+  // Test repeated announcement with identical message
+  const okRepeat = announce('test-announcer', 'Action succeeded');
+  assert.equal(okRepeat, true);
+  assert.equal(politeText, '', 'Repeated message must clear region synchronously to trigger screen readers');
+
+  await new Promise((resolve) => queueMicrotask(resolve));
+  assert.equal(politeText, 'Action succeeded');
+
+  // Test cancellation during queued microtask
+  const acQueue = new AbortController();
+  announce('test-announcer', 'Cancelled in flight', { signal: acQueue.signal });
+  assert.equal(politeText, '');
+  acQueue.abort();
+  await new Promise((resolve) => queueMicrotask(resolve));
+  assert.equal(politeText, '', 'Aborted signal must prevent queued microtask from populating region');
 
   // Test assertive announcement
   const ok2 = announce('test-announcer', 'Critical error occurred', { priority: 'assertive' });
   assert.equal(ok2, true);
+  await new Promise((resolve) => queueMicrotask(resolve));
+  assert.equal(assertiveText, 'Critical error occurred');
 
   // Test missing container returns false
   const okMissing = announce('non-existent', 'Hello');
   assert.equal(okMissing, false);
 
-  // Test aborted signal returns false
+  // Test already-aborted signal returns false
   const ac = new AbortController();
   ac.abort();
   const okAborted = announce('test-announcer', 'Cancelled', { signal: ac.signal });
   assert.equal(okAborted, false);
 });
 
-test('extractCopyableText excludes line numbers and hidden decorations', () => {
+test('extractCopyableText excludes designated decorations while preserving legitimate code operators', () => {
+  // Mock element with prompt decoration and line numbers alongside real code operators
   const mockContainer = {
     cloneNode() {
+      const removed = [];
       return {
-        querySelectorAll() {
+        querySelectorAll(selector) {
+          assert.ok(selector.includes('[data-copy-exclude]') && selector.includes('.prompt'));
           return [
-            { remove() {} }, // line numbers
+            { remove() { removed.push('prompt'); } },
+            { remove() { removed.push('line-number'); } },
           ];
         },
-        textContent: 'npm install @baseline/core',
+        get textContent() {
+          return 'npm install @baseline/core';
+        },
       };
     },
   };
@@ -190,5 +225,26 @@ test('extractCopyableText excludes line numbers and hidden decorations', () => {
   };
   const val = extractCopyableText(inputEl, 'value');
   assert.equal(val, 'git checkout main');
+});
+
+test('TabsController registers and tears down cleanly with AbortController', () => {
+  const root = {
+    getAttribute(attr) {
+      if (attr === 'data-tabs-id') return 'mock-tabs';
+      if (attr === 'data-sync-key') return 'mock-sync';
+      return null;
+    },
+    setAttribute() {},
+    children: [],
+    querySelector() { return null; },
+  };
+
+  const ctrl = new TabsController(root);
+  assert.equal(ctrl.id, 'mock-tabs');
+  assert.equal(ctrl.syncKey, 'mock-sync');
+  assert.equal(ctrl.isDestroyed, false);
+
+  ctrl.destroy();
+  assert.equal(ctrl.isDestroyed, true);
 });
 

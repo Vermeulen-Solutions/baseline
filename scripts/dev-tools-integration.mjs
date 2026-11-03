@@ -19,6 +19,7 @@ export default function devTools({ fixtures = false, platform = 'emdash' } = {})
         if (command === 'dev' || (command === 'build' && fixtures)) {
           injectRoute({ pattern: '/_styleguide', entrypoint: './src/pages/_styleguide.astro', prerender: config.output !== 'server' });
           if (platform === 'emdash') injectRoute({ pattern: '/_form-recovery', entrypoint: './src/dev/FormRecoveryFixture.astro', prerender: false });
+          injectRoute({ pattern: '/_primitives-fixture', entrypoint: './src/dev/PrimitivesFixture.astro', prerender: config.output !== 'server' });
         }
         if (command === 'build' && !fixtures && config.output === 'server') {
           addMiddleware({ entrypoint: new URL('./dev-tools-middleware.mjs', import.meta.url), order: 'pre' });

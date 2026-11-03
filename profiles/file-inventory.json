@@ -412,6 +412,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/dev/PrimitivesFixture.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/env.d.ts": {
       "disposition": "replace-for-static",
       "static": "omit-until-explicitly-allowlisted"

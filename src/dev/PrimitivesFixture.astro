@@ -1,0 +1,93 @@
+---
+import SiteShell from '../layouts/SiteShell.astro';
+import ThemeSelect from '../components/ThemeSelect.astro';
+import Tabs from '../components/Tabs.astro';
+import CopyButton from '../components/CopyButton.astro';
+import Announcer from '../components/Announcer.astro';
+
+if (!import.meta.env.DEV && !import.meta.env.STARTER_TEST_FIXTURES) {
+  return new Response(null, { status: 404 });
+}
+
+Astro.response.headers.set('Cache-Control', 'no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+
+const navParam = Astro.url.searchParams.get('nav');
+const isPageB = navParam === 'page-b';
+const title = isPageB ? 'Primitives Fixture - Page B' : 'Primitives Fixture - Page A';
+---
+
+<SiteShell title={title} spacingPolicy="automatic-v2">
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <header slot="header" class="site-header">
+    <nav class="site-nav" aria-label="Fixture navigation">
+      <ThemeSelect id="fixture-theme-select" />
+      {isPageB ? (
+        <a id="nav-to-a" href="/_primitives-fixture">Navigate to Page A</a>
+      ) : (
+        <a id="nav-to-b" href="/_primitives-fixture?nav=page-b">Navigate to Page B</a>
+      )}
+    </nav>
+  </header>
+
+  <Announcer id="site-announcer" />
+
+  <div class="flow" data-primitives-fixture>
+    <h1 id="fixture-heading">{title}</h1>
+
+    {!isPageB ? (
+      <div id="fixture-content-a" class="flow">
+        <div data-print-content>
+          <Tabs
+            id="tabset-1"
+            syncKey="pkg-sync"
+            label="Package manager 1"
+            defaultValue="npm"
+            items={[
+              { value: 'npm', label: 'npm' },
+              { value: 'pnpm', label: 'pnpm' },
+            ]}
+          >
+            <div slot="npm" id="p1-npm-content" class="flow">
+              <p>npm install @baseline/core</p>
+            </div>
+            <div slot="pnpm" id="p1-pnpm-content" class="flow">
+              <p>pnpm add @baseline/core</p>
+            </div>
+          </Tabs>
+
+          <Tabs
+            id="tabset-2"
+            syncKey="pkg-sync"
+            label="Package manager 2"
+            defaultValue="npm"
+            items={[
+              { value: 'npm', label: 'npm' },
+              { value: 'pnpm', label: 'pnpm' },
+            ]}
+          >
+            <div slot="npm" id="p2-npm-content" class="flow">
+              <p>npm run dev</p>
+            </div>
+            <div slot="pnpm" id="p2-pnpm-content" class="flow">
+              <p>pnpm dev</p>
+            </div>
+          </Tabs>
+        </div>
+
+        <pre id="code-sample"><code dir="auto"><span class="prompt" data-copy-exclude>$ </span>npm install @baseline/core</code></pre>
+
+        <CopyButton
+          id="test-copy-btn"
+          targetId="code-sample"
+          announcerId="site-announcer"
+          label="Copy code"
+        />
+      </div>
+    ) : (
+      <div id="fixture-content-b" class="flow">
+        <p id="page-b-marker">Rendered Page B Content</p>
+      </div>
+    )}
+  </div>
+</SiteShell>

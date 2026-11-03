@@ -31,6 +31,11 @@ async function main() {
       const draftPath = 'src/content/posts/metadata-draft.md';
       const draft = '---\ntitle: PRIVATE METADATA DRAFT\ndescription: Must not be published\npublishedAt: 2026-01-01\ndraft: true\n---\nPrivate synthetic draft.\n';
       await fs.writeFile(path.join(root, draftPath), draft);
+
+      // Verify that virtual:baseline/capabilities is functional in the generated profile
+      const capPath = 'src/pages/capabilities.astro';
+      const capContent = '---\nimport { capabilities } from \'virtual:baseline/capabilities\';\n---\n<!doctype html>\n<html lang="en">\n  <head><title>Capabilities</title></head>\n  <body>\n    <span id="profile">{capabilities.profile}</span>\n    <span id="base">{capabilities.base}</span>\n  </body>\n</html>\n';
+      await fs.writeFile(path.join(root, capPath), capContent);
       // Exercise the shipped WordPress adapter in an independently installed target.
       // The mock supplies only synthetic metadata and the existing neutral fixture image.
       const wpOrigin = 'https://wordpress-migration.example.test';
@@ -62,6 +67,7 @@ async function main() {
       const gatePath = path.join(root, 'audit/design-gate-exceptions.json');
       const gate = JSON.parse(await fs.readFile(gatePath, 'utf8'));
       gate.push({ path: draftPath, reason: 'Exact synthetic publication-filter fixture in the owned generated verification project only; no client visual implementation.', sha256: createHash('sha256').update(draft).digest('hex') });
+      gate.push({ path: capPath, reason: 'Exact synthetic capabilities verification fixture in the owned generated verification project only.', sha256: createHash('sha256').update(capContent).digest('hex') });
       for (const relative of ['src/content/wordpress/wp-page-100.md', 'src/content/wordpress/wp-page-101.md', 'src/components/WordPressEntry.astro', 'src/pages/[...wordpress].astro', 'src/content.config.ts', 'src/wordpress.collection.ts', ...(profile === 'static-sveltia' ? ['public/admin/config.yml'] : []), ...(await fs.readdir(path.join(root, 'src/assets/wordpress'))).map(name => 'src/assets/wordpress/' + name)]) {
         const old = gate.findIndex(entry => entry.path === relative);
         if (old >= 0) gate.splice(old, 1);
@@ -78,6 +84,8 @@ async function main() {
       const importedHTML = await fs.readFile(path.join(root, 'dist/migrated-article/index.html'), 'utf8');
       assert.ok(importedHTML.includes('IMPORTED WORDPRESS BODY') && importedHTML.includes('Imported contextual caption.') && importedHTML.includes('Synthetic image'));
       assert.ok(importedHTML.includes('/_astro/'), 'Imported images use native static Astro processing');
+      const capHTML = await fs.readFile(path.join(root, 'dist/capabilities/index.html'), 'utf8');
+      assert.ok(capHTML.includes(`<span id="profile">${profile}</span>`), `Capabilities profile in ${profile}`);
       for (const missing of ['hidden-wordpress', 'private-source']) await assert.rejects(fs.stat(path.join(root, 'dist', missing, 'index.html')), { code: 'ENOENT' });
       assert.equal((await fs.readdir(path.join(root, 'src/assets/wordpress'))).length, 1);
       assert.ok(!Object.keys(lock.packages).some(name => /(?:^|\/)(?:@emdash-cms|emdash|[^/]*sqlite[^/]*|libsql|@libsql)(?:\/|$)/i.test(name)), 'CMS/database package in independent lockfile');

@@ -57,6 +57,7 @@ const defaultVal = defaultValue && seenValues.has(defaultValue) ? defaultValue :
 ---
 
 <div
+  id={id}
   class="tabs"
   data-tabs-id={id}
   data-default-value={defaultVal}
@@ -127,8 +128,8 @@ const defaultVal = defaultValue && seenValues.has(defaultValue) ? defaultValue :
     .tabs {
       display: flex;
       flex-direction: column;
-      gap: var(--space-xs, 0.5rem);
-      margin-block: var(--space-sm, 1rem);
+      gap: calc(var(--spacing-content) * 0.5);
+      margin-block: var(--spacing-content);
     }
 
     .tabs[data-orientation="vertical"] {
@@ -139,26 +140,27 @@ const defaultVal = defaultValue && seenValues.has(defaultValue) ? defaultValue :
     .tabs__list {
       display: flex;
       flex-wrap: wrap;
-      gap: var(--space-2xs, 0.25rem);
-      border-bottom: 1px solid var(--surface-border, currentColor);
-      padding-bottom: var(--space-2xs, 0.25rem);
+      gap: calc(var(--spacing-content) * 0.25);
+      border-bottom: 1px solid var(--color-border);
+      padding-bottom: calc(var(--spacing-content) * 0.25);
     }
 
     .tabs[data-orientation="vertical"] .tabs__list {
       flex-direction: column;
       border-bottom: none;
-      border-right: 1px solid var(--surface-border, currentColor);
-      padding-right: var(--space-xs, 0.5rem);
+      border-right: 1px solid var(--color-border);
+      padding-right: calc(var(--spacing-content) * 0.5);
       padding-bottom: 0;
     }
 
     .tabs__tab {
-      padding: var(--space-2xs, 0.25rem) var(--space-sm, 0.75rem);
+      padding: calc(var(--spacing-content) * 0.25) calc(var(--spacing-content) * 0.5);
       background: transparent;
       border: 1px solid transparent;
-      border-radius: var(--radius-sm, 0.25rem);
+      border-radius: var(--radius-control);
       color: inherit;
       font: inherit;
+      font-size: var(--text-step--1);
       font-weight: 500;
       cursor: pointer;
       transition: background 120ms ease, border-color 120ms ease;
@@ -169,8 +171,8 @@ const defaultVal = defaultValue && seenValues.has(defaultValue) ? defaultValue :
     }
 
     .tabs__tab[aria-selected="true"] {
-      background: var(--surface-elevated, color-mix(in oklch, currentColor 12%, transparent));
-      border-color: var(--surface-border, currentColor);
+      background: var(--color-surface);
+      border-color: var(--color-border);
     }
 
     .tabs__panels {
@@ -180,12 +182,14 @@ const defaultVal = defaultValue && seenValues.has(defaultValue) ? defaultValue :
     }
 
     .tabs__panel {
-      padding: var(--space-xs, 0.5rem) 0;
+      padding: calc(var(--spacing-content) * 0.25) 0;
     }
 
-    /* Progressive enhancement: hide inactive panels only after enhancement */
-    :where([data-tabs-enhanced="true"]) :where(.tabs__panel[hidden]) {
-      display: none !important;
+    /* Progressive enhancement: hide inactive panels on screen only */
+    @media screen {
+      :where([data-tabs-enhanced="true"]) :where(.tabs__panel[hidden]) {
+        display: none !important;
+      }
     }
   }
 </style>

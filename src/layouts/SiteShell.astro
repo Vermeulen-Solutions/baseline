@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import { getLocaleDirection } from '../lib/locale';
 
 interface Props {
   title: string;
@@ -15,12 +16,13 @@ interface Props {
   surface?: 'light' | 'dark' | 'system';
 }
 
-const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir = 'ltr', skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', surface } = Astro.props;
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', surface } = Astro.props;
+const resolvedDir = dir ?? getLocaleDirection(lang);
 ---
 <!doctype html>
 <html
   lang={lang}
-  dir={dir}
+  dir={resolvedDir}
   data-spacing-policy={spacingPolicy === 'automatic-v2' ? 'automatic-v2' : 'legacy'}
   data-surface={surface === 'dark' || surface === 'light' ? surface : undefined}
   data-surface-mode={surface === 'system' ? 'system' : undefined}
@@ -78,22 +80,29 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir
     <script is:inline>
       (() => {
         const STORAGE_KEY = 'baseline:surface';
-        const resolveSurface = (root = document.documentElement) => {
-          try {
-            const saved = localStorage.getItem(STORAGE_KEY);
-            if (saved === 'dark' || saved === 'light') return saved;
-            if (saved === 'system') {
-              return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-          } catch {}
-          if (root.getAttribute('data-surface-mode') === 'system') {
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        const isSystemDark = () => typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const resolveSurfaceMode = () => {
+          let saved = null;
+          try { saved = localStorage.getItem(STORAGE_KEY); } catch {}
+          if (saved === 'dark' || saved === 'light') {
+            return { pref: saved, mode: null, surface: saved };
           }
-          return null;
+          return { pref: 'system', mode: 'system', surface: isSystemDark() ? 'dark' : 'light' };
         };
         const applySurface = (root = document.documentElement) => {
-          const resolved = resolveSurface(root);
-          if (resolved) root.setAttribute('data-surface', resolved);
+          const { pref, mode, surface } = resolveSurfaceMode(root);
+          if (mode === 'system') {
+            root.setAttribute('data-surface-mode', 'system');
+          } else {
+            root.removeAttribute('data-surface-mode');
+          }
+          root.setAttribute('data-surface', surface);
+          document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
+            btn.setAttribute('aria-pressed', String(surface === 'dark'));
+          });
+          document.querySelectorAll('[data-theme-select]').forEach((sel) => {
+            if (sel.value !== pref) sel.value = pref;
+          });
         };
         applySurface(document.documentElement);
 
@@ -845,11 +854,15 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-surface-switching', '');
             document.documentElement.setAttribute('data-surface', next);
+            document.documentElement.removeAttribute('data-surface-mode');
             void document.documentElement.offsetHeight;
             document.documentElement.removeAttribute('data-surface-switching');
             try { localStorage.setItem(STORAGE_KEY, next); } catch {}
             document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
               btn.setAttribute('aria-pressed', String(next === 'dark'));
+            });
+            document.querySelectorAll('[data-theme-select]').forEach((sel) => {
+              sel.value = next;
             });
             return;
           }

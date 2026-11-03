@@ -41,6 +41,7 @@
     "src/dev/styleguide-fixtures.ts",
     "src/dev/styleguide-prose.md",
     "src/dev/visual-fonts.css",
+    "src/dev/PrimitivesFixture.astro",
     "src/assets/styleguide-grid.svg",
     "src/assets/styleguide-small.svg",
     "src/assets/styleguide-portrait.svg",

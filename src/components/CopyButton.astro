@@ -1,5 +1,6 @@
 ---
 export interface Props {
+  id?: string;
   targetId: string;
   label?: string;
   copiedLabel?: string;
@@ -8,9 +9,11 @@ export interface Props {
   announcerId?: string;
   source?: 'text' | 'value';
   timeout?: number;
+  excludeSelector?: string;
 }
 
 const {
+  id,
   targetId,
   label = 'Copy to clipboard',
   copiedLabel = 'Copied!',
@@ -19,6 +22,7 @@ const {
   announcerId = 'site-announcer',
   source = 'text',
   timeout = 2000,
+  excludeSelector,
 } = Astro.props as Props;
 
 if (!targetId) {
@@ -28,6 +32,7 @@ if (!targetId) {
 
 <button
   type="button"
+  id={id}
   class="copy-button"
   data-copy-button
   data-target-id={targetId}
@@ -38,6 +43,7 @@ if (!targetId) {
   data-announcer-id={announcerId}
   data-source={source}
   data-timeout={timeout}
+  data-exclude-selector={excludeSelector}
   aria-label={label}
 >
   <span class="copy-button__text" data-copy-text>{label}</span>
@@ -49,6 +55,20 @@ if (!targetId) {
 
   interface CopyButtonElement extends HTMLButtonElement {
     _resetTimer?: number;
+    _opToken?: number;
+    _abortController?: AbortController;
+  }
+
+  function cancelPendingOperations(button: CopyButtonElement) {
+    if (button._resetTimer) {
+      clearTimeout(button._resetTimer);
+      delete button._resetTimer;
+    }
+    if (button._abortController) {
+      button._abortController.abort();
+      delete button._abortController;
+    }
+    button._opToken = (button._opToken || 0) + 1;
   }
 
   function initCopyButtons() {
@@ -68,35 +88,46 @@ if (!targetId) {
         const textSpan = button.querySelector<HTMLElement>('[data-copy-text]');
         const copiedLabel = button.getAttribute('data-copied-label') || 'Copied!';
         const initialLabel = button.getAttribute('data-initial-label') || 'Copy to clipboard';
+        const excludeSelector = button.getAttribute('data-exclude-selector') || undefined;
 
         if (!targetId) return;
         const target = document.getElementById(targetId);
         if (!target) return;
 
-        const textToCopy = extractCopyableText(target, source);
+        const textToCopy = extractCopyableText(target, { source, excludeSelector });
         if (!textToCopy) return;
 
-        if (button._resetTimer) {
-          clearTimeout(button._resetTimer);
-        }
+        // Cancel previous pending operation and schedule a new operation token
+        cancelPendingOperations(button);
+        const opToken = button._opToken!;
+        const ac = new AbortController();
+        button._abortController = ac;
 
         try {
-          await copyText(textToCopy);
+          await copyText(textToCopy, { signal: ac.signal });
+
+          // Invalidate if button was disconnected or superseded
+          if (button._opToken !== opToken || !button.isConnected) return;
+
           button.setAttribute('data-state', 'copied');
           if (textSpan) textSpan.textContent = copiedLabel;
-          announce(announcerId, copiedMessage, { priority: 'polite' });
+          announce(announcerId, copiedMessage, { priority: 'polite', signal: ac.signal });
 
           button._resetTimer = window.setTimeout(() => {
+            if (button._opToken !== opToken || !button.isConnected) return;
             button.removeAttribute('data-state');
             if (textSpan) textSpan.textContent = initialLabel;
             delete button._resetTimer;
           }, timeoutMs);
-        } catch {
+        } catch (err) {
+          if (ac.signal.aborted || button._opToken !== opToken || !button.isConnected) return;
+
           button.setAttribute('data-state', 'error');
           if (textSpan) textSpan.textContent = errorMessage;
-          announce(announcerId, errorMessage, { priority: 'assertive' });
+          announce(announcerId, errorMessage, { priority: 'assertive', signal: ac.signal });
 
           button._resetTimer = window.setTimeout(() => {
+            if (button._opToken !== opToken || !button.isConnected) return;
             button.removeAttribute('data-state');
             if (textSpan) textSpan.textContent = initialLabel;
             delete button._resetTimer;
@@ -109,6 +140,12 @@ if (!targetId) {
   if (typeof document !== 'undefined') {
     initCopyButtons();
     document.addEventListener('astro:page-load', initCopyButtons);
+    document.addEventListener('astro:before-swap', () => {
+      document.querySelectorAll<CopyButtonElement>('[data-copy-button]').forEach((btn) => {
+        cancelPendingOperations(btn);
+        btn.removeAttribute('data-state');
+      });
+    });
   }
 </script>
 
@@ -118,14 +155,14 @@ if (!targetId) {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: var(--space-3xs, 0.25rem);
-      padding: var(--space-3xs, 0.25rem) var(--space-2xs, 0.5rem);
+      gap: calc(var(--spacing-content) * 0.25);
+      padding: calc(var(--spacing-content) * 0.25) calc(var(--spacing-content) * 0.5);
       font: inherit;
-      font-size: var(--text-sm, 0.875rem);
+      font-size: var(--text-step--1);
       color: inherit;
-      background: var(--surface-elevated, transparent);
-      border: 1px solid var(--surface-border, currentColor);
-      border-radius: var(--radius-sm, 0.25rem);
+      background: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-control);
       cursor: pointer;
       user-select: none;
       transition: background 150ms ease, border-color 150ms ease;
@@ -136,12 +173,12 @@ if (!targetId) {
     }
 
     .copy-button[data-state="copied"] {
-      border-color: var(--color-action, currentColor);
+      border-color: var(--color-action);
     }
 
     .copy-button[data-state="error"] {
-      border-color: #e53e3e;
-      color: #e53e3e;
+      border-color: var(--color-error, var(--color-action));
+      color: var(--color-error, var(--color-text));
     }
   }
 </style>

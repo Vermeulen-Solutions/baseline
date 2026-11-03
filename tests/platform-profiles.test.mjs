@@ -238,3 +238,14 @@ test('shared form primitive and portable tests ship to all profiles in manifest'
     assert.ok(manifest.files.includes('tests/components-primitives.test.mjs'), `${profile} must include components-primitives.test.mjs`);
   }
 });
+
+test('static profile registers baselineFeatures integration and ambient virtual capabilities type', () => {
+  const staticAstroConfig = fs.readFileSync(path.join(root, 'profiles/static/project/astro.config.mjs'), 'utf8');
+  assert.ok(staticAstroConfig.includes("import baselineFeatures from './scripts/baseline-features-integration.mjs';"), 'Static astro config must import baselineFeatures');
+  assert.ok(staticAstroConfig.includes('baselineFeatures()'), 'Static astro config must register baselineFeatures()');
+
+  const staticEnvDts = fs.readFileSync(path.join(root, 'profiles/static/project/src/env.d.ts'), 'utf8');
+  assert.ok(staticEnvDts.includes("declare module 'virtual:baseline/capabilities'"), 'Static env.d.ts must declare virtual:baseline/capabilities');
+  assert.ok(profileManifest('static').files.includes('scripts/baseline-features-integration.mjs'));
+  assert.ok(profileManifest('static-sveltia').files.includes('scripts/baseline-features-integration.mjs'));
+});

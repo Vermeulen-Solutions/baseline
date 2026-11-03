@@ -360,6 +360,22 @@
 			transition-duration: 0.01ms !important;
 		}
 	}
+
+	/* Print media contracts: opt-in print content mode reveals component-managed tabpanels */
+	@media print {
+		:where(.skip-link, nav, [role="navigation"], [data-theme-select], .theme-select-container) {
+			display: none !important;
+		}
+		[data-print-content] :where([role="tabpanel"], .tabs__panel) {
+			display: block !important;
+		}
+	}
+
+	/* RTL and Bidirectional text isolation contracts for code elements */
+	:where(pre) {
+		direction: ltr !important;
+		text-align: start !important;
+	}
 }
 
 @layer components {
@@ -1156,24 +1172,4 @@
 			border-color: GrayText !important;
 		}
 	}
-
-	/* Print media contracts: opt-in print content mode reveals component-managed tabpanels */
-	@media print {
-		:where(.skip-link, nav, [role="navigation"], [data-theme-select], .theme-select-container) {
-			display: none !important;
-		}
-		:where([data-print-content]) :where([role="tabpanel"][hidden]) {
-			display: block !important;
-		}
-	}
-
-	/* RTL and Bidirectional text isolation contracts for code elements */
-	:where(pre) {
-		direction: ltr !important;
-		text-align: start !important;
-	}
-	:where(code) {
-		direction: auto;
-	}
-
 }

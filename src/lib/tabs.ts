@@ -16,6 +16,7 @@ export interface TabsProps {
 }
 
 const syncRegistries = new Map<string, Set<TabsController>>();
+const liveControllers = new Set<TabsController>();
 
 export class TabsController {
   readonly root: HTMLElement;
@@ -38,7 +39,12 @@ export class TabsController {
     this.orientation = (root.getAttribute('data-orientation') as 'vertical' | 'horizontal') || 'horizontal';
     this.activation = (root.getAttribute('data-activation') as 'manual' | 'automatic') || 'automatic';
 
+    liveControllers.add(this);
     this.init();
+  }
+
+  get isDestroyed(): boolean {
+    return this.abortController.signal.aborted;
   }
 
   private init() {
@@ -189,17 +195,21 @@ export class TabsController {
     if (sync && this.syncKey) {
       const peers = syncRegistries.get(this.syncKey);
       if (peers) {
-        peers.forEach((peer) => {
-          if (peer !== this && peer.selectedValue !== value && document.body.contains(peer.root)) {
+        for (const peer of Array.from(peers)) {
+          if (!peer.root.isConnected || peer.isDestroyed) {
+            peer.destroy();
+          } else if (peer !== this && peer.selectedValue !== value) {
             peer.select(value, { sync: false, focus: false });
           }
-        });
+        }
       }
     }
   }
 
   destroy() {
     this.abortController.abort();
+    liveControllers.delete(this);
+    activeControllers.delete(this.root);
     if (this.syncKey && syncRegistries.has(this.syncKey)) {
       const set = syncRegistries.get(this.syncKey)!;
       set.delete(this);
@@ -213,14 +223,45 @@ export class TabsController {
 const activeControllers = new WeakMap<HTMLElement, TabsController>();
 
 /**
+ * Teardown all registered tabs controllers, optionally preserving persisted elements across View Transitions.
+ */
+export function teardownTabs(preservePersisted = true) {
+  for (const controller of Array.from(liveControllers)) {
+    const isPersisted = preservePersisted && Boolean(controller.root.closest('[data-astro-transition-persist]'));
+    if (!isPersisted) {
+      controller.destroy();
+    }
+  }
+}
+
+/**
+ * Returns number of active controllers registered for a given syncKey.
+ */
+export function getActiveSyncCount(syncKey: string): number {
+  return syncRegistries.get(syncKey)?.size ?? 0;
+}
+
+/**
  * Scans and initializes all tabs within a given container.
  */
 export function initTabs(container: Document | HTMLElement = document) {
   const elements = container.querySelectorAll<HTMLElement>('[data-tabs-id]');
   elements.forEach((el) => {
-    if (!activeControllers.has(el)) {
+    const existing = activeControllers.get(el);
+    if (existing) {
+      if (existing.isDestroyed || !el.isConnected) {
+        existing.destroy();
+        const controller = new TabsController(el);
+        activeControllers.set(el, controller);
+      }
+    } else {
       const controller = new TabsController(el);
       activeControllers.set(el, controller);
     }
   });
+}
+
+// Lifecycle hook for Astro ClientRouter navigation
+if (typeof document !== 'undefined') {
+  document.addEventListener('astro:before-swap', () => teardownTabs(true));
 }
