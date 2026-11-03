@@ -12,12 +12,12 @@
   {
     "path": "src/lib/theme.ts",
     "reason": "Non-visual theme utility: pure theme resolver and safe localStorage preference accessor with exception handling. Exact LF-normalized source hash.",
-    "sha256": "6b7e32cab97fc56759fb6f2bacbd3d2c0e00aa283815715d48bf675d4b0f7da5"
+    "sha256": "1c82eacd6409054d7f6af8e3d96e9b3ae189fa80af3672131e6304c26d68dc79"
   },
   {
     "path": "src/lib/tabs.ts",
     "reason": "Functional interaction primitive: client controller for WAI-ARIA tabs with roving tabindex, arrow navigation, syncKey peer synchronization, and reconnection. Exact LF-normalized source hash.",
-    "sha256": "5bd7a4d4f0195f84dec794a525858b20f1feb57eab25ce2473e884de4260b1c7"
+    "sha256": "f5356339aba7e0e930e65fd991c51e6a99ea6e680319320c1f20fdef50705023"
   },
   {
     "path": "src/lib/announce.ts",
@@ -47,12 +47,12 @@
   {
     "path": "src/components/CopyButton.astro",
     "reason": "Functional interaction primitive: accessible copy-to-clipboard button targeting element text/value with timeout cleanup. Exact LF-normalized source hash.",
-    "sha256": "e8b9bd687f9ac427477091ef6bb532ee62d09720e4fdb5b9ce0a17cf35d7996e"
+    "sha256": "12cd3166c5dda8cdade9cf2ccb9ea04f81a7b5ddcf1c90a735e19fe4a1fe4c92"
   },
   {
     "path": "src/dev/PrimitivesFixture.astro",
     "reason": "Synthetic test fixture for interaction primitives (Tabs, ThemeSelect, CopyButton, Announcer) and ClientRouter navigation; development/fixture builds only.",
-    "sha256": "2e28c6873fe8180c96959b40853305f9f98242a1c7eff906ef9011d5e6989fe9"
+    "sha256": "49540eab4206fb57373a8d8a02434b432894a20aa7ba62e70cf8a57d4d559544"
   },
   {
     "path": "src/lib/form-transport.ts",
@@ -327,7 +327,7 @@
   {
     "path": "src/layouts/SiteShell.astro",
     "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync; preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "c80d8805be5092ccdeeff181ff963f9177bc797826c63f4e1c586c33d6e8fc13"
+    "sha256": "9892fc6b28b7eba92065666ed04a31cb97b051318cce8feb7216c7039bc75591"
   },
   {
     "path": "src/components/EmDashImage.astro",

@@ -39,12 +39,17 @@ export class TabsController {
     this.orientation = (root.getAttribute('data-orientation') as 'vertical' | 'horizontal') || 'horizontal';
     this.activation = (root.getAttribute('data-activation') as 'manual' | 'automatic') || 'automatic';
 
+    (root as unknown as { __tabsController?: TabsController }).__tabsController = this;
     liveControllers.add(this);
     this.init();
   }
 
   get isDestroyed(): boolean {
     return this.abortController.signal.aborted;
+  }
+
+  get abortSignal(): AbortSignal {
+    return this.abortController.signal;
   }
 
   private init() {
@@ -210,6 +215,7 @@ export class TabsController {
     this.abortController.abort();
     liveControllers.delete(this);
     activeControllers.delete(this.root);
+    delete (this.root as unknown as { __tabsController?: TabsController }).__tabsController;
     if (this.syncKey && syncRegistries.has(this.syncKey)) {
       const set = syncRegistries.get(this.syncKey)!;
       set.delete(this);
@@ -221,6 +227,13 @@ export class TabsController {
 }
 
 const activeControllers = new WeakMap<HTMLElement, TabsController>();
+
+/**
+ * Retrieves the TabsController instance associated with a tab root element.
+ */
+export function getTabsController(root: HTMLElement): TabsController | undefined {
+  return activeControllers.get(root) || (root as unknown as { __tabsController?: TabsController }).__tabsController;
+}
 
 /**
  * Destroys any registered controller whose root element is no longer connected to the DOM.
@@ -285,6 +298,23 @@ export function initTabs(container: Document | HTMLElement = document) {
   });
 }
 
+let disconnectObserver: MutationObserver | null = null;
+
+function setupDisconnectObserver() {
+  try {
+    if (disconnectObserver) {
+      disconnectObserver.disconnect();
+    }
+    disconnectObserver = new MutationObserver(() => {
+      purgeDisconnectedTabs();
+    });
+    const rootNode = document.documentElement || document.body;
+    if (rootNode) {
+      disconnectObserver.observe(rootNode, { childList: true, subtree: true });
+    }
+  } catch {}
+}
+
 // Lifecycle hooks for Astro ClientRouter navigation and DOM reconciliation
 if (typeof document !== 'undefined') {
   document.addEventListener('astro:before-swap', (event) => {
@@ -294,14 +324,12 @@ if (typeof document !== 'undefined') {
 
   document.addEventListener('astro:after-swap', () => {
     purgeDisconnectedTabs();
+    setupDisconnectObserver();
   });
 
-  try {
-    const observer = new MutationObserver(() => {
-      purgeDisconnectedTabs();
-    });
-    if (document.body) {
-      observer.observe(document.body, { childList: true, subtree: true });
-    }
-  } catch {}
+  document.addEventListener('astro:page-load', () => {
+    setupDisconnectObserver();
+  });
+
+  setupDisconnectObserver();
 }

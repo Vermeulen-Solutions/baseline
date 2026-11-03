@@ -24,10 +24,20 @@ const title = isPageB ? 'Primitives Fixture - Page B' : 'Primitives Fixture - Pa
   <header slot="header" class="site-header">
     <nav class="site-nav" aria-label="Fixture navigation">
       <ThemeSelect id="fixture-theme-select" />
+      <button
+        type="button"
+        id="fixture-surface-toggle"
+        class="btn btn--ghost"
+        data-surface-toggle
+        aria-label="Toggle theme"
+        aria-pressed="false"
+      >
+        Toggle theme
+      </button>
       {isPageB ? (
-        <a id="nav-to-a" href="/_primitives-fixture">Navigate to Page A</a>
+        <a id="nav-to-a" href="/_primitives-fixture" data-astro-prefetch="false">Navigate to Page A</a>
       ) : (
-        <a id="nav-to-b" href="/_primitives-fixture?nav=page-b">Navigate to Page B</a>
+        <a id="nav-to-b" href="/_primitives-fixture?nav=page-b" data-astro-prefetch="false">Navigate to Page B</a>
       )}
     </nav>
   </header>

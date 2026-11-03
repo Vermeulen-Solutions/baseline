@@ -317,7 +317,7 @@ test('theme controller preserves page-declared and unset defaults when storage i
   // 4. Page with system surface
   const mockSystemRoot = {
     getAttribute(attr) {
-      if (attr === 'data-surface-mode') return 'system';
+      if (attr === 'data-surface-default') return 'system';
       return null;
     },
     setAttribute() {},
@@ -328,12 +328,35 @@ test('theme controller preserves page-declared and unset defaults when storage i
   assert.equal(systemResolved.preference, 'system');
   assert.ok(systemResolved.surface === 'dark' || systemResolved.surface === 'light');
 
-  // 5. Stored preference overrides page default
+  // Verify mutable data-surface-mode="system" is NOT treated as an author default
+  const mockMutableSystemRoot = {
+    getAttribute(attr) {
+      if (attr === 'data-surface-mode') return 'system';
+      return null;
+    },
+    setAttribute() {},
+    removeAttribute() {},
+  };
+  assert.equal(getPageThemeDefault(mockMutableSystemRoot), null, 'Mutable data-surface-mode must not be treated as author default');
+
+  // 5. Explicit theme selection with persist: false applies preference independently of storage
+  const appliedNoPersist = applyTheme('dark', { persist: false, root: mockUnsetRoot });
+  assert.equal(appliedNoPersist.preference, 'dark');
+  assert.equal(appliedNoPersist.surface, 'dark');
+  assert.equal(getStoredThemePreference(), null, 'Storage must not be written when persist: false');
+
+  // 6. Clearing preference with applyTheme(null) restores unset author default
+  const resetToUnset = applyTheme(null, { root: mockUnsetRoot });
+  assert.equal(resetToUnset.preference, null);
+  assert.equal(resetToUnset.surface, null);
+
+  // 7. Stored preference overrides page default
   setStoredThemePreference('dark');
   const overridden = resolveEffectiveTheme(mockLightRoot);
   assert.equal(overridden.preference, 'dark');
   assert.equal(overridden.surface, 'dark');
   clearStoredThemePreference();
+  applyTheme(null, { root: mockUnsetRoot });
 });
 
 test('copyText aborts immediately and does not invoke legacy execCommand fallback', async () => {

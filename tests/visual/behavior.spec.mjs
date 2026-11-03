@@ -760,6 +760,38 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   await expect(page.locator('html')).not.toHaveAttribute('data-surface');
   await expect(page.locator('html')).not.toHaveAttribute('data-surface-mode');
 
+  // Set OS color scheme to light before testing surface toggle
+  await page.emulateMedia({ colorScheme: 'light' });
+
+  // Verify real surface toggle button does not execute twice or bounce back
+  const surfaceToggle = page.locator('#fixture-surface-toggle');
+  await expect(surfaceToggle).toHaveAttribute('aria-pressed', 'false');
+  await surfaceToggle.click();
+  await expect(page.locator('html')).toHaveAttribute('data-surface', 'dark');
+  await expect(surfaceToggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(themeSelect).toHaveValue('dark');
+
+  // Second toggle click returns to light
+  await surfaceToggle.click();
+  await expect(page.locator('html')).toHaveAttribute('data-surface', 'light');
+  await expect(surfaceToggle).toHaveAttribute('aria-pressed', 'false');
+  await expect(themeSelect).toHaveValue('light');
+
+  // Verify applyTheme with persist: false applies preference independently of storage
+  await page.evaluate(() => {
+    window.__baseline_applyTheme('dark', { persist: false });
+  });
+  await expect(page.locator('html')).toHaveAttribute('data-surface', 'dark');
+  await expect(themeSelect).toHaveValue('dark');
+
+  // Verify clearing preference with applyTheme(null) restores unset default
+  await page.evaluate(() => {
+    window.__baseline_applyTheme(null);
+  });
+  await expect(page.locator('html')).not.toHaveAttribute('data-surface');
+  await expect(page.locator('html')).not.toHaveAttribute('data-surface-mode');
+  await expect(themeSelect).toHaveValue('system');
+
   // 2. Verify Tabs WAI-ARIA initial state and roving tabindex
   const t1Npm = page.locator('#tabset-1 [role="tab"][data-tab-value="npm"]');
   const t1Pnpm = page.locator('#tabset-1 [role="tab"][data-tab-value="pnpm"]');
@@ -860,6 +892,51 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   await page.locator('#tabset-1 [role="tab"][data-tab-value="npm"]').focus();
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#tabset-1 [role="tab"][data-tab-value="pnpm"]')).toHaveAttribute('aria-selected', 'true');
+
+  // 6. Verify disconnect observers survive ClientRouter body replacement
+  // A. Tabs disconnect test: remove tabset-2 from the swapped body
+  await page.evaluate(() => {
+    const tab2 = document.getElementById('tabset-2');
+    window.__tab2Controller = tab2?.__tabsController;
+    tab2?.remove();
+  });
+  // Wait for MutationObserver microtask
+  await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 50)));
+  // Verify abort signal is aborted directly on the controller BEFORE getActiveSyncCount is called
+  const isTab2Aborted = await page.evaluate(
+    () => window.__tab2Controller?.isDestroyed && window.__tab2Controller?.abortSignal?.aborted
+  );
+  expect(isTab2Aborted).toBe(true);
+
+  // B. CopyButton disconnect and reinsertion test: trigger copied feedback on new body
+  const copyBtnReturned = page.locator('#test-copy-btn');
+  await copyBtnReturned.click();
+  await expect(copyBtnReturned).toHaveAttribute('data-state', 'copied');
+
+  // Remove the active copy button from swapped body
+  await page.evaluate(() => {
+    const btn = document.getElementById('test-copy-btn');
+    window.__removedBtn = btn;
+    btn?.remove();
+  });
+  // Wait for MutationObserver microtask
+  await page.evaluate(() => new Promise((resolve) => setTimeout(resolve, 50)));
+
+  // Assert button was reset immediately upon removal
+  const removedBtnState = await page.evaluate(() => ({
+    hasState: window.__removedBtn?.hasAttribute('data-state'),
+    text: window.__removedBtn?.querySelector('[data-copy-text]')?.textContent,
+    isAborted: window.__removedBtn?._abortController?.signal?.aborted,
+  }));
+  expect(removedBtnState.hasState).toBe(false);
+  expect(removedBtnState.text).toBe('Copy code');
+
+  // Reinsert button into new body and verify no stale feedback
+  await page.evaluate(() => {
+    document.querySelector('[data-primitives-fixture]')?.appendChild(window.__removedBtn);
+  });
+  await expect(page.locator('#test-copy-btn')).not.toHaveAttribute('data-state', 'copied');
+  await expect(page.locator('#test-copy-btn [data-copy-text]')).toHaveText('Copy code');
 
   expect(problems).toEqual([]);
 });

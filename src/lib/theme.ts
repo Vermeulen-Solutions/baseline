@@ -32,25 +32,31 @@ export function getStoredThemePreference(): ThemePreference | null {
 
 /**
  * Reads the page's declared surface default from HTML root attributes.
+ * Resolves only from the immutable data-surface-default attribute authored by the template.
  */
 export function getPageThemeDefault(root: Element = document.documentElement): ThemePreference | null {
   if (typeof document === 'undefined') return null;
   const def = root.getAttribute('data-surface-default');
   if (def === 'system' || def === 'dark' || def === 'light') return def;
-  if (root.getAttribute('data-surface-mode') === 'system') return 'system';
   return null;
 }
 
+let activePreferenceOverride: ThemePreference | null | undefined = undefined;
+
 /**
- * Resolves effective theme preference and surface given stored user preferences and page defaults.
+ * Resolves effective theme preference and surface given active session preference,
+ * stored user preferences, and page defaults.
  */
 export function resolveEffectiveTheme(root: Element = document.documentElement): {
   preference: ThemePreference | null;
   surface: 'light' | 'dark' | null;
 } {
-  const stored = getStoredThemePreference();
   const pageDefault = getPageThemeDefault(root);
-  const effectivePref = stored ?? pageDefault;
+  const effectivePref =
+    activePreferenceOverride !== undefined
+      ? activePreferenceOverride
+      : (getStoredThemePreference() ?? pageDefault);
+
   if (!effectivePref) {
     return { preference: null, surface: null };
   }
@@ -115,13 +121,19 @@ export function applyTheme(
 
   if (preference !== undefined) {
     if (preference === null) {
+      activePreferenceOverride = undefined;
       if (options?.persist !== false) clearStoredThemePreference();
     } else {
+      activePreferenceOverride = preference;
       if (options?.persist !== false) setStoredThemePreference(preference);
     }
   }
 
   const { preference: effectivePref, surface } = resolveEffectiveTheme(root);
+
+  if (typeof root.setAttribute === 'function') {
+    root.setAttribute('data-surface-switching', '');
+  }
 
   if (effectivePref === null) {
     root.removeAttribute('data-surface');
@@ -134,24 +146,35 @@ export function applyTheme(
     if (surface) root.setAttribute('data-surface', surface);
   }
 
+  if (typeof window !== 'undefined' && typeof (root as HTMLElement).offsetHeight === 'number') {
+    void (root as HTMLElement).offsetHeight;
+  }
+  if (typeof root.removeAttribute === 'function') {
+    root.removeAttribute('data-surface-switching');
+  }
+
   // Synchronize all theme select controls on the page
-  document.querySelectorAll<HTMLSelectElement>('[data-theme-select]').forEach((select) => {
-    const targetValue = effectivePref ?? 'system';
-    if (select.value !== targetValue) {
-      select.value = targetValue;
-    }
-  });
+  if (typeof document !== 'undefined' && typeof document.querySelectorAll === 'function') {
+    document.querySelectorAll<HTMLSelectElement>('[data-theme-select]').forEach((select) => {
+      const targetValue = effectivePref ?? 'system';
+      if (select.value !== targetValue) {
+        select.value = targetValue;
+      }
+    });
 
-  // Synchronize any surface toggle buttons
-  document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
-    btn.setAttribute('aria-pressed', String(surface === 'dark'));
-  });
+    // Synchronize any surface toggle buttons
+    document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
+      btn.setAttribute('aria-pressed', String(surface === 'dark'));
+    });
+  }
 
-  document.dispatchEvent(
-    new CustomEvent('baseline:theme-change', {
-      detail: { preference: effectivePref, surface },
-    })
-  );
+  if (typeof document !== 'undefined' && typeof document.dispatchEvent === 'function') {
+    document.dispatchEvent(
+      new CustomEvent('baseline:theme-change', {
+        detail: { preference: effectivePref, surface },
+      })
+    );
+  }
 
   if (typeof window !== 'undefined') {
     (window as unknown as { __baseline_applyTheme?: typeof applyTheme }).__baseline_applyTheme = applyTheme;
@@ -183,7 +206,8 @@ export function initThemeController() {
 
   // 2. Listen for cross-tab storage changes
   window.addEventListener('storage', (event) => {
-    if (event.key === THEME_STORAGE_KEY) {
+    if (event.key === THEME_STORAGE_KEY || event.key === null) {
+      activePreferenceOverride = undefined;
       applyTheme(undefined, { persist: false });
     }
   });
@@ -199,7 +223,12 @@ export function initThemeController() {
     const toggle = target?.closest?.('[data-surface-toggle]');
     if (!toggle) return;
     event.preventDefault();
-    const currentSurface = document.documentElement.getAttribute('data-surface');
+    const effective = resolveEffectiveTheme(document.documentElement);
+    const systemDark =
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches
+        : false;
+    const currentSurface = effective.surface ?? (systemDark ? 'dark' : 'light');
     const nextSurface = currentSurface === 'dark' ? 'light' : 'dark';
     applyTheme(nextSurface);
   });

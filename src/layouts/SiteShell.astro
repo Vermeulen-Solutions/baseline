@@ -90,8 +90,9 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
           }
           let saved = null;
           try { saved = localStorage.getItem(STORAGE_KEY); } catch {}
-          const pageDefault = root.getAttribute('data-surface-default') || (root.getAttribute('data-surface-mode') === 'system' ? 'system' : null);
+          const pageDefault = root.getAttribute('data-surface-default') || null;
           const effective = saved || pageDefault;
+          root.setAttribute('data-surface-switching', '');
           if (effective === 'dark' || effective === 'light') {
             root.setAttribute('data-surface', effective);
             root.removeAttribute('data-surface-mode');
@@ -102,6 +103,8 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
             root.removeAttribute('data-surface');
             root.removeAttribute('data-surface-mode');
           }
+          void root.offsetHeight;
+          root.removeAttribute('data-surface-switching');
           const surf = root.getAttribute('data-surface');
           document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
             btn.setAttribute('aria-pressed', String(surf === 'dark'));
@@ -833,25 +836,6 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
         document.addEventListener('click', (event) => {
           const target = event.target instanceof Element ? event.target : null;
           if (!target) return;
-
-          const surfaceBtn = target.closest('[data-surface-toggle]');
-          if (surfaceBtn) {
-            const current = document.documentElement.getAttribute('data-surface');
-            const next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-surface-switching', '');
-            document.documentElement.setAttribute('data-surface', next);
-            document.documentElement.removeAttribute('data-surface-mode');
-            void document.documentElement.offsetHeight;
-            document.documentElement.removeAttribute('data-surface-switching');
-            try { localStorage.setItem(STORAGE_KEY, next); } catch {}
-            document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
-              btn.setAttribute('aria-pressed', String(next === 'dark'));
-            });
-            document.querySelectorAll('[data-theme-select]').forEach((sel) => {
-              sel.value = next;
-            });
-            return;
-          }
 
           const filterBtn = target.closest('[data-filter-btn]');
           if (filterBtn) {

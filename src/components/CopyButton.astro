@@ -142,15 +142,14 @@ if (!targetId) {
     });
   }
 
-  if (typeof document !== 'undefined') {
-    initCopyButtons();
-    document.addEventListener('astro:page-load', initCopyButtons);
-    document.addEventListener('astro:before-swap', () => {
-      document.querySelectorAll<CopyButtonElement>('[data-copy-button]').forEach(resetCopyButton);
-    });
+  let disconnectObserver: MutationObserver | null = null;
 
+  function setupDisconnectObserver() {
     try {
-      const disconnectObserver = new MutationObserver((mutations) => {
+      if (disconnectObserver) {
+        disconnectObserver.disconnect();
+      }
+      disconnectObserver = new MutationObserver((mutations) => {
         for (const m of mutations) {
           m.removedNodes.forEach((node) => {
             if (node instanceof HTMLElement) {
@@ -163,10 +162,26 @@ if (!targetId) {
         }
       });
 
-      if (document.body) {
-        disconnectObserver.observe(document.body, { childList: true, subtree: true });
+      const rootNode = document.documentElement || document.body;
+      if (rootNode) {
+        disconnectObserver.observe(rootNode, { childList: true, subtree: true });
       }
     } catch {}
+  }
+
+  if (typeof document !== 'undefined') {
+    initCopyButtons();
+    setupDisconnectObserver();
+    document.addEventListener('astro:page-load', () => {
+      initCopyButtons();
+      setupDisconnectObserver();
+    });
+    document.addEventListener('astro:after-swap', () => {
+      setupDisconnectObserver();
+    });
+    document.addEventListener('astro:before-swap', () => {
+      document.querySelectorAll<CopyButtonElement>('[data-copy-button]').forEach(resetCopyButton);
+    });
   }
 </script>
 
