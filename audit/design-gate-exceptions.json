@@ -246,8 +246,8 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Functional shared starter metadata ownership option; preserve the document/title/landmarks and backward-compatible static default while allowing a platform head to own description/canonical. No visual-system or client content change. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "e0d86e030d5ef65da21617d6dfc7ec11fbd0d207e1e2a21571f0c724f83690e8"
+    "reason": "Functional starter infrastructure: add NoScroll and dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup on page-load; preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "f3c403fb164b8575491ac742ad339ee7a1e154b695ce54901358952e49df884e"
   },
   {
     "path": "src/components/EmDashImage.astro",
