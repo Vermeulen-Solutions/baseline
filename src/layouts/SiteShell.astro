@@ -31,6 +31,12 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
     <title>{title}</title>
     {metadataOwner === 'shell' && description && <meta name="description" content={description} />}
     {metadataOwner === 'shell' && canonical && <link rel="canonical" href={canonical} />}
+    <script>
+      import { swapFunctions } from 'astro:transitions/client';
+      if (typeof window !== 'undefined') {
+        Object.assign(window, { __astro_swap: swapFunctions });
+      }
+    </script>
     {import.meta.env.DEV && (
       <script is:inline>
         // Development-only deterministic latency & failure testing hooks (excluded from production builds)
@@ -102,27 +108,40 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
           activeDirection = null;
         };
 
-        // Swap helpers & script execution tracker for seamless transition swap pipeline
-        const executedScriptKeys = new Set();
-        const getScriptKey = (s) => (s.src ? new URL(s.src, location.href).href : s.textContent || '');
-        for (const s of document.scripts) {
-          executedScriptKeys.add(getScriptKey(s));
-          s.dataset.astroExec = '';
-        }
-
-        const createExecutableScript = (script) => {
-          const fresh = document.createElement('script');
-          fresh.textContent = script.textContent;
-          for (const attr of script.attributes) {
-            fresh.setAttribute(attr.name, attr.value);
+        // Swap fallback helpers & media reification
+        const reifyMediaElements = (root, liveMedia) => {
+          for (const media of root.querySelectorAll('video, audio')) {
+            if (liveMedia && liveMedia.has(media)) continue;
+            const fresh = document.createElement(media.localName);
+            for (const attr of media.attributes) {
+              fresh.setAttribute(attr.name, attr.value);
+            }
+            fresh.innerHTML = media.innerHTML;
+            if (fresh.hasAttribute('muted')) fresh.muted = true;
+            media.replaceWith(fresh);
           }
-          fresh.dataset.astroExec = '';
-          return fresh;
+        };
+
+        const attachShadowRoots = (root) => {
+          root.querySelectorAll('template[shadowrootmode]').forEach((template) => {
+            const mode = template.getAttribute('shadowrootmode');
+            const parent = template.parentNode;
+            if ((mode === 'closed' || mode === 'open') && parent instanceof HTMLElement) {
+              if (parent.shadowRoot) {
+                template.remove();
+                return;
+              }
+              const shadowRoot = parent.attachShadow({ mode });
+              shadowRoot.appendChild(template.content);
+              template.remove();
+              attachShadowRoots(shadowRoot);
+            }
+          });
         };
 
         const deselectScriptsFallback = (doc) => {
           for (const s of doc.scripts) {
-            if (!s.hasAttribute('data-astro-rerun') && executedScriptKeys.has(getScriptKey(s))) {
+            if (!s.hasAttribute('data-astro-rerun')) {
               s.dataset.astroExec = '';
             }
           }
@@ -180,18 +199,6 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
 
           for (const child of Array.from(newDoc.head.childNodes)) {
             if (child.nodeType === 1 || child.nodeType === 8) {
-              if (child.tagName === 'SCRIPT') {
-                const script = child;
-                if (script.dataset.astroExec === undefined) {
-                  const type = script.getAttribute('type');
-                  if (!type || type === 'module' || type === 'text/javascript') {
-                    const fresh = createExecutableScript(script);
-                    executedScriptKeys.add(getScriptKey(fresh));
-                    document.head.appendChild(fresh);
-                    continue;
-                  }
-                }
-              }
               document.head.appendChild(document.adoptNode(child));
             }
           }
@@ -584,6 +591,20 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                 pairs.push({ currentEl, incomingEl });
               }
 
+              // Distinct incoming matches must not overlap (topology / ancestry validation)
+              if (isPairingValid) {
+                const incomingElements = pairs.map((p) => p.incomingEl);
+                for (let i = 0; i < incomingElements.length; i++) {
+                  for (let j = 0; j < incomingElements.length; j++) {
+                    if (i !== j && incomingElements[i].contains(incomingElements[j])) {
+                      isPairingValid = false;
+                      break;
+                    }
+                  }
+                  if (!isPairingValid) break;
+                }
+              }
+
               if (isPairingValid && pairs.length > 0) {
                 event.swap = () => {
                   const swapApi = (typeof window !== 'undefined' && window.__astro_swap) || null;
@@ -606,7 +627,7 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                   }
                   applySurface(document.documentElement);
 
-                  // 3. Synchronize head elements (metadata, title, styles, stylesheets, font preloads, new scripts)
+                  // 3. Synchronize head elements (metadata, title, styles, stylesheets, font preloads)
                   if (swapApi && typeof swapApi.swapHeadElements === 'function') {
                     swapApi.swapHeadElements(newDoc);
                   } else {
@@ -621,7 +642,10 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                     restoreFocus = saveFocusFallback();
                   }
 
-                  // 5. Connected-DOM persistent element handling inside replaced containers
+                  // 5. Track live media right now before any DOM detachment
+                  const liveMedia = new Set(document.querySelectorAll('video, audio'));
+
+                  // 6. Connected-DOM persistent element handling inside replaced containers
                   const docEl = document.documentElement;
                   const moveBefore = typeof docEl.moveBefore === 'function' ? (p, n, c) => p.moveBefore(n, c) : null;
                   const persistPairs = [];
@@ -662,21 +686,13 @@ const { title, description, canonical, metadataOwner = 'shell', lang = 'en', ski
                     }
                   }
 
-                  // 6. Execute any newly inserted scripts in replaced containers if router doesn't
+                  // 7. Upgrade declarative shadow DOM and reify newly introduced media in incoming containers
                   for (const { incomingEl } of pairs) {
-                    for (const script of incomingEl.querySelectorAll('script')) {
-                      if (script.dataset.astroExec === undefined) {
-                        const type = script.getAttribute('type');
-                        if (!type || type === 'module' || type === 'text/javascript') {
-                          const fresh = createExecutableScript(script);
-                          executedScriptKeys.add(getScriptKey(fresh));
-                          script.replaceWith(fresh);
-                        }
-                      }
-                    }
+                    attachShadowRoots(incomingEl);
+                    reifyMediaElements(incomingEl, liveMedia);
                   }
 
-                  // 7. Restore focus
+                  // 8. Restore focus
                   if (typeof restoreFocus === 'function') {
                     restoreFocus();
                   }

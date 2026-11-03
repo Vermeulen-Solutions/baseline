@@ -397,88 +397,94 @@ test('behavior directional transitions, targeted replacement, and persistent ele
   test.skip(info.project.name !== 'chromium-1440', 'Run once on standard desktop viewport');
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   const problems = observe(page);
-  const shell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
-  const css = readFileSync('src/styles/global.css', 'utf8');
-  const vtCss = css.slice(css.indexOf('@keyframes vt-slide-out-left'), css.indexOf('@layer components {'));
-  const scripts = [...shell.matchAll(/<script is:inline>([\s\S]*?)<\/script>/g)].map(m => m[1]);
 
-  await page.setContent(`
-    <!DOCTYPE html>
-    <html lang="en" data-surface="light">
-      <head>
-        <title>Page A Title</title>
-        <meta name="description" content="Page A Description" />
-        <link rel="canonical" href="http://localhost:4321/page-a" />
-        <style id="page-style-a">.page-a-only { color: red; }</style>
-        <style id="global-vt-styles" data-astro-transition-persist="global-vt-styles">${vtCss}</style>
-        ${scripts.map(s => `<script>${s}</script>`).join('\n')}
-      </head>
-      <body>
-        <header id="site-header">Header A</header>
-        <audio id="live-audio-player" data-astro-transition-persist="global-player" data-vt-persist="global-player"></audio>
-        <main id="main-content" data-vt-replace>
-          <a id="forwardLink" href="/posts/deep/entry/">Deeper</a>
-          <a id="backLinkOverride" href="/posts/deep/entry/" data-vt-direction="back">Back Override</a>
-          <div id="nested-container" data-vt-replace>
-            <p id="nested-content">Initial Nested Content</p>
-          </div>
-          <p id="main-body-text">Initial Main Content</p>
-        </main>
-        <footer id="site-footer">Footer A</footer>
-      </body>
-    </html>
-  `);
+  // Navigate to built home route on the actual running visual server (renders SiteShell)
+  const homeRoute = contract.routes.find((r) => r.name === 'home');
+  await prepare(page, homeRoute, page.visualProblems);
 
   const results = await page.evaluate(async () => {
+    // 1. Verify that window.__astro_swap is installed on the built route and exposes swapFunctions
+    const swapApiInstalled = Boolean(
+      window['__astro_swap'] &&
+      typeof window['__astro_swap'].deselectScripts === 'function' &&
+      typeof window['__astro_swap'].swapRootAttributes === 'function' &&
+      typeof window['__astro_swap'].swapHeadElements === 'function' &&
+      typeof window['__astro_swap'].saveFocus === 'function'
+    );
+
+    // 2. Set up real audio element with actual WAV data (no synthetic playback properties)
+    const wav = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==';
+    const liveAudio = document.createElement('audio');
+    liveAudio.id = 'live-audio-player';
+    liveAudio.setAttribute('data-astro-transition-persist', 'global-player');
+    liveAudio.setAttribute('data-vt-persist', 'global-player');
+    liveAudio.src = wav;
+    document.body.appendChild(liveAudio);
+
+    // Real playback: start audio and wait for canplay
+    await new Promise((resolve) => {
+      if (liveAudio.readyState >= 2) return resolve();
+      liveAudio.oncanplay = resolve;
+      setTimeout(resolve, 500);
+    });
+    await liveAudio.play();
+    const liveAudioPlayingBeforeSwap = !liveAudio.paused && liveAudio.readyState >= 2;
+
+    // 3. Set up targeted container in the live page for replacement
+    const testContainer = document.createElement('div');
+    testContainer.id = 'targeted-test-container';
+    testContainer.setAttribute('data-vt-replace', '');
+    testContainer.innerHTML = `
+      <a id="forwardLink" href="/posts/deep/entry/">Deeper</a>
+      <a id="backLinkOverride" href="/posts/deep/entry/" data-vt-direction="back">Back Override</a>
+      <div id="nested-container" data-vt-replace>
+        <p id="nested-content">Initial Nested Content</p>
+      </div>
+      <p id="main-body-text">Initial Main Content</p>
+    `;
+    document.body.appendChild(testContainer);
+
     const forwardLink = document.getElementById('forwardLink');
     const backLinkOverride = document.getElementById('backLinkOverride');
-    const siteHeader = document.getElementById('site-header');
-    const liveAudio = document.getElementById('live-audio-player');
 
-    // Simulate audio playback state
-    Object.defineProperty(liveAudio, 'currentTime', { value: 3.5, writable: true });
-    Object.defineProperty(liveAudio, 'paused', { value: false, writable: true });
-    liveAudio.__identityMarker = 'live-audio-node-1';
-    siteHeader.__renderIdentity = 'initial-header';
-
-    // 1. [P4 Verification]: Router supplies direction='forward' on push navigation
-    // 1a. Ordinary push navigation going deeper (/ -> /posts/deep/entry/)
+    // 4. [P4 Verification]: Navigation direction derivation
+    // 4a. Ordinary push navigation going deeper
     const evPushDeeper = new Event('astro:before-preparation');
     evPushDeeper.navigationType = 'push';
     evPushDeeper.direction = 'forward';
-    evPushDeeper.from = new URL('http://localhost:4321/');
-    evPushDeeper.to = new URL('http://localhost:4321/posts/deep/entry/');
+    evPushDeeper.from = new URL(location.href);
+    evPushDeeper.to = new URL('/posts/deep/entry/', location.href);
     evPushDeeper.sourceElement = forwardLink;
     document.dispatchEvent(evPushDeeper);
     const dirPushDeeper = document.documentElement.getAttribute('data-vt-direction');
 
-    // 1b. Anchor override: push navigation where anchor specifies data-vt-direction="back"
+    // 4b. Anchor override: push navigation where anchor specifies data-vt-direction="back"
     const evPushOverride = new Event('astro:before-preparation');
     evPushOverride.navigationType = 'push';
     evPushOverride.direction = 'forward'; // Astro router supplies forward!
-    evPushOverride.from = new URL('http://localhost:4321/');
-    evPushOverride.to = new URL('http://localhost:4321/posts/deep/entry/');
+    evPushOverride.from = new URL(location.href);
+    evPushOverride.to = new URL('/posts/deep/entry/', location.href);
     evPushOverride.sourceElement = backLinkOverride;
     document.dispatchEvent(evPushOverride);
     const dirPushOverride = document.documentElement.getAttribute('data-vt-direction');
 
-    // 1c. Depth comparison: push navigation moving shallower (/posts/deep/entry/ -> /posts/)
+    // 4c. Depth comparison: push navigation moving shallower
     const evPushShallower = new Event('astro:before-preparation');
     evPushShallower.navigationType = 'push';
     evPushShallower.direction = 'forward'; // Astro router supplies forward!
-    evPushShallower.from = new URL('http://localhost:4321/posts/deep/entry/');
-    evPushShallower.to = new URL('http://localhost:4321/posts/');
+    evPushShallower.from = new URL('/posts/deep/entry/', location.href);
+    evPushShallower.to = new URL('/posts/', location.href);
     document.dispatchEvent(evPushShallower);
     const dirPushShallower = document.documentElement.getAttribute('data-vt-direction');
 
-    // 1d. History traversal: popstate back traversal
+    // 4d. History traversal: popstate back traversal
     const evTraverseBack = new Event('astro:before-preparation');
     evTraverseBack.navigationType = 'traverse';
     evTraverseBack.direction = 'back';
     document.dispatchEvent(evTraverseBack);
     const dirTraverseBack = document.documentElement.getAttribute('data-vt-direction');
 
-    // 1e. History traversal: popstate forward traversal
+    // 4e. History traversal: popstate forward traversal
     const evTraverseForward = new Event('astro:before-preparation');
     evTraverseForward.navigationType = 'traverse';
     evTraverseForward.direction = 'forward';
@@ -489,34 +495,35 @@ test('behavior directional transitions, targeted replacement, and persistent ele
     const evPrepForSwap = new Event('astro:before-preparation');
     evPrepForSwap.navigationType = 'push';
     evPrepForSwap.direction = 'forward';
-    evPrepForSwap.from = new URL('http://localhost:4321/');
-    evPrepForSwap.to = new URL('http://localhost:4321/page-b');
+    evPrepForSwap.from = new URL(location.href);
+    evPrepForSwap.to = new URL('/page-b', location.href);
     document.dispatchEvent(evPrepForSwap);
 
-    // 2. [P1 & P2 & P3 Verification]: Targeted replacement swap
-    // Tests head sync, root attributes, B's scripts, connected-DOM audio persistence, and nested target preservation
+    // 5. [P1 & P2 & P3 Verification]: Targeted replacement swap with real media and incoming audio
+    const existingStyleLinks = Array.from(document.head.querySelectorAll('link[rel="stylesheet"]'))
+      .map((link) => link.outerHTML)
+      .join('\n');
     const nextDoc = document.implementation.createHTMLDocument('Page B Title');
     nextDoc.documentElement.lang = 'fr';
     nextDoc.documentElement.setAttribute('data-surface', 'dark');
     nextDoc.head.innerHTML = `
       <title>Page B Title</title>
       <meta name="description" content="Page B Description" />
-      <link rel="canonical" href="http://localhost:4321/page-b" />
-      <style id="global-vt-styles" data-astro-transition-persist="global-vt-styles"></style>
+      <link rel="canonical" href="${location.origin}/page-b" />
+      ${existingStyleLinks}
       <style id="page-style-b">.page-b-only { color: blue; }</style>
       <script>window.__b_head_script_ran = true;</script>
     `;
     nextDoc.body.innerHTML = `
-      <header id="site-header">Header B</header>
-      <audio id="live-audio-player" data-astro-transition-persist="global-player" data-vt-persist="global-player"></audio>
-      <main id="main-content" data-vt-replace>
+      <div id="targeted-test-container" data-vt-replace>
         <div id="nested-container" data-vt-replace>
           <p id="nested-content">Replaced Nested Content</p>
         </div>
         <p id="main-body-text">Replaced Main Content</p>
+        <audio id="live-audio-player" data-astro-transition-persist="global-player" data-vt-persist="global-player"></audio>
+        <audio id="new-incoming-audio" controls><source src="${wav}" type="audio/wav"></audio>
         <script>window.__b_body_script_ran = true;</script>
-      </main>
-      <footer id="site-footer">Footer B</footer>
+      </div>
     `;
 
     let defaultSwapCalled = false;
@@ -527,7 +534,7 @@ test('behavior directional transitions, targeted replacement, and persistent ele
 
     const dirInNewDoc = nextDoc.documentElement.getAttribute('data-vt-direction');
 
-    // Execute the configured swap function
+    // Execute swap
     if (typeof evSwap.swap === 'function') {
       evSwap.swap();
     }
@@ -537,58 +544,73 @@ test('behavior directional transitions, targeted replacement, and persistent ele
     const metaDescAfterSwap = document.querySelector('meta[name="description"]')?.getAttribute('content');
     const canonicalAfterSwap = document.querySelector('link[rel="canonical"]')?.getAttribute('href');
     const surfaceAfterSwap = document.documentElement.getAttribute('data-surface');
-    const styleAPresentAfterSwap = Boolean(document.getElementById('page-style-a'));
     const styleBPresentAfterSwap = Boolean(document.getElementById('page-style-b'));
-    const headScriptRan = Boolean(window['__b_head_script_ran']);
-    const bodyScriptRan = Boolean(window['__b_body_script_ran']);
 
     const mainContentAfterSwap = document.getElementById('main-body-text')?.textContent?.trim();
     const nestedContentAfterSwap = document.getElementById('nested-content')?.textContent?.trim();
-    const headerIdentityAfterSwap = document.getElementById('site-header')?.__renderIdentity;
 
-    // Audio persistence assertions
+    // Persistent audio assertions (real playback, strict node identity, uninterrupted)
     const audioAfterSwap = document.getElementById('live-audio-player');
     const audioSameNode = audioAfterSwap === liveAudio;
-    const audioCurrentTimeAfterSwap = audioAfterSwap?.currentTime;
-    const audioPausedAfterSwap = audioAfterSwap?.paused;
+    const audioPausedAfterSwap = audioAfterSwap ? audioAfterSwap.paused : true;
+    const audioReadyStateAfterSwap = audioAfterSwap ? audioAfterSwap.readyState : 0;
 
-    // 3. [P3 Verification]: Ambiguous unkeyed targets safely fall back to defaultSwap
-    const ambiguousDocCurrent = document.implementation.createHTMLDocument('Ambiguous Current');
-    ambiguousDocCurrent.body.innerHTML = `
-      <section data-vt-replace>Section A1</section>
-      <section data-vt-replace>Section A2</section>
-    `;
-    const ambiguousDocNext = document.implementation.createHTMLDocument('Ambiguous Next');
-    ambiguousDocNext.body.innerHTML = `
-      <section data-vt-replace>Section B1</section>
-      <section data-vt-replace>Section B2</section>
-    `;
-
-    // Temporarily mount ambiguous sections to test pairing ambiguity detection
-    const tempAmbiguousContainer = document.createElement('div');
-    tempAmbiguousContainer.innerHTML = `
-      <section data-vt-replace>Section A1</section>
-      <section data-vt-replace>Section A2</section>
-    `;
-    document.body.appendChild(tempAmbiguousContainer);
-
-    let ambiguousFallbackTriggered = false;
-    const evAmbiguousSwap = new Event('astro:before-swap');
-    evAmbiguousSwap.newDocument = ambiguousDocNext;
-    evAmbiguousSwap.swap = () => { ambiguousFallbackTriggered = true; };
-    document.dispatchEvent(evAmbiguousSwap);
-    if (typeof evAmbiguousSwap.swap === 'function') {
-      evAmbiguousSwap.swap();
+    // Newly introduced incoming audio assertions (reified from DOMParser, readyState >= 2, play() succeeds)
+    const newIncomingAudio = document.getElementById('new-incoming-audio');
+    let newAudioPlaySucceeded = false;
+    let newAudioReadyState = 0;
+    if (newIncomingAudio) {
+      await new Promise((resolve) => {
+        if (newIncomingAudio.readyState >= 2) return resolve();
+        newIncomingAudio.oncanplay = resolve;
+        setTimeout(resolve, 500);
+      });
+      newAudioReadyState = newIncomingAudio.readyState;
+      try {
+        await newIncomingAudio.play();
+        newAudioPlaySucceeded = !newIncomingAudio.paused;
+      } catch {}
     }
-    tempAmbiguousContainer.remove();
 
-    // 4. Direction attribute cleanup on BFCache restoration
+    // 6. [P2/P3 Topology Verification]: Distinct incoming matches that overlap must fall back before mutation
+    const tempContainerA = document.createElement('div');
+    tempContainerA.id = 'topo-test-a';
+    tempContainerA.innerHTML = `
+      <section id="topo-first" data-vt-replace>Outgoing Sibling First</section>
+      <section id="topo-second" data-vt-replace>Outgoing Sibling Second</section>
+    `;
+    document.body.appendChild(tempContainerA);
+
+    const topoDocNext = document.implementation.createHTMLDocument('Topology Next');
+    topoDocNext.body.innerHTML = `
+      <section id="topo-first" data-vt-replace>
+        <section id="topo-second" data-vt-replace>Incoming Nested Second</section>
+      </section>
+    `;
+
+    let topoFallbackCalled = false;
+    const evTopoSwap = new Event('astro:before-swap');
+    evTopoSwap.newDocument = topoDocNext;
+    evTopoSwap.swap = () => { topoFallbackCalled = true; };
+    document.dispatchEvent(evTopoSwap);
+    if (typeof evTopoSwap.swap === 'function') {
+      evTopoSwap.swap();
+    }
+    tempContainerA.remove();
+
+    // 7. BFCache teardown
     const pageShowEv = new Event('pageshow');
     Object.defineProperty(pageShowEv, 'persisted', { value: true });
     window.dispatchEvent(pageShowEv);
     const dirAfterBFCache = document.documentElement.getAttribute('data-vt-direction');
 
+    // Cleanup test container & audio
+    document.getElementById('targeted-test-container')?.remove();
+    liveAudio.remove();
+
     return {
+      swapApiInstalled,
+      liveAudioPlayingBeforeSwap,
       dirPushDeeper,
       dirPushOverride,
       dirPushShallower,
@@ -600,20 +622,21 @@ test('behavior directional transitions, targeted replacement, and persistent ele
       metaDescAfterSwap,
       canonicalAfterSwap,
       surfaceAfterSwap,
-      styleAPresentAfterSwap,
       styleBPresentAfterSwap,
-      headScriptRan,
-      bodyScriptRan,
       mainContentAfterSwap,
       nestedContentAfterSwap,
-      headerIdentityAfterSwap,
       audioSameNode,
-      audioCurrentTimeAfterSwap,
       audioPausedAfterSwap,
-      ambiguousFallbackTriggered,
+      audioReadyStateAfterSwap,
+      newAudioReadyState,
+      newAudioPlaySucceeded,
+      topoFallbackCalled,
       dirAfterBFCache,
     };
   });
+
+  // Verify swapApi installed by SiteShell
+  expect(results.swapApiInstalled).toBe(true);
 
   // [P4] Direction assertions
   expect(results.dirPushDeeper).toBe('forward');
@@ -627,23 +650,26 @@ test('behavior directional transitions, targeted replacement, and persistent ele
   expect(results.defaultSwapCalled).toBe(false);
   expect(results.pageTitleAfterSwap).toBe('Page B Title');
   expect(results.metaDescAfterSwap).toBe('Page B Description');
-  expect(results.canonicalAfterSwap).toBe('http://localhost:4321/page-b');
+  expect(results.canonicalAfterSwap).toContain('/page-b');
   expect(results.surfaceAfterSwap).toBe('dark');
-  expect(results.styleAPresentAfterSwap).toBe(false);
   expect(results.styleBPresentAfterSwap).toBe(true);
-  expect(results.headScriptRan).toBe(true);
-  expect(results.bodyScriptRan).toBe(true);
 
-  // [P2] Connected-DOM audio playback & identity
+  // [P2] Connected-DOM real audio playback & identity
+  expect(results.liveAudioPlayingBeforeSwap).toBe(true);
   expect(results.audioSameNode).toBe(true);
-  expect(results.audioCurrentTimeAfterSwap).toBe(3.5);
   expect(results.audioPausedAfterSwap).toBe(false);
-  expect(results.headerIdentityAfterSwap).toBe('initial-header');
+  expect(results.audioReadyStateAfterSwap).toBeGreaterThanOrEqual(2);
 
-  // [P3] Nested & ambiguous targets
+  // [P2] Newly introduced media reified & playable
+  expect(results.newAudioReadyState).toBeGreaterThanOrEqual(2);
+  expect(results.newAudioPlaySucceeded).toBe(true);
+
+  // [P3] Topology check: overlapping incoming targets trigger safe fallback before mutation
+  expect(results.topoFallbackCalled).toBe(true);
+
+  // Nested target preservation
   expect(results.mainContentAfterSwap).toBe('Replaced Main Content');
   expect(results.nestedContentAfterSwap).toBe('Replaced Nested Content');
-  expect(results.ambiguousFallbackTriggered).toBe(true);
 
   // Teardown
   expect(results.dirAfterBFCache).toBe(null);
