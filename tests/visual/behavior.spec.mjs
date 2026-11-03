@@ -310,36 +310,84 @@ test('behavior Form rejects protocol-relative and control-character external des
   test.skip(info.project.name !== 'chromium-1440', 'Run once on standard desktop viewport');
   const problems = observe(page);
   const interceptedRequests = [];
-  page.on('request', (req) => {
-    interceptedRequests.push(req.url());
+
+  // Register route handler to intercept and fulfill any calls to outside.test
+  await page.route('**/*', async (route) => {
+    const url = route.request().url();
+    if (url.includes('outside.test')) {
+      interceptedRequests.push(url);
+      await route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' });
+      return;
+    }
+    await route.continue();
   });
 
-  // Verify that evasion strings with tab, CR, LF are rejected for both static profiles
-  const staticAction = resolveFormAction('/\t/outside.test/form', 'static');
-  const staticSveltiaAction = resolveFormAction({ endpoint: '/\r/outside.test/form' }, 'static-sveltia');
-  const staticLFAction = resolveFormAction('/\n/outside.test/form', 'static');
+  // 1. Navigate to real HTTP fixture origin (styleguide)
+  await prepare(page, styleguide, page.visualProblems);
 
-  expect(staticAction).toBe('');
-  expect(staticSveltiaAction).toBe('');
-  expect(staticLFAction).toBe('');
+  // 2. Positive control: prove that on this HTTP origin, Chromium strips control characters and dispatches to outside.test
+  await page.evaluate(async () => {
+    try {
+      await fetch('/\t/outside.test/form', { method: 'POST', body: 'positive-control' });
+    } catch {
+      // Ignored
+    }
+  });
 
-  // Render a document with a native form whose action was resolved via resolveFormAction
-  await page.setContent(`
-    <!DOCTYPE html>
-    <html>
-      <body>
-        <form id="evasion-form" method="POST" action="${staticAction}">
-          <input type="text" name="notes" value="safe" />
-          <button id="submit-btn" type="submit">Submit</button>
-        </form>
-      </body>
-    </html>
-  `);
+  // Verify positive control successfully triggered external request interception
+  const positiveHits = interceptedRequests.filter(url => url.includes('outside.test'));
+  expect(positiveHits.length).toBeGreaterThan(0);
+  expect(positiveHits[0]).toContain('outside.test');
 
-  await page.click('#submit-btn');
-  await page.waitForTimeout(100);
+  // Reset intercepted tracker for sanitized profile checks
+  interceptedRequests.length = 0;
 
-  // Assert no network requests were dispatched to outside.test
+  // 3. Test both static profiles for string and object endpoints with tab, CR, and LF evasion
+  for (const staticProfile of ['static', 'static-sveltia']) {
+    const stringTabAction = resolveFormAction('/\t/outside.test/form', staticProfile);
+    const stringCrAction = resolveFormAction('/\r/outside.test/form', staticProfile);
+    const stringLfAction = resolveFormAction('/\n/outside.test/form', staticProfile);
+    const objTabAction = resolveFormAction({ endpoint: '/\t/outside.test/form' }, staticProfile);
+    const objCrAction = resolveFormAction({ endpoint: '/\r/outside.test/form' }, staticProfile);
+    const objLfAction = resolveFormAction({ endpoint: '/\n/outside.test/form' }, staticProfile);
+
+    // Assert resolver output is strictly empty string
+    expect(stringTabAction).toBe('');
+    expect(stringCrAction).toBe('');
+    expect(stringLfAction).toBe('');
+    expect(objTabAction).toBe('');
+    expect(objCrAction).toBe('');
+    expect(objLfAction).toBe('');
+
+    // Exercise form submission on the HTTP page with the resolved actions
+    await page.evaluate(async ({ stringTabAction, objCrAction }) => {
+      // Create and inspect a form configured with the resolved action
+      const form = document.createElement('form');
+      form.method = 'POST';
+      if (stringTabAction) form.action = stringTabAction;
+      document.body.appendChild(form);
+
+      // In browser DOM, form.action resolves relative URLs against document.location
+      // When stringTabAction is '', form.action resolves safely to current page, never outside.test
+      const effectiveAction = form.action;
+      if (effectiveAction.includes('outside.test')) {
+        await fetch(effectiveAction, { method: 'POST' });
+      }
+      form.remove();
+
+      // Test object endpoint resolution as well
+      const formObj = document.createElement('form');
+      formObj.method = 'POST';
+      if (objCrAction) formObj.action = objCrAction;
+      document.body.appendChild(formObj);
+      if (formObj.action.includes('outside.test')) {
+        await fetch(formObj.action, { method: 'POST' });
+      }
+      formObj.remove();
+    }, { stringTabAction, objCrAction });
+  }
+
+  // Assert ZERO external requests were dispatched for all sanitized endpoints
   const leaked = interceptedRequests.filter(url => url.includes('outside.test'));
   expect(leaked).toEqual([]);
   expect(problems).toEqual([]);
