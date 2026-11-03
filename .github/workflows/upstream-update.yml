@@ -22,6 +22,8 @@ jobs:
       - run: npm ci --no-audit --no-fund
       - name: Propose in-range dependency updates
         run: npm update --save --no-audit --no-fund
+      - name: Propose third-party skill updates (Impeccable & EmDash mirrors)
+        run: npm run sync:upstream-skills
       - name: Prove the resulting lockfile installs cleanly
         run: npm ci --no-audit --no-fund
       - run: npm run verify
@@ -43,27 +45,52 @@ jobs:
         shell: bash
         run: |
           if git diff --quiet; then
-            echo "No dependency updates proposed."
+            echo "No dependency or skill updates proposed."
             exit 0
           fi
 
-          branch="automation/upstream-dependency-update"
-          title="chore(deps): weekly verified upstream dependency review"
+          branch="automation/upstream-update"
 
-          direct_diff=$(git diff package.json | grep -E '^\+[ ]+"' | sed 's/^+ *//' || true)
-          if [ -z "$direct_diff" ]; then
-            direct_diff="In-range lockfile dependencies only (transitive updates)."
+          deps_diff=$(git diff package.json | grep -E '^\+[ ]+"' | sed 's/^+ *//' || true)
+          skill_diff=$(git diff --stat .agents/skills/ .emdash/upstream-skills.json .emdash/impeccable-source.json || true)
+
+          if [ -n "$deps_diff" ] && [ -n "$skill_diff" ]; then
+            title="chore(upstream): weekly verified dependency and skill update review"
+            issue_title="[Upstream Review] Verified dependency and skill updates available"
+          elif [ -n "$skill_diff" ]; then
+            title="chore(skills): weekly verified third-party skill update review"
+            issue_title="[Upstream Review] Verified third-party skill updates available"
+          else
+            title="chore(deps): weekly verified upstream dependency review"
+            issue_title="[Upstream Review] Verified dependency updates available"
+          fi
+
+          if [ -z "$deps_diff" ]; then
+            deps_summary="In-range lockfile dependencies only (transitive updates)."
+          else
+            deps_summary=$(printf '%s\n%s\n%s' "\`\`\`json" "$deps_diff" "\`\`\`")
           fi
 
           body=$(printf '%s\n' \
-            "## Verified Upstream Dependency Proposal" \
+            "## Verified Upstream Update Proposal" \
             "" \
-            "In-range dependency updates were proposed and verified in scheduled CI run [#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})." \
+            "Updates were proposed and verified in scheduled CI run [#${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})." \
             "" \
-            "### Direct package changes" \
-            "\`\`\`json" \
-            "$direct_diff" \
-            "\`\`\`" \
+            "### Dependency changes" \
+            "$deps_summary")
+
+          if [ -n "$skill_diff" ]; then
+            body=$(printf '%s\n' \
+              "$body" \
+              "" \
+              "### Third-party skill changes" \
+              "\`\`\`" \
+              "$skill_diff" \
+              "\`\`\`")
+          fi
+
+          body=$(printf '%s\n' \
+            "$body" \
             "" \
             "### Verification Results" \
             "* \`npm run verify\` passed (syntax, CSS contracts, lint, art direction, design tokens, unit & rehearsal tests, typecheck)." \
@@ -71,15 +98,15 @@ jobs:
             "* \`npm run test:profiles\` passed (independent generation and builds for \`static\` and \`static-sveltia\`)." \
             "" \
             "### Review Guidance" \
-            "Before merging, review [docs/starter-meta-review.md](docs/starter-meta-review.md) and [docs/automated-upstream-updates.md](docs/automated-upstream-updates.md) for changelog and compatibility checks.")
+            "Before merging, review [docs/starter-meta-review.md](docs/starter-meta-review.md), [docs/skill-synchronization.md](docs/skill-synchronization.md) and [docs/automated-upstream-updates.md](docs/automated-upstream-updates.md) for changelog and compatibility checks.")
           printf '%s\n' "$body" > /tmp/upstream-review-body.md
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git checkout -B "$branch"
-          git add package.json package-lock.json
-          git commit -m "chore(deps): weekly verified upstream dependency review"
+          git add package.json package-lock.json .agents/skills/ .emdash/upstream-skills.json .emdash/impeccable-source.json
+          git commit -m "$title"
           git push -f origin "$branch"
 
           existing_pr=$(gh pr list --head "$branch" --base main --state open --json number --jq '.[0].number' 2>/dev/null || true)
@@ -97,7 +124,6 @@ jobs:
 
           echo "PR creation failed (Actions PR permissions might be disabled in repo settings). Falling back to opening an Issue..."
 
-          issue_title="[Upstream Review] Verified dependency updates available"
           existing_issue=$(gh issue list --search "$issue_title" --state open --json number --jq '.[0].number' 2>/dev/null || true)
 
           issue_body=$(printf '%s\n' \

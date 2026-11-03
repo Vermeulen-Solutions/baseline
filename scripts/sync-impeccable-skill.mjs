@@ -27,14 +27,29 @@ export async function syncImpeccable(root = ROOT, options = {}) {
   } catch {}
 
   const targetDir = path.join(root, '.agents', 'skills', 'impeccable');
+  const sourcePath = path.join(root, '.emdash', 'impeccable-source.json');
+  let currentMeta = {};
+  try {
+    currentMeta = JSON.parse(await fs.readFile(sourcePath, 'utf8'));
+  } catch {}
+
+  const isCurrent = currentMeta.upstreamCommitSha === candidate.commitSha;
 
   if (options.check) {
-    const local = await inventory(path.join(root, '.agents', 'skills'), ['impeccable']);
     return {
-      status: 'update-available',
+      status: isCurrent ? 'current' : 'update-available',
       commitSha: candidate.commitSha,
+      currentCommitSha: currentMeta.upstreamCommitSha ?? null,
       latestVersion: version,
       fileCount: Object.keys(candidate.files).length
+    };
+  }
+
+  if (isCurrent && !options.force) {
+    return {
+      status: 'already-current',
+      version,
+      commitSha: candidate.commitSha
     };
   }
 
@@ -50,11 +65,6 @@ export async function syncImpeccable(root = ROOT, options = {}) {
   const skillSha256 = skillMdBytes ? createHash('sha256').update(skillMdBytes).digest('hex') : null;
 
   // Update PROVENANCE.json & .emdash/impeccable-source.json
-  const sourcePath = path.join(root, '.emdash', 'impeccable-source.json');
-  let currentMeta = {};
-  try {
-    currentMeta = JSON.parse(await fs.readFile(sourcePath, 'utf8'));
-  } catch {}
 
   const updatedMeta = {
     formatVersion: 1,

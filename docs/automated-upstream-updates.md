@@ -1,8 +1,8 @@
 # Reviewed upstream maintenance
 
-Baseline maintenance workflows produce verified proposals for review. The root upstream dependency review runs weekly; when updates pass verification, it opens or updates a Pull Request on `automation/upstream-dependency-update` (or an Issue if Pull Request creation is restricted by repository policy) pointing to review documentation and changed packages. Generated static profile maintenance workflows remain manual and read-only.
+Baseline maintenance workflows produce verified proposals for review. The root upstream review runs weekly; when dependency or third-party skill updates pass verification, it opens or updates a Pull Request on `automation/upstream-update` (or an Issue if Pull Request creation is restricted by repository policy) pointing to review documentation, package changes and skill diffs. Generated static profile maintenance workflows remain manual and read-only.
 
-## Root Baseline dependency proposals
+## Root Baseline dependency and skill proposals
 
 The root [upstream-update.yml](../.github/workflows/upstream-update.yml) runs every Monday at 08:00 UTC and supports manual dispatch:
 
@@ -10,13 +10,13 @@ The root [upstream-update.yml](../.github/workflows/upstream-update.yml) runs ev
 gh workflow run upstream-update.yml --repo Vermeulen-Solutions/baseline
 ```
 
-It installs the existing lockfile with `npm ci --no-audit --no-fund`, proposes in-range dependency changes with `npm update --save --no-audit --no-fund`, then proves the resulting lockfile with another clean `npm ci`. Exact version pins remain pinned; this is not a major-version or certification upgrade.
+It installs the existing lockfile with `npm ci --no-audit --no-fund`, proposes in-range dependency changes with `npm update --save --no-audit --no-fund`, checks third-party skills with `npm run sync:upstream-skills`, then proves the resulting lockfile with another clean `npm ci`. Exact version pins remain pinned; this is not a major-version or certification upgrade.
 
 The candidate checkout runs `npm run verify`, `npm run build`, and `npm run test:profiles`. Root verification includes script syntax, art direction, token audits, unit tests, Astro typecheck and the applicable schema budget preflight. Both generated static profiles receive independent installation, verification, builds and HTTP checks. The workflow does not fabricate a SQLite dummy table or run screenshot regression.
 
-The final steps upload `upstream-dependency-review` containing `upstream-update.patch` from `git diff --binary`. When all verification checks pass and updates are proposed, the workflow stages the updates on `automation/upstream-dependency-update` and opens or updates a Pull Request with verification evidence and review guidelines. If GitHub Actions PR creation is restricted under repository settings, it opens an Issue instead. An unchanged candidate produces an empty patch and creates neither a branch nor a notification.
+The final steps upload `upstream-dependency-review` containing `upstream-update.patch` from `git diff --binary`. When all verification checks pass and updates are proposed, the workflow stages the updates on `automation/upstream-update` and opens or updates a Pull Request with verification evidence and review guidelines. If GitHub Actions PR creation is restricted under repository settings, it opens an Issue instead. An unchanged candidate produces an empty patch and creates neither a branch nor a notification.
 
-Inspect the Pull Request (or download the artifact from the Actions run), review changelogs against [starter meta-review](starter-meta-review.md), and merge when satisfied. Failed candidate runs remain proposals, upload diagnostic artifacts, and do not open a Pull Request.
+Inspect the Pull Request (or download the artifact from the Actions run), review changelogs against [starter meta-review](starter-meta-review.md) and [skill synchronization](skill-synchronization.md), and merge when satisfied. Failed candidate runs remain proposals, upload diagnostic artifacts, and do not open a Pull Request.
 
 ## Generated static-site source proposals
 
@@ -28,9 +28,11 @@ See [Baseline updates](baseline-updates.md) for staging, conflict handling, repo
 
 ## Explicit skill updates
 
-The root dependency workflow does not refresh EmDash, site or Impeccable skills. Use the checked-in skills unless you are deliberately reviewing upstream changes:
+Third-party skill updates (Impeccable and upstream EmDash mirrors) can also be checked and synced explicitly:
 
 ```sh
+npm run sync:upstream-skills -- --check
+npm run sync:upstream-skills
 npm run sync:emdash-skills -- --check
 npm run sync:site-skills -- --check
 node scripts/sync-impeccable-skill.mjs --check
