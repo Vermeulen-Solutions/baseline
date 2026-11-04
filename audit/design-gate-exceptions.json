@@ -292,7 +292,7 @@
   {
     "path": "src/dev/styleguide-fixtures.ts",
     "reason": "Shared synthetic coverage inventory and version for the new native/intrinsic production primitives; no client identity or token calibration. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "6d704ea48f460712ef94ade91b74fa0b83cbcf380fd8d7b4983b4634290eaa9d"
+    "sha256": "8c30695e0c45fb86783e71060ba31c26edc2180b1d334151337aa696e3b0c9b2"
   },
   {
     "path": "src/pages/_styleguide.astro",
@@ -302,7 +302,7 @@
   {
     "path": "src/components/dev/Styleguide.astro",
     "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "de9a0cdbd4b5a0e0adccd08a0c9abd2464d821ab29ace0bbd8883b163582e91a"
+    "sha256": "580d360167c30e55592dc15c292469dfbe2426ba840cf6f10c623bd4580352a9"
   },
   {
     "path": "src/utils/grid-guide.ts",

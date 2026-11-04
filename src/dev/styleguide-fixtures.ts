@@ -8,8 +8,26 @@ export const portraitImage = { src: portrait.src, width: 200, height: 600, alt: 
 export const fixtureImage = { src: specimen.src, width: 1200, height: 800, alt: 'Synthetic image: circle centered on a rectangular grid' };
 export const specimenTokens = ['page', 'surface', 'text', 'muted', 'border', 'action', 'on-action', 'focus'] as const;
 export const componentCoverage = {
-  rendered: ['Section', 'Container', 'Grid', 'Card', 'PartnersPanel', 'ResponsiveImage', 'Markdown', 'FormError', 'LogoTicker', 'Disclosure', 'Cluster', 'Sidebar'],
-  variants: { Disclosure: ['native independent/grouped', 'dark surface', 'long German summary', 'Markdown or platform-owned Portable Text body'], Cluster: ['wrapping actions', 'narrow RTL siblings'], Sidebar: ['main first', 'wide/narrow host', 'editor wrappers', 'single region'], Section: ['content', 'section'], Container: ['reading', 'content', 'wide', 'breakout (.content-grid)'], Grid: ['compact', 'standard', 'wide'], Card: ['stacked', 'horizontal'], PartnersPanel: ['linked', 'unlinked', 'empty', 'dark artwork ground'], LogoTicker: ['animated with native stop control', 'single static item', 'RTL', 'empty renders nothing', 'reduced motion/print static'] },
+  rendered: ['Section', 'Container', 'Grid', 'Card', 'PartnersPanel', 'ResponsiveImage', 'Markdown', 'FormError', 'LogoTicker', 'Disclosure', 'Cluster', 'Sidebar', 'Tabs', 'CopyButton', 'Announcer', 'ThemeSelect', 'Heading', 'TableOfContents', 'Callout', 'Steps'],
+  variants: {
+    Disclosure: ['native independent/grouped', 'dark surface', 'long German summary', 'Markdown or platform-owned Portable Text body'],
+    Cluster: ['wrapping actions', 'narrow RTL siblings'],
+    Sidebar: ['main first', 'wide/narrow host', 'editor wrappers', 'single region'],
+    Section: ['content', 'section'],
+    Container: ['reading', 'content', 'wide', 'breakout (.content-grid)'],
+    Grid: ['compact', 'standard', 'wide'],
+    Card: ['stacked', 'horizontal'],
+    PartnersPanel: ['linked', 'unlinked', 'empty', 'dark artwork ground'],
+    LogoTicker: ['animated with native stop control', 'single static item', 'RTL', 'empty renders nothing', 'reduced motion/print static'],
+    Tabs: ['progressive no-JS sequential panels', 'ARIA tablist/tab/tabpanel', 'syncKey peer synchronization', 'keyboard navigation', 'print media layout'],
+    CopyButton: ['target selector', 'aria-live Announcer integration', 'fallback copy', 'timeout cleanup'],
+    Announcer: ['polite/assertive singleton', 'speech clearance', 'teardown cleanup'],
+    ThemeSelect: ['system preference auto', 'author-default preservation', 'storage failure fallback', 'unified controller sync'],
+    Heading: ['levels 1-6', 'accessible permalink anchor', 'deterministic slug', 'scroll-margin'],
+    TableOfContents: ['recursive arbitrary depth (1-6)', 'pure-DOM scroll spy', 'safe percent fragment handling', 'aria-current single active link'],
+    Callout: ['note', 'tip', 'caution', 'danger', 'zero-margin layout contract', 'non-alert aside accessibility'],
+    Steps: ['semantic ol/li', 'CSS counter badges', 'logical properties and RTL support', 'zero-margin layout contract'],
+  },
   stress: ['long heading/name', 'unbroken identifier', 'missing media', 'portrait 1:3', 'small native 96x64', 'invalid/disabled/empty controls', 'narrow placement', 'editorial breakout zone'],
   deferred: { publishing: 'Synthetic specimens verify presentation; test the selected publishing workflow separately.' },
   surfaceModes: 'Neutral light palette by default; 3-tier surfaces (--color-page, --color-surface, --color-elevated / .surface-elevated), data-surface="dark|light", and FOUC-free [data-surface-toggle] remap surface, text, muted, border, and focus tokens.',

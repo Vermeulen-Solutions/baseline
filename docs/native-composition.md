@@ -79,6 +79,15 @@ The main region grows into remaining space and requires 60% of the available inl
 
 The unequal-region relationship follows the intrinsic flexbox principle described by [Every Layout](https://every-layout.dev/layouts/sidebar/) and the [W3C design system](https://design-system.w3.org/layouts/sidebar.html). It solves a different need from Grid's equal flexible columns and Card's semantic article API.
 
+## Interaction and content primitives spacing contract
+
+The structured content and interaction primitives (`Callout`, `Steps`, `Tabs`, `TableOfContents`, and `Heading`) strictly follow the layout spacing contracts defined in the design framework:
+
+- **Zero-margin ownership (`margin: 0;`):** Components like `<Callout>`, `<Steps>`, `<Tabs>`, and `<TableOfContents>` declare `margin: 0;` on their root container elements. They do not inject their own outer margins into layout stacks. Surrounding spacing is owned exclusively by parent stack gaps (`<Section>`, `<Container>`, `<Grid>`, `<Sidebar>`) or the editorial `.flow` rhythm.
+- **Cascading layer boundaries:** All component styles are authored in named `@layer components` with contextual defaults wrapped in `:where()`. This guarantees that Tailwind utilities or custom class overrides (e.g. `mb-6`, `p-8`) win naturally without requiring high-specificity selectors or `!important`.
+- **RTL & Logical properties:** Components utilize CSS logical properties (`margin-inline-start`, `padding-inline-start`, `border-inline-start`, `inset-inline-start`) throughout. Right-to-left document directions (`dir="rtl"`) adapt without visual hacks, inline style flips, or duplicate language-specific component variants.
+- **Scroll margins on headings:** `<Heading>` targets declare `scroll-margin-top: var(--scroll-margin, 5rem)`, ensuring in-page anchor navigation (via permalinks or `<TableOfContents>`) does not obscure heading text beneath sticky navigation headers.
+
 ## Calibration and adoption
 
 `/_styleguide` renders production primitives with independent/grouped disclosures, long German summaries, a dark surface, native Markdown or the platform Portable Text adapter, RTL wrapped siblings, wide/narrow unequal regions, stable editorial wrappers, intrinsic images and missing supporting content. The route and fixtures remain excluded from normal release artifacts.

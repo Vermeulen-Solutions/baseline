@@ -13,6 +13,14 @@ import LogoTicker from '../LogoTicker.astro';
 import Cluster from '../Cluster.astro';
 import CompositionSpecimens from './CompositionSpecimens.astro';
 import DisclosureProse from '../../dev/disclosure-prose.md';
+import Tabs from '../Tabs.astro';
+import CopyButton from '../CopyButton.astro';
+import Announcer from '../Announcer.astro';
+import ThemeSelect from '../ThemeSelect.astro';
+import Heading from '../Heading.astro';
+import TableOfContents from '../TableOfContents.astro';
+import Callout from '../Callout.astro';
+import Steps from '../Steps.astro';
 import { fixtureVersion, smallImage, portraitImage, fixtureImage as image, specimenTokens, componentCoverage } from '../../dev/styleguide-fixtures';
 interface Props {
   coverage?: {
@@ -26,7 +34,12 @@ interface Props {
   editorialLabel?: string;
 }
 const { coverage = componentCoverage, editorialLabel = 'Markdown' } = Astro.props;
-const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'editorial', 'composition', 'coverage'];
+const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'editorial', 'composition', 'primitives', 'coverage'];
+const specimenTocHeadings = [
+  { depth: 2, slug: 'primitives-overview', text: 'Overview of interactive primitives' },
+  { depth: 3, slug: 'primitives-tabs', text: 'Synchronized tabs and copy' },
+  { depth: 3, slug: 'primitives-callouts', text: 'Editorial callouts and steps' },
+];
 ---
 <!doctype html>
 <html data-spacing-policy="automatic-v2" lang="en" data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}>
@@ -75,6 +88,73 @@ const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'edito
         </div></Section>
         <Section labelledBy="editorial"><div class="flow"><h2 id="editorial">{editorialLabel}</h2><div class="flow" data-editorial-content><slot name="editorial"><MarkdownProse /></slot></div></div></Section>
         <CompositionSpecimens><slot name="platform-disclosure-body" slot="editorial"><DisclosureProse /></slot></CompositionSpecimens>
+        <Section labelledBy="primitives"><div class="flow">
+          <h2 id="primitives">Interaction and content primitives</h2>
+          <p>Progressively enhanced controls with zero external dependencies. Calibrated for keyboard navigation, RTL layout, and zero-JS fallbacks.</p>
+
+          <Heading depth={3} id="primitives-overview">Overview of interactive primitives</Heading>
+          <p>Theme selection and clipboard copying with live assistive technology announcements.</p>
+          <Cluster class="control-row">
+            <ThemeSelect label="Theme selector" />
+            <button type="button" class="btn btn--secondary" data-surface-toggle aria-label="Toggle theme mode">Quick toggle</button>
+            <CopyButton targetId="specimen-code" label="Copy specimen code" copiedLabel="Copied code!" />
+          </Cluster>
+          <pre id="specimen-code" style="padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-control); background: var(--color-surface); overflow-x: auto;"><code>npm.cmd run verify:fast</code></pre>
+          <Announcer />
+
+          <Heading depth={3} id="primitives-tabs">Synchronized tabs and copy</Heading>
+          <p>Tab panels synchronize across instances sharing the same <code>syncKey</code>. Without JavaScript, panels remain visible sequentially.</p>
+          <Tabs id="specimen-tabs-install" label="Install commands" items={[{ value: 'npm', label: 'npm' }, { value: 'pnpm', label: 'pnpm' }, { value: 'yarn', label: 'yarn' }]} syncKey="package-manager">
+            <div slot="npm"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>npm install</code></pre></div>
+            <div slot="pnpm"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>pnpm install</code></pre></div>
+            <div slot="yarn"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>yarn install</code></pre></div>
+          </Tabs>
+
+          <Tabs id="specimen-tabs-build" label="Build commands" items={[{ value: 'npm', label: 'npm run' }, { value: 'pnpm', label: 'pnpm run' }, { value: 'yarn', label: 'yarn run' }]} syncKey="package-manager">
+            <div slot="npm"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>npm run build</code></pre></div>
+            <div slot="pnpm"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>pnpm run build</code></pre></div>
+            <div slot="yarn"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>yarn run build</code></pre></div>
+          </Tabs>
+
+          <Heading depth={3} id="primitives-callouts">Editorial callouts and steps</Heading>
+          <TableOfContents headings={specimenTocHeadings} label="Section table of contents" minDepth={2} maxDepth={3} />
+
+          <Grid minimum="compact">
+            <Callout variant="note" title="Note specimen">
+              <p>Informational callout for contextual guidance without an alert role.</p>
+            </Callout>
+            <Callout variant="tip" title="Tip specimen">
+              <p>Actionable advice using semantic success tokens.</p>
+            </Callout>
+            <Callout variant="caution" title="Caution specimen">
+              <p>Warning about potential configuration issues.</p>
+            </Callout>
+            <Callout variant="danger" title="Danger specimen">
+              <p>Critical notice for breaking changes or risk.</p>
+            </Callout>
+          </Grid>
+
+          <h4>Ordered steps with RTL verification</h4>
+          <Steps items={[
+            { value: 'verify', title: 'Run fast verification' },
+            { value: 'profiles', title: 'Compile independent profiles' },
+            { value: 'inspect', title: 'Inspect rendered styleguide' },
+          ]}>
+            <p slot="verify">Execute <code>npm.cmd run verify:fast</code>.</p>
+            <p slot="profiles">Execute <code>npm.cmd run test:profiles</code>.</p>
+            <p slot="inspect">Inspect components in headless Chromium.</p>
+          </Steps>
+
+          <div dir="rtl">
+            <Steps items={[
+              { value: 'step1', title: 'الخطوة الأولى' },
+              { value: 'step2', title: 'الخطوة الثانية' },
+            ]}>
+              <p slot="step1">تشغيل فحص التحقق السريع</p>
+              <p slot="step2">بناء ملفات التعريف الثابتة والتحقق من التوافق</p>
+            </Steps>
+          </div>
+        </div></Section>
         <Section labelledBy="coverage"><div class="flow"><h2 id="coverage">Coverage and limits</h2><ul>{coverage.rendered.map(name => <li><code>{name}</code></li>)}</ul><dl>{Object.entries(coverage.variants).map(([name, variants]) => <><dt>{name}</dt><dd>{variants.join('; ')}</dd></>)}</dl><p>{coverage.stress.join('; ')}.</p>{Object.values(coverage.deferred).map(note => <p>{note}</p>)}<slot name="platform-notes" /><p>Code blocks and tables intentionally scroll internally where needed. External embeds remain outside this verification scope.</p><ul>{coverage.unsupported.map(item => <li>{item}</li>)}</ul></div></Section>
       </Container>
     </main>

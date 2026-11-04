@@ -96,3 +96,189 @@ Existing sites can adopt the updated component through a reviewed Baseline updat
 ## Focus and contextual surfaces
 
 `data-surface="dark"` and `data-surface="light"` establish contextual surface relationships (`color-scheme`, `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, and `--color-focus`) Customizable via `--surface-dark-*` and `--surface-light-*` tokens so a dark section inside a light page (or a light card inside a dark hero) automatically adapts its text, muted copy, border, and focus ring. Set surface tokens from the real site palette and verify contrast against their actual grounds. Tables, filters and count/status belong together; deduplicate contacts without hiding distinct roles. Calendar actions should represent a real dated appointment, not imply a recurring schedule from a programme period.
+
+## Accessible interactive primitives
+
+Baseline's interactive primitives provide zero-framework, progressively enhanced user interface controls following WAI-ARIA authoring practices, with zero external npm dependencies.
+
+### Accessible Tabs (`Tabs.astro`)
+
+`Tabs.astro` provides an accessible, progressive-enhancement tabbed interface that requires zero client script to read all content.
+
+```astro
+---
+import Tabs from '../components/Tabs.astro';
+---
+
+<Tabs id="cli-tabs" label="Command line package manager" items={[{ label: 'Bash', value: 'bash' }, { label: 'PowerShell', value: 'powershell' }]} syncKey="cli-flavor">
+  <div slot="bash">
+    <pre><code>npm run verify</code></pre>
+  </div>
+  <div slot="powershell">
+    <pre><code>npm.cmd run verify</code></pre>
+  </div>
+</Tabs>
+```
+
+- **Progressive enhancement:** Without JavaScript, all panels render in sequence with visible tab-heading titles so all content remains fully legible and discoverable.
+- **WAI-ARIA compliance:** Once initialized, `<div role="tablist">` contains `<button role="tab">` elements paired with `<div role="tabpanel">`. Tab navigation follows WAI-ARIA keyboard guidelines: `ArrowLeft` / `ArrowRight` (or `ArrowUp` / `ArrowDown`), `Home`, and `End` rove focus between tabs with automatic panel activation.
+- **Peer synchronization (`syncKey`):** When multiple `<Tabs>` share a `syncKey`, selecting a tab on one switches all tabs with matching item IDs across the page, persisting the choice in `sessionStorage`. If storage is restricted or unavailable (private browsing, sandboxed iframes), selection continues to function gracefully in memory.
+- **ClientRouter & Disconnect lifecycle:** Integrates with Astro's ClientRouter lifecycle (`astro:page-load`, `astro:before-swap`). Observer connections clean up on DOM teardown to prevent stale references, memory leaks, or duplicate listener registrations after page transitions.
+- **Print media support:** When printing, tab buttons hide and all panels display sequentially with their titles, ensuring printed documentation captures all alternatives.
+
+### Copy button & live announcer (`CopyButton.astro`, `Announcer.astro`)
+
+`CopyButton.astro` provides accessible copy-to-clipboard interactions with clear visual and screen-reader status announcements.
+
+```astro
+---
+import CopyButton from '../components/CopyButton.astro';
+import Announcer from '../Announcer.astro';
+---
+
+<pre id="code-snippet"><code>npm run verify:fast</code></pre>
+<CopyButton targetId="code-snippet" label="Copy command" copiedLabel="Copied command!" />
+<Announcer />
+```
+
+- **Target resolution:** Supports an element ID via `targetId` (e.g. `code-snippet`). Target elements can be standard DOM containers (`pre`, `code`, `p`) or form controls (`input`, `textarea`). Leading/trailing decorations are stripped cleanly before copying.
+- **Fallback copy support:** When the asynchronous `navigator.clipboard` API is unavailable or denied by browser security permissions, a fallback mechanism safely writes the selection.
+- **Visual & Screen-reader feedback:** Changes button text, class (`is-copied`), and icon on success with an automatic reset timer. Integrates with `Announcer` singleton (`announce()` in `src/lib/announce.ts`) to read polite status messages without interrupting active speech.
+- **Abort & Teardown safety:** Operations and pending timeouts clean up on element removal, navigation swaps, or explicit `AbortSignal`.
+
+### Theme selector & surface controls (`ThemeSelect.astro`, `[data-surface-toggle]`)
+
+Baseline includes a unified theme engine that coordinates system preferences, author surface defaults, and user choices.
+
+```astro
+---
+import ThemeSelect from '../components/ThemeSelect.astro';
+---
+
+<ThemeSelect label="Theme" />
+<button type="button" data-surface-toggle aria-label="Toggle dark mode">Toggle mode</button>
+```
+
+- **Zero-FOUC author defaults:** When no stored preference exists, the author-declared default surface (`surface="light"` or `surface="dark"` on `SiteShell.astro`) is preserved without premature overrides, matching both light and dark site branding out of the box.
+- **Storage resilience:** Gracefully handles private browsing modes and disabled `localStorage` without thrown exceptions. Theme changes update live document styles and synchronize `<ThemeSelect>` dropdowns and `[data-surface-toggle]` buttons even when storage writes are blocked.
+- **ClientRouter persistence:** Listens to `astro:after-swap` to ensure theme attributes (`data-surface`, `color-scheme`) persist across Astro ClientRouter page transitions without flashing.
+- **System preference sync:** Automatically synchronizes with OS dark/light mode adjustments when set to "system" (`auto`), adapting in real time via `prefers-color-scheme` media query listeners.
+
+## Content navigation and structured primitives
+
+### Heading anchors & permalinks (`Heading.astro`)
+
+`Heading.astro` renders accessible `<h1>` through `<h6>` headings with self-referencing anchor permalinks.
+
+```astro
+---
+import Heading from '../components/Heading.astro';
+---
+
+<Heading depth={2} id="getting-started">Getting Started</Heading>
+```
+
+- **Accessible permalinks:** Renders an internal `<a>` tag with `#` symbol (or custom icon), marked `aria-hidden="true"` visually, accompanied by a visually hidden screen-reader label ("Section titled Getting Started") to prevent redundant link announcements.
+- **Deterministic slug generation:** Integrates with `src/lib/headings.ts` for clean, URL-safe slugify generation with unicode mark stripping and collision avoidance.
+- **Heading target class:** Renders `.heading-target` on the target heading, supporting `:target` styling and scroll margins for fixed headers (`scroll-margin-top: var(--scroll-margin, 5rem)`).
+
+### Table of Contents & scroll spy (`TableOfContents.astro`)
+
+`TableOfContents.astro` generates a semantic navigation list with pure-DOM scroll-spy tracking.
+
+```astro
+---
+import TableOfContents from '../components/TableOfContents.astro';
+
+const headings = [
+  { depth: 2, slug: 'intro', text: 'Introduction' },
+  { depth: 3, slug: 'details', text: 'Technical Details' },
+  { depth: 2, slug: 'conclusion', text: 'Conclusion' },
+];
+---
+
+<TableOfContents headings={headings} label="On this page" minDepth={2} maxDepth={3} />
+```
+
+- **Arbitrary depth nesting:** Renders recursive semantic `<nav aria-label="...">` with nested `<ol>` lists inside `@layer components`. Scoped styling preserves correct indentation, typography, and contrast across all 6 heading levels.
+- **IntersectionObserver scroll spy:** Tracks active sections on scroll using `src/lib/toc.ts`. Applies `aria-current="true"` and `.is-active` to exactly one active heading at a time, preventing double-activation states.
+- **Safe fragment encoding:** Encodes link fragments consistently and isolates malformed or percent-encoded fragment targets (e.g. `100%`) so malformed links cannot crash the scroll-spy observer.
+- **Zero-JS navigation:** Fully operable as static anchor links when JavaScript is unavailable.
+
+### Callouts (`Callout.astro`)
+
+`Callout.astro` presents distinct aside callouts for notes, tips, cautions, and danger alerts.
+
+```astro
+---
+import Callout from '../components/Callout.astro';
+---
+
+<Callout variant="note" title="Good to know">
+  <p>Callout descriptions appear here.</p>
+</Callout>
+
+<Callout variant="danger" title="Important notice">
+  <p>Critical warnings use high-contrast danger tokens.</p>
+</Callout>
+```
+
+- **Semantic HTML:** Renders `<aside class="callout callout--{variant}">` with an optional title. Non-critical variants (`note`, `tip`, `caution`) avoid intrusive `role="alert"` or `role="status"` live regions to prevent interrupting screen readers during normal reading flow.
+- **Zero external margin contract:** Features `margin: 0;` so parent layout containers (`Section`, `Container`, `Grid`, or `.flow`) dictate spacing without collapsing-margin issues or unexpected whitespace.
+- **Themed variants:** Ships with accessible SVG icons and tokens for `note`, `tip`, `caution`, and `danger`.
+
+### Steps (`Steps.astro`)
+
+`Steps.astro` organizes sequenced workflows, tutorials, or onboarding steps.
+
+```astro
+---
+import Steps from '../components/Steps.astro';
+---
+
+<Steps items={[
+  { value: 'clone', title: 'Clone the repository' },
+  { value: 'install', title: 'Install dependencies' },
+  { value: 'verify', title: 'Verify environment' },
+]}>
+  <p slot="clone">Clone the baseline repository from GitHub.</p>
+  <p slot="install">Install dependencies with <code>npm install</code>.</p>
+  <p slot="verify">Run <code>npm run verify:fast</code> to test your environment.</p>
+</Steps>
+```
+
+- **Semantic list:** Emits an ordered list `<ol class="steps" role="list">` with numbered step markers generated via CSS counters (`counter-increment: step-counter`) or explicit step numbers.
+- **Logical properties & RTL support:** Employs CSS logical properties (`margin-inline-start`, `padding-inline-start`, `border-inline-start`) for complete right-to-left (`dir="rtl"`) compatibility without requiring mirrored styles.
+- **Layout spacing:** Features `margin: 0;` for predictable integration inside `.flow` editorial rhythms and layout containers.
+
+## Platform capabilities module & CMS parity
+
+### Capabilities module (`virtual:baseline/capabilities`)
+
+The `virtual:baseline/capabilities` module exposes browser-safe environment facts and client runtime helpers across all platform profiles (`static`, `static-sveltia`, `emdash`).
+
+```ts
+import {
+  capabilities,
+  applyTheme,
+  subscribeTheme,
+  copyToClipboard,
+  ensureAnnouncer,
+  initTabs,
+  initTableOfContents,
+} from 'virtual:baseline/capabilities';
+
+console.log(capabilities.profile); // 'emdash' | 'static' | 'static-sveltia'
+console.log(capabilities.isEmDash); // true | false
+```
+
+- **Multi-profile integration:** In static profiles, `baselineFeatures()` is registered in `astro.config.mjs` and ambient declarations are provided in `src/env.d.ts` (`declare module 'virtual:baseline/capabilities'`).
+- **Client runtime helpers:** Bundles re-usable client helpers for theme manipulation, clipboard actions, announcer management, and widget initialization with 0 external npm dependencies.
+
+### EmDash CMS heading parity (`RichText.astro`, `emdash-headings.ts`)
+
+Portable Text headings in EmDash maintain full parity with static `<Heading>` components and `<TableOfContents>`:
+
+- **Deterministic ID generation:** Portable Text headings receive deterministic, URL-safe IDs using `slugifyHeading()` and stable block keys.
+- **Scope isolation:** `extractHeadingsFromBlocks()` and `RichText.astro` share heading ID allocations. Providing a custom `id` attribute on `<RichText id="article">` does not invalidate pre-extracted TOC targets unless an explicit `scopeId` override is supplied.
+- **Text alignment preservation:** Portable Text headings with `textAlign: "center"`, `"right"`, or `"justify"` map to `.has-text-align-center`, `.has-text-align-right`, and `.has-text-align-justify` utility classes without losing styling or target anchors.
