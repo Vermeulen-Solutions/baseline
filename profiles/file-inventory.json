@@ -1381,6 +1381,30 @@
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted",
       "reason": "Optional SSR and Cloudflare Workers edge cache integration; no static output runtime"
+    },
+    "scripts/project-structure.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/project-structure.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/audit-page.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/page-audit.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/page-performance.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/PostListItem.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

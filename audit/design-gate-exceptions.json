@@ -180,13 +180,13 @@
   },
   {
     "path": "src/pages/category/[slug].astro",
-    "reason": "Starter sample metadata infrastructure: empty taxonomy noindex, typed breadcrumbs and supported taxonomy cache hints; existing neutral presentation remains intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "8dea05970a4042dda6aff72a443693b0f8f8bd47263758c7f4ca1151497cc55a"
+    "reason": "Neutral starter maintenance: extract identical post-list item markup into its native shared component; preserve queries, URLs, image values, empty states, date policy and CSS. No client-specific visual direction or styling change.",
+    "sha256": "f2c7c46b6ead755b094264627ae1846f36faea8f9e4edb8a6b235b52a44b8301"
   },
   {
     "path": "src/pages/index.astro",
-    "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "b4a3af4729010b86f0887267cc8a6bb9cbcbb4cd79019288379edef1506c32b0"
+    "reason": "Neutral starter maintenance: extract identical post-list item markup into its native shared component; preserve queries, URLs, image values, empty states, date policy and CSS. No client-specific visual direction or styling change.",
+    "sha256": "7cd2de7b4683081165b78579f0c00e980a15ff8177951e8fe7ea4b270b31daf4"
   },
   {
     "path": "src/pages/posts/index.astro",
@@ -200,8 +200,8 @@
   },
   {
     "path": "src/pages/tag/[slug].astro",
-    "reason": "Starter sample metadata infrastructure: empty taxonomy noindex, typed breadcrumbs and supported taxonomy cache hints; existing neutral presentation remains intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "77f2a677c76729f07ca9631faeb378b0c9b6e4a1ac29694154632b896be4d8fb"
+    "reason": "Neutral starter maintenance: extract identical post-list item markup into its native shared component; preserve queries, URLs, image values, empty states, date policy and CSS. No client-specific visual direction or styling change.",
+    "sha256": "9e701f208c15e316f8ccd392d5cd1cd59bcdd4a50a27b3f0b52a9be9e91548ab"
   },
   {
     "path": "src/pages/[slug].astro",
@@ -609,5 +609,10 @@
     "path": "src/lib/cloudflare-cache-provider.mjs",
     "reason": "Optional SSR and Cloudflare Workers edge cache infrastructure only; no visual tokens, markup or presentation changes.",
     "sha256": "123382c6a12c25c43a81f2a06575a40b790c8dbcdb23823343514d1097eaa81d"
+  },
+  {
+    "path": "src/components/PostListItem.astro",
+    "reason": "Neutral starter native component extraction: unchanged semantic post-list markup and image rendering shared by home/category/tag loops, with the existing home-only date made explicit. No client-specific visual styling.",
+    "sha256": "c8bee99f7eb593849994af184cfe403eae7e1d1fc3c8a36cc8711e7dfc7de211"
   }
 ]

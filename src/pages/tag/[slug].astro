@@ -1,6 +1,6 @@
 ---
 import { getTerm, getTaxonomyTermsWithCacheHint, getEmDashCollection, decodeSlug } from "emdash";
-import { Image } from "emdash/ui";
+import PostListItem from "../../components/PostListItem.astro";
 import Base from "../../layouts/Base.astro";
 import Section from "../../components/Section.astro";
 import { taxonomyRobots } from '../../lib/structured-data';
@@ -41,15 +41,7 @@ if (Astro.cache?.enabled) {
 				/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- Safari needs the role when visual list markers are removed. */
 				<ul role="list" class="collection-list">
 					{posts.map((post) => (
-						<li class="collection-item">
-							<a href={`/posts/${post.id}`}>
-								{post.data.featured_image && (
-									<Image image={post.data.featured_image} />
-								)}
-								<h2>{post.data.title}</h2>
-							</a>
-							{post.data.excerpt && <p>{post.data.excerpt}</p>}
-						</li>
+						<PostListItem post={post} />
 					))}
 				</ul>
 			)

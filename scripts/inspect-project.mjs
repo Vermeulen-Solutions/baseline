@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import ts from 'typescript';
+import { inspectStructure } from './project-structure.mjs';
 
 const commands = ['dev', 'doctor', 'verify:fast', 'verify', 'lint', 'check:css', 'check:art-direction', 'design:tokens', 'design:canvas-kit', 'test', 'typecheck', 'build', 'audit:html', 'test:visual', 'mcp:token', 'media:prepare', 'media:upload', 'migration:wordpress', 'migration:verify'];
 const components = ['Section', 'Container', 'Grid', 'Card', 'RichText', 'ResponsiveImage'];
@@ -92,7 +93,7 @@ function declaredProps(source) {
   return { status: declarations.length === 1 ? 'declared-only' : 'unresolved', props, inheritedTypes };
 }
 
-export function inspectProject(directory = process.cwd()) {
+export function inspectProject(directory = process.cwd(), options = {}) {
   const io = reader(directory), pkg = io.json('package.json');
   assert(object(pkg), 'A package.json object is required');
   const receipt = io.json('baseline.config.json');
@@ -117,7 +118,7 @@ export function inspectProject(directory = process.cwd()) {
     const children = fs.readdirSync(skillsRoot); assert(children.length <= 100, 'Skill inventory exceeds pilot bound');
     for (const name of children.sort()) if (io.exists(`.agents/skills/${name}/SKILL.md`)) skills.push({ name, source: `.agents/skills/${name}/SKILL.md` });
   }
-  return {
+  const report = {
     schemaVersion: 1, profile, runtime: runtimeFacts(io.read('astro.config.mjs')),
     commands: Object.fromEntries(commands.map(name => [name, { available: typeof pkg.scripts?.[name] === 'string', command: typeof pkg.scripts?.[name] === 'string' ? `npm run ${name}` : null }])),
     entrypoints: Object.fromEntries(Object.entries(entries).map(([group, files]) => [group, files.map(source => ({ source, exists: io.exists(source) }))])),
@@ -125,18 +126,21 @@ export function inspectProject(directory = process.cwd()) {
     components: components.map(name => { const source = `src/components/${name}.astro`, text = io.read(source); return { name, source, exists: text !== null, ...(text === null ? { status: 'missing', props: [] } : declaredProps(text)) }; }),
     limits: ['Read-only source observations, not health, deployment, content or design certification.', 'Configuration expressions, inherited/imported props, slots and component relationships require source review.', 'Commands are available script names, not executed checks. Seed files describe initial content, not the live CMS.', 'Six-component pilot; no claim of measured agent performance improvement.'],
   };
+  if (options.structure === true) report.structure = inspectStructure(io);
+  return report;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
-    let root = process.cwd(), json = false; const seen = new Set();
+    let root = process.cwd(), json = false, structure = false; const seen = new Set();
     for (let i = 2; i < process.argv.length; i++) {
       const flag = process.argv[i]; assert(!seen.has(flag), 'Duplicate argument'); seen.add(flag);
       if (flag === '--json') json = true;
+      else if (flag === '--structure') structure = true;
       else if (flag === '--root') { root = process.argv[++i]; assert(root && !root.startsWith('--'), 'Missing root'); }
       else throw Error('Unknown argument');
     }
-    const report = inspectProject(root);
-    console.log(json ? JSON.stringify(report, null, 2) : [`Profile: ${report.profile.id} (${report.profile.evidence})`, `Runtime observations: ${JSON.stringify(report.runtime)}`, `Commands: ${Object.values(report.commands).filter(item => item.available).map(item => item.command).join(', ')}`, `Skills: ${report.skills.map(skill => skill.name).join(', ')}`, 'Use --json for source entry points and declared component props.', ...report.limits].join('\n'));
+    const report = inspectProject(root, { structure });
+    console.log(json ? JSON.stringify(report, null, 2) : [`Profile: ${report.profile.id} (${report.profile.evidence})`, `Runtime observations: ${JSON.stringify(report.runtime)}`, `Commands: ${Object.values(report.commands).filter(item => item.available).map(item => item.command).join(', ')}`, `Skills: ${report.skills.map(skill => skill.name).join(', ')}`, 'Use --json for source entry points and declared component props.', ...(report.structure ? [`Structure: ${report.structure.routes.length} Astro route sources; ${report.structure.sources.length} route/component sources read. Use --structure --json for observed relationships and limits.`, ...report.structure.limits] : []), ...report.limits].join('\n'));
   } catch { console.error('Project inspection failed: input is missing, linked, oversized, invalid or unsupported.'); process.exitCode = 1; }
 }

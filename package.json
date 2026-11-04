@@ -98,7 +98,9 @@
     "db:check-backup": "node scripts/check-backup.mjs",
     "check:hosted-auth": "node scripts/check-hosted-auth.mjs",
     "migration:check-library": "node scripts/check-migration-library.mjs",
-    "migration:check-editorial": "node scripts/check-editorial-content.mjs"
+    "migration:check-editorial": "node scripts/check-editorial-content.mjs",
+    "audit:page": "node scripts/audit-page.mjs",
+    "rehearse:workflow": "node tests/visual/workflow-pilot.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",

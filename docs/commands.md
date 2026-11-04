@@ -47,12 +47,16 @@ check:dev-tools confirms that development styleguide/fixture markers are absent 
 
 Review public routes, narrow reflow, keyboard focus, images and relevant editing journeys in a browser. EmDash editing changes need actual typing/save/reload checks. Sveltia handoff needs real authentication, upload, save, rebuild and sign-out. Neither a green check nor a generated calibration record proves those observations.
 
+For the root maintainer's disposable workflow pilot, `npm run rehearse:workflow` exercises fictional owner tasks, collection loops and shared components using the existing local Windows visual helper. It is not installed in generated static projects, CI or production builds. `-- --hold` leaves the owned temporary server available for read-only inspection/page evidence until its report-directory stop file is created. Keep raw receipts under ignored local report paths; no root CMS content is changed.
+
 ## Discovery and diagnostics
 
 | Command | Scope | Purpose |
 | --- | --- | --- |
 | `npm run doctor` | Root EmDash | Dependency-free Node/SQLite, shell and workspace preflight |
 | `npm run baseline:inspect -- --json` | All profiles | Discover installed commands, entry points and declared core props |
+| `npm run baseline:inspect -- --structure --json` | All profiles, when installed | Inspect bounded source relationships and repeated-render observations; runtime behavior remains unverified |
+| `npm run audit:page -- --url <loopback-public-url> --out <fresh-report-directory>` | All profiles, opt-in local | Record controlled public-page loading/resource and rendered-font evidence ([scope](page-performance.md)) |
 | `npm run check:docs` | Root EmDash | Check documentation Markdown files for unwrapped paragraph formatting |
 | `npm run check:dev-tools` | All profiles | Check production development-tool isolation |
 | `npm run build:analyze` | Root EmDash | Build and inspect client JavaScript ownership |

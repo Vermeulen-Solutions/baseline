@@ -113,7 +113,12 @@
     "standards/schemas/migration-acceptance.mjs",
     "standards/schemas/migration-content.mjs",
     "docs/migration-acceptance.md",
-    "docs/migration-content-inventories.md"
+    "docs/migration-content-inventories.md",
+    "scripts/project-structure.mjs",
+    "tests/project-structure.test.mjs",
+    "scripts/audit-page.mjs",
+    "tests/page-audit.test.mjs",
+    "docs/page-performance.md"
   ],
   "packages": {
     "dependencies": [
@@ -163,7 +168,8 @@
     "media:prepare",
     "design:canvas-kit",
     "migration:wordpress",
-    "migration:verify"
+    "migration:verify",
+    "audit:page"
   ],
   "scriptOverrides": {
     "lint": "npm run lint:scripts && npm run lint:templates"
@@ -298,6 +304,7 @@
     ".agents/skills/opendesign-site-design/assets/plugins/od-astro-baseline-export/SKILL.md",
     ".agents/skills/opendesign-site-design/assets/plugins/od-astro-baseline-export/open-design.json",
     ".agents/skills/opendesign-site-design/references/baseline-html-recipe.md",
-    ".agents/skills/opendesign-site-design/references/connection-and-cli.md"
+    ".agents/skills/opendesign-site-design/references/connection-and-cli.md",
+    ".agents/skills/new-site-workflow/references/delivery-evidence.md"
   ]
 }

@@ -24,6 +24,7 @@ Baseline provides two Astro foundations and three Platform Profiles: **`static`*
 - **[Real Downstream Update Rehearsal](verification/baseline-sync-rehearsal.md):** immutable GitHub updates, rename bridging and preserved design conflicts across both static profiles and provenance forms.
 - **[Generation Manifests](../profiles/README.md):** explicit file/dependency inventories and independent profile verification.
 - **[Optional Project Inspection](project-inspection.md):** source-derived profile facts, available commands, entry points and a bounded declared-props pilot.
+- **[Local Public-Page Evidence](page-performance.md):** optional controlled loading/resource observations and actual rendered-font readback, with explicit local-only limits.
 - **[Project Context and Document Scope](project-context.md):** optional client brief, AGENTS.md working rules, DESIGN.md references and focused handoffs.
 - **[Detailed Site Working Rules](site-working-rules.md):** task-specific implementation, rendering, layout and production contracts for the root foundation.
 - **[Maintaining Baseline](../CONTRIBUTING.md):** contributor and agent guidance for improving the reusable starter, generators, distribution and checks.

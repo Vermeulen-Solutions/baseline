@@ -242,5 +242,13 @@
   "cloudflare-cache-provider.test.mjs": {
     "tier": "unit",
     "reason": "Cloudflare Workers caches.default HTML/image edge caching and cookie-safe admin bypass; no external service"
+  },
+  "project-structure.test.mjs": {
+    "tier": "unit",
+    "reason": "Bounded read-only syntax observations, unresolved relationships and linked/private-path refusal; no browser or CMS state"
+  },
+  "page-audit.test.mjs": {
+    "tier": "unit",
+    "reason": "Input/output contracts and resource/font normalization; real-browser cases explicitly local-only and opt-in"
   }
 }
