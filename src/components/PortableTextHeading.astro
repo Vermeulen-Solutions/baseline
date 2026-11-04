@@ -8,6 +8,19 @@ export interface Props extends $<Block> {
   [key: string]: unknown;
 }
 
+const ALIGN_CLASS_MAP = {
+  center: 'has-text-align-center',
+  right: 'has-text-align-right',
+  justify: 'has-text-align-justify',
+} as const;
+
+function textAlignClassName(value: unknown): string | undefined {
+  if (typeof value === 'string' && Object.hasOwn(ALIGN_CLASS_MAP, value)) {
+    return ALIGN_CLASS_MAP[value as keyof typeof ALIGN_CLASS_MAP];
+  }
+  return undefined;
+}
+
 const props = Astro.props;
 const { node, index, isInline, ...attrs } = props;
 const Tag = (node?.style || 'h2') as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
@@ -15,6 +28,22 @@ const Tag = (node?.style || 'h2') as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 const nodeRecord = node as unknown as Record<string, unknown>;
 const id = (typeof nodeRecord?.__emdash_heading_id === 'string' ? nodeRecord.__emdash_heading_id : '') || getPortableHeadingId(node);
 const headingId = (typeof attrs.id === 'string' && attrs.id.trim()) ? attrs.id : id;
+
+const alignClass = textAlignClassName(nodeRecord?.textAlign);
 ---
 
-<Tag {...attrs} id={headingId} class:list={['heading-target', attrs.class]}><slot /></Tag>
+<Tag {...attrs} id={headingId} class:list={['heading-target', alignClass, attrs.class]}><slot /></Tag>
+
+<style>
+  @layer components {
+    .has-text-align-center {
+      text-align: center;
+    }
+    .has-text-align-right {
+      text-align: right;
+    }
+    .has-text-align-justify {
+      text-align: justify;
+    }
+  }
+</style>

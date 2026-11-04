@@ -979,22 +979,50 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   expect(rtlMarkerInlineStart).toBeTruthy();
   await steps.evaluate((el) => el.removeAttribute('dir'));
 
-  // D. TableOfContents and Scroll Spy: verify nested structure, fragment encoding, and dead-zone-free highlighting
+  // D. TableOfContents and Scroll Spy: verify nested structure, fragment encoding, computed styles, and dead-zone-free highlighting
   const tocNav = page.locator('#fixture-toc');
   await expect(tocNav).toHaveAttribute('aria-label', 'On this page');
   const tocLinks = tocNav.locator('a[data-toc-link]');
-  expect(await tocLinks.count()).toBe(4);
+  expect(await tocLinks.count()).toBe(5);
 
-  // Assert percent-containing heading target does not crash TOC initialization and encodes fragment safely
+  // Assert percent-containing heading targets do not crash TOC initialization and encode fragments safely
   const link100 = tocNav.locator('a[href="#100%25"]');
   await expect(link100).toHaveText('100% Target Coverage');
+  const link10025 = tocNav.locator('a[href="#100%2525"]');
+  await expect(link10025).toHaveText('Literal 100%25 Target');
+
   const heading100 = page.locator('h2[id="100%"]');
   await expect(heading100.locator('a.heading-anchor')).toHaveAttribute('href', '#100%25');
+  const heading10025 = page.locator('h2[id="100%25"]');
+  await expect(heading10025.locator('a.heading-anchor')).toHaveAttribute('href', '#100%2525');
 
-  // Link 0 (Architecture Overview) should be active when scrolled near top
+  // Verify TOC rendered elements retain scoped component styles despite set:html injection
   const archLink = tocNav.locator('a[href="#section-architecture"]');
   const primLink = tocNav.locator('a[href="#section-primitives"]');
   const execLink = tocNav.locator('a[href="#section-execution"]');
+
+  const linkStyles = await archLink.evaluate((el) => {
+    const s = window.getComputedStyle(el);
+    return {
+      display: s.display,
+      paddingTop: parseFloat(s.paddingTop),
+      paddingLeft: parseFloat(s.paddingLeft),
+    };
+  });
+  expect(linkStyles.display).toBe('block');
+  expect(linkStyles.paddingLeft).toBeGreaterThan(0);
+
+  const nestedListStyles = await page.evaluate(() => {
+    const nl = document.querySelector('#fixture-toc .toc__list--nested');
+    if (!nl) return null;
+    const s = window.getComputedStyle(nl);
+    return {
+      paddingInlineStart: parseFloat(s.paddingInlineStart),
+      borderInlineStartWidth: parseFloat(s.borderInlineStartWidth),
+    };
+  });
+  expect(nestedListStyles).toBeTruthy();
+  expect(nestedListStyles?.paddingInlineStart).toBeGreaterThan(0);
 
   // Scroll into the long spacer below architecture heading (reading the long paragraph)
   await page.locator('#long-spacer-1').evaluate((el) => el.scrollIntoView({ block: 'start' }));
@@ -1006,17 +1034,40 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   const archClass = await archLink.getAttribute('class');
   expect(archClass).not.toContain('is-active');
 
+  // Verify active link computed font-weight is 600
+  const activeWeight = await archLink.evaluate((el) => window.getComputedStyle(el).fontWeight);
+  expect(parseInt(activeWeight, 10)).toBeGreaterThanOrEqual(600);
+
   // Scroll into primitives heading (aligned to top)
   await page.locator('#section-primitives').evaluate((el) => el.scrollIntoView({ block: 'start' }));
   await page.waitForTimeout(100);
   await expect(primLink).toHaveAttribute('aria-current', 'location');
   await expect(archLink).not.toHaveAttribute('aria-current', 'location');
 
-  // Scroll to bottom of page (100% heading)
-  await heading100.evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  // Scroll to literal 100%25 heading and assert ONLY that link is marked current (no double activation with 100%)
+  await heading10025.evaluate((el) => el.scrollIntoView({ block: 'start' }));
   await page.waitForTimeout(100);
-  await expect(link100).toHaveAttribute('aria-current', 'location');
-  await expect(primLink).not.toHaveAttribute('aria-current', 'location');
+  await expect(link10025).toHaveAttribute('aria-current', 'location');
+  await expect(link100).not.toHaveAttribute('aria-current', 'location');
+
+  // Enforce strictly at most one current link per TOC
+  const currentCount = await tocNav.locator('a[aria-current="location"]').count();
+  expect(currentCount).toBe(1);
+
+  // E. Verify native block alignment styles (center, right, justify)
+  const alignments = await page.evaluate(() => {
+    const c = document.getElementById('align-center');
+    const r = document.getElementById('align-right');
+    const j = document.getElementById('align-justify');
+    return {
+      center: c ? window.getComputedStyle(c).textAlign : '',
+      right: r ? window.getComputedStyle(r).textAlign : '',
+      justify: j ? window.getComputedStyle(j).textAlign : '',
+    };
+  });
+  expect(alignments.center).toBe('center');
+  expect(alignments.right).toBe('right');
+  expect(alignments.justify).toBe('justify');
 
   expect(problems).toEqual([]);
 });

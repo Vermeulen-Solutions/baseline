@@ -382,6 +382,18 @@
 }
 
 @layer components {
+	.has-text-align-center {
+		text-align: center;
+	}
+
+	.has-text-align-right {
+		text-align: right;
+	}
+
+	.has-text-align-justify {
+		text-align: justify;
+	}
+
 	a[target="_blank"]:where(:not(:has(> img, > svg), .card-link, [data-no-external-indicator]))::after {
 		content: "\202F\2197";
 		display: inline;

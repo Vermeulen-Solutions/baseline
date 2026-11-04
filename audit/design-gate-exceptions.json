@@ -52,17 +52,17 @@
   {
     "path": "src/lib/headings.ts",
     "reason": "Non-visual heading tree utility: pure buildToc and slugifyHeading implementations with depth filtering; zero runtime dependencies. Exact LF-normalized source hash.",
-    "sha256": "322ecd1c332ef1b73cccaf9d5610ebf748357943708347f30368441decbdcb45"
+    "sha256": "d8eae452f939d69c722338a4804b98de7e000771b79df3cc87390929e8872a14"
   },
   {
     "path": "src/lib/toc.ts",
     "reason": "Functional navigation primitive: client scroll-spy controller using IntersectionObserver and reading threshold; no dead zones, no history mutation, no focus stealing. Exact LF-normalized source hash.",
-    "sha256": "71857c3cb144d90208786a2bb434795069e79a9a874dfa63e5c8a78445ac37ac"
+    "sha256": "e591f1d7c2bd42126d04e32d6c1ac282aea0451b399b397dc7fc3f97259f4fe9"
   },
   {
     "path": "src/lib/emdash-headings.ts",
     "reason": "CMS heading adapter: pure extraction of HeadingRecord from Portable Text blocks using stable namespaced _key; zero CMS dependencies. Exact LF-normalized source hash.",
-    "sha256": "539a370ca7640004a27ed86b3d43fca2ee44e70cf06bf25167da1a214656ac12"
+    "sha256": "9bce896090e89020aa6c8d5a2d7b83478882c32f1370d5d53691a51380f8fbce"
   },
   {
     "path": "src/components/Heading.astro",
@@ -72,7 +72,7 @@
   {
     "path": "src/components/TableOfContents.astro",
     "reason": "Functional navigation primitive: progressive semantic nav with zero-JS nested ol fallback and pure-DOM scroll spy. Exact LF-normalized source hash.",
-    "sha256": "cc2052e265434dad5d8aeee0bbaa3723d634793915fda953f2b082a6b8526278"
+    "sha256": "262dce3ec576e86165f322b76f23e8b76dada8aaf83c2d2e87d8cbb93d002a0a"
   },
   {
     "path": "src/components/Callout.astro",
@@ -87,12 +87,12 @@
   {
     "path": "src/components/PortableTextHeading.astro",
     "reason": "CMS heading renderer: semantic heading block component for RichText with shared deterministic ID policy and heading-target class. Exact LF-normalized source hash.",
-    "sha256": "1bbc14f520fd811e314453f1b8ca85903f8dc64d093bfef3c7fe570f43324003"
+    "sha256": "704bc51f50fad31331480a850d9235fb4d12dbab90c22e0a6e3eaba54e01ba19"
   },
   {
     "path": "src/dev/PrimitivesFixture.astro",
     "reason": "Synthetic test fixture for interaction primitives (Tabs, ThemeSelect, CopyButton, Announcer) and ClientRouter navigation; development/fixture builds only.",
-    "sha256": "c916d00c32c87fbcd2b2df83b251b6b83c174ad68eb2a69b8ded034dd9f0006f"
+    "sha256": "8b0ab75091609efd98bfe015869ed4b7f9afcd8fdfedad8971fde252ac39f35e"
   },
   {
     "path": "src/lib/form-transport.ts",
@@ -146,7 +146,7 @@
   {
     "path": "src/styles/global.css",
     "reason": "Neutral shared foundation: existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Exact LF-normalized source hash.",
-    "sha256": "5bf3420b50005e3cfad0e7e272c93d732dc11e071622b76321c8d5f923ac38d6"
+    "sha256": "f3dae7ee1a8cd658e09739cd90c1d05f7eeac59ff6d184814417a51b88526a84"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -236,7 +236,7 @@
   {
     "path": "src/components/RichText.astro",
     "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "0b93aff592e22adcbc46790836b5dc5e01cca9c78110d3e6b1b4e4aa47e561ba"
+    "sha256": "56c07bd31eba2409599d84ad584db0acf9eee166055a2755916bc4e0484f5636"
   },
   {
     "path": "src/components/Card.astro",

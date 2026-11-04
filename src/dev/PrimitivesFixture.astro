@@ -109,6 +109,7 @@ const title = isPageB ? 'Primitives Fixture - Page B' : 'Primitives Fixture - Pa
             { id: 'section-primitives', text: 'Core Primitives', depth: 3 },
             { id: 'section-execution', text: 'Execution Guide', depth: 2 },
             { id: '100%', text: '100% Target Coverage', depth: 2 },
+            { id: '100%25', text: 'Literal 100%25 Target', depth: 2 },
           ]}
           spy={true}
         />
@@ -160,6 +161,17 @@ const title = isPageB ? 'Primitives Fixture - Page B' : 'Primitives Fixture - Pa
           <p id="para-100">
             Target coverage verified without percent-decoding runtime exceptions.
           </p>
+
+          <Heading level={2} id="100%25" anchor anchorLabel="Direct link to Literal 100%25 Target">
+            Literal 100%25 Target
+          </Heading>
+          <p id="para-10025">
+            Target coverage verified for double-encoded literal percent strings.
+          </p>
+
+          <h2 id="align-center" class="heading-target has-text-align-center">Centered Heading</h2>
+          <h2 id="align-right" class="heading-target has-text-align-right">Right Heading</h2>
+          <h2 id="align-justify" class="heading-target has-text-align-justify">Justified Heading</h2>
         </div>
       </div>
     ) : (

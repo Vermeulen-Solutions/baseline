@@ -22,6 +22,7 @@ export interface PortableTextBlock {
   _type?: string;
   _key?: string;
   style?: string;
+  textAlign?: string;
   children?: PortableTextSpan[];
   [key: string]: unknown;
 }
@@ -29,13 +30,14 @@ export interface PortableTextBlock {
 const VALID_HEADING_STYLES = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']);
 
 /**
- * Deterministically sanitizes a Portable Text block _key into an anchor ID segment.
+ * Injective, deterministic sanitization of a block _key into a URL-safe ID segment.
  *
- * Replaces non-alphanumeric, non-hyphen, non-underscore characters with a distinct hex-encoded
- * sequence (_xx_) to guarantee that distinct keys such as "a.b" and "a?b" never collide.
+ * Preserves [a-zA-Z0-9-]. All other characters (including underscore '_') are hex-escaped
+ * as '_xx_' (e.g. '_' -> '_5f_', '.' -> '_2e_') to guarantee a strictly injective mapping
+ * where distinct keys like "a.b" and "a_2e_b" can never collide.
  */
 export function sanitizeBlockKey(key: string): string {
-  return key.trim().replace(/[^a-zA-Z0-9_-]/g, (ch) => `_${ch.charCodeAt(0).toString(16)}_`);
+  return key.trim().replace(/[^a-zA-Z0-9-]/g, (ch) => `_${ch.charCodeAt(0).toString(16)}_`);
 }
 
 /**
@@ -79,17 +81,30 @@ export function getPortableHeadingId(
  * Decorates an array of Portable Text blocks in-place with pre-computed, collision-free
  * heading IDs (`__emdash_heading_id`).
  *
- * If a block already has an `__emdash_heading_id` and no explicit non-empty `scopeId` is passed,
- * the existing ID is preserved to maintain alignment with previously extracted TOC records.
+ * Preserves previously allocated heading IDs when no explicit scopeId override is supplied,
+ * ensuring that wrapper element IDs (e.g. <RichText id="review-article">) do not invalidate
+ * already-extracted TOC targets.
  */
 export function decoratePortableHeadingBlocks(
   blocks: readonly unknown[],
-  scopeId: string = ''
+  scopeId?: string
 ): void {
   if (!Array.isArray(blocks) || blocks.length === 0) return;
 
-  const seenIds = new Map<string, number>();
+  const seenIds = new Set<string>();
 
+  // Pass 1: If blocks already have allocated IDs and no scopeId override was supplied,
+  // reserve all existing allocated IDs in seenIds so any unallocated blocks avoid collisions.
+  for (let i = 0; i < blocks.length; i++) {
+    const rawBlock = blocks[i];
+    if (!rawBlock || typeof rawBlock !== 'object') continue;
+    const existingId = (rawBlock as Record<string, unknown>).__emdash_heading_id;
+    if (typeof existingId === 'string' && existingId && !scopeId) {
+      seenIds.add(existingId);
+    }
+  }
+
+  // Pass 2: Allocate or update IDs
   for (let i = 0; i < blocks.length; i++) {
     const rawBlock = blocks[i];
     if (!rawBlock || typeof rawBlock !== 'object') continue;
@@ -99,11 +114,9 @@ export function decoratePortableHeadingBlocks(
       continue;
     }
 
-    // Preserve existing decorated ID if scopeId was not explicitly overridden
+    // Preserve previously allocated heading ID unless an explicit scopeId override was supplied
     const existingId = (block as Record<string, unknown>).__emdash_heading_id;
     if (typeof existingId === 'string' && existingId && !scopeId) {
-      // Track seen to prevent duplicate collisions later in the document
-      seenIds.set(existingId, (seenIds.get(existingId) ?? 0) + 1);
       continue;
     }
 

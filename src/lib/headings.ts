@@ -79,13 +79,46 @@ export function slugifyHeading(text: string): string {
 }
 
 /**
- * Deduplicates a base heading ID against a tracking map of previously seen IDs.
+ * Deduplicates a base heading ID against a tracking set or map of previously seen/emitted IDs.
+ *
+ * Ensures that generated suffixed IDs (e.g. repeat-2) are themselves reserved so subsequent
+ * headings whose base text naturally slugifies to that suffix (e.g. "Repeat 2") never collide.
  */
 export function deduplicateHeadingId(
   baseId: string,
-  seenIds: Map<string, number>
+  seenIds: Set<string> | Map<string, number>
 ): string {
-  const count = seenIds.get(baseId) ?? 0;
-  seenIds.set(baseId, count + 1);
-  return count === 0 ? baseId : `${baseId}-${count + 1}`;
+  let usedSet: Set<string>;
+  let countsMap: Map<string, number>;
+
+  if (seenIds instanceof Set) {
+    usedSet = seenIds;
+    countsMap = new Map();
+  } else {
+    countsMap = seenIds;
+    usedSet = new Set(seenIds.keys());
+  }
+
+  if (!usedSet.has(baseId)) {
+    usedSet.add(baseId);
+    countsMap.set(baseId, 1);
+    if (seenIds instanceof Map) {
+      seenIds.set(baseId, 1);
+    }
+    return baseId;
+  }
+
+  let count = countsMap.get(baseId) ?? 1;
+  let candidate: string;
+  do {
+    count++;
+    candidate = `${baseId}-${count}`;
+  } while (usedSet.has(candidate));
+
+  countsMap.set(baseId, count);
+  usedSet.add(candidate);
+  if (seenIds instanceof Map) {
+    seenIds.set(candidate, 1);
+  }
+  return candidate;
 }

@@ -8,7 +8,8 @@
  * Strictly adheres to:
  * - Zero external runtime dependencies.
  * - Updates only `aria-current="location"` without mutating browser history or stealing focus.
- * - Safely handles URI-encoded, raw, and malformed URL fragments without crashing.
+ * - Uses browser-consistent canonical fragment decoding with raw fallback only when decoding fails.
+ * - Enforces at most one current link per TOC.
  * - Dynamically calculates sticky offsets from `[data-sticky-header]` or custom selectors.
  * - Handles View Transitions (`astro:before-swap` / `astro:after-swap` / `astro:page-load`).
  * - Disconnects on DOM removal or editor surface detection.
@@ -22,39 +23,42 @@ export interface TocSpyOptions {
 }
 
 /**
+ * Browser-consistent canonical fragment decoding.
+ * Falls back to raw string ONLY when decoding fails (malformed URI sequence, e.g. "#100%").
+ */
+export function decodeFragment(raw: string): string {
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
+
+/**
+ * Safely extracts the canonical target ID from a link fragment href.
+ */
+export function getLinkTargetId(link: HTMLAnchorElement): string | null {
+  const href = link.getAttribute('href');
+  if (!href || !href.startsWith('#')) return null;
+  return decodeFragment(href.slice(1));
+}
+
+/**
  * Safely extracts possible target IDs from a fragment href without throwing on malformed URIs.
  */
 export function getTargetIdsFromHref(href: string | null): string[] {
   if (!href || !href.startsWith('#')) return [];
   const raw = href.slice(1);
   if (!raw) return [];
-
-  const ids = [raw];
-  try {
-    const decoded = decodeURIComponent(raw);
-    if (decoded && decoded !== raw) {
-      ids.push(decoded);
-    }
-  } catch {
-    // Malformed URI sequence (e.g. #100%) - isolate error, fallback to raw fragment string
-  }
-  return ids;
+  return [decodeFragment(raw)];
 }
 
 /**
- * Checks whether an anchor link matches a given heading element ID, handling both encoded and literal matches.
+ * Checks whether an anchor link canonically targets a given heading element ID.
  */
 export function linkMatchesHeadingId(link: HTMLAnchorElement, headingId: string): boolean {
-  const href = link.getAttribute('href');
-  if (!href || !href.startsWith('#')) return false;
-  const raw = href.slice(1);
-  if (raw === headingId) return true;
-
-  try {
-    return decodeURIComponent(raw) === headingId;
-  } catch {
-    return false;
-  }
+  const targetId = getLinkTargetId(link);
+  return Boolean(targetId && targetId === headingId);
 }
 
 export class TocSpyController {
@@ -112,11 +116,11 @@ export class TocSpyController {
       return;
     }
 
-    // Collect target headings matching TOC link fragments (both raw and decoded)
+    // Collect target headings matching TOC link fragments (using canonical decoding)
     const targetIds = new Set<string>();
     for (const link of this.links) {
-      const href = link.getAttribute('href');
-      for (const targetId of getTargetIdsFromHref(href)) {
+      const targetId = getLinkTargetId(link);
+      if (targetId) {
         targetIds.add(targetId);
       }
     }
@@ -283,10 +287,13 @@ export class TocSpyController {
   }
 
   private setActiveLink(activeId: string | null): void {
+    let matched = false;
     for (const link of this.links) {
       const isMatch = Boolean(activeId && linkMatchesHeadingId(link, activeId));
 
-      if (isMatch) {
+      // Strictly at most one link per TOC can carry aria-current="location"
+      if (isMatch && !matched) {
+        matched = true;
         if (link.getAttribute('aria-current') !== 'location') {
           link.setAttribute('aria-current', 'location');
         }

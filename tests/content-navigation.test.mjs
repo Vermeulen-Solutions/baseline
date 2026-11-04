@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { buildToc, slugifyHeading } from '../src/lib/headings.ts';
+import { buildToc, slugifyHeading, deduplicateHeadingId } from '../src/lib/headings.ts';
 import {
   headingsFromPortableBlocks,
   sanitizeBlockKey,
@@ -14,6 +14,7 @@ import {
 import {
   getTargetIdsFromHref,
   linkMatchesHeadingId,
+  decodeFragment,
 } from '../src/lib/toc.ts';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -115,70 +116,69 @@ test('slugifyHeading: generates URL-safe slugs with diacritic and HTML stripping
   assert.ok(kee.length > 0);
 });
 
-test('sanitizeBlockKey: escapes non-alphanumeric chars deterministically avoiding collisions', () => {
-  const key1 = sanitizeBlockKey('a.b');
-  const key2 = sanitizeBlockKey('a?b');
-  assert.equal(key1, 'a_2e_b');
-  assert.equal(key2, 'a_3f_b');
-  assert.notEqual(key1, key2, 'Distinct keys with special characters must never collide');
-  assert.equal(sanitizeBlockKey('normal-key_123'), 'normal-key_123');
+test('deduplicateHeadingId: reserves generated suffixes preventing "Repeat, Repeat, Repeat 2" collisions', () => {
+  const seen = new Set();
+  const id1 = deduplicateHeadingId('article-repeat', seen);
+  const id2 = deduplicateHeadingId('article-repeat', seen);
+  const id3 = deduplicateHeadingId('article-repeat-2', seen);
+
+  assert.equal(id1, 'article-repeat');
+  assert.equal(id2, 'article-repeat-2');
+  assert.equal(id3, 'article-repeat-2-2', 'Generated suffix must be reserved so "Repeat 2" never collides with "Repeat" #2');
+  assert.notEqual(id2, id3);
 });
 
-test('headingsFromPortableBlocks: preserves stable _key across text changes and shares ID with renderer', () => {
-  const originalBlocks = [
+test('sanitizeBlockKey: injective escaping prevents collision between "a.b" and "a_2e_b"', () => {
+  const keyDot = sanitizeBlockKey('a.b');
+  const keyEsc = sanitizeBlockKey('a_2e_b');
+  const keyQuestion = sanitizeBlockKey('a?b');
+
+  assert.equal(keyDot, 'a_2e_b');
+  assert.equal(keyEsc, 'a_5f_2e_5f_b');
+  assert.equal(keyQuestion, 'a_3f_b');
+
+  assert.notEqual(keyDot, keyEsc, 'Injective encoding ensures a.b and a_2e_b do not collide');
+  assert.notEqual(keyDot, keyQuestion);
+  assert.equal(sanitizeBlockKey('normal-key-123'), 'normal-key-123');
+});
+
+test('RichText and emdash-headings: preserves allocated heading IDs when wrapper ID and namespace differ', () => {
+  const blocks = [
     {
       _type: 'block',
       _key: 'bk100',
       style: 'h2',
-      children: [{ _type: 'span', text: 'Initial Section Title' }],
+      children: [{ _type: 'span', text: 'Authored Section' }],
     },
     {
       _type: 'block',
       _key: 'bk101',
-      style: 'normal',
-      children: [{ _type: 'span', text: 'Just paragraph body prose.' }],
-    },
-    {
-      _type: 'block',
-      _key: 'bk102',
       style: 'h3',
-      children: [
-        { _type: 'span', text: 'Sub ' },
-        { _type: 'span', text: 'Section' },
-      ],
+      children: [{ _type: 'span', text: 'Authored Subsection' }],
     },
   ];
 
-  const headings1 = headingsFromPortableBlocks(originalBlocks, 'article');
-  assert.equal(headings1.length, 2);
-  assert.equal(headings1[0].id, 'article-bk100');
-  assert.equal(headings1[0].text, 'Initial Section Title');
-  assert.equal(headings1[0].depth, 2);
-  assert.equal(headings1[1].id, 'article-bk102');
-  assert.equal(headings1[1].text, 'Sub Section');
-  assert.equal(headings1[1].depth, 3);
+  // 1. Extract TOC with scope 'article'
+  const extracted = headingsFromPortableBlocks(blocks, 'article');
+  assert.equal(extracted[0].id, 'article-bk100');
+  assert.equal(extracted[1].id, 'article-bk101');
 
-  // Assert that block was decorated with matching ID for RichText heading rendering
-  assert.equal(originalBlocks[0].__emdash_heading_id, 'article-bk100');
-  assert.equal(getPortableHeadingId(originalBlocks[0]), 'article-bk100');
+  // 2. Simulate <RichText id="review-article" value={blocks} />
+  // RichText passes blocks to decoratePortableHeadingBlocks without scopeId override.
+  // The wrapper div's id ("review-article") MUST NOT invalidate the allocated "article-*" targets!
+  decoratePortableHeadingBlocks(blocks, undefined);
 
-  // Now simulate editorial text change: text changes, but _key remains identical
-  const editedBlocks = [
-    {
-      _type: 'block',
-      _key: 'bk100',
-      style: 'h2',
-      children: [{ _type: 'span', text: 'Refined Section Title' }],
-    },
-  ];
+  assert.equal(blocks[0].__emdash_heading_id, 'article-bk100', 'Existing allocated scope is preserved when wrapper id differs');
+  assert.equal(blocks[1].__emdash_heading_id, 'article-bk101');
+  assert.equal(getPortableHeadingId(blocks[0]), 'article-bk100');
+  assert.equal(getPortableHeadingId(blocks[1]), 'article-bk101');
 
-  const headings2 = headingsFromPortableBlocks(editedBlocks, 'article');
-  assert.equal(headings2.length, 1);
-  // Anchor ID MUST remain article-bk100 so incoming links do not break
-  assert.equal(headings2[0].id, 'article-bk100');
-  assert.equal(headings2[0].text, 'Refined Section Title');
-  assert.equal(editedBlocks[0].__emdash_heading_id, 'article-bk100');
-  assert.equal(getPortableHeadingId(editedBlocks[0]), 'article-bk100');
+  // 3. Editorial text edit: text changes, but _key and allocated scope remain intact
+  blocks[0].children = [{ _type: 'span', text: 'Edited Section Title' }];
+  const editedHeadings = headingsFromPortableBlocks(blocks, 'article');
+  assert.equal(editedHeadings[0].id, 'article-bk100');
+  assert.equal(editedHeadings[0].text, 'Edited Section Title');
+  assert.equal(blocks[0].__emdash_heading_id, 'article-bk100');
 });
 
 test('decoratePortableHeadingBlocks: deduplicates identical heading IDs', () => {
@@ -223,28 +223,32 @@ test('headingsFromPortableBlocks: handles fallback when _key is missing and hand
   assert.deepEqual(headingsFromPortableBlocks(undefined, 'doc'), []);
 });
 
-test('TOC fragment handling: isolates malformed URIs (#100%) and handles literal %20', () => {
-  // 100% is malformed URI sequence, should not throw
-  const ids100 = getTargetIdsFromHref('#100%');
-  assert.deepEqual(ids100, ['100%']);
+test('TOC fragment handling: canonical decoding and non-overlapping matching for 100% and 100%25', () => {
+  // Canonical decoding test
+  assert.equal(decodeFragment('100%25'), '100%');
+  assert.equal(decodeFragment('100%2525'), '100%25');
+  assert.equal(decodeFragment('100%'), '100%'); // raw fallback on malformed URI
 
-  // test%20me produces both literal and decoded
-  const idsEncoded = getTargetIdsFromHref('#test%20me');
-  assert.ok(idsEncoded.includes('test%20me'));
-  assert.ok(idsEncoded.includes('test me'));
-
-  // linkMatchesHeadingId with mock anchor
   const mockAnchor = (href) => ({
     getAttribute(name) {
       return name === 'href' ? href : null;
     },
   });
 
-  assert.ok(linkMatchesHeadingId(mockAnchor('#100%'), '100%'));
-  assert.ok(linkMatchesHeadingId(mockAnchor('#100%25'), '100%'));
-  assert.ok(linkMatchesHeadingId(mockAnchor('#test%20me'), 'test%20me'));
-  assert.ok(linkMatchesHeadingId(mockAnchor('#test%20me'), 'test me'));
-  assert.ok(linkMatchesHeadingId(mockAnchor('#test%2520me'), 'test%20me'));
+  const link100 = mockAnchor('#100%25');
+  const link10025 = mockAnchor('#100%2525');
+
+  // link100 targets "100%", must NOT match "100%25"
+  assert.ok(linkMatchesHeadingId(link100, '100%'));
+  assert.ok(!linkMatchesHeadingId(link100, '100%25'), 'Link to 100% must never match 100%25');
+
+  // link10025 targets "100%25", must NOT match "100%"
+  assert.ok(linkMatchesHeadingId(link10025, '100%25'));
+  assert.ok(!linkMatchesHeadingId(link10025, '100%'), 'Link to 100%25 must never match 100%');
+
+  // Raw fallback test
+  const linkRaw100 = mockAnchor('#100%');
+  assert.ok(linkMatchesHeadingId(linkRaw100, '100%'));
 });
 
 test('Component Contracts: Callout, Steps, Heading, TableOfContents, PortableTextHeading', () => {
@@ -272,6 +276,7 @@ test('Component Contracts: Callout, Steps, Heading, TableOfContents, PortableTex
   assert.ok(tocSrc.includes('data-toc-link'), 'TableOfContents links must have data-toc-link');
   assert.ok(tocSrc.includes('encodeURIComponent(node.id)'), 'TableOfContents must URL-encode fragment target');
   assert.ok(tocSrc.includes('--color-link'), 'TableOfContents active link must use --color-link for WCAG AA dark contrast');
+  assert.ok(tocSrc.includes('.toc :global(.toc__link)'), 'TableOfContents must use root-scoped global descendant selector for set:html styles');
   assert.ok(!tocSrc.includes('.is-active'), 'TableOfContents must not use .is-active class (ARIA-only contract)');
 
   const tocLibSrc = fs.readFileSync(path.join(ROOT, 'src/lib/toc.ts'), 'utf8');
@@ -285,6 +290,9 @@ test('Component Contracts: Callout, Steps, Heading, TableOfContents, PortableTex
     const pthSrc = fs.readFileSync(pthPath, 'utf8');
     assert.ok(pthSrc.includes('getPortableHeadingId'), 'PortableTextHeading must import getPortableHeadingId');
     assert.ok(pthSrc.includes('heading-target'), 'PortableTextHeading must have heading-target class');
+    assert.ok(pthSrc.includes('has-text-align-center'), 'PortableTextHeading must support center alignment');
+    assert.ok(pthSrc.includes('has-text-align-right'), 'PortableTextHeading must support right alignment');
+    assert.ok(pthSrc.includes('has-text-align-justify'), 'PortableTextHeading must support justify alignment');
   }
 
   const rtPath = path.join(ROOT, 'src/components/RichText.astro');
@@ -293,6 +301,7 @@ test('Component Contracts: Callout, Steps, Heading, TableOfContents, PortableTex
     if (rtSrc.includes('emdash/ui')) {
       assert.ok(rtSrc.includes('PortableTextHeading'), 'RichText must register PortableTextHeading for headings');
       assert.ok(rtSrc.includes('decoratePortableHeadingBlocks'), 'RichText must decorate heading blocks with IDs');
+      assert.ok(!rtSrc.includes('attributes.id'), 'RichText must never use attributes.id as heading namespace override');
     }
   }
 });

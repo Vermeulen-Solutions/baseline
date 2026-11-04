@@ -89,7 +89,7 @@ const renderedListHtml = renderTocList(tocNodes);
       gap: calc(var(--spacing-content, 1.5rem) * 0.5);
     }
 
-    .toc__title {
+    .toc :global(.toc__title) {
       font-weight: 600;
       color: var(--color-muted, currentColor);
       text-transform: uppercase;
@@ -98,7 +98,7 @@ const renderedListHtml = renderTocList(tocNodes);
       margin: 0;
     }
 
-    .toc__list {
+    .toc :global(.toc__list) {
       list-style: none;
       margin: 0;
       padding: 0;
@@ -107,7 +107,7 @@ const renderedListHtml = renderTocList(tocNodes);
       gap: 0.25rem;
     }
 
-    .toc__list--nested {
+    .toc :global(.toc__list--nested) {
       padding-inline-start: 0.875rem;
       margin-inline-start: 0.125rem;
       border-inline-start: 1px solid var(--color-border, currentColor);
@@ -115,12 +115,12 @@ const renderedListHtml = renderTocList(tocNodes);
       margin-top: 0.25rem;
     }
 
-    .toc__item {
+    .toc :global(.toc__item) {
       margin: 0;
       padding: 0;
     }
 
-    .toc__link {
+    .toc :global(.toc__link) {
       display: block;
       padding: 0.15rem 0.5rem;
       color: var(--color-muted, currentColor);
@@ -132,17 +132,17 @@ const renderedListHtml = renderTocList(tocNodes);
                   border-color var(--duration-fast, 120ms) ease;
     }
 
-    .toc__link:hover {
+    .toc :global(.toc__link:hover) {
       color: var(--color-text, currentColor);
       background: color-mix(in oklch, currentColor 5%, transparent);
     }
 
-    .toc__link:focus-visible {
+    .toc :global(.toc__link:focus-visible) {
       outline: 2px solid var(--color-focus, currentColor);
       outline-offset: 1px;
     }
 
-    .toc__link[aria-current="location"] {
+    .toc :global(.toc__link[aria-current="location"]) {
       color: var(--color-link, #0969da);
       font-weight: 600;
       border-inline-start-color: var(--color-link, #0969da);
@@ -150,7 +150,7 @@ const renderedListHtml = renderTocList(tocNodes);
     }
 
     @media (forced-colors: active) {
-      .toc__link[aria-current="location"] {
+      .toc :global(.toc__link[aria-current="location"]) {
         color: Highlight !important;
         border-inline-start-color: Highlight !important;
       }
