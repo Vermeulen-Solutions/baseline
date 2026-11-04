@@ -1,6 +1,5 @@
 ---
-/* eslint-disable astro/jsx-a11y/no-redundant-roles */
-import type { HeadingRecord, HeadingDepth } from '../lib/headings';
+import type { HeadingRecord, HeadingDepth, TocNode } from '../lib/headings';
 import { buildToc } from '../lib/headings';
 
 export interface TableOfContentsProps {
@@ -28,6 +27,33 @@ const {
 } = Astro.props as TableOfContentsProps;
 
 const tocNodes = buildToc(headings, { minDepth, maxDepth });
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function renderTocList(nodes: TocNode[], isNested = false): string {
+  if (!nodes || nodes.length === 0) return '';
+  const listClass = isNested ? 'toc__list toc__list--nested' : 'toc__list';
+  let html = `<ol class="${listClass}" role="list">`;
+  for (const node of nodes) {
+    html += `<li class="toc__item" data-depth="${node.depth}">`;
+    html += `<a href="#${encodeURIComponent(node.id)}" class="toc__link" data-toc-link>${escapeHtml(node.text)}</a>`;
+    if (node.children && node.children.length > 0) {
+      html += renderTocList(node.children, true);
+    }
+    html += '</li>';
+  }
+  html += '</ol>';
+  return html;
+}
+
+const renderedListHtml = renderTocList(tocNodes);
 ---
 
 {tocNodes.length > 0 && (
@@ -40,37 +66,7 @@ const tocNodes = buildToc(headings, { minDepth, maxDepth });
     data-offset-ids={offsetIds.length > 0 ? offsetIds.join(',') : undefined}
   >
     <p class="toc__title" id={`${id}-title`}>{label}</p>
-    <ol class="toc__list" role="list">
-      {tocNodes.map((node) => (
-        <li class="toc__item" data-depth={node.depth}>
-          <a href={`#${node.id}`} class="toc__link" data-toc-link>
-            {node.text}
-          </a>
-          {node.children && node.children.length > 0 && (
-            <ol class="toc__list toc__list--nested" role="list">
-              {node.children.map((child) => (
-                <li class="toc__item" data-depth={child.depth}>
-                  <a href={`#${child.id}`} class="toc__link" data-toc-link>
-                    {child.text}
-                  </a>
-                  {child.children && child.children.length > 0 && (
-                    <ol class="toc__list toc__list--nested" role="list">
-                      {child.children.map((grandChild) => (
-                        <li class="toc__item" data-depth={grandChild.depth}>
-                          <a href={`#${grandChild.id}`} class="toc__link" data-toc-link>
-                            {grandChild.text}
-                          </a>
-                        </li>
-                      ))}
-                    </ol>
-                  )}
-                </li>
-              ))}
-            </ol>
-          )}
-        </li>
-      ))}
-    </ol>
+    <Fragment set:html={renderedListHtml} />
   </nav>
 )}
 
@@ -146,17 +142,15 @@ const tocNodes = buildToc(headings, { minDepth, maxDepth });
       outline-offset: 1px;
     }
 
-    .toc__link[aria-current="location"],
-    .toc__link.is-active {
-      color: var(--color-action, #0969da);
+    .toc__link[aria-current="location"] {
+      color: var(--color-link, #0969da);
       font-weight: 600;
-      border-inline-start-color: var(--color-action, #0969da);
-      background: color-mix(in oklch, var(--color-action, currentColor) 8%, transparent);
+      border-inline-start-color: var(--color-link, #0969da);
+      background: color-mix(in oklch, var(--color-link, currentColor) 8%, transparent);
     }
 
     @media (forced-colors: active) {
-      .toc__link[aria-current="location"],
-      .toc__link.is-active {
+      .toc__link[aria-current="location"] {
         color: Highlight !important;
         border-inline-start-color: Highlight !important;
       }

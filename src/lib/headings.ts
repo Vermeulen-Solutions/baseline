@@ -62,15 +62,30 @@ export function buildToc(
 
 /**
  * Converts a text string into a URL-safe, lowercase slug suitable for heading anchor IDs.
+ *
+ * Preserves unicode letter and mark characters (\p{L}\p{M}) such as Indic vowel signs,
+ * strips HTML tags safely even with quotes containing brackets, and collapses whitespace.
  */
 export function slugifyHeading(text: string): string {
   return text
+    .replace(/<(?:'[^']*'|"[^"]*"|[^"'>])+>/g, '') // strip HTML tags safely
     .toLowerCase()
     .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '') // remove diacritics
-    .replace(/<[^>]+>/g, '') // strip HTML tags
-    .replace(/[^\p{L}\p{N}\s_-]/gu, '') // keep letters, numbers, spaces, hyphens
+    .replace(/[\u0300-\u036f]/g, '') // remove combining diacritical marks (Latin/Greek accents)
+    .replace(/[^\p{L}\p{M}\p{N}\s_-]/gu, '') // keep letters, combining marks (Indic/Arabic/etc), numbers, spaces, hyphens
     .trim()
     .replace(/[\s_]+/g, '-') // spaces and underscores to hyphens
     .replace(/-+/g, '-'); // collapse multiple hyphens
+}
+
+/**
+ * Deduplicates a base heading ID against a tracking map of previously seen IDs.
+ */
+export function deduplicateHeadingId(
+  baseId: string,
+  seenIds: Map<string, number>
+): string {
+  const count = seenIds.get(baseId) ?? 0;
+  seenIds.set(baseId, count + 1);
+  return count === 0 ? baseId : `${baseId}-${count + 1}`;
 }

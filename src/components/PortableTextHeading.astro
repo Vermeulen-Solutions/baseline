@@ -1,0 +1,20 @@
+---
+import type { Block, Props as $ } from 'astro-portabletext/types';
+import { getPortableHeadingId } from '../lib/emdash-headings.ts';
+
+export interface Props extends $<Block> {
+  id?: string;
+  class?: string;
+  [key: string]: unknown;
+}
+
+const props = Astro.props;
+const { node, index, isInline, ...attrs } = props;
+const Tag = (node?.style || 'h2') as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+
+const nodeRecord = node as unknown as Record<string, unknown>;
+const id = (typeof nodeRecord?.__emdash_heading_id === 'string' ? nodeRecord.__emdash_heading_id : '') || getPortableHeadingId(node);
+const headingId = (typeof attrs.id === 'string' && attrs.id.trim()) ? attrs.id : id;
+---
+
+<Tag {...attrs} id={headingId} class:list={['heading-target', attrs.class]}><slot /></Tag>

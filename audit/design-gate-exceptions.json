@@ -52,42 +52,47 @@
   {
     "path": "src/lib/headings.ts",
     "reason": "Non-visual heading tree utility: pure buildToc and slugifyHeading implementations with depth filtering; zero runtime dependencies. Exact LF-normalized source hash.",
-    "sha256": "01cee08ae9f17f66d997641411ffa812ab0bd322f3bcda88cb869dd374adbdf0"
+    "sha256": "322ecd1c332ef1b73cccaf9d5610ebf748357943708347f30368441decbdcb45"
   },
   {
     "path": "src/lib/toc.ts",
     "reason": "Functional navigation primitive: client scroll-spy controller using IntersectionObserver and reading threshold; no dead zones, no history mutation, no focus stealing. Exact LF-normalized source hash.",
-    "sha256": "5a07c9ec12f367d5e6f5fb1d948b9b2f2be20f382c5f3a3d021d96c04a9831d0"
+    "sha256": "71857c3cb144d90208786a2bb434795069e79a9a874dfa63e5c8a78445ac37ac"
   },
   {
     "path": "src/lib/emdash-headings.ts",
     "reason": "CMS heading adapter: pure extraction of HeadingRecord from Portable Text blocks using stable namespaced _key; zero CMS dependencies. Exact LF-normalized source hash.",
-    "sha256": "05daa52489cf3f227b41bb086d4b35f66e0e374cfcf79c0d2b0f265c9d0e9bcd"
+    "sha256": "539a370ca7640004a27ed86b3d43fca2ee44e70cf06bf25167da1a214656ac12"
   },
   {
     "path": "src/components/Heading.astro",
     "reason": "Functional content primitive: semantic h1-h6 elements with accessible permalink anchor symbol. Exact LF-normalized source hash.",
-    "sha256": "29a05f862aacc78a1dab0bdb6d6c2dd308a0b60169fcd30ecda91ce0941cc5ee"
+    "sha256": "94b141ef58e4e0e0a735d94ae302f9b2434f696d54931261dcc99932bdedd5ef"
   },
   {
     "path": "src/components/TableOfContents.astro",
     "reason": "Functional navigation primitive: progressive semantic nav with zero-JS nested ol fallback and pure-DOM scroll spy. Exact LF-normalized source hash.",
-    "sha256": "55d8f3140c429aebb4a2d0a377a2eff9da980419270f577bd13025d0c77d46df"
+    "sha256": "cc2052e265434dad5d8aeee0bbaa3723d634793915fda953f2b082a6b8526278"
   },
   {
     "path": "src/components/Callout.astro",
     "reason": "Functional content primitive: semantic aside element without alert role, styled paragraph title, and default slot. Exact LF-normalized source hash.",
-    "sha256": "c6857fdf4b61a047631e596604f98c3b5ff1a78eb75f72c3fffe047b2f2ab808"
+    "sha256": "b8add50ef92cf0551f04900aabd4c07ef5ff281bb3cee2bbe091b83a09009a7c"
   },
   {
     "path": "src/components/Steps.astro",
     "reason": "Functional content primitive: semantic ol with role=list, CSS counter badges, and named item slots. Exact LF-normalized source hash.",
-    "sha256": "c4c9cd84aa42bafbbb2ed517c10a8d780dfd015325d185851b34f8d73e0c2860"
+    "sha256": "b05b558b6caf97c1589cb73a5032dd68fe16000b811703f58a8b43d4755d6820"
+  },
+  {
+    "path": "src/components/PortableTextHeading.astro",
+    "reason": "CMS heading renderer: semantic heading block component for RichText with shared deterministic ID policy and heading-target class. Exact LF-normalized source hash.",
+    "sha256": "1bbc14f520fd811e314453f1b8ca85903f8dc64d093bfef3c7fe570f43324003"
   },
   {
     "path": "src/dev/PrimitivesFixture.astro",
     "reason": "Synthetic test fixture for interaction primitives (Tabs, ThemeSelect, CopyButton, Announcer) and ClientRouter navigation; development/fixture builds only.",
-    "sha256": "ce14ffb90cbac07b68817841035396a50a69ef2cf805b20fb3071c3164bf6acc"
+    "sha256": "c916d00c32c87fbcd2b2df83b251b6b83c174ad68eb2a69b8ded034dd9f0006f"
   },
   {
     "path": "src/lib/form-transport.ts",
@@ -231,7 +236,7 @@
   {
     "path": "src/components/RichText.astro",
     "reason": "User-authorized neutral starter utility backport and public renderer integration; no client theme, content or art direction. Any edit invalidates this exact exception.",
-    "sha256": "b74d7dd487a8a9d17238b33aae3d7800d854a8fe6099949ac4ece1dea6f613a2"
+    "sha256": "0b93aff592e22adcbc46790836b5dc5e01cca9c78110d3e6b1b4e4aa47e561ba"
   },
   {
     "path": "src/components/Card.astro",

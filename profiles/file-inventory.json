@@ -388,6 +388,10 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "src/components/PortableTextHeading.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "src/components/ResponsiveImage.astro": {
       "disposition": "shared",
       "static": "copy"

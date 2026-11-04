@@ -24,7 +24,7 @@ const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   <slot />
   {anchor && (
     <a
-      href={`#${id}`}
+      href={`#${encodeURIComponent(id)}`}
       class="heading-anchor"
       aria-label={anchorLabel || 'Direct link to this section'}
       tabindex="0"

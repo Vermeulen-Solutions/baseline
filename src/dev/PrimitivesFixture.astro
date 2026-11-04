@@ -108,6 +108,7 @@ const title = isPageB ? 'Primitives Fixture - Page B' : 'Primitives Fixture - Pa
             { id: 'section-architecture', text: 'Architecture Overview', depth: 2 },
             { id: 'section-primitives', text: 'Core Primitives', depth: 3 },
             { id: 'section-execution', text: 'Execution Guide', depth: 2 },
+            { id: '100%', text: '100% Target Coverage', depth: 2 },
           ]}
           spy={true}
         />
@@ -151,6 +152,13 @@ const title = isPageB ? 'Primitives Fixture - Page B' : 'Primitives Fixture - Pa
           </Heading>
           <p id="para-exec">
             Execute verification commands to ensure zero console errors across all profiles.
+          </p>
+
+          <Heading level={2} id="100%" anchor anchorLabel="Direct link to 100% Target Coverage">
+            100% Target Coverage
+          </Heading>
+          <p id="para-100">
+            Target coverage verified without percent-decoding runtime exceptions.
           </p>
         </div>
       </div>

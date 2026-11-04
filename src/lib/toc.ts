@@ -8,6 +8,7 @@
  * Strictly adheres to:
  * - Zero external runtime dependencies.
  * - Updates only `aria-current="location"` without mutating browser history or stealing focus.
+ * - Safely handles URI-encoded, raw, and malformed URL fragments without crashing.
  * - Dynamically calculates sticky offsets from `[data-sticky-header]` or custom selectors.
  * - Handles View Transitions (`astro:before-swap` / `astro:after-swap` / `astro:page-load`).
  * - Disconnects on DOM removal or editor surface detection.
@@ -18,6 +19,42 @@ export interface TocSpyOptions {
   contentId?: string;
   offsetIds?: readonly string[];
   signal?: AbortSignal;
+}
+
+/**
+ * Safely extracts possible target IDs from a fragment href without throwing on malformed URIs.
+ */
+export function getTargetIdsFromHref(href: string | null): string[] {
+  if (!href || !href.startsWith('#')) return [];
+  const raw = href.slice(1);
+  if (!raw) return [];
+
+  const ids = [raw];
+  try {
+    const decoded = decodeURIComponent(raw);
+    if (decoded && decoded !== raw) {
+      ids.push(decoded);
+    }
+  } catch {
+    // Malformed URI sequence (e.g. #100%) - isolate error, fallback to raw fragment string
+  }
+  return ids;
+}
+
+/**
+ * Checks whether an anchor link matches a given heading element ID, handling both encoded and literal matches.
+ */
+export function linkMatchesHeadingId(link: HTMLAnchorElement, headingId: string): boolean {
+  const href = link.getAttribute('href');
+  if (!href || !href.startsWith('#')) return false;
+  const raw = href.slice(1);
+  if (raw === headingId) return true;
+
+  try {
+    return decodeURIComponent(raw) === headingId;
+  } catch {
+    return false;
+  }
 }
 
 export class TocSpyController {
@@ -75,13 +112,12 @@ export class TocSpyController {
       return;
     }
 
-    // Collect target headings matching TOC link fragments
+    // Collect target headings matching TOC link fragments (both raw and decoded)
     const targetIds = new Set<string>();
     for (const link of this.links) {
       const href = link.getAttribute('href');
-      if (href && href.startsWith('#')) {
-        const id = decodeURIComponent(href.slice(1));
-        if (id) targetIds.add(id);
+      for (const targetId of getTargetIdsFromHref(href)) {
+        targetIds.add(targetId);
       }
     }
 
@@ -248,19 +284,16 @@ export class TocSpyController {
 
   private setActiveLink(activeId: string | null): void {
     for (const link of this.links) {
-      const href = link.getAttribute('href');
-      const targetId = href && href.startsWith('#') ? decodeURIComponent(href.slice(1)) : null;
+      const isMatch = Boolean(activeId && linkMatchesHeadingId(link, activeId));
 
-      if (activeId && targetId === activeId) {
+      if (isMatch) {
         if (link.getAttribute('aria-current') !== 'location') {
           link.setAttribute('aria-current', 'location');
         }
-        link.classList.add('is-active');
       } else {
         if (link.hasAttribute('aria-current')) {
           link.removeAttribute('aria-current');
         }
-        link.classList.remove('is-active');
       }
     }
   }

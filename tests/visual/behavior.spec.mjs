@@ -963,16 +963,33 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   await expect(steps).toHaveAttribute('role', 'list');
   const stepItems = steps.locator('li.steps__item');
   expect(await stepItems.count()).toBe(2);
+  await expect(stepItems.nth(0)).toHaveAttribute('value', '1');
   await expect(stepItems.nth(0).locator('.steps__number')).toHaveText('1');
   await expect(stepItems.nth(0).locator('#step-headings-content')).toContainText('Render semantic h1-h6');
+  await expect(stepItems.nth(1)).toHaveAttribute('value', '2');
   await expect(stepItems.nth(1).locator('.steps__number')).toHaveText('2');
   await expect(stepItems.nth(1).locator('#step-toc-content')).toContainText('Progressively enhance');
 
-  // D. TableOfContents and Scroll Spy: verify nested structure and dead-zone-free highlighting
+  // Verify RTL layout uses logical inline alignment on connector line
+  await steps.evaluate((el) => el.setAttribute('dir', 'rtl'));
+  const rtlMarkerInlineStart = await steps.evaluate(() => {
+    const item = document.querySelector('#fixture-steps li.steps__item');
+    return item ? window.getComputedStyle(item, '::before').getPropertyValue('inset-inline-start') : '';
+  });
+  expect(rtlMarkerInlineStart).toBeTruthy();
+  await steps.evaluate((el) => el.removeAttribute('dir'));
+
+  // D. TableOfContents and Scroll Spy: verify nested structure, fragment encoding, and dead-zone-free highlighting
   const tocNav = page.locator('#fixture-toc');
   await expect(tocNav).toHaveAttribute('aria-label', 'On this page');
   const tocLinks = tocNav.locator('a[data-toc-link]');
-  expect(await tocLinks.count()).toBe(3);
+  expect(await tocLinks.count()).toBe(4);
+
+  // Assert percent-containing heading target does not crash TOC initialization and encodes fragment safely
+  const link100 = tocNav.locator('a[href="#100%25"]');
+  await expect(link100).toHaveText('100% Target Coverage');
+  const heading100 = page.locator('h2[id="100%"]');
+  await expect(heading100.locator('a.heading-anchor')).toHaveAttribute('href', '#100%25');
 
   // Link 0 (Architecture Overview) should be active when scrolled near top
   const archLink = tocNav.locator('a[href="#section-architecture"]');
@@ -985,6 +1002,9 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   // In the dead zone between headings, the architecture link MUST remain active!
   await expect(archLink).toHaveAttribute('aria-current', 'location');
   await expect(primLink).not.toHaveAttribute('aria-current', 'location');
+  // ARIA-only contract: verify class list does not toggle .is-active
+  const archClass = await archLink.getAttribute('class');
+  expect(archClass).not.toContain('is-active');
 
   // Scroll into primitives heading (aligned to top)
   await page.locator('#section-primitives').evaluate((el) => el.scrollIntoView({ block: 'start' }));
@@ -992,10 +1012,10 @@ test('interaction primitives: accessible tabs keyboard navigation, syncKey peer 
   await expect(primLink).toHaveAttribute('aria-current', 'location');
   await expect(archLink).not.toHaveAttribute('aria-current', 'location');
 
-  // Scroll to bottom of page (execution heading)
-  await page.locator('#section-execution').evaluate((el) => el.scrollIntoView({ block: 'start' }));
+  // Scroll to bottom of page (100% heading)
+  await heading100.evaluate((el) => el.scrollIntoView({ block: 'start' }));
   await page.waitForTimeout(100);
-  await expect(execLink).toHaveAttribute('aria-current', 'location');
+  await expect(link100).toHaveAttribute('aria-current', 'location');
   await expect(primLink).not.toHaveAttribute('aria-current', 'location');
 
   expect(problems).toEqual([]);

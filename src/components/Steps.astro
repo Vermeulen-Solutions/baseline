@@ -38,7 +38,7 @@ if (!items || items.length === 0) {
   {items.map((item, index) => {
     const stepNumber = item.number ?? (start + index);
     return (
-      <li class="steps__item" data-step={stepNumber}>
+      <li class="steps__item" data-step={stepNumber} value={stepNumber}>
         <div class="steps__marker" aria-hidden="true">
           <span class="steps__number">{stepNumber}</span>
         </div>
@@ -64,7 +64,7 @@ if (!items || items.length === 0) {
 
       list-style: none;
       padding: 0;
-      margin: var(--spacing-content, 1.5rem) 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
     }
@@ -74,21 +74,21 @@ if (!items || items.length === 0) {
       grid-template-columns: var(--steps-marker-size) 1fr;
       column-gap: calc(var(--spacing-content, 1.5rem) * 0.75);
       position: relative;
-      padding-bottom: var(--spacing-content, 1.5rem);
+      padding-block-end: var(--spacing-content, 1.5rem);
     }
 
     .steps__item:last-child {
-      padding-bottom: 0;
+      padding-block-end: 0;
     }
 
-    /* Vertical connector line between step markers */
+    /* Vertical connector line between step markers, using CSS logical properties for RTL alignment */
     .steps__item::before {
       content: '';
       position: absolute;
-      left: calc(var(--steps-marker-size) / 2 - var(--steps-line-width) / 2);
-      top: var(--steps-marker-size);
-      bottom: 0;
-      width: var(--steps-line-width);
+      inset-inline-start: calc(var(--steps-marker-size) / 2 - var(--steps-line-width) / 2);
+      inset-block-start: var(--steps-marker-size);
+      inset-block-end: 0;
+      inline-size: var(--steps-line-width);
       background: var(--steps-line-color);
     }
 
@@ -97,8 +97,8 @@ if (!items || items.length === 0) {
     }
 
     .steps__marker {
-      width: var(--steps-marker-size);
-      height: var(--steps-marker-size);
+      inline-size: var(--steps-marker-size);
+      block-size: var(--steps-marker-size);
       border-radius: 50%;
       border: var(--steps-line-width) solid var(--steps-accent);
       background: var(--steps-marker-bg);

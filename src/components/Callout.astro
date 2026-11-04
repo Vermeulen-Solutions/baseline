@@ -53,35 +53,35 @@ const normalizedKind: CalloutKind = validKinds.has(kind) ? kind : 'note';
 <style>
   @layer components {
     .callout {
-      --callout-accent: var(--color-action, #0969da);
-      --callout-bg: color-mix(in oklch, var(--callout-accent) 6%, var(--color-surface, #ffffff));
-      --callout-border: color-mix(in oklch, var(--callout-accent) 25%, transparent);
+      --callout-accent: var(--color-callout-accent, var(--color-link, var(--color-action)));
+      --callout-bg: var(--color-callout-bg, color-mix(in oklch, var(--callout-accent) 6%, var(--color-surface)));
+      --callout-border: var(--color-callout-border, color-mix(in oklch, var(--callout-accent) 25%, var(--color-border)));
 
       padding: calc(var(--spacing-content, 1.5rem) * 0.75);
       border-radius: var(--radius-control, 6px);
       border: 1px solid var(--callout-border);
       border-inline-start: 4px solid var(--callout-accent);
       background: var(--callout-bg);
-      margin-block: var(--spacing-content, 1.5rem);
+      margin: 0;
       display: flex;
       flex-direction: column;
       gap: calc(var(--spacing-content, 1.5rem) * 0.5);
     }
 
     .callout--note {
-      --callout-accent: oklch(55% 0.14 240);
+      --callout-accent: var(--color-callout-note, var(--color-link, var(--color-action)));
     }
 
     .callout--tip {
-      --callout-accent: oklch(58% 0.16 145);
+      --callout-accent: var(--color-callout-tip, color-mix(in oklch, var(--color-action) 60%, oklch(65% 0.18 145)));
     }
 
     .callout--caution {
-      --callout-accent: oklch(65% 0.16 75);
+      --callout-accent: var(--color-callout-caution, color-mix(in oklch, var(--color-action) 35%, oklch(70% 0.17 75)));
     }
 
     .callout--danger {
-      --callout-accent: oklch(55% 0.20 28);
+      --callout-accent: var(--color-callout-danger, color-mix(in oklch, var(--color-text) 30%, oklch(58% 0.22 28)));
     }
 
     .callout__title {

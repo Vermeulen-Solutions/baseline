@@ -70,6 +70,7 @@
     "src/components/EditorialImage.astro",
     "src/components/EmDashImage.astro",
     "src/components/PhotoGallery.astro",
+    "src/components/PortableTextHeading.astro",
     "src/components/RichText.astro",
     "src/env.d.ts",
     "src/layouts/Base.astro",
