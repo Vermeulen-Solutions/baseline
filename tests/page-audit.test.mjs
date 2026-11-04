@@ -5,6 +5,8 @@ import path from 'node:path';
 import os from 'node:os';
 import http from 'node:http';
 import { once } from 'node:events';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { auditPage, layoutShiftWindow, localPageURL, pageAuditOptions, pageRequestPolicy, parsePageAuditArgs, preparePageAuditOutput, publicResourceURL } from '../scripts/audit-page.mjs';
 
 function fixture(run) {
@@ -195,3 +197,19 @@ if (process.env.BASELINE_PAGE_BROWSER_TESTS === '1') {
     } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
   }));
 }
+
+test('CLI refusals name the option and rule without echoing supplied values', () => {
+  const cli = fileURLToPath(new URL('../scripts/audit-page.mjs', import.meta.url));
+  const run = (...args) => spawnSync(process.execPath, [cli, ...args], { encoding: 'utf8', env: { ...process.env, CI: '', GITHUB_ACTIONS: '' } });
+  const label = run('--url', 'http://127.0.0.1:4321/', '--out', '.emdash/checks/never-created', '--label', 'build with spaces');
+  assert.equal(label.status, 2);
+  assert.match(label.stderr, /Page evidence refused: --label must be 1-120 characters .*no spaces/);
+  assert.doesNotMatch(label.stderr, /build with spaces/);
+  const secret = run('--url', 'http://user:hunter2@127.0.0.1:4321/', '--out', '.emdash/checks/never-created');
+  assert.match(secret.stderr, /--url must use http:\/\/ on 127\.0\.0\.1/);
+  assert.doesNotMatch(secret.stderr, /hunter2/);
+  assert.match(run('--url', 'http://127.0.0.1:4321/', '--out', '.emdash/checks/x', '--runs', '9').stderr, /--runs must be a whole number from 1 to 5/);
+  const unknown = run('--token', 'sk-private');
+  assert.match(unknown.stderr, /position 1; options: --url, --out/);
+  assert.doesNotMatch(unknown.stderr, /sk-private|--token/);
+});

@@ -278,6 +278,122 @@ export const AESTHETIC_LANES = {
   },
 };
 
+/**
+ * Baseline starter values for every required contract token, mirroring the root
+ * src/styles/global.css. Older sites use them only as reviewed suggestions when
+ * adopting the contract (`--add-missing`); they are not client calibration.
+ */
+export const CONTRACT_STARTER_VALUES = {
+  theme: {
+    '--font-body': 'ui-sans-serif, system-ui, sans-serif',
+    '--font-display': 'ui-sans-serif, system-ui, sans-serif',
+    '--font-mono': 'ui-monospace, Menlo, Consolas, "Liberation Mono", monospace',
+    '--font-accent': 'Georgia, Cambria, "Times New Roman", Times, serif',
+    '--text-step--1': 'clamp(0.875rem, calc(0.8333rem + 0.2083vi), 1rem)',
+    '--text-step-0': 'clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)',
+    '--text-step-1': 'clamp(1.25rem, calc(1rem + 1.25vi), 2rem)',
+    '--text-step-2': 'clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem)',
+    '--text-step-3-to-1': 'clamp(1.25rem, calc(0.25rem + 5vi), 4.25rem)',
+    '--text-step-2-to-0': 'clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem)',
+    '--spacing-content': 'clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)',
+    '--spacing-grid': 'clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem)',
+    '--spacing-container': 'clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)',
+    '--spacing-section': 'clamp(3rem, calc(1rem + 10vi), 9rem)',
+    '--spacing-2xl-to-md': 'clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem)',
+    '--spacing-xl-to-sm': 'clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem)',
+    '--color-page': 'oklch(99% 0.004 250)',
+    '--color-surface': 'oklch(100% 0 0)',
+    '--color-text': 'oklch(24% 0.02 260)',
+    '--color-muted': 'oklch(46% 0.02 260)',
+    '--color-border': 'oklch(85% 0.015 260)',
+    '--color-action': 'oklch(43% 0.14 250)',
+    '--color-on-action': 'oklch(100% 0 0)',
+    '--color-focus': 'oklch(52% 0.18 250)',
+    '--color-focus-on-dark': 'oklch(76% 0.13 250)',
+    '--radius-control': '0.375rem',
+    '--radius-card': '0.75rem',
+    '--shadow-sm': '0 2px 4px -1px oklch(from var(--color-text) l c h / 0.04), 0 4px 6px -1px oklch(from var(--color-text) l c h / 0.06), 0 8px 10px -2px oklch(from var(--color-text) l c h / 0.05)',
+    '--shadow-md': '0 2px 4px -2px oklch(from var(--color-text) l c h / 0.05), 0 6px 10px -2px oklch(from var(--color-text) l c h / 0.07), 0 14px 20px -4px oklch(from var(--color-text) l c h / 0.07), 0 24px 32px -6px oklch(from var(--color-text) l c h / 0.05)',
+    '--shadow-lg': '0 2px 4px -2px oklch(from var(--color-text) l c h / 0.04), 0 6px 12px -2px oklch(from var(--color-text) l c h / 0.06), 0 16px 24px -4px oklch(from var(--color-text) l c h / 0.07), 0 28px 36px -6px oklch(from var(--color-text) l c h / 0.07), 0 44px 52px -8px oklch(from var(--color-text) l c h / 0.06), 0 64px 72px -12px oklch(from var(--color-text) l c h / 0.05)',
+    '--ease-smooth': 'cubic-bezier(0.22, 1, 0.36, 1)',
+    '--ease-snappy': 'cubic-bezier(0.16, 1, 0.3, 1)',
+    '--ease-spring': 'linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1)',
+  },
+  root: {
+    '--color-link': 'var(--color-action)',
+    '--measure-reading': '68ch',
+    '--measure-content': '76rem',
+    '--measure-content-safe': 'min(var(--measure-content), calc(100% - var(--spacing-container) * 2))',
+    '--measure-wide': '88rem',
+    '--header-height': '0px',
+    '--scroll-offset': '1.5rem',
+    '--layout-section-padding': 'var(--spacing-section)',
+    '--layout-container-gap': 'var(--spacing-grid)',
+    '--layout-content-gap': 'var(--spacing-content)',
+    '--layout-grid-gap': 'var(--spacing-grid)',
+  },
+  dark: {
+    '--color-link': 'var(--surface-dark-link, var(--color-focus-on-dark))',
+    '--color-surface': 'var(--surface-dark-bg, oklch(18% 0.02 260))',
+    '--color-text': 'var(--surface-dark-text, oklch(96% 0.005 250))',
+    '--color-muted': 'var(--surface-dark-muted, oklch(72% 0.015 260))',
+    '--color-border': 'var(--surface-dark-border, oklch(30% 0.02 260))',
+    '--color-focus': 'var(--color-focus-on-dark)',
+  },
+};
+
+const REQUIRED_BY_SCOPE = { theme: REQUIRED_THEME_TOKENS, root: REQUIRED_ROOT_TOKENS, dark: REQUIRED_DARK_SURFACE_TOKENS };
+const SCOPE_SELECTORS = { root: ':root', dark: '[data-surface="dark"]' };
+
+/**
+ * Reports which required contract tokens and scope blocks a stylesheet lacks, with
+ * Baseline starter values as suggestions. Older sites adopting the token workflow
+ * use this to plan their migration; suggestions still need calibration.
+ */
+export function contractGap(css) {
+  const { scopes } = tokenScopes(css);
+  const tokens = parseDesignTokens(css);
+  const missing = [];
+  for (const [scope, list] of Object.entries(REQUIRED_BY_SCOPE)) {
+    for (const token of list) {
+      if (!tokens[scope][token]) missing.push({ scope, token, suggestion: CONTRACT_STARTER_VALUES[scope][token], source: 'baseline-starter' });
+    }
+  }
+  return {
+    complete: missing.length === 0,
+    missing,
+    missingScopes: Object.keys(REQUIRED_BY_SCOPE).filter(scope => !scopes[scope].length),
+  };
+}
+
+/**
+ * Inserts every missing required token with its starter suggestion, appending to the
+ * existing scope block or creating the `:root` / `[data-surface="dark"]` block beside
+ * the existing token blocks. Existing declarations are never changed.
+ */
+export function addMissingContractTokens(css) {
+  const gap = contractGap(css);
+  if (gap.complete) return css;
+  const { ast, scopes } = tokenScopes(css);
+  for (const scope of ['theme', 'root', 'dark']) {
+    const items = gap.missing.filter(item => item.scope === scope);
+    if (!items.length) continue;
+    let node = scopes[scope][0];
+    if (!node) {
+      if (scope === 'theme') throw new Error('Cannot add missing @theme tokens: the stylesheet has no @theme block. Add one first.');
+      const anchor = scope === 'dark' ? (scopes.root[0] ?? scopes.theme[0]) : scopes.theme[0];
+      if (!anchor) throw new Error(`Cannot place a new ${SCOPE_SELECTORS[scope]} block: the stylesheet has no @theme or :root block.`);
+      node = postcss.rule({ selector: SCOPE_SELECTORS[scope], raws: { between: ' ' } });
+      anchor.after(node);
+      scopes[scope].push(node);
+    }
+    for (const { token, suggestion } of items) node.append(postcss.decl({ prop: token, value: suggestion }));
+  }
+  const result = ast.toString();
+  tokenScopes(result);
+  return result;
+}
+
 function tokenScopes(css) {
   const ast = postcss.parse(css);
   const scopes = { theme: [], root: [], dark: [], light: [] };
@@ -615,6 +731,7 @@ export function auditDesignTokens(css) {
     contrast,
     fluid,
     spacing,
+    contract: contractGap(css),
     diagnostics: tokenDiagnostics({ errors, fluid }),
   };
 }
@@ -1166,7 +1283,10 @@ export function applyTokenOverrides(css, presetOrOverrides) {
   for (const scope of ['theme','root','dark','light']) {
     for (const [name,value] of Object.entries(preset[scope] || {})) {
       const decl = scopes[scope][0]?.nodes?.find(n=>n.type==='decl' && n.prop===name);
-      if (!decl) throw new Error('Unknown token in ' + scope + ': ' + name + '; expected an existing declaration in that scope.');
+      if (!decl) {
+        const required = REQUIRED_BY_SCOPE[scope]?.includes(name);
+        throw new Error('Unknown token in ' + scope + ': ' + name + '; expected an existing declaration in that scope.' + (required ? ' It is a required contract token: add --add-missing to insert it first.' : ''));
+      }
       if (typeof value !== 'string' || !value.trim() || /[;{}]/.test(value)) throw new Error('Invalid token value for ' + scope + ':' + name);
       decl.value = value.trim();
     }
@@ -1225,6 +1345,11 @@ export function formatTokenDiagnostics(report, cssPath, css) {
       ];
     }),
     ...report.errors.map(error => `  - ${error}`),
+    ...(report.contract && !report.contract.complete ? [
+      `Contract gap: ${report.contract.missing.length} required token(s) missing${report.contract.missingScopes.length ? ` (no ${report.contract.missingScopes.map(scope => SCOPE_SELECTORS[scope] ?? '@theme').join(', ')} block)` : ''}. This is expected on a site created before the current token contract.`,
+      `  Preview them with Baseline starter values: npm run design:tokens -- --css "${cssPath}" --add-missing`,
+      '  Starter values are suggestions, not calibration: adding them can change rendering, so review them as a visual change.',
+    ] : []),
     `Remediation: edit the affected scoped tokens in ${cssPath}, then run npm run design:tokens -- --css "${cssPath}".`,
   ].join('\n');
 }
@@ -1293,13 +1418,20 @@ function main() {
     hasMutationRequest = true;
   }
 
+  const addMissing = args.includes('--add-missing');
+  if (addMissing) hasMutationRequest = true;
+
   if (initClient && !hasMutationRequest) {
     combinedOverrides = mergeOverrides(combinedOverrides, AESTHETIC_LANES[selectedLaneId]);
     hasMutationRequest = true;
   }
 
   const source = readFileSync(cssPath, 'utf8');
-  const css = hasMutationRequest ? applyTokenOverrides(source,combinedOverrides) : source;
+  const sourceGap = contractGap(source);
+  // Missing tokens are inserted first so --set and presets can then adjust them.
+  const withContract = addMissing ? addMissingContractTokens(source) : source;
+  const css = hasMutationRequest ? applyTokenOverrides(withContract,combinedOverrides) : source;
+  const added = addMissing ? sourceGap.missing : undefined;
   const report = auditDesignTokens(css);
   const fontAudit = auditFontLoading(css, process.cwd(), cssPath);
   const fontDiagnostics = [
@@ -1308,15 +1440,38 @@ function main() {
     ...fontAudit.preflight.advisories.map((issue,index) => ({ id: `font-source:${index+1}`, status: 'unverified', actionability: 'verification_required', ...issue })),
   ];
   const proxyAudit = auditEditProxies();
+  const saving = args.includes('--write') || initClient;
   if (!(report.valid && fontAudit.valid && proxyAudit.valid)) {
-    if(args.includes('--json'))console.log(JSON.stringify({...report,diagnostics:[...report.diagnostics,...fontDiagnostics],valid:false,fontLoading:fontAudit,editProxies:proxyAudit,sha256:stylesheetDigest(css)},null,2));
+    // A candidate on an already-failing stylesheet is still previewed, compared with the
+    // source, so older sites can plan a migration. Saving still requires a valid candidate.
+    let preview;
+    if (hasMutationRequest) {
+      const sourceErrors = css === source ? report.errors : auditDesignTokens(source).errors;
+      preview = {
+        mode: saving ? 'refused' : css === source ? 'no-op' : 'preview',
+        changes: combinedOverrides,
+        added,
+        comparison: {
+          sourceErrors: sourceErrors.length,
+          candidateErrors: report.errors.length,
+          resolved: sourceErrors.filter(error => !report.errors.includes(error)),
+          introduced: report.errors.filter(error => !sourceErrors.includes(error)),
+        },
+      };
+    }
+    if(args.includes('--json'))console.log(JSON.stringify({...report,...preview,diagnostics:[...report.diagnostics,...fontDiagnostics],valid:false,fontLoading:fontAudit,editProxies:proxyAudit,sha256:stylesheetDigest(css)},null,2));
     else {
       console.error(formatTokenDiagnostics(report,cssPath,css));
       const other=[...fontAudit.warnings,...proxyAudit.issues];if(other.length)console.error(other.join('\n'));
+      if (preview) {
+        const { comparison } = preview;
+        console.error(`${saving ? 'Not saved' : 'Preview (not saved)'}: the candidate still fails. Source errors ${comparison.sourceErrors} -> candidate ${comparison.candidateErrors}; ${comparison.resolved.length} resolved, ${comparison.introduced.length} introduced.`);
+        if (added?.length) console.error(`Would add ${added.length} token(s): ${added.map(item => item.scope + ':' + item.token).join(', ')}`);
+        for (const error of comparison.introduced) console.error(`  introduced: ${error}`);
+      }
     }
     process.exitCode=1; return;
   }
-  const saving = args.includes('--write') || initClient;
   const recordIndex = args.indexOf('--write-record');
   const calIndex = args.indexOf('--write-calibration');
   const announce = message => (args.includes('--json') ? console.error : console.log)(message);
@@ -1341,7 +1496,7 @@ function main() {
     announce('Wrote saved-source calibration to ' + upsertCalibrationRecord(target,css,cssPath));
     if(!args.includes('--json'))return;
   }
-  if(hasMutationRequest && !saving && !args.includes('--json'))console.log(JSON.stringify({mode:css===source?'no-op':'preview',changes:combinedOverrides,spacing:report.spacing},null,2));
+  if(hasMutationRequest && !saving && !args.includes('--json'))console.log(JSON.stringify({mode:css===source?'no-op':'preview',changes:combinedOverrides,added,spacing:report.spacing},null,2));
 
   const allValid = report.valid && fontAudit.valid && proxyAudit.valid;
 
@@ -1355,6 +1510,7 @@ function main() {
       ],
       mode:hasMutationRequest ? (css===source ? "no-op" : saving ? "saved" : "preview") : "audit",
       changes:hasMutationRequest ? combinedOverrides : undefined,
+      added,
       valid: allValid,
       fontLoading: fontAudit,
       editProxies: proxyAudit,

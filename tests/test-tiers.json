@@ -254,5 +254,9 @@
   "font-preflight.test.mjs": {
     "tier": "unit",
     "reason": "Read-only bounded font-face, exact-path case, format/header and typography-role diagnostics"
+  },
+  "token-contract.test.mjs": {
+    "tier": "unit",
+    "reason": "Synthetic older-site token sets: contract gap report, starter suggestions, --add-missing insertion and preview/refusal on an incomplete base"
   }
 }

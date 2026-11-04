@@ -108,6 +108,19 @@ async function receiptAt(root, kind, id) {
   for (const relative of ['.agents', '.agents/skills', '.emdash', '.emdash/skill-sync', `.emdash/skill-sync/${id}`, `.emdash/skill-sync/${id}/incoming`]) if ((await fs.lstat(path.join(root, relative))).isSymbolicLink()) throw Error('Symlinked managed root');
   return { directory, receipt };
 }
+// Windows reports EPERM/EBUSY/EACCES while another process (dev server watcher, editor,
+// indexer, antivirus) holds a file in the directory open. Short locks clear within a second.
+const LOCKED = new Set(['EPERM', 'EBUSY', 'EACCES']);
+async function move(from, to, rename = fs.rename) {
+  for (let attempt = 0; ; attempt++) {
+    try { return await rename(from, to); }
+    catch (error) { if (!LOCKED.has(error.code) || attempt >= 4) throw error; await new Promise(resolve => setTimeout(resolve, 100 * 2 ** attempt)); }
+  }
+}
+function explainLocked(error, id) {
+  if (!LOCKED.has(error?.code)) return error;
+  return Object.assign(Error(`Could not move a skill directory (${error.code}): another process has files under .agents/skills open. On Windows this is usually a running dev server (astro dev, wrangler dev), an editor or a file indexer. Stop it, then run --apply ${id} again; every change was rolled back.`, { cause: error }), { code: error.code });
+}
 async function withLock(root, action) {
   await safeParents(root, '.emdash');
   await fs.mkdir(path.join(root, '.emdash'), { recursive: true });
@@ -118,13 +131,17 @@ async function withLock(root, action) {
 export async function applySync(root, kind, id, resolution, hooks = {}) {
   return withLock(root, async () => {
     const { directory, receipt } = await receiptAt(root, kind, id), config = sources[kind];
-    if (await exists(path.join(directory, 'journal.json'))) throw Error('Stage already applied or interrupted; inspect/recover it first');
+    const previous = await json(path.join(directory, 'journal.json'));
+    if (previous && previous.state !== 'rolled-back') throw Error('Stage already applied or interrupted; inspect/recover it first');
     const targetRoot = path.join(root, '.agents', 'skills');
     if (!equal(await inventory(targetRoot, config.skills), receipt.local)) throw Error('Local files changed since review');
     const manifest = path.join(root, '.emdash', config.manifest), before = await fs.readFile(manifest).catch(e => { if (e.code === 'ENOENT') return Buffer.alloc(0); throw e; });
     if (hash(before) !== receipt.previousManifestHash) throw Error('Manifest changed since review');
     if (!equal(await inventory(path.join(directory, 'incoming'), config.skills), receipt.incoming)) throw Error('Staged bytes changed since review');
     if (receipt.conflicts.length && (resolution?.reviewSha256 !== hash(await fs.readFile(path.join(directory, 'review.json'))) || JSON.stringify([...(resolution.replacePaths ?? [])].sort()) !== JSON.stringify(receipt.conflicts))) throw Error('Local drift requires a reviewed exact-path resolution; originals will be retained in backup');
+    // A cleanly rolled-back stage can be applied again once the checks above pass: rollback
+    // leaves its backup directory empty (rmdir refuses a non-empty one).
+    if (previous) await fs.rmdir(path.join(directory, 'backup'));
     await fs.mkdir(path.join(directory, 'backup'));
     await fs.writeFile(path.join(directory, 'previous-manifest'), before);
     const journal = { state: 'applying', moved: [], manifestWritten: false };
@@ -134,15 +151,15 @@ export async function applySync(root, kind, id, resolution, hooks = {}) {
         const target = contained(targetRoot, skill), backup = contained(path.join(directory, 'backup'), skill);
         journal.moved.push({ skill, existed: await exists(target) });
         await fs.writeFile(path.join(directory, 'journal.json'), JSON.stringify(journal));
-        if (await exists(target)) await fs.rename(target, backup);
+        if (await exists(target)) await move(target, backup, hooks.rename);
         await hooks.afterBackup?.(skill);
-        await fs.rename(contained(path.join(directory, 'incoming'), skill), target);
+        await move(contained(path.join(directory, 'incoming'), skill), target, hooks.rename);
       }
       const next = { formatVersion: 2, source: `https://github.com/${receipt.repository}/tree/${receipt.commitSha}/${config.prefix}`, ref: receipt.commitSha, commitSha: receipt.commitSha, skills: config.skills, files: receipt.incoming, syncedAt: new Date().toISOString() };
       await fs.writeFile(manifest + '.next', JSON.stringify(next, null, 2) + '\n'); await fs.rename(manifest + '.next', manifest);
       journal.manifestWritten = true; journal.state = 'complete';
       await fs.writeFile(path.join(directory, 'journal.json'), JSON.stringify(journal));
-    } catch (error) { await rollback(root, kind, directory, receipt, journal); throw error; }
+    } catch (error) { await rollback(root, kind, directory, receipt, journal); throw explainLocked(error, id); }
     return { status: 'applied', backup: directory, commitSha: receipt.commitSha };
   });
 }
@@ -156,9 +173,9 @@ async function rollback(root, kind, directory, receipt, journal) {
       const incoming = Object.fromEntries(Object.entries(receipt.incoming).filter(([p]) => p.startsWith(skill + '/')));
       if (!await exists(backup) && existed && equal(now, before)) continue;
       if (!equal(now, incoming)) throw Error('Recovery found later local changes; preserved backup needs manual review: ' + skill);
-      await fs.rename(target, path.join(directory, 'incoming', skill));
+      await move(target, path.join(directory, 'incoming', skill));
     }
-    if (existed && await exists(backup)) await fs.rename(backup, target);
+    if (existed && await exists(backup)) await move(backup, target);
   }
   const previous = await fs.readFile(path.join(directory, 'previous-manifest'));
   const manifest = path.join(root, '.emdash', sources[kind].manifest);

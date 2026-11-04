@@ -1063,6 +1063,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "tests/token-contract.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "docs/native-composition.md": {
       "disposition": "shared",
       "static": "copy"

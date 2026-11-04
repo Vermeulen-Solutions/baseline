@@ -6,7 +6,10 @@ import os from 'node:os';
 import { createHash } from 'node:crypto';
 import { auditFontPreflight } from '../scripts/font-preflight.mjs';
 
-const realFont = fs.readFileSync(new URL('../node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff2', import.meta.url));
+// Fixture font from the @fontsource/noto-sans development dependency, which this suite needs.
+const fixtureFont = new URL('../node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff2', import.meta.url);
+if (!fs.existsSync(fixtureFont)) throw new Error('tests/font-preflight.test.mjs needs the @fontsource/noto-sans development dependency for its fixture font. Install the version pinned by Baseline (npm install --save-dev --save-exact @fontsource/noto-sans@<version>) or skip this suite.');
+const realFont = fs.readFileSync(fixtureFont);
 const roles = '@theme { --font-body: "Fixture Face", sans-serif; --font-display: var(--font-body); --font-accent: var(--font-display); --font-mono: ui-monospace, monospace; }';
 const face = (url = '/fonts/Fixture.woff2', extra = '') => `@font-face { font-family: "Fixture Face"; src: url("${url}") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; ${extra} }`;
 function fixture(run) {

@@ -108,3 +108,39 @@ test('skill apply refuses post-review edits and symlinks; managed distribution i
     await fs.unlink(path.join(root, '.agents', 'skills', 'link'));
   } finally { assert.equal(path.dirname(root), path.resolve(os.tmpdir())); assert.ok(path.basename(root).startsWith('emdash-sync-test-')); await fs.rm(root, { recursive: true, force: true }); }
 });
+
+test('a locked skill directory is retried, then rolled back with a clear cause, and the same stage applies afterwards', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-sync-test-'));
+  try {
+    const config = sources.emdash, files = {};
+    for (const name of config.skills) {
+      files[name + '/SKILL.md'] = { bytes: Buffer.from('# upstream v2\n'), mode: '100644' };
+      await fs.mkdir(path.join(root, '.agents', 'skills', name), { recursive: true });
+      await fs.writeFile(path.join(root, '.agents', 'skills', name, 'SKILL.md'), '# upstream v1\n');
+    }
+    await fs.mkdir(path.join(root, '.emdash'));
+    const before = await inventory(path.join(root, '.agents', 'skills'), config.skills);
+    await fs.writeFile(path.join(root, '.emdash', config.manifest), JSON.stringify({ commitSha: 'd'.repeat(40), files: before }));
+    const candidate = { commitSha: 'e'.repeat(40), files };
+    const report = await review(root, config, candidate);
+    assert.deepEqual(report.conflicts, []);
+    const id = await stageSync(root, 'emdash', config, candidate, report);
+    const locked = () => Object.assign(Error('EPERM: operation not permitted, rename'), { code: 'EPERM' });
+
+    // A lock that never clears (a running dev server watching the directory).
+    let attempts = 0;
+    const persistent = { rename: async (from, to) => { if (from.endsWith(config.skills[1]) && !from.includes('incoming')) { attempts++; throw locked(); } return fs.rename(from, to); } };
+    await assert.rejects(applySync(root, 'emdash', id, null, persistent), error => error.code === 'EPERM' && /running dev server/.test(error.message) && error.message.includes(`--apply ${id}`));
+    assert.equal(attempts, 5, 'retried before giving up');
+    assert.deepEqual(await inventory(path.join(root, '.agents', 'skills'), config.skills), before, 'every change rolled back');
+    assert.equal(JSON.parse(await fs.readFile(path.join(root, '.emdash', 'skill-sync', id, 'journal.json'), 'utf8')).state, 'rolled-back');
+
+    // A transient lock clears after one retry; the same stage now applies without restaging.
+    let failedOnce = false;
+    const transient = { rename: async (from, to) => { if (!failedOnce && from.endsWith(config.skills[0]) && !from.includes('incoming')) { failedOnce = true; throw locked(); } return fs.rename(from, to); } };
+    assert.equal((await applySync(root, 'emdash', id, null, transient)).status, 'applied');
+    assert.equal(failedOnce, true);
+    assert.equal((await review(root, config, candidate)).status, 'current');
+    await assert.rejects(applySync(root, 'emdash', id), /already applied/);
+  } finally { assert.equal(path.dirname(root), path.resolve(os.tmpdir())); assert.ok(path.basename(root).startsWith('emdash-sync-test-')); await fs.rm(root, { recursive: true, force: true }); }
+});

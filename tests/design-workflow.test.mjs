@@ -255,3 +255,14 @@ test('global.css defines directional navigation keyframes and reduced-motion fal
   assert.ok(css.includes(':root[data-vt-direction]::view-transition-old(root)'));
   assert.ok(css.includes(':root[data-vt-direction]::view-transition-new(root)'));
 });
+
+test('contract starter suggestions mirror the starter stylesheet', async () => {
+  const { CONTRACT_STARTER_VALUES } = await import('../scripts/design-system.mjs');
+  const tokens = parseDesignTokens(readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8'));
+  const normalize = value => value.replace(/\s+/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').trim();
+  for (const scope of ['theme', 'root', 'dark']) {
+    for (const [token, value] of Object.entries(CONTRACT_STARTER_VALUES[scope])) {
+      assert.equal(normalize(value), normalize(tokens[scope][token] ?? ''), `${scope}:${token}`);
+    }
+  }
+});

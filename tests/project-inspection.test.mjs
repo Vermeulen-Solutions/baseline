@@ -8,6 +8,9 @@ import { spawnSync } from 'node:child_process';
 import { inspectProject } from '../scripts/inspect-project.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+// The first case inspects the Baseline source repository itself (Node/SQLite, audit:html, Grid gap).
+// Installed sites that copy this suite skip it; the fixture-based cases below are portable.
+const baselineSource = fs.existsSync(path.join(root, 'profiles/contract.mjs'));
 function fixture(run) {
   const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-inspection-'));
   const write = (name, source) => { const file = path.join(directory, name); fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, typeof source === 'string' ? source : JSON.stringify(source)); };
@@ -16,7 +19,7 @@ function fixture(run) {
   finally { assert.equal(path.dirname(directory), path.resolve(os.tmpdir())); assert.ok(path.basename(directory).startsWith('baseline-inspection-')); fs.rmSync(directory, { recursive: true, force: true }); }
 }
 
-test('installed CMS discovery follows sources without changing files or claiming runtime health', () => {
+test('installed CMS discovery follows sources without changing files or claiming runtime health', { skip: !baselineSource && 'inspects the Baseline source repository only' }, () => {
   const before = fs.readFileSync(path.join(root, 'package.json'));
   const report = inspectProject(root);
   assert.equal(report.profile.id, 'emdash');

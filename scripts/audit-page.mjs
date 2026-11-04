@@ -4,19 +4,22 @@ import { pathToFileURL } from 'node:url';
 
 const MAX_RESOURCES = 256;
 const FONT_SELECTORS = ['h1', 'main p', 'body'];
-const fail = message => { throw new Error(message); };
+// Refusal messages are fixed text that names the option and its rule but never echoes the
+// supplied value, which may contain credentials or private paths.
+class PageAuditRefusal extends Error {}
+const fail = message => { throw new PageAuditRefusal(message); };
 const decodedPath = url => { try { return decodeURIComponent(url.pathname); } catch { return '/_emdash/invalid-encoding'; } };
 const integer = (value, fallback, min, max, name) => {
   if (value === undefined) return fallback;
-  if (!/^\d+$/.test(String(value)) || !Number.isSafeInteger(Number(value)) || Number(value) < min || Number(value) > max) fail(`Invalid ${name}`);
+  if (!/^\d+$/.test(String(value)) || !Number.isSafeInteger(Number(value)) || Number(value) < min || Number(value) > max) fail(`--${name} must be a whole number from ${min} to ${max}`);
   return Number(value);
 };
 
 export function localPageURL(value) {
   let url;
-  try { url = new URL(value); } catch { fail('Use an explicit HTTP loopback page URL'); }
-  if (url.protocol !== 'http:' || !['127.0.0.1', '[::1]', 'localhost'].includes(url.hostname) || url.username || url.password || url.search || url.hash || /\s/.test(value)) fail('Use an HTTP loopback page without credentials, query or fragment');
-  if (/^\/(?:_emdash|admin|api)(?:\/|$)/i.test(decodedPath(url))) fail('Choose a public page, not an administrative/API endpoint');
+  try { url = new URL(value); } catch { fail('--url must be an explicit http:// loopback page URL (127.0.0.1, [::1] or localhost)'); }
+  if (url.protocol !== 'http:' || !['127.0.0.1', '[::1]', 'localhost'].includes(url.hostname) || url.username || url.password || url.search || url.hash || /\s/.test(value)) fail('--url must use http:// on 127.0.0.1, [::1] or localhost, without credentials, query string, fragment or spaces');
+  if (/^\/(?:_emdash|admin|api)(?:\/|$)/i.test(decodedPath(url))) fail('--url must be a public page, not an administrative or API endpoint (/_emdash, /admin, /api)');
   return url;
 }
 
@@ -42,10 +45,10 @@ export function pageRequestPolicy(value, origin, method, navigation = false) {
 
 export function pageAuditOptions(input) {
   const url = localPageURL(input.url);
-  if (typeof input.out !== 'string' || !input.out.trim()) fail('An explicit fresh output directory is required');
+  if (typeof input.out !== 'string' || !input.out.trim()) fail('--out is required: a new directory for the report');
   const out = path.resolve(input.out), relative = path.relative(process.cwd(), out).split(path.sep).join('/');
-  if (!relative.startsWith('../') && !path.isAbsolute(relative) && !['.emdash/checks/', '.emdash/visual/', '.baseline/backups/'].some(prefix => relative.startsWith(prefix))) fail('In-project output must use an ignored checks, visual or backup directory');
-  if (input.label !== undefined && !/^[A-Za-z0-9][A-Za-z0-9._/-]{0,119}$/.test(input.label)) fail('Use a short non-secret build label');
+  if (!relative.startsWith('../') && !path.isAbsolute(relative) && !['.emdash/checks/', '.emdash/visual/', '.baseline/backups/'].some(prefix => relative.startsWith(prefix))) fail('--out inside the project must be under .emdash/checks/, .emdash/visual/ or .baseline/backups/');
+  if (input.label !== undefined && !/^[A-Za-z0-9][A-Za-z0-9._/-]{0,119}$/.test(input.label)) fail('--label must be 1-120 characters of letters, digits, ".", "_", "/" or "-", starting with a letter or digit (no spaces); use a non-secret build reference');
   return {
     url: url.href, out, label: input.label ?? null,
     width: integer(input.width, 390, 240, 3840, 'width'), height: integer(input.height, 844, 240, 2160, 'height'),
@@ -60,7 +63,7 @@ export function parsePageAuditArgs(values) {
   const result = {};
   for (let i = 0; i < values.length; i++) {
     const key = flags[values[i]];
-    if (!key || Object.hasOwn(result, key) || !values[i + 1] || values[i + 1].startsWith('--')) fail('Unknown, duplicate or missing argument');
+    if (!key || Object.hasOwn(result, key) || !values[i + 1] || values[i + 1].startsWith('--')) fail(`Unknown, duplicate or valueless argument at position ${i + 1}; options: ${Object.keys(flags).join(', ')}`);
     result[key] = values[++i];
   }
   return pageAuditOptions(result);
@@ -267,5 +270,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       console.log(JSON.stringify({ status: report.status, runs: report.runs.length, report: path.join(options.out, 'page-evidence.json') }));
       if (report.status !== 'observed') process.exitCode = 2;
     }
-  } catch { console.error('Page evidence refused: invalid input, unsafe output or unsupported execution context.'); process.exitCode = 2; }
+  } catch (error) {
+    console.error(error instanceof PageAuditRefusal ? `Page evidence refused: ${error.message}.` : 'Page evidence refused: unsupported execution context or unexpected failure (details withheld).');
+    process.exitCode = 2;
+  }
 }
