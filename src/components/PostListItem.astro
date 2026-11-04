@@ -1,0 +1,28 @@
+---
+import { Image } from "emdash/ui";
+import type { Post } from "../../emdash-env";
+
+interface Props {
+	post: { id: string; data: Post };
+	showDate?: boolean;
+}
+
+const { post, showDate = false } = Astro.props;
+---
+
+<li class="collection-item">
+	<a href={`/posts/${post.id}`}>
+		{post.data.featured_image && <Image image={post.data.featured_image} />}
+		<h2>{post.data.title}</h2>
+	</a>
+	{post.data.excerpt && <p>{post.data.excerpt}</p>}
+	{showDate && post.data.publishedAt && (
+		<time datetime={post.data.publishedAt.toISOString()}>
+			{post.data.publishedAt.toLocaleDateString("en-US", {
+				year: "numeric",
+				month: "long",
+				day: "numeric",
+			})}
+		</time>
+	)}
+</li>

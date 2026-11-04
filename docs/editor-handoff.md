@@ -2,6 +2,12 @@
 
 This guide defines the editorial workflow, permissions model, and operational ownership when handing off a newly migrated EmDash site to non-technical editors and clients.
 
+## Start with the owner's real tasks
+
+Before broad route rollout, rehearse a few representative tasks established by the brief, such as changing a displayed price, adding a collection record or replacing an image and its alternative text. Record task → actual entry/field and editing location → expected public result → save/reload/publish/readback evidence in existing acceptance notes. Confirm whether a person used the interface or only an agent/API performed the write; these are different observations. The [delivery evidence reference](../.agents/skills/new-site-workflow/references/delivery-evidence.md) connects this map to loop/component verification and the final handoff.
+
+The examples below describe the CMS foundation. Static projects use their file-owned edit/build workflow; Git-backed browser editing requires real login/upload/save/rebuild/logout acceptance. Do not add CMS dependencies or unsupported editing controls to satisfy an irrelevant task. Replace example integration dispositions and roles with the site's actual supported configuration and observed access; the table itself is not proof that a feature exists.
+
 ---
 
 ## 1. Roles and Permissions Model

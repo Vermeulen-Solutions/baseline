@@ -22,6 +22,8 @@ In the root, full verify includes lint, CSS/art-direction/token checks, the full
 
 Use `npm run design:tokens -- --init-client --lane <lane>` to initialize a real client site. Read [art direction](art-direction-workflow.md) and the [design framework](design-framework.md) before writing/calibrating tokens.
 
+`design:tokens -- --json` includes `fontLoading.preflight` with bounded local reference/case/format checks, role mappings and unresolved-source advice. See [font preflight](font-preflight.md); static source validation does not replace actual rendered-font readback. For a scoped design change, omit `--write` to preview the candidate, then review the exact CSS change and apply the same arguments. The installed `site-art-direction/references/token-handoff.md` describes this handoff without a new importer.
+
 ## Before handoff
 
 For the root EmDash foundation:
@@ -47,12 +49,16 @@ check:dev-tools confirms that development styleguide/fixture markers are absent 
 
 Review public routes, narrow reflow, keyboard focus, images and relevant editing journeys in a browser. EmDash editing changes need actual typing/save/reload checks. Sveltia handoff needs real authentication, upload, save, rebuild and sign-out. Neither a green check nor a generated calibration record proves those observations.
 
+For the root maintainer's disposable workflow pilot, `npm run rehearse:workflow` exercises fictional owner tasks, collection loops and shared components using the existing local Windows visual helper. It is not installed in generated static projects, CI or production builds. `-- --hold` leaves the owned temporary server available for read-only inspection/page evidence until its report-directory stop file is created. Keep raw receipts under ignored local report paths; no root CMS content is changed.
+
 ## Discovery and diagnostics
 
 | Command | Scope | Purpose |
 | --- | --- | --- |
 | `npm run doctor` | Root EmDash | Dependency-free Node/SQLite, shell and workspace preflight |
 | `npm run baseline:inspect -- --json` | All profiles | Discover installed commands, entry points and declared core props |
+| `npm run baseline:inspect -- --structure --json` | All profiles, when installed | Inspect bounded source relationships and repeated-render observations; runtime behavior remains unverified |
+| `npm run audit:page -- --url <loopback-public-url> --out <fresh-report-directory>` | All profiles, opt-in local | Record controlled public-page loading/resource and rendered-font evidence ([scope](page-performance.md)) |
 | `npm run check:docs` | Root EmDash | Check documentation Markdown files for unwrapped paragraph formatting |
 | `npm run check:dev-tools` | All profiles | Check production development-tool isolation |
 | `npm run build:analyze` | Root EmDash | Build and inspect client JavaScript ownership |
@@ -94,6 +100,8 @@ Read the [database workflow](database-workflow.md), [image delivery](image-deliv
 The backup/authentication checks are EmDash-only opt-in commands; they do not certify content equality, a restore drill or a successful owner login. Read `docs/release-trust.md` in the EmDash foundation for supported inputs and remaining acceptance. Generated static sites omit that CMS-only runbook and these commands.
 
 ## Visual regression and maintenance
+
+Root `npm run rehearse:tokens` is an explicit local Windows rehearsal of a synthetic HTML/CSS canvas mapping through existing token preview/apply, native styleguide calibration and production-before/after route comparisons. It owns disposable CMS source copies with fresh seed data and a dependency junction, writes ignored `.emdash/visual/` evidence and cleans up its instances. It is maintainer-only, refuses CI and does not join ordinary verification/build or generated-site commands. It does not claim external-canvas integration, independent installation or human design approval.
 
 `npm run test:visual` uses the pinned local Windows renderer and reviewed image references. Follow [visual regression](visual-regression.md); screenshot comparisons do not run in automated CI or production builds. `npm run check:cache` is the explicit local production cache/build rehearsal for the Node foundation; it refuses CI/GitHub Actions and does not certify Workers cache. When a shell exports `CI=true`, unset it for that local run rather than weakening the guard.
 

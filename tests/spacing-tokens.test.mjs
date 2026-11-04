@@ -16,6 +16,42 @@ test('T01/T06 exact token scope, ambiguity, no-op and narrow context targeting',
   assert.equal(auditDesignTokens(next).valid,true);
 });
 
+test('font source refusal precedes CSS and companion-file writes, and a corrected exact-case path previews cleanly',()=>{
+  const dir=fs.mkdtempSync(path.join(os.tmpdir(),'font-token-cli-'));
+  const script=path.resolve('scripts/design-system.mjs');
+  try {
+    fs.writeFileSync(path.join(dir,'baseline.config.json'),JSON.stringify({foundation:'static'}));
+    fs.mkdirSync(path.join(dir,'public/fonts'),{recursive:true});
+    fs.mkdirSync(path.join(dir,'audit'));
+    fs.copyFileSync('node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff2',path.join(dir,'public/fonts/Fixture.woff2'));
+    const candidate=applyTokenOverrides(css,{theme:{'--font-body':'"Fixture Sans", sans-serif'}})+'\n@import "/fonts/faces.css";\n';
+    const face='@font-face { font-family: "Fixture Sans"; src: url("fixture.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }\n';
+    fs.writeFileSync(path.join(dir,'public/fonts/faces.css'),face);
+    fs.writeFileSync(path.join(dir,'global.css'),candidate);
+    fs.writeFileSync(path.join(dir,'AGENTS.md'),'preserved context\n');
+    fs.writeFileSync(path.join(dir,'audit/design-gate-exceptions.json'),'[]\n');
+    const files=['global.css','AGENTS.md','audit/design-gate-exceptions.json','public/fonts/faces.css'];
+    const snapshot=()=>files.map(file=>fs.readFileSync(path.join(dir,file),'utf8'));
+    const before=snapshot();
+    const run=(...args)=>spawnSync(process.execPath,[script,'--css','global.css',...args],{cwd:dir,encoding:'utf8'});
+    const refused=run('--set','--radius-card=1rem','--write','--write-record','--write-calibration','--json');
+    assert.equal(refused.status,1,refused.stderr+refused.stdout);
+    assert.equal(JSON.parse(refused.stdout).fontLoading.preflight.valid,false);
+    assert.ok(JSON.parse(refused.stdout).fontLoading.preflight.errors.length>0);
+    assert.deepEqual(snapshot(),before);
+    assert.equal(fs.existsSync(path.join(dir,'audit/component-calibration.md')),false);
+    fs.writeFileSync(path.join(dir,'public/fonts/faces.css'),face.replace('fixture.woff2','Fixture.woff2'));
+    const corrected=snapshot();
+    const preview=run('--set','--radius-card=1rem','--json');
+    assert.equal(preview.status,0,preview.stderr+preview.stdout);
+    const result=JSON.parse(preview.stdout);
+    assert.equal(result.mode,'preview'); assert.equal(result.fontLoading.preflight.valid,true);
+    assert.deepEqual(result.fontLoading.missingFamilies,[]);
+    assert.ok(result.fontLoading.preflight.faces.some(face=>face.family==='fixture sans' && face.source==='public/fonts/faces.css'));
+    assert.deepEqual(snapshot(),corrected);
+  } finally { fs.rmSync(dir,{recursive:true,force:true}); }
+});
+
 test('T02 bounded spacing resolution reports dependency failures and supported arithmetic',()=>{
   const map={'--a':'calc(var(--b) * 0.5)','--b':'clamp(1rem, calc(1rem + 2vi), 3rem)'};
   assert.equal(resolveSpacing('--a',map,{viewportSizePx:800}).px,16);

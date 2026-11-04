@@ -1,6 +1,6 @@
 ---
 import { getEmDashCollection, getSiteSettingsWithCacheHint } from "emdash";
-import { Image } from "emdash/ui";
+import PostListItem from "../components/PostListItem.astro";
 import Base from "../layouts/Base.astro";
 import Section from "../components/Section.astro";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
@@ -25,24 +25,7 @@ if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 				/* eslint-disable-next-line astro/jsx-a11y/no-redundant-roles -- Safari needs the role when visual list markers are removed. */
 				<ul role="list" class="collection-list">
 					{posts.map((post) => (
-						<li class="collection-item">
-							<a href={`/posts/${post.id}`}>
-								{post.data.featured_image && (
-									<Image image={post.data.featured_image} />
-								)}
-								<h2>{post.data.title}</h2>
-							</a>
-							{post.data.excerpt && <p>{post.data.excerpt}</p>}
-							{post.data.publishedAt && (
-								<time datetime={post.data.publishedAt.toISOString()}>
-									{post.data.publishedAt.toLocaleDateString("en-US", {
-										year: "numeric",
-										month: "long",
-										day: "numeric",
-									})}
-								</time>
-							)}
-						</li>
+						<PostListItem post={post} showDate />
 					))}
 				</ul>
 			)

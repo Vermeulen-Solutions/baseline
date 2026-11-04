@@ -11,6 +11,8 @@ Build maintainable, accessible Astro pages and components. When a source site or
 
 ## Platform presentation boundary
 
+For repeated content and reusable presentation, follow `new-site-workflow/references/delivery-evidence.md` when installed: trace actual query/data ownership, loop output and component render sites, then verify the relevant content change and shared instance behavior. Keep file-owned static content separate from CMS collections/editing. Existing route notes can hold the compact map; no new registry or blanket component extraction is required.
+
 Read `baseline.config.json` first. `static` and `static-sveltia` use native Content Collections, `getStaticPaths()` and Markdown `render()`; skip `building-emdash-site` and all CMS binding/modeling specialists. Existing EmDash API/editor/cache instructions below apply only to `emdash`. Localized static routes follow the project's file/URL model rather than assuming CMS translation groups.
 
 Use shared `src/layouts/SiteShell.astro` for document metadata, global styles, skip link and landmarks. Platform `Base.astro` wrappers supply file-owned settings/navigation or EmDash contributions. Keep queries, widgets and storage out of shared primitives. `Card.astro` accepts ordinary HTML attribute bags; pass edit annotations only from an EmDash caller.

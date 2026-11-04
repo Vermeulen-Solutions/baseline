@@ -4,6 +4,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSy
 import { dirname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { tokenDiagnostics } from './audit-actionability.mjs';
+import { auditFontPreflight } from './font-preflight.mjs';
 
 export const REQUIRED_THEME_TOKENS = [
   '--font-body',
@@ -998,10 +999,12 @@ function walkFiles(dir, extFilter) {
 }
 
 /**
- * Checks whether custom font families declared in `--font-body` or `--font-display` are loaded
- * in `package.json`, `astro.config.*`, `@font-face`/`@import` in `src/styles/`, or `src/layouts/`.
+ * Combines four-role family source hints with bounded local font-file preflight.
+ * Package/config mentions remain hints; this does not prove actual glyph rendering.
  */
-export function auditFontLoading(css, rootDir = '.') {
+export function auditFontLoading(css, rootDir = '.', cssPath = 'src/styles/global.css') {
+  const preflight = auditFontPreflight(css, { rootDir, cssPath });
+  const sourceErrors = preflight.errors.map(issue => typeof issue === 'string' ? issue : issue.message);
   const tokens = parseDesignTokens(css);
   const stacks = [
     tokens.theme['--font-body'],
@@ -1022,7 +1025,7 @@ export function auditFontLoading(css, rootDir = '.') {
   }
 
   if (customFamilies.size === 0) {
-    return { valid: true, checkedFamilies: [], missingFamilies: [], warnings: [] };
+    return { valid: preflight.valid, checkedFamilies: [], missingFamilies: [], warnings: sourceErrors, preflight };
   }
 
   const root = resolve(rootDir);
@@ -1044,6 +1047,7 @@ export function auditFontLoading(css, rootDir = '.') {
   }
 
   const haystack = searchblobs.join('\n').toLowerCase();
+  const declaredFaces = new Set(preflight.faces.map(face => face.family).filter(Boolean));
   const missingFamilies = [];
   const warnings = [];
 
@@ -1051,7 +1055,7 @@ export function auditFontLoading(css, rootDir = '.') {
     const lower = family.toLowerCase();
     const slug = lower.replace(/\s+/g, '-');
     const plus = lower.replace(/\s+/g, '+');
-    if (!haystack.includes(lower) && !haystack.includes(slug) && !haystack.includes(plus)) {
+    if (!declaredFaces.has(lower.replace(/\s+/g, ' ')) && !haystack.includes(lower) && !haystack.includes(slug) && !haystack.includes(plus)) {
       missingFamilies.push(family);
       warnings.push(
         `Custom font family "${family}" is declared in @theme but not loaded in package.json, astro.config.mjs, @font-face, or src/layouts/.`,
@@ -1060,10 +1064,11 @@ export function auditFontLoading(css, rootDir = '.') {
   }
 
   return {
-    valid: missingFamilies.length === 0,
+    valid: missingFamilies.length === 0 && preflight.valid,
     checkedFamilies: [...customFamilies],
     missingFamilies,
-    warnings,
+    warnings: [...warnings, ...sourceErrors],
+    preflight,
   };
 }
 
@@ -1296,10 +1301,15 @@ function main() {
   const source = readFileSync(cssPath, 'utf8');
   const css = hasMutationRequest ? applyTokenOverrides(source,combinedOverrides) : source;
   const report = auditDesignTokens(css);
-  const fontAudit = auditFontLoading(css);
+  const fontAudit = auditFontLoading(css, process.cwd(), cssPath);
+  const fontDiagnostics = [
+    ...fontAudit.missingFamilies.map(family => ({ id: `font:${family}`, status: 'unverified', actionability: 'verification_required', message: `Inspect font source/availability: ${family}` })),
+    ...fontAudit.preflight.errors.map((issue,index) => ({ id: `font-source-error:${index+1}`, status: 'fail', actionability: 'review_required', ...issue })),
+    ...fontAudit.preflight.advisories.map((issue,index) => ({ id: `font-source:${index+1}`, status: 'unverified', actionability: 'verification_required', ...issue })),
+  ];
   const proxyAudit = auditEditProxies();
   if (!(report.valid && fontAudit.valid && proxyAudit.valid)) {
-    if(args.includes('--json'))console.log(JSON.stringify({...report,valid:false,fontLoading:fontAudit,editProxies:proxyAudit,sha256:stylesheetDigest(css)},null,2));
+    if(args.includes('--json'))console.log(JSON.stringify({...report,diagnostics:[...report.diagnostics,...fontDiagnostics],valid:false,fontLoading:fontAudit,editProxies:proxyAudit,sha256:stylesheetDigest(css)},null,2));
     else {
       console.error(formatTokenDiagnostics(report,cssPath,css));
       const other=[...fontAudit.warnings,...proxyAudit.issues];if(other.length)console.error(other.join('\n'));
@@ -1340,7 +1350,7 @@ function main() {
       ...report,
       diagnostics: [
         ...report.diagnostics,
-        ...fontAudit.missingFamilies.map(family => ({ id: `font:${family}`, status: 'unverified', actionability: 'verification_required', message: `Inspect font source/availability: ${family}` })),
+        ...fontDiagnostics,
         ...proxyAudit.issues.map((message,index) => ({ id: `edit-proxy:${index+1}`, status: 'fail', actionability: 'review_required', message })),
       ],
       mode:hasMutationRequest ? (css===source ? "no-op" : saving ? "saved" : "preview") : "audit",
@@ -1357,6 +1367,7 @@ function main() {
     console.log(`- :root tokens: ${Object.keys(report.tokens.root).length}`);
     console.log(`- [data-surface="dark"] tokens: ${Object.keys(report.tokens.dark).length}`);
     console.log(`- Font loading: ${fontAudit.valid ? 'PASS' : 'FAIL'} (${fontAudit.checkedFamilies.length ? fontAudit.checkedFamilies.join(', ') : 'system fonts'})`);
+    console.log(`- Font source preflight: ${fontAudit.preflight.status.toUpperCase()} (${fontAudit.preflight.errors.length} errors, ${fontAudit.preflight.advisories.length} advisories; static observations, not rendered-font proof)`);
     console.log(proxyAudit.applicability === 'not-applicable'
       ? '- EmDash edit proxies: NOT APPLICABLE (static foundation)'
       : `- EmDash edit proxies: ${proxyAudit.valid ? 'PASS' : 'FAIL'} (${proxyAudit.checkedRoutes.length} single-entry routes, ${proxyAudit.collectionRoutes.length} collection routes)`);
