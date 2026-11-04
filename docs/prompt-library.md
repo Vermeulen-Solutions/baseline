@@ -46,6 +46,8 @@ use npm.cmd and npx.cmd for all npm and npx commands.
 - Release scope: [Repository/branch, deployment target and authorized commit/push/deploy actions, or explicitly local-only]
 
 Determine the profile first and work in its project directory. Complete the site and verification, then the agreed commit/push/deploy steps and live acceptance, reporting Checkpoints A–C as you go. Continue authorized work without waiting for a reply at each checkpoint; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
+
+Reuse supplied evidence for a concise strategic synthesis and priority page briefs. Draft actual representative copy and map visitor questions to answers/evidence before choosing composition. Use deeper discovery only where uncertainty warrants it; do not invent proof or restart a settled interview.
 ```
 
 ### Standard Agency Mode Kickoff (Full 7 Stages — For Complex Sites & Migrations)
@@ -66,6 +68,33 @@ Here is the context for this project:
 - Release scope: [Repository/branch, deployment target and authorized commit/push/deploy actions, or explicitly local-only]
 
 Begin with Stage 1 (Brief & Evidence Discovery), determine the profile, and complete the requested site and verification, then the agreed commit/push/deploy steps and live acceptance. Report stage handoffs and continue authorized work; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
+
+Use discovery-and-content.md for adaptive discovery, strategic synthesis and priority page briefs. Draft actual representative copy before composition, preserve claim/use restrictions and review content clarity alongside technical acceptance. Keep facts, recommendations and assumptions distinct and reuse existing answers.
+```
+
+### Discovery and Content Planning Only
+
+Use this before visual work when the business argument or page content needs development. Existing supplied briefs and decisions remain inputs; discovery depth is independent of delivery track.
+
+```text
+Use new-site-workflow and its references/discovery-and-content.md to develop
+this site's brief and priority page content. This task ends at copy and a
+composition plan; do not build, publish or deploy the site.
+
+Context and evidence: [brief, call notes, existing site, approved sources]
+Purpose and audience: [known information, or unresolved]
+
+Read existing decisions first. Choose core or deeper discovery from the actual
+uncertainties, ask one to three related questions at a time, and continue useful
+independent work while required answers are pending. Do not invent factual answers.
+Record a strategic synthesis in the established context home, keeping facts,
+recommendations and assumptions distinct. Keep PROJECT.md optional.
+
+Select a representative priority route, write its page brief and actual draft
+copy, and map visitor questions to answers, evidence, sections and next actions
+before proposing composition. Preserve claim/use restrictions and identify missing
+material with an owner. Explain content-led departures from default layouts.
+Report the draft copy, composition rationale and remaining consequential questions.
 ```
 
 ### Resuming a Prepared or Partly Built Site

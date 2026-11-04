@@ -115,6 +115,8 @@ When the user requests **Express Mode** (or when building a straightforward gree
 
 ## Stage 1: establish the brief and evidence
 
+For a new site or material change to its audience, offer or purpose, read [references/discovery-and-content.md](references/discovery-and-content.md). Choose core or deeper discovery from the uncertainty, independently of profile/track. Reuse supplied evidence and answers, ask one to three related questions at a time, and synthesize the audience, offer/service, positioning, lead message, strongest evidence and biggest risk in the established context home. Label recommendations and assumptions; do not introduce a mandatory interview, new brief file or approval stop for a clear existing task.
+
 Determine what is being built before changing the starter:
 
 - site purpose, primary audiences, and important user tasks;
@@ -128,7 +130,7 @@ For a WordPress rebuild or migration on any profile, read `docs/wordpress-migrat
 
 For WordPress migrations, the evidence inventory must include a content-candidate register for repeated or independently managed material that is not necessarily a registered custom post type. Record the source evidence, proposed model, migration method, confidence, and open questions for each candidate. Keep a substantial register in `audit/content-candidate-register.md` and link it from `AGENTS.md`; a small migration may keep it directly in `AGENTS.md`.
 
-**Gate:** the repository contains a brief, an evidence inventory, and—when migration is in scope—a content-candidate register sufficient to distinguish facts, user decisions, and open assumptions.
+**Gate:** the repository contains a brief and concise strategic synthesis, an evidence inventory including material claim/use restrictions and content gaps with owners, and—when migration is in scope—a content-candidate register sufficient to distinguish facts, user decisions, recommendations and open assumptions. Unknowns remain explicit; missing proof does not authorize fabricated claims or prevent honest local drafts.
 
 **Stage 1 completion:** Summarize the brief and evidence. If platform is undecided, present the Stage 2 profile choices below with a recommendation based on editing needs; do not assume Node/SQLite as the only default.
 
@@ -164,6 +166,8 @@ Record decisions that constrain later stages, especially locale URL behavior, de
 **Stage 2 completion:** Report the selected profile, editing owner, hosting, locale policy, publishing latency and infrastructure costs. Explain the next content step in that profile's terms: typed files for static, paired file/forms for Sveltia, or relational collections/admin for EmDash. Ask about schema choices only when still unresolved.
 
 ## Stage 3: model content and routes
+
+For materially different priority pages, use [references/discovery-and-content.md](references/discovery-and-content.md#plan-important-pages-before-composition) to connect visitor questions, intended answers, available evidence and next actions before choosing composition. Keep compact page briefs with existing route/page notes, draft actual representative copy, and identify its owner/publication status. Choose the representative route from journey priority or uncertainty rather than always starting with the homepage. Repeated entries can share an archetype brief; preserve the profile-specific content ownership below.
 
 **Static profiles:** define collections in `src/content.config.ts` with typed Zod schemas and native `glob` loaders. Use Markdown files in `src/content/`, file-owned settings/navigation and draft-filtered `getStaticPaths()`/`render()`. Keep native images in `src/assets`; require descriptive alt text for meaningful hero images. For Sveltia keep form names, required/optional semantics, date serialization and media-relative paths aligned with that schema; verify a CMS-shaped content file in an Astro build. Record content candidates, routes, ordering, locale and editorial ownership, then continue to Stage 4. Do not apply SQL modeling or seed instructions below.
 
@@ -235,6 +239,8 @@ Report the checked components, viewports, surfaces/states and unresolved limitat
 
 ## Stage 5: implement representative pages
 
+Use the page brief's section argument and actual draft copy to inform the pacing blueprint below. When visitor intent or available evidence calls for a different order or proof treatment, record the concrete exception and retain the useful native composition recipes; never invent evidence to fill a prescribed section.
+
 Before writing a representative page's markup, outline its **section-by-section pacing blueprint** so no two adjacent sections repeat the same 3-column card grid (for example: Asymmetric Hero with live-coded `.ui-specimen` or framed focal media → `.grid-hairline` proof/metrics ledger or `<LogoTicker>` → `<Sidebar>` sticky narrative + bento/capability matrix → `<Section data-surface="dark" class="surface-spotlight">` showcase band → native `<Disclosure>` FAQ). Use Baseline's 4-voice typography helpers (`.eyebrow-telemetry`, `.font-accent`, `.tabular-nums`), 3-tier surface utilities (`.surface-elevated`, `.surface-glass`, `.surface-spotlight`), and architectural grids (`.grid-hairline`, `.bg-grid-blueprint`, `.frame-crosshair`). For a preserved composition or a comparison layout that needs uniform rows, record the concrete exception rather than treating the pacing checklist as optional. Use real content; do not invent factual metadata or controls to populate a specimen.
 
 Before adding incoming images, use the installed `media:prepare` workflow in
@@ -276,6 +282,8 @@ Report which representative routes render, the browser/Impeccable findings addre
 
 
 Finish the route inventory, content states, interactions, metadata, and accessibility behavior. Follow the visual review and repair passes in `astro-site-design`, and run one final Impeccable critique or audit when the full route set is available. Fix material cross-route findings in shared styles or components, then stop once the review is coherent. Run the repository's requested checks and build. Verify public and editor modes for CMS-rendered content.
+
+Review representative rendered content against its page brief using [references/discovery-and-content.md](references/discovery-and-content.md#review-the-representative-result): audience/offer clarity, priority question coverage, supported claims, and an action that delivers the promised next step. Keep concrete observations beside existing acceptance evidence; agent review does not prove user understanding or post-launch performance.
 
 Use `astro-site-design/references/rollout-verification.md` for browser availability, valid capture evidence and route coverage. If a native browser fails, discover supported built-in or connector alternatives before declaring browser acceptance unavailable; an actual permission/policy denial must not be bypassed. Before ending a multi-deliverable request, reconcile its completion register using [the maintenance closeout guidance](references/site-maintenance.md#reconcile-completion-before-handoff). Continue required, authorized work while it is possible; an attempted check or saved checklist is not a completed acceptance step.
 

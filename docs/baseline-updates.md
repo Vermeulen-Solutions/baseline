@@ -1,5 +1,7 @@
 # Keeping an existing site up to date
 
+Discovery/content-planning guidance adds `.agents/skills/new-site-workflow/references/discovery-and-content.md` alongside reviewed updates to the workflow, art-direction and Astro skills. New static projects receive the reference through the shared skill manifest. Existing sites can review/adopt those skill changes through their supported synchronization path and optionally merge relevant fields from `PROJECT.example.md`; do not replace their brief, require a new document, restart settled discovery or overwrite client copy/design. This guidance adds no runtime dependency or new CLI gate.
+
 The optional source-derived canvas kit adds `scripts/canvas-kit.mjs`, `scripts/audit-actionability.mjs`, [docs/canvas-kit.md](canvas-kit.md), and the `design:canvas-kit` package script. Existing generated sites can adopt these files through a reviewed update.
 
 For optional canvas-led design iteration, sites can adopt `.agents/skills/opendesign-site-design/`, `.agents/skills/openpencil-site-design/`, or `.agents/skills/penpot-site-design/`, along with [docs/opendesign-onboarding.md](opendesign-onboarding.md), [docs/openpencil-onboarding.md](openpencil-onboarding.md), or [docs/penpot-onboarding.md](penpot-onboarding.md). There are no required runtime dependencies or credentials to copy. Direct Astro in the browser remains available without setup. See [skill synchronization](skill-synchronization.md).

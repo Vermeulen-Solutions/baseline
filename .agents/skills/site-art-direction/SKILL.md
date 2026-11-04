@@ -15,6 +15,8 @@ This skill is influenced by the brief-first and variance/motion/density ideas in
 
 Read the available brief, audience and task information, content model, route inventory, real copy and imagery, brand assets, and visual references. For a redesign or migration, use the source audit produced by `astro-site-design`; do not infer the source identity from a logo or homepage screenshot alone.
 
+Reuse the strategic synthesis and priority page briefs from `new-site-workflow` when present. Let visitor questions, actual copy length, available proof and its permitted use inform the composition. A missing testimonial or metric calls for an honest alternative or omitted section, not invented evidence. Reopen discovery only when a material ambiguity changes the direction; do not repeat a settled interview.
+
 When evidence is incomplete, make reversible working assumptions and label them. Ask only when plausible answers would lead to materially different identities or layouts.
 
 ## Ground UX anatomy before styling

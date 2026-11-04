@@ -17,7 +17,7 @@ Match the page's primary visitor intent to the appropriate structural archetype 
 
 ## Strategic intake and funnel qualification
 
-Gather these essentials before drafting copy or assembling layouts. Ask only for what is missing in a single batch, or make one-line reversible working assumptions when rapid autonomous execution is authorized:
+Reuse the strategic synthesis and priority page brief from `new-site-workflow/references/discovery-and-content.md` when available. Gather these essentials before drafting copy or assembling layouts. Ask only for what is missing in small related batches, or make one-line reversible working assumptions when rapid autonomous execution is authorized. Claims, prices, terms, audience quotations and results require evidence rather than creative assumptions:
 
 - **Purpose & Primary Action:** Identify the ONE primary conversion action (e.g., start trial, schedule demo, download spec, purchase, or join waitlist) and the exact deliverable the visitor receives. Avoid competing calls to action above the fold.
 - **Audience & Traffic Context:** Define the ICP (Ideal Customer Profile), their core burning pain, their top three objections to converting today, and the incoming traffic channel (paid campaign, organic search, referral, or newsletter) to ensure immediate message matching.
@@ -27,6 +27,8 @@ Gather these essentials before drafting copy or assembling layouts. Ask only for
 ## Conversion copywriting engine
 
 High-converting pages succeed on clarity, precision, and outcome-led arguments rather than decorative excess or empty buzzwords:
+
+Start from the page's visitor questions and section argument: question → intended answer → supporting evidence → section purpose → next action. Draft actual representative headings/body/actions before detailed composition, with source/use status and content ownership. The formulas and layout sequence below are starting points; adapt them to awareness, audience vocabulary and the available evidence rather than forcing content into a generic funnel. Do not fabricate numbers to satisfy an outcome formula.
 
 ### Tested headline formulas
 Replace vague AI-slop headlines (such as "Empowering your business with intelligent synergy") with deterministic formulas:
@@ -40,7 +42,7 @@ Keep the subheadline to exactly one or two concise sentences. Clarify *how* the 
 ### Action-oriented CTA triggers
 Compose button labels using an active verb paired with the concrete outcome or deliverable. Never use generic labels like "Submit", "Get Started", or "Learn More":
 - ✅ *"Start 14-day trial"* / *"Download technical spec"* / *"Book architecture review"* / *"Deploy to Cloudflare"*
-- Place risk reversals (e.g., `No credit card required • Cancel anytime`) directly adjacent to primary CTA triggers to eliminate micro-friction.
+- When supported by actual approved terms, place risk reversals (e.g., `No credit card required • Cancel anytime`) directly adjacent to primary CTA triggers to eliminate micro-friction. Otherwise explain the actual next step without inventing a guarantee.
 - Repeat the exact same primary action label across the hero, mid-page proof, and closing conversion banner.
 
 ### Benefit-first capability points
@@ -49,18 +51,18 @@ Features explain what the mechanism does; benefits explain what that capability 
 - **Example:** `**Sub-millisecond routing** — P99 latency under 1.4ms across 38 global edge PoPs without cold starts.`
 
 ### Objection elimination sequence
-Treat objections as essential section arguments rather than an afterthought. Map each major objection directly to a section:
+Treat objections as essential section arguments rather than an afterthought. Map each actual major objection to an appropriate answer and available evidence. These are conditional examples, not claims to add to every page:
 1. *Skepticism about claims* → Concrete customer quote or verifiable metric ledger immediately following the hero.
 2. *Complexity or friction of adoption* → Clear 3-step "How it works" process walkthrough.
-3. *Vendor lock-in or migration anxiety* → Explicit data portability guarantee and technical comparison matrix.
+3. *Vendor lock-in or migration anxiety* → Verified portability terms and a supported technical comparison matrix; do not invent a guarantee.
 4. *Edge cases and terms* → Structured native `<Disclosure>` FAQ accordion ordered by objection severity.
 
-## Deterministic section build order
+## Default section build order
 
-When generating or refactoring a landing page, assemble sections in this deterministic sequence to preserve token discipline, prevent layout regressions, and keep diffs reviewable:
+When generating or refactoring a landing page, use this concrete sequence as a default once its section argument is known. Omit unsupported proof/terms, and record the content-led reason for a changed order or treatment in the page brief. Preserve token discipline and the specific composition recipes without manufacturing sections to complete a checklist:
 
 1. **Hero & Value Proposition:** Single `<h1>`, subheadline, primary CTA with adjacent risk reversal, and a live-coded `.ui-specimen` or framed visual.
-2. **Proof & Telemetry Strip:** Zero-JS `<LogoTicker>` marquee or 4-cell `.grid-hairline` metric ledger (`.tabular-nums`).
+2. **Proof & Telemetry Strip:** Zero-JS `<LogoTicker>` marquee or 4-cell `.grid-hairline` metric ledger (`.tabular-nums`) when publishable logos or verified measurements exist. With thin proof, use an actual sample, documented process or qualification instead; omit the strip when none supports the argument.
 3. **Problem-to-Solution Transition:** Contrast the incumbent friction with the deterministic new model.
 4. **Feature & Capability Variance:** Alternating structural geometries (e.g., asymmetric `.bento-grid`, sticky `<Sidebar>` narrative, or `.grid-hairline` matrix).
 5. **Objection Elimination & FAQ:** Native `<details class="disclosure">` accordion answering top objections, backed by Schema.org `FAQPage` JSON-LD for answer engine optimization (AEO).

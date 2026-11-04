@@ -34,12 +34,16 @@ flowchart TD
 
 ## Stage 1: Brief & Evidence Discovery
 
+Reuse supplied context before asking questions. Follow the [discovery and content-planning reference](../.agents/skills/new-site-workflow/references/discovery-and-content.md): core discovery for a clear brief, deeper discovery when positioning, audiences or the journey are uncertain. Depth is independent of platform and Express/Standard. Ask one to three related questions at a time, pursue useful specifics and preserve unknowns rather than inventing answers. Existing-site maintenance reuses valid decisions instead of restarting an interview.
+
 Never start by writing code or prompting an assistant to "make a homepage." Begin by gathering ground-truth evidence:
 - **Client Brief & Goals:** Target audience, business objectives, brand voice, and language requirements.
 - **Visual Evidence:** Brand assets (SVG logos, brand guidelines, color palettes, photography) and existing site screenshots (desktop and mobile).
 - **UX Flow Teardowns (Optional):** For complex user flows (filterable directories, registration journeys, schedules, or pricing models), inspect real-world production patterns using **Nicelydone MCP**, **Refero.design**, or **Kombai Gallery** to capture authentic UX anatomy and edge states.
 - **Functional Requirements:** Multilingual needs, forms, galleries, third-party embeds, or custom integrations.
 - **Deliverables:** Record findings in project notes before opening templates.
+
+Synthesize the priority audience, offer/service, intended next action, recommended positioning/lead message, strongest usable evidence and biggest uncertainty in the established context home. Separate facts, recommendations, assumptions and actual user decisions. Assign material evidence/content gaps to owners and retain publication restrictions. Use the optional `PROJECT.example.md` only when adopting it is useful; no new brief file or blanket approval stop is required. Keep operational discovery, including editing, budget/timing, integrations and launch constraints, in scope alongside business strategy.
 
 ---
 
@@ -72,6 +76,8 @@ Establish your runtime, hosting boundaries, and plugin needs before modeling con
 ---
 
 ## Stage 3: Content Architecture & Candidate Discovery
+
+For materially different priority routes, write a compact page brief before selecting layout: visitor/arrival context, page purpose, lead message, actual next step, question coverage and ordered section arguments. Map each visitor question to an intended answer, supporting evidence and section purpose; draft the representative copy with owner/use status. Repeated entries can share one archetype brief. Select the representative route by journey priority or uncertainty; it need not be the homepage. Use the existing route/page notes, or the optional brief template, without duplicating content inventories.
 
 On static profiles, define native Zod schemas in `src/content.config.ts`, Markdown files in `src/content`, file-owned navigation, draft filtering and `getStaticPaths()`/`render()`. Sveltia adds a paired form, date/optional-field serialization and native upload paths. Verify those contracts with the build. Load `building-emdash-site` and other CMS specialists only for EmDash.
 
@@ -116,6 +122,8 @@ Do not attempt to assemble twenty full pages at once. Source and calibrate your 
 
 ## Stage 5: Representative Public & Editor Implementation
 
+Use the page brief's question/evidence argument and actual copy to shape composition. Keep the concrete pacing recipes as defaults, recording a content-led exception when evidence or visitor intent calls for a different order/treatment. Build and review the representative route before multiplying its pattern.
+
 Both foundations compose the shared `SiteShell.astro`, tokens and primitives. Static uses the file-owned Base wrapper, native `ResponsiveImage` and Markdown RichText; EmDash keeps queries, edit annotations and storage in platform adapters. Common `/_styleguide` calibration is identical; Portable Text/storage specimens are EmDash extensions.
 
 
@@ -134,6 +142,7 @@ Run deterministic local checks to verify the build before client handoff or depl
 - EmDash only — `npm run test:visual`: Compare local Windows screenshots against reviewed baselines across mobile, tablet, and desktop viewports ([Visual Regression](visual-regression.md)).
 - `npm run check:dev-tools`: Confirm `/_styleguide` and synthetic fixture markers are completely stripped from the production build.
 - **Visual Critique & Polish:** Use the bundled `impeccable` skill for a bounded critique of rendered pages, resolve material findings and record the evidence. This complements automated checks; it does not establish user approval.
+- **Content Acceptance:** Inspect the representative rendered page against its brief: offer/audience clarity, priority question coverage, supported claims and a usable next action that delivers what the copy promises. Record observations and remaining draft/use restrictions beside existing acceptance evidence. Agent review is not user research or proof of commercial performance; any later measurement needs its own agreed owner and scope.
 - **EmDash Client Verification:** Log in to `/_emdash/admin`, test editing live content, publish drafts, and verify updates on the public site.
 - **Migration Acceptance Verification (If Migrating):** Run `npm run migration:verify -- --scope full --manifest audit/url-inventory.json` to verify HTTP status codes, 301 redirect chains without loops, canonicals, robots tags, link/image integrity, and content inventory reconciliation ([Migration Acceptance Contract](migration-acceptance.md)).
 - **EmDash Site Registration:** Run `npm run site:register` to register the site metadata ([Site Registry](site-registry.md)).
