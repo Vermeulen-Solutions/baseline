@@ -73,6 +73,17 @@ async function metadata(origin, route, html, { error = false } = {}) {
   const meta = key => nodes.filter(n => n.tagName === 'meta' && (attr(n, 'name') === key || attr(n, 'property') === key)).map(n => attr(n, 'content'));
   const canonical = nodes.filter(n => n.tagName === 'link' && attr(n, 'rel') === 'canonical').map(n => attr(n, 'href'));
   const graphs = nodes.filter(n => n.tagName === 'script' && attr(n, 'type') === 'application/ld+json').map(n => JSON.parse(n.childNodes.map(n => n.value ?? '').join('')));
+  const iconLinks = nodes.filter(n => n.tagName === 'link' && attr(n, 'rel')?.split(/\s+/).includes('icon'));
+  const ownsDefaultIcon = await fs.stat(path.join(root, 'public/favicon.svg')).then(() => true, () => false);
+  if (ownsDefaultIcon || iconLinks.length) {
+    assert.equal(iconLinks.length, 1, route + ' has one declared profile favicon');
+    const iconURL = new URL(attr(iconLinks[0], 'href'), origin);
+    assert.equal(iconURL.origin, origin, 'Default fixture icon stays on the local origin');
+    const icon = await fetch(iconURL);
+    assert.equal(icon.status, 200, route + ' icon asset');
+    assert.match(icon.headers.get('content-type'), /image\/svg\+xml/);
+    assert.deepEqual(Buffer.from(await icon.arrayBuffer()), await fs.readFile(path.join(root, 'public/favicon.svg')));
+  }
   assert.equal(nodes.filter(n => n.tagName === 'title').length, 1, route + ' title');
   assert.equal(meta('description').length, 1, route + ' description');
   const article = !error && route.startsWith('/posts/') && route !== '/posts/';

@@ -507,6 +507,8 @@ test('behavior directional transitions, targeted replacement, and persistent ele
     const nextDoc = document.implementation.createHTMLDocument('Page B Title');
     nextDoc.documentElement.lang = 'fr';
     nextDoc.documentElement.setAttribute('data-surface', 'dark');
+    // Match SiteShell's authored default; data-surface alone is mutable resolved state.
+    nextDoc.documentElement.setAttribute('data-surface-default', 'dark');
     nextDoc.head.innerHTML = `
       <title>Page B Title</title>
       <meta name="description" content="Page B Description" />

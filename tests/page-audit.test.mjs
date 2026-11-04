@@ -146,4 +146,52 @@ if (process.env.BASELINE_PAGE_BROWSER_TESTS === '1') {
       assert.ok(redirectReport.runs[0].blockedRequests.some(item => item.reason === 'administrative-endpoint'));
     } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
   }));
+
+  test('real HTTP SVG icons complete while missing icons remain failed public resources', () => fixture(async parent => {
+    const svg = fs.readFileSync('public/favicon.svg');
+    const server = http.createServer((request, response) => {
+      if (request.url === '/icon.svg') { response.writeHead(200, { 'content-type': 'image/svg+xml' }); response.end(svg); return; }
+      if (request.url === '/missing.svg') { response.writeHead(404, { 'content-type': 'text/plain' }); response.end('missing icon'); return; }
+      const icon = request.url === '/missing' ? '/missing.svg' : '/icon.svg';
+      response.writeHead(200, { 'content-type': 'text/html' });
+      response.end(`<!doctype html><html lang="en"><head><title>Public icon fixture</title><link rel="icon" type="image/svg+xml" href="${icon}"></head><body><main><h1>Public icon evidence</h1><p>Real local icon requests remain part of the load.</p></main></body></html>`);
+    });
+    server.listen(0, '127.0.0.1'); await once(server, 'listening');
+    try {
+      const origin = `http://127.0.0.1:${server.address().port}`;
+      const good = await auditPage({ url: origin + '/success', out: path.join(parent, 'good-icon'), runs: 1, settleMs: 500 });
+      assert.equal(good.status, 'observed', JSON.stringify(good));
+      assert.ok(good.runs[0].resources.some(item => item.url === origin + '/icon.svg' && item.status === 200 && item.complete));
+      const missing = await auditPage({ url: origin + '/missing', out: path.join(parent, 'missing-icon'), runs: 1, settleMs: 500 });
+      assert.equal(missing.status, 'incomplete');
+      assert.ok(missing.runs[0].resources.some(item => item.url === origin + '/missing.svg' && item.status === 404));
+      assert.equal(missing.runs[0].blockedRequests.length, 0);
+    } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+  }));
+
+  test('implicit ICO cancellation is retained separately from a successful ordinary HTTP read', () => fixture(async parent => {
+    const { default: sharp } = await import('sharp');
+    const png = await sharp(fs.readFileSync('public/favicon.svg')).png().toBuffer();
+    const ico = Buffer.alloc(22 + png.length);
+    ico.writeUInt16LE(1, 2); ico.writeUInt16LE(1, 4); ico[6] = 32; ico[7] = 32;
+    ico.writeUInt16LE(1, 10); ico.writeUInt16LE(32, 12); ico.writeUInt32LE(png.length, 14); ico.writeUInt32LE(22, 18); png.copy(ico, 22);
+    let iconHits = 0;
+    const server = http.createServer((request, response) => {
+      if (request.url === '/favicon.ico') { iconHits++; response.writeHead(200, { 'content-type': 'image/x-icon' }); response.end(ico); return; }
+      response.writeHead(200, { 'content-type': 'text/html' });
+      response.end('<!doctype html><html lang="en"><head><title>Implicit icon fixture</title></head><body><main><h1>Implicit icon evidence</h1><p>The site can serve an icon while the runner cancels its request.</p></main></body></html>');
+    });
+    server.listen(0, '127.0.0.1'); await once(server, 'listening');
+    try {
+      const origin = `http://127.0.0.1:${server.address().port}`;
+      const ordinary = await fetch(origin + '/favicon.ico');
+      assert.equal(ordinary.status, 200); assert.deepEqual(Buffer.from(await ordinary.arrayBuffer()), ico);
+      assert.equal(iconHits, 1);
+      const report = await auditPage({ url: origin + '/', out: path.join(parent, 'implicit-icon'), runs: 1, settleMs: 500 });
+      assert.equal(report.status, 'incomplete');
+      assert.ok(report.runs[0].resources.some(item => item.url === origin + '/favicon.ico' && item.failed && item.canceled), JSON.stringify(report));
+      assert.equal(iconHits, 1, 'The routed implicit request was canceled before reaching the server');
+      assert.deepEqual(report.runs[0].blockedRequests, []);
+    } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+  }));
 }

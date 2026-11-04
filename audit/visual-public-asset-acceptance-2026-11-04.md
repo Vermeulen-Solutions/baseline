@@ -1,0 +1,41 @@
+# Visual references and public icon acceptance
+
+Date: 4 November 2026. Scope: issue #38, based on `14f0272cb74b7101770b29b9e2d749c2537889bf`. Repair the known local reference/asset acceptance gaps without changing client branding, production CSS, comparison thresholds or browser execution policy. The implementation branch is `codex/visual-audit-acceptance`; release follows verification, commit/push and merge, with no website deployment.
+
+## Diagnosis and reference review
+
+The first untouched local run reproduced the three known failures and stopped after them: active ticker 356×168 → 356×169px (980 differing pixels), reduced ticker 356×236 → 356×237px (1,075 pixels), and no-JavaScript styleguide 390×13089 → 390×15317px (308,589 pixels). The preserved unchanged-main control from the earlier investigation remains supporting evidence; the failure was not introduced by the merged workflow changes.
+
+The last reference update was `922bbaaf6fc26324c3ee4c83b153e8c33ae564d7`. Subsequent intentional source changes had not received a complete local reference refresh:
+
+| Source history | Rendered effect |
+| --- | --- |
+| `14f0272` | Updated starter excerpts, About prose, and the Welcome post's introduction and numbered next steps |
+| `ef3f27c`, `91b6239` | Added/corrected the interaction/content primitives section, navigation entry and coverage notes |
+| Existing theme-controller contract | A hand-written transition-test document omitted `data-surface-default`, although actual SiteShell output and the documented controller now use that attribute for author intent |
+
+All 57 PNGs were compared before acceptance. The 43 changed images comprise 18 public-route images with the existing seed-copy changes; nine full-page fixture images containing new specimens/coverage (six ordinary/no-JS styleguides, two zoom images and text-spacing); and 16 narrow/tablet targeted images affected by wrapped navigation placement and fractional screenshot raster origins. Fourteen unrelated references remain byte-identical, including all public not-found captures and the wide targeted controls/composition/gallery/tickers. No extra PNGs were introduced.
+
+For both original ticker failures, an analysis-only crop of the extra top row left zero raw RGB pixel differences. The ticker, Container, Section, font override and readiness sources were unchanged since the old reference update; declared renderer/font versions also match. This supports screenshot-origin drift rather than a demonstrated component regression. The crop was used only to analyze saved images; the actual comparisons and accepted PNGs retain the complete unmodified captures. Review excerpts show the new lower specimens, sequential no-JS panels, copy, controls, gallery overlay and natural footer reflow without missing or clipped content.
+
+The first full explicit update exposed the additional transition fixture failure (96 passed, 47 scoped/update-mode skips, one failure). Its expected dark surface remained unchanged; the synthetic incoming document was corrected to include the author-default attribute emitted by the real template. The isolated test then passed, including its head/root synchronization and persistent-media assertions. No production transition or theme implementation changed.
+
+The final supported `test:visual -- --update` run completed with 97 passes and 47 existing scope/update-mode skips. The subsequent complete **non-updating** run passed 104 checks with 40 existing viewport/scope skips. It includes functional navigation/media/forms/reflow/zoom cases and all seven verification-only sensitivity cases: token/control defects, missing baseline and missing route/setup/image/font readiness. No previously failing specimen was skipped. Comparison settings, renderer/font contract, masks and production CSS are unchanged. All final PNGs match their manifest; the strict run did not alter them. The [portable reference review](visual-reference-review-2026-11-04.json) records per-file hashes, dimensions and pixel statistics.
+
+## Public icon behavior
+
+Two independent causes explained the original favicon observation. The starter had no icon declaration or asset, so an ordinary `/favicon.ico` request followed the CMS page-route redirect to a 404. Separately, the pinned browser runner cancels routed `/favicon.ico` requests before invoking routing callbacks; protocol events still report the canceled transfer. Therefore that cancellation alone does not prove a deployed icon is missing.
+
+The prepared 302-byte `public/favicon.svg` is a neutral document glyph with deliberate unchanged-URL delivery. Its SHA-256 is `90d040bf9ceda788314822853d733b01d54660c8e8ac17bc57cb784f6f8cb09c`. The source was inspected, prepared through the existing preserve pipeline and copied from its eligible output. Root Base declares the fallback only when no resolved CMS favicon URL exists; native metadata remains the owner of a configured icon. Static Base uses the existing deploy-base/file-suffix URL policy. Shared manifests include the asset, with additive-adoption notes preserving client-owned files and wrappers. No unconditional shared-shell icon overrides the platform's choice.
+
+All eleven page-audit tests passed with the local browser fixtures explicitly enabled, including five real browser fixtures. They prove SVG 200 → `observed`, SVG 404 → `incomplete`, and implicit ICO cancellation → `incomplete` even when an ordinary request independently returns a valid icon with 200. Request guards and genuine failure handling remain intact. No query bypass, missing-resource suppression or artificial performance score was added. Existing configured ICO sites can still encounter the documented runner limitation; their canceled audit stays incomplete and requires separate ordinary HTTP evidence rather than a false success.
+
+The disposable owner-task pilot passed its editing/media/component checks plus an authenticated settings-API round trip: real SVG fallback; select existing prepared media as the native favicon; anonymous head contains exactly one configured icon with bytes matching that media; clear the setting; anonymous head returns to exactly one SVG fallback. Unrelated settings, content and working seed remained unchanged. This verifies technical ownership and readback, not human settings-editor usability.
+
+The original public-page conditions were repeated against the production fixture: service index and chair detail, 390×844 and 1440×900, three fresh anonymous contexts each, cache disabled, reduced motion, CPU slowdown 1, unthrottled loopback and a 1500ms post-load window. **All twelve loads are now `observed`**, each with a completed 200 SVG transfer, zero failed/pending resources, zero blocked requests/runtime errors and no horizontal overflow. This is bounded local evidence, not deployed performance or a budget grade. The owned server/tree and dependency junction were cleaned up after capture; working data was not copied or changed.
+
+## Verification and release
+
+Acceptance checks passed: doctor; 13 focused manifest tests; all eleven local page-audit tests with browser fixtures enabled (five actual browser fixtures); fast verification; full verification (326 unit and 156 lifecycle-rehearsal tests plus typechecking); both independent generated-profile install/clean-install/verify/build/HTTP suites; and the fresh root build/release gate/HTML audit (nine HTML files, ten captured public SSR responses). The final profile HTTP assertions validate declared icon delivery even when its source is missing and compare actual SVG MIME type/bytes. Typechecking has zero errors/warnings and the existing clipboard deprecation hint. The mechanical detector reported no findings on the changed wrappers; formatting and all 57 reference-manifest hashes passed.
+
+Release endpoint: reviewed feature commit pushed to origin, merge after remote checks and issue closure, with no website deployment. Raw browser logs, traces, preparation manifest and receipts remain in ignored local evidence directories; selected review artifacts are retained outside distributed source. The explicit routed-ICO limitation remains as documented method scope, not a suppressed failure or an unresolved missing default icon.

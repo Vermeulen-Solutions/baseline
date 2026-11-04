@@ -1,5 +1,7 @@
 # Font and token handoff rehearsal, 4 November 2026
 
+Subsequent acceptance: the earlier visual/favicon findings referenced here are addressed in [issue #38 resolution evidence](visual-public-asset-acceptance-2026-11-04.md). This document retains the original follow-up's scope and observations.
+
 This follow-up implements the [approved plan](../docs/font-and-token-followup-plan.md): font-source preflight in the existing design audit, an explicit selected-design-to-token recipe and a bounded optional delegation recipe. No client theme, content schema, root CSS/component, runtime dependency or production state changed.
 
 ## Font-source behavior
