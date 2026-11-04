@@ -97,188 +97,304 @@ Existing sites can adopt the updated component through a reviewed Baseline updat
 
 `data-surface="dark"` and `data-surface="light"` establish contextual surface relationships (`color-scheme`, `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, and `--color-focus`) Customizable via `--surface-dark-*` and `--surface-light-*` tokens so a dark section inside a light page (or a light card inside a dark hero) automatically adapts its text, muted copy, border, and focus ring. Set surface tokens from the real site palette and verify contrast against their actual grounds. Tables, filters and count/status belong together; deduplicate contacts without hiding distinct roles. Calendar actions should represent a real dated appointment, not imply a recurring schedule from a programme period.
 
+## Tranche coverage
+
+The sections below document the shipped contracts across Tranches 1–5. These capabilities are shared infrastructure; client layouts, branding, endpoint provisioning and deployment remain site-owned.
+
+| Tranche | Public contracts |
+| --- | --- |
+| 1 | [Navigation lifecycle and warming](#navigation-lifecycle-and-warming), navigation ownership, scroll intent and BFCache cleanup |
+| 2 | [Progressively enhanced forms](#progressively-enhanced-forms) and [skeleton loading geometry](#skeleton-loading-geometry) |
+| 3 | [Directional transitions](#directional-transitions) and [targeted swaps and persistence](#targeted-swaps-and-persistence) |
+| 4 | [Accessible interactive primitives](#accessible-interactive-primitives), theme state and [capabilities](#build-time-capabilities-virtualbaselinecapabilities) |
+| 5 | [Content navigation primitives](#content-navigation-and-structured-primitives) and [CMS heading parity](#emdash-cms-heading-ids-richtextastro-emdash-headingsts) |
+
+## Navigation lifecycle and warming
+
+`SiteShell.astro` supplies the browser lifecycle for all three profiles. ClientRouter navigation is opt-in: import `ClientRouter` from `astro:transitions` in the caller and place it in the shell's head slot. Without the router, links retain ordinary document navigation; these enhancements do not add a server runtime to static output.
+
+```astro
+---
+import { ClientRouter } from 'astro:transitions';
+import SiteShell from '../layouts/SiteShell.astro';
+---
+<SiteShell title="Articles">
+  <ClientRouter fallback="swap" slot="head" />
+  <main id="main-content">
+    <a href="?page=2" data-vt-noscroll>Next page</a>
+  </main>
+</SiteShell>
+```
+
+`data-vt-noscroll` on a navigation source or its ancestor preserves the current window's horizontal and vertical scroll coordinates through the swap. A departure page can opt all its navigations in with `<meta name="vt-noscroll" content="true" slot="head" />` or `[data-vt-noscroll-page]`. This is window scroll preservation, not persistence of form values or nested scroll containers. Failed or aborted navigation discards the saved intent.
+
+Each preparation receives a monotonic ownership token. Superseded loaders and warming work cannot clear the newer navigation's loading state. The `html[data-vt-loading]` progress indicator appears after **600ms**, rather than immediately. Loading clears when the owned preparation completes, on swap, or on failure/abort. Temporary morph names remain until the owning `ViewTransition.finished` settles; page initialization must not clear names before snapshots and animations complete. `pagehide` cancels pending warming/loading work; a persisted `pageshow` clears stale transition names/direction and reconciles theme and sticky-header state.
+
+The shell starts page/image warming after a 20ms pointer hover. Eligible links are same-origin, point to another pathname, have no query or fragment, and are not downloads, alternate-target links, `data-astro-reload`, or paths beginning with `/_`, `/api/` or `/admin`. Warming is skipped for Save-Data/2G connections and EmDash editing contexts, and page warming requires the ClientRouter marker. It parses fetched HTML and warms up to eight images with their `srcset`/`sizes`; image and page maps are each bounded to 30 entries. Active navigation cancels the speculative fetch and takes priority.
+
+Use `data-astro-prefetch="false"` on a link or ancestor to opt out of Baseline warming. Positive Astro prefetch directives remain governed by the site's native Astro configuration. Baseline's warming map is not a shared ClientRouter response cache, so do not promise one fetch per destination or automatic coordination with native prefetch. This eligibility list is a performance policy, not an authorization boundary; keep private routes protected and explicitly exclude additional sensitive links.
+
+Card-to-hero morphing derives intent from the actual navigation source. Shared cards use `.card-media` and `.card-title`; custom markup can opt in with `[data-vt-card]`, `[data-vt-media]` and `[data-vt-title]`. Destination elements can use `[data-vt-hero-media]` and `[data-vt-hero-title]`. The shell assigns temporary `hero-media`/`hero-title` names only to the selected pair and supports a return morph using the departed article URL. Avoid assigning these names to every card in a grid. Existing explicit `Card transitionName` and `.vt-morph` contracts remain available; callers own matching and uniqueness. Reduced-motion preferences suppress motion.
+
+For local fault probes, development builds accept destination query parameters `?_vt_delay=800` and `?_vt_fail=1`. Delay is abortable and bounded to 10 seconds; failure flags accept only `true`/`1` values. The fault hook is excluded from production. Probe aborted and overlapping navigation as well as successful navigation; a clean build alone cannot verify this lifecycle.
+
+## Progressively enhanced forms
+
+`Form.astro` renders a native form with `method="POST"` by default. Its additional props are `action?: FormActionConfig`, `method?: string`, `enhance?: boolean` (default `true`), `successMessage?: string` and `errorMessage?: string`, alongside native form attributes. The default slot contains labelled controls; named `success` and `errors` slots provide feedback content. Supply a unique stable `id` beginning with a letter and containing only word characters, colons, dots or hyphens; otherwise a generated ID is used. The supplied `class` belongs to the outer `.form-container`; the inner form uses `.flow`.
+
+```astro
+---
+import Form from '../components/Form.astro';
+---
+<Form id="contact" action="https://forms.example.test/contact" enhance={false}>
+  <label for="contact-email">Email</label>
+  <input id="contact-email" name="email" type="email" autocomplete="email" required />
+  <button type="submit">Send</button>
+</Form>
+```
+
+Replace the illustrative endpoint with a provisioned handler. The example uses native submission (`enhance={false}`), which also suits providers that redirect to their own confirmation page. With JavaScript disabled, the native form remains usable. Enabling enhancement adds browser JavaScript for `fetch` and feedback; neither mode provisions mail, storage, server validation, abuse protection or an endpoint.
+
+`FormActionConfig` is a URL string or `{ endpoint?: string; profile?: 'static' | 'static-sveltia' | 'emdash'; actionName?: string; action?: unknown }`. `resolveFormTransport()` returns `{ action: string; rpcAction?: string }`; `resolveFormAction()` returns only the native action string. The installed static profile is authoritative: callers cannot promote it to EmDash through the `profile` property. These utilities inspect installation configuration on the server/build side; do not import the transport module into browser code.
+
+For `static` and `static-sveltia`, external destinations require explicit HTTPS and must not contain credentials. Ordinary relative endpoints are allowed, but the deployment must provide the handler separately; they do not create an Astro server endpoint. Astro Action paths (`/_actions`), normalized traversal into those paths, `_action` query parameters and `actionName` configurations are rejected. Protocol-relative URLs, backslashes, embedded ASCII controls and executable URL schemes are rejected. Invalid configuration resolves to an empty action with no RPC endpoint; treat that as a configuration failure, because an omitted HTML action submits to the current document.
+
+On `emdash`, `action={{ actionName: 'contact' }}` resolves native submission to `?_action=contact` and enhanced submission to `/_actions/contact`. An action object can instead be supplied as `action={{ action: actions.contact }}` after importing the site's defined action. Define the actual handler with Astro's form action contract and verify both submission modes. Normal relative endpoints and HTTP/HTTPS destinations are also supported on this profile. Endpoint paths must respect the deployed site's routing/base configuration.
+
+Enhancement checks native constraints, captures `new FormData(form, submitter)` before disabling submit controls, prevents duplicate in-flight submission, and honors submitter `formaction`, `formmethod` and `formenctype`. GET requests append string fields to the destination query without a body. Multipart requests retain file bodies; `text/plain` serializes filenames and normalizes names/values to CRLF. URL-encoded and GET serialization include string entries only. Use multipart for file uploads. Submitter overrides are browser submission inputs, so keep them within the same reviewed destination policy as the main action.
+
+The enhanced handler sends `Accept: application/json`. Any successful HTTP status produces the success state; it does not interpret a successful Astro RPC response's validation envelope. Non-success responses can provide a JSON `message`; otherwise the configured error message is used. Cross-origin enhanced endpoints need CORS permission. Verify the chosen backend's response contract, or use native submission when it requires redirects, custom validation decoding or another protocol.
+
+During submission the form sets `aria-busy="true"` and disables submit controls. Failure restores each control's prior disabled/ARIA state, reveals a unique `${form.id}-errors` alert summary and focuses it. Success hides the form, reveals a polite status region and moves focus to that region. Form bindings initialize again on `astro:page-load`; outstanding fetch requests are not cancelled on navigation. Do not assume submission persistence or navigation cancellation. The server must still validate every field; `sanitizeFormValue()`, `validateFormField()` and `formatFormErrors()` are optional helpers, not a complete security or persistence layer.
+
+## Skeleton loading geometry
+
+`.skeleton-shimmer` is a CSS primitive driven by `--skeleton-width`, `--skeleton-height`, `--skeleton-aspect-ratio` and `--skeleton-radius`. `.skeleton-shimmer--text` defaults to one text line; `--circle` uses `--skeleton-size` (default `3rem`); `--card` uses `--skeleton-card-height` (default `12rem`) and a nonzero minimum block size. Reserve geometry that matches the eventual content to reduce layout shift; parent layout primitives still own the surrounding spacing.
+
+```html
+<section aria-label="Article preview" aria-busy="true">
+  <p>Loading article preview…</p>
+  <div class="skeleton-shimmer skeleton-shimmer--card" aria-hidden="true"
+    style="--skeleton-card-height: 16rem; --skeleton-radius: var(--radius-card)"></div>
+</section>
+```
+
+The loading controller owns removal of `aria-busy`, replacement of the placeholder and useful failure content. Skeletons are decorative and ignore pointer input; marking a parent busy changes its cursor but does not disable every real control in that parent. Under reduced motion, shimmer stops and uses a static elevated background at 0.85 opacity. Test contrast, geometry and loading failure with the client's actual tokens.
+
+The CSS works in all profiles and introduces no server capability. EmDash routes with an appropriate server runtime may use skeleton markup in a `server:defer` component's `slot="fallback"`; static profiles must retain their static architecture and use an appropriate client-owned loading mechanism if needed. Styling a placeholder does not implement Server Islands, streaming, personalization or cache invalidation.
+
+## Directional transitions
+
+`SiteShell` derives `html[data-vt-direction="forward|back"]` per navigation. History traversal uses the router's direction first. Other navigations use a source/ancestor `data-vt-direction="back|forward"` override, then same-origin pathname depth: shallower paths go back, deeper or equal-depth paths go forward. Trailing slashes do not add depth. Depth is a navigation heuristic, so use an explicit override when route hierarchy does not represent the intended journey.
+
+```html
+<a href="/articles/" data-vt-direction="back">All articles</a>
+```
+
+The direction is copied to the incoming root before swap and cleared after the owning transition completes, or on error, abort and BFCache restore. The CSS root animations use fluid travel distances, `--ease-smooth`, 180ms exit and 240ms entry durations; reduced-motion rules suppress them. Keep direction declarations on navigation sources rather than treating the transient root attribute as persistent application state. Test same-depth siblings, root/deep routes, explicit overrides and browser Back/Forward separately.
+
+## Targeted swaps and persistence
+
+Normal ClientRouter body swapping remains the default. Use Astro's native `transition:persist` when it satisfies the site's persistence needs. Baseline's `data-vt-persist="stable-key"` aliases a stable key to Astro's persistence attribute on both documents; an element ID supplies the key when the attribute is empty. Matching keys must exist on both pages. The same live DOM node and its state are retained, so incoming markup does not automatically reset an old form value, disclosure state or media source.
+
+Use `[data-vt-replace]` only when surrounding chrome genuinely stays identical across the routes. Its nonempty value is the preferred container key; otherwise matching uses the element ID, then tag name. Use unique explicit keys for multiple targets. Nested replacement targets are pruned to their outermost container. Missing, ambiguous or overlapping incoming matches fall back to the default Astro swap before partial replacement occurs.
+
+```html
+<header>Shared site navigation</header>
+<main id="main-content" data-vt-replace="article">
+  <audio controls data-vt-persist="shared-player" src="/media/preview.mp3"></audio>
+  <article>Route-specific content</article>
+</main>
+```
+
+Repeat the target and persistent player key on the destination page. In targeted mode, nodes outside replaced containers retain identity/listeners; nodes inside survive only when explicitly persisted and matched. Root attributes, head metadata/title/styles and focus handling still synchronize through Astro's swap helpers. Retained header/body wrappers do not receive arbitrary incoming DOM/attribute changes: navigation labels, active links, locale-specific chrome and route-specific body state need their own reconciliation or a normal body swap.
+
+The targeted path keeps persistent nodes in the connected document while moving them, preferring `Element.moveBefore()` when available and falling back to ordinary DOM moves. Media continuity and custom-element lifecycle behavior depend on the browser and move path; confirm playback/time/focus on the actual supported browsers. New media and declarative shadow roots in incoming targets are initialized separately. Do not assume all custom elements or framework islands can be transplanted safely without their own lifecycle contract.
+
+Verify rapid repeated navigation, aborts, default-swap fallback, nested/multiple targets, head synchronization, keyboard focus and BFCache restoration. Unit-tier contracts stay browser-free; `tests/visual/behavior.spec.mjs` provides the explicit local Chromium behavior tier. Shared shell/styles and `Form.astro`/`form-transport.ts` ship through `profiles/manifests/shared.json`; existing sites adopt them through reviewed [Baseline updates](baseline-updates.md), preserving site-owned wrappers, routes and tokens. No capability here adds a CMS dependency or silently enables SSR in a static profile.
+
 ## Accessible interactive primitives
 
-Baseline's interactive primitives provide zero-framework, progressively enhanced user interface controls following WAI-ARIA authoring practices, with zero external npm dependencies.
+These controls use Astro-rendered HTML and small browser modules, with zero framework hydration and zero new runtime npm dependencies. Without JavaScript, tab content remains readable; clipboard feedback and theme controls require JavaScript. Supply unique IDs when rendering multiple instances.
 
 ### Accessible Tabs (`Tabs.astro`)
-
-`Tabs.astro` provides an accessible, progressive-enhancement tabbed interface that requires zero client script to read all content.
 
 ```astro
 ---
 import Tabs from '../components/Tabs.astro';
 ---
 
-<Tabs id="cli-tabs" label="Command line package manager" items={[{ label: 'Bash', value: 'bash' }, { label: 'PowerShell', value: 'powershell' }]} syncKey="cli-flavor">
-  <div slot="bash">
-    <pre><code>npm run verify</code></pre>
-  </div>
-  <div slot="powershell">
-    <pre><code>npm.cmd run verify</code></pre>
-  </div>
-</Tabs>
+<div data-print-content>
+  <Tabs id="cli-tabs" label="Command line package manager" items={[{ label: 'Bash', value: 'bash' }, { label: 'PowerShell', value: 'powershell' }]} syncKey="cli-flavor" persist>
+    <div slot="bash"><pre><code>npm run verify</code></pre></div>
+    <div slot="powershell"><pre><code>npm.cmd run verify</code></pre></div>
+  </Tabs>
+</div>
 ```
 
-- **Progressive enhancement:** Without JavaScript, all panels render in sequence with visible tab-heading titles so all content remains fully legible and discoverable.
-- **WAI-ARIA compliance:** Once initialized, `<div role="tablist">` contains `<button role="tab">` elements paired with `<div role="tabpanel">`. Tab navigation follows WAI-ARIA keyboard guidelines: `ArrowLeft` / `ArrowRight` (or `ArrowUp` / `ArrowDown`), `Home`, and `End` rove focus between tabs with automatic panel activation.
-- **Peer synchronization (`syncKey`):** When multiple `<Tabs>` share a `syncKey`, selecting a tab on one switches all tabs with matching item IDs across the page, persisting the choice in `sessionStorage`. If storage is restricted or unavailable (private browsing, sandboxed iframes), selection continues to function gracefully in memory.
-- **ClientRouter & Disconnect lifecycle:** Integrates with Astro's ClientRouter lifecycle (`astro:page-load`, `astro:before-swap`). Observer connections clean up on DOM teardown to prevent stale references, memory leaks, or duplicate listener registrations after page transitions.
-- **Print media support:** When printing, tab buttons hide and all panels display sequentially with their titles, ensuring printed documentation captures all alternatives.
+- **Props and slots:** `id`, `label`, and a non-empty `items` array are required. Each item has a unique `value` and a `label`; its named slot matches `value`. Optional props are `defaultValue`, `orientation="horizontal|vertical"`, `activation="automatic|manual"`, `syncKey`, and `persist` (default `false`). Item `panelTabIndex` accepts `0` or `-1`.
+- **Progressive enhancement:** All panels remain visible without JavaScript. The component does not insert an extra visible heading above each panel; include any headings needed by the content in its slot. Enhancement manages `hidden`, `aria-selected`, and roving `tabindex`.
+- **Keyboard behavior:** Horizontal arrows (or vertical Up/Down), Home, and End move between tabs. Automatic activation is the default; manual activation uses Enter or Space to select the focused tab.
+- **Peer synchronization:** Selecting an item updates peers with the same `syncKey` and matching item `value`, without stealing focus. Persistence requires both `persist` and `syncKey` and uses `localStorage` under `baseline:tabs:<syncKey>`. Storage failures leave current-page selection usable.
+- **Lifecycle and printing:** Controllers clean up during ClientRouter swaps and DOM removal. Wrap the tabset in `[data-print-content]` to reveal inactive panels when printing. Tab buttons are not automatically hidden in print.
 
-### Copy button & live announcer (`CopyButton.astro`, `Announcer.astro`)
-
-`CopyButton.astro` provides accessible copy-to-clipboard interactions with clear visual and screen-reader status announcements.
+### Copy button and live announcer (`CopyButton.astro`, `Announcer.astro`)
 
 ```astro
 ---
 import CopyButton from '../components/CopyButton.astro';
-import Announcer from '../Announcer.astro';
+import Announcer from '../components/Announcer.astro';
 ---
 
-<pre id="code-snippet"><code>npm run verify:fast</code></pre>
-<CopyButton targetId="code-snippet" label="Copy command" copiedLabel="Copied command!" />
-<Announcer />
+<pre id="code-snippet"><code><span data-copy-exclude>$ </span>npm run verify:fast</code></pre>
+<CopyButton targetId="code-snippet" label="Copy command" copiedLabel="Copied command!" announcerId="command-announcer" />
+<Announcer id="command-announcer" />
 ```
 
-- **Target resolution:** Supports an element ID via `targetId` (e.g. `code-snippet`). Target elements can be standard DOM containers (`pre`, `code`, `p`) or form controls (`input`, `textarea`). Leading/trailing decorations are stripped cleanly before copying.
-- **Fallback copy support:** When the asynchronous `navigator.clipboard` API is unavailable or denied by browser security permissions, a fallback mechanism safely writes the selection.
-- **Visual & Screen-reader feedback:** Changes button text, class (`is-copied`), and icon on success with an automatic reset timer. Integrates with `Announcer` singleton (`announce()` in `src/lib/announce.ts`) to read polite status messages without interrupting active speech.
-- **Abort & Teardown safety:** Operations and pending timeouts clean up on element removal, navigation swaps, or explicit `AbortSignal`.
+- **Target and extraction:** `targetId` is a required element ID, not a CSS selector. `source="text"` copies text content; use `source="value"` for an input or textarea value. Text extraction removes explicit decoration selectors, including `[data-copy-exclude]`, `[data-prompt]`, `.prompt`, `.line-number`, `.line-numbers`, `[data-line-number]`, and `[aria-hidden="true"]`. It does not guess which punctuation is decorative. `excludeSelector` can replace that selector contract.
+- **Feedback props:** `label`, `copiedLabel`, `copiedMessage`, `errorMessage`, `announcerId`, `timeout` (milliseconds, default `2000`), and optional button `id` control the instance. Feedback changes the text span and `data-state="copied|error"`; there is no generated success icon or `is-copied` class.
+- **Copy and cancellation:** The Clipboard API has an `execCommand('copy')` fallback with focus restoration. The component owns cancellation and reset timers on removal or navigation. The separate `copyText(text, { signal })` utility in `src/lib/clipboard.ts` accepts an external AbortSignal; CopyButton has no signal prop.
+- **Announcements:** Announcer renders polite and assertive live-region channels under its explicit `id` (default `site-announcer`). It creates no automatic singleton. Mount the matching container once per ID. `announce(announcerId, message, { priority: 'polite' | 'assertive', signal })` from `src/lib/announce.ts` writes plain text to an existing region; missing containers return `false`.
 
-### Theme selector & surface controls (`ThemeSelect.astro`, `[data-surface-toggle]`)
-
-Baseline includes a unified theme engine that coordinates system preferences, author surface defaults, and user choices.
+### Theme selector and surface controls
 
 ```astro
 ---
 import ThemeSelect from '../components/ThemeSelect.astro';
 ---
 
-<ThemeSelect label="Theme" />
-<button type="button" data-surface-toggle aria-label="Toggle dark mode">Toggle mode</button>
+<ThemeSelect id="site-theme" label="Theme" />
+<button type="button" data-surface-toggle aria-label="Toggle theme">Toggle mode</button>
 ```
 
-- **Zero-FOUC author defaults:** When no stored preference exists, the author-declared default surface (`surface="light"` or `surface="dark"` on `SiteShell.astro`) is preserved without premature overrides, matching both light and dark site branding out of the box.
-- **Storage resilience:** Gracefully handles private browsing modes and disabled `localStorage` without thrown exceptions. Theme changes update live document styles and synchronize `<ThemeSelect>` dropdowns and `[data-surface-toggle]` buttons even when storage writes are blocked.
-- **ClientRouter persistence:** Listens to `astro:after-swap` to ensure theme attributes (`data-surface`, `color-scheme`) persist across Astro ClientRouter page transitions without flashing.
-- **System preference sync:** Automatically synchronizes with OS dark/light mode adjustments when set to "system" (`auto`), adapting in real time via `prefers-color-scheme` media query listeners.
+`ThemeSelect.astro` accepts `id`, `label`, and optional translated `labels` for `light`, `dark`, and `system`. SiteShell initializes `initThemeController()` from `src/lib/theme.ts`; standalone shells such as the styleguide must initialize it themselves. The initializer is idempotent.
+
+- **Author defaults:** SiteShell's `surface="light|dark|system"` is recorded in `data-surface-default`. With no preference, an unset default leaves `data-surface` and `data-surface-mode` unset; it does not opt the page into OS dark mode.
+- **Explicit choices:** `applyTheme(preference, { persist: false })` applies an in-memory choice without writing storage. A normal selection persists under `baseline:surface` when storage is available. The explicit `system` choice is stored as `system`; `applyTheme(null)` clears the choice and restores the author default.
+- **Synchronization:** The controller updates surface attributes, select values, and toggle `aria-pressed` together. It follows OS changes only in system mode, handles cross-tab storage events, and re-synchronizes after ClientRouter swaps. Restricted storage does not prevent current-page theme changes. The CSS surface rules derive `color-scheme` from these attributes.
 
 ## Content navigation and structured primitives
 
-### Heading anchors & permalinks (`Heading.astro`)
-
-`Heading.astro` renders accessible `<h1>` through `<h6>` headings with self-referencing anchor permalinks.
+### Heading anchors (`Heading.astro`)
 
 ```astro
 ---
 import Heading from '../components/Heading.astro';
 ---
 
-<Heading depth={2} id="getting-started">Getting Started</Heading>
+<Heading level={2} id="getting-started" anchor anchorLabel="Direct link to Getting Started">Getting Started</Heading>
 ```
 
-- **Accessible permalinks:** Renders an internal `<a>` tag with `#` symbol (or custom icon), marked `aria-hidden="true"` visually, accompanied by a visually hidden screen-reader label ("Section titled Getting Started") to prevent redundant link announcements.
-- **Deterministic slug generation:** Integrates with `src/lib/headings.ts` for clean, URL-safe slugify generation with unicode mark stripping and collision avoidance.
-- **Heading target class:** Renders `.heading-target` on the target heading, supporting `:target` styling and scroll margins for fixed headers (`scroll-margin-top: var(--scroll-margin, 5rem)`).
+`id` and `level` (`1` through `6`) define the native heading. `anchor` defaults to `false`; opt in for the keyboard-focusable permalink. The link has an `aria-label` (default `Direct link to this section`), while only its decorative `#` span is `aria-hidden`. There is no custom icon prop or automatic heading ID generation. Optional `class` is supported.
 
-### Table of Contents & scroll spy (`TableOfContents.astro`)
+Use `slugifyHeading(text)` from `src/lib/headings.ts` when generating explicit IDs. It preserves Unicode marks needed by scripts such as Devanagari, strips Latin combining accents and quoted HTML tags, and normalizes whitespace. It is stateless: use `deduplicateHeadingId(baseId, seenIds)` with a shared Set or Map to reserve emitted IDs within a document. Keep permanent incoming links tied to stable content identities where available.
 
-`TableOfContents.astro` generates a semantic navigation list with pure-DOM scroll-spy tracking.
+`.heading-target` supplies `scroll-margin-top: calc(var(--header-height, 4rem) + var(--spacing-content, 1.5rem))`. Set `--header-height` to the real sticky-header height and verify actual anchor placement. The permalink fragment is URL-encoded.
+
+### Table of Contents (`TableOfContents.astro`)
 
 ```astro
 ---
+import Heading from '../components/Heading.astro';
 import TableOfContents from '../components/TableOfContents.astro';
+import type { HeadingRecord } from '../lib/headings';
 
-const headings = [
-  { depth: 2, slug: 'intro', text: 'Introduction' },
-  { depth: 3, slug: 'details', text: 'Technical Details' },
-  { depth: 2, slug: 'conclusion', text: 'Conclusion' },
+const headings: HeadingRecord[] = [
+  { depth: 2, id: 'intro', text: 'Introduction' },
+  { depth: 3, id: 'details', text: 'Technical Details' },
+  { depth: 2, id: 'conclusion', text: 'Conclusion' },
 ];
 ---
 
-<TableOfContents headings={headings} label="On this page" minDepth={2} maxDepth={3} />
+<TableOfContents id="article-toc" contentId="article-content" headings={headings} label="On this page" />
+<article id="article-content">
+  <Heading level={2} id="intro">Introduction</Heading>
+  <p>Introduction text.</p>
+  <Heading level={3} id="details">Technical Details</Heading>
+  <p>Technical details.</p>
+  <Heading level={2} id="conclusion">Conclusion</Heading>
+  <p>Conclusion text.</p>
+</article>
 ```
 
-- **Arbitrary depth nesting:** Renders recursive semantic `<nav aria-label="...">` with nested `<ol>` lists inside `@layer components`. Scoped styling preserves correct indentation, typography, and contrast across all 6 heading levels.
-- **IntersectionObserver scroll spy:** Tracks active sections on scroll using `src/lib/toc.ts`. Applies `aria-current="true"` and `.is-active` to exactly one active heading at a time, preventing double-activation states.
-- **Safe fragment encoding:** Encodes link fragments consistently and isolates malformed or percent-encoded fragment targets (e.g. `100%`) so malformed links cannot crash the scroll-spy observer.
-- **Zero-JS navigation:** Fully operable as static anchor links when JavaScript is unavailable.
+- **Input contract:** `contentId` identifies the content container and `headings` is a readonly array of `{ id, text, depth }`. When mapping Astro Markdown headings, copy `slug` into the record's `id`; the component does not accept `slug` records. Defaults are `minDepth={2}`, `maxDepth={3}`, and `spy={true}`. Depth bounds support `1` through `6`; optional props are `id`, `label`, `offsetIds` (element IDs), and `class`.
+- **Native navigation:** Recursive `<ol role="list">` markup retains all eligible levels and works without JavaScript. The component adds no outer margin. Root-scoped global descendant selectors style the injected list inside `@layer components`.
+- **Scroll spy:** IntersectionObserver plus scroll/resize updates keep the last heading at the reading threshold active through long sections. Explicit `offsetIds`, `[data-sticky-header]`, and a pixel-valued `--header-height` fallback inform the threshold. Only `aria-current="location"` changes; there is no `is-active` class, history mutation, or focus transfer. At most one link per TOC is current. Controllers tear down on removal and `astro:before-swap`, and initialize on `astro:page-load`.
+- **Fragments:** Generated fragments are encoded. Matching decodes once, with raw fallback only for malformed encoding, so IDs such as `100%` and `100%25` remain distinct. `spy={false}` leaves static navigation without scroll tracking.
 
 ### Callouts (`Callout.astro`)
-
-`Callout.astro` presents distinct aside callouts for notes, tips, cautions, and danger alerts.
 
 ```astro
 ---
 import Callout from '../components/Callout.astro';
 ---
 
-<Callout variant="note" title="Good to know">
-  <p>Callout descriptions appear here.</p>
-</Callout>
-
-<Callout variant="danger" title="Important notice">
-  <p>Critical warnings use high-contrast danger tokens.</p>
-</Callout>
+<Callout kind="note" title="Good to know"><p>Contextual guidance.</p></Callout>
+<Callout kind="danger" title="Important notice"><p>Read this before proceeding.</p></Callout>
 ```
 
-- **Semantic HTML:** Renders `<aside class="callout callout--{variant}">` with an optional title. Non-critical variants (`note`, `tip`, `caution`) avoid intrusive `role="alert"` or `role="status"` live regions to prevent interrupting screen readers during normal reading flow.
-- **Zero external margin contract:** Features `margin: 0;` so parent layout containers (`Section`, `Container`, `Grid`, or `.flow`) dictate spacing without collapsing-margin issues or unexpected whitespace.
-- **Themed variants:** Ships with accessible SVG icons and tokens for `note`, `tip`, `caution`, and `danger`.
+`title` is required and must be non-empty. `kind` accepts `note`, `tip`, `caution`, or `danger`, defaulting to `note`. Optional `id` and `class` apply to the root. The default slot holds content. Every kind renders an `<aside class="callout callout--{kind}">` with a styled title paragraph and no alert/status role or live region, including `danger`.
+
+Callout has `margin: 0`; the parent owns its surrounding spacing. Override `--color-callout-note`, `--color-callout-tip`, `--color-callout-caution`, or `--color-callout-danger` for semantic accents, and `--color-callout-bg` / `--color-callout-border` for surfaces and borders. Calibrate colors against the client's actual light/dark surfaces; the kind name is not a contrast certification.
 
 ### Steps (`Steps.astro`)
-
-`Steps.astro` organizes sequenced workflows, tutorials, or onboarding steps.
 
 ```astro
 ---
 import Steps from '../components/Steps.astro';
 ---
 
-<Steps items={[
+<Steps id="setup-steps" label="Setup steps" items={[
   { value: 'clone', title: 'Clone the repository' },
   { value: 'install', title: 'Install dependencies' },
   { value: 'verify', title: 'Verify environment' },
 ]}>
-  <p slot="clone">Clone the baseline repository from GitHub.</p>
-  <p slot="install">Install dependencies with <code>npm install</code>.</p>
-  <p slot="verify">Run <code>npm run verify:fast</code> to test your environment.</p>
+  <p slot="clone">Clone the repository.</p>
+  <p slot="install">Run <code>npm ci</code> with the checked-in lockfile.</p>
+  <p slot="verify">Run <code>npm run verify:fast</code>.</p>
 </Steps>
 ```
 
-- **Semantic list:** Emits an ordered list `<ol class="steps" role="list">` with numbered step markers generated via CSS counters (`counter-increment: step-counter`) or explicit step numbers.
-- **Logical properties & RTL support:** Employs CSS logical properties (`margin-inline-start`, `padding-inline-start`, `border-inline-start`) for complete right-to-left (`dir="rtl"`) compatibility without requiring mirrored styles.
-- **Layout spacing:** Features `margin: 0;` for predictable integration inside `.flow` editorial rhythms and layout containers.
+A non-empty `items` array is required. Each item's `value` selects a named slot; optional `title` renders a paragraph. `start` defaults to `1`; `item.number` overrides that item's displayed number and native `<li value>`. Numbers are server-rendered text in decorative, `aria-hidden` markers, not CSS counters. The list uses `<ol role="list">` to preserve list semantics when native markers are suppressed. Optional root props are `id`, `label`, and `class`.
 
-## Platform capabilities module & CMS parity
+The connector uses logical inset/block properties so it follows `dir="rtl"`. Set the appropriate `lang` as well for translated content. Steps has `margin: 0`; the parent owns sibling spacing. Browser markup checks do not replace Safari/VoiceOver acceptance testing.
 
-### Capabilities module (`virtual:baseline/capabilities`)
+## Platform capabilities module and CMS parity
 
-The `virtual:baseline/capabilities` module exposes browser-safe environment facts and client runtime helpers across all platform profiles (`static`, `static-sveltia`, `emdash`).
+### Build-time capabilities (`virtual:baseline/capabilities`)
 
 ```ts
-import {
-  capabilities,
-  applyTheme,
-  subscribeTheme,
-  copyToClipboard,
-  ensureAnnouncer,
-  initTabs,
-  initTableOfContents,
-} from 'virtual:baseline/capabilities';
+import { capabilities } from 'virtual:baseline/capabilities';
 
-console.log(capabilities.profile); // 'emdash' | 'static' | 'static-sveltia'
-console.log(capabilities.isEmDash); // true | false
+console.log(capabilities.profile);
+console.log(capabilities.base);
+console.log(capabilities.search !== false);
 ```
 
-- **Multi-profile integration:** In static profiles, `baselineFeatures()` is registered in `astro.config.mjs` and ambient declarations are provided in `src/env.d.ts` (`declare module 'virtual:baseline/capabilities'`).
-- **Client runtime helpers:** Bundles re-usable client helpers for theme manipulation, clipboard actions, announcer management, and widget initialization with 0 external npm dependencies.
+The virtual module exports the named `capabilities` value and the same data as its default export. Public fields are `profile` (`static`, `static-sveltia`, or `emdash`), normalized `base`, `trailingSlash`, `headingLinks`, `callouts`, and `search`. `search` is `false` or `{ engine: 'pagefind', bundlePath: string }`; there is no `isEmDash` field or `features.search` boolean.
 
-### EmDash CMS heading parity (`RichText.astro`, `emdash-headings.ts`)
+`baselineFeatures()` is installed in both configurations and provides Vite resolution plus ambient declarations. Its explicit options set the flags; flags are not automatic component discovery or proof that a search index exists. The module serializes public build facts only. Browser helpers are separate imports from `src/lib/theme.ts`, `clipboard.ts`, `announce.ts`, `tabs.ts`, or `toc.ts`; they are not re-exported by the virtual module. Do not import the filesystem-backed `src/lib/capabilities.ts` resolver into browser scripts.
 
-Portable Text headings in EmDash maintain full parity with static `<Heading>` components and `<TableOfContents>`:
+### EmDash CMS heading IDs (`RichText.astro`, `emdash-headings.ts`)
 
-- **Deterministic ID generation:** Portable Text headings receive deterministic, URL-safe IDs using `slugifyHeading()` and stable block keys.
-- **Scope isolation:** `extractHeadingsFromBlocks()` and `RichText.astro` share heading ID allocations. Providing a custom `id` attribute on `<RichText id="article">` does not invalidate pre-extracted TOC targets unless an explicit `scopeId` override is supplied.
-- **Text alignment preservation:** Portable Text headings with `textAlign: "center"`, `"right"`, or `"justify"` map to `.has-text-align-center`, `.has-text-align-right`, and `.has-text-align-justify` utility classes without losing styling or target anchors.
+```astro
+---
+import RichText from '../components/RichText.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import { headingsFromPortableBlocks } from '../lib/emdash-headings';
+
+const blocks = [{ _type: 'block', _key: 'intro', style: 'h2', markDefs: [], children: [{ _type: 'span', text: 'Introduction', marks: [] }] }];
+const headings = headingsFromPortableBlocks(blocks, 'article');
+---
+
+<TableOfContents id="cms-toc" contentId="article-body" headings={headings} />
+<RichText id="article-body" value={blocks} />
+```
+
+The adapter allocates IDs on the supplied blocks in place so RichText and the TOC share them. Stable `_key` values use injective hex escaping, including reserved underscores; missing keys fall back to text slugs with collision avoidance. Wrapper HTML IDs do not override previously allocated namespaces. An explicit RichText `scopeId` overrides allocations; use the same scope when extracting the corresponding TOC. Center/right/justify author alignment remains available through the allowlisted `.has-text-align-*` classes. The EmDash renderer remains profile-specific; static projects retain their CMS-free RichText replacement.
+
+### Optional Pagefind search roadmap
+
+[Issue #36](https://github.com/Vermeulen-Solutions/baseline/issues/36) tracks the future native-dialog search primitive. Search UI and indexing are not installed by these capabilities flags. Preserve the existing `capabilities.search` shape, resolve the bundle URL from the configured base and bundle path, and keep the CLI optional build tooling with no new runtime npm dependency. Generated Pagefind JavaScript/WebAssembly is still browser runtime code and should load only on demand.
+
+Pagefind indexes generated public HTML after the build. Static profiles can index `dist`; EmDash's SSR routes need an explicit public HTML export/snapshot policy before they can be included, with search assets served from the public client output rather than server bundles. Exclude drafts, private/admin routes, fixtures, and stale content. Preserve per-page `lang` for multilingual indexing, provide an accessible missing-index state, and verify native dialog focus restoration and keyboard shortcuts outside editable/composition contexts. See the official [Pagefind build workflow](https://pagefind.app/docs/) and [multilingual indexing](https://pagefind.app/docs/multilingual/).

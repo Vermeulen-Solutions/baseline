@@ -21,6 +21,7 @@ import Heading from '../Heading.astro';
 import TableOfContents from '../TableOfContents.astro';
 import Callout from '../Callout.astro';
 import Steps from '../Steps.astro';
+import type { HeadingRecord } from '../../lib/headings';
 import { fixtureVersion, smallImage, portraitImage, fixtureImage as image, specimenTokens, componentCoverage } from '../../dev/styleguide-fixtures';
 interface Props {
   coverage?: {
@@ -35,10 +36,10 @@ interface Props {
 }
 const { coverage = componentCoverage, editorialLabel = 'Markdown' } = Astro.props;
 const sections = ['typography', 'palette', 'controls', 'layout', 'media', 'editorial', 'composition', 'primitives', 'coverage'];
-const specimenTocHeadings = [
-  { depth: 2, slug: 'primitives-overview', text: 'Overview of interactive primitives' },
-  { depth: 3, slug: 'primitives-tabs', text: 'Synchronized tabs and copy' },
-  { depth: 3, slug: 'primitives-callouts', text: 'Editorial callouts and steps' },
+const specimenTocHeadings: readonly HeadingRecord[] = [
+  { depth: 3, id: 'primitives-overview', text: 'Overview of interactive primitives' },
+  { depth: 4, id: 'primitives-tabs', text: 'Synchronized tabs and copy' },
+  { depth: 4, id: 'primitives-callouts', text: 'Editorial callouts and steps' },
 ];
 ---
 <!doctype html>
@@ -88,54 +89,54 @@ const specimenTocHeadings = [
         </div></Section>
         <Section labelledBy="editorial"><div class="flow"><h2 id="editorial">{editorialLabel}</h2><div class="flow" data-editorial-content><slot name="editorial"><MarkdownProse /></slot></div></div></Section>
         <CompositionSpecimens><slot name="platform-disclosure-body" slot="editorial"><DisclosureProse /></slot></CompositionSpecimens>
-        <Section labelledBy="primitives"><div class="flow">
+        <Section labelledBy="primitives"><div id="primitives-content" class="flow" data-print-content>
           <h2 id="primitives">Interaction and content primitives</h2>
           <p>Progressively enhanced controls with zero external dependencies. Calibrated for keyboard navigation, RTL layout, and zero-JS fallbacks.</p>
 
-          <Heading depth={3} id="primitives-overview">Overview of interactive primitives</Heading>
+          <TableOfContents id="specimen-toc" contentId="primitives-content" headings={specimenTocHeadings} label="Section table of contents" minDepth={3} maxDepth={4} />
+          <Heading level={3} id="primitives-overview" anchor anchorLabel="Direct link to Overview of interactive primitives">Overview of interactive primitives</Heading>
           <p>Theme selection and clipboard copying with live assistive technology announcements.</p>
           <Cluster class="control-row">
-            <ThemeSelect label="Theme selector" />
-            <button type="button" class="btn btn--secondary" data-surface-toggle aria-label="Toggle theme mode">Quick toggle</button>
-            <CopyButton targetId="specimen-code" label="Copy specimen code" copiedLabel="Copied code!" />
+            <ThemeSelect id="specimen-theme" label="Theme selector" />
+            <button id="specimen-theme-toggle" type="button" class="btn btn--secondary" data-surface-toggle aria-label="Toggle theme mode">Quick toggle</button>
+            <CopyButton id="specimen-copy" targetId="specimen-code" announcerId="specimen-announcer" label="Copy specimen code" copiedLabel="Copied code!" />
           </Cluster>
-          <pre id="specimen-code" style="padding: 1rem; border: 1px solid var(--color-border); border-radius: var(--radius-control); background: var(--color-surface); overflow-x: auto;"><code>npm.cmd run verify:fast</code></pre>
-          <Announcer />
+          <pre id="specimen-code" class="primitive-code"><code><span data-copy-exclude>$ </span>npm.cmd run verify:fast</code></pre>
+          <Announcer id="specimen-announcer" />
 
-          <Heading depth={3} id="primitives-tabs">Synchronized tabs and copy</Heading>
+          <Heading level={4} id="primitives-tabs" anchor anchorLabel="Direct link to Synchronized tabs and copy">Synchronized tabs and copy</Heading>
           <p>Tab panels synchronize across instances sharing the same <code>syncKey</code>. Without JavaScript, panels remain visible sequentially.</p>
           <Tabs id="specimen-tabs-install" label="Install commands" items={[{ value: 'npm', label: 'npm' }, { value: 'pnpm', label: 'pnpm' }, { value: 'yarn', label: 'yarn' }]} syncKey="package-manager">
-            <div slot="npm"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>npm install</code></pre></div>
-            <div slot="pnpm"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>pnpm install</code></pre></div>
-            <div slot="yarn"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>yarn install</code></pre></div>
+            <div slot="npm"><pre class="primitive-code"><code>npm ci</code></pre></div>
+            <div slot="pnpm"><pre class="primitive-code"><code>pnpm install</code></pre></div>
+            <div slot="yarn"><pre class="primitive-code"><code>yarn install</code></pre></div>
           </Tabs>
 
           <Tabs id="specimen-tabs-build" label="Build commands" items={[{ value: 'npm', label: 'npm run' }, { value: 'pnpm', label: 'pnpm run' }, { value: 'yarn', label: 'yarn run' }]} syncKey="package-manager">
-            <div slot="npm"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>npm run build</code></pre></div>
-            <div slot="pnpm"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>pnpm run build</code></pre></div>
-            <div slot="yarn"><pre style="padding: 0.5rem; background: var(--color-surface);"><code>yarn run build</code></pre></div>
+            <div slot="npm"><pre class="primitive-code"><code>npm run build</code></pre></div>
+            <div slot="pnpm"><pre class="primitive-code"><code>pnpm run build</code></pre></div>
+            <div slot="yarn"><pre class="primitive-code"><code>yarn run build</code></pre></div>
           </Tabs>
 
-          <Heading depth={3} id="primitives-callouts">Editorial callouts and steps</Heading>
-          <TableOfContents headings={specimenTocHeadings} label="Section table of contents" minDepth={2} maxDepth={3} />
+          <Heading level={4} id="primitives-callouts" anchor anchorLabel="Direct link to Editorial callouts and steps">Editorial callouts and steps</Heading>
 
           <Grid minimum="compact">
-            <Callout variant="note" title="Note specimen">
+            <Callout kind="note" title="Note specimen">
               <p>Informational callout for contextual guidance without an alert role.</p>
             </Callout>
-            <Callout variant="tip" title="Tip specimen">
-              <p>Actionable advice using semantic success tokens.</p>
+            <Callout kind="tip" title="Tip specimen">
+              <p>Actionable advice using a client-overridable callout tip token.</p>
             </Callout>
-            <Callout variant="caution" title="Caution specimen">
+            <Callout kind="caution" title="Caution specimen">
               <p>Warning about potential configuration issues.</p>
             </Callout>
-            <Callout variant="danger" title="Danger specimen">
+            <Callout kind="danger" title="Danger specimen">
               <p>Critical notice for breaking changes or risk.</p>
             </Callout>
           </Grid>
 
-          <h4>Ordered steps with RTL verification</h4>
-          <Steps items={[
+          <h5>Ordered steps with RTL verification</h5>
+          <Steps id="specimen-steps-ltr" label="Verification steps" items={[
             { value: 'verify', title: 'Run fast verification' },
             { value: 'profiles', title: 'Compile independent profiles' },
             { value: 'inspect', title: 'Inspect rendered styleguide' },
@@ -145,8 +146,8 @@ const specimenTocHeadings = [
             <p slot="inspect">Inspect components in headless Chromium.</p>
           </Steps>
 
-          <div dir="rtl">
-            <Steps items={[
+          <div dir="rtl" lang="ar">
+            <Steps id="specimen-steps-rtl" label="خطوات التحقق" items={[
               { value: 'step1', title: 'الخطوة الأولى' },
               { value: 'step2', title: 'الخطوة الثانية' },
             ]}>
@@ -161,8 +162,13 @@ const specimenTocHeadings = [
     <footer class="site-footer"><p>Development/test specimen route. Normal production builds return 404. Fixture builds must never be deployed.</p></footer>
   </body>
 </html>
+<script>
+  import { initThemeController } from '../../lib/theme';
+  initThemeController();
+</script>
 <style>
 @layer components {
+  .primitive-code { padding:var(--spacing-content); border:1px solid var(--color-border); border-radius:var(--radius-control); background:var(--color-surface); overflow-x:auto; }
   .stress { overflow-wrap: anywhere; }
   .swatches { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr)); gap:var(--spacing-content); padding:0; list-style:none; }
   .swatch { display:block; block-size:4rem; border:1px solid var(--color-border); margin-block-end:.5rem; }

@@ -58,7 +58,7 @@ Agent instructions require saving the art-direction record before visual impleme
 Bounded fluid scales, root-font/inline-axis assumptions and diagnostics, reading measures (`68ch`), and structural layout primitives.
 - **[Native Composition](native-composition.md)** Open-slot Disclosure, Cluster and Sidebar contracts, intrinsic wrapping, CMS/static content ownership and manual acceptance limits.
 - **[Reusable Public Patterns & Primitives](reusable-public-patterns.md)**  
-Production-tested components: `Card`, `CMSPartnersPanel`, `ResponsiveImage`, `EditorialImage`, and zero-JS interactive primitives (`LogoTicker` CSS infinite marquee, pure CSS flexbox `PhotoGallery`, and surface-aware focus).
+Shared contracts and examples for Cards/media, ClientRouter lifecycle and warming, progressive forms, skeleton geometry, directional transitions and persistent swaps, accessible Tabs/CopyButton/theme controls, heading/TOC/Callout/Steps primitives, and platform capabilities. The guide maps Tranches 1–5 and distinguishes native fallbacks from browser enhancements and server-only capabilities.
 - **[CMS Metadata Ownership Verification](verification/metadata-phase-1.md)** Shared-shell compatibility, article semantics, public-origin defaults, editor/plugin precedence, and the disposable local metadata rehearsal.
 - **[Static Metadata and Safe JSON-LD](verification/metadata-phase-2.md)** Static/Sveltia ownership, public URL and image policy, independent profile verification, and explicit existing-site adoption.
 - **[Foundational Interaction Journeys](verification/interactions-phase-3.md)** Local keyboard, error recovery, no-JS and motion checks across CMS/static profiles, with explicit manual AT limits.
