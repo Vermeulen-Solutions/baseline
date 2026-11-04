@@ -1,0 +1,995 @@
+{
+  "changed": [
+    {
+      "file": "chromium-1440/category.png",
+      "oldDimensions": [
+        1440,
+        900
+      ],
+      "newDimensions": [
+        1440,
+        900
+      ],
+      "rawDifferentCommonPixels": 4078,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        47,
+        431,
+        544,
+        448
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "4aab4ac1f21d36e7d49073bfd20180a582bcaa7835e72b9739c1b7b9c7bd1b11",
+      "candidateSHA256": "54a01b962d76fe6e5b60c628863f9392c47d99053db7ea271d1c83f4f77445ab"
+    },
+    {
+      "file": "chromium-1440/home.png",
+      "oldDimensions": [
+        1440,
+        900
+      ],
+      "newDimensions": [
+        1440,
+        900
+      ],
+      "rawDifferentCommonPixels": 4078,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        47,
+        369,
+        544,
+        386
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "cccf5ff9f3ef31b213a475122f529402774ec4e2544363a1c315e6701f80c5e1",
+      "candidateSHA256": "6c6e7acedc9877006d400727b6da7f752216933fcf3606f133f9467261a1c81d"
+    },
+    {
+      "file": "chromium-1440/page.png",
+      "oldDimensions": [
+        1440,
+        900
+      ],
+      "newDimensions": [
+        1440,
+        900
+      ],
+      "rawDifferentCommonPixels": 3945,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        48,
+        297,
+        668,
+        341
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "fbd3a63660f4cac42a8e60d22344266b40711c725d2a1032d3d1d95002caaa97",
+      "candidateSHA256": "ec3949a96366c7bd48039f37cd9a4ba7380d861e39d74a36b0ae42be2efc8848"
+    },
+    {
+      "file": "chromium-1440/post.png",
+      "oldDimensions": [
+        1440,
+        930
+      ],
+      "newDimensions": [
+        1440,
+        994
+      ],
+      "rawDifferentCommonPixels": 137885,
+      "extraPixelsFromDimensions": 92160,
+      "bboxCommon": [
+        0,
+        393,
+        1440,
+        930
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "7c9faacdaf0e7ad7da48dd3d34239404a51ee7af1c9bcc6aa1dd397b989d496d",
+      "candidateSHA256": "3db3b0f674c10a6d6d5162d16ae1daeaa1f5370ac997ac7e789e4b635d7ea819"
+    },
+    {
+      "file": "chromium-1440/posts.png",
+      "oldDimensions": [
+        1440,
+        900
+      ],
+      "newDimensions": [
+        1440,
+        900
+      ],
+      "rawDifferentCommonPixels": 4078,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        47,
+        369,
+        544,
+        386
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "93fe6307baa22fe68158f31ebd5d34f7f3e922e3b958088916ca002bf0faa1b2",
+      "candidateSHA256": "0b2ffe0a309f05340afa125023b1eb3da9358389d0298513d60e0da40585e12b"
+    },
+    {
+      "file": "chromium-1440/styleguide-no-js.png",
+      "oldDimensions": [
+        1440,
+        12633
+      ],
+      "newDimensions": [
+        1440,
+        14968
+      ],
+      "rawDifferentCommonPixels": 1079214,
+      "extraPixelsFromDimensions": 3362400,
+      "bboxCommon": [
+        0,
+        25,
+        1440,
+        12633
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "ba16636f7c5ddddb24090bcb493c3be15af0a97a8b8a1fbdbb5b57cd52395cc8",
+      "candidateSHA256": "12ef559188f25bb32da31beee460c8453edd6e9419309a1e045558e78b5cca17"
+    },
+    {
+      "file": "chromium-1440/styleguide.png",
+      "oldDimensions": [
+        1440,
+        12545
+      ],
+      "newDimensions": [
+        1440,
+        14536
+      ],
+      "rawDifferentCommonPixels": 733560,
+      "extraPixelsFromDimensions": 2867040,
+      "bboxCommon": [
+        0,
+        25,
+        1440,
+        12545
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "72737358706b34f763ff1c825755785459b5221080532c545af332b8a364c0ef",
+      "candidateSHA256": "503cc5704032d67fa666e39fcfd2ba5b19c01d194f577573f0a93705ddbcdfbc"
+    },
+    {
+      "file": "chromium-1440/tag.png",
+      "oldDimensions": [
+        1440,
+        900
+      ],
+      "newDimensions": [
+        1440,
+        900
+      ],
+      "rawDifferentCommonPixels": 4078,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        47,
+        431,
+        544,
+        448
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "2a19d02983cd925aeabc2477efe0881d26ab88c7ac69f9bfc62f919285a32668",
+      "candidateSHA256": "3119c8be0151a5a42f0fb1d8f9fd1fd0ea667d3fffa4f0607dff5270c9daf997"
+    },
+    {
+      "file": "chromium-1440/zoom-200.png",
+      "oldDimensions": [
+        640,
+        11198
+      ],
+      "newDimensions": [
+        640,
+        12968
+      ],
+      "rawDifferentCommonPixels": 560698,
+      "extraPixelsFromDimensions": 1132800,
+      "bboxCommon": [
+        42,
+        121,
+        640,
+        11181
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "6ef3f8c2a70e2d814297baf1adba2d66dbe3ca12f95ed971a9b18e3e391cf998",
+      "candidateSHA256": "f38315db025ca9764e1c863cec6fbd3e3b511128fcc9515c85b6a9f1610fe461"
+    },
+    {
+      "file": "chromium-1440/zoom-400.png",
+      "oldDimensions": [
+        320,
+        13573
+      ],
+      "newDimensions": [
+        320,
+        15713
+      ],
+      "rawDifferentCommonPixels": 1354501,
+      "extraPixelsFromDimensions": 684800,
+      "bboxCommon": [
+        0,
+        512,
+        320,
+        13499
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "7b88b2c0a5cce350f9254fd7a97fa08d0c1fe75544b152206827d4396e11e829",
+      "candidateSHA256": "e5f5a02390c1b89631d3f047ff3f469998b099b8e2c3622e3622e3cda71043d5"
+    },
+    {
+      "file": "chromium-390/category.png",
+      "oldDimensions": [
+        390,
+        844
+      ],
+      "newDimensions": [
+        390,
+        844
+      ],
+      "rawDifferentCommonPixels": 4064,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        17,
+        309,
+        372,
+        350
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "a3f379d62d07836be5f5e26ce9d1db36f9c21bc7d4c56eec81f2ff3ede2525dd",
+      "candidateSHA256": "cab8135d386c87257429762b1b89cbef40b4e72ad892bb8329aff7cda32d936b"
+    },
+    {
+      "file": "chromium-390/composition-open.png",
+      "oldDimensions": [
+        356,
+        2054
+      ],
+      "newDimensions": [
+        356,
+        2055
+      ],
+      "rawDifferentCommonPixels": 63178,
+      "extraPixelsFromDimensions": 356,
+      "bboxCommon": [
+        0,
+        58,
+        356,
+        1996
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "713006ec06cb620761eb4bcbdab842a6e4135b846bc3e445d3971005658a7b03",
+      "candidateSHA256": "5c4f4b111cf9b9589105cde01205c30c914ae424da3edba9fe81c12a9fb1a6d8"
+    },
+    {
+      "file": "chromium-390/composition.png",
+      "oldDimensions": [
+        356,
+        1693
+      ],
+      "newDimensions": [
+        356,
+        1693
+      ],
+      "rawDifferentCommonPixels": 44478,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        0,
+        58,
+        356,
+        1608
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "4fa886bfa7fee52dec8d352323a5991a9713d21a8e7d7ace16248dc7f82c2503",
+      "candidateSHA256": "deebb4912781a349f3d5a463cf623c5891a99cedc52a9f97f220b73b80eb990d"
+    },
+    {
+      "file": "chromium-390/controls-focus.png",
+      "oldDimensions": [
+        356,
+        1114
+      ],
+      "newDimensions": [
+        356,
+        1113
+      ],
+      "rawDifferentCommonPixels": 6474,
+      "extraPixelsFromDimensions": 356,
+      "bboxCommon": [
+        0,
+        95,
+        356,
+        968
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "07849554748d72aa7701c515254d955a8014ae6e2727e908d31219b70c7a4f3c",
+      "candidateSHA256": "ad0f09e335c2e97b0dcb1fc3bb6c18e683232f85440ca702e8e519b493226286"
+    },
+    {
+      "file": "chromium-390/controls.png",
+      "oldDimensions": [
+        356,
+        1114
+      ],
+      "newDimensions": [
+        356,
+        1113
+      ],
+      "rawDifferentCommonPixels": 6462,
+      "extraPixelsFromDimensions": 356,
+      "bboxCommon": [
+        0,
+        95,
+        356,
+        968
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "6992aa18a8dc563684152a8ddbe9be2fb6d0c2c4f899d1307152bd72adeccc68",
+      "candidateSHA256": "3aee2bd0eb2bb2a53fed6ba1fb6b511106afa052ba1c9ecc05cb0f2e7953343a"
+    },
+    {
+      "file": "chromium-390/gallery-open.png",
+      "oldDimensions": [
+        390,
+        844
+      ],
+      "newDimensions": [
+        390,
+        844
+      ],
+      "rawDifferentCommonPixels": 9035,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        17,
+        0,
+        373,
+        733
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "67dc14fa33a06915ca754bbd14de793bc2cf27132b5b8ee9758e8b702b9fd90c",
+      "candidateSHA256": "6924f1e7ace96fd356830317970e7dfb460a830a748c611ad022e3a42c9ba0e1"
+    },
+    {
+      "file": "chromium-390/home.png",
+      "oldDimensions": [
+        390,
+        844
+      ],
+      "newDimensions": [
+        390,
+        844
+      ],
+      "rawDifferentCommonPixels": 4064,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        17,
+        262,
+        372,
+        302
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "c66e4f2233dda41a6479374598f36e6cbfa6c4a582d9bca4159acb75dca102d5",
+      "candidateSHA256": "051dc482b35a5a7eca2fb16eb06534b3f408783d34334e20c84fa159a15f9a2b"
+    },
+    {
+      "file": "chromium-390/page.png",
+      "oldDimensions": [
+        390,
+        844
+      ],
+      "newDimensions": [
+        390,
+        844
+      ],
+      "rawDifferentCommonPixels": 3864,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        17,
+        244,
+        338,
+        287
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "5b77932e6ac17f3223adf6f3ad848ed0002327e419b6635c37817a5558f9353f",
+      "candidateSHA256": "c392fa39a511ff52b65fee719d7fab83fa53680d471ba5e468ee2832d5164bc6"
+    },
+    {
+      "file": "chromium-390/post.png",
+      "oldDimensions": [
+        390,
+        956
+      ],
+      "newDimensions": [
+        390,
+        1072
+      ],
+      "rawDifferentCommonPixels": 83673,
+      "extraPixelsFromDimensions": 45240,
+      "bboxCommon": [
+        0,
+        298,
+        390,
+        946
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "c1f8424eca2aba615f3736e1c5ec514a074a3a48c8ef227e31bf8605b8b61234",
+      "candidateSHA256": "4f032b45dfe44fbf1a262668ea544b6d98d121ec02ee6e0f6fd47e4c4a2a90c7"
+    },
+    {
+      "file": "chromium-390/posts.png",
+      "oldDimensions": [
+        390,
+        844
+      ],
+      "newDimensions": [
+        390,
+        844
+      ],
+      "rawDifferentCommonPixels": 4064,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        17,
+        262,
+        372,
+        302
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "38e2484612109cef80529ff4325a36de476fd55078f0e9c4ba338c20b5f64024",
+      "candidateSHA256": "b678d7bae04584f635eaf420144b5a8d23823001ddd51aa86fd0e2e1258baf1b"
+    },
+    {
+      "file": "chromium-390/sensitivity-control.png",
+      "oldDimensions": [
+        356,
+        1114
+      ],
+      "newDimensions": [
+        356,
+        1113
+      ],
+      "rawDifferentCommonPixels": 6462,
+      "extraPixelsFromDimensions": 356,
+      "bboxCommon": [
+        0,
+        95,
+        356,
+        968
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "6992aa18a8dc563684152a8ddbe9be2fb6d0c2c4f899d1307152bd72adeccc68",
+      "candidateSHA256": "3aee2bd0eb2bb2a53fed6ba1fb6b511106afa052ba1c9ecc05cb0f2e7953343a"
+    },
+    {
+      "file": "chromium-390/styleguide-no-js.png",
+      "oldDimensions": [
+        390,
+        13089
+      ],
+      "newDimensions": [
+        390,
+        15317
+      ],
+      "rawDifferentCommonPixels": 840850,
+      "extraPixelsFromDimensions": 868920,
+      "bboxCommon": [
+        0,
+        99,
+        390,
+        13089
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "62b728bce2022ebfe2e89801f3a2fe661a36a6dd1c36d74b30280e344cabe2fb",
+      "candidateSHA256": "497b51ca8734202a7d941e6abf7d4426e50c7ebb63e1723887ac0cf0e5670945"
+    },
+    {
+      "file": "chromium-390/styleguide.png",
+      "oldDimensions": [
+        390,
+        13001
+      ],
+      "newDimensions": [
+        390,
+        14960
+      ],
+      "rawDifferentCommonPixels": 771887,
+      "extraPixelsFromDimensions": 764010,
+      "bboxCommon": [
+        0,
+        99,
+        390,
+        13001
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "794dfdf711f72839589943cdd830e9fa26f0c8678d68e23a5b11a228d8af217e",
+      "candidateSHA256": "d0a4bee501e0d2ec268272783b9bfba8f9b1c4e6769d28b9fac1f5adea6ffb25"
+    },
+    {
+      "file": "chromium-390/tag.png",
+      "oldDimensions": [
+        390,
+        844
+      ],
+      "newDimensions": [
+        390,
+        844
+      ],
+      "rawDifferentCommonPixels": 4064,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        17,
+        309,
+        372,
+        350
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "60c193b0a3ec59bc82745579926e3a781c5d6b53c1e2fd684c76c77d182e1b14",
+      "candidateSHA256": "c2fdc0fca245ddaff956891fddc0ec845d905c84e0bd06f020470151980d23bd"
+    },
+    {
+      "file": "chromium-390/text-spacing-320.png",
+      "oldDimensions": [
+        320,
+        16043
+      ],
+      "newDimensions": [
+        320,
+        19088
+      ],
+      "rawDifferentCommonPixels": 1561633,
+      "extraPixelsFromDimensions": 974400,
+      "bboxCommon": [
+        0,
+        138,
+        320,
+        16043
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "5be908efc9011334de93b1de48760e12a8498ef3fdc496fae84fe8bbcbfaa60c",
+      "candidateSHA256": "73cc2416f27a5e4852f24f6f5a29219c28ecdc9d995d1c3d7ea3676e0cd8769d"
+    },
+    {
+      "file": "chromium-390/ticker-active.png",
+      "oldDimensions": [
+        356,
+        168
+      ],
+      "newDimensions": [
+        356,
+        169
+      ],
+      "rawDifferentCommonPixels": 3800,
+      "extraPixelsFromDimensions": 356,
+      "bboxCommon": [
+        0,
+        14,
+        356,
+        149
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "34d8ef3fe463126031b5c11bd9fc46f36c62135f9ba430d6af73b539c93f199c",
+      "candidateSHA256": "e3936cf3c1c8228198bbff08dadf653db285159601e5e3b1aaea1ab07ad0c0ed"
+    },
+    {
+      "file": "chromium-390/ticker-reduced.png",
+      "oldDimensions": [
+        356,
+        236
+      ],
+      "newDimensions": [
+        356,
+        237
+      ],
+      "rawDifferentCommonPixels": 4213,
+      "extraPixelsFromDimensions": 356,
+      "bboxCommon": [
+        27,
+        17,
+        329,
+        216
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "9231760a3a8b6a09c36ac166a7d2f43ea9074f8fddf806311194777ebc747da3",
+      "candidateSHA256": "39ae8b811fe53df81db497e19721dcf37bb436f18ffa0f75715ee68ca485f439"
+    },
+    {
+      "file": "chromium-768/category.png",
+      "oldDimensions": [
+        768,
+        1024
+      ],
+      "newDimensions": [
+        768,
+        1024
+      ],
+      "rawDifferentCommonPixels": 4068,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        23,
+        338,
+        520,
+        355
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "5825e429a5b14a180885a50813ec14ddd447d278801438a0c7f771c5475953f4",
+      "candidateSHA256": "fbb5eb04b93a925da2d6528cb7bd90dcd720ce5c39179febb42d914a193ea44e"
+    },
+    {
+      "file": "chromium-768/composition-open.png",
+      "oldDimensions": [
+        722,
+        1739
+      ],
+      "newDimensions": [
+        722,
+        1739
+      ],
+      "rawDifferentCommonPixels": 37092,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        0,
+        201,
+        722,
+        1643
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "55c72560c2bee0536720d31939f69e48a1af1c03cb2646ca2a0ec2aa0e288f32",
+      "candidateSHA256": "b3472cd169ff8e59bff0e328d75b96cd9335912ee1782c54439359749606e54c"
+    },
+    {
+      "file": "chromium-768/composition.png",
+      "oldDimensions": [
+        722,
+        1500
+      ],
+      "newDimensions": [
+        722,
+        1500
+      ],
+      "rawDifferentCommonPixels": 25642,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        0,
+        201,
+        722,
+        1404
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "56908307804ac681600c7cab48dc5c8563b3183b888cf91352b6abaf53e05174",
+      "candidateSHA256": "ebb4c7e7c22f2cacae768267f993085b63312cea4fb1cac58cf633922cdf55f1"
+    },
+    {
+      "file": "chromium-768/controls-focus.png",
+      "oldDimensions": [
+        722,
+        1123
+      ],
+      "newDimensions": [
+        722,
+        1123
+      ],
+      "rawDifferentCommonPixels": 9828,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        1,
+        96,
+        701,
+        960
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "fd10d0f1b80d5cf57d1f1a280b7c81372adab5f14449d10d69febc23fe468cd8",
+      "candidateSHA256": "08b887eed8715b0ed7799e6ce02756d2b617cf8e2e8756de501c720c9a8a1058"
+    },
+    {
+      "file": "chromium-768/controls.png",
+      "oldDimensions": [
+        722,
+        1123
+      ],
+      "newDimensions": [
+        722,
+        1123
+      ],
+      "rawDifferentCommonPixels": 9818,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        1,
+        96,
+        701,
+        960
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "906038ec94e753a259efad2e8ab5cb1606aec397f5cccf212d1e1ffc87c522e8",
+      "candidateSHA256": "4fe1e772f383d11eef2585f33452450e34187df61855e6538fc6b36a34fa7855"
+    },
+    {
+      "file": "chromium-768/gallery-open.png",
+      "oldDimensions": [
+        768,
+        1024
+      ],
+      "newDimensions": [
+        768,
+        1024
+      ],
+      "rawDifferentCommonPixels": 9581,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        23,
+        9,
+        745,
+        990
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "cafe14a1fca524266f030b5e25deaea09271a2943761f853136b999cd8dc21f2",
+      "candidateSHA256": "3dc9343020ab7fc8e17483aec04f7844917aead5c55c077d74c0bccb36f7293e"
+    },
+    {
+      "file": "chromium-768/home.png",
+      "oldDimensions": [
+        768,
+        1024
+      ],
+      "newDimensions": [
+        768,
+        1024
+      ],
+      "rawDifferentCommonPixels": 4068,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        23,
+        284,
+        520,
+        301
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "936478ad8bc58dd43034920ac5bb6132efc557a156f17f4cb9fc575a626a8ed0",
+      "candidateSHA256": "93af7a7e806a10d1fa25de6c6326a37a1a25d02378fba857a59a8c7dd6a21ad7"
+    },
+    {
+      "file": "chromium-768/page.png",
+      "oldDimensions": [
+        768,
+        1024
+      ],
+      "newDimensions": [
+        768,
+        1024
+      ],
+      "rawDifferentCommonPixels": 3944,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        24,
+        228,
+        644,
+        271
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "b5c789c1c679ee36d9f21d69ba66ebfd5362f72fab90a806972ed3ed86b54fce",
+      "candidateSHA256": "cfd9d1384a721f6cec66827c3d8f01365bb4eb5935e137f6408d49c4f28a83b5"
+    },
+    {
+      "file": "chromium-768/post.png",
+      "oldDimensions": [
+        768,
+        1024
+      ],
+      "newDimensions": [
+        768,
+        1024
+      ],
+      "rawDifferentCommonPixels": 32277,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        23,
+        315,
+        644,
+        607
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "f457f1be196abc28e706f43f84cf2985594c9dff86dd783644eb50bb3093d1a6",
+      "candidateSHA256": "772d71d11dfb22ea49fa97e5639eddc99fd097610b5baac8d4d0037dbcc5012c"
+    },
+    {
+      "file": "chromium-768/posts.png",
+      "oldDimensions": [
+        768,
+        1024
+      ],
+      "newDimensions": [
+        768,
+        1024
+      ],
+      "rawDifferentCommonPixels": 4068,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        23,
+        284,
+        520,
+        301
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "d55cb108b3d24683f5f2f636bd6fe7b21a6994eeada74dab9d28b7dc6b631ac2",
+      "candidateSHA256": "212bbb6583d3955fc869fdad63588301fd7adc5f559cbbed2efef2b4a68d345c"
+    },
+    {
+      "file": "chromium-768/sensitivity-control.png",
+      "oldDimensions": [
+        722,
+        1123
+      ],
+      "newDimensions": [
+        722,
+        1123
+      ],
+      "rawDifferentCommonPixels": 9818,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        1,
+        96,
+        701,
+        960
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "906038ec94e753a259efad2e8ab5cb1606aec397f5cccf212d1e1ffc87c522e8",
+      "candidateSHA256": "4fe1e772f383d11eef2585f33452450e34187df61855e6538fc6b36a34fa7855"
+    },
+    {
+      "file": "chromium-768/styleguide-no-js.png",
+      "oldDimensions": [
+        768,
+        11657
+      ],
+      "newDimensions": [
+        768,
+        13807
+      ],
+      "rawDifferentCommonPixels": 1002213,
+      "extraPixelsFromDimensions": 1651200,
+      "bboxCommon": [
+        0,
+        62,
+        768,
+        11657
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "4739309735871391ba914690269fa3090550d769b46ca5a68ebc5b889ae28e11",
+      "candidateSHA256": "c9229cf6fee430b99afae4312a565d820bae6f3f8fa4bb1fac61be81466ea0fb"
+    },
+    {
+      "file": "chromium-768/styleguide.png",
+      "oldDimensions": [
+        768,
+        11569
+      ],
+      "newDimensions": [
+        768,
+        13417
+      ],
+      "rawDifferentCommonPixels": 859173,
+      "extraPixelsFromDimensions": 1419264,
+      "bboxCommon": [
+        0,
+        62,
+        768,
+        11569
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "6901983c36d05eafc84fe9533d453ac5038bcb0826ad05bb4c038858a52534da",
+      "candidateSHA256": "b90d9127323535e7f1476873be65792360083fff41d19df52349084d6afaa7b9"
+    },
+    {
+      "file": "chromium-768/tag.png",
+      "oldDimensions": [
+        768,
+        1024
+      ],
+      "newDimensions": [
+        768,
+        1024
+      ],
+      "rawDifferentCommonPixels": 4068,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        23,
+        338,
+        520,
+        355
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "40cd8c9e1211d36ba39657dcacaea59294b1c6c451fe4626b90ba7130006fa09",
+      "candidateSHA256": "36dab6928737f45fd0d0476950da67484c8891de4aea9a8b7e97af9ee6d48d90"
+    },
+    {
+      "file": "chromium-768/ticker-active.png",
+      "oldDimensions": [
+        722,
+        175
+      ],
+      "newDimensions": [
+        722,
+        175
+      ],
+      "rawDifferentCommonPixels": 697,
+      "extraPixelsFromDimensions": 0,
+      "bboxCommon": [
+        28,
+        15,
+        137,
+        33
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "ba4edf1991cceed6c49a05751ad9234bd1e8a9339721cc9439ab88cc95336ac8",
+      "candidateSHA256": "9f86b5ebeb162d5d9f81fefa41b55c4b5f47fa6028d008ce1ea23536a3046bf0"
+    },
+    {
+      "file": "chromium-768/ticker-rtl.png",
+      "oldDimensions": [
+        722,
+        110
+      ],
+      "newDimensions": [
+        722,
+        111
+      ],
+      "rawDifferentCommonPixels": 2055,
+      "extraPixelsFromDimensions": 722,
+      "bboxCommon": [
+        271,
+        8,
+        722,
+        88
+      ],
+      "encodingOnly": false,
+      "oldSHA256": "d6c583b6d587cdfd8f8cc60af075ca80de913bd03ce2735c32f4e52b9d365327",
+      "candidateSHA256": "66f0ebcf3513c510c13ba3996e7b84fcd687ef64de5c87c9162f7385be67a347"
+    }
+  ],
+  "byteIdentical": [
+    "chromium-1440/composition-open.png",
+    "chromium-1440/composition.png",
+    "chromium-1440/controls-focus.png",
+    "chromium-1440/controls.png",
+    "chromium-1440/gallery-open.png",
+    "chromium-1440/not-found.png",
+    "chromium-1440/sensitivity-control.png",
+    "chromium-1440/ticker-active.png",
+    "chromium-1440/ticker-reduced.png",
+    "chromium-1440/ticker-rtl.png",
+    "chromium-390/not-found.png",
+    "chromium-390/ticker-rtl.png",
+    "chromium-768/not-found.png",
+    "chromium-768/ticker-reduced.png"
+  ],
+  "oldPNGCount": 57,
+  "newExtraPNGs": [],
+  "captureStatus": "Reviewed reference refresh; full strict non-updating run passed104checks with40existing viewport/scope skips.",
+  "sourceHistory": {
+    "oldReferenceRevision": "922bbaaf6fc26324c3ee4c83b153e8c33ae564d7",
+    "seedCopyChange": "14f0272",
+    "primitiveSectionChange": "ef3f27c",
+    "primitiveCorrection": "91b6239",
+    "sourceBaseRevision": "14f0272cb74b7101770b29b9e2d749c2537889bf"
+  },
+  "manifestSHA256": "15c15ea331c1a887ed4a63d365de75ac10fe5754ee4f3fbe2868dcde2fab0ebb",
+  "verification": {
+    "update": {
+      "passed": 97,
+      "skipped": 47,
+      "failed": 0
+    },
+    "strict": {
+      "passed": 104,
+      "skipped": 40,
+      "failed": 0
+    },
+    "pixelThreshold": 0.1,
+    "maxDiffPixels": 0,
+    "comparisonMasksAdded": false,
+    "comparisonSettingsChanged": false,
+    "rendererContractChanged": false,
+    "behaviorFixtureCorrected": true
+  }
+}

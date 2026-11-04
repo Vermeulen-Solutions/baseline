@@ -29,6 +29,12 @@ Only same-origin GET/HEAD requests are permitted. CMS administrative/setup/auth/
 
 `observed` means the bounded load completed with successful document status, no runtime/resource/scope failures, no unresolved transfers and at least one actual rendered-font sample. It does not mean fast, accessible or approved. `incomplete` retains available evidence and exits 2; invalid/refused input also exits 2. An observed collection exits 0. Record site-specific budgets/acceptance decisions beside the site's existing evidence rather than treating this exit code as a performance grade.
 
+## Favicon interpretation
+
+The neutral starter's platform layouts explicitly reference the shared `favicon.svg` document glyph, with the deployed base applied. Replace that owned asset or the site's wrapper reference when establishing real identity. The CMS layout emits this fallback only when no resolved site favicon is configured; the native platform head retains ownership of a configured icon. These unchanged-URL icon files deliberately live under `public/`, outside content-image optimization.
+
+The pinned browser runner cancels routed requests whose URL ends in `/favicon.ico` before invoking route callbacks. Protocol observations still expose a canceled transfer, even when a separate ordinary HTTP request would return 200. The audit retains that cancellation as `incomplete`: it does not prove the deployed icon is missing, and the audit does not suppress the failure, add query-string bypasses or silently replace the site's icon. Diagnose an ICO cancellation with an ordinary authorized request as separate evidence. Explicit SVG icon requests avoid this runner-specific ICO behavior; an actual missing SVG or other asset remains a resource failure and must still make the audit incomplete. An icon redirect/404 and an automation cancellation can coexist and require separate interpretation.
+
 ## Use in the delivery workflow
 
 Choose representative route archetypes and states from the brief, including the page with the heaviest real content or a suspected loading problem. During component calibration, compare requested typography with actual glyph-family readback and visually inspect the rendered result; legitimate family aliases or multilingual fallback need interpretation. Inspect failed font requests and repair actual paths/configuration rather than accepting a fallback as the chosen face. The same distinction applies to images: successful stored upload is not proof of native public delivery.

@@ -121,7 +121,8 @@
     "docs/page-performance.md",
     "scripts/font-preflight.mjs",
     "tests/font-preflight.test.mjs",
-    "docs/font-preflight.md"
+    "docs/font-preflight.md",
+    "public/favicon.svg"
   ],
   "packages": {
     "dependencies": [

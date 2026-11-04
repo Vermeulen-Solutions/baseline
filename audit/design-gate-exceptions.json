@@ -150,8 +150,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "12d7a35ba52e969fe8db6bc6b6ff2f6bf81e8c172f458edcddbbb1f2b80a4162"
+    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. No page layout, theme, client brand or editor target change.",
+    "sha256": "ebd9de71daab02e3e56c4b486f3ed248d5bd84037a4863bb2ec40517cae65995"
   },
   {
     "path": "src/components/Container.astro",
@@ -431,8 +431,8 @@
   },
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
-    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "0225d5f4c808972f5d3de69a2cb2b6cb430be1d68f350580af3282647873514d"
+    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content, navigation and visual layout.",
+    "sha256": "c6e3b4213f69ba90e7eddd07d2c1990c7c1a4fef3ec41154a7e70a4857ef8030"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",
@@ -614,5 +614,10 @@
     "path": "src/components/PostListItem.astro",
     "reason": "Neutral starter native component extraction: unchanged semantic post-list markup and image rendering shared by home/category/tag loops, with the existing home-only date made explicit. No client-specific visual styling.",
     "sha256": "c8bee99f7eb593849994af184cfe403eae7e1d1fc3c8a36cc8711e7dfc7de211"
+  },
+  {
+    "path": "public/favicon.svg",
+    "reason": "Deliberate unchanged-URL neutral document favicon, prepared in preserve mode and reviewed as native vector infrastructure. No invented client identity or public page styling; exact source replacement invalidates this exception.",
+    "sha256": "90d040bf9ceda788314822853d733b01d54660c8e8ac17bc57cb784f6f8cb09c"
   }
 ]

@@ -1,5 +1,7 @@
 # Delivery workflow rehearsal, 4 November 2026
 
+Subsequent acceptance: [issue #38 resolution evidence](visual-public-asset-acceptance-2026-11-04.md) records the reviewed visual-reference refresh and twelve complete public-page loads with the real SVG favicon. The observations below remain the historical earlier run, including its then-unresolved limitations.
+
 The follow-up adds source structure inspection, actual owner-task rehearsal, optional public-page/font evidence and a compact feedback-to-verified-result loop. These extend the existing discovery/content-planning work without adding a mandatory planning document, review stop, analytics service or runtime dependency. The [implementation plan](../docs/workflow-delivery-followup-plan.md) records scope and release endpoint.
 
 ## Shipped behavior

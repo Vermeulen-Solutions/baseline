@@ -1417,6 +1417,10 @@
     "docs/font-preflight.md": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "public/favicon.svg": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }
