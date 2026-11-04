@@ -2,13 +2,13 @@
 	"$schema": "https://emdashcms.com/seed.schema.json",
 	"version": "1",
 	"meta": {
-		"name": "Starter",
-		"description": "A minimal EmDash starter with posts and pages",
-		"author": "EmDash"
+		"name": "Baseline Starter",
+		"description": "Baseline starter with EmDash CMS, design tokens, layout primitives, and structured content",
+		"author": "Baseline"
 	},
 	"settings": {
 		"title": "My Site",
-		"tagline": "Built with EmDash"
+		"tagline": "Built with Baseline and EmDash"
 	},
 	"collections": [
 		{
@@ -144,7 +144,7 @@
 					"type": "component",
 					"componentId": "core:recent-posts",
 					"title": "Recent Posts",
-					"settings": {
+					"props": {
 						"count": 5
 					}
 				}
@@ -166,7 +166,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "This is the about page. Edit it in the admin panel or replace this template with your own design.",
+									"text": "This is the about page. Edit it in the admin panel or customize it using Baseline layout primitives and design tokens.",
 									"_key": "k1"
 								}
 							],
@@ -183,7 +183,7 @@
 				"status": "published",
 				"data": {
 					"title": "Welcome",
-					"excerpt": "Your first post. Replace this with your own content.",
+					"excerpt": "A starter post using the Baseline design system and EmDash CMS.",
 					"content": [
 						{
 							"_type": "block",
@@ -191,7 +191,7 @@
 							"children": [
 								{
 									"_type": "span",
-									"text": "This is a starter post. The templates in this project show the basic patterns for querying and rendering EmDash content. Replace them with your own design.",
+									"text": "This is a starter post built with Baseline and EmDash CMS. The templates demonstrate core patterns for querying, rendering, and editing structured content with fluid typography, design tokens, and .flow rhythm.",
 									"_key": "k1"
 								}
 							],
@@ -212,14 +212,44 @@
 						{
 							"_type": "block",
 							"style": "normal",
+							"listItem": "number",
+							"level": 1,
 							"children": [
 								{
 									"_type": "span",
-									"text": "Open the admin panel to add content, or edit the Astro pages in src/pages to change how content is displayed.",
+									"text": "Replace the starter content with your own in the EmDash admin panel.",
 									"_key": "k5"
 								}
 							],
 							"_key": "k4"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"listItem": "number",
+							"level": 1,
+							"children": [
+								{
+									"_type": "span",
+									"text": "Establish the site's art direction before changing its visual identity.",
+									"_key": "k7"
+								}
+							],
+							"_key": "k6"
+						},
+						{
+							"_type": "block",
+							"style": "normal",
+							"listItem": "number",
+							"level": 1,
+							"children": [
+								{
+									"_type": "span",
+									"text": "Calibrate shared components on the development styleguide at /_styleguide.",
+									"_key": "k9"
+								}
+							],
+							"_key": "k8"
 						}
 					]
 				},
