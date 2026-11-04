@@ -1,5 +1,7 @@
 # Design Framework & Token Physics
 
+The existing token audit also checks bounded font-source contracts; see [font preflight](font-preflight.md) for exact-case local paths, format/descriptor evidence and unresolved-source limits. Use the installed `site-art-direction/references/token-handoff.md` when translating a selected canvas change through the CLI preview/apply cycle into native calibration and route acceptance. Implemented CSS remains the token authority.
+
 Baseline supplies fluid type/space scales and small structural layout primitives. Use fluid values for continuous sizing and intrinsic wrapping for content-driven layouts. Media queries remain useful for a deliberate change of composition; avoid accumulating spacing breakpoints to repair unclear ownership. Token mathematics describes reference values, while rendered checks establish whether actual content remains readable and usable.
 
 ## Explaining layout spacing during new-site setup

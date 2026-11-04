@@ -250,5 +250,9 @@
   "page-audit.test.mjs": {
     "tier": "unit",
     "reason": "Input/output contracts and resource/font normalization; real-browser cases explicitly local-only and opt-in"
+  },
+  "font-preflight.test.mjs": {
+    "tier": "unit",
+    "reason": "Read-only bounded font-face, exact-path case, format/header and typography-role diagnostics"
   }
 }

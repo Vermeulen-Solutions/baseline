@@ -118,7 +118,10 @@
     "tests/project-structure.test.mjs",
     "scripts/audit-page.mjs",
     "tests/page-audit.test.mjs",
-    "docs/page-performance.md"
+    "docs/page-performance.md",
+    "scripts/font-preflight.mjs",
+    "tests/font-preflight.test.mjs",
+    "docs/font-preflight.md"
   ],
   "packages": {
     "dependencies": [
@@ -305,6 +308,8 @@
     ".agents/skills/opendesign-site-design/assets/plugins/od-astro-baseline-export/open-design.json",
     ".agents/skills/opendesign-site-design/references/baseline-html-recipe.md",
     ".agents/skills/opendesign-site-design/references/connection-and-cli.md",
-    ".agents/skills/new-site-workflow/references/delivery-evidence.md"
+    ".agents/skills/new-site-workflow/references/delivery-evidence.md",
+    ".agents/skills/new-site-workflow/references/parallel-delivery.md",
+    ".agents/skills/site-art-direction/references/token-handoff.md"
   ]
 }

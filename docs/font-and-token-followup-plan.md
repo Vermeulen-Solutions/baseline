@@ -1,0 +1,22 @@
+# Font preflight and design handoff follow-up
+
+Status: implementation and verification complete, 4 November 2026. Tighten font-file evidence and rehearse an explicit design-to-token handoff, with a small optional delegation recipe. Release the verified source on `codex/workflow-delivery-evidence` with a commit and push to origin. No website deployment or merge is included. Commit messages remain free of external product/person attribution.
+
+## Scope and acceptance
+
+| Work | Implementation | Required evidence |
+| --- | --- | --- |
+| Font preflight | Extend the existing design audit with bounded read-only font-face/source/role observations and local asset checks; retain system stacks and existing package/remote integrations | Missing and incorrectly cased local references, format/header mismatch and malformed descriptors fail; unresolved sources remain explicit; legitimate legacy delivery formats produce advice; no asset renaming, conversion or network/config execution |
+| Design-to-token handoff | Use the existing preview/apply CLI with explicit semantic mappings and original fluid expressions; keep production CSS authoritative | Fictional local HTML/CSS design specimen, proposed diff, validated disposable apply, native calibration and representative rendered comparison; unrelated content preserved; no universal importer or second token authority |
+| Delegation recipe | Optional bounded work units, dependencies and single writers for shared files, databases and canvases | Independent content/schema/copy preparation can progress; dependent route implementation uses settled shared contracts; primary integration, source freeze and release verification remain explicit |
+| Integration and release | Distribute helpers/tests/references through existing profile manifests and document additive adoption | Fast/full verification, independent generated-profile checks, fresh build and HTML audit; local browser rehearsal stays outside CI/build; reviewed commit and verified remote branch |
+
+The font audit validates owned delivered references rather than arbitrary source archives. WOFF2 is the preferred modern delivery format; lowercase is a convention for new owned filenames, while exact path case is the correctness requirement. Four typography roles may share families. Static source observations cannot certify decoded font metadata, selected variable axes or actual glyph rendering; browser evidence remains necessary. Keep environment doctor independent of CSS/parser dependencies.
+
+Content ownership and reusable presentation remain separate decisions: a record can be editable content rendered through a shared component, and one-off copy can also be editor-owned. Existing content-model and component-calibration stages own these decisions; add no mandatory document, architectural pause or canvas service.
+
+Subtasks have distinct file owners: font helper/tests, local synthetic rehearsal, and compact workflow references. The primary agent owns CLI integration, distribution, documentation and final verification. Synthetic fixtures use owned temporary projects and local ignored artifacts, preserve the working application/seed and report dependency reuse honestly. Existing authorization covers routine execution; no extra continuation prompts are required.
+
+## Outcome
+
+The [follow-up retrospective](../audit/font-token-handoff-2026-11-04.md) records font checks, reviewed corrections and the actual local design/token rehearsal. Doctor, both modified-skill validations and 29 focused design/font/CLI tests passed. Full verification passed 326 unit and 156 lifecycle-rehearsal tests plus typechecking (zero errors/warnings, one existing clipboard deprecation hint). Both generated static profiles independently installed/clean-installed, verified, built and passed production/fixture/HTTP checks without database packages. The final-code local handoff rehearsal passed at 390/768/1440px with zero recorded runtime errors, preserved root source/content and completed both owned-instance cleanups. The fresh root build, release-artifact gate and HTML audit passed: nine HTML files and ten captured public SSR responses. The reviewed source is ready for the authorized feature commit/push. The earlier delivery rehearsal remains at [workflow-delivery-pilot-2026-11-04.md](../audit/workflow-delivery-pilot-2026-11-04.md); its pre-existing visual-reference and favicon findings are not resolved by this follow-up.

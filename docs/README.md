@@ -98,6 +98,7 @@ Form handling, server-side recovery validation, and Cloudflare Turnstile spam pr
 
 - **[Design Framework, Token Presets & Optional EmVB](design-framework.md)**  
 How `npm run design:tokens` seeds lane presets, checks 14 semantic WCAG relative-luminance contrast pairs across default/dark/restored-light surfaces, validates bounded fluid math, and bridges optional `@perkyzz/emvb` visual landing pages.
+- **[Font Source Preflight](font-preflight.md)** Exact-case local font references, format/header and descriptor checks, typography roles, unresolved-source advice and the browser acceptance boundary.
 - **[Component Quarantine & Styleguide Fixtures](styleguide-fixtures.md)**  
 How `/_styleguide` renders components and responsive stress cases in isolation before page assembly, and how the route is automatically excluded (404) from production builds.
 - **[Local Visual Regression Testing](visual-regression.md)**  

@@ -6,6 +6,8 @@ Use during representative implementation and delivery, or when a scoped change a
 
 For the representative journey, give the operator a compact map: **route → template/components → repeated data source or field owner → editing location → observed result**. Point to actual source/entry/field identities and describe unresolved relationships. Do not copy full schemas, component APIs or inventories into another registry. The optional installed `baseline:inspect -- --structure --json` can supply bounded source observations; ordinary source review remains complete when it is unavailable. Imported code, literal field hints and source loops do not establish runtime use or successful editing.
 
+Choose content ownership and presentation reuse independently. A service can be a collection record rendered through a shared service-card component; one-off hero copy can still belong to an editable page field. Repeated presentation alone does not establish an entity's independent lifecycle, and component props do not make embedded copy editor-owned. Use Stage 3's existing content model and the selected profile's actual editing needs; this distinction adds no new table or checkpoint.
+
 Use semantic components where the same content/interaction contract recurs and a shared change should remain consistent, such as a service card, result row or section introduction. Expose only meaningful variants; preserve natural text, image, heading and action ownership. A component defined but unused is not reuse. Do not force unrelated one-off sections into a page-sized component or a universal configuration object.
 
 Render repeated data through the selected profile's real collection/query or owned data array and a native loop, passing each item's values into its component. Avoid manually copied cards for independently managed records. Fixed illustrative content does not automatically need a CMS collection, and two similar visual boxes alone do not justify extracting a component. Preserve semantic list structure, item ordering, stable destinations, meaningful image alternatives and field edit identity.
@@ -19,6 +21,8 @@ Choose a small representative record and two intended instances in an authorized
 - Keep query, loop and component observations separate from runtime conclusions. A `.map()` expression over a hardcoded demo array is not proof of CMS ownership; matching screenshots of two copied cards are not proof of a shared component.
 
 Restore synthetic test content or retain it only in its owned disposable fixture. Do not create public sample reviews, customer identities or factual claims to populate a real page. Existing CMS data requires the site's supported write/recovery scope; a seed edit is not a migration.
+
+When authorized work is delegated, use [parallel-delivery.md](parallel-delivery.md) for bounded ownership and dependency-aware handoffs. Same-agent delivery remains complete. For a selected canvas change that affects tokens, use [the token handoff recipe](../../site-art-direction/references/token-handoff.md) when installed before broad component rollout.
 
 ## Rehearse the owner's actual tasks early
 
