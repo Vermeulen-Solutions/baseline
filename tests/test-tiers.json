@@ -278,5 +278,9 @@
   "update-plan.test.mjs": {
     "tier": "unit",
     "reason": "Read-only classification of upstream changes against a site using a throwaway Git repository"
+  },
+  "audit-ui.test.mjs": {
+    "tier": "unit",
+    "reason": "Portable rendered UI audit: argument guards, sitemap/index parsing, template sampling and issue aggregation"
   }
 }

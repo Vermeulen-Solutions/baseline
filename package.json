@@ -104,7 +104,8 @@
     "rehearse:tokens": "node tests/visual/token-handoff-pilot.mjs",
     "capture:routes": "node scripts/capture-routes.mjs",
     "record:motion": "node scripts/record-motion.mjs",
-    "update:plan": "node scripts/update-plan.mjs"
+    "update:plan": "node scripts/update-plan.mjs",
+    "audit:ui": "node scripts/audit-ui.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",
