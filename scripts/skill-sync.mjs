@@ -42,6 +42,8 @@ async function fetchJson(url, request) {
   const response = await request(url, { headers: { Accept: 'application/vnd.github+json', 'User-Agent': 'emdash-reviewed-skill-sync' }, signal: AbortSignal.timeout(20000) });
   if (!response.ok) {
     if (request === fetch && [401, 403, 404].includes(response.status) && url.startsWith('https://api.github.com/')) return JSON.parse(execFileSync('gh', ['api', url.slice('https://api.github.com/'.length)], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }));
+    const commit = url.match(/^https:\/\/api\.github\.com\/repos\/([^/]+\/[^/]+)\/commits\/([^/?]+)$/);
+    if (commit && [404, 422].includes(response.status)) throw Error(`Commit ${decodeURIComponent(commit[2])} not found in ${commit[1]} (check the SHA or ref)`);
     throw Error(`Upstream unavailable (${response.status}): ${url}`);
   }
   return response.json();

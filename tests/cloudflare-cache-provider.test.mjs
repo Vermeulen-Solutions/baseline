@@ -77,3 +77,27 @@ test('caches /_image and /_emdash/api/media/file/* with immutable 1-year headers
   assert.equal(await second.text(), 'webp-1');
   assert.equal(transforms, 1);
 });
+
+test('HTML cache entries are keyed per build so a deploy never serves the previous build', async () => {
+  const edgeCache = createFakeEdgeCache();
+  const html = (label) => async () => new Response(`<html>${label}</html>`, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'CDN-Cache-Control': 'max-age=3600' } });
+  const oldBuild = cloudflareCacheProvider({ edgeCache, buildId: 'build-a', query: { exclude: [] } });
+  await oldBuild.onRequest(context('/'), html('old'));
+  const hitOld = await oldBuild.onRequest(context('/'), html('unused'));
+  assert.equal(hitOld.headers.get('X-Astro-Cache'), 'HIT');
+  assert.equal(await hitOld.text(), '<html>old</html>');
+
+  // Same edge cache, new deploy: the old entry must not be served.
+  const newBuild = cloudflareCacheProvider({ edgeCache, buildId: 'build-b', query: { exclude: [] } });
+  const fresh = await newBuild.onRequest(context('/'), html('new'));
+  assert.notEqual(fresh.headers.get('X-Astro-Cache'), 'HIT');
+  assert.equal(await fresh.text(), '<html>new</html>');
+  assert.ok([...edgeCache.store.keys()].some((key) => key.includes('__build=build-a')));
+  assert.ok([...edgeCache.store.keys()].some((key) => key.includes('__build=build-b')));
+});
+
+test('a visitor query string never collides with the build key', async () => {
+  const { htmlCacheKey } = await import('../src/lib/cloudflare-cache-provider.mjs');
+  assert.equal(htmlCacheKey('https://example.workers.dev/', 'b1').url, 'https://example.workers.dev/?__build=b1');
+  assert.equal(htmlCacheKey('https://example.workers.dev/', undefined).url, 'https://example.workers.dev/');
+});

@@ -258,5 +258,13 @@
   "token-contract.test.mjs": {
     "tier": "unit",
     "reason": "Synthetic older-site token sets: contract gap report, starter suggestions, --add-missing insertion and preview/refusal on an incomplete base"
+  },
+  "art-direction.test.mjs": {
+    "tier": "unit",
+    "reason": "Portable Art Direction Record validation: template markers and undecided values rejected, real decisions (including bans mentioning placeholders) accepted"
+  },
+  "styleguide-integration.test.mjs": {
+    "tier": "unit",
+    "reason": "Portable dev-only /_styleguide route injection for adopting sites: injected for dev, absent from build/preview"
   }
 }

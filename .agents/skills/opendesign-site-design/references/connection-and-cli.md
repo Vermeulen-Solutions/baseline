@@ -68,6 +68,16 @@ foreach ($viewport in @(@{ width = 1440; height = 900 }, @{ width = 390; height 
 
 Use the actual daemon origin, owned project ID and output paths. Inspect each returned PNG and record its actual dimensions; a filename is not proof of a mobile capture. If the installed export API differs or visual export is unavailable, export standalone HTML with `od export ... --format html --out ...` and capture that HTML with an available browser at the requested viewport. Keep original fluid expressions, fonts and asset access consistent when comparing captures.
 
+### Overwriting an existing artifact
+
+`od artifacts create` and MCP `create_artifact` reject an existing path, and the tested CLI has no update command. To iterate on a registered artifact in place, keep the same file name and either call MCP `write_file` (fine for small files) or post the file to the daemon's multipart endpoint, which replaces it and records a new version:
+
+```powershell
+curl.exe -s -H "Origin: $env:OD_DAEMON_URL" -F "file=@concept.html;type=text/html" -F "name=concept.html" "$env:OD_DAEMON_URL/api/projects/<project-id>/files"
+```
+
+Discover the daemon port first (see above); the response lists the new version. Ask the owner to press Ctrl+R in OpenDesign Desktop to see the update.
+
 ## Synchronizing external CLI projects with the OpenDesign Desktop UI
 
 When an external agent creates a project via the daemon API or CLI while the OpenDesign Electron window is already open, the desktop UI may not display the project immediately for three reasons:

@@ -38,7 +38,7 @@
     "check:ci-fast": "node scripts/check-ci-fast.mjs",
     "verify": "npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck",
     "design:tokens": "node scripts/design-system.mjs",
-    "test:design": "node --test tests/design-workflow.test.mjs tests/token-coverage.test.mjs tests/fluid-tokens.test.mjs tests/token-contract.test.mjs",
+    "test:design": "node --test tests/design-workflow.test.mjs tests/token-coverage.test.mjs tests/fluid-tokens.test.mjs tests/token-contract.test.mjs tests/art-direction.test.mjs",
     "test:visual": "node scripts/test-visual.mjs",
     "test:visual:update": "node scripts/test-visual.mjs --update",
     "test:visual:sensitivity": "node scripts/test-visual.mjs --sensitivity",

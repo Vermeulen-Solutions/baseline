@@ -4,6 +4,10 @@ import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { join } from 'node:path';
 
+// Template markers ([...], <...>) and undecided values. A real decision may still mention
+// the word "placeholder", for example a ban on placeholder imagery.
+const UNDECIDED = /\[[^\]]*\]|<[^<>]+>|\b(?:TBD|TODO|to be decided)\b|^\s*placeholder\s*$/i;
+
 export function validateRecord(markdown) {
   // A schema example inside a fenced block does not count as a decision.
   let fence = null;
@@ -23,7 +27,7 @@ export function validateRecord(markdown) {
   const field = name => {
     const matches = [...section.matchAll(new RegExp(`^\\s*- \\*\\*${name}:\\*\\*[ \t]*(.*)$`, 'gm'))];
     const value = matches[0]?.[1]?.trim() ?? '';
-    if (matches.length !== 1 || !value || /\[[^\]]*\]|\b(?:TBD|TODO|placeholder|to be decided)\b/i.test(value)) {
+    if (matches.length !== 1 || !value || UNDECIDED.test(value)) {
       errors.push(`${name} must have one concrete, non-placeholder value.`);
     }
     return value;
@@ -42,7 +46,7 @@ export function validateRecord(markdown) {
   const physicsBlock = physics.length === 1 ? section.slice(physics[0].index + physics[0][0].length).split(/^\s*- \*\*/m)[0] : '';
   for (const name of ['Canvas', 'Action/Accent', 'Borders', 'Spatial Density']) {
     const matches = [...physicsBlock.matchAll(new RegExp(`^ +[-] ${name}:[ \\t]*(.*)$`, 'gm'))];
-    if (matches.length !== 1 || !matches[0][1].trim() || /\[|\b(?:TBD|TODO|placeholder)\b/i.test(matches[0][1])) errors.push(`Token Physics needs a concrete ${name}.`);
+    if (matches.length !== 1 || !matches[0][1].trim() || UNDECIDED.test(matches[0][1])) errors.push(`Token Physics needs a concrete ${name}.`);
   }
   const anti = field('Site Anti-Patterns').split(';').map(value => value.trim()).filter(Boolean);
   if (anti.length < 2 || anti.length > 3) errors.push('Site Anti-Patterns needs two or three concrete items separated by semicolons.');

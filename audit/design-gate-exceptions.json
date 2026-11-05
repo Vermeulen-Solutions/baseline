@@ -608,7 +608,7 @@
   {
     "path": "src/lib/cloudflare-cache-provider.mjs",
     "reason": "Optional SSR and Cloudflare Workers edge cache infrastructure only; no visual tokens, markup or presentation changes.",
-    "sha256": "123382c6a12c25c43a81f2a06575a40b790c8dbcdb23823343514d1097eaa81d"
+    "sha256": "9105aac8864d04b4f81d6fb0be325950ca7887a61f58d7b7c6478436bd53f857"
   },
   {
     "path": "src/components/PostListItem.astro",

@@ -6,6 +6,15 @@ function isImmutableMediaPath(pathname) {
   return pathname === '/_image' || pathname.startsWith('/_emdash/api/media/file/');
 }
 
+// HTML entries are keyed per build: a deploy must never serve the previous build's cached
+// pages for the rest of their max-age. Pass `config.buildId` from astro.config (computed once
+// per build); without it the key is the bare URL and stale HTML can outlive a deploy.
+export function htmlCacheKey(url, buildId) {
+  const keyed = new URL(url);
+  if (buildId) keyed.searchParams.set('__build', String(buildId));
+  return new Request(keyed.toString(), { method: 'GET' });
+}
+
 function getEdgeCache(customCache) {
   if (customCache) return customCache;
   return typeof caches !== 'undefined' && caches?.default ? caches.default : null;
@@ -75,7 +84,7 @@ export default function cloudflareCacheProvider(config = {}) {
         return next();
       }
 
-      const cacheKey = new Request(url.toString(), { method: 'GET' });
+      const cacheKey = htmlCacheKey(url, config.buildId);
       if (edgeCache) {
         try {
           const cached = await edgeCache.match(cacheKey);

@@ -4,7 +4,7 @@ The Node/SQLite starter enables no cache provider by default. This is the option
 
 ## Explicit route policy
 
-Use `src/lib/cloudflare-cache-provider.mjs` (wrapping `cacheCloudflare()` from `@astrojs/cloudflare/cache`) on Cloudflare Workers, or `src/lib/private-safe-memory-cache.mjs` on Node.js, not the removed `cloudflareCache()`. In a Cloudflare site, configure `cache: { provider: { entrypoint: './src/lib/cloudflare-cache-provider.mjs' } }`, `toolbar: 'client'` inside `emdash(...)`, and an explicit rule for **every** public route. Choose a sensible public HTML `maxAge` based on the site's publishing cadence (for example `3600` seconds / 1 hour for clubs, associations, portfolios and agency sites, or `300` seconds / 5 minutes for frequent editorial publications — never 15 seconds unless live real-time scores require it). For example:
+Use `src/lib/cloudflare-cache-provider.mjs` (wrapping `cacheCloudflare()` from `@astrojs/cloudflare/cache`) on Cloudflare Workers, or `src/lib/private-safe-memory-cache.mjs` on Node.js, not the removed `cloudflareCache()`. In a Cloudflare site, configure `cache: { provider: { entrypoint: './src/lib/cloudflare-cache-provider.mjs', config: { buildId: Date.now().toString(36) } } }` (the build id is computed once when the config loads, so each build gets its own HTML cache keys), `toolbar: 'client'` inside `emdash(...)`, and an explicit rule for **every** public route. Choose a sensible public HTML `maxAge` based on the site's publishing cadence (for example `3600` seconds / 1 hour for clubs, associations, portfolios and agency sites, or `300` seconds / 5 minutes for frequent editorial publications — never 15 seconds unless live real-time scores require it). For example:
 
 ```js
 routeRules: {
@@ -17,6 +17,12 @@ routeRules: {
   '/robots.txt': { maxAge: 3600, swr: 0, tags: ['emdash:settings', 'all'] },
 }
 ```
+
+List a tag for **every** collection, menu or setting a route queries. When a collection is added to a cached route (for example an FAQ list on the homepage), add its tag to that route rule in the same change and confirm an edit refreshes the page.
+
+**Per-build HTML keys:** the provider stores anonymous HTML in `caches.default` under the page URL plus `__build=<buildId>`. Without `buildId` the key is the bare URL, and after a deploy the previous build's HTML keeps being served for the rest of its `maxAge`: a redesign can look as if it did not deploy. After every deploy, request a public page twice and confirm the second response is a `X-Astro-Cache: HIT` of the new build.
+
+**CMS edits on this layer:** entries in `caches.default` are served before the route-cache tags are consulted, so EmDash's tag invalidation does not evict them. A published edit becomes visible when the entry's `maxAge` expires (up to one hour with `3600`). Choose `maxAge` with that window in mind and tell the site owner; a deploy (new build id) refreshes everything immediately.
 
 On `*.workers.dev` preview/staging domains, Cloudflare's outer CDN layer does not automatically cache Worker HTML based on `CDN-Cache-Control` alone, and if outer CDN caching is forced without a cookie key it can serve cached anonymous HTML to cookie-bearing admin requests. `src/lib/cloudflare-cache-provider.mjs` solves both problems: it bypasses cache lookup whenever `Authorization`, `Cookie` or a query string is present, stores anonymous `200` HTML responses directly in the Worker's edge Cache API (`caches.default`) for `maxAge` seconds, and sets `Cloudflare-CDN-Cache-Control: no-store` on HTML responses so the outer CDN always lets the Worker inspect cookies first. It also caches `GET`/`HEAD` `200` responses for `/_image` and `/_emdash/api/media/file/*` in `caches.default` with `Cache-Control: public, max-age=31536000, immutable` (overriding EmDash's default `max-age=0, must-revalidate` media header).
 

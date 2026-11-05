@@ -30,6 +30,8 @@ and remaining acceptance, and do not deploy.
 
 ## Existing-site update workflow
 
+Older EmDash sites without Baseline's dev-tools integration can adopt component calibration on its own: copy `scripts/styleguide-integration.mjs` and its test, add `styleguide()` to the Astro integrations, and write a site-owned `src/pages/_styleguide.astro` that renders the site's real primitives and components with real content and long-text cases. The route exists only under `astro dev`; confirm it is absent from the release build. Record observations in `audit/component-calibration.md`. An existing Art Direction Record kept in `DESIGN.md` moves into `AGENTS.md`, which is where `check:art-direction` reads it; adopt `tests/art-direction.test.mjs` with the gate script.
+
 Optional SSR feed caching can adopt `src/lib/public-feed-cache.ts`, `src/lib/private-safe-memory-cache.mjs` and [the host integration guide](public-feed-cache-integration.md). This adds no plugin or default route/provider configuration. Existing sites must supply validated SDK evidence, a final response policy and their own acceptance; static profiles omit the helpers.
 
 1. **Establish the target and recovery point.** Read the site's instructions, package/lockfile, existing decisions and Git state. Read `baseline.config.json` and managed receipts when present. On older sites without them, establish the platform from actual dependencies, configuration and content ownership; do not invent generation history or treat every receipt-free site as EmDash. Work on a maintenance branch or isolated checkout, preserving uncommitted work. For CMS changes that need data migration, establish consistent database/media recovery separately from Git before making those changes.
