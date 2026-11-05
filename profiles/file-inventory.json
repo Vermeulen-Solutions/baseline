@@ -1437,6 +1437,14 @@
     "public/favicon.svg": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/capture-routes.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/capture-routes.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

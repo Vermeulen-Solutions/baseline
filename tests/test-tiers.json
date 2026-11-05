@@ -266,5 +266,9 @@
   "styleguide-integration.test.mjs": {
     "tier": "unit",
     "reason": "Portable dev-only /_styleguide route injection for adopting sites: injected for dev, absent from build/preview"
+  },
+  "capture-routes.test.mjs": {
+    "tier": "unit",
+    "reason": "Portable before/after route capture: argument guards (Git Bash path conversion), stable shot names, non-deterministic route detection and comparison"
   }
 }

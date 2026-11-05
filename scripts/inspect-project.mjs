@@ -131,16 +131,21 @@ export function inspectProject(directory = process.cwd(), options = {}) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  const usage = 'Usage: baseline:inspect -- [--root <project-dir>] [--json] [--structure]\nRead-only source observations for a Baseline or older site; run from a Baseline checkout with --root to inspect another site.';
+  let argumentError = null;
   try {
     let root = process.cwd(), json = false, structure = false; const seen = new Set();
     for (let i = 2; i < process.argv.length; i++) {
-      const flag = process.argv[i]; assert(!seen.has(flag), 'Duplicate argument'); seen.add(flag);
+      const flag = process.argv[i];
+      if (flag === '--help' || flag === '-h') { console.log(usage); process.exit(0); }
+      if (seen.has(flag)) { argumentError = `Duplicate argument: ${flag}`; throw Error(argumentError); }
+      seen.add(flag);
       if (flag === '--json') json = true;
       else if (flag === '--structure') structure = true;
-      else if (flag === '--root') { root = process.argv[++i]; assert(root && !root.startsWith('--'), 'Missing root'); }
-      else throw Error('Unknown argument');
+      else if (flag === '--root') { root = process.argv[++i]; if (!root || root.startsWith('--')) { argumentError = 'Missing value for --root'; throw Error(argumentError); } }
+      else { argumentError = `Unknown argument: ${flag}`; throw Error(argumentError); }
     }
     const report = inspectProject(root, { structure });
     console.log(json ? JSON.stringify(report, null, 2) : [`Profile: ${report.profile.id} (${report.profile.evidence})`, `Runtime observations: ${JSON.stringify(report.runtime)}`, `Commands: ${Object.values(report.commands).filter(item => item.available).map(item => item.command).join(', ')}`, `Skills: ${report.skills.map(skill => skill.name).join(', ')}`, 'Use --json for source entry points and declared component props.', ...(report.structure ? [`Structure: ${report.structure.routes.length} Astro route sources; ${report.structure.sources.length} route/component sources read. Use --structure --json for observed relationships and limits.`, ...report.structure.limits] : []), ...report.limits].join('\n'));
-  } catch { console.error('Project inspection failed: input is missing, linked, oversized, invalid or unsupported.'); process.exitCode = 1; }
+  } catch { console.error(argumentError ? `${argumentError}\n${usage}` : 'Project inspection failed: input is missing, linked, oversized, invalid or unsupported.'); process.exitCode = 1; }
 }

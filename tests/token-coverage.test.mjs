@@ -319,3 +319,13 @@ test('pruneStarterExceptions strips sample-page and deleted entries while retain
 });
 
 
+
+test('font loading checks only the first family of each stack and recognises Fontsource variable packages', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  const fallbackOnly = applyTokenOverrides(css, { theme: { '--font-mono': 'ui-monospace, SFMono-Regular, Consolas, monospace' } });
+  assert.deepEqual(auditFontLoading(fallbackOnly, '.').missingFamilies, [], 'fallback names after a system face need no loading');
+  const variable = applyTokenOverrides(css, { theme: { '--font-display': '"Oswald Variable", sans-serif' } });
+  assert.deepEqual(auditFontLoading(variable, '.').missingFamilies, ['Oswald Variable']);
+  const imported = '@import "@fontsource-variable/oswald";\n' + variable;
+  assert.deepEqual(auditFontLoading(imported, '.').missingFamilies, [], 'an @fontsource-variable/<name> import loads "<Name> Variable"');
+});

@@ -20,18 +20,24 @@ async function safeParents(root, relative) {
   for (const segment of relative.split('/')) { current = path.join(current, segment); if (await exists(current) && (await fs.lstat(current)).isSymbolicLink()) throw Error('Symlinked managed parent: ' + current); }
 }
 function contained(root, relative) {
-  if (relative.includes('\\') || relative.split('/').some(p => !p || p === '.' || p === '..') || path.isAbsolute(relative)) throw Error('Unsafe relative path: ' + relative);
+  if (relative.includes('\\') || relative.includes(':') || relative.split('/').some(p => !p || p === '.' || p === '..') || path.isAbsolute(relative)) throw Error('Unsafe relative path: ' + relative);
   const target = path.resolve(root, relative);
   if (!target.startsWith(path.resolve(root) + path.sep)) throw Error('Path escapes root');
   return target;
 }
 export async function inventory(root, skills) {
   const result = {};
+  if (await exists(root) && (await fs.lstat(root)).isSymbolicLink()) throw Error('Symlinked managed root');
+  let entries = 0;
   async function walk(relative) {
+    if (++entries > 10000) throw Error('Managed inventory exceeds file limit');
     const file = contained(root, relative), stat = await fs.lstat(file);
     if (stat.isSymbolicLink()) throw Error('Symlinks are not managed: ' + relative);
     if (stat.isDirectory()) { for (const name of (await fs.readdir(file)).sort()) await walk(relative + '/' + name); }
-    else if (stat.isFile()) result[relative] = hash(normalized(await fs.readFile(file)));
+    else if (stat.isFile()) {
+      if (stat.size > 8 * 1024 * 1024) throw Error('Managed file exceeds size limit: ' + relative);
+      result[relative] = hash(normalized(await fs.readFile(file)));
+    }
     else throw Error('Unsupported file: ' + relative);
   }
   for (const skill of skills) if (await exists(contained(root, skill))) await walk(skill);
@@ -54,6 +60,9 @@ export async function download(config, ref, request = fetch) {
   const tree = await fetchJson(`https://api.github.com/repos/${config.repository}/git/trees/${commit.sha}?recursive=1`, request);
   if (tree.truncated) throw Error('Truncated upstream tree');
   const files = {};
+  // Top-level skill folders upstream, so a site can see skills its installed list never stages.
+  const available = tree.tree.filter(item => item.type === 'tree' && item.path.startsWith(config.prefix) && !item.path.slice(config.prefix.length).includes('/')).map(item => item.path.slice(config.prefix.length)).sort();
+  const helper = tree.tree.find(item => item.type === 'blob' && item.path === 'scripts/skill-sync.mjs');
   for (const item of tree.tree) {
     if (!config.skills.some(name => item.path.startsWith(config.prefix + name + '/'))) continue;
     if (item.type === 'tree') continue;
@@ -72,9 +81,11 @@ export async function download(config, ref, request = fetch) {
     files[relative] = { bytes, mode: item.mode };
   }
   for (const name of config.skills) if (!files[name + '/SKILL.md']) throw Error('Missing upstream skill: ' + name);
-  return { commitSha: commit.sha, files };
+  return { commitSha: commit.sha, files, available, helperBlobSha: helper?.sha ?? null };
 }
 export async function review(root, config, candidate, request = fetch) {
+  await safeParents(root, '.agents/skills');
+  await safeParents(root, '.emdash/' + config.manifest);
   const previous = await json(path.join(root, '.emdash', config.manifest));
   const local = await inventory(path.join(root, '.agents', 'skills'), config.skills);
   let baseline = previous?.files;
@@ -88,6 +99,27 @@ export async function review(root, config, candidate, request = fetch) {
   const incoming = Object.fromEntries(Object.entries(candidate.files).map(([file, data]) => [file, hash(normalized(data.bytes))]));
   const conflicts = [...new Set([...Object.keys(local), ...Object.keys(baseline)])].filter(file => local[file] !== baseline[file]).sort();
   return { local, incoming, conflicts, previousManifestHash: hash(await fs.readFile(path.join(root, '.emdash', config.manifest)).catch(e => { if (e.code === 'ENOENT') return Buffer.alloc(0); throw e; })), status: conflicts.length ? 'local-drift' : equal(local, incoming) ? 'current' : 'update-available' };
+}
+const SKILL_NAME = /^[a-z0-9][a-z0-9-]{0,63}$/;
+// Skills a site added with --add-skill stay managed after a helper update: membership is the
+// helper's list plus valid names already recorded in the site's manifest.
+export async function memberSkills(root, kind) {
+  const recorded = (await json(path.join(root, '.emdash', sources[kind].manifest)))?.skills;
+  const extra = Array.isArray(recorded) ? recorded.filter(name => typeof name === 'string' && SKILL_NAME.test(name) && !sources[kind].skills.includes(name)) : [];
+  return [...sources[kind].skills, ...new Set(extra)];
+}
+function validMembership(kind, skills) {
+  return Array.isArray(skills) && sources[kind].skills.every(name => skills.includes(name)) && skills.every(name => typeof name === 'string' && SKILL_NAME.test(name)) && new Set(skills).size === skills.length;
+}
+// Compares the installed helper with the upstream one at the staged commit (Git blob hash of
+// LF-normalized bytes), so a site learns its own sync tooling is behind (found in a real-site rehearsal).
+export async function helperDrift(root, upstreamBlobSha) {
+  if (!upstreamBlobSha) return { status: 'not-in-upstream' };
+  const bytes = await fs.readFile(path.join(root, 'scripts', 'skill-sync.mjs')).catch(e => { if (e.code === 'ENOENT') return null; throw e; });
+  if (!bytes) return { status: 'missing-locally' };
+  const text = Buffer.from(normalized(bytes));
+  const sha = createHash('sha1').update(`blob ${text.length}\0`).update(text).digest('hex');
+  return sha === upstreamBlobSha ? { status: 'current' } : { status: 'differs', note: 'scripts/skill-sync.mjs differs from the upstream helper at this commit. Review and adopt the upstream helper (docs/baseline-updates.md); fixes to the helper itself never arrive through skill sync.' };
 }
 async function save(file, value) { await fs.writeFile(file, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' }); }
 export async function stageSync(root, kind, config, candidate, report) {
@@ -104,8 +136,11 @@ export async function stageSync(root, kind, config, candidate, report) {
 }
 function stagePath(root, id) { if (!/^[a-f0-9-]{36}$/.test(id)) throw Error('Invalid stage ID'); return path.join(root, '.emdash', 'skill-sync', id); }
 async function receiptAt(root, kind, id) {
-  const directory = stagePath(root, id), receipt = await json(path.join(directory, 'review.json'));
-  if (!receipt || receipt.root !== path.resolve(root) || receipt.kind !== kind || JSON.stringify(receipt.skills) !== JSON.stringify(sources[kind].skills) || !/^[a-f0-9]{40}$/.test(receipt.commitSha)) throw Error('Invalid stage receipt');
+  const directory = stagePath(root, id);
+  await safeParents(root, `.emdash/skill-sync/${id}/review.json`);
+  await safeParents(root, '.emdash/' + sources[kind].manifest);
+  const receipt = await json(path.join(directory, 'review.json'));
+  if (!receipt || receipt.root !== path.resolve(root) || receipt.kind !== kind || !validMembership(kind, receipt.skills) || !/^[a-f0-9]{40}$/.test(receipt.commitSha)) throw Error('Invalid stage receipt');
   // Reject symlinks in staging and target roots, including the managed parent.
   for (const relative of ['.agents', '.agents/skills', '.emdash', '.emdash/skill-sync', `.emdash/skill-sync/${id}`, `.emdash/skill-sync/${id}/incoming`]) if ((await fs.lstat(path.join(root, relative))).isSymbolicLink()) throw Error('Symlinked managed root');
   return { directory, receipt };
@@ -132,7 +167,7 @@ async function withLock(root, action) {
 }
 export async function applySync(root, kind, id, resolution, hooks = {}) {
   return withLock(root, async () => {
-    const { directory, receipt } = await receiptAt(root, kind, id), config = sources[kind];
+    const { directory, receipt } = await receiptAt(root, kind, id), config = { ...sources[kind], skills: receipt.skills };
     const previous = await json(path.join(directory, 'journal.json'));
     if (previous && previous.state !== 'rolled-back') throw Error('Stage already applied or interrupted; inspect/recover it first');
     const targetRoot = path.join(root, '.agents', 'skills');
@@ -143,7 +178,10 @@ export async function applySync(root, kind, id, resolution, hooks = {}) {
     if (receipt.conflicts.length && (resolution?.reviewSha256 !== hash(await fs.readFile(path.join(directory, 'review.json'))) || JSON.stringify([...(resolution.replacePaths ?? [])].sort()) !== JSON.stringify(receipt.conflicts))) throw Error('Local drift requires a reviewed exact-path resolution; originals will be retained in backup');
     // A cleanly rolled-back stage can be applied again once the checks above pass: rollback
     // leaves its backup directory empty (rmdir refuses a non-empty one).
-    if (previous) await fs.rmdir(path.join(directory, 'backup'));
+    if (previous) {
+      await fs.rmdir(path.join(directory, 'backup'));
+      await fs.rm(path.join(directory, 'next-manifest'), { force: true });
+    }
     await fs.mkdir(path.join(directory, 'backup'));
     await fs.writeFile(path.join(directory, 'previous-manifest'), before);
     const journal = { state: 'applying', moved: [], manifestWritten: false };
@@ -158,7 +196,11 @@ export async function applySync(root, kind, id, resolution, hooks = {}) {
         await move(contained(path.join(directory, 'incoming'), skill), target, hooks.rename);
       }
       const next = { formatVersion: 2, source: `https://github.com/${receipt.repository}/tree/${receipt.commitSha}/${config.prefix}`, ref: receipt.commitSha, commitSha: receipt.commitSha, skills: config.skills, files: receipt.incoming, syncedAt: new Date().toISOString() };
-      await fs.writeFile(manifest + '.next', JSON.stringify(next, null, 2) + '\n'); await fs.rename(manifest + '.next', manifest);
+      const nextBytes = JSON.stringify(next, null, 2) + '\n';
+      await fs.writeFile(path.join(directory, 'next-manifest'), nextBytes, { flag: 'wx' });
+      journal.nextManifestHash = hash(nextBytes);
+      await fs.writeFile(path.join(directory, 'journal.json'), JSON.stringify(journal));
+      await fs.rename(path.join(directory, 'next-manifest'), manifest);
       journal.manifestWritten = true; journal.state = 'complete';
       await fs.writeFile(path.join(directory, 'journal.json'), JSON.stringify(journal));
     } catch (error) { await rollback(root, kind, directory, receipt, journal); throw explainLocked(error, id); }
@@ -167,6 +209,25 @@ export async function applySync(root, kind, id, resolution, hooks = {}) {
 }
 async function rollback(root, kind, directory, receipt, journal) {
   const targetRoot = path.join(root, '.agents', 'skills');
+  await safeParents(root, path.relative(root, path.join(directory, 'backup')).split(path.sep).join('/'));
+  const previousManifest = await fs.readFile(path.join(directory, 'previous-manifest'));
+  if (hash(previousManifest) !== receipt.previousManifestHash) throw Error('Recovery backup manifest changed; manual review required');
+  const currentManifest = await fs.readFile(path.join(root, '.emdash', sources[kind].manifest)).catch(e => { if (e.code === 'ENOENT') return Buffer.alloc(0); throw e; });
+  if (![receipt.previousManifestHash, journal.nextManifestHash].includes(hash(currentManifest))) throw Error('Recovery found later manifest changes; manual review required');
+  // Check every affected directory before moving any: recovery must preserve later edits,
+  // even when the changed skill is last in rollback order.
+  for (const { skill, existed } of journal.moved) {
+    if (!receipt.skills.includes(skill)) throw Error('Invalid recovery journal');
+    const before = Object.fromEntries(Object.entries(receipt.local).filter(([p]) => p.startsWith(skill + '/')));
+    const incoming = Object.fromEntries(Object.entries(receipt.incoming).filter(([p]) => p.startsWith(skill + '/')));
+    const backup = contained(path.join(directory, 'backup'), skill);
+    if (existed && !await exists(backup) && !await exists(contained(targetRoot, skill))) throw Error('Recovery original is missing; manual review required: ' + skill);
+    if (await exists(backup) && !equal(await inventory(path.join(directory, 'backup'), [skill]), before)) throw Error('Recovery backup changed; manual review required: ' + skill);
+    if (await exists(contained(targetRoot, skill))) {
+      const now = await inventory(targetRoot, [skill]);
+      if (!equal(now, incoming) && !(equal(now, before) && !await exists(backup))) throw Error('Recovery found later local changes; preserved backup needs manual review: ' + skill);
+    }
+  }
   for (const { skill, existed } of [...journal.moved].reverse()) {
     const target = contained(targetRoot, skill), backup = contained(path.join(directory, 'backup'), skill);
     if (await exists(target)) {
@@ -187,18 +248,35 @@ async function rollback(root, kind, directory, receipt, journal) {
 export async function recoverSync(root, kind, id) {
   return withLock(root, async () => { const { directory, receipt } = await receiptAt(root, kind, id), journal = await json(path.join(directory, 'journal.json')); if (journal?.state !== 'applying') throw Error('No interrupted apply'); await rollback(root, kind, directory, receipt, journal); return { status: 'rolled-back' }; });
 }
-export async function runSync(root, kind, args = process.argv.slice(2)) {
+export async function runSync(root, kind, args = process.argv.slice(2), request = fetch) {
   if (!args.length) args = ['--stage'];
+  const seen = new Set();
+  for (let i = 0; i < args.length; i++) {
+    const name = args[i];
+    if (!['--check', '--stage', '--apply', '--recover', '--ref', '--resolution', '--add-skill'].includes(name) || seen.has(name)) throw Error('Unknown or repeated option: ' + name);
+    seen.add(name);
+    if (['--apply', '--recover', '--ref', '--resolution', '--add-skill'].includes(name) && (!args[++i] || args[i].startsWith('--'))) throw Error('Missing ' + name);
+  }
+  if (seen.has('--resolution') && !seen.has('--apply')) throw Error('--resolution requires --apply');
+  if ((seen.has('--ref') || seen.has('--add-skill')) && (seen.has('--apply') || seen.has('--recover'))) throw Error('--ref and --add-skill are only valid with --stage or --check');
   const option = name => { const i = args.indexOf(name); if (i < 0) return null; if (!args[i + 1] || args[i + 1].startsWith('--')) throw Error('Missing ' + name); return args[i + 1]; };
   const actions = ['--check', '--stage', '--apply', '--recover'].filter(a => args.includes(a));
   if (actions.length !== 1) throw Error('Choose exactly one: --check, --stage, --apply <stage-id>, --recover <stage-id>');
   if (args.includes('--apply')) return applySync(root, kind, option('--apply'), option('--resolution') ? await json(path.resolve(option('--resolution'))) : null);
   if (args.includes('--recover')) return recoverSync(root, kind, option('--recover'));
-  const config = { ...sources[kind] }, ref = option('--ref') ?? process.env[kind === 'site' ? 'SITE_SKILLS_REF' : 'EMDASH_SKILLS_REF'] ?? 'main';
+  const config = { ...sources[kind], skills: await memberSkills(root, kind) }, ref = option('--ref') ?? process.env[kind === 'site' ? 'SITE_SKILLS_REF' : 'EMDASH_SKILLS_REF'] ?? 'main';
   if (kind === 'site' && process.env.SITE_SKILLS_REPOSITORY) config.repository = process.env.SITE_SKILLS_REPOSITORY;
   if (!/^[\w.-]+\/[\w.-]+$/.test(config.repository)) throw Error('Invalid source repository');
-  const candidate = await download(config, ref), report = await review(root, config, candidate);
-  if (args.includes('--check')) return { ...report, commitSha: candidate.commitSha, mutation: false };
+  const added = option('--add-skill')?.split(',').map(name => name.trim()).filter(Boolean) ?? [];
+  for (const name of added) if (!SKILL_NAME.test(name)) throw Error('Invalid skill name: ' + name);
+  config.skills = [...new Set([...config.skills, ...added])];
+  const candidate = await download(config, ref, request), report = await review(root, config, candidate, request);
+  // Mirrored EmDash skills live in the site repository too but belong to the other source.
+  const foreign = kind === 'site' ? sources.emdash.skills : [];
+  const notInstalled = (candidate.available ?? []).filter(name => !config.skills.includes(name) && !foreign.includes(name));
+  const helper = kind === 'site' ? await helperDrift(root, candidate.helperBlobSha) : undefined;
+  const extras = { ...(notInstalled.length ? { notInstalled, addHint: `Upstream skills not in this site's list: ${notInstalled.join(', ')}. Stage one with --add-skill <name> after deciding it is relevant.` } : {}), ...(helper ? { helper } : {}) };
+  if (args.includes('--check')) return { ...report, commitSha: candidate.commitSha, mutation: false, ...extras };
   const id = await stageSync(root, kind, config, candidate, report);
-  return { status: report.status, stageId: id, commitSha: candidate.commitSha, conflicts: report.conflicts, next: `Review .emdash/skill-sync/${id}/review.json and incoming diff; then --apply ${id}. Drift needs --resolution with reviewSha256 and exact replacePaths. Backups are retained.` };
+  return { status: report.status, stageId: id, commitSha: candidate.commitSha, conflicts: report.conflicts, ...(added.length ? { added } : {}), ...extras, next: `Review .emdash/skill-sync/${id}/review.json and incoming diff; then --apply ${id}. Drift needs --resolution with reviewSha256 and exact replacePaths. Backups are retained.` };
 }

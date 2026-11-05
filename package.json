@@ -101,7 +101,8 @@
     "migration:check-editorial": "node scripts/check-editorial-content.mjs",
     "audit:page": "node scripts/audit-page.mjs",
     "rehearse:workflow": "node tests/visual/workflow-pilot.mjs",
-    "rehearse:tokens": "node tests/visual/token-handoff-pilot.mjs"
+    "rehearse:tokens": "node tests/visual/token-handoff-pilot.mjs",
+    "capture:routes": "node scripts/capture-routes.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",

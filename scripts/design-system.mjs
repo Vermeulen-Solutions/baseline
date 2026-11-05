@@ -720,7 +720,11 @@ export function auditDesignTokens(css) {
     if (status === 'fail') {
       errors.push(`Contrast failure (${pair.id}): ${pair.fg} (${fgValue}) on ${pair.bg} (${bgValue}) is ${ratio}:1 (minimum ${pair.min}:1).`);
     } else if (status === 'unverified') {
-      errors.push(`Could not compute contrast (${pair.id}): unsupported color syntax for ${pair.fg} (${fgValue}) or ${pair.bg} (${bgValue}).`);
+      // A token that is simply absent is a contract gap, not a syntax problem (found in a real-site rehearsal).
+      const absent = [[pair.fg, fgValue], [pair.bg, bgValue]].filter(([, value]) => !String(value ?? '').trim()).map(([name]) => name);
+      errors.push(absent.length
+        ? `Could not compute contrast (${pair.id}): missing token ${absent.join(' and ')}.`
+        : `Could not compute contrast (${pair.id}): unsupported color syntax for ${pair.fg} (${fgValue}) or ${pair.bg} (${bgValue}).`);
     }
   }
 
@@ -1131,14 +1135,11 @@ export function auditFontLoading(css, rootDir = '.', cssPath = 'src/styles/globa
   ].filter(Boolean);
   const customFamilies = new Set();
 
+  // Only the first family of a stack is the intended face; later names are fallbacks
+  // (for example SFMono-Regular after ui-monospace) and need no loading.
   for (const stack of stacks) {
-    for (const part of stack.split(',')) {
-      const cleaned = part.trim().replace(/^['"]|['"]$/g, '').trim();
-      if (!cleaned || cleaned.startsWith('var(')) continue;
-      if (!SYSTEM_AND_GENERIC_FONTS.has(cleaned.toLowerCase())) {
-        customFamilies.add(cleaned);
-      }
-    }
+    const first = stack.split(',').map(part => part.trim().replace(/^['"]|['"]$/g, '').trim()).find(name => name && !name.startsWith('var('));
+    if (first && !SYSTEM_AND_GENERIC_FONTS.has(first.toLowerCase())) customFamilies.add(first);
   }
 
   if (customFamilies.size === 0) {
@@ -1172,7 +1173,10 @@ export function auditFontLoading(css, rootDir = '.', cssPath = 'src/styles/globa
     const lower = family.toLowerCase();
     const slug = lower.replace(/\s+/g, '-');
     const plus = lower.replace(/\s+/g, '+');
-    if (!declaredFaces.has(lower.replace(/\s+/g, ' ')) && !haystack.includes(lower) && !haystack.includes(slug) && !haystack.includes(plus)) {
+    // Fontsource variable packages name the family "<Name> Variable" but the package <name>.
+    const base = lower.replace(/\s+variable$/, '').replace(/\s+/g, '-');
+    const fontsource = [`@fontsource-variable/${base}`, `@fontsource/${base}`];
+    if (!declaredFaces.has(lower.replace(/\s+/g, ' ')) && !haystack.includes(lower) && !haystack.includes(slug) && !haystack.includes(plus) && !fontsource.some(name => haystack.includes(name))) {
       missingFamilies.push(family);
       warnings.push(
         `Custom font family "${family}" is declared in @theme but not loaded in package.json, astro.config.mjs, @font-face, or src/layouts/.`,

@@ -7,7 +7,16 @@ Discover an existing `open-design` MCP server or running local daemon before pro
 1. **Daemon CLI entrypoint:** The OpenDesign desktop app bundles its CLI and MCP server inside `resources/app/prebundled/daemon/daemon-cli.mjs` (on Windows typically `C:\Users\<user>\AppData\Local\Programs\Open Design\resources\app\prebundled\daemon\daemon-cli.mjs`) alongside its bundled `resources/open-design/` catalog. Never add OpenDesign packages to a site's `package.json` or lockfile.
 2. **Ephemeral desktop port vs. standalone default:** Standalone `od` defaults to `http://127.0.0.1:7456`, whereas the running OpenDesign desktop app allocates an ephemeral loopback port for its daemon (for example `11285`) and pairs it with a local Next.js web sidecar (for example `6409` or `6411`). Discover the active daemon port from the running `Open Design` process listening sockets or pass `--daemon-url http://127.0.0.1:<port>` (or set `OD_DAEMON_URL=http://127.0.0.1:<port>`).
 3. **Registering the stdio MCP bridge:** Configure `open-design` in the user's private MCP client config as a `stdio` server invoking Node with `daemon-cli.mjs` and `mcp --daemon-url http://127.0.0.1:<port>`. Do not commit user-specific paths or alter global settings outside the user's setup scope.
-4. **Read-only smoke check:** Call MCP `list_projects` and `get_active_context` (or `GET /api/projects` and `GET /api/active` with header `Origin: http://127.0.0.1:<port>`) to confirm connectivity before writing.
+4. **Re-discover before every write batch.** The desktop app moves its daemon to new ephemeral ports when it restarts, and a configured MCP bridge may point at a stale port (it then times out at session start). Find the live daemon and use HTTP when the bridge is stale:
+
+   ```powershell
+   $ids = (Get-Process | Where-Object ProcessName -eq 'Open Design').Id
+   (Get-NetTCPConnection -State Listen | Where-Object { $ids -contains $_.OwningProcess }).LocalPort |
+     ForEach-Object { try { Invoke-RestMethod "http://127.0.0.1:$_/api/projects" -Headers @{ Origin = "http://127.0.0.1:$_" } -TimeoutSec 4 | Out-Null; "daemon: $_" } catch {} }
+   ```
+
+   Two ports may answer (daemon and a proxy); either works for `/api/projects`.
+5. **Read-only smoke check:** Call MCP `list_projects` and `get_active_context` (or `GET /api/projects` and `GET /api/active` with header `Origin: http://127.0.0.1:<port>`) to confirm connectivity before writing.
 
 ## Querying the local catalog and installing Baseline plugins
 
@@ -32,6 +41,7 @@ node "<path-to>/daemon-cli.mjs" plugin doctor od-astro-baseline-export --json
 
 ## Project creation, artifact linting and headless export
 
+1. **UTF-8 bodies and renames.** Send JSON from a UTF-8 file (`curl --data-binary @body.json`) or Node `fetch`, not an inline `-d` string from Git Bash, which can mangle characters such as an em dash in a project name. Rename a project with `PATCH /api/projects/<id>` and a `{"name": …}` body; `PUT` is not supported.
 1. **Explicit project slug ID:** When creating a project via `POST /api/projects` or MCP `create_project`, always supply an explicit lowercase slug `id` alongside `name` (`{ "id": "client-concept-a", "name": "Client Concept A" }`). Omitting `id` returns `400 BAD_REQUEST: invalid project id`.
 2. **Deterministic anti-slop linter (`od lint`):** Run `od lint` on every HTML artifact before review or export:
    ```powershell
