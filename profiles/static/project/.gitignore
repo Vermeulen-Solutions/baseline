@@ -13,3 +13,7 @@ dist-fixtures/
 
 # Staged upstream proposals are local; commit managed-file provenance.
 .baseline/updates/
+
+# Impeccable local state: live-server sessions/annotations and machine-local config.
+.impeccable/live/
+.impeccable/config.local.json

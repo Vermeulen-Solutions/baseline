@@ -62,7 +62,7 @@ export async function snapshotSSR({ directory = 'dist', cwd = process.cwd(), rou
       if (url.origin !== origin || url.username || url.password) throw Error('SSR capture only accepts local public routes');
       const key = url.pathname + url.search;
       if (!queued.has(key)) {
-        if (queued.size >= maxResources) throw Error(`SSR link crawl exceeds ${maxResources} resources`);
+        if (queued.size >= maxResources) throw Error(`SSR link crawl exceeds ${maxResources} resources. A grown site may need a reviewed larger budget: npm run audit:html -- --max-resources <n> (2-512; see docs/html-integrity.md).`);
         queued.add(key); queue.push(key);
       }
       if (expand) expandable.add(key);

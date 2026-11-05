@@ -23,6 +23,7 @@ import {
   upsertArtDirectionRecord,
   auditFontLoading,
   auditEditProxies,
+  declaredContrastPairs,
   pruneStarterExceptions,
 } from '../scripts/design-system.mjs';
 import { validateRecord, validateCssAlignment } from '../scripts/check-art-direction.mjs';
@@ -328,4 +329,33 @@ test('font loading checks only the first family of each stack and recognises Fon
   assert.deepEqual(auditFontLoading(variable, '.').missingFamilies, ['Oswald Variable']);
   const imported = '@import "@fontsource-variable/oswald";\n' + variable;
   assert.deepEqual(auditFontLoading(imported, '.').missingFamilies, [], 'an @fontsource-variable/<name> import loads "<Name> Variable"');
+});
+
+test('auditEditProxies follows a route into the page component that renders Base and binds edit proxies', () => {
+  const dir = mkdtempSync(join(tmpdir(), 'emdash-proxies-'));
+  try {
+    mkdirSync(join(dir, 'src/pages'), { recursive: true });
+    mkdirSync(join(dir, 'src/components/pages'), { recursive: true });
+    writeFileSync(join(dir, 'src/pages/index.astro'), `---\nimport HomePage from '../components/pages/HomePage.astro';\nconst { entry } = await getEmDashEntry('pages', 'home');\n---\n<HomePage page={entry} />\n`);
+    writeFileSync(join(dir, 'src/components/pages/HomePage.astro'), `---\nimport Base from '../../layouts/Base.astro';\nimport Hero from '../Hero.astro';\nconst { page } = Astro.props;\n---\n<Base content={{ collection: 'pages', id: page.data.id }}><Hero page={page} /></Base>\n`);
+    writeFileSync(join(dir, 'src/components/Hero.astro'), `---\nconst { page } = Astro.props;\n---\n<h1 {...page.edit.title}>{page.data.title}</h1>\n`);
+    const followed = auditEditProxies(dir);
+    assert.equal(followed.valid, true, followed.issues.join('\n'));
+    writeFileSync(join(dir, 'src/components/Hero.astro'), `---\nconst { page } = Astro.props;\n---\n<h1>{page.data.title}</h1>\n`);
+    const missing = auditEditProxies(dir);
+    assert.ok(missing.issues.some(issue => issue.includes('does not bind any')), 'a component tree without proxies is still reported');
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('sites can declare contrast pairs for atmospheric grounds; literal stops and token grounds are both checked', () => {
+  const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
+  assert.deepEqual(declaredContrastPairs(css, {}), [], 'the starter declares none');
+  const declared = css + '\n/* @contrast-pair --color-text on #ffd102 */\n/* @contrast-pair --color-muted on #333333 min 4.5 */\n/* @contrast-pair --color-text on --color-surface min 7 */\n';
+  const audited = auditDesignTokens(declared);
+  const site = audited.contrast.filter(pair => pair.id.startsWith('site:'));
+  assert.equal(site.length, 3);
+  assert.equal(site.find(pair => pair.id === 'site:text-on-#ffd102').status, 'pass');
+  assert.equal(site.find(pair => pair.id === 'site:muted-on-#333333').status, 'fail');
+  assert.equal(site.find(pair => pair.id === 'site:text-on-surface').minimum, 7);
+  assert.ok(audited.errors.some(error => error.includes('site:muted-on-#333333')), 'a failing declared pair fails the audit');
 });

@@ -68,10 +68,27 @@ async function files(root, prefix = '') {
   return result;
 }
 
+// On Windows a process holding files open (usually a running `astro dev` or `wrangler dev`,
+// sometimes an editor, indexer or antivirus scan) makes the archive rename fail with EPERM,
+// EBUSY or EACCES. Retry briefly, then name the likely cause (found in a real release).
+export async function renameWithRetry(from, to, renameFn = rename, attempts = 15, delayMs = 100) {
+  for (let attempt = 1; ; attempt++) {
+    try { return await renameFn(from, to); }
+    catch (error) {
+      if (!['EPERM', 'EBUSY', 'EACCES'].includes(error.code)) throw error;
+      if (attempt >= attempts) {
+        error.message = `${error.message}\nThe asset archive could not be finalized because another process holds files open (usually a running dev server such as astro dev or wrangler dev; sometimes an editor, indexer or antivirus scan). Stop it and run the retention step again; nothing was merged into the build.`;
+        throw error;
+      }
+      await new Promise(done => setTimeout(done, delayMs));
+    }
+  }
+}
+
 /** Archive the fresh build BEFORE merging old assets. No remote writes.
  * Archive belongs to ONE site/environment and must persist between deploy jobs.
  */
-export async function retainBuildAssets(assetsPath, archivePath, now = Date.now()) {
+export async function retainBuildAssets(assetsPath, archivePath, now = Date.now(), { renameFn } = {}) {
   if (!Number.isFinite(now)) throw new Error('Invalid retention clock.');
   const assets = await realpath(assetsPath), archive = resolve(archivePath);
   if ((await lstat(assetsPath)).isSymbolicLink()) throw new Error('Asset root must not be a symlink.');
@@ -79,11 +96,11 @@ export async function retainBuildAssets(assetsPath, archivePath, now = Date.now(
   const archiveRoot = await realpath(archive);
   if (inside(assets, archiveRoot) || inside(archiveRoot, assets)) throw new Error('Asset output and archive must be separate trees.');
   const lock = await acquireAssetArchiveLock(archiveRoot);
-  try { return await retainLocked(assets, archiveRoot, now); }
+  try { return await retainLocked(assets, archiveRoot, now, renameFn); }
   finally { await lock.release(); }
 }
 
-async function retainLocked(assets, archiveRoot, now) {
+async function retainLocked(assets, archiveRoot, now, renameFn) {
   // A retry must never re-archive inherited files with a new lifetime. A clean
   // build removes this marker. On failure it also tells the next job to rebuild.
   try {
@@ -126,7 +143,7 @@ async function retainLocked(assets, archiveRoot, now) {
       await handle.writeFile(JSON.stringify({ version: 1, createdAt: now, hashes: Object.fromEntries([...current].map(([key, bytes]) => [key, digest(bytes)])) }));
       await handle.sync();
     } finally { await handle.close(); }
-    await rename(stage, release);
+    await renameWithRetry(stage, release, renameFn);
   } catch (error) {
     // This exact generated scratch path was created by this invocation and is
     // within the resolved archive. Never delete committed generations here.

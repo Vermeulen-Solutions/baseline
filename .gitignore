@@ -48,3 +48,7 @@ test-results/
 audit/**/trials/
 audit/**/trace.jsonl
 audit/**/*.log
+
+# Impeccable local state: live-server sessions/annotations and machine-local config.
+.impeccable/live/
+.impeccable/config.local.json

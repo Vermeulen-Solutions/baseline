@@ -472,6 +472,22 @@ export function colorLuminance(rawValue) {
   return null;
 }
 
+// Atmospheric grounds (stripes, gradients, washes) are not single tokens, so the fixed matrix
+// cannot see them. A site declares the text that sits on each stop in global.css:
+//   /* @contrast-pair --color-on-supporter on #6a9762 min 4.5 */
+//   /* @contrast-pair --color-on-turf on --color-turf-stripe */
+// The background may be a token or a literal colour (a stop of the ground); min defaults to 4.5.
+export function declaredContrastPairs(css, scope) {
+  const pairs = [];
+  for (const match of String(css).matchAll(/@contrast-pair\s+(--[\w-]+)\s+on\s+(--[\w-]+|#[0-9a-fA-F]{3,8}\b|oklch\([^)]*\)|rgb\([^)]*\))(?:\s+min\s+(\d+(?:\.\d+)?))?/g)) {
+    const [, fg, bg, min] = match;
+    const literal = !bg.startsWith('--');
+    const bgKey = literal ? `--declared-ground-${pairs.length}` : bg;
+    pairs.push({ id: `site:${fg.slice(8) || fg}-on-${literal ? bg.replace(/\s+/g, '') : bg.slice(8) || bg}`, fg, bg: bgKey, scope: literal ? { ...scope, [bgKey]: bg } : scope, min: min ? Number(min) : 4.5, declared: true });
+  }
+  return pairs;
+}
+
 export function contrastRatio(foreground, background) {
   const lumA = colorLuminance(foreground);
   const lumB = colorLuminance(background);
@@ -699,6 +715,7 @@ export function auditDesignTokens(css) {
     { id: 'dark:text-on-surface', fg: '--color-text', bg: '--color-surface', scope: allDark, min: 4.5 },
     { id: 'dark:muted-on-surface', fg: '--color-muted', bg: '--color-surface', scope: allDark, min: 4.5 },
     { id: 'dark:focus-on-surface', fg: '--color-focus', bg: '--color-surface', scope: allDark, min: 3.0 },
+    ...declaredContrastPairs(css, allDefaults),
   ];
 
   const contrast = [];
@@ -1208,6 +1225,19 @@ export function auditEditProxies(rootDir = '.') {
   }
   const pagesDir = join(resolve(rootDir), 'src/pages');
   const files = walkFiles(pagesDir, '.astro');
+  const projectRoot = resolve(rootDir);
+  function linkedComponentSources(fromFile, fromSource, depth, seen = new Set([resolve(fromFile)])) {
+    if (depth <= 0) return [];
+    const found = [];
+    for (const match of fromSource.matchAll(/^\s*import\s+[^;'"]+?\s+from\s+['"](\.{1,2}\/[^'"]+\.astro)['"]/gm)) {
+      const target = resolve(dirname(fromFile), match[1]);
+      if (seen.has(target) || !target.startsWith(projectRoot) || !existsSync(target)) continue;
+      seen.add(target);
+      const text = readFileSync(target, 'utf8');
+      found.push(text, ...linkedComponentSources(target, text, depth - 1, seen));
+    }
+    return found;
+  }
   const checkedRoutes = [];
   const collectionRoutes = [];
   const issues = [];
@@ -1225,8 +1255,11 @@ export function auditEditProxies(rootDir = '.') {
     if (!/\bgetEmDashEntry\s*\(/.test(source)) continue;
     checkedRoutes.push(rel);
 
-    const hasBaseContent = /<Base\b[\s\S]*?\bcontent=\{/.test(source);
-    const hasEditProxy = /\.edit\.[a-zA-Z0-9_]+/.test(source);
+    // Routes often hand the entry to a page component that renders <Base> and binds the edit
+    // proxies. Follow relative .astro imports two levels deep before reporting them missing.
+    const linked = linkedComponentSources(file, source, 2);
+    const hasBaseContent = [source, ...linked].some(text => /<Base\b[\s\S]*?\bcontent=\{/.test(text));
+    const hasEditProxy = [source, ...linked].some(text => /\.edit\.[a-zA-Z0-9_]+/.test(text));
 
     if (!hasBaseContent) {
       issues.push(`${rel}: calls getEmDashEntry() but does not pass content={{ collection, id }} to <Base>.`);

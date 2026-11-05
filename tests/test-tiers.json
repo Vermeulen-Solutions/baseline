@@ -270,5 +270,13 @@
   "capture-routes.test.mjs": {
     "tier": "unit",
     "reason": "Portable before/after route capture: argument guards (Git Bash path conversion), stable shot names, non-deterministic route detection and comparison"
+  },
+  "record-motion.test.mjs": {
+    "tier": "unit",
+    "reason": "Motion clip argument validation and GIF conversion arguments; no browser or ffmpeg launched"
+  },
+  "update-plan.test.mjs": {
+    "tier": "unit",
+    "reason": "Read-only classification of upstream changes against a site using a throwaway Git repository"
   }
 }

@@ -102,7 +102,9 @@ export function auditFontPreflight(css, { rootDir = '.', cssPath = 'src/styles/g
         }
       } catch { /* Missing/invalid metadata never authorizes following package files. */ }
     }
-    return declaredPackages.has(value.split(/[/?#]/)[0]);
+    // Scoped packages are named by their first two segments (@scope/name).
+    const parts = value.split(/[/?#]/);
+    return declaredPackages.has(value.startsWith('@') ? parts.slice(0, 2).join('/') : parts[0]);
   }
   function resolveOwned(value, source, location, kind) {
     if (dynamic(value)) { advisory('dynamic-source', location, `${kind} uses an unresolved expression/escape`); return null; }
@@ -118,6 +120,12 @@ export function auditFontPreflight(css, { rootDir = '.', cssPath = 'src/styles/g
   }
   function inspectAsset(value, format, source, location) {
     if (++assets > BOUNDS.assets) throw Error('Font asset bound exceeded');
+    // A bare package specifier (url("@fontsource-variable/x/files/...")) is resolved by the bundler.
+    // Treat it like a declared package import: advisory, package files are not read.
+    if (value && !/^(?:[a-z][a-z\d+.-]*:|\/\/|\.|\/)/i.test(value) && declaredPackageImport(value)) {
+      advisory('package-font-source', location, `Font source comes from declared package ${value.split(/[/?#]/).slice(0, value.startsWith('@') ? 2 : 1).join('/')}; build/browser verification required, package files were not read`);
+      return { ...location, status: 'package', declaredFormat: format ?? null, specifier: value };
+    }
     const file = resolveOwned(value, source, location, 'Font');
     const asset = { ...location, status: 'unresolved', declaredFormat: format ?? null };
     if (!file) return asset;

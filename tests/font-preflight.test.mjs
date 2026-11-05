@@ -145,3 +145,15 @@ test('external explicit CSS source is inspected without opening outside files; u
   const cyclic = auditFontPreflight('@theme { --font-body: var(--font-display); --font-display: var(--font-body); }', { rootDir: root });
   assert.equal(cyclic.valid, true); assert.ok(cyclic.roles.every(role => role.status === 'unresolved'));
 }));
+
+test('package specifiers in @font-face url() from declared (scoped) packages are advisory, undeclared ones still fail', () => fixture(root => {
+  const css = '@font-face { font-family: "Fixture Variable"; font-display: swap; src: url("@fontsource-variable/fixture/files/fixture-latin-wght-normal.woff2") format("woff2"); }';
+  assert.equal(auditFontPreflight(css, { rootDir: root }).valid, false, 'an undeclared package is a missing file');
+  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ dependencies: { '@fontsource-variable/fixture': '5.0.0' } }));
+  const declared = auditFontPreflight(css, { rootDir: root });
+  assert.equal(declared.valid, true);
+  const advisory = declared.advisories.find(item => item.code === 'package-font-source');
+  assert.ok(advisory && advisory.message.includes('@fontsource-variable/fixture'));
+  assert.equal(declared.faces[0].assets[0].status, 'package');
+  assert.equal(auditFontPreflight('@import "@fontsource-variable/fixture/wght.css";', { rootDir: root }).valid, true, 'scoped CSS imports resolve against the scoped package name');
+}));

@@ -179,6 +179,43 @@ test('stage reports upstream skills not installed, --add-skill stages one, membe
     await fs.writeFile(path.join(root, 'scripts', 'skill-sync.mjs'), upstreamHelper.toString().replace('\n', '\r\n'));
     const again = await runSync(root, 'site', ['--check', '--ref', sha], request);
     assert.equal(again.status, 'current'); assert.equal(again.helper.status, 'current', 'CRLF checkout of the same helper counts as current');
-    assert.equal(again.notInstalled, undefined);
+    assert.deepEqual(again.notInstalled, [], 'an empty list is reported, so an absent field means an older helper');
+    const elsewhere = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-sync-test-'));
+    try {
+      const remote = await runSync(elsewhere, 'site', ['--check', '--ref', sha, '--root', root], request);
+      assert.equal(remote.mutation, false); assert.equal(remote.helper.status, 'current', '--root checks the named site, not the checkout running the helper');
+      await assert.rejects(runSync(elsewhere, 'site', ['--stage', '--root', root], request), /only valid with --check/);
+    } finally { await fs.rm(elsewhere, { recursive: true, force: true }); }
+  } finally { assert.ok(path.basename(root).startsWith('emdash-sync-test-')); await fs.rm(root, { recursive: true, force: true }); }
+});
+
+test('apply keeps CRLF line endings of installed text files and lists new skill files in a carried profile manifest', async () => {
+  const { matchLineEndings, updateProfileManifest } = await import('../scripts/skill-sync.mjs');
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-sync-test-'));
+  try {
+    const incoming = path.join(root, 'incoming', 'demo'), target = path.join(root, 'target', 'demo');
+    await fs.mkdir(path.join(incoming, 'references'), { recursive: true }); await fs.mkdir(path.join(target, 'references'), { recursive: true });
+    await fs.writeFile(path.join(target, 'SKILL.md'), 'old\r\nlines\r\n');
+    await fs.writeFile(path.join(target, 'references', 'lf.md'), 'kept lf\n');
+    await fs.writeFile(path.join(incoming, 'SKILL.md'), 'new\nlines\n');
+    await fs.writeFile(path.join(incoming, 'references', 'lf.md'), 'still lf\n');
+    await fs.writeFile(path.join(incoming, 'references', 'added.md'), 'added\n');
+    await fs.writeFile(path.join(incoming, 'icon.bin'), Buffer.from([0, 13, 10, 1]));
+    assert.equal(await matchLineEndings(incoming, target), 1);
+    assert.equal(await fs.readFile(path.join(incoming, 'SKILL.md'), 'utf8'), 'new\r\nlines\r\n');
+    assert.equal(await fs.readFile(path.join(incoming, 'references', 'lf.md'), 'utf8'), 'still lf\n', 'LF files stay LF');
+    assert.equal(await fs.readFile(path.join(incoming, 'references', 'added.md'), 'utf8'), 'added\n', 'new files keep upstream bytes');
+    assert.deepEqual([...await fs.readFile(path.join(incoming, 'icon.bin'))], [0, 13, 10, 1], 'binary files are untouched');
+    assert.equal(hash('x\r\ny'), hash('x\r\ny'));
+
+    assert.deepEqual(await updateProfileManifest(root, ['demo'], {}), [], 'sites without profile manifests are untouched');
+    await fs.mkdir(path.join(root, 'profiles', 'manifests'), { recursive: true });
+    const manifest = path.join(root, 'profiles', 'manifests', 'shared.json');
+    await fs.writeFile(manifest, JSON.stringify({ files: [], skillFiles: ['.agents/skills/demo/SKILL.md'] }, null, 2).replaceAll('\n', '\r\n') + '\r\n');
+    const added = await updateProfileManifest(root, ['demo', 'other'], { 'demo/SKILL.md': 'h', 'demo/references/added.md': 'h', 'other/SKILL.md': 'h' });
+    assert.deepEqual(added, ['.agents/skills/demo/references/added.md'], 'only skills the manifest already ships gain files');
+    const written = await fs.readFile(manifest, 'utf8');
+    assert.ok(written.includes('\r\n'), 'manifest line endings are kept');
+    assert.deepEqual(JSON.parse(written).skillFiles, ['.agents/skills/demo/SKILL.md', '.agents/skills/demo/references/added.md']);
   } finally { assert.ok(path.basename(root).startsWith('emdash-sync-test-')); await fs.rm(root, { recursive: true, force: true }); }
 });

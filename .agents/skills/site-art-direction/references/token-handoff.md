@@ -31,3 +31,14 @@ Check that the source still matches the version used for preview, then apply the
 Calibrate the affected native primitive and meaningful variants on `/_styleguide`, then inspect one representative real route and relevant shared consumers at narrow, intermediate and wide widths. Compare the intended relationship with the selected canvas, retaining text, destinations, content/edit ownership, focus, missing/long content and relevant surface/state behavior. Check actual fonts and prepared media where they changed. Prefer computed relationships plus visual inspection over exact pixel equality when native reflow differs legitimately from a canvas frame.
 
 Record the requested change, source/target mapping, reviewed CSS diff, actual checks and remaining status in the existing evidence. A synthetic rehearsal must label its selection as a fixture decision and report the paths/conditions actually exercised; it does not establish user approval or cross-tool roundtrip fidelity. Continue the installed verification and agreed release endpoint after the representative proof succeeds.
+
+## Adding tokens and atmospheric grounds
+
+- **New colour tokens are styleguide specimens too.** A site that lists its colour tokens for the styleguide (for example `specimenTokens` in `src/dev/styleguide-fixtures.ts`) fails its tests until the new token is listed there; add it in the same change.
+- **Change a token's value instead of bypassing it.** When a refinement needs a larger display size or a new spacing, update the token and keep its consumers; inlining a literal `clamp()` leaves the token without a consumer (a test catches it) and splits the scale.
+- **Check text on atmospheric grounds.** Stripes, gradients and washes are not single tokens, so the token contrast matrix cannot see them. Declare the text that sits on each stop in `global.css`, and `design:tokens` checks it like any other pair:
+  ```css
+  /* @contrast-pair --color-on-supporter on #6a9762 min 4.5 */
+  /* @contrast-pair --color-on-turf on --color-turf-stripe */
+  ```
+  Passing 4.5:1 is the floor, not the goal: small text on a saturated brand ground that only just passes still reads as poor to owners. Aim for 7:1 for body-size text on coloured grounds, or switch to light text.

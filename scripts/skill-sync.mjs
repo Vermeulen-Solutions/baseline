@@ -121,6 +121,46 @@ export async function helperDrift(root, upstreamBlobSha) {
   const sha = createHash('sha1').update(`blob ${text.length}\0`).update(text).digest('hex');
   return sha === upstreamBlobSha ? { status: 'current' } : { status: 'differs', note: 'scripts/skill-sync.mjs differs from the upstream helper at this commit. Review and adopt the upstream helper (docs/baseline-updates.md); fixes to the helper itself never arrive through skill sync.' };
 }
+// A text file that was CRLF in the site stays CRLF after apply: hashes normalize line endings,
+// so this only avoids a status full of line-ending-only changes on autocrlf checkouts.
+export async function matchLineEndings(incomingSkill, targetSkill) {
+  if (!await exists(targetSkill)) return 0;
+  let changed = 0;
+  async function walk(relative) {
+    const from = path.join(incomingSkill, relative), stat = await fs.lstat(from);
+    if (stat.isDirectory()) { for (const name of await fs.readdir(from)) await walk(path.join(relative, name)); return; }
+    const old = await fs.readFile(path.join(targetSkill, relative)).catch(() => null);
+    if (!old || old.includes(0) || !old.includes('\r\n')) return;
+    const bytes = await fs.readFile(from);
+    if (bytes.includes(0) || bytes.includes('\r\n')) return;
+    const text = normalized(bytes);
+    if (typeof text !== 'string') return;
+    await fs.writeFile(from, text.replaceAll('\n', '\r\n')); changed++;
+  }
+  await walk('');
+  return changed;
+}
+// A template-derived site may still carry Baseline's profile manifests and their tests, which
+// require every shipped skill file to be listed. After an apply, list new files of skills that
+// manifest already ships, so a clean sync does not fail the site's own verify.
+export async function updateProfileManifest(root, skills, incomingFiles) {
+  const file = path.join(root, 'profiles', 'manifests', 'shared.json');
+  if (!await exists(file)) return [];
+  const raw = await fs.readFile(file, 'utf8'), manifest = JSON.parse(raw);
+  if (!Array.isArray(manifest.skillFiles)) return [];
+  const listed = new Set(manifest.skillFiles), added = [];
+  for (const relative of Object.keys(incomingFiles).sort()) {
+    const skill = relative.split('/')[0], full = '.agents/skills/' + relative;
+    if (!skills.includes(skill) || listed.has(full)) continue;
+    if (!manifest.skillFiles.some(item => item.startsWith('.agents/skills/' + skill + '/'))) continue;
+    manifest.skillFiles.push(full); listed.add(full); added.push(full);
+  }
+  if (added.length) {
+    const eol = raw.includes('\r\n') ? '\r\n' : '\n';
+    await fs.writeFile(file, (JSON.stringify(manifest, null, 2) + '\n').replaceAll('\n', eol));
+  }
+  return added;
+}
 async function save(file, value) { await fs.writeFile(file, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' }); }
 export async function stageSync(root, kind, config, candidate, report) {
   await safeParents(root, '.emdash/skill-sync');
@@ -191,6 +231,7 @@ export async function applySync(root, kind, id, resolution, hooks = {}) {
         const target = contained(targetRoot, skill), backup = contained(path.join(directory, 'backup'), skill);
         journal.moved.push({ skill, existed: await exists(target) });
         await fs.writeFile(path.join(directory, 'journal.json'), JSON.stringify(journal));
+        await matchLineEndings(contained(path.join(directory, 'incoming'), skill), target);
         if (await exists(target)) await move(target, backup, hooks.rename);
         await hooks.afterBackup?.(skill);
         await move(contained(path.join(directory, 'incoming'), skill), target, hooks.rename);
@@ -204,7 +245,8 @@ export async function applySync(root, kind, id, resolution, hooks = {}) {
       journal.manifestWritten = true; journal.state = 'complete';
       await fs.writeFile(path.join(directory, 'journal.json'), JSON.stringify(journal));
     } catch (error) { await rollback(root, kind, directory, receipt, journal); throw explainLocked(error, id); }
-    return { status: 'applied', backup: directory, commitSha: receipt.commitSha };
+    const profileManifest = kind === 'site' ? await updateProfileManifest(root, config.skills, receipt.incoming) : [];
+    return { status: 'applied', backup: directory, commitSha: receipt.commitSha, ...(profileManifest.length ? { profileManifestAdded: profileManifest } : {}), next: 'Review the change with git add -A .agents && git diff --cached --stat (line-ending-only changes are not content changes).' };
   });
 }
 async function rollback(root, kind, directory, receipt, journal) {
@@ -253,10 +295,11 @@ export async function runSync(root, kind, args = process.argv.slice(2), request 
   const seen = new Set();
   for (let i = 0; i < args.length; i++) {
     const name = args[i];
-    if (!['--check', '--stage', '--apply', '--recover', '--ref', '--resolution', '--add-skill'].includes(name) || seen.has(name)) throw Error('Unknown or repeated option: ' + name);
+    if (!['--check', '--stage', '--apply', '--recover', '--ref', '--resolution', '--add-skill', '--root'].includes(name) || seen.has(name)) throw Error('Unknown or repeated option: ' + name);
     seen.add(name);
-    if (['--apply', '--recover', '--ref', '--resolution', '--add-skill'].includes(name) && (!args[++i] || args[i].startsWith('--'))) throw Error('Missing ' + name);
+    if (['--apply', '--recover', '--ref', '--resolution', '--add-skill', '--root'].includes(name) && (!args[++i] || args[i].startsWith('--'))) throw Error('Missing ' + name);
   }
+  if (seen.has('--root') && !seen.has('--check')) throw Error('--root is only valid with --check (read-only); stage and apply with the site\'s own helper');
   if (seen.has('--resolution') && !seen.has('--apply')) throw Error('--resolution requires --apply');
   if ((seen.has('--ref') || seen.has('--add-skill')) && (seen.has('--apply') || seen.has('--recover'))) throw Error('--ref and --add-skill are only valid with --stage or --check');
   const option = name => { const i = args.indexOf(name); if (i < 0) return null; if (!args[i + 1] || args[i + 1].startsWith('--')) throw Error('Missing ' + name); return args[i + 1]; };
@@ -264,6 +307,7 @@ export async function runSync(root, kind, args = process.argv.slice(2), request 
   if (actions.length !== 1) throw Error('Choose exactly one: --check, --stage, --apply <stage-id>, --recover <stage-id>');
   if (args.includes('--apply')) return applySync(root, kind, option('--apply'), option('--resolution') ? await json(path.resolve(option('--resolution'))) : null);
   if (args.includes('--recover')) return recoverSync(root, kind, option('--recover'));
+  if (args.includes('--root')) root = path.resolve(option('--root'));
   const config = { ...sources[kind], skills: await memberSkills(root, kind) }, ref = option('--ref') ?? process.env[kind === 'site' ? 'SITE_SKILLS_REF' : 'EMDASH_SKILLS_REF'] ?? 'main';
   if (kind === 'site' && process.env.SITE_SKILLS_REPOSITORY) config.repository = process.env.SITE_SKILLS_REPOSITORY;
   if (!/^[\w.-]+\/[\w.-]+$/.test(config.repository)) throw Error('Invalid source repository');
@@ -275,7 +319,7 @@ export async function runSync(root, kind, args = process.argv.slice(2), request 
   const foreign = kind === 'site' ? sources.emdash.skills : [];
   const notInstalled = (candidate.available ?? []).filter(name => !config.skills.includes(name) && !foreign.includes(name));
   const helper = kind === 'site' ? await helperDrift(root, candidate.helperBlobSha) : undefined;
-  const extras = { ...(notInstalled.length ? { notInstalled, addHint: `Upstream skills not in this site's list: ${notInstalled.join(', ')}. Stage one with --add-skill <name> after deciding it is relevant.` } : {}), ...(helper ? { helper } : {}) };
+  const extras = { notInstalled, ...(notInstalled.length ? { addHint: `Upstream skills not in this site's list: ${notInstalled.join(', ')}. Stage one with --add-skill <name> after deciding it is relevant.` } : {}), ...(helper ? { helper } : {}) };
   if (args.includes('--check')) return { ...report, commitSha: candidate.commitSha, mutation: false, ...extras };
   const id = await stageSync(root, kind, config, candidate, report);
   return { status: report.status, stageId: id, commitSha: candidate.commitSha, conflicts: report.conflicts, ...(added.length ? { added } : {}), ...extras, next: `Review .emdash/skill-sync/${id}/review.json and incoming diff; then --apply ${id}. Drift needs --resolution with reviewSha256 and exact replacePaths. Backups are retained.` };

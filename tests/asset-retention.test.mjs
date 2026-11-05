@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { spawn } from 'node:child_process';
-import { acquireAssetArchiveLock, recoverAssetArchiveLock, retainBuildAssets } from '../scripts/retain-build-assets.mjs';
+import { acquireAssetArchiveLock, recoverAssetArchiveLock, retainBuildAssets, renameWithRetry } from '../scripts/retain-build-assets.mjs';
 
 async function temporary(run) {
   const root = await mkdtemp(join(tmpdir(), 'baseline-retention-'));
@@ -80,3 +80,12 @@ test('nested real build assets retain exact paths and bytes', () => temporary(as
   await retainBuildAssets(next, archive, now + 1000);
   assert.equal(await readFile(join(next, 'chunks', 'nested', 'CaseHash.js'), 'utf8'), 'nested original');
 }));
+
+test('archive finalization retries a transient Windows lock, then names the likely holder', async () => {
+  const locked = code => Object.assign(new Error(`${code}: operation not permitted, rename`), { code });
+  let calls = 0;
+  await renameWithRetry('a', 'b', async () => { if (++calls < 3) throw locked('EPERM'); }, 5, 1);
+  assert.equal(calls, 3, 'a lock that clears is retried until the rename succeeds');
+  await assert.rejects(renameWithRetry('a', 'b', async () => { throw locked('EBUSY'); }, 3, 1), error => error.code === 'EBUSY' && /running dev server/.test(error.message) && /nothing was merged/.test(error.message));
+  await assert.rejects(renameWithRetry('a', 'b', async () => { throw locked('ENOENT'); }, 3, 1), error => error.code === 'ENOENT' && !/dev server/.test(error.message), 'other errors are not retried or reworded');
+});
