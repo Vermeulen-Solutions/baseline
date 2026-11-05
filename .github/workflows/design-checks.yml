@@ -26,7 +26,10 @@ jobs:
         shell: bash
         run: |
           base="${PR_BASE:-$PUSH_BASE}"
-          if [[ -z "$base" || "$base" =~ ^0+$ ]]; then
+          # New branch (no base) or a force push whose previous tip no longer exists:
+          # check the whole tree instead of failing on an unreachable diff base.
+          if [[ -z "$base" || "$base" =~ ^0+$ ]] || ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
+            echo "Diff base ${base:-none} is unavailable; checking the whole tree."
             base=$(git hash-object -t tree /dev/null)
           fi
           npm run check:art-direction -- --base "$base"
