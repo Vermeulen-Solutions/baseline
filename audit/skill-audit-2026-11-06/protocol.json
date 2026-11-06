@@ -43,6 +43,17 @@
         "C6 Uses minmax(0, 1fr) or min-inline-size: 0 for shrinking tracks and avoids fixed heights.",
         "C7 Checks narrowest real placement, intermediate widths around the switch, long/unbroken content, missing/odd images, 400% zoom reflow."
       ]
+    },
+    "T4-scoped-spacing": {
+      "prompt": "You are maintaining an existing, already-launched static Baseline site for a yoga studio. Its AGENTS.md (not included here) has a saved Art Direction Record, and the site was built with the usual Baseline primitives (Section, Container, Grid, Card) and tokens in src/styles/global.css. The owner emails: On my phone the class cards on the Classes page feel too far apart, please tighten them a bit; everything else is fine. Using this repository's instructions and skills, write the plan you would follow for this change, from reading to verified result, including which skills/references you load. The site source is not included; do not implement anything.",
+      "acceptance": [
+        "D1 Treats it as a scoped change: no track choice, no discovery, brief or art-direction replay, no new owner questions beyond what changes the work.",
+        "D2 Identifies what must stay unchanged (other grids/routes, desktop spacing) and traces the affected surface (the Grid instance or its spacing token/alias) before editing.",
+        "D3 Changes spacing through the existing spacing API (Grid/primitive gap control, a contextual alias, or a previewed design:tokens --set) rather than an arbitrary one-off value or !important override, and keeps one owner for the gap.",
+        "D4 Keeps the art-direction gate for the visual change (check:art-direction) without re-creating the record.",
+        "D5 Verifies at narrow widths on the Classes page and checks other routes/desktop unchanged, reporting only checks actually run.",
+        "D6 Words of skill text read (reported, lower is better; not pass/fail)."
+      ]
     }
   },
   "limits": [
@@ -51,5 +62,6 @@
     "Grader (the same agent that made the edits) knows the variant mapping after grading; outputs are graded from anonymised copies first.",
     "Files-read lists are self-reported by the worker, not instrumented."
   ],
-  "addendum": "After the before-runs scored at ceiling on sonnet, haiku runs (same prompts, same fixtures) were added for both variants to test the less-capable-model requirement in CONTRIBUTING. Acceptance criteria unchanged."
+  "addendum": "After the before-runs scored at ceiling on sonnet, haiku runs (same prompts, same fixtures) were added for both variants to test the less-capable-model requirement in CONTRIBUTING. Acceptance criteria unchanged.",
+  "addendum2": "2026-11-07: after PR 49 merged and the follow-up wording/boilerplate edits, T4 was added (criteria frozen here, before any T4 run) to test a single-stage request, and T1/T2 were re-run on Haiku against the final text (fixture p9). k7 remains the pre-split base."
 }

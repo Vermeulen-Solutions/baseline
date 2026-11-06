@@ -163,15 +163,4 @@ When the schema migration and verification checklist pass:
 
 ## Engineering verification loop
 
-For the EmDash foundation, preflight with `npm.cmd run doctor`, use
-`npm.cmd run verify:fast` during edits, then run `npm.cmd run verify`,
-`npm.cmd run build`, and `npm.cmd run audit:html` against that fresh build
-before handoff. On Unix use `npm` in place of `npm.cmd`. Set up the local
-Git pre-commit hook once with `npm.cmd run setup:hooks`; it runs doctor and
-verify:fast and preserves existing hook managers. It supplements the final gate
-and CI; Git hooks are local and can be bypassed. The HTML audit checks emitted
-HTML or automatically captures linked public SSR responses from the local
-production CMS. Missing published content or broken navigation fails the audit;
-see `docs/html-integrity.md` for capture limits and snapshot inspection. For generated
-static profiles, inspect the installed package scripts and use their verification
-commands; do not add CMS tooling to satisfy an unavailable command.
+Run the verification sequence in the site's `AGENTS.md` (*Verify and hand off* on the EmDash foundation, *Verification and release* on generated static sites) before handoff; `new-site-workflow` holds the full sequence and its reasons. Check each command against `package.json` first, and do not add CMS tooling to satisfy an unavailable command.

@@ -164,3 +164,31 @@ One anomaly: a Haiku before-run tried to open `references/express-track.md`, whi
 - Files-read lists and their order are self-reported by the worker, not instrumented, and words loaded are estimated from those lists.
 - Only the Claude models available to this session were tested; behaviour under other agent runtimes that read `.agents/skills/` (for example Codex) is untested.
 - Soft-word counts are lexical flags, not judgements; each cited example was read in context.
+
+## Follow-up round: boilerplate and wording (2026-11-07)
+
+After PR 49 merged, the owner approved every follow-up and asked for the remaining test gaps to be closed. This round implements follow-up step 2 (boilerplate), the wording part of step 6 (procedural safety rules), and the soft-word pass on the moved workflow text.
+
+Changes:
+
+- The engineering verification paragraph now appears once, in `new-site-workflow`. Six other skills point to the site's `AGENTS.md` verification section.
+- The design-surface paragraph is a summary plus a pointer to `design-iteration.md` in both `AGENTS.md` files, `site-art-direction` and `astro-site-design`.
+- The workflow plugin list points to `emdash-site-setup`'s registry table and keeps the plugin names inline.
+- *Consequential/material* is defined once in the workflow router. About twenty hedges in the workflow references and in the canvas, cutover and WordPress skills became concrete conditions; for example, contact forms now record their rate-limit window, count and challenge.
+- The cutover skill now says why recovery must precede an authentication-origin change.
+- The Express track now agrees with `AGENTS.md` and Stage 4: compare two or three directions at the concept checkpoint (see the trial result below).
+
+Gap trials (protocol addendum frozen before any run; fixtures `p9` = this round, `q3` = `p9` plus the Express fix):
+
+| Task | Model | Base (`k7`) | This round |
+| --- | --- | ---: | ---: |
+| T4 scoped spacing change (new) | Sonnet | 5 / 5 | 5 / 5 |
+| T4 scoped spacing change (new) | Haiku | 5 / 5 | 5 / 5 |
+| T1 Express greenfield | Haiku | 9 / 9 | 8 / 9 (`p9`), then 9 / 9 and 9 / 9 (`q3`) |
+| T2 Migration audit | Haiku | 8 / 9 | 8 / 9 |
+
+- **Single-stage request (T4).** Every run treated the change as scoped: none chose a track or replayed discovery. They changed spacing through one Grid instance or a scoped alias, kept the art-direction gate, and verified at narrow widths. The router's load saving shows here. Estimated skill words read fell from 16,500 to 9,500 (Sonnet) and from 17,600 to 9,500 (Haiku), because the after-runs opened `site-maintenance.md` from the router table and did not read stage references. These figures come from self-reported file lists.
+- **A conflict surfaced and was fixed.** The Express defaults said "recommend one brief-led visual direction", while `AGENTS.md` and Stage 4 require comparing two or three. This round's hedge replacement ("offer alternatives only when the lane is open") made a Haiku run propose a single direction (A6 fail). The Express rule now requires the comparison and states why; two fresh Haiku runs on the fixed text compared two or three directions and scored 9/9.
+- **T2 on Haiku** stays at 8/9 on every variant. No Haiku run said in so many words that a public URL alone does not authorize a full import (B4 partial), although all of them asked for exporter access before importing. That wording lives in `docs/wordpress-migration.md`, not in a skill the runs reached first. It is left as an observation, not changed.
+
+Same limits as the pilot: one or two trials per cell, planning answers only, and the editor did the grading against criteria frozen before the runs.

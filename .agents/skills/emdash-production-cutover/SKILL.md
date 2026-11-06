@@ -37,7 +37,7 @@ Use the project's package manager and build/deployment scripts. Modify the selec
 
 ### 1. Establish recovery before changing the authentication origin
 
-Keep the existing admin login working while configuring recovery. If built-in email login is the recovery method, activate the provider and verify actual test-email delivery and a fresh magic-link login on the current origin **before** switching the canonical authentication origin.
+Passkeys are bound to the domain they were registered on, and sign-in links and sessions to the configured origin, so switching the canonical origin can lock out every existing admin; a tested recovery path is the way back in. Keep the existing admin login working while configuring recovery. If built-in email login is the recovery method, activate the provider and verify actual test-email delivery and a fresh magic-link login on the current origin **before** switching the canonical authentication origin.
 
 Retain a working provider. If Cloudflare Email Sending is requested or needed, follow the section below. An existing browser session is not proof that fresh login or recovery works.
 
@@ -77,7 +77,7 @@ When a new passkey is required:
 3. Register a replacement passkey in account settings.
 4. Verify passkey login from a fresh browser session before removing obsolete credentials.
 
-Verify OAuth or Access login instead when configured. If recovery fails, stop the cutover and restore the recorded working origin/configuration and deployment as appropriate. Do not reseed, delete users, or reset authentication automatically. Restoring Worker code alone may not restore CMS settings or edge rules; include those in rollback.
+Verify OAuth or Access login instead when configured. If recovery fails, stop the cutover and restore the recorded working origin, configuration and deployment, whichever of them the cutover changed. Do not reseed, delete users, or reset authentication automatically. Restoring Worker code alone may not restore CMS settings or edge rules; include those in rollback.
 
 ## Cloudflare Email Sending, when needed
 
@@ -146,15 +146,4 @@ When cutover verification is complete and production traffic is serving cleanly,
 
 ## Engineering verification loop
 
-For the EmDash foundation, preflight with `npm.cmd run doctor`, use
-`npm.cmd run verify:fast` during edits, then run `npm.cmd run verify`,
-`npm.cmd run build`, and `npm.cmd run audit:html` against that fresh build
-before handoff. On Unix use `npm` in place of `npm.cmd`. Set up the local
-Git pre-commit hook once with `npm.cmd run setup:hooks`; it runs doctor and
-verify:fast and preserves existing hook managers. It supplements the final gate
-and CI; Git hooks are local and can be bypassed. The HTML audit checks emitted
-HTML or automatically captures linked public SSR responses from the local
-production CMS. Missing published content or broken navigation fails the audit;
-see `docs/html-integrity.md` for capture limits and snapshot inspection. For generated
-static profiles, inspect the installed package scripts and use their verification
-commands; do not add CMS tooling to satisfy an unavailable command.
+Run the verification sequence in the site's `AGENTS.md` (*Verify and hand off* on the EmDash foundation, *Verification and release* on generated static sites) before handoff; `new-site-workflow` holds the full sequence and its reasons. Check each command against `package.json` first, and do not add CMS tooling to satisfy an unavailable command.
