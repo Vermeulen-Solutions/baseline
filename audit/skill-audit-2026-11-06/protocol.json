@@ -54,6 +54,28 @@
         "D5 Verifies at narrow widths on the Classes page and checks other routes/desktop unchanged, reporting only checks actually run.",
         "D6 Words of skill text read (reported, lower is better; not pass/fail)."
       ]
+    },
+    "T5-direction-choices": {
+      "prompt": "A family bakery with two shops wants a new four-page site (home, breads and pastries, shops and hours, story). They supplied good photos of their bread, ovens and staff, a hand-drawn logo, and a short history. Visitors mostly want opening hours and to see what is baked each day. No canvas has been mentioned. Using this repository's skills, write the art-direction decisions you would propose before any visual implementation: aesthetic lane, hero visual strategy, header archetype, composition/motion/density levels, display typography settings, and site anti-patterns, each with its reason. Do not implement anything.",
+      "acceptance": [
+        "E1 Hero strategy is art-directed photography (or a recorded brief-led alternative) because real usable photography of a physical product exists; no stock art, no live-coded specimen.",
+        "E2 Header archetype is consistent with the chosen lane's border/surface physics (for example no glass capsule with Editorial Paper), with a reason.",
+        "E3 Composition, motion and density levels are justified by the visitor task (hours and daily bakes favour orderly/scannable over highly varied), and motion includes reduced-motion behaviour.",
+        "E4 Display typography gives tracking/line-height values or a reasoned adjustment for the chosen face, not just a font name.",
+        "E5 Two or three concrete site-specific anti-patterns.",
+        "E6 No invented facts, testimonials or metrics."
+      ]
+    },
+    "T6-pricing-utilities": {
+      "prompt": "In this Baseline site (B2B software product), build the pricing section of the homepage: three tiers with monthly/annual prices, a monthly/annual switch, a short metrics strip above it (uptime, customers, response time) and a call to action per tier. Using this repository's skills, write the Astro markup and CSS/JS you would use (or describe it precisely) and explain which existing Baseline utilities you chose and why. The site source is not included; do not edit files.",
+      "acceptance": [
+        "F1 Uses .tabular-nums (or the mono/telemetry voice with tabular figures) for prices and metrics.",
+        "F2 The billing switch is progressive enhancement with no framework runtime (define:vars script on astro:page-load, data attributes, or native controls); both prices remain available or understandable without JavaScript.",
+        "F3 Action hierarchy uses the existing .btn / .btn--secondary / .btn--ghost classes rather than new button styles.",
+        "F4 Treats three uniform tier cards as a recorded comparison exception to the no-consecutive-identical-rows rule, or otherwise varies the adjacent section geometry.",
+        "F5 Mentions the Astro v7 inline whitespace rule or keeps inline elements joined when mixing inline spans.",
+        "F6 Does not invent metric values as fact (uses placeholders or asks for real numbers)."
+      ]
     }
   },
   "limits": [
@@ -63,5 +85,6 @@
     "Files-read lists are self-reported by the worker, not instrumented."
   ],
   "addendum": "After the before-runs scored at ceiling on sonnet, haiku runs (same prompts, same fixtures) were added for both variants to test the less-capable-model requirement in CONTRIBUTING. Acceptance criteria unchanged.",
-  "addendum2": "2026-11-07: after PR 49 merged and the follow-up wording/boilerplate edits, T4 was added (criteria frozen here, before any T4 run) to test a single-stage request, and T1/T2 were re-run on Haiku against the final text (fixture p9). k7 remains the pre-split base."
+  "addendum2": "2026-11-07: after PR 49 merged and the follow-up wording/boilerplate edits, T4 was added (criteria frozen here, before any T4 run) to test a single-stage request, and T1/T2 were re-run on Haiku against the final text (fixture p9). k7 remains the pre-split base.",
+  "addendum3": "2026-11-07: PR B (astro-site-design utilities moved to references/baseline-utilities.md; site-art-direction decision tables). T5 and T6 frozen here before any run. Before fixture q3 (PR A final), after fixture s4."
 }
