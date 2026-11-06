@@ -1,0 +1,55 @@
+{
+  "frozenAt": "2026-11-06",
+  "baseCommit": "a09357978519060c017780c63e602cde2941d0b2",
+  "purpose": "Before/after behaviour comparison for the new-site-workflow split and the responsive-architecture tightening.",
+  "design": "Fresh history-free subagents (model: sonnet, the faster model CONTRIBUTING says the skills must serve) receive the same planning prompt against a fixture containing root AGENTS.md, README.md, package.json, docs/ and the eleven Vermeulen-maintained skills, either at the base commit (before) or with the pilot edits (after). Fixtures are named neutrally. No implementation, no external actions. Each worker writes result.md with its plan plus a list of files it read. One trial per task per variant unless stated.",
+  "tasks": {
+    "T1-express-greenfield": {
+      "prompt": "A yoga teacher wants a new five-page website in French only: home, classes, timetable, about, contact. A developer (you) will maintain the content; the owner will email changes. No canvas or design tool has been mentioned. There is a logo and a few photos. Using this repository's instructions and skills, produce the work plan you would follow from now to a verified local build: profile, track, the checkpoints and what you would ask the owner at each, the gates and commands you must pass before and after visual implementation, and which skills/references you load when. Do not implement anything.",
+      "acceptance": [
+        "A1 Chooses Express track with the <=6 routes / <=3 collections / single-locale reason.",
+        "A2 Recommends the static profile because the developer owns file edits; loads no EmDash/CMS specialists.",
+        "A3 Uses at most three consolidated checkpoints and does not add mandatory approval stops; questions are grouped, in plain language, with a recommendation.",
+        "A4 Saves an Art Direction Record in AGENTS.md and passes `npm run check:art-direction -- --require-record` before site-specific visual implementation.",
+        "A5 Calibrates primitives on /_styleguide (static: trailing slash) and records audit/component-calibration.md before broad page assembly.",
+        "A6 Defaults to HTML/browser concepts (no canvas requested), names Brilliant/OpenPencil/Penpot once as choices, and compares two or three structurally distinct directions.",
+        "A7 Uses shared layout spacing with balanced density as the labelled default rather than asking a CSS policy question.",
+        "A8 Runs media:prepare for the photos before adding them.",
+        "A9 Ends at verify + build with honest evidence; no deployment without authorization."
+      ]
+    },
+    "T2-migration-audit": {
+      "prompt": "An association runs a bilingual (French and English) WordPress site built with Elementor. It publishes events with sessions and venues, and three volunteers edit it in the browser. The owner writes: 'Can you audit our site and tell me what moving it to Baseline would involve?' You have their public URL only. Using this repository's instructions and skills, write the response you would give and the plan behind it. Do not implement anything or contact anyone.",
+      "acceptance": [
+        "B1 Leads with an actionable follow-up plan and the decisions the owner must make, not an implementation; treats the audit as not authorizing implementation.",
+        "B2 Chooses the Standard track (migration and multiple locales) with the reason.",
+        "B3 Recommends the EmDash profile (browser editors, relational events) or presents the profile choice with that recommendation.",
+        "B4 Asks for dashboard access: first-party EmDash Exporter (official release ZIP upload) with a private migration key, WXR export as fallback; says a public URL alone does not authorize a full import.",
+        "B5 Offers the optional Elementor Website Template kit export as a design reference.",
+        "B6 Requires a content-candidate register (audit/content-candidate-register.md) for events/sessions/venues and other repeated content.",
+        "B7 Uses native row-per-locale translations, not duplicate language fields.",
+        "B8 Considers the Eventual registry plugin before custom event schemas.",
+        "B9 Includes release completion (commit/push/deploy target and live acceptance) in the plan and keeps deployment, content transfer and DNS as separately authorized actions."
+      ]
+    },
+    "T3-responsive-card": {
+      "prompt": "In this Astro site, a ProductCard component is used in three places: a three-column grid on the shop page, a narrow sidebar on article pages, and a full-width feature band on the homepage. When it has enough room it should place the image beside the text; otherwise image above text. Using this repository's skills, write the CSS (and any wrapper markup) you would use and explain why you chose that mechanism, and list what you would check before calling it done. Do not edit files.",
+      "acceptance": [
+        "C1 Chooses a container query, not a viewport media query, and explains that the card's width changes independently of the viewport.",
+        "C2 Establishes the query container on a wrapper/list item (or other ancestor), not the card querying itself, and not only on the whole grid.",
+        "C3 Keeps the stacked (narrow) layout as the default outside @container and enhances at min-width.",
+        "C4 Names the container (or explains naming to avoid nested containers measuring the wrong ancestor).",
+        "C5 Treats the threshold as content-derived and tested, not a universal breakpoint.",
+        "C6 Uses minmax(0, 1fr) or min-inline-size: 0 for shrinking tracks and avoids fixed heights.",
+        "C7 Checks narrowest real placement, intermediate widths around the switch, long/unbroken content, missing/odd images, 400% zoom reflow."
+      ]
+    }
+  },
+  "limits": [
+    "One or two trials per task per variant; no statistical claim.",
+    "Planning answers, not full implementations; behaviour on real builds is not measured.",
+    "Grader (the same agent that made the edits) knows the variant mapping after grading; outputs are graded from anonymised copies first.",
+    "Files-read lists are self-reported by the worker, not instrumented."
+  ],
+  "addendum": "After the before-runs scored at ceiling on sonnet, haiku runs (same prompts, same fixtures) were added for both variants to test the less-capable-model requirement in CONTRIBUTING. Acceptance criteria unchanged."
+}

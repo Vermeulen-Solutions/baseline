@@ -113,6 +113,12 @@ test('editable canvas guidance ships complete on every profile without a runtime
     '.agents/skills/astro-site-design/references/screen-reader-checks.md',
     '.agents/skills/astro-site-design/references/interaction-motion.md',
     '.agents/skills/new-site-workflow/references/visitor-research.md',
+    '.agents/skills/new-site-workflow/references/decisions-and-release.md',
+    '.agents/skills/new-site-workflow/references/express-track.md',
+    '.agents/skills/new-site-workflow/references/brief-platform-content.md',
+    '.agents/skills/new-site-workflow/references/art-direction-and-calibration.md',
+    '.agents/skills/new-site-workflow/references/build-verify-launch.md',
+    '.agents/skills/new-site-workflow/SKILL.md',
   ];
   const onboardingDocs = ['docs/penpot-onboarding.md', 'docs/openpencil-onboarding.md', 'docs/opendesign-onboarding.md', 'docs/brilliant-onboarding.md'];
   assert.ok(expectedPenpot.includes(`${penpotDir}/assets/design-brief.md`));
