@@ -24,5 +24,7 @@ Use WCAG 2.2 AA as the default target unless the project sets a different standa
 
 ## Validation
 
+For actual screen-reader behavior or announcement/focus defects, use [bounded screen-reader checks](screen-reader-checks.md). Record the reader/platform and observed task result; keep an unoperated reader check explicitly unverified rather than inferring speech from the DOM.
+
 - Review with keyboard only at minimum. Use automated accessibility checks as issue finders, not proof of conformance; they cannot verify editorial quality, all focus behavior, or whether the interface makes sense.
 - Inspect representative page types and interactive states at desktop and mobile widths. Record what was checked and any limitations; don't claim WCAG conformance without an appropriate full evaluation.

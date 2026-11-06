@@ -1,6 +1,6 @@
 ---
 name: new-site-workflow
-description: Coordinate new sites, full rebuilds, and maintenance spanning content models, templates or shared design in this Astro and EmDash starter. Use profile-aware stages and existing decisions; route implementation to the relevant specialist skills. Isolated component or content edits can use their specialist directly.
+description: Coordinate new sites, full rebuilds, and maintenance spanning content models, templates or shared design in this Astro and EmDash starter, plus requested visitor-research plans and synthesis for a website. Use profile-aware stages and existing decisions; route implementation to the relevant specialist skills. Isolated component or content edits can use their specialist directly.
 ---
 
 # New site workflow
@@ -33,6 +33,8 @@ Shared on all profiles: `site-art-direction`, `astro-site-design`, `impeccable`,
 5. Load each specialist skill when its stage begins. Do not load every skill up front.
 
 For writing, rewriting or editing site copy (copywriting or copyediting), start with [references/copywriting.md](references/copywriting.md), which routes to the brief, claims, conversion-copy and microcopy guidance.
+
+For requested participant studies, uncertain visitor findability or synthesis of supplied research, use [optional visitor research](references/visitor-research.md). Reuse settled discovery; a straightforward website does not require a new study. Distinguish actual participant evidence from owner review, agent critique and synthetic rehearsal.
 
 For requests such as motion, illustration, charts, editable vectors, 3D or video, follow [capability routing](../site-art-direction/references/capability-routing.md). Reuse the chosen surface and runtime, load relevant installed guidance first, discover a suitable skill only for a real gap, and test a representative result in its destination. A capability request is not a reason to switch tools or replay discovery.
 

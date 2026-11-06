@@ -1,6 +1,6 @@
 ---
 name: site-art-direction
-description: Turn a site brief, content structure, brand assets, and visual evidence into a distinct art direction before Astro implementation. Use for new public sites, redesigns, and migrations; leave CMS architecture and frontend mechanics to their specialist skills.
+description: Turn a site brief, content structure, brand assets, and visual evidence into a distinct art direction before Astro implementation. Use for new public sites, redesigns, migrations, and requested website logo/icon or illustration work; leave CMS architecture and frontend mechanics to their specialist skills.
 ---
 
 # Site art direction
@@ -52,6 +52,8 @@ Choose a deliberate level for each dimension and explain it in site-specific ter
 - **Density:** spacious to information-rich — how much content appears together and how quickly visitors can scan it.
 
 When a request needs motion or another specialist capability, follow [capability routing](references/capability-routing.md): keep the chosen surface, combine craft guidance with the correct runtime adapter, and demonstrate actual behavior. Installed Impeccable motion guidance applies across surfaces; Brilliant's timeline is one execution path. Discover external skills only when the installed guidance leaves a concrete gap.
+
+For logo/icon variants or refinement, read [website brand assets](references/brand-assets.md). For a related illustration set or explanatory artwork, read [editorial illustration](references/editorial-illustration.md), which preserves the requested native/vector medium and resolves upstream picture-format defaults for that scope. These are conditional asset tasks, not a new identity workshop on every site.
 
 Use qualitative levels or a small scale as a thinking aid, not as a formula. Accessibility, content volume, audience expectations, and the existing identity can override an aesthetic preference.
 

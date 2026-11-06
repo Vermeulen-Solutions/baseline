@@ -68,6 +68,8 @@ Do not invent testimonials, audience quotations, client logos, measurements, cre
 
 ## Review the representative result
 
+When actual participant research is requested or an important visitor-task uncertainty remains, use [optional visitor research](visitor-research.md) for neutral tasks and evidence-linked synthesis. Do not treat the owner/agent review below as a participant study or add a research checkpoint to a settled brief.
+
 Alongside browser, accessibility and editor checks in Stages 5–6, inspect the actual representative page against its brief:
 
 - Can a first-time visitor identify the offer/service, audience fit and intended next step from the rendered content?
