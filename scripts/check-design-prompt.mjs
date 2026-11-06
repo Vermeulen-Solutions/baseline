@@ -131,10 +131,11 @@ const RULES = [
 ];
 
 // Clause-local handling prevents a prohibition from hiding a later command.
-// An action following "and" is conservatively reviewed independently: its
-// negation scope can be ambiguous. This is not general negation parsing.
+// An action following "and" or a comma is conservatively reviewed independently:
+// its negation scope can be ambiguous. A comma followed by a noun keeps a negated
+// list together. This is not general negation parsing.
 function clauses(line) {
-  return line.split(/;|[.!?](?=\s|$)|\b(?:but|however)\b|\band\s+(?=(?:(?:must|also|then)\s+)*(?:add|use|include|invent|fabricate|fake|make up|ignore|skip|disable)\b)/i).map(part => part.trim()).filter(Boolean);
+  return line.split(/;|[.!?](?=\s|$)|\b(?:but|however)\b|(?:,\s*(?:and\s+)?|\band\s+)(?=(?:(?:must|also|then)\s+)*(?:add|use|include|invent|fabricate|fake|make up|create|generate|write|show|ignore|skip|disable)\b)/i).map(part => part.trim()).filter(Boolean);
 }
 
 function prohibited(clause, matchIndex) {

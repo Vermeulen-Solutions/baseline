@@ -84,6 +84,21 @@ test('a prohibition cannot hide a later action joined with and', () => {
   assert.ok(!ids(inspectPrompt('Do not invent testimonials and client logos.')).includes('invented-proof'));
 });
 
+test('a prohibition cannot hide a later action joined with a comma', () => {
+  for (const prompt of [
+    'Never invent testimonials, add fake client logos.',
+    'Do not use stock photos, fabricate five client testimonials.',
+    'Without testimonials, create fake customer reviews.',
+  ]) {
+    assert.ok(inspectPrompt(prompt).some(f => f.id === 'fabricated-proof' && f.severity === 'P1'), prompt);
+  }
+  assert.ok(ids(inspectPrompt('Do not add animation, add a parallax hero.')).includes('motion-without-reduced'));
+  assert.ok(inspectPrompt('Never use gradients, ignore accessibility.').some(f => f.id === 'accessibility-override' && f.severity === 'P1'));
+  for (const prompt of ['No animations, transitions or parallax.', 'Do not invent testimonials, logos or ratings.']) {
+    assert.deepEqual(ids(inspectPrompt(prompt)).filter(id => id !== 'contrast-unstated'), [], prompt);
+  }
+});
+
 test('a clearly labelled generated illustration needs review without an accusation of fabricated identity', () => {
   const findings = inspectPrompt('Use an AI-generated portrait clearly labelled as an illustration.');
   assert.ok(!ids(findings).includes('fabricated-proof'));
