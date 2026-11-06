@@ -15,9 +15,9 @@ This skill is influenced by the brief-first and variance/motion/density ideas in
 
 Read the available brief, audience and task information, content model, route inventory, real copy and imagery, brand assets, and visual references. For a redesign or migration, use the source audit produced by `astro-site-design`; do not infer the source identity from a logo or homepage screenshot alone.
 
-Reuse the strategic synthesis and priority page briefs from `new-site-workflow` when present. Let visitor questions, actual copy length, available proof and its permitted use inform the composition. A missing testimonial or metric calls for an honest alternative or omitted section, not invented evidence. Reopen discovery only when a material ambiguity changes the direction; do not repeat a settled interview.
+Reuse the strategic synthesis and priority page briefs from `new-site-workflow` when present. Let visitor questions, actual copy length, available proof and its permitted use inform the composition. A missing testimonial or metric calls for an honest alternative or omitted section, not invented evidence. Reopen discovery only when an open question would change the lane, typography or hero strategy; do not repeat a settled interview.
 
-When evidence is incomplete, make reversible working assumptions and label them. Ask only when plausible answers would lead to materially different identities or layouts.
+When evidence is incomplete, make reversible working assumptions and label them. Ask only when plausible answers would lead to a different lane, typography pairing, hero strategy or page layout.
 
 When the owner brings a design prompt from a library — [open-design.ai/prompts](https://open-design.ai/prompts/), [superdesign.dev](https://superdesign.dev/), [designprompts.dev](https://designprompts.dev/) — treat it as reference material subordinate to the brief and preserved brand commitments. When references are missing at the concept checkpoint, offer these libraries once; a settled no needs no repeat. Run `npm run design:prompt-check -- <file>` and follow [external prompt adaptation](references/external-prompt-adaptation.md): preserve structural intent, map roles, retain approved typography and require real proof. Findings require review rather than automatic rejection; a clean report does not establish approval or rendered acceptance.
 
@@ -45,11 +45,19 @@ Avoid style labels without interpretation. If a brief says “premium,” “pla
 
 ## Set the expressive range
 
-Choose a deliberate level for each dimension and explain it in site-specific terms:
+Choose a level for each dimension and explain it in site-specific terms:
 
 - **Composition:** orderly to highly varied — symmetry, overlap, rhythm, section changes, and use of negative space.
 - **Motion:** quiet to expressive — feedback, entrances, scroll behavior, and transitions justified by the content.
 - **Density:** spacious to information-rich — how much content appears together and how quickly visitors can scan it.
+
+Set each level from the strongest signal in the brief:
+
+| Dimension | Toward the lower end when… | Toward the upper end when… | Why |
+| --- | --- | --- | --- |
+| Composition | Visitors complete tasks or compare items (booking, pricing, timetables, documentation), or most pages are repeated records | The site sells a point of view or portfolio, has few routes, and its identity is distinctive | Variation costs scanning speed; spend it where the visitor came to be persuaded, not to find something |
+| Motion | The audience is task-focused, includes many older or motion-sensitive visitors, or the performance budget is tight | Motion explains a product, process or sequence, or the identity is kinetic | Motion that neither explains nor gives feedback is load and distraction; reduced-motion behaviour is required at every level |
+| Density | There are few high-value actions and the copy carries the brand | Visitors scan many comparable items (schedules, catalogues, data, listings) | Density should match the scanning task: spacious layouts slow comparison, dense ones bury a single message |
 
 When a request needs motion or another specialist capability, follow [capability routing](references/capability-routing.md): keep the chosen surface, combine craft guidance with the correct runtime adapter, and demonstrate actual behavior. Installed Impeccable motion guidance applies across surfaces; Brilliant's timeline is one execution path. Discover external skills only when the installed guidance leaves a concrete gap.
 
@@ -70,16 +78,16 @@ Use the concrete defaults and examples below for new or replacement visual work;
 - **Typography roles and rationale:** Display and body pairing from fonts the project can legally and reliably serve.
 - **Palette and physics:** Contrast hierarchy, 3-tier surfaces (`--color-page`, `--color-surface`, `--color-elevated` / `.surface-elevated`), 2-tier borders (`--color-border`, `--color-border-strong`), `1px` specular top inner highlight (`--surface-highlight`), shadows, and corner treatment.
 - **4-Voice typography hierarchy:**
-  1. *Monumental Display (`--font-display`)* — Tight tracking (`-0.03em` to `-0.04em`), compressed line-height (`0.95–1.08`), `text-wrap: balance`.
+  1. *Monumental Display (`--font-display`)* — Tight tracking (`-0.03em` to `-0.04em`), compressed line-height (`0.95–1.08`), `text-wrap: balance`. Large type looks loosely spaced at default tracking and leading because both scale with font size; tighten less for a face that is already narrow or tightly fitted, and check that descenders and accents do not collide at the compressed line-height.
   2. *Inline Editorial Contrast Accent (`.font-accent` / `--font-accent`)* — Italic serif accent used selectively on 1–2 focal words inside a display `<h1>`/`<h2>` (`<em class="font-accent">...</em>`) to create editorial tension against a geometric/grotesk display face.
   3. *Reading & UI Body (`--font-body`)* — High-x-height neutral sans (`1.6–1.68` line-height, `60ch–68ch` measure).
   4. *Telemetry & Coordinate Monospace (`.eyebrow-telemetry` / `--font-mono` + `.tabular-nums`)* — `0.75rem` uppercase with `0.12em` tracking for structural section indices (`[01 // ARCHITECTURE]`, `§ 02 — TELEMETRY`), version badges (`.badge-pill`), dates/times and numeric metrics. Use actual content and meaningful labels; decorative indices are not evidence for invented data.
-- **Hero visual specimen strategy (mandatory choice before coding):** Explicitly select how the hero anchors visual authority instead of falling back to generic stock art. Use the examples below to make that choice; preserve a different established treatment when the brief fixes it and record why:
+- **Hero visual specimen strategy (mandatory choice before coding):** Explicitly select how the hero anchors visual authority instead of falling back to generic stock art. The hero is the visitor's first proof of the offer, so it must show the real thing. Take the first match: (a) the brief or accepted identity fixes a hero treatment → keep it and record why; (b) the offer is software, data or a developer tool → 1, live-coded specimen; (c) the offer is several services or capabilities from one studio or agency → 2, capability stage; (d) the offer is a place, physical product, person or craft and usable photography exists → 3, art-directed photography; (e) nothing fits, or the photography is unusable → record a Custom treatment built from real copy and supplied assets, never stock art. Use the examples below to make that choice; preserve a different established treatment when the brief fixes it and record why:
   1. *Live-Coded UI / Telemetry Specimen (`.ui-specimen`)* — For SaaS, developer tools, AI, fintech, and B2B platforms: build an HTML/CSS/SVG architectural console, telemetry ledger, CLI readout, or interactive state switcher using `.ui-specimen`, `.ui-specimen__header`, `.tabular-nums`, and `.status-dot`. Never use blurry raster screenshots or generic futuristic AI stock art.
   2. *Interactive Narrative / Capability Stage* — For agencies, studios, and multi-service brands: an asymmetric split stage pairing the value proposition with a numbered capability matrix (`01`–`04`) or interactive preview panel.
   3. *Art-Directed Photography / Editorial Frame* — For hospitality, architecture, physical goods, and craft brands: prepared photography (`npm run media:prepare`) framed with deliberate aspect ratios, hairline borders, and archival figure captions (`FIG. 01`).
 - **Grid, density, and section pacing:** Container behavior, alignment, spacing rhythm, compositional variance across consecutive sections (do not stack consecutive identical 3-column card grids; alternate split hero → `.grid-hairline` ledger → sticky narrative + bento matrix → `data-surface="dark"` spotlight → native `<Disclosure>` FAQ), and responsive composition. Record a specific exception for an accepted existing composition or a comparison task that genuinely requires uniform rows.
-- **Signature header & navigation archetype:** Select an intentional masthead pattern matching the lane (*Floating Glass Capsule* via `.surface-glass`, *Exposed Brutalist Multi-Cell Bar* with `1px` cell dividers and top telemetry strip, or *Editorial Hairline Masthead* with numbered nav indices). An established masthead can be the recorded choice during refinement; preserve real navigation semantics.
+- **Signature header & navigation archetype:** Select an intentional masthead pattern matching the lane (*Floating Glass Capsule* via `.surface-glass`, *Exposed Brutalist Multi-Cell Bar* with `1px` cell dividers and top telemetry strip, or *Editorial Hairline Masthead* with numbered nav indices). An established masthead can be the recorded choice during refinement; preserve real navigation semantics. Default pairing, because each archetype reuses its lane's surface and border physics: *Technical Systems* → Exposed Brutalist Multi-Cell Bar (hairline cells, sharp corners); *Editorial Paper* → Editorial Hairline Masthead (ink rules; glass is one of that lane's anti-patterns); *Luminous Futurism* and *Product-Led Minimalism* → Floating Glass Capsule (frosted or lifted surfaces); *Custom / existing brand* → whichever archetype matches its recorded borders and surfaces. Choose against the default only for a recorded navigation need, such as many top-level items that will not fit a capsule.
 - **Asset generation pre-flight rule:** Generated expressive imagery must embed the Narrative Metaphor and describe its visible application. Functional icons, factual diagrams, and faithful brand assets are exempt: preserve their meaning. Merely appending the metaphor to a generic prompt is not compliance. Avoid unsupported generic requests such as "modern clean tech", "AI network", or "glowing futuristic background".
 - **Interaction and motion character:** Feedback, transitions, and reduced-motion behavior.
 - **Navigation, hero, editorial flow, and calls to action:** Core page family layouts.
@@ -91,7 +99,7 @@ Do not invent facts, testimonials, clients, metrics, team members, or pseudo-rea
 
 ## Explore enough to make a choice
 
-When the brief supports substantially different directions, develop two or three compact concepts and compare them against audience fit, brand continuity, content fit, accessibility, maintainability, and distinctiveness. Select one direction or present the meaningful decision to the user.
+When the brief supports substantially different directions, develop two or three compact concepts and compare them against audience fit, brand continuity, content fit, accessibility, maintainability, and distinctiveness. Select one direction, or present the choice to the user when the directions differ in lane, hero strategy or density.
 
 For a new site, significant overhaul or replacement visual world, read [references/design-iteration.md](references/design-iteration.md) before offering a design surface. It holds the surface rule (HTML/browser concepts by default; Brilliant when an editable canvas is requested and no tool is settled; Brilliant, OpenPencil and Penpot named once; OpenDesign optional), the skill and limits for each tool, the side-by-side comparison of two or three structurally distinct directions, and honest efficiency measurement. Reuse a settled surface and working connection rather than repeating the offer; resolve an unavailable chosen surface with the user. Same-agent work is complete; another agent/handoff is optional.
 
@@ -101,7 +109,7 @@ Use mood boards, community `DESIGN.md` references (`designmd-mcp` / [designmd.ai
 
 For an existing Baseline site, a builder migration or another redesign, distinguish refinement, significant overhaul within the brand, and replacement of the visual world. Reuse an explicit choice; resolve only consequential ambiguity. Separate fixed logo, palette, type, content and functionality commitments from permission to change composition or the visual system. An accepted preserve-composition direction stays authoritative until the user supersedes it. Weak hierarchy, generic sections, inconsistent spacing or poor reflow are problems to solve, not a license to discard brand commitments.
 
-For an authorized significant overhaul or materially different visual premise, make a visual concept pass before broad Astro implementation:
+For an authorized significant overhaul or a different visual premise (new lane, metaphor or hero strategy), make a visual concept pass before broad Astro implementation:
 
 1. Choose one representative page archetype and gather its real copy, source imagery, content shapes, and important states.
 2. Create two or three compact visual concepts that show composition, hierarchy, typography character, imagery treatment, density, and responsive intent. Use the concept-stage choice above: Penpot, OpenPencil, Pencil, Google Stitch, OpenDesign, Claude Design, `designmd-mcp` references, image generation or a direct Astro/browser prototype. Preserve the user's selected approach; use the agreed fallback if an external tool is unavailable. Keep concept artifacts under `audit/visual-concepts/`.
@@ -151,7 +159,7 @@ Before handing off, test the proposal:
 - Can it remain legible, operable, responsive, and respectful of user preferences?
 - For a redesign, is it clear what recognizable character is preserved and what is intentionally improved?
 
-Resolve material weaknesses before broad implementation. Cosmetic variation alone does not make a direction distinctive.
+Resolve every check above that fails before broad implementation. Cosmetic variation alone does not make a direction distinctive.
 
 ## Engineering verification loop
 
