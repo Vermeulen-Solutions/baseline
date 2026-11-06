@@ -23,6 +23,8 @@ When entering **Stage 4 (Art Direction)** for a new site or major redesign, reco
 - **Penpot (Shared cloud canvas):** Uses the `penpot-site-design` skill and [Penpot onboarding](penpot-onboarding.md). Provides a collaborative web workspace ideal for client reviews.
 - **Direct Astro (Browser-native proof):** Use an early bounded route spike when browser behavior could invalidate a concept. After saving and checking the Art Direction Record, translate the selected concept into `src/styles/global.css`, `/_styleguide` and production routes. Requires no external tools or accounts.
 
+For motion, illustration, charts, editable vectors, 3D, video or another requested capability, use the shared [capability routing](../.agents/skills/site-art-direction/references/capability-routing.md). It keeps the chosen surface, combines installed craft guidance with the correct runtime adapter, inspects targeted catalogue skills only when needed, and requires an actual representative test. Motion can use Impeccable guidance on every surface; native film export and interactive browser behavior have separate acceptance checks.
+
 Baseline supports two execution models across all surfaces:
 - **Single-Agent Model:** The same agent iterates concepts on the canvas and translates the approved direction into Astro.
 - **Multi-Agent Model (Agent Switch):** A specialized design agent receives the [portable design brief](../.agents/skills/penpot-site-design/assets/design-brief.md), iterates on the canvas, and passes the [design handoff](../.agents/skills/penpot-site-design/assets/design-handoff.md) to an implementation agent that translates the design into Astro primitives and routes.

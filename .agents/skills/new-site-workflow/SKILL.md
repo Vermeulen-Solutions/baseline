@@ -34,6 +34,8 @@ Shared on all profiles: `site-art-direction`, `astro-site-design`, `impeccable`,
 
 For writing, rewriting or editing site copy (copywriting or copyediting), start with [references/copywriting.md](references/copywriting.md), which routes to the brief, claims, conversion-copy and microcopy guidance.
 
+For requests such as motion, illustration, charts, editable vectors, 3D or video, follow [capability routing](../site-art-direction/references/capability-routing.md). Reuse the chosen surface and runtime, load relevant installed guidance first, discover a suitable skill only for a real gap, and test a representative result in its destination. A capability request is not a reason to switch tools or replay discovery.
+
 Keep business context in its established home: `AGENTS.md` by default, or an explicitly adopted optional `PROJECT.md` linked there. The brief covers purpose, audiences, scope, ownership and decision rationale; link actual models, routes and configuration instead of copying their current values. Working rules and the compact Art Direction Record stay in `AGENTS.md`; selected `DESIGN.md` references support that record while CSS owns shipped values. Put current progress and next actions in the existing tracker or a short handoff when needed. Use one home per fact and resolve conflicts by subject and evidence, not a blanket filename hierarchy. Do not relocate established facts or create missing records merely to complete a template. When installed, `docs/project-context.md` expands this guidance and `PROJECT.example.md` offers an optional starting point; older installed profiles can use this scope summary without adding those files.
 
 ## Decision and question policy

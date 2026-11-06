@@ -52,6 +52,8 @@ At the existing new-site/significant-redesign concept checkpoint, recommend **Br
 
 ## Shared design authority
 
+For motion, illustration, charts, editable vectors, 3D, video or another requested capability, follow `site-art-direction/references/capability-routing.md`. Keep the chosen surface and runtime, use relevant installed guidance first, inspect catalogue skills for a concrete gap, and test the actual output before expanding. A motion request does not imply Brilliant; native film and interactive browser behavior require separate acceptance.
+
 `src/styles/global.css`, the layout primitives, `SiteShell.astro`, `design:tokens`
 and `check:art-direction` are canonical. Before client-specific visual work,
 save a complete `## Art Direction Record` with Aesthetic Lane, Narrative Metaphor,

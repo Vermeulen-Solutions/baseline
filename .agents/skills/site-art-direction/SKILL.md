@@ -51,6 +51,8 @@ Choose a deliberate level for each dimension and explain it in site-specific ter
 - **Motion:** quiet to expressive — feedback, entrances, scroll behavior, and transitions justified by the content.
 - **Density:** spacious to information-rich — how much content appears together and how quickly visitors can scan it.
 
+When a request needs motion or another specialist capability, follow [capability routing](references/capability-routing.md): keep the chosen surface, combine craft guidance with the correct runtime adapter, and demonstrate actual behavior. Installed Impeccable motion guidance applies across surfaces; Brilliant's timeline is one execution path. Discover external skills only when the installed guidance leaves a concrete gap.
+
 Use qualitative levels or a small scale as a thinking aid, not as a formula. Accessibility, content volume, audience expectations, and the existing identity can override an aesthetic preference.
 
 ## Define the visual system

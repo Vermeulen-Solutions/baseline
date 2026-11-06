@@ -9,6 +9,8 @@ Treat optional `DESIGN.md` proposals as reference material and reconcile them wi
 
 Build maintainable, accessible Astro pages and components. When a source site or visual reference exists, inspect its actual rendered appearance before implementation; do not substitute a vague textual approximation for visual review.
 
+For requested motion, imagery, charts, 3D or other specialist behavior, use [capability routing](../site-art-direction/references/capability-routing.md). Keep the selected surface and existing runtime; for UI motion read installed Impeccable `reference/animate.md`, then implement through CSS/WAAPI or the site's adopted library. Inspect actual interaction, interruption and reduced-motion behavior in the browser; a canvas film does not prove website behavior.
+
 ## Platform presentation boundary
 
 For repeated content and reusable presentation, follow `new-site-workflow/references/delivery-evidence.md` when installed: trace actual query/data ownership, loop output and component render sites, then verify the relevant content change and shared instance behavior. Keep file-owned static content separate from CMS collections/editing. Existing route notes can hold the compact map; no new registry or blanket component extraction is required.

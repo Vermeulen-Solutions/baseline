@@ -1,0 +1,18 @@
+```bm
+file("Studies/Motion/Motion/Workflow.bm")
+fps(30) s(960,540) bpm(120) blur(3)
+canvases["Studies/Motion/Storyboard"]
+treatment(treatment.md)
+state(01 Brief) #s1
+state(02 Concepts) #s2
+state(03 Astro proof) #s3
+#s1 hold(sec(1.5))
+#s1 to(#s2) sec(0.5) decelerate
+  126146cf190267fe "Active step highlight" blur(8)
+  [c8f429bff49c9665 "Step number 0",de4ff0d4fb900c09 "Step label 0",641243c94847c11d "Step description 0",e8fc7ac9fb12d2ef "Step number 1",7e76c9202f0d8320 "Step label 1",57f6b596da40a81a "Step description 1",83db54f7c4e2d286 "Step number 2",a3199886ec9aaf10 "Step label 2",ea61822c9d6c0da7 "Step description 2"] stagger(sec(0.02))
+#s2 hold(sec(1.5))
+#s2 to(#s3) sec(0.5) decelerate
+  de1deb11812ab326 "Active step highlight" blur(8)
+  [4a9cffcfe5059cc3 "Step number 0",11afb0f273de0066 "Step label 0",f696800449c2b906 "Step description 0",6a72888985f20c79 "Step number 1",f1a123c75571ca79 "Step label 1",a38f2374e29714f6 "Step description 1",19c8706c9e6a46b8 "Step number 2",6bf0f1a584f168b3 "Step label 2",708717146166c3d8 "Step description 2"] stagger(sec(0.02))
+#s3 hold(sec(2))
+```

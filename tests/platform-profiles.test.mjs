@@ -106,6 +106,7 @@ test('editable canvas guidance ships complete on every profile without a runtime
   const expectedOpendesign = collect(opendesignDir).sort();
   const expectedBrilliant = collect(brilliantDir).sort();
   const iterationReference = '.agents/skills/site-art-direction/references/design-iteration.md';
+  const capabilityReference = '.agents/skills/site-art-direction/references/capability-routing.md';
   const onboardingDocs = ['docs/penpot-onboarding.md', 'docs/openpencil-onboarding.md', 'docs/opendesign-onboarding.md', 'docs/brilliant-onboarding.md'];
   assert.ok(expectedPenpot.includes(`${penpotDir}/assets/design-brief.md`));
   assert.ok(expectedPenpot.includes(`${penpotDir}/assets/design-handoff.md`));
@@ -122,10 +123,11 @@ test('editable canvas guidance ships complete on every profile without a runtime
     assert.deepEqual(manifest.skillFiles.filter(file => file.startsWith(`${penpotDir}/`)).sort(), expectedPenpot, profile);
     assert.deepEqual(manifest.skillFiles.filter(file => file.startsWith(`${openpencilDir}/`)).sort(), expectedOpenpencil, profile);
     assert.ok(manifest.skillFiles.includes(iterationReference), profile);
+    assert.ok(manifest.skillFiles.includes(capabilityReference), profile);
     for (const doc of onboardingDocs) assert.ok(manifest.files.includes(doc), `${profile}: missing ${doc}`);
     const packages = profilePackages(profile, pkg);
     assert.ok(!Object.keys({ ...packages.dependencies, ...packages.devDependencies }).some(name => /penpot|open-pencil|brilliant/.test(name)), profile);
-    for (const file of [...expectedPenpot.filter(file => file.endsWith('.md')), ...expectedOpenpencil.filter(file => file.endsWith('.md')), ...expectedOpendesign.filter(file => file.endsWith('.md')), ...expectedBrilliant.filter(file => file.endsWith('.md')), iterationReference, ...onboardingDocs]) {
+    for (const file of [...expectedPenpot.filter(file => file.endsWith('.md')), ...expectedOpenpencil.filter(file => file.endsWith('.md')), ...expectedOpendesign.filter(file => file.endsWith('.md')), ...expectedBrilliant.filter(file => file.endsWith('.md')), iterationReference, capabilityReference, ...onboardingDocs]) {
       for (const [, href] of fs.readFileSync(path.join(root, file), 'utf8').matchAll(/\]\(([^)]+)\)/g)) {
         if (/^https?:/.test(href) || href.startsWith('#')) continue;
         const target = path.posix.normalize(path.posix.join(path.posix.dirname(file), href.split('#')[0]));

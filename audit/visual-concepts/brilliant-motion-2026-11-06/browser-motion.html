@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Baseline — browser motion study</title>
+  <style>
+    :root { color-scheme: dark; --page:#0b0e0d; --surface:#171b18; --ink:#e5e6e2; --muted:#adb5ab; --action:#c5ff00; --ease-out:cubic-bezier(.16,1,.3,1); font: 100%/1.5 Arial,sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--page); color:var(--ink); }
+    main { width:min(100% - 3rem,70rem); margin:clamp(1.5rem,6vw,5rem) auto; }
+    .brand { display:flex; align-items:center; gap:.75rem; font-weight:700; }
+    .mark { display:grid; place-items:center; width:2.25rem; height:2.25rem; border-radius:.5rem; background:var(--action); color:var(--page); font-size:1.4rem; }
+    .study { display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,6vw,5rem); align-items:center; margin-block:4rem 3rem; }
+    h1 { font-size:clamp(2.3rem,4.5vw,3.5rem); line-height:1.06; max-width:13ch; margin:0 0 1.5rem; text-wrap:balance; }
+    .description { color:var(--muted); max-width:42ch; margin:0; min-height:5em; }
+    .stage-list { position:relative; display:grid; gap:.75rem; background:var(--surface); padding:1rem; border-radius:1rem; }
+    .marker { position:absolute; left:1rem; width:3px; top:0; height:5.5rem; transform:translateY(1rem); background:var(--action); border-radius:2px; pointer-events:none; }
+    .step { position:relative; display:grid; grid-template-columns:2rem 1fr; gap:.25rem .75rem; align-content:center; min-height:5.5rem; padding:.8rem 1rem; border:0; border-radius:.65rem; background:transparent; color:var(--ink); text-align:left; font:inherit; cursor:pointer; }
+    .step b { font-size:1.25rem; line-height:1.2; }
+    .step small { grid-column:2; color:var(--muted); font-size:.875rem; }
+    .step[aria-pressed="true"] { color:var(--action); }
+    .step[aria-pressed="true"] small { color:var(--ink); }
+    button:focus-visible { outline:3px solid var(--ink); outline-offset:4px; }
+    .controls { display:flex; flex-wrap:wrap; gap:.75rem; }
+    .control { padding:.75rem 1.1rem; border:1px solid #53634f; border-radius:.5rem; color:var(--ink); background:var(--surface); font:inherit; font-weight:700; cursor:pointer; }
+    .control.primary { background:var(--action); color:var(--page); border-color:var(--action); }
+    .control:disabled { opacity:.55; cursor:default; }
+    .note { color:var(--muted); font-size:.9rem; max-width:70ch; }
+    a { color:var(--ink); text-underline-offset:.2em; }
+    @media(max-width:44rem) { .study { grid-template-columns:1fr; margin-top:2.5rem; gap:2rem; } h1 { max-width:18ch; } .description { min-height:0; } }
+    @media(prefers-reduced-motion:reduce) { *, *::before, *::after { scroll-behavior:auto !important; } }
+  </style>
+</head>
+<body>
+<main>
+  <div class="brand"><span class="mark" aria-hidden="true">B</span>Baseline</div>
+  <section class="study" aria-labelledby="heading">
+    <div><h1 id="heading">Start with the brief.</h1><p class="description" id="description">Agree the content, audience and the decision the prototype should resolve.</p></div>
+    <div class="stage-list" role="group" aria-label="Prototype workflow steps">
+      <div class="marker" aria-hidden="true"></div>
+      <button class="step" type="button" data-stage="0" aria-pressed="true"><span>01</span><b>Brief</b><small>Frame the real task</small></button>
+      <button class="step" type="button" data-stage="1" aria-pressed="false"><span>02</span><b>Concepts</b><small>Choose what to develop</small></button>
+      <button class="step" type="button" data-stage="2" aria-pressed="false"><span>03</span><b>Astro proof</b><small>Verify the real route</small></button>
+    </div>
+  </section>
+  <div class="controls">
+    <button class="control primary" id="replay" type="button">Replay tour</button>
+    <button class="control" id="stop" type="button" disabled>Stop tour</button>
+    <button class="control" id="long-copy" type="button" aria-pressed="false">Use longer copy</button>
+  </div>
+  <p class="note" id="status" role="status">Select a step or replay the six-second tour. Motion starts only on request.</p>
+  <p class="note">Browser implementation study using native HTML and the Web Animations API. It is independent of Brilliant. <a href="workflow-final.mp4">Compare the native film</a>.</p>
+  <noscript><p>JavaScript is unavailable. The complete sequence is Brief → Concepts → Astro proof; the default brief remains visible.</p></noscript>
+</main>
+<script type="module">
+  const headings = ['Start with the brief.','Compare the directions.','Build the selected idea.'];
+  const copy = ['Agree the content, audience and the decision the prototype should resolve.','Explore distinct ideas side by side, then develop the selected direction.','Prove the chosen design in Astro with real responsive behavior and semantics.'];
+  const buttons = [...document.querySelectorAll('.step')];
+  const marker = document.querySelector('.marker');
+  const heading = document.querySelector('#heading');
+  const description = document.querySelector('#description');
+  const status = document.querySelector('#status');
+  const replay = document.querySelector('#replay');
+  const stop = document.querySelector('#stop');
+  const longCopy = document.querySelector('#long-copy');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  let selected = 0;
+  let animation = null;
+  let timers = [];
+  let generation = 0;
+  let expanded = false;
+  let running = false;
+
+  function stopTour() {
+    generation++;
+    timers.forEach(clearTimeout);
+    timers = [];
+    running = false;
+    stop.disabled = true;
+    if (animation) {
+      const painted = getComputedStyle(marker).transform;
+      animation.cancel(); marker.style.transform = painted; animation = null;
+    }
+  }
+
+  function positionMarker(animate) {
+    const from = getComputedStyle(marker).transform;
+    if (animation) { animation.cancel(); animation = null; }
+    const target = buttons[selected];
+    const to = `translateY(${target.offsetTop}px)`;
+    marker.style.height = `${target.offsetHeight}px`;
+    marker.style.transform = to;
+    if (animate && !reduced.matches && from !== 'none' && from !== to) {
+      const current = marker.animate([{transform:from},{transform:to}], {duration:320,easing:getComputedStyle(document.documentElement).getPropertyValue('--ease-out').trim()});
+      animation = current;
+      current.finished.then(() => { if (animation === current) animation = null; }).catch(() => {});
+    }
+  }
+
+  function select(index, animate = true) {
+    selected = index;
+    buttons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
+    heading.textContent = headings[index];
+    description.textContent = copy[index] + (expanded ? ' This deliberately longer passage checks that the page grows naturally, keeps the controls reachable, and preserves the selected step during a content edit.' : '');
+    positionMarker(animate);
+  }
+
+  buttons.forEach((button, index) => button.addEventListener('click', () => {
+    stopTour(); select(index); status.textContent = `${headings[index]} Selected manually.`;
+  }));
+  replay.addEventListener('click', () => {
+    stopTour();
+    if (reduced.matches) { select(2, false); status.textContent = 'Reduced motion: final step shown immediately. All steps remain selectable.'; return; }
+    running = true; stop.disabled = false; select(0); status.textContent = 'Tour playing. Stop or select a step to interrupt it.';
+    const ownGeneration = generation;
+    [[1500,1],[3500,2]].forEach(([delay, index]) => timers.push(setTimeout(() => { if (generation === ownGeneration) select(index); }, delay)));
+    timers.push(setTimeout(() => { if (generation === ownGeneration) { stopTour(); status.textContent = 'Tour complete. Explore any step.'; } },6000));
+  });
+  stop.addEventListener('click', () => { stopTour(); positionMarker(false); status.textContent = 'Tour stopped. The current step stays selected.'; });
+  longCopy.addEventListener('click', () => { expanded = !expanded; longCopy.setAttribute('aria-pressed', String(expanded)); longCopy.textContent = expanded ? 'Use shorter copy' : 'Use longer copy'; select(selected, false); });
+  reduced.addEventListener('change', () => { stopTour(); select(selected, false); });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { stopTour(); positionMarker(false); } });
+  window.addEventListener('pagehide', stopTour);
+  window.addEventListener('pageshow', () => positionMarker(false));
+  const observer = new ResizeObserver(() => positionMarker(false));
+  buttons.forEach(button => observer.observe(button));
+  select(0, false);
+  // Read-only test observability for this isolated study; no production contract.
+  window.motionStudy = { get state() { return {selected, running, pendingTimers:timers.length, reduced:reduced.matches, expanded, activeAnimations:marker.getAnimations().length}; } };
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+fps(30) s(960,540) bpm(120) blur(3)
+canvases["Studies/Motion/Storyboard"]
+treatment(treatment.md)
+state(01 Brief) #s1
+state(02 Concepts) #s2
+state(03 Astro proof) #s3
+#s1 hold(sec(1.5))
+#s1 to(#s2) sec(0.5) decelerate
+  #x9 blur(8)
+  [#x10,#x11,#x12,#x13,#x14,#x15,#x16,#x17,#x18] stagger(sec(0.02))
+#s2 hold(sec(1.5))
+#s2 to(#s3) sec(0.5) decelerate
+  #x28 blur(8)
+  [#x29,#x30,#x31,#x32,#x33,#x34,#x35,#x36,#x37] stagger(sec(0.02))
+#s3 hold(sec(2))

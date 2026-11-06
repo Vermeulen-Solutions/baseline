@@ -304,6 +304,7 @@
     ".agents/skills/openpencil-site-design/agents/openai.yaml",
     ".agents/skills/openpencil-site-design/references/connection-and-api.md",
     ".agents/skills/site-art-direction/references/design-iteration.md",
+    ".agents/skills/site-art-direction/references/capability-routing.md",
     ".agents/skills/site-art-direction/references/external-prompt-adaptation.md",
     ".agents/skills/openpencil-site-design/assets/review-specimen.jsx",
     ".agents/skills/openpencil-site-design/assets/review-tokens.json",

@@ -26,6 +26,8 @@ This recommendation is based on the exercised native workflow, including the [na
 
 Surface and agent continuity are independent. The same agent can design and implement on every path. Ask about another model/session only when the user wants that arrangement; never automatically launch one. Setup is only the missing connection step, not a repeated questionnaire or permission to install software, provision accounts or change global configuration outside the user's scope.
 
+Requests for motion, illustration, charts, 3D or other capabilities use [capability routing](capability-routing.md) on the selected surface. Choose guidance for the requested outcome and actual runtime, rather than changing surfaces to reach a particular skill. Inspect and test a targeted catalogue source when installed guidance has a gap; preserve the same browser/native acceptance boundary.
+
 ## Comparing directions in HTML
 
 Surface choice and direction choice are separate. HTML concepts retain the same two-or-three-direction exploration and owner selection as canvas boards; a file-first default is not permission to present one unchosen direction or three colour skins of one layout.
