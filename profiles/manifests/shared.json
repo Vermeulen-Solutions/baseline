@@ -213,6 +213,7 @@
     ".agents/skills/astro-site-design/agents/openai.yaml",
     ".agents/skills/astro-site-design/references/accessibility.md",
     ".agents/skills/astro-site-design/references/screen-reader-checks.md",
+    ".agents/skills/astro-site-design/references/interaction-motion.md",
     ".agents/skills/astro-site-design/references/astro-primitives.md",
     ".agents/skills/astro-site-design/references/component-quarantine.md",
     ".agents/skills/astro-site-design/references/emdash-content.md",
