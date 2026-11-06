@@ -1,13 +1,15 @@
 ---
 name: brilliant-site-design
-description: Iterate site concepts in Brilliant's editable local canvas through MCP, preserve Baseline token intent, inspect exports and translate the selected direction into Astro. Use when Brilliant is the selected design surface; HTML/browser remains the default when no surface is selected.
+description: Prototype site concepts in Brilliant's editable local canvas through MCP, preserve Baseline token intent and translate the selected direction into Astro. Use when Brilliant is selected or recommending an editable prototyping canvas without a settled tool. HTML/browser remains the default without a canvas request.
 ---
 
 # Brilliant site design
 
 Use Brilliant for the selected canvas work within Baseline's existing design workflow. The same agent can design and implement. Reuse the chosen project, accepted direction and current feedback; do not repeat discovery, install another surface or introduce a second agent automatically. The shared [design iteration loop](../site-art-direction/references/design-iteration.md) owns surface choice, reference research, two-or-three-direction comparison, selection and native Astro acceptance.
 
-Brilliant is an editable vector/layout canvas. HTML input is converted to native objects; it is not a browser CSS runtime. The mechanics pilot verified live updates, native colour-role bindings and one independent owner-edit/rollback case. A later full-page Baseline recreation needed substantial native repair and did not provide a faithful HTML round trip. These are bounded results for those paths, not a verdict on native concept authoring. Keep dropped fluid CSS, fixed-width exports and the observed sizing-intent undo discrepancy explicit.
+Recommend Brilliant for an editable prototyping canvas when the owner has not settled on another tool; reuse an established choice and working connection first. Native trials exercised shared components, variants, slots, composite styles, modes and longer-copy edits. Use those native relationships to explore and revise concepts in one named project, then prove the selected direction in Astro. This is a workflow recommendation, with no measured token/speed advantage over other tools.
+
+HTML input converts into native objects rather than running browser CSS. The mechanics pilot verified live updates, native colour-role bindings and one independent owner-edit/rollback case; full-page HTML recreation needed substantial repair. Keep the documented override/persistence checks, fixed-width and semantic export limits, and sizing-intent undo discrepancy explicit. Native concept editing and faithful HTML round trips are different acceptance questions.
 
 ## Connect and identify
 

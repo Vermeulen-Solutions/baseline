@@ -161,7 +161,7 @@ During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, con
 ```
 
 > [!TIP]
-> **Optional design tools:** HTML/browser concepts are the default at the Stage 4 checkpoint for a new site or substantial overhaul. Explicitly offer **Brilliant** and **OpenPencil** for editable local canvases and **Penpot** for shared cloud review; keep **OpenDesign** optional for catalogue/lint or an existing project. Reuse settled choices. The same two-or-three-direction comparison and selection apply to HTML and canvases. Local lane/token tooling (`npm run design:tokens`) and `/_styleguide` remain available without external services. See [Art Direction Workflow](art-direction-workflow.md).
+> **Optional design tools:** At the Stage 4 checkpoint, recommend **Brilliant** for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer **Brilliant** and **OpenPencil** for editable local canvases and **Penpot** for shared cloud review; keep **OpenDesign** optional for catalogue/lint or an existing project. Reuse settled choices. The same two-or-three-direction comparison and selection apply to HTML and canvases. Local lane/token tooling (`npm run design:tokens`) and `/_styleguide` remain available without external services. See [Art Direction Workflow](art-direction-workflow.md).
 
 ---
 

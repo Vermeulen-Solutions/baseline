@@ -40,7 +40,7 @@ Select the tools that fit the project rather than treating every external servic
 | :--- | :--- | :--- |
 | **1. UX Flows & Anatomy** | **Nicelydone MCP** / **Refero.design** / **Kombai** | Real-world page flows, filter bars, secondary metadata, and empty states. |
 | **2. Design Systems** | **OpenDesign Catalog** / **[designmd.ai](https://designmd.ai/explore)** | 154 bundled offline systems in OpenDesign plus 420+ community `DESIGN.md` files via `designmd-mcp`. |
-| **3. Visual Prototyping** | **HTML/browser** by default; **Brilliant**, **OpenPencil**, **Penpot** alternatives; optional **OpenDesign** | Two or three distinct concepts compared side by side on the selected surface, then a representative Astro proof. |
+| **3. Visual Prototyping** | **Brilliant** recommended for a requested editable canvas without a settled tool; **HTML/browser** default without a canvas request; explicit **OpenPencil**/**Penpot** choices; optional **OpenDesign** | Two or three distinct concepts compared side by side on the selected surface, then a representative Astro proof. |
 | **4. Component Blueprints** | **21st.dev MCP** (`@21st-dev/magic`) | High-craft Tailwind component structures transmuted to zero-JS Astro. |
 | **5. Token Calibration** | **`npm run design:tokens` + `/_styleguide`** | WCAG AA contrast, fluid typography and spacing verification, and visual proofing. |
 

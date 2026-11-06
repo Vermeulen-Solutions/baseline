@@ -205,7 +205,7 @@ We are ready for Stage 4: Art Direction. Activate the site-art-direction skill.
 Brand goals and personality: [E.g., Editorial craftsmanship, technical precision, high-contrast typography, restrained color palette].
 
 Please:
-Before choosing the direction, recommend HTML/browser concepts and explicitly offer Brilliant, OpenPencil and Penpot as alternatives, keeping OpenDesign optional for catalogue/lint or an existing project. Follow `site-art-direction/references/design-iteration.md` for side-by-side comparison and capability boundaries; reuse a settled choice. Use the selected tool’s specialist skill when supplied.
+Before choosing the direction, recommend Brilliant for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer Brilliant, OpenPencil and Penpot choices, keeping OpenDesign optional for catalogue/lint or an existing project. Follow `site-art-direction/references/design-iteration.md` for side-by-side comparison and capability boundaries; reuse a settled choice. Use the selected tool’s specialist skill when supplied.
 
 1. Review .agents/skills/site-art-direction/references/aesthetic-lanes.md and propose 2-3 suitable Aesthetic Lanes.
 2. Formulate a Narrative Metaphor, Typography Pairing, and Token Physics (Canvas ground, Action/Accent colors, Borders, and Spatial Density).
@@ -474,7 +474,7 @@ fit, identity continuity, readability, function and maintainability. Resolve the
 direction decision before broad implementation; ask only consequential questions
 not already answered. Record which previous visual decisions are superseded.
 
-At the concept checkpoint, reuse our selected design surface. If unresolved, recommend HTML/browser concepts and explicitly offer Brilliant, OpenPencil and Penpot as alternatives; keep OpenDesign optional for catalogue/lint or an existing project. Follow `site-art-direction/references/design-iteration.md` to compare two or three structurally distinct directions side by side before proving the selected direction in Astro. Use the selected tool’s specialist skill when supplied.
+At the concept checkpoint, reuse our selected design surface. If unresolved, recommend Brilliant for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer Brilliant, OpenPencil and Penpot choices; keep OpenDesign optional for catalogue/lint or an existing project. Follow `site-art-direction/references/design-iteration.md` to compare two or three structurally distinct directions side by side before proving the selected direction in Astro. Use the selected tool’s specialist skill when supplied.
 
 Calibrate the selected system on the installed styleguide, implement one real
 page per archetype and critique it in the browser before rolling it out. Keep
@@ -699,12 +699,12 @@ Please:
 
 ## 10. Design Iteration: HTML, Brilliant, OpenPencil or Penpot
 
-For a new site or substantial overhaul, recommend HTML/browser concepts by default and explicitly present Brilliant, OpenPencil and Penpot as alternatives. Keep OpenDesign optional for catalogue/lint or an existing project. Use the shared `site-art-direction/references/design-iteration.md` for HTML side-by-side review, tool capability boundaries and settled-choice reuse. See [Art Direction Workflow](art-direction-workflow.md), [Brilliant onboarding](brilliant-onboarding.md), [OpenPencil onboarding](openpencil-onboarding.md), [Penpot onboarding](penpot-onboarding.md) and optional [OpenDesign onboarding](opendesign-onboarding.md).
+For a new site or substantial overhaul, recommend Brilliant when an editable prototyping canvas is requested and no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly present Brilliant, OpenPencil and Penpot as choices. Keep OpenDesign optional for catalogue/lint or an existing project. Use the shared `site-art-direction/references/design-iteration.md` for HTML side-by-side review, tool capability boundaries and settled-choice reuse. See [Art Direction Workflow](art-direction-workflow.md), [Brilliant onboarding](brilliant-onboarding.md), [OpenPencil onboarding](openpencil-onboarding.md), [Penpot onboarding](penpot-onboarding.md) and optional [OpenDesign onboarding](opendesign-onboarding.md).
 
 ### Canvas-led kickoff, one agent
 
 ```markdown
-Follow new-site-workflow and site-art-direction/references/design-iteration.md. I want to iterate visually before broad implementation. Recommend HTML/browser concepts by default and explicitly offer Brilliant, OpenPencil and Penpot alternatives; retain OpenDesign when its catalogue/lint or my existing project is useful. Reuse settled choices and onboard me only for a missing connection step. Preserve [fixed brand/content/features]; explore [changeable scope] using a representative real route. For a new direction, compare two or three structurally distinct concepts side by side with desktop/mobile intent and full-size links. Show the render and recommend a meaningful next change; incorporate feedback in focused batches without recreating every route or the component library. Resolve direction selection, then calibrate native primitives, prove one real Astro route and roll out with browser acceptance. Keep one agent unless I request a handoff. Finish [authorized commit/push/applicable deployment, or local-only].
+Follow new-site-workflow and site-art-direction/references/design-iteration.md. I want an editable prototyping canvas before broad implementation. Reuse my settled tool; otherwise recommend Brilliant for native concept work. Explicitly offer Brilliant, OpenPencil and Penpot choices; retain OpenDesign when its catalogue/lint or my existing project is useful. Reuse settled choices and onboard me only for a missing connection step. Preserve [fixed brand/content/features]; explore [changeable scope] using a representative real route. For a new direction, compare two or three structurally distinct concepts side by side with desktop/mobile intent and full-size links. Show the render and recommend a meaningful next change; incorporate feedback in focused batches without recreating every route or the component library. Resolve direction selection, then calibrate native primitives, prove one real Astro route and roll out with browser acceptance. Keep one agent unless I request a handoff. Finish [authorized commit/push/applicable deployment, or local-only].
 ```
 
 ### Direct Astro/browser, one agent
