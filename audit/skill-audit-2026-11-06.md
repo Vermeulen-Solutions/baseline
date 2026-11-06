@@ -192,3 +192,30 @@ Gap trials (protocol addendum frozen before any run; fixtures `p9` = this round,
 - **T2 on Haiku** stays at 8/9 on every variant. No Haiku run said in so many words that a public URL alone does not authorize a full import (B4 partial), although all of them asked for exporter access before importing. That wording lives in `docs/wordpress-migration.md`, not in a skill the runs reached first. It is left as an observation, not changed.
 
 Same limits as the pilot: one or two trials per cell, planning answers only, and the editor did the grading against criteria frozen before the runs.
+
+## Follow-up round: craft splits (2026-11-07)
+
+This round implements follow-up steps 3 and 4.
+
+- **Step 3: `astro-site-design`.** The 1,000-word utility catalogue moved verbatim from `SKILL.md` into `references/baseline-utilities.md`, behind a table that maps each utility family to the visitor need it serves and says why. The two rules that apply to every page stay in the skill with their reasons: the Astro v7 inline-whitespace rule, and eager loading for the above-the-fold hero image. `SKILL.md` drops from 4,752 to 4,243 words.
+- **Step 4: `site-art-direction`.** The existing lists stay. Three additions sit beside them:
+  - a table for the expressive range (composition, motion and density), with the signal for each end and a reason;
+  - an ordered first-match rule for the hero strategy;
+  - a lane-matched default header archetype.
+
+  The display tracking values now carry their reason and say when to tighten less. Five hedges became conditions.
+
+Trials (criteria frozen before any run; before = this branch's base `q3`, after = `s4`):
+
+| Task | Model | Before | After |
+| --- | --- | ---: | ---: |
+| T5 direction choices for a bakery | Sonnet | 6 / 6 | 6 / 6 |
+| T5 direction choices for a bakery | Haiku | 6 / 6 | 6 / 6 |
+| T6 pricing section utilities | Sonnet | 6 / 6 | 6 / 6 |
+| T6 pricing section utilities | Haiku | 5 / 6 | 6 / 6 |
+
+- **T5:** every run chose art-directed photography, an Editorial Hairline Masthead and quiet motion. The after-runs cited the new rules by name ("option (d)", "default pairing", "variation costs scanning speed", "tighten less for a fitted face") and set tracking from the stated reason. The before-runs reached the same choices from the lane reference. There was no measurable score difference.
+- **T6:** the Haiku before-run did not apply the inline-whitespace rule (F5), which then sat inside a 250-word bullet. The after-run applied it and recorded pricing as the comparison exception named in the new table.
+- **Truncation:** the Sonnet before-run reported that its first read of the old `astro-site-design/SKILL.md` was truncated, which is direct evidence for the size problem. Both T6 after-runs opened the new reference from the skill's pointer.
+
+One trial per cell, so the Haiku T6 gain is suggestive rather than established.
