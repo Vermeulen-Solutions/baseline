@@ -9,7 +9,7 @@ Treat optional `DESIGN.md` proposals as reference material and reconcile them wi
 
 Build maintainable, accessible Astro pages and components. When a source site or visual reference exists, inspect its actual rendered appearance before implementation; do not substitute a vague textual approximation for visual review.
 
-For requested motion, imagery, charts, 3D or other specialist behavior, use [capability routing](../site-art-direction/references/capability-routing.md). Keep the selected surface and existing runtime; for UI motion read installed Impeccable `reference/animate.md`, then implement through CSS/WAAPI or the site's adopted library. Inspect actual interaction, interruption and reduced-motion behavior in the browser; a canvas film does not prove website behavior.
+For requested motion, imagery, charts, 3D or other specialist behavior, use [capability routing](../site-art-direction/references/capability-routing.md). Keep the selected surface and existing runtime; for UI motion read installed Impeccable `reference/animate.md`, then implement and review the mechanics with [interaction motion](references/interaction-motion.md) through CSS/WAAPI or the site's adopted library. Inspect actual interaction, interruption and reduced-motion behavior in the browser; a canvas film does not prove website behavior.
 
 For asset-specific work follow site-art-direction's [brand assets](../site-art-direction/references/brand-assets.md) or [editorial illustration](../site-art-direction/references/editorial-illustration.md) reference. For reader announcement/focus acceptance use [bounded screen-reader checks](references/screen-reader-checks.md); semantic/keyboard checks alone do not establish actual reader output.
 

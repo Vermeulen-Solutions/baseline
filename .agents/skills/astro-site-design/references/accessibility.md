@@ -12,7 +12,7 @@ Use WCAG 2.2 AA as the default target unless the project sets a different standa
 ## Interaction
 
 - All functionality must work using a keyboard. Provide a visible `:focus-visible` indicator with adequate contrast, a logical focus order, and no keyboard traps. Ensure sticky headers, dialogs, menus, and overlays do not hide focused content.
-- Forms need persistent labels, understandable required/format instructions, errors tied to fields, and a way for assistive technology users to discover submission results and async status updates.
+- Forms need persistent labels, understandable required/format instructions, errors tied to fields, and a way for assistive technology users to discover submission results and async status updates. Give fields that collect the visitor's own details the matching `autocomplete` token (`name`, `email`, `tel`, `postal-code` and similar; WCAG 1.3.5), and do not ask again for information already entered in the same process (WCAG 3.3.7).
 - Do not rely on color, hover, sound, or motion alone to convey information or state. Implement `prefers-reduced-motion` behavior for nonessential animation.
 - Make pointer targets at least the WCAG 2.2 AA minimum of 24 by 24 CSS pixels or meet a documented exception; aim larger (around 44 by 44 CSS pixels) for touch comfort when layout permits. See WCAG 2.5.8 and its exceptions in the [W3C Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/).
 
