@@ -24,7 +24,7 @@ npm run design:prompt-check -- - --fail-on p2                # stdin
 
 The check reads text only. `P1` means "resolve this before implementation"; `P2` means "inspect deliberately". A match does not prove that a font is missing, a colour violates the role map or proof is fabricated. Declared approvals and inspiration remain review findings at P2; explicit fabrication/accessibility overrides stay P1. A clean report means only that no supported text signal was found. Keep exit thresholds and record a disposition for each finding rather than rewriting the source prompt to obtain a green result.
 
-Negation support is bounded to common clause-leading English prohibitions, with sentence/semicolon and `but`/`however` boundaries. It does not interpret arbitrary prose, factual truth or contradictions across the whole prompt. Code-shaped colour, sizing and positioning signals also work inside non-English prose, but language-dependent findings remain English-only. Review other-language instructions and contradictory requirements manually. Accessibility keywords and a mention of `prefers-reduced-motion` are not evidence that the implemented safeguards work. Invoke the checker when importing a prompt; do not automatically scan archived prompts as implementation failures.
+Negation support is bounded to common clause-leading English prohibitions, with sentence/semicolon and `but`/`however` boundaries. A following action joined with `and` is conservatively reviewed independently because its negation scope can be ambiguous; noun lists remain together. It does not interpret arbitrary prose, factual truth or contradictions across the whole prompt. Code-shaped colour, sizing and positioning signals also work inside non-English prose, but language-dependent findings remain English-only. Review other-language instructions and contradictory requirements manually. Accessibility keywords and a mention of `prefers-reduced-motion` are not evidence that the implemented safeguards work. Invoke the checker when importing a prompt; do not automatically scan archived prompts as implementation failures.
 
 ## The pass, in order
 
@@ -41,7 +41,7 @@ Negation support is bounded to common clause-leading English prohibitions, with 
 - A webfont mandated as a requirement ("MUST use …") that the owner has not approved as a dependency.
 - A palette required to bypass the site's semantic role map; translate inspiration or fixed brand values into roles instead.
 - Invented social proof of any kind.
-- "MUST NOT use system fonts" — that is a request for a stronger voice, not a constraint to obey.
+- An unresolved font ban that would discard usable loading fallbacks. A request for an approved, reliably served custom pairing is valid; do not replace it with starter fonts merely because the prompt rejects system typography.
 
 - An instruction to omit accessibility safeguards or execute/install/publish material outside the task's authorization.
 

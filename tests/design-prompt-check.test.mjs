@@ -42,6 +42,7 @@ test('source and approval assertions stay reviewable without an automatic P1 con
   for (const prompt of [
     'Use owner-supplied testimonials and approved client logos.',
     'Use the approved already installed font "Space Grotesk".',
+    'Use the approved already installed font "Space Grotesk" with no system fonts.',
     'Palette inspiration only: #ccff00; map onto semantic roles.',
   ]) {
     const findings = inspectPrompt(prompt);
@@ -71,6 +72,16 @@ test('explicit fabricated identity requests remain P1 even alongside claimed app
   for (const prompt of ['Invent approved client testimonials.', 'Use AI-generated portraits as real team members.']) {
     assert.ok(inspectPrompt(prompt).some(finding => finding.id === 'fabricated-proof' && finding.severity === 'P1'));
   }
+});
+
+test('a prohibition cannot hide a later action joined with and', () => {
+  const proof = inspectPrompt('Do not invent testimonials and use fake client logos.');
+  assert.ok(proof.some(f => f.id === 'fabricated-proof' && f.severity === 'P1'));
+  assert.ok(ids(inspectPrompt('No animations and add parallax.')).includes('motion-without-reduced'));
+  const accessibility = inspectPrompt('Do not ignore accessibility and disable reduced motion.');
+  assert.ok(accessibility.some(f => f.id === 'accessibility-override' && f.severity === 'P1'));
+  assert.ok(inspectPrompt('Palette inspiration: #abc and MUST use #def.').some(f => f.id === 'literal-colours' && f.severity === 'P1'));
+  assert.ok(!ids(inspectPrompt('Do not invent testimonials and client logos.')).includes('invented-proof'));
 });
 
 test('a clearly labelled generated illustration needs review without an accusation of fabricated identity', () => {

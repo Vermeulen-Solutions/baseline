@@ -46,8 +46,8 @@ const RULES = [
     id: 'system-font-ban',
     severity: 'P1',
     pattern: /MUST NOT use (standard )?system fonts|no system fonts/i,
-    message: 'This bans the families Baseline ships with.',
-    fix: 'Treat it as a request for a stronger voice, not a ban. Decide the pairing explicitly and record it in the Art Direction Record.',
+    message: 'A system-font ban needs checking against the approved pairing and usable loading fallbacks.',
+    fix: 'Preserve approved, reliably served brand typography. Resolve a new dependency or an unusable fallback policy explicitly; do not replace an accepted pairing with starter fonts.',
   },
   {
     id: 'literal-colours',
@@ -130,10 +130,11 @@ const RULES = [
   },
 ];
 
-// Clause-local handling prevents "do not invent testimonials; add fake client logos"
-// from suppressing the second instruction. This is not general negation parsing.
+// Clause-local handling prevents a prohibition from hiding a later command.
+// An action following "and" is conservatively reviewed independently: its
+// negation scope can be ambiguous. This is not general negation parsing.
 function clauses(line) {
-  return line.split(/;|[.!?](?=\s|$)|\b(?:but|however)\b/i).map(part => part.trim()).filter(Boolean);
+  return line.split(/;|[.!?](?=\s|$)|\b(?:but|however)\b|\band\s+(?=(?:(?:must|also|then)\s+)*(?:add|use|include|invent|fabricate|fake|make up|ignore|skip|disable)\b)/i).map(part => part.trim()).filter(Boolean);
 }
 
 function prohibited(clause, matchIndex) {
@@ -148,7 +149,7 @@ function lineFinding(rule, line) {
     if (['invented-proof', 'fabricated-proof', 'motion-without-reduced', 'accessibility-override'].includes(rule.id) && prohibited(clause, match.index)) continue;
     let candidate = rule.severity;
     if (rule.id === 'literal-colours' && /\b(?:inspiration|reference|sample palette)\b/i.test(clause) && !/\b(?:must|exact|mandatory)\b/i.test(clause)) candidate = 'P2';
-    if (['webfont-dependency', 'named-font-mandate', 'quoted-font-name', 'invented-proof'].includes(rule.id) && /\b(?:approved|owner[- ]supplied|already installed|self[- ]hosted|verified source)\b/i.test(clause)) candidate = 'P2';
+    if (['webfont-dependency', 'named-font-mandate', 'quoted-font-name', 'system-font-ban', 'invented-proof'].includes(rule.id) && /\b(?:approved|owner[- ]supplied|already installed|self[- ]hosted|verified source)\b/i.test(clause)) candidate = 'P2';
     if (rule.id === 'invented-proof' && /\b(?:labelled|labeled)\b[^.\n]{0,30}\billustration\b/i.test(clause)) candidate = 'P2';
     if (!severity || SEVERITY_ORDER[candidate.toLowerCase()] < SEVERITY_ORDER[severity.toLowerCase()]) severity = candidate;
   }
