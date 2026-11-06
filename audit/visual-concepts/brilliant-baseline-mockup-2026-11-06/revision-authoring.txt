@@ -1,0 +1,12 @@
+```bl
+file("Native reconstruction.bl")
+// source mockup preserved
+#n1440-25-text t("A foundation for\nsites worth shipping.")
+  spans[("sites worth shipping.",i,linear(100,stop($color.action,0),stop($color.headlineEnd,0.72)))]
+#n1440-26-text t("Start with Baseline’s shared tokens, reusable Astro components and browser checks. Choose Markdown, Sveltia or EmDash for content editing, then adapt the art direction and verify the full page before shipping.")
+#n1440-28-text t("Build with Baseline")
+#n390-17-text t("A foundation for\nsites worth shipping.")
+  spans[("sites worth shipping.",i,linear(100,stop($color.action,0),stop($color.headlineEnd,0.72)))]
+#n390-18-text t("Start with Baseline’s shared tokens, reusable Astro components and browser checks. Choose Markdown, Sveltia or EmDash for content editing, then adapt the art direction and verify the full page before shipping.")
+#n390-20-text t("Build with Baseline")
+```

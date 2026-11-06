@@ -1,0 +1,26 @@
+```ds
+file("Styles/default.ds")
+color.page: #fafcfe
+color.surface: #ffffff
+color.text: #1a2029
+color.action: #005198
+color.border: #c8ced8
+font.family: "Arial"
+font.size.display: 40
+font.size.body: 18
+font.weight.display: 700
+spacing.pad: 24
+spacing.gap: 12
+radius.card: 12
+```
+```bl
+file("Compatibility.bl")
+// semantic probe
+al(v,g($spacing.gap),pad($spacing.pad)) s(390,hug) f[($color.page)] "Semantic role probe" #probe
+  t("Build with Baseline",$font.family,$font.size.display,$font.weight.display) s(fill,hug) f[($color.text)] #probeTitle
+  al(v,g($spacing.gap),pad($spacing.pad)) s(fill,hug) f[($color.surface)] rd($radius.card) "Surface" #probeSurface
+    t("Five named semantic colours",$font.family,$font.size.body) s(fill,hug) f[($color.text)] #probeBody
+    r s(fill,1) f[($color.border)] "Border sample" #probeBorder
+    r s(fill,24) f[($color.action)] "Action sample" #probeAction
+preview(#probe)
+```

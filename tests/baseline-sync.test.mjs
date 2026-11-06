@@ -78,7 +78,7 @@ test('older installed inventory preserves legacy primitives, calibrated tokens a
 test('historical four-skill sites remain valid and cannot acquire Penpot or OpenPencil through bounded sync', () => fixture(async root => {
   const configPath = path.join(root, 'baseline.config.json');
   const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
-  config.skills = config.skills.filter(skill => !['penpot-site-design', 'openpencil-site-design', 'opendesign-site-design'].includes(skill));
+  config.skills = config.skills.filter(skill => !['penpot-site-design', 'openpencil-site-design', 'opendesign-site-design', 'brilliant-site-design'].includes(skill));
   await fs.writeFile(configPath, JSON.stringify(config));
   const originalConfig = await fs.readFile(configPath);
   const managedPath = path.join(root, '.baseline/managed-files.json');
@@ -108,6 +108,32 @@ test('historical four-skill sites remain valid and cannot acquire Penpot or Open
   assert.deepEqual(JSON.parse(await fs.readFile(managedPath, 'utf8')).files, JSON.parse(originalManaged).files);
   assert.deepEqual(await fs.readFile(path.join(root, target)), originalSkill);
   assert.deepEqual(await fs.readFile(path.join(root, openpencilTarget)), originalOpenpencilSkill);
+}));
+test('seven-skill sites cannot acquire Brilliant through retained records or a forged stage', () => fixture(async root => {
+  const configPath = path.join(root, 'baseline.config.json');
+  const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
+  config.skills = config.skills.filter(skill => skill !== 'brilliant-site-design');
+  assert.equal(config.skills.length, 7);
+  await fs.writeFile(configPath, JSON.stringify(config));
+  const originalConfig = await fs.readFile(configPath);
+  const managedPath = path.join(root, '.baseline/managed-files.json');
+  const originalManaged = JSON.parse(await fs.readFile(managedPath, 'utf8'));
+  const target = '.agents/skills/brilliant-site-design/SKILL.md';
+  const originalSkill = await fs.readFile(path.join(root, target));
+  const commit = '3'.repeat(40);
+  const stage = await stageBaseline({ root, commit, readSource: async relative => {
+    assert.ok(!relative.startsWith('.agents/skills/brilliant-site-design/'), 'uninstalled skill must never be fetched');
+    return fs.readFile(new URL(relative, source));
+  } });
+  assert.equal(stage.entries.length, 0);
+  const stagePath = path.join(root, `.baseline/updates/${commit}/stage.json`);
+  await fs.writeFile(stagePath, JSON.stringify({ ...stage, entries: [{ target }] }));
+  await assert.rejects(applyBaseline({ root, commit }), /membership/);
+  await fs.writeFile(stagePath, JSON.stringify(stage));
+  await applyBaseline({ root, commit });
+  assert.deepEqual(await fs.readFile(configPath), originalConfig);
+  assert.deepEqual(JSON.parse(await fs.readFile(managedPath, 'utf8')).files, originalManaged.files);
+  assert.deepEqual(await fs.readFile(path.join(root, target)), originalSkill);
 }));
 
 test('profile sync stages shared changes and skills, preserves calibrated tokens and excludes client files and packages', () => fixture(async root => {

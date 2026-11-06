@@ -1,0 +1,82 @@
+[
+  {
+    "w": 1440,
+    "format": "png",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/aligned-1440.png\nelement(s): 00d6a8a1485ed92e | 1440x4585 | 671487 bytes | sha256:1b966ddb8e28733650d949a64c76f4c94167e231bed741b832b795cdb184491a\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/aligned-1440.png\">aligned-1440</media>"
+        }
+      ]
+    }
+  },
+  {
+    "w": 1440,
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/aligned-1440.html\nelement(s): 00d6a8a1485ed92e | 203223 bytes | sha256:7440317ef0b47e2a412d512809165da2d3a053fc38472b1f396fdbbecfc45aea\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        }
+      ]
+    }
+  },
+  {
+    "w": 1440,
+    "format": "htmlFlex",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (flex) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/aligned-1440-flex.html\nelement(s): 00d6a8a1485ed92e | 196287 bytes | sha256:f1812dd61e3bcf1ed8908a90a7e425af3a2897bcb476ca8f2eceb74450402e8a\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        }
+      ]
+    }
+  },
+  {
+    "w": 390,
+    "format": "png",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/aligned-390.png\nelement(s): 2865f18e7d41ca6b | 390x6660 | 560022 bytes | sha256:1ca8d3c8ad0f7f9ec400f7d60d99031169c43afabbac9cb3278c23f0835e375e\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/aligned-390.png\">aligned-390</media>"
+        }
+      ]
+    }
+  },
+  {
+    "w": 390,
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/aligned-390.html\nelement(s): 2865f18e7d41ca6b | 191212 bytes | sha256:2dedc5446d68e2207ea81ba0f70c66b249c30400d1b44907b073d54996f11692\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        }
+      ]
+    }
+  },
+  {
+    "w": 390,
+    "format": "htmlFlex",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (flex) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/aligned-390-flex.html\nelement(s): 2865f18e7d41ca6b | 184431 bytes | sha256:7a970cd99ff8ef39360175793ec6051c7012901985d654c0d1359bfda86436fa\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        }
+      ]
+    }
+  }
+]

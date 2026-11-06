@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brilliant pilot — two mechanical concept studies</title>
+  <style>
+    @layer base, components;
+    @layer base {
+      :root { color-scheme: light; font-family: system-ui, sans-serif; color: #1a2029; background: #fafcfe; }
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: clamp(1rem, 3vi, 3rem); }
+      main { max-width: 100rem; margin-inline: auto; }
+      h1 { font-size: clamp(1.75rem, 3vi, 3rem); line-height: 1.15; margin-block: 0 1rem; }
+      h2 { margin: 0; font-size: 1.3rem; }
+      p { max-width: 78ch; line-height: 1.6; }
+      a { color: #005198; text-underline-offset: .2em; }
+      :focus-visible { outline: 3px solid #005198; outline-offset: 4px; }
+      img { display: block; max-width: 100%; height: auto; }
+      fieldset { margin: 1.5rem 0; padding: 1rem; border: 1px solid #c8ced8; }
+      label { display: inline-flex; gap: .5rem; align-items: center; padding: .5rem 1rem .5rem 0; }
+    }
+    @layer components {
+      .status { padding: 1rem; background: white; border-left: 4px solid #005198; }
+      .concepts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; align-items: start; }
+      article { padding: 1rem; border: 1px solid #c8ced8; background: white; }
+      .preview { background: #fafcfe; border: 1px solid #c8ced8; margin-top: 1rem; }
+      .mobile img { width: 390px; margin-inline: auto; }
+      .mobile { display: none; }
+      main:has(#mobile:checked) .desktop { display: none; }
+      main:has(#mobile:checked) .mobile { display: block; }
+      .caption { font-size: .875rem; }
+      @media (max-width: 50rem) { .concepts { grid-template-columns: 1fr; } }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Two directions, one mechanical test</h1>
+    <p>Neutral Baseline content, current colour roles and sampled type/spacing values. These studies test canvas mechanics and export fidelity. They are not a proposed site redesign or an approved art direction.</p>
+    <p class="status"><strong>Current result:</strong> live edits work, native semantic colours can survive full-document export, and the owner's independent text edit survived agent undo. The exported layouts use fixed pixel widths. A desktop export overflows at 390 and 768px; the mobile board is a separate composition. A separate fixed-height/hug undo discrepancy remains documented.</p>
+    <fieldset>
+      <legend>Compare equal render widths</legend>
+      <label><input id="desktop" type="radio" name="viewport" checked> Desktop · authored at 1440px</label>
+      <label><input id="mobile" type="radio" name="viewport"> Mobile · authored at 390px</label>
+    </fieldset>
+    <p class="caption">Previews are scaled canvas PNGs. Open a full-size export to inspect text, spacing and the complete page. Preview scaling is not responsive reflow. This static pilot contains no motion or working product controls.</p>
+    <div class="concepts">
+      <article>
+        <h2>A · Workbench</h2>
+        <p>Split introduction and workflow panel, followed by the profile index and verification section. Selected by the agent only to exercise one three-change iteration: headline, mobile content height and desktop hero gap.</p>
+        <div class="desktop">
+          <a href="project/Exports/a1440.html">Open full-size desktop HTML</a>
+          <div class="preview"><a href="project/Exports/a1440.png"><img src="project/Exports/a1440.png" alt="Workbench desktop canvas, with a split hero and three profile rows" width="1440" height="947"></a></div>
+          <p class="caption">Native capture: 1440 × 947. Inspected in a 1440 × 900 browser viewport.</p>
+        </div>
+        <div class="mobile">
+          <a href="project/Exports/a390.html">Open full-size mobile HTML</a>
+          <div class="preview"><a href="project/Exports/a390.png"><img src="project/Exports/a390.png" alt="Workbench mobile canvas, with the workflow panel below the introduction" width="390" height="1010"></a></div>
+          <p class="caption">Native capture: 390 × 1010. Browser content rounds to 1009px; inspected at 390 × 844.</p>
+        </div>
+      </article>
+      <article>
+        <h2>B · Field notes</h2>
+        <p>Framed introductory statement, then a profile index beside verification and workflow notes on desktop. The mobile board stacks these sections. No owner direction selection is implied.</p>
+        <div class="desktop">
+          <a href="project/Exports/b1440.html">Open full-size desktop HTML</a>
+          <div class="preview"><a href="project/Exports/b1440.png"><img src="project/Exports/b1440.png" alt="Field notes desktop canvas, with a framed hero and a sidebar beside the profile index" width="1440" height="900"></a></div>
+          <p class="caption">Native capture and browser viewport: 1440 × 900.</p>
+        </div>
+        <div class="mobile">
+          <a href="project/Exports/b390.html">Open full-size mobile HTML</a>
+          <div class="preview"><a href="project/Exports/b390.png"><img src="project/Exports/b390.png" alt="Field notes mobile canvas, with a framed hero and stacked sections" width="390" height="1400"></a></div>
+          <p class="caption">Native capture: 390 × 1400. Inspected at 390 × 844; lower whitespace remains part of the fixed-height test board.</p>
+        </div>
+      </article>
+    </div>
+    <p><a href="../brilliant-compatibility-2026-11-06/fluid.html">Original fluid CSS probe</a> · <a href="project/Exports/probe-htmlDoc.html">Five-role native-token export</a> · <a href="browser-checks-final.json">Viewport measurements</a> · <a href="effort.json">MCP effort receipt</a></p>
+    <p>Recommendation: retain Brilliant as an optional editable canvas, with responsive composition proved separately in Astro. <a href="project/Exports/owner-undo-verified.html">The completed owner-edit/undo check</a> preserved the owner's text and restored the agent's earlier heading and bar height. The detailed pilot record, including the separate sizing-intent undo discrepancy, is <a href="../../brilliant-canvas-pilot-2026-11-06.md">beside the concept evidence</a>.</p>
+  </main>
+</body>
+</html>

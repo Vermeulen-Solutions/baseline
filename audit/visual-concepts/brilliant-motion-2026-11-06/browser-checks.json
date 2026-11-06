@@ -1,0 +1,172 @@
+[
+  {
+    "width": 390,
+    "moving": {
+      "selected": 2,
+      "running": false,
+      "pendingTimers": 0,
+      "reduced": false,
+      "expanded": false,
+      "activeAnimations": 1,
+      "painted": "matrix(1, 0, 0, 1, 0, 169.299)",
+      "destination": "translateY(216px)"
+    },
+    "retarget": {
+      "painted": "matrix(1, 0, 0, 1, 0, 169.299)",
+      "from": "matrix(1, 0, 0, 1, 0, 169.299)",
+      "markerRight": 43,
+      "labelLeft": 56
+    },
+    "interrupted": {
+      "selected": 2,
+      "running": false,
+      "pendingTimers": 0,
+      "reduced": false,
+      "expanded": false,
+      "activeAnimations": 0
+    },
+    "keyboardFocus": {
+      "stage": "1",
+      "outline": "solid"
+    },
+    "longCopy": {
+      "width": 390,
+      "documentWidth": 390,
+      "description": "Prove the chosen design in Astro with real responsive behavior and semantics. This deliberately longer passage checks that the page grows naturally, keeps the controls reachable, and preserves the selected step during a content edit.",
+      "controlsBottom": 858,
+      "state": {
+        "selected": 2,
+        "running": false,
+        "pendingTimers": 0,
+        "reduced": false,
+        "expanded": true,
+        "activeAnimations": 0
+      }
+    },
+    "reduced": {
+      "selected": 2,
+      "running": false,
+      "pendingTimers": 0,
+      "reduced": true,
+      "expanded": true,
+      "activeAnimations": 0
+    },
+    "errors": [],
+    "passed": true
+  },
+  {
+    "width": 768,
+    "moving": {
+      "selected": 2,
+      "running": false,
+      "pendingTimers": 0,
+      "reduced": false,
+      "expanded": false,
+      "activeAnimations": 1,
+      "painted": "matrix(1, 0, 0, 1, 0, 148.42)",
+      "destination": "translateY(216px)"
+    },
+    "retarget": {
+      "painted": "matrix(1, 0, 0, 1, 0, 148.42)",
+      "from": "matrix(1, 0, 0, 1, 0, 148.42)",
+      "markerRight": 426.03125,
+      "labelLeft": 439.03125
+    },
+    "interrupted": {
+      "selected": 2,
+      "running": false,
+      "pendingTimers": 0,
+      "reduced": false,
+      "expanded": false,
+      "activeAnimations": 0
+    },
+    "keyboardFocus": {
+      "stage": "1",
+      "outline": "solid"
+    },
+    "longCopy": {
+      "width": 768,
+      "documentWidth": 768,
+      "description": "Prove the chosen design in Astro with real responsive behavior and semantics. This deliberately longer passage checks that the page grows naturally, keeps the controls reachable, and preserves the selected step during a content edit.",
+      "controlsBottom": 564.078125,
+      "state": {
+        "selected": 2,
+        "running": false,
+        "pendingTimers": 0,
+        "reduced": false,
+        "expanded": true,
+        "activeAnimations": 0
+      }
+    },
+    "reduced": {
+      "selected": 2,
+      "running": false,
+      "pendingTimers": 0,
+      "reduced": true,
+      "expanded": true,
+      "activeAnimations": 0
+    },
+    "errors": [],
+    "passed": true
+  },
+  {
+    "width": 1440,
+    "moving": {
+      "selected": 2,
+      "running": false,
+      "pendingTimers": 0,
+      "reduced": false,
+      "expanded": false,
+      "activeAnimations": 1,
+      "painted": "matrix(1, 0, 0, 1, 0, 148.421)",
+      "destination": "translateY(216px)"
+    },
+    "retarget": {
+      "painted": "matrix(1, 0, 0, 1, 0, 148.421)",
+      "from": "matrix(1, 0, 0, 1, 0, 148.421)",
+      "markerRight": 779,
+      "labelLeft": 792
+    },
+    "interrupted": {
+      "selected": 2,
+      "running": false,
+      "pendingTimers": 0,
+      "reduced": false,
+      "expanded": false,
+      "activeAnimations": 0
+    },
+    "keyboardFocus": {
+      "stage": "1",
+      "outline": "solid"
+    },
+    "longCopy": {
+      "width": 1440,
+      "documentWidth": 1440,
+      "description": "Prove the chosen design in Astro with real responsive behavior and semantics. This deliberately longer passage checks that the page grows naturally, keeps the controls reachable, and preserves the selected step during a content edit.",
+      "controlsBottom": 598,
+      "state": {
+        "selected": 2,
+        "running": false,
+        "pendingTimers": 0,
+        "reduced": false,
+        "expanded": true,
+        "activeAnimations": 0
+      }
+    },
+    "reduced": {
+      "selected": 2,
+      "running": false,
+      "pendingTimers": 0,
+      "reduced": true,
+      "expanded": true,
+      "activeAnimations": 0
+    },
+    "errors": [],
+    "passed": true
+  },
+  {
+    "javaScriptDisabled": true,
+    "contentVisible": true,
+    "overflow": false
+  }
+]

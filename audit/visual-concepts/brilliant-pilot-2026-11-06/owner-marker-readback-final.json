@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```bl\nfile(\"Compatibility\")\nacb786d577981bc9 t(\"Five named semantic colours\",Arial:$font.family,18:$font.size.body,r,align(l),lh(auto,1.17)) p(24,24) s(fill,hug:21) ext(294,) f[(9e18c05acf9becae,tok(color.text,#1A2029))] \"Text 2\" #probeBody\n```"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+# Keep live native app state and its bundled default catalog local.
+# Authored request text and review exports are retained as reproducible evidence.
+/project/*
+!/project/Exports/

@@ -1,0 +1,901 @@
+[
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "commands": [
+        {
+          "commandId": "get_canvases"
+        }
+      ]
+    },
+    "elapsedMs": 11,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":null,\"results\":[{\"canvases\":[{\"id\":\"Studies/Mechanics pilot/Compatibility\",\"name\":\"Compatibility\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Compatibility\"},{\"id\":\"Studies/Mechanics pilot/Directions\",\"name\":\"Directions\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Directions\"},{\"id\":\"Studies/Mockup recreation/Baseline mockup\",\"name\":\"Baseline mockup\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Baseline mockup\"},{\"id\":\"Studies/Mockup recreation/Native reconstruction\",\"name\":\"Native reconstruction\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Native reconstruction\"}],\"folders\":[{\"id\":\"4361E5E4-F781-439F-A663-525D032E74A8\",\"name\":\"Assets\",\"path\":\"\",\"fullPath\":\"Assets\"},{\"id\":\"45C797D8-2E90-48BB-8C07-4A0A6B620FE7\",\"name\":\"Studies\",\"path\":\"\",\"fullPath\":\"Studies\"},{\"id\":\"857C1722-8408-4336-A532-EEE851E554FF\",\"name\":\"Mechanics pilot\",\"path\":\"Studies\",\"fullPath\":\"Studies/Mechanics pilot\"},{\"id\":\"CF0249B2-E8E4-4932-BAF0-43C4019C4326\",\"name\":\"Mockup recreation\",\"path\":\"Studies\",\"fullPath\":\"Studies/Mockup recreation\"},{\"id\":\"6FD06E09-AB9B-4BAA-8234-14A469722785\",\"name\":\"Styles\",\"path\":\"\",\"fullPath\":\"Styles\"},{\"id\":\"3645AACE-D7C3-4B5B-BEB1-AA9443EA79A2\",\"name\":\"Styles\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Styles\"},{\"id\":\"AC630C9B-7903-4786-8F39-995C2A48D505\",\"name\":\"Assets\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Assets\"},{\"id\":\"1EB03787-710E-44B0-9AAD-4BD61AE5E421\",\"name\":\"Styles\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Styles\"},{\"id\":\"8BE97561-877A-4E1A-8EF6-BB48DAE698A8\",\"name\":\"Assets\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Assets\"}],\"currentCanvasId\":\"Studies/Mockup recreation/Native reconstruction\",\"commandId\":\"get_canvases\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "commands": [
+        {
+          "commandId": "create_structure",
+          "params": {
+            "path": "Studies/Native capabilities",
+            "children": [
+              {
+                "type": "canvas",
+                "name": "Components"
+              },
+              {
+                "type": "canvas",
+                "name": "Consumers"
+              },
+              {
+                "type": "canvas",
+                "name": "Modes and typography"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "elapsedMs": 44,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":null,\"results\":[{\"success\":true,\"basePath\":\"Studies/Native capabilities\",\"createdCanvasCount\":3,\"createdFolderCount\":0,\"saved\":true,\"items\":[{\"type\":\"canvas\",\"name\":\"Components\",\"path\":\"Studies/Native capabilities/Components\",\"canvasId\":\"Studies/Native capabilities/Components\",\"saved\":true},{\"type\":\"canvas\",\"name\":\"Consumers\",\"path\":\"Studies/Native capabilities/Consumers\",\"canvasId\":\"Studies/Native capabilities/Consumers\",\"saved\":true},{\"type\":\"canvas\",\"name\":\"Modes and typography\",\"path\":\"Studies/Native capabilities/Modes and typography\",\"canvasId\":\"Studies/Native capabilities/Modes and typography\",\"saved\":true}],\"commandId\":\"create_structure\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-trial-ds-01",
+      "designSystem": "none",
+      "response_mode": "compact",
+      "text": "```ds\nfile(\"Studies/Native capabilities/Styles/native-trial.ds\")\ninherits: none\nroot: true\nmodes { theme: [light, dark], density: [comfortable, compact], accessibility: [standard, large-text] }\ncolor.surface { $default: #ffffff, theme.dark: #172132 }\ncolor.text { $default: #172132, theme.dark: #f7f8fa }\ncolor.action { $default: #005198, theme.dark: #83c9ff }\ncolor.border: #c8ced8\ncolor.alphaProbe: #ff000080\nfont.family: Arial\nfont.size.heading: 28\nfont.size.body { $default: 16, accessibility.large-text: 20 }\nfont.weight.regular: 400\nfont.weight.bold: 700\nspacing.pad { $default: 24, density.compact: 12 }\nspacing.gap: 12\nspacing.sm: 8\nradius.card: 12\nradius.button: 8\ntypography.body: { fontFamily: font.family, fontSize: font.size.body, fontWeight: font.weight.regular }\nsurface.card: { fills: [ color.surface ], radius: radius.card }\n```"
+    },
+    "elapsedMs": 145,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"status\":\"ready\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"fences\":[{\"index\":0,\"kind\":\"ds\",\"path\":\"Studies/Native capabilities/Styles/native-trial.ds\",\"applied\":{\"created\":0,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"written\":true}],\"applied\":{\"created\":0,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"writtenDesignSystems\":[\"native-trial\"],\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":0,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed. Nothing is pending. This result carries no screenshot, and none will come for this block: call export to see it. Self-review lens for the screenshot: Spacing · Typography · Contrast · Alignment · Clipping. Palette, type and content: do they match what the user asked for (e.g. \\\"calming sage\\\" ≠ orange)? If something needs a fix, tell the user in one line what you are fixing, then write it as a new edit call. If a professional designer would say \\\"I'll take it from here\\\", give the user a 1-2 sentence overview (inline <el id=\\\"#ref\\\">Name</el> references) and finish your turn.\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-components-01",
+      "designSystem": "native-trial",
+      "response_mode": "compact",
+      "text": "```bl\nfile(\"Studies/Native capabilities/Components\")\n// initial shared card\nal(v,x(s),g($spacing.pad),pad($spacing.pad)) ds(native-trial) s(1040,hug) f[($color.surface)] \"Reusable Baseline components\" #componentBoard\n  t(\"Build once. Edit together.\",$font.family,$font.size.heading,$font.weight.bold) f[($color.text)] \"Study heading\" #studyHeading\n  t(\"A master, two content overrides, and an empty marker slot.\") s(fill,hug) f[($color.text)] $typography.body \"Study description\"\n  al(h,y(s),g($spacing.gap)) s(fill,hug) \"Shared card specimens\" #cardRow\n    al(v,x(s),g($spacing.gap),pad($spacing.pad)) comp s(300,hug) st[($color.border)] $surface.card \"Delivery card\" #deliveryCard\n      al(h,x(c),y(c)) slot s(24,24) \"Card marker\" #cardMarker\n      t(\"Shared foundation\",$font.family,$font.size.heading,$font.weight.bold) s(fill,hug) f[($color.text)] \"Card heading\" #cardHeading\n      t(\"One shared card keeps layout and typography consistent as the copy changes.\") s(fill,hug) f[($color.text)] $typography.body \"Card description\" #cardDescription\n      al(h,x(c),y(c),pad($spacing.sm)) s(hug,hug) f[($color.action)] rd($radius.button) \"Card action\" #cardAction\n        t(\"Explore the foundation\") f[($color.surface)] $typography.body \"Action label\" #cardActionLabel\n    inst(#deliveryCard) \"Static delivery\" #staticCard\n      override(#cardHeading) t(\"Git-owned content\")\n      override(#cardDescription) t(\"Write typed Markdown and publish a static site from the same foundation.\")\n      override(#cardMarker) slot\n        svg(icon:code) s(24,24) f[($color.action)] \"Static marker\"\n    inst(#deliveryCard) \"CMS delivery\" #cmsCard\n      override(#cardHeading) t(\"Editorial freedom\")\n      override(#cardDescription) t(\"Give editors a relational CMS while preserving the shared Astro components.\")\npreview(#componentBoard)\n```"
+    },
+    "elapsedMs": 256,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Reusable Baseline components (3 children), 23 elements.\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Components\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"applied\":{\"created\":13,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"refs\":{\"componentBoard\":\"6641c85726018756\",\"studyHeading\":\"bb4486b510e27522\",\"u1\":\"07708d2ab4c451de\",\"cardRow\":\"96f788cdb54df19f\",\"deliveryCard\":\"8d629cc5b010d426\",\"cardMarker\":\"c0a35e48fa3d4aaa\",\"cardHeading\":\"b0d678e5b2807e49\",\"cardDescription\":\"05e7f7b8fce1ce20\",\"cardAction\":\"355c72b4c77cc248\",\"cardActionLabel\":\"c970b7209fc50557\",\"staticCard\":\"51fbe0ab826dcf0e\",\"cmsCard\":\"96023beac122c538\"},\"refRows\":{\"u1\":\"t(\\\"A master, two content overrides, and an …\\\")\"},\"slots\":{\"#staticCard\":[\"override(#cardMarker) slot\"],\"#cmsCard\":[\"override(#cardMarker) slot\"]},\"compositionNotes\":[\"⚠ Line 8: st[] item '$color.border' is not a stroke, so st[($color.border)] was not applied. A stroke is st[(paint,w(N))], e.g. st[(#000000,w(1))].\\n  | al(v,x(s),g($spacing.gap),pad($spacing.pad)) comp s(300,hug) st[($color.border)] $surface.card \\\"Delivery card\\\" #deliveryCard\"],\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"initial shared card\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":1,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 13 created. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Components\\\"], ids: [\\\"6641c85726018756\\\", \\\"98d96ba11cbf9d30\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-components-stroke-02",
+      "designSystem": "native-trial",
+      "response_mode": "compact",
+      "text": "```ds\nfile(\"Studies/Native capabilities/Styles/native-trial.ds\")\nstroke.width.subtle: 1\n```\n```bl\nfile(\"Studies/Native capabilities/Components\")\n#deliveryCard st[($color.border,w($stroke.width.subtle))]\npreview(#componentBoard)\n```"
+    },
+    "elapsedMs": 178,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Reusable Baseline components (3 children), 23 elements.\n\n## Fences\nfile(\"Studies/Native capabilities/Styles/native-trial.ds\"): written\nfile(\"Studies/Native capabilities/Components.bl\"): 0 created, 1 modified, 0 deleted\n\n## Changed\n#deliveryCard st[(ad4a3a764a8cdfc2,tok(color.border,#C8CED8),w(1:$stroke.width.subtle))]\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Components\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"fences\":[{\"index\":0,\"kind\":\"ds\",\"path\":\"Studies/Native capabilities/Styles/native-trial.ds\",\"applied\":{\"created\":0,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"written\":true},{\"index\":1,\"kind\":\"bl\",\"path\":\"Studies/Native capabilities/Components.bl\",\"applied\":{\"created\":0,\"modified\":1,\"unchanged\":0,\"deleted\":0}}],\"applied\":{\"created\":0,\"modified\":1,\"unchanged\":0,\"deleted\":0},\"writtenDesignSystems\":[\"native-trial\"],\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":1,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 1 modified. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Components\\\"], ids: [\\\"8d629cc5b010d426\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "read",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "paths": [
+        "Studies/Native capabilities/Components"
+      ],
+      "ids": [
+        "#deliveryCard",
+        "#staticCard",
+        "#cmsCard"
+      ],
+      "expandInstances": true,
+      "depth": 2,
+      "limit": 5
+    },
+    "elapsedMs": 15,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "```bl\nfile(\"Studies/Native capabilities/Components\")\n8d629cc5b010d426 al(v,g(12:$spacing.gap),pad(24:$spacing.pad)) comp p(0,0) s(300,hug:228) f[(72fca1c418e80a68,#FFFFFF)] st[(ad4a3a764a8cdfc2,tok(color.border,#C8CED8),w(1:$stroke.width.subtle))] rd(12) $surface.card \"Delivery card\" #deliveryCard\n  c0a35e48fa3d4aaa al(h,x(c),y(c)) slot s(24,24) f[] \"Card marker\" #cardMarker\n  b0d678e5b2807e49 t(\"Shared foundation\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) s(fill,hug:32) ext(252,) f[(b7d05c1d1a4d5bc5,tok(color.text,#172132,dark(#F7F8FA)))] \"Card heading\" #cardHeading\n  05e7f7b8fce1ce20 t(\"One shared card keeps layout and typography consistent as the copy changes.\",Arial,16,r,align(l),lh(auto,1.13)) s(fill,hug:54) ext(252,) f[(abe6d4c81009b4c9,tok(color.text,#172132,dark(#F7F8FA)))] $typography.body \"Card description\" #cardDescription\n  355c72b4c77cc248 al(h,x(c),y(c),pad(8:$spacing.sm)) s(hug:176.12,hug:34) f[(9f857941752c80a0,tok(color.action,#005198,dark(#83C9FF)))] rd(8:$radius.button) \"Card action\" #cardAction\n    c970b7209fc50557 t(\"Explore the foundation\",Arial,16,r,align(l),lh(auto,1.13)) s(hug:160.12,hug:18) f[(15f1256da18b2c2e,tok(color.surface,#FFFFFF,dark(#172132)))] $typography.body \"Action label\" #cardActionLabel\n51fbe0ab826dcf0e inst(\"Delivery card\") p(312,0) s(300,hug:228) \"Static delivery\" #staticCard\n  # derived instance children: real ids. A modify row on one (`<id> t(...)`, `<id> f[...]`, `<id> at(...)` on a nested copy, `<id>` with an indented `override(<slot>) slot` fill) lands as an override on this instance and survives a master sync.\n  454d21ac3067cf83 al(h,x(c),y(c)) slot s(24,24) f[] \"Card marker\"\n    98d96ba11cbf9d30 svg(icon:code) s(24,19.2) f[(fe4347a0797d4019,tok(color.action,#005198,dark(#83C9FF)))] \"Static marker\"\n  8b091d4c6fd6bdf9 t(\"Git-owned content\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) s(fill,hug:32) ext(252,) f[(b7d05c1d1a4d5bc5,tok(color.text,#172132,dark(#F7F8FA)))] \"Card heading\"\n  15835f91439a4bec t(\"Write typed Markdown and publish a static site from the same foundation.\",Arial,16,r,align(l),lh(auto,1.13)) s(fill,hug:54) ext(252,) f[(abe6d4c81009b4c9,tok(color.text,#172132,dark(#F7F8FA)))] $typography.body \"Card description\"\n  876f8c04267e497a al(h,x(c),y(c),pad(8:$spacing.sm)) s(hug:176.12,hug:34) f[(9f857941752c80a0,tok(color.action,#005198,dark(#83C9FF)))] rd(8:$radius.button) \"Card action\"\n    b047effb5794a7a7 t(\"Explore the foundation\",Arial,16,r,align(l),lh(auto,1.13)) s(hug:160.12,hug:18) f[(15f1256da18b2c2e,tok(color.surface,#FFFFFF,dark(#172132)))] $typography.body \"Action label\"\n96023beac122c538 inst(\"Delivery card\") p(624,0) s(300,hug:228) \"CMS delivery\" #cmsCard\n  # derived instance children: real ids. A modify row on one (`<id> t(...)`, `<id> f[...]`, `<id> at(...)` on a nested copy, `<id>` with an indented `override(<slot>) slot` fill) lands as an override on this instance and survives a master sync.\n  c76294eb299fc794 al(h,x(c),y(c)) slot s(24,24) f[] \"Card marker\"\n  6828dcbce4edadef t(\"Editorial freedom\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) s(fill,hug:32) ext(252,) f[(b7d05c1d1a4d5bc5,tok(color.text,#172132,dark(#F7F8FA)))] \"Card heading\"\n  a597d9b6d790f015 t(\"Give editors a relational CMS while preserving the shared Astro components.\",Arial,16,r,align(l),lh(auto,1.13)) s(fill,hug:54) ext(252,) f[(abe6d4c81009b4c9,tok(color.text,#172132,dark(#F7F8FA)))] $typography.body \"Card description\"\n  81ddeb199e10c451 al(h,x(c),y(c),pad(8:$spacing.sm)) s(hug:176.12,hug:34) f[(9f857941752c80a0,tok(color.action,#005198,dark(#83C9FF)))] rd(8:$radius.button) \"Card action\"\n    7851a6aaf52ea58c t(\"Explore the foundation\",Arial,16,r,align(l),lh(auto,1.13)) s(hug:160.12,hug:18) f[(15f1256da18b2c2e,tok(color.surface,#FFFFFF,dark(#172132)))] $typography.body \"Action label\"\n```"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-variants-01",
+      "designSystem": "native-trial",
+      "response_mode": "compact",
+      "text": "```bl\nfile(\"Studies/Native capabilities/Components\")\n// native button variants\nal(v,x(s),g($spacing.pad),pad($spacing.pad)) ds(native-trial) p(0,430) s(1040,hug) f[($color.surface)] \"Button variant masters\" #variantBoard\n  t(\"One button. Two tones.\",$font.family,$font.size.heading,$font.weight.bold) f[($color.text)] \"Variant heading\"\n  comp \"Action button\" axes[tone[primary,secondary]] #actionSet\n    al(h,x(c),y(c),g($spacing.sm),pad($spacing.sm,$spacing.pad)) variant(tone(primary)) s(hug,hug) f[($color.action)] rd($radius.button) \"Primary tone\" #primaryVariant\n      t(\"Start a site\") f[($color.surface)] $typography.body \"Button label\" #primaryLabel\n    al(h,x(c),y(c),g($spacing.sm),pad($spacing.sm,$spacing.pad)) variant(tone(secondary)) s(hug,hug) f[($color.surface)] st[($color.border,w($stroke.width.subtle))] rd($radius.button) \"Secondary tone\" #secondaryVariant\n      t(\"Start a site\") f[($color.action)] $typography.body \"Button label\" #secondaryLabel\npreview(#variantBoard)\n```\n```bl\nfile(\"Studies/Native capabilities/Consumers\")\n// cross-canvas consumers\nal(v,x(s),g($spacing.pad),pad($spacing.pad)) ds(native-trial) s(720,hug) f[($color.surface)] \"Cross-canvas consumers\" #consumerBoard\n  t(\"Shared components, local copy.\",$font.family,$font.size.heading,$font.weight.bold) s(fill,hug) f[($color.text)] \"Consumer heading\"\n  t(\"These instances reference masters on the Components canvas.\") s(fill,hug) f[($color.text)] $typography.body \"Consumer description\"\n  al(h,y(c),g($spacing.gap)) s(fill,hug) \"Variant instances\" #consumerActions\n    inst(\"Action button\",canvas(\"Studies/Native capabilities/Components\")) at(tone(primary)) \"Create project\" #createButton\n      override(#primaryLabel) t(\"Create project\")\n    inst(\"Action button\",canvas(\"Studies/Native capabilities/Components\")) at(tone(secondary)) \"Read workflow\" #readButton\n      override(#secondaryLabel) t(\"Read workflow\")\n  inst(\"Delivery card\",canvas(\"Studies/Native capabilities/Components\")) \"Cross-canvas card\" #crossCard\n    override(#cardHeading) t(\"Shared across canvases\")\n    override(#cardDescription) t(\"Local copy and marker content should survive shared typography and layout edits.\")\n    override(#cardMarker) slot\n      svg(icon:stack) s(24,24) f[($color.action)] \"Cross-canvas marker\"\npreview(#consumerBoard)\n```"
+    },
+    "elapsedMs": 334,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Reusable Baseline components (3 children), Button variant masters (2 children), 30 elements.\nCanvas: Cross-canvas consumers (4 children), 15 elements.\n\n## Fences\nfile(\"Studies/Native capabilities/Components.bl\"): 7 created, 0 modified, 0 deleted\nfile(\"Studies/Native capabilities/Consumers.bl\"): 8 created, 0 modified, 0 deleted\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Components\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"fences\":[{\"index\":0,\"kind\":\"bl\",\"path\":\"Studies/Native capabilities/Components.bl\",\"applied\":{\"created\":7,\"modified\":0,\"unchanged\":0,\"deleted\":0}},{\"index\":1,\"kind\":\"bl\",\"path\":\"Studies/Native capabilities/Consumers.bl\",\"applied\":{\"created\":8,\"modified\":0,\"unchanged\":0,\"deleted\":0}}],\"applied\":{\"created\":15,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"refs\":{\"variantBoard\":\"0e8b52ba07f9c41d\",\"u2\":\"16f6d0b7013a937f\",\"actionSet\":\"ae918d23e7b6daa0\",\"primaryVariant\":\"4d6615e72532a38d\",\"primaryLabel\":\"2b50dec19f646c3c\",\"secondaryVariant\":\"9e510b32520454da\",\"secondaryLabel\":\"dc885d3e601ab4ba\",\"consumerBoard\":\"5f600933c00f10f1\",\"u3\":\"9f57e9f88eb635a7\",\"u4\":\"cf25e430b9acc4d5\",\"consumerActions\":\"15c7e85938767865\",\"createButton\":\"3c6408d3f2b09384\",\"readButton\":\"3335bfac9e25913a\",\"crossCard\":\"3c1394fc6597cbad\"},\"refRows\":{\"u2\":\"t(\\\"One button. Two tones.\\\")\",\"u3\":\"t(\\\"Shared components, local copy.\\\")\",\"u4\":\"t(\\\"These instances reference masters on the…\\\")\"},\"slots\":{\"#crossCard\":[\"override(#cardMarker) slot\"]},\"compositionNotes\":[\"Master \\\"Action button\\\" has copies on other canvases: \\\"Studies/Native capabilities/Consumers\\\" (2 copies, closed) not written by this edit: a copy body stored in its file reads the old master until the canvas is next edited (opening it updates the copies in memory only).\"],\"autoCorrections\":[\"ℹ Line 20: canvas(\\\"Studies/Native capabilities/Components\\\") is read as canvas(Studies/Native capabilities/Components), a canvas path is written without quotes.\\n  | inst(\\\"Action button\\\",canvas(\\\"Studies/Native capabilities/Components\\\")) at(tone(primary)) \\\"Create project\\\" #createButton (and 2 more rows)\"],\"checkpointHint\":\"Recent checkpoints (most recent first) on file(\\\"Studies/Native capabilities/Components.bl\\\"): \\\"native button variants\\\" · \\\"initial shared card\\\"; on file(\\\"Studies/Native capabilities/Consumers.bl\\\"): \\\"cross-canvas consumers\\\". Use `undo(\\\"label\\\")` in a fence on that canvas to roll back to one.\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":2,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 15 created. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Components\\\"], ids: [\\\"0e8b52ba07f9c41d\\\", \\\"5f600933c00f10f1\\\", \\\"f2c307ebd54d72cb\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-master-style-03",
+      "designSystem": "native-trial",
+      "response_mode": "compact",
+      "text": "```bl\nfile(\"Studies/Native capabilities/Components\")\n// shared typography revision\n#cardHeading t(\"Shared foundation\",$font.family,$font.size.body,$font.weight.bold)\n#cardActionLabel t(\"Explore the foundation\")\n#primaryLabel t(\"Start a site\",$font.family,$font.size.body,$font.weight.bold)\n#secondaryLabel t(\"Start a site\",$font.family,$font.size.body,$font.weight.bold)\n#deliveryCard al(v,x(s),g($spacing.pad),pad($spacing.pad))\npreview(#componentBoard)\n```"
+    },
+    "elapsedMs": 184,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Reusable Baseline components (3 children), Button variant masters (2 children), 30 elements.\n\n## Changed\n#cardHeading t(\"Shared foundation\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) -> t(\"Shared foundation\",Arial:$font.family,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) p(24,60) -> p(24,72) s(fill,hug:32) -> s(fill,hug:18)\n#primaryLabel t(\"Start a site\",Arial,16,r,align(l),lh(auto,1.13)) -> t(\"Start a site\",Arial:$font.family,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) s(hug:76.48,hug:18) -> s(hug:81.82,hug:18) removed $typography.body\n#secondaryLabel t(\"Start a site\",Arial,16,r,align(l),lh(auto,1.13)) -> t(\"Start a site\",Arial:$font.family,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) s(hug:76.48,hug:18) -> s(hug:81.82,hug:18) removed $typography.body\n#deliveryCard al(v,g(12:$spacing.gap),pad(24:$spacing.pad)) -> al(v,g(24:$spacing.pad),pad(24:$spacing.pad)) s(300,hug:228) -> s(300,hug:250)\n#cardActionLabel unchanged\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Components\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"applied\":{\"created\":0,\"modified\":4,\"unchanged\":1,\"deleted\":0},\"compositionNotes\":[\"Masters \\\"Delivery card\\\", \\\"Action button\\\" have copies on other canvases: \\\"Studies/Native capabilities/Consumers\\\" (3 copies, closed) not written by this edit: a copy body stored in its file reads the old master until the canvas is next edited (opening it updates the copies in memory only).\",\"2 copies of \\\"Button label\\\" kept a text style apart from the master's (one the person set, or one an earlier edit left stale: the edit cannot tell them apart, so it kept both): on \\\"Studies/Native capabilities/Consumers\\\": \\\"Create project\\\" (3f2ed18e3b5a4600), \\\"Read workflow\\\" (9d7082de3fd03d01). To give a copy the master's text style and keep its characters: execute_commands {canvasId: <its canvas>, commands: [{commandId: \\\"reset_text_style_overrides\\\", ids: [<text ids>]}]} (an instance id restyles every flagged text in it).\"],\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"shared typography revision\\\" · \\\"native button variants\\\" · \\\"initial shared card\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":1,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 4 modified. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Components\\\"], ids: [\\\"b0d678e5b2807e49\\\", \\\"c970b7209fc50557\\\", \\\"2b50dec19f646c3c\\\", \\\"dc885d3e601ab4ba\\\", \\\"8d629cc5b010d426\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "read",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "paths": [
+        "Studies/Native capabilities/Consumers"
+      ],
+      "ids": [
+        "#crossCard",
+        "#createButton"
+      ],
+      "expandInstances": true,
+      "depth": 2,
+      "limit": 4
+    },
+    "elapsedMs": 19,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "```bl\nfile(\"Studies/Native capabilities/Consumers\")\n3c1394fc6597cbad inst(\"Delivery card\",canvas(Studies/Native capabilities/Components)) p(24,180) s(300,hug:250) \"Cross-canvas card\" #crossCard\n  # derived instance children: real ids. A modify row on one (`<id> t(...)`, `<id> f[...]`, `<id> at(...)` on a nested copy, `<id>` with an indented `override(<slot>) slot` fill) lands as an override on this instance and survives a master sync.\n  caf44192e7ed21a1 al(h,x(c),y(c)) slot s(24,24) f[] \"Card marker\"\n    f2c307ebd54d72cb svg(icon:stack) s(22.3,24) f[(de863091ba811cf1,tok(color.action,#005198,dark(#83C9FF)))] \"Cross-canvas marker\"\n  5790527690d2b6ae t(\"Shared across canvases\",Arial:$font.family,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) s(fill,hug:18) ext(252,) f[(b7d05c1d1a4d5bc5,tok(color.text,#172132,dark(#F7F8FA)))] \"Card heading\"\n  e45792b5409a4c4f t(\"Local copy and marker content should survive shared typography and layout edits.\",Arial,16,r,align(l),lh(auto,1.13)) s(fill,hug:54) ext(252,) f[(abe6d4c81009b4c9,tok(color.text,#172132,dark(#F7F8FA)))] $typography.body \"Card description\"\n  a5678d4e6ac7a857 al(h,x(c),y(c),pad(8:$spacing.sm)) s(hug:176.12,hug:34) f[(9f857941752c80a0,tok(color.action,#005198,dark(#83C9FF)))] rd(8:$radius.button) \"Card action\"\n    6e13f77ce2ff8067 t(\"Explore the foundation\",Arial,16,r,align(l),lh(auto,1.13)) s(hug:160.12,hug:18) f[(15f1256da18b2c2e,tok(color.surface,#FFFFFF,dark(#172132)))] $typography.body \"Action label\"\n3c6408d3f2b09384 inst(\"Action button\",canvas(Studies/Native capabilities/Components)) at(tone(primary)) p(0,0) \"Create project\" #createButton\n  # derived instance children: real ids. A modify row on one (`<id> t(...)`, `<id> f[...]`, `<id> at(...)` on a nested copy, `<id>` with an indented `override(<slot>) slot` fill) lands as an override on this instance and survives a master sync.\n  3f2ed18e3b5a4600 t(\"Create project\",Arial,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) s(hug:107.6,hug:18) f[(84a8d2bef21a719e,tok(color.surface,#FFFFFF,dark(#172132)))] $typography.body \"Button label\"\n```"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-modes-01",
+      "designSystem": "native-trial",
+      "response_mode": "compact",
+      "text": "```bl\nfile(\"Studies/Native capabilities/Modes and typography\")\n// composite and mode specimens\nal(v,x(s),g($spacing.pad),pad($spacing.pad)) ds(native-trial) s(1120,hug) f[($color.surface)] \"Composite and mode study\" #modeBoard\n  t(\"Editable text, shared styles.\",$font.family,$font.size.heading,$font.weight.bold) f[($color.text)] \"Styled study heading\" #styledHeading\n    spans[(\"shared styles\",i,$color.action)]\n  t(\"The same recipes under light, dark, and compact large-text modes.\") s(fill,hug) f[($color.text)] $typography.body \"Mode description\"\n  al(h,y(s),g($spacing.gap)) s(fill,hug) \"Mode specimens\" #modeRow\n    al(v,x(s),g($spacing.gap),pad($spacing.pad)) ds(native-trial,theme(light)) s(340,hug) st[($color.border,w($stroke.width.subtle))] $surface.card \"Light / comfortable\" #lightCard\n      t(\"Light / comfortable\",$font.family,$font.size.heading,$font.weight.bold) s(fill,hug) f[($color.text)] \"Light heading\"\n      t(\"Shared typography should follow its mode while the card keeps editable text and native layout.\") s(fill,hug) f[($color.text)] $typography.body \"Light body\" #lightBody\n    al(v,x(s),g($spacing.gap),pad($spacing.pad)) ds(native-trial,theme(dark)) s(340,hug) st[($color.border,w($stroke.width.subtle))] $surface.card \"Dark / comfortable\" #darkCard\n      t(\"Dark / comfortable\",$font.family,$font.size.heading,$font.weight.bold) s(fill,hug) f[($color.text)] \"Dark heading\"\n      t(\"Shared typography should follow its mode while the card keeps editable text and native layout.\") s(fill,hug) f[($color.text)] $typography.body \"Dark body\" #darkBody\n    al(v,x(s),g($spacing.gap),pad($spacing.pad)) ds(native-trial,theme(light),density(compact),accessibility(large-text)) s(340,hug) st[($color.border,w($stroke.width.subtle))] $surface.card \"Compact / large text\" #compactCard\n      t(\"Compact / large text\",$font.family,$font.size.heading,$font.weight.bold) s(fill,hug) f[($color.text)] \"Compact heading\"\n      t(\"Shared typography should follow its mode while the card keeps editable text and native layout.\") s(fill,hug) f[($color.text)] $typography.body \"Compact body\" #compactBody\n  al(h,y(c),g($spacing.gap)) s(fill,hug) \"Alpha and link probes\"\n    r s(64,32) f[($color.alphaProbe)] \"Eight-digit DS alpha\" #alphaProbe\n    t(\"Baseline source\") f[($color.action)] $typography.body \"Native link\" #nativeLink\n      spans[(\"Baseline source\",u,link(\"https://github.com/Vermeulen-Solutions/baseline\"))]\npreview(#modeBoard)\n```"
+    },
+    "elapsedMs": 3205,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Composite and mode study (4 children), 16 elements.\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Modes and typography\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"applied\":{\"created\":16,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"refs\":{\"modeBoard\":\"db3eb2833f4ec5a7\",\"styledHeading\":\"240a03f340152d79\",\"u5\":\"39ee5bc03bbeaa58\",\"modeRow\":\"590bbf3ef30f8ccb\",\"lightCard\":\"ed7c7341b349e4d6\",\"u6\":\"2d68f3ab3288138f\",\"lightBody\":\"ef4d268764fff9db\",\"darkCard\":\"9b98f00a5fa473c3\",\"u7\":\"04dfc9d6fa19ac8c\",\"darkBody\":\"7dc087b28cf7e3ba\",\"compactCard\":\"87b74902da74b2bf\",\"u8\":\"2f10a9982ddbca99\",\"compactBody\":\"2e7e86269e08e69d\",\"u9\":\"a52f0c8018d62757\",\"alphaProbe\":\"d5c9f32d36564007\",\"nativeLink\":\"621c5a193edcd40c\"},\"refRows\":{\"u5\":\"t(\\\"The same recipes under light, dark, and …\\\")\",\"u6\":\"t(\\\"Light / comfortable\\\")\",\"u7\":\"t(\\\"Dark / comfortable\\\")\",\"u8\":\"t(\\\"Compact / large text\\\")\",\"u9\":\"\\\"Alpha and link probes\\\"\"},\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"composite and mode specimens\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":1,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 16 created. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Modes and typography\\\"], ids: [\\\"db3eb2833f4ec5a7\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "read",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "paths": [
+        "Studies/Native capabilities/Modes and typography"
+      ],
+      "ids": [
+        "#lightCard",
+        "#darkCard",
+        "#compactCard",
+        "#alphaProbe"
+      ],
+      "depth": 1,
+      "limit": 5
+    },
+    "elapsedMs": 13,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "```bl\nfile(\"Studies/Native capabilities/Modes and typography\")\ned7c7341b349e4d6 al(v,g(12:$spacing.gap),pad(24:$spacing.pad)) ds(native-trial, theme(light)) p(0,0) s(340,hug:146) f[(1f48f9a5c9af7d02,#FFFFFF)] st[(4affa0ba5bac7b23,tok(color.border,#C8CED8),w(1:$stroke.width.subtle))] rd(12) $surface.card \"Light / comfortable\" #lightCard\n  2d68f3ab3288138f t(\"Light / comfortable\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) s(fill,hug:32) ext(292,) f[(c4245013ff4cd7ed,tok(color.text,#172132,dark(#F7F8FA)))] \"Light heading\" #u6\n  ef4d268764fff9db t(\"Shared typography should follow its mode while the card keeps editable text and native layout.\",Arial,16,r,align(l),lh(auto,1.13)) s(fill,hug:54) ext(292,) f[(0c376d96614ca105,tok(color.text,#172132,dark(#F7F8FA)))] $typography.body \"Light body\" #lightBody\n9b98f00a5fa473c3 al(v,g(12:$spacing.gap),pad(24:$spacing.pad)) ds(native-trial, theme(dark)) p(352,0) s(340,hug:146) f[(51d863a54df4ccd5,#172132)] st[(0d77d5470f981ad7,tok(color.border,#C8CED8),w(1:$stroke.width.subtle))] rd(12) $surface.card \"Dark / comfortable\" #darkCard\n  04dfc9d6fa19ac8c t(\"Dark / comfortable\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) s(fill,hug:32) ext(292,) f[(b1e5e38b4be5eba6,tok(color.text,#F7F8FA,light(#172132)))] \"Dark heading\" #u7\n  7dc087b28cf7e3ba t(\"Shared typography should follow its mode while the card keeps editable text and native layout.\",Arial,16,r,align(l),lh(auto,1.13)) s(fill,hug:54) ext(292,) f[(6be7bdceb305e52c,tok(color.text,#F7F8FA,light(#172132)))] $typography.body \"Dark body\" #darkBody\n87b74902da74b2bf al(v,g(12:$spacing.gap),pad(12:$spacing.pad)) ds(native-trial, accessibility(large-text), density(compact), theme(light)) p(704,0) s(340,hug:137) f[(2dff2b6200d2c5af,#FFFFFF)] st[(e22eab7446289b67,tok(color.border,#C8CED8),w(1:$stroke.width.subtle))] rd(12) $surface.card \"Compact / large text\" #compactCard\n  2f10a9982ddbca99 t(\"Compact / large text\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) s(fill,hug:32) ext(316,) f[(3842a906c334a081,tok(color.text,#172132,dark(#F7F8FA)))] \"Compact heading\" #u8\n  2e7e86269e08e69d t(\"Shared typography should follow its mode while the card keeps editable text and native layout.\",Arial,20,r,align(l),lh(auto,1.15)) s(fill,hug:69) ext(316,) f[(365675ab6ef56084,tok(color.text,#172132,dark(#F7F8FA)))] $typography.body \"Compact body\" #compactBody\nd5c9f32d36564007 r p(0,0) s(64,32) f[(0916c45d6622197b,solid(tok(color.alphaProbe,#FF000080),o(0.5)))] \"Eight-digit DS alpha\" #alphaProbe\n```"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-alpha-02",
+      "designSystem": "none",
+      "response_mode": "compact",
+      "text": "```bl\nfile(\"Studies/Native capabilities/Modes and typography\")\nr p(24,390) s(64,32) f[(#ff000080)] \"Eight-digit BL literal\" #literalAlphaProbe\nt(\"Literal BL #ff000080\",Arial,16) p(100,396) f[(#172132)] \"Literal alpha label\"\npreview(#literalAlphaProbe)\n```"
+    },
+    "elapsedMs": 47,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Composite and mode study (4 children), Eight-digit BL literal (empty), Literal alpha label (empty), 18 elements.\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Modes and typography\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"applied\":{\"created\":2,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"refs\":{\"literalAlphaProbe\":\"8afa238b2e7fe1cc\",\"u10\":\"8dfda4c7489bbf7e\"},\"refRows\":{\"u10\":\"t(\\\"Literal BL #ff000080\\\")\"},\"autoCorrections\":[\"ℹ Line 3: #ff000080 is 8-char #RRGGBBAA (CSS) but Brilliant's color parser reads 8-char hex as #AARRGGBB (Flutter byte order). Auto-corrected to solid(#FF0000,o(0.50)) (#FF0000 at 50% alpha), use solid(#hex,o(N)) for opacity next time.\"],\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":1,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 2 created. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Modes and typography\\\"], ids: [\\\"8afa238b2e7fe1cc\\\", \\\"8dfda4c7489bbf7e\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-local-style-04",
+      "designSystem": "native-trial",
+      "response_mode": "compact",
+      "text": "```ds\nfile(\"Studies/Native capabilities/Styles/native-trial.ds\")\nfont.size.card: 22\n```\n```bl\nfile(\"Studies/Native capabilities/Components\")\n// local style versus shared style\n#staticCard\n  override(#cardHeading) t(\"Git-owned content\",$font.family,$font.size.heading,$font.weight.bold)\n#cardHeading t(\"Shared foundation\",$font.family,$font.size.card,$font.weight.bold)\n#deliveryCard al(v,x(s),g($spacing.gap),pad($spacing.pad))\npreview(#componentBoard)\n```"
+    },
+    "elapsedMs": 128,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Reusable Baseline components (3 children), Button variant masters (2 children), 30 elements.\n\n## Fences\nfile(\"Studies/Native capabilities/Styles/native-trial.ds\"): written\nfile(\"Studies/Native capabilities/Components.bl\"): 0 created, 3 modified, 0 deleted\n\n## Changed\n#staticCard s(300,hug:250) -> s(300,hug:228) override(#cardHeading) t(\"Git-owned content\",Arial:$font.family,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) -> t(\"Git-owned content\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) p(24,72) -> p(24,60) s(fill,hug:18) -> s(fill,hug:32)\n#cardHeading t(\"Shared foundation\",Arial:$font.family,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) -> t(\"Shared foundation\",Arial:$font.family,22:$font.size.card,b:$font.weight.bold,align(l),lh(auto,1.14)) p(24,72) -> p(24,60) s(fill,hug:18) -> s(fill,hug:25)\n#deliveryCard al(v,g(24:$spacing.pad),pad(24:$spacing.pad)) -> al(v,g(12:$spacing.gap),pad(24:$spacing.pad)) s(300,hug:250) -> s(300,hug:221)\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Components\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"fences\":[{\"index\":0,\"kind\":\"ds\",\"path\":\"Studies/Native capabilities/Styles/native-trial.ds\",\"applied\":{\"created\":0,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"written\":true},{\"index\":1,\"kind\":\"bl\",\"path\":\"Studies/Native capabilities/Components.bl\",\"applied\":{\"created\":0,\"modified\":3,\"unchanged\":0,\"deleted\":0}}],\"applied\":{\"created\":0,\"modified\":3,\"unchanged\":0,\"deleted\":0},\"compositionNotes\":[\"Master \\\"Delivery card\\\" has copies on other canvases: \\\"Studies/Native capabilities/Consumers\\\" (1 copy, closed) not written by this edit: a copy body stored in its file reads the old master until the canvas is next edited (opening it updates the copies in memory only).\",\"1 copy of \\\"Card heading\\\" kept a text style apart from the master's (one the person set, or one an earlier edit left stale: the edit cannot tell them apart, so it kept both): on \\\"Studies/Native capabilities/Components\\\": \\\"Static delivery\\\" (8b091d4c6fd6bdf9). To give a copy the master's text style and keep its characters: execute_commands {canvasId: <its canvas>, commands: [{commandId: \\\"reset_text_style_overrides\\\", ids: [<text ids>]}]} (an instance id restyles every flagged text in it).\"],\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"local style versus shared style\\\" · \\\"shared typography revision\\\" · \\\"native button variants\\\" · \\\"initial shared card\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"writtenDesignSystems\":[\"native-trial\"],\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":1,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 3 modified. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Components\\\"], ids: [\\\"51fbe0ab826dcf0e\\\", \\\"b0d678e5b2807e49\\\", \\\"8d629cc5b010d426\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Consumers",
+      "commands": [
+        {
+          "commandId": "reset_text_style_overrides",
+          "ids": [
+            "3f2ed18e3b5a4600",
+            "9d7082de3fd03d01"
+          ]
+        }
+      ]
+    },
+    "elapsedMs": 31,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":\"Studies/Native capabilities/Consumers\",\"results\":[{\"success\":true,\"canvasId\":\"Studies/Native capabilities/Consumers\",\"message\":\"Restyled 2 texts to the master text style; the characters are kept.\",\"blueprint\":\"3f2ed18e3b5a4600 t(\\\"Create project\\\",Arial:$font.family,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) p(24,8) s(hug:107.6,hug:18) f[(84a8d2bef21a719e,tok(color.surface,#FFFFFF))] \\\"Button label\\\"\\n9d7082de3fd03d01 t(\\\"Read workflow\\\",Arial:$font.family,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) p(24,8) s(hug:112.91,hug:18) f[(7937cd12b9ed239c,tok(color.action,#005198))] \\\"Button label\\\"\",\"commandId\":\"reset_text_style_overrides\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-variant-switch-02",
+      "designSystem": "native-trial",
+      "response_mode": "compact",
+      "text": "```bl\nfile(\"Studies/Native capabilities/Consumers\")\n// variant switch preserves copy\n#createButton at(tone(secondary))\n#crossCard\n  override(#cardDescription) t(\"Local copy and marker content survive the shared edit. A deliberately longer paragraph should now grow the card instead of colliding with its action.\")\npreview(#consumerBoard)\n```"
+    },
+    "elapsedMs": 57,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Cross-canvas consumers (4 children), 15 elements.\n\n## Changed\n#createButton at(tone(primary)) -> at(tone(secondary))\n#crossCard s(300,hug:246) -> s(300,hug:282) override(#cardDescription) t(\"Local copy and marker content should survive shared typography and layout edits.\",Arial,16,r,align(l),lh(auto,1.13)) -> t(\"Local copy and marker content survive the shared edit. A deliberately longer paragraph should now grow the card instead of colliding with its action.\",Arial,16,r,align(l),lh(auto,1.13)) s(fill,hug:54) -> s(fill,hug:90)\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Consumers\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"applied\":{\"created\":0,\"modified\":2,\"unchanged\":0,\"deleted\":0},\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"variant switch preserves copy\\\" · \\\"cross-canvas consumers\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":1,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 2 modified. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Consumers\\\"], ids: [\\\"3c6408d3f2b09384\\\", \\\"3c1394fc6597cbad\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "export",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Modes and typography",
+      "ids": [
+        "#modeBoard"
+      ],
+      "format": "png",
+      "scale": 1,
+      "outputPath": "C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\modes-before.png"
+    },
+    "elapsedMs": 52,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\modes-before.png\nelement(s): db3eb2833f4ec5a7 | 1120x348 | 69983 bytes | sha256:eb17612c1491e2885fe6b4cfaee4346b015ed4e9eb808dc7d7fccb1712b0d091"
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/Native capabilities/modes-before.png\">modes-before</media>"
+        }
+      ]
+    }
+  },
+  {
+    "name": "read",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "paths": [
+        "Studies/Native capabilities/Components"
+      ],
+      "ids": [
+        "#staticCard"
+      ],
+      "expandInstances": true,
+      "depth": 1,
+      "limit": 2
+    },
+    "elapsedMs": 9,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "```bl\nfile(\"Studies/Native capabilities/Components\")\n51fbe0ab826dcf0e inst(\"Delivery card\") p(312,0) s(300,hug:228) \"Static delivery\" #staticCard\n  # derived instance children: real ids. A modify row on one (`<id> t(...)`, `<id> f[...]`, `<id> at(...)` on a nested copy, `<id>` with an indented `override(<slot>) slot` fill) lands as an override on this instance and survives a master sync.\n  454d21ac3067cf83 al(h,x(c),y(c)) slot s(24,24) f[] \"Card marker\"\n  8b091d4c6fd6bdf9 t(\"Git-owned content\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) s(fill,hug:32) ext(252,) f[(b7d05c1d1a4d5bc5,tok(color.text,#172132,dark(#F7F8FA)))] \"Card heading\"\n  15835f91439a4bec t(\"Write typed Markdown and publish a static site from the same foundation.\",Arial,16,r,align(l),lh(auto,1.13)) s(fill,hug:54) ext(252,) f[(abe6d4c81009b4c9,tok(color.text,#172132,dark(#F7F8FA)))] $typography.body \"Card description\"\n  876f8c04267e497a al(h,x(c),y(c),pad(8:$spacing.sm)) s(hug:176.12,hug:34) f[(9f857941752c80a0,tok(color.action,#005198,dark(#83C9FF)))] rd(8:$radius.button) \"Card action\"\n```"
+        }
+      ]
+    }
+  },
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Components",
+      "commands": [
+        {
+          "commandId": "reset_text_style_overrides",
+          "ids": [
+            "8b091d4c6fd6bdf9"
+          ]
+        }
+      ]
+    },
+    "elapsedMs": 24,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":\"Studies/Native capabilities/Components\",\"results\":[{\"success\":true,\"canvasId\":\"Studies/Native capabilities/Components\",\"message\":\"Restyled 1 text to the master text style; the characters are kept.\",\"blueprint\":\"8b091d4c6fd6bdf9 t(\\\"Git-owned content\\\",Arial:$font.family,22:$font.size.card,b:$font.weight.bold,align(l),lh(auto,1.14)) p(24,60) s(fill,hug:25) ext(252,) f[(b7d05c1d1a4d5bc5,tok(color.text,#172132))] \\\"Card heading\\\"\",\"commandId\":\"reset_text_style_overrides\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-composite-03",
+      "designSystem": "native-trial",
+      "response_mode": "compact",
+      "text": "```ds\nfile(\"Studies/Native capabilities/Styles/native-trial.ds\")\nradius.local: 20\n```\n```bl\nfile(\"Studies/Native capabilities/Modes and typography\")\n// local composite field\n#lightCard rd($radius.local)\n```\n```ds\nfile(\"Studies/Native capabilities/Styles/native-trial.ds\")\nradius.card: 18\nfont.weight.regular: 700\n```\n```bl\nfile(\"Studies/Native capabilities/Modes and typography\")\n#styledHeading t(\"Editable native text, shared styles.\")\npreview(#modeBoard)\n```"
+    },
+    "elapsedMs": 151,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Composite and mode study (4 children), Eight-digit BL literal (empty), Literal alpha label (empty), 18 elements.\n\n## Fences\nfile(\"Studies/Native capabilities/Styles/native-trial.ds\"): written\nfile(\"Studies/Native capabilities/Modes and typography.bl\"): 0 created, 1 modified, 0 deleted\nfile(\"Studies/Native capabilities/Styles/native-trial.ds\"): written\nfile(\"Studies/Native capabilities/Modes and typography.bl\"): 0 created, 1 modified, 0 deleted\n\n## Changed\n#lightCard rd(12) -> rd(20:$radius.local)\n#styledHeading t(\"Editable text, shared styles.\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) -> t(\"Editable native text, shared styles.\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) s(hug:368.82,hug:32) -> s(hug:457.52,hug:32)\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Modes and typography\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"fences\":[{\"index\":0,\"kind\":\"ds\",\"path\":\"Studies/Native capabilities/Styles/native-trial.ds\",\"applied\":{\"created\":0,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"written\":true},{\"index\":1,\"kind\":\"bl\",\"path\":\"Studies/Native capabilities/Modes and typography.bl\",\"applied\":{\"created\":0,\"modified\":1,\"unchanged\":0,\"deleted\":0}},{\"index\":2,\"kind\":\"ds\",\"path\":\"Studies/Native capabilities/Styles/native-trial.ds\",\"applied\":{\"created\":0,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"written\":true},{\"index\":3,\"kind\":\"bl\",\"path\":\"Studies/Native capabilities/Modes and typography.bl\",\"applied\":{\"created\":0,\"modified\":1,\"unchanged\":0,\"deleted\":0}}],\"applied\":{\"created\":0,\"modified\":2,\"unchanged\":0,\"deleted\":0},\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"local composite field\\\" · \\\"composite and mode specimens\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"writtenDesignSystems\":[\"native-trial\",\"native-trial\"],\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":1,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 2 modified. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Modes and typography\\\"], ids: [\\\"ed7c7341b349e4d6\\\", \\\"240a03f340152d79\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "read",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "paths": [
+        "Studies/Native capabilities/Modes and typography"
+      ],
+      "ids": [
+        "#styledHeading",
+        "#lightCard",
+        "#darkCard",
+        "#compactBody"
+      ],
+      "depth": 0,
+      "limit": 5
+    },
+    "elapsedMs": 10,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "```bl\nfile(\"Studies/Native capabilities/Modes and typography\")\n240a03f340152d79 t(\"Editable native text, shared styles.\",Arial:$font.family,28:$font.size.heading,b:$font.weight.bold,align(l),lh(auto,1.14)) p(24,24) s(hug:457.52,hug:32) f[(2e36e33b8f1e3555,tok(color.text,#172132,dark(#F7F8FA)))] \"Styled study heading\" #styledHeading\n  spans[(15,28,i,$color.action)]\ned7c7341b349e4d6 al(v,g(12:$spacing.gap),pad(24:$spacing.pad)) ds(native-trial, theme(light)) p(0,0) s(340,hug:146) f[(1f48f9a5c9af7d02,#FFFFFF)] st[(4affa0ba5bac7b23,tok(color.border,#C8CED8),w(1:$stroke.width.subtle))] rd(20:$radius.local) $surface.card \"Light / comfortable\" #lightCard\n9b98f00a5fa473c3 al(v,g(12:$spacing.gap),pad(24:$spacing.pad)) ds(native-trial, theme(dark)) p(352,0) s(340,hug:146) f[(51d863a54df4ccd5,#172132)] st[(0d77d5470f981ad7,tok(color.border,#C8CED8),w(1:$stroke.width.subtle))] rd(18) $surface.card \"Dark / comfortable\" #darkCard\n2e7e86269e08e69d t(\"Shared typography should follow its mode while the card keeps editable text and native layout.\",Arial,20,b,align(l),lh(auto,1.15)) p(12,56) s(fill,hug:92) ext(316,) f[(365675ab6ef56084,tok(color.text,#172132,dark(#F7F8FA)))] $typography.body \"Compact body\" #compactBody\n```"
+        }
+      ]
+    }
+  },
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "commands": [
+        {
+          "commandId": "list_ui_targets",
+          "params": {
+            "query": "libraries"
+          }
+        }
+      ]
+    },
+    "elapsedMs": 14,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":null,\"results\":[{\"count\":1,\"targets\":[{\"id\":\"project.libraries\",\"label\":\"Libraries\",\"surface\":\"project\",\"kind\":\"row\",\"reach\":\"Project tab > Libraries\",\"mounted\":false}],\"note\":\"menu and palette targets list only for a surface or a query; they cannot be lit (reachable false).\",\"commandId\":\"list_ui_targets\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "render_ui",
+    "args": {
+      "component": "right-toolbar.fills",
+      "state": {
+        "elementName": "Baseline native trial",
+        "rows": [
+          {
+            "color": "#005198"
+          },
+          {
+            "color": "#172132"
+          },
+          {
+            "color": "#ff000080"
+          }
+        ]
+      },
+      "pixelRatio": 1,
+      "format": "png",
+      "outputPath": "C:\\dev\\emdash-baseline-design-review\\audit\\visual-concepts\\brilliant-native-capabilities-2026-11-06\\staged-fills.png"
+    },
+    "elapsedMs": 4,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "render_ui failed: Refused to write \"C:\\dev\\emdash-baseline-design-review\\audit\\visual-concepts\\brilliant-native-capabilities-2026-11-06\\staged-fills.png\": it is outside every allowed root. Agent tools may write files only inside: C:\\dev\\baseline-designs\\Baseline, C:\\Users\\Jaap\\AppData\\Local\\Temp, C:\\Users\\Jaap, and never into a hidden (dot-prefixed) directory or the OS application-support tree. Pass an absolute path inside one of those roots."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "name": "render_ui",
+    "args": {
+      "component": "right-toolbar.fills",
+      "state": {
+        "elementName": "Baseline native trial",
+        "rows": [
+          {
+            "color": "#005198"
+          },
+          {
+            "color": "#172132"
+          },
+          {
+            "color": "#ff000080"
+          }
+        ]
+      },
+      "pixelRatio": 1,
+      "format": "png",
+      "outputPath": "C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\staged-fills.png"
+    },
+    "elapsedMs": 271,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"outputPath\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\\\\Exports\\\\Native capabilities\\\\staged-fills.png\",\"width\":280,\"height\":159,\"component\":\"right-toolbar.fills\",\"appliedHighlights\":0,\"media\":\"<media src=\\\"C:\\\\dev\\\\baseline-designs\\\\Baseline\\\\Exports\\\\Native capabilities\\\\staged-fills.png\\\">right-toolbar.fills</media>\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "edit",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "requestId": "cap-styled-range-repair-04",
+      "designSystem": "native-trial",
+      "response_mode": "compact",
+      "text": "```bl\nfile(\"Studies/Native capabilities/Modes and typography\")\n#styledHeading\n  spans[(\"shared styles\",i,$color.action)]\npreview(#modeBoard)\n```"
+    },
+    "elapsedMs": 54,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Canvas: Composite and mode study (4 children), Eight-digit BL literal (empty), Literal alpha label (empty), 18 elements.\n\n## Changed\n#styledHeading spans[(22,35,i,$color.action)] removed spans[(15,28,i,$color.action)]\n\n{\"status\":\"ready\",\"canvasId\":\"Studies/Native capabilities/Modes and typography\",\"project\":\"C:\\\\dev\\\\baseline-designs\\\\Baseline\",\"projectLabel\":\"the local folder \\\"Baseline\\\"\",\"applied\":{\"created\":0,\"modified\":1,\"unchanged\":0,\"deleted\":0},\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":1,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 1 modified. Nothing is pending.\",\"blueprintHandle\":\"read({ paths: [\\\"Studies/Native capabilities/Modes and typography\\\"], ids: [\\\"240a03f340152d79\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:595f6cde666bf47b\\\", project: \\\"C:/dev/baseline-designs/Baseline\\\" })\"}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "commands": [
+        {
+          "commandId": "show_ui",
+          "params": {
+            "steps": [
+              {
+                "target": "project.libraries",
+                "title": "Library guidance test",
+                "text": "This is the project library entry. This test adds no library; use Done to finish.",
+                "advance": "next"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "elapsedMs": 40,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":null,\"results\":[{\"runId\":\"sm1793982229934_1\",\"steps\":1,\"resolved\":[{\"target\":\"project.libraries\",\"reachable\":true,\"how\":\"Project tab > Libraries\"}],\"outcome\":\"call show_ui_outcome {runId} to wait for it\",\"commandId\":\"show_ui\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "commands": [
+        {
+          "commandId": "show_ui_outcome",
+          "params": {
+            "runId": "sm1793982229934_1",
+            "waitMs": 1000
+          }
+        }
+      ]
+    },
+    "elapsedMs": 13,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":null,\"results\":[{\"runId\":\"sm1793982229934_1\",\"outcome\":\"done\",\"stepReached\":1,\"steps\":1,\"changed\":[],\"commandId\":\"show_ui_outcome\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Modes and typography",
+      "commands": [
+        {
+          "commandId": "switch_canvas"
+        }
+      ]
+    },
+    "elapsedMs": 63,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":\"Studies/Native capabilities/Modes and typography\",\"results\":[{\"success\":true,\"canvasId\":\"Studies/Native capabilities/Modes and typography\",\"presented\":true,\"commandId\":\"switch_canvas\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "commands": [
+        {
+          "commandId": "get_canvases"
+        }
+      ]
+    },
+    "elapsedMs": 13,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":null,\"results\":[{\"canvases\":[{\"id\":\"Studies/Mechanics pilot/Compatibility\",\"name\":\"Compatibility\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Compatibility\"},{\"id\":\"Studies/Mechanics pilot/Directions\",\"name\":\"Directions\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Directions\"},{\"id\":\"Studies/Mockup recreation/Baseline mockup\",\"name\":\"Baseline mockup\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Baseline mockup\"},{\"id\":\"Studies/Mockup recreation/Native reconstruction\",\"name\":\"Native reconstruction\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Native reconstruction\"},{\"id\":\"Studies/Native capabilities/Components\",\"name\":\"Components\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Components\"},{\"id\":\"Studies/Native capabilities/Consumers\",\"name\":\"Consumers\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Consumers\"},{\"id\":\"Studies/Native capabilities/Modes and typography\",\"name\":\"Modes and typography\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Modes and typography\"}],\"folders\":[{\"id\":\"4361E5E4-F781-439F-A663-525D032E74A8\",\"name\":\"Assets\",\"path\":\"\",\"fullPath\":\"Assets\"},{\"id\":\"45C797D8-2E90-48BB-8C07-4A0A6B620FE7\",\"name\":\"Studies\",\"path\":\"\",\"fullPath\":\"Studies\"},{\"id\":\"857C1722-8408-4336-A532-EEE851E554FF\",\"name\":\"Mechanics pilot\",\"path\":\"Studies\",\"fullPath\":\"Studies/Mechanics pilot\"},{\"id\":\"CF0249B2-E8E4-4932-BAF0-43C4019C4326\",\"name\":\"Mockup recreation\",\"path\":\"Studies\",\"fullPath\":\"Studies/Mockup recreation\"},{\"id\":\"6FD06E09-AB9B-4BAA-8234-14A469722785\",\"name\":\"Styles\",\"path\":\"\",\"fullPath\":\"Styles\"},{\"id\":\"3645AACE-D7C3-4B5B-BEB1-AA9443EA79A2\",\"name\":\"Styles\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Styles\"},{\"id\":\"AC630C9B-7903-4786-8F39-995C2A48D505\",\"name\":\"Assets\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Assets\"},{\"id\":\"1EB03787-710E-44B0-9AAD-4BD61AE5E421\",\"name\":\"Styles\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Styles\"},{\"id\":\"8BE97561-877A-4E1A-8EF6-BB48DAE698A8\",\"name\":\"Assets\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Assets\"},{\"id\":\"1D5E09EC-C5AF-46DF-BBE2-9306D32B1BDE\",\"name\":\"Native capabilities\",\"path\":\"Studies\",\"fullPath\":\"Studies/Native capabilities\"},{\"id\":\"8909270D-323F-40F2-92ED-E001D894C177\",\"name\":\"Styles\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Styles\"},{\"id\":\"860F0543-E231-4EEB-A3B5-3E287C3E05B2\",\"name\":\"Assets\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Assets\"},{\"id\":\"81B07E03-8640-4263-BD9B-DF93761EF07D\",\"name\":\"Exports\",\"path\":\"\",\"fullPath\":\"Exports\"},{\"id\":\"768C2B69-4894-4961-B360-232FC0EA1F50\",\"name\":\"Native capabilities\",\"path\":\"Exports\",\"fullPath\":\"Exports/Native capabilities\"}],\"currentCanvasId\":\"Studies/Native capabilities/Modes and typography\",\"commandId\":\"get_canvases\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "convert_html",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "frames": [
+        "<div style=\"width:390px;height:160px;display:flex;flex-direction:column;padding:24px;gap:12px;background:#ffffff\"><h1 style=\"font:700 24px Arial;margin:0;color:#172132\">Baseline preflight</h1><p style=\"font:16px Arial;margin:0;color:#172132\">Inspect conversion before creating objects.</p></div>",
+        "<div style=\"width:390px;height:160px;display:flex;flex-direction:column;padding:24px;gap:12px;background:#ffffff\"><h1 style=\"font-family:Arial;font-size:24px;font-weight:700;margin:0;color:#172132\">Baseline preflight</h1><p style=\"font-family:Arial;font-size:16px;margin:0;color:#172132\">Inspect conversion before creating objects.</p></div>"
+      ],
+      "layout": true
+    },
+    "elapsedMs": 15,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"count\":2,\"layout\":true,\"frames\":[{\"index\":0,\"blueprint\":\"al(v,g(12),pad(24)) s(390,160) f[(#FFFFFF)]\\n  t(\\\"Baseline preflight\\\",Inter,32,b) f[(#172132)] s(fill,hug)\\n  t(\\\"Inspect conversion before creating objects.\\\",Inter,16) f[(#172132)] s(fill,hug)\",\"lines\":3,\"notes\":[],\"elements\":[{\"row\":1,\"parentRow\":null,\"name\":\"Frame 1\",\"type\":\"al\",\"x\":0.0,\"y\":0.0,\"w\":390.0,\"h\":160.0,\"lx\":0.0,\"ly\":0.0,\"rot\":0.0,\"opacity\":1.0,\"fill\":\"#FFFFFF\"},{\"row\":2,\"parentRow\":1,\"name\":\"Text 1\",\"type\":\"t\",\"text\":\"Baseline preflight\",\"x\":24.0,\"y\":24.0,\"w\":342.0,\"h\":39.0,\"lx\":24.0,\"ly\":24.0,\"rot\":0.0,\"opacity\":1.0,\"fill\":\"#172132\"},{\"row\":3,\"parentRow\":1,\"name\":\"Text 2\",\"type\":\"t\",\"text\":\"Inspect conversion before creating objects.\",\"x\":24.0,\"y\":75.0,\"w\":342.0,\"h\":19.0,\"lx\":24.0,\"ly\":75.0,\"rot\":0.0,\"opacity\":1.0,\"fill\":\"#172132\"}]},{\"index\":1,\"blueprint\":\"al(v,g(12),pad(24)) s(390,160) f[(#FFFFFF)]\\n  t(\\\"Baseline preflight\\\",Arial,24,b) f[(#172132)] s(fill,hug)\\n  t(\\\"Inspect conversion before creating objects.\\\",Arial,16) f[(#172132)] s(fill,hug)\",\"lines\":3,\"notes\":[],\"elements\":[{\"row\":1,\"parentRow\":null,\"name\":\"Frame 1\",\"type\":\"al\",\"x\":0.0,\"y\":0.0,\"w\":390.0,\"h\":160.0,\"lx\":0.0,\"ly\":0.0,\"rot\":0.0,\"opacity\":1.0,\"fill\":\"#FFFFFF\"},{\"row\":2,\"parentRow\":1,\"name\":\"Text 1\",\"type\":\"t\",\"text\":\"Baseline preflight\",\"x\":24.0,\"y\":24.0,\"w\":342.0,\"h\":28.0,\"lx\":24.0,\"ly\":24.0,\"rot\":0.0,\"opacity\":1.0,\"fill\":\"#172132\"},{\"row\":3,\"parentRow\":1,\"name\":\"Text 2\",\"type\":\"t\",\"text\":\"Inspect conversion before creating objects.\",\"x\":24.0,\"y\":64.0,\"w\":342.0,\"h\":18.0,\"lx\":24.0,\"ly\":64.0,\"rot\":0.0,\"opacity\":1.0,\"fill\":\"#172132\"}]}],\"convertMs\":1,\"layoutMs\":2,\"stagesMs\":{\"html\":1.1,\"webFonts\":0.1,\"world\":0.1,\"parse\":0.2,\"fontPreload\":0.0,\"build\":1.8,\"svg\":0.0,\"finalize\":0.0,\"read\":0.0,\"drop\":0.1,\"yield\":4.0,\"engineWaits\":0},\"wallMs\":7,\"bytes\":636}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "execute_commands",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "commands": [
+        {
+          "commandId": "get_canvases"
+        }
+      ]
+    },
+    "elapsedMs": 9,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"canvasId\":null,\"results\":[{\"canvases\":[{\"id\":\"Studies/Mechanics pilot/Compatibility\",\"name\":\"Compatibility\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Compatibility\"},{\"id\":\"Studies/Mechanics pilot/Directions\",\"name\":\"Directions\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Directions\"},{\"id\":\"Studies/Mockup recreation/Baseline mockup\",\"name\":\"Baseline mockup\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Baseline mockup\"},{\"id\":\"Studies/Mockup recreation/Native reconstruction\",\"name\":\"Native reconstruction\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Native reconstruction\"},{\"id\":\"Studies/Native capabilities/Components\",\"name\":\"Components\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Components\"},{\"id\":\"Studies/Native capabilities/Consumers\",\"name\":\"Consumers\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Consumers\"},{\"id\":\"Studies/Native capabilities/Modes and typography\",\"name\":\"Modes and typography\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Modes and typography\"}],\"folders\":[{\"id\":\"4361E5E4-F781-439F-A663-525D032E74A8\",\"name\":\"Assets\",\"path\":\"\",\"fullPath\":\"Assets\"},{\"id\":\"45C797D8-2E90-48BB-8C07-4A0A6B620FE7\",\"name\":\"Studies\",\"path\":\"\",\"fullPath\":\"Studies\"},{\"id\":\"857C1722-8408-4336-A532-EEE851E554FF\",\"name\":\"Mechanics pilot\",\"path\":\"Studies\",\"fullPath\":\"Studies/Mechanics pilot\"},{\"id\":\"CF0249B2-E8E4-4932-BAF0-43C4019C4326\",\"name\":\"Mockup recreation\",\"path\":\"Studies\",\"fullPath\":\"Studies/Mockup recreation\"},{\"id\":\"6FD06E09-AB9B-4BAA-8234-14A469722785\",\"name\":\"Styles\",\"path\":\"\",\"fullPath\":\"Styles\"},{\"id\":\"3645AACE-D7C3-4B5B-BEB1-AA9443EA79A2\",\"name\":\"Styles\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Styles\"},{\"id\":\"AC630C9B-7903-4786-8F39-995C2A48D505\",\"name\":\"Assets\",\"path\":\"Studies/Mockup recreation\",\"fullPath\":\"Studies/Mockup recreation/Assets\"},{\"id\":\"1EB03787-710E-44B0-9AAD-4BD61AE5E421\",\"name\":\"Styles\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Styles\"},{\"id\":\"8BE97561-877A-4E1A-8EF6-BB48DAE698A8\",\"name\":\"Assets\",\"path\":\"Studies/Mechanics pilot\",\"fullPath\":\"Studies/Mechanics pilot/Assets\"},{\"id\":\"1D5E09EC-C5AF-46DF-BBE2-9306D32B1BDE\",\"name\":\"Native capabilities\",\"path\":\"Studies\",\"fullPath\":\"Studies/Native capabilities\"},{\"id\":\"8909270D-323F-40F2-92ED-E001D894C177\",\"name\":\"Styles\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Styles\"},{\"id\":\"860F0543-E231-4EEB-A3B5-3E287C3E05B2\",\"name\":\"Assets\",\"path\":\"Studies/Native capabilities\",\"fullPath\":\"Studies/Native capabilities/Assets\"},{\"id\":\"81B07E03-8640-4263-BD9B-DF93761EF07D\",\"name\":\"Exports\",\"path\":\"\",\"fullPath\":\"Exports\"},{\"id\":\"768C2B69-4894-4961-B360-232FC0EA1F50\",\"name\":\"Native capabilities\",\"path\":\"Exports\",\"fullPath\":\"Exports/Native capabilities\"}],\"currentCanvasId\":\"Studies/Native capabilities/Modes and typography\",\"commandId\":\"get_canvases\"}]}"
+        }
+      ]
+    }
+  },
+  {
+    "name": "export",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Modes and typography",
+      "ids": [
+        "#modeBoard"
+      ],
+      "format": "png",
+      "scale": 1,
+      "outputPath": "C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\modes-final.png"
+    },
+    "elapsedMs": 54,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\modes-final.png\nelement(s): db3eb2833f4ec5a7 | 1120x362 | 74787 bytes | sha256:645dfdbadebfb069952f205dd108accef8ce14c1922cab5000c3c554d6b60309"
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/Native capabilities/modes-final.png\">modes-final</media>"
+        }
+      ]
+    }
+  },
+  {
+    "name": "export",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Modes and typography",
+      "ids": [
+        "#modeBoard"
+      ],
+      "format": "htmlDoc",
+      "scale": 1,
+      "outputPath": "C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\modes-final.html"
+    },
+    "elapsedMs": 24,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\modes-final.html\nelement(s): db3eb2833f4ec5a7 | 6049 bytes | sha256:68a752ac6a8d3bdfa4833dce8093718a5f7b9e6c7a8878a5a70e36e6c97c9568"
+        }
+      ]
+    }
+  },
+  {
+    "name": "export",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Consumers",
+      "ids": [
+        "#consumerBoard"
+      ],
+      "format": "png",
+      "scale": 1,
+      "outputPath": "C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\consumers-final.png"
+    },
+    "elapsedMs": 46,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\consumers-final.png\nelement(s): 5f600933c00f10f1 | 720x504 | 46269 bytes | sha256:54746cd5665e942b459755c2e4a825c769b5138fe9f4de3b08d8dc3a02cebed5"
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/Native capabilities/consumers-final.png\">consumers-final</media>"
+        }
+      ]
+    }
+  },
+  {
+    "name": "export",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Consumers",
+      "ids": [
+        "#consumerBoard"
+      ],
+      "format": "htmlDoc",
+      "scale": 1,
+      "outputPath": "C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\consumers-final.html"
+    },
+    "elapsedMs": 24,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\consumers-final.html\nelement(s): 5f600933c00f10f1 | 5927 bytes | sha256:38163ac8f67b0031452c9172a5bb5fdcf19dd5e9f44c8338cd5a47f2cf6b9e79"
+        }
+      ]
+    }
+  },
+  {
+    "name": "export",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Components",
+      "ids": [
+        "#componentBoard"
+      ],
+      "format": "png",
+      "scale": 1,
+      "outputPath": "C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\components-final.png"
+    },
+    "elapsedMs": 43,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\components-final.png\nelement(s): 6641c85726018756 | 1040x367 | 42844 bytes | sha256:59459a11ad25bd5f25b3235b6eda0a0a1ccff5032a0c647e4f88d49cf5f7005c"
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/Native capabilities/components-final.png\">components-final</media>"
+        }
+      ]
+    }
+  },
+  {
+    "name": "export",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "canvasId": "Studies/Native capabilities/Components",
+      "ids": [
+        "#variantBoard"
+      ],
+      "format": "png",
+      "scale": 1,
+      "outputPath": "C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\variants-final.png"
+    },
+    "elapsedMs": 71,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:\\dev\\baseline-designs\\Baseline\\Exports\\Native capabilities\\variants-final.png\nelement(s): 0e8b52ba07f9c41d | 1040x178 | 14013 bytes | sha256:a360102ea21606ae64c041c0bb37eb99f43cd1fd4274c606f60bf11020db3294"
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/Native capabilities/variants-final.png\">variants-final</media>"
+        }
+      ]
+    }
+  },
+  {
+    "name": "read",
+    "args": {
+      "project": "C:/dev/baseline-designs/Baseline",
+      "sessionId": "mcp:595f6cde666bf47b",
+      "paths": [
+        "Studies/Native capabilities/Consumers"
+      ],
+      "ids": [
+        "#createButton",
+        "#crossCard"
+      ],
+      "expandInstances": true,
+      "depth": 2,
+      "limit": 3
+    },
+    "elapsedMs": 12,
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "```bl\nfile(\"Studies/Native capabilities/Consumers\")\n3c6408d3f2b09384 inst(\"Action button\",canvas(Studies/Native capabilities/Components)) at(tone(secondary)) p(0,0) \"Create project\" #createButton\n  # derived instance children: real ids. A modify row on one (`<id> t(...)`, `<id> f[...]`, `<id> at(...)` on a nested copy, `<id>` with an indented `override(<slot>) slot` fill) lands as an override on this instance and survives a master sync.\n  3f2ed18e3b5a4600 t(\"Create project\",Arial:$font.family,16:$font.size.body,b:$font.weight.bold,align(l),lh(auto,1.13)) s(hug:107.6,hug:18) f[(7937cd12b9ed239c,tok(color.action,#005198,dark(#83C9FF)))] \"Button label\"\n3c1394fc6597cbad inst(\"Delivery card\",canvas(Studies/Native capabilities/Components)) p(24,180) s(300,hug:300) \"Cross-canvas card\" #crossCard\n  # derived instance children: real ids. A modify row on one (`<id> t(...)`, `<id> f[...]`, `<id> at(...)` on a nested copy, `<id>` with an indented `override(<slot>) slot` fill) lands as an override on this instance and survives a master sync.\n  caf44192e7ed21a1 al(h,x(c),y(c)) slot s(24,24) f[] \"Card marker\"\n    f2c307ebd54d72cb svg(icon:stack) s(22.3,24) f[(de863091ba811cf1,tok(color.action,#005198,dark(#83C9FF)))] \"Cross-canvas marker\"\n  5790527690d2b6ae t(\"Shared across canvases\",Arial:$font.family,22:$font.size.card,b:$font.weight.bold,align(l),lh(auto,1.14)) s(fill,hug:50) ext(252,) f[(b7d05c1d1a4d5bc5,tok(color.text,#172132,dark(#F7F8FA)))] \"Card heading\"\n  e45792b5409a4c4f t(\"Local copy and marker content survive the shared edit. A deliberately longer paragraph should now grow the card instead of colliding with its action.\",Arial,16,b,align(l),lh(auto,1.13)) s(fill,hug:108) ext(252,) f[(abe6d4c81009b4c9,tok(color.text,#172132,dark(#F7F8FA)))] $typography.body \"Card description\"\n  a5678d4e6ac7a857 al(h,x(c),y(c),pad(8:$spacing.sm)) s(hug:190.22,hug:34) f[(9f857941752c80a0,tok(color.action,#005198,dark(#83C9FF)))] rd(8:$radius.button) \"Card action\"\n    6e13f77ce2ff8067 t(\"Explore the foundation\",Arial,16,b,align(l),lh(auto,1.13)) s(hug:174.22,hug:18) f[(15f1256da18b2c2e,tok(color.surface,#FFFFFF,dark(#172132)))] $typography.body \"Action label\"\n```"
+        }
+      ]
+    }
+  }
+]

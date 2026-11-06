@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Canvas: Semantic role probe (2 children), 6 elements.\n\n## Changed\n#probeTitle t(\"Build with Baseline\",Arial:$font.family,40:$font.size.display,b:$font.weight.display,align(l),lh(auto,1.15)) -> t(\"Live update verified\",Arial:$font.family,40:$font.size.display,b:$font.weight.display,align(l),lh(auto,1.15))\n#probeAction s(fill,24) -> s(fill,32)\n\n{\"status\":\"ready\",\"canvasId\":\"Compatibility\",\"project\":\"C:\\\\dev\\\\emdash-baseline\\\\audit\\\\visual-concepts\\\\brilliant-pilot-2026-11-06\\\\project\",\"projectLabel\":\"the local folder \\\"project\\\"\",\"applied\":{\"created\":0,\"modified\":2,\"unchanged\":0,\"deleted\":0},\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"before live turn\\\" · \\\"semantic probe\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":0,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 2 modified. Nothing is pending. This result carries no screenshot, and none will come for this block: call export to see it.\",\"blueprintHandle\":\"read({ paths: [\\\"Compatibility\\\"], ids: [\\\"4b1616afcfb7642d\\\", \\\"f871d53b75d5240c\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:c3858ea6f76c181d\\\", project: \\\"C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project\\\" })\"}"
+    }
+  ]
+}

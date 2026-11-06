@@ -1,0 +1,18 @@
+{
+  "redoMore": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"canvasId\":\"Directions\",\"results\":[{\"success\":true,\"canvasId\":\"Directions\",\"message\":\"Redid the last action on canvas \\\"Directions\\\", this session's stack.\",\"commandId\":\"redo\"},{\"success\":true,\"canvasId\":\"Directions\",\"message\":\"Redid the last action on canvas \\\"Directions\\\", this session's stack.\",\"commandId\":\"redo\"},{\"success\":true,\"canvasId\":\"Directions\",\"message\":\"Redid the last action on canvas \\\"Directions\\\", this session's stack.\",\"commandId\":\"redo\"}]}"
+      }
+    ]
+  },
+  "afterRedoAll": {
+    "content": [
+      {
+        "type": "text",
+        "text": "```bl\nfile(\"Directions\")\ne4c25e52fd5c4e23 t(\"A clear path from brief to launch.\",Arial,52,b,align(l),lh(1.25)) p(0,33.5) s(fill,hug:130) ext(800,) f[(e67d1511594a8978,#1A2029)] \"Text 4\" #a1440Title\n394b53d6b7913f96 t(\"A clear path from brief to launch.\",Arial,29.75,b,align(l),lh(1.25)) p(0,33.5) s(fill,hug:74.38) ext(355.66,) f[(c9f3ddd6b7b53e0f,#1A2029)] \"Text 24\" #a390Title\n6496785f0966d412 al(v,g(21.17),pad(17.17)) p(1480,0) s(390,hug:1009.16) f[(1f061daa2946c18f,#FAFCFE)] \"A / Workbench — mobile\" #a390\nc27baf0a8a710373 al(h,y(c),g(48)) p(32,107.5) s(fill,hug:209.5) ext(1376,) f[] \"Frame 4\" #m6\n```"
+      }
+    ]
+  }
+}

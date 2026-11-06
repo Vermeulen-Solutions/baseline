@@ -5,7 +5,7 @@ import { execFileSync } from 'node:child_process';
 
 export const sources = {
   emdash: { repository: 'emdash-cms/emdash', prefix: 'skills/', manifest: 'upstream-skills.json', skills: ['building-emdash-site', 'creating-plugins', 'emdash-cli'] },
-  site: { repository: 'Vermeulen-Solutions/baseline', prefix: '.agents/skills/', manifest: 'site-skills.json', skills: ['new-site-workflow', 'site-art-direction', 'penpot-site-design', 'openpencil-site-design', 'opendesign-site-design', 'impeccable', 'astro-site-design', 'emdash-site-setup', 'emdash-content-modeling', 'wordpress-to-emdash-content', 'emdash-production-cutover'] },
+  site: { repository: 'Vermeulen-Solutions/baseline', prefix: '.agents/skills/', manifest: 'site-skills.json', skills: ['new-site-workflow', 'site-art-direction', 'penpot-site-design', 'openpencil-site-design', 'opendesign-site-design', 'impeccable', 'astro-site-design', 'emdash-site-setup', 'emdash-content-modeling', 'wordpress-to-emdash-content', 'emdash-production-cutover'], bundledOptionalSkills: ['brilliant-site-design'] },
 };
 export const hash = value => createHash('sha256').update(value).digest('hex');
 const normalized = bytes => {
@@ -102,10 +102,22 @@ export async function review(root, config, candidate, request = fetch) {
 }
 const SKILL_NAME = /^[a-z0-9][a-z0-9-]{0,63}$/;
 // Skills a site added with --add-skill stay managed after a helper update: membership is the
-// helper's list plus valid names already recorded in the site's manifest.
+// helper's historical base plus valid names already recorded in the site's manifest.
+// New optional skills bundled in fresh checkouts are discovered locally only before
+// an ownership receipt exists. Updating the helper must not widen an old receipt.
 export async function memberSkills(root, kind) {
-  const recorded = (await json(path.join(root, '.emdash', sources[kind].manifest)))?.skills;
+  const receiptPath = path.join(root, '.emdash', sources[kind].manifest);
+  const hasReceipt = await exists(receiptPath);
+  const recorded = hasReceipt ? (await json(receiptPath))?.skills : undefined;
   const extra = Array.isArray(recorded) ? recorded.filter(name => typeof name === 'string' && SKILL_NAME.test(name) && !sources[kind].skills.includes(name)) : [];
+  if (!hasReceipt) {
+    await safeParents(root, '.agents/skills');
+    for (const name of sources[kind].bundledOptionalSkills ?? []) {
+      await safeParents(root, `.agents/skills/${name}/SKILL.md`);
+      const localSkill = contained(root, `.agents/skills/${name}/SKILL.md`);
+      if (await exists(localSkill) && (await fs.lstat(localSkill)).isFile()) extra.push(name);
+    }
+  }
   return [...sources[kind].skills, ...new Set(extra)];
 }
 function validMembership(kind, skills) {

@@ -1,0 +1,9 @@
+{
+  "crossCanvas": {
+    "diskChangedByMaster": false,
+    "diskChangedAfterConsumerEdit": true
+  },
+  "preflight": {
+    "canvasInventoryUnchanged": true
+  }
+}

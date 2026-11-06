@@ -1,0 +1,146 @@
+[
+  {
+    "path": "README.md",
+    "lfSha256": {
+      "review": "789d1578ebb6f0363d2da3da32d6a1056454e228e2014434617a0199419dea02",
+      "main": "789d1578ebb6f0363d2da3da32d6a1056454e228e2014434617a0199419dea02"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": "package.json",
+    "lfSha256": {
+      "review": "a93464416fa448f12499fdcdd4967ad5e8497343adf4344a5045c179701a637e",
+      "main": "45f985d94597fe7ef9acd54e534f02a35df958ab5a6b58672b6e9cc7ef3cdad4"
+    },
+    "sameInBoth": false
+  },
+  {
+    "path": ".agents/skills/new-site-workflow/SKILL.md",
+    "lfSha256": {
+      "review": "f27e061242103b916e6fdd15aa732b07a81e7ea7ca28d136109f7b32f28e9a22",
+      "main": "a332ee2e078a21e54fcb6a026e10758b86f3888b54f6c805644813f0a65da59f"
+    },
+    "sameInBoth": false
+  },
+  {
+    "path": ".agents/skills/new-site-workflow/references/discovery-and-content.md",
+    "lfSha256": {
+      "review": "78b15b13e2fea5c160254ba2cff5e73b98b0f662e85dc4b465701dddca2100c9",
+      "main": "78b15b13e2fea5c160254ba2cff5e73b98b0f662e85dc4b465701dddca2100c9"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": ".agents/skills/new-site-workflow/references/copywriting.md",
+    "lfSha256": {
+      "review": "d49ac79c700316e78d65f969b760a310c7a547807b506e60d0c3fb7f2a174bcf",
+      "main": "d49ac79c700316e78d65f969b760a310c7a547807b506e60d0c3fb7f2a174bcf"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": ".agents/skills/site-art-direction/SKILL.md",
+    "lfSha256": {
+      "review": "56022039e5e397f393cd727be153ed61fd3246350b710fa12f5b6f9320af0592",
+      "main": "05f98a11ffbb313440b46321e7e1a108eb478e5046e5aeeac066881cdc49f11a"
+    },
+    "sameInBoth": false
+  },
+  {
+    "path": ".agents/skills/site-art-direction/references/capability-routing.md",
+    "lfSha256": {
+      "review": "fa7ee4d5bd7a9908ae9d8630868db992efa3d674bda6791bcfcc99ff4fb446dd",
+      "main": null
+    },
+    "sameInBoth": false
+  },
+  {
+    "path": ".agents/skills/astro-site-design/SKILL.md",
+    "lfSha256": {
+      "review": "51ea99fbb11371996e078e0c8c143d156d5fc07c8eea3f238d5f7a5ac5fa484f",
+      "main": "8db69ff4044e35360cef5ff3227d3026a001c25dbb3547fad28b4afea52602cd"
+    },
+    "sameInBoth": false
+  },
+  {
+    "path": ".agents/skills/astro-site-design/references/accessibility.md",
+    "lfSha256": {
+      "review": "f9d26c20e734f86c4cc8dce437cf1caa36f847bd5a3971ee1175034a83d7f4e2",
+      "main": "f9d26c20e734f86c4cc8dce437cf1caa36f847bd5a3971ee1175034a83d7f4e2"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": ".agents/skills/astro-site-design/references/rollout-verification.md",
+    "lfSha256": {
+      "review": "511f321540c882187314125f447d04f42b590f113198a075ab9cf42ceb4d0dba",
+      "main": "511f321540c882187314125f447d04f42b590f113198a075ab9cf42ceb4d0dba"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": ".agents/skills/impeccable/SKILL.md",
+    "lfSha256": {
+      "review": "fab04b31f946573b00a8559db1fc070f8ea5825254d491c2b13156e5661a86d7",
+      "main": "fab04b31f946573b00a8559db1fc070f8ea5825254d491c2b13156e5661a86d7"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": ".agents/skills/impeccable/reference/harden.md",
+    "lfSha256": {
+      "review": "4167eb7fc456cdfe09ff0ac2dbcb5e59cee57e590137aab6cc8ec08aafb6d775",
+      "main": "4167eb7fc456cdfe09ff0ac2dbcb5e59cee57e590137aab6cc8ec08aafb6d775"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": ".agents/skills/impeccable/reference/overdrive.md",
+    "lfSha256": {
+      "review": "0a0d4ae6eea720c6d6e1c073fc77192d7c2100f78a44d9a8d262ddf22270cf4d",
+      "main": "0a0d4ae6eea720c6d6e1c073fc77192d7c2100f78a44d9a8d262ddf22270cf4d"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": ".agents/skills/impeccable/reference/craft-floor.md",
+    "lfSha256": {
+      "review": "808a50e0e6c74617a07b0eaf7fd80f58d8e48a13f48e47c658c7534b1724e5c2",
+      "main": "808a50e0e6c74617a07b0eaf7fd80f58d8e48a13f48e47c658c7534b1724e5c2"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": ".agents/skills/impeccable/reference/operate.md",
+    "lfSha256": {
+      "review": "a9d2203acd45ca33a13d5c68b02b23ed512425ac15f0e8438318ed124b43729d",
+      "main": "a9d2203acd45ca33a13d5c68b02b23ed512425ac15f0e8438318ed124b43729d"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": "docs/media-preparation.md",
+    "lfSha256": {
+      "review": "a9362d9730229b38e43d5c2227b0e907030fde57100f2f80fe1de080776c5493",
+      "main": "a9362d9730229b38e43d5c2227b0e907030fde57100f2f80fe1de080776c5493"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": "docs/forms-adoption.md",
+    "lfSha256": {
+      "review": "3313c8bd784a340f87de7194a13b651c158db29660226b6f5afacbae3378b5a4",
+      "main": "3313c8bd784a340f87de7194a13b651c158db29660226b6f5afacbae3378b5a4"
+    },
+    "sameInBoth": true
+  },
+  {
+    "path": "docs/support-boundaries.md",
+    "lfSha256": {
+      "review": "a89e2ea7798d94c21db976e964470f81855b485998536656ba079d7cde190d37",
+      "main": "a89e2ea7798d94c21db976e964470f81855b485998536656ba079d7cde190d37"
+    },
+    "sameInBoth": true
+  }
+]

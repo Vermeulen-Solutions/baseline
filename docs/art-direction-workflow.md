@@ -8,18 +8,22 @@ One of the most persistent frustrations when building websites with AI coding as
 - Low-contrast light gray body text on white backgrounds
 - Monotonous page pacing (repeating the same 3-column card grid four times down the page)
 
-Baseline addresses this with an **Art Direction Gate** (`npm run check:art-direction`) and optional design tools ([designmd.ai](https://designmd.ai/explore), `OpenDesign`, `OpenPencil`, `Penpot`, `Nicelydone`, and `21st.dev MCP`). `AGENTS.md` requires saving a complete Art Direction Record before site-specific visual implementation, then verifying it with `npm run check:art-direction -- --require-record`.
+Baseline addresses this with an **Art Direction Gate** (`npm run check:art-direction`) and optional design tools ([designmd.ai](https://designmd.ai/explore), `Brilliant`, `OpenPencil`, `Penpot`, optional `OpenDesign`, `Nicelydone`, and `21st.dev MCP`). `AGENTS.md` requires saving a complete Art Direction Record before site-specific visual implementation, then verifying it with `npm run check:art-direction -- --require-record`.
 
 ---
 
 ## 1. Choosing a Design Surface (Stage 4)
 
-When entering **Stage 4 (Art Direction)** for a new site or major redesign, choose a design iteration surface that matches the project's workflow:
+When entering **Stage 4 (Art Direction)** for a new site or major redesign, recommend Brilliant when an editable prototyping canvas is requested and no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly present Brilliant, OpenPencil and Penpot as choices. Reuse an established preference and working connection; name the alternatives once when unresolved without imposing a new setup checkpoint. [The shared iteration loop](../.agents/skills/site-art-direction/references/design-iteration.md) owns the choice and review recipe. Every surface retains two or three structurally distinct concepts, side-by-side desktop/mobile comparison, direction selection and a representative Astro proof.
 
-- **OpenDesign (Local HTML/CSS canvas):** Uses the `opendesign-site-design` skill and [OpenDesign onboarding](opendesign-onboarding.md). Bundles 154 offline `DESIGN.md` systems, 188 layout examples, `od lint` validation, and native export to Baseline Astro.
+- **HTML/browser (Default without a canvas request):** Agent-authored concept files under `audit/visual-concepts/<round>/`, with one `index.html` comparing A/B/C directions and full-size links. Render each at 390/768/1440; thumbnails do not replace mobile reflow or full-page inspection. `design:watch -- --dir <round>` opens changed HTML files; it is not live reload.
+- **Brilliant (Recommended editable prototyping canvas):** Uses [brilliant-site-design](../.agents/skills/brilliant-site-design/SKILL.md) and [Brilliant onboarding](brilliant-onboarding.md). Native trials exercised shared components, variants, slots, composite styles, modes and longer-copy edits; use those native relationships for concept work in one named project. Check overrides, cross-canvas persistence and post-undo state. Fixed-width/semantic export limits require translation and native Astro acceptance; no comparative token/speed advantage is established.
+- **OpenDesign (Optional HTML/CSS canvas):** Uses the `opendesign-site-design` skill and [OpenDesign onboarding](opendesign-onboarding.md). Bundles 154 offline `DESIGN.md` systems, 188 layout examples, `od lint` validation, and native export to Baseline Astro.
 - **OpenPencil (Local desktop canvas):** Uses the `openpencil-site-design` skill and [OpenPencil onboarding](openpencil-onboarding.md). Iterates vector shapes, component nodes, and variable bindings in local `.fig` files.
 - **Penpot (Shared cloud canvas):** Uses the `penpot-site-design` skill and [Penpot onboarding](penpot-onboarding.md). Provides a collaborative web workspace ideal for client reviews.
-- **Direct Astro (Browser-native):** Explore isolated concepts under `audit/visual-concepts/` with browser previews. After saving and checking the Art Direction Record, translate the selected concept into `src/styles/global.css`, `/_styleguide` and production routes. Requires no external tools or accounts.
+- **Direct Astro (Browser-native proof):** Use an early bounded route spike when browser behavior could invalidate a concept. After saving and checking the Art Direction Record, translate the selected concept into `src/styles/global.css`, `/_styleguide` and production routes. Requires no external tools or accounts.
+
+For motion, illustration, charts, editable vectors, 3D, video or another requested capability, use the shared [capability routing](../.agents/skills/site-art-direction/references/capability-routing.md). It keeps the chosen surface, combines installed craft guidance with the correct runtime adapter, inspects targeted catalogue skills only when needed, and requires an actual representative test. Motion can use Impeccable guidance on every surface; native film export and interactive browser behavior have separate acceptance checks.
 
 Baseline supports two execution models across all surfaces:
 - **Single-Agent Model:** The same agent iterates concepts on the canvas and translates the approved direction into Astro.

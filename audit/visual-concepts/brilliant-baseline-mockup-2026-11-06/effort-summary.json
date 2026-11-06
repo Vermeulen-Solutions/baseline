@@ -1,0 +1,17 @@
+{
+  "tools": 57,
+  "protocol": 1,
+  "requestBytes": 1038613,
+  "responseBytes": 785863,
+  "byTool": {
+    "init": 1,
+    "get_knowledge": 5,
+    "convert_html": 2,
+    "edit": 12,
+    "export": 32,
+    "read": 5
+  },
+  "elapsedMinutes": 31.0468,
+  "modelTokens": "unavailable",
+  "limits": "HTTP byte totals exclude textFile payloads and model-side code/images/context. Wall time includes local extraction, script work, visual review and report preparation; not a matched tool benchmark."
+}

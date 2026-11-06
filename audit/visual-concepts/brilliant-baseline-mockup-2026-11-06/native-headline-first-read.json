@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```bl\nfile(\"Native reconstruction\")\n24ecc0ab60567495 t(\"A baseline,\\nnot a blank page.\",Segoe UI Variable:$font.family.sans,109.44:$sample.type.v109_44,sb:$font.weight.w600,align(l),lh(0.9:$sample.leading.v0_9),ls(-538.992px:$sample.tracking.vminus4_925)) p(0,0) s(676.66,hug:197) f[(82102ef0c04a8a74,tok(color.text,#EAEBEC))] \"h1 copy\" #n1440-25-text\n  spans[(12,29,i,linear(99.9974,$color.action,$color.headlineEnd))]\n```"
+    }
+  ]
+}

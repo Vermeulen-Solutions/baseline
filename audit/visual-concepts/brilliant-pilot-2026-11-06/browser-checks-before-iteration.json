@@ -1,0 +1,122 @@
+[
+  {
+    "id": "a1440",
+    "width": 390,
+    "overflow": true,
+    "scrollWidth": 1440,
+    "errors": [],
+    "requiredText": true
+  },
+  {
+    "id": "a1440",
+    "width": 768,
+    "overflow": true,
+    "scrollWidth": 1440,
+    "errors": [],
+    "requiredText": true
+  },
+  {
+    "id": "a1440",
+    "width": 1440,
+    "overflow": false,
+    "scrollWidth": 1440,
+    "errors": [],
+    "requiredText": true,
+    "comparison": {
+      "width": 1440,
+      "height": 947,
+      "meanMaxChannelDelta": 3.55135442332512,
+      "pixelsOver16": 0.03749926669013258
+    }
+  },
+  {
+    "id": "a390",
+    "width": 390,
+    "overflow": false,
+    "scrollWidth": 390,
+    "errors": [],
+    "requiredText": true,
+    "comparison": {
+      "width": 390,
+      "height": 1400,
+      "meanMaxChannelDelta": 6.6337728937728935,
+      "pixelsOver16": 0.05946886446886447
+    }
+  },
+  {
+    "id": "a390",
+    "width": 768,
+    "overflow": false,
+    "scrollWidth": 768,
+    "errors": [],
+    "requiredText": true
+  },
+  {
+    "id": "a390",
+    "width": 1440,
+    "overflow": false,
+    "scrollWidth": 1440,
+    "errors": [],
+    "requiredText": true
+  },
+  {
+    "id": "b1440",
+    "width": 390,
+    "overflow": true,
+    "scrollWidth": 1440,
+    "errors": [],
+    "requiredText": true
+  },
+  {
+    "id": "b1440",
+    "width": 768,
+    "overflow": true,
+    "scrollWidth": 1440,
+    "errors": [],
+    "requiredText": true
+  },
+  {
+    "id": "b1440",
+    "width": 1440,
+    "overflow": false,
+    "scrollWidth": 1440,
+    "errors": [],
+    "requiredText": true,
+    "comparison": {
+      "width": 1440,
+      "height": 900,
+      "meanMaxChannelDelta": 3.177059413580247,
+      "pixelsOver16": 0.03627469135802469
+    }
+  },
+  {
+    "id": "b390",
+    "width": 390,
+    "overflow": false,
+    "scrollWidth": 390,
+    "errors": [],
+    "requiredText": true,
+    "comparison": {
+      "width": 390,
+      "height": 1400,
+      "meanMaxChannelDelta": 6.218959706959707,
+      "pixelsOver16": 0.05062637362637363
+    }
+  },
+  {
+    "id": "b390",
+    "width": 768,
+    "overflow": false,
+    "scrollWidth": 768,
+    "errors": [],
+    "requiredText": true
+  },
+  {
+    "id": "b390",
+    "width": 1440,
+    "overflow": false,
+    "scrollWidth": 1440,
+    "errors": [],
+    "requiredText": true
+  }
+]

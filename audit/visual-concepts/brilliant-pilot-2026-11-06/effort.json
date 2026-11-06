@@ -1,0 +1,446 @@
+{
+  "startedAt": "2026-11-06T10:46:35.282Z",
+  "elapsedMs": 1246736,
+  "modelTokens": "unavailable",
+  "receipts": [
+    {
+      "id": 1,
+      "method": "initialize",
+      "elapsedMs": 18,
+      "requestBytes": 169,
+      "responseBytes": 2304,
+      "isError": false
+    },
+    {
+      "id": 2,
+      "method": "tools/list",
+      "elapsedMs": 4,
+      "requestBytes": 58,
+      "responseBytes": 56650,
+      "isError": false
+    },
+    {
+      "id": 3,
+      "method": "tools/call",
+      "tool": "init",
+      "elapsedMs": 240,
+      "requestBytes": 220,
+      "responseBytes": 27374,
+      "isError": false
+    },
+    {
+      "id": 4,
+      "method": "tools/call",
+      "tool": "get_knowledge",
+      "elapsedMs": 43,
+      "requestBytes": 231,
+      "responseBytes": 21091,
+      "isError": false
+    },
+    {
+      "id": 5,
+      "method": "tools/call",
+      "tool": "get_knowledge",
+      "elapsedMs": 33,
+      "requestBytes": 237,
+      "responseBytes": 12399,
+      "isError": false
+    },
+    {
+      "id": 6,
+      "method": "tools/call",
+      "tool": "get_knowledge",
+      "elapsedMs": 10,
+      "requestBytes": 187,
+      "responseBytes": 11623,
+      "isError": false
+    },
+    {
+      "id": 7,
+      "method": "tools/call",
+      "tool": "edit",
+      "elapsedMs": 3492,
+      "requestBytes": 1268,
+      "responseBytes": 24438,
+      "isError": false
+    },
+    {
+      "id": 8,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 8,
+      "requestBytes": 377,
+      "responseBytes": 589,
+      "isError": true
+    },
+    {
+      "id": 9,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 8,
+      "requestBytes": 383,
+      "responseBytes": 592,
+      "isError": true
+    },
+    {
+      "id": 10,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 8,
+      "requestBytes": 386,
+      "responseBytes": 594,
+      "isError": true
+    },
+    {
+      "id": 11,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 6,
+      "requestBytes": 379,
+      "responseBytes": 590,
+      "isError": true
+    },
+    {
+      "id": 12,
+      "method": "tools/call",
+      "tool": "execute_commands",
+      "elapsedMs": 19,
+      "requestBytes": 295,
+      "responseBytes": 504,
+      "isError": false
+    },
+    {
+      "id": 13,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 138,
+      "requestBytes": 394,
+      "responseBytes": 334,
+      "isError": false
+    },
+    {
+      "id": 14,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 17,
+      "requestBytes": 400,
+      "responseBytes": 348,
+      "isError": false
+    },
+    {
+      "id": 15,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 14,
+      "requestBytes": 402,
+      "responseBytes": 345,
+      "isError": false
+    },
+    {
+      "id": 16,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 18,
+      "requestBytes": 395,
+      "responseBytes": 341,
+      "isError": false
+    },
+    {
+      "id": 17,
+      "method": "tools/call",
+      "tool": "edit",
+      "elapsedMs": 312,
+      "requestBytes": 16154,
+      "responseBytes": 13598,
+      "isError": false
+    },
+    {
+      "id": 18,
+      "method": "tools/call",
+      "tool": "read",
+      "elapsedMs": 6,
+      "requestBytes": 270,
+      "responseBytes": 2392,
+      "isError": false
+    },
+    {
+      "id": 19,
+      "method": "tools/call",
+      "tool": "edit",
+      "elapsedMs": 68,
+      "requestBytes": 595,
+      "responseBytes": 1766,
+      "isError": false
+    },
+    {
+      "id": 20,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 98,
+      "requestBytes": 394,
+      "responseBytes": 433,
+      "isError": false
+    },
+    {
+      "id": 21,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 16,
+      "requestBytes": 399,
+      "responseBytes": 340,
+      "isError": false
+    },
+    {
+      "id": 22,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 47,
+      "requestBytes": 392,
+      "responseBytes": 429,
+      "isError": false
+    },
+    {
+      "id": 23,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 15,
+      "requestBytes": 397,
+      "responseBytes": 340,
+      "isError": false
+    },
+    {
+      "id": 24,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 81,
+      "requestBytes": 394,
+      "responseBytes": 433,
+      "isError": false
+    },
+    {
+      "id": 25,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 17,
+      "requestBytes": 399,
+      "responseBytes": 341,
+      "isError": false
+    },
+    {
+      "id": 26,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 49,
+      "requestBytes": 392,
+      "responseBytes": 429,
+      "isError": false
+    },
+    {
+      "id": 27,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 13,
+      "requestBytes": 397,
+      "responseBytes": 339,
+      "isError": false
+    },
+    {
+      "id": 28,
+      "method": "tools/call",
+      "tool": "list_capture_targets",
+      "elapsedMs": 5,
+      "requestBytes": 103,
+      "responseBytes": 1429,
+      "isError": false
+    },
+    {
+      "id": 29,
+      "method": "tools/call",
+      "tool": "edit",
+      "elapsedMs": 29,
+      "requestBytes": 500,
+      "responseBytes": 1462,
+      "isError": false
+    },
+    {
+      "id": 30,
+      "method": "tools/call",
+      "tool": "execute_commands",
+      "elapsedMs": 96,
+      "requestBytes": 318,
+      "responseBytes": 470,
+      "isError": false
+    },
+    {
+      "id": 31,
+      "method": "tools/call",
+      "tool": "edit",
+      "elapsedMs": 35,
+      "requestBytes": 547,
+      "responseBytes": 1780,
+      "isError": false
+    },
+    {
+      "id": 32,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 94,
+      "requestBytes": 394,
+      "responseBytes": 433,
+      "isError": false
+    },
+    {
+      "id": 33,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 14,
+      "requestBytes": 399,
+      "responseBytes": 340,
+      "isError": false
+    },
+    {
+      "id": 34,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 70,
+      "requestBytes": 392,
+      "responseBytes": 429,
+      "isError": false
+    },
+    {
+      "id": 35,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 16,
+      "requestBytes": 397,
+      "responseBytes": 340,
+      "isError": false
+    },
+    {
+      "id": 36,
+      "method": "tools/call",
+      "tool": "read",
+      "elapsedMs": 3,
+      "requestBytes": 289,
+      "responseBytes": 715,
+      "isError": false
+    },
+    {
+      "id": 37,
+      "method": "tools/call",
+      "tool": "edit",
+      "elapsedMs": 24,
+      "requestBytes": 385,
+      "responseBytes": 1171,
+      "isError": false
+    },
+    {
+      "id": 38,
+      "method": "tools/call",
+      "tool": "read",
+      "elapsedMs": 6,
+      "requestBytes": 282,
+      "responseBytes": 540,
+      "isError": false
+    },
+    {
+      "id": 39,
+      "method": "tools/call",
+      "tool": "execute_commands",
+      "elapsedMs": 17,
+      "requestBytes": 283,
+      "responseBytes": 300,
+      "isError": false
+    },
+    {
+      "id": 40,
+      "method": "tools/call",
+      "tool": "read",
+      "elapsedMs": 3,
+      "requestBytes": 282,
+      "responseBytes": 537,
+      "isError": false
+    },
+    {
+      "id": 41,
+      "method": "tools/call",
+      "tool": "execute_commands",
+      "elapsedMs": 22,
+      "requestBytes": 325,
+      "responseBytes": 620,
+      "isError": false
+    },
+    {
+      "id": 42,
+      "method": "tools/call",
+      "tool": "read",
+      "elapsedMs": 6,
+      "requestBytes": 295,
+      "responseBytes": 727,
+      "isError": false
+    },
+    {
+      "id": 43,
+      "method": "tools/call",
+      "tool": "read",
+      "elapsedMs": 4,
+      "requestBytes": 271,
+      "responseBytes": 397,
+      "isError": false
+    },
+    {
+      "id": 44,
+      "method": "tools/call",
+      "tool": "read",
+      "elapsedMs": 5,
+      "requestBytes": 270,
+      "responseBytes": 350,
+      "isError": false
+    },
+    {
+      "id": 45,
+      "method": "tools/call",
+      "tool": "read",
+      "elapsedMs": 6,
+      "requestBytes": 299,
+      "responseBytes": 712,
+      "isError": false
+    },
+    {
+      "id": 46,
+      "method": "tools/call",
+      "tool": "edit",
+      "elapsedMs": 24,
+      "requestBytes": 396,
+      "responseBytes": 1229,
+      "isError": false
+    },
+    {
+      "id": 47,
+      "method": "tools/call",
+      "tool": "read",
+      "elapsedMs": 19,
+      "requestBytes": 299,
+      "responseBytes": 711,
+      "isError": false
+    },
+    {
+      "id": 48,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 78,
+      "requestBytes": 411,
+      "responseBytes": 473,
+      "isError": false
+    },
+    {
+      "id": 49,
+      "method": "tools/call",
+      "tool": "export",
+      "elapsedMs": 14,
+      "requestBytes": 406,
+      "responseBytes": 354,
+      "isError": false
+    }
+  ]
+}

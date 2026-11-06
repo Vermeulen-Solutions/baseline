@@ -1,0 +1,4 @@
+interface:
+  display_name: "Brilliant Site Design"
+  short_description: "Iterate editable canvas concepts with an Astro proof"
+  default_prompt: "Use $brilliant-site-design to iterate the selected Brilliant project, preserve Baseline token intent, verify the actual canvas and exports, and implement the reviewed direction in Astro."

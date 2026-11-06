@@ -1,0 +1,114 @@
+[
+  {
+    "id": "a1440",
+    "format": "png",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/a1440.png\nelement(s): 43a7c1e2b9685118 | 1440x947 | 119703 bytes | sha256:0ad021c9ce9d6dc6827cc4730c881419546d905b24e8a8aa315e864f98738af6"
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/a1440.png\">a1440</media>"
+        }
+      ]
+    }
+  },
+  {
+    "id": "a1440",
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/a1440.html\nelement(s): 43a7c1e2b9685118 | 9854 bytes | sha256:0b415e70b42e4533b0735e11175dc1e4f76ea98cf3ef3166fce1e6d17139b56f"
+        }
+      ]
+    }
+  },
+  {
+    "id": "a390",
+    "format": "png",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/a390.png\nelement(s): 6496785f0966d412 | 390x1400 | 72455 bytes | sha256:8b26b9e5bc6823594e3ae3a7f40b540c08296657eced48eab4e3d5e6f5dba7e1"
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/a390.png\">a390</media>"
+        }
+      ]
+    }
+  },
+  {
+    "id": "a390",
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/a390.html\nelement(s): 6496785f0966d412 | 10009 bytes | sha256:a907ab61b2c8265aa2b9217fb2c0100f3a708111606d14098d0dd518ea2ebd6b"
+        }
+      ]
+    }
+  },
+  {
+    "id": "b1440",
+    "format": "png",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/b1440.png\nelement(s): ce000e7f5a97eb40 | 1440x900 | 119016 bytes | sha256:c41a1f998b5fa3d744d3beb24f9ffe3ca690eb738c93dca231ae32f0561760f4"
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/b1440.png\">b1440</media>"
+        }
+      ]
+    }
+  },
+  {
+    "id": "b1440",
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/b1440.html\nelement(s): ce000e7f5a97eb40 | 10872 bytes | sha256:e7c44b1d2d54537d96656479736116656e086898a48c06b637b29c229d120a35"
+        }
+      ]
+    }
+  },
+  {
+    "id": "b390",
+    "format": "png",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/b390.png\nelement(s): a85a8a5a8b2bcc74 | 390x1400 | 63905 bytes | sha256:86a612b0f009b4c466c37ffde7d59b0af0c16219cde7a9d8af46cfa3ee9cf6d8"
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/b390.png\">b390</media>"
+        }
+      ]
+    }
+  },
+  {
+    "id": "b390",
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/b390.html\nelement(s): a85a8a5a8b2bcc74 | 9580 bytes | sha256:1d830d46df41dd8865b7c190154950bbfb0d34b8068dae8c0a39a345bda102a9"
+        }
+      ]
+    }
+  }
+]

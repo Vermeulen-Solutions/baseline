@@ -1,0 +1,813 @@
+```bl
+file("Native reconstruction.bl")
+// source reconstruction 1440
+fr s(1440,4459) f[] clip "viewport" #n1440-1
+  fr p(20,20) s(1400,4419.391) f[($color.surface)] rd($sample.radius.v40,$sample.radius.v40,$sample.radius.v40,$sample.radius.v40) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] clip shadow($color.black,o($sample.opacity.v0_9),y(40),blur(120),sp(-40)) "shell" #n1440-2
+    svg(<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="4419.391" viewBox="0 0 1400 4419.391"><path d="M0 0V4419.391M60 0V4419.391M120 0V4419.391M180 0V4419.391M240 0V4419.391M300 0V4419.391M360 0V4419.391M420 0V4419.391M480 0V4419.391M540 0V4419.391M600 0V4419.391M660 0V4419.391M720 0V4419.391M780 0V4419.391M840 0V4419.391M900 0V4419.391M960 0V4419.391M1020 0V4419.391M1080 0V4419.391M1140 0V4419.391M1200 0V4419.391M1260 0V4419.391M1320 0V4419.391M1380 0V4419.391M0 0H1400M0 60H1400M0 120H1400M0 180H1400M0 240H1400M0 300H1400M0 360H1400M0 420H1400M0 480H1400M0 540H1400M0 600H1400M0 660H1400M0 720H1400M0 780H1400M0 840H1400M0 900H1400M0 960H1400M0 1020H1400M0 1080H1400M0 1140H1400M0 1200H1400M0 1260H1400M0 1320H1400M0 1380H1400M0 1440H1400M0 1500H1400M0 1560H1400M0 1620H1400M0 1680H1400M0 1740H1400M0 1800H1400M0 1860H1400M0 1920H1400M0 1980H1400M0 2040H1400M0 2100H1400M0 2160H1400M0 2220H1400M0 2280H1400M0 2340H1400M0 2400H1400M0 2460H1400M0 2520H1400M0 2580H1400M0 2640H1400M0 2700H1400M0 2760H1400M0 2820H1400M0 2880H1400M0 2940H1400M0 3000H1400M0 3060H1400M0 3120H1400M0 3180H1400M0 3240H1400M0 3300H1400M0 3360H1400M0 3420H1400M0 3480H1400M0 3540H1400M0 3600H1400M0 3660H1400M0 3720H1400M0 3780H1400M0 3840H1400M0 3900H1400M0 3960H1400M0 4020H1400M0 4080H1400M0 4140H1400M0 4200H1400M0 4260H1400M0 4320H1400M0 4380H1400" fill="none" stroke="white" stroke-opacity="0.035" stroke-width="1"/></svg>) p(0,0) s(1400,4419.391) "60px source grid" #n1440-2-grid
+    fr p(855,-351) s(736,736) f[(radial(solid($color.action,o($sample.opacity.v0_14)),stop(solid($color.action,o($sample.opacity.v0)),0.62)))] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) eblur(120) "glow glow--a" #n1440-3
+    fr p(-415,545) s(736,736) f[(radial(solid($color.secondary,o($sample.opacity.v0_12)),stop(solid($color.secondary,o($sample.opacity.v0)),0.62)))] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) eblur(120) "glow glow--b" #n1440-4
+    fr p(1,1) s(1398,94.828) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v1,$sample.stroke.v0),pos(i))] "masthead" #n1440-5
+      fr p(32,28.906) s(107.953,36) f[] "brand" #n1440-6
+        fr p(0,0) s(36,36) f[($color.action)] rd($sample.radius.v12,$sample.radius.v12,$sample.radius.v12,$sample.radius.v12) "brand__mark" #n1440-7
+          t("B",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.v0),align(c),valign(c)) p(0,0) s(36,36) f[($color.on-action)] "brand__mark copy" #n1440-7-text
+        fr p(47.188,4.563) s(60.766,26.875) f[] "brand__name" #n1440-8
+          t("Baseline",$font.family.sans,$sample.type.v16_8,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_03)) p(0,0) s(hug,hug) f[($color.text)] "brand__name copy" #n1440-8-text
+      fr p(425.625,21.594) s(335.938,50.641) f[(solid($color.white,o($sample.opacity.v0_051))),(blur(16))] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "nav" #n1440-9
+        fr p(5.797,5.797) s(77.016,39.047) f[] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) "a" #n1440-10
+          t("Profiles",$font.family.sans,$sample.type.v14_4,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(15.2,8) s(hug,hug) f[($color.muted)] "a copy" #n1440-10-text
+            spans[("Profiles",link("#profiles"))]
+        fr p(86.813,5.797) s(75.5,39.047) f[] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) "a" #n1440-11
+          t("System",$font.family.sans,$sample.type.v14_4,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(15.2,8) s(hug,hug) f[($color.muted)] "a copy" #n1440-11-text
+            spans[("System",link("#bento"))]
+        fr p(166.313,5.797) s(90.703,39.047) f[] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) "a" #n1440-12
+          t("Workflow",$font.family.sans,$sample.type.v14_4,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(15.2,8) s(hug,hug) f[($color.muted)] "a copy" #n1440-12-text
+            spans[("Workflow",link("#method"))]
+        fr p(261.016,5.797) s(69.125,39.047) f[] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) "a" #n1440-13
+          t("Scope",$font.family.sans,$sample.type.v14_4,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(15.2,8) s(hug,hug) f[($color.muted)] "a copy" #n1440-13-text
+            spans[("Scope",link("#scope"))]
+      fr p(1047.219,39.219) s(199.359,15.391) f[] "status mono" #n1440-14
+        fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n1440-15
+        fr p(14,1) s(185.359,13) f[] "status mono text" #n1440-16
+          t("Astro 7.4 · EmDash 1.4",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "status mono text copy" #n1440-16-text
+      fr p(1262.578,25.438) s(103.422,42.938) f[($color.action)] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.page,o($sample.opacity.v0)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] shadow($color.action,o($sample.opacity.v0_28),blur(34)) "button button--action button--small header-cta" #n1440-17
+        t("Start a site",$font.family.sans,$sample.type.v13_6,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(17.8,10.6) s(hug,hug) f[($color.on-action)] "button button--action button--small header-cta copy" #n1440-17-text
+          spans[("Start a site",link("#cta"))]
+    fr p(1,95.828) s(1398,4090.828) f[] "main" #n1440-18
+      fr p(0,0) s(1398,811.281) f[] "hero" #n1440-19
+        fr p(91,100.797) s(1216,624.094) f[] "wrap hero__grid" #n1440-20
+          fr p(0,0) s(676.656,624.094) f[] "div" #n1440-21
+            fr p(0,9.313) s(208.594,15.391) f[] "eyebrow mono" #n1440-22
+              fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n1440-23
+              fr p(14.797,1) s(193.797,13) f[] "eyebrow mono text" #n1440-24
+                t("Agent-first web starter",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n1440-24-text
+            fr p(0,44.781) s(676.656,295.453) f[] "h1" #n1440-25
+              t("A baseline,\nnot a blank page.",$font.family.sans,$sample.type.v109_44,$font.weight.w600,lh($sample.leading.v0_9),ls($sample.tracking.vminus0_045)) p(0,0) s(676.656,hug) f[($color.text)] "h1 copy" #n1440-25-text
+                spans[("not a blank page.",0,i,linear(100,stop($color.action,0),stop($color.headlineEnd,0.72)))]
+            fr p(0,364.234) s(387.078,104.375) f[] "hero__deck" #n1440-26
+              t("Astro, Tailwind v4 and optional EmDash content editing — with design tokens, art-direction gates and rendered checks already wired before the first section is built.",$font.family.sans,$sample.type.v16_32,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(387.078,hug) f[($color.muted)] "hero__deck copy" #n1440-26-text
+            fr p(0,500.609) s(676.656,53.5) f[] "hero__actions" #n1440-27
+              fr p(0,0) s(122.594,53.5) f[($color.action)] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.page,o($sample.opacity.v0)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] shadow($color.action,o($sample.opacity.v0_28),blur(34)) "button button--action" #n1440-28
+                t("Start a site",$font.family.sans,$sample.type.v15_2,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(23.4,14.6) s(hug,hug) f[($color.on-action)] "button button--action copy" #n1440-28-text
+                  spans[("Start a site",link("#cta"))]
+              fr p(134.594,0) s(181.547,53.5) f[(solid($color.white,o($sample.opacity.v0_02)))] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "button button--ghost" #n1440-29
+                t("Read the workflow",$font.family.sans,$sample.type.v15_2,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(23.4,14.6) s(hug,hug) f[($color.text)] "button button--ghost copy" #n1440-29-text
+                  spans[("Read the workflow",link("#method"))]
+            fr p(0,590.109) s(676.656,33.984) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "hero__meta mono" #n1440-30
+              fr p(0,18.594) s(101.109,15.391) f[] "li" #n1440-31
+                t("MIT licensed",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "li copy" #n1440-31-text
+                  spans[("MIT",0,w($font.weight.w600),$color.text)]
+              fr p(123.5,18.594) s(84.266,15.391) f[] "li" #n1440-32
+                t("3 profiles",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "li copy" #n1440-32-text
+                  spans[("3",0,w($font.weight.w600),$color.text)]
+              fr p(230.156,18.594) s(117.969,15.391) f[] "li" #n1440-33
+                t("Static or Node",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "li copy" #n1440-33-text
+                  spans[("Static",0,w($font.weight.w600),$color.text)]
+              fr p(370.516,18.594) s(185.375,15.391) f[] "li" #n1440-34
+                t("Checked before handoff",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "li copy" #n1440-34-text
+                  spans[("Checked",0,w($font.weight.w600),$color.text)]
+          fr p(732.656,0) s(483.328,386.531) f[] "specimen" #n1440-35
+            fr p(0,12) s(483.328,374.531) f[(solid($color.white,o($sample.opacity.v0_031))),(radial(cx(80),cy(0),rx(120),ry(120),solid($color.action,o($sample.opacity.v0_1)),stop(solid($color.action,o($sample.opacity.v0)),0.55))),(blur(16))] rd($sample.radius.v40,$sample.radius.v40,$sample.radius.v40,$sample.radius.v40) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "specimen__shell" #n1440-36
+              fr p(24.031,24.031) s(435.266,32.391) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v1,$sample.stroke.v0),pos(i))] "specimen__bar mono" #n1440-37
+                fr p(0,4.188) s(32.188,7) f[] "specimen__dots" #n1440-38
+                  fr p(0,0) s(7,7) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "i" #n1440-39
+                  fr p(12.594,0) s(7,7) f[(solid($color.white,o($sample.opacity.v0_161)))] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "i" #n1440-40
+                  fr p(25.188,0) s(7,7) f[(solid($color.white,o($sample.opacity.v0_161)))] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "i" #n1440-41
+                fr p(40.188,0) s(160.094,15.391) f[] "span" #n1440-42
+                  t("client-site / brief",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n1440-42-text
+              fr p(24.031,72.422) s(435.266,278.078) f[] "specimen__row" #n1440-43
+                fr p(0,0) s(435.266,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip float" #n1440-44
+                  fr p(16.188,13.797) s(115.375,18.422) f[] "span" #n1440-45
+                    t("brief & evidence",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n1440-45-text
+                  fr p(375.813,13.797) s(43.266,18.422) f[] "b" #n1440-46
+                    t("locked",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.text)] "b copy" #n1440-46-text
+                fr p(0,58.016) s(435.266,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip float float--delay" #n1440-47
+                  fr p(16.188,13.797) s(144.219,18.422) f[] "span" #n1440-48
+                    t("art direction record",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n1440-48-text
+                  fr p(383.016,13.797) s(36.063,18.422) f[] "b" #n1440-49
+                    t("saved",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.text)] "b copy" #n1440-49-text
+                fr p(0,116.031) s(435.266,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip chip--pass" #n1440-50
+                  fr p(16.188,13.797) s(137.016,18.422) f[] "span" #n1440-51
+                    t("npm run verify:fast",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n1440-51-text
+                  fr p(368.594,13.797) s(50.484,18.422) f[] "b" #n1440-52
+                    t("passing",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.action)] "b copy" #n1440-52-text
+                fr p(0,174.047) s(435.266,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip" #n1440-53
+                  fr p(16.188,13.797) s(129.797,18.422) f[] "span" #n1440-54
+                    t("build + audit:html",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n1440-54-text
+                  fr p(383.016,13.797) s(36.063,18.422) f[] "b" #n1440-55
+                    t("clean",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.text)] "b copy" #n1440-55-text
+                fr p(0,232.063) s(435.266,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip" #n1440-56
+                  fr p(16.188,13.797) s(36.063,18.422) f[] "span" #n1440-57
+                    t("board",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n1440-57-text
+                  fr p(346.969,13.797) s(72.109,18.422) f[] "b" #n1440-58
+                    t("2 concepts",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.text)] "b copy" #n1440-58-text
+              fr p(330.797,-11.797) s(133.938,29.672) f[($color.action)] rd($sample.radius.v8_8,$sample.radius.v8_8,$sample.radius.v8_8,$sample.radius.v8_8) shadow($color.action,o($sample.opacity.v0_55),y(18),blur(40),sp(-12)) "cursor-tag" #n1440-59
+                t("agent · editing",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_12),case(upper)) p(11.2,6.4) s(111.537,hug) f[($color.on-action)] "cursor-tag copy" #n1440-59-text
+                  spans[("agent",0,w($font.weight.w700))]
+      fr p(0,811.281) s(1398,469.078) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "profiles" #n1440-62
+        fr p(91,87.391) s(1216,295.297) f[] "wrap" #n1440-63
+          fr p(0,0) s(1216,123.938) f[] "section__head" #n1440-64
+            fr p(0,0) s(600.797,123.938) f[] "div" #n1440-65
+              fr p(0,9.313) s(124.328,15.391) f[] "eyebrow mono" #n1440-66
+                fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n1440-67
+                fr p(14.797,1) s(109.531,13) f[] "eyebrow mono text" #n1440-68
+                  t("Content setup",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n1440-68-text
+              fr p(0,27.188) s(600.797,96.75) f[] "h2" #n1440-69
+                t("One foundation.\nThree ways to edit.",$font.family.sans,$sample.type.v46_08,$font.weight.w600,lh($sample.leading.v1_05),ls($sample.tracking.vminus0_035)) p(0,0) s(600.797,hug) f[($color.text)] "h2 copy" #n1440-69-text
+            fr p(615.188,69.563) s(600.813,54.375) f[] "section__lead" #n1440-70
+              t("The design tokens, components and checks are identical across profiles. What changes is where the words live and who can change them.",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(600.813,hug) f[($color.muted)] "section__lead copy" #n1440-70-text
+          fr p(0,167.125) s(1216,128.172) f[] "profiles" #n1440-71
+            fr p(0,0) s(376.531,128.172) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "profile" #n1440-72
+              fr p(0,18.594) s(376.531,15.391) f[] "mono profile__tag" #n1440-73
+                t("01 · static",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.action)] "mono profile__tag copy" #n1440-73-text
+              fr p(0,43.578) s(376.531,26.875) f[] "h3" #n1440-74
+                t("Typed Markdown",$font.family.sans,$sample.type.v16_8,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n1440-74-text
+              fr p(0,80.047) s(376.531,48.125) f[] "p" #n1440-75
+                t("Content stays in the repository as files your assistant can read and diff. Deploy is a folder of HTML.",$font.family.sans,$sample.type.v15_04,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(376.531,hug) f[($color.muted)] "p copy" #n1440-75-text
+            fr p(419.719,0) s(376.547,128.172) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "profile" #n1440-76
+              fr p(0,18.594) s(376.547,15.391) f[] "mono profile__tag" #n1440-77
+                t("02 · static-sveltia",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.action)] "mono profile__tag copy" #n1440-77-text
+              fr p(0,43.578) s(376.547,26.875) f[] "h3" #n1440-78
+                t("Markdown, edited visually",$font.family.sans,$sample.type.v16_8,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n1440-78-text
+              fr p(0,80.047) s(376.547,48.125) f[] "p" #n1440-79
+                t("Sveltia edits the same Git-owned files through a web form. No database, no content drift.",$font.family.sans,$sample.type.v15_04,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(376.547,hug) f[($color.muted)] "p copy" #n1440-79-text
+            fr p(839.453,0) s(376.531,128.172) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "profile" #n1440-80
+              fr p(0,18.594) s(376.531,15.391) f[] "mono profile__tag" #n1440-81
+                t("03 · emdash",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.action)] "mono profile__tag copy" #n1440-81-text
+              fr p(0,43.578) s(376.531,26.875) f[] "h3" #n1440-82
+                t("Relational CMS",$font.family.sans,$sample.type.v16_8,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n1440-82-text
+              fr p(0,80.047) s(376.531,48.125) f[] "p" #n1440-83
+                t("Portable Text, live canvas and MCP tools on SQLite or Cloudflare D1 and R2. Editorial content is never a seed.",$font.family.sans,$sample.type.v15_04,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(376.531,hug) f[($color.muted)] "p copy" #n1440-83-text
+      fr p(0,1280.359) s(1398,943.078) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "bento" #n1440-84
+        fr p(91,87.391) s(1216,769.297) f[] "wrap" #n1440-85
+          fr p(0,0) s(1216,123.938) f[] "section__head" #n1440-86
+            fr p(0,0) s(600.797,123.938) f[] "div" #n1440-87
+              fr p(0,9.313) s(99.063,15.391) f[] "eyebrow mono" #n1440-88
+                fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n1440-89
+                fr p(14.797,1) s(84.266,13) f[] "eyebrow mono text" #n1440-90
+                  t("The system",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n1440-90-text
+              fr p(0,27.188) s(600.797,96.75) f[] "h2" #n1440-91
+                t("What is already decided for you.",$font.family.sans,$sample.type.v46_08,$font.weight.w600,lh($sample.leading.v1_05),ls($sample.tracking.vminus0_035)) p(0,0) s(600.797,hug) f[($color.text)] "h2 copy" #n1440-91-text
+            fr p(615.188,69.563) s(600.813,54.375) f[] "section__lead" #n1440-92
+              t("Not a theme. A small set of contracts — surfaces, one accent, a type scale, a spacing hierarchy — plus the checks that keep them true as the site grows.",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(600.813,hug) f[($color.muted)] "section__lead copy" #n1440-92-text
+          fr p(0,167.125) s(1216,602.172) f[] "bento" #n1440-93
+            fr p(0,0) s(600,261.063) f[(solid($color.white,o($sample.opacity.v0_031))),(blur(16))] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "card card--roles" #n1440-94
+              fr p(25.469,25.469) s(549.063,26.875) f[] "h3" #n1440-95
+                t("Roles, not moods",$font.family.sans,$sample.type.v16_8,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_02)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n1440-95-text
+              fr p(25.469,66.734) s(549.063,48.625) f[] "p" #n1440-96
+                t("Page, surface and elevated are distinct roles. Text, muted and border are derived. One action colour carries every button, link and focus ring.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(549.063,hug) f[($color.muted)] "p copy" #n1440-96-text
+              fr p(25.469,129.75) s(549.063,105.844) f[] "swatches" #n1440-97
+                fr p(0,0) s(176.625,48.125) f[] "swatch" #n1440-98
+                  fr p(0,0) s(176.625,27.188) f[($color.page)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-99
+                  fr p(0,32.781) s(176.625,15.344) f[] "code" #n1440-100
+                    t("page",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-100-text
+                fr p(186.219,0) s(176.625,48.125) f[] "swatch" #n1440-101
+                  fr p(0,0) s(176.625,27.188) f[($color.surface)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-102
+                  fr p(0,32.781) s(176.625,15.344) f[] "code" #n1440-103
+                    t("surface",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-103-text
+                fr p(372.438,0) s(176.625,48.125) f[] "swatch" #n1440-104
+                  fr p(0,0) s(176.625,27.188) f[(solid($color.white,o($sample.opacity.v0_059)))] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-105
+                  fr p(0,32.781) s(176.625,15.344) f[] "code" #n1440-106
+                    t("elevated",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-106-text
+                fr p(0,57.719) s(176.625,48.125) f[] "swatch" #n1440-107
+                  fr p(0,0) s(176.625,27.188) f[($color.action)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-108
+                  fr p(0,32.781) s(176.625,15.344) f[] "code" #n1440-109
+                    t("action",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-109-text
+                fr p(186.219,57.719) s(176.625,48.125) f[] "swatch" #n1440-110
+                  fr p(0,0) s(176.625,27.188) f[($color.text)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-111
+                  fr p(0,32.781) s(176.625,15.344) f[] "code" #n1440-112
+                    t("text",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-112-text
+                fr p(372.438,57.719) s(176.625,48.125) f[] "swatch" #n1440-113
+                  fr p(0,0) s(176.625,27.188) f[($color.secondary)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-114
+                  fr p(0,32.781) s(176.625,15.344) f[] "code" #n1440-115
+                    t("secondary",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-115-text
+            fr p(616,0) s(600,261.063) f[(solid($color.white,o($sample.opacity.v0_031))),(blur(16))] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "card card--matrix" #n1440-116
+              fr p(25.469,25.469) s(549.063,26.875) f[] "h3" #n1440-117
+                t("Profiles",$font.family.sans,$sample.type.v16_8,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_02)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n1440-117-text
+              fr p(25.469,66.734) s(549.063,24.313) f[] "p" #n1440-118
+                t("Capabilities stay honest: a dot means the profile ships it.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.muted)] "p copy" #n1440-118-text
+              fr p(25.469,109.438) s(549.063,119.641) f[] "matrix" #n1440-119
+                fr p(0,0) s(549.063,16.891) f[] "matrix__row matrix__row--head" #n1440-120
+                  fr p(0,0) s(448.328,16.891) f[] "span" #n1440-121
+                    t("capability",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n1440-121-text
+                  fr p(454.719,0) s(27.188,16.891) f[] "span" #n1440-122
+                    t("01",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),align(c),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n1440-122-text
+                  fr p(488.297,0) s(27.188,16.891) f[] "span" #n1440-123
+                    t("02",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),align(c),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n1440-123-text
+                  fr p(521.875,0) s(27.188,16.891) f[] "span" #n1440-124
+                    t("03",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),align(c),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n1440-124-text
+                fr p(0,25.688) s(549.063,16.891) f[] "matrix__row" #n1440-125
+                  fr p(0,0) s(448.328,16.891) f[] "span" #n1440-126
+                    t("typed files",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n1440-126-text
+                  fr p(463.906,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-127
+                  fr p(497.484,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-128
+                  fr p(531.063,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-129
+                fr p(0,51.375) s(549.063,16.891) f[] "matrix__row" #n1440-130
+                  fr p(0,0) s(448.328,16.891) f[] "span" #n1440-131
+                    t("visual edit",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n1440-131-text
+                  fr p(463.906,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-132
+                  fr p(497.484,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-133
+                  fr p(531.063,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-134
+                fr p(0,77.063) s(549.063,16.891) f[] "matrix__row" #n1440-135
+                  fr p(0,0) s(448.328,16.891) f[] "span" #n1440-136
+                    t("relational api",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n1440-136-text
+                  fr p(463.906,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-137
+                  fr p(497.484,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-138
+                  fr p(531.063,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-139
+                fr p(0,102.75) s(549.063,16.891) f[] "matrix__row" #n1440-140
+                  fr p(0,0) s(448.328,16.891) f[] "span" #n1440-141
+                    t("live canvas",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n1440-141-text
+                  fr p(463.906,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-142
+                  fr p(497.484,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-143
+                  fr p(531.063,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n1440-144
+            fr p(0,277.063) s(600,325.109) f[($color.action),(blur(16))] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.page,o($sample.opacity.v0)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "card card--accent" #n1440-145
+              fr p(25.469,25.469) s(549.063,26.875) f[] "h3" #n1440-146
+                t("Checks run before handoff",$font.family.sans,$sample.type.v16_8,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_02)) p(0,0) s(hug,hug) f[($color.on-action)] "h3 copy" #n1440-146-text
+              fr p(25.469,66.734) s(549.063,48.625) f[] "p" #n1440-147
+                t("Tokens, CSS layers, art direction and unit tests in one fast pass; the full pass adds typecheck and the browser suite.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(549.063,hug) f[($color.sample2a320b)] "p copy" #n1440-147-text
+              fr p(25.469,129.75) s(549.063,107.438) f[($color.on-action)] rd($sample.radius.v12_8,$sample.radius.v12_8,$sample.radius.v12_8,$sample.radius.v12_8) st[($color.on-action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "code" #n1440-148
+                t("npm run verify:fast\nnpm run verify\nnpm run build\nnpm run audit:html",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_7),ls($sample.tracking.v0)) p(16.2,14.6) s(516.662,hug) f[($color.samplecce1a7)] "code copy" #n1440-148-text
+                  spans[("npm run verify:fast",0,w($font.weight.w600),$color.sampleeffadd)]
+              fr p(25.469,284.25) s(549.063,15.391) f[] "card__foot mono" #n1440-149
+                t("fails loudly · no silent drift",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.sample2a320b)] "card__foot mono copy" #n1440-149-text
+            fr p(616,277.063) s(600,325.109) f[(solid($color.white,o($sample.opacity.v0_031))),(blur(16))] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "card card--type" #n1440-150
+              fr p(25.469,25.469) s(549.063,26.875) f[] "h3" #n1440-151
+                t("The scale is the specimen",$font.family.sans,$sample.type.v16_8,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_02)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n1440-151-text
+              fr p(25.469,66.734) s(549.063,48.625) f[] "p" #n1440-152
+                t("Four fluid steps between 20rem and 80rem. The display face is used once per page, the accent serif only where a human voice matters.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(549.063,hug) f[($color.muted)] "p copy" #n1440-152-text
+              fr p(25.469,129.75) s(549.063,169.891) f[] "ramp" #n1440-153
+                fr p(0,0) s(549.063,51.875) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "ramp__row" #n1440-154
+                  fr p(0,9) s(43.844,41.594) f[] "ramp__sample ramp__sample--display" #n1440-155
+                    t("Aa",$font.family.sans,$sample.type.v41_6,$font.weight.w400,lh($sample.leading.v1),ls($sample.tracking.vminus0_04),italic) p(0,0) s(hug,hug) f[($color.action)] "ramp__sample ramp__sample--display copy" #n1440-155-text
+                  fr p(446.984,36) s(102.078,15.875) f[] "code" #n1440-156
+                    t("display · clamp",$font.family.mono,$sample.type.v9_92,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-156-text
+                fr p(0,60.672) s(549.063,37.875) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "ramp__row" #n1440-157
+                  fr p(0,9) s(28.672,27.203) f[] "ramp__sample ramp__sample--h2" #n1440-158
+                    t("Aa",$font.family.sans,$sample.type.v27_2,$font.weight.w400,lh($sample.leading.v1),ls($sample.tracking.vminus0_04)) p(0,0) s(hug,hug) f[($color.text)] "ramp__sample ramp__sample--h2 copy" #n1440-158-text
+                  fr p(508.234,22) s(40.828,15.875) f[] "code" #n1440-159
+                    t("step 2",$font.family.mono,$sample.type.v9_92,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-159-text
+                fr p(0,107.344) s(549.063,28.875) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "ramp__row" #n1440-160
+                  fr p(0,9) s(17.703,16.797) f[] "ramp__sample ramp__sample--body" #n1440-161
+                    t("Aa",$font.family.sans,$sample.type.v16_8,$font.weight.w400,lh($sample.leading.v1),ls($sample.tracking.vminus0_04)) p(0,0) s(hug,hug) f[($color.text)] "ramp__sample ramp__sample--body copy" #n1440-161-text
+                  fr p(508.234,13) s(40.828,15.875) f[] "code" #n1440-162
+                    t("step 0",$font.family.mono,$sample.type.v9_92,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-162-text
+                fr p(0,145.016) s(549.063,24.875) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "ramp__row" #n1440-163
+                  fr p(0,10) s(15,12.797) f[] "ramp__sample ramp__sample--mono" #n1440-164
+                    t("Aa",$font.family.mono,$sample.type.v12_8,$font.weight.w400,lh($sample.leading.v1),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "ramp__sample ramp__sample--mono copy" #n1440-164-text
+                  fr p(521.844,9) s(27.219,15.875) f[] "code" #n1440-165
+                    t("mono",$font.family.mono,$sample.type.v9_92,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n1440-165-text
+      fr p(0,2309.828) s(1398,804.281) f[($color.paper)] rd($sample.radius.v64,$sample.radius.v64,$sample.radius.v0,$sample.radius.v0) "method" #n1440-166
+        fr p(91,86.391) s(1216,631.5) f[] "wrap method__grid" #n1440-167
+          fr p(0,0) s(609,631.5) f[] "div" #n1440-168
+            fr p(0,0) s(609,219.859) f[] "section__head" #n1440-169
+              fr p(0,0) s(609,151.094) f[] "div" #n1440-170
+                fr p(0,9.313) s(141.188,15.391) f[] "eyebrow mono" #n1440-171
+                  fr p(0,4.688) s(6,6) f[($color.ink)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n1440-172
+                  fr p(14.797,1) s(126.391,13) f[] "eyebrow mono text" #n1440-173
+                    t("How it is built",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.ink-muted)] "eyebrow mono text copy" #n1440-173-text
+                fr p(0,48.344) s(609,81.594) f[] "h2" #n1440-174
+                  t("Brief first.\nThen a route.",$font.family.sans,$sample.type.v25_5,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(609,hug) f[($color.ink)] "h2 copy" #n1440-174-text
+              fr p(0,165.484) s(609,54.375) f[] "section__lead" #n1440-175
+                t("Every stage leaves something the next one can check. Nothing visual ships before the direction is recorded.",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(609,hug) f[($color.ink-muted)] "section__lead copy" #n1440-175-text
+            fr p(0,243.859) s(609,387.641) f[] "steps" #n1440-176
+              fr p(0,0) s(609,102.547) f[] st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "step" #n1440-177
+                fr p(0,20.188) s(38.391,38.391) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "step__num mono" #n1440-178
+                  t("01",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_04),align(c),valign(c),case(upper)) p(1,1) s(36.391,36.391) f[($color.ink)] "step__num mono copy" #n1440-178-text
+                fr p(54.391,20.188) s(554.609,82.359) f[] "div" #n1440-179
+                  fr p(0,0) s(554.609,28.141) f[] "h3" #n1440-180
+                    t("Brief, evidence, platform",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.ink)] "h3 copy" #n1440-180-text
+                  fr p(0,33.734) s(554.609,48.625) f[] "p" #n1440-181
+                    t("Real copy, real photography, the owner's own references. The platform profile is chosen here, not after the layout.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(554.609,hug) f[($color.ink-muted)] "p copy" #n1440-181-text
+              fr p(0,142.547) s(609,102.547) f[] st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "step" #n1440-182
+                fr p(0,20.188) s(38.391,38.391) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "step__num mono" #n1440-183
+                  t("02",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_04),align(c),valign(c),case(upper)) p(1,1) s(36.391,36.391) f[($color.ink)] "step__num mono copy" #n1440-183-text
+                fr p(54.391,20.188) s(554.609,82.359) f[] "div" #n1440-184
+                  fr p(0,0) s(554.609,28.141) f[] "h3" #n1440-185
+                    t("Art direction and tokens",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.ink)] "h3 copy" #n1440-185-text
+                  fr p(0,33.734) s(554.609,48.625) f[] "p" #n1440-186
+                    t("A complete record — lane, metaphor, type pairing, token physics, anti-patterns — then primitives calibrated on the style guide.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(554.609,hug) f[($color.ink-muted)] "p copy" #n1440-186-text
+              fr p(0,285.094) s(609,102.547) f[] st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "step" #n1440-187
+                fr p(0,20.188) s(38.391,38.391) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "step__num mono" #n1440-188
+                  t("03",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_04),align(c),valign(c),case(upper)) p(1,1) s(36.391,36.391) f[($color.ink)] "step__num mono copy" #n1440-188-text
+                fr p(54.391,20.188) s(554.609,82.359) f[] "div" #n1440-189
+                  fr p(0,0) s(554.609,28.141) f[] "h3" #n1440-190
+                    t("One representative route",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.ink)] "h3 copy" #n1440-190-text
+                  fr p(0,33.734) s(554.609,48.625) f[] "p" #n1440-191
+                    t("Build the hardest page, compare it with the selected direction, fix reflow and focus states, then roll the rest out.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(554.609,hug) f[($color.ink-muted)] "p copy" #n1440-191-text
+          fr p(665,0) s(551,410.281) f[($color.sample060809)] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.white,o($sample.opacity.v0_078)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] shadow($color.black,o($sample.opacity.v0_55),y(30),blur(80),sp(-40)) "receipt" #n1440-192
+            fr p(26.594,36.594) s(185.359,13) f[] "mono" #n1440-193
+              t("handoff · this starter",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "mono copy" #n1440-193-text
+            fr p(26.594,68.172) s(497.813,175) f[] "pre" #n1440-194
+              t("PASS docs format (83 files)\nPASS css contracts\nPASS art direction\nPASS design tokens\nPASS unit (368)\nPASS astro check\nPASS build\nPASS html audit",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_9),ls($sample.tracking.v0)) p(0,0) s(497.813,hug) f[($color.muted)] "pre copy" #n1440-194-text
+                spans[("PASS",0,$color.action),("PASS",1,$color.action),("PASS",2,$color.action),("PASS",3,$color.action),("PASS",4,$color.action),("PASS",5,$color.action),("PASS",6,$color.action),("PASS",7,$color.action)]
+            fr p(26.594,262.359) s(497.813,121.328) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "receipt__note" #n1440-195
+              fr p(0,27) s(117.969,13) f[] "mono" #n1440-196
+                t("what that buys",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "mono copy" #n1440-196-text
+              fr p(0,52.188) s(497.813,69.141) f[] "p" #n1440-197
+                t("Tokens stay one source of truth. CSS keeps its layer order. Art direction cannot be skipped silently. Emitted HTML is checked for real, including server-rendered routes.",$font.family.sans,$sample.type.v14_4,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(497.813,hug) f[($color.muted)] "p copy" #n1440-197-text
+      fr p(0,3114.109) s(1398,556.984) f[] "scope" #n1440-198
+        fr p(91,86.391) s(1216,384.203) f[] "wrap scope__grid" #n1440-199
+          fr p(0,0) s(623.156,384.203) f[] "scope" #n1440-200
+            fr p(0,9.313) s(56.938,15.391) f[] "eyebrow mono" #n1440-201
+              fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n1440-202
+              fr p(14.797,1) s(42.141,13) f[] "eyebrow mono text" #n1440-203
+                t("Scope",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n1440-203-text
+            fr p(0,41.578) s(623.156,48.375) f[] "h2" #n1440-204
+              t("What it will not do.",$font.family.sans,$sample.type.v46_08,$font.weight.w600,lh($sample.leading.v1_05),ls($sample.tracking.vminus0_035)) p(0,0) s(hug,hug) f[($color.text)] "h2 copy" #n1440-204-text
+            fr p(0,89.953) s(623.156,294.25) f[] "dl" #n1440-205
+              fr p(0,0) s(623.156,84.75) f[] "div" #n1440-206
+                fr p(0,0) s(623.156,27.188) f[] "dt" #n1440-207
+                  t("Invent your art direction",$font.family.sans,$sample.type.v17,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_01)) p(0,0) s(hug,hug) f[($color.text)] "dt copy" #n1440-207-text
+                fr p(0,30.375) s(623.156,54.375) f[] "dd" #n1440-208
+                  t("Neutral tokens are a starting point. A lane, a metaphor and three anti-patterns are yours to choose and record.",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(623.156,hug) f[($color.muted)] "dd copy" #n1440-208-text
+              fr p(0,104.75) s(623.156,84.75) f[] "div" #n1440-209
+                fr p(0,0) s(623.156,27.188) f[] "dt" #n1440-210
+                  t("Pretend a build is acceptance",$font.family.sans,$sample.type.v17,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_01)) p(0,0) s(hug,hug) f[($color.text)] "dt copy" #n1440-210-text
+                fr p(0,30.375) s(623.156,54.375) f[] "dd" #n1440-211
+                  t("Emitted HTML is not a browser. Client scripts, reflow and focus states are checked on a rendered page.",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(623.156,hug) f[($color.muted)] "dd copy" #n1440-211-text
+              fr p(0,209.5) s(623.156,84.75) f[] "div" #n1440-212
+                fr p(0,0) s(623.156,27.188) f[] "dt" #n1440-213
+                  t("Hide the CMS boundary",$font.family.sans,$sample.type.v17,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_01)) p(0,0) s(hug,hug) f[($color.text)] "dt copy" #n1440-213-text
+                fr p(0,30.375) s(623.156,54.375) f[] "dd" #n1440-214
+                  t("EmDash records live in SQLite or D1, not in Markdown. Seeds are not migrations, and code deploys do not move them.",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(623.156,hug) f[($color.muted)] "dd copy" #n1440-214-text
+          fr p(726.391,0) s(489.594,236.516) f[] "banned" #n1440-215
+            fr p(0,16.391) s(185.359,13) f[] "mono" #n1440-216
+              t("Recorded anti-patterns",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "mono copy" #n1440-216-text
+            fr p(0,47.969) s(489.594,188.547) f[] "ul" #n1440-217
+              fr p(0,0) s(489.594,62.422) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "li" #n1440-218
+                t("Placeholder art direction: a lane and a type pairing are decisions, not defaults.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,13.8) s(489.594,hug) f[($color.muted)] "li copy" #n1440-218-text
+              fr p(0,75.219) s(489.594,38.109) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "li" #n1440-219
+                t("Invented proof: no fake logos, metrics or testimonials to fill a section.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,13.8) s(489.594,hug) f[($color.muted)] "li copy" #n1440-219-text
+              fr p(0,126.125) s(489.594,62.422) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "li" #n1440-220
+                t("Repeated skeletons: three cards saying the same thing in the same shape.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,13.8) s(489.594,hug) f[($color.muted)] "li copy" #n1440-220-text
+      fr p(0,3671.094) s(1398,419.734) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "cta" #n1440-221
+        fr p(91,87.391) s(1216,245.953) f[] "wrap cta__inner" #n1440-222
+          fr p(0,56) s(909.047,133.953) f[] "div" #n1440-223
+            fr p(0,9.313) s(56.938,15.391) f[] "eyebrow mono" #n1440-224
+              fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n1440-225
+              fr p(14.797,1) s(42.141,13) f[] "eyebrow mono text" #n1440-226
+                t("Start",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n1440-226-text
+            fr p(0,39.984) s(909.047,93.969) f[] "h2" #n1440-227
+              t("Open a folder.\nPaste the brief.",$font.family.sans,$sample.type.v46_08,$font.weight.w700,lh($sample.leading.v1_02),ls($sample.tracking.vminus0_035)) p(0,0) s(909.047,hug) f[($color.text)] "h2 copy" #n1440-227-text
+          fr p(933.047,136.453) s(282.953,53.5) f[] "cta__actions" #n1440-228
+            fr p(0,0) s(122.594,53.5) f[($color.action)] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.page,o($sample.opacity.v0)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] shadow($color.action,o($sample.opacity.v0_28),blur(34)) "button button--action" #n1440-229
+              t("Start a site",$font.family.sans,$sample.type.v15_2,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(23.4,14.6) s(hug,hug) f[($color.on-action)] "button button--action copy" #n1440-229-text
+                spans[("Start a site",link("#cta"))]
+            fr p(134.594,0) s(148.359,53.5) f[(solid($color.white,o($sample.opacity.v0_02)))] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "button button--ghost" #n1440-230
+              t("Read the rules",$font.family.sans,$sample.type.v15_2,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(23.4,14.6) s(hug,hug) f[($color.text)] "button button--ghost copy" #n1440-230-text
+                spans[("Read the rules",link("#scope"))]
+    fr p(1,4186.656) s(1398,231.734) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] clip "footer" #n1440-231
+      fr p(415.977,52.531) s(566.047,217.594) f[] "footer__watermark" #n1440-232
+        t("BASELINE",$font.family.sans,$sample.type.v136,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_05)) p(0,0) s(hug,hug) f[(solid($color.white,o($sample.opacity.v0_035)))] "footer__watermark copy" #n1440-232-text
+      fr p(91,41) s(1216,118.344) f[] "wrap footer__grid" #n1440-233
+        fr p(0,0) s(541.813,118.344) f[] "div" #n1440-234
+          fr p(0,0) s(107.953,36) f[] "brand" #n1440-235
+            fr p(0,0) s(36,36) f[($color.action)] rd($sample.radius.v12,$sample.radius.v12,$sample.radius.v12,$sample.radius.v12) "brand__mark" #n1440-236
+              t("B",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.v0),align(c),valign(c)) p(0,0) s(36,36) f[($color.on-action)] "brand__mark copy" #n1440-236-text
+            fr p(47.188,4.563) s(60.766,26.875) f[] "brand__name" #n1440-237
+              t("Baseline",$font.family.sans,$sample.type.v16_8,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_03)) p(0,0) s(hug,hug) f[($color.muted)] "brand__name copy" #n1440-237-text
+          fr p(0,48.797) s(541.813,15.391) f[] "mono" #n1440-238
+            t("Astro · Tailwind · EmDash · MIT",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "mono copy" #n1440-238-text
+        fr p(565.813,0) s(650.188,118.344) f[] "footer__cols" #n1440-239
+          fr p(0,0) s(203.391,118.344) f[] "div" #n1440-240
+            fr p(0,0) s(203.391,17.594) f[] "h3" #n1440-241
+              t("Docs",$font.family.mono,$sample.type.v11,$font.weight.w500,lh($sample.leading.v1_6),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "h3 copy" #n1440-241-text
+            fr p(0,25.594) s(203.391,92.75) f[] "ul" #n1440-242
+              fr p(0,0) s(203.391,27.188) f[] "li" #n1440-243
+                t("Quickstart",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n1440-243-text
+                  spans[("Quickstart",0,$color.muted)]
+              fr p(0,32.781) s(203.391,27.188) f[] "li" #n1440-244
+                t("Platform profiles",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n1440-244-text
+                  spans[("Platform profiles",0,$color.muted)]
+              fr p(0,65.563) s(203.391,27.188) f[] "li" #n1440-245
+                t("Site rules",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n1440-245-text
+                  spans[("Site rules",0,$color.muted)]
+          fr p(223.391,0) s(203.391,118.344) f[] "div" #n1440-246
+            fr p(0,0) s(203.391,17.594) f[] "h3" #n1440-247
+              t("Skills",$font.family.mono,$sample.type.v11,$font.weight.w500,lh($sample.leading.v1_6),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "h3 copy" #n1440-247-text
+            fr p(0,25.594) s(203.391,92.75) f[] "ul" #n1440-248
+              fr p(0,0) s(203.391,27.188) f[] "li" #n1440-249
+                t("New site workflow",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n1440-249-text
+                  spans[("New site workflow",0,$color.muted)]
+              fr p(0,32.781) s(203.391,27.188) f[] "li" #n1440-250
+                t("Art direction",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n1440-250-text
+                  spans[("Art direction",0,$color.muted)]
+              fr p(0,65.563) s(203.391,27.188) f[] "li" #n1440-251
+                t("EmDash CLI",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n1440-251-text
+                  spans[("EmDash CLI",0,$color.muted)]
+          fr p(446.781,0) s(203.391,118.344) f[] "div" #n1440-252
+            fr p(0,0) s(203.391,17.594) f[] "h3" #n1440-253
+              t("Repo",$font.family.mono,$sample.type.v11,$font.weight.w500,lh($sample.leading.v1_6),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "h3 copy" #n1440-253-text
+            fr p(0,25.594) s(203.391,92.75) f[] "ul" #n1440-254
+              fr p(0,0) s(203.391,27.188) f[] "li" #n1440-255
+                t("README",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n1440-255-text
+                  spans[("README",0,$color.muted)]
+              fr p(0,32.781) s(203.391,27.188) f[] "li" #n1440-256
+                t("Contributing",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n1440-256-text
+                  spans[("Contributing",0,$color.muted)]
+              fr p(0,65.563) s(203.391,27.188) f[] "li" #n1440-257
+                t("License",$font.family.sans,$sample.type.v17,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n1440-257-text
+                  spans[("License",0,$color.muted)]
+      fr p(91,159.344) s(1216,40.391) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "wrap footer__base mono" #n1440-258
+        fr p(0,25) s(176.938,15.391) f[] "span" #n1440-259
+          t("© 2026 Baseline · MIT",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n1440-259-text
+        fr p(870.547,25) s(345.453,15.391) f[] "span" #n1440-260
+          t("Concept mockup · Obsidian & Lime, adapted",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n1440-260-text
+```
+```bl
+file("Native reconstruction.bl")
+// source reconstruction 390
+fr s(390,6497) f[] clip "viewport" #n390-1
+  fr p(8,8) s(374,6480.813) f[($color.surface)] rd($sample.radius.v40,$sample.radius.v40,$sample.radius.v40,$sample.radius.v40) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] clip shadow($color.black,o($sample.opacity.v0_9),y(40),blur(120),sp(-40)) "shell" #n390-2
+    svg(<svg xmlns="http://www.w3.org/2000/svg" width="374" height="6480.813" viewBox="0 0 374 6480.813"><path d="M0 0V6480.813M60 0V6480.813M120 0V6480.813M180 0V6480.813M240 0V6480.813M300 0V6480.813M360 0V6480.813M0 0H374M0 60H374M0 120H374M0 180H374M0 240H374M0 300H374M0 360H374M0 420H374M0 480H374M0 540H374M0 600H374M0 660H374M0 720H374M0 780H374M0 840H374M0 900H374M0 960H374M0 1020H374M0 1080H374M0 1140H374M0 1200H374M0 1260H374M0 1320H374M0 1380H374M0 1440H374M0 1500H374M0 1560H374M0 1620H374M0 1680H374M0 1740H374M0 1800H374M0 1860H374M0 1920H374M0 1980H374M0 2040H374M0 2100H374M0 2160H374M0 2220H374M0 2280H374M0 2340H374M0 2400H374M0 2460H374M0 2520H374M0 2580H374M0 2640H374M0 2700H374M0 2760H374M0 2820H374M0 2880H374M0 2940H374M0 3000H374M0 3060H374M0 3120H374M0 3180H374M0 3240H374M0 3300H374M0 3360H374M0 3420H374M0 3480H374M0 3540H374M0 3600H374M0 3660H374M0 3720H374M0 3780H374M0 3840H374M0 3900H374M0 3960H374M0 4020H374M0 4080H374M0 4140H374M0 4200H374M0 4260H374M0 4320H374M0 4380H374M0 4440H374M0 4500H374M0 4560H374M0 4620H374M0 4680H374M0 4740H374M0 4800H374M0 4860H374M0 4920H374M0 4980H374M0 5040H374M0 5100H374M0 5160H374M0 5220H374M0 5280H374M0 5340H374M0 5400H374M0 5460H374M0 5520H374M0 5580H374M0 5640H374M0 5700H374M0 5760H374M0 5820H374M0 5880H374M0 5940H374M0 6000H374M0 6060H374M0 6120H374M0 6180H374M0 6240H374M0 6300H374M0 6360H374M0 6420H374M0 6480H374" fill="none" stroke="white" stroke-opacity="0.035" stroke-width="1"/></svg>) p(0,0) s(374,6480.813) "60px source grid" #n390-2-grid
+    fr p(-171,-351) s(736,736) f[(radial(solid($color.action,o($sample.opacity.v0_14)),stop(solid($color.action,o($sample.opacity.v0)),0.62)))] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) eblur(120) "glow glow--a" #n390-3
+    fr p(-415,545) s(736,736) f[(radial(solid($color.secondary,o($sample.opacity.v0_12)),stop(solid($color.secondary,o($sample.opacity.v0)),0.62)))] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) eblur(120) "glow glow--b" #n390-4
+    fr p(1,1) s(372,72.719) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v1,$sample.stroke.v0),pos(i))] "masthead" #n390-5
+      fr p(16,17.859) s(107.953,36) f[] "brand" #n390-6
+        fr p(0,0) s(36,36) f[($color.action)] rd($sample.radius.v12,$sample.radius.v12,$sample.radius.v12,$sample.radius.v12) "brand__mark" #n390-7
+          t("B",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.v0),align(c),valign(c)) p(0,0) s(36,36) f[($color.on-action)] "brand__mark copy" #n390-7-text
+        fr p(47.188,4.563) s(60.766,26.875) f[] "brand__name" #n390-8
+          t("Baseline",$font.family.sans,$sample.type.v16_8,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_03)) p(0,0) s(hug,hug) f[($color.text)] "brand__name copy" #n390-8-text
+      fr p(252.578,14.391) s(103.422,42.938) f[($color.action)] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.page,o($sample.opacity.v0)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] shadow($color.action,o($sample.opacity.v0_28),blur(34)) "button button--action button--small header-cta" #n390-9
+        t("Start a site",$font.family.sans,$sample.type.v13_6,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(17.8,10.6) s(hug,hug) f[($color.on-action)] "button button--action button--small header-cta copy" #n390-9-text
+          spans[("Start a site",link("#cta"))]
+    fr p(1,73.719) s(372,5914.047) f[] "main" #n390-10
+      fr p(0,0) s(372,980.875) f[] "hero" #n390-11
+        fr p(16,48) s(340,876.875) f[] "wrap hero__grid" #n390-12
+          fr p(0,0) s(340,484.406) f[] "div" #n390-13
+            fr p(0,8.313) s(208.594,15.391) f[] "eyebrow mono" #n390-14
+              fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n390-15
+              fr p(14.797,1) s(193.797,13) f[] "eyebrow mono text" #n390-16
+                t("Agent-first web starter",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n390-16-text
+            fr p(0,43.281) s(340,133.875) f[] "h1" #n390-17
+              t("A baseline,\nnot a blank page.",$font.family.sans,$sample.type.v49_6,$font.weight.w600,lh($sample.leading.v0_9),ls($sample.tracking.vminus0_045)) p(0,0) s(340,hug) f[($color.text)] "h1 copy" #n390-17-text
+                spans[("not a blank page.",0,i,linear(100,stop($color.action,0),stop($color.headlineEnd,0.72)))]
+            fr p(0,201.156) s(340,104.375) f[] "hero__deck" #n390-18
+              t("Astro, Tailwind v4 and optional EmDash content editing — with design tokens, art-direction gates and rendered checks already wired before the first section is built.",$font.family.sans,$sample.type.v16_32,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.muted)] "hero__deck copy" #n390-18-text
+            fr p(0,337.531) s(340,53.5) f[] "hero__actions" #n390-19
+              fr p(0,0) s(122.594,53.5) f[($color.action)] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.page,o($sample.opacity.v0)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] shadow($color.action,o($sample.opacity.v0_28),blur(34)) "button button--action" #n390-20
+                t("Start a site",$font.family.sans,$sample.type.v15_2,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(23.4,14.6) s(hug,hug) f[($color.on-action)] "button button--action copy" #n390-20-text
+                  spans[("Start a site",link("#cta"))]
+              fr p(134.594,0) s(181.547,53.5) f[(solid($color.white,o($sample.opacity.v0_02)))] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "button button--ghost" #n390-21
+                t("Read the workflow",$font.family.sans,$sample.type.v15_2,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(23.4,14.6) s(hug,hug) f[($color.text)] "button button--ghost copy" #n390-21-text
+                  spans[("Read the workflow",link("#method"))]
+            fr p(0,427.031) s(340,57.375) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "hero__meta mono" #n390-22
+              fr p(0,18.594) s(101.109,15.391) f[] "li" #n390-23
+                t("MIT licensed",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "li copy" #n390-23-text
+                  spans[("MIT",0,w($font.weight.w600),$color.text)]
+              fr p(123.5,18.594) s(84.266,15.391) f[] "li" #n390-24
+                t("3 profiles",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "li copy" #n390-24-text
+                  spans[("3",0,w($font.weight.w600),$color.text)]
+              fr p(0,41.984) s(117.969,15.391) f[] "li" #n390-25
+                t("Static or Node",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "li copy" #n390-25-text
+                  spans[("Static",0,w($font.weight.w600),$color.text)]
+              fr p(140.359,41.984) s(185.375,15.391) f[] "li" #n390-26
+                t("Checked before handoff",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "li copy" #n390-26-text
+                  spans[("Checked",0,w($font.weight.w600),$color.text)]
+          fr p(0,516.406) s(340,360.469) f[] "specimen" #n390-27
+            fr p(0,0) s(340,360.469) f[(solid($color.white,o($sample.opacity.v0_031))),(radial(cx(80),cy(0),rx(120),ry(120),solid($color.action,o($sample.opacity.v0_1)),stop(solid($color.action,o($sample.opacity.v0)),0.55))),(blur(16))] rd($sample.radius.v40,$sample.radius.v40,$sample.radius.v40,$sample.radius.v40) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "specimen__shell" #n390-28
+              fr p(17,17) s(306,32.391) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v1,$sample.stroke.v0),pos(i))] "specimen__bar mono" #n390-29
+                fr p(0,4.188) s(32.188,7) f[] "specimen__dots" #n390-30
+                  fr p(0,0) s(7,7) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "i" #n390-31
+                  fr p(12.594,0) s(7,7) f[(solid($color.white,o($sample.opacity.v0_161)))] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "i" #n390-32
+                  fr p(25.188,0) s(7,7) f[(solid($color.white,o($sample.opacity.v0_161)))] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "i" #n390-33
+                fr p(40.188,0) s(160.094,15.391) f[] "span" #n390-34
+                  t("client-site / brief",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n390-34-text
+              fr p(17,65.391) s(306,278.078) f[] "specimen__row" #n390-35
+                fr p(0,0) s(306,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip float" #n390-36
+                  fr p(16.188,13.797) s(115.375,18.422) f[] "span" #n390-37
+                    t("brief & evidence",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n390-37-text
+                  fr p(246.547,13.797) s(43.266,18.422) f[] "b" #n390-38
+                    t("locked",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.text)] "b copy" #n390-38-text
+                fr p(0,58.016) s(306,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip float float--delay" #n390-39
+                  fr p(16.188,13.797) s(144.219,18.422) f[] "span" #n390-40
+                    t("art direction record",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n390-40-text
+                  fr p(253.75,13.797) s(36.063,18.422) f[] "b" #n390-41
+                    t("saved",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.text)] "b copy" #n390-41-text
+                fr p(0,116.031) s(306,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip chip--pass" #n390-42
+                  fr p(16.188,13.797) s(137.016,18.422) f[] "span" #n390-43
+                    t("npm run verify:fast",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n390-43-text
+                  fr p(239.328,13.797) s(50.484,18.422) f[] "b" #n390-44
+                    t("passing",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.action)] "b copy" #n390-44-text
+                fr p(0,174.047) s(306,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip" #n390-45
+                  fr p(16.188,13.797) s(129.797,18.422) f[] "span" #n390-46
+                    t("build + audit:html",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n390-46-text
+                  fr p(253.75,13.797) s(36.063,18.422) f[] "b" #n390-47
+                    t("clean",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.text)] "b copy" #n390-47-text
+                fr p(0,232.063) s(306,46.016) f[(solid($color.white,o($sample.opacity.v0_031)))] rd($sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4,$sample.radius.v14_4) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "chip" #n390-48
+                  fr p(16.188,13.797) s(36.063,18.422) f[] "span" #n390-49
+                    t("board",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n390-49-text
+                  fr p(217.703,13.797) s(72.109,18.422) f[] "b" #n390-50
+                    t("2 concepts",$font.family.mono,$sample.type.v11_52,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.v0_04)) p(0,0) s(hug,hug) f[($color.text)] "b copy" #n390-50-text
+              fr p(187.469,-11.797) s(133.938,29.672) f[($color.action)] rd($sample.radius.v8_8,$sample.radius.v8_8,$sample.radius.v8_8,$sample.radius.v8_8) shadow($color.action,o($sample.opacity.v0_55),y(18),blur(40),sp(-12)) "cursor-tag" #n390-51
+                t("agent · editing",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_12),case(upper)) p(11.2,6.4) s(111.537,hug) f[($color.on-action)] "cursor-tag copy" #n390-51-text
+                  spans[("agent",0,w($font.weight.w700))]
+      fr p(0,980.875) s(372,784.906) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "profiles" #n390-54
+        fr p(16,57) s(340,671.906) f[] "wrap" #n390-55
+          fr p(0,0) s(340,179.266) f[] "section__head" #n390-56
+            fr p(0,0) s(340,87.813) f[] "div" #n390-57
+              fr p(0,8.313) s(124.328,15.391) f[] "eyebrow mono" #n390-58
+                fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n390-59
+                fr p(14.797,1) s(109.531,13) f[] "eyebrow mono text" #n390-60
+                  t("Content setup",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n390-60-text
+              fr p(0,25.688) s(340,62.125) f[] "h2" #n390-61
+                t("One foundation.\nThree ways to edit.",$font.family.sans,$sample.type.v29_6,$font.weight.w600,lh($sample.leading.v1_05),ls($sample.tracking.vminus0_035)) p(0,0) s(340,hug) f[($color.text)] "h2 copy" #n390-61-text
+            fr p(0,102.203) s(340,77.063) f[] "section__lead" #n390-62
+              t("The design tokens, components and checks are identical across profiles. What changes is where the words live and who can change them.",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.muted)] "section__lead copy" #n390-62-text
+          fr p(0,207.266) s(340,464.641) f[] "profiles" #n390-63
+            fr p(0,0) s(340,152.234) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "profile" #n390-64
+              fr p(0,18.594) s(340,15.391) f[] "mono profile__tag" #n390-65
+                t("01 · static",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.action)] "mono profile__tag copy" #n390-65-text
+              fr p(0,43.578) s(340,26.875) f[] "h3" #n390-66
+                t("Typed Markdown",$font.family.sans,$sample.type.v16_8,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n390-66-text
+              fr p(0,80.047) s(340,72.188) f[] "p" #n390-67
+                t("Content stays in the repository as files your assistant can read and diff. Deploy is a folder of HTML.",$font.family.sans,$sample.type.v15_04,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.muted)] "p copy" #n390-67-text
+            fr p(0,168.234) s(340,128.172) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "profile" #n390-68
+              fr p(0,18.594) s(340,15.391) f[] "mono profile__tag" #n390-69
+                t("02 · static-sveltia",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.action)] "mono profile__tag copy" #n390-69-text
+              fr p(0,43.578) s(340,26.875) f[] "h3" #n390-70
+                t("Markdown, edited visually",$font.family.sans,$sample.type.v16_8,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n390-70-text
+              fr p(0,80.047) s(340,48.125) f[] "p" #n390-71
+                t("Sveltia edits the same Git-owned files through a web form. No database, no content drift.",$font.family.sans,$sample.type.v15_04,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.muted)] "p copy" #n390-71-text
+            fr p(0,312.406) s(340,152.234) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "profile" #n390-72
+              fr p(0,18.594) s(340,15.391) f[] "mono profile__tag" #n390-73
+                t("03 · emdash",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.action)] "mono profile__tag copy" #n390-73-text
+              fr p(0,43.578) s(340,26.875) f[] "h3" #n390-74
+                t("Relational CMS",$font.family.sans,$sample.type.v16_8,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n390-74-text
+              fr p(0,80.047) s(340,72.188) f[] "p" #n390-75
+                t("Portable Text, live canvas and MCP tools on SQLite or Cloudflare D1 and R2. Editorial content is never a seed.",$font.family.sans,$sample.type.v15_04,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.muted)] "p copy" #n390-75-text
+      fr p(0,1765.781) s(372,1637.234) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "bento" #n390-76
+        fr p(16,57) s(340,1524.234) f[] "wrap" #n390-77
+          fr p(0,0) s(340,204.953) f[] "section__head" #n390-78
+            fr p(0,0) s(340,87.813) f[] "div" #n390-79
+              fr p(0,8.313) s(99.063,15.391) f[] "eyebrow mono" #n390-80
+                fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n390-81
+                fr p(14.797,1) s(84.266,13) f[] "eyebrow mono text" #n390-82
+                  t("The system",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n390-82-text
+              fr p(0,25.688) s(340,62.125) f[] "h2" #n390-83
+                t("What is already decided for you.",$font.family.sans,$sample.type.v29_6,$font.weight.w600,lh($sample.leading.v1_05),ls($sample.tracking.vminus0_035)) p(0,0) s(340,hug) f[($color.text)] "h2 copy" #n390-83-text
+            fr p(0,102.203) s(340,102.75) f[] "section__lead" #n390-84
+              t("Not a theme. A small set of contracts — surfaces, one accent, a type scale, a spacing hierarchy — plus the checks that keep them true as the site grows.",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.muted)] "section__lead copy" #n390-84-text
+          fr p(0,232.953) s(340,1291.281) f[] "bento" #n390-85
+            fr p(0,0) s(340,300.75) f[(solid($color.white,o($sample.opacity.v0_031))),(blur(16))] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "card card--roles" #n390-86
+              fr p(21,21) s(298,26.875) f[] "h3" #n390-87
+                t("Roles, not moods",$font.family.sans,$sample.type.v16_8,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_02)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n390-87-text
+              fr p(21,62.266) s(298,97.25) f[] "p" #n390-88
+                t("Page, surface and elevated are distinct roles. Text, muted and border are derived. One action colour carries every button, link and focus ring.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(298,hug) f[($color.muted)] "p copy" #n390-88-text
+              fr p(21,173.906) s(298,105.844) f[] "swatches" #n390-89
+                fr p(0,0) s(92.938,48.125) f[] "swatch" #n390-90
+                  fr p(0,0) s(92.938,27.188) f[($color.page)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-91
+                  fr p(0,32.781) s(92.938,15.344) f[] "code" #n390-92
+                    t("page",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-92-text
+                fr p(102.531,0) s(92.938,48.125) f[] "swatch" #n390-93
+                  fr p(0,0) s(92.938,27.188) f[($color.surface)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-94
+                  fr p(0,32.781) s(92.938,15.344) f[] "code" #n390-95
+                    t("surface",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-95-text
+                fr p(205.063,0) s(92.938,48.125) f[] "swatch" #n390-96
+                  fr p(0,0) s(92.938,27.188) f[(solid($color.white,o($sample.opacity.v0_059)))] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-97
+                  fr p(0,32.781) s(92.938,15.344) f[] "code" #n390-98
+                    t("elevated",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-98-text
+                fr p(0,57.719) s(92.938,48.125) f[] "swatch" #n390-99
+                  fr p(0,0) s(92.938,27.188) f[($color.action)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-100
+                  fr p(0,32.781) s(92.938,15.344) f[] "code" #n390-101
+                    t("action",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-101-text
+                fr p(102.531,57.719) s(92.938,48.125) f[] "swatch" #n390-102
+                  fr p(0,0) s(92.938,27.188) f[($color.text)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-103
+                  fr p(0,32.781) s(92.938,15.344) f[] "code" #n390-104
+                    t("text",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-104-text
+                fr p(205.063,57.719) s(92.938,48.125) f[] "swatch" #n390-105
+                  fr p(0,0) s(92.938,27.188) f[($color.secondary)] rd($sample.radius.v8,$sample.radius.v8,$sample.radius.v8,$sample.radius.v8) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-106
+                  fr p(0,32.781) s(92.938,15.344) f[] "code" #n390-107
+                    t("secondary",$font.family.mono,$sample.type.v9_6,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_02)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-107-text
+            fr p(0,316.75) s(340,269.922) f[(solid($color.white,o($sample.opacity.v0_031))),(blur(16))] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "card card--matrix" #n390-108
+              fr p(21,21) s(298,26.875) f[] "h3" #n390-109
+                t("Profiles",$font.family.sans,$sample.type.v16_8,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_02)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n390-109-text
+              fr p(21,62.266) s(298,48.625) f[] "p" #n390-110
+                t("Capabilities stay honest: a dot means the profile ships it.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(298,hug) f[($color.muted)] "p copy" #n390-110-text
+              fr p(21,129.281) s(298,119.641) f[] "matrix" #n390-111
+                fr p(0,0) s(298,16.891) f[] "matrix__row matrix__row--head" #n390-112
+                  fr p(0,0) s(197.266,16.891) f[] "span" #n390-113
+                    t("capability",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n390-113-text
+                  fr p(203.656,0) s(27.188,16.891) f[] "span" #n390-114
+                    t("01",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),align(c),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n390-114-text
+                  fr p(237.234,0) s(27.188,16.891) f[] "span" #n390-115
+                    t("02",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),align(c),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n390-115-text
+                  fr p(270.813,0) s(27.188,16.891) f[] "span" #n390-116
+                    t("03",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),align(c),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "span copy" #n390-116-text
+                fr p(0,25.688) s(298,16.891) f[] "matrix__row" #n390-117
+                  fr p(0,0) s(197.266,16.891) f[] "span" #n390-118
+                    t("typed files",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n390-118-text
+                  fr p(212.844,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-119
+                  fr p(246.422,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-120
+                  fr p(280,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-121
+                fr p(0,51.375) s(298,16.891) f[] "matrix__row" #n390-122
+                  fr p(0,0) s(197.266,16.891) f[] "span" #n390-123
+                    t("visual edit",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n390-123-text
+                  fr p(212.844,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-124
+                  fr p(246.422,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-125
+                  fr p(280,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-126
+                fr p(0,77.063) s(298,16.891) f[] "matrix__row" #n390-127
+                  fr p(0,0) s(197.266,16.891) f[] "span" #n390-128
+                    t("relational api",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n390-128-text
+                  fr p(212.844,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-129
+                  fr p(246.422,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-130
+                  fr p(280,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-131
+                fr p(0,102.75) s(298,16.891) f[] "matrix__row" #n390-132
+                  fr p(0,0) s(197.266,16.891) f[] "span" #n390-133
+                    t("live canvas",$font.family.mono,$sample.type.v10_56,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n390-133-text
+                  fr p(212.844,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-134
+                  fr p(246.422,4.047) s(8.797,8.797) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.white,o($sample.opacity.v0_22)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-135
+                  fr p(280,4.047) s(8.797,8.797) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[($color.action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "i" #n390-136
+            fr p(0,602.672) s(340,307.813) f[($color.action),(blur(16))] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.page,o($sample.opacity.v0)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "card card--accent" #n390-137
+              fr p(21,21) s(298,26.875) f[] "h3" #n390-138
+                t("Checks run before handoff",$font.family.sans,$sample.type.v16_8,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_02)) p(0,0) s(hug,hug) f[($color.on-action)] "h3 copy" #n390-138-text
+              fr p(21,62.266) s(298,72.938) f[] "p" #n390-139
+                t("Tokens, CSS layers, art direction and unit tests in one fast pass; the full pass adds typecheck and the browser suite.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(298,hug) f[($color.sample2a320b)] "p copy" #n390-139-text
+              fr p(21,149.594) s(298,107.438) f[($color.on-action)] rd($sample.radius.v12_8,$sample.radius.v12_8,$sample.radius.v12_8,$sample.radius.v12_8) st[($color.on-action,w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "code" #n390-140
+                t("npm run verify:fast\nnpm run verify\nnpm run build\nnpm run audit:html",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_7),ls($sample.tracking.v0)) p(16.2,14.6) s(265.6,hug) f[($color.samplecce1a7)] "code copy" #n390-140-text
+                  spans[("npm run verify:fast",0,w($font.weight.w600),$color.sampleeffadd)]
+              fr p(21,271.422) s(298,15.391) f[] "card__foot mono" #n390-141
+                t("fails loudly · no silent drift",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.sample2a320b)] "card__foot mono copy" #n390-141-text
+            fr p(0,926.484) s(340,364.797) f[(solid($color.white,o($sample.opacity.v0_031))),(blur(16))] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "card card--type" #n390-142
+              fr p(21,21) s(298,26.875) f[] "h3" #n390-143
+                t("The scale is the specimen",$font.family.sans,$sample.type.v16_8,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_02)) p(0,0) s(hug,hug) f[($color.text)] "h3 copy" #n390-143-text
+              fr p(21,62.266) s(298,97.25) f[] "p" #n390-144
+                t("Four fluid steps between 20rem and 80rem. The display face is used once per page, the accent serif only where a human voice matters.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(298,hug) f[($color.muted)] "p copy" #n390-144-text
+              fr p(21,173.906) s(298,169.891) f[] "ramp" #n390-145
+                fr p(0,0) s(298,51.875) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "ramp__row" #n390-146
+                  fr p(0,9) s(43.844,41.594) f[] "ramp__sample ramp__sample--display" #n390-147
+                    t("Aa",$font.family.sans,$sample.type.v41_6,$font.weight.w400,lh($sample.leading.v1),ls($sample.tracking.vminus0_04),italic) p(0,0) s(hug,hug) f[($color.action)] "ramp__sample ramp__sample--display copy" #n390-147-text
+                  fr p(195.922,36) s(102.078,15.875) f[] "code" #n390-148
+                    t("display · clamp",$font.family.mono,$sample.type.v9_92,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-148-text
+                fr p(0,60.672) s(298,37.875) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "ramp__row" #n390-149
+                  fr p(0,9) s(28.672,27.203) f[] "ramp__sample ramp__sample--h2" #n390-150
+                    t("Aa",$font.family.sans,$sample.type.v27_2,$font.weight.w400,lh($sample.leading.v1),ls($sample.tracking.vminus0_04)) p(0,0) s(hug,hug) f[($color.text)] "ramp__sample ramp__sample--h2 copy" #n390-150-text
+                  fr p(257.172,22) s(40.828,15.875) f[] "code" #n390-151
+                    t("step 2",$font.family.mono,$sample.type.v9_92,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-151-text
+                fr p(0,107.344) s(298,28.875) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "ramp__row" #n390-152
+                  fr p(0,9) s(17.703,16.797) f[] "ramp__sample ramp__sample--body" #n390-153
+                    t("Aa",$font.family.sans,$sample.type.v16_8,$font.weight.w400,lh($sample.leading.v1),ls($sample.tracking.vminus0_04)) p(0,0) s(hug,hug) f[($color.text)] "ramp__sample ramp__sample--body copy" #n390-153-text
+                  fr p(257.172,13) s(40.828,15.875) f[] "code" #n390-154
+                    t("step 0",$font.family.mono,$sample.type.v9_92,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-154-text
+                fr p(0,145.016) s(298,24.875) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "ramp__row" #n390-155
+                  fr p(0,10) s(15,12.797) f[] "ramp__sample ramp__sample--mono" #n390-156
+                    t("Aa",$font.family.mono,$sample.type.v12_8,$font.weight.w400,lh($sample.leading.v1),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "ramp__sample ramp__sample--mono copy" #n390-156-text
+                  fr p(270.781,9) s(27.219,15.875) f[] "code" #n390-157
+                    t("mono",$font.family.mono,$sample.type.v9_92,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0_1),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "code copy" #n390-157-text
+      fr p(0,3459.016) s(372,1269.422) f[($color.paper)] rd($sample.radius.v64,$sample.radius.v64,$sample.radius.v0,$sample.radius.v0) "method" #n390-158
+        fr p(16,56) s(340,1157.422) f[] "wrap method__grid" #n390-159
+          fr p(0,0) s(340,711.094) f[] "div" #n390-160
+            fr p(0,0) s(340,234.203) f[] "section__head" #n390-161
+              fr p(0,0) s(340,142.75) f[] "div" #n390-162
+                fr p(0,8.313) s(141.188,15.391) f[] "eyebrow mono" #n390-163
+                  fr p(0,4.688) s(6,6) f[($color.ink)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n390-164
+                  fr p(14.797,1) s(126.391,13) f[] "eyebrow mono text" #n390-165
+                    t("How it is built",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.ink-muted)] "eyebrow mono text copy" #n390-165-text
+                fr p(0,45.672) s(340,77.094) f[] "h2" #n390-166
+                  t("Brief first.\nThen a route.",$font.family.sans,$sample.type.v24_093,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.ink)] "h2 copy" #n390-166-text
+              fr p(0,157.141) s(340,77.063) f[] "section__lead" #n390-167
+                t("Every stage leaves something the next one can check. Nothing visual ships before the direction is recorded.",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.ink-muted)] "section__lead copy" #n390-167-text
+            fr p(0,258.203) s(340,452.891) f[] "steps" #n390-168
+              fr p(0,0) s(340,126.859) f[] st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "step" #n390-169
+                fr p(0,20.188) s(38.391,38.391) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "step__num mono" #n390-170
+                  t("01",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_04),align(c),valign(c),case(upper)) p(1,1) s(36.391,36.391) f[($color.ink)] "step__num mono copy" #n390-170-text
+                fr p(54.391,20.188) s(285.609,106.672) f[] "div" #n390-171
+                  fr p(0,0) s(285.609,28.141) f[] "h3" #n390-172
+                    t("Brief, evidence, platform",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.ink)] "h3 copy" #n390-172-text
+                  fr p(0,33.734) s(285.609,72.938) f[] "p" #n390-173
+                    t("Real copy, real photography, the owner's own references. The platform profile is chosen here, not after the layout.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(285.609,hug) f[($color.ink-muted)] "p copy" #n390-173-text
+              fr p(0,150.859) s(340,151.172) f[] st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "step" #n390-174
+                fr p(0,20.188) s(38.391,38.391) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "step__num mono" #n390-175
+                  t("02",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_04),align(c),valign(c),case(upper)) p(1,1) s(36.391,36.391) f[($color.ink)] "step__num mono copy" #n390-175-text
+                fr p(54.391,20.188) s(285.609,130.984) f[] "div" #n390-176
+                  fr p(0,0) s(285.609,28.141) f[] "h3" #n390-177
+                    t("Art direction and tokens",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.ink)] "h3 copy" #n390-177-text
+                  fr p(0,33.734) s(285.609,97.25) f[] "p" #n390-178
+                    t("A complete record — lane, metaphor, type pairing, token physics, anti-patterns — then primitives calibrated on the style guide.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(285.609,hug) f[($color.ink-muted)] "p copy" #n390-178-text
+              fr p(0,326.031) s(340,126.859) f[] st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "step" #n390-179
+                fr p(0,20.188) s(38.391,38.391) f[] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) st[(solid($color.sample13130c,o($sample.opacity.v0_161)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "step__num mono" #n390-180
+                  t("03",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_04),align(c),valign(c),case(upper)) p(1,1) s(36.391,36.391) f[($color.ink)] "step__num mono copy" #n390-180-text
+                fr p(54.391,20.188) s(285.609,106.672) f[] "div" #n390-181
+                  fr p(0,0) s(285.609,28.141) f[] "h3" #n390-182
+                    t("One representative route",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_015)) p(0,0) s(hug,hug) f[($color.ink)] "h3 copy" #n390-182-text
+                  fr p(0,33.734) s(285.609,72.938) f[] "p" #n390-183
+                    t("Build the hardest page, compare it with the selected direction, fix reflow and focus states, then roll the rest out.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(285.609,hug) f[($color.ink-muted)] "p copy" #n390-183-text
+          fr p(0,743.094) s(340,414.328) f[($color.sample060809)] rd($sample.radius.v24,$sample.radius.v24,$sample.radius.v24,$sample.radius.v24) st[(solid($color.white,o($sample.opacity.v0_078)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] shadow($color.black,o($sample.opacity.v0_55),y(30),blur(80),sp(-40)) "receipt" #n390-184
+            fr p(18.594,27.594) s(185.359,13) f[] "mono" #n390-185
+              t("handoff · this starter",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "mono copy" #n390-185-text
+            fr p(18.594,58.672) s(302.813,175) f[] "pre" #n390-186
+              t("PASS docs format (83 files)\nPASS css contracts\nPASS art direction\nPASS design tokens\nPASS unit (368)\nPASS astro check\nPASS build\nPASS html audit",$font.family.mono,$sample.type.v11_52,$font.weight.w400,lh($sample.leading.v1_9),ls($sample.tracking.v0)) p(0,0) s(302.813,hug) f[($color.muted)] "pre copy" #n390-186-text
+                spans[("PASS",0,$color.action),("PASS",1,$color.action),("PASS",2,$color.action),("PASS",3,$color.action),("PASS",4,$color.action),("PASS",5,$color.action),("PASS",6,$color.action),("PASS",7,$color.action)]
+            fr p(18.594,252.859) s(302.813,142.875) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "receipt__note" #n390-187
+              fr p(0,26) s(117.969,13) f[] "mono" #n390-188
+                t("what that buys",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "mono copy" #n390-188-text
+              fr p(0,50.688) s(302.813,92.188) f[] "p" #n390-189
+                t("Tokens stay one source of truth. CSS keeps its layer order. Art direction cannot be skipped silently. Emitted HTML is checked for real, including server-rendered routes.",$font.family.sans,$sample.type.v14_4,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(302.813,hug) f[($color.muted)] "p copy" #n390-189-text
+      fr p(0,4728.438) s(372,832.281) f[] "scope" #n390-190
+        fr p(16,56) s(340,720.281) f[] "wrap scope__grid" #n390-191
+          fr p(0,0) s(340,428.953) f[] "scope" #n390-192
+            fr p(0,8.313) s(56.938,15.391) f[] "eyebrow mono" #n390-193
+              fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n390-194
+              fr p(14.797,1) s(42.141,13) f[] "eyebrow mono text" #n390-195
+                t("Scope",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n390-195-text
+            fr p(0,40.078) s(340,31.063) f[] "h2" #n390-196
+              t("What it will not do.",$font.family.sans,$sample.type.v29_6,$font.weight.w600,lh($sample.leading.v1_05),ls($sample.tracking.vminus0_035)) p(0,0) s(hug,hug) f[($color.text)] "h2 copy" #n390-196-text
+            fr p(0,71.141) s(340,357.813) f[] "dl" #n390-197
+              fr p(0,0) s(340,105.938) f[] "div" #n390-198
+                fr p(0,0) s(340,25.688) f[] "dt" #n390-199
+                  t("Invent your art direction",$font.family.sans,$sample.type.v16_062,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_01)) p(0,0) s(hug,hug) f[($color.text)] "dt copy" #n390-199-text
+                fr p(0,28.875) s(340,77.063) f[] "dd" #n390-200
+                  t("Neutral tokens are a starting point. A lane, a metaphor and three anti-patterns are yours to choose and record.",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.muted)] "dd copy" #n390-200-text
+              fr p(0,125.938) s(340,105.938) f[] "div" #n390-201
+                fr p(0,0) s(340,25.688) f[] "dt" #n390-202
+                  t("Pretend a build is acceptance",$font.family.sans,$sample.type.v16_062,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_01)) p(0,0) s(hug,hug) f[($color.text)] "dt copy" #n390-202-text
+                fr p(0,28.875) s(340,77.063) f[] "dd" #n390-203
+                  t("Emitted HTML is not a browser. Client scripts, reflow and focus states are checked on a rendered page.",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.muted)] "dd copy" #n390-203-text
+              fr p(0,251.875) s(340,105.938) f[] "div" #n390-204
+                fr p(0,0) s(340,25.688) f[] "dt" #n390-205
+                  t("Hide the CMS boundary",$font.family.sans,$sample.type.v16_062,$font.weight.w600,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_01)) p(0,0) s(hug,hug) f[($color.text)] "dt copy" #n390-205-text
+                fr p(0,28.875) s(340,77.063) f[] "dd" #n390-206
+                  t("EmDash records live in SQLite or D1, not in Markdown. Seeds are not migrations, and code deploys do not move them.",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(340,hug) f[($color.muted)] "dd copy" #n390-206-text
+          fr p(0,460.953) s(340,259.328) f[] "banned" #n390-207
+            fr p(0,15.391) s(185.359,13) f[] "mono" #n390-208
+              t("Recorded anti-patterns",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "mono copy" #n390-208-text
+            fr p(0,46.469) s(340,212.859) f[] "ul" #n390-209
+              fr p(0,0) s(340,62.422) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "li" #n390-210
+                t("Placeholder art direction: a lane and a type pairing are decisions, not defaults.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,13.8) s(340,hug) f[($color.muted)] "li copy" #n390-210-text
+              fr p(0,75.219) s(340,62.422) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "li" #n390-211
+                t("Invented proof: no fake logos, metrics or testimonials to fill a section.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,13.8) s(340,hug) f[($color.muted)] "li copy" #n390-211-text
+              fr p(0,150.438) s(340,62.422) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "li" #n390-212
+                t("Repeated skeletons: three cards saying the same thing in the same shape.",$font.family.sans,$sample.type.v15_2,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,13.8) s(340,hug) f[($color.muted)] "li copy" #n390-212-text
+      fr p(0,5560.719) s(372,353.328) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "cta" #n390-213
+        fr p(16,57) s(340,240.328) f[] "wrap cta__inner" #n390-214
+          fr p(0,32) s(340,98.828) f[] "div" #n390-215
+            fr p(0,8.313) s(56.938,15.391) f[] "eyebrow mono" #n390-216
+              fr p(0,4.688) s(6,6) f[($color.action)] rd($sample.radius.v50,$sample.radius.v50,$sample.radius.v50,$sample.radius.v50) "dot" #n390-217
+              fr p(14.797,1) s(42.141,13) f[] "eyebrow mono text" #n390-218
+                t("Start",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.muted)] "eyebrow mono text copy" #n390-218-text
+            fr p(0,38.484) s(340,60.344) f[] "h2" #n390-219
+              t("Open a folder.\nPaste the brief.",$font.family.sans,$sample.type.v29_6,$font.weight.w700,lh($sample.leading.v1_02),ls($sample.tracking.vminus0_035)) p(0,0) s(340,hug) f[($color.text)] "h2 copy" #n390-219-text
+          fr p(0,154.828) s(340,53.5) f[] "cta__actions" #n390-220
+            fr p(0,0) s(122.594,53.5) f[($color.action)] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.page,o($sample.opacity.v0)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] shadow($color.action,o($sample.opacity.v0_28),blur(34)) "button button--action" #n390-221
+              t("Start a site",$font.family.sans,$sample.type.v15_2,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(23.4,14.6) s(hug,hug) f[($color.on-action)] "button button--action copy" #n390-221-text
+                spans[("Start a site",link("#cta"))]
+            fr p(134.594,0) s(148.359,53.5) f[(solid($color.white,o($sample.opacity.v0_02)))] rd($sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999,$sample.radius.v9999) st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1,$sample.stroke.v1),pos(i))] "button button--ghost" #n390-222
+              t("Read the rules",$font.family.sans,$sample.type.v15_2,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(23.4,14.6) s(hug,hug) f[($color.text)] "button button--ghost copy" #n390-222-text
+                spans[("Read the rules",link("#scope"))]
+    fr p(1,5987.766) s(372,492.047) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] clip "footer" #n390-223
+      fr p(69.461,440.844) s(233.078,89.594) f[] "footer__watermark" #n390-224
+        t("BASELINE",$font.family.sans,$sample.type.v56,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_05)) p(0,0) s(hug,hug) f[(solid($color.white,o($sample.opacity.v0_035)))] "footer__watermark copy" #n390-224-text
+      fr p(16,41) s(340,335.875) f[] "wrap footer__grid" #n390-225
+        fr p(0,0) s(340,64.188) f[] "div" #n390-226
+          fr p(0,0) s(107.953,36) f[] "brand" #n390-227
+            fr p(0,0) s(36,36) f[($color.action)] rd($sample.radius.v12,$sample.radius.v12,$sample.radius.v12,$sample.radius.v12) "brand__mark" #n390-228
+              t("B",$font.family.sans,$sample.type.v17_6,$font.weight.w700,lh($sample.leading.v1_6),ls($sample.tracking.v0),align(c),valign(c)) p(0,0) s(36,36) f[($color.on-action)] "brand__mark copy" #n390-228-text
+            fr p(47.188,4.563) s(60.766,26.875) f[] "brand__name" #n390-229
+              t("Baseline",$font.family.sans,$sample.type.v16_8,$font.weight.w650,lh($sample.leading.v1_6),ls($sample.tracking.vminus0_03)) p(0,0) s(hug,hug) f[($color.muted)] "brand__name copy" #n390-229-text
+          fr p(0,48.797) s(340,15.391) f[] "mono" #n390-230
+            t("Astro · Tailwind · EmDash · MIT",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "mono copy" #n390-230-text
+        fr p(0,88.188) s(340,247.688) f[] "footer__cols" #n390-231
+          fr p(0,0) s(160,113.844) f[] "div" #n390-232
+            fr p(0,0) s(160,17.594) f[] "h3" #n390-233
+              t("Docs",$font.family.mono,$sample.type.v11,$font.weight.w500,lh($sample.leading.v1_6),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "h3 copy" #n390-233-text
+            fr p(0,25.594) s(160,88.25) f[] "ul" #n390-234
+              fr p(0,0) s(160,25.688) f[] "li" #n390-235
+                t("Quickstart",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n390-235-text
+                  spans[("Quickstart",0,$color.muted)]
+              fr p(0,31.281) s(160,25.688) f[] "li" #n390-236
+                t("Platform profiles",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n390-236-text
+                  spans[("Platform profiles",0,$color.muted)]
+              fr p(0,62.563) s(160,25.688) f[] "li" #n390-237
+                t("Site rules",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n390-237-text
+                  spans[("Site rules",0,$color.muted)]
+          fr p(180,0) s(160,113.844) f[] "div" #n390-238
+            fr p(0,0) s(160,17.594) f[] "h3" #n390-239
+              t("Skills",$font.family.mono,$sample.type.v11,$font.weight.w500,lh($sample.leading.v1_6),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "h3 copy" #n390-239-text
+            fr p(0,25.594) s(160,88.25) f[] "ul" #n390-240
+              fr p(0,0) s(160,25.688) f[] "li" #n390-241
+                t("New site workflow",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n390-241-text
+                  spans[("New site workflow",0,$color.muted)]
+              fr p(0,31.281) s(160,25.688) f[] "li" #n390-242
+                t("Art direction",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n390-242-text
+                  spans[("Art direction",0,$color.muted)]
+              fr p(0,62.563) s(160,25.688) f[] "li" #n390-243
+                t("EmDash CLI",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n390-243-text
+                  spans[("EmDash CLI",0,$color.muted)]
+          fr p(0,133.844) s(160,113.844) f[] "div" #n390-244
+            fr p(0,0) s(160,17.594) f[] "h3" #n390-245
+              t("Repo",$font.family.mono,$sample.type.v11,$font.weight.w500,lh($sample.leading.v1_6),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "h3 copy" #n390-245-text
+            fr p(0,25.594) s(160,88.25) f[] "ul" #n390-246
+              fr p(0,0) s(160,25.688) f[] "li" #n390-247
+                t("README",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n390-247-text
+                  spans[("README",0,$color.muted)]
+              fr p(0,31.281) s(160,25.688) f[] "li" #n390-248
+                t("Contributing",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n390-248-text
+                  spans[("Contributing",0,$color.muted)]
+              fr p(0,62.563) s(160,25.688) f[] "li" #n390-249
+                t("License",$font.family.sans,$sample.type.v16_062,$font.weight.w400,lh($sample.leading.v1_6),ls($sample.tracking.v0)) p(0,0) s(hug,hug) f[($color.text)] "li copy" #n390-249-text
+                  spans[("License",0,$color.muted)]
+      fr p(16,376.875) s(340,83.172) f[] st[(solid($color.white,o($sample.opacity.v0_102)),w($sample.stroke.v1,$sample.stroke.v0,$sample.stroke.v0,$sample.stroke.v0),pos(i))] "wrap footer__base mono" #n390-250
+        fr p(0,25) s(176.938,15.391) f[] "span" #n390-251
+          t("© 2026 Baseline · MIT",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(hug,hug) f[($color.faint)] "span copy" #n390-251-text
+        fr p(0,52.391) s(340,30.781) f[] "span" #n390-252
+          t("Concept mockup · Obsidian & Lime, adapted",$font.family.mono,$sample.type.v11,$font.weight.w400,lh($sample.leading.v1_4),ls($sample.tracking.v0_18),case(upper)) p(0,0) s(340,hug) f[($color.faint)] "span copy" #n390-252-text
+```

@@ -30,11 +30,97 @@ test('quoted font names and an explicit system-font ban are both P1 conflicts', 
   assert.deepEqual(ids(conflicts), ['quoted-font-name', 'system-font-ban']);
 });
 
-test('named proof needs an owner source, so it is refused rather than translated', () => {
+test('named proof requires source review without claiming that a match proves fabrication', () => {
   const findings = inspectPrompt('A greyscale portrait with a testimonial card, plus a trusted by logo wall.');
   const proof = findings.find(finding => finding.id === 'invented-proof');
   assert.equal(proof.severity, 'P1');
   assert.match(proof.fix, /Never invent/i);
+  assert.match(proof.message, /does not establish fabrication/);
+});
+
+test('source and approval assertions stay reviewable without an automatic P1 conflict', () => {
+  for (const prompt of [
+    'Use owner-supplied testimonials and approved client logos.',
+    'Use the approved already installed font "Space Grotesk".',
+    'Use the approved already installed font "Space Grotesk" with no system fonts.',
+    'Palette inspiration only: #ccff00; map onto semantic roles.',
+  ]) {
+    const findings = inspectPrompt(prompt);
+    assert.ok(findings.length > 0, 'approval text must not certify the source');
+    assert.ok(findings.every(finding => finding.severity === 'P2'));
+  }
+  assert.ok(inspectPrompt('Palette inspiration, but MUST use exactly #ccff00.').some(finding => finding.id === 'literal-colours' && finding.severity === 'P1'));
+});
+
+test('bounded prohibitions suppress proof and motion matches only in their own clauses', () => {
+  for (const prompt of [
+    'Do not invent testimonials or client logos.',
+    'Never fabricate customer ratings.',
+    'No animations, transitions or parallax.',
+    'Avoid floating cards.',
+    'Do not ignore accessibility.',
+  ]) {
+    assert.deepEqual(ids(inspectPrompt(prompt)).filter(id => id !== 'contrast-unstated'), []);
+  }
+  const mixed = inspectPrompt('Do not invent testimonials; add fake client logos.');
+  assert.ok(ids(mixed).includes('fabricated-proof'));
+  assert.ok(ids(mixed).includes('invented-proof'));
+  assert.ok(ids(inspectPrompt('No animations, but floating cards are required.')).includes('motion-without-reduced'));
+});
+
+test('explicit fabricated identity requests remain P1 even alongside claimed approvals', () => {
+  for (const prompt of ['Invent approved client testimonials.', 'Use AI-generated portraits as real team members.']) {
+    assert.ok(inspectPrompt(prompt).some(finding => finding.id === 'fabricated-proof' && finding.severity === 'P1'));
+  }
+});
+
+test('a prohibition cannot hide a later action joined with and', () => {
+  const proof = inspectPrompt('Do not invent testimonials and use fake client logos.');
+  assert.ok(proof.some(f => f.id === 'fabricated-proof' && f.severity === 'P1'));
+  assert.ok(ids(inspectPrompt('No animations and add parallax.')).includes('motion-without-reduced'));
+  const accessibility = inspectPrompt('Do not ignore accessibility and disable reduced motion.');
+  assert.ok(accessibility.some(f => f.id === 'accessibility-override' && f.severity === 'P1'));
+  assert.ok(inspectPrompt('Palette inspiration: #abc and MUST use #def.').some(f => f.id === 'literal-colours' && f.severity === 'P1'));
+  assert.ok(!ids(inspectPrompt('Do not invent testimonials and client logos.')).includes('invented-proof'));
+});
+
+test('a prohibition cannot hide a later action joined with a comma', () => {
+  for (const prompt of [
+    'Never invent testimonials, add fake client logos.',
+    'Do not use stock photos, fabricate five client testimonials.',
+    'Without testimonials, create fake customer reviews.',
+  ]) {
+    assert.ok(inspectPrompt(prompt).some(f => f.id === 'fabricated-proof' && f.severity === 'P1'), prompt);
+  }
+  assert.ok(ids(inspectPrompt('Do not add animation, add a parallax hero.')).includes('motion-without-reduced'));
+  assert.ok(inspectPrompt('Never use gradients, ignore accessibility.').some(f => f.id === 'accessibility-override' && f.severity === 'P1'));
+  for (const prompt of ['No animations, transitions or parallax.', 'Do not invent testimonials, logos or ratings.']) {
+    assert.deepEqual(ids(inspectPrompt(prompt)).filter(id => id !== 'contrast-unstated'), [], prompt);
+  }
+});
+
+test('a clearly labelled generated illustration needs review without an accusation of fabricated identity', () => {
+  const findings = inspectPrompt('Use an AI-generated portrait clearly labelled as an illustration.');
+  assert.ok(!ids(findings).includes('fabricated-proof'));
+  assert.equal(findings.find(finding => finding.id === 'invented-proof')?.severity, 'P2');
+});
+
+test('structural signals catch risky sizes, layout, copy and prose breakpoints as review decisions', () => {
+  const findings = inspectPrompt('Use width:100vw; height:100vh; position:absolute for all body sections. Fill body copy with lorem ipsum. Use these exact breakpoints: 480px and 1024px.');
+  assert.deepEqual(ids(findings), ['absolute-layout', 'contrast-unstated', 'hardcoded-breakpoints', 'placeholder-copy', 'viewport-sizing']);
+  assert.ok(findings.every(finding => finding.severity === 'P2'));
+  assert.ok(!ids(inspectPrompt('font-size: clamp(1rem, 1rem + 2vi, 3rem); WCAG AA contrast.')).includes('fixed-type-scale'));
+});
+
+test('modern colour syntax is detected independently of English prose', () => {
+  for (const value of ['oklch(93% 0.26 124)', 'color(display-p3 0.8 1 0)', 'color-mix(in oklch, red, blue)']) {
+    assert.ok(ids(inspectPrompt(`Couleur: ${value}`)).includes('literal-colours'));
+  }
+});
+
+test('accessibility keywords do not hide an explicit instruction to omit safeguards', () => {
+  const findings = inspectPrompt('Accessibility is out of scope. Mention prefers-reduced-motion in the notes.');
+  assert.ok(findings.some(finding => finding.id === 'accessibility-override' && finding.severity === 'P1'));
 });
 
 test('fixed type sizes and pixel breakpoints are P2 decisions, not refusals', () => {

@@ -1,0 +1,50 @@
+[
+  {
+    "format": "html",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Error exporting: Refused to write \"C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/probe-html.html\": it is outside every allowed root. Agent tools may write files only inside: C:\\dev\\emdash-baseline\\audit\\visual-concepts\\brilliant-pilot-2026-11-06\\project, C:\\Users\\Jaap\\AppData\\Local\\Temp, C:\\Users\\Jaap, and never into a hidden (dot-prefixed) directory or the OS application-support tree. Pass an absolute path inside one of those roots."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Error exporting: Refused to write \"C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/probe-htmlDoc.html\": it is outside every allowed root. Agent tools may write files only inside: C:\\dev\\emdash-baseline\\audit\\visual-concepts\\brilliant-pilot-2026-11-06\\project, C:\\Users\\Jaap\\AppData\\Local\\Temp, C:\\Users\\Jaap, and never into a hidden (dot-prefixed) directory or the OS application-support tree. Pass an absolute path inside one of those roots."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "format": "htmlFlex",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Error exporting: Refused to write \"C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/probe-htmlFlex.html\": it is outside every allowed root. Agent tools may write files only inside: C:\\dev\\emdash-baseline\\audit\\visual-concepts\\brilliant-pilot-2026-11-06\\project, C:\\Users\\Jaap\\AppData\\Local\\Temp, C:\\Users\\Jaap, and never into a hidden (dot-prefixed) directory or the OS application-support tree. Pass an absolute path inside one of those roots."
+        }
+      ],
+      "isError": true
+    }
+  },
+  {
+    "format": "react",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Error exporting: Refused to write \"C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/probe-react.jsx\": it is outside every allowed root. Agent tools may write files only inside: C:\\dev\\emdash-baseline\\audit\\visual-concepts\\brilliant-pilot-2026-11-06\\project, C:\\Users\\Jaap\\AppData\\Local\\Temp, C:\\Users\\Jaap, and never into a hidden (dot-prefixed) directory or the OS application-support tree. Pass an absolute path inside one of those roots."
+        }
+      ],
+      "isError": true
+    }
+  }
+]

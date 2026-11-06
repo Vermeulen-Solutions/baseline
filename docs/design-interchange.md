@@ -26,7 +26,7 @@ Baseline supports two execution models across all surfaces:
 
 ```mermaid
 flowchart LR
-    S1["1. Brief & UX research<br/>(Nicelydone / Refero)"] --> S2["2. Concept iteration<br/>(OpenDesign / OpenPencil / Penpot / Astro)"]
+    S1["1. Brief & UX research<br/>(Nicelydone / Refero)"] --> S2["2. Concept iteration<br/>(HTML / Brilliant / OpenPencil / Penpot)"]
     S2 --> S3["3. Translate to native CSS<br/>(src/styles/global.css)"]
     S3 --> S4["4. Component quarantine<br/>(21st.dev MCP -> /_styleguide)"]
     S4 --> S5["5. Token calibration<br/>(design:tokens + /_styleguide)"]
@@ -40,7 +40,7 @@ Select the tools that fit the project rather than treating every external servic
 | :--- | :--- | :--- |
 | **1. UX Flows & Anatomy** | **Nicelydone MCP** / **Refero.design** / **Kombai** | Real-world page flows, filter bars, secondary metadata, and empty states. |
 | **2. Design Systems** | **OpenDesign Catalog** / **[designmd.ai](https://designmd.ai/explore)** | 154 bundled offline systems in OpenDesign plus 420+ community `DESIGN.md` files via `designmd-mcp`. |
-| **3. Visual Prototyping** | **OpenDesign** / **OpenPencil** / **Penpot** / **Astro** | Bounded concept iteration on your chosen surface before translating to production code. |
+| **3. Visual Prototyping** | **Brilliant** recommended for a requested editable canvas without a settled tool; **HTML/browser** default without a canvas request; explicit **OpenPencil**/**Penpot** choices; optional **OpenDesign** | Two or three distinct concepts compared side by side on the selected surface, then a representative Astro proof. |
 | **4. Component Blueprints** | **21st.dev MCP** (`@21st-dev/magic`) | High-craft Tailwind component structures transmuted to zero-JS Astro. |
 | **5. Token Calibration** | **`npm run design:tokens` + `/_styleguide`** | WCAG AA contrast, fluid typography and spacing verification, and visual proofing. |
 

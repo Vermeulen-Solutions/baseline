@@ -1,0 +1,39 @@
+{
+  "date": "2026-11-06",
+  "catalogUrl": "https://open-design.ai/skills/#catalog",
+  "entries": 244,
+  "repositories": 58,
+  "categories": {
+    "review": 19,
+    "motion": 40,
+    "web-ui": 53,
+    "diagrams": 13,
+    "images": 15,
+    "brand": 30,
+    "mobile": 10,
+    "presentations": 19,
+    "3d": 13,
+    "ux": 32
+  },
+  "pinnedSourceLinks": 106,
+  "sourceCheckCount": 25,
+  "readEntryPointsOrSections": 24,
+  "unavailableSources": 1,
+  "baselineReviewCommit": "ca69c453dcae2b1546e609abc831c653cfa71ab0",
+  "mainCheckoutCommit": "f5a6785",
+  "assessmentCounts": {
+    "covered-with-workflow-refinement": 1,
+    "covered-at-capability-level": 103,
+    "optional-brief-dependent": 61,
+    "optional-explainer-depth": 1,
+    "optional-editorial-format": 5,
+    "optional-tool-or-framework": 16,
+    "outside-core-website-scope": 34,
+    "specialist-depth-candidate": 7,
+    "covered-with-host-dependency": 5,
+    "verification-depth-candidate": 1,
+    "conditional-research-depth": 10
+  },
+  "scope": "Capability-gap analysis for public websites, with host-provided tools distinguished from bundled Baseline guidance. No external skill installed or executed; screening is not a quality or compatibility certification of all 244 sources.",
+  "catalogHtmlSha256": "ad10357ada910cf8d3aaeb0c175729f68edee4d7b8e6e71f3f75b4d97c891547"
+}

@@ -1,0 +1,20 @@
+{
+  "ownerEditObservedBefore": true,
+  "ownerTextPreservedAfter": true,
+  "ownerLayerNamePreservedAfter": true,
+  "restoredHeading": "Build with Baseline",
+  "restoredActionHeight": 24,
+  "scope": "Observed independent human text/name edit preserved across this session checkpoint rollback. Does not establish all interleavings or lossless sizing-intent rollback.",
+  "receipts": [
+    "owner-before-undo.json",
+    "owner-undo.json",
+    "owner-export.json"
+  ],
+  "continuationToolCalls": 5,
+  "totalToolCalls": 47,
+  "totalProtocolRequests": 2,
+  "requestBytes": 33507,
+  "responseBytes": 196475,
+  "wallMinutesIncludingOwnerWait": 20.778966666666665,
+  "modelTokens": "unavailable"
+}

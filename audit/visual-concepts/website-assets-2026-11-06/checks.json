@@ -1,0 +1,24 @@
+{
+  "images": 14,
+  "failed": 0,
+  "glyphGeometryPreserved": true,
+  "viewports": [
+    {
+      "width": 960,
+      "scheme": "light",
+      "documentWidth": 960
+    },
+    {
+      "width": 960,
+      "scheme": "dark",
+      "documentWidth": 960
+    },
+    {
+      "width": 390,
+      "scheme": "dark",
+      "documentWidth": 390
+    }
+  ],
+  "errors": [],
+  "geometryCheck": "XML tag/attribute comparison: all three source glyph shapes match both reduced variants, excluding only source class bindings."
+}

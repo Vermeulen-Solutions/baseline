@@ -145,16 +145,36 @@ test('a locked skill directory is retried, then rolled back with a clear cause, 
   } finally { assert.equal(path.dirname(root), path.resolve(os.tmpdir())); assert.ok(path.basename(root).startsWith('emdash-sync-test-')); await fs.rm(root, { recursive: true, force: true }); }
 });
 
-test('stage reports upstream skills not installed, --add-skill stages one, membership persists and helper drift is reported', async () => {
+test('optional bundled skills bootstrap fresh checkouts without widening an existing ownership receipt', async () => {
+  const { memberSkills } = await import('../scripts/skill-sync.mjs');
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-sync-test-'));
+  try {
+    assert.ok(!(await memberSkills(root, 'site')).includes('brilliant-site-design'));
+    const skill = path.join(root, '.agents/skills/brilliant-site-design');
+    await fs.mkdir(skill, { recursive: true });
+    await fs.writeFile(path.join(skill, 'SKILL.md'), '# Local bundled guidance\n');
+    assert.ok((await memberSkills(root, 'site')).includes('brilliant-site-design'), 'fresh checkout discovers its bundled skill');
+    await fs.mkdir(path.join(root, '.emdash'));
+    const receipt = path.join(root, '.emdash/site-skills.json');
+    await fs.writeFile(receipt, JSON.stringify({ skills: sources.site.skills }));
+    assert.ok(!(await memberSkills(root, 'site')).includes('brilliant-site-design'), 'an old receipt wins over an unrecorded local folder');
+    await fs.writeFile(receipt, JSON.stringify({ files: {} }));
+    assert.ok(!(await memberSkills(root, 'site')).includes('brilliant-site-design'), 'a receipt without a skill array is not a fresh checkout');
+    await fs.writeFile(receipt, JSON.stringify({ skills: [...sources.site.skills, 'brilliant-site-design'] }));
+    assert.ok((await memberSkills(root, 'site')).includes('brilliant-site-design'), 'explicit recorded adoption remains managed');
+  } finally { assert.ok(path.basename(root).startsWith('emdash-sync-test-')); await fs.rm(root, { recursive: true, force: true }); }
+});
+
+test('stage offers uninstalled Brilliant, explicit adoption persists and helper drift is reported', async () => {
   const { runSync, memberSkills } = await import('../scripts/skill-sync.mjs');
   const { createHash } = await import('node:crypto');
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-sync-test-'));
   try {
     const sha = 'd'.repeat(40), blob = bytes => createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
     const upstreamHelper = Buffer.from('// upstream helper\n');
-    const files = Object.fromEntries([...sources.site.skills, 'demo-extra-skill'].map(name => [`.agents/skills/${name}/SKILL.md`, Buffer.from(`# ${name}\n`)]));
+    const files = Object.fromEntries([...sources.site.skills, 'brilliant-site-design'].map(name => [`.agents/skills/${name}/SKILL.md`, Buffer.from(`# ${name}\n`)]));
     files['scripts/skill-sync.mjs'] = upstreamHelper;
-    const tree = [...[...sources.site.skills, 'demo-extra-skill', 'building-emdash-site'].map(name => ({ path: `.agents/skills/${name}`, type: 'tree' })),
+    const tree = [...[...sources.site.skills, 'brilliant-site-design', 'building-emdash-site'].map(name => ({ path: `.agents/skills/${name}`, type: 'tree' })),
       ...Object.entries(files).map(([p, bytes]) => ({ path: p, type: 'blob', mode: '100644', sha: blob(bytes) }))];
     const request = async url => {
       if (url.includes('/commits/')) return new Response(JSON.stringify({ sha }));
@@ -166,16 +186,16 @@ test('stage reports upstream skills not installed, --add-skill stages one, membe
     await fs.mkdir(path.join(root, '.agents', 'skills'), { recursive: true });
     await fs.writeFile(path.join(root, 'scripts', 'skill-sync.mjs'), '// older local helper\r\n');
     const check = await runSync(root, 'site', ['--check', '--ref', sha], request);
-    assert.deepEqual(check.notInstalled, ['demo-extra-skill'], 'mirrored EmDash skills are not offered as site skills');
+    assert.deepEqual(check.notInstalled, ['brilliant-site-design'], 'mirrored EmDash skills are not offered as site skills');
     assert.equal(check.helper.status, 'differs');
     await assert.rejects(runSync(root, 'site', ['--stage', '--stage'], request), /repeated option/);
-    await assert.rejects(runSync(root, 'site', ['--apply', 'x', '--add-skill', 'demo-extra-skill'], request), /only valid with --stage/);
+    await assert.rejects(runSync(root, 'site', ['--apply', 'x', '--add-skill', 'brilliant-site-design'], request), /only valid with --stage/);
     await assert.rejects(runSync(root, 'site', ['--stage', '--add-skill', '../escape'], request), /Invalid skill name/);
-    const staged = await runSync(root, 'site', ['--stage', '--ref', sha, '--add-skill', 'demo-extra-skill'], request);
-    assert.deepEqual(staged.added, ['demo-extra-skill']);
+    const staged = await runSync(root, 'site', ['--stage', '--ref', sha, '--add-skill', 'brilliant-site-design'], request);
+    assert.deepEqual(staged.added, ['brilliant-site-design']);
     await applySync(root, 'site', staged.stageId);
-    assert.equal(await fs.readFile(path.join(root, '.agents', 'skills', 'demo-extra-skill', 'SKILL.md'), 'utf8'), '# demo-extra-skill\n');
-    assert.ok((await memberSkills(root, 'site')).includes('demo-extra-skill'), 'added skill stays managed for later syncs');
+    assert.equal(await fs.readFile(path.join(root, '.agents', 'skills', 'brilliant-site-design', 'SKILL.md'), 'utf8'), '# brilliant-site-design\n');
+    assert.ok((await memberSkills(root, 'site')).includes('brilliant-site-design'), 'added skill stays managed for later syncs');
     await fs.writeFile(path.join(root, 'scripts', 'skill-sync.mjs'), upstreamHelper.toString().replace('\n', '\r\n'));
     const again = await runSync(root, 'site', ['--check', '--ref', sha], request);
     assert.equal(again.status, 'current'); assert.equal(again.helper.status, 'current', 'CRLF checkout of the same helper counts as current');

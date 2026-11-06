@@ -1,0 +1,32 @@
+[
+  {
+    "width": 390,
+    "mobile": true,
+    "desktopHidden": true,
+    "desktop": true,
+    "overflow": false,
+    "brokenImages": 0,
+    "missing": [],
+    "errors": []
+  },
+  {
+    "width": 768,
+    "mobile": true,
+    "desktopHidden": true,
+    "desktop": true,
+    "overflow": false,
+    "brokenImages": 0,
+    "missing": [],
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "mobile": true,
+    "desktopHidden": true,
+    "desktop": true,
+    "overflow": false,
+    "brokenImages": 0,
+    "missing": [],
+    "errors": []
+  }
+]

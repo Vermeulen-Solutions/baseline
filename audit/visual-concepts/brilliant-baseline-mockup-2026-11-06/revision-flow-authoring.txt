@@ -1,0 +1,107 @@
+```ds
+file("Styles/default.ds")
+flow.v0: 0
+flow.v20: 20
+flow.v1: 1
+flow.v100_8: 100.8
+flow.v86_4: 86.4
+flow.v56: 56
+flow.v9_313: 9.313
+flow.v20_078: 20.078
+flow.v24: 24
+flow.v32: 32
+flow.v36: 36
+flow.v12: 12
+flow.v14_6: 14.6
+flow.v23_4: 23.4
+flow.v22_4: 22.4
+flow.v8: 8
+flow.v18_6: 18.6
+flow.v48: 48
+flow.v8_313: 8.313
+flow.v19_578: 19.578
+```
+```bl
+file("Native reconstruction.bl")
+// revised copy before native flow repair
+#n1440-1 al(v,g($flow.v0),pad($flow.v20)) s(1440,hug)
+#n1440-2 al(v,g($flow.v0),pad($flow.v1)) s(fill,hug)
+#n1440-2-grid abs
+#n1440-3 abs
+#n1440-4 abs
+#n1440-18 al(v,g($flow.v0),pad($flow.v0)) s(fill,hug)
+fr s(fill,86.391) before(#n1440-166) "Preserved section separation" #flow-gap-1440-3
+#n1440-19 al(v,x(c),g($flow.v0),pad($flow.v100_8,$flow.v0,$flow.v86_4,$flow.v0)) s(fill,hug)
+#n1440-20 al(h,g($flow.v56),pad($flow.v0)) s(1216,hug)
+#n1440-21 al(v,g($flow.v0),pad($flow.v0)) s(676.656,hug)
+al(v,g($flow.v0),pad($flow.v9_313,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n1440-21) "Preserved hero spacing" #flow-n1440-22
+#n1440-22 parent(#flow-n1440-22)
+al(v,g($flow.v0),pad($flow.v20_078,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n1440-21) "Preserved hero spacing" #flow-n1440-25
+#n1440-25 parent(#flow-n1440-25)
+al(v,g($flow.v0),pad($flow.v24,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n1440-21) "Preserved hero spacing" #flow-n1440-26
+#n1440-26 parent(#flow-n1440-26)
+al(v,g($flow.v0),pad($flow.v32,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n1440-21) "Preserved hero spacing" #flow-n1440-27
+#n1440-27 parent(#flow-n1440-27)
+al(v,g($flow.v0),pad($flow.v36,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n1440-21) "Preserved hero spacing" #flow-n1440-30
+#n1440-30 parent(#flow-n1440-30)
+#n1440-25 al(v,g($flow.v0),pad($flow.v0)) s(fill,hug)
+#n1440-25-text s(fill,hug)
+#n1440-26 al(v,g($flow.v0),pad($flow.v0)) s(387.078,hug)
+#n1440-26-text s(fill,hug)
+#n1440-27 al(h,wrap,g($flow.v12),pad($flow.v0)) s(fill,hug)
+#n1440-28 al(h,x(c),y(c),g($flow.v0),pad($flow.v14_6,$flow.v23_4)) s(hug,hug)
+#n1440-28-text s(hug,hug)
+#n1440-29 al(h,x(c),y(c),g($flow.v0),pad($flow.v14_6,$flow.v23_4)) s(hug,hug)
+#n1440-29-text s(hug,hug)
+#n1440-28-text
+  spans[("Build with Baseline",link("#cta"))]
+#n1440-30 al(h,wrap,g($flow.v22_4,$flow.v8),pad($flow.v18_6,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug)
+#n1440-31 al(v,g($flow.v0),pad($flow.v0)) s(hug,hug)
+#n1440-31-text s(hug,hug)
+#n1440-32 al(v,g($flow.v0),pad($flow.v0)) s(hug,hug)
+#n1440-32-text s(hug,hug)
+#n1440-33 al(v,g($flow.v0),pad($flow.v0)) s(hug,hug)
+#n1440-33-text s(hug,hug)
+#n1440-34 al(v,g($flow.v0),pad($flow.v0)) s(hug,hug)
+#n1440-34-text s(hug,hug)
+#n390-1 al(v,g($flow.v0),pad($flow.v8)) s(390,hug)
+#n390-2 al(v,g($flow.v0),pad($flow.v1)) s(fill,hug)
+#n390-2-grid abs
+#n390-3 abs
+#n390-4 abs
+#n390-10 al(v,g($flow.v0),pad($flow.v0)) s(fill,hug)
+fr s(fill,56) before(#n390-158) "Preserved section separation" #flow-gap-390-3
+#n390-11 al(v,x(c),g($flow.v0),pad($flow.v48,$flow.v0,$flow.v56,$flow.v0)) s(fill,hug)
+#n390-12 al(v,g($flow.v32),pad($flow.v0)) s(340,hug)
+#n390-13 al(v,g($flow.v0),pad($flow.v0)) s(340,hug)
+al(v,g($flow.v0),pad($flow.v8_313,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n390-13) "Preserved hero spacing" #flow-n390-14
+#n390-14 parent(#flow-n390-14)
+al(v,g($flow.v0),pad($flow.v19_578,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n390-13) "Preserved hero spacing" #flow-n390-17
+#n390-17 parent(#flow-n390-17)
+al(v,g($flow.v0),pad($flow.v24,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n390-13) "Preserved hero spacing" #flow-n390-18
+#n390-18 parent(#flow-n390-18)
+al(v,g($flow.v0),pad($flow.v32,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n390-13) "Preserved hero spacing" #flow-n390-19
+#n390-19 parent(#flow-n390-19)
+al(v,g($flow.v0),pad($flow.v36,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug) parent(#n390-13) "Preserved hero spacing" #flow-n390-22
+#n390-22 parent(#flow-n390-22)
+#n390-17 al(v,g($flow.v0),pad($flow.v0)) s(fill,hug)
+#n390-17-text s(fill,hug)
+#n390-18 al(v,g($flow.v0),pad($flow.v0)) s(340,hug)
+#n390-18-text s(fill,hug)
+#n390-19 al(h,wrap,g($flow.v12),pad($flow.v0)) s(fill,hug)
+#n390-20 al(h,x(c),y(c),g($flow.v0),pad($flow.v14_6,$flow.v23_4)) s(hug,hug)
+#n390-20-text s(hug,hug)
+#n390-21 al(h,x(c),y(c),g($flow.v0),pad($flow.v14_6,$flow.v23_4)) s(hug,hug)
+#n390-21-text s(hug,hug)
+#n390-20-text
+  spans[("Build with Baseline",link("#cta"))]
+#n390-22 al(h,wrap,g($flow.v22_4,$flow.v8),pad($flow.v18_6,$flow.v0,$flow.v0,$flow.v0)) s(fill,hug)
+#n390-23 al(v,g($flow.v0),pad($flow.v0)) s(hug,hug)
+#n390-23-text s(hug,hug)
+#n390-24 al(v,g($flow.v0),pad($flow.v0)) s(hug,hug)
+#n390-24-text s(hug,hug)
+#n390-25 al(v,g($flow.v0),pad($flow.v0)) s(hug,hug)
+#n390-25-text s(hug,hug)
+#n390-26 al(v,g($flow.v0),pad($flow.v0)) s(hug,hug)
+#n390-26-text s(hug,hug)
+```

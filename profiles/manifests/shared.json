@@ -92,6 +92,7 @@
     "docs/penpot-onboarding.md",
     "docs/openpencil-onboarding.md",
     "docs/opendesign-onboarding.md",
+    "docs/brilliant-onboarding.md",
     "scripts/audit-actionability.mjs",
     "scripts/canvas-kit.mjs",
     "docs/canvas-kit.md",
@@ -204,12 +205,14 @@
     "impeccable",
     "penpot-site-design",
     "openpencil-site-design",
-    "opendesign-site-design"
+    "opendesign-site-design",
+    "brilliant-site-design"
   ],
   "skillFiles": [
     ".agents/skills/astro-site-design/SKILL.md",
     ".agents/skills/astro-site-design/agents/openai.yaml",
     ".agents/skills/astro-site-design/references/accessibility.md",
+    ".agents/skills/astro-site-design/references/screen-reader-checks.md",
     ".agents/skills/astro-site-design/references/astro-primitives.md",
     ".agents/skills/astro-site-design/references/component-quarantine.md",
     ".agents/skills/astro-site-design/references/emdash-content.md",
@@ -287,6 +290,7 @@
     ".agents/skills/new-site-workflow/agents/openai.yaml",
     ".agents/skills/new-site-workflow/references/discovery-and-content.md",
     ".agents/skills/new-site-workflow/references/copywriting.md",
+    ".agents/skills/new-site-workflow/references/visitor-research.md",
     ".agents/skills/new-site-workflow/references/site-maintenance.md",
     ".agents/skills/site-art-direction/SKILL.md",
     ".agents/skills/site-art-direction/agents/openai.yaml",
@@ -302,6 +306,9 @@
     ".agents/skills/openpencil-site-design/agents/openai.yaml",
     ".agents/skills/openpencil-site-design/references/connection-and-api.md",
     ".agents/skills/site-art-direction/references/design-iteration.md",
+    ".agents/skills/site-art-direction/references/capability-routing.md",
+    ".agents/skills/site-art-direction/references/brand-assets.md",
+    ".agents/skills/site-art-direction/references/editorial-illustration.md",
     ".agents/skills/site-art-direction/references/external-prompt-adaptation.md",
     ".agents/skills/openpencil-site-design/assets/review-specimen.jsx",
     ".agents/skills/openpencil-site-design/assets/review-tokens.json",
@@ -321,6 +328,10 @@
     ".agents/skills/opendesign-site-design/references/connection-and-cli.md",
     ".agents/skills/new-site-workflow/references/delivery-evidence.md",
     ".agents/skills/new-site-workflow/references/parallel-delivery.md",
-    ".agents/skills/site-art-direction/references/token-handoff.md"
+    ".agents/skills/site-art-direction/references/token-handoff.md",
+    ".agents/skills/brilliant-site-design/SKILL.md",
+    ".agents/skills/brilliant-site-design/agents/openai.yaml",
+    ".agents/skills/brilliant-site-design/references/connection-and-recovery.md",
+    ".agents/skills/brilliant-site-design/references/baseline-mapping-and-export.md"
   ]
 }
