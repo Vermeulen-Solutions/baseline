@@ -1,0 +1,205 @@
+[
+  {
+    "file": "modes-final.html",
+    "width": 390,
+    "errors": [],
+    "metrics": {
+      "documentWidth": 1120,
+      "viewport": 390,
+      "headings": 0,
+      "buttons": 0,
+      "styledSpans": [
+        {
+          "text": "shared styles",
+          "color": "rgb(0, 81, 152)",
+          "style": "italic"
+        },
+        {
+          "text": "Baseline source",
+          "color": "rgb(0, 0, 238)",
+          "style": "normal"
+        }
+      ],
+      "links": [
+        {
+          "href": "https://github.com/Vermeulen-Solutions/baseline",
+          "color": "rgb(0, 0, 238)"
+        }
+      ],
+      "cards": [
+        {
+          "mode": "brand.native-trial theme.light",
+          "background": "rgb(255, 255, 255)",
+          "radius": "20px",
+          "textColor": "rgb(23, 33, 50)",
+          "bodyFontSize": "16px"
+        },
+        {
+          "mode": "brand.native-trial theme.dark",
+          "background": "rgb(23, 33, 50)",
+          "radius": "18px",
+          "textColor": "rgb(247, 248, 250)",
+          "bodyFontSize": "16px"
+        },
+        {
+          "mode": "brand.native-trial accessibility.large-text density.compact theme.light",
+          "background": "rgb(255, 255, 255)",
+          "radius": "18px",
+          "textColor": "rgb(23, 33, 50)",
+          "bodyFontSize": "20px"
+        }
+      ]
+    }
+  },
+  {
+    "file": "modes-final.html",
+    "width": 768,
+    "errors": [],
+    "metrics": {
+      "documentWidth": 1120,
+      "viewport": 768,
+      "headings": 0,
+      "buttons": 0,
+      "styledSpans": [
+        {
+          "text": "shared styles",
+          "color": "rgb(0, 81, 152)",
+          "style": "italic"
+        },
+        {
+          "text": "Baseline source",
+          "color": "rgb(0, 0, 238)",
+          "style": "normal"
+        }
+      ],
+      "links": [
+        {
+          "href": "https://github.com/Vermeulen-Solutions/baseline",
+          "color": "rgb(0, 0, 238)"
+        }
+      ],
+      "cards": [
+        {
+          "mode": "brand.native-trial theme.light",
+          "background": "rgb(255, 255, 255)",
+          "radius": "20px",
+          "textColor": "rgb(23, 33, 50)",
+          "bodyFontSize": "16px"
+        },
+        {
+          "mode": "brand.native-trial theme.dark",
+          "background": "rgb(23, 33, 50)",
+          "radius": "18px",
+          "textColor": "rgb(247, 248, 250)",
+          "bodyFontSize": "16px"
+        },
+        {
+          "mode": "brand.native-trial accessibility.large-text density.compact theme.light",
+          "background": "rgb(255, 255, 255)",
+          "radius": "18px",
+          "textColor": "rgb(23, 33, 50)",
+          "bodyFontSize": "20px"
+        }
+      ]
+    }
+  },
+  {
+    "file": "modes-final.html",
+    "width": 1120,
+    "errors": [],
+    "metrics": {
+      "documentWidth": 1120,
+      "viewport": 1120,
+      "headings": 0,
+      "buttons": 0,
+      "styledSpans": [
+        {
+          "text": "shared styles",
+          "color": "rgb(0, 81, 152)",
+          "style": "italic"
+        },
+        {
+          "text": "Baseline source",
+          "color": "rgb(0, 0, 238)",
+          "style": "normal"
+        }
+      ],
+      "links": [
+        {
+          "href": "https://github.com/Vermeulen-Solutions/baseline",
+          "color": "rgb(0, 0, 238)"
+        }
+      ],
+      "cards": [
+        {
+          "mode": "brand.native-trial theme.light",
+          "background": "rgb(255, 255, 255)",
+          "radius": "20px",
+          "textColor": "rgb(23, 33, 50)",
+          "bodyFontSize": "16px"
+        },
+        {
+          "mode": "brand.native-trial theme.dark",
+          "background": "rgb(23, 33, 50)",
+          "radius": "18px",
+          "textColor": "rgb(247, 248, 250)",
+          "bodyFontSize": "16px"
+        },
+        {
+          "mode": "brand.native-trial accessibility.large-text density.compact theme.light",
+          "background": "rgb(255, 255, 255)",
+          "radius": "18px",
+          "textColor": "rgb(23, 33, 50)",
+          "bodyFontSize": "20px"
+        }
+      ],
+      "modeMutation": {
+        "mode": "brand.native-trial theme.light",
+        "bodyFontSize": "20px",
+        "bodyLeft": "12px"
+      }
+    }
+  },
+  {
+    "file": "consumers-final.html",
+    "width": 390,
+    "errors": [],
+    "metrics": {
+      "documentWidth": 720,
+      "viewport": 390,
+      "headings": 0,
+      "buttons": 0,
+      "styledSpans": [],
+      "links": [],
+      "cards": []
+    }
+  },
+  {
+    "file": "consumers-final.html",
+    "width": 768,
+    "errors": [],
+    "metrics": {
+      "documentWidth": 768,
+      "viewport": 768,
+      "headings": 0,
+      "buttons": 0,
+      "styledSpans": [],
+      "links": [],
+      "cards": []
+    }
+  },
+  {
+    "file": "consumers-final.html",
+    "width": 1120,
+    "errors": [],
+    "metrics": {
+      "documentWidth": 1120,
+      "viewport": 1120,
+      "headings": 0,
+      "buttons": 0,
+      "styledSpans": [],
+      "links": [],
+      "cards": []
+    }
+  }
+]

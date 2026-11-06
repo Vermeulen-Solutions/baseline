@@ -38,6 +38,12 @@ The `edit` tool takes `text`, with fences whose first row names the document. Us
 
 This deliberately uses sampled constants, not claims of fluid fidelity. A native `bl` iteration can address `#sample`; use `preview(#sample)` or `export` for a PNG. `read` returns a fence that can guide the next edit. Create only the requested slice and keep bounded read ranges/depth; compact responses still require reading warnings and save status.
 
+## Preflight without creating objects
+
+When exposed by the installed server, `convert_html` with `html` or a batch of `frames` and `layout: true` returns blueprint rows, conversion notes and resolved boxes in a throwaway world. Pass the owned project/session for its font/token context. A two-input native capability trial left the canvas inventory unchanged. Use this before importing a representative HTML slice; it is structural preflight, not a visual fidelity pass.
+
+Inspect the returned properties even when `notes` is empty. In that trial, `font:700 24px Arial` on an `h1` became Inter 32, while explicit `font-family:Arial;font-size:24px;font-weight:700` preserved Arial 24. Prefer explicit applicable properties in prepared input and still compare the actual native render. Do not generalize one supported shorthand into support for every CSS shorthand.
+
 ## Writes, retries and saves
 
 - Assign a stable `requestId` per logical edit. The tested contract caches it for two minutes: retry the same text with the same ID after a transport failure, never resend with a fresh ID just because the response was lost. New text needs a new ID. Outside that window, or with an unknown outcome, read the target before deciding whether another write is needed.
@@ -51,5 +57,9 @@ This deliberately uses sampled constants, not claims of fluid fidelity. A native
 `init` can bind a background project, and `switch_canvas` can return `presented: false`. In the pilot, the desktop showed “Agent working in project” with “Open project”; opening it once made the saved canvas visible. Thereafter agent text/geometry changes and a new canvas file appeared without Ctrl+R. Record this initial opening step separately from any refresh required by a later write.
 
 Use the live app or an available UI tool to inspect the exact owned project. An export, screenshot of a different tab or API `preview` is not evidence of desktop freshness. Avoid capturing unrelated projects or account details in shared evidence. Keep the owner's current review entry obvious, and inspect expected post-undo state rather than relying on the undo label alone.
+
+For instructions about the app itself, load `reference/show-me`, discover the actual control with `list_ui_targets`, then use `show_ui` through `execute_commands` when useful. Check `show_ui_outcome`: the trial's one-step Libraries guide was visible and completed with `changed: []`, without adding a dependency. A walkthrough's completion is not evidence of a changed setting. Afterward inspect the actual surface: `switch_canvas` reported `presented: true` while the Libraries panel still covered the canvas; selecting the Files rail restored the design view.
+
+For an illustrative inspector image, discover `list_stagers` and its state schema, then use `render_ui`. This stages the real widget with supplied data; it is not a capture of the owner's current selection. The trial rendered three supplied Fills rows, including 50% alpha. Its write to the repository worktree was refused; writing under the owned project's `Exports/` succeeded. Follow returned allowed roots once, then copy the generated artifact through normal filesystem tools if needed. Load these features only when explaining the UI; they are not required for ordinary design edits.
 
 Checkpoint rollback and redo are not universal transactions. A named rollback preserved an actual owner's text and layer name during one two-property agent undo; another test restored fixed sizing intent with a newer measured height. One redo acted on one row-level history item. Re-read important sizes, tokens, text and independent owner work after rollback/redo, and repair only the verified discrepancy within the authorized feedback batch.

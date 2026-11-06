@@ -26,6 +26,19 @@ Read [Baseline mapping and export](references/baseline-mapping-and-export.md) be
 - **Native-token path:** load `blueprint/core`, `blueprint/layout`, `design-systems/core` and `design-systems/authoring` as needed. Author the design system with a `ds` fence and use its references in `bl` fences. HTML fences do not provide the same native design-system discipline.
 - Load knowledge in one or two focused batches. Follow prerequisite information returned by the installed server; avoid fetching the whole catalogue or repeatedly reading the complete canvas. Tool-call counts and bytes are not model tokens.
 
+Load the relevant installed keys when the task needs these capabilities; the mapping and connection references carry the observed limits:
+
+| Task | Knowledge keys / tool |
+| --- | --- |
+| Repeated cards, buttons, states and slots | `blueprint/components`, relevant `design/blocks/*`; inspect with `read(expandInstances: true)` |
+| Layout relationships and intentional overlap | `blueprint/layout`, `blueprint/layout-patterns` |
+| Shared typography/surface recipes and modes | `design-systems/authoring-composites`, `design-systems/authoring-branches`, `design-systems/authoring-modes`, `design-systems/apply` |
+| Mixed text styles and links | `blueprint/text`, `blueprint/styled-ranges`; reapply ranges after copy changes |
+| HTML conversion preflight | Discover `convert_html`; inspect its `layout: true` output before creating objects |
+| Helping the owner find a control | `reference/show-me`, `reference/ui-walkthroughs`; discover targets/stagers first |
+
+Use native masters/instances for repeated structures and variants for their discrete states. Test one shared edit and one local override before expanding a component family. Cross-canvas propagation, stored consumer bodies and text-style overrides have distinct limits; follow the mapping reference rather than promising every instance is immediately synchronized on disk.
+
 ## Iterate and inspect
 
 1. Pick the representative slice from the brief. For an open new direction, compare two or three concepts with meaningful structural differences, shared real content and desktop/mobile intent (`1440×900`, `390×844`). A tall mobile board may extend below the viewport; report its actual capture dimensions. Small refinements edit the selected composition directly.
