@@ -6,6 +6,21 @@ Issue [#12](https://github.com/Vermeulen-Solutions/baseline/issues/12) follows t
 
 This review records the earlier compatible dependency remediation and its audit results. The subsequent focused maintenance change removes `@google/design.md` and its bridge from the default installation instead of waiting for an upstream release. See [existing-site adoption](baseline-updates.md#retiring-the-default-designmd-package). The original receipts remain historical evidence; EmDash's separate Zod path is not resolved by removing the design tool.
 
+## Follow-up resolution — 6 November 2026
+
+The remaining paths and a newly published minimatch advisory are now resolved by reviewed npm overrides in the canonical `package.json`. Root and both independently installed static profiles report **0 vulnerabilities**.
+
+| Override | Advisory and reason | Profiles |
+| --- | --- | --- |
+| `zod` 4.6.7 | [GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5), patched in 4.6.6. `emdash`/`@emdash-cms/auth` 1.4.0 and `@emdash-cms/plugin-types` 0.6.0 still pin 4.5.4 exactly. 4.6.7 is the same major Astro already resolves, so the whole tree now shares one Zod instance. | EmDash only. Static profiles already resolve 4.6.7 through Astro. |
+| `minimatch` 11.0.5 | [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249) (globparts amplification, published 30 October). Only 11.0.1+ is patched. `eslint`, `@eslint/config-array`, `@typescript-eslint/typescript-estree` and `eslint-plugin-jsx-a11y-x` declare `^10`. Their source uses only `new Minimatch()`, `.match(path[, partial])` and `minimatch()`, which 11 keeps. The APIs 11 removed (`makeRe`, `regexp`, `AST`, `matchOne`, `debug`) are unused. | All profiles; development lint tooling only. |
+
+Overrides live in `package.json#/overrides` and are inventoried in `profiles/dependency-inventory.json#/overrides`. Generated profiles take only their inventoried overrides from the canonical package, and a test enforces the single source. Remove each override once its upstream declares a patched range: EmDash for Zod, eslint and its plugins for minimatch.
+
+The design-package path was already resolved by its retirement. Upstream, [google-labs-code/design.md#184](https://github.com/google-labs-code/design.md/issues/184) was fixed by moving its declared and bundled Zod to v4 (release 0.4.1). Baseline does not reinstall it.
+
+Verification on Windows: clean root install, full `verify` (381 unit and 159 rehearsal tests, zero Astro errors), `build`, `check:dev-tools`, `check:native-images`, `check:emdash13` (admin restore/refresh and inline-link save/reload against overridden Zod), `check:ci-fast` and `test:profiles`. Each regenerated static profile was also installed separately, audited and linted. The sections below are the original 25 October record.
+
 ## Compatible changes
 
 | Package | Before → after | Dependency path and decision |
