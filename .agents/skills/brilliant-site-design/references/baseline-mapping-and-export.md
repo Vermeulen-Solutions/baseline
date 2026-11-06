@@ -10,6 +10,14 @@ The neutral pilot mapped five source roles into native `color.page`, `color.surf
 
 HTML `clamp()`, `vi`, custom-property declarations and `var()` paints were dropped by the tested converter without warnings. Gap/padding/font constants survived. Use sampled constants deliberately when exploring an HTML layout, then inspect the result. Do not treat HTML-fence creation as native semantic-token authoring or infer preserved expressions from a screenshot.
 
+## Choose the authoring path for the goal
+
+For a new Brilliant concept, author its visual hierarchy in native groups and layout, with editable typography and brief-led illustration. An owner-selected native Scratch example demonstrated layered gradient fills, vector silhouettes/arcs, restrained glows and semantically named illustration groups, alongside auto layout for editorial copy, navigation and controls. These are useful native composition patterns; they do not establish that the example's business claims are true, who created it, how many tokens it took or whether it is responsive. Extract the construction principle, not its copy, palette or private scene.
+
+For an exact recreation, capture the real source at matching widths, preserve its copy/assets and adaptation constraints, and compare a representative converted slice before importing everything. The [full Baseline mockup trial](https://github.com/Vermeulen-Solutions/baseline/blob/0e9a35a/audit/brilliant-baseline-mockup-2026-11-06.md) created 870 objects through sampled HTML but failed visual review. Native reconstruction represented the full design with partial fidelity after repair. That result is specific to the tested path, not evidence that native design authoring is inherently a DOM-copying task or that every capture/import path fails.
+
+When preparing inline CSS, copy only applicable layout properties: computed `flex-direction: row` on a block is not its authored layout, and blindly inlining it changes conversion. Retain original expressions, normalize deliberately supported colour syntax and inspect grid, rich text, borders, fonts and effects rather than trusting a success response. Fixed browser-derived geometry is a declared reconstruction, not responsive behavior or a maintainable default for new concepts.
+
 ## Native probe recipe
 
 Load the version-matched `blueprint/core`, `blueprint/layout`, `design-systems/core` and `design-systems/authoring` knowledge before using this pattern. The example values below are the neutral November 2026 pilot samples, not client defaults to copy blindly. Replace them from the current source mapping and preserve the original expressions in the concept notes.
@@ -49,6 +57,17 @@ preview(#probe)
 
 Read back the actual bindings and bounds. Only change the requested declarations in an existing system. Native named number tokens still represent canvas values; they do not recreate `clamp()` or contextual CSS automatically. Keep narrow/wide specimens, realistic long copy and the reading-order intent beside the chosen composition.
 
+## Native units and edit resilience
+
+- **Tracking:** bare `ls(N)` uses pixels, while the tested token-bound tracking value is relative to the font size. Translate CSS pixel tracking as `letterSpacingPx / fontSizePx` before binding, then inspect the resolved pixel value. Binding `-4.925` as a token at 109.44px produced roughly -539px tracking; `-0.045` resolved correctly. A clean parse did not detect that unit mistake.
+- **Alpha:** the tested native eight-digit hex parser uses `AARRGGBB`, unlike CSS `RRGGBBAA`. Prefer explicit `solid(colour,o(...))` in paints and check resolved alpha values. `rgba()` declarations in the tested design-system parser returned unknown-generator notes even while the file write reported ready; inspect statements and diagnostics rather than assuming CSS declarations are accepted unchanged.
+- **Fonts:** inspect the actual source display/body faces, weights and optical variants. Replacing a CSS stack with its broad family name can change selection: this trial's exported `Segoe UI Variable` family fell back to `Segoe UI` in Chromium. Check real rendered fonts when fidelity matters. A repeated identical PNG did not clear the tool's persistent provisional-font warning; record that limit rather than exporting indefinitely or certifying all fonts as settled.
+- **Content flow:** use native auto layout, hug/fill, bounded widths and wrapping for headline, deck, actions and page sections. Preserve real margins/gaps intentionally; do not assume sampled fixed frames absorb longer copy. Try a longer headline, paragraph and CTA before accepting a representative layout. Keep single-line labels intrinsic where appropriate.
+- **Alignment and clipping:** explicitly check start/center/end alignment when enabling auto layout on a frame. Re-read clip flags, page ground, dimensions and bounds after the type change, and mark decorative backgrounds/overlays absolute so they do not join content flow. In the trial, restoring explicit alignment and clipping repaired unintended centering and oversized raster exports.
+- **Cross-row gaps:** this runtime could bind the main-axis gap but refused a token on the wrap-row gap; a numeric cross-gap was accepted. Read the installed contract and resolved layout instead of silently accepting the reported fallback.
+
+Keep illustration/effect layers separate from content layout, and name important groups by design purpose. A source coordinate is reasonable for a star, overlay or deliberate overlap; it is not a reason to freeze every text and button parent. Read diagnostics critically: a warning that a background is behind transparent content is not automatically a reason to bring it over the text.
+
 ## Test the right export flavour
 
 Use the actual `export` schema, owned `project`, `sessionId`, `canvasId`, returned refs/IDs and a destination under that project's `Exports/`. The pilot's names and behavior are a tested baseline, not a guarantee across future app versions:
@@ -61,6 +80,10 @@ Use the actual `export` schema, owned `project`, `sessionId`, `canvasId`, return
 | `react` | Five declarations and six `var()` uses | Flex relationships and literal sizes; exported JSX parsing does not prove a working mount or justify adding React to a static site |
 
 All four lacked the original fluid expressions. `htmlDoc`/React preserved native colour roles; an offline `--color-action` edit propagated to the rendered action sample. That does not certify every token type or prove a native design-system edit propagates in every context. Compare expressions and role references explicitly instead of choosing an export by filename alone.
+
+Check native and browser results separately. The full-page trial kept editable native content but exported linked text with default blue/underline styling, omitted named fragment targets and produced no semantic heading/landmark elements. Those are observed acceptance failures for that reconstruction/export path. Check all meaningful text, actual font selection, link paint/destinations, semantics and required states; record pre-existing source placeholders separately. Do not silently patch the export and present the repaired result as native export fidelity.
+
+`htmlFlex` is a snippet. Render it inside a minimal document with viewport metadata and `body { margin: 0 }` before diagnosing matching-width overflow: the raw browser's default body margin caused a separate, removable offset. Keep that wrapper and its result distinct from the raw snippet and from a responsive implementation. A full-document export with zero runtime errors still failed narrow-width reflow, motion/reduced-motion and semantic acceptance.
 
 Capture the complete board plus the requested viewport slice when the page is taller. Inspect actual PNG dimensions and equivalent browser extents: the pilot's 1009.16px content rounded to 1010px in the native PNG and 1009px in Chromium. A measured pixel difference has no automatic aesthetic or fidelity pass threshold; inspect wrapping, geometry, fonts, clipping and required states yourself.
 
