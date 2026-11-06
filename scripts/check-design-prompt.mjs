@@ -142,6 +142,13 @@ function prohibited(clause, matchIndex) {
   return /^\s*(?:[-*]\s*|\d+[.)]\s*)?(?:do not|don't|never|avoid|no|without)\b/i.test(clause.slice(0, matchIndex + 1));
 }
 
+// A declared source lowers proof to a review finding only when it describes the
+// proof itself ("approved client logos", "testimonials are owner-supplied"), not
+// another noun ("ratings from approved customers"). It still never certifies it.
+const PROOF_NOUN = String.raw`(?:testimonials?|reviews?|logos?|ratings?|case stud(?:y|ies)|portraits?|quotes?)`;
+const SOURCED_PROOF = new RegExp(String.raw`\b(?:approved|owner[- ]supplied|verified(?: source)?)\s+(?:[\w-]+\s+){0,2}${PROOF_NOUN}\b|\b${PROOF_NOUN}\b[^.\n]{0,30}\b(?:are|is|were|was|been)\s+(?:owner[- ])?(?:approved|supplied|verified)\b`, 'i');
+const sourcedProof = clause => SOURCED_PROOF.test(clause);
+
 function lineFinding(rule, line) {
   let severity;
   for (const clause of clauses(line)) {
@@ -150,7 +157,8 @@ function lineFinding(rule, line) {
     if (['invented-proof', 'fabricated-proof', 'motion-without-reduced', 'accessibility-override'].includes(rule.id) && prohibited(clause, match.index)) continue;
     let candidate = rule.severity;
     if (rule.id === 'literal-colours' && /\b(?:inspiration|reference|sample palette)\b/i.test(clause) && !/\b(?:must|exact|mandatory)\b/i.test(clause)) candidate = 'P2';
-    if (['webfont-dependency', 'named-font-mandate', 'quoted-font-name', 'system-font-ban', 'invented-proof'].includes(rule.id) && /\b(?:approved|owner[- ]supplied|already installed|self[- ]hosted|verified source)\b/i.test(clause)) candidate = 'P2';
+    if (['webfont-dependency', 'named-font-mandate', 'quoted-font-name', 'system-font-ban'].includes(rule.id) && /\b(?:approved|owner[- ]supplied|already installed|self[- ]hosted|verified source)\b/i.test(clause)) candidate = 'P2';
+    if (rule.id === 'invented-proof' && sourcedProof(clause)) candidate = 'P2';
     if (rule.id === 'invented-proof' && /\b(?:labelled|labeled)\b[^.\n]{0,30}\billustration\b/i.test(clause)) candidate = 'P2';
     if (!severity || SEVERITY_ORDER[candidate.toLowerCase()] < SEVERITY_ORDER[severity.toLowerCase()]) severity = candidate;
   }

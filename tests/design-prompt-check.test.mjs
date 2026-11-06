@@ -84,6 +84,13 @@ test('a prohibition cannot hide a later action joined with and', () => {
   assert.ok(!ids(inspectPrompt('Do not invent testimonials and client logos.')).includes('invented-proof'));
 });
 
+test('an approval word lowers proof only when it describes the proof itself', () => {
+  assert.equal(inspectPrompt('Add 5-star ratings from approved customers.').find(f => f.id === 'invented-proof')?.severity, 'P1');
+  for (const prompt of ['These testimonials are approved by the owner.', 'Use only verified source testimonials.']) {
+    assert.equal(inspectPrompt(prompt).find(f => f.id === 'invented-proof')?.severity, 'P2', prompt);
+  }
+});
+
 test('a prohibition cannot hide a later action joined with a comma', () => {
   for (const prompt of [
     'Never invent testimonials, add fake client logos.',
