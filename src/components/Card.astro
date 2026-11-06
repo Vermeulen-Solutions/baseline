@@ -92,8 +92,8 @@ const hasDescription = Boolean(description || Astro.slots.has('default') || Obje
 .card h2, .card h3, .card h4 { font-size: var(--text-step-0); overflow-wrap: anywhere; }
 .card-metadata, .card-description { color: var(--card-muted); }
 .card-action { margin-top: auto; font-weight: 700; color: var(--color-action); }
-.card--horizontal { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+/* Narrow-first: stacked by default; side by side above 40rem of viewport; stacked again in a query container of 32rem or less (declared last so it wins). */
+@media (min-width: 40.0625rem) { .card--horizontal { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 @container (max-width: 32rem) { .card--horizontal { display: flex; } }
-@media (max-width: 40rem) { .card--horizontal { display: flex; } }
 }
 </style>

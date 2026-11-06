@@ -161,6 +161,10 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   assert.ok(card.includes('transitionName?: string'), 'Card must accept optional shared-element View Transition prefix');
   assert.ok(!/from ['"]emdash/.test(card), 'Shared Card must not require EmDash types');
   assert.ok(card.includes('[data-emdash-field]'), 'Card must elevate EmDash field annotations above .clickable-parent');
+  const horizontalGrid = card.indexOf('@media (min-width: 40.0625rem) { .card--horizontal { display: grid;');
+  const narrowSlot = card.indexOf('@container (max-width: 32rem) { .card--horizontal { display: flex; } }');
+  assert.ok(horizontalGrid > 0 && narrowSlot > horizontalGrid, 'Horizontal Card must stack by default, go side by side only above 40rem, and let a narrow container restack it afterwards');
+  assert.ok(!/^\.card--horizontal \{ display: grid/m.test(card), 'Horizontal Card must not default to the side-by-side grid outside a query');
   assert.ok(css.includes('grid-template-columns: subgrid'), 'global.css must propagate .content-grid tracks into .flow / [data-emdash-field] via subgrid');
 
   const editorialImage = readFileSync('src/components/EditorialImage.astro', 'utf8');

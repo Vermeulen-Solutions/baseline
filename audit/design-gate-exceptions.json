@@ -240,8 +240,8 @@
   },
   {
     "path": "src/components/Card.astro",
-    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "1d48366af82530edb6163f552f6b56a7cb7e5d73581ff10119bb0590f7e00060"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; layout=\"horizontal\" rules reordered narrow-first (stacked default, side by side above a 40rem viewport, restacked in a query container of 32rem or less) with the same breakpoints and outcomes and no new visual values; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "48224c2617a427e38104e309af55c00be10c02d3d2c1c76bdf20264e55d962c0"
   },
   {
     "path": "src/components/PartnersPanel.astro",
