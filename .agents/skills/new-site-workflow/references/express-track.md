@@ -8,7 +8,7 @@ Present the defaults below briefly at the checkpoint they belong to and record a
 
 - Recommend `static` when developers/agents own file edits. Ask about editing needs before selecting a browser CMS or relational platform; record the selected profile.
 - Use the brief/content language as a labeled assumption. Resolve ambiguity or extra locales before committing to URL/schema structure.
-- Recommend one brief-led visual direction, preserving supplied identity. Offer two or three alternatives only when the brief and identity leave the lane, typography or hero strategy open. Explain lane names in everyday terms.
+- For a new site, compare two or three structurally distinct directions side by side at the concept checkpoint, as `AGENTS.md` and Stage 4 require, and say which one you recommend from the brief and why; preserve supplied identity in all of them. Express shortens the decision around the comparison, not the comparison itself, because a single direction gives the owner nothing to choose against. A small refinement of an accepted direction needs no new comparison. Explain lane names in everyday terms.
 - Use **shared layout spacing** and calibrate density from the brief/reference; assume **balanced** density when no cue exists. Explain that the gaps adapt to screen size and remain locally adjustable. Do not ask users to opt into a CSS policy. Ask about compact/balanced/spacious feel only if it affects an unresolved visual decision.
 - Compose native primitives, editorial flow and progressive enhancement. Add browser JavaScript only for a required interaction. No third-party tracking by default; discuss it when measurement is requested.
 - Use real supplied content or explicitly marked local drafts. Identify the owner of missing material; do not publish filler or assume draft/legal approval.
@@ -36,7 +36,7 @@ When the user requests **Express Mode** (or when building a straightforward gree
      > - **Collections & Routes:** [List collections and routes]
      >
      > Next is **Checkpoint B (Stages 4–4.5: Art Direction & Component Calibration)**.
-     > **Visual direction:** [Recommend one direction from the brief in plain language, with its density and shared spacing defaults. Ask for missing identity/reference information only if needed.]
+     > **Visual direction:** [Recommend one direction from the brief in plain language, with its density and shared spacing defaults; the side-by-side comparison of two or three directions follows at Checkpoint B. Ask for missing identity/reference information only if needed.]
      > - **Look and feel:** [For example: clear and restrained, warm and editorial, or bold and technical; connect the recommendation to this site's audience.]
      > - **Spacing:** Shared responsive defaults, with [brief-led density; balanced if unspecified] and [any deliberate layout exceptions].
      > - **Missing input:** [Ask only an unresolved brand/reference or density question; otherwise record the recommendation/assumption and continue.]
