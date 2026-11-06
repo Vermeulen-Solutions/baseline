@@ -1,0 +1,33 @@
+{
+  "source": "audit/visual-concepts/baseline-site-mockup/index.html",
+  "lfSha256": "9a74f69d19d7cdffb11d827290de9ec5efe6580b72d29e4b60e4dc264c889680",
+  "adaptation": "audit/visual-concepts/baseline-site-mockup/adaptation.md",
+  "sourceFonts": {
+    "h1": [
+      {
+        "familyName": "Segoe UI Variable",
+        "postScriptName": "Segoe-UI-Variable-Display-Semibold",
+        "isCustomFont": false,
+        "glyphCount": 27
+      }
+    ],
+    ".hero__deck": [
+      {
+        "familyName": "Segoe UI Variable",
+        "postScriptName": "Segoe-UI-Variable-Text",
+        "isCustomFont": false,
+        "glyphCount": 162
+      }
+    ],
+    ".mono": [
+      {
+        "familyName": "Cascadia Mono",
+        "postScriptName": "CascadiaMonoRoman",
+        "isCustomFont": false,
+        "glyphCount": 22
+      }
+    ]
+  },
+  "sampling": "Computed styles at 1440 and 390; modern colours resolved to sRGB; actual platform font family names substituted for CSS stacks; animations disabled with prefers-reduced-motion; no source edit.",
+  "adaptationLfSha256": "7876ba08fbace3bb46a18aaec6c86847ffb9a725e36e0329bb5128b76fc56d77"
+}

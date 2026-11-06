@@ -1,0 +1,41 @@
+{
+  "comparisons": [
+    {
+      "width": 1440,
+      "source": {
+        "w": 1440,
+        "h": 4459
+      },
+      "native": {
+        "w": 1440,
+        "h": 4459
+      },
+      "pixelsCompared": 6420960,
+      "pixelsAnyChannelDifferenceOver16": 352131,
+      "percentage": 5.484086491739553,
+      "meanAbsoluteChannelDifference": 8.849545136125506,
+      "note": "Descriptive only; no pass threshold. Native transparent pixels composited onto black for comparison."
+    },
+    {
+      "width": 390,
+      "source": {
+        "w": 390,
+        "h": 6497
+      },
+      "native": {
+        "w": 390,
+        "h": 6497
+      },
+      "pixelsCompared": 2533830,
+      "pixelsAnyChannelDifferenceOver16": 254711,
+      "percentage": 10.052410777360754,
+      "meanAbsoluteChannelDifference": 11.938740445081173,
+      "note": "Descriptive only; no pass threshold. Native transparent pixels composited onto black for comparison."
+    }
+  ],
+  "warm": {
+    "original": "daa3797954b64a96c7559c63854a4c6ab59a9a9a72db25de724fa271216f7ac1",
+    "warm": "daa3797954b64a96c7559c63854a4c6ab59a9a9a72db25de724fa271216f7ac1",
+    "message": "Exported PNG to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/final-1440-warm.png\nelement(s): 00d6a8a1485ed92e | 1440x4585 | 671438 bytes | sha256:daa3797954b64a96c7559c63854a4c6ab59a9a9a72db25de724fa271216f7ac1\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds.\nShow it in the chat: <media src=\"Exports/final-1440-warm.png\">final-1440-warm</media>"
+  }
+}

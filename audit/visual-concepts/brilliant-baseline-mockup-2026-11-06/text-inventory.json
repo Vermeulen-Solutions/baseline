@@ -1,0 +1,42 @@
+{
+  "method": "Case-insensitive Unicode word-count multiset comparison; source versus repaired full-document export at matching width.",
+  "checks": [
+    {
+      "width": 1440,
+      "missing": [
+        {
+          "word": "skip",
+          "count": 1
+        },
+        {
+          "word": "to",
+          "count": 1
+        },
+        {
+          "word": "content",
+          "count": 1
+        }
+      ],
+      "extra": []
+    },
+    {
+      "width": 390,
+      "missing": [
+        {
+          "word": "skip",
+          "count": 1
+        },
+        {
+          "word": "to",
+          "count": 1
+        },
+        {
+          "word": "content",
+          "count": 1
+        }
+      ],
+      "extra": []
+    }
+  ],
+  "intentionalOmission": "The source skip link is offscreen in the design canvas; it remains required in real semantic implementation."
+}

@@ -1,0 +1,58 @@
+[
+  {
+    "w": 1440,
+    "format": "png",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/native-1440.png\nelement(s): 00d6a8a1485ed92e | 1440x4459 | 530037 bytes | sha256:35e7a812fd4542bc5b35a615cb289cc0c67a08103e62461a26b027d2c592d60a\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/native-1440.png\">native-1440</media>"
+        }
+      ]
+    }
+  },
+  {
+    "w": 1440,
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/native-1440.html\nelement(s): 00d6a8a1485ed92e | 196633 bytes | sha256:795303d52c7a5ae6bf0717e2a84e029fc912d8790e91e837a1bf187b4aa0d9f3\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        }
+      ]
+    }
+  },
+  {
+    "w": 390,
+    "format": "png",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported PNG to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/native-390.png\nelement(s): 2865f18e7d41ca6b | 390x6497 | 479724 bytes | sha256:a036010dde2ef4f3a6d9da55b7c715f080f722de2460e0a9f6deeed863c4fc50\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        },
+        {
+          "type": "text",
+          "text": "Show it in the chat: <media src=\"Exports/native-390.png\">native-390</media>"
+        }
+      ]
+    }
+  },
+  {
+    "w": 390,
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project/Exports/native-390.html\nelement(s): 2865f18e7d41ca6b | 196467 bytes | sha256:39a6af8b7a30a27ed1f4cea3cb8b32af07afc6b4e53e22286ed0967f7d0bb1b7\n\nNote: some text had not finished measuring when the export started, so its box was exported at a provisional size. Export again once the fonts settle for exact bounds."
+        }
+      ]
+    }
+  }
+]

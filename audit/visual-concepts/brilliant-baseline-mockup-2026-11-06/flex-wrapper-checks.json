@@ -1,0 +1,50 @@
+[
+  {
+    "board": 1440,
+    "width": 390,
+    "scrollWidth": 1440,
+    "clientWidth": 390,
+    "overflow": true,
+    "errors": []
+  },
+  {
+    "board": 1440,
+    "width": 768,
+    "scrollWidth": 1440,
+    "clientWidth": 768,
+    "overflow": true,
+    "errors": []
+  },
+  {
+    "board": 1440,
+    "width": 1440,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "board": 390,
+    "width": 390,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "board": 390,
+    "width": 768,
+    "scrollWidth": 768,
+    "clientWidth": 768,
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "board": 390,
+    "width": 1440,
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "overflow": false,
+    "errors": []
+  }
+]

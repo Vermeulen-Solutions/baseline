@@ -1,0 +1,3 @@
+# Preserve source blank-line whitespace in the actual sampled HTML inputs.
+/initial-authoring.txt -whitespace
+/sampled-input-390.html -whitespace

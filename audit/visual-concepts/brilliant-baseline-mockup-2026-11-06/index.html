@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Baseline mockup — Brilliant representative test</title>
+<style>
+  :root { color-scheme: light; font-family: system-ui, sans-serif; color: #192321; background: #eef1ec; }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: clamp(1rem, 3vw, 2.5rem); }
+  header, main, footer { max-width: 92rem; margin-inline: auto; }
+  h1 { max-width: 28ch; font-size: clamp(1.8rem, 3.5vw, 3.2rem); line-height: 1.1; letter-spacing: -.035em; }
+  h2 { font-size: 1.4rem; margin-block: 0 1rem; }
+  h3 { margin: 0; font-size: 1.05rem; }
+  p { max-width: 85ch; line-height: 1.6; }
+  a { color: #154c3f; text-underline-offset: .2em; overflow-wrap: anywhere; }
+  :focus-visible { outline: 3px solid #154c3f; outline-offset: 3px; }
+  .kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; font-weight: 700; }
+  .verdict { background: #fff; border-left: 4px solid #154c3f; padding: 1rem 1.25rem; }
+  fieldset { border: 1px solid #aab8af; border-radius: .5rem; display: flex; gap: 1rem; flex-wrap: wrap; padding: 1rem; margin-block: 1.5rem; }
+  label { display: inline-flex; align-items: center; gap: .5rem; cursor: pointer; }
+  input { accent-color: #154c3f; }
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+  figure { margin: 0; min-width: 0; border: 1px solid #bdc7bf; background: #fff; border-radius: .5rem; overflow: hidden; }
+  figcaption { padding: 1rem; min-height: 10rem; }
+  figcaption p { margin-block: .5rem; font-size: .9rem; }
+  .imageview { height: 36rem; overflow: auto; background: #111; }
+  .imageview img { display: block; width: 100%; height: auto; }
+  [data-device="mobile"] .imageview img { max-width: 390px; margin-inline: auto; }
+  body:has(#desktop:checked) [data-device="mobile"], body:has(#mobile:checked) [data-device="desktop"] { display: none; }
+  section { margin-block: 2.5rem; }
+  details { background: #fff; padding: 1rem; border: 1px solid #bdc7bf; border-radius: .5rem; }
+  summary { font-weight: 700; cursor: pointer; }
+  .exports { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; background: #fff; }
+  caption { text-align: left; font-weight: 700; padding-bottom: .75rem; }
+  th, td { padding: .85rem; border-bottom: 1px solid #bdc7bf; text-align: left; vertical-align: top; line-height: 1.5; }
+  footer { border-top: 1px solid #aab8af; padding-block: 1rem; font-size: .85rem; }
+  @media (max-width: 800px) { .grid, .exports { grid-template-columns: 1fr; } figcaption { min-height: 0; } .imageview { height: 32rem; } }
+</style>
+<header>
+  <p class="kicker">Representative test · 6 November 2026</p>
+  <h1>The actual Baseline mockup, tested in Brilliant.</h1>
+  <p class="verdict"><strong>Partial visual recreation after native reconstruction; failed as a clean HTML round trip.</strong> The full desktop/mobile mockup was rebuilt as editable objects. A longer headline, supporting paragraph and CTA exposed fixed-frame collisions; native flow repairs made the page grow and the mobile buttons wrap. Raw HTML still loses behavior and presentation.</p>
+  <p>The source and <a href="../baseline-site-mockup/adaptation.md">adaptation record</a> are unchanged. These are comparisons of one design, not three proposed directions. The revised wording is an agent-authored test draft, not owner approval.</p>
+  <fieldset><legend>Comparison device</legend><label><input type="radio" id="desktop" name="device" checked> Desktop · 1440px</label><label><input type="radio" id="mobile" name="device"> Mobile · 390px</label></fieldset>
+</header>
+<main>
+  <section aria-label="Desktop comparison" data-device="desktop">
+    <div class="grid">
+      <figure><figcaption><h2>Original browser mockup</h2><p>1440 × 4459. Browser render, reduced motion. Original concept copy and historical example check figures.</p><a href="source-1440.png">Full image</a> · <a href="../baseline-site-mockup/index.html">Original HTML</a></figcaption><div class="imageview" tabindex="0" aria-label="Scroll original desktop capture"><img src="source-1440.png" width="1440" height="4459" alt="Original Baseline desktop mockup with split hero, bento and light methodology band"></div></figure>
+      <figure><figcaption><h2>Native reconstruction</h2><p>1440 × 4459. Editable fixed frames reconstructed from measured source geometry. Includes manual repairs; effects and typography differ.</p><a href="project/Exports/repaired-1440.png">Full native image</a> · <a href="project/Exports/repaired-1440.html">Raw HTML</a></figcaption><div class="imageview" tabindex="0" aria-label="Scroll reconstructed desktop capture"><img src="project/Exports/repaired-1440.png" width="1440" height="4459" alt="Reconstructed desktop canvas with the full source page structure"></div></figure>
+      <figure><figcaption><h2>Long-copy revision</h2><p>1440 × 4585 native PNG; 4584.15px canvas height. Native flow repair lets the page grow. Original top/left alignment restored.</p><a href="project/Exports/aligned-1440.png">Full native image</a> · <a href="project/Exports/aligned-1440.html">Raw HTML</a> · <a href="flex-view-1440.html">Flex export view</a></figcaption><div class="imageview" tabindex="0" aria-label="Scroll revised desktop capture"><img src="project/Exports/aligned-1440.png" width="1440" height="4585" alt="Revised desktop canvas with longer headline and wider Build with Baseline button"></div></figure>
+    </div>
+  </section>
+  <section aria-label="Mobile comparison" data-device="mobile">
+    <div class="grid">
+      <figure><figcaption><h2>Original browser mockup</h2><p>390 × 6497. This is the source page's mobile layout, not a scaled desktop image.</p><a href="source-390.png">Full image</a> · <a href="../baseline-site-mockup/index.html">Original HTML</a></figcaption><div class="imageview" tabindex="0" aria-label="Scroll original mobile capture"><img src="source-390.png" width="390" height="6497" alt="Original Baseline mobile mockup"></div></figure>
+      <figure><figcaption><h2>Native reconstruction</h2><p>390 × 6497. A separate editable mobile board. The two boards do not constitute one responsive page.</p><a href="project/Exports/repaired-390.png">Full native image</a> · <a href="project/Exports/repaired-390.html">Raw HTML</a></figcaption><div class="imageview" tabindex="0" aria-label="Scroll reconstructed mobile capture"><img src="project/Exports/repaired-390.png" width="390" height="6497" alt="Reconstructed mobile canvas showing the full original composition"></div></figure>
+      <figure><figcaption><h2>Long-copy revision</h2><p>390 × 6660 native PNG; 6659.37px canvas height. The wider CTA and secondary action now wrap into separate rows.</p><a href="project/Exports/aligned-390.png">Full native image</a> · <a href="project/Exports/aligned-390.html">Raw HTML</a> · <a href="flex-view-390.html">Flex export view</a></figcaption><div class="imageview" tabindex="0" aria-label="Scroll revised mobile capture"><img src="project/Exports/aligned-390.png" width="390" height="6660" alt="Revised mobile canvas with longer copy and wrapped actions"></div></figure>
+    </div>
+  </section>
+  <section>
+    <h2>What the canvas images do not establish</h2>
+    <div class="scroll"><table><caption>Observed acceptance limits</caption><thead><tr><th scope="col">Check</th><th scope="col">Result</th></tr></thead><tbody>
+      <tr><th scope="row">Direct sampled HTML conversion</th><td>Failed visual review: overlapping sections, wrong grid/card stacking and misplaced footer. 870 objects were created, but the render was unsuitable.</td></tr>
+      <tr><th scope="row">Native visual reconstruction</th><td>Full structure recreated, with source-measured fixed geometry and 249 text blocks initially. Grid, noise, blur, font metrics and text-gradient differences prevent an exact-fidelity claim.</td></tr>
+      <tr><th scope="row">Ordinary copy changes</th><td>Initially overflowed. Repaired with native hug/fill, wrapping, explicit alignment, page flow, bounds and clip settings. Final canvas: 769 objects.</td></tr>
+      <tr><th scope="row">Responsive export</th><td>Failed. The 1440px document still overflows 390/768px. The mobile document remains 390px wide on larger screens.</td></tr>
+      <tr><th scope="row">Exported links and structure</th><td>Raw linked text becomes default blue/underlined; named fragment targets are absent. Exported content has zero heading/landmark elements. The source's nine <code>#</code> footer placeholders are recorded separately.</td></tr>
+      <tr><th scope="row">Motion and fonts</th><td>Motion/reduced-motion behavior is not reconstructed. The native family mapping does not reproduce the source's browser font selection exactly. Provisional-font warnings persist; one repeated PNG was byte-identical.</td></tr>
+      <tr><th scope="row">Token efficiency</th><td>Not measured. MCP calls/bytes, generated file payloads and elapsed time are not input/output/cached model tokens.</td></tr>
+    </tbody></table></div>
+  </section>
+  <section>
+    <details><summary>Inspect the failed import and the raw browser exports</summary>
+      <p>Full first-import renders: <a href="project/Exports/initial-1440.png">desktop PNG</a> · <a href="project/Exports/initial-390.png">mobile PNG</a>. The conversion returned success and actionable diagnostics, but did not preserve this composition.</p>
+      <p>The images below are browser renders of untouched full-document exports. Compare their blue linked text and type wrapping with the native images above. The Flex views add only a document wrapper, viewport metadata and <code>body { margin: 0 }</code> around the raw snippet; they do not repair its styles.</p>
+      <div class="exports" data-device="desktop"><figure><figcaption><h3>Reconstruction → browser</h3><a href="browser-repaired-1440.png">Full capture</a></figcaption><div class="imageview"><img src="browser-repaired-1440.png" width="1440" height="4459" alt="Browser render of the reconstructed desktop HTML export"></div></figure><figure><figcaption><h3>Revision → browser</h3><a href="browser-aligned-1440.png">Full capture</a></figcaption><div class="imageview"><img src="browser-aligned-1440.png" width="1440" height="4584" alt="Browser render of revised desktop HTML export"></div></figure></div>
+      <div class="exports" data-device="mobile"><figure><figcaption><h3>Reconstruction → browser</h3><a href="browser-repaired-390.png">Full capture</a></figcaption><div class="imageview"><img src="browser-repaired-390.png" width="390" height="6497" alt="Browser render of the reconstructed mobile HTML export"></div></figure><figure><figcaption><h3>Revision → browser</h3><a href="browser-aligned-390.png">Full capture</a></figcaption><div class="imageview"><img src="browser-aligned-390.png" width="390" height="6659" alt="Browser render of the revised mobile HTML export"></div></figure></div>
+    </details>
+  </section>
+</main>
+<footer><p><a href="../../../audit/brilliant-baseline-mockup-2026-11-06.md">Test report</a> · <a href="browser-checks.json">Browser measurements</a> · <a href="pixel-comparison.json">Pixel comparison</a> · <a href="source-identity.json">Source identity</a>. Native projects remain local and unpublished; this page contains exports and authoring evidence.</p></footer>
+</html>

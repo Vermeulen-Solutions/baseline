@@ -1,0 +1,256 @@
+{
+  "390": {
+    "root": "n390-1",
+    "shell": "n390-2",
+    "main": "n390-10",
+    "hero": "n390-11",
+    "grid": "n390-12",
+    "left": "n390-13",
+    "head": "n390-17",
+    "deck": "n390-18",
+    "actions": "n390-19",
+    "cta": "n390-20",
+    "meta": "n390-22",
+    "children": [
+      {
+        "ref": "n390-14",
+        "name": "eyebrow mono",
+        "y": 8.3125,
+        "h": 15.390625
+      },
+      {
+        "ref": "n390-17",
+        "name": "h1",
+        "y": 43.28125,
+        "h": 133.875
+      },
+      {
+        "ref": "n390-18",
+        "name": "hero__deck",
+        "y": 201.15625,
+        "h": 104.375
+      },
+      {
+        "ref": "n390-19",
+        "name": "hero__actions",
+        "y": 337.53125,
+        "h": 53.5
+      },
+      {
+        "ref": "n390-22",
+        "name": "hero__meta mono",
+        "y": 427.03125,
+        "h": 57.375
+      }
+    ],
+    "heroStyle": {
+      "color": [
+        234,
+        235,
+        236,
+        255
+      ],
+      "background": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "fontFamily": "sans",
+      "fontSize": 16.062,
+      "weight": 400,
+      "italic": false,
+      "lineHeight": 1.5999999999999999,
+      "letterSpacing": 0,
+      "textAlign": "start",
+      "textTransform": "none",
+      "padding": [
+        48,
+        0,
+        56,
+        0
+      ],
+      "radii": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "borders": [
+        {
+          "width": 0,
+          "color": [
+            234,
+            235,
+            236,
+            255
+          ]
+        },
+        {
+          "width": 0,
+          "color": [
+            234,
+            235,
+            236,
+            255
+          ]
+        },
+        {
+          "width": 0,
+          "color": [
+            234,
+            235,
+            236,
+            255
+          ]
+        },
+        {
+          "width": 0,
+          "color": [
+            234,
+            235,
+            236,
+            255
+          ]
+        }
+      ],
+      "shadow": "none",
+      "blur": 0,
+      "opacity": 1,
+      "overflow": "visible",
+      "position": "relative",
+      "display": "block",
+      "transform": "none",
+      "backgroundImage": "none"
+    },
+    "gridW": 340,
+    "leftW": 340
+  },
+  "1440": {
+    "root": "n1440-1",
+    "shell": "n1440-2",
+    "main": "n1440-18",
+    "hero": "n1440-19",
+    "grid": "n1440-20",
+    "left": "n1440-21",
+    "head": "n1440-25",
+    "deck": "n1440-26",
+    "actions": "n1440-27",
+    "cta": "n1440-28",
+    "meta": "n1440-30",
+    "children": [
+      {
+        "ref": "n1440-22",
+        "name": "eyebrow mono",
+        "y": 9.3125,
+        "h": 15.390625
+      },
+      {
+        "ref": "n1440-25",
+        "name": "h1",
+        "y": 44.78125,
+        "h": 295.453125
+      },
+      {
+        "ref": "n1440-26",
+        "name": "hero__deck",
+        "y": 364.234375,
+        "h": 104.375
+      },
+      {
+        "ref": "n1440-27",
+        "name": "hero__actions",
+        "y": 500.609375,
+        "h": 53.5
+      },
+      {
+        "ref": "n1440-30",
+        "name": "hero__meta mono",
+        "y": 590.109375,
+        "h": 33.984375
+      }
+    ],
+    "heroStyle": {
+      "color": [
+        234,
+        235,
+        236,
+        255
+      ],
+      "background": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "fontFamily": "sans",
+      "fontSize": 17,
+      "weight": 400,
+      "italic": false,
+      "lineHeight": 1.5999999999999999,
+      "letterSpacing": 0,
+      "textAlign": "start",
+      "textTransform": "none",
+      "padding": [
+        100.8,
+        0,
+        86.4,
+        0
+      ],
+      "radii": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "borders": [
+        {
+          "width": 0,
+          "color": [
+            234,
+            235,
+            236,
+            255
+          ]
+        },
+        {
+          "width": 0,
+          "color": [
+            234,
+            235,
+            236,
+            255
+          ]
+        },
+        {
+          "width": 0,
+          "color": [
+            234,
+            235,
+            236,
+            255
+          ]
+        },
+        {
+          "width": 0,
+          "color": [
+            234,
+            235,
+            236,
+            255
+          ]
+        }
+      ],
+      "shadow": "none",
+      "blur": 0,
+      "opacity": 1,
+      "overflow": "visible",
+      "position": "relative",
+      "display": "block",
+      "transform": "none",
+      "backgroundImage": "none"
+    },
+    "gridW": 1216,
+    "leftW": 676.65625
+  }
+}

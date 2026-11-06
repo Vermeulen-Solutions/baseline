@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "```bl\nfile(\"Native reconstruction\")\n2865f18e7d41ca6b al(v,x(c),g(0:$flow.v0),pad(8:$flow.v8)) p(1480,0) s(390,hug:6659.37) f[(9cb27d2c2a1b6789,tok(color.page,#000000))] clip \"viewport\" #n390-1\n  d0607cb74595e6df al(v,x(c),g(0:$flow.v0),pad(1:$flow.v1)) s(fill,hug:6643.37) ext(374,) f[(553bc421c3cb8d75,tok(color.surface,#0D0F10))] st[(25d85d55cd3526db,solid(tok(color.white,#FFFFFF),o($sample.opacity.v0_102)),w(1:$sample.stroke.v1,1:$sample.stroke.v1,1:$sample.stroke.v1,1:$sample.stroke.v1),pos(i))] rd(40:$sample.radius.v40) shadow(tok(color.black,#000000),o(0.9:$sample.opacity.v0_9),y(40),blur(120),sp(-40),id(c2e51b6ebfc9fcdd)) clip \"shell\" #n390-2\n770199fa0a356239 al(h,y(c),g(12:$flow.v12),wrap,pad(0:$flow.v0)) p(0,32) s(fill,hug:119.04) ext(340,) f[] \"hero__actions\" #n390-19\n00d6a8a1485ed92e al(v,x(c),g(0:$flow.v0),pad(20:$flow.v20)) p(0,0) s(1440,hug:4584.15) f[(a2ddf7022b86be0f,tok(color.page,#000000))] clip \"viewport\" #n1440-1\n  03c16ae645c02128 al(v,x(c),g(0:$flow.v0),pad(1:$flow.v1)) s(fill,hug:4544.15) ext(1400,) f[(77ab6df9f459cdaa,tok(color.surface,#0D0F10))] st[(75d7f793a93b93b3,solid(tok(color.white,#FFFFFF),o($sample.opacity.v0_102)),w(1:$sample.stroke.v1,1:$sample.stroke.v1,1:$sample.stroke.v1,1:$sample.stroke.v1),pos(i))] rd(40:$sample.radius.v40) shadow(tok(color.black,#000000),o(0.9:$sample.opacity.v0_9),y(40),blur(120),sp(-40),id(b557b2854d0cdc85)) clip \"shell\" #n1440-2\n9e437aa407cb5dd7 al(h,y(c),g(12:$flow.v12),wrap,pad(0:$flow.v0)) p(0,32) s(fill,hug:53.52) ext(676.66,) f[] \"hero__actions\" #n1440-27\n```"
+    }
+  ]
+}

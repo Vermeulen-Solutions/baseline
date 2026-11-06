@@ -1,0 +1,392 @@
+[
+  {
+    "width": 390,
+    "mobileVisible": true,
+    "desktopVisible": true,
+    "overflow": false,
+    "missing": [],
+    "images": [
+      {
+        "src": "source-1440.png",
+        "declared": [
+          356,
+          1102
+        ],
+        "natural": [
+          1440,
+          4459
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/repaired-1440.png",
+        "declared": [
+          356,
+          1102
+        ],
+        "natural": [
+          1440,
+          4459
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/aligned-1440.png",
+        "declared": [
+          356,
+          1134
+        ],
+        "natural": [
+          1440,
+          4585
+        ],
+        "loaded": true
+      },
+      {
+        "src": "source-390.png",
+        "declared": [
+          390,
+          6497
+        ],
+        "natural": [
+          390,
+          6497
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/repaired-390.png",
+        "declared": [
+          390,
+          6497
+        ],
+        "natural": [
+          390,
+          6497
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/aligned-390.png",
+        "declared": [
+          390,
+          6660
+        ],
+        "natural": [
+          390,
+          6660
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-repaired-1440.png",
+        "declared": [
+          322,
+          997
+        ],
+        "natural": [
+          1440,
+          4459
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-aligned-1440.png",
+        "declared": [
+          322,
+          1025
+        ],
+        "natural": [
+          1440,
+          4584
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-repaired-390.png",
+        "declared": [
+          390,
+          6497
+        ],
+        "natural": [
+          390,
+          6497
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-aligned-390.png",
+        "declared": [
+          390,
+          6659
+        ],
+        "natural": [
+          390,
+          6659
+        ],
+        "loaded": true
+      }
+    ],
+    "errors": []
+  },
+  {
+    "width": 768,
+    "mobileVisible": true,
+    "desktopVisible": true,
+    "overflow": false,
+    "missing": [],
+    "images": [
+      {
+        "src": "source-1440.png",
+        "declared": [
+          720,
+          2229
+        ],
+        "natural": [
+          1440,
+          4459
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/repaired-1440.png",
+        "declared": [
+          720,
+          2229
+        ],
+        "natural": [
+          1440,
+          4459
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/aligned-1440.png",
+        "declared": [
+          720,
+          2292
+        ],
+        "natural": [
+          1440,
+          4585
+        ],
+        "loaded": true
+      },
+      {
+        "src": "source-390.png",
+        "declared": [
+          390,
+          6497
+        ],
+        "natural": [
+          390,
+          6497
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/repaired-390.png",
+        "declared": [
+          390,
+          6497
+        ],
+        "natural": [
+          390,
+          6497
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/aligned-390.png",
+        "declared": [
+          390,
+          6660
+        ],
+        "natural": [
+          390,
+          6660
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-repaired-1440.png",
+        "declared": [
+          686,
+          2124
+        ],
+        "natural": [
+          1440,
+          4459
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-aligned-1440.png",
+        "declared": [
+          686,
+          2184
+        ],
+        "natural": [
+          1440,
+          4584
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-repaired-390.png",
+        "declared": [
+          390,
+          6497
+        ],
+        "natural": [
+          390,
+          6497
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-aligned-390.png",
+        "declared": [
+          390,
+          6659
+        ],
+        "natural": [
+          390,
+          6659
+        ],
+        "loaded": true
+      }
+    ],
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "mobileVisible": true,
+    "desktopVisible": true,
+    "overflow": false,
+    "missing": [],
+    "images": [
+      {
+        "src": "source-1440.png",
+        "declared": [
+          441,
+          1365
+        ],
+        "natural": [
+          1440,
+          4459
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/repaired-1440.png",
+        "declared": [
+          441,
+          1365
+        ],
+        "natural": [
+          1440,
+          4459
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/aligned-1440.png",
+        "declared": [
+          441,
+          1403
+        ],
+        "natural": [
+          1440,
+          4585
+        ],
+        "loaded": true
+      },
+      {
+        "src": "source-390.png",
+        "declared": [
+          390,
+          6497
+        ],
+        "natural": [
+          390,
+          6497
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/repaired-390.png",
+        "declared": [
+          390,
+          6497
+        ],
+        "natural": [
+          390,
+          6497
+        ],
+        "loaded": true
+      },
+      {
+        "src": "project/Exports/aligned-390.png",
+        "declared": [
+          390,
+          6660
+        ],
+        "natural": [
+          390,
+          6660
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-repaired-1440.png",
+        "declared": [
+          653,
+          2022
+        ],
+        "natural": [
+          1440,
+          4459
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-aligned-1440.png",
+        "declared": [
+          653,
+          2079
+        ],
+        "natural": [
+          1440,
+          4584
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-repaired-390.png",
+        "declared": [
+          390,
+          6497
+        ],
+        "natural": [
+          390,
+          6497
+        ],
+        "loaded": true
+      },
+      {
+        "src": "browser-aligned-390.png",
+        "declared": [
+          390,
+          6659
+        ],
+        "natural": [
+          390,
+          6659
+        ],
+        "loaded": true
+      }
+    ],
+    "errors": []
+  }
+]

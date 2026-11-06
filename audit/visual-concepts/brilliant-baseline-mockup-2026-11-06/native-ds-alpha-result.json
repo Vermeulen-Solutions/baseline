@@ -1,0 +1,12 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"status\":\"ready\",\"project\":\"C:\\\\dev\\\\emdash-baseline\\\\audit\\\\visual-concepts\\\\brilliant-baseline-mockup-2026-11-06\\\\project\",\"projectLabel\":\"the local folder \\\"project\\\"\",\"fences\":[{\"index\":0,\"kind\":\"ds\",\"path\":\"Styles/default.ds\",\"applied\":{\"created\":0,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"written\":true}],\"applied\":{\"created\":0,\"modified\":0,\"unchanged\":0,\"deleted\":0},\"writtenDesignSystems\":[\"default\"],\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":0,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed. Nothing is pending. This result carries no screenshot, and none will come for this block: call export to see it.\"}"
+    },
+    {
+      "type": "text",
+      "text": "job: baseline-mockup-native-ds-alpha-20261106 (text from \"C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/native-design-system.txt\", 3032 bytes). A resend inside 2 minutes answers this result and applies nothing."
+    }
+  ]
+}

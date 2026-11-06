@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Canvas: viewport (1 child), viewport (1 child), 769 elements.\n\n## Changed\n#n390-1 clip\n#n390-2 clip\n#n1440-1 clip\n#n1440-2 clip\n\n{\"status\":\"ready\",\"canvasId\":\"Native reconstruction\",\"project\":\"C:\\\\dev\\\\emdash-baseline\\\\audit\\\\visual-concepts\\\\brilliant-baseline-mockup-2026-11-06\\\\project\",\"projectLabel\":\"the local folder \\\"project\\\"\",\"applied\":{\"created\":0,\"modified\":4,\"unchanged\":0,\"deleted\":0},\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"bound revised raster exports\\\" · \\\"revised page bounds and grid\\\" · \\\"revised copy before native flow repair\\\" · \\\"source mockup preserved\\\" · \\\"intrinsic label and rich-tag repair\\\" · \\\"restore intrinsic inline labels\\\" · \\\"tracking unit correction\\\" · \\\"source reconstruction 390\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":0,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 4 modified. Nothing is pending. This result carries no screenshot, and none will come for this block: call export to see it.\",\"blueprintHandle\":\"read({ paths: [\\\"Native reconstruction\\\"], ids: [\\\"2865f18e7d41ca6b\\\", \\\"00d6a8a1485ed92e\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:0aa6f3e892bd964d\\\", project: \\\"C:/dev/emdash-baseline/audit/visual-concepts/brilliant-baseline-mockup-2026-11-06/project\\\" })\"}"
+    }
+  ]
+}
