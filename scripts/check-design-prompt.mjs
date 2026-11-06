@@ -6,16 +6,15 @@
 //   npm run design:prompt-check -- prompt.md --json
 //
 // An external prompt (open-design.ai/prompts, superdesign.dev, designprompts.dev, a client deck)
-// is a brief, not a specification. This reports the parts that conflict with Baseline's contracts
-// before any of them reach a token file, a component or a stylesheet:
+// is a brief, not a specification. Findings are review requirements, not proof of a violation:
 //
-//   P1  ready to conflict — webfonts as a dependency, literal colours that skip the role map,
-//       invented proof (testimonials, logos, ratings), or an explicit ban on system fonts.
-//   P2  needs a decision — fixed type sizes, hard-coded breakpoints, motion with no
-//       reduced-motion branch, or a prompt that never mentions contrast at all.
+//   P1  resolve before implementation — dependencies/role mapping, unverified proof,
+//       explicit fabrication or an instruction to ignore accessibility.
+//   P2  inspect deliberately — declared approvals/inspiration, responsive structure,
+//       placeholder copy, motion safeguards and accessibility evidence.
 //
-// It reads text; it does not style anything and it never blocks on judgement. A P1 means "map this
-// onto a role or refuse it", not "the prompt is bad". Exit code is 1 when a finding reaches
+// It reads text only: installed fonts, owner approval, factual accuracy and rendered behavior
+// still need verification. English negation handling is deliberately bounded. Exit code is 1 when a finding reaches
 // --fail-on (default p1), 0 otherwise, 2 for usage.
 import { readFileSync } from 'node:fs';
 
@@ -26,22 +25,22 @@ const RULES = [
     id: 'webfont-dependency',
     severity: 'P1',
     pattern: /fonts\.googleapis\.com|@font-face|@import\s+url\([^)]*font|use\.typekit|fontshare|font-family:\s*['"][A-Z]/i,
-    message: 'A webfont becomes a runtime dependency and a font-preflight decision.',
-    fix: 'Use the site stacks (--font-display, --font-body, --font-mono). Carry character with weight, tracking and case. A real pairing is a recorded decision, not a prompt line.',
+    message: 'A font source needs checking against the installed, approved typography.',
+    fix: 'Preserve approved faces and verify loading/licensing. For a new dependency, record the pairing decision; otherwise translate character through the existing type roles.',
   },
   {
     id: 'named-font-mandate',
     severity: 'P1',
     pattern: /\bMUST\b[^.\n]{0,80}\b(font|typeface|typography)\b|\b(font|typeface)\b[^.\n]{0,40}\bMUST\b/i,
-    message: 'A mandated font name cannot be satisfied by the starter without adding it.',
-    fix: 'Translate the character, not the file: weight, tracking, case and measure. Record a pairing only if the owner approves the dependency.',
+    message: 'A font mandate needs checking against the project typography and available sources.',
+    fix: 'Keep an approved installed pairing. Resolve a new font dependency explicitly, or translate weight, tracking, case and measure through the existing roles.',
   },
   {
     id: 'quoted-font-name',
     severity: 'P1',
     pattern: /\b(font|fonts|typeface|typography|headings?|body|labels?|mono)\b[^.\n]{0,60}['"][A-Z][A-Za-z0-9]+(?: [A-Z][A-Za-z0-9]+){0,2}['"]|['"][A-Z][A-Za-z0-9]+(?: [A-Z][A-Za-z0-9]+){0,2}['"][^.\n]{0,30}\b(font|typeface|mono|serif|sans)\b/i,
-    message: 'A quoted font name asks for a family the starter does not ship.',
-    fix: 'Keep the site stacks and translate the character (weight, tracking, case). If the owner wants the real pairing, record the dependency decision first.',
+    message: 'A named family needs checking; prompt text cannot establish whether it is installed or approved.',
+    fix: 'Preserve approved typography and run font preflight. If unavailable, record a dependency decision or translate its character with the existing roles.',
   },
   {
     id: 'system-font-ban',
@@ -53,29 +52,36 @@ const RULES = [
   {
     id: 'literal-colours',
     severity: 'P1',
-    pattern: /#[0-9a-f]{3,8}\b|\brgba?\(|\bhsla?\(/i,
-    message: 'Literal colours bypass the semantic role map.',
+    pattern: /#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{4}|[0-9a-f]{3})\b|\b(?:rgba?|hsla?|oklch|oklab|lch|lab|color|color-mix)\(/i,
+    message: 'Colour values need a semantic role map, including values offered only as inspiration.',
     fix: 'Name the role first (page, surface, elevated, text, muted, border, action, focus), then choose an OKLCH value for it once.',
   },
   {
     id: 'invented-proof',
     severity: 'P1',
     pattern: /\btestimonials?\b|\btrusted by\b|\b(customer|client|partner) logos?\b|\b5-star\b|\bfive-star\b|\brating\b|\bcase stud(y|ies)\b|\bportrait\b/i,
-    message: 'Proof that must come from the owner, not from a prompt.',
-    fix: 'Replace with material the project actually produced: real work, real numbers, a verification receipt. Never invent a quote, logo or portrait.',
+    message: 'A proof or identity reference needs a verified source and permitted use; this match does not establish fabrication.',
+    fix: 'Check the owner/source evidence. Keep authentic permitted material; otherwise omit it or use honest project evidence. Never invent a quote, logo or portrait presented as real.',
+  },
+  {
+    id: 'fabricated-proof',
+    severity: 'P1',
+    pattern: /\b(invent|fabricate|fake|make up)\b[^.\n]{0,80}\b(testimonials?|reviews?|clients?|customers?|logos?|ratings?|portraits?|team members?|metrics?)\b|\bAI[- ]generated\b[^.\n]{0,60}\b(?:testimonials?|reviews?|ratings?|team members?)\b|\bAI[- ]generated\b[^.\n]{0,40}\bportraits?\b[^.\n]{0,50}\b(?:as real|real (?:people|customers?|clients?|team)|as (?:customers?|clients?|team members?))\b/i,
+    message: 'The prompt requests fabricated proof or identity material.',
+    fix: 'Refuse fabricated evidence. Use verified real material or a clearly labelled illustration that makes no factual identity claim.',
   },
   {
     id: 'fixed-type-scale',
     severity: 'P2',
     pattern: /font-size:\s*\d+(?:\.\d+)?(px|rem|pt)\b|\b\d+(?:\.\d+)?rem\b[^.\n]{0,24}\b(heading|headline|hero|type|title)\b/i,
-    message: 'A fixed type size will not hold between 320 px and a wide screen.',
-    fix: 'Use a fluid step: clamp(min, preferred, max) in the token block, then reference the token.',
+    message: 'A fixed type size needs a responsive role decision.',
+    fix: 'Use the site type tokens and inspect reflow. Use a bounded fluid step where appropriate; a deliberate constant is not automatically invalid.',
   },
   {
     id: 'hardcoded-breakpoints',
     severity: 'P2',
-    pattern: /@media[^{]{0,40}\d+px/i,
-    message: 'Pixel breakpoints duplicate what fluid tokens already handle.',
+    pattern: /@media[^{]{0,40}\d+px|\bbreakpoints?\b[^.\n]{0,70}\d+(?:\.\d+)?px/i,
+    message: 'Breakpoint instructions need checking against actual layout changes.',
     fix: 'Prefer fluid values and container queries. Keep a media query only where the layout genuinely changes shape.',
   },
   {
@@ -94,7 +100,60 @@ const RULES = [
     message: 'The prompt never mentions contrast, focus or accessibility.',
     fix: 'Measure text against its composed background and state the target (4.5:1 body, 3:1 large). Do not infer readability from a hex pair.',
   },
+  {
+    id: 'viewport-sizing',
+    severity: 'P2',
+    pattern: /\b(?:width\s*:\s*100(?:vw|vi)|height\s*:\s*100vh)\b/i,
+    message: 'Viewport sizing can overflow the page or clip content on mobile.',
+    fix: 'Check scrollbars, browser chrome and expanded content. Prefer container width and content-driven height; retain a viewport size only for an intentional bounded use.',
+  },
+  {
+    id: 'absolute-layout',
+    severity: 'P2',
+    pattern: /\bposition\s*:\s*absolute\b|\babsolute positioning\b/i,
+    message: 'Absolute positioning needs a content-flow review.',
+    fix: 'Use Grid/Flexbox for document structure. Positioned decoration and deliberate overlaps can remain when reading order, long copy and reflow are verified.',
+  },
+  {
+    id: 'placeholder-copy',
+    severity: 'P2',
+    pattern: /\blorem ipsum\b|\bplaceholder (?:body )?copy\b/i,
+    message: 'Placeholder copy does not establish a representative content shape.',
+    fix: 'Use real copy or clearly labelled editorial drafts with realistic lengths before direction selection; track missing content with its owner.',
+  },
+  {
+    id: 'accessibility-override',
+    severity: 'P1',
+    pattern: /\b(?:ignore|skip|disable)\b[^.\n]{0,40}\b(?:accessibility|a11y|WCAG|reduced[- ]motion)\b|\b(?:accessibility|a11y|WCAG|reduced[- ]motion)\b[^.\n]{0,40}\b(?:out of scope|not required|unnecessary|ignore|disable)\b/i,
+    message: 'The prompt asks to omit an accessibility safeguard.',
+    fix: 'Refuse that instruction and retain keyboard/focus, measured contrast, reflow and reduced-motion acceptance. Keywords elsewhere do not establish compliance.',
+  },
 ];
+
+// Clause-local handling prevents "do not invent testimonials; add fake client logos"
+// from suppressing the second instruction. This is not general negation parsing.
+function clauses(line) {
+  return line.split(/;|[.!?](?=\s|$)|\b(?:but|however)\b/i).map(part => part.trim()).filter(Boolean);
+}
+
+function prohibited(clause, matchIndex) {
+  return /^\s*(?:[-*]\s*|\d+[.)]\s*)?(?:do not|don't|never|avoid|no|without)\b/i.test(clause.slice(0, matchIndex + 1));
+}
+
+function lineFinding(rule, line) {
+  let severity;
+  for (const clause of clauses(line)) {
+    const match = rule.pattern.exec(clause);
+    if (!match) continue;
+    if (['invented-proof', 'fabricated-proof', 'motion-without-reduced', 'accessibility-override'].includes(rule.id) && prohibited(clause, match.index)) continue;
+    let candidate = rule.severity;
+    if (rule.id === 'literal-colours' && /\b(?:inspiration|reference|sample palette)\b/i.test(clause) && !/\b(?:must|exact|mandatory)\b/i.test(clause)) candidate = 'P2';
+    if (['webfont-dependency', 'named-font-mandate', 'quoted-font-name', 'invented-proof'].includes(rule.id) && /\b(?:approved|owner[- ]supplied|already installed|self[- ]hosted|verified source)\b/i.test(clause)) candidate = 'P2';
+    if (rule.id === 'invented-proof' && /\b(?:labelled|labeled)\b[^.\n]{0,30}\billustration\b/i.test(clause)) candidate = 'P2';
+    if (!severity || SEVERITY_ORDER[candidate.toLowerCase()] < SEVERITY_ORDER[severity.toLowerCase()]) severity = candidate;
+  }
+  return severity;
+}
 
 /** Findings for one prompt, in line order. Pure: takes text, returns data. */
 export function inspectPrompt(text) {
@@ -102,16 +161,17 @@ export function inspectPrompt(text) {
   const findings = [];
   for (const rule of RULES) {
     if (rule.absent) {
-      if (rule.pattern.test(text) && !rule.absent.test(text)) {
+      const matched = rule.id === 'motion-without-reduced' ? lines.some(line => lineFinding(rule, line)) : rule.pattern.test(text);
+      if (matched && !rule.absent.test(text)) {
         findings.push({ severity: rule.severity, id: rule.id, line: 0, excerpt: '', message: rule.message, fix: rule.fix });
       }
       continue;
     }
     lines.forEach((line, index) => {
-      const match = rule.pattern.exec(line);
-      if (!match) return;
+      const severity = lineFinding(rule, line);
+      if (!severity) return;
       findings.push({
-        severity: rule.severity,
+        severity,
         id: rule.id,
         line: index + 1,
         excerpt: line.trim().slice(0, 120),
@@ -185,7 +245,7 @@ function main() {
       console.log(`  ${finding.message}`);
       console.log(`  Fix: ${finding.fix}`);
     }
-    if (findings.length === 0) console.log('\nNothing to translate. Check the roles and proof anyway.');
+    if (findings.length === 0) console.log('\nNo text signals found. Verify project fit, sources and rendered behavior; this is not design approval.');
   }
   if (!ok) process.exitCode = 1;
 }

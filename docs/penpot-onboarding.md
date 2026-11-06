@@ -1,6 +1,6 @@
 # Penpot Onboarding for Baseline
 
-Penpot offers a collaborative cloud design canvas accessible in the browser, making it ideal for client reviews and shared inspection. For new sites and major redesigns, choose between [OpenDesign](opendesign-onboarding.md), [OpenPencil](openpencil-onboarding.md), [Penpot](penpot-onboarding.md), or direct Astro in the browser. Use `penpot-site-design` for concept iteration followed by representative Astro proofs.
+Penpot offers a collaborative cloud design canvas accessible in the browser for client reviews and shared inspection. HTML/browser concepts are the default when no preference exists, with Brilliant and OpenPencil explicitly offered as editable local alternatives and Penpot for shared cloud review. Keep [OpenDesign](opendesign-onboarding.md) optional for catalogue/lint or an existing project. Use `penpot-site-design` for the selected Penpot workflow and [the shared iteration loop](../.agents/skills/site-art-direction/references/design-iteration.md) for two-or-three-direction comparison followed by an Astro proof.
 
 Baseline supports two execution models: a single agent completing both design and implementation, or an **optional agent switch** where a design agent explores concepts in Penpot and an implementation agent translates the saved design into Astro.
 

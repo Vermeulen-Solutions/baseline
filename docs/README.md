@@ -57,6 +57,7 @@ Agent instructions require saving the art-direction record before visual impleme
 
 - **[Design Framework & Token Physics](design-framework.md)**  
 Bounded fluid scales, root-font/inline-axis assumptions and diagnostics, reading measures (`68ch`), and structural layout primitives.
+- **[Brilliant Onboarding](brilliant-onboarding.md)** Optional editable local canvas, tested colour-role export, fixed-width/undo limits and native Astro proof.
 - **[Native Composition](native-composition.md)** Open-slot Disclosure, Cluster and Sidebar contracts, intrinsic wrapping, CMS/static content ownership and manual acceptance limits.
 - **[Reusable Public Patterns & Primitives](reusable-public-patterns.md)**  
 Shared contracts and examples for Cards/media, ClientRouter lifecycle and warming, progressive forms, skeleton geometry, directional transitions and persistent swaps, accessible Tabs/CopyButton/theme controls, heading/TOC/Callout/Steps primitives, and platform capabilities. The guide maps Tranches 1–5 and distinguishes native fallbacks from browser enhancements and server-only capabilities.

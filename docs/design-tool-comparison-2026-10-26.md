@@ -1,6 +1,12 @@
 # Baseline design-surface trial — 2026-10-26
 
-## Recommendation
+## Current policy note — 2026-11-06
+
+The workflow now defaults to HTML/browser concepts while explicitly presenting Brilliant and OpenPencil as editable local alternatives and Penpot for shared cloud review. OpenDesign remains optional for catalogue/lint or an existing project. Two or three distinct design directions remain reviewable side by side on every surface. See [the maintained iteration loop](../.agents/skills/site-art-direction/references/design-iteration.md); the recommendation below records the October trial and its then-current policy, not a new benchmark.
+
+No controlled token-efficiency comparison was performed. The October trial covered OpenPencil, Penpot and direct Astro/browser; it did not include Brilliant. MCP schema count, calls, payload bytes and qualitative editing friction are not input/output token measurements. A future comparison must hold brief, model, assets, direction count, feedback and final Astro acceptance constant, separate cold setup from warm iteration and include translation/retry effort. Record actual input/output/cached tokens and image accounting only when exposed by the harness; otherwise mark them unavailable.
+
+## Historical recommendation
 
 Recommend **canvas-led iteration** for new sites and substantial visual overhauls, offering **OpenPencil**, **Penpot** and **direct Astro/browser** explicitly. Prefer an already working user-preferred canvas: OpenPencil suits local desktop/files, Penpot suits shared cloud access and sequential agents across machines. Direct Astro remains complete when the user prefers it or browser behavior dominates the design question. Small refinements can stay in their accepted surface. Use one representative concept slice, focused visual changes, direction selection, then an Astro proof before rollout; avoid recreating the whole site on both surfaces. Same-agent work is complete. The final pass adopts the user's preference for a comfortable design-tool review experience; the pilot did not establish a timed speed advantage.
 

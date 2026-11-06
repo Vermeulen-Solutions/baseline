@@ -1,0 +1,18 @@
+{
+  "ownerUndo": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Canvas: Semantic role probe (2 children), 6 elements.\n\n## Changed\n#probe s(390,hug:278) -> s(390,hug:270) restored geometry\n#probeTitle restored text\n#probeSurface s(fill,hug:126) -> s(fill,hug:118) restored geometry\n#probeAction s(fill,32) -> s(fill,24) restored geometry\n\n{\"status\":\"ready\",\"canvasId\":\"Compatibility\",\"project\":\"C:\\\\dev\\\\emdash-baseline\\\\audit\\\\visual-concepts\\\\brilliant-pilot-2026-11-06\\\\project\",\"projectLabel\":\"the local folder \\\"project\\\"\",\"applied\":{\"created\":0,\"modified\":4,\"unchanged\":0,\"deleted\":0},\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"before live turn\\\" · \\\"semantic probe\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"undoSummary\":\"Changed 4 elements: #probe (geometry), #probeTitle (text), #probeSurface (geometry), #probeAction (geometry).\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":0,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 4 modified. Nothing is pending. This result carries no screenshot, and none will come for this block: call export to see it.\"}"
+      }
+    ]
+  },
+  "ownerAfter": {
+    "content": [
+      {
+        "type": "text",
+        "text": "```bl\nfile(\"Compatibility\")\nacb786d577981bc9 t(\"Owner edit kept\",Arial:$font.family,18:$font.size.body,r,align(l),lh(auto,1.17)) p(24,24) s(fill,hug:21) ext(294,) f[(9e18c05acf9becae,tok(color.text,#1A2029))] \"Owner edit kept\" #probeBody\n4b1616afcfb7642d t(\"Build with Baseline\",Arial:$font.family,40:$font.size.display,b:$font.weight.display,align(l),lh(auto,1.15)) p(24,24) s(fill,hug:92) ext(342,) f[(fd5b9e3514442175,tok(color.text,#1A2029))] \"Text 1\" #probeTitle\nf871d53b75d5240c r p(24,70) s(fill,24) ext(294,) f[(b94cc39c7e4fe5cf,tok(color.action,#005198))] \"Action sample\" #probeAction\n```"
+      }
+    ]
+  }
+}

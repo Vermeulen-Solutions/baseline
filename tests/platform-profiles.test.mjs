@@ -95,16 +95,18 @@ test('profile allowlists contain only explicit existing sources and correctly de
   assert.throws(() => profilePackages('static', { dependencies: {} }), /Missing canonical/);
 });
 
-test('Penpot and OpenPencil guidance ships complete on every profile without a runtime dependency', () => {
+test('editable canvas guidance ships complete on every profile without a runtime dependency', () => {
   const penpotDir = '.agents/skills/penpot-site-design';
   const openpencilDir = '.agents/skills/openpencil-site-design';
   const opendesignDir = '.agents/skills/opendesign-site-design';
+  const brilliantDir = '.agents/skills/brilliant-site-design';
   const collect = dir => fs.readdirSync(path.join(root, dir), { withFileTypes: true }).flatMap(entry => entry.isDirectory() ? collect(`${dir}/${entry.name}`) : [`${dir}/${entry.name}`]);
   const expectedPenpot = collect(penpotDir).sort();
   const expectedOpenpencil = collect(openpencilDir).sort();
   const expectedOpendesign = collect(opendesignDir).sort();
+  const expectedBrilliant = collect(brilliantDir).sort();
   const iterationReference = '.agents/skills/site-art-direction/references/design-iteration.md';
-  const onboardingDocs = ['docs/penpot-onboarding.md', 'docs/openpencil-onboarding.md', 'docs/opendesign-onboarding.md'];
+  const onboardingDocs = ['docs/penpot-onboarding.md', 'docs/openpencil-onboarding.md', 'docs/opendesign-onboarding.md', 'docs/brilliant-onboarding.md'];
   assert.ok(expectedPenpot.includes(`${penpotDir}/assets/design-brief.md`));
   assert.ok(expectedPenpot.includes(`${penpotDir}/assets/design-handoff.md`));
   assert.ok(expectedOpenpencil.includes(`${openpencilDir}/SKILL.md`));
@@ -114,14 +116,16 @@ test('Penpot and OpenPencil guidance ships complete on every profile without a r
     assert.ok(manifest.skills.includes('penpot-site-design'), profile);
     assert.ok(manifest.skills.includes('openpencil-site-design'), profile);
     assert.ok(manifest.skills.includes('opendesign-site-design'), profile);
+    assert.ok(manifest.skills.includes('brilliant-site-design'), profile);
+    assert.deepEqual(manifest.skillFiles.filter(file => file.startsWith(`${brilliantDir}/`)).sort(), expectedBrilliant, profile);
     assert.deepEqual(manifest.skillFiles.filter(file => file.startsWith(`${opendesignDir}/`)).sort(), expectedOpendesign, profile);
     assert.deepEqual(manifest.skillFiles.filter(file => file.startsWith(`${penpotDir}/`)).sort(), expectedPenpot, profile);
     assert.deepEqual(manifest.skillFiles.filter(file => file.startsWith(`${openpencilDir}/`)).sort(), expectedOpenpencil, profile);
     assert.ok(manifest.skillFiles.includes(iterationReference), profile);
     for (const doc of onboardingDocs) assert.ok(manifest.files.includes(doc), `${profile}: missing ${doc}`);
     const packages = profilePackages(profile, pkg);
-    assert.ok(!Object.keys({ ...packages.dependencies, ...packages.devDependencies }).some(name => /penpot|open-pencil/.test(name)), profile);
-    for (const file of [...expectedPenpot.filter(file => file.endsWith('.md')), ...expectedOpenpencil.filter(file => file.endsWith('.md')), ...expectedOpendesign.filter(file => file.endsWith('.md')), iterationReference, ...onboardingDocs]) {
+    assert.ok(!Object.keys({ ...packages.dependencies, ...packages.devDependencies }).some(name => /penpot|open-pencil|brilliant/.test(name)), profile);
+    for (const file of [...expectedPenpot.filter(file => file.endsWith('.md')), ...expectedOpenpencil.filter(file => file.endsWith('.md')), ...expectedOpendesign.filter(file => file.endsWith('.md')), ...expectedBrilliant.filter(file => file.endsWith('.md')), iterationReference, ...onboardingDocs]) {
       for (const [, href] of fs.readFileSync(path.join(root, file), 'utf8').matchAll(/\]\(([^)]+)\)/g)) {
         if (/^https?:/.test(href) || href.startsWith('#')) continue;
         const target = path.posix.normalize(path.posix.join(path.posix.dirname(file), href.split('#')[0]));

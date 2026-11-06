@@ -1,0 +1,5 @@
+{
+  "before": "rgb(0, 81, 152)",
+  "after": "rgb(31, 111, 80)",
+  "nativeVariables": ":root { --color-action: #005198; --color-border: #c8ced8; --color-page: #fafcfe; --color-surface: #ffffff; --color-text: #1a2029; }"
+}

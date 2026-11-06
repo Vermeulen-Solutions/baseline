@@ -1,0 +1,36 @@
+[
+  {
+    "artifact": "owner-undo-verified.html",
+    "ownerText": true,
+    "heading": true,
+    "barHeight": 24,
+    "errors": []
+  },
+  {
+    "artifact": "index.html",
+    "width": 390,
+    "mobileControl": true,
+    "overflow": false,
+    "brokenImages": 0,
+    "missing": [],
+    "errors": []
+  },
+  {
+    "artifact": "index.html",
+    "width": 768,
+    "mobileControl": true,
+    "overflow": false,
+    "brokenImages": 0,
+    "missing": [],
+    "errors": []
+  },
+  {
+    "artifact": "index.html",
+    "width": 1440,
+    "mobileControl": true,
+    "overflow": false,
+    "brokenImages": 0,
+    "missing": [],
+    "errors": []
+  }
+]

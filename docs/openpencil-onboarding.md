@@ -1,6 +1,6 @@
 # Optional OpenPencil Desktop Path
 
-OpenPencil (`open-pencil/open-pencil`) provides a local desktop canvas for vector shapes, component nodes, and variable bindings saved in local `.fig` files. For new sites and major redesigns, choose between [OpenDesign](opendesign-onboarding.md), [OpenPencil](openpencil-onboarding.md), [Penpot](penpot-onboarding.md), or direct Astro in the browser. Use `openpencil-site-design` for concept iteration followed by representative Astro proofs.
+OpenPencil (`open-pencil/open-pencil`) provides a local desktop canvas for vector shapes, component nodes, and variable bindings saved in local `.fig` files. HTML/browser concepts are the default when no preference exists, with Brilliant and OpenPencil explicitly offered as editable local alternatives and Penpot for shared cloud review. Keep [OpenDesign](opendesign-onboarding.md) optional for catalogue/lint or an existing project. Use `openpencil-site-design` for the selected OpenPencil workflow and [the shared iteration loop](../.agents/skills/site-art-direction/references/design-iteration.md) for two-or-three-direction comparison followed by an Astro proof.
 
 Baseline supports two execution models: a single agent completing both design and implementation, or an **optional agent switch** where a design agent explores concepts in OpenPencil and an implementation agent translates the saved `.fig` design into Astro.
 

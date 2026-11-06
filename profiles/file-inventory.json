@@ -1485,6 +1485,10 @@
     "tests/audit-ui.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "docs/brilliant-onboarding.md": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

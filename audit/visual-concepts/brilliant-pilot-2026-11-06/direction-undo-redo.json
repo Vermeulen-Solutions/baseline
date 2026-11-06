@@ -1,0 +1,34 @@
+{
+  "undo": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Canvas: A / Workbench — desktop (4 children), A / Workbench — mobile (4 children), B / Field notes — desktop (3 children), B / Field notes — mobile (4 children), 170 elements.\n\n## Changed\n#m6 restored frame\n#a1440Title restored text\n#m10 s(460,hug:154) p(848,27.8) -> s(460,hug:154) p(836,27.8) restored geometry\n#a390 s(390,hug:1009.2) -> s(390,1009.2) restored sizing\n#a390Title restored text\n\n{\"status\":\"ready\",\"canvasId\":\"Directions\",\"project\":\"C:\\\\dev\\\\emdash-baseline\\\\audit\\\\visual-concepts\\\\brilliant-pilot-2026-11-06\\\\project\",\"projectLabel\":\"the local folder \\\"project\\\"\",\"applied\":{\"created\":0,\"modified\":5,\"unchanged\":0,\"deleted\":0},\"undoSummary\":\"Changed 5 elements: #m6 (frame), #a1440Title (text), #m10 (geometry), #a390 (sizing), #a390Title (text).\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":0,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 5 modified. Nothing is pending. This result carries no screenshot, and none will come for this block: call export to see it.\"}"
+      }
+    ]
+  },
+  "undone": {
+    "content": [
+      {
+        "type": "text",
+        "text": "```bl\nfile(\"Directions\")\ne4c25e52fd5c4e23 t(\"Build a website from brief to launch.\",Arial,52,b,align(l),lh(1.25)) p(0,33.5) s(fill,hug:130) ext(800,) f[(e67d1511594a8978,#1A2029)] \"Text 4\" #a1440Title\n6496785f0966d412 al(v,g(21.17),pad(17.17)) p(1480,0) s(390,1009.16) f[(1f061daa2946c18f,#FAFCFE)] \"A / Workbench — mobile\" #a390\nc27baf0a8a710373 al(h,y(c),g(36)) p(32,107.5) s(fill,hug:209.5) ext(1376,) f[] \"Frame 4\" #m6\n```"
+      }
+    ]
+  },
+  "redo": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"canvasId\":\"Directions\",\"results\":[{\"success\":true,\"canvasId\":\"Directions\",\"message\":\"Redid the last action on canvas \\\"Directions\\\", this session's stack.\",\"commandId\":\"redo\"}]}"
+      }
+    ]
+  },
+  "redone": {
+    "content": [
+      {
+        "type": "text",
+        "text": "```bl\nfile(\"Directions\")\ne4c25e52fd5c4e23 t(\"A clear path from brief to launch.\",Arial,52,b,align(l),lh(1.25)) p(0,33.5) s(fill,hug:130) ext(800,) f[(e67d1511594a8978,#1A2029)] \"Text 4\" #a1440Title\n6496785f0966d412 al(v,g(21.17),pad(17.17)) p(1480,0) s(390,1009.16) f[(1f061daa2946c18f,#FAFCFE)] \"A / Workbench — mobile\" #a390\nc27baf0a8a710373 al(h,y(c),g(36)) p(32,107.5) s(fill,hug:209.5) ext(1376,) f[] \"Frame 4\" #m6\n```"
+      }
+    ]
+  }
+}

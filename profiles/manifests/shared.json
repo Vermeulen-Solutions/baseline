@@ -92,6 +92,7 @@
     "docs/penpot-onboarding.md",
     "docs/openpencil-onboarding.md",
     "docs/opendesign-onboarding.md",
+    "docs/brilliant-onboarding.md",
     "scripts/audit-actionability.mjs",
     "scripts/canvas-kit.mjs",
     "docs/canvas-kit.md",
@@ -204,7 +205,8 @@
     "impeccable",
     "penpot-site-design",
     "openpencil-site-design",
-    "opendesign-site-design"
+    "opendesign-site-design",
+    "brilliant-site-design"
   ],
   "skillFiles": [
     ".agents/skills/astro-site-design/SKILL.md",
@@ -321,6 +323,10 @@
     ".agents/skills/opendesign-site-design/references/connection-and-cli.md",
     ".agents/skills/new-site-workflow/references/delivery-evidence.md",
     ".agents/skills/new-site-workflow/references/parallel-delivery.md",
-    ".agents/skills/site-art-direction/references/token-handoff.md"
+    ".agents/skills/site-art-direction/references/token-handoff.md",
+    ".agents/skills/brilliant-site-design/SKILL.md",
+    ".agents/skills/brilliant-site-design/agents/openai.yaml",
+    ".agents/skills/brilliant-site-design/references/connection-and-recovery.md",
+    ".agents/skills/brilliant-site-design/references/baseline-mapping-and-export.md"
   ]
 }

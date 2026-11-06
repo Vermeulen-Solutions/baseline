@@ -1,0 +1,46 @@
+[
+  {
+    "format": "html",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/probe-html.html\nelement(s): ca023cf59ae19490 | 1281 bytes | sha256:8bc8392b49a09f34a1299075cfaeeedaa309f8f39b96545eacc8fe849c8a3e77"
+        }
+      ]
+    }
+  },
+  {
+    "format": "htmlDoc",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (document) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/probe-htmlDoc.html\nelement(s): ca023cf59ae19490 | 1792 bytes | sha256:e7829017bbb6561f1a53476d1e65a705ce1ee31b6585e98ebe1b76c4b2832e72"
+        }
+      ]
+    }
+  },
+  {
+    "format": "htmlFlex",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported HTML (flex) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/probe-htmlFlex.html\nelement(s): ca023cf59ae19490 | 1252 bytes | sha256:1a1f7b7a2e22f2c80c10d0bf1be856e2e1458a5c6a9bc0c1a158befe461e45f2"
+        }
+      ]
+    }
+  },
+  {
+    "format": "react",
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "Exported React (JSX) to C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project/Exports/probe-react.jsx\nelement(s): ca023cf59ae19490 | 1640 bytes | sha256:d79d26cb62a6a22875f6eeea5a25cd7b20b5cc8d705ffbf7ca2f6d0800b96f20"
+        }
+      ]
+    }
+  }
+]

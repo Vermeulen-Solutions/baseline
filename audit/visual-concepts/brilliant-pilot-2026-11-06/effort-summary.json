@@ -1,0 +1,10 @@
+{
+  "elapsedMinutes": 15.66065,
+  "mcpTools": 42,
+  "protocolRequests": 2,
+  "requestBytes": 31696,
+  "responseBytes": 192996,
+  "knowledgeCalls": 3,
+  "knowledgeResponseBytes": 45113,
+  "modelTokens": "unavailable"
+}

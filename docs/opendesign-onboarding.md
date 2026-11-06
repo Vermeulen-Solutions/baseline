@@ -1,6 +1,6 @@
 # Optional OpenDesign desktop and CLI path
 
-OpenDesign (`nexu-io/open-design`) is a local HTML/CSS design, linting and headless-export surface. For new sites and substantial redesigns, recommend a design canvas and offer **OpenDesign**, **OpenPencil**, **Penpot** and **direct Astro/browser** explicitly. Prefer an already working user-preferred connection; use [opendesign-site-design](../.agents/skills/opendesign-site-design/SKILL.md) and [design-iteration.md](../.agents/skills/site-art-direction/references/design-iteration.md) for focused concept edits followed by a representative Astro proof. Use Baseline's existing art-direction, CSS/component contracts and acceptance gates on every surface.
+OpenDesign (`nexu-io/open-design`) is an optional local HTML/CSS design, linting and headless-export surface. HTML/browser concepts are Baseline's default for new directions; Brilliant and OpenPencil are explicit editable local alternatives, and Penpot supports shared cloud review. Choose OpenDesign when its catalogue/lint or an existing project is useful. Reuse an already working user-preferred connection; use [opendesign-site-design](../.agents/skills/opendesign-site-design/SKILL.md) and [design-iteration.md](../.agents/skills/site-art-direction/references/design-iteration.md) for focused concept edits followed by a representative Astro proof. Existing art-direction, CSS/component contracts and acceptance gates apply on every surface.
 
 ## Setup
 

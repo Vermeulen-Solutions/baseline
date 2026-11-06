@@ -1,0 +1,8 @@
+```bl
+file("Directions.bl")
+// selected A iteration
+#a1440Title t("A clear path from brief to launch.",Arial,52,b)
+#a390Title t("A clear path from brief to launch.",Arial,29.75,b)
+#a390 s(390,hug)
+#m6 g(48)
+```

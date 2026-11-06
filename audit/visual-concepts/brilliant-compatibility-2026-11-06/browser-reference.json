@@ -1,0 +1,50 @@
+[
+  {
+    "frame": 0,
+    "width": 390,
+    "computed": {
+      "gap": "8px",
+      "padding": "12px",
+      "background": "oklch(0.99 0.004 250)",
+      "text": "oklch(0.24 0.02 260)",
+      "fontSize": "16px"
+    },
+    "errors": []
+  },
+  {
+    "frame": 1,
+    "width": 768,
+    "computed": {
+      "gap": "15.36px",
+      "padding": "23.04px",
+      "background": "oklch(0.99 0.004 250)",
+      "text": "oklch(0.24 0.02 260)",
+      "fontSize": "16px"
+    },
+    "errors": []
+  },
+  {
+    "frame": 2,
+    "width": 1440,
+    "computed": {
+      "gap": "24px",
+      "padding": "40px",
+      "background": "oklch(0.99 0.004 250)",
+      "text": "oklch(0.24 0.02 260)",
+      "fontSize": "28.8px"
+    },
+    "errors": []
+  },
+  {
+    "frame": 3,
+    "width": 390,
+    "computed": {
+      "gap": "16px",
+      "padding": "24px",
+      "background": "rgb(240, 240, 240)",
+      "text": "rgb(18, 18, 18)",
+      "fontSize": "32px"
+    },
+    "errors": []
+  }
+]

@@ -22,7 +22,8 @@ For improvements to Baseline as a reusable starter, also read [CONTRIBUTING.md](
 ## Skills and documentation
 
 - `new-site-workflow`: required sequencing and handoffs for a complete new site or rebuild.
-- `site-art-direction`: brief-led visual direction before frontend implementation. Consult `references/aesthetic-lanes.md` to select an aesthetic lane and define the narrative metaphor.
+- `site-art-direction`: brief-led visual direction before frontend implementation. Default to HTML/browser concepts while explicitly offering Brilliant, OpenPencil and Penpot alternatives; retain OpenDesign when useful. Compare two or three distinct directions side by side on every surface. Consult `references/design-iteration.md` for review mechanics and `references/aesthetic-lanes.md` for lane/metaphor selection.
+- `brilliant-site-design`: editable local concepts with native token mapping, live-state checks and verified fixed-width-to-Astro translation ([Brilliant onboarding](brilliant-onboarding.md)).
 - `opendesign-site-design`: local HTML/CSS canvas with 154 bundled design systems, 188 examples, and `od lint` validation ([OpenDesign onboarding](opendesign-onboarding.md)).
 - `openpencil-site-design`: local desktop canvas for vector nodes, variable bindings, and `.fig` files ([OpenPencil onboarding](openpencil-onboarding.md)).
 - `penpot-site-design`: shared cloud design canvas for team collaboration and browser review ([Penpot onboarding](penpot-onboarding.md)).

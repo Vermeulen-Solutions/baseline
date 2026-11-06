@@ -1,0 +1,22 @@
+{
+  "page": {
+    "expression": "oklch(99% 0.004 250)",
+    "hex": "#fafcfe"
+  },
+  "surface": {
+    "expression": "oklch(100% 0 0)",
+    "hex": "#ffffff"
+  },
+  "text": {
+    "expression": "oklch(24% 0.02 260)",
+    "hex": "#1a2029"
+  },
+  "action": {
+    "expression": "oklch(43% 0.14 250)",
+    "hex": "#005198"
+  },
+  "border": {
+    "expression": "oklch(85% 0.015 260)",
+    "hex": "#c8ced8"
+  }
+}

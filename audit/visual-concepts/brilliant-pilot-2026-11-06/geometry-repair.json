@@ -1,0 +1,8 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Canvas: A / Workbench — desktop (4 children), A / Workbench — mobile (4 children), B / Field notes — desktop (3 children), B / Field notes — mobile (4 children), 170 elements.\n\n## Changed\n#a1440 s(1440,900) -> s(1440,hug:946.5) \"Frame 1\" -> \"A / Workbench — desktop\"\n#a390 \"Frame 18\" -> \"A / Workbench — mobile\"\n#b1440 \"Frame 35\" -> \"B / Field notes — desktop\"\n#b390 \"Frame 56\" -> \"B / Field notes — mobile\"\n#m115 s(460,hug:154) -> s(fill,hug:154) ext(450,)\n#m125 s(hug:510.92,fill) -> s(fill,hug:205.34) ext(,147.42) -> ext(351.66,)\n\n{\"status\":\"ready\",\"canvasId\":\"Directions\",\"project\":\"C:\\\\dev\\\\emdash-baseline\\\\audit\\\\visual-concepts\\\\brilliant-pilot-2026-11-06\\\\project\",\"projectLabel\":\"the local folder \\\"project\\\"\",\"applied\":{\"created\":0,\"modified\":6,\"unchanged\":0,\"deleted\":0},\"checkpointHint\":\"Recent checkpoints (most recent first): \\\"first-pass geometry repair\\\". Use `undo(\\\"label\\\")` in your next block to roll back to one.\",\"screenshot\":{\"ids\":[],\"scale\":1.0,\"images\":0,\"splitNote\":\"\"},\"guidance\":\"Block 1 of this turn landed: 6 modified. Nothing is pending. This result carries no screenshot, and none will come for this block: call export to see it.\",\"blueprintHandle\":\"read({ paths: [\\\"Directions\\\"], ids: [\\\"43a7c1e2b9685118\\\", \\\"6496785f0966d412\\\", \\\"ce000e7f5a97eb40\\\", \\\"a85a8a5a8b2bcc74\\\", \\\"eacb03dcd1d170eb\\\", \\\"05f81678fd7f8c35\\\"], format: \\\"blueprint\\\", sessionId: \\\"mcp:c3858ea6f76c181d\\\", project: \\\"C:/dev/emdash-baseline/audit/visual-concepts/brilliant-pilot-2026-11-06/project\\\" })\"}"
+    }
+  ]
+}
