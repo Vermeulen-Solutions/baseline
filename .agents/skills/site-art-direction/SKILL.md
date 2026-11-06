@@ -93,7 +93,7 @@ Do not invent facts, testimonials, clients, metrics, team members, or pseudo-rea
 
 When the brief supports substantially different directions, develop two or three compact concepts and compare them against audience fit, brand continuity, content fit, accessibility, maintainability, and distinctiveness. Select one direction or present the meaningful decision to the user.
 
-For a new site, significant overhaul or replacement visual world, read [references/design-iteration.md](references/design-iteration.md). Recommend **Brilliant** when the owner requests an editable prototyping canvas and no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly present **Brilliant** and **OpenPencil** as editable local choices and **Penpot** for shared cloud review. Keep **OpenDesign** optional for catalogue/lint or an existing project; its locally available catalogue can inform any surface. Reuse a settled preference and working connection rather than repeating the offer. Compare two or three structurally distinct directions side by side on every surface, including HTML, then select one, prove it in Astro and roll out. Use `openpencil-site-design` with its version-matched upstream skill/API, `penpot-site-design` for Penpot and `opendesign-site-design` for optional OpenDesign. Use `brilliant-site-design` for Brilliant, including its tested native-token path, fixed-width export limits and post-undo readback. Retain explicitly preferred **Pencil**, **Google Stitch**, **Claude Design** and `designmd-mcp` references, and resolve an unavailable chosen surface with the user. Same-agent work is complete; another agent/handoff is optional. The reference defines comparison/review mechanics and honest efficiency measurement; no token-savings advantage is established.
+For a new site, significant overhaul or replacement visual world, read [references/design-iteration.md](references/design-iteration.md) before offering a design surface. It holds the surface rule (HTML/browser concepts by default; Brilliant when an editable canvas is requested and no tool is settled; Brilliant, OpenPencil and Penpot named once; OpenDesign optional), the skill and limits for each tool, the side-by-side comparison of two or three structurally distinct directions, and honest efficiency measurement. Reuse a settled surface and working connection rather than repeating the offer; resolve an unavailable chosen surface with the user. Same-agent work is complete; another agent/handoff is optional.
 
 Use mood boards, community `DESIGN.md` references (`designmd-mcp` / [designmd.ai/explore](https://designmd.ai/explore)), prototyping tools (**Brilliant**, **Penpot**, **OpenPencil**, **Pencil**, **Google Stitch**, **OpenDesign**, **Claude Design**), or generated visual studies to execute the selected concept approach. When a tool emits a `DESIGN.md` file, store it under `audit/visual-concepts/<concept-name>/DESIGN.md`, review its provenance and intent, and translate the selected decisions into native CSS tokens. Run `npm run design:tokens` and inspect the rendered result on `/_styleguide`. Only select and separately install an external validator when a specific exchange requires it; ordinary site work needs no design-package dependency. Treat generated images as design references until the user intends them as production assets. Record provenance and usage constraints for third-party assets.
 
@@ -155,15 +155,4 @@ Resolve material weaknesses before broad implementation. Cosmetic variation alon
 
 ## Engineering verification loop
 
-For the EmDash foundation, preflight with `npm.cmd run doctor`, use
-`npm.cmd run verify:fast` during edits, then run `npm.cmd run verify`,
-`npm.cmd run build`, and `npm.cmd run audit:html` against that fresh build
-before handoff. On Unix use `npm` in place of `npm.cmd`. Set up the local
-Git pre-commit hook once with `npm.cmd run setup:hooks`; it runs doctor and
-verify:fast and preserves existing hook managers. It supplements the final gate
-and CI; Git hooks are local and can be bypassed. The HTML audit checks emitted
-HTML or automatically captures linked public SSR responses from the local
-production CMS. Missing published content or broken navigation fails the audit;
-see `docs/html-integrity.md` for capture limits and snapshot inspection. For generated
-static profiles, inspect the installed package scripts and use their verification
-commands; do not add CMS tooling to satisfy an unavailable command.
+Run the verification sequence in the site's `AGENTS.md` (*Verify and hand off* on the EmDash foundation, *Verification and release* on generated static sites) before handoff; `new-site-workflow` holds the full sequence and its reasons. Check each command against `package.json` first, and do not add CMS tooling to satisfy an unavailable command.

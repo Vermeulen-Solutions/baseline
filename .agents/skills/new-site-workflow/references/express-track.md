@@ -4,11 +4,11 @@ Read this when the track decision in `SKILL.md` selects Express. Express runs th
 
 ## Express defaults
 
-Present the material defaults briefly at the relevant checkpoint and record approved versus assumed decisions in the established context home; keep the selected visual direction and density with the Art Direction Record in `AGENTS.md`. Defaults are revisable, not approval claims:
+Present the defaults below briefly at the checkpoint they belong to and record approved versus assumed decisions in the established context home; keep the selected visual direction and density with the Art Direction Record in `AGENTS.md`. Defaults are revisable, not approval claims:
 
 - Recommend `static` when developers/agents own file edits. Ask about editing needs before selecting a browser CMS or relational platform; record the selected profile.
 - Use the brief/content language as a labeled assumption. Resolve ambiguity or extra locales before committing to URL/schema structure.
-- Recommend one brief-led visual direction, preserving supplied identity. Offer alternatives when needed to resolve a material design uncertainty. Explain lane names in everyday terms.
+- Recommend one brief-led visual direction, preserving supplied identity. Offer two or three alternatives only when the brief and identity leave the lane, typography or hero strategy open. Explain lane names in everyday terms.
 - Use **shared layout spacing** and calibrate density from the brief/reference; assume **balanced** density when no cue exists. Explain that the gaps adapt to screen size and remain locally adjustable. Do not ask users to opt into a CSS policy. Ask about compact/balanced/spacious feel only if it affects an unresolved visual decision.
 - Compose native primitives, editorial flow and progressive enhancement. Add browser JavaScript only for a required interaction. No third-party tracking by default; discuss it when measurement is requested.
 - Use real supplied content or explicitly marked local drafts. Identify the owner of missing material; do not publish filler or assume draft/legal approval.

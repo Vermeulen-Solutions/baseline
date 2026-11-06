@@ -63,6 +63,7 @@ The right-hand column summarises each **Gate**; the stage reference holds its fu
 
 The full policy, discovery questions and release rules are in [references/decisions-and-release.md](references/decisions-and-release.md). Read it before the first owner question and before any handoff. The rules that apply at every step:
 
+- A decision is *consequential* (the stage references also say *material*) when its plausible answers lead to different routes, content models, profiles, visual directions or external actions. Anything else gets a labelled working assumption instead of a question, because each extra question delays the owner without changing the work.
 - Use supplied evidence and prior answers before asking. Ask only unresolved questions whose answers change the work, one to three related questions at a time, in plain language, with a recommendation. Do not make users choose implementation details the agent can derive.
 - Ask the question in chat when it becomes relevant. A question written only into a report, checklist or handoff has not been asked, because the owner reads the chat, not every file.
 - When work is authorized, report the outcome and continue. Do not end with “shall I continue?” or ask “ready to build?” at each stage; reuse existing authorization.

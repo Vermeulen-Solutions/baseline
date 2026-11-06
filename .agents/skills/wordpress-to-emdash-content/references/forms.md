@@ -30,7 +30,7 @@ Classify from configuration and observed behavior. A form with five text fields 
 
 ### Choose the provider with the client
 
-Before implementing a Tier 1 form, ask the client which provider they want to use. If they have no preference, compare at least a couple of suitable options, explain the practical tradeoffs, and get their choice before wiring the form. Possible candidates include Formspark, StaticForms, and Web3Forms; this list is not an endorsement and providers' plans and features change. Check each candidate's official current documentation and pricing for:
+Before implementing a Tier 1 form, ask the client which provider they want to use. If they have no preference, compare two or three providers that support the form's delivery, spam control and data-residency needs, explain the practical tradeoffs, and get their choice before wiring the form. Possible candidates include Formspark, StaticForms, and Web3Forms; this list is not an endorsement and providers' plans and features change. Check each candidate's official current documentation and pricing for:
 
 - Existing account, who owns it, recipient verification, and how credentials are issued. Never assume a browser-visible key is safe unless that provider explicitly documents it as public.
 - Current submission allowance, overage behavior, and whether pricing is recurring, one-time, promotional, or tied to an expiring bundle.
@@ -160,7 +160,7 @@ Suggested collection slug: `form_submissions`. Keep the collection non-routable,
 - `email_key` — required normalized composite key such as `${formKey}:${email.trim().toLowerCase()}`, **unique**. Avoid global email uniqueness when duplicates are only forbidden within one form/event.
 - `slot_key` — required composite string such as `${formKey}:${slotNumber}`, **unique**. It is a candidate capacity reservation only after the draft-uniqueness and concurrency preflight above passes.
 - `answers` — JSON for form-specific extra answers; keep common searchable/export columns as real fields, because JSON values are not indexed/searchable as ordinary collection fields.
-- `submitted_at`, `submission_status`, and consent/retention metadata as needed. Don't collect fields the workflow does not need.
+- `submitted_at`, `submission_status`, and consent/retention metadata whenever the form collects personal data. Don't collect fields the workflow does not need.
 
 EmDash documents collection/field definitions through seed files and Content Types, draft/unpublished entry behavior, per-field unique and searchable rules, and admin list search. The exact seed keys and content-create payload must match the current seed reference and `GET /_emdash/api/openapi.json` on the target site; do not copy an approximate schema shape into production. The client inbox is the EmDash collection list/editor. Native CSV export is not assumed: if the target EmDash version does not provide it, build a separately authenticated export endpoint/action that reads all pages of the collection and emits correctly quoted CSV. Escape spreadsheet formula-leading values (`=`, `+`, `-`, `@`) in exported cells.
 
