@@ -282,5 +282,13 @@
   "audit-ui.test.mjs": {
     "tier": "unit",
     "reason": "Portable rendered UI audit: argument guards, sitemap/index parsing, template sampling and issue aggregation"
+  },
+  "design-artifact-watch.test.mjs": {
+    "tier": "unit",
+    "reason": "Watcher change detection, project resolution, platform paths and opener selection"
+  },
+  "design-prompt-check.test.mjs": {
+    "tier": "unit",
+    "reason": "Prompt preflight rules, severity thresholds, line reporting and CLI exit codes"
   }
 }

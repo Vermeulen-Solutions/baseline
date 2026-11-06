@@ -19,6 +19,8 @@ Reuse the strategic synthesis and priority page briefs from `new-site-workflow` 
 
 When evidence is incomplete, make reversible working assumptions and label them. Ask only when plausible answers would lead to materially different identities or layouts.
 
+When the owner brings a design prompt from a library — [open-design.ai/prompts](https://open-design.ai/prompts/), [superdesign.dev](https://superdesign.dev/), [designprompts.dev](https://designprompts.dev/) — treat it as a brief, not a specification. At the concept checkpoint, ask whether they are short on visual inspiration and offer those libraries when the brief has no references of its own; then run `npm run design:prompt-check -- <file>` and follow [external prompt adaptation](references/external-prompt-adaptation.md): roles before colours, type character before type files, real proof only. A clean report is not approval, a conflict is not a reason to discard the prompt, and the offer is made once.
+
 ## Ground UX anatomy before styling
 
 When a site includes non-trivial interactive flows, directories, schedules, pricing structures, or multi-step forms, avoid inventing layouts from statistical LLM averages:

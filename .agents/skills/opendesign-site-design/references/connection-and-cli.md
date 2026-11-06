@@ -86,14 +86,41 @@ Use the actual daemon origin, owned project ID and output paths. Inspect each re
 curl.exe -s -H "Origin: $env:OD_DAEMON_URL" -F "file=@concept.html;type=text/html" -F "name=concept.html" "$env:OD_DAEMON_URL/api/projects/<project-id>/files"
 ```
 
-Discover the daemon port first (see above); the response lists the new version. Ask the owner to press Ctrl+R in OpenDesign Desktop to see the update.
+Discover the daemon port first (see above); the response lists the new version. Review the file itself (next section) rather than the desktop artifact panel.
 
-## Synchronizing external CLI projects with the OpenDesign Desktop UI
+## Reviewing an artifact without the desktop UI
 
-When an external agent creates a project via the daemon API or CLI while the OpenDesign Electron window is already open, the desktop UI may not display the project immediately for three reasons:
+The Electron window is a cache of the daemon; the artifact is a plain file. Everything below works with the window closed, and it is the default review surface for agent-driven iterations.
+
+- **Where the files are:** `%APPDATA%\Open Design\namespaces\<channel>\data\projects\<project-id>\` on Windows (`release-stable-win` for a stable build), one `.html` plus `<name>.artifact.json` per artifact and a `.file-versions/` history. `GET /api/projects/<id>/files` returns the same list with `localPath`, size and manifest, so an agent can resolve the path without scanning disk.
+- **Open it:** `Start-Process "C:\...\projects\<id>\concept.html"` (Windows) or `open` (macOS). The artifact is self-contained — verified headless at 1440×900 and 390×844 with zero page errors and no daemon, sign-in or session involved.
+- **Serve the folder** when several artifacts link to each other: any static server rooted at the project directory.
+- **Captures** stay with the export endpoint above; `od export --format html` also runs headless (only `image`/`pdf` need the desktop runtime's Chromium).
+
+The write returns after the bytes land, so a browser refreshed on that file is the current version. No reload command, no sidebar.
+
+### Auto-open changed artifacts
+
+`npm run design:watch -- --project <id>` polls the project folder and opens each new or rewritten `.html` in the default browser; that replaces the desktop tab you would otherwise have to find. Omit `--project` to watch the most recently modified project, or pass `--dir <path>`. `--no-open` prints paths only (remote shells, CI), `--all` opens every artifact that changed in one poll instead of just the newest, `--once` scans and exits, and `--open-existing` opens the newest file at startup. Polling is deliberate: it behaves the same on Windows, macOS, Linux and network drives, and survives the write-then-rename pattern editors use. Paths resolve per platform — `%APPDATA%\Open Design`, `~/Library/Application Support/Open Design`, `$XDG_CONFIG_HOME` or `~/.config/Open Design` — and the opener is `explorer.exe`, `open`, `xdg-open`, or `wslview` under WSL. A headless or SSH session has no browser to open, so use `--no-open` there; if OpenDesign changes its namespace layout, `--dir` bypasses resolution entirely.
+
+## Why a new artifact does not open itself, and what to do
+
+Three separate behaviours, checked against 0.27.0 on 2026-11-05:
+
+- `POST /api/active` is a **write-only** channel. `apps/daemon/src/routes/active-context.ts` documents the web UI as the writer and the MCP surface as the reader; the web app only posts (`apps/web/src/App.tsx`) and never reads it back. Setting it from outside does not move the UI.
+- `opendesign://` handles only workspace invites (`/invite/continue`) and `workspace/open`; there is no deep link to a project file. `od://` is the packaged app's own proxy, not an external navigation API.
+- Tab state (`tabs`, `tabs_state`) is read when the view mounts, and artifact writes emit no event.
+
+So after an external write, the owner reloads the window and clicks the file, or you open the artifact URL `http://127.0.0.1:<web-port>/projects/<project-id>/files/<artifact>` — a real route (`apps/web/src/router.ts`), but it needs a signed-in session in that browser: an unauthenticated fresh browser lands on the sign-in screen. Opening the file from disk has neither limitation, which is why it is the default here.
+
+## When the owner insists on the desktop UI
+
+When an external agent creates a project via the daemon API or CLI while the OpenDesign Electron window is already open, the desktop UI may not display it immediately for three reasons:
 
 | Cause | Resolution |
 | --- | --- |
 | `POST /api/active` rejected with CSRF / same-origin error | Include `Origin: http://127.0.0.1:<daemon-port>` in the HTTP headers when calling `/api/active` |
 | Desktop sidebar filters out projects without a conversation title or active tab | Ensure `conversations` has a row with a non-null `title` for `project_id`, and `tabs` / `tabs_state` list the active `.html` artifact |
 | Electron React frontend caches project state in memory | Ask the user to focus the OpenDesign desktop window and press `Ctrl + R` (`View -> Reload`), or open the local Next.js web sidecar URL (`http://127.0.0.1:<web-port>`) in any browser |
+
+Upstream status, checked 2026-11-05: [issue #8964](https://github.com/nexu-io/open-design/issues/8964) confirms the cause — the daemon emits no catalog event and the Home view keeps its own `POST` response. [PR #8968](https://github.com/nexu-io/open-design/pull/8968) adds a thin `project-catalog-changed` SSE and a cache-bypassing re-read; it is approved and green but **unmerged**, so 0.27.0 (2026-11-04) still needs the reload. The earlier Projects-tab polling fix (#3993) never covered Home, and artifact content has no change event at all, so that part outlives #8968. Treat this section as a fallback, not the workflow.

@@ -93,6 +93,8 @@
     "baseline:inspect": "node scripts/inspect-project.mjs",
     "workflow:replay": "node scripts/workflow-replay.mjs",
     "design:canvas-kit": "node scripts/canvas-kit.mjs",
+    "design:watch": "node scripts/watch-design-artifacts.mjs",
+    "design:prompt-check": "node scripts/check-design-prompt.mjs",
     "migration:wordpress": "node scripts/wordpress-migrate.mjs",
     "migration:check-locale": "node scripts/check-migration-locale.mjs",
     "db:check-backup": "node scripts/check-backup.mjs",

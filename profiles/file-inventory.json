@@ -1259,6 +1259,22 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "scripts/watch-design-artifacts.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/design-artifact-watch.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/check-design-prompt.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/design-prompt-check.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "scripts/wordpress-io.mjs": {
       "disposition": "shared",
       "static": "copy"

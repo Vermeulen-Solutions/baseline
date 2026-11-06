@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Baseline — a baseline, not a blank page</title>
+<meta name="description" content="Baseline is an Astro starter with design tokens, art-direction gates and rendered checks wired before the first section is built. Static, Sveltia or EmDash." />
+<style>
+	/* Concept mockup. Baseline roles, dark-first, one accent. Values marked
+	   ADAPTED in adaptation.md — decorative constants are named, not scattered. */
+	:root {
+		color-scheme: dark;
+
+		/* Baseline semantic roles, dark equivalents. */
+		--color-page: oklch(0% 0 0);
+		--color-surface: oklch(16.5% 0.004 240);
+		--color-elevated: rgb(255 255 255 / 0.03);
+		--color-text: oklch(94% 0.002 250);
+		--color-muted: oklch(78% 0.004 250);
+		--color-faint: oklch(66% 0.004 250);
+		--color-border: rgb(255 255 255 / 0.1);
+		--color-action: oklch(93% 0.26 124);
+		--color-on-action: oklch(15% 0.01 120);
+		--color-focus: oklch(88% 0.24 124);
+		--color-secondary: oklch(72% 0.16 160);
+
+		/* Light band, for the methodology contrast section. */
+		--color-paper: oklch(92.5% 0.004 85);
+		--color-ink: oklch(18% 0.01 70);
+		--color-ink-muted: oklch(38% 0.012 70);
+		--color-ink-border: oklch(18% 0.01 70 / 0.16);
+
+		/* Baseline type families: system stacks, no webfont request. */
+		--font-display: ui-sans-serif, "Segoe UI Variable Display", "SF Pro Display", system-ui, -apple-system, sans-serif;
+		--font-body: ui-sans-serif, "Segoe UI Variable Text", "SF Pro Text", system-ui, -apple-system, sans-serif;
+		--font-mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
+
+		/* Fluid steps, same construction as the starter's --text-step-*. */
+		--text-hero: clamp(3.1rem, 7.6vw, 7.5rem);
+		--text-h2: clamp(1.85rem, 3.2vw, 2.9rem);
+		--text-h3: clamp(1.05rem, 1.1vw, 1.25rem);
+		--text-body: clamp(1rem, 0.96rem + 0.18vw, 1.0625rem);
+		--text-mono: 0.6875rem;
+
+		--space-section: clamp(3.5rem, 6vw, 7rem);
+		--space-card: clamp(1.25rem, 1.7vw, 1.75rem);
+		--measure: 68ch;
+		--grid-cell: 60px; /* ADAPTED: decorative rhythm from the source prompt */
+		--radius-shell: 2.5rem;
+		--radius-card: 1.5rem;
+		--radius-pill: 9999px;
+
+		--ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+		--shadow-shell: 0 40px 120px -40px rgb(0 0 0 / 0.9);
+	}
+
+	*, *::before, *::after { box-sizing: border-box; }
+
+	html { scroll-behavior: smooth; }
+	html:focus-within { scroll-behavior: auto; }
+	body {
+		margin: 0;
+		background: var(--color-page);
+		color: var(--color-text);
+		font-family: var(--font-body);
+		font-size: var(--text-body);
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+	img, svg { display: block; max-width: 100%; }
+	a { color: inherit; }
+	:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 3px; border-radius: 4px; }
+
+	.skip {
+		position: absolute; left: 1rem; top: -4rem;
+		z-index: 10; padding: 0.6rem 1rem;
+		background: var(--color-action); color: var(--color-on-action);
+		font-family: var(--font-mono); font-size: var(--text-mono); letter-spacing: 0.14em; text-transform: uppercase;
+		border-radius: 0.5rem;
+	}
+	.skip:focus { top: 1rem; }
+
+	/* Floating shell: black viewport, obsidian container. */
+	.viewport { padding: clamp(0.5rem, 1.4vw, 1.25rem); min-height: 100vh; }
+	.shell {
+		position: relative;
+		max-width: 1600px;
+		margin-inline: auto;
+		background: var(--color-surface);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-shell);
+		box-shadow: var(--shadow-shell);
+		overflow: hidden;
+		background-image:
+			linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
+			linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+		background-size: var(--grid-cell) var(--grid-cell);
+	}
+	.shell::after {
+		content: "";
+		position: absolute; inset: 0;
+		pointer-events: none;
+		opacity: 0.05;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+	}
+	.wrap { width: min(100% - 2 * clamp(1rem, 3vw, 3rem), 76rem); margin-inline: auto; }
+	.glow {
+		position: absolute; z-index: 0; pointer-events: none;
+		width: 46rem; height: 46rem; border-radius: 50%;
+		background: radial-gradient(circle, oklch(93% 0.26 124 / 0.14), transparent 62%);
+		filter: blur(120px);
+	}
+	.glow--a { top: -22rem; right: -12rem; }
+	.glow--b { top: 34rem; left: -26rem; background: radial-gradient(circle, oklch(72% 0.16 160 / 0.12), transparent 60%); }
+
+	/* Micro labels. */
+	.mono {
+		font-family: var(--font-mono);
+		font-size: var(--text-mono);
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		line-height: 1.4;
+	}
+	.eyebrow { display: inline-flex; align-items: center; gap: 0.55rem; color: var(--color-muted); }
+	.dot {
+		width: 6px; height: 6px; border-radius: 50%;
+		background: var(--color-action);
+		animation: pulse 2.4s ease-in-out infinite;
+	}
+	@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+	/* Masthead. */
+	.masthead {
+		position: relative; z-index: 2;
+		display: flex; align-items: center; gap: 1rem;
+		padding: clamp(0.9rem, 1.6vw, 1.35rem) clamp(1rem, 2.4vw, 2rem);
+		border-bottom: 1px solid var(--color-border);
+	}
+	.brand { display: inline-flex; align-items: center; gap: 0.7rem; text-decoration: none; }
+	.brand__mark {
+		display: grid; place-items: center;
+		width: 2.25rem; height: 2.25rem;
+		border-radius: 0.75rem;
+		background: var(--color-action); color: var(--color-on-action);
+		font-family: var(--font-display); font-weight: 700; font-size: 1.1rem;
+	}
+	.brand__name { font-family: var(--font-display); font-weight: 650; letter-spacing: -0.03em; font-size: 1.05rem; }
+	.nav {
+		margin-inline: auto;
+		display: none; gap: 0.25rem;
+		padding: 0.3rem;
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-pill);
+		background: rgb(255 255 255 / 0.05);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+	}
+	.nav a {
+		padding: 0.5rem 0.95rem;
+		border-radius: var(--radius-pill);
+		color: var(--color-muted);
+		text-decoration: none;
+		font-size: 0.9rem;
+		transition: color 160ms var(--ease-out), background-color 160ms var(--ease-out);
+	}
+	.nav a:hover { color: var(--color-text); background: rgb(255 255 255 / 0.06); }
+	.status { display: none; align-items: center; gap: 0.5rem; color: var(--color-muted); }
+	.header-cta { margin-inline-start: auto; }
+	@media (min-width: 900px) {
+		.nav { display: flex; }
+		.status { display: inline-flex; }
+		.header-cta { margin-inline-start: 0; }
+	}
+
+	/* Buttons. */
+	.button {
+		display: inline-flex; align-items: center; gap: 0.6rem;
+		padding: 0.85rem 1.4rem;
+		border-radius: var(--radius-pill);
+		border: 1px solid transparent;
+		font-weight: 650; font-size: 0.95rem; text-decoration: none;
+		transition: transform 180ms var(--ease-out), background-color 180ms var(--ease-out), color 180ms var(--ease-out);
+	}
+	.button--action {
+		background: var(--color-action); color: var(--color-on-action);
+		box-shadow: 0 0 34px oklch(93% 0.26 124 / 0.28);
+	}
+	.button--action:hover { transform: translateY(-1px) scale(1.02); }
+	.button--ghost { border-color: var(--color-border); color: var(--color-text); background: rgb(255 255 255 / 0.02); }
+	.button--ghost:hover { background: rgb(255 255 255 / 0.07); }
+	.button--small { padding: 0.6rem 1.05rem; font-size: 0.85rem; }
+
+	/* Hero. */
+	.hero { position: relative; z-index: 1; padding-block: clamp(3rem, 7vw, 6.5rem) var(--space-section); }
+	.hero__grid { display: grid; gap: clamp(2rem, 4vw, 3.5rem); }
+	.hero h1 {
+		margin: 1.1rem 0 0;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: var(--text-hero);
+		line-height: 0.9;
+		letter-spacing: -0.045em;
+		text-wrap: balance;
+	}
+	.hero h1 em {
+		font-style: italic;
+		background: linear-gradient(100deg, var(--color-action), oklch(98% 0.02 124) 72%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: var(--color-action);
+		-webkit-text-fill-color: transparent;
+	}
+	.hero__deck { max-width: 44ch; margin: 1.5rem 0 0; color: var(--color-muted); font-size: clamp(1.02rem, 1.1vw, 1.15rem); }
+	.hero__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+	.hero__meta {
+		display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem;
+		margin: 2.25rem 0 0; padding: 1.1rem 0 0;
+		border-top: 1px solid var(--color-border);
+		list-style: none; color: var(--color-faint);
+	}
+	.hero__meta b { color: var(--color-text); font-weight: 600; }
+
+	/* Hero specimen: the product as a floating glass shell. */
+	.specimen { position: relative; align-self: start; }
+	.specimen__shell {
+		position: relative;
+		padding: clamp(1rem, 1.6vw, 1.5rem);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-shell);
+		background:
+			radial-gradient(120% 120% at 80% 0%, oklch(93% 0.26 124 / 0.1), transparent 55%),
+			rgb(255 255 255 / 0.03);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+	}
+	.specimen__bar {
+		display: flex; align-items: center; gap: 0.5rem;
+		padding-bottom: 1rem; border-bottom: 1px solid var(--color-border);
+		color: var(--color-faint);
+	}
+	.specimen__dots { display: flex; gap: 0.35rem; }
+	.specimen__dots i { width: 7px; height: 7px; border-radius: 50%; background: rgb(255 255 255 / 0.16); }
+	.specimen__dots i:first-child { background: var(--color-action); }
+	.specimen__row { display: grid; gap: 0.75rem; margin-top: 1rem; }
+	.chip {
+		display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+		padding: 0.8rem 0.95rem;
+		border: 1px solid var(--color-border);
+		border-radius: 0.9rem;
+		background: rgb(255 255 255 / 0.03);
+		font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+		color: var(--color-muted);
+	}
+	.chip b { color: var(--color-text); font-weight: 600; }
+	.chip--pass b { color: var(--color-action); }
+	.float { animation: float 6s ease-in-out infinite; }
+	.float--delay { animation-delay: -2.2s; }
+	@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+	.cursor-tag {
+		position: absolute; right: 1.1rem; top: -0.8rem;
+		display: inline-flex; align-items: center; gap: 0.45rem;
+		padding: 0.4rem 0.7rem;
+		border-radius: 0.55rem;
+		background: var(--color-action); color: var(--color-on-action);
+		font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
+		box-shadow: 0 18px 40px -12px oklch(93% 0.26 124 / 0.55);
+	}
+	@media (min-width: 1024px) {
+		.hero__grid { grid-template-columns: 7fr 5fr; align-items: start; }
+		.specimen { padding-top: 0.75rem; }
+	}
+
+	/* Section furniture. */
+	.section { position: relative; z-index: 1; padding-block: var(--space-section); }
+	.section--rule { border-top: 1px solid var(--color-border); }
+	.section__head { display: grid; gap: 0.9rem; margin-bottom: clamp(1.75rem, 3vw, 2.75rem); }
+	.section h2 {
+		margin: 0;
+		font-family: var(--font-display);
+		font-weight: 600;
+		font-size: var(--text-h2);
+		line-height: 1.05;
+		letter-spacing: -0.035em;
+		text-wrap: balance;
+	}
+	.section__lead { max-width: var(--measure); margin: 0; color: var(--color-muted); }
+	@media (min-width: 900px) {
+		.section__head { grid-template-columns: 1fr 1fr; align-items: end; }
+		.section__head .section__lead { justify-self: end; }
+	}
+
+	/* Bento. */
+	.bento { display: grid; gap: 1rem; }
+	@media (min-width: 900px) {
+		.bento { grid-template-columns: repeat(4, 1fr); }
+		.bento > .card { grid-column: span 2; }
+	}
+	.card {
+		position: relative;
+		display: flex; flex-direction: column; gap: 0.9rem;
+		padding: var(--space-card);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-card);
+		background: var(--color-elevated);
+		backdrop-filter: blur(16px);
+		-webkit-backdrop-filter: blur(16px);
+		transition: border-color 180ms var(--ease-out);
+	}
+	.card:hover { border-color: oklch(93% 0.26 124 / 0.4); }
+	.card h3 { margin: 0; font-family: var(--font-display); font-size: var(--text-h3); font-weight: 600; letter-spacing: -0.02em; }
+	.card p { margin: 0; color: var(--color-muted); font-size: 0.95rem; }
+	.card--accent { background: var(--color-action); color: var(--color-on-action); border-color: transparent; }
+	.card--accent p, .card--accent .mono { color: oklch(30% 0.06 120); }
+	.card--accent .card__foot { color: oklch(30% 0.06 120); }
+	.card__foot { margin-top: auto; display: flex; align-items: center; gap: 0.5rem; color: var(--color-faint); }
+	.card--wide { grid-column: span 2; }
+
+	/* Profile matrix: honest binary capabilities, no invented numbers. */
+	.matrix { display: grid; gap: 0.55rem; margin-top: 0.25rem; }
+	.matrix__row {
+		display: grid;
+		grid-template-columns: 1fr repeat(3, 1.7rem);
+		align-items: center; gap: 0.4rem;
+		font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.1em; text-transform: uppercase;
+		color: var(--color-faint);
+	}
+	.matrix__row span:not(:first-child) { text-align: center; }
+	.matrix__row--head { color: var(--color-muted); }
+	.matrix__row i {
+		justify-self: center;
+		width: 0.55rem; height: 0.55rem; border-radius: 50%;
+		border: 1px solid rgb(255 255 255 / 0.22);
+	}
+	.matrix__row i[data-on="on"] { background: var(--color-action); border-color: var(--color-action); }
+
+	/* Token swatches. */
+	.swatches { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.6rem; margin-top: auto; }
+	.swatch { display: grid; gap: 0.35rem; }
+	.swatch i { display: block; height: 1.7rem; border-radius: 0.5rem; border: 1px solid rgb(255 255 255 / 0.1); }
+	.swatch code { font-family: var(--font-mono); font-size: 0.6rem; letter-spacing: 0.02em; color: var(--color-faint); }
+	.code {
+		margin: 0;
+		padding: 0.85rem 0.95rem;
+		border-radius: 0.8rem;
+		background: oklch(11% 0.004 240);
+		border: 1px solid var(--color-border);
+		font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.7;
+		color: var(--color-muted);
+		overflow-x: auto;
+	}
+	.code b { color: var(--color-text); font-weight: 600; }
+	.card--accent .code { background: oklch(15% 0.01 120); border-color: oklch(15% 0.01 120); color: oklch(88% 0.08 124); }
+	.card--accent .code b { color: oklch(97% 0.04 124); }
+	.ramp { display: grid; gap: 0.55rem; margin-top: auto; }
+	.ramp__row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; padding-top: 0.5rem; border-top: 1px solid var(--color-border); }
+	.ramp__sample { font-family: var(--font-display); line-height: 1; letter-spacing: -0.04em; }
+	.ramp__sample--display { font-size: 2.6rem; font-style: italic; color: var(--color-action); }
+	.ramp__sample--h2 { font-size: 1.7rem; }
+	.ramp__sample--body { font-size: 1.05rem; }
+	.ramp__sample--mono { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0; }
+	.ramp__row code { font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-faint); }
+
+	/* Profiles row. */
+	.profiles { display: grid; gap: 1rem; }
+	.profile { display: grid; gap: 0.6rem; padding-top: 1.1rem; border-top: 1px solid var(--color-border); }
+	.profile h3 { margin: 0; font-family: var(--font-display); font-size: 1.05rem; letter-spacing: -0.015em; }
+	.profile p { margin: 0; color: var(--color-muted); font-size: 0.94rem; }
+	.profile__tag { color: var(--color-action); }
+	@media (min-width: 820px) { .profiles { grid-template-columns: repeat(3, 1fr); gap: clamp(1.5rem, 3vw, 2.75rem); } }
+
+	/* Methodology: light band with rounded top corners. */
+	.method {
+		position: relative; z-index: 1;
+		margin-top: var(--space-section);
+		padding-block: var(--space-section);
+		background: var(--color-paper);
+		color: var(--color-ink);
+		border-radius: 4rem 4rem 0 0;
+	}
+	.method .eyebrow { color: var(--color-ink-muted); }
+	.method .section__lead { color: var(--color-ink-muted); }
+	.method .section h2 { color: var(--color-ink); }
+	.steps { display: grid; gap: clamp(1.5rem, 3vw, 2.5rem); }
+	.step { display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: start; padding-top: 1.2rem; border-top: 1px solid var(--color-ink-border); }
+	.step__num {
+		display: grid; place-items: center;
+		width: 2.4rem; height: 2.4rem; border-radius: 50%;
+		border: 1px solid var(--color-ink-border);
+		font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em;
+		color: var(--color-ink);
+	}
+	.step h3 { margin: 0 0 0.35rem; font-family: var(--font-display); font-size: 1.1rem; letter-spacing: -0.015em; }
+	.step p { margin: 0; color: var(--color-ink-muted); font-size: 0.95rem; }
+	.method__grid { display: grid; gap: clamp(2rem, 4vw, 3.5rem); }
+	@media (min-width: 1024px) { .method__grid { grid-template-columns: 1.05fr 0.95fr; align-items: start; } }
+
+	/* Receipt card: real command output, not a testimonial. */
+	.receipt {
+		padding: clamp(1.1rem, 1.8vw, 1.6rem);
+		border-radius: var(--radius-card);
+		background: oklch(13% 0.006 240);
+		border: 1px solid rgb(255 255 255 / 0.08);
+		color: var(--color-text);
+		box-shadow: 0 30px 80px -40px rgb(0 0 0 / 0.55);
+	}
+	.receipt .mono { color: var(--color-faint); }
+	.receipt pre { margin: 0.9rem 0 0; font-family: var(--font-mono); font-size: 0.72rem; line-height: 1.9; color: var(--color-muted); overflow-x: auto; }
+	.receipt .ok { color: var(--color-action); }
+	.receipt__note { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px solid rgb(255 255 255 / 0.1); }
+	.receipt__note p { margin: 0.5rem 0 0; color: var(--color-muted); font-size: 0.9rem; }
+
+	/* Scope: narrow, no cards. */
+	.scope { max-width: var(--measure); }
+	.scope dl { margin: 0; display: grid; gap: 1.25rem; }
+	.scope dt { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em; }
+	.scope dd { margin: 0.2rem 0 0; color: var(--color-muted); }
+	.scope__grid { display: grid; gap: clamp(2rem, 5vw, 4rem); }
+	.banned { align-self: start; padding-top: 0.4rem; }
+	.banned .mono { color: var(--color-faint); }
+	.banned ul { margin: 0.9rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.8rem; }
+	.banned li { padding-top: 0.8rem; border-top: 1px solid var(--color-border); color: var(--color-muted); font-size: 0.95rem; }
+	@media (min-width: 1024px) { .scope__grid { grid-template-columns: 1.15fr 0.85fr; align-items: start; } }
+
+	/* CTA + footer. */
+	.cta { position: relative; z-index: 1; padding-block: var(--space-section); border-top: 1px solid var(--color-border); }
+	.cta__inner {
+		display: grid; gap: 1.5rem;
+		padding-block: clamp(2rem, 4vw, 3.5rem);
+	}
+	.cta h2 { margin: 0; font-family: var(--font-display); font-size: var(--text-h2); line-height: 1.02; letter-spacing: -0.035em; }
+	.cta__actions { display: flex; flex-wrap: wrap; gap: 0.75rem; align-self: end; }
+	@media (min-width: 900px) { .cta__inner { grid-template-columns: 1.4fr auto; align-items: end; } }
+
+	.footer { position: relative; z-index: 1; border-top: 1px solid var(--color-border); padding-block: 2.5rem 2rem; overflow: hidden; }
+	.footer__watermark {
+		position: absolute; left: 50%; bottom: -2.4rem;
+		transform: translateX(-50%);
+		font-family: var(--font-display); font-weight: 700;
+		font-size: clamp(3.5rem, 11vw, 8.5rem); letter-spacing: -0.05em;
+		color: rgb(255 255 255 / 0.035);
+		white-space: nowrap; pointer-events: none; user-select: none;
+	}
+	.footer__grid { position: relative; display: grid; gap: 1.5rem; }
+	.footer__cols { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+	.footer h3 { margin: 0 0 0.5rem; font-family: var(--font-mono); font-size: var(--text-mono); letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-faint); font-weight: 500; }
+	.footer ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.35rem; }
+	.footer a { text-decoration: none; color: var(--color-muted); font-size: 0.9rem; }
+	.footer a:hover { color: var(--color-text); }
+	.footer__base { display: flex; flex-wrap: wrap; gap: 0.75rem 1.5rem; align-items: center; justify-content: space-between; padding-top: 1.5rem; border-top: 1px solid var(--color-border); color: var(--color-faint); }
+	@media (min-width: 820px) { .footer__grid { grid-template-columns: 1fr 1.2fr; } .footer__cols { grid-template-columns: repeat(3, 1fr); } }
+
+	@media (prefers-reduced-motion: reduce) {
+		html { scroll-behavior: auto; }
+		.float, .dot { animation: none; }
+		.button, .nav a, .card { transition: none; }
+	}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="viewport">
+	<div class="shell">
+		<span class="glow glow--a" aria-hidden="true"></span>
+		<span class="glow glow--b" aria-hidden="true"></span>
+
+		<header class="masthead" data-od-id="masthead">
+			<a class="brand" href="/" aria-label="Baseline home">
+				<span class="brand__mark" aria-hidden="true">B</span>
+				<span class="brand__name">Baseline</span>
+			</a>
+
+			<nav class="nav" aria-label="Primary">
+				<a href="#profiles">Profiles</a>
+				<a href="#bento">System</a>
+				<a href="#method">Workflow</a>
+				<a href="#scope">Scope</a>
+			</nav>
+
+			<span class="status mono"><i class="dot" aria-hidden="true"></i>Astro 7.4 · EmDash 1.4</span>
+			<a class="button button--action button--small header-cta" href="#cta">Start a site</a>
+		</header>
+
+		<main id="main">
+			<section class="hero" data-od-id="hero">
+				<div class="wrap hero__grid">
+					<div>
+						<span class="eyebrow mono"><i class="dot" aria-hidden="true"></i>Agent-first web starter</span>
+						<h1>A baseline,<br /><em>not a blank page.</em></h1>
+						<p class="hero__deck">Astro, Tailwind v4 and optional EmDash content editing — with design tokens, art-direction gates and rendered checks already wired before the first section is built.</p>
+						<div class="hero__actions">
+							<a class="button button--action" href="#cta">Start a site</a>
+							<a class="button button--ghost" href="#method">Read the workflow</a>
+						</div>
+						<ul class="hero__meta mono">
+							<li><b>MIT</b> licensed</li>
+							<li><b>3</b> profiles</li>
+							<li><b>Static</b> or Node</li>
+							<li><b>Checked</b> before handoff</li>
+						</ul>
+					</div>
+
+					<div class="specimen" aria-hidden="true">
+						<div class="specimen__shell">
+							<div class="specimen__bar mono">
+								<span class="specimen__dots"><i></i><i></i><i></i></span>
+								<span>client-site / brief</span>
+							</div>
+							<div class="specimen__row">
+								<div class="chip float"><span>brief &amp; evidence</span><b>locked</b></div>
+								<div class="chip float float--delay"><span>art direction record</span><b>saved</b></div>
+								<div class="chip chip--pass"><span>npm run verify:fast</span><b>passing</b></div>
+								<div class="chip"><span>build + audit:html</span><b>clean</b></div>
+								<div class="chip"><span>board</span><b>2 concepts</b></div>
+							</div>
+							<span class="cursor-tag"><b>agent</b> · editing</span>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="section section--rule" id="profiles" data-od-id="profiles">
+				<div class="wrap">
+					<div class="section__head">
+						<div>
+							<span class="eyebrow mono"><i class="dot" aria-hidden="true"></i>Content setup</span>
+							<h2>One foundation.<br />Three ways to edit.</h2>
+						</div>
+						<p class="section__lead">The design tokens, components and checks are identical across profiles. What changes is where the words live and who can change them.</p>
+					</div>
+
+					<div class="profiles">
+						<article class="profile">
+							<span class="mono profile__tag">01 · static</span>
+							<h3>Typed Markdown</h3>
+							<p>Content stays in the repository as files your assistant can read and diff. Deploy is a folder of HTML.</p>
+						</article>
+						<article class="profile">
+							<span class="mono profile__tag">02 · static-sveltia</span>
+							<h3>Markdown, edited visually</h3>
+							<p>Sveltia edits the same Git-owned files through a web form. No database, no content drift.</p>
+						</article>
+						<article class="profile">
+							<span class="mono profile__tag">03 · emdash</span>
+							<h3>Relational CMS</h3>
+							<p>Portable Text, live canvas and MCP tools on SQLite or Cloudflare D1 and R2. Editorial content is never a seed.</p>
+						</article>
+					</div>
+				</div>
+			</section>
+
+			<section class="section section--rule" id="bento" data-od-id="bento">
+				<div class="wrap">
+					<div class="section__head">
+						<div>
+							<span class="eyebrow mono"><i class="dot" aria-hidden="true"></i>The system</span>
+							<h2>What is already decided for you.</h2>
+						</div>
+						<p class="section__lead">Not a theme. A small set of contracts — surfaces, one accent, a type scale, a spacing hierarchy — plus the checks that keep them true as the site grows.</p>
+					</div>
+
+					<div class="bento">
+						<article class="card card--roles">
+							<h3>Roles, not moods</h3>
+							<p>Page, surface and elevated are distinct roles. Text, muted and border are derived. One action colour carries every button, link and focus ring.</p>
+							<div class="swatches" aria-hidden="true">
+								<div class="swatch"><i style="background: var(--color-page)"></i><code>page</code></div>
+								<div class="swatch"><i style="background: var(--color-surface)"></i><code>surface</code></div>
+								<div class="swatch"><i style="background: rgb(255 255 255 / 0.06)"></i><code>elevated</code></div>
+								<div class="swatch"><i style="background: var(--color-action)"></i><code>action</code></div>
+								<div class="swatch"><i style="background: var(--color-text)"></i><code>text</code></div>
+								<div class="swatch"><i style="background: var(--color-secondary)"></i><code>secondary</code></div>
+							</div>
+						</article>
+
+						<article class="card card--matrix">
+							<h3>Profiles</h3>
+							<p>Capabilities stay honest: a dot means the profile ships it.</p>
+							<div class="matrix" aria-hidden="true">
+								<div class="matrix__row matrix__row--head"><span>capability</span><span>01</span><span>02</span><span>03</span></div>
+								<div class="matrix__row"><span>typed files</span><i data-on="on"></i><i data-on="on"></i><i data-on="on"></i></div>
+								<div class="matrix__row"><span>visual edit</span><i></i><i data-on="on"></i><i data-on="on"></i></div>
+								<div class="matrix__row"><span>relational api</span><i></i><i></i><i data-on="on"></i></div>
+								<div class="matrix__row"><span>live canvas</span><i></i><i></i><i data-on="on"></i></div>
+							</div>
+						</article>
+
+						<article class="card card--accent">
+							<h3>Checks run before handoff</h3>
+							<p>Tokens, CSS layers, art direction and unit tests in one fast pass; the full pass adds typecheck and the browser suite.</p>
+							<pre class="code"><b>npm run verify:fast</b>
+npm run verify
+npm run build
+npm run audit:html</pre>
+							<div class="card__foot mono">fails loudly · no silent drift</div>
+						</article>
+						<article class="card card--type">
+							<h3>The scale is the specimen</h3>
+							<p>Four fluid steps between 20rem and 80rem. The display face is used once per page, the accent serif only where a human voice matters.</p>
+							<div class="ramp" aria-hidden="true">
+								<div class="ramp__row"><span class="ramp__sample ramp__sample--display">Aa</span><code>display · clamp</code></div>
+								<div class="ramp__row"><span class="ramp__sample ramp__sample--h2">Aa</span><code>step 2</code></div>
+								<div class="ramp__row"><span class="ramp__sample ramp__sample--body">Aa</span><code>step 0</code></div>
+								<div class="ramp__row"><span class="ramp__sample ramp__sample--mono">Aa</span><code>mono</code></div>
+							</div>
+						</article>
+					</div>
+				</div>
+			</section>
+
+			<section class="method" id="method" data-od-id="method">
+				<div class="wrap method__grid">
+					<div>
+						<div class="section__head" style="grid-template-columns: 1fr; margin-bottom: 1.5rem;">
+							<div>
+								<span class="eyebrow mono"><i class="dot" aria-hidden="true" style="background: var(--color-ink)"></i>How it is built</span>
+								<h2>Brief first.<br />Then a route.</h2>
+							</div>
+							<p class="section__lead">Every stage leaves something the next one can check. Nothing visual ships before the direction is recorded.</p>
+						</div>
+
+						<div class="steps">
+							<div class="step">
+								<span class="step__num mono">01</span>
+								<div>
+									<h3>Brief, evidence, platform</h3>
+									<p>Real copy, real photography, the owner's own references. The platform profile is chosen here, not after the layout.</p>
+								</div>
+							</div>
+							<div class="step">
+								<span class="step__num mono">02</span>
+								<div>
+									<h3>Art direction and tokens</h3>
+									<p>A complete record — lane, metaphor, type pairing, token physics, anti-patterns — then primitives calibrated on the style guide.</p>
+								</div>
+							</div>
+							<div class="step">
+								<span class="step__num mono">03</span>
+								<div>
+									<h3>One representative route</h3>
+									<p>Build the hardest page, compare it with the selected direction, fix reflow and focus states, then roll the rest out.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<aside class="receipt" aria-label="Example verification output">
+						<span class="mono">handoff · this starter</span>
+						<pre><span class="ok">PASS</span> docs format (83 files)
+<span class="ok">PASS</span> css contracts
+<span class="ok">PASS</span> art direction
+<span class="ok">PASS</span> design tokens
+<span class="ok">PASS</span> unit (368)
+<span class="ok">PASS</span> astro check
+<span class="ok">PASS</span> build
+<span class="ok">PASS</span> html audit</pre>
+						<div class="receipt__note">
+							<span class="mono">what that buys</span>
+							<p>Tokens stay one source of truth. CSS keeps its layer order. Art direction cannot be skipped silently. Emitted HTML is checked for real, including server-rendered routes.</p>
+						</div>
+					</aside>
+				</div>
+			</section>
+
+			<section class="section" id="scope" data-od-id="scope">
+				<div class="wrap scope__grid">
+					<div class="scope">
+					<span class="eyebrow mono"><i class="dot" aria-hidden="true"></i>Scope</span>
+					<h2 style="margin-top: 0.9rem;">What it will not do.</h2>
+					<dl>
+						<div>
+							<dt>Invent your art direction</dt>
+							<dd>Neutral tokens are a starting point. A lane, a metaphor and three anti-patterns are yours to choose and record.</dd>
+						</div>
+						<div>
+							<dt>Pretend a build is acceptance</dt>
+							<dd>Emitted HTML is not a browser. Client scripts, reflow and focus states are checked on a rendered page.</dd>
+						</div>
+						<div>
+							<dt>Hide the CMS boundary</dt>
+							<dd>EmDash records live in SQLite or D1, not in Markdown. Seeds are not migrations, and code deploys do not move them.</dd>
+						</div>
+					</dl>
+					</div>
+					<aside class="banned" aria-label="Recorded anti-patterns">
+						<span class="mono">Recorded anti-patterns</span>
+						<ul>
+							<li>Placeholder art direction: a lane and a type pairing are decisions, not defaults.</li>
+							<li>Invented proof: no fake logos, metrics or testimonials to fill a section.</li>
+							<li>Repeated skeletons: three cards saying the same thing in the same shape.</li>
+						</ul>
+					</aside>
+				</div>
+			</section>
+
+			<section class="cta" id="cta" data-od-id="cta">
+				<div class="wrap cta__inner">
+					<div>
+						<span class="eyebrow mono"><i class="dot" aria-hidden="true"></i>Start</span>
+						<h2 style="margin-top: 0.8rem;">Open a folder.<br />Paste the brief.</h2>
+					</div>
+					<div class="cta__actions">
+						<a class="button button--action" href="#cta">Start a site</a>
+						<a class="button button--ghost" href="#scope">Read the rules</a>
+					</div>
+				</div>
+			</section>
+		</main>
+
+		<footer class="footer" data-od-id="footer">
+			<span class="footer__watermark" aria-hidden="true">BASELINE</span>
+			<div class="wrap footer__grid">
+				<div>
+					<a class="brand" href="/" aria-label="Baseline home">
+						<span class="brand__mark" aria-hidden="true">B</span>
+						<span class="brand__name">Baseline</span>
+					</a>
+					<p class="mono" style="margin: 0.8rem 0 0; color: var(--color-faint);">Astro · Tailwind · EmDash · MIT</p>
+				</div>
+				<div class="footer__cols">
+					<div>
+						<h3>Docs</h3>
+						<ul>
+							<li><a href="#">Quickstart</a></li>
+							<li><a href="#">Platform profiles</a></li>
+							<li><a href="#">Site rules</a></li>
+						</ul>
+					</div>
+					<div>
+						<h3>Skills</h3>
+						<ul>
+							<li><a href="#">New site workflow</a></li>
+							<li><a href="#">Art direction</a></li>
+							<li><a href="#">EmDash CLI</a></li>
+						</ul>
+					</div>
+					<div>
+						<h3>Repo</h3>
+						<ul>
+							<li><a href="#">README</a></li>
+							<li><a href="#">Contributing</a></li>
+							<li><a href="#">License</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="wrap footer__base mono">
+				<span>© 2026 Baseline · MIT</span>
+				<span>Concept mockup · Obsidian &amp; Lime, adapted</span>
+			</div>
+		</footer>
+	</div>
+</div>
+</body>
+</html>
