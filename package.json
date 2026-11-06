@@ -145,5 +145,9 @@
     "ulidx": "2.4.1",
     "yaml": "2.9.1"
   },
+  "overrides": {
+    "minimatch": "11.0.5",
+    "zod": "4.6.7"
+  },
   "license": "MIT"
 }

@@ -41,12 +41,20 @@ export function validateProfileConfig(config) {
   return config;
 }
 
-/** Package versions come from the canonical root package.json, never a second pin. */
+const dependencyOverrides = JSON.parse(readFileSync(new URL('./dependency-inventory.json', import.meta.url), 'utf8')).overrides ?? {};
+
+/** Package versions and transitive overrides come from the canonical root package.json, never a second pin. */
 export function profilePackages(profile, canonicalPackage) {
   const manifest = profileManifest(profile);
-  return Object.fromEntries(['dependencies', 'devDependencies'].map(kind => [kind, Object.fromEntries(manifest.packages[kind].map(name => {
+  const packages = Object.fromEntries(['dependencies', 'devDependencies'].map(kind => [kind, Object.fromEntries(manifest.packages[kind].map(name => {
     const version = canonicalPackage[kind]?.[name];
     if (typeof version !== 'string') throw new Error(`Missing canonical ${kind}: ${name}`);
     return [name, version];
   }))]));
+  const overrides = Object.fromEntries(Object.entries(dependencyOverrides).filter(([, entry]) => entry.profiles.includes(profile)).map(([name]) => {
+    const version = canonicalPackage.overrides?.[name];
+    if (typeof version !== 'string') throw new Error(`Missing canonical override: ${name}`);
+    return [name, version];
+  }));
+  return Object.keys(overrides).length ? { ...packages, overrides } : packages;
 }

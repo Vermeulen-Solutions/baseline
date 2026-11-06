@@ -168,6 +168,21 @@ test('dependency inventory accounts for every root dependency and versions have 
   }
 });
 
+test('transitive overrides are inventoried and reach each profile from the canonical package only', () => {
+  const overrides = json('profiles/dependency-inventory.json').overrides;
+  assert.deepEqual(Object.keys(overrides).sort(), Object.keys(pkg.overrides ?? {}).sort());
+  for (const [name, entry] of Object.entries(overrides)) {
+    assert.equal(entry.versionSource, `package.json#/overrides/${name}`);
+    assert.ok(entry.reason, name);
+    assert.ok(!Object.hasOwn({ ...pkg.dependencies, ...pkg.devDependencies }, name), `${name}: override a direct dependency by changing its pin instead`);
+  }
+  for (const profile of PROFILE_IDS) {
+    const expected = Object.fromEntries(Object.entries(overrides).filter(([, entry]) => entry.profiles.includes(profile)).map(([name]) => [name, pkg.overrides[name]]));
+    assert.deepEqual(profilePackages(profile, pkg).overrides ?? {}, expected, profile);
+  }
+  assert.throws(() => profilePackages('static', { ...pkg, overrides: {} }), /Missing canonical override/);
+});
+
 test('native design checks remain available without installing a DESIGN.md exchange tool', () => {
   const lock = json('package-lock.json');
   assert.ok(!Object.keys(lock.packages).some(name => name.endsWith('/@google/design.md')));
