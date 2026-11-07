@@ -28,6 +28,8 @@
     "build:timings": "astro build --timings",
     "build:analyze": "node scripts/client-bundles.mjs --build",
     "postbuild": "node scripts/assert-release-artifact.mjs",
+    "search:index": "node scripts/index-search.mjs",
+    "rehearse:search": "node scripts/rehearse-search.mjs",
     "pretypecheck": "npm run check:schema-budget",
     "typecheck": "astro check",
     "lint": "npm run lint:scripts && npm run lint:templates && npm run check:docs",

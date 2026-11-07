@@ -118,6 +118,15 @@ installed release notes and verify:
   `CI`/`GITHUB_ACTIONS` are run with the variable unset, not with a weakened guard.
 - The exact branch, build/deploy command, deployed version and
   `/_emdash/api/health` result are recorded; every exposed hostname is checked.
+- On Node sites with local media storage, when the upgrade touches Astro, EmDash,
+  Sharp or image configuration, the installed `npm run check:native-images`
+  passes. It builds and serves disposable fixtures, checks responsive WebP
+  output and media uploaded after the build, and removes everything it created.
+  It needs port 4332 free.
+- When the upgrade touches EmDash, React, the icon package or the bundler, the
+  installed `npm run build:analyze` receipt is compared with the previous one
+  for editor/admin bundle growth (`docs/client-bundles.md`), followed by a real
+  editor select/type/save/reload check.
 
 See `docs/emdash-1.4-upgrade.md` for current version behavior and
 `docs/cloudflare-backup-restore.md` for recovery.

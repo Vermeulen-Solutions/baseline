@@ -870,7 +870,7 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
     <slot name="body-start" />
     <a class="skip-link" href="#main-content" data-astro-reload>{skipLinkLabel}</a>
     <slot name="header" />
-    <main id="main-content" class="site-main" tabindex="-1"><slot /></main>
+    <main id="main-content" class="site-main" tabindex="-1" data-pagefind-body><slot /></main>
     <slot name="footer" />
     <slot name="body-end" />
   </body>

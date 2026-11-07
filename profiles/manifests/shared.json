@@ -37,6 +37,11 @@
     "src/lib/headings.ts",
     "src/lib/toc.ts",
     "src/lib/emdash-headings.ts",
+    "src/components/SearchDialog.astro",
+    "src/lib/search.ts",
+    "scripts/index-search.mjs",
+    "tests/search.test.mjs",
+    "docs/search.md",
     "scripts/baseline-features-integration.mjs",
     "scripts/check-art-direction.mjs",
     "scripts/check-script-syntax.mjs",
@@ -187,7 +192,8 @@
     "design:artifact-check",
     "migration:wordpress",
     "migration:verify",
-    "audit:page"
+    "audit:page",
+    "search:index"
   ],
   "scriptOverrides": {
     "lint": "npm run lint:scripts && npm run lint:templates"
@@ -221,6 +227,7 @@
     ".agents/skills/astro-site-design/references/interaction-motion.md",
     ".agents/skills/astro-site-design/references/baseline-utilities.md",
     ".agents/skills/astro-site-design/references/astro-primitives.md",
+    ".agents/skills/astro-site-design/references/shipped-primitives.md",
     ".agents/skills/astro-site-design/references/component-quarantine.md",
     ".agents/skills/astro-site-design/references/emdash-content.md",
     ".agents/skills/astro-site-design/references/fluid-tokens.md",

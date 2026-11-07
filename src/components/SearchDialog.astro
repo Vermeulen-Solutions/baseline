@@ -1,0 +1,291 @@
+---
+/**
+ * Optional Pagefind site search in a native modal <dialog>.
+ *
+ * Renders nothing interactive unless `baselineFeatures({ search })` is configured.
+ * Without JavaScript only the optional `fallbackHref` link is shown; the dialog
+ * trigger stays hidden until the controller enhances it, so no inert button is
+ * exposed. Mount an <Announcer id={announcerId} /> once per page for result
+ * announcements. Build the index with `npm run search:index` after `astro build`.
+ */
+import { capabilities } from 'virtual:baseline/capabilities';
+import { resolveSearchBundleUrl, resolveSearchLabels, type SearchLabels } from '../lib/search.ts';
+
+export interface Props {
+  id?: string;
+  /** Localized copy; omitted keys use English defaults. */
+  labels?: Partial<SearchLabels>;
+  /** Element ID of a mounted Baseline Announcer. */
+  announcerId?: string;
+  /** Ordinary link shown without JavaScript, e.g. a public sitemap or archive page. */
+  fallbackHref?: string;
+  /** Also open on `/` outside editable elements. Ctrl+K / Cmd+K are always enabled. */
+  slashShortcut?: boolean;
+  maxResults?: number;
+  class?: string;
+}
+
+const {
+  id = 'site-search',
+  labels: labelOverrides,
+  announcerId = 'site-announcer',
+  fallbackHref,
+  slashShortcut = false,
+  maxResults = 8,
+  class: className,
+} = Astro.props as Props;
+
+const labels = resolveSearchLabels(labelOverrides);
+const bundleUrl = resolveSearchBundleUrl(capabilities);
+const dialogId = `${id}-dialog`;
+const titleId = `${id}-title`;
+const inputId = `${id}-input`;
+const statusId = `${id}-status`;
+const shortcuts = ['Control+K', 'Meta+K', ...(slashShortcut ? ['/'] : [])].join(' ');
+---
+
+{bundleUrl ? (
+  <div
+    class:list={['search', className]}
+    data-search-root
+    data-search-bundle={bundleUrl}
+    data-announcer-id={announcerId}
+    data-max-results={maxResults}
+    data-slash-shortcut={String(slashShortcut)}
+    data-labels={JSON.stringify(labels)}
+    data-search-state="idle"
+    data-pagefind-ignore="all"
+  >
+    {fallbackHref && <a class="search__fallback" href={fallbackHref} data-search-fallback>{labels.trigger}</a>}
+    <button
+      type="button"
+      class="search__trigger"
+      data-search-trigger
+      aria-haspopup="dialog"
+      aria-controls={dialogId}
+      aria-expanded="false"
+      aria-keyshortcuts={shortcuts}
+      hidden
+    >
+      <span>{labels.trigger}</span>
+      <kbd class="search__shortcut" aria-hidden="true">Ctrl K</kbd>
+    </button>
+    <dialog id={dialogId} class="search__dialog" aria-labelledby={titleId} data-search-dialog>
+      <div class="search__panel">
+        <div class="search__header">
+          <h2 id={titleId} class="search__title">{labels.title}</h2>
+          <button type="button" class="search__close" data-search-close>{labels.close}</button>
+        </div>
+        <form class="search__form" role="search" aria-labelledby={titleId} data-search-form>
+          <label class="search__label" for={inputId}>{labels.inputLabel}</label>
+          <input
+            id={inputId}
+            class="search__input"
+            type="search"
+            name="q"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            enterkeyhint="search"
+            placeholder={labels.placeholder || undefined}
+            aria-describedby={statusId}
+            data-search-input
+          />
+        </form>
+        <p id={statusId} class="search__status" data-search-status>{labels.idle}</p>
+        <ol class="search__results" aria-labelledby={titleId} data-search-results></ol>
+      </div>
+    </dialog>
+  </div>
+) : fallbackHref ? (
+  <a class:list={['search__fallback', className]} href={fallbackHref} data-pagefind-ignore="all">{labels.trigger}</a>
+) : null}
+
+<script>
+  import { bindSearchLifecycle, initSearch } from '../lib/search.ts';
+
+  bindSearchLifecycle();
+  initSearch();
+</script>
+
+<style>
+  @layer components {
+    .search {
+      /* Client-overridable hooks; defaults follow Baseline tokens. */
+      --search-surface: var(--color-surface);
+      --search-text: var(--color-text);
+      --search-muted: var(--color-muted);
+      --search-border: var(--color-border);
+      --search-link: var(--color-link, var(--color-action));
+      --search-focus: var(--color-focus);
+      --search-radius: var(--radius-card);
+      --search-control-radius: var(--radius-control);
+      --search-gap: var(--spacing-content);
+      --search-width: min(40rem, calc(100vi - 2 * var(--spacing-content)));
+      --search-mark: var(--color-action-subtle, color-mix(in oklch, var(--search-link) 16%, var(--search-surface)));
+      display: contents;
+    }
+
+    .search__trigger,
+    .search__close {
+      display: inline-flex;
+      align-items: center;
+      gap: calc(var(--search-gap) * 0.5);
+      min-block-size: 2.75rem;
+      padding-block: calc(var(--search-gap) * 0.25);
+      padding-inline: calc(var(--search-gap) * 0.75);
+      font: inherit;
+      color: var(--search-text);
+      background: var(--search-surface);
+      border: 1px solid var(--search-border);
+      border-radius: var(--search-control-radius);
+      cursor: pointer;
+    }
+
+    .search__trigger[hidden] {
+      display: none;
+    }
+
+    .search__shortcut {
+      font-family: var(--font-mono, ui-monospace, monospace);
+      font-size: var(--text-step--1, 0.875em);
+      color: var(--search-muted);
+    }
+
+    .search__dialog {
+      inline-size: var(--search-width);
+      max-inline-size: 100%;
+      max-block-size: min(40rem, calc(100dvb - 2 * var(--search-gap)));
+      /* Restore native centering after global margin resets. */
+      margin-block: min(12vb, 6rem) auto;
+      margin-inline: auto;
+      padding: 0;
+      color: var(--search-text);
+      background: var(--search-surface);
+      border: 1px solid var(--search-border);
+      border-radius: var(--search-radius);
+      overscroll-behavior: contain;
+    }
+
+    .search__dialog::backdrop {
+      background: color-mix(in oklch, var(--color-text, #000) 45%, transparent);
+    }
+
+    .search__panel {
+      display: grid;
+      gap: calc(var(--search-gap) * 0.75);
+      padding: var(--search-gap);
+    }
+
+    .search__header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: calc(var(--search-gap) * 0.5);
+    }
+
+    .search__title {
+      margin: 0;
+      font-size: var(--text-step-1, 1.25rem);
+    }
+
+    .search__form {
+      display: grid;
+      gap: calc(var(--search-gap) * 0.25);
+    }
+
+    .search__label {
+      font-weight: 600;
+    }
+
+    .search__input {
+      inline-size: 100%;
+      min-block-size: 2.75rem;
+      padding-inline: calc(var(--search-gap) * 0.5);
+      font: inherit;
+      color: var(--search-text);
+      background: var(--search-surface);
+      border: 1px solid var(--color-border-strong, var(--search-border));
+      border-radius: var(--search-control-radius);
+    }
+
+    .search__trigger:focus-visible,
+    .search__close:focus-visible,
+    .search__input:focus-visible,
+    .search__results :global(.search__result-link:focus-visible) {
+      outline: 2px solid var(--search-focus);
+      outline-offset: 2px;
+    }
+
+    .search__status {
+      margin: 0;
+      color: var(--search-muted);
+    }
+
+    .search__results {
+      display: grid;
+      gap: calc(var(--search-gap) * 0.25);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .search__results:empty {
+      display: none;
+    }
+
+    /* Result nodes are created by the controller and carry no scoped-style attribute. */
+    .search__results :global(.search__result-link) {
+      display: grid;
+      gap: calc(var(--search-gap) * 0.125);
+      padding: calc(var(--search-gap) * 0.5);
+      color: inherit;
+      text-decoration: none;
+      border: 1px solid transparent;
+      border-radius: var(--search-control-radius);
+      overflow-wrap: anywhere;
+    }
+
+    .search__results :global(.search__result-link:hover) {
+      border-color: var(--search-border);
+    }
+
+    .search__results :global(.search__result-title) {
+      color: var(--search-link);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
+    }
+
+    .search__results :global(.search__result-excerpt) {
+      color: var(--search-muted);
+      font-size: var(--text-step--1, 0.9375em);
+    }
+
+    .search__results :global(.search__result-excerpt mark) {
+      color: var(--search-text);
+      background: var(--search-mark);
+      border-radius: 0.125em;
+    }
+
+    @media (forced-colors: active) {
+      .search__dialog,
+      .search__trigger,
+      .search__close,
+      .search__input {
+        border-color: CanvasText;
+      }
+
+      .search__results :global(.search__result-link:hover) {
+        border-color: Highlight;
+      }
+
+      .search__results :global(.search__result-excerpt mark) {
+        color: HighlightText;
+        background: Highlight;
+        forced-color-adjust: none;
+      }
+    }
+  }
+</style>
