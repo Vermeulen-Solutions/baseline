@@ -22,7 +22,7 @@ Express consolidates unresolved decisions into up to three checkpoints while sti
 
 - **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):** Gather brief, confirm hosting/runtime, and model collections/routes in one pass.
 - **Checkpoint B (Stages 4–4.5 — Art Direction & Component Calibration):** Seed tokens and `## Art Direction Record` (`npm run design:tokens -- --lane <lane> --write --write-record --write-calibration`), verify `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide`.
-- **Checkpoint C (Stages 5–6 — Representative Pages, Critique & Verification):** Build routes, run the `impeccable` critique pass, and verify with `npm run verify` and `npm run build`.
+- **Checkpoint C (Stages 5–6 — Representative Pages, Critique & Verification):** Build routes, run the `impeccable` critique pass, and verify with `npm run verify` and `npm run build` (plus `npm run search:index` and search browser acceptance when search was chosen at Checkpoint A).
 
 Each checkpoint in detail:
 

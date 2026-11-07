@@ -366,8 +366,8 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync; preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "9892fc6b28b7eba92065666ed04a31cb97b051318cce8feb7216c7039bc75591"
+    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "4b73696d2703201823cdffc496aa258f46bf117b09f9a27706710d5358d67b51"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -619,5 +619,15 @@
     "path": "public/favicon.svg",
     "reason": "Deliberate unchanged-URL neutral document favicon, prepared in preserve mode and reviewed as native vector infrastructure. No invented client identity or public page styling; exact source replacement invalidates this exception.",
     "sha256": "90d040bf9ceda788314822853d733b01d54660c8e8ac17bc57cb784f6f8cb09c"
+  },
+  {
+    "path": "src/lib/search.ts",
+    "reason": "Functional interaction primitive: framework-free Pagefind search controller with lazy runtime bundle loading, safe text-only result rendering, editable-aware shortcuts, query cancellation and ClientRouter teardown. Exact LF-normalized source hash.",
+    "sha256": "7474fd0c08b184863eb84123b92b3b1da67218b6ff297b02688c2edb2f6b76ac"
+  },
+  {
+    "path": "src/components/SearchDialog.astro",
+    "reason": "Functional interaction primitive: optional native <dialog> site search using Baseline tokens and client-overridable --search-* hooks, hidden trigger until enhanced and explicit no-JS fallback link. Exact LF-normalized source hash.",
+    "sha256": "73c3426ad1d1b2a902cd008e9bbe48e45e59bafe3a456c3c14d795dc9dbe3166"
   }
 ]

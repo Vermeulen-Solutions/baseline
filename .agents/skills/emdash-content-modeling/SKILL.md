@@ -118,8 +118,10 @@ Every schema and data change must be applied and verified across all three envir
    - Execute via Wrangler: `npx wrangler d1 execute <db-name> --remote --file=scripts/<migration>.sql`.
    - Rebuild and deploy the Cloudflare Worker: `npm run build:cloudflare && npm run deploy:cloudflare`.
    - Verify live rendered HTML on `workers.dev` or production domain.
+   - Verify structural parity with the installed `npm run db:diff` instead of comparing schemas by hand: capture a closed, consistent local SQLite copy, then compare it against a saved snapshot or an explicit D1 target (`--config`, `--env`, `--account`, `--database`). It also enforces the 50-physical-column budget. Exit 0 is verified equal, 1 is drift, 2 is unverified. It never migrates or writes either database. See `docs/database-workflow.md`.
 3. **Version-Controlled Seed (`seed/seed.json`):**
-   - Sync the new collections, fields, relations, and migrated entries into `seed/seed.json`.
+   - Sync the new collections, fields, relations, and migrated entries into `seed/seed.json`. To derive it from a database, use the installed `npm run db:export-seed` with a private allowlist policy (`docs/database-workflow.md`) rather than `npx emdash export-seed --with-content`, which would copy client content and personal data into Git. It stages a candidate and never replaces `seed/seed.json`; review the candidate and receipt, replace the file deliberately and rehearse it with `emdash seed` in a disposable database.
+   - Use `npm run db:diff -- ... --seed seed/seed.json` to confirm the seed matches the database's logical schema.
    - Ensures fresh clones or team checkouts reproduce the exact evolved data model.
 
 ### Step 6: Navigation & Menu Synchronization

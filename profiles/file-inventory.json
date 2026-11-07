@@ -1505,6 +1505,30 @@
     "docs/brilliant-onboarding.md": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "src/components/SearchDialog.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/search.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/index-search.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/search.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/search.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/rehearse-search.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

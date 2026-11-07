@@ -294,5 +294,9 @@
   "design-prompt-check.test.mjs": {
     "tier": "unit",
     "reason": "Prompt preflight rules, severity thresholds, line reporting and CLI exit codes"
+  },
+  "search.test.mjs": {
+    "tier": "unit",
+    "reason": "Search bundle URL, shortcut, safe excerpt and indexer exclusion/pinning/receipt contracts with a stubbed Pagefind; no browser or Pagefind binary"
   }
 }
