@@ -105,7 +105,7 @@ How `/_styleguide` renders components and responsive stress cases in isolation b
 - **[Local Visual Regression Testing](visual-regression.md)**  
 Local-first Windows Chromium screenshot regression testing harness (`npm run test:visual`). Catch unintended layout reflows without Docker or consuming GitHub Actions runner quotas.
 - **[AI-Native Visual Design, Component Sourcing & DESIGN.md Interchange](design-interchange.md)**  
-Optional UX references, `DESIGN.md` exchange, visual concepts and component sourcing, followed by native CSS token validation and rendered calibration. No external design package is required.
+Optional, surface-independent UX and design references, `DESIGN.md` exchange, visual concepts and component sourcing, followed by native CSS token validation and rendered calibration. No external design package, account or MCP connection is required.
 
 ---
 
@@ -128,7 +128,7 @@ Progressively enhanced PhotoSwipe lightboxes embedded directly within Portable T
 - **[AI Developer Prompt Library](prompt-library.md)**  
 Curated prompts for new sites, component quarantine, WP migrations, live token tuning, and domain cutovers.
 - **[Agent Documentation & MCP Setup](agent-documentation.md)**  
-Connecting coding assistants to official Astro/EmDash docs, optional design MCP superpowers (`designmd-mcp`, `21st.dev`, `Nicelydone`, `Stitch`), and generating site-level access tokens with `npm run mcp:token`.
+Connecting coding assistants to official Astro/EmDash docs, optional design MCP sources (`designmd-mcp`, `21st.dev`, `Nicelydone`, `Stitch`) used through shared reference research and component quarantine, and generating site-level access tokens with `npm run mcp:token`.
 - **[Skill Synchronization](skill-synchronization.md)**  
 Managing staged updates for mirrored EmDash skills (`sync:emdash-skills`) and shared Vermeulen-maintained skills (`sync:site-skills`) while protecting local customizations.
 - **[Automated Upstream Updates & CI Maintenance](automated-upstream-updates.md)**  

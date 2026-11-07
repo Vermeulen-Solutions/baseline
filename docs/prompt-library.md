@@ -205,7 +205,7 @@ We are ready for Stage 4: Art Direction. Activate the site-art-direction skill.
 Brand goals and personality: [E.g., Editorial craftsmanship, technical precision, high-contrast typography, restrained color palette].
 
 Please:
-Before choosing the direction, recommend Brilliant for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer Brilliant, OpenPencil and Penpot choices, keeping OpenDesign optional for catalogue/lint or an existing project. Follow `site-art-direction/references/design-iteration.md` for side-by-side comparison and capability boundaries; reuse a settled choice. Use the selected tool’s specialist skill when supplied.
+Before choosing the direction, recommend Brilliant for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer Brilliant, OpenPencil and Penpot choices, keeping OpenDesign optional for an explicitly selected canvas/export workflow or an existing project. Follow `site-art-direction/references/design-iteration.md` for side-by-side comparison and capability boundaries; reuse a settled choice. Use the selected tool’s specialist skill when supplied.
 
 1. Review .agents/skills/site-art-direction/references/aesthetic-lanes.md and propose 2-3 suitable Aesthetic Lanes.
 2. Formulate a Narrative Metaphor, Typography Pairing, and Token Physics (Canvas ground, Action/Accent colors, Borders, and Spatial Density).
@@ -218,7 +218,7 @@ Before choosing the direction, recommend Brilliant for a requested editable prot
 ## 4. Component Sourcing & Styleguide Quarantine
 
 ### Quarantining External Tailwind Blueprints (21st.dev or Community Code)
-Use this prompt when bringing external React/Tailwind components into Baseline.
+Use this prompt when bringing external React/Tailwind components into Baseline. Source the blueprint only after the direction is selected; it is a reference, not a design authority.
 
 ```markdown
 I want to adapt an external component blueprint into our site. Follow the 5-step Component Quarantine Protocol in .agents/skills/astro-site-design/references/component-quarantine.md and stage it on /_styleguide.
@@ -232,6 +232,8 @@ Please:
 3. Upgrade fixed pixel utilities to fluid typographic steps (--text-step-*) and layout primitives (<Container>, <Grid>, or <Card>).
 4. Wire EmDash live editing proxies ({...entry.edit.title}).
 5. Add a test specimen to src/pages/_styleguide.astro and verify it across viewports.
+
+Record the source URL/commit and licence, inspect its actual behavior, and note what we keep, change or refuse against our brief. Do not let the blueprint choose the visual direction, add a dependency or bypass the saved Art Direction Record.
 ```
 
 ### Agent-First Token Calibration & WCAG Contrast Audit
@@ -439,7 +441,7 @@ Once the diagnosis completes:
 
 Use this for a substantial visual overhaul of an existing Baseline or other site. The concept pass defines the new composition before broad implementation. Specify fixed identity elements independently of the permitted visual change; use a local-only release unless broader actions are authorized.
 
-This remains the right recipe when revisiting an already completed redesign: reopen its visual direction while preserving the working site's content and functionality. Resume at art direction rather than repeating the initial migration. Reuse the selected design surface, or resolve a new preference if the user wants to change it. The [OpenDesign recipe](#opendesign-design-and-implementation-same-agent) supplies tool-specific execution; it does not replace the preservation and release scope below.
+This remains the right recipe when revisiting an already completed redesign: reopen its visual direction while preserving the working site's content and functionality. Resume at art direction rather than repeating the initial migration. Reuse the selected design surface, or resolve a new preference if the user wants to change it. Reference research stays shared across surfaces; the [OpenDesign recipe](#opendesign-design-and-implementation-same-agent) supplies tool-specific execution only, and does not replace the preservation and release scope below.
 
 ```text
 Significantly redesign this existing site using new-site-workflow,
@@ -461,12 +463,17 @@ Inventory route archetypes and inspect the actual source at desktop and mobile.
 Preserve product truth and editing ownership. Do not treat the old composition
 as fixed unless listed above or mistake utility adoption for a redesign.
 
-Research a small relevant reference shortlist before presenting concepts.
-With OpenDesign, search its bundled design systems/examples and read relevant
-parts of shortlisted DESIGN.md files or layout sources. Show the names and
-links/paths, what was inspected, which ideas inform each concept and which
-stylistic choices are excluded by our brief. Put this explanation directly in
-chat and alongside the concept comparison; disclose partial reads or previews.
+Research a small relevant reference shortlist before presenting concepts using
+site-art-direction/references/reference-research.md. Start from supplied references
+and offer inspiration once when needed. The shortlist can include real websites,
+UX references (Nicelydone, Refero or Kombai where available), prompt libraries,
+community DESIGN.md systems and OpenDesign public/local systems or templates.
+Reading public/local files needs no OpenDesign app, MCP, key or account; a connected
+catalogue search is optional transport. Adapt selected textual instructions, systems
+and templates with external-prompt-adaptation.md and design:prompt-check. Show the
+names and links/paths, what was inspected, which ideas inform each concept, and which
+stylistic choices our brief excludes. Put this explanation directly in chat and
+alongside the concept comparison; disclose partial reads or previews.
 
 Develop two or three materially different concepts for a representative page
 using real copy and available assets, including mobile intent. Compare audience
@@ -474,7 +481,7 @@ fit, identity continuity, readability, function and maintainability. Resolve the
 direction decision before broad implementation; ask only consequential questions
 not already answered. Record which previous visual decisions are superseded.
 
-At the concept checkpoint, reuse our selected design surface. If unresolved, recommend Brilliant for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer Brilliant, OpenPencil and Penpot choices; keep OpenDesign optional for catalogue/lint or an existing project. Follow `site-art-direction/references/design-iteration.md` to compare two or three structurally distinct directions side by side before proving the selected direction in Astro. Use the selected tool’s specialist skill when supplied.
+At the concept checkpoint, reuse our selected design surface. If unresolved, recommend Brilliant for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer Brilliant, OpenPencil and Penpot choices; keep OpenDesign optional for an explicitly selected canvas/export workflow or an existing project. Follow `site-art-direction/references/design-iteration.md` to compare two or three structurally distinct directions side by side before proving the selected direction in Astro. Use the selected tool’s specialist skill when supplied.
 
 Calibrate the selected system on the installed styleguide, implement one real
 page per archetype and critique it in the browser before rolling it out. Keep
@@ -699,12 +706,12 @@ Please:
 
 ## 10. Design Iteration: HTML, Brilliant, OpenPencil or Penpot
 
-For a new site or substantial overhaul, recommend Brilliant when an editable prototyping canvas is requested and no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly present Brilliant, OpenPencil and Penpot as choices. Keep OpenDesign optional for catalogue/lint or an existing project. Use the shared `site-art-direction/references/design-iteration.md` for HTML side-by-side review, tool capability boundaries and settled-choice reuse. See [Art Direction Workflow](art-direction-workflow.md), [Brilliant onboarding](brilliant-onboarding.md), [OpenPencil onboarding](openpencil-onboarding.md), [Penpot onboarding](penpot-onboarding.md) and optional [OpenDesign onboarding](opendesign-onboarding.md).
+For a new site or substantial overhaul, recommend Brilliant when an editable prototyping canvas is requested and no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly present Brilliant, OpenPencil and Penpot as choices. Keep OpenDesign optional for an explicitly selected canvas/export workflow or an existing project. Use the shared `site-art-direction/references/design-iteration.md` for HTML side-by-side review, tool capability boundaries and settled-choice reuse. See [Art Direction Workflow](art-direction-workflow.md), [Brilliant onboarding](brilliant-onboarding.md), [OpenPencil onboarding](openpencil-onboarding.md), [Penpot onboarding](penpot-onboarding.md) and optional [OpenDesign onboarding](opendesign-onboarding.md).
 
 ### Canvas-led kickoff, one agent
 
 ```markdown
-Follow new-site-workflow and site-art-direction/references/design-iteration.md. I want an editable prototyping canvas before broad implementation. Reuse my settled tool; otherwise recommend Brilliant for native concept work. Explicitly offer Brilliant, OpenPencil and Penpot choices; retain OpenDesign when its catalogue/lint or my existing project is useful. Reuse settled choices and onboard me only for a missing connection step. Preserve [fixed brand/content/features]; explore [changeable scope] using a representative real route. For a new direction, compare two or three structurally distinct concepts side by side with desktop/mobile intent and full-size links. Show the render and recommend a meaningful next change; incorporate feedback in focused batches without recreating every route or the component library. Resolve direction selection, then calibrate native primitives, prove one real Astro route and roll out with browser acceptance. Keep one agent unless I request a handoff. Finish [authorized commit/push/applicable deployment, or local-only].
+Follow new-site-workflow and site-art-direction/references/design-iteration.md. I want an editable prototyping canvas before broad implementation. Reuse my settled tool; otherwise recommend Brilliant for native concept work. Explicitly offer Brilliant, OpenPencil and Penpot choices; retain OpenDesign when I choose its canvas/export workflow or already have a project there. Reuse settled choices and onboard me only for a missing connection step. Preserve [fixed brand/content/features]; explore [changeable scope] using a representative real route. For a new direction, compare two or three structurally distinct concepts side by side with desktop/mobile intent and full-size links. Show the render and recommend a meaningful next change; incorporate feedback in focused batches without recreating every route or the component library. Resolve direction selection, then calibrate native primitives, prove one real Astro route and roll out with browser acceptance. Keep one agent unless I request a handoff. Finish [authorized commit/push/applicable deployment, or local-only].
 ```
 
 ### Direct Astro/browser, one agent
@@ -716,7 +723,7 @@ Follow new-site-workflow, site-art-direction and astro-site-design. I want to it
 ### OpenDesign design and implementation, same agent
 
 ```markdown
-Use opendesign-site-design and Baseline's design-iteration workflow. Keep this task in one agent unless I request a handoff. Confirm the local OpenDesign daemon is running; search bundled design systems and examples during Stage 4A research and read relevant parts of the shortlisted sources. Present the named references with links/paths, the extent of inspection, their concrete influence on each concept and what our brief rules out, directly in chat and with the comparison. Author zero-JS HTML/CSS slices with data-od-id section anchors, validate with `od lint --fail-on p1`, export 1440×900 and 390×844 renders, and iterate based on my feedback. Resolve the direction selection, translate components into Baseline Astro primitives, calibrate on /_styleguide, and complete the routes. Finish [authorized commit/push/deploy targets, or local-only].
+Use opendesign-site-design and Baseline's design-iteration workflow. Keep this task in one agent unless I request a handoff. Use the shared site-art-direction/references/reference-research.md step for the shortlist, including relevant public/local systems and templates, and reuse settled inspiration answers. Catalogue research is independent of this surface; connect the local OpenDesign daemon for the selected canvas/export operations. Present the named references with links/paths, the extent of inspection, their concrete influence on each concept and what our brief rules out, directly in chat and with the comparison. Author zero-JS HTML/CSS slices with data-od-id section anchors, validate with `od lint --fail-on p1`, export 1440×900 and 390×844 renders, and iterate based on my feedback. Resolve the direction selection, translate components into Baseline Astro primitives, calibrate on /_styleguide, and complete the routes. Finish [authorized commit/push/deploy targets, or local-only].
 ```
 
 ### OpenPencil design and implementation, same agent
