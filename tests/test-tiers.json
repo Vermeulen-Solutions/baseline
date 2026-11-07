@@ -1,4 +1,8 @@
 {
+  "artifact-lint.test.mjs": {
+    "tier": "unit",
+    "reason": "Source-only artifact rules, inert content, advisory boundaries, recursive inputs and CLI exit contracts; no browser or OpenDesign runtime"
+  },
   "component-container.test.mjs": {
     "tier": "unit",
     "reason": "Container API semantic component rendering, heading structure, link ownership, and proxy assertions"

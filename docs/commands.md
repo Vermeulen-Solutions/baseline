@@ -14,6 +14,7 @@ Run npm commands from the project that owns the work. This reference distinguish
 | `npm run verify:fast` | Root EmDash | Lint, CSS/art-direction/token checks and the unit test tier |
 | `npm run design:tokens` | All profiles | Audit colors, typography, fonts, fluid values and applicable editing bindings |
 | `npm run design:canvas-kit` | All profiles | Extract source tokens and semantic previews for OpenDesign, OpenPencil, or Penpot ([canvas kit](canvas-kit.md)) |
+| `npm run design:artifact-check` | All profiles, when installed | Opt-in source preflight for current HTML concepts/exports, without OpenDesign ([artifact lint](artifact-lint.md)) |
 | `npm run test:design` | All profiles | Run the installed design-contract tests |
 | `npm run typecheck` | All profiles | Astro/TypeScript diagnostics and applicable schema preflight |
 | `npm test` | All profiles | Run the installed test suite |

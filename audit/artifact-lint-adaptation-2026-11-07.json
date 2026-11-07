@@ -1,0 +1,224 @@
+{
+  "date": "2026-11-07",
+  "installedVersion": "0.27.0",
+  "bundle": "Open Design/launcher/channels/stable/namespaces/release-stable-win/versions/0.27.0/payload/resources/app/prebundled/daemon/chunks/server-THMNTGHL.mjs",
+  "bundleSha256": "25351ffcc2c40e53c4fc8ce2304c85c58143e8e1c9877b0a0bb36ac8c920553d",
+  "lintModuleSha256": "453d31bcafa78b8f11766e1dfe003b2414445a82c6ae398ab87e5cf05f0103d1",
+  "method": "Executed the exact bounded lint-artifact.js module from the installed bundle in an isolated Node VM. No app/daemon was running; this is execution of the shipped lintArtifact used by the /api/artifacts/lint endpoint, not a claim of a fresh od CLI/desktop session.",
+  "upstreamReference": "https://github.com/nexu-io/open-design/blob/87a4f91c308170a8270458fc40fc66a86ed69aac/apps/daemon/src/lint-artifact.ts",
+  "installedSourceCommit": null,
+  "fixtures": [
+    {
+      "name": "filler",
+      "html": "<p>Lorem ipsum</p>",
+      "upstream": [
+        {
+          "severity": "P0",
+          "id": "filler-copy",
+          "message": "Filler copy detected: \"Lorem ipsum\". Pages should ship with real, brief-derived copy.",
+          "fix": "Replace with copy specific to the brief or delete the section entirely. An empty section is a design problem to solve with composition, not by inventing words.",
+          "snippet": "Lorem ipsum"
+        }
+      ],
+      "baseline": [
+        {
+          "id": "filler-copy",
+          "severity": "P1",
+          "line": 1,
+          "snippet": "Lorem ipsum",
+          "message": "Placeholder copy appears in page content.",
+          "fix": "Replace it with representative brief-derived copy or remove the unfinished section. Label intentional specimens in the review record."
+        }
+      ]
+    },
+    {
+      "name": "metric",
+      "html": "<p>10× faster</p>",
+      "upstream": [
+        {
+          "severity": "P0",
+          "id": "invented-metric",
+          "message": "Suspected invented metric: \"10× faster\". Anti-slop list says: no numbers without a real source.",
+          "fix": "Either remove the claim or replace with a placeholder (— or a labelled stub) until the user supplies a real number.",
+          "snippet": "10× faster"
+        }
+      ],
+      "baseline": [
+        {
+          "id": "invented-metric",
+          "severity": "P2",
+          "line": 1,
+          "snippet": "10× faster",
+          "message": "A quantified claim needs source verification; this match does not establish fabrication.",
+          "fix": "Record the real source and permitted use, or remove the claim. Do not invent replacement proof."
+        }
+      ]
+    },
+    {
+      "name": "uppercase",
+      "html": "<style>.label{text-transform:uppercase}</style><span class=\"label\">Status</span>",
+      "upstream": [
+        {
+          "severity": "P1",
+          "id": "all-caps-no-tracking",
+          "message": "Selector `.label` sets text-transform: uppercase without sufficient letter-spacing (≥0.06em).",
+          "fix": "Add `letter-spacing: 0.08em` (typical) to the same rule. ALL CAPS without tracking looks cramped — Refero's typography rules call this out as a top-tier amateur tell.",
+          "snippet": ".label { text-transform:uppercase }"
+        }
+      ],
+      "baseline": [
+        {
+          "id": "all-caps-no-tracking",
+          "severity": "P2",
+          "line": 1,
+          "snippet": ".label{text-transform:uppercase}",
+          "message": "An uppercase declaration lacks verifiable tracking of at least 0.06em in the same declaration block.",
+          "fix": "Inspect computed tracking, inheritance and every theme. Usually use the approved tracking token around 0.08em; preserve deliberate brand typography."
+        }
+      ]
+    },
+    {
+      "name": "tracked",
+      "html": "<style>:root{--tracking:.08em}.label{text-transform:uppercase;letter-spacing:var(--tracking)}</style>",
+      "upstream": [],
+      "baseline": []
+    },
+    {
+      "name": "image",
+      "html": "<img src=\"https://picsum.photos/400/300\" alt=\"Example\">",
+      "upstream": [
+        {
+          "severity": "P1",
+          "id": "external-image",
+          "message": "External placeholder image CDN detected — fragile, looks fake when it 404s.",
+          "fix": "Use the .ph-img placeholder class shipped in the seed templates instead.",
+          "snippet": "<img src=\"https://picsum.photos"
+        }
+      ],
+      "baseline": [
+        {
+          "id": "external-image",
+          "severity": "P2",
+          "line": 1,
+          "snippet": "<img src=\"https://picsum.photos/400/300\" alt=\"Example\">",
+          "message": "An image uses a stock or placeholder service; availability and permitted use need review.",
+          "fix": "Verify the actual image/source, then prepare a durable local or CMS copy through media:prepare. Preserve approved imagery."
+        }
+      ]
+    },
+    {
+      "name": "raw-hex",
+      "html": "<style>.c0{color:#aabbcc}.c1{color:#aabbcc}.c2{color:#aabbcc}.c3{color:#aabbcc}.c4{color:#aabbcc}.c5{color:#aabbcc}.c6{color:#aabbcc}.c7{color:#aabbcc}.c8{color:#aabbcc}.c9{color:#aabbcc}.c10{color:#aabbcc}.c11{color:#aabbcc}.c12{color:#aabbcc}</style>",
+      "upstream": [
+        {
+          "severity": "P1",
+          "id": "raw-hex",
+          "message": "13 raw hex values found outside :root — design tokens probably not honoured.",
+          "fix": "Move every color into the :root token block (--bg / --surface / --fg / --muted / --border / --accent) and reference via var(). Use color-mix() for derived tones.",
+          "snippet": "#aabbcc #aabbcc #aabbcc #aabbcc #aabbcc #aabbcc"
+        }
+      ],
+      "baseline": [
+        {
+          "id": "raw-hex",
+          "severity": "P2",
+          "line": 1,
+          "snippet": "13 literals; color: #aabbcc; color: #aabbcc; color: #aabbcc; color: #aabbcc; color: #aabbcc; color: #aabbcc",
+          "message": "More than twelve literal hex colours occur outside custom-property declarations.",
+          "fix": "Review semantic role mapping in all embedded styles and inline declarations. Keep canonical values in the site tokens; preserve justified SVG/asset colours."
+        }
+      ]
+    },
+    {
+      "name": "accents",
+      "html": "<span style=\"color:var(--accent)\">Copy</span><span style=\"color:var(--accent)\">Copy</span><span style=\"color:var(--accent)\">Copy</span><span style=\"color:var(--accent)\">Copy</span><span style=\"color:var(--accent)\">Copy</span><span style=\"color:var(--accent)\">Copy</span><span style=\"color:var(--accent)\">Copy</span>",
+      "upstream": [
+        {
+          "severity": "P1",
+          "id": "accent-overuse",
+          "message": "var(--accent) used 7 times inline in the body — likely overused per screen.",
+          "fix": "Cap accent usage at 2 visible uses per screen (one eyebrow + one CTA, OR one accent card + one tab). Demote the rest to var(--fg) or var(--muted)."
+        }
+      ],
+      "baseline": [
+        {
+          "id": "accent-overuse",
+          "severity": "P2",
+          "line": 1,
+          "snippet": "7 inline blocks use the action/accent role",
+          "message": "More than six inline declarations use the action/accent colour; inspect the visible action hierarchy.",
+          "fix": "Review each viewport and state before demoting secondary uses to text/muted roles. A source count is not a count of visible accents."
+        }
+      ]
+    },
+    {
+      "name": "anchor",
+      "html": "<section>Real copy</section>",
+      "upstream": [
+        {
+          "severity": "P2",
+          "id": "missing-section-anchor",
+          "message": "1 of 1 <section>s lack data-od-id (or data-screen-label).",
+          "fix": "Add data-od-id=\"kebab-slug\" (or data-screen-label=\"01 Cover\" for slides) to every top-level <section> so comment mode can target it."
+        }
+      ],
+      "baseline": [
+        {
+          "id": "missing-section-anchor",
+          "severity": "P2",
+          "line": 1,
+          "snippet": "<section>",
+          "message": "An OpenDesign section lacks a comment anchor.",
+          "fix": "For an OpenDesign artifact, add a nonempty data-od-id or data-screen-label. Ordinary HTML and Astro sections need no OpenDesign attributes."
+        }
+      ]
+    },
+    {
+      "name": "brand",
+      "html": "<style>h1{font-family:Inter;background:linear-gradient(purple,blue)}</style><h1>Welcome</h1>",
+      "upstream": [
+        {
+          "severity": "P0",
+          "id": "purple-gradient",
+          "message": "Found a \"purple\" keyword inside a gradient — anti-slop.",
+          "fix": "Remove the gradient or swap to a single solid color from the active design tokens.",
+          "snippet": "linear-gradient(purple,blue)"
+        },
+        {
+          "severity": "P0",
+          "id": "sans-display",
+          "message": "A heading rule uses Inter / Roboto / system-sans as the display face — not the serif the seed binds.",
+          "fix": "Use `font-family: var(--font-display)` on h1/h2/h3 and let the active design system pick the serif. Override only if the active direction is \"tech / utility\" or \"modern minimal\".",
+          "snippet": "h1{font-family:Inter"
+        }
+      ],
+      "baseline": []
+    },
+    {
+      "name": "inert",
+      "html": "<script>const example=\"lorem ipsum\"</script><p>Real copy</p>",
+      "upstream": [
+        {
+          "severity": "P0",
+          "id": "filler-copy",
+          "message": "Filler copy detected: \"lorem ipsum\". Pages should ship with real, brief-derived copy.",
+          "fix": "Replace with copy specific to the brief or delete the section entirely. An empty section is a design problem to solve with composition, not by inventing words.",
+          "snippet": "lorem ipsum"
+        }
+      ],
+      "baseline": []
+    }
+  ],
+  "exclusions": [
+    "purple-gradient",
+    "trust-gradient",
+    "ai-default-indigo",
+    "emoji-icon",
+    "left-accent-card",
+    "sans-display",
+    "scroll-into-view",
+    "slide-theme-missing",
+    "slide-rhythm"
+  ],
+  "limits": "Selected adaptation, not full seed policy parity. Source-only: no external CSS/assets, cascade, contrast or clipping measured. Decision 4 remains unstarted."
+}

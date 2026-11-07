@@ -43,11 +43,11 @@ node "<path-to>/daemon-cli.mjs" plugin doctor od-astro-baseline-export --json
 
 1. **UTF-8 bodies and renames.** Send JSON from a UTF-8 file (`curl --data-binary @body.json`) or Node `fetch`, not an inline `-d` string from Git Bash, which can mangle characters such as an em dash in a project name. Rename a project with `PATCH /api/projects/<id>` and a `{"name": …}` body; `PUT` is not supported.
 1. **Explicit project slug ID:** When creating a project via `POST /api/projects` or MCP `create_project`, always supply an explicit lowercase slug `id` alongside `name` (`{ "id": "client-concept-a", "name": "Client Concept A" }`). Omitting `id` returns `400 BAD_REQUEST: invalid project id`.
-2. **Deterministic anti-slop linter (`od lint`):** Run `od lint` on every HTML artifact before review or export:
+2. **Artifact preflight:** Prefer the standalone `npm run design:artifact-check -- <artifact.html> --opendesign --json` when installed; it needs no daemon. Native `od lint` remains available for app/seed-specific policy or older sites:
    ```powershell
    node "<path-to>/daemon-cli.mjs" lint C:/path/to/concept.html --fail-on p1 --json
    ```
-   Resolve all `P0` and `P1` findings (`all-caps-no-tracking`, contrast failures, layout clipping) and add `data-od-id="<section-slug>"` to top-level sections to satisfy `missing-section-anchor`.
+   Resolve confirmed defects and reconcile native aesthetic rules with the accepted direction. Add `data-od-id="<section-slug>"` to sections to satisfy `missing-section-anchor`. Both linters inspect source; neither measures contrast or layout clipping. Verify those in the actual rendered artifact. See [artifact lint](../../../../docs/artifact-lint.md) for the portable rule selection and limits.
 3. **Register artifact and export (`od artifacts create` & `od export`):**
    ```powershell
    node "<path-to>/daemon-cli.mjs" artifacts create --project client-concept-a --name concept-preview.html --input C:/path/to/concept.html
