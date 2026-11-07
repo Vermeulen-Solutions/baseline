@@ -129,7 +129,11 @@
     "scripts/watch-design-artifacts.mjs",
     "tests/design-artifact-watch.test.mjs",
     "scripts/check-design-prompt.mjs",
-    "tests/design-prompt-check.test.mjs"
+    "tests/design-prompt-check.test.mjs",
+    "scripts/check-artifact.mjs",
+    "tests/artifact-lint.test.mjs",
+    "docs/artifact-lint.md",
+    "docs/licenses/open-design-Apache-2.0.txt"
   ],
   "packages": {
     "dependencies": [
@@ -180,6 +184,7 @@
     "design:canvas-kit",
     "design:watch",
     "design:prompt-check",
+    "design:artifact-check",
     "migration:wordpress",
     "migration:verify",
     "audit:page"
