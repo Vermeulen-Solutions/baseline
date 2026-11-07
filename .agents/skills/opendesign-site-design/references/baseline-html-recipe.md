@@ -82,7 +82,9 @@ Structure every top-level section with `data-od-id="<section-id>"` and match Bas
 </section>
 ```
 
-## 3. Pre-handoff checklist (`od lint` & `od export`)
+## 3. Pre-handoff checklist (artifact preflight & export)
+
+Run `npm run design:artifact-check -- <artifact.html> --opendesign --json` when installed. Resolve P1 findings and review P2 signals with the actual render. Native `od lint` is optional for app/seed-specific policy; neither source pass measures contrast or clipping. See [artifact lint](../../../../docs/artifact-lint.md).
 
 1. **Uppercase tracking (`all-caps-no-tracking`):** Every element with `text-transform: uppercase` (`.eyebrow-telemetry`, `.badge-pill`, tags) must include `letter-spacing: 0.06em` to `0.12em`.
 2. **Section anchors (`missing-section-anchor`):** Every `<section>` must carry a descriptive `data-od-id` attribute.

@@ -20,6 +20,22 @@
   "defaultAction": "omit",
   "note": "Source classification, not an executable copy-all instruction. Only resolved manifest.files may be copied. Profile tests, visual baselines, docs, skills and local state are not implicitly shipped.",
   "files": {
+    "docs/artifact-lint.md": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "docs/licenses/open-design-Apache-2.0.txt": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/check-artifact.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/artifact-lint.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "scripts/rehearse-media-preparation.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"

@@ -179,6 +179,17 @@ test('source canvas bootstrap ships across profiles as an optional command outsi
   for(const name of ['verify:fast','verify','build','prebuild','test','test:unit']) assert.ok(!pkg.scripts[name].includes('canvas-kit'),name);
 });
 
+test('portable artifact lint ships without an OpenDesign runtime or automatic archive scanning', () => {
+  for (const profile of PROFILE_IDS) {
+    const manifest = profileManifest(profile);
+    for (const file of ['scripts/check-artifact.mjs', 'tests/artifact-lint.test.mjs', 'docs/artifact-lint.md']) assert.ok(manifest.files.includes(file), `${profile}: ${file}`);
+    assert.ok(manifest.scripts.includes('design:artifact-check'), profile);
+    assert.ok(!manifest.checks.includes('design:artifact-check'), profile);
+  }
+  assert.equal(pkg.scripts['design:artifact-check'], 'node scripts/check-artifact.mjs');
+  for (const command of ['verify:fast', 'verify', 'build']) assert.ok(!pkg.scripts[command].includes('design:artifact-check'));
+});
+
 test('dependency inventory accounts for every root dependency and versions have a single source', () => {
   const inventory = json('profiles/dependency-inventory.json').packages;
   assert.deepEqual(Object.keys(inventory).sort(), Object.keys({ ...pkg.dependencies, ...pkg.devDependencies }).sort());

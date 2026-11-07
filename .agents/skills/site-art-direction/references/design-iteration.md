@@ -87,6 +87,10 @@ For a selected change to shared design values, follow [token-handoff.md](token-h
 
 For an authorized feedback batch, retain the small chain feedback → confirmed target → bounded change → inspected result → remaining status in the existing notes. Distinguish a correction completed in the canvas from one implemented and verified on its real route. Reuse the selected surface's comment/identity rules; a resolved thread does not establish user approval. `new-site-workflow/references/delivery-evidence.md`, when installed, connects this loop to shared components, content ownership and browser evidence without adding a second tracker.
 
+## HTML artifact preflight
+
+After an HTML/browser concept edit batch and before presenting the current comparison, run `npm run design:artifact-check -- <current-file-or-directory> --json` when installed. Resolve P1 filler findings and deliberately review P2 signals against sources, the brief and rendered evidence. The checker is standalone: no OpenDesign app or daemon is needed. For artifacts intended for OpenDesign add `--opendesign` to check comment anchors; ordinary HTML/Astro needs no OpenDesign attributes. See [artifact lint](../../../../docs/artifact-lint.md) for rule decisions, source-only limits and additive adoption in older sites. This does not measure cascade, contrast, clipping or runtime behavior; preserve the actual surface/browser review above. Select current artifacts explicitly rather than scanning archived iterations as release failures.
+
 ## Refining a built site
 
 When the site is already built and the owner wants a refinement (not a new direction), there is no canvas concept to "edit directly". Use this recipe:

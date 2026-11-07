@@ -95,6 +95,7 @@
     "design:canvas-kit": "node scripts/canvas-kit.mjs",
     "design:watch": "node scripts/watch-design-artifacts.mjs",
     "design:prompt-check": "node scripts/check-design-prompt.mjs",
+    "design:artifact-check": "node scripts/check-artifact.mjs",
     "migration:wordpress": "node scripts/wordpress-migrate.mjs",
     "migration:check-locale": "node scripts/check-migration-locale.mjs",
     "db:check-backup": "node scripts/check-backup.mjs",
