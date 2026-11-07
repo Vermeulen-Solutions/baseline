@@ -56,9 +56,8 @@ Structure every top-level section with `data-od-id="<section-id>"` and match Bas
 <section class="section" data-od-id="announcements-preview" aria-labelledby="section-heading">
   <div class="container">
     <header class="section__header flow">
-      <p class="eyebrow-telemetry">[01 // COMMUNITY BOARD]</p>
       <h2 id="section-heading" class="section__title">
-        Room for <em class="font-accent">useful</em> ideas
+        Room for useful ideas
       </h2>
     </header>
 

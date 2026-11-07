@@ -83,11 +83,11 @@ Use this lane when the profiles force the wrong identity: organic hospitality, p
 ## Composing Lanes with 4-Voice Typography & Surface Physics
 
 1. **Pick a Primary Lane (70% weight)** for your canvas physics, border rules, and spatial density, and an optional **Secondary Inflection (30% weight)** for typography or structural tension (for example, *Editorial Paper* canvas paired with exposed `.grid-hairline` cell walls for an architecture practice).
-2. **Orchestrate the 4-Voice Typographic Hierarchy:**
+2. **Orchestrate the 4-Voice Typographic Hierarchy** (display and body required; accent and mono only where the content earns them):
    - **Display (`--font-display`):** Primary structural headline voice (`-0.03em` to `-0.04em` tracking, `0.95–1.08` line-height).
-   - **Inline Editorial Contrast Accent (`.font-accent` / `--font-accent`):** Selective italic serif accent (`<em class="font-accent">...</em>`) on 1–2 focal words inside a display heading to introduce human warmth or editorial contrast against a geometric/grotesk display face.
+   - **Inline Editorial Contrast Accent (`.font-accent` / `--font-accent`, optional):** Selective italic serif accent (`<em class="font-accent">...</em>`) on 1–2 focal words inside a display heading to introduce human warmth or editorial contrast against a geometric/grotesk display face.
    - **Body (`--font-body`):** High-legibility reading and UI copy (`1.6–1.68` line-height, `60ch–68ch` measure).
-   - **Telemetry Monospace (`.eyebrow-telemetry` / `--font-mono` + `.tabular-nums`):** Uppercase `0.75rem` labels (`0.12em` tracking) for structural section coordinates (`[01 // ARCHITECTURE]`), version pills (`.badge-pill`), and aligned numeric metrics.
+   - **Telemetry Monospace (`.eyebrow-telemetry` / `--font-mono` + `.tabular-nums`, optional):** Uppercase `0.75rem` labels (`0.12em` tracking) for real metadata: version pills (`.badge-pill`), dates, status and aligned numeric metrics. Not for kicker labels above headings or decorative section coordinates (`[01 // ARCHITECTURE]`).
 3. **Choose the Hero Visual Specimen & Surface Architecture:**
    - Select a **Live-Coded UI Specimen** (`.ui-specimen` + `.ui-specimen__header` with real HTML/SVG telemetry and `.tabular-nums` for SaaS/developer/AI/B2B sites), an **Interactive Capability Stage** (for studios/agencies), or **Prepared Editorial Photography** (for craft/hospitality/architecture).
    - Combine 3 surface tiers (`--color-page`, `--color-surface`, `.surface-elevated`) with `1px` top specular highlights (`--surface-highlight`) or exposed hairline cell walls (`.grid-hairline`, `.frame-crosshair`, `.bg-grid-blueprint`).

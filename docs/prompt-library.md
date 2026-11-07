@@ -278,10 +278,10 @@ Activate the impeccable skill and perform a visual critique pass on our rendered
 Apply the **5-Point Visual Self-Critique Rubric** in astro-site-design/SKILL.md:
 1. 3-Tier Surface Depth: Base (--color-page) -> Surface (--color-surface) ->
    Elevated/Glass (--color-elevated, .surface-elevated, .surface-glass) with 1px
-   --color-border hairlines. Check a contrasting mid-page band/rhythm breaker.
-2. 4-Voice Typography: tracked --font-display headings, --font-body around 68ch,
-   selective italic .font-accent, .eyebrow-telemetry and .tabular-nums metadata.
-   On new landing pages, check at least three distinct roles above the fold.
+   --color-border hairlines. Use a rhythm breaker only where the page needs one.
+2. Typography Roles: tracked --font-display headings and --font-body around 68ch
+   are required. .font-accent and .eyebrow-telemetry / .tabular-nums only where
+   earned: real metadata, no kicker labels or decorative section indices.
 3. Grid Rhythm & Asymmetry: avoid consecutive equal 3-column card rows; inspect
    12-column .bento-grid (8/4 or 7/5), .grid-hairline and Sidebar alternatives.
 4. Tactile Action Hierarchy: .btn, .btn--secondary, .btn--ghost, .icon-nudge and
@@ -292,6 +292,9 @@ Apply the **5-Point Visual Self-Critique Rubric** in astro-site-design/SKILL.md:
 Use these concrete defaults for new/replacement work. Evaluate every check
 against real content; document specific exceptions for an accepted existing
 direction or route function. Capability counts alone are not quality scores.
+Then run the generic-fingerprint check: remove each default pattern (kicker
+labels, section indices, italic word in every headline, glass nav, repeated
+bento/metric/dark-band sequence, gradient text) that has no content reason.
 
 Inspect mobile (390x844), desktop (1440x900) and relevant intermediate widths.
 Verify saved capture dimensions, loaded content and live geometry. Exercise

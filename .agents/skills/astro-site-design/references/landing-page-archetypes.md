@@ -89,10 +89,6 @@ For technical, SaaS, AI, fintech, or B2B sites, build the hero visual as a real 
   <Container width="wide">
     <div class="grid items-center gap-[var(--spacing-grid)] lg:grid-cols-12">
       <div class="flow lg:col-span-7">
-        <p class="eyebrow-telemetry">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span>[01 // SYSTEM ARCHITECTURE]</span>
-        </p>
         <h1>
           Deterministic infrastructure for <em class="font-accent">autonomous</em> workflows.
         </h1>
@@ -126,6 +122,8 @@ For technical, SaaS, AI, fintech, or B2B sites, build the hero visual as a real 
 </Section>
 ```
 
+The mono voice lives inside the specimen, on real measurements. The heading carries itself: no kicker or section coordinate above the `<h1>`. Keep the single `.font-accent` word only when the brand has that editorial voice.
+
 ### 2. Exposed `1px` Hairline Ledger Grid (`.grid-hairline` & `.frame-crosshair`)
 
 When presenting technical specifications, architectural pillars, or numbered process steps, replace floating drop-shadow cards with an exposed `1px` cell-wall matrix:
@@ -133,8 +131,7 @@ When presenting technical specifications, architectural pillars, or numbered pro
 ```astro
 <Section>
   <Container width="content">
-    <p class="eyebrow-telemetry">§ 02 // CAPABILITIES</p>
-    <h2>Engineered for <em class="font-accent">precision</em> at scale</h2>
+    <h2>Engineered for precision at scale</h2>
     <div class="grid-hairline frame-crosshair">
       <article class="flow">
         <span class="eyebrow-telemetry">01 // INGEST</span>
@@ -155,6 +152,8 @@ When presenting technical specifications, architectural pillars, or numbered pro
   </Container>
 </Section>
 ```
+
+The `01`–`03` labels are earned here because they name the order of a real pipeline. Do not number sections or capabilities that have no sequence.
 
 ### 3. Signature Header Archetypes
 
