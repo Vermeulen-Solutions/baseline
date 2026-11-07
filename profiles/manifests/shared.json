@@ -308,6 +308,7 @@
     ".agents/skills/openpencil-site-design/agents/openai.yaml",
     ".agents/skills/openpencil-site-design/references/connection-and-api.md",
     ".agents/skills/site-art-direction/references/design-iteration.md",
+    ".agents/skills/site-art-direction/references/reference-research.md",
     ".agents/skills/site-art-direction/references/capability-routing.md",
     ".agents/skills/site-art-direction/references/brand-assets.md",
     ".agents/skills/site-art-direction/references/editorial-illustration.md",

@@ -118,11 +118,11 @@ It does not load or validate your agent's configuration and cannot establish tha
 
 ## 2. Optional Design & UI Superpowers via MCP
 
-During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, connecting optional design MCPs supports canvas-led visual iteration, community design systems, and high-craft component blueprints while preserving native CSS tokens and real browser verification:
+During **Stage 4 (Art Direction)**, [shared reference research](../.agents/skills/site-art-direction/references/reference-research.md) supplies the same websites, prompt libraries, community systems and OpenDesign system/template files to HTML/browser, Brilliant and other selected surfaces. Reading public/local references needs no OpenDesign app, MCP connection or surface skill. Selected sources use the existing adaptation pass and concept comparison. During **Stage 4.5 (Component Quarantine)** and selected canvas work, the optional tools below support specific operations while preserving native CSS tokens and real browser verification:
 
 | MCP / Reference Tool | Role in Baseline Workflow | Tier / Access |
 | :--- | :--- | :--- |
-| **[OpenDesign MCP](opendesign-onboarding.md)** (`opendesign-site-design`) | Local HTML/CSS canvas with 154 bundled design systems, 188 layout examples, `od lint` validation, and native export to Baseline Astro. | Free / Local Desktop |
+| **[OpenDesign MCP](opendesign-onboarding.md)** (`opendesign-site-design`) | Explicitly selected local HTML/CSS canvas/export operations or an existing project. Its reference files are also readable through shared research without MCP. | Free / Local Desktop |
 | **[OpenPencil Desktop MCP](openpencil-onboarding.md)** (`openpencil-site-design`) | Local desktop canvas (`open-pencil/open-pencil`) and `.fig` file iteration via declarative scene JSX. | Free / Local Desktop |
 | **[Penpot MCP](penpot-onboarding.md)** (`penpot-site-design`) | Shared cloud design canvas for browser review and team collaboration. | Free / Cloud or Self-Hosted |
 | **[designmd.ai MCP](https://designmd.ai/mcp)** (`designmd-mcp`) | Search, browse, and download 420+ community `DESIGN.md` design systems ([designmd.ai/explore](https://designmd.ai/explore)) directly into `audit/visual-concepts/`. | Free (Search requires no key; free key for download) |
@@ -161,7 +161,7 @@ During **Stage 4 (Art Direction)** and **Stage 4.5 (Component Quarantine)**, con
 ```
 
 > [!TIP]
-> **Optional design tools:** At the Stage 4 checkpoint, recommend **Brilliant** for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer **Brilliant** and **OpenPencil** for editable local canvases and **Penpot** for shared cloud review; keep **OpenDesign** optional for catalogue/lint or an existing project. Reuse settled choices. The same two-or-three-direction comparison and selection apply to HTML and canvases. Local lane/token tooling (`npm run design:tokens`) and `/_styleguide` remain available without external services. See [Art Direction Workflow](art-direction-workflow.md).
+> **Optional design tools:** At the Stage 4 checkpoint, recommend **Brilliant** for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer **Brilliant** and **OpenPencil** for editable local canvases and **Penpot** for shared cloud review; keep **OpenDesign** optional for an explicitly selected canvas/export workflow or an existing project. Reuse settled choices. The same two-or-three-direction comparison and selection apply to HTML and canvases. Local lane/token tooling (`npm run design:tokens`) and `/_styleguide` remain available without external services. See [Art Direction Workflow](art-direction-workflow.md).
 
 ---
 

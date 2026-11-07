@@ -108,6 +108,7 @@ test('editable canvas guidance ships complete on every profile without a runtime
   const iterationReference = '.agents/skills/site-art-direction/references/design-iteration.md';
   const capabilityReference = '.agents/skills/site-art-direction/references/capability-routing.md';
   const focusedReferences = [
+    '.agents/skills/site-art-direction/references/reference-research.md',
     '.agents/skills/site-art-direction/references/brand-assets.md',
     '.agents/skills/site-art-direction/references/editorial-illustration.md',
     '.agents/skills/astro-site-design/references/screen-reader-checks.md',

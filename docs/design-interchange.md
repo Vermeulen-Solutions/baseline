@@ -10,10 +10,15 @@ Baseline's design workflow starts with the brief, native CSS tokens and rendered
 
 ## Design Surfaces
 
-For new sites and substantial overhauls, choose a design iteration surface that fits your workflow:
-- **[OpenDesign](opendesign-onboarding.md):** Local HTML/CSS canvas (`opendesign-site-design`) with 154 bundled offline `DESIGN.md` systems, 188 layout examples, and `od lint` validation.
+For new sites and substantial overhauls, reference discovery follows the shared [reference research](../.agents/skills/site-art-direction/references/reference-research.md) step on every surface. Public/local OpenDesign systems and templates join existing prompt libraries, community references and real websites without requiring its app, daemon or surface skill. Selected references use the existing adaptation pass; they do not choose the editing tool.
+
+Choose a design iteration surface using the shared defaults:
+
+- **HTML/browser (default without a canvas request):** Agent-authored concept files under `audit/visual-concepts/`, with desktop/mobile comparison and real browser behavior.
+- **[Brilliant](brilliant-onboarding.md) (recommended when an editable canvas is requested and no tool is settled):** Native editable concepts with the `brilliant-site-design` skill; translate the selected direction into Astro.
 - **[OpenPencil](openpencil-onboarding.md):** Local desktop canvas (`openpencil-site-design`) using `.fig` files, vector nodes, and semantic variable bindings.
 - **[Penpot](penpot-onboarding.md):** Shared cloud workspace (`penpot-site-design`) for multi-user browser review.
+- **[OpenDesign](opendesign-onboarding.md) (optional):** Its canvas/export workflow when explicitly chosen, or an existing project; reference research does not require it.
 - **Direct Astro:** Explore isolated concepts under `audit/visual-concepts/` in the browser; after saving and checking the Art Direction Record, translate the selected concept into native CSS, `/_styleguide` and production routes.
 
 Baseline supports two execution models across all surfaces:
