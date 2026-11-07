@@ -1,6 +1,6 @@
 # Visual references to maintainable Astro
 
-Read when translating a screenshot, generative concept (`designmd.ai`, Stitch, OpenDesign, Claude Design), source site, UX flow teardown (Nicelydone, Refero), or external component/interaction recipe (`21st.dev MCP`). Keep the existing `AGENTS.md` art-direction gate and specialist sequence. This reference is project-owned; do not patch Impeccable or EmDash mirrors to add these rules.
+Read when translating a screenshot, generative concept (`designmd.ai`, Stitch, OpenDesign, Claude Design), source site, UX flow teardown (Nicelydone, Refero), or external component/interaction recipe (`21st.dev MCP`). Select and adapt reference sources through [reference research](../../site-art-direction/references/reference-research.md) and the [adaptation pass](../../site-art-direction/references/external-prompt-adaptation.md); component recipes also follow `references/component-quarantine.md` after direction selection. Keep the existing `AGENTS.md` art-direction gate and specialist sequence. This reference is project-owned; do not patch Impeccable or EmDash mirrors to add these rules.
 
 ## Evidence before implementation
 
@@ -20,7 +20,7 @@ For a migration classify preserve/refine/overhaul using the existing migration a
 
 ## Borrowing components and interactions (`21st.dev` & external registries)
 
-Record component/recipe source, license, and behavior. Route external component blueprints (such as React/Tailwind snippets from `21st.dev MCP`) through `references/component-quarantine.md` on `/_styleguide`: strip unnecessary React/Framer Motion runtime down to zero-JS Astro, replace hardcoded Tailwind palette classes with semantic tokens, and bind fluid typographic/spacing steps. Prefer CSS where sufficient, but do not promise CSS-only implementation for behavior needing JavaScript. Test keyboard/focus/touch, reduced motion and performance. Do not install smooth scrolling or magnetic effects as a default modernization step.
+Component sourcing follows a selected direction; it is not discovery and cannot choose the visual world. Treat a registry blueprint as a candidate: inspect its actual behavior, record source and license, and note what the brief keeps, changes or refuses. Route external component blueprints (such as React/Tailwind snippets from `21st.dev MCP`) through `references/component-quarantine.md` on `/_styleguide`: strip unnecessary React/Framer Motion runtime down to zero-JS Astro, replace hardcoded Tailwind palette classes with semantic tokens, and bind fluid typographic/spacing steps. Prefer CSS where sufficient, but do not promise CSS-only implementation for behavior needing JavaScript. Test keyboard/focus/touch, reduced motion and performance. Do not install smooth scrolling or magnetic effects as a default modernization step.
 
 ## Verification and handoff
 

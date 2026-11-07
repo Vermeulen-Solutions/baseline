@@ -39,7 +39,7 @@ Reuse supplied context before asking questions. Follow the [discovery and conten
 Never start by writing code or prompting an assistant to "make a homepage." Begin by gathering ground-truth evidence:
 - **Client Brief & Goals:** Target audience, business objectives, brand voice, and language requirements.
 - **Visual Evidence:** Brand assets (SVG logos, brand guidelines, color palettes, photography) and existing site screenshots (desktop and mobile).
-- **UX Flow Teardowns (Optional):** For complex user flows (filterable directories, registration journeys, schedules, or pricing models), inspect real-world production patterns using **Nicelydone MCP**, **Refero.design**, or **Kombai Gallery** to capture authentic UX anatomy and edge states.
+- **UX Flow Teardowns (Optional):** For complex user flows (filterable directories, registration journeys, schedules, or pricing models), inspect real-world production patterns using **Nicelydone MCP**, **Refero.design**, or **Kombai Gallery** to capture authentic UX anatomy and edge states. These are optional reference sources for the shared Stage 4 research step; a hit is evidence to inspect, not a design decision.
 - **Functional Requirements:** Multilingual needs, forms, galleries, third-party embeds, or custom integrations.
 - **Deliverables:** Record findings in project notes before opening templates.
 
@@ -107,7 +107,7 @@ Before writing a single line of site-specific CSS or template HTML, establish a 
 ## Stage 4.5: Component Sourcing & Quarantine (`/_styleguide`)
 
 Do not attempt to assemble twenty full pages at once. Source and calibrate your reusable components in isolation first:
-- **Source High-Craft Patterns (Optional `21st.dev MCP`):** Fetch modern Tailwind component blueprints (bento grids, timelines, disclosures, spotlight cards) and transmute them through Baseline's **5-Step Quarantine Protocol**:
+- **Source High-Craft Patterns (Optional `21st.dev MCP` or another registry):** After the direction is selected, if native primitives leave a real gap, treat a blueprint as a reference rather than a design authority. Record its source and licence, inspect its actual behavior, and then transmute it through Baseline's **5-Step Quarantine Protocol**:
   1. Strip React/Framer Motion runtime down to **zero-JS `.astro` markup**.
   2. Replace hardcoded Tailwind palette classes (`bg-zinc-900`) with **semantic tokens** (`var(--color-surface)`).
   3. Upgrade fixed pixel utilities to **fluid typographic steps** (`--text-step-*`, `--text-step-3-to-1`) and `<Section>` / `<Container>` / `<Container breakout>` / `<Grid>`.

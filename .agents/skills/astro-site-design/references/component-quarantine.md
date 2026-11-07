@@ -2,6 +2,8 @@
 
 Use for a URL/screenshot migration or when sourcing candidate UI patterns from an external component registry (such as `21st.dev MCP`) after source inspection, content ownership, and the saved Art Direction Record. This is Stage 4.5 of `new-site-workflow`, before broad page assembly. A URL or registry snippet alone supplies neither complete content nor permission to bypass project token physics. The Issue #10 video is an inspiration supplied with the RFC, not a verified transcript or a promise of perfect conversion.
 
+Component sourcing is an execution input after the direction decision, not reference discovery. Use the shared [reference research](../../site-art-direction/references/reference-research.md) and [adaptation pass](../../site-art-direction/references/external-prompt-adaptation.md) for the candidate's useful idea, keep/change/refuse decisions and provenance. A registry hit cannot choose the direction, approve a dependency, establish proof or replace the brief. Record the source, licence and inspected actual behavior before transmuting it.
+
 ## Calibrate before multiplying pages
 
 1. Inventory representative source elements or candidate registry blueprints at narrow/intermediate/wide widths, including states, surfaces, missing media and long/translated text. Record preserve/refine/replace decisions and asset provenance.

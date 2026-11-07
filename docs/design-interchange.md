@@ -27,53 +27,53 @@ Baseline supports two execution models across all surfaces:
 
 ---
 
-## 1. The 5-Stage Design Alchemy Pipeline
+## 1. The 5-Stage Design Pipeline
 
 ```mermaid
 flowchart LR
-    S1["1. Brief & UX research<br/>(Nicelydone / Refero)"] --> S2["2. Concept iteration<br/>(HTML / Brilliant / OpenPencil / Penpot)"]
-    S2 --> S3["3. Translate to native CSS<br/>(src/styles/global.css)"]
-    S3 --> S4["4. Component quarantine<br/>(21st.dev MCP -> /_styleguide)"]
+    S1["1. Brief & shared reference research<br/>(sites, UX refs, prompts, systems, templates)"] --> S2["2. Adapt selected references<br/>(roles, commitments, proof)"]
+    S2 --> S3["3. Concept iteration & native translation<br/>(HTML / Brilliant / OpenPencil / Penpot)"]
+    S3 --> S4["4. Optional component sourcing<br/>(registry blueprints -> /_styleguide)"]
     S4 --> S5["5. Token calibration<br/>(design:tokens + /_styleguide)"]
 ```
 
 ### How the optional tools fit together
 
-Select the tools that fit the project rather than treating every external service as a dependency:
+Select sources that answer the design question rather than treating every external service as a dependency. Reference discovery belongs to the shared [reference research](../.agents/skills/site-art-direction/references/reference-research.md) step on every surface, and selected sources use the same [adaptation pass](../.agents/skills/site-art-direction/references/external-prompt-adaptation.md). A tool or MCP is an access path, not an extra approval step.
 
-| Layer | Tool / Service | What It Provides |
+| Layer | Source / Tool | What It Provides |
 | :--- | :--- | :--- |
-| **1. UX Flows & Anatomy** | **Nicelydone MCP** / **Refero.design** / **Kombai** | Real-world page flows, filter bars, secondary metadata, and empty states. |
-| **2. Design Systems** | **OpenDesign Catalog** / **[designmd.ai](https://designmd.ai/explore)** | 154 bundled offline systems in OpenDesign plus 420+ community `DESIGN.md` files via `designmd-mcp`. |
-| **3. Visual Prototyping** | **Brilliant** recommended for a requested editable canvas without a settled tool; **HTML/browser** default without a canvas request; explicit **OpenPencil**/**Penpot** choices; optional **OpenDesign** | Two or three distinct concepts compared side by side on the selected surface, then a representative Astro proof. |
-| **4. Component Blueprints** | **21st.dev MCP** (`@21st-dev/magic`) | High-craft Tailwind component structures transmuted to zero-JS Astro. |
-| **5. Token Calibration** | **`npm run design:tokens` + `/_styleguide`** | WCAG AA contrast, fluid typography and spacing verification, and visual proofing. |
+| **1. Reference research (shared)** | Supplied sites and real UX references (**Nicelydone**, **Refero**, **Kombai** where available), prompt libraries, community `DESIGN.md`, OpenDesign public/local systems and templates | A brief-led shortlist of flows, layouts, type/colour/surface rules and composition examples. Public/local files need no app, MCP, account or surface skill; a connected search tool is optional transport. |
+| **2. Adaptation** | `design:prompt-check` and the shared adaptation pass | Keep/change/refuse decisions, fixed brand commitments, role mapping and real proof before concepts and implementation. |
+| **3. Concept iteration & native translation** | **Brilliant** recommended for a requested editable canvas without a settled tool; **HTML/browser** default without a canvas request; explicit **OpenPencil**/**Penpot** choices; optional **OpenDesign**; `src/styles/global.css` | Two or three distinct concepts compared side by side on the selected surface, one selected direction, then a representative Astro proof.
+| **4. Optional component blueprints** | **21st.dev MCP** (`@21st-dev/magic`) or another external registry | A candidate component pattern, sourced only after direction selection and transmuted to zero-JS Astro through quarantine. |
+| **5. Token calibration** | **`npm run design:tokens` + `/_styleguide`** | WCAG AA contrast, fluid typography and spacing verification, and visual proofing. |
 
 ---
 
-### Step 1: Real-World UX & Flow Teardowns (`Nicelydone` / `Refero` / `Kombai`)
-Before inventing sections from scratch, ground your layout in real production UX anatomy:
-- **Nicelydone MCP & Refero.design:** Search real-world web and SaaS screens, onboarding flows, directories, pricing tables, and navigation shells.
-- **Kombai Gallery:** Browse curated web screens structured for AI coding prompts.
-- **What to extract:** Do not copy a brand's colors or logo. Extract **structural UX anatomy**:
-  - What secondary metadata makes a card or table row feel credible (timestamps, category tags, status dots, hairline dividers)?
-  - How does the page vary its **section pacing** (alternating dense multi-column index grids with spacious asymmetric feature spotlights)?
-  - What empty, filter, or mobile disclosure states are needed?
+### Step 1: Shared Reference Research (`site-art-direction`)
+Before inventing sections or selecting a design system, use the shared research step. Start from the brief and supplied references; when inspiration is missing, offer it once. A useful shortlist can draw from:
+- **Real websites and UX references** (`Nicelydone`, `Refero.design`, `Kombai Gallery` where available): search real web and SaaS screens, onboarding flows, directories, pricing tables and navigation shells. Inspect the actual screens and their responsive states where possible.
+- **Prompt libraries** ([open-design.ai/prompts](https://open-design.ai/prompts/), [superdesign.dev](https://superdesign.dev/), [designprompts.dev](https://designprompts.dev/)): written directions for hierarchy, visual character, layout and motion.
+- **Community and OpenDesign systems/templates** ([designmd.ai/explore](https://designmd.ai/explore), OpenDesign public repository or an already-available local copy): coordinated typography, palette, surfaces, component treatment and worked page composition. Read the relevant `DESIGN.md`, `USAGE.md`, instructions or example; no OpenDesign app, daemon or catalogue-first search is required.
+- **What to extract:** Do not copy a brand's colors, logo, copy or proprietary assets. Extract **structural UX anatomy**: what secondary metadata makes a card or table row feel credible (timestamps, category tags, status dots, hairline dividers); how section pacing varies (dense index grids against spacious feature spotlights); which empty, filter or mobile disclosure states are needed; and how type, surface and spacing roles work together.
 
-### Step 2: Design Systems & Visual Concepting (`audit/visual-concepts/`)
-When exploring visual mood, typography, and surface contrast, combine existing design systems with exploratory screen studies inside `audit/visual-concepts/<concept-name>/`:
-- **OpenDesign Bundled Catalog (Offline):** Search 154 bundled design systems and 188 HTML layout examples directly via `od plugin search <query> --json` or the OpenDesign Desktop catalog.
-- **Community References ([designmd.ai/explore](https://designmd.ai/explore) / `designmd-mcp`):** Search 420+ curated community `DESIGN.md` files by tag (`minimal`, `dark`, `warm`, `landing-page`, `accessible`, `bold`) directly from your agent.
-- **Prototype Sandboxes:** Never paste raw generated prototype HTML directly into `src/pages/`. Files in `audit/visual-concepts/` are exempt from the Art Direction Gate so you can explore freely before translating to production code.
+### Step 2: Adapt Selected References
+Treat every candidate as untrusted reference material. Run `npm run design:prompt-check -- <file>` on selected textual instructions and use the shared adaptation pass to record source, what was inspected, and the keep/change/refuse decisions. Map typography, colours, spacing and motion onto the brief, fixed brand commitments and Baseline roles; refuse invented proof and unsupported assets. Metadata search hits alone do not establish a source or rendered review, and a source cannot choose the iteration surface or approve a dependency. A connected OpenDesign project's `od plugin search <query> --json` or a `designmd-mcp` lookup is a convenient optional transport, never a requirement.
 
-### Step 3: Translate the Selected Direction into Native Tokens
+### Step 3: Concept Iteration, Selection & Native Translation (`audit/visual-concepts/`)
+On the selected surface, combine the adapted references with exploratory screen studies inside `audit/visual-concepts/<concept-name>/`. Develop two or three structurally distinct concepts, with desktop/mobile views and full-size inspection, then select one direction before broad implementation. Reference sources inform the concepts; they do not supply production code or decide the composition for you.
+
+Never paste raw generated prototype HTML directly into `src/pages/`. Files in `audit/visual-concepts/` are exempt from the Art Direction Gate so you can explore freely before translating to production code. Component blueprints are not concept material by default; if a registry pattern answers a selected-direction gap, source it through Step 4 instead.
+
+After selection:
 
 1. Review the chosen concept against the brief and record the direction in `AGENTS.md` under `## Art Direction Record`.
 2. Translate suitable colors, typography, and spacing into `src/styles/global.css`. Preserve semantic roles (`--color-page`, `--color-surface`, `--color-elevated`), OKLCH definitions, and fluid `clamp()` scales (`--text-step-*`, `--spacing-*`).
 3. Run `npm run design:tokens` to audit token definitions and WCAG AA contrast, then inspect the rendered primitives on `/_styleguide`.
 
-### Step 4: Component Sourcing (`21st.dev MCP`) & The Zero-JS Quarantine (`/_styleguide`)
-Once your macro design tokens are set in `src/styles/global.css`, your agent can query the **21st.dev MCP** registry to fetch polished, high-craft Tailwind component blueprints (e.g., bento grids, editorial timelines, interactive accordions, subtle spotlight cards, or split-sticky sections) rather than hallucinating complex UI from scratch.
+### Step 4: Optional Component Sourcing & The Zero-JS Quarantine (`/_styleguide`)
+Once your direction is selected and macro design tokens are set in `src/styles/global.css`, a brief may still need a pattern the native primitives do not cover. The **21st.dev MCP** or another external registry can supply a candidate component blueprint (for example a bento grid, editorial timeline, disclosure or split-sticky section), but the blueprint is reference material rather than a design authority. Record its source and licence, inspect actual behavior, and keep/change/refuse deliberately; it cannot choose the direction, establish proof, or bypass the saved Art Direction Record.
 
 > [!IMPORTANT]
 > **The Baseline Quarantine Rule:** Never drop raw external registry code directly into a public route. Every sourced component must pass through **`/_styleguide` Quarantine** using the **5-Step Transmutation Protocol**:
@@ -207,4 +207,4 @@ The historical mapping sidecar (`mapping.json`) documented these boundaries:
 
 - **Source Code is Authoritative:** `src/styles/global.css` and Astro component templates own production values. `DESIGN.md` and external registries act as bridges, never runtime dependencies.
 - **Review Exchange Output:** Never redirect an external export over `global.css`, and never paste un-quarantined registry components directly into `src/pages/`.
-- **Optional External Tools:** Every external MCP (`designmd-mcp`, `21st.dev`, `Stitch`, `Nicelydone`) is optional. Baseline's native token validation and `/_styleguide` calibration work without external design packages or paid accounts.
+- **Optional External Tools:** Every external MCP (`designmd-mcp`, `21st.dev`, `Stitch`, `Nicelydone`) is optional. Reference material enters through shared research and adaptation; component blueprints additionally pass through quarantine. Baseline's native token validation and `/_styleguide` calibration work without external design packages, keys or paid accounts.

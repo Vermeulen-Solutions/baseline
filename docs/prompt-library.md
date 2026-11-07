@@ -218,7 +218,7 @@ Before choosing the direction, recommend Brilliant for a requested editable prot
 ## 4. Component Sourcing & Styleguide Quarantine
 
 ### Quarantining External Tailwind Blueprints (21st.dev or Community Code)
-Use this prompt when bringing external React/Tailwind components into Baseline.
+Use this prompt when bringing external React/Tailwind components into Baseline. Source the blueprint only after the direction is selected; it is a reference, not a design authority.
 
 ```markdown
 I want to adapt an external component blueprint into our site. Follow the 5-step Component Quarantine Protocol in .agents/skills/astro-site-design/references/component-quarantine.md and stage it on /_styleguide.
@@ -232,6 +232,8 @@ Please:
 3. Upgrade fixed pixel utilities to fluid typographic steps (--text-step-*) and layout primitives (<Container>, <Grid>, or <Card>).
 4. Wire EmDash live editing proxies ({...entry.edit.title}).
 5. Add a test specimen to src/pages/_styleguide.astro and verify it across viewports.
+
+Record the source URL/commit and licence, inspect its actual behavior, and note what we keep, change or refuse against our brief. Do not let the blueprint choose the visual direction, add a dependency or bypass the saved Art Direction Record.
 ```
 
 ### Agent-First Token Calibration & WCAG Contrast Audit
@@ -439,7 +441,7 @@ Once the diagnosis completes:
 
 Use this for a substantial visual overhaul of an existing Baseline or other site. The concept pass defines the new composition before broad implementation. Specify fixed identity elements independently of the permitted visual change; use a local-only release unless broader actions are authorized.
 
-This remains the right recipe when revisiting an already completed redesign: reopen its visual direction while preserving the working site's content and functionality. Resume at art direction rather than repeating the initial migration. Reuse the selected design surface, or resolve a new preference if the user wants to change it. The [OpenDesign recipe](#opendesign-design-and-implementation-same-agent) supplies tool-specific execution; it does not replace the preservation and release scope below.
+This remains the right recipe when revisiting an already completed redesign: reopen its visual direction while preserving the working site's content and functionality. Resume at art direction rather than repeating the initial migration. Reuse the selected design surface, or resolve a new preference if the user wants to change it. Reference research stays shared across surfaces; the [OpenDesign recipe](#opendesign-design-and-implementation-same-agent) supplies tool-specific execution only, and does not replace the preservation and release scope below.
 
 ```text
 Significantly redesign this existing site using new-site-workflow,
@@ -461,12 +463,17 @@ Inventory route archetypes and inspect the actual source at desktop and mobile.
 Preserve product truth and editing ownership. Do not treat the old composition
 as fixed unless listed above or mistake utility adoption for a redesign.
 
-Research a small relevant reference shortlist before presenting concepts.
-With OpenDesign, search its bundled design systems/examples and read relevant
-parts of shortlisted DESIGN.md files or layout sources. Show the names and
-links/paths, what was inspected, which ideas inform each concept and which
-stylistic choices are excluded by our brief. Put this explanation directly in
-chat and alongside the concept comparison; disclose partial reads or previews.
+Research a small relevant reference shortlist before presenting concepts using
+site-art-direction/references/reference-research.md. Start from supplied references
+and offer inspiration once when needed. The shortlist can include real websites,
+UX references (Nicelydone, Refero or Kombai where available), prompt libraries,
+community DESIGN.md systems and OpenDesign public/local systems or templates.
+Reading public/local files needs no OpenDesign app, MCP, key or account; a connected
+catalogue search is optional transport. Adapt selected textual instructions, systems
+and templates with external-prompt-adaptation.md and design:prompt-check. Show the
+names and links/paths, what was inspected, which ideas inform each concept, and which
+stylistic choices our brief excludes. Put this explanation directly in chat and
+alongside the concept comparison; disclose partial reads or previews.
 
 Develop two or three materially different concepts for a representative page
 using real copy and available assets, including mobile intent. Compare audience

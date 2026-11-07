@@ -125,10 +125,14 @@ During **Stage 4 (Art Direction)**, [shared reference research](../.agents/skill
 | **[OpenDesign MCP](opendesign-onboarding.md)** (`opendesign-site-design`) | Explicitly selected local HTML/CSS canvas/export operations or an existing project. Its reference files are also readable through shared research without MCP. | Free / Local Desktop |
 | **[OpenPencil Desktop MCP](openpencil-onboarding.md)** (`openpencil-site-design`) | Local desktop canvas (`open-pencil/open-pencil`) and `.fig` file iteration via declarative scene JSX. | Free / Local Desktop |
 | **[Penpot MCP](penpot-onboarding.md)** (`penpot-site-design`) | Shared cloud design canvas for browser review and team collaboration. | Free / Cloud or Self-Hosted |
-| **[designmd.ai MCP](https://designmd.ai/mcp)** (`designmd-mcp`) | Search, browse, and download 420+ community `DESIGN.md` design systems ([designmd.ai/explore](https://designmd.ai/explore)) directly into `audit/visual-concepts/`. | Free (Search requires no key; free key for download) |
-| **21st.dev MCP** (`@21st-dev/magic`) | Search, inspect, and fetch high-craft Tailwind component blueprints directly into `/_styleguide` for zero-JS Astro transmutation. | Free / Open Registry |
-| **Nicelydone MCP / Refero.design** | Inspect real-world web and SaaS UX screens, user flows, filter bars, and onboarding patterns during discovery. | Freemium / Web |
+| **[designmd.ai MCP](https://designmd.ai/mcp)** (`designmd-mcp`) | Optional shared-research access to community `DESIGN.md` systems ([designmd.ai/explore](https://designmd.ai/explore)); inspect and adapt selected systems rather than copying them. Public references can be read without a key. | Free (Search requires no key; free key for download) |
+| **21st.dev MCP** (`@21st-dev/magic`) | Optional component-blueprint source after direction selection; a candidate pattern is recorded, licensed, inspected and transmuted through component quarantine on `/_styleguide`. | Free / Open Registry |
+| **Nicelydone MCP / Refero.design** | Optional real-world UX references for shared research: actual screens, flows, filter bars and onboarding patterns. Treat a hit as a shortlist candidate, not a design decision. | Freemium / Web |
 | **Official Figma MCP** *(Optional)* | Inspect layers and layout tokens if a client hands off an existing Figma file. | Free |
+
+### Reviewing selected references
+
+All of these are optional access paths to the same shared research step, not separate approval stages. Read public/local reference files directly when possible; an MCP connection is only transport. For each selected prompt, system, template, screen or blueprint, identify its source and provenance, inspect the actual source or render, run `npm run design:prompt-check` on textual instructions, and use the [adaptation pass](../.agents/skills/site-art-direction/references/external-prompt-adaptation.md) to record keep/change/refuse decisions. Component blueprints add the [quarantine](../.agents/skills/astro-site-design/references/component-quarantine.md) steps and cannot choose the direction. A metadata hit alone establishes no source, licence or rendered quality.
 
 ### Enabling `designmd-mcp`, `21st-dev`, and `nicelydone` in `.mcp.json`:
 

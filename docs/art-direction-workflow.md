@@ -8,7 +8,7 @@ One of the most persistent frustrations when building websites with AI coding as
 - Low-contrast light gray body text on white backgrounds
 - Monotonous page pacing (repeating the same 3-column card grid four times down the page)
 
-Baseline addresses this with an **Art Direction Gate** (`npm run check:art-direction`) and optional design tools ([designmd.ai](https://designmd.ai/explore), `Brilliant`, `OpenPencil`, `Penpot`, optional `OpenDesign`, `Nicelydone`, and `21st.dev MCP`). `AGENTS.md` requires saving a complete Art Direction Record before site-specific visual implementation, then verifying it with `npm run check:art-direction -- --require-record`.
+Baseline addresses this with an **Art Direction Gate** (`npm run check:art-direction`) and optional shared [reference research](../.agents/skills/site-art-direction/references/reference-research.md): real websites and UX references (for example `Nicelydone`, `Refero` or `Kombai` when available), prompt libraries, community `DESIGN.md` systems and OpenDesign public/local systems and templates. Reading those sources works on any surface without an OpenDesign connection, MCP, key or account. `21st.dev` component blueprints remain an optional Stage 4.5 input through component quarantine, after the direction is chosen. `AGENTS.md` requires saving a complete Art Direction Record before site-specific visual implementation, then verifying it with `npm run check:art-direction -- --require-record`.
 
 ---
 
@@ -33,11 +33,11 @@ Baseline supports two execution models across all surfaces:
 
 The core workflow proceeds through five focused steps:
 
-1. **Iterate concepts on your chosen surface:** Explore visual directions for a representative page slice (hero, card, typography), get feedback, and select the final direction.
-2. **Establish the native foundation:** Pick an Aesthetic Lane, write the Art Direction Record in `AGENTS.md`, set up tokens in `src/styles/global.css` via `npm run design:tokens`, and verify on `/_styleguide`.
-3. **Inspect real-world UX patterns (optional):** Extract structural layout patterns (timestamps, status badges, filter bars, section pacing) using `Nicelydone MCP` or `Refero.design`.
-4. **Explore design systems (optional):** Query OpenDesign's bundled offline systems (`od plugin search`) or community references via `designmd-mcp`, saving exploratory sandboxes to `audit/visual-concepts/`.
-5. **Source reusable components (optional):** Find high-craft patterns via `21st.dev MCP` and transmute them into zero-JS Astro components on `/_styleguide`.
+1. **Research references through the shared step (optional):** Use [reference research](../.agents/skills/site-art-direction/references/reference-research.md) to inspect a brief-led shortlist of real websites, UX flows, prompt libraries, community systems or OpenDesign public/local systems and templates. Offer inspiration once when it is missing; read public/local files without the app, MCP or a provider menu.
+2. **Adapt selected references:** Run `npm run design:prompt-check -- <file>` on textual instructions and follow [external reference adaptation](../.agents/skills/site-art-direction/references/external-prompt-adaptation.md): preserve structural intent, map roles, keep approved typography and require real proof. A source cannot select the surface or override the brief.
+3. **Iterate concepts on your chosen surface:** Explore visual directions for a representative page slice (hero, card, typography), get feedback, and select the final direction.
+4. **Establish the native foundation:** Pick an Aesthetic Lane, write the Art Direction Record in `AGENTS.md`, set up tokens in `src/styles/global.css` via `npm run design:tokens`, and verify on `/_styleguide`.
+5. **Source reusable components only after direction selection (optional):** If native primitives leave a real gap, treat a `21st.dev` or other registry blueprint as a candidate and transmute it through [component quarantine](../.agents/skills/astro-site-design/references/component-quarantine.md) on `/_styleguide`. Record source/licence and verify behavior; this is not reference discovery and cannot choose the direction.
 
 See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md) and [AI Agent & Harness Configuration](agent-documentation.md) for tool configuration.
 
