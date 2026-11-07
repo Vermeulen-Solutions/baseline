@@ -33,12 +33,12 @@ Never hardcode raw hex values inside component rules. Declare all colors in `:ro
 
 ## 3. 4-Voice Fluid Typography
 
-Every composition orchestrates four distinct typographic voices:
+Four typographic voices are available. Display and body are required; the accent and mono voices appear only where the content earns them (an editorial word, real metadata), never as kicker labels or decorative section indices:
 
 1. **Monumental Display (`--font-display`):** Tight tracking (`-0.03em` to `-0.04em`), compressed line-height (`0.98–1.12`), `text-wrap: balance`.
 2. **Inline Editorial Contrast Accent (`.font-accent` / `--font-accent`):** Selective italic serif (`<em class="font-accent">...</em>`) on 1–2 focal words inside a display heading to create tension.
 3. **Reading & UI Body (`--font-body`):** High-legibility copy (`line-height: 1.6–1.68`, measure `60ch–68ch`).
-4. **Telemetry & Coordinate Monospace (`.eyebrow-telemetry` / `--font-mono` + `.tabular-nums`):** `0.75rem` (`12px`) uppercase labels with mandatory `letter-spacing: 0.08em` to `0.12em` for structural coordinates (`[01 // ARCHITECTURE]`), version pills (`.badge-pill`), dates, and tabular counts.
+4. **Telemetry & Coordinate Monospace (`.eyebrow-telemetry` / `--font-mono` + `.tabular-nums`):** `0.75rem` (`12px`) uppercase labels with mandatory `letter-spacing: 0.08em` to `0.12em` for real metadata: version pills (`.badge-pill`), dates, status and tabular counts. Not for kicker labels above headings or decorative section coordinates (`[01 // ARCHITECTURE]`).
 
 ### Fluid Typographic Scale (`clamp()`)
 

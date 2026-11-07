@@ -1021,11 +1021,11 @@ export function upsertCalibrationRecord(targetPath, css, cssPath = 'src/styles/g
     '',
     '## Component Specimens To Verify',
     '',
-    '- **Typography & Measure:** Check fluid steps, 4-voice roles (`--font-display`, `--font-accent` `.font-accent`, `--font-body`, `--font-mono` `.eyebrow-telemetry` / `.tabular-nums`), and `--measure-reading` line lengths on `/_styleguide#typography`.',
+    '- **Typography & Measure:** Check fluid steps, 4-voice roles (`--font-display` and `--font-body` required; `--font-accent` `.font-accent` and `--font-mono` `.eyebrow-telemetry` / `.tabular-nums` where the content earns them), and `--measure-reading` line lengths on `/_styleguide#typography`.',
     '- **Surfaces & Controls:** Check 3-tier surfaces (`--color-page`, `--color-surface`, `--color-elevated` / `.surface-elevated`), tactile `.btn` / `.btn--secondary` / `.btn--ghost` hierarchy, disabled/invalid, and `:focus-visible` states on `/_styleguide#palette` and `/_styleguide#controls`.',
     '- **Layout, Bento & Cards:** Check `Section`, `Container` (`reading`, `content`, `wide`, `breakout`), `Grid`, `.bento-grid`, and `Card` (`stacked`, `horizontal`, optional `transitionName`) on `/_styleguide#layout`.',
     '- **Media & Editorial Flow:** Check native `ResponsiveImage` (`loading="eager" fetchpriority="high"` on above-the-fold Hero media), `PartnersPanel`, `LogoTicker`, and `.flow` Markdown on the common specimens. For EmDash, also check `EditorialImage`, `PhotoGallery` and Portable Text in the platform extension.',
-    '- **Page Assembly & Self-Critique:** Read `.agents/skills/astro-site-design/references/astro-primitives.md` and `references/landing-page-archetypes.md` when assembling routes, then apply the 5-Point Visual Self-Critique Rubric (geometry alternation, rhythm-breaker band, 3+ typographic voices above the fold, action weight separation, and 375px/768px/1440px reflow).',
+    '- **Page Assembly & Self-Critique:** Read `.agents/skills/astro-site-design/references/astro-primitives.md` and `references/landing-page-archetypes.md` when assembling routes, then apply the 5-Point Visual Self-Critique Rubric (geometry alternation, purposeful surface depth, earned typography roles with no kicker labels or decorative indices, action weight separation, and 375px/768px/1440px reflow) and its generic-fingerprint check.',
     '- **Evidence:** Record captures and observed results before marking component specimens verified. Token calculations alone do not verify rendered components.',
     '',
   ].join('\n');
