@@ -97,6 +97,7 @@
 
 	html {
 		scroll-behavior: smooth;
+		overflow-x: hidden;
 	}
 
 	html:focus-within {
@@ -110,15 +111,26 @@
 	body {
 		min-block-size: 100vh;
 		margin: 0;
+		inline-size: 100%;
+		min-inline-size: 0;
 		display: flex;
 		flex-direction: column;
+		overflow-x: hidden;
 		/* Exported surface tokens work without the development controls. */
 		background-image: var(--page-pattern, none);
 		background-size: var(--page-pattern-size, auto);
 	}
 
+	@supports (overflow-x: clip) {
+		html,
+		body {
+			overflow-x: clip;
+		}
+	}
+
 	main {
 		flex: 1;
+		min-inline-size: 0;
 	}
 
 	:where(:root:not([data-spacing-policy="automatic-v2"])) :where(main > section, .section) {
@@ -213,7 +225,8 @@
 
 	img,
 	picture,
-	video {
+	video,
+	iframe {
 		max-inline-size: 100%;
 		height: auto;
 	}
@@ -237,6 +250,13 @@
 	select,
 	textarea {
 		font: inherit;
+		max-inline-size: 100%;
+	}
+
+	input,
+	select,
+	textarea {
+		box-sizing: border-box;
 	}
 
 	button {

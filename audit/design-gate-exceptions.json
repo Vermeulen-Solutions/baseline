@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Neutral shared foundation: existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Exact LF-normalized source hash.",
-    "sha256": "f3dae7ee1a8cd658e09739cd90c1d05f7eeac59ff6d184814417a51b88526a84"
+    "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Exact LF-normalized source hash.",
+    "sha256": "49be27cfa4dbd54c8705a2e7cc89d90d5b06d0a5b59ab9569066b850afbeae8a"
   },
   {
     "path": "src/layouts/Base.astro",
