@@ -115,7 +115,7 @@
   "dependencies": {
     "@astrojs/node": "11.1.8",
     "@astrojs/react": "7.1.0",
-    "@tailwindcss/vite": "^4.3.4",
+    "@tailwindcss/vite": "^4.3.5",
     "astro": "7.4.0",
     "emdash": "1.4.0",
     "photoswipe": "^5.4.4",
