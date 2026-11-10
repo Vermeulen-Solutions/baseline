@@ -4,6 +4,8 @@ import * as fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { sources, inventory, hash, review, stageSync, applySync, recoverSync } from '../scripts/skill-sync.mjs';
+import { readLauncherVersion, syncImpeccable } from '../scripts/sync-impeccable-skill.mjs';
+import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
@@ -238,4 +240,33 @@ test('apply keeps CRLF line endings of installed text files and lists new skill 
     assert.ok(written.includes('\r\n'), 'manifest line endings are kept');
     assert.deepEqual(JSON.parse(written).skillFiles, ['.agents/skills/demo/SKILL.md', '.agents/skills/demo/references/added.md']);
   } finally { assert.ok(path.basename(root).startsWith('emdash-sync-test-')); await fs.rm(root, { recursive: true, force: true }); }
+});
+
+test('impeccable provenance records the launcher version from the synced snapshot', async () => {
+  assert.equal(readLauncherVersion({ 'impeccable/scripts/VERSION': { bytes: Buffer.from('0.1.20\n') } }), '0.1.20');
+  assert.equal(readLauncherVersion({ 'impeccable/scripts/VERSION': { bytes: Buffer.from('not-a-version') } }), null);
+  assert.equal(readLauncherVersion({}), null, 'a snapshot without scripts/VERSION reports no launcher version');
+
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-impeccable-test-'));
+  try {
+    await fs.mkdir(path.join(root, '.emdash'), { recursive: true });
+    await fs.mkdir(path.join(root, '.agents', 'skills', 'impeccable'), { recursive: true });
+    await fs.writeFile(path.join(root, '.emdash', 'impeccable-source.json'), JSON.stringify({ formatVersion: 1, declaredSkillVersion: '4.8.0', launcherVersion: '0.1.5', upstreamCommitSha: 'a'.repeat(40) }));
+    const skillMd = '---\nname: impeccable\n---\n';
+    const candidate = {
+      commitSha: 'b'.repeat(40),
+      files: {
+        'impeccable/SKILL.md': { bytes: Buffer.from(skillMd), mode: '100644' },
+        'impeccable/scripts/VERSION': { bytes: Buffer.from('0.1.20\n'), mode: '100644' }
+      }
+    };
+    await syncImpeccable(root, { candidate, version: '4.8.1' });
+    const source = JSON.parse(await fs.readFile(path.join(root, '.emdash', 'impeccable-source.json'), 'utf8'));
+    const provenance = JSON.parse(await fs.readFile(path.join(root, '.agents', 'skills', 'impeccable', 'PROVENANCE.json'), 'utf8'));
+    assert.equal(source.launcherVersion, '0.1.20', 'a carried-over launcher version is replaced by the synced VERSION');
+    assert.equal(source.declaredSkillVersion, '4.8.1');
+    assert.equal(source.upstreamCommitSha, 'b'.repeat(40));
+    assert.equal(source.skillSha256, createHash('sha256').update(skillMd).digest('hex'));
+    assert.deepEqual(provenance, source, 'PROVENANCE.json mirrors the recorded source');
+  } finally { assert.ok(path.basename(root).startsWith('emdash-impeccable-test-')); await fs.rm(root, { recursive: true, force: true }); }
 });
