@@ -184,6 +184,14 @@ export function safeResultHref(url: unknown, pageHref: string): string | null {
   }
 }
 
+/** True when a pointer position is beyond a box's edges. Exported for browser-free tests. */
+export function isOutsideRect(
+  point: { clientX: number; clientY: number },
+  rect: { left: number; right: number; top: number; bottom: number },
+): boolean {
+  return point.clientX < rect.left || point.clientX > rect.right || point.clientY < rect.top || point.clientY > rect.bottom;
+}
+
 /* ------------------------------------------------------------------ */
 /* Browser controller                                                  */
 /* ------------------------------------------------------------------ */
@@ -285,8 +293,18 @@ export class SearchController {
     trigger.addEventListener('click', () => this.open(trigger), { signal });
     this.root.querySelectorAll<HTMLElement>('[data-search-close]').forEach((button) =>
       button.addEventListener('click', () => this.close(), { signal }));
-    // Clicks on the backdrop target the dialog itself; the inner panel fills its box.
-    dialog.addEventListener('click', (event) => { if (event.target === dialog) this.close(); }, { signal });
+    // closedby="any" gives native light dismiss. Safari does not support it yet, so
+    // compare press and release positions there: a text-selection drag that ends on
+    // the backdrop must not dismiss, and event.target cannot distinguish that case.
+    if (!('closedBy' in HTMLDialogElement.prototype)) {
+      let pressedOutside = false;
+      dialog.addEventListener('pointerdown', (event) => {
+        pressedOutside = isOutsideRect(event, dialog.getBoundingClientRect());
+      }, { signal });
+      dialog.addEventListener('pointerup', (event) => {
+        if (pressedOutside && isOutsideRect(event, dialog.getBoundingClientRect())) this.close();
+      }, { signal });
+    }
     dialog.addEventListener('close', () => this.onClosed(), { signal });
     // Chromium consumes Escape in a non-empty type="search" input to clear it,
     // so the native cancel never fires. Escape always dismisses the dialog here.

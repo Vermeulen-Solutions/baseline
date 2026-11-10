@@ -70,6 +70,7 @@
     "audit:baseline": "node scripts/audit-baseline.mjs",
     "audit:site": "node scripts/audit-site.mjs",
     "audit:modernize": "node scripts/audit-modernize.mjs",
+    "audit:modern-web": "node scripts/audit-modern-web.mjs",
     "audit:pilot": "node scripts/rehearse-site-audit.mjs",
     "test:site-audit": "node --test tests/site-standards-audit.test.mjs tests/audit-coverage.test.mjs tests/audit-modernize.test.mjs tests/audit-runtime-evidence.test.mjs",
     "sync:emdash-skills": "node scripts/sync-emdash-skills.mjs",

@@ -82,6 +82,6 @@ The component uses Baseline surface, text, border, link, focus, spacing and radi
 
 ## Verification
 
-`tests/search.test.mjs` covers the browser-free contracts with a stubbed Pagefind. Before shipping search on a site, check the real index in a browser: open the dialog with the trigger and with Ctrl+K, search for a known page, follow a result, check that Escape returns focus, check the missing-index message before indexing, and check every published locale and the base path.
+`tests/search.test.mjs` covers the browser-free contracts with a stubbed Pagefind. Before shipping search on a site, check the real index in a browser: open the dialog with the trigger and with Ctrl+K, search for a known page, follow a result, check that Escape returns focus, check that a backdrop click closes the dialog while a text-selection drag from the input onto the backdrop does not, check the missing-index message before indexing, and check every published locale and the base path.
 
 Baseline maintainers can automate these checks against a generated project with `npm run rehearse:search -- --site <project>` in the Baseline repository. It runs local headless Chromium only and never runs in CI.

@@ -46,6 +46,7 @@ Acceptance happens in a browser, on the built site with its real index:
 - Open search with the button and with Ctrl+K, and search for a known page in each published locale.
 - Follow a result: the URL keeps the base path.
 - Escape closes the dialog and returns focus to what opened it.
+- A backdrop click closes the dialog; a text-selection drag from the input onto the backdrop does not.
 - A noindex or private page never appears.
 - With JavaScript off, only the fallback link shows.
 

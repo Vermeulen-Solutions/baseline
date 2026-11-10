@@ -28,6 +28,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "docs/licenses/modern-web-guidance-Apache-2.0.txt": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "scripts/check-artifact.mjs": {
       "disposition": "shared",
       "static": "copy"
@@ -145,6 +149,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "scripts/audit-modernize.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/audit-modern-web.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
@@ -585,6 +593,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "tests/audit-modernize.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/audit-modern-web.test.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
