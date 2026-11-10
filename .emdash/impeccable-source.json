@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "declaredSkillVersion": "4.8.0",
-  "launcherVersion": "0.1.5",
+  "launcherVersion": "0.1.18",
   "distribution": "Codex curated Impeccable 4.8.0",
   "skillSha256": "fab04b31f946573b00a8559db1fc070f8ea5825254d491c2b13156e5661a86d7",
   "matchesInstalledCuratedSkill": true,

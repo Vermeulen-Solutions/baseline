@@ -6,6 +6,17 @@ import { download, inventory, hash } from './skill-sync.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+// The launcher and engine are versioned separately from the npm skill package.
+// `scripts/VERSION` in the synced snapshot is the version the launchers and
+// engine-checksums.txt describe, so it is the only reliable source; recording a
+// carried-over value is a fallback for an upstream layout that stops shipping it.
+export function readLauncherVersion(files) {
+  const bytes = files?.['impeccable/scripts/VERSION']?.bytes;
+  if (!bytes) return null;
+  const version = Buffer.from(bytes).toString('utf8').trim();
+  return /^\d+\.\d+\.\d+$/.test(version) ? version : null;
+}
+
 export async function syncImpeccable(root = ROOT, options = {}) {
   const config = {
     repository: 'pbakaus/impeccable',
@@ -14,17 +25,19 @@ export async function syncImpeccable(root = ROOT, options = {}) {
   };
 
   const ref = options.ref ?? 'main';
-  const candidate = await download(config, ref);
+  const candidate = options.candidate ?? await download(config, ref);
 
   // Fetch version from npm registry
-  let version = '4.6.0';
-  try {
-    const res = await fetch('https://registry.npmjs.org/impeccable');
-    if (res.ok) {
-      const data = await res.json();
-      version = data['dist-tags']?.latest ?? version;
-    }
-  } catch {}
+  let version = options.version ?? '4.6.0';
+  if (!options.version) {
+    try {
+      const res = await fetch('https://registry.npmjs.org/impeccable');
+      if (res.ok) {
+        const data = await res.json();
+        version = data['dist-tags']?.latest ?? version;
+      }
+    } catch {}
+  }
 
   const targetDir = path.join(root, '.agents', 'skills', 'impeccable');
   const sourcePath = path.join(root, '.emdash', 'impeccable-source.json');
@@ -63,13 +76,14 @@ export async function syncImpeccable(root = ROOT, options = {}) {
   // Calculate new hash of SKILL.md
   const skillMdBytes = candidate.files['impeccable/SKILL.md']?.bytes;
   const skillSha256 = skillMdBytes ? createHash('sha256').update(skillMdBytes).digest('hex') : null;
+  const launcherVersion = readLauncherVersion(candidate.files) ?? currentMeta.launcherVersion ?? null;
 
   // Update PROVENANCE.json & .emdash/impeccable-source.json
 
   const updatedMeta = {
     formatVersion: 1,
     declaredSkillVersion: version,
-    launcherVersion: currentMeta.launcherVersion ?? '0.1.5',
+    launcherVersion,
     distribution: `Codex curated Impeccable ${version}`,
     skillSha256: skillSha256 ?? currentMeta.skillSha256,
     matchesInstalledCuratedSkill: true,
