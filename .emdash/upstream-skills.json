@@ -1,8 +1,8 @@
 {
   "formatVersion": 2,
-  "source": "https://github.com/emdash-cms/emdash/tree/1824902c0c383c052b623528799427b8a5ff75d0/skills/",
-  "ref": "1824902c0c383c052b623528799427b8a5ff75d0",
-  "commitSha": "1824902c0c383c052b623528799427b8a5ff75d0",
+  "source": "https://github.com/emdash-cms/emdash/tree/f636085f0f4993dd137a5ec9ab4b1775ec90c462/skills/",
+  "ref": "f636085f0f4993dd137a5ec9ab4b1775ec90c462",
+  "commitSha": "f636085f0f4993dd137a5ec9ab4b1775ec90c462",
   "skills": [
     "building-emdash-site",
     "creating-plugins",
@@ -12,7 +12,7 @@
     "building-emdash-site/SKILL.md": "87393083e92b33db4ec77b7037b35bf76f5c77bdf875e3dc233dcde442c12238",
     "building-emdash-site/references/configuration.md": "19c08f821ba1f2f9b4b5a8f2a8de21e97dd72efb52810594d4ee7550973dc1b3",
     "building-emdash-site/references/querying-and-rendering.md": "824ded645620a806e01a676f99c65c93ff44af9a13016211d410aa66f29eaf30",
-    "building-emdash-site/references/schema-and-seed.md": "7f2f898b7d9cc66eaafe3a24ffcc117f75d8807d2ddea1a5e6c3c3237d30e770",
+    "building-emdash-site/references/schema-and-seed.md": "af19fe456292b16bf6bd1e1ebc20327d2c4dcd64694c7dbebaa7136b879ec8ef",
     "building-emdash-site/references/site-features.md": "069d7a524148cc4943c68d4cdfb338c40d81fed0e27f8f16e06e89467b940e9e",
     "creating-plugins/SKILL.md": "34a81edbe2691646bf729ecc3c44bbd82fd237af7db05a24ce3905717ffefe9a",
     "creating-plugins/references/admin-ui.md": "f7aae0f18bcb0836aed0dd61ae747142765c9f112f1f2966252e9a0ddcaa5ca2",
@@ -28,7 +28,7 @@
     "creating-plugins/references/storage.md": "12c9dad162f4e4126b476f3fe83929c58d692e8ee9b9a05cc8231a5eb8f93df1",
     "creating-plugins/references/taxonomies-and-redirects.md": "08d047abb33f405b62af59be1e6024f1e9635da527f7d100192d22e95b151f6f",
     "emdash-cli/EDITING-FLOW.md": "89bb734c199f4c14f85a7ac88805af18cca398e4f9ec7cd74a3d5e29eda48389",
-    "emdash-cli/SKILL.md": "bb4a01fc0263a4b808b000edeeb1a5bcb0bf20809d8cc219e6aff7bf3664e037"
+    "emdash-cli/SKILL.md": "ed9782a75ac8708af3e16a43e7540f2a0e4401297dcdedb79b75e55963c9f26f"
   },
-  "syncedAt": "2026-11-03T00:14:41.357Z"
+  "syncedAt": "2026-11-09T18:29:20.883Z"
 }
