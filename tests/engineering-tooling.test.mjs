@@ -4,7 +4,7 @@ import { readdirSync, mkdtempSync, writeFileSync, readFileSync, existsSync, mkdi
 import os from 'node:os';
 import path from 'node:path';
 import { noLinks } from '../scripts/infrastructure-io.mjs';
-import { testFiles, testEnvironment } from '../scripts/run-tests.mjs';
+import { testFiles, testEnvironment, testInvocation } from '../scripts/run-tests.mjs';
 import { availableLoopbackPort, listenLoopback } from '../scripts/loopback-port.mjs';
 import { createServer } from 'node:http';
 import { npmInvocation, execNpmSync, spawnNpmSync } from '../scripts/process-runner.mjs';
@@ -23,7 +23,13 @@ test('test tiers are a disjoint exhaustive partition and stale inventories fail 
   try {
     writeFileSync(path.join(directory, 'test-tiers.json'), '{}');
     writeFileSync(path.join(directory, 'new.test.mjs'), '');
-    assert.throws(() => testFiles('unit', directory), /inventory is stale/);
+    assert.throws(() => testFiles('unit', directory), /inventory is stale[\s\S]*Not classified: new\.test\.mjs/);
+    // The message names both kinds of drift, so the fix does not need a manual diff.
+    writeFileSync(path.join(directory, 'test-tiers.json'), JSON.stringify({ 'new.test.mjs': { tier: 'unit', reason: 'fixture' }, 'gone.test.mjs': { tier: 'unit', reason: 'fixture' } }));
+    assert.throws(() => testFiles('unit', directory), /Classified but missing on disk: gone\.test\.mjs/);
+    writeFileSync(path.join(directory, 'test-tiers.json'), JSON.stringify({ 'new.test.mjs': { tier: 'unit', reason: 'fixture' } }));
+    assert.deepEqual(testInvocation('unit', directory), { files: [`${directory}/new.test.mjs`], concurrency: 2, args: ['--test', '--test-concurrency=2', `${directory}/new.test.mjs`] });
+    assert.throws(() => testFiles('rehearsal', directory), /No tests in rehearsal tier/);
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });
 
