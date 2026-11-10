@@ -18,6 +18,12 @@ The final steps upload `upstream-dependency-review` containing `upstream-update.
 
 Inspect the Pull Request (or download the artifact from the Actions run), review changelogs against [starter meta-review](starter-meta-review.md) and [skill synchronization](skill-synchronization.md), and merge when satisfied. Failed candidate runs remain proposals, upload diagnostic artifacts, and do not open a Pull Request.
 
+## Independent verification of the automation branch
+
+GitHub does not start workflow runs for events caused by `GITHUB_TOKEN`, so a proposal pushed by the scheduled workflow carries no `pull_request` checks. [automation-verification.yml](../.github/workflows/automation-verification.yml) closes that gap: it runs daily at 10:00 UTC and on manual dispatch, resolves the `automation/upstream-update` head, and re-runs `npm run verify`, `npm run build` and `npm run test:profiles` on that exact commit through `actions/checkout` with an explicit `ref`. It only acts while an open pull request matches the branch head, so a merged or stale branch costs nothing; dispatch with `force` to verify the branch without a pull request.
+
+The outcome is published as the `automation-branch-gate` commit status, which appears in the proposal's checks list and can be required in branch protection. Commit statuses are per commit, so a new force-push needs a fresh run and an unverified head stays visibly unverified rather than inheriting an earlier pass. The scheduled job is an independent execution of the same gate, not a stronger claim: scheduled workflows pause after 60 days without repository activity and can be delayed under load, and the producing run remains the first gate. Review the diff as before; this evidence does not replace changelog review.
+
 ## Generated static-site source proposals
 
 Generated `static` and `static-sveltia` projects have a different [workflow template](../profiles/static/project/.github/workflows/upstream-update.yml). It is manual only and takes a full immutable 40-character Baseline commit SHA. It stages `sync:baseline`, applies eligible files in its disposable checkout, and runs `npm run verify`, `npm run build`, and `npm run check:dev-tools`.

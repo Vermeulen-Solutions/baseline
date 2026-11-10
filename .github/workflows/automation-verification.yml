@@ -1,0 +1,104 @@
+name: Automation branch verification
+
+# GitHub suppresses workflow runs for pushes made with GITHUB_TOKEN, so the
+# weekly upstream proposal arrives without pull_request checks. This runs the
+# same gate on a schedule instead and publishes a commit status, which merge
+# protection can require.
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Verify the automation branch even when no open pull request matches its head
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  pull-requests: read
+  statuses: write
+
+concurrency:
+  group: automation-branch-verification
+  cancel-in-progress: false
+
+env:
+  AUTOMATION_BRANCH: automation/upstream-update
+  STATUS_CONTEXT: automation-branch-gate
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      active: ${{ steps.target.outputs.active }}
+      sha: ${{ steps.target.outputs.sha }}
+    steps:
+      - name: Resolve the automation branch head
+        id: target
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE: ${{ github.event.inputs.force || 'false' }}
+        run: |
+          set -euo pipefail
+          sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/$AUTOMATION_BRANCH" --jq .object.sha 2>/dev/null || true)
+          if [ -z "$sha" ]; then
+            echo "No $AUTOMATION_BRANCH branch; nothing to verify."
+            echo "active=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$FORCE" != "true" ]; then
+            pr_head=$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$AUTOMATION_BRANCH" --state open --json headRefOid --jq '.[0].headRefOid // empty')
+            if [ "$pr_head" != "$sha" ]; then
+              echo "No open pull request for $AUTOMATION_BRANCH at $sha; nothing to verify."
+              echo "active=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo "Verifying $sha."
+          echo "active=true" >> "$GITHUB_OUTPUT"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v7
+        if: steps.target.outputs.active == 'true'
+        with:
+          ref: ${{ steps.target.outputs.sha }}
+      - uses: actions/setup-node@v7
+        if: steps.target.outputs.active == 'true'
+        with:
+          node-version: '24.16.0'
+          cache: npm
+      - name: Install from the locked tree
+        if: steps.target.outputs.active == 'true'
+        run: npm ci --no-audit --no-fund
+      - name: Verify
+        if: steps.target.outputs.active == 'true'
+        run: npm run verify
+      - name: Build
+        if: steps.target.outputs.active == 'true'
+        run: npm run build
+      - name: Generated static profiles
+        if: steps.target.outputs.active == 'true'
+        run: npm run test:profiles
+
+  report:
+    needs: verify
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      statuses: write
+    steps:
+      - name: Publish the commit status
+        if: needs.verify.outputs.active == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATE: ${{ needs.verify.result == 'success' && 'success' || 'failure' }}
+          SHA: ${{ needs.verify.outputs.sha }}
+        run: |
+          set -euo pipefail
+          gh api --method POST "repos/$GITHUB_REPOSITORY/statuses/$SHA" \
+            -f state="$STATE" \
+            -f context="$STATUS_CONTEXT" \
+            -f description="Independent verify, build and profile check" > /dev/null
