@@ -90,6 +90,34 @@ try {
     await context.close();
   }
 
+  // 1b. Light dismiss: native closedby, then the fallback with native support removed.
+  for (const [name, withoutNative] of [['native closedby', false], ['fallback without closedBy', true]]) {
+    const { context, page } = await page_();
+    if (withoutNative) await page.addInitScript(() => { delete HTMLDialogElement.prototype.closedBy; });
+    await page.goto(route('/'));
+    if (withoutNative) await page.evaluate(() => document.querySelector('dialog[data-search-dialog]').removeAttribute('closedby'));
+    const open = async () => {
+      await page.getByRole('button', { name: 'Search' }).click();
+      await page.locator('[data-search-input]').fill('greenhouse');
+    };
+    await open();
+    await page.locator('.search__title').click();
+    check(`${name}: clicking inside keeps the dialog open`, await dialogOpen(page));
+    const input = await page.locator('[data-search-input]').boundingBox();
+    const box = await page.locator('dialog[data-search-dialog]').boundingBox();
+    const y = input.y + input.height / 2;
+    await page.mouse.move(input.x + 20, y);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width + 40, y, { steps: 8 });
+    await page.mouse.up();
+    check(`${name}: selection drag onto the backdrop keeps the dialog open`, await dialogOpen(page));
+    await page.mouse.click(10, 10);
+    await page.waitForFunction(() => !document.querySelector('dialog[data-search-dialog]')?.open);
+    check(`${name}: backdrop click closes`, !(await dialogOpen(page)));
+    check(`${name}: focus returns to trigger`, await active(page) === 'trigger');
+    await context.close();
+  }
+
   const receipt = JSON.parse(npm('run', '--silent', 'search:index', '--', '--json'));
   check('index receipt distinguishes readiness', receipt.kind === 'search-index' && receipt.pages >= 3, JSON.stringify({ pages: receipt.pages, languages: receipt.languages }));
   check('noindex page excluded', receipt.excluded.some(e => e.route === '/members/' && e.reason === 'noindex'));

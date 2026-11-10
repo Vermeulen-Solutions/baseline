@@ -623,11 +623,11 @@
   {
     "path": "src/lib/search.ts",
     "reason": "Functional interaction primitive: framework-free Pagefind search controller with lazy runtime bundle loading, safe text-only result rendering, editable-aware shortcuts, query cancellation and ClientRouter teardown. Exact LF-normalized source hash.",
-    "sha256": "7474fd0c08b184863eb84123b92b3b1da67218b6ff297b02688c2edb2f6b76ac"
+    "sha256": "ec04df5ec4d813d89a4868fad7e398c3249765dc255601ba54424774bb456370"
   },
   {
     "path": "src/components/SearchDialog.astro",
     "reason": "Functional interaction primitive: optional native <dialog> site search using Baseline tokens and client-overridable --search-* hooks, hidden trigger until enhanced and explicit no-JS fallback link. Exact LF-normalized source hash.",
-    "sha256": "73c3426ad1d1b2a902cd008e9bbe48e45e59bafe3a456c3c14d795dc9dbe3166"
+    "sha256": "322df773dbdd18522e52c9a21f7d2f483d779783de2122906b03ab60fe9cfa17"
   }
 ]

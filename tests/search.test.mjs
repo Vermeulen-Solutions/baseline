@@ -11,6 +11,7 @@ import {
   isEditableTarget,
   parseExcerpt,
   safeResultHref,
+  isOutsideRect,
 } from '../src/lib/search.ts';
 import {
   parseArgs,
@@ -215,3 +216,23 @@ test('without a pinned pagefind devDependency the real loader explains the opt-i
   fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ name: 'site', devDependencies: {} }));
   await assert.rejects(indexSearch({ cwd: root }), /npm install --save-dev --save-exact pagefind@/);
 });
+
+test('light-dismiss fallback treats only positions beyond the dialog box as outside', () => {
+  const rect = { left: 100, right: 300, top: 50, bottom: 250 };
+  assert.equal(isOutsideRect({ clientX: 200, clientY: 150 }, rect), false);
+  assert.equal(isOutsideRect({ clientX: 100, clientY: 50 }, rect), false);
+  assert.equal(isOutsideRect({ clientX: 300, clientY: 250 }, rect), false);
+  assert.equal(isOutsideRect({ clientX: 99, clientY: 150 }, rect), true);
+  assert.equal(isOutsideRect({ clientX: 301, clientY: 150 }, rect), true);
+  assert.equal(isOutsideRect({ clientX: 200, clientY: 49 }, rect), true);
+  assert.equal(isOutsideRect({ clientX: 200, clientY: 251 }, rect), true);
+});
+
+test('search dialog uses native light dismiss with a guarded position-based fallback', () => {
+  const component = fs.readFileSync(new URL('../src/components/SearchDialog.astro', import.meta.url), 'utf8');
+  const controller = fs.readFileSync(new URL('../src/lib/search.ts', import.meta.url), 'utf8');
+  assert.match(component, /<dialog[^>]*closedby="any"/);
+  assert.match(controller, /'closedBy' in HTMLDialogElement\.prototype/);
+  assert.doesNotMatch(controller, /event\.target === dialog/);
+});
+

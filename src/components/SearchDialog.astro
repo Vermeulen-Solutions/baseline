@@ -70,7 +70,7 @@ const shortcuts = ['Control+K', 'Meta+K', ...(slashShortcut ? ['/'] : [])].join(
       <span>{labels.trigger}</span>
       <kbd class="search__shortcut" aria-hidden="true">Ctrl K</kbd>
     </button>
-    <dialog id={dialogId} class="search__dialog" aria-labelledby={titleId} data-search-dialog>
+    <dialog id={dialogId} class="search__dialog" aria-labelledby={titleId} closedby="any" data-search-dialog>
       <div class="search__panel">
         <div class="search__header">
           <h2 id={titleId} class="search__title">{labels.title}</h2>
