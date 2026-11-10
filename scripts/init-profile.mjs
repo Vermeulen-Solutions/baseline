@@ -2,21 +2,45 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { execFileSync } from 'node:child_process';
-import { createHash } from 'node:crypto';
-import { BASELINE_REPOSITORY, profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
+import { BASELINE_REPOSITORY, GENERATED_PROFILE_IDS, profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
+// Maintainer-only script: it runs from the Baseline checkout and is never shipped,
+// so it can share helpers. Shipped scripts stay self-contained (see profiles/README.md).
+import { sha256, within } from './audit-evidence.mjs';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const GENERATOR_VERSION = '0.4.0';
-const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const gateHash = bytes => sha256(String(bytes).replaceAll('\r\n', '\n'));
 const json = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
-const inside = (parent, child) => child === parent || child.startsWith(parent + path.sep);
 
 export function containedPath(root, relative) {
   if (typeof relative !== 'string' || relative.includes('\\') || relative.includes(':') || relative.includes('\0') || path.isAbsolute(relative) || relative.split('/').some(part => !part || part === '.' || part === '..')) throw new Error('Unsafe manifest path');
   const target = path.resolve(root, relative);
-  if (!inside(path.resolve(root), target)) throw new Error('Manifest path escapes root');
+  if (!within(path.resolve(root), target)) throw new Error('Manifest path escapes root');
   return target;
+}
+
+/**
+ * Who owns a generated file afterwards. `sync:baseline` only ever updates `shared`
+ * and `client-calibrated` files, so content, settings, routes, the site-owned Base
+ * wrapper and the Sveltia admin configuration stay with the site.
+ */
+export function ownershipOf(target) {
+  if (target === 'src/styles/global.css') return 'client-calibrated';
+  const client = target === 'src/layouts/Base.astro'
+    || ['src/content/', 'src/config/', 'public/admin/'].some(prefix => target.startsWith(prefix))
+    || /^src\/pages\/(?!_styleguide)/.test(target);
+  return client ? 'client' : 'shared';
+}
+
+/** The immutable provenance of the assembled bytes. A commit is required: a copy without Git history cannot be generated from. */
+function sourceRevision(root) {
+  const git = args => execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
+  let commit;
+  try { commit = git(['rev-parse', 'HEAD']); }
+  catch (error) {
+    throw new Error(`Generation records the Baseline source commit, but ${root} has no readable Git commit${error.code === 'ENOENT' ? ' (git is not installed or not on PATH)' : ''}. Generate from a Git clone of Baseline.`);
+  }
+  return { commit, sourceTreeDirty: Boolean(git(['status', '--porcelain'])) };
 }
 
 async function noLinks(target) {
@@ -34,9 +58,14 @@ async function validateDestination(out, root) {
   const destination = path.resolve(out);
   const source = await fs.realpath(root);
   await noLinks(destination);
-  const parent = await fs.realpath(path.dirname(destination));
+  let parent;
+  try { parent = await fs.realpath(path.dirname(destination)); }
+  catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+    throw new Error('Destination parent directory does not exist: ' + path.dirname(destination));
+  }
   const actual = path.join(parent, path.basename(destination));
-  if (inside(source, actual) || inside(actual, source)) throw new Error('Destination must not overlap the Baseline source');
+  if (within(source, actual) || within(actual, source)) throw new Error('Destination must not overlap the Baseline source');
   try {
     if (!(await fs.lstat(destination)).isDirectory() || (await fs.readdir(destination)).length) throw new Error('Destination must be a new or empty directory');
   } catch (error) { if (error.code !== 'ENOENT') throw error; }
@@ -46,7 +75,7 @@ async function validateDestination(out, root) {
 /** Validate and snapshot every input before creating anything in the destination. */
 export async function planProfile({ profile, out, sourceRoot = ROOT }) {
   const manifest = profileManifest(profile);
-  if (!['static', 'static-sveltia'].includes(profile) || !manifest.generationReady) throw new Error(`Profile ${profile} is not available for generation`);
+  if (!GENERATED_PROFILE_IDS.includes(profile)) throw new Error(`Profile ${profile} is not available for generation. Use one of: ${GENERATED_PROFILE_IDS.join(', ')}`);
   const root = await fs.realpath(sourceRoot);
   const destination = await validateDestination(out, root);
   const canonical = JSON.parse(await fs.readFile(path.join(root, 'package.json'), 'utf8'));
@@ -73,7 +102,7 @@ export async function planProfile({ profile, out, sourceRoot = ROOT }) {
       gateExceptions.push({ ...entry, path: target });
     }
     outputs.set(target, bytes);
-    records[target] = { source, sha256: sha256(bytes), ownership: target.startsWith('src/content/') || target.startsWith('src/config/') || target.startsWith('public/admin/') || /^src\/pages\/(?!_styleguide)/.test(target) || target === 'src/layouts/Base.astro' ? 'client' : target === 'src/styles/global.css' ? 'client-calibrated' : 'shared' };
+    records[target] = { source, sha256: sha256(bytes), ownership: ownershipOf(target) };
   }
   const scripts = Object.fromEntries(manifest.scripts.map(name => {
     if (!canonical.scripts[name]) throw new Error('Unknown canonical script: ' + name);
@@ -83,9 +112,7 @@ export async function planProfile({ profile, out, sourceRoot = ROOT }) {
   const packages = profilePackages(profile, canonical);
   const projectPackage = { name: path.basename(destination).toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '') || 'baseline-static', version: '0.0.0', private: true, type: 'module', engines: canonical.engines, scripts, ...packages, license: canonical.license };
   if (/emdash|schema-budget|dist\/server/.test(JSON.stringify(projectPackage.scripts))) throw new Error('CMS command leaked into static package');
-  const git = args => execFileSync('git', ['-C', root, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-  const commit = git(['rev-parse', 'HEAD']);
-  const sourceTreeDirty = Boolean(git(['status', '--porcelain']));
+  const { commit, sourceTreeDirty } = sourceRevision(root);
   const config = validateProfileConfig({ schemaVersion: 1, platformProfile: profile, foundation: manifest.foundation, runtime: 'static', source: { repository: BASELINE_REPOSITORY, commit, release: null }, generatorVersion: GENERATOR_VERSION, features: [], checks: manifest.checks, skills: manifest.skills });
   outputs.set('package.json', json(projectPackage));
   outputs.set('baseline.config.json', json(config));
@@ -127,7 +154,7 @@ function parse(args) {
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
-    if (process.argv.slice(2).includes('--help')) console.log('npm run init:profile -- --profile static|static-sveltia --out <new-or-empty-directory> [--dry-run]');
+    if (process.argv.slice(2).includes('--help')) console.log(`npm run init:profile -- --profile ${GENERATED_PROFILE_IDS.join('|')} --out <new-or-empty-directory> [--dry-run]`);
     else {
       const result = await initProfile(parse(process.argv.slice(2)));
       console.log(JSON.stringify(result, null, 2));

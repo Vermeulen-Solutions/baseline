@@ -129,7 +129,7 @@
   },
   "platform-profiles.test.mjs": {
     "tier": "unit",
-    "reason": "Manifest, provenance and source inventory contracts; no builds"
+    "reason": "Manifest, provenance, source inventory and generated-project import closure on the generator's in-memory plan; no writes or builds"
   },
   "presentation-boundaries.test.mjs": {
     "tier": "rehearsal",

@@ -53,6 +53,10 @@ Everything unlisted is omitted. Never copy `.git`, `node_modules`, `.env*` (apar
 from a generated example), `.mcp.json`, `data.db*`, `uploads`, `.emdash` local state,
 build output, old audit evidence or visual baselines.
 
+A generated project must be closed: every local import, every imported package and every file named by a package script has to ship with the profile. `tests/platform-profiles.test.mjs` checks this on the generator's own plan in the unit tier, so a leak fails in seconds instead of only in the slower `test:profiles` rehearsal.
+
+Shipped scripts stay self-contained on purpose. `sync:baseline` updates an installed site one file at a time and treats a new local import as a migration conflict, because an older site cannot acquire a new module path through a bounded update. For that reason small helpers (hashing, path containment, the "is this the entry script" check) are repeated in shipped scripts instead of being moved to a common module. Share helpers only between maintainer-only scripts, or add a reviewed additive migration when a shipped script really needs a new module.
+
 Static excludes seeds, live collections, EmDash declarations, CMS database/media
 migration tooling, schema-budget npm hooks, server start commands, CMS skills,
 CMS endpoints, React and server adapters. Shared scripts that still assume these

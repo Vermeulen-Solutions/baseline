@@ -4,7 +4,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { BASELINE_REPOSITORY, BASELINE_PROVENANCE_REPOSITORIES, PROFILE_IDS, profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
+import os from 'node:os';
+import { builtinModules } from 'node:module';
+import ts from 'typescript';
+import { BASELINE_REPOSITORY, BASELINE_PROVENANCE_REPOSITORIES, GENERATED_PROFILE_IDS, PROFILE_IDS, profileManifest, profilePackages, validateProfileConfig } from '../profiles/contract.mjs';
+import { ownershipOf, planProfile } from '../scripts/init-profile.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const json = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
@@ -306,4 +310,64 @@ test('static profile registers baselineFeatures integration and ambient virtual 
   assert.ok(staticEnvDts.includes("declare module 'virtual:baseline/capabilities'"), 'Static env.d.ts must declare virtual:baseline/capabilities');
   assert.ok(profileManifest('static').files.includes('scripts/baseline-features-integration.mjs'));
   assert.ok(profileManifest('static-sveltia').files.includes('scripts/baseline-features-integration.mjs'));
+});
+
+// Every problem that would break a freshly generated project at import or script
+// time: a local import of a file the profile does not ship, a package the
+// generated package.json does not declare, or a package script naming a missing file.
+function generatedProjectProblems(outputs) {
+  const generated = JSON.parse(outputs.get('package.json'));
+  const declared = { ...generated.dependencies, ...generated.devDependencies };
+  const problems = [];
+  for (const [target, bytes] of outputs) {
+    // Vendored skill scripts are upstream snapshots with their own runtime, not project modules.
+    if (!/\.(?:mjs|js|ts)$/.test(target) || target.startsWith('.agents/')) continue;
+    // A real parse: import-like text inside strings (generated Astro sources, test fixtures) is not an import.
+    for (const { fileName: specifier } of ts.preProcessFile(bytes.toString('utf8'), true, true).importedFiles) {
+      if (/^(?:node:|astro:|virtual:)/.test(specifier) || builtinModules.includes(specifier)) continue;
+      if (specifier.startsWith('.')) {
+        const resolved = path.posix.normalize(path.posix.join(path.posix.dirname(target), specifier.split(/[?#]/)[0]));
+        const candidates = [resolved, `${resolved}.ts`, `${resolved}.mjs`, `${resolved}.js`, resolved.replace(/\.js$/, '.ts'), `${resolved}/index.ts`];
+        if (!candidates.some(candidate => outputs.has(candidate))) problems.push(`${target} imports unshipped ${specifier}`);
+      } else {
+        const name = specifier.startsWith('@') ? specifier.split('/').slice(0, 2).join('/') : specifier.split('/')[0];
+        if (!Object.hasOwn(declared, name)) problems.push(`${target} imports undeclared package ${name}`);
+      }
+    }
+  }
+  for (const [name, command] of Object.entries(generated.scripts)) {
+    for (const [file] of command.matchAll(/(?:scripts|tests)\/[\w./-]+\.mjs/g)) if (!outputs.has(file)) problems.push(`package script ${name} runs unshipped ${file}`);
+  }
+  return problems;
+}
+
+test('generated profiles are closed: every import, package and script target ships with the profile', async () => {
+  assert.deepEqual(GENERATED_PROFILE_IDS, ['static', 'static-sveltia']);
+  for (const profile of GENERATED_PROFILE_IDS) {
+    // The generator's own plan, so this covers overrides and the generated package.json. Nothing is written.
+    const { outputs } = await planProfile({ profile, out: path.join(os.tmpdir(), `baseline-closure-${process.pid}-${profile}`) });
+    assert.deepEqual(generatedProjectProblems(outputs), [], profile);
+    const managed = JSON.parse(outputs.get('.baseline/managed-files.json')).files;
+    for (const [target, record] of Object.entries(managed)) if (record.source) assert.equal(record.ownership, ownershipOf(target), target);
+
+    // The check must see each kind of leak, including a CMS dependency in a shipped script.
+    const leaking = new Map(outputs);
+    leaking.set('scripts/leak.mjs', Buffer.from("import './not-shipped.mjs';\nimport { getEmDashEntry } from 'emdash';\nconst text = \"import x from './only-a-string.mjs'\";\nawait import('@emdash-cms/auth/tokens');\n"));
+    leaking.set('package.json', Buffer.from(JSON.stringify({ ...JSON.parse(outputs.get('package.json')), scripts: { broken: 'node scripts/removed.mjs' } })));
+    assert.deepEqual(generatedProjectProblems(leaking), [
+      'scripts/leak.mjs imports unshipped ./not-shipped.mjs',
+      'scripts/leak.mjs imports undeclared package emdash',
+      'scripts/leak.mjs imports undeclared package @emdash-cms/auth',
+      'package script broken runs unshipped scripts/removed.mjs',
+    ]);
+  }
+});
+
+test('ownership keeps content, settings, routes and the site wrapper with the site', () => {
+  for (const [target, ownership] of [
+    ['src/styles/global.css', 'client-calibrated'], ['src/layouts/Base.astro', 'client'], ['src/layouts/SiteShell.astro', 'shared'],
+    ['src/content/posts/welcome.md', 'client'], ['src/config/site.ts', 'client'], ['public/admin/config.yml', 'client'],
+    ['src/pages/index.astro', 'client'], ['src/pages/posts/[...id].astro', 'client'], ['src/pages/_styleguide.astro', 'shared'],
+    ['src/components/Card.astro', 'shared'], ['scripts/design-system.mjs', 'shared'], ['AGENTS.md', 'shared'],
+  ]) assert.equal(ownershipOf(target), ownership, target);
 });

@@ -24,6 +24,9 @@ export function profileManifest(profile) {
   return result;
 }
 
+/** Profiles the generator can assemble. The manifests decide; no second list to keep in step. */
+export const GENERATED_PROFILE_IDS = Object.freeze(PROFILE_IDS.filter(profile => profileManifest(profile).generationReady));
+
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const exact = (value, keys) => object(value) && Object.keys(value).length === keys.length && keys.every(key => Object.hasOwn(value, key));
 const same = (actual, expected) => Array.isArray(actual) && actual.length === expected.length && new Set(actual).size === actual.length && actual.every(item => expected.includes(item));
