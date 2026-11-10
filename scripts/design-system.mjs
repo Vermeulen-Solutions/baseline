@@ -342,6 +342,9 @@ export const CONTRACT_STARTER_VALUES = {
   },
 };
 
+// Own keys only: a name such as `constructor` must not resolve to an inherited member.
+const laneOf = id => (Object.hasOwn(AESTHETIC_LANES, id) ? AESTHETIC_LANES[id] : undefined);
+
 const REQUIRED_BY_SCOPE = { theme: REQUIRED_THEME_TOKENS, root: REQUIRED_ROOT_TOKENS, dark: REQUIRED_DARK_SURFACE_TOKENS };
 const SCOPE_SELECTORS = { root: ':root', dark: '[data-surface="dark"]' };
 
@@ -424,20 +427,47 @@ function srgbChannelToLinear(c) {
   return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
 }
 
+// The two colour syntaxes the token contract can verify. One grammar serves the
+// contrast audit and the palette generator, so they cannot disagree about what is
+// a supported colour. Anything else (alpha, `none`, rgb(), 4/8-digit hex, a
+// malformed number such as 1.2.3) is unsupported and stays unverified.
+const COLOR_DECIMAL = '(?:\\d+(?:\\.\\d+)?|\\.\\d+)';
+const OKLCH_COLOR = new RegExp(`^oklch\\(\\s*(${COLOR_DECIMAL})(%?)\\s+(${COLOR_DECIMAL})\\s+(${COLOR_DECIMAL})(deg|rad|turn)?\\s*\\)$`, 'i');
+const HEX_COLOR = /^#([0-9a-f]{3}|[0-9a-f]{6})$/i;
+
+/** `oklch(L C H)` as authored: lightness number, whether it is a percentage, chroma and hue in degrees. */
+function parseOklchSyntax(value) {
+  const match = value.match(OKLCH_COLOR);
+  if (!match) return null;
+  const unit = (match[5] || 'deg').toLowerCase();
+  const hue = Number(match[4]);
+  return {
+    lightness: Number(match[1]),
+    percent: match[2] === '%',
+    chroma: Number(match[3]),
+    hueDegrees: unit === 'rad' ? (hue * 180) / Math.PI : unit === 'turn' ? hue * 360 : hue,
+  };
+}
+
+/** `#rgb` or `#rrggbb` as linear-light sRGB channels. */
+function parseHexLinearRgb(value) {
+  const match = value.match(HEX_COLOR);
+  if (!match) return null;
+  const hex = match[1].length === 3 ? match[1].split('').map(ch => ch + ch).join('') : match[1];
+  return [0, 2, 4].map(offset => srgbChannelToLinear(parseInt(hex.slice(offset, offset + 2), 16) / 255));
+}
+
 /**
  * Converts an OKLCH or Hex CSS color string into WCAG 2.1 relative luminance (0..1).
+ * Returns null for any other syntax; callers report that as unverified, never as a pass.
  */
 export function colorLuminance(rawValue) {
   const value = String(rawValue ?? '').trim();
-  const oklchMatch = value.match(/^oklch\(\s*([0-9.]+)(%?)\s+([0-9.]+)\s+([0-9.]+)(deg|rad|turn)?\s*\)$/i);
-  if (oklchMatch) {
-    const L = oklchMatch[2] === '%' ? Number(oklchMatch[1]) / 100 : Number(oklchMatch[1]);
-    const C = Number(oklchMatch[3]);
-    let hDeg = Number(oklchMatch[4]);
-    const unit = (oklchMatch[5] || 'deg').toLowerCase();
-    if (unit === 'rad') hDeg = (hDeg * 180) / Math.PI;
-    else if (unit === 'turn') hDeg = hDeg * 360;
-    const hRad = (hDeg * Math.PI) / 180;
+  const oklch = parseOklchSyntax(value);
+  if (oklch) {
+    const L = oklch.percent ? oklch.lightness / 100 : oklch.lightness;
+    const C = oklch.chroma;
+    const hRad = (oklch.hueDegrees * Math.PI) / 180;
     const a = C * Math.cos(hRad);
     const b = C * Math.sin(hRad);
 
@@ -458,14 +488,9 @@ export function colorLuminance(rawValue) {
     return 0.2126 * rLin + 0.7152 * gLin + 0.0722 * bLin;
   }
 
-  const hexMatch = value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
-  if (hexMatch) {
-    const hex = hexMatch[1].length === 3
-      ? hexMatch[1].split('').map(ch => ch + ch).join('')
-      : hexMatch[1];
-    const r = srgbChannelToLinear(parseInt(hex.slice(0, 2), 16) / 255);
-    const g = srgbChannelToLinear(parseInt(hex.slice(2, 4), 16) / 255);
-    const b = srgbChannelToLinear(parseInt(hex.slice(4, 6), 16) / 255);
+  const rgb = parseHexLinearRgb(value);
+  if (rgb) {
+    const [r, g, b] = rgb;
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   }
 
@@ -660,20 +685,19 @@ export function spacingReport(tokens) {
   });
 }
 
-export function auditDesignTokens(css) {
+/**
+ * Audits one stylesheet string against the token contract. `cssPath` only labels
+ * messages, so a report about another file (`--css <file>`) names that file.
+ */
+export function auditDesignTokens(css, { cssPath = 'src/styles/global.css' } = {}) {
   const tokens = parseDesignTokens(css);
   const errors = [];
   const spacing = spacingReport(tokens);
   for (const context of spacing) if(context.status !== 'pass') errors.push(`${context.name}: ${context.error}`);
 
-  for (const key of REQUIRED_THEME_TOKENS) {
-    if (!tokens.theme[key]) errors.push(`Missing required @theme token in src/styles/global.css: ${key}`);
-  }
-  for (const key of REQUIRED_ROOT_TOKENS) {
-    if (!tokens.root[key]) errors.push(`Missing required :root token in src/styles/global.css: ${key}`);
-  }
-  for (const key of REQUIRED_DARK_SURFACE_TOKENS) {
-    if (!tokens.dark[key]) errors.push(`Missing required [data-surface="dark"] token in src/styles/global.css: ${key}`);
+  const contract = contractGap(css);
+  for (const { scope, token } of contract.missing) {
+    errors.push(`Missing required ${SCOPE_SELECTORS[scope] ?? '@theme'} token in ${cssPath}: ${token}`);
   }
 
   const fluidTokens = Object.keys(tokens.theme).filter(
@@ -752,7 +776,7 @@ export function auditDesignTokens(css) {
     contrast,
     fluid,
     spacing,
-    contract: contractGap(css),
+    contract,
     diagnostics: tokenDiagnostics({ errors, fluid }),
   };
 }
@@ -833,25 +857,16 @@ export function generateSpaceScale({ ratio = 1.5, baseMinRem = 1, baseMaxRem = 1
  */
 export function parseToOklch(rawValue) {
   const value = String(rawValue ?? '').trim();
-  const oklchMatch = value.match(/^oklch\(\s*([0-9.]+)(%?)\s+([0-9.]+)\s+([0-9.]+)(deg|rad|turn)?\s*\)$/i);
-  if (oklchMatch) {
-    const L = oklchMatch[2] === '%' ? Number(oklchMatch[1]) : Number(oklchMatch[1]) * 100;
-    const C = Number(oklchMatch[3]);
-    let H = Number(oklchMatch[4]);
-    const unit = (oklchMatch[5] || 'deg').toLowerCase();
-    if (unit === 'rad') H = (H * 180) / Math.PI;
-    else if (unit === 'turn') H = H * 360;
-    return { L: round4(L), C: round4(C), H: round4(((H % 360) + 360) % 360) };
+  const oklch = parseOklchSyntax(value);
+  if (oklch) {
+    const L = oklch.percent ? oklch.lightness : oklch.lightness * 100;
+    const H = oklch.hueDegrees;
+    return { L: round4(L), C: round4(oklch.chroma), H: round4(((H % 360) + 360) % 360) };
   }
 
-  const hexMatch = value.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
-  if (hexMatch) {
-    const hex = hexMatch[1].length === 3
-      ? hexMatch[1].split('').map(ch => ch + ch).join('')
-      : hexMatch[1];
-    const r = srgbChannelToLinear(parseInt(hex.slice(0, 2), 16) / 255);
-    const g = srgbChannelToLinear(parseInt(hex.slice(2, 4), 16) / 255);
-    const b = srgbChannelToLinear(parseInt(hex.slice(4, 6), 16) / 255);
+  const rgb = parseHexLinearRgb(value);
+  if (rgb) {
+    const [r, g, b] = rgb;
 
     const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
     const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
@@ -986,6 +1001,24 @@ export function formatCalibrationMarkdown(css, cssPath = 'src/styles/global.css'
 }
 
 /**
+ * Replaces the generated `## <heading>` section of an LF-normalised Markdown document.
+ * The section runs to the next `## ` heading or the end of the document. Repeated
+ * copies left by earlier writes are removed. Returns null when the heading is absent,
+ * so each caller decides where a new section belongs.
+ */
+function replaceMarkdownSection(markdown, heading, section) {
+  // JavaScript has no \Z end anchor; `(?![\s\S])` matches the end of the document.
+  const pattern = new RegExp(`^## ${heading.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[ \\t]*(?:\\n|$)[\\s\\S]*?(?=^## |(?![\\s\\S]))`, 'gm');
+  let found = false;
+  const updated = markdown.replace(pattern, () => {
+    if (found) return '';
+    found = true;
+    return `${section}\n\n`;
+  }).replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '\n');
+  return found ? updated : null;
+}
+
+/**
  * Writes or updates the `## Token Calibration` section inside `audit/component-calibration.md`.
  */
 export function upsertCalibrationRecord(targetPath, css, cssPath = 'src/styles/global.css') {
@@ -995,20 +1028,8 @@ export function upsertCalibrationRecord(targetPath, css, cssPath = 'src/styles/g
 
   if (existsSync(resolved)) {
     const existing = readFileSync(resolved, 'utf8').replace(/\r\n/g, '\n');
-    // JavaScript has no \Z end anchor. Handle a final section and repair
-    // duplicate generated sections left by earlier calibration writes.
-    const headingRegex = /^## Token Calibration[ \t]*(?:\n|$)[\s\S]*?(?=^## |(?![\s\S]))/gm;
-    let found = false;
-    const updated = existing.replace(headingRegex, () => {
-      if (found) return '';
-      found = true;
-      return `${section}\n\n`;
-    }).replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '\n');
-    if (found) {
-      writeFileSync(resolved, updated, 'utf8');
-      return resolved;
-    }
-    writeFileSync(resolved, `${existing.trimEnd()}\n\n${section}\n`, 'utf8');
+    const updated = replaceMarkdownSection(existing, 'Token Calibration', section);
+    writeFileSync(resolved, updated ?? `${existing.trimEnd()}\n\n${section}\n`, 'utf8');
     return resolved;
   }
 
@@ -1038,7 +1059,7 @@ export function upsertCalibrationRecord(targetPath, css, cssPath = 'src/styles/g
  * Formats a structurally valid `## Art Direction Record` Markdown section for `AGENTS.md`.
  */
 export function formatArtDirectionRecord(laneId = 'neutral', custom = {}) {
-  const lane = AESTHETIC_LANES[laneId] || AESTHETIC_LANES.neutral;
+  const lane = laneOf(laneId) ?? AESTHETIC_LANES.neutral;
   const rec = { ...lane.record, ...custom };
   return [
     '## Art Direction Record',
@@ -1062,24 +1083,16 @@ export function upsertArtDirectionRecord(agentsPath = 'AGENTS.md', laneId = 'neu
   const section = formatArtDirectionRecord(laneId, custom);
   const resolved = resolve(agentsPath);
   const existing = existsSync(resolved) ? readFileSync(resolved, 'utf8').replace(/\r\n/g, '\n') : '# Site Instructions\n';
-  const headingRegex = /^## Art Direction Record[ \t]*(?:\n|$)[\s\S]*?(?=^## |(?![\s\S]))/gm;
-  let found = false;
-  const updated = existing.replace(headingRegex, () => {
-    if (found) return '';
-    found = true;
-    return `${section}\n\n`;
-  }).replace(/\n{3,}/g, '\n\n').replace(/\n+$/, '\n');
-  if (found) {
+  const updated = replaceMarkdownSection(existing, 'Art Direction Record', section);
+  if (updated !== null) {
     writeFileSync(resolved, updated, 'utf8');
     return resolved;
   }
+  // A new record goes before the implementation rules when that section exists.
   const implMatch = /^## Implementation rules\b/m.exec(existing);
-  if (implMatch) {
-    const updated = `${existing.slice(0, implMatch.index)}${section}\n\n${existing.slice(implMatch.index)}`;
-    writeFileSync(resolved, updated, 'utf8');
-    return resolved;
-  }
-  writeFileSync(resolved, `${existing.trimEnd()}\n\n${section}\n`, 'utf8');
+  writeFileSync(resolved, implMatch
+    ? `${existing.slice(0, implMatch.index)}${section}\n\n${existing.slice(implMatch.index)}`
+    : `${existing.trimEnd()}\n\n${section}\n`, 'utf8');
   return resolved;
 }
 
@@ -1308,7 +1321,7 @@ export function pruneStarterExceptions(exceptionsPath = 'audit/design-gate-excep
  */
 export function applyTokenOverrides(css, presetOrOverrides) {
   const preset = typeof presetOrOverrides === 'string'
-    ? AESTHETIC_LANES[presetOrOverrides]
+    ? laneOf(presetOrOverrides)
     : presetOrOverrides;
   if (!preset) {
     throw new Error(`Unknown aesthetic lane preset: ${String(presetOrOverrides)}. Available lanes: ${Object.keys(AESTHETIC_LANES).join(', ')}`);
@@ -1333,29 +1346,70 @@ export function applyTokenOverrides(css, presetOrOverrides) {
   return result;
 }
 
-function parseSetFlags(args) {
-  const overrides = { theme: {}, root: {}, dark: {} };
-  let count = 0;
+const CLI_USAGE = [
+  'npm run design:tokens -- [options]',
+  '  --css <file>                 Stylesheet to audit (default src/styles/global.css)',
+  '  --json                       Machine-readable report',
+  '  --list-lanes                 List the aesthetic lane presets',
+  '  --lane <id>                  Apply a lane preset',
+  '  --type-scale <ratio|name>    Generate the fluid type scale',
+  '  --space-scale <ratio>        Generate the fluid space scale',
+  '  --seed-accent <color>        Generate a palette from a #hex or oklch() accent',
+  '  --seed-canvas <color>        Canvas colour for --seed-accent',
+  '  --set <token>=<value>        Set one token; prefix --root: or --dark: for those scopes (repeatable)',
+  '  --add-missing                Insert missing contract tokens with starter values',
+  '  --write                      Save a validated candidate (changes are a preview without it)',
+  '  --init-client                Apply the lane, save, write the record and calibration, prune starter exceptions',
+  '  --write-record [file]        Write the Art Direction Record (default AGENTS.md)',
+  '  --write-calibration [file]   Write the token calibration (default audit/component-calibration.md)',
+].join('\n');
+const CLI_BOOLEAN_FLAGS = { '--json': 'json', '--list-lanes': 'listLanes', '--add-missing': 'addMissing', '--write': 'write', '--init-client': 'initClient', '--help': 'help' };
+const CLI_VALUE_FLAGS = { '--css': 'css', '--lane': 'lane', '--type-scale': 'typeScale', '--space-scale': 'spaceScale', '--seed-accent': 'seedAccent', '--seed-canvas': 'seedCanvas' };
+// The file is optional: `true` selects the default target.
+const CLI_OPTIONAL_VALUE_FLAGS = { '--write-record': 'writeRecord', '--write-calibration': 'writeCalibration' };
+
+/**
+ * Strict command-line grammar. An unknown or misspelled flag is an error: a
+ * mistyped `--write` must not silently turn a save into a preview, and a flag
+ * without its value must not fall back to a default.
+ */
+export function parseTokenCliArguments(args) {
+  const options = { set: [] };
+  const once = (flag, key) => { if (Object.hasOwn(options, key)) throw new Error(`Duplicate argument: ${flag}`); };
   for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--set' && !args[i + 1]) throw new Error('Missing --set argument; expected <token>=<value>.');
-    if (args[i] === '--set' && args[i + 1]) {
-      const pair = args[i + 1];
-      const eq = pair.indexOf('=');
-      if (eq === -1) throw new Error(`Invalid --set argument '${pair}'. Expected <token>=<value>.`);
-      const rawKey = pair.slice(0, eq).trim();
-      const value = pair.slice(eq + 1).trim();
-      if (rawKey.startsWith('--dark:')) {
-        overrides.dark[rawKey.slice('--dark:'.length)] = value;
-      } else if (rawKey.startsWith('--root:')) {
-        overrides.root[rawKey.slice('--root:'.length)] = value;
-      } else {
-        overrides.theme[rawKey] = value;
-      }
-      count++;
-      i++;
-    }
+    const flag = args[i], next = args[i + 1];
+    if (flag === '--set') {
+      // A --set value starts with `--` itself (`--color-page=...`), so it is never read as a flag.
+      if (!next) throw new Error('Missing --set argument; expected <token>=<value>.');
+      if (!next.includes('=')) throw new Error(`Invalid --set argument '${next}'. Expected <token>=<value>.`);
+      options.set.push(next); i++;
+    } else if (Object.hasOwn(CLI_BOOLEAN_FLAGS, flag)) {
+      once(flag, CLI_BOOLEAN_FLAGS[flag]); options[CLI_BOOLEAN_FLAGS[flag]] = true;
+    } else if (Object.hasOwn(CLI_VALUE_FLAGS, flag)) {
+      once(flag, CLI_VALUE_FLAGS[flag]);
+      if (!next || next.startsWith('--')) throw new Error(`Missing value for ${flag}.`);
+      options[CLI_VALUE_FLAGS[flag]] = next; i++;
+    } else if (Object.hasOwn(CLI_OPTIONAL_VALUE_FLAGS, flag)) {
+      once(flag, CLI_OPTIONAL_VALUE_FLAGS[flag]);
+      if (next && !next.startsWith('--')) { options[CLI_OPTIONAL_VALUE_FLAGS[flag]] = next; i++; }
+      else options[CLI_OPTIONAL_VALUE_FLAGS[flag]] = true;
+    } else throw new Error(`Unknown argument: ${flag}. Use --help to list the options.`);
   }
-  return count > 0 ? overrides : null;
+  return options;
+}
+
+function setOverridesOf(pairs) {
+  if (!pairs.length) return null;
+  const overrides = { theme: {}, root: {}, dark: {} };
+  for (const pair of pairs) {
+    const eq = pair.indexOf('=');
+    const rawKey = pair.slice(0, eq).trim();
+    const value = pair.slice(eq + 1).trim();
+    if (rawKey.startsWith('--dark:')) overrides.dark[rawKey.slice('--dark:'.length)] = value;
+    else if (rawKey.startsWith('--root:')) overrides.root[rawKey.slice('--root:'.length)] = value;
+    else overrides.theme[rawKey] = value;
+  }
+  return overrides;
 }
 
 function mergeOverrides(target, source) {
@@ -1392,12 +1446,14 @@ export function formatTokenDiagnostics(report, cssPath, css) {
 }
 
 function main() {
-  const args = process.argv.slice(2);
-  const cssIndex = args.indexOf('--css');
-  const cssPath = resolve(cssIndex >= 0 ? args[cssIndex + 1] : 'src/styles/global.css');
-  const initClient = args.includes('--init-client');
+  const options = parseTokenCliArguments(process.argv.slice(2));
+  if (options.help) { console.log(CLI_USAGE); return; }
+  const cssLabel = options.css ?? 'src/styles/global.css';
+  const cssPath = resolve(cssLabel);
+  const initClient = Boolean(options.initClient);
+  const json = Boolean(options.json);
 
-  if (args.includes('--list-lanes')) {
+  if (options.listLanes) {
     for (const [id, lane] of Object.entries(AESTHETIC_LANES)) {
       console.log(`- ${id} (${lane.name}): ${lane.description}`);
     }
@@ -1408,54 +1464,38 @@ function main() {
   let hasMutationRequest = false;
   let selectedLaneId = 'neutral';
 
-  const laneIndex = args.indexOf('--lane');
-  if (laneIndex >= 0) {
-    const laneId = args[laneIndex + 1];
-    if (!AESTHETIC_LANES[laneId]) {
-      throw new Error(`Unknown aesthetic lane preset: ${String(laneId)}. Available lanes: ${Object.keys(AESTHETIC_LANES).join(', ')}`);
+  if (options.lane) {
+    if (!Object.hasOwn(AESTHETIC_LANES, options.lane)) {
+      throw new Error(`Unknown aesthetic lane preset: ${options.lane}. Available lanes: ${Object.keys(AESTHETIC_LANES).join(', ')}`);
     }
-    selectedLaneId = laneId;
-    combinedOverrides = mergeOverrides(combinedOverrides, AESTHETIC_LANES[laneId]);
+    selectedLaneId = options.lane;
+    combinedOverrides = mergeOverrides(combinedOverrides, AESTHETIC_LANES[options.lane]);
     hasMutationRequest = true;
   }
 
-  const typeScaleIndex = args.indexOf('--type-scale');
-  if (typeScaleIndex >= 0) {
-    const ratioArg = args[typeScaleIndex + 1];
-    combinedOverrides = mergeOverrides(combinedOverrides, {
-      theme: generateTypeScale({ ratio: ratioArg }),
-    });
+  if (options.typeScale) {
+    combinedOverrides = mergeOverrides(combinedOverrides, { theme: generateTypeScale({ ratio: options.typeScale }) });
     hasMutationRequest = true;
   }
 
-  const spaceScaleIndex = args.indexOf('--space-scale');
-  if (spaceScaleIndex >= 0) {
-    const ratioArg = args[spaceScaleIndex + 1];
-    combinedOverrides = mergeOverrides(combinedOverrides, {
-      theme: generateSpaceScale({ ratio: ratioArg }),
-    });
+  if (options.spaceScale) {
+    combinedOverrides = mergeOverrides(combinedOverrides, { theme: generateSpaceScale({ ratio: options.spaceScale }) });
     hasMutationRequest = true;
   }
 
-  const seedAccentIndex = args.indexOf('--seed-accent');
-  if (seedAccentIndex >= 0) {
-    const accentArg = args[seedAccentIndex + 1];
-    const seedCanvasIndex = args.indexOf('--seed-canvas');
-    const canvasArg = seedCanvasIndex >= 0 ? args[seedCanvasIndex + 1] : undefined;
-    combinedOverrides = mergeOverrides(
-      combinedOverrides,
-      generateSeededPalette({ accent: accentArg, canvas: canvasArg }),
-    );
+  if (options.seedCanvas && !options.seedAccent) throw new Error('--seed-canvas requires --seed-accent.');
+  if (options.seedAccent) {
+    combinedOverrides = mergeOverrides(combinedOverrides, generateSeededPalette({ accent: options.seedAccent, canvas: options.seedCanvas }));
     hasMutationRequest = true;
   }
 
-  const setOverrides = parseSetFlags(args);
+  const setOverrides = setOverridesOf(options.set);
   if (setOverrides) {
     combinedOverrides = mergeOverrides(combinedOverrides, setOverrides);
     hasMutationRequest = true;
   }
 
-  const addMissing = args.includes('--add-missing');
+  const addMissing = Boolean(options.addMissing);
   if (addMissing) hasMutationRequest = true;
 
   if (initClient && !hasMutationRequest) {
@@ -1469,7 +1509,7 @@ function main() {
   const withContract = addMissing ? addMissingContractTokens(source) : source;
   const css = hasMutationRequest ? applyTokenOverrides(withContract,combinedOverrides) : source;
   const added = addMissing ? sourceGap.missing : undefined;
-  const report = auditDesignTokens(css);
+  const report = auditDesignTokens(css, { cssPath: cssLabel });
   const fontAudit = auditFontLoading(css, process.cwd(), cssPath);
   const fontDiagnostics = [
     ...fontAudit.missingFamilies.map(family => ({ id: `font:${family}`, status: 'unverified', actionability: 'verification_required', message: `Inspect font source/availability: ${family}` })),
@@ -1477,13 +1517,13 @@ function main() {
     ...fontAudit.preflight.advisories.map((issue,index) => ({ id: `font-source:${index+1}`, status: 'unverified', actionability: 'verification_required', ...issue })),
   ];
   const proxyAudit = auditEditProxies();
-  const saving = args.includes('--write') || initClient;
+  const saving = Boolean(options.write) || initClient;
   if (!(report.valid && fontAudit.valid && proxyAudit.valid)) {
     // A candidate on an already-failing stylesheet is still previewed, compared with the
     // source, so older sites can plan a migration. Saving still requires a valid candidate.
     let preview;
     if (hasMutationRequest) {
-      const sourceErrors = css === source ? report.errors : auditDesignTokens(source).errors;
+      const sourceErrors = css === source ? report.errors : auditDesignTokens(source, { cssPath: cssLabel }).errors;
       preview = {
         mode: saving ? 'refused' : css === source ? 'no-op' : 'preview',
         changes: combinedOverrides,
@@ -1496,7 +1536,7 @@ function main() {
         },
       };
     }
-    if(args.includes('--json'))console.log(JSON.stringify({...report,...preview,diagnostics:[...report.diagnostics,...fontDiagnostics],valid:false,fontLoading:fontAudit,editProxies:proxyAudit,sha256:stylesheetDigest(css)},null,2));
+    if(json)console.log(JSON.stringify({...report,...preview,diagnostics:[...report.diagnostics,...fontDiagnostics],valid:false,fontLoading:fontAudit,editProxies:proxyAudit,sha256:stylesheetDigest(css)},null,2));
     else {
       console.error(formatTokenDiagnostics(report,cssPath,css));
       const other=[...fontAudit.warnings,...proxyAudit.issues];if(other.length)console.error(other.join('\n'));
@@ -1509,35 +1549,32 @@ function main() {
     }
     process.exitCode=1; return;
   }
-  const recordIndex = args.indexOf('--write-record');
-  const calIndex = args.indexOf('--write-calibration');
-  const announce = message => (args.includes('--json') ? console.error : console.log)(message);
-  if(hasMutationRequest && !saving && (recordIndex>=0 || calIndex>=0)) throw new Error('Preview is read-only. Add --write to save the validated candidate before writing record/calibration evidence.');
+  const writeRecord = options.writeRecord, writeCalibration = options.writeCalibration;
+  const announce = message => (json ? console.error : console.log)(message);
+  if(hasMutationRequest && !saving && (writeRecord || writeCalibration)) throw new Error('Preview is read-only. Add --write to save the validated candidate before writing record/calibration evidence.');
   // All candidate gates above precede the first mutation, including companion files.
   if(hasMutationRequest && saving) {
     if(css===source)announce('No-op: requested token values already match ' + cssPath);
     else { writeFileSync(cssPath,css,'utf8'); announce('Updated ' + cssPath + ' (SHA-256 ' + stylesheetDigest(css) + ').'); }
   }
-  if(recordIndex>=0 || initClient) {
-    const next=recordIndex>=0?args[recordIndex+1]:null;
-    const target=next && !next.startsWith('--')?next:'AGENTS.md';
+  if(writeRecord || initClient) {
+    const target=typeof writeRecord === 'string'?writeRecord:'AGENTS.md';
     announce('Wrote ## Art Direction Record to ' + upsertArtDirectionRecord(target,selectedLaneId));
   }
   if(initClient) {
     const pruned=pruneStarterExceptions('audit/design-gate-exceptions.json');
     announce('Pruned starter sample exceptions (' + pruned.before + ' -> ' + pruned.after + ').');
   }
-  if(calIndex>=0 || initClient) {
-    const next=calIndex>=0?args[calIndex+1]:null;
-    const target=next && !next.startsWith('--')?next:'audit/component-calibration.md';
+  if(writeCalibration || initClient) {
+    const target=typeof writeCalibration === 'string'?writeCalibration:'audit/component-calibration.md';
     announce('Wrote saved-source calibration to ' + upsertCalibrationRecord(target,css,cssPath));
-    if(!args.includes('--json'))return;
+    if(!json)return;
   }
-  if(hasMutationRequest && !saving && !args.includes('--json'))console.log(JSON.stringify({mode:css===source?'no-op':'preview',changes:combinedOverrides,added,spacing:report.spacing},null,2));
+  if(hasMutationRequest && !saving && !json)console.log(JSON.stringify({mode:css===source?'no-op':'preview',changes:combinedOverrides,added,spacing:report.spacing},null,2));
 
   const allValid = report.valid && fontAudit.valid && proxyAudit.valid;
 
-  if (args.includes('--json')) {
+  if (json) {
     console.log(JSON.stringify({
       ...report,
       diagnostics: [

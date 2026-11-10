@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 import {
   REQUIRED_THEME_TOKENS, REQUIRED_ROOT_TOKENS, REQUIRED_DARK_SURFACE_TOKENS, CONTRACT_STARTER_VALUES,
   contractGap, addMissingContractTokens, auditDesignTokens, applyTokenOverrides, parseDesignTokens,
+  parseTokenCliArguments, colorLuminance, parseToOklch,
 } from '../scripts/design-system.mjs';
 
 // Portable: synthetic stylesheets only, so installed sites can run this suite.
@@ -132,4 +133,63 @@ test('CLI previews changes on an incomplete base, compares errors and never writ
   } finally {
     rmSync(directory, { recursive: true, force: true });
   }
+});
+
+test('CLI grammar is strict: unknown, duplicate and valueless flags fail before any read or write', () => {
+  assert.deepEqual(parseTokenCliArguments(['--css', 'a.css', '--set', '--color-page=#fff', '--set', '--dark:--color-text=#000', '--write-calibration', '--json']),
+    { set: ['--color-page=#fff', '--dark:--color-text=#000'], css: 'a.css', writeCalibration: true, json: true });
+  assert.deepEqual(parseTokenCliArguments(['--write-record', 'SITE.md', '--write']), { set: [], writeRecord: 'SITE.md', write: true });
+  for (const [args, pattern] of [
+    [['--wirte'], /Unknown argument: --wirte/], [['stray.css'], /Unknown argument: stray\.css/],
+    [['--css'], /Missing value for --css/], [['--type-scale', '--write'], /Missing value for --type-scale/],
+    [['--lane'], /Missing value for --lane/], [['--json', '--json'], /Duplicate argument: --json/],
+    [['--css', 'a.css', '--css', 'b.css'], /Duplicate argument: --css/],
+    [['--set'], /Missing --set argument/], [['--set', 'no-equals'], /Invalid --set argument/],
+  ]) assert.throws(() => parseTokenCliArguments(args), pattern);
+
+  const dir = mkdtempSync(join(tmpdir(), 'baseline-token-cli-'));
+  try {
+    const file = join(dir, 'global.css');
+    writeFileSync(file, olderSite);
+    const run = (...args) => spawnSync(process.execPath, [cli, '--css', file, ...args], { cwd: dir, encoding: 'utf8' });
+    // A misspelled --write used to be ignored, which turned a requested save into a silent preview.
+    const typo = run('--add-missing', '--wirte');
+    assert.equal(typo.status, 1);
+    assert.match(typo.stderr, /Unknown argument: --wirte/);
+    assert.doesNotMatch(typo.stderr, /\n\s+at /);
+    assert.equal(readFileSync(file, 'utf8'), olderSite);
+    for (const [args, pattern] of [
+      [['--seed-canvas', '#ffffff'], /--seed-canvas requires --seed-accent/],
+      // An inherited object key is not a lane.
+      [['--lane', 'constructor'], /Unknown aesthetic lane preset: constructor/],
+    ]) {
+      const result = run(...args);
+      assert.equal(result.status, 1, args.join(' '));
+      assert.match(result.stderr, pattern);
+    }
+    const help = run('--help');
+    assert.equal(help.status, 0);
+    assert.match(help.stdout, /--write-calibration \[file\]/);
+    assert.equal(readFileSync(file, 'utf8'), olderSite);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+  assert.throws(() => applyTokenOverrides(olderSite, 'constructor'), /Unknown aesthetic lane preset/);
+});
+
+test('contract messages name the audited stylesheet, and both colour consumers share one grammar', () => {
+  assert.ok(auditDesignTokens(olderSite).errors.some(error => /^Missing required :root token in src\/styles\/global\.css: /.test(error)));
+  const labelled = auditDesignTokens(olderSite, { cssPath: 'site/tokens.css' }).errors.filter(error => error.startsWith('Missing required'));
+  assert.ok(labelled.length > 0 && labelled.every(error => error.includes(' in site/tokens.css: ')));
+  for (const [color, supported] of [
+    ['oklch(43% 0.14 250)', true], ['oklch(0.43 .14 250deg)', true], ['oklch(43% 0.14 0.7turn)', true], ['#abc', true], ['#AABBCC', true],
+    // Outside the verified grammar: alpha, malformed numbers, 4/8-digit hex and rgb().
+    ['oklch(43% 0.14 250 / 0.5)', false], ['oklch(4.3.1% 0.14 250)', false], ['oklch(43% 0.1.4 250)', false], ['#abcd', false], ['rgb(0 0 0)', false],
+  ]) {
+    assert.equal(colorLuminance(color) !== null, supported, color);
+    if (supported) assert.ok(Number.isFinite(colorLuminance(color)) && Object.values(parseToOklch(color)).every(Number.isFinite), color);
+    else assert.throws(() => parseToOklch(color), /Unsupported color format/, color);
+  }
+  // A malformed number is reported as unsupported syntax, never as a NaN contrast ratio.
+  const malformed = auditDesignTokens(applyTokenOverrides(addMissingContractTokens(olderSite), { theme: { '--color-text': 'oklch(9.6.1% 0.01 280)' } }));
+  assert.ok(malformed.errors.some(error => /unsupported color syntax for --color-text/.test(error)), malformed.errors.join('\n'));
+  assert.ok(!malformed.errors.some(error => error.includes('NaN')));
 });
