@@ -29,7 +29,7 @@ Walk down this list and stop at the first fit. Do not add a dependency for an ef
 | Programmatic control, sequencing or dynamic values without a library | Web Animations API (`element.animate()`) |
 | Springs, gestures with momentum or exit animations of removed elements | The site's already adopted motion library; adopt one only as a recorded dependency decision |
 
-A menu, dialog, disclosure or toast is first a component with focus, keyboard and announcement behavior. Use native elements (`<dialog>`, `<details>`, popover) or the site's accessible primitive, then animate it. Never hand-build a `<div>` dropdown to make it animatable.
+A menu, dialog, disclosure or toast is first a component with focus, keyboard and announcement behavior. Use native elements (`<dialog>`, `<details>`, popover) or the site's accessible primitive, then animate it. Never hand-build a `<div>` dropdown to make it animatable. Choose the native feature, and check its browser support and fallback, with [native platform choices](native-platform.md).
 
 ## Properties, easing and duration
 

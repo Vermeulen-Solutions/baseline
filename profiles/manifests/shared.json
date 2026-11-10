@@ -138,7 +138,8 @@
     "scripts/check-artifact.mjs",
     "tests/artifact-lint.test.mjs",
     "docs/artifact-lint.md",
-    "docs/licenses/open-design-Apache-2.0.txt"
+    "docs/licenses/open-design-Apache-2.0.txt",
+    "docs/licenses/modern-web-guidance-Apache-2.0.txt"
   ],
   "packages": {
     "dependencies": [
@@ -228,6 +229,7 @@
     ".agents/skills/astro-site-design/references/baseline-utilities.md",
     ".agents/skills/astro-site-design/references/astro-primitives.md",
     ".agents/skills/astro-site-design/references/shipped-primitives.md",
+    ".agents/skills/astro-site-design/references/native-platform.md",
     ".agents/skills/astro-site-design/references/component-quarantine.md",
     ".agents/skills/astro-site-design/references/emdash-content.md",
     ".agents/skills/astro-site-design/references/fluid-tokens.md",

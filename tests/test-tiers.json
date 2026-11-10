@@ -298,5 +298,9 @@
   "search.test.mjs": {
     "tier": "unit",
     "reason": "Search bundle URL, shortcut, safe excerpt and indexer exclusion/pinning/receipt contracts with a stubbed Pagefind; no browser or Pagefind binary"
+  },
+  "audit-modern-web.test.mjs": {
+    "tier": "unit",
+    "reason": "Pinned version, forced telemetry opt-out, Windows launcher and scan-target validation; no network or subprocess"
   }
 }

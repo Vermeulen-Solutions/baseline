@@ -113,6 +113,7 @@ test('editable canvas guidance ships complete on every profile without a runtime
     '.agents/skills/site-art-direction/references/editorial-illustration.md',
     '.agents/skills/astro-site-design/references/screen-reader-checks.md',
     '.agents/skills/astro-site-design/references/interaction-motion.md',
+    '.agents/skills/astro-site-design/references/native-platform.md',
     '.agents/skills/astro-site-design/references/baseline-utilities.md',
     '.agents/skills/astro-site-design/references/responsive-architecture.md',
     '.agents/skills/new-site-workflow/references/visitor-research.md',
