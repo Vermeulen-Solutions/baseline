@@ -136,6 +136,17 @@ Use `data-astro-prefetch="false"` on a link or ancestor to opt out of Baseline w
 
 Card-to-hero morphing derives intent from the actual navigation source. Shared cards use `.card-media` and `.card-title`; custom markup can opt in with `[data-vt-card]`, `[data-vt-media]` and `[data-vt-title]`. Destination elements can use `[data-vt-hero-media]` and `[data-vt-hero-title]`. The shell assigns temporary `hero-media`/`hero-title` names only to the selected pair and supports a return morph using the departed article URL. Avoid assigning these names to every card in a grid. Existing explicit `Card transitionName` and `.vt-morph` contracts remain available; callers own matching and uniqueness. Reduced-motion preferences suppress motion.
 
+### Sticky header
+
+`[data-sticky-header]` makes the header sticky, and the shell maintains two state attributes on it.
+
+| Attribute | Set when | Use for |
+| --- | --- | --- |
+| `data-scrolled` | `scrollY` is above 16px | Paint only: background, border colour, shadow, backdrop filter |
+| `data-compact` | Added above 96px, removed below 24px | Size: padding, height, logo size |
+
+A size change keyed to a single threshold flips every frame at rest: the header shrinks, the content below moves up, scroll anchoring pulls `scrollY` back under the threshold and the header expands again. `data-compact` therefore has hysteresis, and the band between its two offsets (72px by default) must stay wider than the header's height change. For a larger change set `data-compact-after` and `data-expand-below` (pixels) on the header. `npm run check:css` rejects size properties in rules that select `[data-scrolled]`. After changing header height on scroll, rest the page at several positions just past each threshold and confirm that the state does not change between animation frames; `tests/visual/sticky-header.spec.mjs` does this for the starter.
+
 For local fault probes, development builds accept destination query parameters `?_vt_delay=800` and `?_vt_fail=1`. Delay is abortable and bounded to 10 seconds; failure flags accept only `true`/`1` values. The fault hook is excluded from production. Probe aborted and overlapping navigation as well as successful navigation; a clean build alone cannot verify this lifecycle.
 
 ## Progressively enhanced forms

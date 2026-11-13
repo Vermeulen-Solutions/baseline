@@ -4,6 +4,7 @@ import postcss from 'postcss';
 import selectorParser from 'postcss-selector-parser';
 import { parseTemplate } from 'astro-eslint-parser';
 
+const SCROLLED_SIZE_PROPERTY = /^(?:(?:padding|margin)(?:-(?:block|top|bottom)(?:-(?:start|end))?)?|gap|row-gap|font-size|line-height|(?:min-|max-)?(?:height|block-size)|border(?:-(?:top|bottom|block|block-start|block-end))?-width)$/;
 export const LAYER_ORDER = 'theme, base, vendor, astro, components, utilities';
 
 export function astroStyleInputs(source, file = 'component.astro') {
@@ -36,6 +37,14 @@ export function inspectAuthorCSS(css, { file = 'stylesheet.css', lineOffset = 0 
     }
     const outer = layers[0]?.split('.')[0];
     if (!['base','components'].includes(outer) || layers.some(x=>!x)) add(rule,`Author selector must belong to base or components: ${rule.selector}`);
+  });
+  // The shell flips data-scrolled on a single scroll threshold. A size change keyed to it moves the
+  // content below, scroll anchoring pulls scrollY back across the threshold and the state flips
+  // every frame. Size belongs to [data-compact], which the shell sets with hysteresis.
+  root.walkRules(/\[data-scrolled[\]=~|^\s]/, rule => {
+    rule.each(node => {
+      if (node.type === 'decl' && SCROLLED_SIZE_PROPERTY.test(node.prop)) add(node, `[data-scrolled] is paint-only; move ${node.prop} to [data-sticky-header][data-compact]: ${rule.selector}`);
+    });
   });
   return issues;
 }

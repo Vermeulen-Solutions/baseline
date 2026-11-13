@@ -50,3 +50,20 @@ test('M07-M10 flow audit recognizes real selectors and both guarded and one-side
   assert.equal(analyzeFlow('/* '+base+' */').flowRuleCount,0);
   assert.equal(analyzeFlow('@layer components {').verified,false);
 });
+
+test('data-scrolled stays paint-only: size changes keyed to the single scroll threshold are rejected', () => {
+  const messages = css => inspectAuthorCSS(`@layer components { ${css} }`).map(issue => issue.message);
+  for (const css of [
+    '[data-sticky-header][data-scrolled] { padding-block: 0.5rem }',
+    ':where([data-sticky-header][data-scrolled]) .site-nav { min-block-size: 3rem }',
+    '.site-header[data-scrolled] .site-logo { height: 2rem }',
+    '[data-scrolled] { font-size: 0.9rem; border-block-end-width: 0 }',
+  ]) assert.ok(messages(css).some(message => message.includes('[data-scrolled] is paint-only')), css);
+  assert.equal(messages('[data-scrolled] { font-size: 0.9rem; border-block-end-width: 0 }').length, 2);
+  for (const css of [
+    '[data-sticky-header][data-scrolled] { background: red; border-block-end-color: blue; box-shadow: none; padding-inline: 1rem }',
+    '[data-sticky-header][data-compact] { padding-block: 0.5rem }',
+    '[data-sticky-header][data-compact] .site-nav { min-block-size: 3rem }',
+    '[data-scrolled-marker] { padding-block: 0 }',
+  ]) assert.deepEqual(messages(css), [], css);
+});

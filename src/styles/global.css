@@ -988,6 +988,8 @@
 		border-block-end: 1px solid transparent;
 	}
 
+	/* data-scrolled is paint-only (one 16px threshold). Size changes go on [data-compact], which the
+	   shell sets with hysteresis; a size change here lets scroll anchoring flip the state every frame. */
 	:where([data-sticky-header][data-scrolled]) {
 		background: var(--surface-glass);
 		backdrop-filter: blur(16px) saturate(140%);

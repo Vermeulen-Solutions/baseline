@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Exact LF-normalized source hash.",
-    "sha256": "49be27cfa4dbd54c8705a2e7cc89d90d5b06d0a5b59ab9569066b850afbeae8a"
+    "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Sticky-header state contract (paint-only data-scrolled, hysteresis data-compact). Exact LF-normalized source hash.",
+    "sha256": "cd611ffacc9a4fc7517e3ccec98d758b2dd30ddbb0f4ce9d6125f38e4eaf3cf5"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -366,8 +366,8 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "4b73696d2703201823cdffc496aa258f46bf117b09f9a27706710d5358d67b51"
+    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "2f9fc06d47f1070510ce0870965e89635f64147b68609f4564ecc88c39e8638b"
   },
   {
     "path": "src/components/EmDashImage.astro",

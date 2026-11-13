@@ -757,10 +757,28 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
           }
         });
 
+        // Sticky header state. `data-scrolled` flips on one 16px threshold and is paint-only: a size
+        // change keyed to it moves the content below, scroll anchoring pulls scrollY back across the
+        // threshold, and the header flips every frame. Size changes belong to `data-compact`, which has
+        // hysteresis: it compacts after one offset (96px) and expands only below a lower one (24px). That
+        // band must stay wider than the header's height change; data-compact-after / data-expand-below
+        // set both offsets on a header that needs more, and an unusable pair falls back to a 72px band.
+        const stickyOffset = (header, name, fallback) => {
+          const value = header.hasAttribute(name) ? Number(header.getAttribute(name)) : NaN;
+          return Number.isFinite(value) && value >= 0 ? value : fallback;
+        };
         const syncStickyHeader = () => {
-          const scrolled = window.scrollY > 16;
+          const y = window.scrollY;
           document.querySelectorAll('[data-sticky-header]').forEach((header) => {
-            header.toggleAttribute('data-scrolled', scrolled);
+            header.toggleAttribute('data-scrolled', y > 16);
+            const compactAfter = stickyOffset(header, 'data-compact-after', 96);
+            const requestedExpand = stickyOffset(header, 'data-expand-below', NaN);
+            const expandBelow = requestedExpand < compactAfter ? requestedExpand : Math.max(0, compactAfter - 72);
+            if (header.hasAttribute('data-compact')) {
+              if (y < expandBelow) header.removeAttribute('data-compact');
+            } else if (y > compactAfter) {
+              header.setAttribute('data-compact', '');
+            }
           });
         };
         window.addEventListener('scroll', syncStickyHeader, { passive: true });
