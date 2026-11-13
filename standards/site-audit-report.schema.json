@@ -66,5 +66,44 @@
       }
     }
   },
-  "$defs": { "hashOrNull": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" } }
+  "$defs": {
+    "hashOrNull": { "type": ["string", "null"], "pattern": "^[a-f0-9]{64}$" },
+    "primitiveUsage": {
+      "title": "Observed facts of rule design-system:primitive-usage when it is an object",
+      "type": "object", "additionalProperties": false,
+      "required": ["routeCount", "scannedFileCount", "unresolvedImportCount", "truncated", "installed", "totals", "routesUsing", "installedButUnused", "stylesheetViewTransitionNameCount", "routes"],
+      "properties": {
+        "routeCount": { "type": "integer", "minimum": 0 },
+        "scannedFileCount": { "type": "integer", "minimum": 0 },
+        "unresolvedImportCount": { "type": "integer", "minimum": 0 },
+        "truncated": { "type": "boolean" },
+        "installed": {
+          "type": "object", "additionalProperties": false, "required": ["dataReveal", "stickyHeader", "viewTransitionName", "surfaceClasses"],
+          "properties": { "dataReveal": { "type": "boolean" }, "stickyHeader": { "type": "boolean" }, "viewTransitionName": { "type": "boolean" }, "surfaceClasses": { "type": "boolean" } }
+        },
+        "totals": { "$ref": "#/$defs/primitiveUsageCounts" },
+        "routesUsing": { "$ref": "#/$defs/primitiveUsageCounts" },
+        "installedButUnused": { "type": "array", "items": { "enum": ["dataReveal", "stickyHeader", "viewTransitionName", "surfaceClasses"] } },
+        "stylesheetViewTransitionNameCount": { "type": "integer", "minimum": 0 },
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["route", "dataReveal", "stickyHeader", "viewTransitionName", "surfaceClasses"],
+            "properties": {
+              "route": { "type": "string", "pattern": "^route-[0-9]{3}$" },
+              "dataReveal": { "type": "integer", "minimum": 0 }, "stickyHeader": { "type": "integer", "minimum": 0 },
+              "viewTransitionName": { "type": "integer", "minimum": 0 }, "surfaceClasses": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "primitiveUsageCounts": {
+      "type": "object", "additionalProperties": false, "required": ["dataReveal", "stickyHeader", "viewTransitionName", "surfaceClasses"],
+      "properties": {
+        "dataReveal": { "type": "integer", "minimum": 0 }, "stickyHeader": { "type": "integer", "minimum": 0 },
+        "viewTransitionName": { "type": "integer", "minimum": 0 }, "surfaceClasses": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
 }

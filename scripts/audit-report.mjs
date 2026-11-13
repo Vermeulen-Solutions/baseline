@@ -35,7 +35,14 @@ export function validateReport(report) {
     if (depth > 30 || typeof value === 'number' && !Number.isFinite(value) || ['undefined', 'function', 'symbol', 'bigint'].includes(typeof value)) throw Error('Invalid JSON report');
     if (value && typeof value === 'object') { if (seen.has(value)) throw Error('Cyclic report'); seen.add(value); Object.values(value).forEach(child => json(child, depth + 1)); seen.delete(value); }
   }
-  try { json(report); check(schema, report, '#'); } catch { errors.push('#: invalid report structure'); }
+  try {
+    json(report); check(schema, report, '#');
+    // Observed facts are free-form except where the schema names a rule's shape. The route list
+    // is ordinal-only, so a report cannot carry target filenames through this rule.
+    if (schema.$defs?.primitiveUsage && Array.isArray(report.rules)) report.rules.forEach((rule, index) => {
+      if (rule?.id === 'design-system:primitive-usage' && kind(rule.observed) === 'object') check(schema.$defs.primitiveUsage, rule.observed, `#/rules/${index}/observed`);
+    });
+  } catch { errors.push('#: invalid report structure'); }
   if (Array.isArray(report?.rules)) {
     if (new Set(report.rules.map(rule => rule?.id)).size !== report.rules.length) errors.push('#/rules: duplicate IDs');
     for (const status of ['pass', 'fail', 'warning', 'unverified', 'not-applicable']) if (report.summary?.[status] !== report.rules.filter(rule => rule?.status === status).length) errors.push('#/summary: inconsistent counts');

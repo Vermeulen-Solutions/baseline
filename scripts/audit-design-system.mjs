@@ -3,6 +3,61 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { readTarget, safeRelative } from './audit-evidence.mjs';
 
+const USAGE_PATTERNS = {
+  dataReveal: /(?<![\w-])data-reveal(?![\w-])/g,
+  stickyHeader: /(?<![\w-])data-sticky-header(?![\w-])/g,
+  viewTransitionName: /(?<![\w-])view-transition-name\s*:|(?<![\w-])transition:name\s*=|(?<![\w-])transitionName\s*=\s*[{"']|(?<![\w.-])mediaTransition\s*\(|(?<![\w-])vt-morph(?![\w-])/g,
+  surfaceClasses: /(?<![\w-])surface-(?:elevated|glass|spotlight|grain)(?![\w-])/g,
+};
+const USAGE_KEYS = Object.keys(USAGE_PATTERNS);
+// These files implement the primitives; their own selectors and helpers are not adoption.
+const PRIMITIVE_SOURCES = new Set(['src/layouts/SiteShell.astro', 'src/components/Card.astro']);
+const MAX_ROUTES = 300, MAX_FILES_PER_ROUTE = 400;
+
+/**
+ * Count primitive usage per route: each page file plus the local .astro files it reaches through
+ * relative imports (layouts and components). Markup, frontmatter and style blocks are counted;
+ * script blocks and comments are not. Routes are reported by ordinal, never by filename.
+ */
+function primitiveUsage(target, routeFiles) {
+  const cache = new Map();
+  let unresolvedImportCount = 0;
+  const inspect = file => {
+    if (cache.has(file)) return cache.get(file);
+    const entry = { counts: Object.fromEntries(USAGE_KEYS.map(key => [key, 0])), imports: [] };
+    cache.set(file, entry);
+    const bytes = readTarget(target, file).bytes;
+    if (!bytes) return entry;
+    const source = bytes.toString('utf8');
+    const frontmatter = source.match(/^﻿?---\r?\n([\s\S]*?)\r?\n---/)?.[1] ?? '';
+    for (const [, specifier] of frontmatter.matchAll(/(?:\bfrom\s*|\bimport\s*)['"]([^'"]+\.astro)['"]/g)) {
+      if (!specifier.startsWith('.')) { unresolvedImportCount++; continue; }
+      const resolved = path.posix.normalize(path.posix.join(path.posix.dirname(file), specifier));
+      if (resolved.startsWith('src/') && safeRelative(resolved)) entry.imports.push(resolved);
+    }
+    if (!PRIMITIVE_SOURCES.has(file)) {
+      const text = source.replace(/<script\b[\s\S]*?<\/script>/gi, '').replace(/<!--[\s\S]*?-->/g, '');
+      for (const key of USAGE_KEYS) entry.counts[key] = (text.match(USAGE_PATTERNS[key]) ?? []).length;
+    }
+    return entry;
+  };
+  let truncated = routeFiles.length > MAX_ROUTES;
+  const routes = routeFiles.slice(0, MAX_ROUTES).map((file, index) => {
+    const seen = new Set(), queue = [file], counts = Object.fromEntries(USAGE_KEYS.map(key => [key, 0]));
+    while (queue.length) {
+      const current = queue.shift();
+      if (seen.has(current)) continue;
+      if (seen.size >= MAX_FILES_PER_ROUTE) { truncated = true; break; }
+      seen.add(current);
+      const entry = inspect(current);
+      for (const key of USAGE_KEYS) counts[key] += entry.counts[key];
+      queue.push(...entry.imports);
+    }
+    return { route: `route-${String(index + 1).padStart(3, '0')}`, ...counts };
+  });
+  return { routes, truncated, unresolvedImportCount, scannedFileCount: cache.size };
+}
+
 /**
  * Static, read-only inspection of downstream CSS token/rhythm primitives,
  * accessible Card / Container breakout adoption, and Component Quarantine HUD.
@@ -10,6 +65,7 @@ import { readTarget, safeRelative } from './audit-evidence.mjs';
  */
 export function designSystemRules(target, add) {
   const cssRead = readTarget(target, 'src/styles/global.css');
+  const cssText = cssRead.bytes ? cssRead.bytes.toString('utf8') : '';
   if (!cssRead.bytes) {
     add(
       'design-system:tokens-and-rhythm',
@@ -204,6 +260,36 @@ export function designSystemRules(target, add) {
       },
       { required: false, evidence: ['src/components'], confidence: 'bounded-static', remediation: 'docs/reusable-public-patterns.md' }
     );
+  }
+
+  // The capability flags above say what is installed; this rule says where it is used.
+  const usageExpected = 'Per-route usage counts for data-reveal, data-sticky-header, view-transition names and surface classes beside the installed capability flags';
+  const usageOptions = { required: false, evidence: ['src/pages'], confidence: 'bounded-static', remediation: 'docs/site-standards-audit.md' };
+  const routeFiles = scanAstroDir('src/pages', -3).filter(file => !file.split('/').slice(2).some(part => part.startsWith('_'))).sort();
+  if (!routeFiles.length) {
+    add('design-system:primitive-usage', 'unverified', usageExpected, 'No public .astro routes observed under src/pages', usageOptions);
+  } else {
+    const usage = primitiveUsage(target, routeFiles);
+    const installed = {
+      dataReveal: /\[data-reveal\]/.test(cssText),
+      stickyHeader: /\[data-sticky-header\]/.test(cssText),
+      viewTransitionName: cardTransitionMorphing || /\.vt-morph\b/.test(cssText),
+      surfaceClasses: /\.surface-elevated\b/.test(cssText),
+    };
+    const totals = Object.fromEntries(USAGE_KEYS.map(key => [key, usage.routes.reduce((sum, route) => sum + route[key], 0)]));
+    const routesUsing = Object.fromEntries(USAGE_KEYS.map(key => [key, usage.routes.filter(route => route[key] > 0).length]));
+    add('design-system:primitive-usage', 'pass', usageExpected, {
+      routeCount: usage.routes.length,
+      scannedFileCount: usage.scannedFileCount,
+      unresolvedImportCount: usage.unresolvedImportCount,
+      truncated: usage.truncated,
+      installed,
+      totals,
+      routesUsing,
+      installedButUnused: USAGE_KEYS.filter(key => installed[key] && routesUsing[key] === 0),
+      stylesheetViewTransitionNameCount: (cssText.replace(/\.vt-morph\s*\{[^}]*\}|:where\(\[data-sticky-header\]\[data-vt-header\]\)\s*\{[^}]*\}/g, '').match(/(?<![\w-])view-transition-name\s*:/g) ?? []).length,
+      routes: usage.routes,
+    }, usageOptions);
   }
 
   const styleguideBytes = readTarget(target, 'src/pages/_styleguide.astro').bytes;

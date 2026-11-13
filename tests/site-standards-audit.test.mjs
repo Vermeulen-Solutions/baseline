@@ -291,4 +291,89 @@ test('design-system drift rules detect brownfield CSS/Card gaps and pass on base
   assert.equal(rule(baselineReport, 'design-system:quarantine-hud').status, 'pass');
 }));
 
+test('primitive usage is counted per route beside the capability flags, without target filenames', () => fixture((root) => {
+  current(root);
+  const put = (file, text) => { fs.mkdirSync(path.dirname(path.join(root, file)), { recursive: true }); fs.writeFileSync(path.join(root, file), text); };
+  // Everything is installed: stylesheet, shell and Card carry the primitives.
+  put('src/styles/global.css', '[data-reveal] { opacity: 1 } [data-sticky-header] { position: sticky } .vt-morph { view-transition-name: var(--vt-name) } .surface-elevated { background: white } .site-header { view-transition-name: masthead }');
+  put('src/layouts/SiteShell.astro', '<script is:inline>document.querySelectorAll("[data-reveal]"); document.querySelectorAll("[data-sticky-header]");</script>\n<slot name="header" /><slot />\n');
+  put('src/components/Card.astro', '---\nimport { mediaTransition } from "../lib/view-transition";\nconst { transitionName } = Astro.props;\nconst style = mediaTransition(transitionName, "media");\n---\n<article class="card" style={style}><slot /></article>\n');
+  put('src/components/Container.astro', '<div class:list={[breakout ? "content-grid" : "container-shell"]}><slot /></div>\n');
+  // A layout wraps the header in an element: the attribute is present on every route that uses it.
+  put('src/layouts/Base.astro', '---\nimport SiteShell from "./SiteShell.astro";\n---\n<SiteShell><header slot="header" data-sticky-header>Site</header><slot /></SiteShell>\n');
+  put('src/components/StoryList.astro', '---\nimport Card from "./Card.astro";\nimport { mediaTransition } from "../lib/view-transition";\n---\n<ul data-reveal>{stories.map(story => <li><a style={mediaTransition("story", story.slug)} href={story.href}>{story.title}</a></li>)}</ul>\n<Card transitionName={`story-${lead.slug}`} title={lead.title} />\n<!-- <div data-reveal class="surface-glass"></div> -->\n');
+  put('src/pages/index.astro', '---\nimport Base from "../layouts/Base.astro";\nimport StoryList from "../components/StoryList.astro";\nimport Aliased from "@/components/Aliased.astro";\n---\n<Base><section data-reveal data-reveal-delay="80" class="surface-elevated">Intro</section><StoryList /><p style="background: var(--surface-glass)">Token use is not a class</p></Base>\n');
+  put('src/pages/about.astro', '---\nimport Base from "../layouts/Base.astro";\n---\n<Base><h1>About</h1></Base>\n');
+  put('src/pages/stories/[slug].astro', '---\nimport Base from "../../layouts/Base.astro";\n---\n<Base><figure class="vt-morph surface-elevated surface-grain" style={`--vt-name: story-${slug}-media`}></figure></Base>\n');
+  put('src/pages/bare.astro', '<h1>No shell</h1>\n');
+  put('src/pages/_styleguide.astro', '<div data-reveal data-sticky-header class="surface-elevated vt-morph"></div>\n');
+  put('src/pages/_drafts/hidden.astro', '<div data-reveal></div>\n');
+
+  const report = auditSite({ root });
+  assert.deepEqual(validateReport(report), []);
+  const usage = rule(report, 'design-system:primitive-usage');
+  assert.equal(usage.status, 'pass');
+  assert.equal(usage.actionability, 'design_judgment');
+  assert.equal(usage.severity, 'recommendation');
+  assert.deepEqual(usage.evidence, ['src/pages']);
+  const observed = usage.observed;
+  // Sorted public routes: about, bare, index, stories/[slug]. Underscore-prefixed files and directories are not routes.
+  assert.equal(observed.routeCount, 4);
+  assert.deepEqual(observed.routes, [
+    { route: 'route-001', dataReveal: 0, stickyHeader: 1, viewTransitionName: 0, surfaceClasses: 0 },
+    { route: 'route-002', dataReveal: 0, stickyHeader: 0, viewTransitionName: 0, surfaceClasses: 0 },
+    { route: 'route-003', dataReveal: 2, stickyHeader: 1, viewTransitionName: 2, surfaceClasses: 1 },
+    { route: 'route-004', dataReveal: 0, stickyHeader: 1, viewTransitionName: 1, surfaceClasses: 2 },
+  ]);
+  assert.deepEqual(observed.totals, { dataReveal: 2, stickyHeader: 3, viewTransitionName: 3, surfaceClasses: 3 });
+  assert.deepEqual(observed.routesUsing, { dataReveal: 1, stickyHeader: 3, viewTransitionName: 2, surfaceClasses: 2 });
+  assert.deepEqual(observed.installed, { dataReveal: true, stickyHeader: true, viewTransitionName: true, surfaceClasses: true });
+  assert.deepEqual(observed.installedButUnused, []);
+  assert.equal(observed.unresolvedImportCount, 1, 'Aliased component imports are reported, not silently counted as zero usage');
+  assert.equal(observed.stylesheetViewTransitionNameCount, 1, 'A header named in the stylesheet is visible although no route file names it');
+  assert.equal(observed.truncated, false);
+  assert.doesNotMatch(JSON.stringify(report), /StoryList|about\.astro|stories\//, 'Route and component filenames stay out of the report');
+  assert.doesNotMatch(markdownReport(report), /Read capability flags together with route usage/);
+
+  // Installed everywhere, used nowhere: the flags alone would say nothing is missing.
+  for (const file of ['src/pages/index.astro', 'src/pages/stories/[slug].astro']) fs.rmSync(path.join(root, file));
+  put('src/layouts/Base.astro', '---\nimport SiteShell from "./SiteShell.astro";\n---\n<SiteShell><header slot="header">Site</header><slot /></SiteShell>\n');
+  const unused = auditSite({ root });
+  assert.deepEqual(validateReport(unused), []);
+  const flags = rule(unused, 'design-system:card-and-breakout').observed;
+  assert.equal(flags.cardTransitionMorphing, true);
+  const idle = rule(unused, 'design-system:primitive-usage');
+  assert.equal(idle.status, 'pass', 'Unused primitives are a design question, not a failed rule');
+  assert.deepEqual(idle.observed.installedButUnused, ['dataReveal', 'stickyHeader', 'viewTransitionName', 'surfaceClasses']);
+  assert.deepEqual(idle.observed.totals, { dataReveal: 0, stickyHeader: 0, viewTransitionName: 0, surfaceClasses: 0 });
+  const md = markdownReport(unused);
+  assert.match(md, /Read capability flags together with route usage/);
+  assert.match(md, /used on none of the 2 scanned routes: data-reveal; data-sticky-header; view-transition names[^;]*; \.surface-\* classes/);
+  assert.match(md, /Unused is not a defect/);
+  assert.equal(strictFailure(unused), strictFailure(report), 'Usage counts never change strict outcomes');
+
+  // Nothing installed and no routes: nothing to call unused, and the rule stays unverified.
+  fs.rmSync(path.join(root, 'src/pages'), { recursive: true });
+  const none = rule(auditSite({ root }), 'design-system:primitive-usage');
+  assert.equal(none.status, 'unverified');
+  assert.equal(typeof none.observed, 'string');
+
+  // The reader enforces the documented shape and its ordinal-only route labels.
+  for (const edit of [
+    observed => { observed.routes[0].route = 'src/pages/about.astro'; },
+    observed => { observed.routes[0].file = 'about.astro'; },
+    observed => { observed.totals.dataReveal = -1; },
+    observed => { delete observed.installedButUnused; },
+    observed => { observed.installedButUnused = ['bentoGrid']; },
+    observed => { observed.privatePath = '/home/site'; },
+  ]) {
+    const invalid = structuredClone(report);
+    edit(rule(invalid, 'design-system:primitive-usage').observed);
+    assert.ok(validateReport(invalid).some(error => error.includes('/observed')), String(edit));
+  }
+  const legacy = structuredClone(report); legacy.schemaVersion = 2;
+  legacy.rules.forEach(item => delete item.actionability);
+  assert.deepEqual(validateReport(legacy), [], 'Archived v2 readers keep observed facts free-form');
+}));
+
 
