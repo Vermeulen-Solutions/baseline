@@ -131,3 +131,58 @@ test('behavior sticky header probe catches a size change keyed to data-scrolled'
   const flipping = samples.filter(sample => sample.flips > 0);
   expect(flipping.length, `the probe must reproduce the single-threshold flip: ${JSON.stringify(samples.map(sample => [sample.y, sample.flips]))}`).toBeGreaterThan(0);
 });
+
+test('behavior held header and media morph rules apply to live view-transition pseudo-elements', async ({ page }, info) => {
+  test.skip(info.project.name !== 'chromium-1440', 'Run once on standard desktop viewport');
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await prepare(page, home, page.visualProblems);
+  const probe = () => page.evaluate(async () => {
+    const header = document.querySelector('[data-sticky-header]');
+    header.setAttribute('data-vt-header', '');
+    const media = document.createElement('div');
+    media.id = 'vt-media-probe';
+    media.style.cssText = 'view-transition-name: post-probe; view-transition-class: vt-media; inline-size: 12rem; block-size: 8rem; background: currentColor';
+    document.querySelector('main').prepend(media);
+    const named = getComputedStyle(header).viewTransitionName;
+    const transition = document.startViewTransition(() => {
+      // The incoming header is taller and the photo changes aspect ratio, as on a detail page.
+      header.style.paddingBlock = '2rem';
+      media.style.inlineSize = '24rem';
+    });
+    await transition.ready;
+    const style = (pseudo, property) => getComputedStyle(document.documentElement, pseudo)[property];
+    const result = {
+      named,
+      oldHeaderDisplay: style('::view-transition-old(site-header)', 'display'),
+      newHeaderAnimation: style('::view-transition-new(site-header)', 'animationName'),
+      headerGroupAnimation: style('::view-transition-group(site-header)', 'animationName'),
+      rootOldDisplay: style('::view-transition-old(root)', 'display'),
+      mediaGroupOverflow: style('::view-transition-group(post-probe)', 'overflow'),
+      mediaGroupAnimation: style('::view-transition-group(post-probe)', 'animationName'),
+      mediaOldFit: style('::view-transition-old(post-probe)', 'objectFit'),
+      mediaNewFit: style('::view-transition-new(post-probe)', 'objectFit'),
+    };
+    transition.skipTransition();
+    await transition.finished.catch(() => {});
+    header.removeAttribute('data-vt-header');
+    header.style.paddingBlock = '';
+    media.remove();
+    return result;
+  });
+  const motion = await probe();
+  expect(motion.named).toBe('site-header');
+  expect(motion.oldHeaderDisplay, 'the outgoing header must not ghost over the incoming one').toBe('none');
+  expect(motion.newHeaderAnimation, 'the incoming header must not fade in').toBe('none');
+  expect(motion.rootOldDisplay, 'control: unnamed content still crossfades').not.toBe('none');
+  expect(motion.mediaGroupOverflow).toBe('clip');
+  expect(motion.mediaGroupAnimation, 'the photo box morphs under normal motion').not.toBe('none');
+  expect(motion.mediaOldFit).toBe('cover');
+  expect(motion.mediaNewFit).toBe('cover');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const reduced = await probe();
+  expect(reduced.oldHeaderDisplay).toBe('none');
+  expect(reduced.newHeaderAnimation).toBe('none');
+  expect(reduced.headerGroupAnimation, 'reduced motion: the header box does not animate').toBe('none');
+  expect(reduced.mediaGroupAnimation, 'reduced motion: the photo box does not morph').toBe('none');
+  await info.attach('view-transition-pseudo-styles', { body: JSON.stringify({ motion, reduced }), contentType: 'application/json' });
+});

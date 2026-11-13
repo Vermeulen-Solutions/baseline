@@ -36,6 +36,7 @@
     "src/lib/clipboard.ts",
     "src/lib/headings.ts",
     "src/lib/toc.ts",
+    "src/lib/view-transition.ts",
     "src/lib/emdash-headings.ts",
     "src/components/SearchDialog.astro",
     "src/lib/search.ts",

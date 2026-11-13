@@ -3,6 +3,7 @@ import type { ImageMetadata } from 'astro';
 import type { HTMLAttributes } from 'astro/types';
 import { publicLink } from '../lib/public-link';
 import ResponsiveImage from './ResponsiveImage.astro';
+import { mediaTransition, transitionName } from '../lib/view-transition';
 // Attribute bags also accept CMS data-* annotations, without importing a CMS type.
 type FieldAttributes = HTMLAttributes<'span'>;
 interface Props extends Omit<HTMLAttributes<'article'>, 'title'> {
@@ -14,7 +15,7 @@ interface Props extends Omit<HTMLAttributes<'article'>, 'title'> {
   titleEdit?: FieldAttributes;
   descriptionEdit?: FieldAttributes;
   actionEdit?: FieldAttributes;
-  /** Optional shared-element View Transition prefix; sets `<prefix>-media` and `<prefix>-title` view-transition-name. */
+  /** Optional shared-element View Transition prefix; sets ident-safe `<prefix>-media` (with the `vt-media` class) and `<prefix>-title` view-transition-name. */
   transitionName?: string;
   class?: string;
 }
@@ -25,9 +26,9 @@ const fieldAttributes = (value: unknown): FieldAttributes => value && typeof val
 const titleEdit = fieldAttributes(rawTitleEdit), descriptionEdit = fieldAttributes(rawDescriptionEdit), actionEdit = fieldAttributes(rawActionEdit);
 const imageFit = rawFit === 'contain' ? 'contain' : 'cover';
 const imageAspect = typeof rawAspect === 'string' && rawAspect.trim() ? rawAspect : '3 / 2';
-const transitionPrefix = typeof rawTransitionName === 'string' && /^[A-Za-z0-9_-]+$/.test(rawTransitionName.trim()) ? rawTransitionName.trim() : '';
-const mediaStyle = transitionPrefix ? { '--card-aspect': imageAspect, '--card-fit': imageFit, 'view-transition-name': `${transitionPrefix}-media` } : { '--card-aspect': imageAspect, '--card-fit': imageFit };
-const titleAttrs = transitionPrefix ? { ...titleEdit, style: [titleEdit.style, `view-transition-name: ${transitionPrefix}-title`].filter(Boolean).join('; ') } : titleEdit;
+const transitionPrefix = typeof rawTransitionName === 'string' ? transitionName(rawTransitionName) : '';
+const mediaStyle = [`--card-aspect: ${imageAspect}`, `--card-fit: ${imageFit}`, transitionPrefix && mediaTransition(rawTransitionName, 'media')].filter(Boolean).join('; ');
+const titleAttrs = transitionPrefix ? { ...titleEdit, style: [titleEdit.style, `view-transition-name: ${transitionName(rawTransitionName, 'title')}`].filter(Boolean).join('; ') } : titleEdit;
 const title = typeof rawTitle === 'string' ? rawTitle : '';
 const description = typeof rawDescription === 'string' ? rawDescription : '';
 const action = typeof rawAction === 'string' ? rawAction : '';

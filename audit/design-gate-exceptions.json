@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Sticky-header state contract (paint-only data-scrolled, hysteresis data-compact). Exact LF-normalized source hash.",
-    "sha256": "cd611ffacc9a4fc7517e3ccec98d758b2dd30ddbb0f4ce9d6125f38e4eaf3cf5"
+    "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Sticky-header state contract (paint-only data-scrolled, hysteresis data-compact), opt-in held header and media-morph view-transition rules with reduced-motion fallback; no new tokens or colours. Exact LF-normalized source hash.",
+    "sha256": "50c0b7f339f5c0bfc96e7ffbe5886db0425090efb05062c83059adbd8d5d6c65"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -240,8 +240,8 @@
   },
   {
     "path": "src/components/Card.astro",
-    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; layout=\"horizontal\" rules reordered narrow-first (stacked default, side by side above a 40rem viewport, restacked in a query container of 32rem or less) with the same breakpoints and outcomes and no new visual values; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "48224c2617a427e38104e309af55c00be10c02d3d2c1c76bdf20264e55d962c0"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; layout=\"horizontal\" rules reordered narrow-first (stacked default, side by side above a 40rem viewport, restacked in a query container of 32rem or less) with the same breakpoints and outcomes and no new visual values; no client theme or page implementation. transitionName now resolves through the shared ident-safe view-transition helper and adds the vt-media class to the media; unchanged output for ident-safe prefixes apart from that class. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "d62f58b09c3ca4283062ade349b3b320c4abedc037e30817a78300055775c7f3"
   },
   {
     "path": "src/components/PartnersPanel.astro",
@@ -629,5 +629,10 @@
     "path": "src/components/SearchDialog.astro",
     "reason": "Functional interaction primitive: optional native <dialog> site search using Baseline tokens and client-overridable --search-* hooks, hidden trigger until enhanced and explicit no-JS fallback link. Exact LF-normalized source hash.",
     "sha256": "322df773dbdd18522e52c9a21f7d2f483d779783de2122906b03ab60fe9cfa17"
+  },
+  {
+    "path": "src/lib/view-transition.ts",
+    "reason": "Non-visual view-transition utility: ident-safe transition names from slugs and the media class pairing used by Card and list rows; no styles or markup. Exact LF-normalized source hash.",
+    "sha256": "1e9802bba24a9c8c30331b1c62121249523346a2a9c6e4f10853e8300942417a"
   }
 ]

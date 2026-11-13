@@ -85,6 +85,7 @@ test('Card renders semantic article, heading hierarchy, clickable parent and att
     },
     slots: {
       default: '<span class="custom-badge">New</span>',
+      media: '<img src="/story.jpg" alt="" />',
     },
   });
 
@@ -102,6 +103,9 @@ test('Card renders semantic article, heading hierarchy, clickable parent and att
   assert.ok(hasClass(h2, 'card-title'), 'Heading must have .card-title class');
   assert.equal(getAttr(h2, 'data-emdash-field'), 'title', 'Heading must forward titleEdit attributes');
   assert.match(getAttr(h2, 'style') || '', /view-transition-name:\s*story-hero-title/, 'Heading style must receive view-transition-name');
+  const media = queryOne(article, n => hasClass(n, 'card-media'));
+  assert.ok(media, 'Card with a media slot must render .card-media');
+  assert.match(getAttr(media, 'style') || '', /--card-aspect:\s*3 \/ 2;\s*--card-fit:\s*cover;\s*view-transition-name:\s*story-hero-media;\s*view-transition-class:\s*vt-media/, 'Media must keep its frame variables and receive the shared morph name and class');
 
   // Anchor inside heading
   const link = queryOne(h2, n => n.tagName === 'a');

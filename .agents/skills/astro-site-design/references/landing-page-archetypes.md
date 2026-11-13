@@ -379,10 +379,11 @@ To avoid repetitive equal-width 3-column card rows and flat link styling, combin
    On the detail route (`/posts/[slug]`):
    ```astro
    <h1 class="vt-morph" style={`--vt-name: post-${post.slug}-title;`}>{post.title}</h1>
-   <figure class="vt-morph" style={`--vt-name: post-${post.slug}-media;`}>
+   <figure style={mediaTransition(`post-${post.slug}`, 'media')}>
      <ResponsiveImage src={post.cover} alt={post.coverAlt} />
    </figure>
    ```
+   `mediaTransition` (from `src/lib/view-transition.ts`) produces the same ident-safe `<prefix>-media` name as `<Card>` plus the `vt-media` class that clips and covers the photo while it morphs. Lists that render their own rows instead of `<Card>` use `style={mediaTransition('post', post.slug)}` on both the row photo and the detail photo.
 3. **Native Inline SVG Component Imports (`.svg-icon`):**
    Import any `.svg` from `src/assets/` as an Astro component and pass native `<svg>` attributes:
    ```astro

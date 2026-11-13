@@ -1039,6 +1039,56 @@
 		view-transition-name: var(--vt-name);
 	}
 
+	/* Hold the header across navigations. A named header whose height differs between two pages (a
+	   compact scrolled header leaving, a tall one arriving) otherwise crossfades as a ghosted double
+	   header. Opt in with data-vt-header on the page's single sticky header, or give a header that is
+	   already named view-transition-class: vt-header. */
+	:where([data-sticky-header][data-vt-header]) {
+		view-transition-name: site-header;
+		view-transition-class: vt-header;
+	}
+
+	::view-transition-old(site-header) {
+		display: none;
+	}
+
+	::view-transition-new(site-header) {
+		animation: none;
+	}
+
+	::view-transition-old(*.vt-header) {
+		display: none;
+	}
+
+	::view-transition-new(*.vt-header) {
+		animation: none;
+	}
+
+	/* List-to-detail photo morphs: mediaTransition() in src/lib/view-transition.ts and Card media. The
+	   group clips to the card radius and both snapshots cover it while the box changes aspect ratio. */
+	::view-transition-group(*.vt-media) {
+		animation-duration: 380ms;
+		animation-timing-function: var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+		overflow: clip;
+		border-radius: var(--radius-card);
+	}
+
+	::view-transition-old(*.vt-media),
+	::view-transition-new(*.vt-media) {
+		block-size: 100%;
+		object-fit: cover;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		::view-transition-group(site-header),
+		::view-transition-group(*.vt-header),
+		::view-transition-group(*.vt-media),
+		::view-transition-old(*.vt-media),
+		::view-transition-new(*.vt-media) {
+			animation: none !important;
+		}
+	}
+
 	.svg-icon {
 		display: inline-block;
 		flex-shrink: 0;

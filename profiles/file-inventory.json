@@ -532,6 +532,14 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/lib/view-transition.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/view-transition.test.mjs": {
+      "disposition": "shared",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "src/lib/emdash-headings.ts": {
       "disposition": "shared",
       "static": "copy"

@@ -136,6 +136,19 @@ Use `data-astro-prefetch="false"` on a link or ancestor to opt out of Baseline w
 
 Card-to-hero morphing derives intent from the actual navigation source. Shared cards use `.card-media` and `.card-title`; custom markup can opt in with `[data-vt-card]`, `[data-vt-media]` and `[data-vt-title]`. Destination elements can use `[data-vt-hero-media]` and `[data-vt-hero-title]`. The shell assigns temporary `hero-media`/`hero-title` names only to the selected pair and supports a return morph using the departed article URL. Avoid assigning these names to every card in a grid. Existing explicit `Card transitionName` and `.vt-morph` contracts remain available; callers own matching and uniqueness. Reduced-motion preferences suppress motion.
 
+**List rows that do not use `<Card>`.** `mediaTransition(...parts)` from `src/lib/view-transition.ts` returns an inline style with an ident-safe `view-transition-name` and `view-transition-class: vt-media`. Put it on the list photo's wrapper and on the detail photo's wrapper with the same parts:
+
+```astro
+---
+import { mediaTransition } from '../lib/view-transition';
+---
+<a class="story-row-photo" style={mediaTransition('story', story.slug)} href={`/stories/${story.slug}/`}>…</a>
+<!-- detail page -->
+<figure class="story-hero" style={mediaTransition('story', story.slug)}>…</figure>
+```
+
+Every character outside `A-Z a-z 0-9 _ -` becomes a hyphen, a leading digit or a reserved keyword gets a `vt-` prefix, and an empty result omits the attribute, so a CMS slug cannot produce invalid CSS. `::view-transition-group(*.vt-media)` clips the morph to `--radius-card`, and both snapshots cover the box while its aspect ratio changes. `<Card transitionName>` uses the same helper: its media is named `<prefix>-media` with the `vt-media` class and its title `<prefix>-title`, so name the detail media with `mediaTransition(prefix, 'media')`. `transitionName(...parts)` returns the bare name. A name may appear once per rendered page, and slugs that differ only in punctuation map to the same name.
+
 ### Sticky header
 
 `[data-sticky-header]` makes the header sticky, and the shell maintains two state attributes on it.
@@ -146,6 +159,8 @@ Card-to-hero morphing derives intent from the actual navigation source. Shared c
 | `data-compact` | Added above 96px, removed below 24px | Size: padding, height, logo size |
 
 A size change keyed to a single threshold flips every frame at rest: the header shrinks, the content below moves up, scroll anchoring pulls `scrollY` back under the threshold and the header expands again. `data-compact` therefore has hysteresis, and the band between its two offsets (72px by default) must stay wider than the header's height change. For a larger change set `data-compact-after` and `data-expand-below` (pixels) on the header. `npm run check:css` rejects size properties in rules that select `[data-scrolled]`. After changing header height on scroll, rest the page at several positions just past each threshold and confirm that the state does not change between animation frames; `tests/visual/sticky-header.spec.mjs` does this for the starter.
+
+**Hold the header during View Transitions.** Under the root transition, a sticky header that changes height between the outgoing and incoming page (compact after scrolling, tall on arrival) shows as a ghosted double header. Add `data-vt-header` to the page's single sticky header: it is named `site-header`, the outgoing snapshot is not drawn and the incoming one appears without a fade. A header that already has its own `view-transition-name` gets the same rules from `view-transition-class: vt-header`. Under reduced motion the header box does not animate either. A transition name must be unique in the document, so use the attribute on one element.
 
 For local fault probes, development builds accept destination query parameters `?_vt_delay=800` and `?_vt_fail=1`. Delay is abortable and bounded to 10 seconds; failure flags accept only `true`/`1` values. The fault hook is excluded from production. Probe aborted and overlapping navigation as well as successful navigation; a clean build alone cannot verify this lifecycle.
 

@@ -143,6 +143,10 @@
     "tier": "unit",
     "reason": "Config-import copy, loopback public-page verdicts and no-store directive contract; no framework build"
   },
+  "view-transition.test.mjs": {
+    "tier": "unit",
+    "reason": "Ident-safe transition names, media class pairing and stylesheet rule contract; no browser"
+  },
   "release-artifact.test.mjs": {
     "tier": "unit",
     "reason": "Release artifact refusal contract"
