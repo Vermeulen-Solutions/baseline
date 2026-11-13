@@ -104,6 +104,8 @@
     "scripts/snapshot-ssr.mjs",
     "scripts/html-tags.mjs",
     "scripts/loopback-port.mjs",
+    "scripts/dev-tools-checks.mjs",
+    "tests/dev-tools-checks.test.mjs",
     "scripts/client-bundles.mjs",
     "tests/client-bundles.test.mjs",
     "tests/engineering-hooks.test.mjs",

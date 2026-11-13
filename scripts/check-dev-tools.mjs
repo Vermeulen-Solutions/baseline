@@ -8,6 +8,7 @@ import { availableLoopbackPort } from './loopback-port.mjs';
 import { randomBytes } from 'node:crypto';
 import assert from 'node:assert/strict';
 import { assertReleaseArtifact } from './assert-release-artifact.mjs';
+import { assertPublicPage, copyConfigImports, forbidsStorage } from './dev-tools-checks.mjs';
 
 const root = process.cwd();
 const stage = await mkdtemp(path.join(tmpdir(), 'emdash-dev-tools-'));
@@ -52,6 +53,8 @@ try {
   await copyFile(path.join(root, 'scripts', 'dev-tools-integration.mjs'), path.join(stage, 'scripts', 'dev-tools-integration.mjs'));
   for (const name of ['client-bundles.mjs', 'process-runner.mjs', 'baseline-features-integration.mjs']) await copyFile(path.join(root, 'scripts', name), path.join(stage, 'scripts', name));
   await copyFile(path.join(root, 'scripts', 'dev-tools-middleware.mjs'), path.join(stage, 'scripts', 'dev-tools-middleware.mjs'));
+  // Sites add their own config-imported integrations; copy every local module the config reaches.
+  await copyConfigImports(root, stage, 'astro.config.mjs');
   await symlink(path.join(root, 'node_modules'), path.join(stage, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
   launch(['node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', String(port)]);
   await ready();
@@ -68,7 +71,7 @@ try {
   // cannot accidentally pass on an error/setup response.
   const setup = await fetch(origin + '/_emdash/api/setup/dev-bypass?redirect=/_emdash/admin');
   assert.equal(setup.status, 200, 'Disposable dev setup must succeed');
-  assert.ok((await (await fetch(origin + '/')).text()).includes('Welcome'), 'Expected seeded public content');
+  report.dev.publicStatus = await assertPublicPage(await fetch(origin + '/'), 'Dev public route must render the site, not setup/error markup');
   await stop();
   const fixtureBuild = launch(['node_modules/astro/bin/astro.mjs', 'build'], { ASTRO_TEST_FIXTURES: '1' });
   const [fixtureCode] = await once(fixtureBuild, 'exit'); child = undefined;
@@ -83,7 +86,8 @@ try {
   const fixtureVersion = Number(fixturesSource.match(/export const fixtureVersion = (\d+);/)?.[1]);
   assert.ok(Number.isSafeInteger(fixtureVersion) && fixtureVersion > 0, 'Expected the source fixture version');
   assert.ok(fixtureHtml.includes(`data-fixture-version="${fixtureVersion}"`));
-  assert.equal(fixtureResponse.headers.get('cache-control'), 'no-store');
+  // Fixture pages must never be stored; sites may add stricter directives such as `private`.
+  assert.ok(forbidsStorage(fixtureResponse.headers.get('cache-control')), 'Fixture responses must send the no-store directive');
   const tickerMarkup = [...fixtureHtml.matchAll(/<div[^>]*data-logo-ticker[^>]*>([\s\S]*?)<\/ul>\s*<\/div>\s*<\/div>\s*<\/div>/g)];
   assert.equal(tickerMarkup.length, 2, 'Empty ticker renders nothing');
   for (const [markup] of tickerMarkup) {
@@ -109,11 +113,7 @@ try {
       report.production[method + suffix] = result.status;
     }
   }
-  const publicResponse = await fetch(origin + '/');
-  assert.equal(publicResponse.status, 200, 'Built public route must be healthy');
-  const index = await publicResponse.text();
-  assert.ok(index.includes('Welcome') && index.includes('Recent Posts'), 'Built public content must render, not setup/error markup');
-  report.production.publicStatus = publicResponse.status;
+  report.production.publicStatus = await assertPublicPage(await fetch(origin + '/'), 'Built public content must render, not setup/error markup');
   for (const method of ['GET', 'HEAD', 'POST']) for (const suffix of ['', '/', '?fixtures=1']) {
     const response = await fetch(origin + '/_form-recovery' + suffix, { method, headers: { cookie: 'fixtures=1' } });
     assert.equal(response.status, 404); assert.ok(!(await response.text()).includes('data-form-recovery-fixture'));

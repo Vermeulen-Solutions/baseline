@@ -139,6 +139,10 @@
     "tier": "rehearsal",
     "reason": "Generate a Sveltia site and run its contracts"
   },
+  "dev-tools-checks.test.mjs": {
+    "tier": "unit",
+    "reason": "Config-import copy, loopback public-page verdicts and no-store directive contract; no framework build"
+  },
   "release-artifact.test.mjs": {
     "tier": "unit",
     "reason": "Release artifact refusal contract"

@@ -1179,6 +1179,14 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/dev-tools-checks.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/dev-tools-checks.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/client-bundles.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
