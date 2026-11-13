@@ -8,6 +8,7 @@ import { safeJsonLdSerialize } from 'emdash/page';
 import { isCmsFlagSet, isCmsFlagEnabled } from '../src/lib/cms-flag.ts';
 import { breadcrumbGraph, organizationGraph, taxonomyRobots } from '../src/lib/structured-data.ts';
 import { normalizedPageLocation } from '../src/lib/page-url.ts';
+import { ROBOTS_CACHE_CAP, robotsCacheControl } from '../src/lib/robots-cache.ts';
 import { isWebhookDomainAllowed } from '../src/lib/webhook-domain.ts';
 import { checkProductionSetup } from '../scripts/check-production-setup.mjs';
 import { retainBuildAssets } from '../scripts/retain-build-assets.mjs';
@@ -103,4 +104,14 @@ test('seven-day build retention carries exact-case assets, expires old generatio
     await assert.rejects(readFile(join(next, 'RecentHash.js')));
     await assert.rejects(retainBuildAssets(current, join(current, 'nested'), now), /separate trees/);
   } finally { await rm(root, { recursive: true, force: true }); }
+});
+
+test('robots.txt caching is capped when public and left alone while a site is in staging', async () => {
+  assert.equal(ROBOTS_CACHE_CAP, 'public, max-age=3600, must-revalidate');
+  for (const native of ['public, max-age=86400', 'max-age=86400', '', null]) assert.equal(robotsCacheControl(native), ROBOTS_CACHE_CAP);
+  for (const native of ['no-store', 'No-Store', 'private, max-age=60', 'no-cache']) assert.equal(robotsCacheControl(native), native);
+  // The request policy must call the helper and carry no stray control characters.
+  const middleware = await readFile(new URL('../src/middleware.ts', import.meta.url), 'utf8');
+  assert.match(middleware, /robotsCacheControl\(response\.headers\.get\('Cache-Control'\)\)/);
+  for (const file of ['../src/middleware.ts', '../src/lib/robots-cache.ts']) assert.doesNotMatch(await readFile(new URL(file, import.meta.url), 'utf8'), /[\x00-\x08\x0b\x0c\x0e-\x1f]/);
 });

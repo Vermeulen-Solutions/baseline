@@ -112,6 +112,7 @@
     "src/lib/cms-flag.ts",
     "src/lib/structured-data.ts",
     "src/lib/page-url.ts",
+    "src/lib/robots-cache.ts",
     "src/lib/webhook-domain.ts",
     "src/middleware.ts",
     "scripts/check-production-setup.mjs",

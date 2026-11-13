@@ -1,5 +1,6 @@
 import { defineMiddleware } from 'astro:middleware';
 import { normalizedPageLocation } from './lib/page-url';
+import { robotsCacheControl } from './lib/robots-cache';
 
 const IMMUTABLE_MEDIA_CACHE = 'public, max-age=31536000, immutable';
 
@@ -45,9 +46,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return out;
   }
   if (context.url.pathname === '/robots.txt' && response.status === 200) {
-    // Native 1.3 route uses 24h browser caching. Cap it without replacing its body.
+    // Cap the native 24h cache without replacing the body; keep the staging no-store (see robots-cache.ts).
     const headers = new Headers(response.headers);
-    headers.set('Cache-Control', 'public, max-age=3600, must-revalidate');
+    headers.set('Cache-Control', robotsCacheControl(response.headers.get('Cache-Control')));
     return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   }
   if (['GET', 'HEAD'].includes(context.request.method) && response.status === 200 && response.headers.get('content-type')?.includes('text/html') && !response.headers.has('Cache-Control') && !response.headers.has('Set-Cookie') && !context.url.pathname.startsWith('/_') && !context.url.pathname.startsWith('/api/')) {

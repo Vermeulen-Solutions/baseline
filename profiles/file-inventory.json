@@ -1219,6 +1219,10 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "src/lib/robots-cache.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "src/lib/page-url.ts": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"

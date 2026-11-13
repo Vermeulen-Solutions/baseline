@@ -23,6 +23,8 @@ Sites created through the setup wizard, or by a script that calls the setup API,
 - Existing sites are live and do not change. A site without the setting is live.
 - The development-only `setup/dev-bypass` route does not set staging, so local rehearsals and the checks in this repository render as live sites.
 - Site transfer and `emdash export-seed` do not carry the staging status.
+- Baseline's middleware caps the native `/robots.txt` cache at one hour. It now leaves the staging `no-store` response alone, so crawlers see the change when the site goes live; before this change it replaced `no-store` with a one-hour public cache.
+- A separate staging environment (see [production deployment](production-deployment.md)) should stay in staging permanently and keep its edge `X-Robots-Tag` rule: the native tag covers only pages that render `<EmDashHead>`.
 - Going live is an explicit launch step: **Settings > General > Site Status > Go live**, `{ "staging": false }` to the settings API, or the MCP `settings_update` tool. A production site that still returns `noindex, nofollow` on ordinary pages after cutover is most likely still in staging.
 
 ## Collaborative editing
@@ -65,7 +67,7 @@ The evaluated target is `@emdash-cms/plugin-forms@0.2.13`, which requires Kumo 2
 
 ## Evidence for this upgrade
 
-Run locally on Windows, Node.js 24.21.0, Node/SQLite/local media, against the installed 1.5.0 packages: `npm run verify`, `npm run build`, `npm run audit:html`, the compatibility-named `npm run check:emdash13` (role boundaries, edit locks, revision diff and restore, inline toolbar), `node tests/forms.integration.mjs` with forms 0.2.13, `node tests/metadata.integration.mjs`, `npm run rehearse:importer`, `npm run check:cache` and `npm run check:dev-tools`. Each rehearsal uses a disposable site with synthetic content. Separately, the starter's own seeded local development database, created on 1.4.0, was migrated in place through 092 to 097 by the first 1.5.0 build and HTML audit run, and the audit then served its public routes from it. That run was not preceded by a backup; treat it as an observation, not as the procedure.
+Run locally on Windows, Node.js 24.21.0, Node/SQLite/local media, against the installed 1.5.0 packages: `npm run verify`, `npm run build`, `npm run audit:html`, the compatibility-named `npm run check:emdash13` (role boundaries, edit locks, revision diff and restore, inline toolbar), `node tests/forms.integration.mjs` with forms 0.2.13, `node tests/metadata.integration.mjs`, `npm run rehearse:importer`, `npm run check:cache` and `npm run check:dev-tools`. Each rehearsal uses a disposable site with synthetic content. Staging was also observed end to end on a disposable built site: after the real setup route, the home page and a post served `noindex, nofollow` and `/robots.txt` answered `no-store`; after `{ "staging": false }` through the settings API both pages carried no robots tag and `/robots.txt` returned to the one-hour public cache. Separately, the starter's own seeded local development database, created on 1.4.0, was migrated in place through 092 to 097 by the first 1.5.0 build and HTML audit run, and the audit then served its public routes from it. That run was not preceded by a backup; treat it as an observation, not as the procedure.
 
 Not covered: an in-place upgrade of a database with real content, menus, plugins or plugin storage, collaborative editing, the SMTP provider, sandboxed plugins, and any Workers/D1/R2 or Durable Object behavior. Verify those on the site that uses them.
 

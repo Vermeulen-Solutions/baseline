@@ -173,11 +173,12 @@ npx wrangler deploy --env staging
 > [!WARNING]
 > Search engines must never index your staging environment. Indexing staging domains or `*.workers.dev` URLs creates duplicate content penalties, leaks unreleased marketing campaigns, and confuses search ranking.
 
-To guarantee search engines ignore the staging environment:
-1. **Cloudflare Transform Rule (Recommended):** In Cloudflare Dashboard for your staging hostname (`staging.client-site.com`), add an **HTTP Response Header Modification Rule**:
+To guarantee search engines ignore the staging environment, combine the native status with an edge rule:
+1. **Native site status (EmDash 1.5 or later):** a site created through setup starts in staging and adds `noindex, nofollow` to every page that renders `<EmDashHead>`, which Baseline's `Base.astro` does. Leave a staging environment in that state and never select **Go live** on it. A staging site created before 1.5 has no status and is live: select **Switch back to staging** in Settings > General > Site Status. Site transfer does not copy the status in either direction, so importing production content keeps a staging target in staging, and a production target stays in whatever state it was set up in.
+2. **Cloudflare Transform Rule (Recommended as well):** the native tag covers HTML pages only, not media, feeds or routes that do not render `<EmDashHead>`. In Cloudflare Dashboard for your staging hostname (`staging.client-site.com`), add an **HTTP Response Header Modification Rule**:
    * Header Name: `X-Robots-Tag`
    * Value: `noindex, nofollow`
-2. **Environment Variable Guard:** Ensure templates or site shells emit `<meta name="robots" content="noindex, nofollow" />` whenever `ENVIRONMENT === 'staging'` or when the request hostname does not match `SITE_URL`.
+3. **Environment Variable Guard (optional, site-owned):** the starter does not implement this. If a site adds it, ensure templates or site shells emit `<meta name="robots" content="noindex, nofollow" />` whenever `ENVIRONMENT === 'staging'` or when the request hostname does not match `SITE_URL`.
 
 ### C. Data Synchronization (Cloning Production Content to Staging)
 
@@ -204,6 +205,7 @@ When rolling out Day-2 changes through staging:
 4. **Promote to Production:**
    * Follow the existing migration mode. If the release adds migrations, has known pending migrations or requires data-changing actions, record the applicable database recovery point before deployment. Use explicit migration commands only when the site's workflow or the migration requires them; reuse unchanged media/key recovery versions.
    * Deploy the verified production Worker: `npx wrangler deploy`
+   * On first launch, select **Go live** on production (Settings > General > Site Status) and confirm an ordinary public page has no `noindex` robots tag. Promotion deploys code; it never changes the site status of either environment.
    * Smoke-check the changed routes and compare required environment bindings. Re-run publish/purge or scheduled-post acceptance when the release changes those behaviors or during initial launch acceptance.
 
 ---

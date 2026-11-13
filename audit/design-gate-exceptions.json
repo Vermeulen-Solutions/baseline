@@ -570,6 +570,11 @@
     "sha256": "12a11ea0bcf37548795e48d18e22bcbf935ed8a2af0a7d141d044f600f174729"
   },
   {
+    "path": "src/lib/robots-cache.ts",
+    "reason": "Functional infrastructure: cache policy for the native robots.txt response, preserving the staging no-store; no presentation changes. Exact LF-normalized source hash.",
+    "sha256": "ed6b7ed20bc2b59794352efa58c85b5efcc6e863cb6aff922c72bc6aed72c71e"
+  },
+  {
     "path": "src/lib/page-url.ts",
     "reason": "Functional infrastructure: opt-in public URL normalization with asset/auth/API exclusions; no presentation changes. Any source edit invalidates this exact LF-normalized exception.",
     "sha256": "89ff259a0c34f6a41076045fe4917854a380a5c4e7a05e3924bbe9169f64acd1"
@@ -588,7 +593,7 @@
   {
     "path": "src/middleware.ts",
     "reason": "Functional starter request policy: opt-in page redirects, bounded robots caching and explicit browser revalidation for public HTML without an existing policy/session cookie; no client visual implementation. Exact LF-normalized source hash.",
-    "sha256": "70b4873507b3af859e12bbd8fb08fa4ab8edaa267e9afc640c044f803e0d3305"
+    "sha256": "2e669134007800fb46cf2c67d81ac4abbaf2cb71a5969d1bbc29d70a006da0b6"
   },
   {
     "path": "src/plugins/baseline-metadata/index.ts",
