@@ -49,6 +49,29 @@ export function inspectAuthorCSS(css, { file = 'stylesheet.css', lineOffset = 0 
   return issues;
 }
 
+/**
+ * A sticky element only travels within its parent. A header nested in an element that carries
+ * slot="header" sits in a wrapper exactly as tall as itself, so it can never stick. Bounded
+ * source heuristic: lowercase wrapper elements only; components and <Fragment> are not inspected.
+ */
+export function inspectShellSlots(source, file = 'component.astro') {
+  const issues = [];
+  const text = source.replace(/<!--[\s\S]*?-->/g, comment => comment.replace(/[^\n]/g, ' '));
+  for (const match of text.matchAll(/<([a-z][\w-]*)\b([^<>]*?\bslot\s*=\s*["']header["'][^<>]*)>/g)) {
+    const [opening, name, attributes] = match;
+    if (/(?<![\w-])data-sticky-header(?![\w-])/.test(attributes) || /\/\s*$/.test(attributes)) continue;
+    const rest = text.slice(match.index + opening.length);
+    let depth = 1, end = rest.length;
+    for (const tag of rest.matchAll(new RegExp(`<(/?)${name}(?![\\w-])[^<>]*?(/?)>`, 'g'))) {
+      if (tag[2]) continue;
+      depth += tag[1] ? -1 : 1;
+      if (depth === 0) { end = tag.index; break; }
+    }
+    if (/(?<![\w-])data-sticky-header(?![\w-])/.test(rest.slice(0, end))) issues.push({ file, line: text.slice(0, match.index).split('\n').length, message: `A sticky header inside <${name} slot="header"> cannot stick: the wrapper is only as tall as its content. Put slot="header" on the header or use <Fragment slot="header">.` });
+  }
+  return issues;
+}
+
 export function inspectSourceTree(rootDir = process.cwd(), roots = ['src','profiles/static/project/src']) {
   const issues = [], files = new Set();
   const visit = filename => {
@@ -60,6 +83,7 @@ export function inspectSourceTree(rootDir = process.cwd(), roots = ['src','profi
     const file = path.relative(rootDir,filename).replaceAll('\\','/');
     const source = fs.readFileSync(filename,'utf8');
     try {
+      if (filename.endsWith('.astro')) issues.push(...inspectShellSlots(source, file));
       const inputs = filename.endsWith('.css') ? [{css:source,file}] : astroStyleInputs(source,file);
       for (const input of inputs) {
         issues.push(...inspectAuthorCSS(input.css,input));

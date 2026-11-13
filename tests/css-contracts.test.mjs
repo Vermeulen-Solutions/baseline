@@ -3,7 +3,33 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { inspectAuthorCSS, inspectSourceTree, astroStyleInputs, analyzeFlow } from '../scripts/css-contracts.mjs';
+import { inspectAuthorCSS, inspectSourceTree, inspectShellSlots, astroStyleInputs, analyzeFlow } from '../scripts/css-contracts.mjs';
+
+test('a sticky header nested in an element slot wrapper is reported; direct and Fragment slots are not', () => {
+  const wrapped = '---\nimport SiteShell from "./SiteShell.astro";\n---\n<SiteShell>\n  <div slot="header">\n    <p class="notice">Notice</p>\n    <div class="inner"><header class="site-header" data-sticky-header>Site</header></div>\n  </div>\n  <slot />\n</SiteShell>\n';
+  const issues = inspectShellSlots(wrapped, 'src/layouts/Base.astro');
+  assert.equal(issues.length, 1);
+  assert.equal(issues[0].line, 5);
+  assert.equal(issues[0].file, 'src/layouts/Base.astro');
+  assert.match(issues[0].message, /<div slot="header"> cannot stick.*<Fragment slot="header">/);
+  assert.equal(inspectShellSlots("<section class='bar' slot='header'><div><header data-sticky-header /></div></section>").length, 1);
+  for (const source of [
+    '<SiteShell><header slot="header" class="site-header" data-sticky-header>Site</header></SiteShell>',
+    '<SiteShell><Fragment slot="header"><p>Notice</p><header data-sticky-header>Site</header></Fragment></SiteShell>',
+    '<SiteShell><div slot="header"><header class="site-header">Static header</header></div><div data-sticky-header-note></div></SiteShell>',
+    '<SiteShell><div slot="header"><p>Notice</p></div><header data-sticky-header>Outside the wrapper</header></SiteShell>',
+    '<SiteShell><div slot="header"><div>Nested</div></div><div><header data-sticky-header>Later sibling tree</header></div></SiteShell>',
+    '<SiteShell><div slot="footer"><header data-sticky-header>Other slot</header></div></SiteShell>',
+    '<!-- <div slot="header"><header data-sticky-header></header></div> -->',
+  ]) assert.deepEqual(inspectShellSlots(source), [], source);
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'shell-slots-'));
+  try {
+    fs.mkdirSync(path.join(dir, 'src/layouts'), { recursive: true });
+    fs.writeFileSync(path.join(dir, 'src/layouts/Base.astro'), wrapped);
+    const report = inspectSourceTree(dir, ['src']);
+    assert.deepEqual(report.issues.map(issue => [issue.file, issue.line]), [['src/layouts/Base.astro', 5]]);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
 
 test('M01-M03/M05 CSS parsing handles strings, comments, at-rules and anonymous/wrong layers',()=>{
   assert.equal(inspectAuthorCSS('@layer components { .x::after { content:"}"; } } .outside {color:red}').length,1);

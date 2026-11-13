@@ -160,6 +160,20 @@ Every character outside `A-Z a-z 0-9 _ -` becomes a hyphen, a leading digit or a
 
 A size change keyed to a single threshold flips every frame at rest: the header shrinks, the content below moves up, scroll anchoring pulls `scrollY` back under the threshold and the header expands again. `data-compact` therefore has hysteresis, and the band between its two offsets (72px by default) must stay wider than the header's height change. For a larger change set `data-compact-after` and `data-expand-below` (pixels) on the header. `npm run check:css` rejects size properties in rules that select `[data-scrolled]`. After changing header height on scroll, rest the page at several positions just past each threshold and confirm that the state does not change between animation frames; `tests/visual/sticky-header.spec.mjs` does this for the starter.
 
+**Slot the header as a direct child of the shell.** A sticky element only travels within its parent. `<div slot="header"><header data-sticky-header>…</header></div>` puts the header in a box exactly as tall as the header and whatever sits above it, so it has nowhere to stick and scrolls away. Nothing fails; it looks like a CSS bug. Put `slot="header"` on the header itself, or group several elements with `<Fragment slot="header">`, which renders no wrapper:
+
+```astro
+<SiteShell title={title}>
+  <Fragment slot="header">
+    <p class="site-notice">…</p>
+    <header class="site-header" data-sticky-header>…</header>
+  </Fragment>
+  <slot />
+</SiteShell>
+```
+
+`check:css` reports a `data-sticky-header` element nested inside a lowercase element that carries `slot="header"`. A wrapper rendered by a component is not inspected.
+
 **Hold the header during View Transitions.** Under the root transition, a sticky header that changes height between the outgoing and incoming page (compact after scrolling, tall on arrival) shows as a ghosted double header. Add `data-vt-header` to the page's single sticky header: it is named `site-header`, the outgoing snapshot is not drawn and the incoming one appears without a fade. A header that already has its own `view-transition-name` gets the same rules from `view-transition-class: vt-header`. Under reduced motion the header box does not animate either. A transition name must be unique in the document, so use the attribute on one element.
 
 For local fault probes, development builds accept destination query parameters `?_vt_delay=800` and `?_vt_fail=1`. Delay is abortable and bounded to 10 seconds; failure flags accept only `true`/`1` values. The fault hook is excluded from production. Probe aborted and overlapping navigation as well as successful navigation; a clean build alone cannot verify this lifecycle.
