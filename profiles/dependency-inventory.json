@@ -311,7 +311,7 @@
         "emdash"
       ],
       "versionSource": "package.json#/overrides/zod",
-      "reason": "GHSA-mrhx-c7xc-m3w5 is patched in zod 4.6.6; EmDash 1.4.0, @emdash-cms/auth 1.4.0 and @emdash-cms/plugin-types 0.6.0 pin 4.5.4 exactly. Same major; remove once EmDash ships a patched pin"
+      "reason": "GHSA-mrhx-c7xc-m3w5 is patched in zod 4.6.6; EmDash 1.5.0, @emdash-cms/auth 1.5.0 and @emdash-cms/plugin-types 0.6.1 now pin 4.6.7 themselves, so the override no longer changes the EmDash graph. Retained until its effect on the other Zod consumers is reviewed; removal is a separate dependency change"
     }
   }
 }

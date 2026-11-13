@@ -312,6 +312,10 @@
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/emdash-reviewed.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/sqlite-schema.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"

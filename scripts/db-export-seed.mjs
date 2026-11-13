@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { validateSeed } from 'emdash';
+import { REVIEWED_EMDASH, installedEmdash } from './emdash-reviewed.mjs';
 import { argumentsOf, bytesOf, jsonOf, requireFact, newDirectory, writeJSON, sha256, isMain, failure } from './infrastructure-io.mjs';
 const cli = fileURLToPath(new URL('../node_modules/emdash/dist/cli/index.mjs', import.meta.url));
 export function projectSeed(seed, policy) {
@@ -32,7 +33,7 @@ export function projectSeed(seed, policy) {
   return { seed: result, warnings: [...warnings].sort(), excludedScopes: ['settings', 'menus', 'bylines', 'taxonomies', 'widgets', 'sections', 'redirects', 'unselected collections/fields', 'users/sessions/credentials'] };
 }
 export function exportSeedCandidate(options) {
-  requireFact(JSON.parse(fs.readFileSync(new URL('../node_modules/emdash/package.json', import.meta.url))).version === '1.4.0', 'Installed exporter differs from reviewed adapter');
+  requireFact(installedEmdash() === REVIEWED_EMDASH, 'Installed exporter differs from reviewed adapter');
   requireFact(options.database && options.policy && options.out, 'Explicit closed database, allowlist policy and new staging output required');
   const source = bytesOf(options.database); requireFact(!['-wal', '-shm', '-journal'].some(suffix => fs.existsSync(options.database + suffix)), 'Use a closed consistent offline database');
   const policy = jsonOf(options.policy);
@@ -47,7 +48,7 @@ export function exportSeedCandidate(options) {
     const raw = execFileSync(process.execPath, args, { cwd: scratch, encoding: 'utf8', timeout: 60000, maxBuffer: 32 * 1024 * 1024, stdio: ['ignore', 'pipe', 'pipe'] });
     const projected = projectSeed(JSON.parse(raw), policy);
     writeJSON(path.join(stage, 'candidate.json'), projected.seed);
-    const receipt = { receiptVersion: 1, status: projected.warnings.length ? 'candidate-with-portability-warnings' : 'candidate-created', exitCode: projected.warnings.length ? 2 : 0, emdash: '1.4.0', sourceSHA256: sha256(source), policySHA256: sha256(bytesOf(options.policy)), candidateSHA256: sha256(bytesOf(path.join(stage, 'candidate.json'))), warnings: projected.warnings, excludedScopes: projected.excludedScopes, note: 'Bootstrap candidate, not a backup, production migration or content/media parity certificate; seed/seed.json never overwritten' };
+    const receipt = { receiptVersion: 1, status: projected.warnings.length ? 'candidate-with-portability-warnings' : 'candidate-created', exitCode: projected.warnings.length ? 2 : 0, emdash: REVIEWED_EMDASH, sourceSHA256: sha256(source), policySHA256: sha256(bytesOf(options.policy)), candidateSHA256: sha256(bytesOf(path.join(stage, 'candidate.json'))), warnings: projected.warnings, excludedScopes: projected.excludedScopes, note: 'Bootstrap candidate, not a backup, production migration or content/media parity certificate; seed/seed.json never overwritten' };
     requireFact(sha256(bytesOf(options.database)) === sha256(source), 'Source changed during export; candidate not verified');
     writeJSON(path.join(stage, 'receipt.json'), receipt); return receipt;
   } finally { requireFact(path.dirname(scratch) === path.resolve(os.tmpdir()) && path.basename(scratch).startsWith('baseline-seed-export-'), 'Unsafe cleanup'); fs.rmSync(scratch, { recursive: true, force: true }); }

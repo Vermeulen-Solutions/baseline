@@ -87,7 +87,7 @@
   {
     "path": "src/components/PortableTextHeading.astro",
     "reason": "CMS heading renderer: semantic heading block component for RichText with shared deterministic ID policy and heading-target class. Exact LF-normalized source hash.",
-    "sha256": "704bc51f50fad31331480a850d9235fb4d12dbab90c22e0a6e3eaba54e01ba19"
+    "sha256": "5442649b5f4433ae178d6181ad35998e68db7461a73ff4c256fd442d6253851c"
   },
   {
     "path": "src/dev/PrimitivesFixture.astro",

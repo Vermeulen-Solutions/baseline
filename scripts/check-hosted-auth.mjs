@@ -1,5 +1,9 @@
 import { argumentsOf, bytesOf, isMain, requireFact } from './infrastructure-io.mjs';
 import { stripVTControlCharacters } from 'node:util';
+import { REVIEWED_EMDASH } from './emdash-reviewed.mjs';
+
+// Releases whose native setup/admin/verify route was read and found to keep the same guard order.
+export const HOSTED_AUTH_VERSIONS = ['1.3.0', '1.4.0', REVIEWED_EMDASH];
 
 export function checkAuthBuildLog(log) {
   requireFact(typeof log === 'string' && log.trim().length > 0, 'A complete successful build log is required');
@@ -20,9 +24,9 @@ async function jsonResponse(response) {
   return JSON.parse(Buffer.concat(chunks).toString('utf8'));
 }
 
-/** EmDash 1.3.0 and 1.4.0: no cookies, authorization, nonce or challenge are sent. */
+/** Reviewed releases only: no cookies, authorization, nonce or challenge are sent. */
 export async function checkHostedAuth({ origin, version, buildLog, fetcher = fetch }) {
-  requireFact(['1.3.0', '1.4.0'].includes(version), 'Probe contract is verified for EmDash 1.3.0 and 1.4.0; review the installed route before extending it');
+  requireFact(HOSTED_AUTH_VERSIONS.includes(version), 'Probe contract is verified for EmDash ' + HOSTED_AUTH_VERSIONS.join(', ') + '; review the installed route before extending it');
   checkAuthBuildLog(buildLog);
   const url = new URL(origin);
   requireFact(url.protocol === 'https:' || (url.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)), 'Use HTTPS, or HTTP only on loopback');
@@ -32,7 +36,7 @@ export async function checkHostedAuth({ origin, version, buildLog, fetcher = fet
   const body = await jsonResponse(status);
   requireFact(status.status === 200 && body.success === true && typeof body.data?.needsSetup === 'boolean', 'Native setup status is unverified');
   // This route checks session presence before setup state and credential writes.
-  // An empty body without a nonce cannot reach credential creation on both reviewed versions.
+  // An empty body without a nonce cannot reach credential creation on the reviewed versions.
   const probe = await fetcher(new URL('/_emdash/api/setup/admin/verify', url), {
     ...options, method: 'POST', headers: { ...options.headers, Origin: url.origin, 'Content-Type': 'application/json', 'X-EmDash-Request': '1' }, body: '{}', signal: AbortSignal.timeout(10000),
   });
@@ -44,7 +48,7 @@ export async function checkHostedAuth({ origin, version, buildLog, fetcher = fet
 
 if (isMain(import.meta.url)) {
   try {
-    if (process.argv.length === 3 && process.argv[2] === '--help') console.log('Non-consuming native preflight: --url https://preview.example --emdash-version 1.4.0 --build-log <complete successful release log>. No credentials/cookies are sent; does not create a passkey, reset setup, or certify a successful session-store write.');
+    if (process.argv.length === 3 && process.argv[2] === '--help') console.log('Non-consuming native preflight: --url https://preview.example --emdash-version ' + REVIEWED_EMDASH + ' --build-log <complete successful release log>. No credentials/cookies are sent; does not create a passkey, reset setup, or certify a successful session-store write.');
     else {
       const args = argumentsOf(process.argv.slice(2), ['--url', '--emdash-version', '--build-log']);
       requireFact(args.url && args['build-log'], 'URL and build log required');

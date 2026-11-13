@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 import { startVisualSite } from './visual/site.mjs';
 import { checkHostedAuth } from '../scripts/check-hosted-auth.mjs';
+import { REVIEWED_EMDASH } from '../scripts/emdash-reviewed.mjs';
 import { retainBuildAssets } from '../scripts/retain-build-assets.mjs';
 
 assert.ok(!process.env.CI && !process.env.GITHUB_ACTIONS, 'Cache production rehearsal is an explicit local check');
@@ -52,9 +53,9 @@ try {
       receipt.builds.push({ current: retained.current, retained: retained.retained });
     },
   });
-  const authProbe = await checkHostedAuth({ origin, version: '1.4.0', buildLog: await readFile(path.join(reportDir, 'build.log'), 'utf8') });
+  const authProbe = await checkHostedAuth({ origin, version: REVIEWED_EMDASH, buildLog: await readFile(path.join(reportDir, 'build.log'), 'utf8') });
   assert.equal(authProbe.setupLocked, true);
-  receipt.checks.push('native non-consuming hosted-auth contract reaches completed setup on built 1.4.0');
+  receipt.checks.push('native non-consuming hosted-auth contract reaches completed setup on built ' + REVIEWED_EMDASH);
   const api = async (route, method = 'GET', body) => {
     const response = await fetch(origin + '/_emdash/api/' + route, {
       method, headers: { Authorization: 'Bearer ' + token, ...(body ? { 'Content-Type': 'application/json' } : {}) },

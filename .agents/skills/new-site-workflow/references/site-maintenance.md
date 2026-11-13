@@ -128,7 +128,7 @@ installed release notes and verify:
   for editor/admin bundle growth (`docs/client-bundles.md`), followed by a real
   editor select/type/save/reload check.
 
-See `docs/emdash-1.4-upgrade.md` for current version behavior and
+See `docs/emdash-1.5-upgrade.md` for current version behavior and
 `docs/cloudflare-backup-restore.md` for recovery.
 
 For image additions, use the general `media:prepare` workflow when installed;

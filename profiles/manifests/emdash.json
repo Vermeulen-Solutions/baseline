@@ -134,8 +134,9 @@
     "tests/migration-review.test.mjs",
     "docs/migration-review.md",
     "docs/runtime-targets.md",
-    "docs/emdash-1.4-upgrade.md",
-    "standards/emdash-1.4.0-database-tables.json",
+    "docs/emdash-1.5-upgrade.md",
+    "standards/emdash-1.5.0-database-tables.json",
+    "scripts/emdash-reviewed.mjs",
     "tests/visual/site.mjs",
     "tests/visual/fixed-clock.mjs",
     "tests/visual/contract.mjs"

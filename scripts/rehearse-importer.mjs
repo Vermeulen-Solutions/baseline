@@ -10,6 +10,7 @@ import { randomBytes, randomUUID } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 import sharp from 'sharp';
+import { REVIEWED_EMDASH } from './emdash-reviewed.mjs';
 import { argumentsOf, newDirectory, isMain, writeJSON, jsonOf as json } from './infrastructure-io.mjs';
 import { contractDigest, sha256 } from '../standards/schemas/migration-acceptance.mjs';
 import { exporterHandler, syntheticWXR, portableFacts, htmlFacts } from '../tests/fixtures/importer-fidelity/fixture-tools.mjs';
@@ -23,7 +24,7 @@ export async function rehearseImporter({ out, signal } = {}) {
   assert.equal(fs.readFileSync(path.join(fixtures, 'wordpress.xml'), 'utf8'), syntheticWXR(fixture));
   const requests = [], images = new Map();
   const versions = Object.fromEntries(['astro', 'emdash', '@emdash-cms/gutenberg-to-portable-text'].map(name => [name, json(path.join(root, 'node_modules', name, 'package.json')).version]));
-  assert.equal(versions.astro, '7.4.0'); assert.equal(versions.emdash, '1.4.0');
+  assert.equal(versions.astro, '7.4.0'); assert.equal(versions.emdash, REVIEWED_EMDASH);
   let child, protocol; const logs = [];
   const executableHashes = Object.fromEntries(['dist/astro/routes/api/import/wordpress/execute.mjs', 'dist/astro/routes/api/import/wordpress-plugin/execute.mjs', 'dist/astro/routes/api/import/wordpress/rewrite-urls.mjs', 'dist/index.mjs'].map(file => [file, sha256(fs.readFileSync(path.join(root, 'node_modules/emdash', file)))]));
   executableHashes['@emdash-cms/gutenberg-to-portable-text/dist/index.mjs'] = sha256(fs.readFileSync(path.join(root, 'node_modules/@emdash-cms/gutenberg-to-portable-text/dist/index.mjs')));

@@ -118,7 +118,7 @@
     "@astrojs/react": "7.1.0",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "7.4.0",
-    "emdash": "1.4.0",
+    "emdash": "1.5.0",
     "photoswipe": "^5.4.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -127,7 +127,7 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@cloudflare/workers-types": "5.20261019.1",
-    "@emdash-cms/auth": "1.4.0",
+    "@emdash-cms/auth": "1.5.0",
     "@fontsource/noto-sans": "5.3.0",
     "@playwright/test": "1.64.1",
     "@types/node": "24.19.2",

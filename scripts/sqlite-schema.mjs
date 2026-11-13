@@ -4,9 +4,10 @@ import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { MIGRATION_NAMES } from 'emdash';
 import { bytesOf, requireFact, sha256, writeJSON } from './infrastructure-io.mjs';
+import { adapterId, installedEmdash, reviewedCatalog } from './emdash-reviewed.mjs';
 
 const quoted = name => '"' + name.replaceAll('"', '""') + '"';
-const catalog = JSON.parse(fs.readFileSync(new URL('../standards/emdash-1.4.0-database-tables.json', import.meta.url)));
+const catalog = reviewedCatalog(), ADAPTER = adapterId('sqlite-metadata-v1');
 const sort = rows => rows.sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b), 'en'));
 export const affinity = type => /INT/i.test(type) ? 'INTEGER' : /CHAR|CLOB|TEXT/i.test(type) ? 'TEXT' : /BLOB/i.test(type) || !type ? 'BLOB' : /REAL|FLOA|DOUB/i.test(type) ? 'REAL' : 'NUMERIC';
 /** Bounded SQL lexer: literals stay exact, identifiers/keywords normalize; never evaluates SQL. */
@@ -123,8 +124,7 @@ function schemaOf(db) {
   return { tables, viewsAndTriggers: masters.filter(row => ['view', 'trigger'].includes(row.type)).map(row => ({ type: row.type, name: row.name, table: row.tbl_name, definition: normalize(row.sql) })), registry, migrations, issues, unknown };
 }
 export function inspectSQLite(file) {
-  const installed = JSON.parse(fs.readFileSync(new URL('../node_modules/emdash/package.json', import.meta.url)));
-  requireFact(installed.version === catalog.emdash && sha256(fs.readFileSync(new URL('../node_modules/emdash/src/database/types.ts', import.meta.url))) === catalog.sourceSHA256, 'Installed CMS differs from reviewed metadata adapter');
+  requireFact(installedEmdash() === catalog.emdash && sha256(fs.readFileSync(new URL('../node_modules/emdash/src/database/types.ts', import.meta.url))) === catalog.sourceSHA256, 'Installed CMS differs from reviewed metadata adapter');
   const source = bytesOf(file);
   requireFact(!['-wal', '-shm', '-journal'].some(suffix => fs.existsSync(file + suffix)), 'Use a closed consistent snapshot without SQLite sidecars');
   const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-db-inspect-')); let db;
@@ -134,11 +134,11 @@ export function inspectSQLite(file) {
     requireFact(db.prepare('PRAGMA integrity_check').all().every(row => Object.values(row)[0] === 'ok'), 'SQLite integrity check failed');
     requireFact(db.prepare('PRAGMA foreign_key_check').all().length === 0, 'SQLite foreign key check failed');
     const schema = schemaOf(db);
-    return { schemaVersion: 1, adapter: 'emdash-1.4.0/sqlite-metadata-v1', sourceSHA256: sha256(source), sqliteVersion: db.prepare('SELECT sqlite_version() AS version').get().version, schema, schemaSHA256: sha256(JSON.stringify(schema)) };
+    return { schemaVersion: 1, adapter: ADAPTER, sourceSHA256: sha256(source), sqliteVersion: db.prepare('SELECT sqlite_version() AS version').get().version, schema, schemaSHA256: sha256(JSON.stringify(schema)) };
   } finally { db?.close(); requireFact(path.dirname(scratch) === path.resolve(os.tmpdir()) && path.basename(scratch).startsWith('baseline-db-inspect-'), 'Unsafe scratch cleanup'); fs.rmSync(scratch, { recursive: true, force: true }); }
 }
 export function compareSchemas(left, right) {
-  for (const snapshot of [left, right]) requireFact(snapshot?.schemaVersion === 1 && snapshot.adapter === 'emdash-1.4.0/sqlite-metadata-v1' && snapshot.schemaSHA256 === sha256(JSON.stringify(snapshot.schema)), 'Invalid schema snapshot contract/digest');
+  for (const snapshot of [left, right]) requireFact(snapshot?.schemaVersion === 1 && snapshot.adapter === ADAPTER && snapshot.schemaSHA256 === sha256(JSON.stringify(snapshot.schema)), 'Invalid schema snapshot contract/digest');
   const comparable = schema => ({ ...schema, tables: schema.tables.filter(table => table.owner !== 'engine') });
   const equal = JSON.stringify(comparable(left.schema)) === JSON.stringify(comparable(right.schema));
   const unknown = [...new Set([...left.schema.unknown, ...right.schema.unknown])];

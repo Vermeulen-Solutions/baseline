@@ -92,7 +92,7 @@ When an update changes EmDash, Astro or the Cloudflare adapter, apply the instal
 - Record the exact branch, build/deploy command and a D1 Time Travel bookmark before deployment. `wrangler d1 export` cannot dump EmDash FTS5 databases.
 - After deployment, verify `/_emdash/api/health`, the public cache headers, admin login flow and every exposed hostname.
 
-See [EmDash 1.4 upgrade](emdash-1.4-upgrade.md) for current version-specific behavior and [Cloudflare recovery](cloudflare-backup-restore.md) for bookmark and restore procedure.
+See [EmDash 1.5 upgrade](emdash-1.5-upgrade.md) for current version-specific behavior and [Cloudflare recovery](cloudflare-backup-restore.md) for bookmark and restore procedure.
 
 The optional `audit:site` command in a current Baseline tooling checkout diagnoses older EmDash sites without requiring them to install it. Its read-only inventory supports npm and pnpm lockfiles and marks local file/link/workspace packages separately from registry packages. Its versioned standards checks are a starting point, not a complete comparison against today's features; follow its documented runtime/evidence limits. A full update still needs the three-area comparison above. See the upstream [audit guide](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/site-standards-audit.md).
 

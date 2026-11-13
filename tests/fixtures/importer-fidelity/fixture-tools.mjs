@@ -20,7 +20,8 @@ const cdata = value => `<![CDATA[${String(value).replaceAll(']]>', ']]]]><![CDAT
 // Deterministic semantic comparison: ignore random PT keys, resolve mark keys
 // to definitions, and replace run-specific media URLs with fixture identities.
 export function portableFacts(value, media = []) {
-  const urls = new Map(media.flatMap(m => [[m.newUrl, `attachment:${m.wpId}`], [m.originalUrl, `attachment:${m.wpId}`]]));
+  // EmDash 1.5 REST saves replace a URL-shaped asset._ref with the media ID when the file is in the library.
+  const urls = new Map(media.flatMap(m => [[m.newUrl, `attachment:${m.wpId}`], [m.originalUrl, `attachment:${m.wpId}`], ...(m.mediaId ? [[m.mediaId, `attachment:${m.wpId}`]] : [])]));
   const clean = (v, marks = new Map()) => {
     if (typeof v === 'string') return urls.get(v) ?? v.replace(/\/view\/(?:wxr|plugin)_posts\//g, '/view/{collection}/');
     if (Array.isArray(v)) return v.map(item => clean(item, marks));

@@ -1,5 +1,7 @@
 # EmDash 1.4 upgrade
 
+Historical record. The current pin and guide are in [EmDash 1.5 upgrade](emdash-1.5-upgrade.md).
+
 The EmDash foundation now pins `emdash` and its directly used `@emdash-cms/auth` to **1.4.0**. Core brings matching admin, blocks and Gutenberg conversion packages. Astro remains 7.4.0. Static/Sveltia projects do not acquire CMS or forms dependencies. Historical standards certification and earlier audit receipts retain their original versions; this upgrade does not rewrite that evidence.
 
 ## Existing sites
