@@ -12,6 +12,16 @@ Owned styles use `@layer base` or `@layer components`, after vendor/framework ow
 
 Section owns block padding and a stack's container gap. `spacing="section|content|none"` controls padding only, with none equal to zero. Ordinary Container owns content gap; Grid owns grid gap. Each primitive resets its local defaults from inherited root-context aliases. The shell pays horizontal gutters once and has no inferred block rhythm under v2. Intentionally scoped aliases inherit; local mode values do not.
 
+**Lists used as layout rows.** The base rule gives every `p` and `li` the prose measure (`max-width: var(--measure-reading)`). A `ul > li` list whose items are layout rows (linked rows with a photo, title and facts; a directory; a schedule) inherits that limit and stays at the reading width inside a full-width container. Lift it on the rows and keep it on prose:
+
+```css
+@layer components {
+  .row-list > li { max-inline-size: none; }
+}
+```
+
+The narrowing only appears where the container is wider than the measure, so check a wide viewport (1440px) in a full-page capture; a narrow preview pane hides it.
+
 RichText establishes `.flow` and `data-editorial-content`; generic flow only spaces visible direct siblings. Editorial controls include heading/list/item/figure/quote/base flow spacing. Native CSS scope stops recursive list/quote defaults at islands and nested editorial boundaries. `flow={false}` removes both defaults, wrapperless unless attributes require a plain wrapper. Empty public content is omitted while real CMS edit metadata retains selectable empty fields.
 
 ## Section, Grid and RichText
