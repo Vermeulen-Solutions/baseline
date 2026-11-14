@@ -24,6 +24,12 @@ export function validateRecord(markdown) {
   if (sections.length !== 1) return ['Expected exactly one real ## Art Direction Record section.'];
   const section = prose.slice(sections[0].index + sections[0][0].length).split(/^## /m)[0];
   const errors = [];
+  // A second record body elsewhere in the file (for example one pasted into the middle of a
+  // sentence, so its heading is not at the start of a line) leaves the section above valid while
+  // the newer decision goes unchecked. Found on a real site: the gate kept passing on a stale record.
+  const bodies = [...prose.matchAll(/^\s*- \*\*Aesthetic Lane:\*\*/gm)].length;
+  if (bodies > 1) errors.push(`Found ${bodies} record bodies (lines starting "- **Aesthetic Lane:**"). Keep exactly one, under the ## Art Direction Record heading, and remove the superseded one.`);
+  if (/\S[^\n]*## Art Direction Record[ \t]*$/m.test(prose)) errors.push('A line ends with "## Art Direction Record" in the middle of other text: a record was pasted into a sentence. Restore that sentence and keep the record in its own section.');
   const field = name => {
     const matches = [...section.matchAll(new RegExp(`^\\s*- \\*\\*${name}:\\*\\*[ \t]*(.*)$`, 'gm'))];
     const value = matches[0]?.[1]?.trim() ?? '';

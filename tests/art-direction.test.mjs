@@ -32,3 +32,15 @@ test('template markers and undecided values are rejected', () => {
   };
   for (const [name, markdown] of Object.entries(cases)) assert.ok(validateRecord(markdown).length, name);
 });
+
+test('a second record body pasted into a sentence is rejected, not silently ignored', () => {
+  // Seen on a real site: the newer record was spliced into prose, so its heading was not at the
+  // start of a line and the gate kept validating the older section at the end of the file.
+  const newer = record.replace('Orbit', 'Reply badge').replace('## Art Direction Record\n', '');
+  const spliced = `Before client-specific visual work,\nsave a complete \`## Art Direction Record\n\nSelected by the owner.\n\n${newer}\n## Content\n\nText.\n\n${record}`;
+  const errors = validateRecord(spliced);
+  assert.ok(errors.some(e => /2 record bodies/.test(e)), errors.join(' | '));
+  assert.ok(errors.some(e => /pasted into a sentence/.test(e)), errors.join(' | '));
+  // Mentioning the heading in prose, as the shipped AGENTS.md does, stays valid.
+  assert.deepEqual(validateRecord(`Save a complete \`## Art Direction Record\` with every field.\n\n${record}`), []);
+});

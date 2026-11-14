@@ -41,3 +41,26 @@ test('issues aggregate per problem with every place they occur', () => {
   assert.match(report, /9 route\/width combinations, 2 distinct issue/);
   assert.match(report, /== edge-on-hover: 1/);
 });
+
+test('enlarged-text cases default on, can be narrowed or switched off, and reject nonsense', async () => {
+  const { parseTextScale, DEFAULT_TEXT_SCALE } = await import('../scripts/audit-ui.mjs');
+  const base = ['--base', 'http://127.0.0.1:4321', '--sitemap'];
+  assert.deepEqual(parseArgs(base).textScale, parseTextScale(DEFAULT_TEXT_SCALE));
+  assert.deepEqual(parseArgs(base).textScale.map(s => `${s.kind}:${s.factor}`), ['root:1.6', 'root:2', 'text:1.5', 'text:2']);
+  assert.deepEqual(parseArgs([...base, '--text-scale', 'off']).textScale, []);
+  assert.deepEqual(parseArgs([...base, '--text-scale', 'text:2']).textScale, [{ kind: 'text', factor: 2 }]);
+  assert.throws(() => parseArgs([...base, '--text-scale', 'zoom:2']), /--text-scale/);
+  assert.throws(() => parseArgs([...base, '--text-scale', 'root:1']), /--text-scale/);
+  assert.equal(parseArgs(base).contrast, false);
+  assert.equal(parseArgs([...base, '--contrast']).contrast, true);
+});
+
+test('measurements are reported without splitting one problem into many entries', () => {
+  // The pixel note varies per route and width; it must not be part of the aggregation key.
+  const entries = aggregate([
+    { kind: 'large-text-offscreen', sig: 'h1', detail: 'at text ×2', note: 'spans 34..511 of 390px', route: '/', width: 390 },
+    { kind: 'large-text-offscreen', sig: 'h1', detail: 'at text ×2', note: 'spans 32..453 of 320px', route: '/', width: 320 },
+  ]);
+  assert.equal(entries.length, 1);
+  assert.match(formatReport(entries, 2), /h1 at text ×2 \[spans 34\.\.511 of 390px\] — 2×/);
+});

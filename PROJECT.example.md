@@ -89,6 +89,7 @@ Link the actual sources rather than copying their values or inventories:
 - Content model, routes, navigation and locale rules: [paths / focused inventory]
 - Visual direction: `AGENTS.md` → Art Direction Record; [selected `DESIGN.md` reference, if used]
 - Shipped design values and calibration: `src/styles/global.css`; [calibration evidence]
+- Owner's other sites (optional): [URLs, so a new direction can be checked against them for borrowed motifs]
 - Other evidence and durable decisions: [paths]
 
 Repository working rules stay in `AGENTS.md`. Design references and interchange

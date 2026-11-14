@@ -489,8 +489,13 @@ At the concept checkpoint, reuse our selected design surface. If unresolved, rec
 Calibrate the selected system on the installed styleguide, implement one real
 page per archetype and critique it in the browser before rolling it out. Keep
 one requirement-to-evidence register in the existing tracker. Present requested
-route proposals before their implementation. Validate saved capture dimensions,
-loaded content, narrow/intermediate/wide layouts and changed interactions.
+route proposals before their implementation. Before release, show a route
+treatment table: every route marked rebuilt, restyled (shared styles only) or
+unchanged, so no page is left on inherited styles without the owner knowing.
+Validate saved capture dimensions, loaded content, narrow/intermediate/wide
+layouts and changed interactions. Test phone widths (390 and 320) with enlarged
+text as well: a larger root font size and text-only scaling, checking for text
+that leaves the screen and columns squeezed to a few characters.
 If native-browser access fails, discover supported built-in/connector options;
 never bypass a policy denial. Test CMS save/reload when edit targets change,
 using an authorized isolated copy where appropriate.
