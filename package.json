@@ -83,7 +83,7 @@
     "init:profile": "node scripts/init-profile.mjs",
     "sync:baseline": "node scripts/sync-baseline.mjs",
     "test:profiles": "node scripts/verify-profiles.mjs",
-    "check:emdash13": "node scripts/check-emdash13.mjs",
+    "check:emdash-current": "node scripts/check-emdash-current.mjs",
     "rehearse:importer": "node scripts/rehearse-importer.mjs",
     "lint:scripts": "node scripts/check-script-syntax.mjs",
     "lint:templates": "eslint src profiles/static/project/src --max-warnings 0",
@@ -150,8 +150,7 @@
     "yaml": "2.9.1"
   },
   "overrides": {
-    "minimatch": "11.0.5",
-    "zod": "4.6.7"
+    "minimatch": "11.0.5"
   },
   "license": "MIT"
 }

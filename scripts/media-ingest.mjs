@@ -5,6 +5,24 @@ import { safeKey } from './media-files.mjs';
 import { adapterId } from './emdash-reviewed.mjs';
 import { requireFact, bytesOf, noLinks, jsonOf, newDirectory, writeJSON, atomicJSON, sha256, boundedBody } from './infrastructure-io.mjs';
 
+const THUMBNAIL_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/avif']);
+/**
+ * Small JPEG that EmDash 1.5 uses for the blurhash/dominant-color placeholder instead of decoding
+ * the full original, as the admin does (fits a 64-pixel box). Returns null, and the server keeps
+ * its own behavior, for non-raster types, images with an alpha channel (EmDash gives transparent
+ * images no placeholder) and anything sharp cannot read. Never a reason to fail an upload.
+ */
+export async function placeholderThumbnail(bytes, mimeType) {
+  if (!THUMBNAIL_TYPES.has(mimeType)) return null;
+  try {
+    const { default: sharp } = await import('sharp');
+    const image = sharp(bytes, { limitInputPixels: 268402689 });
+    if ((await image.metadata()).hasAlpha) return null;
+    const thumbnail = await image.rotate().resize(64, 64, { fit: 'inside', withoutEnlargement: true }).jpeg({ quality: 70 }).toBuffer();
+    return thumbnail.length <= 24000 ? thumbnail : null;
+  } catch { return null; }
+}
+
 export function localEmdashAdapter({ url, token, devBypass = false, request = fetch }) {
   const base = new URL(url);
   requireFact(base.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(base.hostname) && base.pathname === '/' && !base.search && !base.hash && !base.username && !base.password, 'Apply-local requires an explicit loopback HTTP origin');
@@ -35,6 +53,8 @@ export function localEmdashAdapter({ url, token, devBypass = false, request = fe
       form.append('deduplicate', 'false'); form.append('ensureUniqueFilename', 'true');
       form.append('alt', entry.metadata.alt); form.append('caption', entry.metadata.caption);
       if (entry.output.width && entry.output.height) { form.append('width', String(entry.output.width)); form.append('height', String(entry.output.height)); }
+      const thumbnail = await placeholderThumbnail(bytes, entry.output.mimeType);
+      if (thumbnail) form.append('thumbnail', new Blob([thumbnail], { type: 'image/jpeg' }), 'thumbnail.jpg');
       return item(await call('/_emdash/api/media', { method: 'POST', body: form }));
     },
   };

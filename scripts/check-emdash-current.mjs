@@ -17,7 +17,7 @@ const receipt={schemaVersion:1,node:process.versions.node,platform:process.platf
 const hashes={};
 receipt.sourceCommit=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
 receipt.sourceTreeDirty=Boolean(execFileSync('git',['status','--porcelain'],{cwd:root,encoding:'utf8'}).trim());
-for(const relative of ['scripts/check-emdash13.mjs','tests/visual/site.mjs','package-lock.json','astro.config.mjs','seed/seed.json','src/layouts/Base.astro','src/layouts/SiteShell.astro','src/components/RichText.astro','src/components/Card.astro'])hashes[relative]=createHash('sha256').update(await fs.readFile(path.join(root,relative))).digest('hex');
+for(const relative of ['scripts/check-emdash-current.mjs','tests/visual/site.mjs','package-lock.json','astro.config.mjs','seed/seed.json','src/layouts/Base.astro','src/layouts/SiteShell.astro','src/components/RichText.astro','src/components/Card.astro'])hashes[relative]=createHash('sha256').update(await fs.readFile(path.join(root,relative))).digest('hex');
 const key=randomBytes(32).toString('hex');
 let owned,origin,browser,admin,activePage;
 const actors={};

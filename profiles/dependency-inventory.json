@@ -305,13 +305,6 @@
       ],
       "versionSource": "package.json#/overrides/minimatch",
       "reason": "GHSA-g3hv-75wg-m249 is patched only in minimatch 11; eslint, @eslint/config-array, @typescript-eslint and eslint-plugin-jsx-a11y-x still declare ^10 but use only the Minimatch constructor, match() and minimatch(), which 11 retains"
-    },
-    "zod": {
-      "profiles": [
-        "emdash"
-      ],
-      "versionSource": "package.json#/overrides/zod",
-      "reason": "GHSA-mrhx-c7xc-m3w5 is patched in zod 4.6.6; EmDash 1.5.0, @emdash-cms/auth 1.5.0 and @emdash-cms/plugin-types 0.6.1 now pin 4.6.7 themselves, so the override no longer changes the EmDash graph. Retained until its effect on the other Zod consumers is reviewed; removal is a separate dependency change"
     }
   }
 }

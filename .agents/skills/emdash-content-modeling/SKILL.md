@@ -41,6 +41,12 @@ When an organization has multiple distinct variants, sub-teams, or cohorts withi
   - Distinct external link endpoints (e.g. external booking links, portal URLs, partner sites).
 - **Navigation & ordering:** Keep entity variants grouped logically in navigation menus and directories (e.g. sub-departments ordered under their parent division).
 
+### Collection options to decide explicitly (EmDash 1.5 or later)
+- **Scheduling:** every collection can schedule entries unless `supports` includes `no-scheduling`. The older `scheduling` value never disabled anything and is deprecated; leaving it out does not turn scheduling off. Add `no-scheduling` to collections that should never be scheduled, such as settings-like singletons or reference data, and leave editorial collections alone. Existing schedules still run.
+- **Date column:** set the collection `dateField` to `publishedAt`, `createdAt` or `updatedAt` so the admin list shows and sorts by that system timestamp. Do not add a custom date field that only duplicates one of them; keep a custom field when the date is editorial data, such as an event date.
+- **Long plain text:** `options.rows` on a `text` field renders a textarea of that height. Use it for multi-line plain text instead of reaching for `rich_text`.
+- **Seed images:** a seed can import an image stored beside it with `{ "$media": { "file": "assets/photo.jpg" } }` instead of a URL. The path must stay inside the seed directory, the file is read when the seed is applied with Node.js, and it is not bundled for deployment, so it suits starter and fixture content, not production media transfer. Prepare such images with `npm run media:prepare` first.
+
 ### Native Row-per-Locale Multilingual Architecture
 - Every editorial collection must use native row-per-locale architecture: each record has a `locale` (matching the site's configured locales, e.g. `defaultLocale` and secondary locales) and a shared `translation_group` ULID.
 - Cross-collection relations link parents and children via `translation_group`s so that referencing an item automatically resolves to the matching locale row in public queries.

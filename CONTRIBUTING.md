@@ -104,7 +104,7 @@ stay local and independent of push/PR CI and production/deploy commands.
 
 ## Skills and instruction ownership
 
-building-emdash-site, creating-plugins and emdash-cli are upstream EmDash mirrors.
+building-emdash-site, creating-plugins, emdash-cli and upgrading-emdash are upstream EmDash mirrors.
 Submit upstream API guidance upstream; keep Baseline policy in maintained
 instructions, references and local skills. Do not edit mirrors to add starter policy.
 

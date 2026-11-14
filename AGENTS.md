@@ -124,7 +124,7 @@ for direction, implementation and rendered critique.
 | WordPress migration | [Dashboard source capture and profile outputs](docs/wordpress-migration.md), wordpress-to-emdash-content for EmDash, and the migration guidance in new-site-workflow; classify repeated content before routes and link audit/content-candidate-register.md here |
 | Languages/locales | [Internationalization](docs/internationalization.md): native row-per-locale groups, no duplicate language fields, prefixDefaultLocale: false |
 | Hosting, production data, cache or newsletters | emdash-site-setup or emdash-production-cutover as applicable, and [production runtime rules](docs/site-working-rules.md#production-runtime-hardening); never reset production to repair authentication/imports |
-| Reviewed starter/skill updates | [Baseline updates](docs/baseline-updates.md), [skill synchronization](docs/skill-synchronization.md); preserve local calibration and review conflicts |
+| Reviewed starter/skill updates | [Baseline updates](docs/baseline-updates.md), [skill synchronization](docs/skill-synchronization.md); preserve local calibration and review conflicts. For an EmDash version upgrade also use upgrading-emdash and the current `docs/emdash-*-upgrade.md` guide |
 
 ## Verify and hand off
 

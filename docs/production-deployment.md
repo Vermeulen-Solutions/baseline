@@ -34,7 +34,20 @@ Ensure your production host has:
 - `EMDASH_ENCRYPTION_KEY`: Generated via `npx emdash secrets generate`; escrow the complete rotation list separately from the database. `EMDASH_AUTH_SECRET` is a separate legacy/optional input, not a replacement encryption key.
 - `PORT`: Server port (default 4321).
 - Persistent storage for the SQLite database (`data.db`) and uploaded media (`./uploads/`).
+- Optional email through the built-in SMTP provider (EmDash 1.5 or later): choose SMTP in Settings > Email, or set `EMAIL_SMTP_HOST`, `EMAIL_SMTP_USER` and `EMAIL_SMTP_PASS`. Saving credentials in the admin needs `EMDASH_ENCRYPTION_KEY`; admin settings take precedence over the environment. Port 465 uses implicit TLS, 587 uses STARTTLS and 25 is refused. Send a test email and confirm inbox delivery before relying on it for sign-in or recovery mail.
 - **Backup & Disaster Recovery:** Follow [Node.js + SQLite Backup & Recovery](node-backup-restore.md) to establish automated SQLite `.backup` / `VACUUM INTO` snapshots, media synchronization, and isolated restore drills. Naive copying of `data.db` while WAL is active is strictly prohibited.
+
+### Collaborative editing (optional, off by default)
+
+The starter leaves `coEditing` off; the edit lock then works as before and none of this applies. To let several editors work in one entry, set `coEditing: true` in the `emdash()` options, rebuild and deploy, and check the host first:
+
+- **Forward WebSocket upgrades** on `/_emdash/api/content/{collection}/{id}/room`. Nginx needs `proxy_http_version 1.1` with the `Upgrade` and `Connection` headers passed through for that path; Caddy's `reverse_proxy` forwards upgrades by default. Without it each browser falls back to single-editor mode after three failed connections and the server logs a `[co-editing]` warning.
+- **One process per room.** Rooms live in the site's own process. Several processes on one database must route each room path to the same process, for example by hashing the path. `node:cluster` workers and PM2 cluster mode keep the edit lock instead.
+- **Shutdown timeout above 5 seconds.** While rooms are open EmDash handles `SIGTERM`/`SIGINT` and exits up to 5 seconds later so edits are saved. Raise PM2 `kill_timeout` (default 1.6 seconds) or the equivalent stop timeout of the process manager or container.
+- **Other WebSocket handlers** on the same server must leave room paths alone: use a `ws` server created with `noServer: true` that handles only its own paths.
+- **Collections need revisions.** Co-editing applies only to collections with `revisions` in `supports`; others keep the edit lock.
+
+After enabling it, open one entry in two browsers and confirm both avatars appear and concurrent rich text edits merge. API clients see different conflicts while an entry is co-edited; see [EmDash 1.5 upgrade](emdash-1.5-upgrade.md#collaborative-editing). Workers sites need the `EMDASH_ROOMS` Durable Object binding and room class exports instead; follow the official Cloudflare co-editing guide.
 
 ---
 

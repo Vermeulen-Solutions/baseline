@@ -81,7 +81,7 @@ Optional SSR feed caching can adopt `src/lib/public-feed-cache.ts`, `src/lib/pri
 
 ### Framework upgrade checks
 
-When an update changes EmDash, Astro or the Cloudflare adapter, apply the installed release notes and these checks before treating the site as upgraded:
+When an update changes EmDash, Astro or the Cloudflare adapter, apply the installed release notes and these checks before treating the site as upgraded. The mirrored `upgrading-emdash` skill describes the upstream `npx upgrade-emdash@latest` updater, which bumps every direct EmDash package and writes a `.emdash/UPGRADE.md` work order listing the release entries and the core migration delta. Use that work order as the checklist, keep Baseline's exact pins, and bring skills in through [skill synchronization](skill-synchronization.md) rather than accepting an unreviewed refresh of managed skills:
 
 - Pin core, its exact admin/blocks/auth/Gutenberg companions, the Cloudflare adapter and any sandbox runner together. `@emdash-cms/sandbox-workerd` vendors an exact core dependency; `npm ls emdash` or `pnpm why emdash` must show one installed version.
 - Pass the canonical origin through `emdash({ siteUrl })` in every Astro config, including a separate Worker config. Runtime `EMDASH_SITE_URL` does not cover build-time origin behavior.
@@ -164,7 +164,7 @@ For an existing site, adopt this as an explicit package/tooling migration rather
 
 ### Adopting dependency advisory overrides
 
-Current generation adds the npm `overrides` inventoried in `profiles/dependency-inventory.json`: `minimatch` 11.0.5 for every profile's lint tooling, and `zod` 4.6.7 for EmDash installations only. See the [dependency review](dependency-review-2026-10-25.md#follow-up-resolution--6-november-2026). Bounded sync does not change package manifests. In an existing site, add the matching `overrides` entries to its own `package.json`, run `npm install`, and review the lockfile diff. Then run the installed verify/build checks (for EmDash, also admin save/reload) and confirm `npm audit` is clean. Drop an override when the site's upstream packages declare a patched range.
+Current generation adds the npm `overrides` inventoried in `profiles/dependency-inventory.json`: `minimatch` 11.0.5 for every profile's lint tooling. The earlier `zod` 4.6.7 override for EmDash installations was dropped with EmDash 1.5.0, whose packages pin the patched version themselves; a site still on EmDash 1.4.0 keeps it until it upgrades. See the [dependency review](dependency-review-2026-10-25.md#follow-up-resolution--6-november-2026). Bounded sync does not change package manifests. In an existing site, add the matching `overrides` entries to its own `package.json`, run `npm install`, and review the lockfile diff. Then run the installed verify/build checks (for EmDash, also admin save/reload) and confirm `npm audit` is clean. Drop an override when the site's upstream packages declare a patched range.
 
 The native token checker remains the source of automated CSS checks. Add an exchange format or validator only when an actual recipient needs it; no second canonical token file or replacement token framework is introduced.
 

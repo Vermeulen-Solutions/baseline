@@ -1,12 +1,13 @@
 {
   "formatVersion": 2,
-  "source": "https://github.com/emdash-cms/emdash/tree/f636085f0f4993dd137a5ec9ab4b1775ec90c462/skills/",
-  "ref": "f636085f0f4993dd137a5ec9ab4b1775ec90c462",
-  "commitSha": "f636085f0f4993dd137a5ec9ab4b1775ec90c462",
+  "source": "https://github.com/emdash-cms/emdash/tree/c73c6008f49c66d4f6629bf7436c883877e21344/skills/",
+  "ref": "c73c6008f49c66d4f6629bf7436c883877e21344",
+  "commitSha": "c73c6008f49c66d4f6629bf7436c883877e21344",
   "skills": [
     "building-emdash-site",
     "creating-plugins",
-    "emdash-cli"
+    "emdash-cli",
+    "upgrading-emdash"
   ],
   "files": {
     "building-emdash-site/SKILL.md": "87393083e92b33db4ec77b7037b35bf76f5c77bdf875e3dc233dcde442c12238",
@@ -28,7 +29,8 @@
     "creating-plugins/references/storage.md": "12c9dad162f4e4126b476f3fe83929c58d692e8ee9b9a05cc8231a5eb8f93df1",
     "creating-plugins/references/taxonomies-and-redirects.md": "08d047abb33f405b62af59be1e6024f1e9635da527f7d100192d22e95b151f6f",
     "emdash-cli/EDITING-FLOW.md": "89bb734c199f4c14f85a7ac88805af18cca398e4f9ec7cd74a3d5e29eda48389",
-    "emdash-cli/SKILL.md": "ed9782a75ac8708af3e16a43e7540f2a0e4401297dcdedb79b75e55963c9f26f"
+    "emdash-cli/SKILL.md": "ed9782a75ac8708af3e16a43e7540f2a0e4401297dcdedb79b75e55963c9f26f",
+    "upgrading-emdash/SKILL.md": "a942be1d972ebccf9e75c869c00a0497c111e6a7747d3f174750258f114fffad"
   },
-  "syncedAt": "2026-11-09T18:29:20.883Z"
+  "syncedAt": "2026-11-14T00:27:12.783Z"
 }

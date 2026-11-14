@@ -39,7 +39,7 @@ The current evaluated target is `@emdash-cms/plugin-forms@0.2.12`, registered th
 
 For a site opting in, install the exact evaluated version with `npm install --save-exact @emdash-cms/plugin-forms@0.2.12`, add `formsPlugin()` to the existing EmDash plugins array, and render `<Form id="form-id-or-slug" />` from `@emdash-cms/plugin-forms/ui`. Preserve other plugins and complete site-specific acceptance.
 
-The compatibility-named `npm run check:emdash13` now rehearses the installed version and writes a fresh private receipt, preserving historical evidence. The name does not certify a different version.
+The compatibility-named `npm run check:emdash13` (renamed `check:emdash-current` with the 1.5 upgrade) rehearses the installed version and writes a fresh private receipt, preserving historical evidence. The name does not certify a different version.
 
 The explicit local `node tests/forms.integration.mjs` rehearsal installs that exact plugin only into an owned temporary dependency tree, creates synthetic data in a separate app, tests built SSR/client/admin and native role boundaries, and cleans both trees. It is not a build, CI or deployment dependency and never installs the plugin into root `package.json`.
 

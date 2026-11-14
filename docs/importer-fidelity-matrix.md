@@ -4,6 +4,8 @@ Tested **18 October 2026** with **Astro 7.4.0**, **EmDash 1.3.0**, **@emdash-cms
 
 The installed package's bundled `.mjs` behavior differs from some accompanying TypeScript source and documentation: notably, the executed paths preserve published status and schedule the future-dated fixture. Do not infer behavior from a source-only read or version string. Each run records executable, fixture and harness SHA-256 values in `receipt.json`; the dated [verification record](../audit/importer-fidelity-rehearsal-2026-10-18.json) identifies the tested artifacts. Review this matrix whenever those artifacts or importer versions change.
 
+**Re-run on 14 November 2026 with EmDash 1.5.0 and @emdash-cms/gutenberg-to-portable-text 1.5.0:** every asserted row below still holds for this fixture, including the duplicate guest identities from partial and chunked imports. One behavior changed outside the importer: a REST save now replaces a URL-shaped `asset._ref` with the media ID when the file is in the library, so imported gallery and image references change shape on their first API save, and the fixture compares them by resolved attachment. The 1.5 importer changes that this fixture does not exercise remain **untested here**: menus from WXR files, one byline per author across a whole WXR file, classic-editor paragraph and code-block handling, nested content in Columns and Cover blocks, and password-protected posts importing as drafts. Sites imported before 1.5 are not repaired: review any password-protected posts that were published.
+
 ## Run the rehearsal
 
 ```sh

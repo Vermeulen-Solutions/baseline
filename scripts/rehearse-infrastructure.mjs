@@ -66,6 +66,8 @@ try {
   const adapter = localEmdashAdapter({ url: site.origin, devBypass: true });
   const ingestion = await ingestPrepared(prepared, adapter); assert.equal(ingestion.exitCode, 0, JSON.stringify(ingestion));
   const repeated = await ingestPrepared(prepared, adapter); assert.equal(repeated.exitCode, 0); assert.equal(repeated.verified, 2);
+  // EmDash 1.5: the uploaded thumbnail, not a decode of the original, yields the placeholder.
+  for (const record of Object.values(JSON.parse(fs.readFileSync(path.join(prepared, 'ingestion.json'), 'utf8')).entries)) assert.equal(typeof (await adapter.get(record.media.id)).blurhash, 'string', 'Opaque raster upload must store a placeholder');
   const mapped = mapPreparedReferences(prepared, [plan.entries[1].entryId, plan.entries[0].entryId, plan.entries[1].entryId]);
   assert.equal(mapped[0].asset._ref, mapped[2].asset._ref); assert.notEqual(mapped[0].asset._ref, mapped[1].asset._ref);
   const client = new EmDashClient({ baseUrl: site.origin, devBypass: true });

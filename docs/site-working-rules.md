@@ -31,6 +31,7 @@ For improvements to Baseline as a reusable starter, also read [CONTRIBUTING.md](
 - `building-emdash-site`: content queries, schema, Portable Text, site features.
 - `emdash-cli`: current CLI operations and editing flow.
 - `creating-plugins`: plugin implementation when a site actually needs one.
+- `upgrading-emdash`: the upstream `upgrade-emdash` updater and its `.emdash/UPGRADE.md` work order. Baseline's exact pins, reviewed skill synchronization and `docs/baseline-updates.md` still govern; do not let the updater replace managed skills outside that review.
 - `emdash-site-setup`: hosting and sandbox runner selection, deployment, and site transfer.
 - `wordpress-to-emdash-content`: WordPress import, media, and form behavior.
 - `astro-site-design`: visual inspection and maintainable public Astro presentation. For existing-site rebuilds, read its migration visual-audit reference before implementing pages.

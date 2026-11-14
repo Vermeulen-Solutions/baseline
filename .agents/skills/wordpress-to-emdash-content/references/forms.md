@@ -309,7 +309,7 @@ Do not treat this render-time count as a reservation. The Action rechecks and cl
 
 ## Email, spam, errors, and accessibility
 
-- Use Resend or the project's approved email provider from a server-only module. Send only the notification/autoresponse actually required. Never fail a saved registration just because a secondary email provider is temporarily down; log and retry through a durable outbox if guaranteed delivery matters.
+- Use the project's approved email provider from a server-only module: on EmDash 1.5 or later the built-in SMTP provider (Settings > Email) covers an existing mail service without a plugin, and Resend or another provider remains fine where it is already established. Send only the notification/autoresponse actually required. Never fail a saved registration just because a secondary email provider is temporarily down; log and retry through a durable outbox if guaranteed delivery matters.
 - Apply server-side validation even when HTML constraints are present. Normalize email once; apply the exact duplicate scope from the audit. Use a provider CAPTCHA/rate limiting when risk merits it. A honeypot alone is not security.
 - Add abuse/rate limits appropriate to the deployment adapter. Avoid logging message bodies, email addresses, access tokens, or full form payloads.
 - Use labels, fieldsets/legends for groups, autocomplete, helpful required/format hints, field-associated errors and a focusable error summary. Preserve entered values after validation errors. Announce success/full-state updates with a status region. Use no embed/iframe.

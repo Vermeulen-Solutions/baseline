@@ -934,7 +934,7 @@
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },
-    "scripts/check-emdash13.mjs": {
+    "scripts/check-emdash-current.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },

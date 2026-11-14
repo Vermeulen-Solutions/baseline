@@ -8,7 +8,7 @@ import { spawnSync } from 'node:child_process';
 import sharp from 'sharp';
 import { mediaPlan, prepareMedia } from '../scripts/media-migrate-wp.mjs';
 import { probeMedia, isolatedProbe } from '../scripts/media-probe.mjs';
-import { ingestPrepared, stageR2Objects, localEmdashAdapter, mapPreparedReferences } from '../scripts/media-ingest.mjs';
+import { ingestPrepared, stageR2Objects, localEmdashAdapter, mapPreparedReferences, placeholderThumbnail } from '../scripts/media-ingest.mjs';
 import { syncR2, r2Transport } from '../scripts/sync-r2-media.mjs';
 import { atomicJSON, sha256 } from '../scripts/infrastructure-io.mjs';
 import { adapterId } from '../scripts/emdash-reviewed.mjs';
@@ -157,3 +157,28 @@ test('real R2 CLI sets exit 1 on upload failures using injected offline fetch; a
   assert.throws(() => localEmdashAdapter({ url: 'https://example.invalid', token: 'synthetic' })); assert.equal(fs.existsSync(config), false);
   const retired = spawnSync(process.execPath, [path.join(root, 'scripts/organize-media.mjs'), '--db=never-create.db', '--hydrate'], { cwd: source, encoding: 'utf8' }); assert.equal(retired.status, 2); assert.equal(fs.existsSync(path.join(source, 'never-create.db')), false);
 }));
+
+test('REST uploads send a small placeholder thumbnail for opaque rasters only and never fail an upload over it', async () => {
+  const opaque = await sharp({ create: { width: 400, height: 200, channels: 3, background: '#336699' } }).png().toBuffer();
+  const alpha = await sharp({ create: { width: 40, height: 20, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0.5 } } }).png().toBuffer();
+  const thumbnail = await placeholderThumbnail(opaque, 'image/png');
+  const info = await sharp(thumbnail).metadata();
+  assert.equal(info.format, 'jpeg'); assert.equal(info.width, 64); assert.equal(info.height, 32);
+  assert.equal(await placeholderThumbnail(alpha, 'image/png'), null);
+  assert.equal(await placeholderThumbnail(Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>'), 'image/svg+xml'), null);
+  assert.equal(await placeholderThumbnail(Buffer.from('not an image'), 'image/jpeg'), null);
+  const forms = [];
+  const request = async (url, options = {}) => {
+    if (url.includes('/setup/dev-bypass')) return new Response(null, { status: 302, headers: { 'set-cookie': 'session=synthetic; Path=/' } });
+    forms.push(options.body);
+    return Response.json({ success: true, data: { item: { id: 'synthetic' } } });
+  };
+  const adapter = localEmdashAdapter({ url: 'http://127.0.0.1:12345', devBypass: true, request });
+  const entry = bytes => ({ entryId: 'a'.repeat(64), probe: { extension: 'png' }, metadata: { alt: '', caption: '' }, output: { mimeType: 'image/png', width: 400, height: 200 }, bytes });
+  await adapter.upload(opaque, entry(opaque)); await adapter.upload(alpha, entry(alpha));
+  assert.equal(forms.length, 2);
+  const sent = forms[0].get('thumbnail');
+  assert.equal(sent.type, 'image/jpeg'); assert.ok(sent.size > 0 && sent.size < 24000);
+  assert.equal(forms[0].get('file').size, opaque.length);
+  assert.equal(forms[1].get('thumbnail'), null);
+});
