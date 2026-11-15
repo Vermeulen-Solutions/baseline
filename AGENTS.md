@@ -129,8 +129,8 @@ for direction, implementation and rendered critique.
 ## Verify and hand off
 
 For this EmDash foundation, run `npm run doctor` before installing dependencies,
-use `npm run verify:fast` during edits, then run `npm run verify`, `npm run build`
-and `npm run audit:html` against that fresh build before handoff. Use npm.cmd
+use `npm run verify:fast` during edits, then run `npm run verify`, `npm run build`,
+`npm run audit:html` and `npm run check:dev-tools` against that fresh build before handoff. Use npm.cmd
 and npx.cmd in Windows PowerShell. In Git Bash, never pass text that contains
 backticks through an inline `node -e` or an unquoted heredoc: the shell runs
 them as commands and drops them. Write the text or script to a file first. The HTML audit checks emitted HTML and captures

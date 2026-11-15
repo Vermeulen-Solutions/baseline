@@ -142,7 +142,7 @@ When cutover verification is complete and production traffic is serving cleanly,
 > The site is live on its custom production domain with valid TLS, verified admin logins, and protected corporate mail DNS.
 >
 > **Recommended Final Actions:**
-> 1. **(Recommended) Update Site Registry:** Run `npm run site:register` with status `active` to record the live production repository.
+> 1. **Update the site registry:** Run `npm run site:register` with status `active` to record the live production repository. Stage 6 of `new-site-workflow` already requires a registry record or a pending-registration artifact for a new site; this updates it for production.
 > 2. **Archive Cutover Log:** Save the completed recovery, deployment and observed acceptance receipts with rollback instructions in `audit/production-cutover.md`. Backup ownership/cadence and live acceptance must already be established before declaring completion.
 
 ## Engineering verification loop

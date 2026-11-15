@@ -122,7 +122,7 @@ Every schema and data change must be applied and verified across all three envir
 2. **Cloudflare D1 (`<db-binding>`):**
    - Export SQL statements or write a dedicated `.sql` migration script.
    - Execute via Wrangler: `npx wrangler d1 execute <db-name> --remote --file=scripts/<migration>.sql`.
-   - Rebuild and deploy the Cloudflare Worker: `npm run build:cloudflare && npm run deploy:cloudflare`.
+   - Rebuild and deploy the Cloudflare Worker with the site's own build and deploy commands (look them up in `package.json`; Baseline ships no `build:cloudflare` or `deploy:cloudflare` script, and a bare `wrangler deploy` skips the site's checks).
    - Verify live rendered HTML on `workers.dev` or production domain.
    - Verify structural parity with the installed `npm run db:diff` instead of comparing schemas by hand: capture a closed, consistent local SQLite copy, then compare it against a saved snapshot or an explicit D1 target (`--config`, `--env`, `--account`, `--database`). It also enforces the 50-physical-column budget. Exit 0 is verified equal, 1 is drift, 2 is unverified. It never migrates or writes either database. See `docs/database-workflow.md`.
 3. **Version-Controlled Seed (`seed/seed.json`):**

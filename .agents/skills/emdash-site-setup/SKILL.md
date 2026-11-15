@@ -59,7 +59,7 @@ EmDash and Cloudflare interfaces change. Before using commands or configuration,
 - [Install plugins](https://docs.emdashcms.com/plugins/installing/)
 - [Internationalization (i18n)](https://docs.emdashcms.com/guides/internationalization/) when the site will have translated content.
 - [Site transfer](https://docs.emdashcms.com/guides/site-transfer/) when copying an existing EmDash site between local and hosted environments.
-- [Cloudflare agent setup prompt](https://developers.cloudflare.com/agent-setup/prompt.md) only when the user wants Cloudflare skills/MCPs configured for Codex. Those tools are optional agent tooling, not a site dependency; installing them changes Codex-wide configuration and requires a restart.
+- [Cloudflare agent setup prompt](https://developers.cloudflare.com/agent-setup/prompt.md) only when the user wants Cloudflare skills/MCPs configured for their agent harness. Those tools are optional agent tooling, not a site dependency; installing them changes harness-wide configuration and may require a restart.
 
 Check the joint runtime requirements: this starter's Astro 7.4 baseline requires Node.js 22.22 or later, even when EmDash alone advertises 22.16. Prefer one supported package manager consistently within the generated project. Examples in current docs include the interactive `npm create emdash@latest` flow and the Cloudflare blog scaffold `npm create emdash@latest <site-name> -- --template cloudflare:blog --pm pnpm --yes`; verify the desired template and flags before using them. Use `docs/skill-synchronization.md` for staged updates; never overwrite dirty mirrors. Finish a new-site workflow with reviewed private registration or its explicit pending artifact under `docs/site-registry.md`.
 
@@ -95,7 +95,7 @@ npx emdash schema get <collection> --url https://<site-domain>
 
 The CLI can create a draft from a JSON file with `npx emdash content create <collection> --file post.json --slug <slug> --draft --url https://<site-domain>`. New content is published by default if `--draft` is omitted, so preserve draft-and-review behavior unless the user explicitly requests publishing. For updates, read the item first and pass its `_rev` token to `content update`. See the current [EmDash AI tools guide](https://docs.emdashcms.com/guides/ai-tools/), [MCP reference](https://docs.emdashcms.com/reference/mcp-server/), and [CLI reference](https://docs.emdashcms.com/reference/cli/) before relying on commands or scopes.
 
-Keep site infrastructure setup separate from site migration and design work. For a WordPress source, use `$wordpress-to-emdash-content` for content/media transfer; for public pages and reusable Astro components, use `$astro-site-design` to inspect references and implement the presentation.
+Keep site infrastructure setup separate from site migration and design work. For a WordPress source, use `wordpress-to-emdash-content` for content/media transfer; for public pages and reusable Astro components, use `astro-site-design` to inspect references and implement the presentation.
 
 ## Copying an existing EmDash site
 
@@ -131,7 +131,7 @@ After a first site is proven, the user may want a clean GitHub template reposito
 
 ## Agent documentation and image setup
 
-For this starter, verify Astro and EmDash docs MCP queries in Codex and Google Antigravity during setup; follow docs/agent-documentation.md. Repository configuration does not imply client activation or Antigravity user-level inheritance. For images follow docs/image-delivery.md: Node uses native Sharp; Cloudflare needs its supported image service/binding for runtime CMS uploads. Do not copy client domains, bindings or billing choices.
+For this starter, verify that Astro and EmDash docs MCP queries work in the agent harness in use during setup; follow docs/agent-documentation.md, which covers Claude Code, Cursor, Codex, OpenCode and Google Antigravity. Repository configuration does not imply client activation or user-level inheritance in a harness. For images follow docs/image-delivery.md: Node uses native Sharp; Cloudflare needs its supported image service/binding for runtime CMS uploads. Do not copy client domains, bindings or billing choices.
 
 ## Post-setup handoff
 
