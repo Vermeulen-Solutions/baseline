@@ -131,7 +131,9 @@ for direction, implementation and rendered critique.
 For this EmDash foundation, run `npm run doctor` before installing dependencies,
 use `npm run verify:fast` during edits, then run `npm run verify`, `npm run build`
 and `npm run audit:html` against that fresh build before handoff. Use npm.cmd
-and npx.cmd in Windows PowerShell. The HTML audit checks emitted HTML and captures
+and npx.cmd in Windows PowerShell. In Git Bash, never pass text that contains
+backticks through an inline `node -e` or an unquoted heredoc: the shell runs
+them as commands and drops them. Write the text or script to a file first. The HTML audit checks emitted HTML and captures
 linked public SSR routes; see [HTML integrity](docs/html-integrity.md).
 
 Build success is not runtime acceptance: emitted HTML strings do not prove that browser scripts parse or execute. When modifying client-side scripts, router hooks (`astro:before-preparation`, `astro:before-swap`, `astro:after-swap`, `astro:page-load`), View Transitions, or interactive state machines, launch headless Chromium (via the installed Playwright runner) against the build or rendered route. Listen to `pageerror` and `console.error` to ensure zero syntax or runtime exceptions, and adversarially probe asynchronous state transitions (rapid overlapping clicks, aborted navigation, BFCache restoration).

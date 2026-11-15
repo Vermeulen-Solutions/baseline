@@ -1538,6 +1538,22 @@
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/cms-roundtrip.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/cms-roundtrip.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/canvas-board-check.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/canvas-board-check.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "docs/brilliant-onboarding.md": {
       "disposition": "shared",
       "static": "copy"

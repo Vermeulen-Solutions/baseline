@@ -22,8 +22,18 @@
 // - low-contrast (only with --contrast): text whose computed colour against the composited solid
 //   backgrounds behind it is under 4.5:1 (3:1 for large text). It catches a cascade slip that
 //   token-pair checks cannot see. Text over images, gradients or pseudo-element grounds is skipped;
+// - hover-low-contrast (only with --contrast): the same measurement on every hovered element and
+//   its descendants, for text that was readable at rest. Found on a real site: a link that turned
+//   yellow on a white card passed every rest-state check;
+// - image-clipped: an image whose box is over 15% larger than the nearest clipping frame around
+//   it, so only part of the picture shows. Found on a real site: portraits cut to the top of the
+//   head by a leftover min-height after a restyle. object-fit crops inside the image box are fine;
 // - overflow-x, broken-image, http, console-error and failed-request.
 // Exit 0 = clean, 2 = issues, 1 = error. Read-only: it never submits forms or clicks links.
+// Progress goes to stderr, one line per route and width, and --out is rewritten after every route
+// ("partial": true until the run completes), so an interrupted run keeps what it measured. With the
+// default enlarged-text cases a phone width takes about half a minute per route: where a time
+// limit applies, audit about ten routes per run.
 // Git Bash on Windows rewrites a lone "/" route: set MSYS_NO_PATHCONV=1.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
@@ -116,6 +126,38 @@ export function formatReport(entries, audited) {
   return lines.join('\n');
 }
 
+// Splits a selector list at top-level commas, so ":is(.a, .b):hover" stays one selector.
+export function splitSelectors(text) {
+  const out = []; let depth = 0, quote = '', start = 0; const str = String(text);
+  for (let i = 0; i < str.length; i++) {
+    const c = str[i];
+    if (quote) { if (c === '\\') i++; else if (c === quote) quote = ''; continue; }
+    if (c === '"' || c === "'") quote = c;
+    else if (c === '(' || c === '[') depth++;
+    else if (c === ')' || c === ']') depth--;
+    else if (c === ',' && depth === 0) { out.push(str.slice(start, i).trim()); start = i + 1; }
+  }
+  out.push(str.slice(start).trim());
+  return out.filter(Boolean);
+}
+
+// The elements to hover for the :hover rules of a page. For ".card:hover .title" that is ".card";
+// when the part before ":hover" is not a complete selector (":is(.a:hover, .b) span"), the whole
+// selector with ":hover" removed is used instead.
+export function hoverBases(selectorTexts) {
+  const bases = new Set();
+  for (const text of selectorTexts) for (const selector of splitSelectors(text)) {
+    if (!selector.includes(':hover')) continue;
+    const prefix = selector.slice(0, selector.indexOf(':hover')).trim().replace(/\s*[>+~]\s*$/, '');
+    const balanced = (prefix.match(/\(/g) || []).length === (prefix.match(/\)/g) || []).length;
+    const base = prefix && balanced && !/[(:]$/.test(prefix) ? prefix : selector.replaceAll(':hover', '').trim();
+    if (base && !/:(?:not|is|where|has)\(\s*\)/.test(base)) bases.add(base);
+  }
+  return [...bases];
+}
+
+export const progressLine = (done, total, width, route, findings) => `[${done}/${total}] ${width} ${route}: ${findings} finding${findings === 1 ? '' : 's'}`;
+
 // Runs in the page. With `scope`, only that element, its descendants and three ancestors are measured.
 function edgeCheck({ min, badge, scope }) {
   const out = [];
@@ -181,14 +223,15 @@ function applyTextScale({ kind, factor }) {
 // Runs in the page. Computed text colour against the solid backgrounds composited behind it.
 // A canvas resolves any colour syntax (oklch, color-mix) to sRGB. Text over an image or gradient
 // is skipped, and grounds painted by pseudo-elements or shadows are not seen: check those by eye.
-function contrastCheck() {
+function contrastCheck({ scope } = {}) {
   const canvas = document.createElement('canvas'); canvas.width = canvas.height = 1;
   const ctx = canvas.getContext('2d', { willReadFrequently: true });
   const rgba = c => { ctx.clearRect(0, 0, 1, 1); ctx.fillStyle = '#000'; ctx.fillStyle = c; ctx.fillRect(0, 0, 1, 1); const d = ctx.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2], d[3] / 255]; };
   const over = (top, under) => [0, 1, 2].map(i => top[i] * top[3] + under[i] * (1 - top[3])).concat(1);
   const lum = ([r, g, b]) => { const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b); };
   const out = [];
-  for (const el of document.querySelectorAll('body *')) {
+  const root = scope ? document.querySelector(scope) : null;
+  for (const el of scope ? (root ? [root, ...root.querySelectorAll('*')] : []) : document.querySelectorAll('body *')) {
     const cs = getComputedStyle(el);
     if (cs.display === 'none' || cs.visibility === 'hidden' || parseFloat(cs.opacity) === 0) continue;
     if (el.closest('[data-audit-ignore], [aria-hidden="true"]')) continue;
@@ -206,7 +249,27 @@ function contrastCheck() {
   return out.slice(0, 20);
 }
 
-async function audit(options) {
+// Runs in the page. An image larger than the clipping frame around it shows only part of itself.
+// Cropping through object-fit happens inside the image box and is not reported.
+function imageClipCheck() {
+  const out = [];
+  for (const img of document.images) {
+    const r = img.getBoundingClientRect();
+    if (r.width < 24 || r.height < 24 || img.closest('[data-audit-ignore], [aria-hidden="true"]')) continue;
+    let frame = img.parentElement;
+    for (let i = 0; i < 3 && frame && frame !== document.body; i++, frame = frame.parentElement) {
+      const s = getComputedStyle(frame);
+      if (!/hidden|clip/.test(s.overflowX + ' ' + s.overflowY)) continue;
+      const f = frame.getBoundingClientRect();
+      const overlaps = r.left < f.right && r.right > f.left && r.top < f.bottom && r.bottom > f.top;
+      if (f.width >= 24 && f.height >= 24 && overlaps && (r.width > f.width * 1.15 || r.height > f.height * 1.15)) out.push({ sig: 'img in ' + frame.tagName.toLowerCase() + [...frame.classList].slice(0, 2).map(c => '.' + c).join(''), text: (img.alt || img.currentSrc.split('/').pop() || '').slice(0, 40), note: `image ${Math.round(r.width)}x${Math.round(r.height)} in a ${Math.round(f.width)}x${Math.round(f.height)} frame` });
+      break;
+    }
+  }
+  return out.slice(0, 12);
+}
+
+async function audit(options, hooks = {}) {
   let chromium;
   for (const base of [path.join(process.cwd(), 'package.json'), import.meta.url]) { try { ({ chromium } = createRequire(base)('@playwright/test')); break; } catch {} }
   if (!chromium) throw Error('audit:ui needs @playwright/test and an installed Chromium (npx playwright install chromium).');
@@ -219,8 +282,8 @@ async function audit(options) {
   }
   routes = sampleRoutes(routes, options.samples);
   if (!routes.length) throw Error('No routes to audit');
-  const browser = await chromium.launch(), issues = []; let audited = 0;
-  const widest = Math.max(...options.widths);
+  const browser = await chromium.launch(), issues = []; let audited = 0, step = 0;
+  const widest = Math.max(...options.widths), total = routes.length * options.widths.length;
   try {
     for (const width of options.widths) {
       const context = await browser.newContext({ viewport: { width, height: 900 } });
@@ -232,10 +295,11 @@ async function audit(options) {
       const done = new Set();
       for (const route of routes) {
         consoleErrors.length = 0; failed.length = 0;
+        const before = issues.length, report = () => hooks.progress?.({ done: ++step, total, width, route, findings: issues.length - before, issues, audited });
         let response;
         try { response = await page.goto(new URL(route, options.base).href, { waitUntil: 'networkidle', timeout: 60000 }); }
-        catch (error) { issues.push({ kind: 'load-failed', sig: route, route, width, detail: error.message.split('\n')[0].slice(0, 100) }); continue; }
-        const final = new URL(page.url()).pathname; if (done.has(final)) continue; done.add(final); audited++;
+        catch (error) { issues.push({ kind: 'load-failed', sig: route, route, width, detail: error.message.split('\n')[0].slice(0, 100) }); report(); continue; }
+        const final = new URL(page.url()).pathname; if (done.has(final)) { report(); continue; } done.add(final); audited++;
         const note = (kind, extra) => issues.push({ kind, route: final, width, ...extra });
         if (response && response.status() >= 400) note('http', { sig: String(response.status()) });
         if (options.hide.length) await page.addStyleTag({ content: `${options.hide.join(',')}{display:none!important}` }).catch(() => {});
@@ -245,6 +309,7 @@ async function audit(options) {
         const overflow = await page.evaluate(() => { const w = document.documentElement.clientWidth; return document.documentElement.scrollWidth > w ? [...document.querySelectorAll('body *')].filter(el => el.getBoundingClientRect().right > w + 1 && getComputedStyle(el).position !== 'fixed' && !el.closest('[aria-hidden="true"]')).slice(0, 3).map(el => el.tagName.toLowerCase() + [...el.classList].slice(0, 2).map(c => '.' + c).join('')) : null; });
         if (overflow) note('overflow-x', { sig: overflow.join(' ') || 'document' });
         for (const src of await page.evaluate(() => [...document.images].filter(i => i.complete && i.naturalWidth === 0 && i.getBoundingClientRect().width > 0).map(i => i.currentSrc || i.src).slice(0, 5))) note('broken-image', { sig: src.slice(-80) });
+        for (const hit of await page.evaluate(imageClipCheck)) note('image-clipped', hit);
         for (const c of [...new Set(consoleErrors)]) note('console-error', { sig: c.slice(0, 140) });
         for (const f of [...new Set(failed)]) note('failed-request', { sig: f.slice(0, 160) });
         // Text fit at the normal size, measured per element so a clipping shell cannot hide it.
@@ -264,22 +329,28 @@ async function audit(options) {
           }
           if (width === widest) { await page.goto(new URL(route, options.base).href, { waitUntil: 'networkidle', timeout: 60000 }).catch(() => {}); await walkPage(); }
         }
-        if (options.contrast && width === widest) for (const hit of await page.evaluate(contrastCheck)) note('low-contrast', hit);
-        if (width !== widest) continue;
+        const lowAtRest = new Set();
+        if (options.contrast && width === widest) for (const hit of await page.evaluate(contrastCheck)) { lowAtRest.add(hit.sig + '|' + hit.text); note('low-contrast', hit); }
+        if (width !== widest) { report(); continue; }
         // Hover: every element matched by a :hover rule, hovered in turn.
-        const count = await page.evaluate(max => {
-          const bases = new Set();
-          const walk = rules => { for (const r of rules) { if (r.cssRules && !r.selectorText) walk(r.cssRules); if (r.selectorText?.includes(':hover')) for (const part of r.selectorText.split(',')) { const b = part.split(':hover')[0].replace(/:is\($|:where\($/, '').trim().replace(/\s*[>+~]\s*$/, ''); if (b && !/[(:]$/.test(b)) bases.add(b); } } };
+        const hoverSelectors = await page.evaluate(() => {
+          const found = [];
+          const walk = rules => { for (const r of rules) { if (r.cssRules && !r.selectorText) walk(r.cssRules); if (r.selectorText?.includes(':hover')) found.push(r.selectorText); } };
           for (const sheet of document.styleSheets) { try { walk(sheet.cssRules); } catch {} }
+          return found;
+        });
+        const count = await page.evaluate(({ bases, max }) => {
           const els = new Set();
           for (const b of bases) { try { document.querySelectorAll(b).forEach(e => { if (e.getBoundingClientRect().width > 30 && !e.closest('[data-audit-ignore]')) els.add(e); }); } catch {} }
           return [...els].slice(0, max).map((e, i) => (e.setAttribute('data-audit-hover', String(i)), i)).length;
-        }, options.maxHover);
+        }, { bases: hoverBases(hoverSelectors), max: options.maxHover });
         for (let i = 0; i < count; i++) {
           const target = page.locator(`[data-audit-hover="${i}"]`);
           try { await target.scrollIntoViewIfNeeded({ timeout: 2000 }); await target.hover({ timeout: 2000, force: true }); } catch { continue; }
           await page.waitForTimeout(260);
           for (const hit of await page.evaluate(edgeCheck, { min: options.edge, badge: options.badge, scope: `[data-audit-hover="${i}"]` })) note('edge-on-hover', hit);
+          // Text that was readable at rest and is not while hovered (a hover colour on the wrong ground).
+          if (options.contrast) for (const hit of await page.evaluate(contrastCheck, { scope: `[data-audit-hover="${i}"]` })) if (!lowAtRest.has(hit.sig + '|' + hit.text)) note('hover-low-contrast', hit);
         }
         await page.mouse.move(0, 0);
         // Keyboard focus: Tab through, wait for transitions, require a visible indicator.
@@ -296,6 +367,7 @@ async function audit(options) {
           if (miss) misses.add(miss);
         }
         for (const m of misses) note('focus-invisible', { sig: m });
+        report();
       }
       await context.close();
     }
@@ -306,9 +378,12 @@ async function audit(options) {
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const options = parseArgs(process.argv.slice(2));
-    if (options.help) console.log('Usage: audit:ui -- --base <origin> (--routes /,/contact | --routes-file <file> | --sitemap) [--widths 390,768,1440] [--sample "^/news/.+=3"] [--hide "#dev-panel"] [--edge 8] [--badge 3] [--max-hover 80] [--tabs 45] [--text-scale root:1.6,root:2,text:1.5,text:2|off] [--contrast] [--out report.json]\nEnlarged-text checks run at widths up to 500px. Mark deliberate exceptions in markup with data-audit-ignore. Git Bash: MSYS_NO_PATHCONV=1 when a route is "/".');
+    if (options.help) console.log('Usage: audit:ui -- --base <origin> (--routes /,/contact | --routes-file <file> | --sitemap) [--widths 390,768,1440] [--sample "^/news/.+=3"] [--hide "#dev-panel"] [--edge 8] [--badge 3] [--max-hover 80] [--tabs 45] [--text-scale root:1.6,root:2,text:1.5,text:2|off] [--contrast] [--out report.json]\nEnlarged-text checks run at widths up to 500px. --contrast also measures hovered elements. Progress is printed to stderr and --out is rewritten after every route, so an interrupted run keeps its findings; allow about half a minute per route and phone width. Mark deliberate exceptions in markup with data-audit-ignore. Git Bash: MSYS_NO_PATHCONV=1 when a route is "/".');
     else {
-      const { audited, entries } = await audit(options);
+      const { audited, entries } = await audit(options, { progress: ({ done, total, width, route, findings, issues, audited: sofar }) => {
+        console.error(progressLine(done, total, width, route, findings));
+        if (options.out) writeFileSync(options.out, JSON.stringify({ base: options.base, audited: sofar, partial: true, entries: aggregate(issues) }, null, 1) + '\n');
+      } });
       if (options.out) writeFileSync(options.out, JSON.stringify({ base: options.base, audited, entries }, null, 1) + '\n');
       console.log(formatReport(entries, audited));
       if (entries.length) process.exitCode = 2;

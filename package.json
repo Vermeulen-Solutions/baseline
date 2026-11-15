@@ -111,7 +111,9 @@
     "capture:routes": "node scripts/capture-routes.mjs",
     "record:motion": "node scripts/record-motion.mjs",
     "update:plan": "node scripts/update-plan.mjs",
-    "audit:ui": "node scripts/audit-ui.mjs"
+    "audit:ui": "node scripts/audit-ui.mjs",
+    "audit:cms-roundtrip": "node scripts/cms-roundtrip.mjs",
+    "design:canvas-check": "node scripts/canvas-board-check.mjs"
   },
   "dependencies": {
     "@astrojs/node": "11.1.8",

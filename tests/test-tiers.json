@@ -293,7 +293,15 @@
   },
   "audit-ui.test.mjs": {
     "tier": "unit",
-    "reason": "Portable rendered UI audit: argument guards, sitemap/index parsing, template sampling and issue aggregation"
+    "reason": "Portable rendered UI audit: argument guards, sitemap/index parsing, template sampling, hover targets, progress lines and issue aggregation"
+  },
+  "cms-roundtrip.test.mjs": {
+    "tier": "unit",
+    "reason": "CMS save-and-reload guards (loopback origin, copy outside the project), check parsing, edit-target and text extraction, isolation proof on throwaway files; no server or database opened"
+  },
+  "canvas-board-check.test.mjs": {
+    "tier": "unit",
+    "reason": "Design canvas board parsing, asset localisation and frame comparison; no browser launched"
   },
   "design-artifact-watch.test.mjs": {
     "tier": "unit",

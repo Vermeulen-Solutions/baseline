@@ -44,9 +44,12 @@ and remaining acceptance, and do not deploy.
 
 - boxed elements whose text sits within 8 px of their edge, both at rest and **after hovering every element that has a `:hover` rule**;
 - keyboard focus without a visible indicator;
+- text that leaves the viewport or sits in a column a few characters wide, at the normal size and, on phone widths, with enlarged text;
+- images cut by the frame around them (`image-clipped`), for example a portrait whose leftover minimum height shows only the top of the face;
+- with `--contrast`: text contrast at rest and on every hovered element (`low-contrast`, `hover-low-contrast`);
 - horizontal overflow, broken images, HTTP errors, console errors and failed requests.
 
-Use `--sitemap` (nested sitemaps are followed and hosts rewritten to `--base`) or `--routes`/`--routes-file`, and `--sample '<regex>=<n>'` to sample templated collections. It exits 2 when it finds issues. Mark a deliberate exception in markup with `data-audit-ignore`. Run it after any change to a shared ground, surface or component, and against production after a deploy: hover-only padding defects pass every rest-state check.
+Use `--sitemap` (nested sitemaps are followed and hosts rewritten to `--base`) or `--routes`/`--routes-file`, and `--sample '<regex>=<n>'` to sample templated collections. It exits 2 when it finds issues. It prints one progress line per route and width and rewrites `--out` after every route, so an interrupted run keeps its findings; with the enlarged-text cases allow about half a minute per route and phone width, and audit about ten routes per run where a time limit applies. Mark a deliberate exception in markup with `data-audit-ignore`. Run it after any change to a shared ground, surface or component, and against production after a deploy: hover-only padding defects pass every rest-state check.
 
 **Site-owned tooling.** Some sites own a checker with the same purpose but a different CLI (for example a site-specific `scripts/design-system.mjs`). Do not replace it during an update. Run Baseline's version read-only from this checkout with the site as the working directory (`node <baseline>/scripts/design-system.mjs`) and record its contract gap. Likewise, `sync:site-skills` never updates `scripts/skill-sync.mjs` itself: `--check` and `--stage` now report `helper.status` (`current` or `differs`) against the staged commit; when it differs, review and adopt the upstream helper deliberately, keeping any site-only hardening. They also list `notInstalled` upstream skills; stage a relevant one with `--stage --add-skill <name>` (comma-separated for several), and it stays managed in later syncs. On Windows, stop the dev server before `--apply` when the installed helper predates the lock retry.
 

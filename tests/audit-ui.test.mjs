@@ -64,3 +64,31 @@ test('measurements are reported without splitting one problem into many entries'
   assert.equal(entries.length, 1);
   assert.match(formatReport(entries, 2), /h1 at text ×2 \[spans 34\.\.511 of 390px\] — 2×/);
 });
+
+test('hover targets survive commas inside :is() and incomplete prefixes', async () => {
+  const { splitSelectors, hoverBases } = await import('../scripts/audit-ui.mjs');
+  assert.deepEqual(splitSelectors('.a:hover, main :is(.link, p a):hover, [data-x="a,b"] b:hover'), ['.a:hover', 'main :is(.link, p a):hover', '[data-x="a,b"] b:hover']);
+  // The part before :hover when it is a whole selector; otherwise the selector without :hover.
+  assert.deepEqual(hoverBases(['.card:hover .title', 'main :is(.link, p a):hover', ':is(.a:hover, .b) span', '.x > a:hover']), ['.card', 'main :is(.link, p a)', ':is(.a, .b) span', '.x > a']);
+  // A selector that only negates hover has nothing to hover; plain rules are ignored.
+  assert.deepEqual(hoverBases(['.menu:not(:hover) a', '.plain']), []);
+  assert.deepEqual(hoverBases([':not(:hover)']), []);
+});
+
+test('progress lines name the step, width, route and finding count', async () => {
+  const { progressLine } = await import('../scripts/audit-ui.mjs');
+  assert.equal(progressLine(3, 42, 390, '/contact/', 1), '[3/42] 390 /contact/: 1 finding');
+  assert.equal(progressLine(42, 42, 1440, '/', 0), '[42/42] 1440 /: 0 findings');
+});
+
+test('hover contrast and clipped images report with their measurements', () => {
+  const entries = aggregate([
+    { kind: 'hover-low-contrast', sig: 'a.text-link', text: 'All dates', detail: 'needs 4.5:1', note: '1.30:1', route: '/', width: 1440 },
+    { kind: 'image-clipped', sig: 'img in div.portrait', text: 'Coach', note: 'image 104x160 in a 104x104 frame', route: '/team/', width: 390 },
+    { kind: 'image-clipped', sig: 'img in div.portrait', text: 'Coach', note: 'image 104x160 in a 104x104 frame', route: '/team/', width: 1440 },
+  ]);
+  assert.equal(entries.length, 2);
+  const report = formatReport(entries, 3);
+  assert.match(report, /== hover-low-contrast: 1\n {2}a\.text-link "All dates" needs 4\.5:1 \[1\.30:1\]/);
+  assert.match(report, /img in div\.portrait "Coach" \[image 104x160 in a 104x104 frame\] — 2×/);
+});
