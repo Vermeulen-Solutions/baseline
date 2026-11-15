@@ -219,3 +219,20 @@ Trials (criteria frozen before any run; before = this branch's base `q3`, after 
 - **Truncation:** the Sonnet before-run reported that its first read of the old `astro-site-design/SKILL.md` was truncated, which is direct evidence for the size problem. Both T6 after-runs opened the new reference from the skill's pointer.
 
 One trial per cell, so the Haiku T6 gain is suggestive rather than established.
+
+## Follow-up round: conditional design defaults (2026-11-15)
+
+A workflow audit found that `site-art-direction` recommended by default several patterns that the generic-fingerprint check in `astro-site-design` then asks to remove: a floating glass navigation bar for two of the four lanes, numbered capability matrices and nav indices, figure numbers, and one fixed section sequence. The defaults were made conditional: Product-Led Minimalism gets the capsule geometry on a solid lifted surface, numbering is tied to an order that carries information, and the section sequence is described as one option to vary per page.
+
+Trials (T7 and T8 were written after the edit and frozen before any run; before = `v4`, the commit before the audit fixes, after = `w8`; Haiku only, two trials per variant):
+
+| Task | Before | After |
+| --- | ---: | ---: |
+| T7 direction choices for a freelancer time-tracking product | 5 / 6, 5 / 6 | 6 / 6, 6 / 6 |
+| T8 direction choices for a solo brand-design studio | 6 / 6, 6 / 6 | 6 / 6, 6 / 6 |
+
+- **T7, criterion G1 (header matches the lane's surfaces).** Both before-runs chose a Floating Glass Capsule for Product-Led Minimalism and gave "the default pairing for this lane" as the reason, while banning glass elsewhere on the same site. Both after-runs chose the capsule on a solid elevated surface and stated that the lane's surfaces are flat planes. This is the only criterion that changed.
+- **T7, section sequence (observation, not a criterion).** Both before-runs ended the home and pricing pages with an FAQ followed by a dark closing band. Neither after-run used a dark band, and one left out the FAQ until the owner supplies real questions. All four runs kept numbering to the real how-it-works steps and planned no metric strip.
+- **T8 is at ceiling in both variants.** The before-runs already declined numbered nav indices and numbered services; one recorded that as a departure from the lane default, which the after text no longer requires. The change is not shown to help or harm on this brief.
+
+Limits: two trials per cell, planning answers only, and the grader made the edits and knew which fixture was which. The criteria were frozen after the edit, so they could not be blind to it. No regression was observed; the measured improvement rests on one criterion in one task.

@@ -76,6 +76,28 @@
         "F5 Mentions the Astro v7 inline whitespace rule or keeps inline elements joined when mixing inline spans.",
         "F6 Does not invent metric values as fact (uses placeholders or asks for real numbers)."
       ]
+    },
+    "T7-product-direction": {
+      "prompt": "A two-person company makes a time-tracking app for freelancers and wants a new five-page marketing site in English: home, features, pricing, about, contact. They supplied a logo, a brand blue, product screenshots and three short customer quotes they may publish. They have no usage statistics they want to publish. No canvas has been mentioned. Using this repository's skills, write the art-direction decisions you would propose before any visual implementation: aesthetic lane, header and navigation archetype, hero visual strategy, the section sequence for the home page and for the pricing page, which typography voices and labels the site uses, and site anti-patterns, each with its reason. Do not implement anything.",
+      "acceptance": [
+        "G1 The header matches the chosen lane's surfaces: with Product-Led Minimalism (flat planes) it is not a floating glass bar unless a site-specific reason is given.",
+        "G2 No decorative numbering: numbered labels, nav indices or section indices appear only where the order carries information (for example setup steps).",
+        "G3 The home and pricing sequences differ and each follows that page's content; the same hero, metrics strip, bento, dark band, FAQ run is not applied to both.",
+        "G4 No metrics or proof strip is planned from numbers the brief says do not exist; the three real quotes are the proof.",
+        "G5 Mono or kicker labels are used only for real metadata (prices, versions, dates), or not at all.",
+        "G6 No invented facts, customers or metrics."
+      ]
+    },
+    "T8-studio-direction": {
+      "prompt": "A solo brand designer trading under a studio name offers three services: identity design, packaging and illustration. She has six finished client projects with good photographs and permission to show them, and wants a four-page site in English: home, work, services, contact. She does not want her own photo on the site. No canvas has been mentioned. Using this repository's skills, write the art-direction decisions you would propose before any visual implementation: aesthetic lane, header and navigation archetype, hero visual strategy, the section sequence for the home page and for the work page, how services and project images are labelled, and site anti-patterns, each with its reason. Do not implement anything.",
+      "acceptance": [
+        "H1 The three parallel services are not presented as a numbered 01-03 sequence (they are not steps), or the numbering is given an information reason.",
+        "H2 Project images carry captions that say what they show; figure numbers appear only if the text refers to them.",
+        "H3 The header matches the chosen lane's surfaces and has no numbered nav indices without an information reason.",
+        "H4 The home and work sequences differ and follow their content; no section is planned without real content behind it.",
+        "H5 The hero shows real client work, not a stand-in or a live-coded console.",
+        "H6 No invented facts, clients or metrics; the solo practitioner is not presented as a team."
+      ]
     }
   },
   "limits": [
@@ -86,5 +108,6 @@
   ],
   "addendum": "After the before-runs scored at ceiling on sonnet, haiku runs (same prompts, same fixtures) were added for both variants to test the less-capable-model requirement in CONTRIBUTING. Acceptance criteria unchanged.",
   "addendum2": "2026-11-07: after PR 49 merged and the follow-up wording/boilerplate edits, T4 was added (criteria frozen here, before any T4 run) to test a single-stage request, and T1/T2 were re-run on Haiku against the final text (fixture p9). k7 remains the pre-split base.",
-  "addendum3": "2026-11-07: PR B (astro-site-design utilities moved to references/baseline-utilities.md; site-art-direction decision tables). T5 and T6 frozen here before any run. Before fixture q3 (PR A final), after fixture s4."
+  "addendum3": "2026-11-07: PR B (astro-site-design utilities moved to references/baseline-utilities.md; site-art-direction decision tables). T5 and T6 frozen here before any run. Before fixture q3 (PR A final), after fixture s4.",
+  "addendum4": "2026-11-15: the site-art-direction defaults were made conditional (solid capsule for Product-Led Minimalism, numbering only where order carries information, section sequence as one option to vary per page). T7 and T8 were written and frozen here after that edit but before any T7/T8 run. Before fixture v4 (commit 9f63826), after fixture w8 (commit fb770e9). Haiku only, two trials per task per variant."
 }

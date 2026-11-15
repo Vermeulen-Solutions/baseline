@@ -9,6 +9,7 @@ Supporting files for [skill-audit-2026-11-06.md](../skill-audit-2026-11-06.md).
   - `r5` is `m2` plus the revised `responsive-architecture.md` (after, revised).
   - `p9` is the boilerplate and wording round; `q3` is `p9` plus the Express fix.
   - `s4` is `q3` plus the craft splits.
+  - `v4` is the commit before the 2026-11-15 workflow-audit fixes; `w8` is the commit after them (T7 and T8 only; `a` and `b` mark the two trials).
   - Files prefixed `H-` are Haiku runs; the others are Sonnet.
   - A trailing `b` marks a second trial.
 - `measure-wording.mjs` counts words and the soft, strict and "why" markers per skill file. Run it as `node audit/skill-audit-2026-11-06/measure-wording.mjs .agents/skills <skill…>`.
