@@ -92,3 +92,14 @@ test('hover contrast and clipped images report with their measurements', () => {
   assert.match(report, /== hover-low-contrast: 1\n {2}a\.text-link "All dates" needs 4\.5:1 \[1\.30:1\]/);
   assert.match(report, /img in div\.portrait "Coach" \[image 104x160 in a 104x104 frame\] — 2×/);
 });
+
+test('header controls count as one row until a control starts below the others', async () => {
+  const { countRows } = await import('../scripts/audit-ui.mjs');
+  // A tall brand link, a button and a language switch, vertically centred on one line.
+  assert.equal(countRows([{ top: 10, bottom: 70 }, { top: 18, bottom: 62 }, { top: 18, bottom: 62 }]), 1);
+  // The language switch has wrapped under the brand.
+  assert.equal(countRows([{ top: 18, bottom: 62 }, { top: 10, bottom: 70 }, { top: 78, bottom: 122 }]), 2);
+  assert.equal(countRows([]), 0);
+  const entries = aggregate([{ kind: 'large-text-header-wrapped', sig: 'header.site-header', detail: 'at text ×1.5', note: 'controls on 2 rows, 1 at the normal size', route: '/', width: 360 }]);
+  assert.match(formatReport(entries, 1), /header\.site-header at text ×1\.5 \[controls on 2 rows, 1 at the normal size\]/);
+});

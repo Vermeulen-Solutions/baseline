@@ -293,7 +293,7 @@
   },
   "audit-ui.test.mjs": {
     "tier": "unit",
-    "reason": "Portable rendered UI audit: argument guards, sitemap/index parsing, template sampling, hover targets, progress lines and issue aggregation"
+    "reason": "Portable rendered UI audit: argument guards, sitemap/index parsing, template sampling, hover targets, header row counting, progress lines and issue aggregation"
   },
   "cms-roundtrip.test.mjs": {
     "tier": "unit",

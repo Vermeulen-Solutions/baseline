@@ -45,6 +45,7 @@ and remaining acceptance, and do not deploy.
 - boxed elements whose text sits within 8 px of their edge, both at rest and **after hovering every element that has a `:hover` rule**;
 - keyboard focus without a visible indicator;
 - text that leaves the viewport or sits in a column a few characters wide, at the normal size and, on phone widths, with enlarged text;
+- a page header whose links and buttons fold onto more rows with enlarged text than at the normal size (`large-text-header-wrapped`);
 - images cut by the frame around them (`image-clipped`), for example a portrait whose leftover minimum height shows only the top of the face;
 - with `--contrast`: text contrast at rest and on every hovered element (`low-contrast`, `hover-low-contrast`);
 - horizontal overflow, broken images, HTTP errors, console errors and failed requests.

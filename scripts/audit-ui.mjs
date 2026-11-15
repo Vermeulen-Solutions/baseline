@@ -19,6 +19,10 @@
 //   enlarged text, as phone users set it: a larger root size (root:1.6, root:2) and text-only
 //   scaling where boxes keep their size (text:1.5, text:2). Change with --text-scale, or "off".
 //   Found on a real site: 20 of 20 cases failed while every normal-size check passed;
+// - large-text-header-wrapped: with enlarged text the links and buttons of the page header sit on
+//   more rows than at the normal size. Letting header controls wrap keeps them on screen, so the
+//   off-screen check passes, but a header that folds onto two rows is a defect on a phone (found
+//   on a real site after its other enlarged-text checks were all green);
 // - low-contrast (only with --contrast): text whose computed colour against the composited solid
 //   backgrounds behind it is under 4.5:1 (3:1 for large text). It catches a cascade slip that
 //   token-pair checks cannot see. Text over images, gradients or pseudo-element grounds is skipped;
@@ -156,6 +160,16 @@ export function hoverBases(selectorTexts) {
   return [...bases];
 }
 
+// Rows occupied by a set of boxes: a box starts a new row when it begins at or below the bottom
+// of the current one (4px tolerance), so controls of different heights on one line count once.
+export function countRows(boxes) {
+  let rows = 0, bottom = -Infinity;
+  for (const box of [...boxes].sort((a, b) => a.top - b.top)) {
+    if (box.top >= bottom - 4) { rows++; bottom = box.bottom; } else bottom = Math.max(bottom, box.bottom);
+  }
+  return rows;
+}
+
 export const progressLine = (done, total, width, route, findings) => `[${done}/${total}] ${width} ${route}: ${findings} finding${findings === 1 ? '' : 's'}`;
 
 // Runs in the page. With `scope`, only that element, its descendants and three ancestors are measured.
@@ -210,6 +224,20 @@ function textFitCheck() {
     if (el.textContent.trim().length > 12 && cs.display !== 'inline' && r.width < font * (font >= 40 ? 2.2 : 4)) squeezed.push({ sig: sig(el), text, note: `${Math.round(r.width)}px wide at ${Math.round(font)}px text` });
   }
   return { off: off.slice(0, 12), squeezed: squeezed.slice(0, 12) };
+}
+
+// Runs in the page. The visible links, buttons and fields of the page header, as boxes.
+function bannerBoxes() {
+  const banner = document.querySelector('body > header, [role="banner"]') ?? document.querySelector('header');
+  if (!banner) return null;
+  const area = banner.getBoundingClientRect(), boxes = [];
+  for (const el of banner.querySelectorAll('a[href], button, summary, input, select, [role="button"]')) {
+    if (el.closest('[data-audit-ignore], [aria-hidden="true"]')) continue;
+    const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
+    if (r.width < 1 || r.height < 1 || cs.visibility === 'hidden' || r.bottom <= area.top || r.top >= area.bottom + 1) continue;
+    boxes.push({ top: r.top, bottom: r.bottom });
+  }
+  return { sig: 'header' + [...banner.classList].slice(0, 2).map(c => '.' + c).join(''), boxes };
 }
 
 // Runs in the page. Enlarged text as phone users set it: "root" scales rem-based layout with the
@@ -319,6 +347,7 @@ async function audit(options, hooks = {}) {
         for (const hit of fit.squeezed) note('text-squeezed', hit);
         // Enlarged text on phone widths: reload for each case so the cases do not compound.
         if (width <= 500 && options.textScale.length) {
+          const headerAtRest = await page.evaluate(bannerBoxes), rowsAtRest = headerAtRest ? countRows(headerAtRest.boxes) : 0;
           for (const scale of options.textScale) {
             try { await page.goto(new URL(route, options.base).href, { waitUntil: 'networkidle', timeout: 60000 }); } catch { continue; }
             if (options.hide.length) await page.addStyleTag({ content: `${options.hide.join(',')}{display:none!important}` }).catch(() => {});
@@ -326,6 +355,8 @@ async function audit(options, hooks = {}) {
             const scaled = await page.evaluate(textFitCheck), detail = `at ${scale.kind} ×${scale.factor}`;
             for (const hit of scaled.off) note('large-text-offscreen', { ...hit, detail });
             for (const hit of scaled.squeezed) note('large-text-squeezed', { ...hit, detail });
+            const header = rowsAtRest ? await page.evaluate(bannerBoxes) : null, rows = header ? countRows(header.boxes) : 0;
+            if (rows > rowsAtRest) note('large-text-header-wrapped', { sig: header.sig, detail, note: `controls on ${rows} rows, ${rowsAtRest} at the normal size` });
           }
           if (width === widest) { await page.goto(new URL(route, options.base).href, { waitUntil: 'networkidle', timeout: 60000 }).catch(() => {}); await walkPage(); }
         }
