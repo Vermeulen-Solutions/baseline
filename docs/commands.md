@@ -35,6 +35,7 @@ npm run doctor
 npm run verify
 npm run build
 npm run audit:html
+npm run check:dev-tools
 ```
 
 audit:html checks emitted HTML and, where needed, captures linked public SSR responses from the local production CMS. Missing published content or broken navigation fails the audit. See [HTML integrity](html-integrity.md) for capture limits and snapshot inspection. `npm run setup:hooks` installs the supplemental local doctor/verify:fast pre-commit hook.
@@ -111,3 +112,63 @@ Root `npm run rehearse:tokens` is an explicit local Windows rehearsal of a synth
 Root `npm run check:ci-fast` measures the fast checks plus a normal build/release gate, enforces the 60-second budget and writes .emdash/checks/ci-fast.{json,log}. It includes the documentation format check, and when a step fails it prints the end of that step's output and names the steps that did not run. `npm run test:profiles` independently installs/verifies/builds/HTTP-checks both generated static profiles. These are maintainer tools rather than generated-site delivery prerequisites.
 
 For dependency proposals, `npm run check:upstream` reviews available framework, adapter, EmDash and Node updates. Source updates for static sites use sync:baseline with an immutable reference. Skill updates are deliberate staged operations, not routine new-clone setup. Follow [reviewed upstream maintenance](automated-upstream-updates.md), [Baseline updates](baseline-updates.md) and [skill synchronization](skill-synchronization.md).
+
+## Further commands
+
+Commands that the workflow and skills name but the sections above do not. Scope says where a command exists: "Root tooling" runs from a Baseline checkout, usually against another site or origin, and does not ship in generated sites.
+
+### Design and review
+
+| Command | Scope | Purpose |
+| --- | --- | --- |
+| `npm run check:art-direction` | All profiles | Art-direction gate: validates the record in `AGENTS.md` for changed visual source; `-- --require-record` before site-specific visual work ([art direction](art-direction-workflow.md)) |
+| `npm run design:prompt-check -- <file>` | All profiles | Preflight an external design prompt before it informs a concept |
+| `npm run design:watch -- --dir <folder>` | All profiles | Open changed top-level concept HTML files; a file opener, not a live-reload server |
+| `npm run design:canvas-check` | Root tooling | Check Claude Design canvas boards locally before upload |
+| `npm run audit:ui -- --base <origin> --routes <list>` | Root tooling, against any origin | Rendered UI audit: off-screen and squeezed text, enlarged phone text, contrast, hover states and clipped images |
+| `npm run capture:routes -- --base <origin> --routes <list> --out <dir>` | Root tooling, against any origin | Before/after full-page and viewport captures, optionally with a concept CSS overlay |
+| `npm run record:motion` | Root tooling | Record a real route with headless Chromium as a GIF for image-only review surfaces |
+| `npm run audit:cms-roundtrip` | Root tooling, disposable EmDash copy only | Check edit targets, save, publish and public reload without touching real content |
+| `npm run fixtures:build` / `fixtures:serve` | All profiles | Build and serve isolated styleguide fixtures ([styleguide fixtures](styleguide-fixtures.md)); never deploy the output |
+| `npm run test:visual:update` / `test:visual:sensitivity` / `test:visual:functional` | Root EmDash, local Windows | Update reviewed screenshots explicitly, prove the comparison detects a change, and run functional browser checks ([visual regression](visual-regression.md)) |
+| `npm run check:visual-cleanup` | Root EmDash | Confirm the visual harness left no owned processes or temporary state behind |
+
+### Checks and build helpers
+
+| Command | Scope | Purpose |
+| --- | --- | --- |
+| `npm run lint:scripts` / `lint:templates` / `check:css` | All profiles | Script syntax, Astro template accessibility lint and CSS layer/spacing contracts; all part of `verify` |
+| `npm run check:release-artifact` | All profiles | Confirm the build output matches the configured profile; also runs automatically after `build` (`postbuild`) and before `start` (`prestart`, `prestart:local`) |
+| `npm run build:timings` | All profiles | Build with Astro timing output |
+| `npm run check:native-images` | Root EmDash, Node with local media | Disposable fixture check of responsive image output, including media uploaded after the build; needs port 4332 |
+| `npm run check:cache` | Root EmDash | Local memory-cache rehearsal of the cache contracts; does not certify Workers Cache |
+| `npm run check:production-setup` | Root EmDash | Read the deployed setup status; passes only on the actual JSON `needsSetup: false` |
+| `npm run check:emdash-current` | Root EmDash, opt-in local | Built integration rehearsal of the installed EmDash version on a disposable project |
+| `npm run check:docs-mcp` | Root EmDash | Read-only transport check of the configured documentation MCP servers |
+| `npm run assets:retain` | Root EmDash, Workers | Merge previous build assets into the new adapter output so cached pages keep loading their files |
+| `npm run test:site-audit` | Root EmDash | Run the site-standards audit tests |
+
+### Site audits and updates
+
+| Command | Scope | Purpose |
+| --- | --- | --- |
+| `npm run audit:modernize -- --recipe <id>` | Root EmDash tooling | Plan, apply or roll back one bounded modernization recipe on an older site ([site standards audit](site-standards-audit.md)) |
+| `npm run update:plan` | Root tooling | Classify upstream changes for a reviewed existing-site update ([Baseline updates](baseline-updates.md)) |
+| `npm run audit:baseline` | Root EmDash tooling | Read-only inventory of a project's package and lockfile state; observations, not certification |
+| `npm run update:all` | Root EmDash | Collect upstream updates and run the staged skill synchronization ([automated upstream updates](automated-upstream-updates.md)) |
+| `npm run sync:emdash-skills` / `sync:site-skills` / `sync:impeccable` / `sync:upstream-skills` | Root EmDash | Stage reviewed skill snapshots; staging is not permission to overwrite local drift ([skill synchronization](skill-synchronization.md)) |
+| `npm run init:profile -- --profile static|static-sveltia --out <new-directory>` | Root | Generate a static project into an empty directory ([platform profiles](platform-profiles.md)) |
+| `npm run site:register` | Root EmDash | Record a new or launched site in the private registry, or leave a pending-registration artifact ([site registry](site-registry.md)) |
+| `npm run mcp:token` | Root EmDash | Create a personal access token for the site MCP endpoint |
+| `npm run workflow:replay` | Root maintainer | Replay a recorded workflow brief against a disposable project ([workflow replay](workflow-replay.md)) |
+
+### Data, media and rehearsals
+
+| Command | Scope | Purpose |
+| --- | --- | --- |
+| `npm run db:export-seed` | Root EmDash | Export the local content model and content as a seed for new installs; not a migration ([database workflow](database-workflow.md)) |
+| `npm run db:export-d1` / `db:pull-remote` | Root EmDash, Workers | Export or snapshot a remote D1 database for offline comparison |
+| `npm run media:sync-r2` | Root EmDash, Workers | Plan, then explicitly apply, staged media storage keys to R2 ([image delivery](image-delivery.md)) |
+| `npm run media:organize` | Root EmDash | Retired: refuses the old flags and points to the reviewed manifest workflow |
+| `npm run migration:check-locale` | Root EmDash | Check that migrated entries carry the expected native locale metadata |
+| `npm run rehearse:search` / `rehearse:media` / `audit:pilot` | Root maintainer, local only | Synthetic rehearsals of search, media preparation and the site audit on owned disposable data |

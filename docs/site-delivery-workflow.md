@@ -6,163 +6,50 @@ When building client websites with AI coding assistants, the most common failure
 
 The stages separate discovery, modeling, design and implementation, with written handoffs and profile-appropriate checks for art direction, tokens, script syntax, tests and Astro types. These checks support review; rendered behavior, migration fidelity and host/provider acceptance still need site-specific evidence. See [Capability and Support Boundaries](support-boundaries.md) and the **[AI Developer Prompt Library](prompt-library.md)**.
 
-Platform Profile (`static`, `static-sveltia`, `emdash`) selects content/editing/runtime; Standard/Express selects delivery sequencing. Read [Platform Profiles](platform-profiles.md) before choosing a track. SQL budget, live-editor, registry and database deployment instructions below apply only to EmDash.
+**This page is an overview for people.** The instructions an agent follows, including every stage's full steps and its gate, live in the [`new-site-workflow` skill](../.agents/skills/new-site-workflow/SKILL.md) and its stage references, linked per stage below. When this page and the skill disagree, the skill governs; this page does not repeat stage details so that it cannot drift from them.
 
-Keep durable context in its established home, optionally adopting `PROJECT.md` from the supplied example. Working rules and the compact Art Direction Record stay in `AGENTS.md`; selected `DESIGN.md` references support the visual direction while source owns implemented values. Keep current progress in the existing tracker or a short handoff when useful. [Document scope](project-context.md) defines these boundaries without adding mandatory files or checkpoint stops.
+## Profile and track
 
-### Choosing Your Track: Standard (7 Stages) vs. Express (3 Checkpoints)
+Platform Profile (`static`, `static-sveltia`, `emdash`) selects content, editing and runtime; Standard or Express selects delivery sequencing. They are independent choices. Read [Platform Profiles](platform-profiles.md) before choosing a track. SQL budget, live-editor, registry and database deployment steps apply only to EmDash.
 
-| Track | Best For | Handoffs and decisions | CLI Gates Enforced |
-| --- | --- | --- | --- |
-| **Standard Track (7 Stages)** | Complex migrations, multi-collection architectures, or multi-locale sites | Detailed stage handoffs; ask when consequential decisions remain unresolved | Profile-appropriate (`check:art-direction`, `design:tokens`, `verify`; SQL budget only on EmDash) |
-| **Express Track (3 Checkpoints)** | Smaller greenfield sites (`<= 6` routes, `<= 3` collections, single locale) | Up to three consolidated checkpoints: **A** (Stages 1–3), **B** (Stages 4–4.5), **C** (Stages 5–6) | Profile-appropriate (`check:art-direction`, `design:tokens`, `verify`; SQL budget only on EmDash) |
+| Track | Best for | Handoffs and decisions |
+| --- | --- | --- |
+| **Standard (7 stages)** | Migrations, more than one locale, more than six route archetypes or three collections, editor roles, cross-collection relationships, integrations, authentication or payments | A handoff per stage; a question only when a consequential decision is unresolved |
+| **Express (up to 3 checkpoints)** | Smaller greenfield sites (`<= 6` route archetypes, `<= 3` collections, single locale) | **A** (Stages 1–3), **B** (Stages 4–4.5), **C** (Stages 5–6) |
 
-Both tracks continue authorized work without mandatory handoff stops. Ask only for consequential missing decisions or external actions not already authorized, and honor an explicit request to stop at a stage or review before continuing. Record approved versus assumed choices. A saved Art Direction Record or passing gate establishes neither user approval nor visual acceptance; Stage 4.5 calibration remains required before broad page assembly. Local preparation, deployment, CMS content transfer and DNS changes have distinct scopes and evidence.
+Express runs the same stages, specialists and CLI gates as Standard; it only consolidates open decisions. Both tracks continue authorized work without mandatory handoff stops and honor an explicit request to stop at a stage or review before continuing. A saved Art Direction Record or passing gate establishes neither user approval nor visual acceptance. Local preparation, deployment, CMS content transfer and DNS changes have distinct scopes and evidence.
 
 ```mermaid
 flowchart TD
     S1["1. Brief & Evidence"] --> S2["2. Platform & Hosting"]
-    S2 --> S3["3. Content Architecture"]
+    S2 --> S3["3. Content & Routes"]
     S3 --> S4["4. Art Direction & Visual Concepting"]
-    S4 --> S45["4.5 Component Sourcing & Quarantine (/_styleguide)"]
-    S45 --> S5["5. Public & Editor Implementation"]
-    S5 --> S6["6. Verification & Route Completion"]
-    S6 --> S7["7. Production Cutover, Email & Launch"]
+    S4 --> S45["4.5 Component Calibration (/_styleguide)"]
+    S45 --> S5["5. Representative Pages"]
+    S5 --> S6["6. Complete & Verify"]
+    S6 --> S7["7. Production Cutover"]
 ```
 
----
+## The stages
 
-## Stage 1: Brief & Evidence Discovery
+| Stage | What it settles | Leave the stage when | Full instructions |
+| --- | --- | --- | --- |
+| 1 Brief and evidence | Audience, offer, purpose, evidence and content gaps; a content-candidate register for migrations | The brief, strategic synthesis and evidence inventory exist | [Brief, platform and content](../.agents/skills/new-site-workflow/references/brief-platform-content.md), [discovery and content](../.agents/skills/new-site-workflow/references/discovery-and-content.md) |
+| 2 Platform and hosting | Profile, runtime, hosting, localization model and plugin sandbox | Those decisions are known or explicitly deferred | [Brief, platform and content](../.agents/skills/new-site-workflow/references/brief-platform-content.md) |
+| 3 Content and routes | Collections or file schemas, route archetypes, editorial ownership, wayfinding and the site-search decision | Every page archetype and content candidate has a source, target, method, placement and owner | [Brief, platform and content](../.agents/skills/new-site-workflow/references/brief-platform-content.md) |
+| 4 Art direction | Two or three compared directions, one selected, and the Art Direction Record | The record is saved in `AGENTS.md` and `npm run check:art-direction -- --require-record` passes | [Art direction and calibration](../.agents/skills/new-site-workflow/references/art-direction-and-calibration.md), [art direction workflow](art-direction-workflow.md) |
+| 4.5 Calibration | Tokens and primitives proven on `/_styleguide` | `audit/component-calibration.md` names the patterns ready for pages | [Art direction and calibration](../.agents/skills/new-site-workflow/references/art-direction-and-calibration.md) |
+| 5 Representative pages | The shell and one page per archetype, with real content and a bounded visual critique | Those pages work at mobile, intermediate and wide viewports | [Build, verify and launch](../.agents/skills/new-site-workflow/references/build-verify-launch.md) |
+| 6 Complete and verify | Every route and state, automated checks, browser and editor acceptance | Findings are resolved or documented and the checks actually run are reported | [Build, verify and launch](../.agents/skills/new-site-workflow/references/build-verify-launch.md) |
+| 7 Cutover | Deployment, domain, login, mail and forms, recovery, and go-live | Only the checks actually observed are reported as done | [Build, verify and launch](../.agents/skills/new-site-workflow/references/build-verify-launch.md), [production deployment](production-deployment.md) |
 
-Reuse supplied context before asking questions. Follow the [discovery and content-planning reference](../.agents/skills/new-site-workflow/references/discovery-and-content.md): core discovery for a clear brief, deeper discovery when positioning, audiences or the journey are uncertain. Depth is independent of platform and Express/Standard. Ask one to three related questions at a time, pursue useful specifics and preserve unknowns rather than inventing answers. Existing-site maintenance reuses valid decisions instead of restarting an interview.
+Scoped maintenance (a field, a component, spacing, a route) does not replay the stages: it starts at the earliest affected stage and follows [site maintenance](../.agents/skills/new-site-workflow/references/site-maintenance.md). Decisions, questions, audits and release scope follow [decisions and release](../.agents/skills/new-site-workflow/references/decisions-and-release.md).
 
-Never start by writing code or prompting an assistant to "make a homepage." Begin by gathering ground-truth evidence:
-- **Client Brief & Goals:** Target audience, business objectives, brand voice, and language requirements.
-- **Visual Evidence:** Brand assets (SVG logos, brand guidelines, color palettes, photography) and existing site screenshots (desktop and mobile).
-- **UX Flow Teardowns (Optional):** For complex user flows (filterable directories, registration journeys, schedules, or pricing models), inspect real-world production patterns using **Nicelydone MCP**, **Refero.design**, or **Kombai Gallery** to capture authentic UX anatomy and edge states. These are optional reference sources for the shared Stage 4 research step; a hit is evidence to inspect, not a design decision.
-- **Functional Requirements:** Multilingual needs, forms, galleries, third-party embeds, or custom integrations.
-- **Deliverables:** Record findings in project notes before opening templates.
+## Where the related guides are
 
-Synthesize the priority audience, offer/service, intended next action, recommended positioning/lead message, strongest usable evidence and biggest uncertainty in the established context home. Separate facts, recommendations, assumptions and actual user decisions. Assign material evidence/content gaps to owners and retain publication restrictions. Use the optional `PROJECT.example.md` only when adopting it is useful; no new brief file or blanket approval stop is required. Keep operational discovery, including editing, budget/timing, integrations and launch constraints, in scope alongside business strategy.
-
----
-
-## Stage 2: Platform, Hosting & Architecture Decisions
-
-Ask who edits, whether changes may wait for a build, what relational/live capabilities are needed, and what hosting/operations the client can maintain. Offer all three profiles and explain the infrastructure costs:
-
-| Profile | Editing persona | Hosting and ongoing costs |
-| --- | --- | --- |
-| `static` | Developer/agent edits typed files | Static hosting/build minutes; optional external services |
-| `static-sveltia` | Non-technical browser editors, Git commits | Same builds plus OAuth proxy hosting/maintenance or PAT administration |
-| `emdash` | Relational CMS editors, live canvas/MCP | Node/SQLite or Workers/D1/R2, storage, auth and backups |
-
-Record the selected profile independently of track and locale count. Generate static projects via `init:profile` into an empty destination; use the full repository template for EmDash. Static branches skip EmDash specialist skills, plugin registry evaluation, SQL budgeting and database fixtures. Configure real 404 behavior and commit-triggered builds; Sveltia also requires repository/branch/auth decisions. Refer to the generated Sveltia guide for OAuth proxy vs PAT setup. Prices and provider limits must be checked for the actual hosting decision.
-
-**The following runtime/plugin decisions are EmDash-only.**
-
-Establish your runtime, hosting boundaries, and plugin needs before modeling content:
-- **Default Profile:** Node.js + SQLite + local media storage. No cloud account is required for local development; deployed data/media need persistent storage and recovery procedures.
-- **Cloudflare Profile (Optional):** Cloudflare Workers + D1 (SQLite) + R2 (media storage).
-  - *Hard Limit Awareness:* Cloudflare D1 enforces a [100-column table maximum](https://developers.cloudflare.com/d1/platform/limits/). Baseline checks a stricter **50-column physical schema budget** (`npm run check:schema-budget`); passing this check does not certify other D1 limits or query behavior.
-  - *Session Storage:* Multi-instance serverless workers require persistent storage for form recovery ([Forms & Verification](forms-adoption.md)).
-- **Curated Registry & Native Plugins Evaluation:** Before writing custom backend code or complex relational schemas, check the official [EmDash Plugin Registry](https://plugins.emdashcms.com/) and ecosystem:
-  - **Event Management & Ticketing:** [`@vermeulen.solutions/eventual`](https://plugins.emdashcms.com/plugins/@vermeulen.solutions/eventual) provides turnkey event schedules, session agendas, speaker profiles, and calendar exports.
-  - **Translation Dashboards:** [`@swiss.ky/linguadash`](https://plugins.emdashcms.com/plugins/@swiss.ky/linguadash) provides side-by-side editing and AI translation drafting.
-  - **Visual Landing Pages & Popups (Optional):** [`@perkyzz/emvb`](https://emvb.dev/) (`+ @perkyzz/emvb-mcp`) provides a native drag-and-drop visual block editor that inherits `src/styles/global.css` via `canvasStyles`.
-  - *Sandbox Runner Setup:* If using registry plugins, configure the sandbox runner (`workerd` on Node or `LOADER` on Cloudflare Workers Paid) in Stage 2 before installing the plugin.
-- **Guides:** [Hosting Setup](../.agents/skills/emdash-site-setup/SKILL.md) · [Production Deployment & Cloudflare Cutover](production-deployment.md).
-
----
-
-## Stage 3: Content Architecture & Candidate Discovery
-
-For materially different priority routes, write a compact page brief before selecting layout: visitor/arrival context, page purpose, lead message, actual next step, question coverage and ordered section arguments. Map each visitor question to an intended answer, supporting evidence and section purpose; draft the representative copy with owner/use status. Repeated entries can share one archetype brief. Select the representative route by journey priority or uncertainty; it need not be the homepage. Use the existing route/page notes, or the optional brief template, without duplicating content inventories.
-
-On static profiles, define native Zod schemas in `src/content.config.ts`, Markdown files in `src/content`, file-owned navigation, draft filtering and `getStaticPaths()`/`render()`. Sveltia adds a paired form, date/optional-field serialization and native upload paths. Verify those contracts with the build. Load `building-emdash-site` and other CMS specialists only for EmDash.
-
-For EmDash, model your editorial data structure *before* creating page templates:
-- **WordPress Migrations:** If migrating from an existing site, do not blindly replicate messy postmeta tables. Run the [WordPress Content Modeling & Candidate Register](wordpress-content-modeling.md) workflow.
-- **The Content Candidate Register:** Hunt for repeated operational entities trapped in page builder blocks or ACF repeaters (e.g., rosters, schedules, venues, sponsors) and promote them to first-class EmDash collections.
-- **Relational Integrity:** Model 1:N relations and master data lookups rather than bloating single collection rows.
-- **Container & Breakout Planning:** Identify which page archetypes use standard single-measure sections (`<Container width="reading|content|wide">`) versus long-form editorial articles and case studies that interleave reading prose with wider figures, galleries, or callouts (`<Container breakout>` / `.content-grid`).
-- **Multilingual Architecture:** Enforce EmDash's native row-per-locale model ([Internationalization](internationalization.md)). Never create language-suffixed columns (e.g. `title_en`).
-- **Slugs vs. Labels:** Keep database slugs in clean ASCII kebab-case (`training_sessions`) while authoring admin display labels in the client's working language.
-
----
-
-## Stage 4: Art Direction, Visual Concepting & The Design Gate
-
-Before writing a single line of site-specific CSS or template HTML, establish a distinct visual identity to prevent default "generic AI landing page" output:
-- **Design Surface & Optional Agent Switch:** Recommend [Brilliant](brilliant-onboarding.md) when an editable prototyping canvas is requested and no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly present Brilliant, [OpenPencil](openpencil-onboarding.md) and [Penpot](penpot-onboarding.md) as choices; retain [OpenDesign](opendesign-onboarding.md) for an explicitly selected canvas/export workflow or existing projects. Reuse settled preferences. Compare two or three distinct directions side by side on every surface. Work as one agent or use an explicitly requested agent switch with the portable handoff template ([Art Direction Workflow](art-direction-workflow.md)).
-- **Select an Aesthetic Lane:** Choose a lane from [Aesthetic Lanes](../.agents/skills/site-art-direction/references/aesthetic-lanes.md) (*Technical Systems*, *Product-Led Minimalism*, *Editorial Paper*, *Luminous Futurism*, or *Custom / existing brand*).
-- **Define Token Physics & Pacing Variance:** Set typography pairings, canvas ground, action/accent contrast, border philosophy, spatial density, and a **Section Rhythm Map** (so consecutive sections never repeat the same layout).
-- **Declare Anti-Patterns:** Write 2–3 explicit semicolon-separated bans (e.g. *"No floating rounded cards; no decorative icon pills; no purple gradients"*).
-- **Initialize & Verify the Gate:** Run `npm run design:tokens -- --init-client --lane <lane>` (which seeds `src/styles/global.css`, writes `## Art Direction Record` in `AGENTS.md`, writes `audit/component-calibration.md`, and prunes starter sample-page exceptions from `audit/design-gate-exceptions.json`), then verify with `npm run check:art-direction -- --require-record`.
-- **Ordering & Validation:** `AGENTS.md` requires saving the record before site-specific visual implementation. The gate validates changed visual source against Git; infrastructure exceptions must be registered in `audit/design-gate-exceptions.json`.
-- **Guides:** [Art Direction Workflow](art-direction-workflow.md) · [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
-
----
-
-## Stage 4.5: Component Sourcing & Quarantine (`/_styleguide`)
-
-Do not attempt to assemble twenty full pages at once. Source and calibrate your reusable components in isolation first:
-- **Source High-Craft Patterns (Optional `21st.dev MCP` or another registry):** After the direction is selected, if native primitives leave a real gap, treat a blueprint as a reference rather than a design authority. Record its source and licence, inspect its actual behavior, and then transmute it through Baseline's **5-Step Quarantine Protocol**:
-  1. Strip React/Framer Motion runtime down to **zero-JS `.astro` markup**.
-  2. Replace hardcoded Tailwind palette classes (`bg-zinc-900`) with **semantic tokens** (`var(--color-surface)`).
-  3. Upgrade fixed pixel utilities to **fluid typographic steps** (`--text-step-*`, `--text-step-3-to-1`) and `<Section>` / `<Container>` / `<Container breakout>` / `<Grid>`.
-  4. On EmDash only, wire **CMS live edit proxies** (`{...entry.edit.title}`).
-  5. Stress-test on `/_styleguide`.
-- **Audit & Record Token Calibration (`npm run design:tokens`):** Verify fluid typography/spacing scales and all 10 WCAG AA perceptual contrast pairs across default and `[data-surface="dark"]` contexts, and generate the `## Token Calibration` section in `audit/component-calibration.md` via `npm run design:tokens -- --write-calibration`.
-- **Stress-Test Edge Cases:** Test long translated headings, missing images, uneven grid counts, `<Card>` `.clickable-parent`/`.focus-parent` keyboard outlines and concentric radii, `.content-grid` editorial breakouts, RTL text, and `prefers-reduced-motion`.
-- **Production Guard:** `/_styleguide` automatically returns **404** in production builds.
-- **Guides:** [Component Quarantine & Styleguide Fixtures](styleguide-fixtures.md) · [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md).
-
----
-
-## Stage 5: Representative Public & Editor Implementation
-
-Use the page brief's question/evidence argument and actual copy to shape composition. Keep the concrete pacing recipes as defaults, recording a content-led exception when evidence or visitor intent calls for a different order/treatment. Build and review the representative route before multiplying its pattern.
-
-Both foundations compose the shared `SiteShell.astro`, tokens and primitives. Static uses the file-owned Base wrapper, native `ResponsiveImage` and Markdown RichText; EmDash keeps queries, edit annotations and storage in platform adapters. Common `/_styleguide` calibration is identical; Portable Text/storage specimens are EmDash extensions.
-
-
-Now assemble your public routes; the CMS editing and media-import steps below apply only to EmDash.
-- **Compose with Primitives:** Build layouts using `<Section>`, `<Container>` (or `<Container breakout>` / `.content-grid` for editorial articles with wide callouts/media), `<Grid>`, and `<Card>` primitives ([Design Framework](design-framework.md)).
-- **Bind Editorial Canvas Proxies:** Pass page identity to `Base.astro` and spread field proxies (`{...entry.edit.title}`) onto the rendered elements so clients can visually edit content in the CMS ([Editorial Canvas](emdash-editorial-canvas.md)).
-- **Media Optimization:** Use native Astro image delivery for photographic assets ([Image Delivery](image-delivery.md)) and run `npm run media:migrate-wp` to normalize and ingest WordPress media imports via an auditable manifest.
-- **Zero-JS by Default:** Use pure CSS interactive primitives like `LogoTicker` and justified `PhotoGallery` ([Reusable Patterns](reusable-public-patterns.md)).
-
----
-
-## Stage 6: Verification & Route Completion
-
-Run deterministic local checks to verify the build before client handoff or deployment:
-- `npm run verify`: Run syntax/template lint, Art Direction Gate, token/font/edit-proxy audit, the complete test suite (`npm test`, including lifecycle rehearsals), physical schema budget preflight (`check:schema-budget`), and Astro/TypeScript checks (`typecheck`) in one command. Use `npm run verify:fast` for daily lint/gate/token/unit feedback; it does not replace full verification. Test classification lives in `tests/test-tiers.json`.
-- EmDash only — `npm run test:visual`: Compare local Windows screenshots against reviewed baselines across mobile, tablet, and desktop viewports ([Visual Regression](visual-regression.md)).
-- `npm run check:dev-tools`: Confirm `/_styleguide` and synthetic fixture markers are completely stripped from the production build.
-- **Visual Critique & Polish:** Use the bundled `impeccable` skill for a bounded critique of rendered pages, resolve material findings and record the evidence. This complements automated checks; it does not establish user approval.
-- **Content Acceptance:** Inspect the representative rendered page against its brief: offer/audience clarity, priority question coverage, supported claims and a usable next action that delivers what the copy promises. Record observations and remaining draft/use restrictions beside existing acceptance evidence. Agent review is not user research or proof of commercial performance; any later measurement needs its own agreed owner and scope.
-- **EmDash Client Verification:** Log in to `/_emdash/admin`, test editing live content, publish drafts, and verify updates on the public site.
-- **Migration Acceptance Verification (If Migrating):** Run `npm run migration:verify -- --scope full --manifest audit/url-inventory.json` to verify HTTP status codes, 301 redirect chains without loops, canonicals, robots tags, link/image integrity, and content inventory reconciliation ([Migration Acceptance Contract](migration-acceptance.md)).
-- **EmDash Site Registration:** Run `npm run site:register` to register the site metadata ([Site Registry](site-registry.md)).
-
----
-
-## Stage 7: Production Cutover, Email & Launch
-
-Take the verified site live on its production custom domain:
-- **Pre-Cutover Content Freeze & Delta Reconciliation:** Follow the [Migration Cutover Runbook](migration-cutover.md) to enforce `T_freeze`, reconcile late WordPress edits/deletions, map slug-shift 301 redirects, and set up rollback triggers.
-- **Disaster Recovery Backup (Node.js Target):** Acquire a consistent SQLite snapshot via `.backup` or `VACUUM INTO` alongside media and secrets per [Node.js Backup & Recovery](node-backup-restore.md).
-- **EmDash Node.js Target:** Generate production environment variables, configure reverse proxy (Nginx, Caddy with automatic TLS), and set up process supervision (Docker, systemd).
-- **EmDash Cloudflare Target (`emdash-production-cutover`):** Connect custom production domain via Cloudflare Wrangler, issue TLS certificates, and configure apex/www canonical redirects.
-- **Go Live (EmDash 1.5 or later):** A site created through setup starts in staging and serves `noindex, nofollow` on every page. Select **Go live** in Settings > General > Site Status at cutover and confirm an ordinary public page no longer carries the robots tag ([EmDash 1.5 upgrade](emdash-1.5-upgrade.md#staging-and-going-live)).
-- **Corporate Mail DNS Preservation:** Protect existing client email (Google Workspace / Microsoft 365) by auditing MX, SPF, DKIM, and DMARC records before modifying DNS.
-- **Admin Authentication Origin & Editor Handoff:** Verify admin login on the production domain origin, and complete the [Client & Editor Handoff Guide](editor-handoff.md) covering roles, daily Portable Text publishing, and the peripheral integrations checklist.
-- **Guides:** [Migration Cutover](migration-cutover.md) · [Node Backup & Recovery](node-backup-restore.md) · [Editor Handoff](editor-handoff.md) · [Production Deployment & Cloudflare Cutover](production-deployment.md) · [Hosting Setup](../.agents/skills/emdash-site-setup/SKILL.md).
-
-## Static verification, updates and handoff
-
-Generated CI runs `npm ci`, the art gate, token audits, tests, Astro typecheck, static build and release/styleguide checks. Static content edits must rebuild successfully; deploy only `dist/` with missing paths returning 404. Verify Sveltia sign-in, media upload, save and publication on the actual deployment before editor handoff. Local generation does not certify credentialed OAuth/PAT flows.
-
-Use [staged Baseline updates](baseline-updates.md) to update shared primitives and selected skills without CMS dependencies. Locally changed tokens remain conflicts for review. Record static deployment/browser evidence in project notes; the existing database audit, registry and Windows screenshot regression tooling remains EmDash-specific.
+- **Context and records:** [project context](project-context.md) defines where the brief, the Art Direction Record and progress notes live, without adding mandatory files.
+- **Design:** [design framework](design-framework.md), [native composition](native-composition.md), [visual regression](visual-regression.md).
+- **Migration:** [WordPress migration](wordpress-migration.md), [migration acceptance](migration-acceptance.md), [migration cutover](migration-cutover.md).
+- **Verification:** [commands](commands.md), [HTML integrity](html-integrity.md), [page performance](page-performance.md).
+- **Launch and operation:** [production deployment](production-deployment.md), [Node backup and recovery](node-backup-restore.md), [Cloudflare backup and restore](cloudflare-backup-restore.md), [editor handoff](editor-handoff.md), [site registry](site-registry.md).
+- **Updates:** [staged Baseline updates](baseline-updates.md) for generated static sites and existing EmDash sites.

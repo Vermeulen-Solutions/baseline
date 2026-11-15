@@ -50,6 +50,6 @@ Pin `emdash` and `@emdash-cms/cloudflare` to the same version; dev/build warning
 
 ## Reproduction and receipts
 
-`npm run check:emdash13` is an optional local browser/runtime check. It creates a fresh disposable project/database, reuses the installed packages, starts its own loopback server and provisions synthetic users through a test-only authentication route that exists only in the disposable copy. Real EmDash authorization and session role resolution remain active. No working database, credentials or uploads are copied, no email is sent, and no downstream deployment is mutated.
+`npm run check:emdash13` (renamed `check:emdash-current` with the 1.5 upgrade) is an optional local browser/runtime check. It creates a fresh disposable project/database, reuses the installed packages, starts its own loopback server and provisions synthetic users through a test-only authentication route that exists only in the disposable copy. Real EmDash authorization and session role resolution remain active. No working database, credentials or uploads are copied, no email is sent, and no downstream deployment is mutated.
 
 The command writes synthetic API/browser receipts and screenshots to `audit/emdash-1.3-review-2026-10-18/`. It is not part of automated screenshot CI. Read the receipt's observed statuses and limitations before treating a feature as verified. Downstream client source audits are private reports outside Baseline and the client checkout; they do not certify a live deployment.

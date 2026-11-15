@@ -29,7 +29,7 @@ Profile selects editing/runtime independently of Standard/Express delivery track
 
 - [Standards 0.1.1](../standards/releases/0.1.1.md) retains the scoped Node/SQLite/local-media and Windows Chromium certification. Resolve the immutable standards reference for downstream audits; current main is not automatically that certified release.
 - [Platform-profile verification](verification/platform-profiles.md) records independent generated builds and browser checks. Its linked Sveltia pilot verified token publishing on a disposable static deployment, with OAuth, fine-grained PAT and automatic Git hosting limitations stated separately.
-- [Phase 5 infrastructure evidence](../audit/phase-5-2026-10-16/README.md) covers synthetic offline transports and a local CMS media/content API rehearsal. It does not certify live Workers/D1/R2, cloud restore or browser editor saving.
+- Phase 5 infrastructure evidence (`audit/phase-5-2026-10-16/README.md`, pruned from the repository on 2026-11-03; in Git history) covers synthetic offline transports and a local CMS media/content API rehearsal. It does not certify live Workers/D1/R2, cloud restore or browser editor saving.
 - [Native forms evaluation](forms-adoption.md) distinguishes tested local storage/validation from external delivery, Workers and full accessibility/editor acceptance.
 - [Gallery migration case study](../audit/gallery-migration-case-study.md) is a privacy-edited architectural example, not a reproducible client receipt or universal importer guarantee.
 

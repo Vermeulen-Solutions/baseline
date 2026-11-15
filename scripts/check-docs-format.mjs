@@ -195,6 +195,39 @@ export function checkDocsFormatting(targets = ['docs'], options = {}) {
   return { checkedCount, unformatted, isWrite };
 }
 
+/**
+ * Relative Markdown links whose target file or directory does not exist.
+ * Links inside fenced code, external URLs and same-page anchors are not checked;
+ * an anchor on an existing file is not resolved.
+ */
+export function findBrokenLinks(targets = ['docs']) {
+  const broken = [];
+  for (const target of targets) {
+    if (!fs.existsSync(target)) continue;
+    const files = fs.statSync(target).isDirectory() ? getMdFiles(target) : [target];
+    for (const file of files) {
+      let fence = null;
+      fs.readFileSync(file, 'utf8').split(/\r?\n/).forEach((line, index) => {
+        const marker = line.match(/^\s*(`{3,}|~{3,})/);
+        if (marker) {
+          if (!fence) fence = marker[1];
+          else if (marker[1][0] === fence[0] && marker[1].length >= fence.length) fence = null;
+          return;
+        }
+        if (fence) return;
+        for (const match of line.matchAll(/\]\(([^)\s]+)\)/g)) {
+          const link = match[1];
+          if (/^(?:[a-z][a-z0-9+.-]*:|#|\/)/i.test(link)) continue;
+          let relative = link.split('#')[0];
+          try { relative = decodeURIComponent(relative); } catch { /* keep the literal path */ }
+          if (relative && !fs.existsSync(path.join(path.dirname(file), relative))) broken.push(`${file.replaceAll('\\', '/')}:${index + 1} -> ${link}`);
+        }
+      });
+    }
+  }
+  return broken;
+}
+
 if (process.argv[1] && process.argv[1].endsWith('check-docs-format.mjs')) {
   const isWrite = process.argv.includes('--write');
   const customTargets = process.argv.slice(2).filter(a => !a.startsWith('--'));
@@ -213,5 +246,16 @@ if (process.argv[1] && process.argv[1].endsWith('check-docs-format.mjs')) {
     process.exitCode = 1;
   } else {
     console.log(`Docs format check: PASS (${checkedCount} Markdown files checked).`);
+  }
+
+  // Generated-profile docs link to files that exist only in the generated project, so only
+  // the root docs tree is link-checked by default.
+  const broken = isWrite ? [] : findBrokenLinks(customTargets.length ? customTargets : ['docs']);
+  if (broken.length > 0) {
+    console.error(`Docs link check: FAILED. ${broken.length} relative link(s) point at a missing file:`);
+    for (const item of broken) console.error(`  - ${item}`);
+    process.exitCode = 1;
+  } else if (!isWrite) {
+    console.log('Docs link check: PASS.');
   }
 }

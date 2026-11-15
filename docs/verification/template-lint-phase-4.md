@@ -46,4 +46,4 @@ New profile generation includes the four development dependencies, configuration
 
 Do not hand-edit a managed receipt to make a new config appear synchronized. Adopt new managed membership through a reviewed generator migration, or record the new tooling as a separately adopted local file. Locally calibrated CSS remains owned by the site.
 
-See the [execution receipt](../../audit/verification/template-lint-phase-4-checks.json) in the full Baseline repository for results, hashes and retained generated projects.
+See the execution receipt (`audit/verification/template-lint-phase-4-checks.json`, pruned from the repository on 2026-11-03; in Git history) in the full Baseline repository for results, hashes and retained generated projects.

@@ -34,7 +34,7 @@ Generated compatibility is checked with `npm run test:profiles`: both static pro
 
 ## Before/after evidence
 
-Reviewed synthetic receipts: [before](../../audit/verification/metadata-phase-1-before.json), [after](../../audit/verification/metadata-phase-1-after.json).
+Reviewed synthetic receipts: before (`audit/verification/metadata-phase-1-before.json`, pruned from the repository on 2026-11-03; in Git history), after (`audit/verification/metadata-phase-1-after.json`, pruned from the repository on 2026-11-03; in Git history).
 
 | Scenario | Before | Implemented expectation |
 | --- | --- | --- |

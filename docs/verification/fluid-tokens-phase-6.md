@@ -23,7 +23,7 @@ npm run test:visual:functional
 
 The last command is local Windows browser verification only. The existing suite uses actual Chromium extension-driven zoom, 320px reflow, text-spacing overrides, keyboard navigation and native composition. It compares existing screenshots without updating references or thresholds. Fresh profile verification independently installs, clean-installs, verifies and builds both generated static foundations, then runs HTTP and fixture/release checks. No CMS dependency is introduced.
 
-Execution results and source hashes are recorded in [`fluid-tokens-phase-6-checks.json`](../../audit/verification/fluid-tokens-phase-6-checks.json).
+Execution results and source hashes are recorded in `fluid-tokens-phase-6-checks.json` (pruned from the repository on 2026-11-03; in Git history).
 
 ## Adoption and remaining acceptance
 

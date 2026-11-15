@@ -67,7 +67,7 @@ The before root was clean `a2df5c86df9883c37c669f7e2e490f686bd8b0fe`. Fresh proj
 | static | 3 high | 2 high: Zod and @google/design.md |
 | static-sveltia | 3 high | 2 high: Zod and @google/design.md |
 
-Audit data and registry tags can change. Saved results and dependency paths live in [the review evidence](../audit/dependency-review-2026-10-25/).
+Audit data and registry tags can change. Saved results and dependency paths live in the review evidence (pruned from the repository on 2026-11-03; in Git history).
 
 New generated sites inherit the Sharp pin from root package.json. Existing sites need a separate package/lockfile review: `sync:baseline` does not update dependencies. In an existing static site, update Sharp to 0.35.5 with npm, review its own lockfile, then run its installed verification/build/dev-tool checks. Root/template users adopt both package.json and package-lock.json and use npm ci. Do not copy the EmDash lockfile or add its dependencies to static sites.
 

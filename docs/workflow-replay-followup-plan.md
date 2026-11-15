@@ -2,7 +2,7 @@
 
 Status: **implementation in progress; final replay and issue closure are pending**.
 
-Issue: [Make agent workflow evaluations reproducible before expanding discovery tooling](https://github.com/Vermeulen-Solutions/baseline/issues/7). Evidence: [2026-10-23 replay report](../audit/workflow-replay-2026-10-23/README.md), [operator review](../audit/workflow-replay-2026-10-23/operator-review.json), [toolchain hashes](../audit/workflow-replay-2026-10-23/toolchain.json), and [current replay instructions](workflow-replay.md).
+Issue: [Make agent workflow evaluations reproducible before expanding discovery tooling](https://github.com/Vermeulen-Solutions/baseline/issues/7). Evidence: 2026-10-23 replay report (`audit/workflow-replay-2026-10-23/README.md`, pruned from the repository on 2026-11-03; in Git history), operator review (`audit/workflow-replay-2026-10-23/operator-review.json`, pruned from the repository on 2026-11-03; in Git history), toolchain hashes (`audit/workflow-replay-2026-10-23/toolchain.json`, pruned from the repository on 2026-11-03; in Git history), and [current replay instructions](workflow-replay.md).
 
 The goal is a supported replay procedure whose **final implementation** has been exercised, whose grading and evidence do not depend on operator repair, and whose cleanup has an honest, verifiable result. Complete the work below, preserve the existing exploratory conclusions, and then close #7 with committed evidence. Do not close the issue merely because this plan or the earlier report exists.
 

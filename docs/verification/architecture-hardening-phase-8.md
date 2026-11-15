@@ -36,6 +36,6 @@ The CMS metadata rehearsal checks supported synthetic SEO API writes and real fi
 
 ## Evidence and remaining work
 
-The [Phase 8 receipt](../../audit/verification/architecture-hardening-phase-8-checks.json) records current commands, fixtures, source hashes, superseded probes, preserved invariants and the available acceptance scope. Synthetic projects are deliberately retained for patch/review reproduction; owned CMS servers/junctions/temp apps are cleaned by their harnesses.
+The Phase 8 receipt (`audit/verification/architecture-hardening-phase-8-checks.json`, pruned from the repository on 2026-11-03; in Git history) records current commands, fixtures, source hashes, superseded probes, preserved invariants and the available acceptance scope. Synthetic projects are deliberately retained for patch/review reproduction; owned CMS servers/junctions/temp apps are cleaned by their harnesses.
 
 Manual text-only resizing, toolbar Find, screen-reader announcements/navigation, other engines and writing modes, physical devices, authenticated editor save/reload, credentialed Sveltia publishing, mail delivery and provider deployment/cache behavior are not converted into automated passes. No WCAG or Cloudflare certification is claimed. Optional Phase 7 remains deferred. Publication/push/tagging/deployment were not requested; the Git checkpoint is the local review artifact.

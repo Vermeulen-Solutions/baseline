@@ -51,7 +51,7 @@ All four downstreams passed:
 
 Baseline's existing root tests passed **117/117**. The candidate's separate [GitHub Actions run](https://github.com/Vermeulen-Solutions/baseline/actions/runs/39142437250) passed all three jobs: root verification and independent generation/verification of both static profiles. That CI run verifies the candidate source; the local receipts separately verify modified downstream update behavior.
 
-See [machine-readable results](../../audit/baseline-sync-2026-10-18/verification.json), [artifact inventory](../../audit/baseline-sync-2026-10-18/manifest.json), and [receipt guide](../../audit/baseline-sync-2026-10-18/README.md). Receipts include base/local/incoming bytes and hashes, stages, proposal diffs, apply logs, integrity assertions, build/test/browser output, network probes and CI job records. All content is synthetic; no client data or credentials are included.
+See machine-readable results (`audit/baseline-sync-2026-10-18/verification.json`, pruned from the repository on 2026-11-03; in Git history), artifact inventory (`audit/baseline-sync-2026-10-18/manifest.json`, pruned from the repository on 2026-11-03; in Git history), and receipt guide (`audit/baseline-sync-2026-10-18/README.md`, pruned from the repository on 2026-11-03; in Git history). Receipts include base/local/incoming bytes and hashes, stages, proposal diffs, apply logs, integrity assertions, build/test/browser output, network probes and CI job records. All content is synthetic; no client data or credentials are included.
 
 ## Reproduction and operational findings
 
@@ -88,5 +88,5 @@ A useful subsequent refinement would be an opt-in `--require-clean` status check
 ## Finalization and cleanup
 
 The Phase 4 records were committed to `main` as [`a67af20`](https://github.com/Vermeulen-Solutions/baseline/commit/a67af20f20ef0f6f767e5fa1c964dfb214fb8c4f), with all three [CI jobs passing](https://github.com/Vermeulen-Solutions/baseline/actions/runs/39143751696). The disposable candidate branch and local runtime fixtures were then removed. Its commit and changed objects remain in the verified candidate Git bundle in the receipt directory. The earlier live Sveltia Pages pilot was also retired; its private GitHub repository was archived after deletion was denied with HTTP
-403. See the [cleanup receipt](../../audit/rehearsal-cleanup-2026-10-18/README.md)
+403. See the cleanup receipt (`audit/rehearsal-cleanup-2026-10-18/README.md`, pruned from the repository on 2026-11-03; in Git history)
 for retained evidence and the remaining repository-deletion limitation.
