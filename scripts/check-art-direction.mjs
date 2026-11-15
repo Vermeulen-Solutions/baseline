@@ -129,6 +129,8 @@ function main() {
   const base = baseIndex >= 0 ? args[baseIndex + 1] : 'HEAD';
   if (!base || base.startsWith('-')) throw new Error('--base requires a Git revision.');
   const git = (...gitArgs) => execFileSync('git', gitArgs, { encoding: 'utf8' }).split('\0').filter(Boolean);
+  const agentsMd = existsSync('AGENTS.md') ? readFileSync('AGENTS.md', 'utf8') : '';
+  const recordErrors = validateRecord(agentsMd);
   if (args.includes('--changed') && !args.includes('--require-record')) {
     let gitReady = true;
     try { execFileSync('git', ['rev-parse', '--verify', base], { stdio: 'pipe' }); }
@@ -143,8 +145,14 @@ function main() {
     }) : [];
     // Fresh generated projects have no Git history yet. Check every visual file
     // against exact starter exceptions rather than silently skipping the gate.
+    // Without a valid record, a diff against the base only sees work that is not committed
+    // (or not in this push) yet: committed client pages then pass unchecked. Check every
+    // tracked visual file against the exact exceptions until a record exists.
+    const wholeTree = gitReady && recordErrors.length > 0;
+    const emptyTree = wholeTree ? execFileSync('git', ['hash-object', '-t', 'tree', '--stdin'], { input: '', encoding: 'utf8' }).trim() : null;
     const changed = [...new Set(gitReady ? [
       ...git('diff', '--relative', '--name-only', '-z', base, '--', '.'),
+      ...(wholeTree ? git('diff', '--relative', '--name-only', '-z', emptyTree, '--', '.') : []),
       ...git('ls-files', '--others', '--exclude-standard', '-z', '--', '.'),
     ] : [...walk('src'), ...walk('public')])].filter(isVisualPath);
     if (!changed.length) { console.log('Art direction gate: no visual source changes.'); return; }
@@ -160,9 +168,8 @@ function main() {
     if (!uncovered.length) { console.log('Art direction gate: exact infrastructure exceptions cover these changes.'); return; }
     console.log(`Art direction gate: checking record for ${uncovered.join(', ')}`);
   }
-  const agentsMd = existsSync('AGENTS.md') ? readFileSync('AGENTS.md', 'utf8') : '';
   const css = existsSync('src/styles/global.css') ? readFileSync('src/styles/global.css', 'utf8') : null;
-  const errors = [...validateRecord(agentsMd), ...validateCssAlignment(agentsMd, css)];
+  const errors = [...recordErrors, ...validateCssAlignment(agentsMd, css)];
   if (errors.length) { console.error(formatRecordDiagnostics(agentsMd, errors)); process.exitCode = 1; }
   else {
     console.log('Art direction record is structurally valid.');

@@ -85,6 +85,28 @@ test('CLI catches untracked visual work, accepts a record, and expires changed i
   }
 });
 
+test('CLI keeps requiring the record after visual work is committed', () => {
+  const directory = mkdtempSync(join(tmpdir(), 'emdash-design-gate-'));
+  try {
+    const git = (...args) => execFileSync('git', ['-c', 'user.name=Test', '-c', 'user.email=test@example.invalid', '-c', 'commit.gpgsign=false', ...args], { cwd: directory });
+    git('init', '--quiet');
+    mkdirSync(join(directory, 'src'), { recursive: true });
+    writeFileSync(join(directory, 'AGENTS.md'), '# Neutral starter\n');
+    writeFileSync(join(directory, 'src', 'page.astro'), '<h1>Client layout</h1>\n');
+    git('add', '-A');
+    git('commit', '--quiet', '--no-verify', '-m', 'client page');
+    const script = fileURLToPath(new URL('../scripts/check-art-direction.mjs', import.meta.url));
+    const run = () => spawnSync(process.execPath, [script, '--changed'], { cwd: directory, encoding: 'utf8' });
+    assert.equal(run().status, 1, 'committed visual implementation must still require the record');
+    writeFileSync(join(directory, 'AGENTS.md'), record);
+    assert.equal(run().status, 0);
+  } finally {
+    assert.equal(dirname(resolve(directory)), resolve(tmpdir()));
+    assert.ok(basename(directory).startsWith('emdash-design-gate-'));
+    rmSync(directory, { recursive: true, force: true });
+  }
+});
+
 test('applyTokenOverrides updates @theme, :root, and [data-surface="dark"] tokens non-destructively while preserving comments', () => {
   const css = readFileSync('src/styles/global.css', 'utf8');
   const editorial = applyTokenOverrides(css, 'editorial-paper');

@@ -66,7 +66,8 @@ Run `npm run check:art-direction -- --require-record` before implementing that w
 This reusable foundation has no invented client art direction. Starter infrastructure
 exceptions are exact-path, LF-normalized SHA-256 records; any edit invalidates its
 exception. Never add broad directory exceptions or exempt client implementations.
-The changed-source check also validates all visual files before Git initialization.
+The changed-source check validates all visual files before Git initialization and
+until a valid record is saved; committing visual work does not pass it.
 Run `npm run design:tokens -- --init-client --lane <lane>` when adapting the starter,
 then calibrate real components at the Component calibration path printed by
 `npm run dev` (`/_styleguide/` with the default slash policy) and record results in
