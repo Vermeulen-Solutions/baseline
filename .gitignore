@@ -52,3 +52,6 @@ audit/**/*.log
 # Impeccable local state: live-server sessions/annotations and machine-local config.
 .impeccable/live/
 .impeccable/config.local.json
+
+# Local Claude app state (launch configuration, worktrees); project skills live in .agents/skills
+.claude/
