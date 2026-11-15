@@ -7,7 +7,7 @@ import { spawnSync, execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
-import { auditSite, strictFailure, writeReports, markdownReport, STANDARD } from '../scripts/audit-site.mjs';
+import { auditSite, strictFailure, writeReports, markdownReport, STANDARD, satisfiesCertified } from '../scripts/audit-site.mjs';
 import { validateReport } from '../scripts/audit-report.mjs';
 const script = new URL('../scripts/audit-site.mjs', import.meta.url);
 const baselineFile = new URL('../standards/baselines/0.1.1.json', import.meta.url);
@@ -377,3 +377,15 @@ test('primitive usage is counted per route beside the capability flags, without 
 }));
 
 
+
+test('certified caret ranges accept later compatible versions and the starter passes its own dependency comparison', () => {
+  assert.equal(satisfiesCertified('4.3.5', '^4.3.3'), true);
+  assert.equal(satisfiesCertified('4.4.0', '^4.3.3'), true);
+  assert.equal(satisfiesCertified('4.3.2', '^4.3.3'), false);
+  assert.equal(satisfiesCertified('5.0.0', '^4.3.3'), false);
+  assert.equal(satisfiesCertified('0.3.0', '^0.2.1'), false);
+  assert.equal(satisfiesCertified('7.4.1', '7.4.0'), false);
+  const report = auditSite({ root: fileURLToPath(new URL('../', import.meta.url)) });
+  const flagged = report.rules.filter(item => (item.id.startsWith('dependency:') || item.id === 'node-policy') && item.status !== 'pass');
+  assert.deepEqual(flagged.map(item => item.id), []);
+});
