@@ -606,6 +606,13 @@
 		}
 	}
 
+	/* The search component removes the focus outline in its own styles and leaves a grey border as
+	   the only sign of focus. Restore the ring every other control shows. Its scoped styles are
+	   unlayered, hence the priority. */
+	.emdash-live-search-input:focus-visible {
+		outline: 0.2rem solid var(--color-focus) !important;
+	}
+
 	/* Inside the Menu panel, search results open in the flow of the scrolling panel instead of as a
 	   dropdown the panel would clip. The search component's scoped styles are unlayered, hence the
 	   priority. The two conditions are the two cases in which the panel is shown. */

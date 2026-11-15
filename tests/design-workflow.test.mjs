@@ -206,6 +206,15 @@ test('starter header keeps brand and one Menu disclosure on a single row in both
   assert.match(css, /@media \(min-width: 48rem\) \{ @supports selector\(::details-content\) \{ \.site-menu \{[^}]*\} \.site-menu::details-content \{ content-visibility: visible; \} \.site-menu__toggle \{ display: none; \}/);
 });
 
+test('the search field keeps the shared focus ring that its component removes', () => {
+  const css = readFileSync('src/styles/global.css', 'utf8').replace(/\s+/g, ' ');
+  // Layered author styles lose to the component's unlayered scoped styles unless they are important.
+  assert.match(css, /\.emdash-live-search-input:focus-visible \{ outline: 0\.2rem solid var\(--color-focus\) !important; \}/);
+  // The rule names a class owned by the search component: a rename there must fail here, not pass silently.
+  const component = readFileSync('node_modules/emdash/src/components/LiveSearch.astro', 'utf8');
+  assert.match(component, /class:list=\{\["emdash-live-search-input", inputClass\]\}/, 'LiveSearch no longer names its field emdash-live-search-input; update the focus rule in global.css');
+});
+
 test('cascade layers and automatic spacing contracts stay enforceable', () => {
   const css = readFileSync('src/styles/global.css', 'utf8');
   assert.match(css, /@layer theme, base, vendor, astro, components, utilities;/);
