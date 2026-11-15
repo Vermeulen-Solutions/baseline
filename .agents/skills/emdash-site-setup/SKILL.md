@@ -133,15 +133,17 @@ After a first site is proven, the user may want a clean GitHub template reposito
 
 For this starter, verify Astro and EmDash docs MCP queries in Codex and Google Antigravity during setup; follow docs/agent-documentation.md. Repository configuration does not imply client activation or Antigravity user-level inheritance. For images follow docs/image-delivery.md: Node uses native Sharp; Cloudflare needs its supported image service/binding for runtime CMS uploads. Do not copy client domains, bindings or billing choices.
 
-## Post-Setup Handoff Prompt
+## Post-setup handoff
 
-When scaffolding and platform configuration are complete:
-> **Platform Setup Complete!**
-> The project structure, hosting adapter, and localization configurations are established.
+When scaffolding and platform configuration are complete, report the outcome in chat and continue; this is an adaptable example, not a question to wait on:
+> **Platform setup complete**
+> - **Established:** [hosting adapter, database/media setup, locales and default locale, plugin sandbox decision]
+> - **Checks actually run:** [commands and results; anything still unverified]
+> - **Deferred:** [deployment or other details explicitly left for later, with the reason]
 >
-> **Recommended Next Step:**
-> - Return to `new-site-workflow` and proceed to **Stage 3: Content Structure & Admin Setup**.
->   *Shall we begin setting up the editing forms and collections in your EmDash admin?*
+> Next is `new-site-workflow` **Stage 3: content and routes** — the collections and editing forms in the EmDash admin.
+
+Continue into Stage 3 when the work is already authorized. Stop only when the user asked for setup alone, or when a consequential decision (one whose answers lead to different content models, routes or external actions) is still open; ask that one question directly in chat.
 
 ## Engineering verification loop
 

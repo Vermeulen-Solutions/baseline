@@ -140,22 +140,18 @@ Run `npm run migration:verify -- --scope full --manifest audit/url-inventory.jso
 
 The importer transfers content, not the WordPress theme, PHP templates, public URL routing, form behavior, widgets, or plugin workflows. Do not call a selective manual reconstruction a complete migration. Report the content-candidate register, import counts by source and target type, skipped/failed items, unresolved fields or candidates, media work, source-to-target identifiers, and behavioral replacements before handing off to Astro implementation. Include the route inventory, repeatable content types, and verified purpose of meaningful media/links in that handoff; the Astro design skill uses these alongside full-page visual references to build and check every route.
 
-### Post-Import Handoff Prompt
+### Post-import handoff
 
-After importing content and preparing media, present this prompt:
-> **WordPress Content Import Complete!**
-> We have successfully imported your WordPress content and images.
+After importing content and preparing media, report the outcome in chat and continue with the recommended preparation; this is an adaptable example, not a menu to wait on:
+> **WordPress content import complete**
+> - **Imported:** [counts by source and target type; skipped or failed items]
+> - **Still open:** [unresolved fields or content candidates, media work, behavioral replacements]
 >
-> **What would you like to do next?**
-> 1. **(Recommended) Full Post-Import Preparation (Clean Admin Forms + Verify Media):**
->    - *Step A:* Clean up messy WordPress custom fields and repeaters into clear, friendly EmDash admin forms (`emdash-content-modeling`).
->    - *Step B:* Verify image dimensions, alt text, captions and native media references; use the manifest-driven preparation/ingestion workflow where needed (`media:migrate-wp`).
-> 2. **Clean up admin forms only for now:**
->    - Normalize schema and fields first; defer media preparation.
-> 3. **Proceed directly to visual styling (Stage 4 Art Direction):**
->    - Start styling the front end right away using the raw imported data.
->
-> *(Reply `1` for the complete recommended preparation.)*
+> Next is the post-import preparation, in this order:
+> 1. **Clean admin forms:** turn WordPress custom fields and repeaters into clear EmDash admin forms (`emdash-content-modeling`).
+> 2. **Verify media:** check image dimensions, alt text, captions and native media references; use the manifest-driven preparation/ingestion workflow where needed (`media:migrate-wp`).
+
+Do both steps before Stage 4 art direction. The Stage 3 gate in `new-site-workflow` requires every content candidate to be classified, and styling raw imported data designs against shapes that the cleanup then changes. Defer media verification only when the user asks for that, and record it as deferred with its owner. Ask a question only when a consequential choice is open, for example which of two models a repeated element should become.
 
 ## Forms: classify before replacing
 

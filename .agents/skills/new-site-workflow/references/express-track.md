@@ -18,15 +18,7 @@ Assess complexity beyond the `<= 6` route / `<= 3` collection / single-locale he
 
 ## Checkpoints
 
-Express consolidates unresolved decisions into up to three checkpoints while still enforcing every automated CLI gate (`check:art-direction`, `design:tokens`, `audit/component-calibration.md`, `verify`):
-
-- **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):** Gather brief, confirm hosting/runtime, and model collections/routes in one pass.
-- **Checkpoint B (Stages 4–4.5 — Art Direction & Component Calibration):** Seed tokens and `## Art Direction Record` (`npm run design:tokens -- --lane <lane> --write --write-record --write-calibration`), verify `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide`.
-- **Checkpoint C (Stages 5–6 — Representative Pages, Critique & Verification):** Build routes, run the `impeccable` critique pass, and verify with `npm run verify` and `npm run build` (plus `npm run search:index` and search browser acceptance when search was chosen at Checkpoint A).
-
-Each checkpoint in detail:
-
-When the user requests **Express Mode** (or when building a straightforward greenfield site with `<= 6` routes, `<= 3` collections, and a single locale), execute the same specialist skills and CLI gates with **up to 3 consolidated checkpoints**, using the decision policy and defaults above:
+Execute the same specialist skills and CLI gates as Standard (`check:art-direction`, `design:tokens`, `audit/component-calibration.md`, `verify`) with **up to three consolidated checkpoints**, using the decision policy and defaults above. Each stage reference still governs its stage: read it when the checkpoint reaches that stage.
 
 1. **Checkpoint A (Stages 1–3 — Brief, Platform & Content Schema):**
    - Document the brief and route rationale in the established context home, choose the Platform Profile in Stage 2, then follow its Stage 3 content branch. Link the actual route inventory. On static profiles define native Zod schemas and routes; only EmDash uses CMS specialists and the SQL budget.
@@ -44,7 +36,8 @@ When the user requests **Express Mode** (or when building a straightforward gree
    Include the **Layout spacing choice** explanation from [art-direction-and-calibration.md](art-direction-and-calibration.md#layout-spacing-choice-standard-and-express) in this same handoff. Express uses shared defaults unless the brief or user calls for custom spacing; do not add a separate technical question or checkpoint.
 
 2. **Checkpoint B (Stages 4–4.5 — Art Direction & `/_styleguide` Calibration):**
-   - Run `npm run design:tokens -- --init-client --lane <lane>` (or `--seed-accent <hex>`), refine `## Art Direction Record` in `AGENTS.md` and tokens in `src/styles/global.css`, pass `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide` (`audit/component-calibration.md`).
+   - For a new site or a significant redesign, first run the concept comparison from Stage 4 in [art-direction-and-calibration.md](art-direction-and-calibration.md): two or three structurally distinct directions side by side, with your recommendation, and one selected before tokens are written. Skip it only for a small refinement of an accepted direction.
+   - Then run `npm run design:tokens -- --init-client --lane <lane>` (or `--seed-accent <hex>`). `--init-client` applies the lane, saves the tokens, writes the record and the calibration table and prunes the starter exceptions in one step; on a site that already has its own tokens, use `--lane <lane> --write --write-record --write-calibration` instead so nothing is pruned. Refine `## Art Direction Record` in `AGENTS.md` and tokens in `src/styles/global.css`, pass `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide` (`audit/component-calibration.md`).
    - **Checkpoint B Handoff Prompt:**
      > **Express Checkpoint B Complete: Art Direction & `/_styleguide` Calibrated**
      > - **Art Direction Gate:** [Actual command and result; the saved record and passing gate do not imply user approval.]
@@ -54,4 +47,4 @@ When the user requests **Express Mode** (or when building a straightforward gree
      > [Continue authorized implementation; offer the preview for inspection without requiring a continuation reply.]
 
 3. **Checkpoint C (Stages 5–6 — Route Implementation, Critique & Full Verification):**
-   - Implement public routes using the selected profile (native `getStaticPaths()`/`render()` for static; `<Base content={{...}}>` + `{...entry.edit.*}` for EmDash), run the `impeccable` visual critique pass, run `npm run verify` + `npm run build`, and report the Stage 6 handoff with actual acceptance and any remaining launch work.
+   - Implement public routes using the selected profile (native `getStaticPaths()`/`render()` for static; `<Base content={{...}}>` + `{...entry.edit.*}` for EmDash), run the `impeccable` visual critique pass, then run the Stage 6 checks in [build-verify-launch.md](build-verify-launch.md): `npm run verify`, `npm run build` and `npm run check:dev-tools` on every profile, plus `npm run audit:html` against that fresh build on EmDash and `npm run search:index` with its browser acceptance when search was chosen at Checkpoint A. Report the Stage 6 handoff with actual acceptance and any remaining launch work.
