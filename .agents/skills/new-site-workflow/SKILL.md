@@ -52,7 +52,7 @@ Count route archetypes, not repeated entries: twelve class pages from one templa
 | 4.5 Calibration | [art-direction-and-calibration.md](references/art-direction-and-calibration.md) | `astro-site-design` | `audit/component-calibration.md` names the patterns ready for pages and why |
 | 5 Representative pages | [build-verify-launch.md](references/build-verify-launch.md), [delivery-evidence.md](references/delivery-evidence.md) | `astro-site-design`, `impeccable` (+ `building-emdash-site` on EmDash) | representative pages work with real content at mobile, intermediate and wide viewports; Impeccable findings resolved or recorded |
 | 6 Complete and verify | [build-verify-launch.md](references/build-verify-launch.md) | `astro-site-design`, `impeccable` | every route and state is accounted for; findings resolved or documented; checks actually run are reported |
-| 7 Cutover | [build-verify-launch.md](references/build-verify-launch.md) | `emdash-site-setup` (EmDash); `emdash-production-cutover` only for a Cloudflare Workers domain cutover. Node targets use `docs/production-deployment.md` and `docs/node-backup-restore.md` | only the TLS, login, mail/form and recovery checks actually observed are reported as done |
+| 7 Cutover | [build-verify-launch.md](references/build-verify-launch.md); on a Node.js host also [node-launch.md](references/node-launch.md) | `emdash-site-setup` (EmDash); `emdash-production-cutover` only for a Cloudflare Workers domain cutover | only the TLS, login, mail/form and recovery checks actually observed are reported as done |
 
 The right-hand column summarises each **Gate**; the stage reference holds its full wording, which governs. Express Checkpoint A covers Stages 1–3, B covers 4–4.5 and C covers 5–6.
 

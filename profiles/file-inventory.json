@@ -1507,12 +1507,12 @@
       "static": "copy"
     },
     "scripts/capture-routes.mjs": {
-      "disposition": "maintainer-only",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "tests/capture-routes.test.mjs": {
-      "disposition": "maintainer-only",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "scripts/record-motion.mjs": {
       "disposition": "maintainer-only",
@@ -1531,12 +1531,12 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "scripts/audit-ui.mjs": {
-      "disposition": "maintainer-only",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "tests/audit-ui.test.mjs": {
-      "disposition": "maintainer-only",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "scripts/cms-roundtrip.mjs": {
       "disposition": "maintainer-only",
@@ -1579,6 +1579,10 @@
       "static": "copy"
     },
     "scripts/rehearse-search.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/docs-links.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     }

@@ -115,7 +115,7 @@ For dependency proposals, `npm run check:upstream` reviews available framework, 
 
 ## Further commands
 
-Commands that the workflow and skills name but the sections above do not. Scope says where a command exists: "Root tooling" runs from a Baseline checkout, usually against another site or origin, and does not ship in generated sites.
+Commands that the workflow and skills name but the sections above do not. Scope says where a command exists: "Root tooling" runs from a Baseline checkout, usually against another site or origin, and does not ship in generated sites. A site generated before a command was added needs the reviewed adoption in [Baseline updates](baseline-updates.md) before it has it.
 
 ### Design and review
 
@@ -125,8 +125,8 @@ Commands that the workflow and skills name but the sections above do not. Scope 
 | `npm run design:prompt-check -- <file>` | All profiles | Preflight an external design prompt before it informs a concept |
 | `npm run design:watch -- --dir <folder>` | All profiles | Open changed top-level concept HTML files; a file opener, not a live-reload server |
 | `npm run design:canvas-check` | Root tooling | Check Claude Design canvas boards locally before upload |
-| `npm run audit:ui -- --base <origin> --routes <list>` | Root tooling, against any origin | Rendered UI audit: off-screen and squeezed text, enlarged phone text, contrast, hover states and clipped images |
-| `npm run capture:routes -- --base <origin> --routes <list> --out <dir>` | Root tooling, against any origin | Before/after full-page and viewport captures, optionally with a concept CSS overlay |
+| `npm run audit:ui -- --base <origin> --routes <list>` | All profiles, against any origin; needs a local Chromium | Rendered UI audit: off-screen and squeezed text, enlarged phone text, contrast, hover states and clipped images |
+| `npm run capture:routes -- --base <origin> --routes <list> --out <dir>` | All profiles, against any origin; needs a local Chromium | Before/after full-page and viewport captures, optionally with a concept CSS overlay |
 | `npm run record:motion` | Root tooling | Record a real route with headless Chromium as a GIF for image-only review surfaces |
 | `npm run audit:cms-roundtrip` | Root tooling, disposable EmDash copy only | Check edit targets, save, publish and public reload without touching real content |
 | `npm run fixtures:build` / `fixtures:serve` | All profiles | Build and serve isolated styleguide fixtures ([styleguide fixtures](styleguide-fixtures.md)); never deploy the output |
