@@ -476,6 +476,15 @@
 		gap: var(--spacing-content);
 	}
 
+	/* A header with the Menu disclosure never wraps, at any text size: the Menu control keeps its
+	   size and its place, and the brand is the one item that gives way. A header without the
+	   disclosure (links directly in .site-nav) keeps wrapping as before. */
+	.site-nav:has(> .site-menu) {
+		position: relative;
+		flex-wrap: nowrap;
+		gap: min(var(--spacing-content), 5vi);
+	}
+
 	.site-brand {
 		margin-inline-end: auto;
 		font-weight: 700;
@@ -486,6 +495,132 @@
 		display: block;
 		max-block-size: 3rem;
 		inline-size: auto;
+	}
+
+	/* Beside the Menu control the brand may shrink: a logo scales down with its box (the base img
+	   rule keeps its proportions) and a long word in a text title may break. */
+	.site-nav:has(> .site-menu) > .site-brand {
+		min-inline-size: 0;
+		overflow-wrap: anywhere;
+	}
+
+	/* Below 48rem a text title wraps onto two lines, then ends in an ellipsis. The end padding keeps
+	   the last glyph's edge inside the clip. */
+	@media not (min-width: 48rem) {
+		.site-nav:has(> .site-menu) > .site-brand:not(:has(> .site-logo)) {
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			overflow: hidden;
+			padding-inline-end: 0.125em;
+		}
+	}
+
+	.site-menu {
+		flex: none;
+	}
+
+	/* Sizes are capped against the viewport so enlarged text cannot push the control off a phone. */
+	.site-menu__toggle {
+		display: flex;
+		align-items: center;
+		min-block-size: min(2.75rem, 14vi);
+		border: 1px solid var(--color-border-strong);
+		border-radius: var(--radius-control);
+		padding-inline: min(1rem, 4vi);
+		font-size: min(1rem, 6vi);
+		font-weight: 600;
+		white-space: nowrap;
+		list-style: none;
+		cursor: pointer;
+	}
+
+	.site-menu__toggle::-webkit-details-marker {
+		display: none;
+	}
+
+	.site-menu[open] > .site-menu__toggle {
+		background: var(--color-elevated);
+	}
+
+	/* The open panel hangs below the header row and scrolls when it is taller than the screen. */
+	.site-menu__panel {
+		position: absolute;
+		inset-inline: 0;
+		inset-block-start: 100%;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		max-block-size: calc(100dvb - 100%);
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		border-block: 1px solid var(--color-border);
+		padding: calc(var(--spacing-content) * 0.5) var(--spacing-container) var(--spacing-content);
+		background: var(--color-surface);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.site-menu__panel > a {
+		padding-block: 0.625rem;
+	}
+
+	/* A closed panel has no boxes at all, so nothing measures or reaches its hidden content. */
+	.site-menu:where(:not([open])) > .site-menu__panel {
+		display: none;
+	}
+
+	/* From 48rem the same links sit inline in the header row and the Menu control is not shown.
+	   A browser without ::details-content keeps the working Menu disclosure at every width. */
+	@media (min-width: 48rem) {
+		@supports selector(::details-content) {
+			.site-menu {
+				flex: 0 1 auto;
+				min-inline-size: 0;
+			}
+
+			.site-menu::details-content {
+				content-visibility: visible;
+			}
+
+			.site-menu__toggle {
+				display: none;
+			}
+
+			.site-menu > .site-menu__panel {
+				position: static;
+				display: flex;
+				flex-flow: row wrap;
+				align-items: center;
+				gap: var(--spacing-content);
+				max-block-size: none;
+				overflow: visible;
+				border: 0;
+				padding: 0;
+				background: none;
+				box-shadow: none;
+			}
+
+			.site-menu__panel > a {
+				padding-block: 0;
+			}
+		}
+	}
+
+	/* Inside the Menu panel, search results open in the flow of the scrolling panel instead of as a
+	   dropdown the panel would clip. The search component's scoped styles are unlayered, hence the
+	   priority. The two conditions are the two cases in which the panel is shown. */
+	@media not (min-width: 48rem) {
+		.site-menu__results {
+			position: static !important;
+			max-block-size: none !important;
+		}
+	}
+
+	@supports not selector(::details-content) {
+		.site-menu__results {
+			position: static !important;
+			max-block-size: none !important;
+		}
 	}
 
 	.site-main {

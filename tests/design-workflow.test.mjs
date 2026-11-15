@@ -176,6 +176,36 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   assert.ok(photoGallery.includes('breakout && `content--${breakout}`'));
 });
 
+test('starter header keeps brand and one Menu disclosure on a single row in both profiles', () => {
+  for (const basePath of ['src/layouts/Base.astro', 'profiles/static/project/src/layouts/Base.astro']) {
+    const source = readFileSync(basePath, 'utf8');
+    const nav = source.slice(source.indexOf('<nav class="site-nav"'), source.indexOf('</nav>'));
+    assert.equal(nav.split('<details class="site-menu">').length, 2, `${basePath} must hold the header links in one Menu disclosure`);
+    const [row, disclosure] = nav.split('<details class="site-menu">');
+    assert.match(row, /<a class="site-brand"/, `${basePath} keeps the brand beside the Menu control`);
+    assert.doesNotMatch(row, /\.map\(|LiveSearch/, `${basePath} must not leave links or the search field directly in the header row`);
+    assert.match(disclosure, /^\s*<summary class="site-menu__toggle">Menu<\/summary>\s*<div class="site-menu__panel">[\s\S]*\.map\([\s\S]*<\/div>\s*<\/details>\s*$/, `${basePath} must put the links inside the Menu panel`);
+    // The search field is rendered once: a second copy would duplicate its elements and listeners.
+    assert.ok(source.split('<LiveSearch ').length <= 2, `${basePath} must render the search field at most once`);
+    assert.doesNotMatch(nav, /<script|client:/, `${basePath} header must work without JavaScript`);
+  }
+  assert.match(readFileSync('src/layouts/Base.astro', 'utf8'), /<LiveSearch [^>]*resultsClass="site-menu__results"[^>]*\/>\s*<\/div>\s*<\/details>/, 'EmDash search field must sit inside the Menu panel');
+
+  const css = readFileSync('src/styles/global.css', 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ');
+  const rule = selector => css.split(` ${selector} {`).slice(1).map(part => part.slice(0, part.indexOf('}'))).join(' ');
+  // Only a header that has the disclosure stops wrapping; links placed directly in .site-nav keep the old row.
+  assert.match(rule('.site-nav'), /flex-wrap: wrap;/);
+  assert.match(rule('.site-nav:has(> .site-menu)'), /flex-wrap: nowrap;/);
+  // The Menu control keeps its size; the brand is the item that gives way.
+  assert.match(rule('.site-menu'), /flex: none;/);
+  assert.match(rule('.site-menu__toggle'), /white-space: nowrap;/);
+  assert.match(rule('.site-nav:has(> .site-menu) > .site-brand'), /min-inline-size: 0;/);
+  assert.match(css, /@media not \(min-width: 48rem\) \{ \.site-nav:has\(> \.site-menu\) > \.site-brand:not\(:has\(> \.site-logo\)\) \{[^}]*-webkit-line-clamp: 2;[^}]*overflow: hidden;/);
+  assert.match(rule('.site-menu:where(:not([open])) > .site-menu__panel'), /display: none;/);
+  // Inline links from 48rem need ::details-content; without it the disclosure stays at every width.
+  assert.match(css, /@media \(min-width: 48rem\) \{ @supports selector\(::details-content\) \{ \.site-menu \{[^}]*\} \.site-menu::details-content \{ content-visibility: visible; \} \.site-menu__toggle \{ display: none; \}/);
+});
+
 test('cascade layers and automatic spacing contracts stay enforceable', () => {
   const css = readFileSync('src/styles/global.css', 'utf8');
   assert.match(css, /@layer theme, base, vendor, astro, components, utilities;/);

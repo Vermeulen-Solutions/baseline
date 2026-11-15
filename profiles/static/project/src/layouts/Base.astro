@@ -18,7 +18,14 @@ const metadata = resolveStaticMetadata(pageProps, site, { siteUrl: Astro.site, u
   <header slot="header" class="site-header" data-sticky-header>
     <nav class="site-nav" aria-label="Primary navigation">
       <a class="site-brand" href={routePath('/', routing)}>{site.title}</a>
-      {site.navigation.map(item => <a href={item.href.startsWith('/') && !item.href.startsWith('//') ? routePath(item.href, routing) : item.href}>{item.label}</a>)}
+      {/* One disclosure holds the links: a Menu control on phones, the same links inline from 48rem
+          (see .site-menu in global.css). It works without JavaScript. */}
+      <details class="site-menu">
+        <summary class="site-menu__toggle">Menu</summary>
+        <div class="site-menu__panel">
+          {site.navigation.map(item => <a href={item.href.startsWith('/') && !item.href.startsWith('//') ? routePath(item.href, routing) : item.href}>{item.label}</a>)}
+        </div>
+      </details>
     </nav>
   </header>
   <slot />

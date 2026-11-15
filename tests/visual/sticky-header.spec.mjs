@@ -2,8 +2,8 @@ import { test, expect, prepare } from './helpers.mjs';
 import { visualContract as contract } from './contract.mjs';
 
 const home = contract.routes.find(route => route.name === 'home');
-// A compact header that loses about 24px at every width (the nav wraps on phones, so the padding
-// carries the change there): less than the shell's 72px hysteresis band, more than the 16px paint
+// A compact header that loses about 24px at every width (on phones the Menu control is taller than
+// the reduced minimum, so the padding carries the change there): less than the shell's 72px hysteresis band, more than the 16px paint
 // threshold, so the same rule keyed to data-scrolled is the known flip defect.
 const shrink = state => `[data-sticky-header][${state}] .site-nav { min-block-size: 2.5rem; padding-block: 0; }`;
 

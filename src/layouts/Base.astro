@@ -81,14 +81,21 @@ const pageCtx = createPublicPageContext({
 						: siteTitle
 					}
 				</a>
-				{
-					menu?.items.map((item) => (
-						<a href={item.url} target={item.target} rel={item.target === "_blank" ? "noopener noreferrer" : undefined}>
-							{item.label}
-						</a>
-					))
-				}
-				<LiveSearch placeholder="Search..." collections={["posts", "pages"]} />
+				{/* One disclosure holds the links and the search field: a Menu control on phones, the same
+				    elements inline from 48rem (see .site-menu in global.css). It works without JavaScript. */}
+				<details class="site-menu">
+					<summary class="site-menu__toggle">Menu</summary>
+					<div class="site-menu__panel">
+						{
+							menu?.items.map((item) => (
+								<a href={item.url} target={item.target} rel={item.target === "_blank" ? "noopener noreferrer" : undefined}>
+									{item.label}
+								</a>
+							))
+						}
+						<LiveSearch placeholder="Search..." collections={["posts", "pages"]} resultsClass="site-menu__results" />
+					</div>
+				</details>
 			</nav>
 		</header>
 
