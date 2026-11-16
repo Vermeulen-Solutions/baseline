@@ -98,6 +98,18 @@
         "H5 The hero shows real client work, not a stand-in or a live-coded console.",
         "H6 No invented facts, clients or metrics; the solo practitioner is not presented as a team."
       ]
+    },
+    "T9-print-workshop-direction": {
+      "prompt": "Two printers run a letterpress workshop in a converted bakery. They sell three things side by side: art prints, wedding stationery and one-day printing workshops. They have good photographs of the presses, the type cases, work in progress and finished pieces, all cleared for use. Their tone is literary and print-led. They want a five-page site in English: home, prints, stationery, workshops, visit (address and opening hours). They have no customer numbers or press coverage to publish. No canvas has been mentioned. Using this repository's skills, write the art-direction decisions you would propose before any visual implementation: aesthetic lane, header and navigation archetype, hero visual strategy, the section sequence for the home page, how the three offerings are presented and labelled, how photographs are captioned, and site anti-patterns, each with its reason. Do not implement anything.",
+      "acceptance": [
+        "J1 The navigation has no numbered indices (01 Prints, 02 Stationery and so on), or the numbering is given a reason in the order of the pages.",
+        "J2 Photograph captions say what the photograph shows; figure or plate numbers (FIG. 01, Plate 1) appear only where the text refers to them.",
+        "J3 The three offerings are not presented as a numbered 01-03 sequence or matrix (they are parallel, not steps), or the numbering is given an information reason.",
+        "J4 Where numbering is used at all, it marks an order the visitor follows (for example the stages of a workshop day or booking steps).",
+        "J5 The header matches the chosen lane's surfaces (with Editorial Paper: ink rules, no glass bar).",
+        "J6 No invented facts, customers, metrics, prices or press; no proof strip is planned from numbers the brief says do not exist."
+      ],
+      "scoring": "J1 to J4 are the numbering criteria this task exists to test; J5 and J6 are guards. A partial counts one half."
     }
   },
   "limits": [
@@ -109,5 +121,6 @@
   "addendum": "After the before-runs scored at ceiling on sonnet, haiku runs (same prompts, same fixtures) were added for both variants to test the less-capable-model requirement in CONTRIBUTING. Acceptance criteria unchanged.",
   "addendum2": "2026-11-07: after PR 49 merged and the follow-up wording/boilerplate edits, T4 was added (criteria frozen here, before any T4 run) to test a single-stage request, and T1/T2 were re-run on Haiku against the final text (fixture p9). k7 remains the pre-split base.",
   "addendum3": "2026-11-07: PR B (astro-site-design utilities moved to references/baseline-utilities.md; site-art-direction decision tables). T5 and T6 frozen here before any run. Before fixture q3 (PR A final), after fixture s4.",
-  "addendum4": "2026-11-15: the site-art-direction defaults were made conditional (solid capsule for Product-Led Minimalism, numbering only where order carries information, section sequence as one option to vary per page). T7 and T8 were written and frozen here after that edit but before any T7/T8 run. Before fixture v4 (commit 9f63826), after fixture w8 (commit fb770e9). Haiku only, two trials per task per variant."
+  "addendum4": "2026-11-15: the site-art-direction defaults were made conditional (solid capsule for Product-Led Minimalism, numbering only where order carries information, section sequence as one option to vary per page). T7 and T8 were written and frozen here after that edit but before any T7/T8 run. Before fixture v4 (commit 9f63826), after fixture w8 (commit fb770e9). Haiku only, two trials per task per variant.",
+  "addendum5": "2026-11-16: issue 62 section 3. T9 was written and frozen here, before any T9 run, to give the old numbering defaults a brief they apply to: an Editorial Paper lane (whose old default masthead had numbered nav indices), craft photography (old default FIG. 01 captions) and three parallel offerings (old default numbered capability matrix). Before fixture c2 (commit 9f63826, as v4), after fixture j6 (commit fb770e9, as w8). Two trials per variant on Haiku and on Sonnet; T7 once per variant on Sonnet. Answers are graded from copies renamed to random identifiers, with fixture names removed, before the mapping is read."
 }

@@ -236,3 +236,23 @@ Trials (T7 and T8 were written after the edit and frozen before any run; before 
 - **T8 is at ceiling in both variants.** The before-runs already declined numbered nav indices and numbered services; one recorded that as a departure from the lane default, which the after text no longer requires. The change is not shown to help or harm on this brief.
 
 Limits: two trials per cell, planning answers only, and the grader made the edits and knew which fixture was which. The criteria were frozen after the edit, so they could not be blind to it. No regression was observed; the measured improvement rests on one criterion in one task.
+
+## Follow-up round: numbering evidence (2026-11-16)
+
+The 2026-11-15 round showed the glass-header fix, but not the numbering changes: T8 scored full marks before and after. This round adds a brief that the old numbering defaults apply to, and repeats T7 on a second model (issue 62, section 3).
+
+T9 asks for art direction for a letterpress workshop selling art prints, wedding stationery and one-day workshops side by side, with cleared photographs and a literary, print-led tone. It touches all three old defaults: the Editorial Paper lane's masthead "with numbered nav indices", the photography hero's "archival figure captions (`FIG. 01`)", and the numbered `01`–`04` capability matrix for several offerings. The prompt and six criteria were frozen in `protocol.json` (addendum 5) before any run. J1 to J4 test numbering: navigation, captions, the offerings, and numbering only where order carries information. J5 (header matches the lane) and J6 (no invented facts) are guards. Before = `c2` (commit 9f63826, the same as `v4`), after = `j6` (commit fb770e9, the same as `w8`). The ten answers were copied to random identifiers with the fixture names removed and graded before the mapping was read. One grading rule was set while grading, before unblinding: figure or plate numbers placed on process photographs to mark their order score J2 one half, because the criterion allows them only where the text refers to them, while J4 accepts the order itself.
+
+| Task | Model | Before (`c2`) | After (`j6`) |
+| --- | --- | ---: | ---: |
+| T9 letterpress workshop, all criteria | Haiku | 5.5 / 6, 6 / 6 | 6 / 6, 6 / 6 |
+| T9 letterpress workshop, all criteria | Sonnet | 5.5 / 6, 5.5 / 6 | 6 / 6, 6 / 6 |
+| T9 numbering criteria only (J1–J4) | both | 3.5, 4, 3.5, 3.5 of 4 | 4, 4, 4, 4 of 4 |
+| T7 freelancer time-tracking product | Sonnet | 5.5 / 6 | 6 / 6 |
+
+- **Figure numbers are where the old text still showed.** Three of the four before-runs put `FIG.`-style or plate numbers on the process photographs. Two of them named the source ("the skill's photography recipe suggests archival FIG. 01 captions") and kept the numbers where they judged the order real. No after-run numbered a caption; they captioned by what the photograph shows and left sequence to the caption text or to a plain ordered list.
+- **Numbered navigation and numbered offerings were declined in every run, before and after.** Before-runs did it against the default: "the archetype's recipe suggests numbering, but the site's own check says numbered indices read as generated", and one recorded it as an exception to the lane default. The generic-fingerprint check in `astro-site-design` already caught these two on the old text; the change removes the conflict that runs had to argue around. One Haiku after-run took the capability stage reading for the hero ("three offerings from one studio"), but built it from photographs with no numbered matrix, which the new text allows.
+- **T7 repeats on Sonnet.** The before-run chose the Floating Glass Capsule as "the default pairing" and then softened it to "mostly opaque, without stacked blur" because glass is on the fingerprint list (G1 one half). The after-run chose the capsule on a solid lifted surface. This matches the two Haiku runs of the previous round, so the glass-header fix now holds on two models.
+- **No regression.** Every after-run scored full marks on both tasks. No before-run invented proof; all planned the process photographs or the real quotes instead of a metric strip.
+
+Limits: two trials per cell on T9 and one on T7 Sonnet, planning answers only. The grader is the agent that made the edits. Grading used anonymised copies, but blinding was partial: several before-runs quoted the old default while declining it, which hints at the variant. The criteria were written after the edit and test the rules the edit introduced. The measured change is on one criterion (J2) in three of four before-runs, plus G1 on T7.
