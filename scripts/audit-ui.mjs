@@ -329,7 +329,15 @@ function textFitCheck() {
     for (let a = el.parentElement; a && a !== document.body && !scroller; a = a.parentElement) scroller = /auto|scroll/.test(getComputedStyle(a).overflowX);
     if (scroller) continue;
     const text = el.textContent.trim().replace(/\s+/g, ' ').slice(0, 40);
-    if (r.right > vw + 1 || r.left < -1) off.push({ sig: sig(el), text, note: `spans ${Math.round(r.left)}..${Math.round(r.right)} of ${vw}px` });
+    // The text itself, not only the box: a no-wrap line or a long word overflows its own box while
+    // the box stays on screen. An element that clips its own text (an ellipsis) is left alone.
+    let left = r.left, right = r.right;
+    if (!/hidden|clip/.test(cs.overflowX)) for (const n of el.childNodes) {
+      if (n.nodeType !== 3 || !n.textContent.trim()) continue;
+      const range = document.createRange(); range.selectNodeContents(n);
+      for (const t of range.getClientRects()) if (t.width) { left = Math.min(left, t.left); right = Math.max(right, t.right); }
+    }
+    if (right > vw + 1 || left < -1) off.push({ sig: sig(el), text, note: `spans ${Math.round(left)}..${Math.round(right)} of ${vw}px` });
     // Body text needs about four ems of width; large headings get by with a little over two.
     const font = parseFloat(cs.fontSize);
     if (el.textContent.trim().length > 12 && cs.display !== 'inline' && r.width < font * (font >= 40 ? 2.2 : 4)) squeezed.push({ sig: sig(el), text, note: `${Math.round(r.width)}px wide at ${Math.round(font)}px text` });

@@ -209,7 +209,8 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       <section class="intro"><h1>Fixture</h1><div class="actions"><a href="/contact">Contact</a></div>
         <figure><img class="photo" src="/photo.svg" alt="Group photo"></figure></section>
       <section class="next"><h2>Next</h2><img class="texture" data-audit-crop-ok src="/photo.svg" alt="">
-        <img class="portrait" src="/photo.svg" alt="Fitting photo"><p class="calm">A framed note with room around it.</p></section>
+        <img class="portrait" src="/photo.svg" alt="Fitting photo"><p class="calm">A framed note with room around it.</p>
+        <p class="nowrap" style="white-space: nowrap">A line that never wraps and runs past a phone screen edge</p></section>
     </main></body></html>`;
     const server = createServer((req, res) => {
       if (req.url === '/photo.svg') { res.writeHead(200, { 'content-type': 'image/svg+xml' }); res.end(photo); return; }
@@ -231,6 +232,8 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       const overlaps = of('decoration-overlap');
       assert.deepEqual(overlaps.map(e => [e.sig, e.detail]), [['figure::before', 'touches a']]);
       assert.deepEqual(overlaps[0].where.sort(), ['700 /', '768 /', '989 /']);
+      // Text that overflows its own box (the box stays on screen) is measured by its text.
+      assert.deepEqual(of('text-offscreen').map(e => [e.sig, e.where]), [['p.nowrap', ['390 /']]]);
       const bands = of('empty-band');
       assert.deepEqual(bands.map(e => [e.sig, e.where]), [['section.intro "Fixture" → section.next "Next"', ['1440 /']]]);
     } finally { server.close(); }
