@@ -84,6 +84,13 @@
       "execution": "local, against a fresh build"
     },
     {
+      "id": "html-integrity",
+      "command": "npm run audit:html",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local, against a fresh build"
+    },
+    {
       "id": "production-dev-tools-exclusion",
       "command": "npm run check:dev-tools",
       "level": "required",
@@ -124,6 +131,13 @@
       "level": "advisory",
       "availability": "shipped on every profile",
       "execution": "Local Chromium against a running origin; excluded from CI/build/deployment"
+    },
+    {
+      "id": "rendered-ui",
+      "command": "npm run audit:ui",
+      "level": "advisory",
+      "availability": "shipped on every profile",
+      "execution": "Local Chromium against a running origin; excluded from CI/build/deployment"
     }
   ],
   "pending": [
@@ -152,8 +166,8 @@
   },
   "certification": {
     "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
-    "sourceCommit": "pending-rehearsal",
-    "sourceTree": "pending-rehearsal",
+    "sourceCommit": "38dc55f6d8f2330bedaf53c807cb35167a696b6c",
+    "sourceTree": "41474a82eb7d260b0c1cd6e1b9ce4f677adf3772",
     "receipt": "audit/certification-2026-11-16/verification.json",
     "releaseNotes": "standards/releases/0.2.0.md",
     "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles."

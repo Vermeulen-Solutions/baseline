@@ -15,7 +15,9 @@ if (process.env.CI || process.env.GITHUB_ACTIONS === 'true') throw new Error('Vi
 if (update && (process.env.CI || sensitivity || functional)) throw new Error('Baseline --update is local-only and cannot combine with sensitivity/functional-only mode');
 const pkg = JSON.parse(await readFile('node_modules/@playwright/test/package.json', 'utf8'));
 if (pkg.version !== '1.64.1') throw new Error('Unexpected Playwright version; run npm ci');
-const runnerArgs = ['--import', './tests/visual/cancel-receiver.mjs', 'node_modules/@playwright/test/cli.js', 'test', '--config=playwright.config.mjs', `--repeat-each=${repeat}`];
+// The configured global timeout covers one pass; each repeat gets the same budget, so --repeat=3
+// can finish instead of being cut off at ten minutes.
+const runnerArgs = ['--import', './tests/visual/cancel-receiver.mjs', 'node_modules/@playwright/test/cli.js', 'test', '--config=playwright.config.mjs', `--repeat-each=${repeat}`, `--global-timeout=${600000 * Number(repeat)}`];
 if (sensitivity) runnerArgs.push('--grep', 'sensitivity');
 if (functional) runnerArgs.push('--grep', 'behavior|reflow|zoom');
 const env = { ...process.env, VISUAL_UPDATE: update ? '1' : '0' };

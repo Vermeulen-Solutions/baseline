@@ -1,0 +1,290 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.2.0",
+  "recordedAt": "2026-11-16T12:00:28.004Z",
+  "sourceCommit": "38dc55f6d8f2330bedaf53c807cb35167a696b6c",
+  "lockfileSHA256": "14c02e66f509733c71cdfd15d691301fbaecf7fa9445bf6943ed9dc93ef05463",
+  "visualReferenceManifestSHA256": "bec94659c030f67a9bf957ddb18f83bd4a5f231935ee1d565f4797500454401d",
+  "versionDecision": {
+    "adopted": {
+      "astro": "7.4.12",
+      "@astrojs/node": "11.1.13",
+      "@astrojs/react": "7.1.9",
+      "react": "19.3.1",
+      "react-dom": "19.3.1",
+      "@cloudflare/workers-types": "5.20261116.1",
+      "@typescript-eslint/parser": "8.72.2",
+      "eslint": "10.15.0",
+      "postcss": "8.5.33",
+      "postcss-selector-parser": "7.2.1"
+    },
+    "deferred": {
+      "@playwright/test": "1.65.1 (Chromium 1248 to 1255; reference images need review)",
+      "typescript": "7.0.2 (major; @astrojs/check and @typescript-eslint/parser do not accept it yet)",
+      "@types/node": "26.x (major; 24.19.2 is the latest 24)",
+      "parse5": "8.x (major; 7.3.0 is the latest 7)"
+    },
+    "unchanged": {
+      "emdash": "1.5.0 (current)"
+    },
+    "nodeFloor": "astro 7.4.2 and @astrojs/react 7.1.1 require Node >= 22.23.4 (October 2026 security release); engines ^22.23.4 || ^24.22.1 || >=26.12.1"
+  },
+  "cleanCheckout": {
+    "22.23.4": {
+      "node": "v22.23.4",
+      "commit": "38dc55f6d8f2330bedaf53c807cb35167a696b6c",
+      "steps": {
+        "node": "v22.23.4",
+        "commit": "38dc55f6d8f2330bedaf53c807cb35167a696b6c",
+        "doctor-before": {
+          "exit": 0,
+          "seconds": 0
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 135
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 219
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 15
+        },
+        "audit-html": {
+          "exit": 1,
+          "seconds": 3
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 57
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "ci-fast": {
+          "exit": 0,
+          "seconds": 50
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        }
+      },
+      "auditHtmlUnseeded": {
+        "exit": 1,
+        "observed": "Broken internal destination /about (HTTP 404) on an unseeded CMS, as the HTML integrity contract requires"
+      },
+      "auditHtmlSeeded": {
+        "seed": "npx emdash seed seed/seed.json",
+        "result": "HTML integrity: PASS; 9 HTML files; 1701.4ms."
+      },
+      "ciFast": {
+        "seconds": 48.952,
+        "under60Seconds": true
+      }
+    },
+    "24.22.3": {
+      "node": "v24.22.3",
+      "commit": "38dc55f6d8f2330bedaf53c807cb35167a696b6c",
+      "steps": {
+        "node": "v24.22.3",
+        "commit": "38dc55f6d8f2330bedaf53c807cb35167a696b6c",
+        "doctor-before": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 133
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 196
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 14
+        },
+        "audit-html": {
+          "exit": 1,
+          "seconds": 2
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 50
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "ci-fast": {
+          "exit": 0,
+          "seconds": 46
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        }
+      },
+      "auditHtmlUnseeded": {
+        "exit": 1,
+        "observed": "Broken internal destination /about (HTTP 404) on an unseeded CMS, as the HTML integrity contract requires"
+      },
+      "auditHtmlSeeded": {
+        "seed": "npx emdash seed seed/seed.json",
+        "result": "HTML integrity: PASS; 9 HTML files; 1441.8ms."
+      },
+      "ciFast": {
+        "seconds": 45.017,
+        "under60Seconds": true
+      }
+    }
+  },
+  "localSuites": {
+    "node": "v24.22.3",
+    "platform": "win32-x64",
+    "playwright": "1.64.1",
+    "chromiumRevision": "1248",
+    "results": {
+      "visual": {
+        "exit": 0,
+        "seconds": 394
+      },
+      "visual-repeat": {
+        "exit": 1,
+        "seconds": 602
+      },
+      "visual-sensitivity": {
+        "exit": 0,
+        "seconds": 79
+      },
+      "visual-functional": {
+        "exit": 0,
+        "seconds": 330
+      },
+      "visual-cleanup": {
+        "exit": 0,
+        "seconds": 33
+      },
+      "editor-rehearsal": {
+        "exit": 0,
+        "seconds": 55
+      },
+      "emdash-current": {
+        "exit": 0,
+        "seconds": 38
+      },
+      "metadata": {
+        "exit": 1,
+        "seconds": 1
+      },
+      "forms": {
+        "exit": 0,
+        "seconds": 190
+      },
+      "cache": {
+        "exit": 0,
+        "seconds": 52
+      },
+      "infrastructure": {
+        "exit": 1,
+        "seconds": 1
+      },
+      "native-images": {
+        "exit": 0,
+        "seconds": 51
+      },
+      "metadata-out": {
+        "exit": 0,
+        "seconds": 36
+      },
+      "infrastructure-out": {
+        "exit": 0,
+        "seconds": 26
+      },
+      "visual-repeat-3": {
+        "exit": 0,
+        "seconds": 1057
+      }
+    },
+    "visualRepeat3": "336 passed (17.6m)",
+    "notes": [
+      "visual-repeat (first attempt) stopped at the 600 s global timeout after 214 passed; scripts/test-visual.mjs now scales the global timeout by --repeat, and visual-repeat-3 ran with that change",
+      "metadata and infrastructure (first attempts) were invoked without their required --out argument; metadata-out and infrastructure-out are the valid runs"
+    ],
+    "metadata": {
+      "status": "passed",
+      "routes": 12
+    }
+  },
+  "restoreDrill": {
+    "previousRelease": "cb46cafca26e4e1b36ebda0f12ef386fc14b47dd (astro 7.4.0, emdash 1.5.0)",
+    "node": "24.22.3",
+    "staleSidecarsRemoved": [
+      "-wal",
+      "-shm"
+    ],
+    "steps": [
+      {
+        "name": "seed previous release with an uploaded image",
+        "ok": true
+      },
+      {
+        "name": "closed backup matches the source inventory",
+        "ok": true
+      },
+      {
+        "name": "restored database passes integrity_check with the same inventory",
+        "ok": true
+      },
+      {
+        "name": "schema budget on the restored database",
+        "ok": true
+      },
+      {
+        "name": "no pending or unknown migrations for the candidate",
+        "ok": true
+      },
+      {
+        "name": "candidate build",
+        "ok": true
+      },
+      {
+        "name": "production server boots on the restored database",
+        "ok": true
+      },
+      {
+        "name": "anonymous public reads",
+        "ok": true,
+        "statuses": [
+          "/ 200",
+          "/posts/welcome 200",
+          "/about 200"
+        ]
+      },
+      {
+        "name": "restored image is delivered",
+        "ok": true,
+        "status": 200,
+        "request": "/_image?href=https%3A%2F%2Fstarter-drill.invalid%2F_emdash%2Fapi%2Fmedia%2Ffile%2F01M7J3HM0SWKV4XKYNV5DB3FK9.jpg&w=1200&h=800&f=webp&fit=cover&position=center",
+        "type": "image/webp",
+        "bytes": 1782
+      },
+      {
+        "name": "admin route answers (sign-in not attempted)",
+        "ok": true,
+        "status": 302
+      }
+    ],
+    "finding": "A first attempt restored over a target that still had data.db-wal and data.db-shm from earlier runs; SQLite replayed them and reported a malformed schema. docs/node-backup-restore.md now removes the sidecars before copying."
+  },
+  "notCovered": [
+    "Workers/D1/R2 runtime profile (unverified, Phase 5)",
+    "An upgrade across an EmDash release: the previous Baseline release already ran EmDash 1.5.0 (the 1.3 to 1.5 upgrade after 0.1.1 has its own evidence in docs/emdash-1.5-upgrade.md); the drill covers a database created by the previous Baseline release",
+    "Admin sign-in and live notification providers",
+    "Browsers other than the pinned Windows Chromium"
+  ]
+}

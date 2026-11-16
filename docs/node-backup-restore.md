@@ -111,8 +111,12 @@ npm ci
 ```
 
 ### Step 2: Restore Files
+
+Stop any server using the target first, and remove the target's `-wal` and `-shm` files before copying the backup over it. SQLite replays a leftover write-ahead log onto whatever file now has the database's name: in the 0.2.0 standards drill, a restore over a target with stale sidecars produced "database disk image is malformed" at the first query.
+
 ```sh
-# Copy backup artifacts
+# Remove stale write-ahead log files, then copy backup artifacts
+rm -f ./data.db ./data.db-wal ./data.db-shm
 cp /path/to/backup.sqlite ./data.db
 cp -r /path/to/backup-media ./local-media
 cp /path/to/.env.production ./.env

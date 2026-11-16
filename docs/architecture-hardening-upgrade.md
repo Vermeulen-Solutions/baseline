@@ -4,7 +4,7 @@ Generator **0.4.0** assembles the metadata, interaction verification, Astro acce
 
 ## New projects
 
-Use an inspected checkout and npm on Node `^22.23.4 || ^24.22.1 || >=26.12.1`. The pinned local Windows screenshot renderer and automated checks use Node 24.22.3. Installed development tooling has a higher floor than the historical standards record. Astro 7.4.0 and EmDash 1.3.0 remain the scoped framework versions; this update does not recertify their admitted runtime range.
+Use an inspected checkout and npm on Node `^22.23.4 || ^24.22.1 || >=26.12.1`. The pinned local Windows screenshot renderer and automated checks use Node 24.22.3. Standards `0.2.0` certifies Astro 7.4.12 and EmDash 1.5.0 on this range.
 
 | Profile | Assembly and metadata owner | Applicable acceptance |
 | --- | --- | --- |
