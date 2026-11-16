@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { DatabaseSync } from 'node:sqlite';
-import { auditSite, strictFailure, markdownReport } from '../scripts/audit-site.mjs';
+import { auditSite, strictFailure, markdownReport, STANDARD } from '../scripts/audit-site.mjs';
 import { configCapabilities } from '../scripts/audit-capabilities.mjs';
 import { validateReport } from '../scripts/audit-report.mjs';
 import { sources } from '../scripts/skill-sync.mjs';
@@ -17,7 +17,7 @@ function fixture(fn) {
   const parent = fs.mkdtempSync(path.join(os.tmpdir(), 'baseline-coverage-')), root = path.join(parent, 'site'); fs.mkdirSync(root);
   const put = (file, bytes) => { const full = path.join(root, file); fs.mkdirSync(path.dirname(full), { recursive: true }); fs.writeFileSync(full, bytes); };
   put('astro.config.mjs', config); put('package.json', JSON.stringify({ engines: { node: '>=22.22.2' } }));
-  const manifest = JSON.parse(fs.readFileSync(new URL('../standards/baselines/0.1.1.json', import.meta.url)));
+  const manifest = JSON.parse(fs.readFileSync(new URL(`../standards/baselines/${STANDARD.version}.json`, import.meta.url)));
   put('package-lock.json', JSON.stringify({ lockfileVersion: 3, packages: { '': { dependencies: manifest.runtimeProfiles['node-sqlite'].dependencies }, ...Object.fromEntries(Object.entries(manifest.runtimeProfiles['node-sqlite'].dependencies).map(([name, v]) => ['node_modules/' + name, { version: v.replace('^', '') }])) } }));
   for (const [group, source] of Object.entries(sources)) {
     const files = {};

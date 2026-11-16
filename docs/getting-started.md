@@ -8,7 +8,7 @@ Choose the editing and hosting model before installing dependencies. The full re
 
 ## Requirements
 
-Use npm and the supplied lockfile. The supported Node.js engine range is `^22.22.3 || ^24.16.0 || >=26.3.0`, as declared in [package.json](../package.json). Node 24 LTS, version 24.16.0 or later within the 24.x line, is the recommended choice.
+Use npm and the supplied lockfile. The supported Node.js engine range is `^22.23.4 || ^24.22.1 || >=26.12.1`, as declared in [package.json](../package.json). Node 24 LTS, version 24.16.0 or later within the 24.x line, is the recommended choice.
 
 Setup commands below have separate Windows PowerShell and macOS/Linux blocks. The PowerShell blocks use `npm.cmd` and `npx.cmd` to avoid script execution-policy friction. No policy change is needed.
 

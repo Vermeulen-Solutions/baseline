@@ -3,7 +3,7 @@ export const visualContract = {
   fixtureVersion: 3,
   playwright: '1.64.1',
   chromiumRevision: '1248',
-  node: '24.21.0',
+  node: '24.22.3',
   platform: 'win32',
   executionPolicy: 'Local developer verification only; no push/PR/build/deployment dependency',
   font: '@fontsource/noto-sans@5.3.0 (latin 400/700)',

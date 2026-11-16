@@ -112,8 +112,8 @@ test('a linked-worktree hook environment cannot redirect a foreign Git fixture i
 
 test('doctor evaluates the declared Node alternatives without semver dependencies', () => {
   const range = JSON.parse(readFileSync('package.json', 'utf8')).engines.node;
-  for (const version of ['22.22.3', '22.23.0', '24.16.0', '24.21.0', '26.3.0', '27.0.0']) assert.equal(supportsNode(version, range), true, version);
-  for (const version of ['20.20.0', '22.22.2', '23.99.0', '24.15.9', '25.0.0', '26.2.9', '26.3.0-rc.1']) assert.equal(supportsNode(version, range), false, version);
+  for (const version of ['22.23.4', '22.24.0', '24.22.1', '24.22.3', '26.12.1', '27.0.0']) assert.equal(supportsNode(version, range), true, version);
+  for (const version of ['20.20.0', '22.23.3', '23.99.0', '24.22.0', '25.0.0', '26.12.0', '26.12.1-rc.1']) assert.equal(supportsNode(version, range), false, version);
   assert.equal(supportsNode('24.21.0', '>=24'), null);
   assert.equal(supportsNode('24.21.0', undefined), null);
   assert.equal(supportsNode('0.2.9', '^0.2.3'), true);

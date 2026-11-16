@@ -35,8 +35,8 @@
     "standards": {
       "type": "object", "additionalProperties": false, "required": ["version", "commit", "sha256", "source"],
       "properties": {
-        "version": { "const": "0.1.1" }, "commit": { "const": "28ccf82b3047eb615cd57ca55141751e0d29af11" },
-        "sha256": { "const": "a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4" }, "source": { "type": "string" }
+        "version": { "enum": ["0.1.1", "0.2.0"] }, "commit": { "enum": ["28ccf82b3047eb615cd57ca55141751e0d29af11", "cb46cafca26e4e1b36ebda0f12ef386fc14b47dd"] },
+        "sha256": { "enum": ["a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4", "dfb0d821033aad09b17a3d2ee71425d7f05c4c0d20837421ee721ac070687732"] }, "source": { "type": "string" }
       }
     },
     "runtime": { "enum": ["node-sqlite", "cloudflare-d1-r2"] },

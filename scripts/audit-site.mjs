@@ -11,7 +11,6 @@ import { assertReport } from './audit-report.mjs';
 import { runtimeEvidenceRules } from './audit-runtime-evidence.mjs';
 import { readTarget, readJSON, within, canonicalOutput, sha256 as digest, gitRead } from './audit-evidence.mjs';
 import { packageLockEvidence } from './package-lock-evidence.mjs';
-import { REVIEWED_EMDASH } from './emdash-reviewed.mjs';
 
 // A certified caret range ("^4.3.3") accepts what npm would install for it, not only its lower bound.
 export function satisfiesCertified(observed, expectedRange) {
@@ -25,10 +24,10 @@ export function satisfiesCertified(observed, expectedRange) {
   return true;
 }
 
-export const STANDARD = Object.freeze({ version: '0.1.1', commit: '28ccf82b3047eb615cd57ca55141751e0d29af11', sha256: 'a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4' });
+export const STANDARD = Object.freeze({ version: '0.2.0', commit: 'cb46cafca26e4e1b36ebda0f12ef386fc14b47dd', sha256: 'dfb0d821033aad09b17a3d2ee71425d7f05c4c0d20837421ee721ac070687732' });
 const starterRoot = fileURLToPath(new URL('../', import.meta.url));
 function loadStandard(file) {
-  const bytes = fs.readFileSync(file ?? path.join(starterRoot, 'standards/baselines/0.1.1.json'));
+  const bytes = fs.readFileSync(file ?? path.join(starterRoot, `standards/baselines/${STANDARD.version}.json`));
   if (digest(bytes) !== STANDARD.sha256) throw Error('Standards artifact digest mismatch; diagnosis refused');
   const manifest = JSON.parse(bytes.toString('utf8'));
   if (manifest.standardsVersion !== STANDARD.version || manifest.status !== 'certified-scoped') throw Error('Unsupported standards artifact');
@@ -71,26 +70,21 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
   const packagesObserved = record(pkg.data) && lock.status === 'observed';
   const packageEvidence = ['package.json', ...(lock.lockfile ? [lock.lockfile, ...(lock.alternateLockfile ? [lock.lockfile === 'package-lock.json' ? 'pnpm-lock.yaml' : 'package-lock.json'] : [])] : ['package-lock.json', 'pnpm-lock.yaml'])];
   add('package-evidence', packagesObserved ? 'pass' : 'unverified', 'Readable package object and one supported npm or pnpm package inventory', packagesObserved ? `Observed ${lock.manager} inventory${lock.alternateLockfile ? ' selected by packageManager; alternate lockfile ignored' : ''}; contents withheld` : lock.reason ?? 'Missing, invalid, ambiguous or refused evidence', { evidence: packageEvidence });
-  add('runtime-profile', runtime === 'node-sqlite' ? 'pass' : 'unverified', 'A certified source standards profile', manifest.runtimeProfiles[runtime].status, { evidence: ['standards/baselines/0.1.1.json'] });
+  add('runtime-profile', runtime === 'node-sqlite' ? 'pass' : 'unverified', 'A certified source standards profile', manifest.runtimeProfiles[runtime].status, { evidence: [`standards/baselines/${STANDARD.version}.json`] });
   for (const [name, expectedRange] of Object.entries(manifest.runtimeProfiles['node-sqlite'].dependencies)) {
     const expected = expectedRange.replace(/^\^/, '');
     const entry = lock.entries?.get(name);
     const observed = entry?.version;
-    // The certified baseline is a dated record. The EmDash release this checkout's adapters were
-    // reviewed against is newer; flagging it would make the current starter warn against itself.
-    const reviewed = name === 'emdash' && observed === REVIEWED_EMDASH && observed !== expected;
-    const status = !entry || entry.source === 'local' || !observed ? 'unverified' : reviewed || satisfiesCertified(observed, expectedRange) ? 'pass' : 'warning';
-    const observation = entry?.source === 'local' ? 'Resolved from a local package source; registry baseline comparison is not applicable' : reviewed ? `${observed} (current reviewed EmDash release; newer than the certified comparison)` : observed ?? 'No valid direct lock entry';
+    const status = !entry || entry.source === 'local' || !observed ? 'unverified' : satisfiesCertified(observed, expectedRange) ? 'pass' : 'warning';
+    const observation = entry?.source === 'local' ? 'Resolved from a local package source; registry baseline comparison is not applicable' : observed ?? 'No valid direct lock entry';
     add(`dependency:${name}`, status, `Certified comparison version ${expected}`, observation, { required: false, evidence: [lock.lockfile ?? 'package-lock.json'], applicability: 'Static lockfile comparison, not runtime compatibility or an upgrade ceiling' });
   }
   const engine = pkg.data?.engines?.node;
   const safeEngine = typeof engine === 'string' && /^[\d v^~<>=|.*x-]+$/.test(engine);
-  // Accept the certified range or the range this Baseline checkout declares now (its minimums are not lower).
-  let currentRange = null;
-  try { currentRange = JSON.parse(fs.readFileSync(path.join(starterRoot, 'package.json'), 'utf8')).engines?.node ?? null; } catch { /* comparison stays certified-only */ }
   const compact = value => value.replaceAll(/\s/g, '');
-  const exactPolicy = safeEngine && [manifest.runtimeProfiles['node-sqlite'].nodeEngineRange, currentRange].some(range => typeof range === 'string' && compact(range) === compact(engine));
-  add('node-policy', !safeEngine ? 'unverified' : exactPolicy ? 'pass' : 'warning', 'Minimum 22.22.2; recommend current Node 24 LTS patch', safeEngine ? `Declared ${engine}; executing audit on ${process.version}` : 'No safe declaration observed', { required: false, evidence: ['package.json'], applicability: 'Exact comparison with the certified or current Baseline declared policy only; not deployment runtime or general semver evaluation' });
+  const certifiedRange = manifest.runtimeProfiles['node-sqlite'].nodeEngineRange;
+  const exactPolicy = safeEngine && typeof certifiedRange === 'string' && compact(certifiedRange) === compact(engine);
+  add('node-policy', !safeEngine ? 'unverified' : exactPolicy ? 'pass' : 'warning', `Minimum ${manifest.runtimeProfiles['node-sqlite'].nodeMinimum}; recommend current Node 24 LTS patch`, safeEngine ? `Declared ${engine}; executing audit on ${process.version}` : 'No safe declaration observed', { required: false, evidence: ['package.json'], applicability: 'Exact comparison with the certified declared policy only; not deployment runtime or general semver evaluation' });
   const hashes = {};
   for (const relative of ['astro.config.mjs', 'src/live.config.ts', 'src/styles/global.css', 'package-lock.json']) {
     const result = readTarget(target, relative);

@@ -63,8 +63,8 @@ generation. Read actual configuration rather than inferring support from a READM
 
 ## Local workflow and verification
 
-Use npm and the checked-in lockfile. Current tooling requires Node ^22.22.3,
-^24.16.0 or >=26.3.0; Node 24 LTS is recommended. In Windows PowerShell use npm.cmd
+Use npm and the checked-in lockfile. Current tooling requires Node ^22.23.4,
+^24.22.1 or >=26.12.1; Node 24 LTS is recommended. In Windows PowerShell use npm.cmd
 and npx.cmd. These launchers avoid execution-policy friction.
 
 1. Run `npm run doctor` before `npm ci`. Doctor needs no installed dependencies;
@@ -97,7 +97,7 @@ final checks. [HTML integrity](docs/html-integrity.md) documents SSR capture and
 content prerequisites. Do not install CMS tooling into generated static projects
 to satisfy checks that do not apply.
 
-CI uses Node 24.16.0 with separate fast/build, lifecycle rehearsal and generated-profile
+CI uses Node 24.22.3 with separate fast/build, lifecycle rehearsal and generated-profile
 jobs. Fast checks enforce a 60-second budget (checkout/setup/install excluded) and
 publish timing receipts; typecheck follows the measured segment. Browser tests
 stay local and independent of push/PR CI and production/deploy commands.

@@ -24,7 +24,7 @@ export async function rehearseImporter({ out, signal } = {}) {
   assert.equal(fs.readFileSync(path.join(fixtures, 'wordpress.xml'), 'utf8'), syntheticWXR(fixture));
   const requests = [], images = new Map();
   const versions = Object.fromEntries(['astro', 'emdash', '@emdash-cms/gutenberg-to-portable-text'].map(name => [name, json(path.join(root, 'node_modules', name, 'package.json')).version]));
-  assert.equal(versions.astro, '7.4.0'); assert.equal(versions.emdash, REVIEWED_EMDASH);
+  assert.equal(versions.astro, '7.4.12'); assert.equal(versions.emdash, REVIEWED_EMDASH);
   let child, protocol; const logs = [];
   const executableHashes = Object.fromEntries(['dist/astro/routes/api/import/wordpress/execute.mjs', 'dist/astro/routes/api/import/wordpress-plugin/execute.mjs', 'dist/astro/routes/api/import/wordpress/rewrite-urls.mjs', 'dist/index.mjs'].map(file => [file, sha256(fs.readFileSync(path.join(root, 'node_modules/emdash', file)))]));
   executableHashes['@emdash-cms/gutenberg-to-portable-text/dist/index.mjs'] = sha256(fs.readFileSync(path.join(root, 'node_modules/@emdash-cms/gutenberg-to-portable-text/dist/index.mjs')));

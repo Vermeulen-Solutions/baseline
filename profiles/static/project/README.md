@@ -100,4 +100,4 @@ Record browser acceptance and deployment ownership in project notes. The EmDash
 database audit, site registry and Windows screenshot baseline commands are not
 included in this profile.
 
-Template verification requires Node `^22.22.3 || ^24.16.0 || >=26.3.0` (Node 24 LTS recommended). Run `npm run lint:templates` for Astro accessibility checks; `npm run verify` also retains script syntax, tokens, tests and type checking.
+Template verification requires Node `^22.23.4 || ^24.22.1 || >=26.12.1` (Node 24 LTS recommended). Run `npm run lint:templates` for Astro accessibility checks; `npm run verify` also retains script syntax, tokens, tests and type checking.

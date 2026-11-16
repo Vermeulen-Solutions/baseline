@@ -1,6 +1,6 @@
 # Visual regression capture and sensitivity
 
-Use Node **24.21.0**, npm/lockfile, **@playwright/test 1.64.1**, bundled full Chromium **revision 1248** (channel chromium), locale en-US, UTC, light scheme and device scale 1. Windows is the authoritative local renderer. No Linux/Docker baseline or browser CI is required. The fixture profile uses pinned Noto Sans latin 400/700 from `@fontsource/noto-sans@5.3.0`; its [OFL license](licenses/noto-sans-OFL.txt) is retained. The profile attribute scopes font overrides; normal public pages retain their source fonts.
+Use Node **24.22.3**, npm/lockfile, **@playwright/test 1.64.1**, bundled full Chromium **revision 1248** (channel chromium), locale en-US, UTC, light scheme and device scale 1. Windows is the authoritative local renderer. No Linux/Docker baseline or browser CI is required. The fixture profile uses pinned Noto Sans latin 400/700 from `@fontsource/noto-sans@5.3.0`; its [OFL license](licenses/noto-sans-OFL.txt) is retained. The profile attribute scopes font overrides; normal public pages retain their source fonts.
 
 This starter suite certifies the stated fixture font, not operating-system font fallback. A client site must replace the renderer font contract with its actual licensed brand faces and review new baselines; the neutral override must not conceal a client typography change.
 
@@ -23,7 +23,7 @@ Review full-page captures, focused state images, changed dimensions and the envi
 
 ### Local-only policy
 
-Visual tests never run automatically on git push, pull requests, production builds or deployments. Both wrapper and direct Playwright configuration reject CI/GitHub Actions execution. There is no visual GitHub job or Linux/Docker prerequisite. Install Chromium locally only; npm ci in CI does not download browsers. Local visual Node 24.21.0 is a pinned renderer input; the current automated build/unit jobs use Node 24.16.0.
+Visual tests never run automatically on git push, pull requests, production builds or deployments. Both wrapper and direct Playwright configuration reject CI/GitHub Actions execution. There is no visual GitHub job or Linux/Docker prerequisite. Install Chromium locally only; npm ci in CI does not download browsers. Local visual Node 24.22.3 is a pinned renderer input; the current automated build/unit jobs use Node 24.22.3
 
 ## Built-server fixtures and readiness
 
@@ -53,7 +53,7 @@ Pixelmatch color threshold **0.1** is independent from the allowed changed-pixel
 
 `.emdash/visual/` contains bootstrap/environment/cleanup receipts, server logs, JSON/HTML reports, expected/actual/diff images and retained traces for unexpected failures. These are ignored locally; reviewable goldens remain under tests. Native framework artifacts use synthetic public content and no authenticated browser storage. Cleanup stops the owned server, unlinks the dependency junction, validates the absolute temporary path and removes only that app. Wrapper cancellation uses IPC to reach Playwright's graceful signal handlers: Windows `child.kill('SIGINT')` would terminate immediately and bypass teardown. Failure/abort cleanup and the IPC relay have separate verification. Forced OS process-tree termination can still bypass JavaScript cleanup and requires removing the verified owned temporary tree. Never recursively delete through its dependency junction.
 
-Automated CI configures Node 24.16.0 for the root verification/build job on Ubuntu with a ten-minute cap and the separate generated-profile jobs (`static`, `static-sveltia`) with fifteen-minute caps. The scheduled dependency-proposal workflow also verifies both profiles. None installs a browser or runs screenshot comparisons; there are no automatic pre-commit or deployment screenshot dependencies. Timings depend on installation, builds, runner queues and network conditions. Local reports remain available until the next run; copy dated receipts when retaining evidence. See [Reviewed upstream maintenance](automated-upstream-updates.md) for proposal artifacts.
+Automated CI configures Node 24.22.3 for the root verification/build job on Ubuntu with a ten-minute cap and the separate generated-profile jobs (`static`, `static-sveltia`) with fifteen-minute caps. The scheduled dependency-proposal workflow also verifies both profiles. None installs a browser or runs screenshot comparisons; there are no automatic pre-commit or deployment screenshot dependencies. Timings depend on installation, builds, runner queues and network conditions. Local reports remain available until the next run; copy dated receipts when retaining evidence. See [Reviewed upstream maintenance](automated-upstream-updates.md) for proposal artifacts.
 
 Screenshots do not certify editor saves, Cloudflare, provider delivery or WCAG conformance. Real editor/database/media acceptance stays separate.
 

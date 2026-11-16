@@ -10,7 +10,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { auditSite, strictFailure, writeReports, markdownReport, STANDARD, satisfiesCertified } from '../scripts/audit-site.mjs';
 import { validateReport } from '../scripts/audit-report.mjs';
 const script = new URL('../scripts/audit-site.mjs', import.meta.url);
-const baselineFile = new URL('../standards/baselines/0.1.1.json', import.meta.url);
+const baselineFile = new URL(`../standards/baselines/${STANDARD.version}.json`, import.meta.url);
 
 test('audit v3 classifications preserve legacy v2 validation and never imply unconditional safe writes', () => {
   const report = auditSite({ root: fileURLToPath(new URL('../', import.meta.url)) });
@@ -68,8 +68,8 @@ test('degraded, malformed and absent evidence stay warnings/unverified; altered 
 test('site standards diagnosis selects pnpm importers and withholds comparisons for local vendored sources', () => fixture(root => {
   current(root);
   const profile = JSON.parse(fs.readFileSync(baselineFile)).runtimeProfiles['node-sqlite'];
-  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ packageManager: 'pnpm@9.15.0', engines: { node: profile.nodeEngineRange }, dependencies: { astro: '7.4.0', emdash: '1.3.0', eventual: 'file:vendor/eventual-0.1.0.tgz' } }));
-  fs.writeFileSync(path.join(root, 'pnpm-lock.yaml'), `lockfileVersion: '9.0'\nimporters:\n  .:\n    dependencies:\n      astro:\n        specifier: 7.4.0\n        version: 7.4.0\n      emdash:\n        specifier: 1.3.0\n        version: 1.3.0\n      eventual:\n        specifier: file:vendor/eventual-0.1.0.tgz\n        version: file:vendor/eventual-0.1.0.tgz\npackages: {}\nsnapshots: {}\n`);
+  fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({ packageManager: 'pnpm@9.15.0', engines: { node: profile.nodeEngineRange }, dependencies: { astro: profile.dependencies.astro, emdash: profile.dependencies.emdash, eventual: 'file:vendor/eventual-0.1.0.tgz' } }));
+  fs.writeFileSync(path.join(root, 'pnpm-lock.yaml'), `lockfileVersion: '9.0'\nimporters:\n  .:\n    dependencies:\n      astro:\n        specifier: ${profile.dependencies.astro}\n        version: ${profile.dependencies.astro}\n      emdash:\n        specifier: ${profile.dependencies.emdash}\n        version: ${profile.dependencies.emdash}\n      eventual:\n        specifier: file:vendor/eventual-0.1.0.tgz\n        version: file:vendor/eventual-0.1.0.tgz\npackages: {}\nsnapshots: {}\n`);
   const report = auditSite({ root });
   assert.equal(rule(report, 'package-evidence').status, 'pass');
   assert.match(rule(report, 'package-evidence').observed, /pnpm.*alternate lockfile ignored/);
