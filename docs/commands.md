@@ -125,7 +125,7 @@ Commands that the workflow and skills name but the sections above do not. Scope 
 | `npm run design:prompt-check -- <file>` | All profiles | Preflight an external design prompt before it informs a concept |
 | `npm run design:watch -- --dir <folder>` | All profiles | Open changed top-level concept HTML files; a file opener, not a live-reload server |
 | `npm run design:canvas-check` | Root tooling | Check Claude Design canvas boards locally before upload |
-| `npm run audit:ui -- --base <origin> --routes <list>` | All profiles, against any origin; needs a local Chromium | Rendered UI audit: off-screen and squeezed text, enlarged phone text, contrast, hover states and clipped images |
+| `npm run audit:ui -- --base <origin> --routes <list>` | All profiles, against any origin; needs a local Chromium | Rendered UI audit: off-screen and squeezed text, enlarged phone text, contrast, hover states, clipped and cover-cropped images, decorations touching content and stacked empty bands; `--widths auto` adds widths around the site's own breakpoints |
 | `npm run capture:routes -- --base <origin> --routes <list> --out <dir>` | All profiles, against any origin; needs a local Chromium | Before/after full-page and viewport captures, optionally with a concept CSS overlay |
 | `npm run record:motion` | Root tooling | Record a real route with headless Chromium as a GIF for image-only review surfaces |
 | `npm run audit:cms-roundtrip` | Root tooling, disposable EmDash copy only | Check edit targets, save, publish and public reload without touching real content |

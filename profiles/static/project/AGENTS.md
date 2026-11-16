@@ -102,7 +102,8 @@ requires a rebuild to publish, and must keep its form paired with the native sch
 Run `npm run verify`, `npm run build` and `npm run check:dev-tools`. Inspect the
 public routes, emitted images, keyboard focus and narrow reflow in a browser.
 Run `npm run audit:ui -- --base <preview origin> --routes <routes> --widths 390,320`
-for the enlarged-phone-text check (it needs `npx playwright install chromium` once).
+for the enlarged-phone-text check (it needs `npx playwright install chromium` once),
+and once with `--widths auto` to check the widths around the site's own breakpoints.
 `/_styleguide` exists in development and isolated fixture builds, and is absent
 from production. Never deploy `dist-fixtures/`. Deploy only a verified `dist/`.
 

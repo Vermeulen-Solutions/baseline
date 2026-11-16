@@ -31,8 +31,21 @@
 //   yellow on a white card passed every rest-state check;
 // - image-clipped: an image whose box is over 15% larger than the nearest clipping frame around
 //   it, so only part of the picture shows. Found on a real site: portraits cut to the top of the
-//   head by a leftover min-height after a restyle. object-fit crops inside the image box are fine;
+//   head by a leftover min-height after a restyle. object-fit crops are measured separately:
+// - image-cover-cropped: a photograph shown with object-fit: cover whose frame hides more than
+//   --crop percent (15) of it on one side, worked out from its natural size, its box and
+//   object-position. Found on a real site: a fixed-height frame hid the top 27% of group photos
+//   on tablets. Images meant to be cropped (backgrounds, textures) take data-audit-crop-ok;
+// - decoration-overlap: a ::before/::after border, outline or glyph that reaches outside its host
+//   and comes within 4px of text or a control outside it. Found on a real site: a dashed outline
+//   drawn with a negative inset ran into the buttons above its figure at tablet widths only;
+// - empty-band (at widths of 1024px and up): more than --band px (160) between the content of two
+//   consecutive blocks of <main> on the same ground with no rule between them, as when the end
+//   padding of one section stacks on the start padding of the next;
 // - overflow-x, broken-image, http, console-error and failed-request.
+// --widths auto adds one width on each side of the breakpoints in the site's stylesheets (read
+// from the first five routes) to the given or default widths. Found on a real site: two defects
+// lived only between about 600 and 990px, where no default width looked.
 // Exit 0 = clean, 2 = issues, 1 = error. Read-only: it never submits forms or clicks links.
 // Progress goes to stderr, one line per route and width, and --out is rewritten after every route
 // ("partial": true until the run completes), so an interrupted run keeps what it measured. With the
@@ -59,8 +72,98 @@ export function parseTextScale(value) {
   });
 }
 
+// Breakpoint edges in the media queries of a page: for each, the first width at which the wider
+// layout applies (min-width: 768px and max-width: 767px both give 768). em and rem count as 16px,
+// as media queries do. Returns [{ edge, count }] sorted by edge; print-only queries are skipped.
+export function parseBreakpoints(mediaTexts) {
+  const edges = new Map(), px = (n, unit) => Number(n) * (unit === 'px' ? 1 : 16);
+  const add = edge => { if (Number.isFinite(edge) && edge > 200 && edge <= 3840) edges.set(edge, (edges.get(edge) ?? 0) + 1); };
+  // width >= v and width > v (and their mirrors) start the wider side at v; <= and < end the narrower one there.
+  const edgeOf = (op, v) => op === '>=' || op === '<' ? Math.ceil(v) : Math.floor(v) + 1;
+  const flip = { '<': '>', '>': '<', '<=': '>=', '>=': '<=' };
+  for (const text of mediaTexts) for (const query of String(text).split(',')) {
+    if (/\bprint\b/.test(query) && !/\bnot\s+print\b/.test(query)) continue;
+    for (const m of query.matchAll(/(min|max)-width\s*:\s*([\d.]+)(px|r?em)\b/g)) add(edgeOf(m[1] === 'min' ? '>=' : '<=', px(m[2], m[3])));
+    for (const m of query.matchAll(/(?<![-\w])width\s*(<=|>=|<|>)\s*([\d.]+)(px|r?em)\b/g)) add(edgeOf(m[1], px(m[2], m[3])));
+    for (const m of query.matchAll(/([\d.]+)(px|r?em)\s*(<=|>=|<|>)\s*width(?![-\w])/g)) add(edgeOf(flip[m[3]], px(m[1], m[2])));
+  }
+  return [...edges].map(([edge, count]) => ({ edge, count })).sort((a, b) => a.edge - b.edge);
+}
+
+// The widths for --widths auto: the given widths plus one width on each side of the most used
+// breakpoints (at most `max`; edges closer than `merge` px count as one).
+export function autoWidths(base, edges, { max = 6, merge = 24 } = {}) {
+  const chosen = [];
+  for (const { edge } of [...edges].sort((a, b) => b.count - a.count || a.edge - b.edge)) {
+    if (chosen.length >= max) break;
+    if (!chosen.some(e => Math.abs(e - edge) < merge)) chosen.push(edge);
+  }
+  const widths = new Set(base);
+  for (const edge of chosen) { widths.add(edge - 1); widths.add(edge); }
+  return { widths: [...widths].filter(w => w >= 200 && w <= 3840).sort((a, b) => a - b), edges: chosen.sort((a, b) => a - b) };
+}
+
+// The offsets, in px, of an image's left and top edges inside its box for a computed
+// object-position, where freeX/freeY are the box size minus the displayed image size.
+export function objectPosition(value, freeX, freeY) {
+  const tokens = String(value).trim().match(/calc\((?:[^()]|\([^()]*\))*\)|\S+/g) ?? [];
+  const keyword = { left: ['x', 0], right: ['x', 100], top: ['y', 0], bottom: ['y', 100], center: [null, 50] };
+  const length = (t, free) => t.endsWith('%') ? free * parseFloat(t) / 100 : /^-?[\d.]+px$/.test(t) ? parseFloat(t) : free / 2;
+  const at = (t, free) => t in keyword ? free * keyword[t][1] / 100 : length(t, free);
+  if (tokens.length === 4) {
+    // Edge offsets: "right 10px bottom 20%".
+    const out = { x: freeX / 2, y: freeY / 2 };
+    for (const [k, off] of [[tokens[0], tokens[1]], [tokens[2], tokens[3]]]) {
+      const axis = keyword[k]?.[0]; if (!axis) continue;
+      const free = axis === 'x' ? freeX : freeY, d = length(off, free);
+      out[axis] = k === 'left' || k === 'top' ? d : free - d;
+    }
+    return [out.x + 0, out.y + 0];
+  }
+  let [x = 'center', y = 'center'] = tokens;
+  if (tokens.length === 1 && keyword[x]?.[0] === 'y') [x, y] = ['center', x];
+  else if (keyword[x]?.[0] === 'y' || keyword[y]?.[0] === 'x') [x, y] = [y, x];
+  return [at(x, freeX) + 0, at(y, freeY) + 0];
+}
+
+// The share (0 to 1) of a photograph that object-fit: cover hides on each side of its box.
+export function coverCrop({ naturalWidth, naturalHeight, width, height, position = '50% 50%' }) {
+  const scale = Math.max(width / naturalWidth, height / naturalHeight), dw = naturalWidth * scale, dh = naturalHeight * scale;
+  const [x, y] = objectPosition(position, width - dw, height - dh);
+  const share = (hidden, size) => Math.max(0, Math.min(1, hidden / size));
+  return { top: share(-y, dh), right: share(x + dw - width, dw), bottom: share(y + dh - height, dh), left: share(-x, dw) };
+}
+
+// A decoration (a ::before/::after box) that reaches outside its host, and the text or controls
+// outside the host it touches (within `margin` px). For a drawn outline or border, content inside
+// the ring (`inner`) is not touched; a pseudo-element with text has no inner area.
+export function decorationHits({ rect, inner, host }, obstacles, margin = 4) {
+  const outside = Math.max(host.left - rect.left, rect.right - host.right, host.top - rect.top, rect.bottom - host.bottom);
+  if (outside <= 2) return { outside: Math.max(0, Math.round(outside)), hits: [] };
+  const near = (a, b) => a.left < b.right + margin && a.right > b.left - margin && a.top < b.bottom + margin && a.bottom > b.top - margin;
+  const inRing = r => inner && r.left >= inner.left + margin && r.right <= inner.right - margin && r.top >= inner.top + margin && r.bottom <= inner.bottom - margin;
+  return { outside: Math.round(outside), hits: obstacles.filter(o => near(rect, o.rect) && !inRing(o.rect)) };
+}
+
+// Gaps between the content of consecutive page blocks on the same ground, with no rule between
+// them. Blocks: [{ sig, top, bottom, ground, edgeTop, edgeBottom, ignored }] in page order, top
+// and bottom null for a block without content (measured across, unless its ground differs).
+export function emptyBands(blocks, threshold) {
+  const out = []; let prev = null;
+  for (const block of blocks) {
+    if (block.ignored) { prev = null; continue; }
+    if (block.top == null) { if (prev && (block.ground !== prev.ground || block.edgeTop || block.edgeBottom)) prev = null; continue; }
+    if (prev && prev.ground === block.ground && !prev.edgeBottom && !block.edgeTop) {
+      const gap = block.top - prev.bottom;
+      if (gap > threshold) out.push({ sig: `${prev.sig} → ${block.sig}`, gap: Math.round(gap) });
+    }
+    prev = block;
+  }
+  return out;
+}
+
 export function parseArgs(argv) {
-  const out = { widths: DEFAULT_WIDTHS, samples: [], hide: [], edge: 8, badge: 3, maxHover: 80, tabs: 45, routes: [], textScale: parseTextScale(DEFAULT_TEXT_SCALE), contrast: false };
+  const out = { widths: DEFAULT_WIDTHS, autoWidths: false, samples: [], hide: [], edge: 8, badge: 3, maxHover: 80, tabs: 45, routes: [], textScale: parseTextScale(DEFAULT_TEXT_SCALE), contrast: false, crop: 15, band: 160 };
   for (let i = 0; i < argv.length; i++) {
     const flag = argv[i], value = () => { const v = argv[++i]; if (v === undefined || v.startsWith('--')) throw Error('Missing value for ' + flag); return v; };
     if (flag === '--help' || flag === '-h') out.help = true;
@@ -68,7 +171,14 @@ export function parseArgs(argv) {
     else if (flag === '--routes') out.routes.push(...value().split(',').map(r => r.trim()).filter(Boolean));
     else if (flag === '--routes-file') out.routesFile = msysToNative(value());
     else if (flag === '--sitemap') out.sitemap = true;
-    else if (flag === '--widths') out.widths = value().split(',').map(Number);
+    else if (flag === '--widths') {
+      const parts = value().split(',').map(s => s.trim()).filter(Boolean);
+      out.autoWidths = parts.includes('auto');
+      const numbers = parts.filter(p => p !== 'auto').map(Number);
+      out.widths = numbers.length || !out.autoWidths ? numbers : DEFAULT_WIDTHS;
+    }
+    else if (flag === '--crop') out.crop = Number(value());
+    else if (flag === '--band') out.band = Number(value());
     else if (flag === '--sample') { const [pattern, n] = value().split(/=(?=\d+$)/); out.samples.push({ pattern: new RegExp(pattern), keep: Number(n ?? 3) }); }
     else if (flag === '--hide') out.hide.push(...value().split(',').map(s => s.trim()).filter(Boolean));
     else if (flag === '--edge') out.edge = Number(value());
@@ -87,8 +197,9 @@ export function parseArgs(argv) {
     if (/^[A-Za-z]:[\\/]/.test(r)) throw Error(`Route "${r}" looks like a Windows path: Git Bash converted it. Re-run with MSYS_NO_PATHCONV=1.`);
     if (!r.startsWith('/')) throw Error(`Route "${r}" must start with /`);
   }
-  if (out.widths.some(w => !Number.isInteger(w) || w < 200 || w > 3840)) throw Error('--widths must be integers between 200 and 3840');
-  for (const k of ['edge', 'badge', 'maxHover', 'tabs']) if (!Number.isFinite(out[k]) || out[k] < 0) throw Error(`--${k} must be a non-negative number`);
+  if (!out.widths.length || out.widths.some(w => !Number.isInteger(w) || w < 200 || w > 3840)) throw Error('--widths must be integers between 200 and 3840, optionally with "auto"');
+  if (!Number.isFinite(out.crop) || out.crop <= 0 || out.crop >= 100) throw Error('--crop must be a percentage between 0 and 100');
+  for (const k of ['edge', 'badge', 'maxHover', 'tabs', 'band']) if (!Number.isFinite(out[k]) || out[k] < 0) throw Error(`--${k} must be a non-negative number`);
   return out;
 }
 
@@ -297,7 +408,153 @@ function imageClipCheck() {
   return out.slice(0, 12);
 }
 
-async function audit(options, hooks = {}) {
+// Runs in the page. The media query texts of every readable stylesheet, imports and nested rules included.
+function mediaQueryTexts() {
+  const out = [];
+  const walk = rules => { for (const rule of rules) { try {
+    if (rule instanceof CSSMediaRule) out.push(rule.media.mediaText);
+    if (rule instanceof CSSImportRule) { if (rule.media.mediaText) out.push(rule.media.mediaText); if (rule.styleSheet) walk(rule.styleSheet.cssRules); }
+    if (rule.cssRules) walk(rule.cssRules);
+  } catch {} } };
+  for (const sheet of document.styleSheets) { try { if (sheet.media?.mediaText) out.push(sheet.media.mediaText); walk(sheet.cssRules); } catch {} }
+  return out;
+}
+
+// Runs in the page. Content images shown with object-fit: cover, with what is needed to compute
+// how much of them the frame hides. Mark images meant to be cropped with data-audit-crop-ok.
+function coverImages() {
+  const out = [];
+  for (const img of document.images) {
+    if (!img.complete || !img.naturalWidth || !img.naturalHeight) continue;
+    if (img.closest('[data-audit-ignore], [data-audit-crop-ok], [aria-hidden="true"]')) continue;
+    const s = getComputedStyle(img);
+    if (s.objectFit !== 'cover' || s.display === 'none' || s.visibility === 'hidden') continue;
+    const r = img.getBoundingClientRect();
+    const width = r.width - parseFloat(s.paddingLeft) - parseFloat(s.paddingRight) - parseFloat(s.borderLeftWidth) - parseFloat(s.borderRightWidth);
+    const height = r.height - parseFloat(s.paddingTop) - parseFloat(s.paddingBottom) - parseFloat(s.borderTopWidth) - parseFloat(s.borderBottomWidth);
+    if (width < 48 || height < 48) continue;
+    const frame = img.parentElement?.tagName === 'PICTURE' ? img.parentElement.parentElement : img.parentElement;
+    const sig = el => el ? el.tagName.toLowerCase() + [...el.classList].slice(0, 2).map(c => '.' + c).join('') : '';
+    out.push({ sig: 'img in ' + sig(frame), text: (img.alt || (img.currentSrc || img.src).split('/').pop() || '').slice(0, 40), naturalWidth: img.naturalWidth, naturalHeight: img.naturalHeight, width, height, position: s.objectPosition });
+    if (out.length >= 60) break;
+  }
+  return out;
+}
+
+// Runs in the page. ::before/::after boxes that paint a border, an outline or text: the hosts are
+// marked with data-audit-pseudo so their pseudo-elements can be measured through DevTools.
+function pseudoCandidates() {
+  const out = [], alpha = c => { const m = String(c).match(/\/\s*([\d.]+%?)\s*\)|rgba\([^)]*,\s*([\d.]+)\s*\)/); if (!m) return c === 'transparent' ? 0 : 1; const v = m[1] ?? m[2]; return v.endsWith('%') ? parseFloat(v) / 100 : parseFloat(v); };
+  let index = 0;
+  for (const el of document.querySelectorAll('body *')) {
+    if (el.closest('[data-audit-ignore]')) continue;
+    let mine = null;
+    for (const pseudo of ['before', 'after']) {
+      const s = getComputedStyle(el, '::' + pseudo);
+      if (s.content === 'none' || s.content === 'normal' || s.display === 'none' || s.visibility === 'hidden' || parseFloat(s.opacity) === 0) continue;
+      const borders = ['Top', 'Right', 'Bottom', 'Left'].map(k => parseFloat(s['border' + k + 'Width']) > 0 && !/none|hidden/.test(s['border' + k + 'Style']) && alpha(s['border' + k + 'Color']) > 0.05 ? parseFloat(s['border' + k + 'Width']) : 0);
+      const outline = s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0 && alpha(s.outlineColor) > 0.05 ? { width: parseFloat(s.outlineWidth), offset: parseFloat(s.outlineOffset) || 0 } : null;
+      const text = /^["'].*\S.*["']$/.test(s.content);
+      if (!borders.some(Boolean) && !outline && !text) continue;
+      if (mine === null) { mine = index++; el.setAttribute('data-audit-pseudo', String(mine)); }
+      out.push({ i: mine, pseudo, borders, outline, text });
+    }
+    if (out.length >= 200) break;
+  }
+  return out;
+}
+
+// Runs in the page. For decorations placed relative to their host, the text lines and controls
+// outside the host near them. Coordinates are those of getBoundingClientRect.
+function decorationObstacles(decos) {
+  const sig = el => el.tagName.toLowerCase() + [...el.classList].slice(0, 2).map(c => '.' + c).join('');
+  const box = r => ({ left: r.left, right: r.right, top: r.top, bottom: r.bottom });
+  const all = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => n.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT });
+  for (let n; (n = walker.nextNode());) {
+    const parent = n.parentElement; if (!parent || parent.closest('[data-audit-ignore], [aria-hidden="true"]')) continue;
+    const range = document.createRange(); range.selectNodeContents(n);
+    for (const r of range.getClientRects()) if (r.width >= 2 && r.height >= 2) all.push({ node: n, sig: sig(parent), text: n.textContent.trim().replace(/\s+/g, ' ').slice(0, 30), rect: box(r) });
+  }
+  for (const el of document.querySelectorAll('a[href], button, input, select, textarea, summary, [role="button"]')) {
+    if (el.closest('[data-audit-ignore], [aria-hidden="true"]')) continue;
+    const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) continue;
+    all.push({ node: el, sig: sig(el), text: (el.textContent || el.getAttribute('aria-label') || el.value || '').trim().replace(/\s+/g, ' ').slice(0, 30), rect: box(r) });
+  }
+  return decos.map(d => {
+    const host = document.querySelector(`[data-audit-pseudo="${d.i}"]`); if (!host) return null;
+    const h = host.getBoundingClientRect(), dx = h.left - d.hostBox.left, dy = h.top - d.hostBox.top;
+    const shift = r => r && { left: r.left + dx, right: r.right + dx, top: r.top + dy, bottom: r.bottom + dy };
+    const rect = shift(d.rect), inner = shift(d.inner), m = 8;
+    const obstacles = all.filter(o => !host.contains(o.node) && !(o.node.nodeType === 1 && o.node.contains(host)) && o.rect.left < rect.right + m && o.rect.right > rect.left - m && o.rect.top < rect.bottom + m && o.rect.bottom > rect.top - m).slice(0, 10).map(({ sig, text, rect }) => ({ sig, text, rect }));
+    return { ...d, sig: sig(host) + '::' + d.pseudo, rect, inner, host: box(h), obstacles };
+  }).filter(Boolean);
+}
+
+// Runs in the page. The top-level blocks of the main content (through single-child wrappers), with
+// the vertical extent of their content and the ground they stand on.
+function bandBlocks() {
+  const main = document.querySelector('main, [role="main"]'); if (!main) return [];
+  const alpha = c => { const m = String(c).match(/\/\s*([\d.]+%?)\s*\)|rgba\([^)]*,\s*([\d.]+)\s*\)/); if (!m) return c === 'transparent' ? 0 : 1; const v = m[1] ?? m[2]; return v.endsWith('%') ? parseFloat(v) / 100 : parseFloat(v); };
+  const shown = el => { const s = getComputedStyle(el), r = el.getBoundingClientRect(); return s.display !== 'none' && s.visibility !== 'hidden' && s.position !== 'absolute' && s.position !== 'fixed' && r.height > 0; };
+  let parent = main;
+  for (let kids = [...parent.children].filter(shown); kids.length === 1 && kids[0].children.length; kids = [...parent.children].filter(shown)) parent = kids[0];
+  const ground = el => { for (let a = el; a; a = a.parentElement) { const s = getComputedStyle(a); if (s.backgroundImage !== 'none') return 'image ' + s.backgroundImage.slice(0, 80); if (alpha(s.backgroundColor) > 0) return s.backgroundColor; } return 'none'; };
+  const edge = (s, side) => parseFloat(s[`border${side}Width`]) > 0 && !/none|hidden/.test(s[`border${side}Style`]) && alpha(s[`border${side}Color`]) > 0.05;
+  const media = /^(IMG|SVG|VIDEO|CANVAS|IFRAME|INPUT|SELECT|TEXTAREA|BUTTON|HR|svg)$/;
+  return [...parent.children].filter(shown).map(block => {
+    const s = getComputedStyle(block), own = ground(block);
+    let top = Infinity, bottom = -Infinity;
+    const take = r => { if (r.width < 2 || r.height < 2) return; top = Math.min(top, r.top + scrollY); bottom = Math.max(bottom, r.bottom + scrollY); };
+    const walker = document.createTreeWalker(block, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, { acceptNode: n => {
+      if (n.nodeType === 3) return n.textContent.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      const cs = getComputedStyle(n); return cs.display === 'none' || cs.visibility === 'hidden' ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+    } });
+    for (let n; (n = walker.nextNode());) {
+      if (n.nodeType === 3) { const range = document.createRange(); range.selectNodeContents(n); for (const r of range.getClientRects()) take(r); continue; }
+      const cs = getComputedStyle(n);
+      const painted = ['Top', 'Right', 'Bottom', 'Left'].some(k => edge(cs, k)) || cs.backgroundImage !== 'none' || (alpha(cs.backgroundColor) > 0 && cs.backgroundColor !== own) || (cs.boxShadow !== 'none' && !/^(rgba\(0, 0, 0, 0\)|transparent)/.test(cs.boxShadow));
+      if (media.test(n.tagName) || painted) take(n.getBoundingClientRect());
+    }
+    // Sections often share their classes: the first heading tells the joins apart.
+    const heading = block.querySelector('h1, h2, h3, h4')?.textContent.trim().replace(/\s+/g, ' ').slice(0, 24);
+    return { sig: block.tagName.toLowerCase() + [...block.classList].slice(0, 2).map(c => '.' + c).join('') + (heading ? ` "${heading}"` : ''), top: top === Infinity ? null : top, bottom: top === Infinity ? null : bottom, ground: own, edgeTop: edge(s, 'Top'), edgeBottom: edge(s, 'Bottom'), ignored: !!block.closest('[data-audit-ignore]') };
+  });
+}
+
+// Pseudo-element boxes through the DevTools protocol (the page cannot measure them itself), as
+// decorations with their host's box in the same coordinates.
+async function measureDecorations(page, candidates) {
+  if (!candidates.length) return [];
+  const cdp = await page.context().newCDPSession(page);
+  try {
+    const { root } = await cdp.send('DOM.getDocument', { depth: -1, pierce: false });
+    const hosts = new Map(), stack = [root];
+    while (stack.length) {
+      const node = stack.pop(), attrs = node.attributes ?? [];
+      const at = attrs.indexOf('data-audit-pseudo');
+      if (at >= 0 && at % 2 === 0) hosts.set(Number(attrs[at + 1]), node);
+      stack.push(...(node.children ?? []));
+    }
+    const quadBox = q => { const xs = [q[0], q[2], q[4], q[6]], ys = [q[1], q[3], q[5], q[7]]; return { left: Math.min(...xs), right: Math.max(...xs), top: Math.min(...ys), bottom: Math.max(...ys) }; };
+    const boxOf = async nodeId => { try { return quadBox((await cdp.send('DOM.getBoxModel', { nodeId })).model.border); } catch { return null; } };
+    const out = [];
+    for (const c of candidates) {
+      const host = hosts.get(c.i), pseudo = host?.pseudoElements?.find(p => p.pseudoType === c.pseudo);
+      if (!pseudo) continue;
+      const [hostBox, border] = [await boxOf(host.nodeId), await boxOf(pseudo.nodeId)];
+      if (!hostBox || !border) continue;
+      const grow = (r, d) => ({ left: r.left - d, right: r.right + d, top: r.top - d, bottom: r.bottom + d });
+      const reach = c.outline ? Math.max(0, c.outline.offset + c.outline.width) : 0, rect = grow(border, reach);
+      const [bt, br, bb, bl] = c.borders;
+      const inner = c.text ? null : c.borders.some(Boolean) ? { left: border.left + bl, right: border.right - br, top: border.top + bt, bottom: border.bottom - bb } : grow(border, c.outline.offset);
+      if (decorationHits({ rect, inner, host: hostBox }, []).outside > 2) out.push({ i: c.i, pseudo: c.pseudo, rect, inner, hostBox });
+    }
+    return out;
+  } finally { await cdp.detach().catch(() => {}); }
+}
+
+export async function audit(options, hooks = {}) {
   let chromium;
   for (const base of [path.join(process.cwd(), 'package.json'), import.meta.url]) { try { ({ chromium } = createRequire(base)('@playwright/test')); break; } catch {} }
   if (!chromium) throw Error('audit:ui needs @playwright/test and an installed Chromium (npx playwright install chromium).');
@@ -311,9 +568,22 @@ async function audit(options, hooks = {}) {
   routes = sampleRoutes(routes, options.samples);
   if (!routes.length) throw Error('No routes to audit');
   const browser = await chromium.launch(), issues = []; let audited = 0, step = 0;
-  const widest = Math.max(...options.widths), total = routes.length * options.widths.length;
+  // Hover, focus and contrast run at the widest given width and enlarged text at the given phone
+  // widths, so the widths added by --widths auto only add the per-width checks.
+  const widest = Math.max(...options.widths), phoneWidths = new Set(options.widths.filter(w => w <= 500));
+  let widths = options.widths, breakpoints = [];
   try {
-    for (const width of options.widths) {
+    if (options.autoWidths) {
+      const page = await browser.newPage({ viewport: { width: options.widths[0], height: 900 } }), texts = [];
+      for (const route of routes.slice(0, 5)) {
+        try { await page.goto(new URL(route, options.base).href, { waitUntil: 'load', timeout: 60000 }); texts.push(...await page.evaluate(mediaQueryTexts)); } catch {}
+      }
+      await page.close();
+      ({ widths, edges: breakpoints } = autoWidths(options.widths, parseBreakpoints(texts)));
+      hooks.widths?.({ widths, breakpoints });
+    }
+    const total = routes.length * widths.length;
+    for (const width of widths) {
       const context = await browser.newContext({ viewport: { width, height: 900 } });
       const page = await context.newPage();
       const consoleErrors = [], failed = [];
@@ -338,6 +608,18 @@ async function audit(options, hooks = {}) {
         if (overflow) note('overflow-x', { sig: overflow.join(' ') || 'document' });
         for (const src of await page.evaluate(() => [...document.images].filter(i => i.complete && i.naturalWidth === 0 && i.getBoundingClientRect().width > 0).map(i => i.currentSrc || i.src).slice(0, 5))) note('broken-image', { sig: src.slice(-80) });
         for (const hit of await page.evaluate(imageClipCheck)) note('image-clipped', hit);
+        for (const img of await page.evaluate(coverImages)) {
+          const hidden = coverCrop(img), sides = Object.keys(hidden).filter(side => hidden[side] * 100 > options.crop);
+          if (sides.length) note('image-cover-cropped', { sig: img.sig, text: img.text, detail: sides.join('+'), note: `${sides.map(side => `${Math.round(hidden[side] * 100)}% hidden at the ${side}`).join(', ')}; image ${img.naturalWidth}x${img.naturalHeight} in a ${Math.round(img.width)}x${Math.round(img.height)} frame` });
+        }
+        const decorations = await measureDecorations(page, await page.evaluate(pseudoCandidates)).catch(() => []);
+        for (const d of decorations.length ? await page.evaluate(decorationObstacles, decorations) : []) {
+          const { outside, hits } = decorationHits(d, d.obstacles);
+          // A link and its own text line are one obstacle.
+          for (const hit of hits.filter((h, i) => hits.findIndex(o => o.sig === h.sig) === i).slice(0, 3)) note('decoration-overlap', { sig: d.sig, detail: `touches ${hit.sig}`, text: hit.text, note: `reaches ${outside}px outside its host` });
+        }
+        await page.evaluate(() => document.querySelectorAll('[data-audit-pseudo]').forEach(el => el.removeAttribute('data-audit-pseudo')));
+        if (width >= 1024) for (const band of emptyBands(await page.evaluate(bandBlocks), options.band)) note('empty-band', { sig: band.sig, note: `${band.gap}px without content` });
         for (const c of [...new Set(consoleErrors)]) note('console-error', { sig: c.slice(0, 140) });
         for (const f of [...new Set(failed)]) note('failed-request', { sig: f.slice(0, 160) });
         // Text fit at the normal size, measured per element so a clipping shell cannot hide it.
@@ -346,7 +628,7 @@ async function audit(options, hooks = {}) {
         for (const hit of fit.off) note('text-offscreen', hit);
         for (const hit of fit.squeezed) note('text-squeezed', hit);
         // Enlarged text on phone widths: reload for each case so the cases do not compound.
-        if (width <= 500 && options.textScale.length) {
+        if (phoneWidths.has(width) && options.textScale.length) {
           const headerAtRest = await page.evaluate(bannerBoxes), rowsAtRest = headerAtRest ? countRows(headerAtRest.boxes) : 0;
           for (const scale of options.textScale) {
             try { await page.goto(new URL(route, options.base).href, { waitUntil: 'networkidle', timeout: 60000 }); } catch { continue; }
@@ -403,19 +685,23 @@ async function audit(options, hooks = {}) {
       await context.close();
     }
   } finally { await browser.close(); }
-  return { audited, entries: aggregate(issues) };
+  return { audited, widths, breakpoints, entries: aggregate(issues) };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const options = parseArgs(process.argv.slice(2));
-    if (options.help) console.log('Usage: audit:ui -- --base <origin> (--routes /,/contact | --routes-file <file> | --sitemap) [--widths 390,768,1440] [--sample "^/news/.+=3"] [--hide "#dev-panel"] [--edge 8] [--badge 3] [--max-hover 80] [--tabs 45] [--text-scale root:1.6,root:2,text:1.5,text:2|off] [--contrast] [--out report.json]\nEnlarged-text checks run at widths up to 500px. --contrast also measures hovered elements. Progress is printed to stderr and --out is rewritten after every route, so an interrupted run keeps its findings; allow about half a minute per route and phone width. Mark deliberate exceptions in markup with data-audit-ignore. Git Bash: MSYS_NO_PATHCONV=1 when a route is "/".');
+    if (options.help) console.log('Usage: audit:ui -- --base <origin> (--routes /,/contact | --routes-file <file> | --sitemap) [--widths 390,768,1440|auto|auto,320,390,1440] [--sample "^/news/.+=3"] [--hide "#dev-panel"] [--edge 8] [--badge 3] [--max-hover 80] [--tabs 45] [--text-scale root:1.6,root:2,text:1.5,text:2|off] [--contrast] [--crop 15] [--band 160] [--out report.json]\n"auto" adds one width on each side of the site\'s own breakpoints to the given (or default) widths. Enlarged-text checks run at the given widths up to 500px; hover, focus and contrast at the widest given width. Mark images meant to be cropped with data-audit-crop-ok. --contrast also measures hovered elements. Progress is printed to stderr and --out is rewritten after every route, so an interrupted run keeps its findings; allow about half a minute per route and phone width. Mark deliberate exceptions in markup with data-audit-ignore. Git Bash: MSYS_NO_PATHCONV=1 when a route is "/".');
     else {
-      const { audited, entries } = await audit(options, { progress: ({ done, total, width, route, findings, issues, audited: sofar }) => {
-        console.error(progressLine(done, total, width, route, findings));
-        if (options.out) writeFileSync(options.out, JSON.stringify({ base: options.base, audited: sofar, partial: true, entries: aggregate(issues) }, null, 1) + '\n');
-      } });
-      if (options.out) writeFileSync(options.out, JSON.stringify({ base: options.base, audited, entries }, null, 1) + '\n');
+      let chosen = options.widths;
+      const { audited, widths, breakpoints, entries } = await audit(options, {
+        widths: ({ widths, breakpoints }) => { chosen = widths; console.error(`Widths: ${widths.join(', ')} (breakpoints ${breakpoints.length ? breakpoints.join(', ') : 'none found'})`); },
+        progress: ({ done, total, width, route, findings, issues, audited: sofar }) => {
+          console.error(progressLine(done, total, width, route, findings));
+          if (options.out) writeFileSync(options.out, JSON.stringify({ base: options.base, widths: chosen, audited: sofar, partial: true, entries: aggregate(issues) }, null, 1) + '\n');
+        },
+      });
+      if (options.out) writeFileSync(options.out, JSON.stringify({ base: options.base, widths, breakpoints, audited, entries }, null, 1) + '\n');
       console.log(formatReport(entries, audited));
       if (entries.length) process.exitCode = 2;
     }
