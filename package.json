@@ -79,6 +79,7 @@
     "sync:upstream-skills": "node scripts/sync-upstream-skills.mjs",
     "update:all": "node scripts/auto-update.mjs",
     "site:register": "node scripts/register-site.mjs",
+    "fleet:status": "node scripts/fleet-status.mjs",
     "mcp:token": "node scripts/create-mcp-token.mjs",
     "init:profile": "node scripts/init-profile.mjs",
     "sync:baseline": "node scripts/sync-baseline.mjs",

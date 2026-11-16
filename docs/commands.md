@@ -159,6 +159,7 @@ Commands that the workflow and skills name but the sections above do not. Scope 
 | `npm run sync:emdash-skills` / `sync:site-skills` / `sync:impeccable` / `sync:upstream-skills` | Root EmDash | Stage reviewed skill snapshots; staging is not permission to overwrite local drift ([skill synchronization](skill-synchronization.md)) |
 | `npm run init:profile -- --profile static|static-sveltia --out <new-directory>` | Root | Generate a static project into an empty directory ([platform profiles](platform-profiles.md)) |
 | `npm run site:register` | Root EmDash | Record a new or launched site in the private registry, or leave a pending-registration artifact ([site registry](site-registry.md)) |
+| `npm run fleet:status -- --config <private fleet.json>` | Root tooling | Read-only table of every site in a private fleet list: Git state, kind, hosting, versions, and each Baseline site against the pinned standards ([site registry](site-registry.md#fleet-status)) |
 | `npm run mcp:token` | Root EmDash | Create a personal access token for the site MCP endpoint |
 | `npm run workflow:replay` | Root maintainer | Replay a recorded workflow brief against a disposable project ([workflow replay](workflow-replay.md)) |
 

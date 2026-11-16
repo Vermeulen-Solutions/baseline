@@ -1530,6 +1530,14 @@
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/fleet-status.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/fleet-status.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/update-plan.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
