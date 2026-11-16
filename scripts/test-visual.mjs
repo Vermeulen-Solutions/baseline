@@ -14,7 +14,7 @@ if (args.some(arg => !['--update', '--sensitivity', '--functional'].includes(arg
 if (process.env.CI || process.env.GITHUB_ACTIONS === 'true') throw new Error('Visual tests are local-only; never run them in GitHub Actions');
 if (update && (process.env.CI || sensitivity || functional)) throw new Error('Baseline --update is local-only and cannot combine with sensitivity/functional-only mode');
 const pkg = JSON.parse(await readFile('node_modules/@playwright/test/package.json', 'utf8'));
-if (pkg.version !== '1.64.1') throw new Error('Unexpected Playwright version; run npm ci');
+if (pkg.version !== visualContract.playwright) throw new Error(`Unexpected Playwright version ${pkg.version}; the visual contract pins ${visualContract.playwright}. Run npm ci`);
 // The configured global timeout covers one pass; each repeat gets the same budget, so --repeat=3
 // can finish instead of being cut off at ten minutes.
 const runnerArgs = ['--import', './tests/visual/cancel-receiver.mjs', 'node_modules/@playwright/test/cli.js', 'test', '--config=playwright.config.mjs', `--repeat-each=${repeat}`, `--global-timeout=${600000 * Number(repeat)}`];

@@ -1,8 +1,8 @@
 export const visualContract = {
   version: 1,
   fixtureVersion: 3,
-  playwright: '1.64.1',
-  chromiumRevision: '1248',
+  playwright: '1.65.1',
+  chromiumRevision: '1255',
   node: '24.22.3',
   platform: 'win32',
   executionPolicy: 'Local developer verification only; no push/PR/build/deployment dependency',

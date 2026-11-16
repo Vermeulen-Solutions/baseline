@@ -1,6 +1,6 @@
 # Visual regression capture and sensitivity
 
-Use Node **24.22.3**, npm/lockfile, **@playwright/test 1.64.1**, bundled full Chromium **revision 1248** (channel chromium), locale en-US, UTC, light scheme and device scale 1. Windows is the authoritative local renderer. No Linux/Docker baseline or browser CI is required. The fixture profile uses pinned Noto Sans latin 400/700 from `@fontsource/noto-sans@5.3.0`; its [OFL license](licenses/noto-sans-OFL.txt) is retained. The profile attribute scopes font overrides; normal public pages retain their source fonts.
+Use Node **24.22.3**, npm/lockfile, **@playwright/test 1.65.1**, bundled full Chromium **revision 1255** (channel chromium), locale en-US, UTC, light scheme and device scale 1. Windows is the authoritative local renderer. No Linux/Docker baseline or browser CI is required. The fixture profile uses pinned Noto Sans latin 400/700 from `@fontsource/noto-sans@5.3.0`; its [OFL license](licenses/noto-sans-OFL.txt) is retained. The profile attribute scopes font overrides; normal public pages retain their source fonts.
 
 This starter suite certifies the stated fixture font, not operating-system font fallback. A client site must replace the renderer font contract with its actual licensed brand faces and review new baselines; the neutral override must not conceal a client typography change.
 
