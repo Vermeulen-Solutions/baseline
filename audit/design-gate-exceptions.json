@@ -366,8 +366,8 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "2f9fc06d47f1070510ce0870965e89635f64147b68609f4564ecc88c39e8638b"
+    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. An opt-in darkReaderLock prop emits the documented <meta name=\"darkreader-lock\"> for dark-by-design sites; it is off by default. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "71bfbd6b516f20a9f91c880e67790dada74c8bfd16f05f79a7a6ac8e17770067"
   },
   {
     "path": "src/components/EmDashImage.astro",

@@ -14,9 +14,11 @@ interface Props {
   spacingPolicy?: 'legacy' | 'automatic-v2';
   /** Optional initial root surface mode ('light' | 'dark' | 'system') for sites with a daylight/dark toggle. */
   surface?: 'light' | 'dark' | 'system';
+  /** Opt out of the Dark Reader extension for sites whose public pages are dark by design; it otherwise recolours light text on a dark ground to near-black. */
+  darkReaderLock?: boolean;
 }
 
-const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', surface } = Astro.props;
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', surface, darkReaderLock = false } = Astro.props;
 const resolvedDir = dir ?? getLocaleDirection(lang);
 ---
 <!doctype html>
@@ -34,6 +36,7 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    {darkReaderLock === true && <meta name="darkreader-lock" />}
     {metadataOwner === 'shell' && description && <meta name="description" content={description} />}
     {metadataOwner === 'shell' && canonical && <link rel="canonical" href={canonical} />}
     <script>

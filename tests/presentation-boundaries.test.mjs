@@ -62,7 +62,7 @@ import Card from '../components/Card.astro';
 import ResponsiveImage from '../components/ResponsiveImage.astro';
 import image from '../assets/photo.jpg';
 ---
-<SiteShell title="Shared shell specimen" description="Metadata specimen" canonical="https://example.invalid/specimen" lang="fr">
+<SiteShell title="Shared shell specimen" description="Metadata specimen" canonical="https://example.invalid/specimen" lang="fr" darkReaderLock>
   <meta slot="head" name="shell-extension" content="head-contribution" />
   <span slot="body-start" id="body-start-contribution"></span>
   <header slot="header" id="header-contribution"></header>
@@ -71,6 +71,10 @@ import image from '../assets/photo.jpg';
   <footer slot="footer" id="footer-contribution"></footer>
   <span slot="body-end" id="body-end-contribution"></span>
 </SiteShell>`);
+    await fs.writeFile(path.join(stage, 'src/pages/plain.astro'), `---
+import SiteShell from '../layouts/SiteShell.astro';
+---
+<SiteShell title="Default shell"><p>Default</p></SiteShell>`);
     await fs.writeFile(path.join(stage, 'src/pages/edge.astro'), `---
 import Card from '../components/Card.astro';
 import ResponsiveImage from '../components/ResponsiveImage.astro';
@@ -105,6 +109,9 @@ const bad = { toString: null };
     const html = await fs.readFile(path.join(stage, 'dist/index.html'), 'utf8');
     for (const text of ['lang="fr"', '<title>Shared shell specimen</title>', 'content="Metadata specimen"', 'href="https://example.invalid/specimen"', 'name="shell-extension"', 'data-emdash-field="title"', 'data-emdash-field="description"', 'data-emdash-field="action"', 'data-original-src="/original-photo.jpg"']) assert.ok(html.includes(text), text);
     assert.equal((html.match(/<main\b/g) ?? []).length, 1);
+    // The Dark Reader opt-out is explicit: present when asked for, absent by default.
+    assert.match(html, /<meta name="darkreader-lock"\s*\/?>/);
+    assert.ok(!(await fs.readFile(path.join(stage, 'dist/plain/index.html'), 'utf8')).includes('darkreader-lock'));
     assert.ok(!html.includes('slot="'), 'Named contributions must not add wrapper/slot attributes');
     const order = ['id="body-start-contribution"', 'class="skip-link"', 'id="header-contribution"', 'id="main-content"', 'id="footer-contribution"', 'id="body-end-contribution"'].map(marker => html.indexOf(marker));
     assert.ok(order.every((position, i) => position >= 0 && (i === 0 || position > order[i - 1])), order.join(','));

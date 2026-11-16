@@ -118,6 +118,16 @@ For an authorized significant overhaul or a different visual premise (new lane, 
 
 Generated concepts are references for composition and visual character, not exact CSS or content specifications. Verify typography, text, responsive behavior, interactions, and CMS states in the real Astro implementation. Store substantial concept work under `audit/visual-concepts/` and link it from `AGENTS.md`.
 
+### Build a chosen direction as a layer, and keep every concept
+
+Implement a selected overhaul so it can be replaced. On a real site the owner changed direction after release, when a second stakeholder preferred another concept mixed with parts of the earlier site, and the switch took hours rather than days because of three habits:
+
+- **Keep the sources and renders of every concept**, not only the chosen one, under `audit/visual-concepts/<concept>/`. A rejected concept is the most likely next direction, and rebuilding it from a screenshot loses its decisions.
+- **Put each direction in its own stylesheet, loaded after the historical one.** Write it in `@layer components` in a separate file (for example `src/styles/direction-<name>.css`) imported by the site's `Base.astro` after `SiteShell`, so it wins over the earlier rules of equal specificity by order. Do not use a nested layer such as `@layer components.direction`: rules written directly in `@layer components` beat its nested layers, so the direction would lose to the stylesheet it should override, and the CSS contract allows only `base` and `components` as outer layers. Check the order in the built CSS. Rewrite only the page templates that need a new composition; the rest keep their markup and change through the stylesheet.
+- **List the safeguards that do not depend on the direction** in the art-direction record or the tracker, so they carry over when a direction is replaced: the enlarged-text behaviour, the one-row phone header, focus rings, rendered contrast, framed-photo shapes, Dark Reader opt-out on dark sites, and any `audit:ui` exceptions with their reasons. Rerun `audit:ui` (with `--widths auto`) after the switch.
+
+When a direction is replaced, update the Art Direction Record, record which decisions are superseded, and keep the previous direction's stylesheet in history (or under `audit/visual-concepts/`) rather than mixing its rules into the new one.
+
 ## Produce the handoff
 
 > [!CAUTION]

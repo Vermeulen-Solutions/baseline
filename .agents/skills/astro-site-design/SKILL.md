@@ -19,9 +19,30 @@ For repeated content and reusable presentation, follow `new-site-workflow/refere
 
 Read `baseline.config.json` first. `static` and `static-sveltia` use native Content Collections, `getStaticPaths()` and Markdown `render()`; skip `building-emdash-site` and all CMS binding/modeling specialists. Existing EmDash API/editor/cache instructions below apply only to `emdash`. Localized static routes follow the project's file/URL model rather than assuming CMS translation groups.
 
-Use shared `src/layouts/SiteShell.astro` for document metadata, global styles, skip link and landmarks. Platform `Base.astro` wrappers supply file-owned settings/navigation or EmDash contributions. Keep queries, widgets and storage out of shared primitives. `Card.astro` accepts ordinary HTML attribute bags; pass edit annotations only from an EmDash caller.
+Use shared `src/layouts/SiteShell.astro` for document metadata, global styles, skip link and landmarks. A site whose public pages are dark by default passes `darkReaderLock` to it, so the Dark Reader extension does not recolour its light text to near-black. Platform `Base.astro` wrappers supply file-owned settings/navigation or EmDash contributions. Keep queries, widgets and storage out of shared primitives. `Card.astro` accepts ordinary HTML attribute bags; pass edit annotations only from an EmDash caller.
 
 `ResponsiveImage.astro` accepts native Astro ImageMetadata (from `src/assets`) or a resolved URL with dimensions and uses Astro image processing. Do not add a storage endpoint to static sites. Native EmDash image fields must be passed whole to `Image` from `emdash/ui`; `url`/`src` may be absent on their provider/reference values. Baseline's `EmDashImage.astro` resolves already-known URLs for presentation, not arbitrary native field objects. Verify a CMS-saved image reference through actual rendering; do not treat upload success as proof. Where installed, `PhotoGallery fit="contain"` preserves full image frames; its omitted/cover default retains existing cropped previews. Static RichText wraps native Markdown in `.flow` plus `data-editorial-content`; Portable Text is a platform extension. `flow={false}` relinquishes both defaults, wrapperless unless attributes require a plain wrapper.
+
+**Framed photographs take the shape of the photograph.** A fixed-height frame with `object-fit: cover` hid the top 27% of group photographs on tablets, where the faces were. The recipe that held for ten photographs between 1:1 and 3:2 at ten widths (at most 1% hidden on any side): set the frame's `aspect-ratio` from the stored image dimensions, clamped to the range the design allows; limit the frame by a maximum height and make it narrower rather than cropping when the limit is reached; and when one end of the frame is rounded, keep the radius well under half its height (about a quarter at most, never a `999px` pill end), so the corners of the photograph, and whoever stands there, stay in view.
+
+```astro
+---
+// image: ImageMetadata or a stored field with width and height.
+const ratio = Math.min(Math.max(image.width / image.height, 1), 1.5);
+---
+<figure class="photo-frame" style={`--ratio: ${ratio}`}>
+  <ResponsiveImage src={image} alt={alt} />
+</figure>
+```
+
+```css
+@layer components {
+  .photo-frame { --frame-max-h: 32rem; aspect-ratio: var(--ratio); inline-size: min(100%, calc(var(--frame-max-h) * var(--ratio))); overflow: hidden; }
+  .photo-frame img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+}
+```
+
+Only the clamp crops, and only for photographs outside the allowed range. `audit:ui` reports `image-cover-cropped` when a frame hides more than 15% on one side; mark images that are meant to be cropped (backgrounds, textures) with `data-audit-crop-ok`.
 
 For incoming imagery in a greenfield build or day-2 maintenance, follow the installed `docs/media-preparation.md` and `media:prepare` command before storing/uploading it. Inspect intended use and output quality, use eligible prepared copies, and keep full-size originals outside the library and Git. Static profiles add those copies to `src/assets/`; EmDash uses the selected instance and `media:upload` readback when installed. A prior WordPress migration is not required. Existing sites without these commands need the explicit adoption described in `docs/baseline-updates.md`; do not invent an installed capability.
 
