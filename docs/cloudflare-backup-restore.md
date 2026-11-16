@@ -36,6 +36,22 @@ npx emdash migrate --check --account-id <account-id> --d1 <database-uuid>
 
 For a site that deliberately uses a deployment-managed migration pipeline, set `migrations: { runtime: 'check', dev: 'auto' }` so production refuses requests while migrations are pending. Do not change runtime migration policy as a prerequisite for an unrelated code deploy. Inspect `EMDASH_MIGRATIONS_MODE` overrides. Build first to generate `.emdash/migrations.json`; provision D1 separately before migrating it. See the [official core migration contract](https://docs.emdashcms.com/deployment/core-migrations/).
 
+### Portable copy and a local upgrade rehearsal
+
+`wrangler d1 export` refuses any database with FTS5 virtual tables ("cannot export databases with virtual tables"), and EmDash creates one for every collection with Search enabled. `npm run db:export-d1 -- --out <private file.sql>` (read-only; `--database <name>` when `wrangler.jsonc` has several) exports the ordinary tables with `--table`, adds the search tables with their rows and every index and trigger, and orders the file so all tables exist before any row is inserted. It then counts every table in D1, loads the file into a scratch SQLite database, and writes the export and `<file>.manifest.json` only when row counts, object counts, `integrity_check` and `foreign_key_check` all match. Keep the file private: it contains users, sessions and settings. It is a portable copy for rehearsal and inspection, not the recovery point; that remains the Time Travel bookmark.
+
+Rehearse a core upgrade on that copy before deploying. **Do not use a Cloudflare preview version for this:** any Worker version bound to the production D1 runs the new release's migrations against production on its first request. Load the copy into a local D1 in a scratch folder and serve the updated build with the same runtime:
+
+```sh
+npx wrangler d1 execute <database> --local --persist-to <scratch dir> --file <private file.sql>
+# copy the R2 objects the checked pages need, reading production and writing locally
+npx wrangler r2 object get <bucket>/<key> --remote --file <tmp file>
+npx wrangler r2 object put <bucket>/<key> --local --persist-to <scratch dir> --file <tmp file>
+npx wrangler dev --persist-to <scratch dir>
+```
+
+The first request applies the pending migrations to the copy. Compare `_emdash_migrations`, the new tables and columns, and every non-empty table's row count with the manifest; check public routes, media, the admin sign-in redirect and `/_emdash/api/health`. A separate `--persist-to` folder keeps the copy apart from the site's own local development data.
+
 ## 2. Media and immutable releases
 
 For ongoing media recovery, keep a copy outside the production failure domain, such as a restricted backup account or protected off-platform storage. Choose encryption, retention and copy cadence from the site's recovery goals. Keep dated manifests of exact storage keys, SHA-256 checksums, sizes, content types and metadata, including plugin bundle storage if used. Do not propagate source deletes into the only backup. Do not assume R2 has S3 object versioning or that `wrangler deploy` backs up media. Reuse a verified snapshot for an upgrade that leaves its referenced bytes unchanged.

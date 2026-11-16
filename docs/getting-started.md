@@ -8,7 +8,9 @@ Choose the editing and hosting model before installing dependencies. The full re
 
 ## Requirements
 
-Use npm and the supplied lockfile. The supported Node.js engine range is `^22.23.4 || ^24.22.1 || >=26.12.1`, as declared in [package.json](../package.json). Node 24 LTS, version 24.16.0 or later within the 24.x line, is the recommended choice.
+Use npm and the supplied lockfile. The supported Node.js engine range is `^22.23.4 || ^24.22.1 || >=26.12.1`, as declared in [package.json](../package.json). Node 24 LTS, version 24.22.1 or later within the 24.x line (use its latest security patch), is the recommended choice.
+
+npm 11.20 and later hold back dependency install scripts until a project approves them. The starter's own dependencies have none to approve. A Workers site gets two through Wrangler, `esbuild` and `workerd`; their platform binaries arrive as separate packages and run without the scripts, so the warning does not block a build. To approve them for good, run `npm install-scripts approve esbuild workerd --no-allow-scripts-pin`, which records them in `package.json` under `allowScripts` by name; the default pins exact versions, so every Wrangler update would ask again. Commit that change deliberately: in npm 11.20, `--dry-run` writes it too.
 
 Setup commands below have separate Windows PowerShell and macOS/Linux blocks. The PowerShell blocks use `npm.cmd` and `npx.cmd` to avoid script execution-policy friction. No policy change is needed.
 

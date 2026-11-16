@@ -262,14 +262,17 @@ test('D1 export passes database/table names and SQL as argv without shell interp
       calls.push(args);
       assert.deepEqual(args.slice(0, 3), ['exec', '--', 'wrangler']);
       assert.equal(args[5], database);
-      if (args[4] === 'execute') return JSON.stringify([{ results: [{ type: 'table', name: table, sql: 'CREATE TABLE example(id TEXT)' }] }]);
+      if (args[4] === 'execute' && /sqlite_master/.test(args.at(-1))) return JSON.stringify([{ results: [{ type: 'table', name: table, sql: `CREATE TABLE "odd ""table""; $literal"(id TEXT)` }] }]);
+      if (args[4] === 'execute') return JSON.stringify([{ results: [{ t: table, n: 0 }] }]);
       assert.equal(args[args.indexOf('--table') + 1], table);
-      writeFileSync(args[args.indexOf('--output') + 1], 'CREATE TABLE example(id TEXT);');
+      writeFileSync(args[args.indexOf('--output') + 1], `CREATE TABLE "odd ""table""; $literal"(id TEXT);`);
     });
-    assert.equal(calls.length, 2);
+    // sqlite_master, the table export and one count call, each with its arguments intact.
+    assert.equal(calls.length, 3);
     assert.ok(calls.every(args => args.includes('--local')));
     assert.match(calls[0].at(-1), /^SELECT type, name/);
-    assert.match(readFileSync(out, 'utf8'), /^PRAGMA foreign_keys = OFF;/);
+    assert.match(calls[2].at(-1), /FROM "odd ""table""; \$literal"/);
+    assert.match(readFileSync(out, 'utf8'), /^PRAGMA defer_foreign_keys = TRUE;/);
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });
 
@@ -279,17 +282,76 @@ test('D1 partial export is cleaned after failure and JSONC autodetection preserv
     let temporary;
     const out = path.join(directory, 'output.sql');
     assert.throws(() => exportD1Database({ database: 'synthetic', out }, args => {
-      if (args[4] === 'execute') return JSON.stringify([{ results: [] }]);
+      if (args[4] === 'execute') return JSON.stringify([{ results: [{ type: 'table', name: 'posts', sql: 'CREATE TABLE posts(id TEXT)' }] }]);
       temporary = args[args.indexOf('--output') + 1]; writeFileSync(temporary, 'partial');
       throw Error('simulated export failure');
     }), /simulated export failure/);
     assert.equal(existsSync(temporary), false); assert.equal(existsSync(out), false);
     writeFileSync(path.join(directory, 'wrangler.jsonc'), '// synthetic config\n{"docs":"https://example.invalid/", "d1_databases":[{"database_name":"fixture-db"}],}\n');
     const harness = path.join(directory, 'probe.mjs');
-    writeFileSync(harness, `import assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {exportD1Database} from ${JSON.stringify(new URL('../scripts/d1-export.mjs', import.meta.url).href)};\nexportD1Database({out:'fixture.sql'}, args => {assert.equal(args[5],'fixture-db'); if(args[4]==='execute')return JSON.stringify([{results:[]}]); fs.writeFileSync(args[args.indexOf('--output')+1],'-- synthetic export');});\n`);
+    writeFileSync(harness, `import assert from 'node:assert/strict';\nimport fs from 'node:fs';\nimport {exportD1Database} from ${JSON.stringify(new URL('../scripts/d1-export.mjs', import.meta.url).href)};\nexportD1Database({out:'fixture.sql'}, args => {assert.equal(args[5],'fixture-db'); if(args[4]==='execute')return JSON.stringify([{results:[]}]); fs.writeFileSync(args[args.indexOf('--output')+1],'-- synthetic export');});\nassert.ok(fs.existsSync('fixture.sql.manifest.json'));\n`);
     const detected = spawnSync(process.execPath, [harness], { cwd: directory, encoding: 'utf8' });
     assert.equal(detected.status, 0, detected.stdout + detected.stderr);
     assert.equal(readdirSync(directory).some(file => file.startsWith('.temp-d1-export-')), false);
+  } finally { rmSync(directory, { recursive: true, force: true }); }
+});
+
+test('D1 export keeps FTS5 search rows, creates tables before rows and refuses an export that does not match', () => {
+  // Two problems found exporting a live EmDash database: `wrangler d1 export` refuses FTS5 tables, and
+  // its table-filtered output inserts into `media` before `media_folders` (its foreign-key target) exists.
+  const directory = mkdtempSync(path.join(os.tmpdir(), 'baseline-D1-fts-'));
+  try {
+    const master = [
+      { type: 'table', name: 'media', sql: 'CREATE TABLE "media" ("id" text primary key, "folder_id" text references "media_folders"("id"))' },
+      { type: 'table', name: 'media_folders', sql: 'CREATE TABLE "media_folders" ("id" text primary key)' },
+      { type: 'table', name: 'posts', sql: 'CREATE TABLE "posts" ("id" text primary key, "title" text)' },
+      { type: 'table', name: '_emdash_fts_posts', sql: 'CREATE VIRTUAL TABLE "_emdash_fts_posts" USING fts5(id UNINDEXED, title)' },
+      ...['config', 'content', 'data', 'docsize', 'idx'].map(suffix => ({ type: 'table', name: `_emdash_fts_posts_${suffix}`, sql: `CREATE TABLE '_emdash_fts_posts_${suffix}'(x)` })),
+      { type: 'index', name: 'idx_media_folder', sql: 'CREATE INDEX "idx_media_folder" ON "media" ("folder_id")' },
+      { type: 'trigger', name: '_emdash_fts_posts_insert', sql: 'CREATE TRIGGER "_emdash_fts_posts_insert" AFTER INSERT ON "posts" BEGIN INSERT INTO "_emdash_fts_posts"(id, title) VALUES (NEW.id, NEW.title); END' },
+    ];
+    const wranglerExport = [
+      'PRAGMA defer_foreign_keys=TRUE;',
+      'CREATE TABLE IF NOT EXISTS "media" ("id" text primary key, "folder_id" text references "media_folders"("id"));',
+      `INSERT INTO "media" ("id","folder_id") VALUES('m1','f1');`,
+      'CREATE TABLE IF NOT EXISTS "media_folders" ("id" text primary key);',
+      `INSERT INTO "media_folders" ("id") VALUES('f1');`,
+      'CREATE TABLE IF NOT EXISTS "posts" ("id" text primary key, "title" text);',
+      `INSERT INTO "posts" ("id","title") VALUES('p1','It''s; a title');`,
+    ].join('\n');
+    const counts = { media: 1, media_folders: 1, posts: 1 };
+    const fake = (overrides = {}) => args => {
+      const command = args.at(-1);
+      if (args[4] === 'export') {
+        assert.deepEqual(args.filter((_, i) => args[i - 1] === '--table'), ['media', 'media_folders', 'posts'], 'virtual and shadow tables are not passed to wrangler d1 export');
+        return writeFileSync(args[args.indexOf('--output') + 1], wranglerExport);
+      }
+      if (/sqlite_master/.test(command)) return JSON.stringify([{ results: master }]);
+      if (/FROM "_emdash_fts_posts"/.test(command)) return JSON.stringify([{ results: /OFFSET 0$/.test(command) ? [{ id: 'p1', title: "It's; a title" }] : [] }]);
+      // One statement per table, answered as one result per statement, like D1.
+      return JSON.stringify([...command.matchAll(/SELECT '([^']+)' AS t/g)].map(([, t]) => ({ results: [{ t, n: overrides[t] ?? counts[t] }] })));
+    };
+    const out = path.join(directory, 'site.sql');
+    const result = exportD1Database({ database: 'site', out }, fake());
+    const sql = readFileSync(out, 'utf8');
+    const lastCreate = Math.max(...[...sql.matchAll(/^CREATE TABLE/gm)].map(m => m.index)), firstInsert = sql.search(/^INSERT INTO "media"/m);
+    assert.ok(lastCreate < firstInsert, 'every ordinary table exists before the first row');
+    assert.ok(sql.indexOf('INSERT INTO "_emdash_fts_posts"') < sql.indexOf('CREATE TRIGGER'), 'search rows load before the triggers exist');
+    assert.equal((sql.match(/CREATE INDEX "idx_media_folder"/g) ?? []).length, 1);
+    assert.deepEqual(result.rows, { _emdash_fts_posts: 1, media: 1, media_folders: 1, posts: 1 });
+    const manifest = JSON.parse(readFileSync(`${out}.manifest.json`, 'utf8'));
+    assert.deepEqual(manifest.objects, { table: 9, index: 1, trigger: 1 });
+    assert.deepEqual([manifest.verification.integrity, manifest.verification.foreignKeyViolations], ['ok', 0]);
+    // The file loads into SQLite with foreign keys enforced, applied as one transaction the way D1
+    // applies a file, so the deferred check runs at commit.
+    const db = new DatabaseSync(':memory:');
+    db.exec(`BEGIN;\n${sql}COMMIT;`);
+    assert.equal(db.prepare('SELECT title FROM "_emdash_fts_posts" WHERE "_emdash_fts_posts" MATCH ?').get('title').title, "It's; a title");
+    db.close();
+    // A count that disagrees with the export stops the export and writes nothing.
+    const refused = path.join(directory, 'refused.sql');
+    assert.throws(() => exportD1Database({ database: 'site', out: refused }, fake({ posts: 2 })), /posts: 2 in D1, 1 in export/);
+    assert.equal(existsSync(refused), false); assert.equal(existsSync(`${refused}.manifest.json`), false);
   } finally { rmSync(directory, { recursive: true, force: true }); }
 });
 

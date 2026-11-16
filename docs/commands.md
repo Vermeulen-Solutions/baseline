@@ -167,7 +167,7 @@ Commands that the workflow and skills name but the sections above do not. Scope 
 | Command | Scope | Purpose |
 | --- | --- | --- |
 | `npm run db:export-seed` | Root EmDash | Export the local content model and content as a seed for new installs; not a migration ([database workflow](database-workflow.md)) |
-| `npm run db:export-d1` / `db:pull-remote` | Root EmDash, Workers | Export or snapshot a remote D1 database for offline comparison |
+| `npm run db:export-d1` / `db:pull-remote` | Root EmDash, Workers | Verified SQL copy of a D1 database, including FTS5 search tables, for rehearsal and comparison ([Cloudflare recovery](cloudflare-backup-restore.md#portable-copy-and-a-local-upgrade-rehearsal)); or a snapshot for offline comparison |
 | `npm run media:sync-r2` | Root EmDash, Workers | Plan, then explicitly apply, staged media storage keys to R2 ([image delivery](image-delivery.md)) |
 | `npm run media:organize` | Root EmDash | Retired: refuses the old flags and points to the reviewed manifest workflow |
 | `npm run migration:check-locale` | Root EmDash | Check that migrated entries carry the expected native locale metadata |
