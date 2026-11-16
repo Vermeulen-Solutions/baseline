@@ -1,6 +1,6 @@
 # Issue #3: final standards certification
 
-The current scoped standards baseline is `0.2.0`, identified by `standards-v0.2.0` (evidence: `audit/certification-2026-11-16/README.md`). The first was `0.1.1`, identified by `standards-v0.1.1`. See `standards/manifest.json`, the versioned release notes and `audit/certification-2026-10-16/README.md` for evidence and the published reference readback. The HUD milestone is committed as `ac92dac`; Node-policy alignment is `6424ab5`. Certification covers the stated Node/SQLite/Windows Chromium profile. Public repository/community packaging is a separate Issue #11 milestone.
+The current scoped standards baseline is `0.2.1`, identified by `standards-v0.2.1` (framework evidence: `audit/certification-2026-11-16/README.md`; renderer evidence: `audit/visual-renderer-2026-11-16/README.md`). The first was `0.1.1`, identified by `standards-v0.1.1`. See `standards/manifest.json`, the versioned release notes and `audit/certification-2026-10-16/README.md` for evidence and the published reference readback. The HUD milestone is committed as `ac92dac`; Node-policy alignment is `6424ab5`. Certification covers the stated Node/SQLite/Windows Chromium profile. Public repository/community packaging is a separate Issue #11 milestone.
 
 ## Certification sequence
 

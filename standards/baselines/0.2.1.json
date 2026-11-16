@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.2.1",
+  "status": "certified-scoped",
+  "reviewedAt": "2026-11-16",
+  "stableReleaseRef": "refs/tags/standards-v0.2.1",
+  "runtimeProfiles": {
+    "node-sqlite": {
+      "status": "certified-scoped",
+      "nodeMinimum": "22.23.4",
+      "nodeObserved": "24.22.3",
+      "dependencies": {
+        "astro": "7.4.12",
+        "emdash": "1.5.0",
+        "@astrojs/node": "11.1.13",
+        "@astrojs/react": "7.1.9",
+        "react": "19.3.1",
+        "react-dom": "19.3.1",
+        "tailwindcss": "^4.3.3"
+      },
+      "evidence": "audit/certification-2026-11-16/README.md",
+      "serverBundling": "Vite ssr.noExternal zod: resolve dependency-local versions before emitting server chunks",
+      "nodeTested": [
+        "22.23.4",
+        "24.22.3"
+      ],
+      "additionalEvidence": [
+        "audit/certification-2026-11-16/verification.json",
+        "audit/visual-renderer-2026-11-16/README.md"
+      ],
+      "nodeRecommended": "24 LTS (current security patch)",
+      "nodeEngineRange": "^22.23.4 || ^24.22.1 || >=26.12.1",
+      "browser": {
+        "platform": "win32-x64",
+        "playwright": "1.65.1",
+        "chromiumRevision": "1255",
+        "node": "24.22.3",
+        "scope": "Local-only; not a cross-platform browser matrix"
+      },
+      "applicability": {
+        "i18n": "not enabled; opt-in locale matrix required",
+        "routeCaching": "disabled; opt-in shared cache-hint review required",
+        "forms": "optional; live provider delivery unverified",
+        "galleryOuterKey": "regenerated during observed inline conversion; semantic image data preserved"
+      }
+    },
+    "cloudflare-d1-r2": {
+      "status": "unverified",
+      "reason": "Optional adapter/resources and Worker delivery not certified",
+      "phase": "Phase 5 (#8/#9)"
+    }
+  },
+  "checks": [
+    {
+      "id": "art-direction",
+      "command": "npm run check:art-direction",
+      "level": "required",
+      "availability": "shipped"
+    },
+    {
+      "id": "unit",
+      "command": "npm test",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "unit and rehearsal tiers from tests/test-tiers.json"
+    },
+    {
+      "id": "typecheck",
+      "command": "npm run typecheck",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local; excluded from fast automated CI"
+    },
+    {
+      "id": "build",
+      "command": "npm run build",
+      "level": "required",
+      "availability": "shipped"
+    },
+    {
+      "id": "html-integrity",
+      "command": "npm run audit:html",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local, against a fresh build"
+    },
+    {
+      "id": "html-integrity",
+      "command": "npm run audit:html",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local, against a fresh build"
+    },
+    {
+      "id": "production-dev-tools-exclusion",
+      "command": "npm run check:dev-tools",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local; excluded from fast automated CI"
+    },
+    {
+      "id": "upstream-availability",
+      "command": "npm run check:upstream",
+      "level": "advisory",
+      "availability": "shipped",
+      "offline": "unverified"
+    },
+    {
+      "id": "schema-budget",
+      "command": "npm run check:schema-budget",
+      "level": "required-when-database-present",
+      "availability": "shipped; certified fresh SQLite physical widths 17/19; remote/missing DB remains unmeasured",
+      "offline": "missing database is unmeasured"
+    },
+    {
+      "id": "release-artifact-profile",
+      "command": "npm run check:release-artifact",
+      "level": "required-before-release",
+      "availability": "shipped; marker is packaging metadata, not authentication"
+    },
+    {
+      "id": "visual-regression",
+      "command": "npm run test:visual",
+      "level": "local-review-required-for-visual-changes",
+      "availability": "shipped",
+      "execution": "Windows only; Node 24.22.3 / Playwright 1.65.1 / Chromium revision 1255; prohibited in CI/build/deployment",
+      "evidence": "audit/visual-renderer-2026-11-16/README.md"
+    },
+    {
+      "id": "rendered-ui",
+      "command": "npm run audit:ui",
+      "level": "advisory",
+      "availability": "shipped on every profile",
+      "execution": "Local Chromium against a running origin; excluded from CI/build/deployment"
+    },
+    {
+      "id": "rendered-ui",
+      "command": "npm run audit:ui",
+      "level": "advisory",
+      "availability": "shipped on every profile",
+      "execution": "Local Chromium against a running origin; excluded from CI/build/deployment"
+    }
+  ],
+  "pending": [
+    "Workers/D1/R2 parity and R2/WordPress ingestion (#8/#9)",
+    "Native forms real notification/Turnstile providers",
+    "Opt-in multilingual/cache/full admin/plugin block matrix",
+    "Reviewed upstream skill snapshot refresh (emdash, site and impeccable candidates available); existing drift preserved",
+    "TypeScript 7 (major), evaluated when @astrojs/check and @typescript-eslint/parser support it"
+  ],
+  "releasePolicy": "Scoped standards certification only. Downstream audits must resolve and pin the published immutable standards reference and manifest digest; unsupported scopes remain unverified. Latest supported security patches are recommended; declared engine compatibility is not certification of every admitted Node version.",
+  "automatedCI": {
+    "node": "24.22.3",
+    "matrix": false,
+    "checks": [
+      "art-direction",
+      "script-syntax-lint",
+      "schema-budget",
+      "unit",
+      "normal-build"
+    ],
+    "visual": false,
+    "targetSeconds": 60,
+    "timingScope": "Local command rehearsal excludes checkout, setup, install and network; not a GitHub runtime guarantee",
+    "localRehearsalSeconds": 21.593,
+    "pushBranchesOnly": true
+  },
+  "certification": {
+    "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
+    "sourceCommit": "983317274020826bf8dffd2b3c64ca24d576366e",
+    "sourceTree": "3069417dd4bcce6d410b08f4fec3f921ff4a73a0",
+    "receipt": "audit/certification-2026-11-16/verification.json",
+    "releaseNotes": "standards/releases/0.2.1.md",
+    "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles.",
+    "frameworkEvidence": "audit/certification-2026-11-16/README.md (0.2.0; application source and dependencies other than @playwright/test unchanged)",
+    "rendererEvidence": "audit/visual-renderer-2026-11-16/README.md"
+  }
+}

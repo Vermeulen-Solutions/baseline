@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "standardsVersion": "0.2.0",
+  "standardsVersion": "0.2.1",
   "status": "certified-scoped",
   "reviewedAt": "2026-11-16",
-  "stableReleaseRef": "refs/tags/standards-v0.2.0",
+  "stableReleaseRef": "refs/tags/standards-v0.2.1",
   "runtimeProfiles": {
     "node-sqlite": {
       "status": "certified-scoped",
@@ -25,14 +25,15 @@
         "24.22.3"
       ],
       "additionalEvidence": [
-        "audit/certification-2026-11-16/verification.json"
+        "audit/certification-2026-11-16/verification.json",
+        "audit/visual-renderer-2026-11-16/README.md"
       ],
       "nodeRecommended": "24 LTS (current security patch)",
       "nodeEngineRange": "^22.23.4 || ^24.22.1 || >=26.12.1",
       "browser": {
         "platform": "win32-x64",
-        "playwright": "1.64.1",
-        "chromiumRevision": "1248",
+        "playwright": "1.65.1",
+        "chromiumRevision": "1255",
         "node": "24.22.3",
         "scope": "Local-only; not a cross-platform browser matrix"
       },
@@ -122,8 +123,8 @@
       "command": "npm run test:visual",
       "level": "local-review-required-for-visual-changes",
       "availability": "shipped",
-      "execution": "Windows only; Node 24.22.3 / Playwright 1.64.1 / Chromium revision 1248; prohibited in CI/build/deployment",
-      "evidence": "audit/certification-2026-11-16/README.md"
+      "execution": "Windows only; Node 24.22.3 / Playwright 1.65.1 / Chromium revision 1255; prohibited in CI/build/deployment",
+      "evidence": "audit/visual-renderer-2026-11-16/README.md"
     },
     {
       "id": "rendered-ui",
@@ -145,7 +146,7 @@
     "Native forms real notification/Turnstile providers",
     "Opt-in multilingual/cache/full admin/plugin block matrix",
     "Reviewed upstream skill snapshot refresh (emdash, site and impeccable candidates available); existing drift preserved",
-    "@playwright/test 1.65 (new pinned Chromium and reference images) and TypeScript 7 (major) evaluated separately"
+    "TypeScript 7 (major), evaluated when @astrojs/check and @typescript-eslint/parser support it"
   ],
   "releasePolicy": "Scoped standards certification only. Downstream audits must resolve and pin the published immutable standards reference and manifest digest; unsupported scopes remain unverified. Latest supported security patches are recommended; declared engine compatibility is not certification of every admitted Node version.",
   "automatedCI": {
@@ -166,10 +167,12 @@
   },
   "certification": {
     "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
-    "sourceCommit": "38dc55f6d8f2330bedaf53c807cb35167a696b6c",
-    "sourceTree": "41474a82eb7d260b0c1cd6e1b9ce4f677adf3772",
+    "sourceCommit": "983317274020826bf8dffd2b3c64ca24d576366e",
+    "sourceTree": "3069417dd4bcce6d410b08f4fec3f921ff4a73a0",
     "receipt": "audit/certification-2026-11-16/verification.json",
-    "releaseNotes": "standards/releases/0.2.0.md",
-    "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles."
+    "releaseNotes": "standards/releases/0.2.1.md",
+    "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles.",
+    "frameworkEvidence": "audit/certification-2026-11-16/README.md (0.2.0; application source and dependencies other than @playwright/test unchanged)",
+    "rendererEvidence": "audit/visual-renderer-2026-11-16/README.md"
   }
 }

@@ -4,6 +4,8 @@ Both updates were left out of standards 0.2.0 on 2026-11-16, which adopted every
 
 ## Playwright 1.64.1 → 1.65.1
 
+**Done 2026-11-16** as standards 0.2.1; evidence in `audit/visual-renderer-2026-11-16/README.md`.
+
 **What changes.** Playwright 1.65.1 bundles Chromium revision 1255 (Chromium 159). The visual contract pins revision 1248 (Chromium 156), and every reference image under `tests/visual/baselines/win32` was rendered by it. A new Chromium can move text rendering, antialiasing and layout by a pixel, and the comparison allows zero different pixels, so the reference images have to be renewed and reviewed, not just re-run.
 
 **When.** Ready now: nothing upstream blocks it. Do it as its own change, after 0.2.0 is published, so a renderer difference is never mixed with a framework difference.
