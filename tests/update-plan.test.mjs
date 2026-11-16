@@ -32,7 +32,7 @@ test('update:plan classifies upstream changes against a site as current, adoptab
     assert.equal(state('scripts/new.mjs'), 'missing');
     assert.equal(state('scripts/same.mjs'), 'current');
     assert.equal(state('scripts/gone.mjs'), 'removed');
-    assert.deepEqual(plan.counts, { current: 1, adoptable: 1, 'site-modified': 1, missing: 2, removed: 1 });
+    assert.deepEqual(plan.counts, { current: 1, adoptable: 1, 'site-modified': 1, missing: 2, removed: 1, retired: 0 });
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 

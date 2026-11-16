@@ -48,6 +48,7 @@
     "scripts/db-diff.mjs",
     "scripts/db-export-seed.mjs",
     "scripts/doctor.mjs",
+    "scripts/retired-paths.mjs",
     "scripts/infrastructure-io.mjs",
     "scripts/media-files.mjs",
     "scripts/media-ingest.mjs",

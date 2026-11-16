@@ -58,7 +58,7 @@ For the root maintainer's disposable workflow pilot, `npm run rehearse:workflow`
 
 | Command | Scope | Purpose |
 | --- | --- | --- |
-| `npm run doctor` | Root EmDash | Dependency-free Node/SQLite, shell and workspace preflight |
+| `npm run doctor` | Root EmDash | Dependency-free Node/SQLite, shell and workspace preflight; warns about files Baseline has retired |
 | `npm run baseline:inspect -- --json` | All profiles | Discover installed commands, entry points and declared core props |
 | `npm run baseline:inspect -- --structure --json` | All profiles, when installed | Inspect bounded source relationships and repeated-render observations; runtime behavior remains unverified |
 | `npm run audit:page -- --url <loopback-public-url> --out <fresh-report-directory>` | All profiles, opt-in local | Record controlled public-page loading/resource and rendered-font evidence ([scope](page-performance.md)) |
@@ -153,7 +153,7 @@ Commands that the workflow and skills name but the sections above do not. Scope 
 | Command | Scope | Purpose |
 | --- | --- | --- |
 | `npm run audit:modernize -- --recipe <id>` | Root EmDash tooling | Plan, apply or roll back one bounded modernization recipe on an older site ([site standards audit](site-standards-audit.md)) |
-| `npm run update:plan` | Root tooling | Classify upstream changes for a reviewed existing-site update ([Baseline updates](baseline-updates.md)) |
+| `npm run update:plan` | Root tooling | Classify upstream changes for a reviewed existing-site update, and report retired files the site still has ([Baseline updates](baseline-updates.md)) |
 | `npm run audit:baseline` | Root EmDash tooling | Read-only inventory of a project's package and lockfile state; observations, not certification |
 | `npm run update:all` | Root EmDash | Collect upstream updates and run the staged skill synchronization ([automated upstream updates](automated-upstream-updates.md)) |
 | `npm run sync:emdash-skills` / `sync:site-skills` / `sync:impeccable` / `sync:upstream-skills` | Root EmDash | Stage reviewed skill snapshots; staging is not permission to overwrite local drift ([skill synchronization](skill-synchronization.md)) |

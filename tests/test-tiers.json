@@ -287,6 +287,10 @@
     "tier": "unit",
     "reason": "Motion clip argument validation and GIF conversion arguments; no browser or ffmpeg launched"
   },
+  "retired-paths.test.mjs": {
+    "tier": "unit",
+    "reason": "Retired-file list contract, a clean checkout and manifests, detection in throwaway sites, the doctor warning and update:plan rows; small temporary Git repository only"
+  },
   "update-plan.test.mjs": {
     "tier": "unit",
     "reason": "Read-only classification of upstream changes against a site using a throwaway Git repository"

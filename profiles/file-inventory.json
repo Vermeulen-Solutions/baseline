@@ -1522,6 +1522,14 @@
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/retired-paths.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/retired-paths.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/update-plan.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"

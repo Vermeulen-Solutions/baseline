@@ -36,7 +36,18 @@ export function shellCheck(platform, env) {
   return { id: 'shell', status: 'warn', message: 'Windows; outer npm.cmd vs npm.ps1 launcher is not observable here. In PowerShell use npm.cmd (and npx.cmd); direct node scripts/doctor.mjs also works.' };
 }
 
-export async function diagnose({ cwd = process.cwd(), env = process.env, platform = process.platform, version = process.versions.node, loadSQLite = () => import('node:sqlite'), gitStatus = spawnSync } = {}) {
+// Files Baseline has retired that this site still has (warn only; removal steps are in
+// scripts/retired-paths.mjs and printed by update:plan). Null when the list is not installed.
+export function retiredCheck(cwd, retired) {
+  if (!retired) return null;
+  const found = retired.findRetired(cwd);
+  if (!found.length) return { id: 'retired', status: 'pass', message: 'No files that Baseline has retired.' };
+  const commits = [...new Set(found.map(hit => `${hit.title} (${hit.commit})`))];
+  const sample = found.slice(0, 3).map(hit => hit.kind === 'file' ? hit.path : `${hit.path}: ${hit.note}`).join('; ');
+  return { id: 'retired', status: 'warn', message: `${found.length} retired item(s) still present from ${commits.join(', ')}: ${sample}${found.length > 3 ? '; …' : ''}. Removal steps: scripts/retired-paths.mjs, or run update:plan from a Baseline checkout.` };
+}
+
+export async function diagnose({ cwd = process.cwd(), env = process.env, platform = process.platform, version = process.versions.node, loadSQLite = () => import('node:sqlite'), gitStatus = spawnSync, loadRetired = () => import('./retired-paths.mjs') } = {}) {
   const started = performance.now();
   const checks = [];
   const add = (id, status, message) => checks.push({ id, status, message });
@@ -86,6 +97,11 @@ export async function diagnose({ cwd = process.cwd(), env = process.env, platfor
       catch { add('workspace-cleanup', 'fail', 'The temporary .emdash/ write probe could not be removed.'); }
     }
   }
+
+  let retired = null;
+  try { retired = await loadRetired(); } catch {}
+  try { const check = retiredCheck(cwd, retired); if (check) checks.push(check); }
+  catch { add('retired', 'warn', 'The retired-file check could not read the workspace.'); }
 
   // Avoid optional index writes and bound Git's share of the 500ms preflight budget.
   const remaining = Math.min(200, Math.floor(400 - (performance.now() - started)));
