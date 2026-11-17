@@ -13,7 +13,8 @@ Implementation report for the owner's review. Scope: the spacing changes approve
 | `74d174a` | B.8: `design:tokens --format dtcg` |
 | `77035fc` | B.8: CSS scroll-driven reveal by default, opt-in registry aliases, optional recipes marked |
 | `43a16a0` | Fix: `@theme static` so every token is emitted; compact widget titles; renewed visual references; release notes; gate reasons |
-| (last) | Styleguide specimen fixes from `audit:ui`, final renewed references and this report |
+| `51a712a` | Styleguide specimen fixes from `audit:ui`, final renewed references and this report |
+| (last) | Resize-text grace period for older stylesheets; agreed owner decisions |
 
 ## Per item
 
@@ -63,7 +64,7 @@ Implementation report for the owner's review. Scope: the spacing changes approve
 
 - **What:** `design:tokens` fails a fluid `--text-*` token whose max exceeds 2.5 × its min (four-place rounding slack), unless a `/* resize-text-exception: <reason> */` comment precedes it. The generator raises bridge and high-step minimums to that floor. The zoom-model advisory stays.
 - **Retuned:** `--text-step-2-to-0` 1rem → 1.3125rem minimum (16 → 21px), `--text-step-3-to-1` 1.25rem → 1.75rem (20 → 28px). Golden-hash test now pins the unchanged non-bridge values (hash of the earlier output, recomputed before the change).
-- **Effect on existing sites:** a site that syncs `design-system.mjs` while keeping the old bridges fails `design:tokens` until it retunes or records an exception. That is the intent of "failing", but it is a hard stop on update; see the owner decisions.
+- **Effect on existing sites:** a site that syncs `design-system.mjs` while keeping an older `global.css` (no strict theme, no `--text-step-3`) sees a warning naming the fix; once it merges the current `global.css` the rule fails (owner decision 2).
 
 ### B.5 Card narrow-slot rule
 
@@ -116,9 +117,9 @@ Only styleguide-based captures changed; the starter routes (home, page, posts, p
 | `gallery-open` (390, 768) | Lightbox over the styleguide: the page behind it sits at a different scroll position |
 | `ticker-active`, `ticker-reduced`, `ticker-rtl` | 1px height or sub-pixel shifts from the layout above; ticker content unchanged. Two (`chromium-1440/ticker-rtl`, `chromium-768/ticker-reduced`) were re-encoded with zero changed pixels and kept so the manifest hashes stay consistent |
 
-## Owner decisions
+## Owner decisions (agreed 2026-11-17)
 
-1. **Strict theme timing:** keep it in `--init-client` (current), or also apply it at generation with a matching `sync:baseline` rule.
-2. **Resize-text rule as a hard failure on update:** older sites with 3.25× bridges fail `design:tokens` after syncing the script. Keep it failing, or make it advisory for stylesheets that predate the rule.
-3. **Section joins for existing sites:** adopt per site (`sectionJoins="shared"` in the Base) during their next reviewed update, starting with the live test bed.
-4. **Heading sizes:** h3 at step 0 and h4 at body size is the shipped map; confirm before the next fleet update, because it changes every site that merges `global.css`.
+1. **Strict theme timing:** stays in `--init-client`, which every new site runs; the generator keeps `global.css` byte-identical to upstream so `sync:baseline` can compare it.
+2. **Resize-text rule on update:** hard rule with a grace period. A stylesheet that predates it (no strict theme, no `--text-step-3`) gets a warning naming the fix; merging the current `global.css` adopts the scale and the rule then fails.
+3. **Section joins for existing sites:** adopted per site during each site's next reviewed update, live test bed first: add `sectionJoins="shared"` to the Base, run `audit:ui`, mark sections with scoped backgrounds `data-ground`. Not a default for older sites.
+4. **Heading map:** kept (h3 step 0, h4 body size, h5/h6 step −1). When merging `global.css` into a site, check one long CMS article; a site that wants quieter h3s overrides that one rule.

@@ -164,6 +164,14 @@ test('text tokens above 2.5 x their minimum fail unless a reviewed exception pre
   const wide = css.replace(/--text-step-2-to-0: [^;]+;/, '--text-step-2-to-0: clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem);');
   const failing = auditDesignTokens(wide);
   assert.equal(failing.valid, false);
+  // An older stylesheet (no --text-step-3, no strict theme) gets a warning instead of a failure.
+  const withoutStep3 = wide.replace(/\t--text-step-3: [^;]+;\n/, '');
+  assert.notEqual(withoutStep3, wide);
+  const older = auditDesignTokens(withoutStep3);
+  assert.equal(older.valid, true, older.errors.join('\n'));
+  assert.ok(older.warnings.some(warning => warning.includes('--text-step-2-to-0') && warning.includes('resize-text-exception')));
+  const { applyStrictTheme } = await import('../scripts/design-system.mjs');
+  assert.equal(auditDesignTokens(applyStrictTheme(withoutStep3)).valid, false, 'the strict theme marks a current stylesheet');
   assert.ok(failing.errors.some(error => error.includes('--text-step-2-to-0') && error.includes('WCAG 1.4.4') && error.includes('1.3rem')));
   const excepted = wide.replace('--text-step-2-to-0:', '/* resize-text-exception: display line wraps; checked at 200% */\n\t--text-step-2-to-0:');
   assert.equal(auditDesignTokens(excepted).valid, true, auditDesignTokens(excepted).errors.join('\n'));

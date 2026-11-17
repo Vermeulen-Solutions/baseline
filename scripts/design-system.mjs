@@ -796,6 +796,11 @@ export function auditDesignTokens(css, { cssPath = 'src/styles/global.css' } = {
     tokens: [],
   };
   const ratioExceptions = textRatioExceptions(css);
+  // Grace period: a stylesheet that predates the rule (no strict theme, no --text-step-3) gets a
+  // warning naming the fix, so syncing this script does not fail an older site's verification.
+  // Merging the current global.css adopts the scale and turns the warning into a failure.
+  const enforceTextRatio = Object.hasOwn(tokens.theme, '--text-step-3') || hasStrictTheme(css);
+  const warnings = [];
   for (const key of fluidTokens) {
     const clampError = validateClampToken(key, tokens.theme[key]);
     if (clampError) errors.push(clampError);
@@ -805,7 +810,7 @@ export function auditDesignTokens(css, { cssPath = 'src/styles/global.css' } = {
         fluid.tokens.push(diagnosis);
         const ratio = diagnosis.maxRem / diagnosis.minRem;
         if (key.startsWith('--text-') && ratio > MAX_TEXT_RATIO + 5e-4 && !ratioExceptions.has(key)) {
-          errors.push(`Token ${key}: maximum ${diagnosis.maxRem}rem is ${round4(ratio)} times its minimum ${diagnosis.minRem}rem; text tokens keep max <= ${MAX_TEXT_RATIO} x min so 200% text enlargement stays reachable (WCAG 1.4.4). Raise the minimum to at least ${round4(diagnosis.maxRem / MAX_TEXT_RATIO)}rem, or record a reviewed exception with a /* resize-text-exception: <reason> */ comment directly before the declaration.`);
+          (enforceTextRatio ? errors : warnings).push(`Token ${key}: maximum ${diagnosis.maxRem}rem is ${round4(ratio)} times its minimum ${diagnosis.minRem}rem; text tokens keep max <= ${MAX_TEXT_RATIO} x min so 200% text enlargement stays reachable (WCAG 1.4.4). Raise the minimum to at least ${round4(diagnosis.maxRem / MAX_TEXT_RATIO)}rem, or record a reviewed exception with a /* resize-text-exception: <reason> */ comment directly before the declaration.`);
         }
       } catch (error) {
         errors.push(`Token ${key}: ${error.message}`);
@@ -866,6 +871,7 @@ export function auditDesignTokens(css, { cssPath = 'src/styles/global.css' } = {
   return {
     valid: errors.length === 0,
     errors,
+    warnings,
     tokens,
     contrast,
     fluid,
@@ -1828,6 +1834,10 @@ function main() {
       ? '- EmDash edit proxies: NOT APPLICABLE (static foundation)'
       : `- EmDash edit proxies: ${proxyAudit.valid ? 'PASS' : 'FAIL'} (${proxyAudit.checkedRoutes.length} single-entry routes, ${proxyAudit.collectionRoutes.length} collection routes)`);
     console.log(`- Fluid mathematics: ${report.fluid.tokens.length} bounded affine tokens (vi default; reference root 16px, horizontal writing)`);
+    if (report.warnings.length) {
+      console.log(`- Resize-text warnings: ${report.warnings.length} (this stylesheet predates the 2.5x rule; it fails once the current type scale is adopted)`);
+      for (const warning of report.warnings) console.log(`  [WARN] ${warning}`);
+    }
     const advisoryCount = report.fluid.tokens.filter(token => token.advisories.length).length;
     if (advisoryCount) console.log(`- Fluid advisories: ${advisoryCount} tokens; inspect --json fluid.tokens (advisory only, rendered acceptance required)`);
     console.log('- Spacing contexts (bounded reference values; starter consumers, not a downstream site inventory):');
