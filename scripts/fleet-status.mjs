@@ -40,8 +40,32 @@ export function loadFleet(configFile) {
     if (typeof site.path !== 'string' || !site.path.trim()) throw new Error(`site ${site.id} needs a path`);
     seen.add(site.id);
     const page = path.join(path.dirname(configFile), 'sites', `${site.id}.md`);
-    return { id: site.id, path: path.resolve(path.dirname(configFile), site.path), page: fs.existsSync(page) ? `sites/${site.id}.md` : null };
+    return { id: site.id, path: path.resolve(path.dirname(configFile), site.path), page: fs.existsSync(page) ? `sites/${site.id}.md` : null, record: siteRecord(site) };
   });
+}
+
+// Optional hand-kept facts per site: what update tooling cannot read from a checkout.
+export const SITE_STATUSES = ['live', 'preview', 'candidate', 'archived'];
+const DATE = /^\d{4}-\d{2}-\d{2}$/;
+export function siteRecord(site) {
+  const fail = message => { throw new Error(`site ${site.id}: ${message}`); };
+  const text = (value, name) => { if (value !== undefined && (typeof value !== 'string' || !value.trim() || value.length > 300)) fail(`${name} must be a short string`); return value ?? null; };
+  const status = site.status ?? 'live';
+  if (!SITE_STATUSES.includes(status)) fail(`status must be one of ${SITE_STATUSES.join(', ')}`);
+  const origins = site.origins ?? [];
+  if (!Array.isArray(origins) || origins.some(origin => typeof origin !== 'string' || !/^https?:\/\/[^\s/]+/.test(origin))) fail('origins must be a list of http(s) URLs');
+  let adopted = null;
+  if (site.adopted !== undefined) {
+    if (!/^\d+\.\d+\.\d+$/.test(site.adopted?.standards ?? '')) fail('adopted.standards must be a version like 0.3.0');
+    if (site.adopted.date !== undefined && !DATE.test(site.adopted.date)) fail('adopted.date must be YYYY-MM-DD');
+    adopted = { standards: site.adopted.standards, date: site.adopted.date ?? null };
+  }
+  let deploy = null;
+  if (site.deploy !== undefined) {
+    if (!DATE.test(site.deploy?.date ?? '')) fail('deploy.date must be YYYY-MM-DD');
+    deploy = { date: site.deploy.date, version: text(site.deploy.version, 'deploy.version'), rollback: text(site.deploy.rollback, 'deploy.rollback'), log: text(site.deploy.log, 'deploy.log') };
+  }
+  return { status, origins, adopted, deploy };
 }
 
 function git(dir, args) { try { return execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch { return null; } }
@@ -113,18 +137,23 @@ export function compareWithStandard(site, manifest) {
   return { standard: manifest.standardsVersion, current: behind.length === 0, behind };
 }
 
-export function siteStatus({ id, path: dir, page = null }, manifest) {
-  if (!fs.existsSync(dir)) return { id, path: dir, page, missing: true };
+export function siteStatus({ id, path: dir, page = null, record = siteRecord({ id }) }, manifest) {
+  if (!fs.existsSync(dir)) return { id, path: dir, page, record, missing: true };
   const kind = kindOf(dir);
   const names = ['astro', 'emdash', '@emdash-cms/cloudflare', '@astrojs/cloudflare', '@astrojs/node', '@astrojs/netlify', 'wrangler', ...Object.keys(manifest.runtimeProfiles['node-sqlite'].dependencies)];
   const { versions, engines } = versionsOf(dir, [...new Set(names)]);
   const hosting = hostingOf(dir);
-  const status = { id, path: dir, page, ...kind, hosting, versions, engines, git: gitState(dir), htmlCacheKeyedPerBuild: hosting === 'cloudflare' ? htmlCacheKeyedPerBuild(dir) : null };
+  const status = { id, path: dir, page, record, ...kind, hosting, versions, engines, git: gitState(dir), htmlCacheKeyedPerBuild: hosting === 'cloudflare' ? htmlCacheKeyedPerBuild(dir) : null };
   status.standards = kind.kind === 'other' ? null : compareWithStandard(status, manifest);
   if (status.standards && manifest.distribution) {
     status.distribution = compareDistribution(dir, manifest.distribution, kind.profile === 'emdash' ? 'emdash' : 'static');
     status.standards.distributionBehind = distributionLags(status.distribution);
     status.standards.current = status.standards.current && status.standards.distributionBehind.length === 0;
+  }
+  // The record names the release a site was last brought to; its notes are what an update reads next.
+  if (status.standards && record.adopted && record.adopted.standards !== manifest.standardsVersion) {
+    status.standards.recordBehind = [`fleet record says standards ${record.adopted.standards}: follow the release notes after it, then record ${manifest.standardsVersion}`];
+    status.standards.current = false;
   }
   return status;
 }
@@ -188,9 +217,19 @@ export function markdownStatus(report) {
       lines.push(`### ${site.id}`, '');
       for (const item of site.standards.behind) lines.push(`- ${item}`);
       for (const item of site.standards.distributionBehind ?? []) lines.push(`- ${item}`);
+      for (const item of site.standards.recordBehind ?? []) lines.push(`- ${item}`);
       lines.push('');
     }
     lines.pop();
+  }
+  const recorded = report.sites.filter(site => site.record && (site.record.origins.length || site.record.deploy || site.record.adopted || site.record.status !== 'live'));
+  if (recorded.length) {
+    lines.push('', '## Deployments', '', 'From the fleet record (hand-kept): what a checkout cannot show.', '', '| Site | Status | Origins | Adopted | Last deploy | Rollback |', '| --- | --- | --- | --- | --- | --- |');
+    for (const site of recorded) {
+      const { status, origins, adopted, deploy } = site.record;
+      const deployed = deploy ? `${deploy.date}${deploy.version ? ` (${deploy.version})` : ''}${deploy.log ? `, log: ${deploy.log}` : ''}` : null;
+      lines.push(`| ${link(site)} | ${status} | ${cell(origins.join(', '))} | ${cell(adopted ? `${adopted.standards}${adopted.date ? ` (${adopted.date})` : ''}` : null)} | ${cell(deployed)} | ${cell(deploy?.rollback)} |`);
+    }
   }
   if (others.length) {
     lines.push('', '## Other projects', '', 'Not built from Baseline; listed for the record, not compared.', '', '| Site | Hosting | Astro | Git |', '| --- | --- | --- | --- |');
