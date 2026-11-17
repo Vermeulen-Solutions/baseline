@@ -176,8 +176,8 @@ function deliveryRules(target, lock, pkgData, add) {
     `EmDash ${emdash ?? 'not locked'}, @astrojs/cloudflare ${adapter ?? 'not locked'}`,
     { evidence: [lock.lockfile ?? 'package-lock.json'], remediation: 'docs/site-standards-audit.md#workers-delivery', applicability: 'Workers bundling of EmDash 1.5 (PostCSS require("path"))' });
   const perBuild = htmlCacheKeyedPerBuild(target);
-  add('workers:html-cache-per-build', perBuild === null ? 'not-applicable' : perBuild ? 'pass' : 'warning', 'A site cache provider keys HTML edge-cache entries per build',
-    perBuild === null ? 'No site cache provider in src/lib' : perBuild ? 'Keyed per build' : 'Keyed by URL only: after a deploy the cache serves pages of the previous build, pointing at deleted stylesheets',
+  add('workers:html-cache-per-build', perBuild === null ? 'not-applicable' : perBuild ? 'pass' : 'warning', 'A site cache provider keys HTML edge-cache entries per build, or the deploy retains previous build assets',
+    perBuild === null ? 'No site cache provider in src/lib' : perBuild ? 'Keyed per build or previous build assets retained' : 'Keyed by URL only: after a deploy the cache serves pages of the previous build, pointing at deleted stylesheets',
     { evidence: ['src/lib'], remediation: 'docs/site-standards-audit.md#workers-delivery' });
 }
 

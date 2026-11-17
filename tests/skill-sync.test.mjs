@@ -276,3 +276,23 @@ test('impeccable provenance records the launcher version from the synced snapsho
     assert.deepEqual(provenance, source, 'PROVENANCE.json mirrors the recorded source');
   } finally { assert.ok(path.basename(root).startsWith('emdash-impeccable-test-')); await fs.rm(root, { recursive: true, force: true }); }
 });
+
+test('in a site, Impeccable comes with the site skills and its record follows the applied provenance', async () => {
+  const { recordImpeccableSource } = await import('../scripts/skill-sync.mjs');
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'emdash-impeccable-site-'));
+  try {
+    await fs.mkdir(path.join(root, '.agents', 'skills', 'impeccable'), { recursive: true });
+    await fs.mkdir(path.join(root, '.emdash'), { recursive: true });
+    const record = { formatVersion: 1, declaredSkillVersion: '4.9.2', upstreamCommitSha: 'c'.repeat(40) };
+    await fs.writeFile(path.join(root, '.agents', 'skills', 'impeccable', 'PROVENANCE.json'), JSON.stringify(record, null, 2).replaceAll('\n', '\r\n') + '\r\n');
+    assert.equal(await recordImpeccableSource(root, ['new-site-workflow']), false, 'only when the site skills include Impeccable');
+    assert.equal(await recordImpeccableSource(root, ['impeccable']), true);
+    assert.deepEqual(JSON.parse(await fs.readFile(path.join(root, '.emdash', 'impeccable-source.json'), 'utf8')), record);
+    assert.doesNotMatch(await fs.readFile(path.join(root, '.emdash', 'impeccable-source.json'), 'utf8'), /\r/, 'the record is written with LF, like Baseline\'s');
+
+    await fs.writeFile(path.join(root, '.emdash', 'site-skills.json'), JSON.stringify({ skills: ['impeccable'] }));
+    const candidate = { commitSha: 'd'.repeat(40), files: { 'impeccable/SKILL.md': { bytes: Buffer.from('x'), mode: '100644' } } };
+    await assert.rejects(syncImpeccable(root, { candidate, version: '4.9.3' }), /managed by this site's skill sync/);
+    assert.equal((await syncImpeccable(root, { candidate, version: '4.9.3', check: true })).status, 'update-available', 'a read-only check still reports');
+  } finally { await fs.rm(root, { recursive: true, force: true }); }
+});

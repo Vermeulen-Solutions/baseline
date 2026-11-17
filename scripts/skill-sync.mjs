@@ -173,6 +173,21 @@ export async function updateProfileManifest(root, skills, incomingFiles) {
   }
   return added;
 }
+// In a site, Impeccable arrives with the site skills as Baseline curated it, and its PROVENANCE.json is
+// the same record Baseline keeps in .emdash/impeccable-source.json. Write that record from the applied
+// skill so the site's receipt and skill folder agree, instead of running sync:impeccable over them
+// (which rewrote the managed files and made every later site sync report them as local drift).
+export async function recordImpeccableSource(root, skills) {
+  if (!skills.includes('impeccable')) return false;
+  const provenance = path.join(root, '.agents', 'skills', 'impeccable', 'PROVENANCE.json');
+  if (!await exists(provenance)) return false;
+  const text = (await fs.readFile(provenance, 'utf8')).replaceAll('\r\n', '\n');
+  JSON.parse(text);
+  await safeParents(root, '.emdash/impeccable-source.json');
+  await fs.mkdir(path.join(root, '.emdash'), { recursive: true });
+  await fs.writeFile(path.join(root, '.emdash', 'impeccable-source.json'), text);
+  return true;
+}
 async function save(file, value) { await fs.writeFile(file, JSON.stringify(value, null, 2) + '\n', { flag: 'wx' }); }
 export async function stageSync(root, kind, config, candidate, report) {
   await safeParents(root, '.emdash/skill-sync');
@@ -258,7 +273,8 @@ export async function applySync(root, kind, id, resolution, hooks = {}) {
       await fs.writeFile(path.join(directory, 'journal.json'), JSON.stringify(journal));
     } catch (error) { await rollback(root, kind, directory, receipt, journal); throw explainLocked(error, id); }
     const profileManifest = kind === 'site' ? await updateProfileManifest(root, config.skills, receipt.incoming) : [];
-    return { status: 'applied', backup: directory, commitSha: receipt.commitSha, ...(profileManifest.length ? { profileManifestAdded: profileManifest } : {}), next: 'Review the change with git add -A .agents && git diff --cached --stat (line-ending-only changes are not content changes).' };
+    const impeccableSource = kind === 'site' ? await recordImpeccableSource(root, config.skills) : false;
+    return { status: 'applied', backup: directory, commitSha: receipt.commitSha, ...(profileManifest.length ? { profileManifestAdded: profileManifest } : {}), ...(impeccableSource ? { impeccableSource: '.emdash/impeccable-source.json' } : {}), next: 'Review the change with git add -A .agents && git diff --cached --stat (line-ending-only changes are not content changes).' };
   });
 }
 async function rollback(root, kind, directory, receipt, journal) {

@@ -107,7 +107,7 @@ export function compareWithStandard(site, manifest) {
   if (adapter && adapter !== profile.dependencies.emdash) behind.push(`@emdash-cms/cloudflare ${adapter} (needs ${profile.dependencies.emdash})`);
   const astroAdapter = site.versions['@astrojs/cloudflare'];
   if (astroAdapter && site.versions.emdash && versionAtLeast(site.versions.emdash, WORKERS_RULES.emdashFrom) && !versionAtLeast(astroAdapter, WORKERS_RULES.adapterMinimum)) behind.push(`@astrojs/cloudflare ${astroAdapter} (EmDash ${WORKERS_RULES.emdashFrom}+ on Workers needs ${WORKERS_RULES.adapterMinimum} or newer)`);
-  if (site.htmlCacheKeyedPerBuild === false) behind.push('HTML edge cache keyed by URL only (key it per build before the next deploy)');
+  if (site.htmlCacheKeyedPerBuild === false) behind.push('HTML edge cache keyed by URL only (key it per build, or retain previous build assets on deploy, before the next deploy)');
   const compact = value => String(value).replaceAll(/\s/g, '');
   if (site.engines && compact(site.engines) !== compact(profile.nodeEngineRange)) behind.push(`Node range ${site.engines} (certified ${profile.nodeEngineRange})`);
   return { standard: manifest.standardsVersion, current: behind.length === 0, behind };

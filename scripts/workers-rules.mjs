@@ -29,14 +29,24 @@ export function workersAdapterStatus(emdashVersion, adapterVersion) {
   return versionAtLeast(adapterVersion, WORKERS_RULES.adapterMinimum) ? 'pass' : 'fail';
 }
 
-// true when the site's own Cloudflare cache provider keys HTML per build, false when it keys by URL
-// only, null when the site has no custom provider (Astro's own provider needs no change).
+// true when the site's own Cloudflare cache provider keys HTML per build, or its build or deploy
+// script carries the previous builds' hashed assets forward (assets:retain), so cached HTML from an
+// earlier deploy still finds its stylesheets; false when HTML is cached by URL only; null when the
+// site has no custom provider (Astro's own provider needs no change).
 export function htmlCacheKeyedPerBuild(dir) {
   const lib = path.join(dir, 'src', 'lib');
   if (!fs.existsSync(lib)) return null;
   const providers = fs.readdirSync(lib).filter(name => /cache-provider\.(?:mjs|js|ts)$/.test(name));
   if (!providers.length) return null;
-  return providers.some(name => /__SITE_BUILD_ID__|\bbuildId\b|\bBUILD_ID\b/.test(fs.readFileSync(path.join(lib, name), 'utf8')));
+  if (providers.some(name => /__SITE_BUILD_ID__|\bbuildId\b|\bBUILD_ID\b/.test(fs.readFileSync(path.join(lib, name), 'utf8')))) return true;
+  return retainsPreviousAssets(dir);
+}
+
+// A build or deploy script that runs the seven-day asset retention before upload.
+export function retainsPreviousAssets(dir) {
+  let scripts = {};
+  try { scripts = JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8')).scripts ?? {}; } catch { return false; }
+  return Object.entries(scripts).some(([name, command]) => /^(?:deploy|build:worker|build:cloudflare|release)/.test(name) && /assets:retain|retain-build-assets/.test(String(command)));
 }
 
 // @emdash-cms/* packages a site imports from its own source without declaring them. npm only hoists
