@@ -7,7 +7,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { htmlCacheKeyedPerBuild, undeclaredEmDashImports, versionAtLeast, workersAdapterStatus } from '../scripts/workers-rules.mjs';
 import { assertSafeDestination, gitIgnoreStatus, oversizedStatements } from '../scripts/d1-export.mjs';
 import { compareCounts, databaseHealth, findD1File, loadExport, pluginBundlePrefixes, tableCounts } from '../scripts/d1-rehearse.mjs';
-import { checkLive, parseSitemap, reroot, stylesheetHrefs } from '../scripts/check-live.mjs';
+import { checkLive, parseSitemap, reroot, sitemapAlternates, stylesheetHrefs } from '../scripts/check-live.mjs';
 
 // Portable: throwaway folders, a stubbed `git` and a stubbed fetch; no network, Wrangler or CMS.
 const scratch = prefix => mkdtempSync(path.join(os.tmpdir(), prefix));
@@ -100,4 +100,39 @@ test('live check follows sitemap indexes on the checked origin and fails a missi
   assert.deepEqual(report.redirects.map(item => [new URL(item.from).pathname, new URL(item.to).pathname, item.targetStatus]), [['/old', '/new/', 200]]);
   assert.equal(report.ok, false);
   assert.deepEqual(report.failures, ['Stylesheet https://staging.example/_astro/old.css (used by https://staging.example/old) answered 404']);
+});
+
+test('live check warns about search-facing problems by path and fails them only with --strict-seo', async () => {
+  const sitemap = '<urlset xmlns:xhtml="http://www.w3.org/1999/xhtml">'
+    + '<url><loc>https://prod.example/fr/</loc><xhtml:link rel="alternate" hreflang="fr" href="https://prod.example/fr/"/><xhtml:link rel="alternate" hreflang="en" href="https://prod.example/en/"/></url>'
+    + '<url><loc>https://prod.example/en/</loc><xhtml:link rel="alternate" hreflang="fr" href="https://prod.example/fr/"/><xhtml:link rel="alternate" hreflang="en" href="https://prod.example/en/"/></url>'
+    + '<url><loc>https://prod.example/twice/</loc></url><url><loc>https://prod.example/slug</loc></url></urlset>';
+  assert.deepEqual(sitemapAlternates(sitemap).get('https://prod.example/fr/').map(link => link.hreflang), ['fr', 'en']);
+  const head = (canonical, links = '', descriptions = 1) => `<link rel="canonical" href="${canonical}">${'<meta name="description" content="x">'.repeat(descriptions)}${links}`;
+  const pair = '<link rel="alternate" hreflang="fr" href="https://prod.example/fr/"><link rel="alternate" hreflang="en" href="https://prod.example/en/">';
+  const site = {
+    '/_emdash/api/health': { status: 404, body: '' },
+    '/sitemap.xml': { status: 200, body: sitemap },
+    // Always fetched, though not listed: not judged for search-facing problems.
+    '/': { status: 302, location: '/fr/' },
+    // Same paths on the production host are fine: only paths are compared.
+    '/fr/': { status: 200, body: head('https://prod.example/fr/', pair) },
+    // Head links built from a CMS URL pattern instead of the real route.
+    '/en/': { status: 200, body: head('https://staging.example/en/', pair.replace('/fr/', '/fr-cms/')) },
+    '/twice/': { status: 200, body: head('https://staging.example/twice', '<link rel="alternate" hreflang="fr" href="/twice/"><link rel="alternate" hreflang="fr" href="/other/">', 2) },
+    '/slug': { status: 301, location: '/real/' },
+    '/real/': { status: 200, body: head('https://staging.example/real/') },
+    '/robots.txt': { status: 200, body: '' },
+  };
+  const fetcher = async url => site[new URL(url).pathname] ?? { status: 404, body: '' };
+  const report = await checkLive({ origin: 'https://staging.example' }, fetcher);
+  assert.equal(report.ok, true, 'warnings alone do not fail the default check');
+  assert.deepEqual(report.warnings, [
+    'https://staging.example/en/ declares hreflang en=/en/ fr=/fr-cms/; the sitemap lists en=/en/ fr=/fr/',
+    'https://staging.example/twice/ names https://staging.example/twice as canonical',
+    'https://staging.example/twice/ has 2 meta descriptions',
+    'https://staging.example/twice/ repeats hreflang fr',
+    'The sitemap lists https://staging.example/slug, which redirects (301) to https://staging.example/real/',
+  ]);
+  assert.equal((await checkLive({ origin: 'https://staging.example', strictSeo: true }, fetcher)).ok, false);
 });

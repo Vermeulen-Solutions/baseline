@@ -8,6 +8,8 @@ Inventory fields, locale, consent, attachments, recipient routing, confirmations
 
 Use an Astro server endpoint such as `src/pages/api/contact.ts`, with `export const prerender = false` where needed. For Astro 6+ with the current Cloudflare adapter, import `env` from `cloudflare:workers` instead of `locals.runtime.env`. Verify older adapter APIs rather than forcing a migration.
 
+Do not rely on `locals.emdash.email` in a public form. EmDash gives anonymous requests reduced public locals without the email service, so a form that sends only when `locals.emdash?.email` is available stores or accepts the submission and silently sends nothing to visitors; it appears to work only while an editor is signed in. Send through the binding, or use EmDash's service when the request has it and fall back to the binding. The `cloudflareEmail` provider plugin covers CMS mail (sign-in links, invites), not anonymous form routes.
+
 Run `npx wrangler types` after binding changes and include generated declarations in TypeScript. Use the generated binding types; do not declare the virtual module as `Record<string, any>` or cast the binding to `any`. Consult [Astro typing](https://docs.astro.build/en/guides/integrations-guide/cloudflare/#typing) and [Cloudflare's sending API](https://developers.cloudflare.com/email-service/api/send-emails/workers-api/).
 
 ## Request and validation contract
@@ -29,6 +31,10 @@ Inspect the schema rather than inventing `pages/contact.contact_email`. Reuse a 
 Inspect both returned `error` and `entry`: EmDash errors are data and need not throw. Validate the address and destination allowlist. Use only a deliberate, validated fallback; distinguish missing optional configuration from query failure and record configuration errors without visitor content. Never accept the destination from submitted fields.
 
 Maintain sender configuration in one place. A dedicated form binding can restrict recipients without restricting CMS authentication emails. Exclude debug CC/BCC options from production templates.
+
+When the site stores submissions, store first and send second, and record the delivery state on the stored record: a send failure must not turn an accepted submission into a retry or a lost message. Hard-coded fallback recipients are a hazard: when mail is enabled later, everything goes to that address. Prefer a server-side runtime variable (Worker `vars`) with no default, where unset means stored only.
+
+Before the production domain's sender is onboarded, mail can leave from a sender subdomain the operator has already verified in the same Cloudflare account, to a recipient the owner names, so forms are testable on the preview hostname without sending to the client's inbox. At cutover, change the sender (binding `allowed_sender_addresses` and the single sender setting) and the recipient in one change, deploy, and send one test per form.
 
 ## Email construction
 
@@ -76,7 +82,7 @@ JavaScript can request JSON, disable duplicate submission while pending, and ann
 
 ## Acceptance checks
 
-Test meaningful endpoint boundaries using the project's test tooling and a stubbed email binding. Send live test email only to the authorized destination/environment.
+Test meaningful endpoint boundaries using the project's test tooling and a stubbed email binding. Send live test email only to the authorized destination/environment. Make one live submission as an anonymous visitor (no session cookie): a test while signed in can pass on a path visitors never take. Send it from a browser or with an explicit UTF-8 body; a command-line client using the Windows code page stores and mails replacement characters for accented text. Remove the test records afterwards.
 
 | Scenario | Expected result |
 | --- | --- |
