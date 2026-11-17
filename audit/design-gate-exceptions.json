@@ -146,7 +146,7 @@
   {
     "path": "src/styles/global.css",
     "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Sticky-header state contract (paint-only data-scrolled, hysteresis data-compact), opt-in held header and media-morph view-transition rules with reduced-motion fallback; no new tokens or colours. One-row starter header: a native Menu disclosure on phones with the links inline from 48rem, a brand that gives way under enlarged text, existing tokens only. Shared focus ring restored on the search component's field. Exact LF-normalized source hash.",
-    "sha256": "c6258d217ed6bc015b103262077f48f2efbed4b6f2014d6697afdb97674d1a4b"
+    "sha256": "ec5d54c5c2917fe75bca94aa7fb773d03fc6c50d33fe632027eb88629623bef7"
   },
   {
     "path": "src/layouts/Base.astro",
@@ -156,17 +156,17 @@
   {
     "path": "src/components/Container.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "6191f396504660d3cf44a71ae7f4b021f2db3026be387093d6bf33bba5a9fbd6"
+    "sha256": "bfe032b6b38bd36db08fc4354396a1965bf5c72f925308f38ed5f32cfc3dd2de"
   },
   {
     "path": "src/components/Grid.astro",
     "reason": "Starter infrastructure: expose a contextual grid gap variable while retaining the calibrated minimum-width variants; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "6510cee21bfbc48d7945d51c03c45b1168d863be75c740612729351db7f49908"
+    "sha256": "36be198488bb36449a2eb0afedc74cee5ab6ee6f77cb0886abc4e59d9741cd2c"
   },
   {
     "path": "src/components/Section.astro",
     "reason": "Starter infrastructure: section spacing moves to the layered global spacing contract with a data-spacing opt-out; semantic section markup and accessible naming are preserved. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "d3b7b5d71ae6008f8fe4e36a7d4148463be975976ca27ccab4e52f83f310a2b6"
+    "sha256": "3da009a8857f0c9ec17039454b57223a71da2e1a3c4ccc90726adbf24fd6e673"
   },
   {
     "path": "src/live.config.ts",
@@ -241,7 +241,7 @@
   {
     "path": "src/components/Card.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; layout=\"horizontal\" rules reordered narrow-first (stacked default, side by side above a 40rem viewport, restacked in a query container of 32rem or less) with the same breakpoints and outcomes and no new visual values; no client theme or page implementation. transitionName now resolves through the shared ident-safe view-transition helper and adds the vt-media class to the media; unchanged output for ident-safe prefixes apart from that class. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "8bbb41b98944cccaf05a5e681da7339faf15dbe807958a4a87660a2a2c61e17d"
+    "sha256": "6402d3ee0b2549494f3ccb389ed75b476f4e840f853d99daad9e307dda321a5b"
   },
   {
     "path": "src/components/PartnersPanel.astro",
@@ -557,7 +557,7 @@
   {
     "path": "src/lib/layout-style.ts",
     "reason": "Approved automatic-spacing starter infrastructure: shared attribute/style merge helper; no client visual implementation.",
-    "sha256": "de4f24be706d7e62a89ecf471fcc4b4be1c744b8226f5c6eef0ea366de8ec9aa"
+    "sha256": "9f3b14ae158009d8186ee587a8803ac2fc6e219acbb0faa6baa6af9768327b82"
   },
   {
     "path": "src/lib/cms-flag.ts",

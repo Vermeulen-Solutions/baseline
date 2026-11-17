@@ -1,12 +1,13 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import { layoutStyle } from '../lib/layout-style';
+import { layoutStyle, type LayoutGap } from '../lib/layout-style';
 interface Props extends HTMLAttributes<'section'> {
 	labelledBy: string;
 	/** Section step: full (`section`, default), `medium`, `content` or `none`. */
 	spacing?: "content" | "medium" | "section" | "none";
 	class?: string;
-	gap?: string;
+	/** Token name (`container`, `content`, `grid`, `none`, `s`, `m` …) or a CSS length. */
+	gap?: LayoutGap;
 	layout?: 'stack' | 'custom';
 }
 

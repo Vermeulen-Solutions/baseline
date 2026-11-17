@@ -27,7 +27,7 @@ test('installed CMS discovery follows sources without changing files or claiming
   assert.equal(report.commands['audit:html'].available, true);
   assert.ok(report.skills.some(skill => skill.name === 'emdash-cli'));
   assert.ok(report.entrypoints.content.some(item => item.source === 'seed/seed.json' && item.exists));
-  assert.deepEqual(report.components.find(item => item.name === 'Grid').props.find(item => item.name === 'gap'), { name: 'gap', optional: true, type: 'string' });
+  assert.deepEqual(report.components.find(item => item.name === 'Grid').props.find(item => item.name === 'gap'), { name: 'gap', optional: true, type: 'LayoutGap' });
   assert.deepEqual(fs.readFileSync(path.join(root, 'package.json')), before);
 });
 

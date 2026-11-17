@@ -138,7 +138,7 @@ Owned CSS uses `@layer base` or `@layer components`. The document establishes `t
 | Section | Block padding (one section step; same-ground joins share it with `sectionJoins="shared"`); column stack of direct children with container gap | `spacing="section|medium|content|none"`, `gap`, `layout="stack|custom"` |
 | Ordinary Container | Centered reading/content/wide measure; column stack with content gap | `width`, `gap`, `layout="stack|custom"` |
 | Breakout Container | Named-track grid; content gap, preserving subgrid propagation | `breakout`, `gap`, track classes |
-| Grid | Intrinsic auto-fit columns; grid gap | `minimum="compact|standard|wide"`, `gap` |
+| Grid | Intrinsic auto-fit columns; grid gap; each item a named `card-slot` inline-size query container | `minimum="compact|standard|wide"`, `gap`, `slots={false}` |
 | Site main | Horizontal page gutters once; no inferred block spacing | Compose explicit Sections |
 | RichText | Editorial sibling rhythm and bounded prose presentation | Six public flow controls, or `flow={false}` |
 
@@ -168,11 +168,15 @@ Use `layout="custom"` when the caller owns display, direction and gaps. Ordinary
 </Container>
 ```
 
+`gap` takes a token name or, for compatibility, any CSS length. Names map to custom properties: `none` (0), the semantic `content`, `grid`, `container`, `section` and `section-m`, and the space scale's steps and pairs (`s`, `m`, `xl-3xl` …) become `var(--spacing-<name>)`. TypeScript offers the names (`LayoutGap` in `src/lib/layout-style.ts`); `npm run check:css` reports raw lengths as advisories.
+
 The components preserve ordinary HTML attributes, IDs, ARIA, class/class:list and string/object styles. A `gap` prop wins over the same local custom property in passed style; a real `gap-*` utility wins over the default property through layers. Invalid enum inputs normalize to documented defaults; empty/non-string optional gap values are omitted. These normalization rules do not validate arbitrary caller CSS.
 
 Breakout children normally occupy the reading track (`--measure-reading`). `.content--feature`, `.content--wide`, `.content--full` and `.content--full-safe` select wider named tracks. Within the padded site shell, the grid does not add another gutter; full/full-safe extend to the shell content edge. Viewport-edge bleed requires a caller-owned shell composition and rendered verification. Native image placement hints must match those actual bounds.
 
 ### `<Card />` (Turnkey Accessible Card & Concentric Radius)
+
+`layout="horizontal"` is stacked by default and goes side by side only when the card itself is at least 32rem wide: a horizontal card is its own named query container (`container: card / inline-size`) and enhances at `min-width`, so the same card stacks in a narrow grid cell or sidebar and sits side by side as a full-width feature, whatever the viewport. Because it measures its own width, give a horizontal card a definite width when it sits in a flex row. Media and body sit in a `.card-layout` wrapper that has no box (`display: contents`) for a stacked card.
 
 `<Card>` renders a semantic `<article class="card">` and uses `.clickable-parent` on the heading's `<a>` tag so the entire card is clickable while screen readers announce only the heading as the link name. Paired with `.focus-parent` (`:focus-within:has(:focus-visible)`), keyboard navigation draws a single focus ring on the card perimeter without sticky mouse outlines. Customize cards via `--card-bg`, `--card-text`, `--card-muted`, `--card-border-color`, `--card-radius`, `--card-padding`, `--card-frame-padding`, `--card-gap`, `--card-shadow`, automatic concentric media radius (`--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))`), and optional `transitionName="<prefix>"` (which sets `view-transition-name: <prefix>-media` and `<prefix>-title` for shared-element View Transition morphing into detail routes alongside `.vt-morph`).
 

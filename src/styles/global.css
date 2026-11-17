@@ -844,6 +844,12 @@
 		gap: var(--grid-gap, var(--spacing-grid));
 	}
 
+	/* Grid items are named inline-size query containers, so a component in a cell can respond to
+	   the cell rather than to the viewport (Grid slots, on by default). */
+	:where(.grid-auto[data-slots="container"]) > :where(*) {
+		container: card-slot / inline-size;
+	}
+
 	.grid-auto--compact {
 		--grid-min: 14rem;
 	}

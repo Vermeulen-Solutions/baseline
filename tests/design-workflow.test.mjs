@@ -183,10 +183,11 @@ test('global.css, Container.astro, and Card.astro ship the curated token engine,
   assert.ok(card.includes('transitionName?: string'), 'Card must accept optional shared-element View Transition prefix');
   assert.ok(!/from ['"]emdash/.test(card), 'Shared Card must not require EmDash types');
   assert.ok(card.includes('[data-emdash-field]'), 'Card must elevate EmDash field annotations above .clickable-parent');
-  const horizontalGrid = card.indexOf('@media (min-width: 40.0625rem) { .card--horizontal { display: grid;');
-  const narrowSlot = card.indexOf('@container (max-width: 32rem) { .card--horizontal { display: flex; } }');
-  assert.ok(horizontalGrid > 0 && narrowSlot > horizontalGrid, 'Horizontal Card must stack by default, go side by side only above 40rem, and let a narrow container restack it afterwards');
-  assert.ok(!/^\.card--horizontal \{ display: grid/m.test(card), 'Horizontal Card must not default to the side-by-side grid outside a query');
+  assert.ok(card.includes('.card--horizontal { container: card / inline-size; }'), 'A horizontal Card must be its own named query container');
+  assert.ok(/@container card \(min-width: 32rem\) \{\s*\.card--horizontal > \.card-layout \{ display: grid;/.test(card), 'Horizontal Card must go side by side only from a 32rem card width, enhanced at min-width');
+  assert.ok(!/@media[^{]*\{\s*\.card--horizontal/.test(card), 'Horizontal Card must not switch on the viewport');
+  assert.ok(card.includes('.card-layout { display: contents; }'), 'A stacked Card keeps its media and body as flex children of the card');
+  assert.ok(!/^\.card--horizontal > \.card-layout \{ display: grid/m.test(card), 'Horizontal Card must not default to the side-by-side grid outside a query');
   assert.ok(css.includes('grid-template-columns: subgrid'), 'global.css must propagate .content-grid tracks into .flow / [data-emdash-field] via subgrid');
 
   const editorialImage = readFileSync('src/components/EditorialImage.astro', 'utf8');
@@ -258,7 +259,7 @@ test('cascade layers and automatic spacing contracts stay enforceable', () => {
   assert.ok(section.includes('data-spacing'), 'Section must expose its spacing opt-out');
 
   const grid = readFileSync('src/components/Grid.astro', 'utf8');
-  assert.ok(grid.includes('gap?: string'), 'Grid must expose a contextual gap');
+  assert.ok(grid.includes('gap?: LayoutGap'), 'Grid must expose a contextual gap typed as token names or a length');
   assert.ok(grid.includes('--grid-gap'), 'Grid must pass the gap through the CSS variable');
 
   const richText = readFileSync('src/components/RichText.astro', 'utf8');

@@ -1,18 +1,22 @@
 ---
 import type { HTMLAttributes } from 'astro/types';
-import { layoutStyle } from '../lib/layout-style';
+import { layoutStyle, type LayoutGap } from '../lib/layout-style';
 interface Props extends HTMLAttributes<'div'> {
 	minimum?: "compact" | "standard" | "wide";
-	gap?: string;
+	/** Token name (`grid`, `content`, `s`, `m` …) or a CSS length. */
+	gap?: LayoutGap;
+	/** Each item is a named `card-slot` inline-size query container (default). `false` leaves items as they are. */
+	slots?: boolean;
 	class?: string;
 }
 
-const { minimum: rawMinimum, gap, class: className, 'class:list': classes, style, ...attributes } = Astro.props;
+const { minimum: rawMinimum, gap, slots = true, class: className, 'class:list': classes, style, ...attributes } = Astro.props;
 const minimum = rawMinimum === 'compact' || rawMinimum === 'wide' ? rawMinimum : 'standard';
 ---
 
 <div
 	{...attributes}
+	data-slots={slots === false ? undefined : 'container'}
 	class:list={["grid-auto", `grid-auto--${minimum}`, className, classes]}
 	style={layoutStyle(style, '--grid-gap', gap)}
 >
