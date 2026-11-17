@@ -159,6 +159,20 @@ test('editable canvas guidance ships complete on every profile without a runtime
   }
 });
 
+test('every Impeccable file ships on profiles that carry the skill', () => {
+  const dir = '.agents/skills/impeccable';
+  const files = fs.readdirSync(path.join(root, dir), { recursive: true, withFileTypes: true })
+    .filter(entry => entry.isFile())
+    .map(entry => path.relative(root, path.join(entry.parentPath, entry.name)).replaceAll('\\', '/'))
+    .filter(file => !file.startsWith(`${dir}/scripts/bin/`));
+  assert.ok(files.includes(`${dir}/SKILL.md`));
+  for (const profile of PROFILE_IDS) {
+    const manifest = profileManifest(profile);
+    if (!manifest.skills.includes('impeccable')) continue;
+    for (const file of files) assert.ok(manifest.skillFiles.includes(file), `${profile}: unshipped Impeccable file ${file}`);
+  }
+});
+
 test('bundled OpenPencil mechanics retain reviewed upstream bytes and license on every profile', () => {
   const dir = '.agents/skills/openpencil-site-design/references/upstream';
   const provenance = json(`${dir}/PROVENANCE.json`);

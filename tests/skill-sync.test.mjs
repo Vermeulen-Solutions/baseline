@@ -257,10 +257,16 @@ test('impeccable provenance records the launcher version from the synced snapsho
       commitSha: 'b'.repeat(40),
       files: {
         'impeccable/SKILL.md': { bytes: Buffer.from(skillMd), mode: '100644' },
-        'impeccable/scripts/VERSION': { bytes: Buffer.from('0.1.20\n'), mode: '100644' }
+        'impeccable/scripts/VERSION': { bytes: Buffer.from('0.1.20\n'), mode: '100644' },
+        'impeccable/reference/new-file.md': { bytes: Buffer.from('new\n'), mode: '100644' }
       }
     };
-    await syncImpeccable(root, { candidate, version: '4.8.1' });
+    await fs.mkdir(path.join(root, 'profiles', 'manifests'), { recursive: true });
+    await fs.writeFile(path.join(root, 'profiles', 'manifests', 'shared.json'), JSON.stringify({ skillFiles: ['.agents/skills/impeccable/SKILL.md', '.agents/skills/impeccable/scripts/VERSION'] }));
+    const result = await syncImpeccable(root, { candidate, version: '4.8.1' });
+    assert.deepEqual(result.profileManifestAdded, ['.agents/skills/impeccable/reference/new-file.md'], 'a file new in the release is listed for static profiles');
+    const shared = JSON.parse(await fs.readFile(path.join(root, 'profiles', 'manifests', 'shared.json'), 'utf8'));
+    assert.ok(shared.skillFiles.includes('.agents/skills/impeccable/reference/new-file.md'));
     const source = JSON.parse(await fs.readFile(path.join(root, '.emdash', 'impeccable-source.json'), 'utf8'));
     const provenance = JSON.parse(await fs.readFile(path.join(root, '.agents', 'skills', 'impeccable', 'PROVENANCE.json'), 'utf8'));
     assert.equal(source.launcherVersion, '0.1.20', 'a carried-over launcher version is replaced by the synced VERSION');

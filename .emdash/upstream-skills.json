@@ -1,8 +1,8 @@
 {
   "formatVersion": 2,
-  "source": "https://github.com/emdash-cms/emdash/tree/c73c6008f49c66d4f6629bf7436c883877e21344/skills/",
-  "ref": "c73c6008f49c66d4f6629bf7436c883877e21344",
-  "commitSha": "c73c6008f49c66d4f6629bf7436c883877e21344",
+  "source": "https://github.com/emdash-cms/emdash/tree/38b1398a654051284828220cc289c4e700410428/skills/",
+  "ref": "38b1398a654051284828220cc289c4e700410428",
+  "commitSha": "38b1398a654051284828220cc289c4e700410428",
   "skills": [
     "building-emdash-site",
     "creating-plugins",
@@ -18,7 +18,7 @@
     "creating-plugins/SKILL.md": "34a81edbe2691646bf729ecc3c44bbd82fd237af7db05a24ce3905717ffefe9a",
     "creating-plugins/references/admin-ui.md": "f7aae0f18bcb0836aed0dd61ae747142765c9f112f1f2966252e9a0ddcaa5ca2",
     "creating-plugins/references/api-routes.md": "5586881b7f1d1ba5f482f822ef2237159d528e774532116b52d3fdea470b4dc0",
-    "creating-plugins/references/block-kit.md": "237d2bc21cc2a71f60f750c762419ef33c359bdb86e97aabab4cbd013d6b1b4e",
+    "creating-plugins/references/block-kit.md": "f7ad7b3aa7f71b0d66c1376cc4e5872ee60bbe3445a41ad82338d7fde843c1d8",
     "creating-plugins/references/comments.md": "cc3e1ea3657a41365283b0ae89bfab2852930c01c739cc591d1238e26525e068",
     "creating-plugins/references/content.md": "738f617311dcfa1ab595b674ada072d214012c69178c4d05d8ce371324136007",
     "creating-plugins/references/hooks.md": "addda7fd1945f37d9ddbd426bd72075d435abd9e01630552457130b6fd4ea54e",
@@ -32,5 +32,5 @@
     "emdash-cli/SKILL.md": "ed9782a75ac8708af3e16a43e7540f2a0e4401297dcdedb79b75e55963c9f26f",
     "upgrading-emdash/SKILL.md": "a942be1d972ebccf9e75c869c00a0497c111e6a7747d3f174750258f114fffad"
   },
-  "syncedAt": "2026-11-14T00:27:12.783Z"
+  "syncedAt": "2026-11-16T18:04:49.895Z"
 }
