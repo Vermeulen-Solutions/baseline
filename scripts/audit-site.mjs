@@ -37,6 +37,7 @@ const version = value => typeof value === 'string' && /^\d+\.\d+\.\d+(?:-[a-zA-Z
 
 import { splitSQL } from './d1-snapshot.mjs';
 import { ruleActionability } from './audit-actionability.mjs';
+import { WORKERS_RULES, htmlCacheKeyedPerBuild, isWorkersSite, undeclaredEmDashImports, workersAdapterStatus } from './workers-rules.mjs';
 
 export function ingestSQLSchema(db, text) {
   db.exec('PRAGMA foreign_keys = OFF;');
@@ -92,6 +93,7 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
   }
   if (lock.lockfile === 'pnpm-lock.yaml' || lock.alternateLockfile) hashes['pnpm-lock.yaml'] = lock.lockfile === 'pnpm-lock.yaml' ? lock.sha256 ?? null : lock.alternateLockfileSHA256 ?? null;
   capabilityRules(readTarget(target, 'astro.config.mjs').bytes?.toString('utf8'), runtime, add);
+  deliveryRules(target, lock, pkg.data, add);
   designSystemRules(target, add);
   const scripts = pkg.data?.scripts;
   add('schema-prebuild', scripts?.['check:schema-budget'] === 'node scripts/check-schema-budget.mjs' && /^(?:npm run check:schema-budget)(?:$| && )/.test(scripts?.prebuild ?? '') ? 'pass' : scripts && typeof scripts === 'object' ? 'warning' : 'unverified', 'Schema preflight before the existing build hook', 'Command presence is static evidence; missing DB still needs measurement', { required: false, evidence: ['package.json'], remediation: 'schema-budget-prebuild@1' });
@@ -153,6 +155,30 @@ export function auditSite({ root, runtime = 'node-sqlite', standardsFile, dbSnap
     git = { status: 'observed', revision: /^[a-f0-9]{40,64}$/.test(revision) ? revision : null, trackedDirty: Boolean(command('status', '--porcelain', '--untracked-files=no')), note: 'Untracked paths and repository remotes withheld' };
   } catch { /* An unavailable Git checkout is not a clean-tree assertion. */ }
   return assertReport({ schemaVersion: 3, generatedAt: new Date().toISOString(), stage: 'static-diagnosis', target: { label: 'audited-repository', git, configurationSHA256: hashes }, standards: { ...STANDARD, source: 'Digest-verified offline manifest; original private Git history not required' }, runtime, mutationPolicy: 'No target writes, target script/config execution or network; explicit reports outside target and isolated temporary snapshot copy only', rules, summary: Object.fromEntries(['pass', 'fail', 'warning', 'unverified', 'not-applicable'].map(status => [status, rules.filter(rule => rule.status === status).length])) });
+}
+
+// Site-level delivery rules learned on live EmDash 1.5 updates (see scripts/workers-rules.mjs).
+function deliveryRules(target, lock, pkgData, add) {
+  const record = value => value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+  const declared = new Set(Object.keys({ ...record(pkgData?.dependencies), ...record(pkgData?.devDependencies), ...record(pkgData?.peerDependencies) }));
+  const undeclared = pkgData ? undeclaredEmDashImports(target, declared) : null;
+  add('declared-imports', undeclared === null ? 'unverified' : undeclared.length ? 'warning' : 'pass', 'Every @emdash-cms/* package imported by site source is declared in package.json',
+    undeclared === null ? 'No readable package.json' : undeclared.length ? `Undeclared: ${undeclared.map(item => `${item.name} (${item.file})`).join(', ')}` : 'All declared',
+    { required: false, evidence: ['package.json', 'src'], remediation: 'docs/site-standards-audit.md#declared-imports', applicability: 'Static import scan of src/' });
+  if (!isWorkersSite(target)) {
+    add('workers:astro-adapter', 'not-applicable', 'Cloudflare Workers sites only', 'No Wrangler configuration', { required: false, remediation: 'docs/site-standards-audit.md#workers-delivery' });
+    add('workers:html-cache-per-build', 'not-applicable', 'Cloudflare Workers sites only', 'No Wrangler configuration', { required: false, remediation: 'docs/site-standards-audit.md#workers-delivery' });
+    return;
+  }
+  const emdash = lock.entries?.get('emdash')?.version;
+  const adapter = lock.entries?.get('@astrojs/cloudflare')?.version;
+  add('workers:astro-adapter', workersAdapterStatus(emdash, adapter), `@astrojs/cloudflare ${WORKERS_RULES.adapterMinimum} or newer with EmDash ${WORKERS_RULES.emdashFrom} or newer`,
+    `EmDash ${emdash ?? 'not locked'}, @astrojs/cloudflare ${adapter ?? 'not locked'}`,
+    { evidence: [lock.lockfile ?? 'package-lock.json'], remediation: 'docs/site-standards-audit.md#workers-delivery', applicability: 'Workers bundling of EmDash 1.5 (PostCSS require("path"))' });
+  const perBuild = htmlCacheKeyedPerBuild(target);
+  add('workers:html-cache-per-build', perBuild === null ? 'not-applicable' : perBuild ? 'pass' : 'warning', 'A site cache provider keys HTML edge-cache entries per build',
+    perBuild === null ? 'No site cache provider in src/lib' : perBuild ? 'Keyed per build' : 'Keyed by URL only: after a deploy the cache serves pages of the previous build, pointing at deleted stylesheets',
+    { evidence: ['src/lib'], remediation: 'docs/site-standards-audit.md#workers-delivery' });
 }
 
 export function strictFailure(report, { failsOnly = false } = {}) {

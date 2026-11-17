@@ -4,6 +4,10 @@
 //
 //   npm run db:export-d1 -- [--database <name>] [--out <file.sql>] [--local]
 //
+// The copy holds users, sessions and content, so it is written only where Git ignores it: the
+// default is .emdash/backups/, and inside a Git repository any destination Git would track is
+// refused (add the folder to .gitignore first).
+//
 // 1. Reads sqlite_master, then exports every ordinary table with `wrangler d1 export --table`.
 // 2. Orders the file so every table exists before any row is inserted (D1 rejects an insert whose
 //    foreign-key target table does not exist yet, even with deferred foreign keys).
@@ -12,13 +16,15 @@
 // 4. Counts every table in D1 and loads the result into a scratch SQLite file to compare row counts,
 //    object counts, integrity and foreign keys. The export and <out>.manifest.json are written only
 //    when everything matches.
-// The output loads into a local D1 for an upgrade rehearsal:
-//   npx wrangler d1 execute <name> --local --persist-to <scratch dir> --file <out>
-// It is a portable copy for rehearsal and inspection; for recovery use D1 Time Travel.
+// The output loads into a local D1 for an upgrade rehearsal with `npm run db:rehearse`, which loads
+// it directly: D1 refuses statements over 100 KB, so `wrangler d1 execute --file` fails on large
+// rows (the manifest lists them). It is a portable copy for rehearsal and inspection; for recovery
+// use D1 Time Travel.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 import { DatabaseSync } from 'node:sqlite';
 import { parse as parseJSONC } from 'jsonc-parser';
 import { execNpmSync } from './process-runner.mjs';
@@ -27,6 +33,29 @@ import { splitSQL } from './d1-snapshot.mjs';
 
 const PAGE = 500;      // FTS rows per query
 const PER_COMMAND = 15; // count statements per wrangler call (Windows command-line and D1 limits)
+export const D1_STATEMENT_LIMIT = 100_000; // bytes; D1 rejects longer statements (SQLITE_TOOBIG)
+export const DEFAULT_BACKUP_DIR = '.emdash/backups';
+
+// 'ignored', 'tracked' (Git would commit it) or 'outside' (not in a Git work tree).
+export function gitIgnoreStatus(file, run = spawnSync) {
+  let directory = path.dirname(path.resolve(file));
+  while (!fs.existsSync(directory)) directory = path.dirname(directory);
+  const inside = run('git', ['rev-parse', '--is-inside-work-tree'], { cwd: directory, encoding: 'utf8', windowsHide: true });
+  if (inside.status !== 0 || String(inside.stdout).trim() !== 'true') return 'outside';
+  const checked = run('git', ['check-ignore', '-q', '--no-index', path.resolve(file)], { cwd: directory, encoding: 'utf8', windowsHide: true });
+  return checked.status === 0 ? 'ignored' : 'tracked';
+}
+
+export function assertSafeDestination(file, run = spawnSync) {
+  if (gitIgnoreStatus(file, run) === 'tracked') throw new Error(`${file} is not ignored by Git, and a database copy holds users, sessions and content. Add ${DEFAULT_BACKUP_DIR}/ (or the destination folder) to .gitignore, or choose a destination outside the repository.`);
+}
+
+// Statements D1 would refuse when the export is loaded with `wrangler d1 execute --file`.
+export function oversizedStatements(statements, limit = D1_STATEMENT_LIMIT) {
+  return statements.map(statement => ({ statement, bytes: Buffer.byteLength(statement, 'utf8') }))
+    .filter(item => item.bytes > limit)
+    .map(({ statement, bytes }) => ({ table: statement.match(/^INSERT\s+INTO\s+("(?:[^"]|"")+"|\S+)/i)?.[1]?.replace(/^"|"$/g, '').replaceAll('""', '"') ?? statement.slice(0, 40), bytes }));
+}
 
 function detectDatabase() {
   for (const file of ['wrangler.jsonc', 'wrangler.json']) {
@@ -88,9 +117,10 @@ export function exportD1Database({ database, out, remote = true } = {}, runNpm =
   if (!dbName) throw new Error('Database name required: specify --database <name> or configure in wrangler.jsonc');
 
   const dateStr = new Date().toISOString().slice(0, 10);
-  const finalExportFile = out ? path.resolve(out) : path.resolve(`./d1-export-${dbName}-${dateStr}.sql`);
+  const finalExportFile = out ? path.resolve(out) : path.resolve(DEFAULT_BACKUP_DIR, `d1-export-${dbName}-${dateStr}.sql`);
+  assertSafeDestination(finalExportFile);
   const manifestFile = `${finalExportFile}.manifest.json`;
-  const tempExportFile = path.resolve(`./.temp-d1-export-${randomUUID()}.sql`);
+  const tempExportFile = path.join(os.tmpdir(), `d1-export-${randomUUID()}.sql`);
   const wrangler = ['exec', '--', 'wrangler'];
   const target = remote ? '--remote' : '--local';
   const query = command => {
@@ -131,18 +161,21 @@ export function exportD1Database({ database, out, remote = true } = {}, runNpm =
     const written = new Set(parts.map(statement => statement.replace(/;$/, '').trim()));
     for (const item of [...indexes, ...triggers]) if (!written.has(item.sql.trim())) parts.push(`${item.sql.trim()};`);
     const sql = parts.join('\n') + '\n';
+    const oversized = oversizedStatements(parts);
 
     for (const command of countStatements(exportableTables.map(item => item.name))) for (const result of query(command)) rows[result.t] = result.n;
     const expected = { rows, objects: { table: tables.length, index: indexes.length, trigger: triggers.length } };
     const verification = verifyExport(sql, expected);
     if (!verification.ok) throw new Error(`Export does not match the database: ${[...verification.rowMismatches, ...verification.objectMismatches].slice(0, 5).join('; ') || `integrity ${verification.integrity}, ${verification.foreignKeyViolations} foreign-key violations`}`);
 
+    fs.mkdirSync(path.dirname(finalExportFile), { recursive: true });
     fs.writeFileSync(finalExportFile, sql, 'utf8');
-    const manifest = { formatVersion: 1, database: dbName, source: remote ? 'remote' : 'local', exportedAt: new Date().toISOString(), rows, objects: verification.objects, ftsTables: virtualTables.map(v => v.name), verification: { integrity: verification.integrity, foreignKeyViolations: verification.foreignKeyViolations, rowsCompared: Object.keys(rows).length } };
+    const manifest = { formatVersion: 1, database: dbName, source: remote ? 'remote' : 'local', exportedAt: new Date().toISOString(), rows, objects: verification.objects, ftsTables: virtualTables.map(v => v.name), verification: { integrity: verification.integrity, foreignKeyViolations: verification.foreignKeyViolations, rowsCompared: Object.keys(rows).length }, d1StatementLimitBytes: D1_STATEMENT_LIMIT, oversizedStatements: oversized };
     fs.writeFileSync(manifestFile, JSON.stringify(manifest, null, 2) + '\n', 'utf8');
     const { size } = fs.statSync(finalExportFile);
     console.log(`[d1-export] Exported and verified ${Object.keys(rows).length} tables (${Object.values(rows).reduce((a, n) => a + n, 0)} rows) to ${finalExportFile} (${(size / 1024).toFixed(1)} KB); manifest ${manifestFile}`);
-    return { file: finalExportFile, manifest: manifestFile, size, tables: exportableTables.length, rows };
+    if (oversized.length) console.warn(`[d1-export] ${oversized.length} statement(s) exceed D1's ${D1_STATEMENT_LIMIT / 1000} KB limit (${[...new Set(oversized.map(item => item.table))].join(', ')}); \`wrangler d1 execute --file\` cannot load this export. Use \`npm run db:rehearse\`.`);
+    return { file: finalExportFile, manifest: manifestFile, size, tables: exportableTables.length, rows, oversized };
   } finally {
     if (fs.existsSync(tempExportFile)) fs.unlinkSync(tempExportFile);
   }

@@ -295,6 +295,10 @@
     "tier": "unit",
     "reason": "Fleet status from throwaway site folders and one throwaway Git repository: kinds, hosting, locked versions, standards comparison, Markdown report and config validation"
   },
+  "delivery-tools.test.mjs": {
+    "tier": "unit",
+    "reason": "Workers delivery rules, D1 export safeguards, rehearsal and live-check helpers with throwaway folders and stubbed git and fetch; no network"
+  },
   "update-plan.test.mjs": {
     "tier": "unit",
     "reason": "Read-only classification of upstream changes against a site using a throwaway Git repository"

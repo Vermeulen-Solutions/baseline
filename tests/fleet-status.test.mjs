@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fleetStatus, loadFleet, markdownStatus, repositoryName } from '../scripts/fleet-status.mjs';
+import { compareWithStandard, fleetStatus, htmlCacheKeyedPerBuild, loadFleet, markdownStatus, repositoryName, versionAtLeast } from '../scripts/fleet-status.mjs';
 import { STANDARD } from '../scripts/audit-site.mjs';
 
 // Portable: throwaway site folders and one throwaway Git repository; no network.
@@ -76,5 +76,28 @@ test('fleet config is validated before anything is read, and repository URLs are
     assert.equal(repositoryName('https://github.com/example-org/example-site.git'), 'example-org/example-site');
     assert.equal(repositoryName('git@github.com:example-org/example-site.git'), 'example-org/example-site');
     assert.equal(repositoryName(null), null);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('Workers rules flag an old Cloudflare adapter on EmDash 1.5 and an HTML cache keyed by URL only', () => {
+  const manifest = JSON.parse(readFileSync(new URL(`../standards/baselines/${STANDARD.version}.json`, import.meta.url), 'utf8'));
+  const base = { versions: { emdash: '1.5.0', '@emdash-cms/cloudflare': '1.5.0' }, engines: certified.nodeEngineRange };
+  const behind = site => compareWithStandard(site, manifest).behind;
+  assert.match(behind({ ...base, versions: { ...base.versions, '@astrojs/cloudflare': '14.3.3' } }).join('\n'), /@astrojs\/cloudflare 14\.3\.3 \(EmDash 1\.5\.0\+ on Workers needs 14\.4\.0/);
+  assert.equal(behind({ ...base, versions: { ...base.versions, '@astrojs/cloudflare': '14.4.8' } }).some(item => item.startsWith('@astrojs/cloudflare')), false);
+  assert.equal(behind({ ...base, versions: { emdash: '1.4.0', '@astrojs/cloudflare': '14.3.3' } }).some(item => item.startsWith('@astrojs/cloudflare')), false, 'EmDash 1.4 sites are not held to the 1.5 rule');
+  assert.match(behind({ ...base, htmlCacheKeyedPerBuild: false }).join('\n'), /HTML edge cache keyed by URL only/);
+  assert.equal(behind({ ...base, htmlCacheKeyedPerBuild: null }).some(item => item.startsWith('HTML')), false);
+  assert.equal(versionAtLeast('14.4.0-beta.1', '14.4.0'), true);
+  assert.equal(versionAtLeast('14.10.0', '14.4.0'), true);
+  assert.equal(versionAtLeast('13.9.9', '14.4.0'), false);
+
+  const dir = mkdtempSync(path.join(os.tmpdir(), 'fleet-cache-'));
+  try {
+    assert.equal(htmlCacheKeyedPerBuild(dir), null);
+    put(dir, 'src/lib/cloudflare-cache-provider.mjs', "const cacheKey = new Request(url.toString(), { method: 'GET' });");
+    assert.equal(htmlCacheKeyedPerBuild(dir), false);
+    put(dir, 'src/lib/cloudflare-cache-provider.mjs', "const BUILD_ID = typeof __SITE_BUILD_ID__ !== 'undefined' ? __SITE_BUILD_ID__ : 'dev';");
+    assert.equal(htmlCacheKeyedPerBuild(dir), true);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });

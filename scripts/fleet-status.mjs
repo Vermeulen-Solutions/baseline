@@ -11,13 +11,17 @@
 //   art-direction gate is present), or another project;
 // - hosting from its config files (Wrangler, Netlify, Vercel, Firebase);
 // - Astro, EmDash and adapter versions as locked (package-lock.json) or declared, and engines.node;
-// - for Baseline sites: each certified dependency and the Node range against standards/baselines/<STANDARD>.json.
+// - for Baseline sites: each certified dependency and the Node range against standards/baselines/<STANDARD>.json,
+//   plus two Workers delivery rules learned on live EmDash 1.5 updates (WORKERS_RULES).
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { argumentsOf, isMain } from './infrastructure-io.mjs';
 import { STANDARD, satisfiesCertified } from './audit-site.mjs';
+import { WORKERS_RULES, htmlCacheKeyedPerBuild, versionAtLeast } from './workers-rules.mjs';
+
+export { WORKERS_RULES, htmlCacheKeyedPerBuild, versionAtLeast };
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const readJSON = file => { try { return JSON.parse(fs.readFileSync(file, 'utf8')); } catch { return null; } };
@@ -96,6 +100,9 @@ export function compareWithStandard(site, manifest) {
   // A Workers site pins the EmDash adapter to exactly the core version.
   const adapter = site.versions['@emdash-cms/cloudflare'];
   if (adapter && adapter !== profile.dependencies.emdash) behind.push(`@emdash-cms/cloudflare ${adapter} (needs ${profile.dependencies.emdash})`);
+  const astroAdapter = site.versions['@astrojs/cloudflare'];
+  if (astroAdapter && site.versions.emdash && versionAtLeast(site.versions.emdash, WORKERS_RULES.emdashFrom) && !versionAtLeast(astroAdapter, WORKERS_RULES.adapterMinimum)) behind.push(`@astrojs/cloudflare ${astroAdapter} (EmDash ${WORKERS_RULES.emdashFrom}+ on Workers needs ${WORKERS_RULES.adapterMinimum} or newer)`);
+  if (site.htmlCacheKeyedPerBuild === false) behind.push('HTML edge cache keyed by URL only (key it per build before the next deploy)');
   const compact = value => String(value).replaceAll(/\s/g, '');
   if (site.engines && compact(site.engines) !== compact(profile.nodeEngineRange)) behind.push(`Node range ${site.engines} (certified ${profile.nodeEngineRange})`);
   return { standard: manifest.standardsVersion, current: behind.length === 0, behind };
@@ -106,7 +113,8 @@ export function siteStatus({ id, path: dir }, manifest) {
   const kind = kindOf(dir);
   const names = ['astro', 'emdash', '@emdash-cms/cloudflare', '@astrojs/cloudflare', '@astrojs/node', '@astrojs/netlify', 'wrangler', ...Object.keys(manifest.runtimeProfiles['node-sqlite'].dependencies)];
   const { versions, engines } = versionsOf(dir, [...new Set(names)]);
-  const status = { id, path: dir, ...kind, hosting: hostingOf(dir), versions, engines, git: gitState(dir) };
+  const hosting = hostingOf(dir);
+  const status = { id, path: dir, ...kind, hosting, versions, engines, git: gitState(dir), htmlCacheKeyedPerBuild: hosting === 'cloudflare' ? htmlCacheKeyedPerBuild(dir) : null };
   status.standards = kind.kind === 'other' ? null : compareWithStandard(status, manifest);
   return status;
 }

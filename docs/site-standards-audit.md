@@ -40,6 +40,7 @@ The source is the exact standalone `standards/baselines/0.1.1.json` artifact. It
 | Design system & quarantine | Static CSS token/rhythm primitives (`interpolate-size`, `.flow` duplicate-margin guard, `.content-grid` + `subgrid`, `.clickable-parent`/`.focus-parent`, `data-surface`, 4-voice typography `--font-mono`/`--font-accent`, 3-tier surfaces `--color-elevated`/`--surface-glass`, `.bento-grid`/`.ui-specimen`, tactile `.btn--secondary`/`.btn--ghost`, ad-hoc `clamp()` count), semantic `<article>` Card vs whole-card `<a>` wrappers, `Card` `transitionName` morphing, `SiteShell` choreography (`data-surface-toggle`, `data-sticky-header`, `data-vt-loading`), `Container` breakout, route expressive primitive adoption (`expressivePrimitiveUsageCount`), per-route usage counts for `data-reveal`, `data-sticky-header`, view-transition names and `.surface-*` classes (`design-system:primitive-usage`), and `/_styleguide` (`src/pages/_styleguide.astro` + `src/components/dev/Styleguide.astro`) presence | Runtime computed styles, contrast ratios, or visual layout quality |
 | SQLite / D1 schema | Explicit offline SQLite snapshot or D1 SQL dump, actual physical widths including hidden/generated columns, definition and snapshot digests | Width inferred from seed fields, collection registry/reference integrity or content correctness |
 | Build preflight | A supported schema command at the beginning of the npm prebuild hook | Proof that a database exists or that a modified helper behaves correctly |
+| Delivery | Undeclared `@emdash-cms/*` imports in `src`; on Workers sites, the `@astrojs/cloudflare` version for EmDash 1.5 and per-build HTML cache keys in a site cache provider | That the Worker bundle runs, or that a cache provider without the marker is correct |
 | Runtime/visual/providers | Explicit unverified findings | Successful editing/saving, accessibility conformance, form delivery, Worker/D1/R2 certification |
 
 Dynamic/unsupported configuration is **unverified**, never a successful guess based on comments or matching text. The parser never imports a target module. Dual-runtime configurations using conditionals (e.g., `onCloudflare ? cloudflare() : node(...)` and `onCloudflare ? d1() : sqlite()`) are statically resolved against the audited `--runtime` profile. Supported npm and pnpm lockfiles are read as data. If both exist, `package.json` must declare `packageManager` to select one; conflicting declarations and unsupported/malformed formats remain unverified. The pinned TypeScript and YAML parsers are explicit development dependencies; install development tooling to use the audit commands.
@@ -47,6 +48,19 @@ Dynamic/unsupported configuration is **unverified**, never a successful guess ba
 Skill passes mean equality to the recorded managed snapshot, not equality to today's upstream. Legacy commit-only receipts and incomplete/malformed inventories stay unverified. Intentional site customizations can be documented under `overrides` in `.emdash/site-skills.json` or `.emdash/skill-overrides.json`, reporting declared overrides rather than unexpected drift. Drift without declared overrides is a required failure with counts; local file names/content are withheld and preserved for review.
 
 Schema measurement accepts a caller-supplied **closed, consistent offline SQLite snapshot** or a **D1 SQL export dump** (`.sql`), without WAL/SHM/journal sidecars and at most 64 MiB. A temporary private copy is opened read-only/query-only and removed afterward. The engine reads metadata, not content rows; table/column names and raw SQL are withheld. Missing DB/tables/refused evidence stays unverified; 51 physical columns fails the 50-column budget.
+
+## Delivery rules
+
+These rules come from updating live sites to EmDash 1.5. The certified standards profile does not cover Workers yet, so they are checked by `audit:site` and `fleet:status` rather than pinned in the standards (`scripts/workers-rules.mjs`).
+
+### Declared imports
+
+`declared-imports` warns when site source imports an `@emdash-cms/*` package that `package.json` does not declare. npm only hoists a dependency's own dependencies by accident: EmDash 1.5 nests `@emdash-cms/admin` under `emdash`, and a plugin page importing it undeclared stopped type-checking and building. Declare it at the exact version EmDash uses.
+
+### Workers delivery
+
+- `workers:astro-adapter` fails when EmDash 1.5 or newer runs with `@astrojs/cloudflare` below 14.4. EmDash 1.5 brings `sanitize-html` and PostCSS into page rendering, and older adapters leave PostCSS's `require("path")` in the Workers bundle, so every page answers 500. A local Node build does not show it; a Workers rehearsal does.
+- `workers:html-cache-per-build` warns when a site's own cache provider in `src/lib` keys HTML by URL only. After a deploy, the edge cache then keeps serving the previous build's pages, which point at stylesheets the new deploy no longer has, and pages render unstyled until the entries expire. Add a per-build id to the HTML key (the Baseline provider uses `__SITE_BUILD_ID__`, defined in `astro.config.mjs`); media keys stay as they are.
 
 ## Stable report contract
 

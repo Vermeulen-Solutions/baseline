@@ -38,19 +38,26 @@ For a site that deliberately uses a deployment-managed migration pipeline, set `
 
 ### Portable copy and a local upgrade rehearsal
 
-`wrangler d1 export` refuses any database with FTS5 virtual tables ("cannot export databases with virtual tables"), and EmDash creates one for every collection with Search enabled. `npm run db:export-d1 -- --out <private file.sql>` (read-only; `--database <name>` when `wrangler.jsonc` has several) exports the ordinary tables with `--table`, adds the search tables with their rows and every index and trigger, and orders the file so all tables exist before any row is inserted. It then counts every table in D1, loads the file into a scratch SQLite database, and writes the export and `<file>.manifest.json` only when row counts, object counts, `integrity_check` and `foreign_key_check` all match. Keep the file private: it contains users, sessions and settings. It is a portable copy for rehearsal and inspection, not the recovery point; that remains the Time Travel bookmark.
+`wrangler d1 export` refuses any database with FTS5 virtual tables ("cannot export databases with virtual tables"), and EmDash creates one for every collection with Search enabled. `npm run db:export-d1` (read-only; `--database <name>` when `wrangler.jsonc` has several) exports the ordinary tables with `--table`, adds the search tables with their rows and every index and trigger, and orders the file so all tables exist before any row is inserted. It then counts every table in D1, loads the file into a scratch SQLite database, and writes the export and `<file>.manifest.json` only when row counts, object counts, `integrity_check` and `foreign_key_check` all match. It is a portable copy for rehearsal and inspection, not the recovery point; that remains the Time Travel bookmark.
 
-Rehearse a core upgrade on that copy before deploying. **Do not use a Cloudflare preview version for this:** any Worker version bound to the production D1 runs the new release's migrations against production on its first request. Load the copy into a local D1 in a scratch folder and serve the updated build with the same runtime:
+The copy contains users, sessions and settings. It is written to `.emdash/backups/` by default, and inside a Git repository the command refuses any destination Git would track. Sites created before this rule may not ignore that folder: add `.emdash/backups/` (and `*.sql`) to `.gitignore` first. The manifest also lists statements longer than D1's 100 KB limit (large gallery entries and revisions); `wrangler d1 execute --file` cannot load such an export, which is why the rehearsal command loads it directly.
+
+Rehearse a core upgrade on that copy before deploying. **Do not use a Cloudflare preview version for this:** any Worker version bound to the production D1 runs the new release's migrations against production on its first request. Instead, serve a local copy with the updated build:
 
 ```sh
-npx wrangler d1 execute <database> --local --persist-to <scratch dir> --file <private file.sql>
-# copy the R2 objects the checked pages need, reading production and writing locally
-npx wrangler r2 object get <bucket>/<key> --remote --file <tmp file>
-npx wrangler r2 object put <bucket>/<key> --local --persist-to <scratch dir> --file <tmp file>
-npx wrangler dev --persist-to <scratch dir>
+npm run db:export-d1
+npm run db:rehearse -- --from .emdash/backups/<export.sql> --persist-to <empty scratch dir> [--media-sample 20]
+# build the updated site for Workers, then run the command it prints:
+npx wrangler dev --persist-to <scratch dir> --port 8790 --ip 127.0.0.1
+# request pages, stop the server, then:
+npm run db:rehearse -- --compare --persist-to <scratch dir>
 ```
 
-The first request applies the pending migrations to the copy. Compare `_emdash_migrations`, the new tables and columns, and every non-empty table's row count with the manifest; check public routes, media, the admin sign-in redirect and `/_emdash/api/health`. A separate `--persist-to` folder keeps the copy apart from the site's own local development data.
+`db:rehearse` lets Wrangler create the local D1 file and loads the export into it. It copies the code of every active registry and marketplace plugin from R2 (`registry/<id>/<version>/`, `marketplace/<id>/<version>/`). Without those objects, pages that call a sandboxed plugin fail with "Plugin route not found", which looks like an upgrade defect. `--media-sample <n>` copies the newest media files; a whole library takes seconds per object, and a sample is enough to see images on the checked pages. Use a fresh, empty `--persist-to` folder for every rehearsal so the copy starts unmigrated.
+
+The first request applies the pending migrations to the copy. Before trusting what you see, make sure the requests appear in that server's own log: stopping a background `wrangler dev` can leave its `workerd` child serving the port, and a new rehearsal then silently answers from the previous one. `db:rehearse` checks the port before printing the command, and `--compare` refuses to run while the port is still in use. The comparison reports the migrations applied, every table whose row count changed, new and dropped tables, `integrity_check` and `foreign_key_check`, and fails when a table lost rows. Also check public routes, media, the admin sign-in redirect and `/_emdash/api/health` on the rehearsal server.
+
+After the production deploy, `npm run check:live -- --origin <https://site>` requests every sitemap page and every stylesheet those pages use. A page passes when it answers 200 or redirects to a page that does, and every stylesheet must answer 200; the sitemap's own host is ignored, so a workers.dev origin is checked even when the sitemap names the final domain.
 
 ## 2. Media and immutable releases
 

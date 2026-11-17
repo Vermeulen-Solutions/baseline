@@ -228,6 +228,18 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/d1-rehearse.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-live.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/workers-rules.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/d1-snapshot.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -1535,6 +1547,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "tests/fleet-status.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/delivery-tools.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },
