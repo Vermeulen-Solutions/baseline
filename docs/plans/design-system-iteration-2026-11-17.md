@@ -103,7 +103,8 @@ All on Node 24.22.3, Windows, Playwright 1.65.1 with Chromium 1255.
 - `npm run typecheck`: 0 errors. `npm run build`: pass, also with the strict theme and with the registry alias import switched on (both trial builds reverted).
 - `npm run test:visual`: pass after renewing the references below (112 passed, 44 skipped by the suite's own design).
 - `npm run audit:ui` against the dev server (`/`, `/posts`, `/_styleguide` at 390/768/1440 with enlarged text): **no `empty-band`** findings; no finding on the starter routes. Remaining findings are in code this branch does not change: the logo ticker's off-screen marquee items at enlarged text, the styleguide's nine-link header wrapping at enlarged text, a fieldset legend 1px from its edge, and PhotoGallery's justified rows cropping a 3:2 image. `/posts/welcome` redirected to 404 on the fresh dev database (no sample post), so it was left out.
-- Not run: `npm run test:profiles` (the generated-profile rehearsal) and `test:visual:functional`; profile generation is covered by the unit-tier platform-profile and sync tests.
+- `npm run test:profiles`: both generated profiles (`static`, `static-sveltia`) pass independent install, verify, production build, fixtures and HTTP checks.
+- `npm run test:visual:functional` (actual 200%/400% browser zoom, 320px reflow, text spacing, keyboard journeys, sticky header): 62 passed, 28 skipped by the suite's own design.
 
 ### Renewed visual references
 
