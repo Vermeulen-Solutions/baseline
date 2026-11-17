@@ -86,7 +86,7 @@ export function designSystemRules(target, add) {
     const threeTierSurfaces = /--color-elevated\s*:/.test(css) && /--surface-glass\s*:/.test(css);
     const bentoAndSpecimenPrimitives = /\.bento-grid\b/.test(css) && /\.ui-specimen\b/.test(css);
     const tactileActionVariants = /\.btn--secondary\b/.test(css) && /\.btn--ghost\b/.test(css);
-    const withoutRootAndTheme = css.replace(/@theme\s*\{[^}]*\}|:root\s*\{[^}]*\}/g, '');
+    const withoutRootAndTheme = css.replace(/@theme(?:\s+static)?\s*\{[^}]*\}|:root\s*\{[^}]*\}/g, '');
     const adHocClampCount = (withoutRootAndTheme.match(/\bclamp\s*\(/g) ?? []).length;
 
     const pass =

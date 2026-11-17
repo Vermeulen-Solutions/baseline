@@ -81,7 +81,7 @@
   },
   {
     "path": "src/components/Steps.astro",
-    "reason": "Functional content primitive: semantic ol with role=list, CSS counter badges, and named item slots. Exact LF-normalized source hash.",
+    "reason": "Functional content primitive: semantic ol with role=list, CSS counter badges, and named item slots. Marker layering uses the z-raised token. Exact LF-normalized source hash.",
     "sha256": "089b53feda199f5a7fb2b89a49bc0627c4702e587bdb50afb6b29bcb6ff990c4"
   },
   {
@@ -91,7 +91,7 @@
   },
   {
     "path": "src/dev/PrimitivesFixture.astro",
-    "reason": "Synthetic test fixture for interaction primitives (Tabs, ThemeSelect, CopyButton, Announcer) and ClientRouter navigation; development/fixture builds only.",
+    "reason": "Synthetic test fixture for interaction primitives (Tabs, ThemeSelect, CopyButton, Announcer) and ClientRouter navigation; development/fixture builds only. Fixture opts into same-ground section joins.",
     "sha256": "4a78487c10f024a8cd8c864f55d8527747294cab946b893792c436d31f2659ad"
   },
   {
@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Sticky-header state contract (paint-only data-scrolled, hysteresis data-compact), opt-in held header and media-morph view-transition rules with reduced-motion fallback; no new tokens or colours. One-row starter header: a native Menu disclosure on phones with the links inline from 48rem, a brand that gives way under enlarged text, existing tokens only. Shared focus ring restored on the search component's field. Exact LF-normalized source hash.",
-    "sha256": "24a84f1c19b14f9d01ccfb7037229f6d1b1aa342343e5f09301d24ff04574a5f"
+    "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Sticky-header state contract (paint-only data-scrolled, hysteresis data-compact), opt-in held header and media-morph view-transition rules with reduced-motion fallback; no new tokens or colours. One-row starter header: a native Menu disclosure on phones with the links inline from 48rem, a brand that gives way under enlarged text, existing tokens only. Shared focus ring restored on the search component's field. Design-system iteration: opt-in same-ground section joins and a medium section step, a primitive fluid space scale, type steps 3-5 with a heading map, retuned bridges under the 2.5x resize-text ratio, layering/motion/breakpoint tokens replacing raw values, Grid slot containers, CSS scroll-driven reveal with the observer fallback, and banners marking optional recipes; neutral starter values only, no client colours. Exact LF-normalized source hash.",
+    "sha256": "84bef97865746b727e532c0880bc8f30ad59aa83bafdb19f2e156e6665f0fd77"
   },
   {
     "path": "src/styles/registry-aliases.css",
@@ -155,22 +155,22 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change.",
+    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins.",
     "sha256": "17a2793dc59428690bd1abed1dc1aa09338a79f8983cdd30f83d7778ac2c5482"
   },
   {
     "path": "src/components/Container.astro",
-    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception. Gap typed as token names.",
     "sha256": "bfe032b6b38bd36db08fc4354396a1965bf5c72f925308f38ed5f32cfc3dd2de"
   },
   {
     "path": "src/components/Grid.astro",
-    "reason": "Starter infrastructure: expose a contextual grid gap variable while retaining the calibrated minimum-width variants; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
+    "reason": "Starter infrastructure: expose a contextual grid gap variable while retaining the calibrated minimum-width variants; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception. Items are named card-slot query containers by default; gap typed as token names.",
     "sha256": "36be198488bb36449a2eb0afedc74cee5ab6ee6f77cb0886abc4e59d9741cd2c"
   },
   {
     "path": "src/components/Section.astro",
-    "reason": "Starter infrastructure: section spacing moves to the layered global spacing contract with a data-spacing opt-out; semantic section markup and accessible naming are preserved. Any source edit invalidates this exact LF-normalized exception.",
+    "reason": "Starter infrastructure: section spacing moves to the layered global spacing contract with a data-spacing opt-out; semantic section markup and accessible naming are preserved. Any source edit invalidates this exact LF-normalized exception. Medium spacing step; gap typed as token names.",
     "sha256": "3da009a8857f0c9ec17039454b57223a71da2e1a3c4ccc90726adbf24fd6e673"
   },
   {
@@ -245,12 +245,12 @@
   },
   {
     "path": "src/components/Card.astro",
-    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; layout=\"horizontal\" rules reordered narrow-first (stacked default, side by side above a 40rem viewport, restacked in a query container of 32rem or less) with the same breakpoints and outcomes and no new visual values; no client theme or page implementation. transitionName now resolves through the shared ident-safe view-transition helper and adds the vt-media class to the media; unchanged output for ident-safe prefixes apart from that class. Any source edit invalidates this exact LF-normalized exception.",
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; layout=\"horizontal\" rules reordered narrow-first (stacked default, side by side above a 40rem viewport, restacked in a query container of 32rem or less) with the same breakpoints and outcomes and no new visual values; no client theme or page implementation. transitionName now resolves through the shared ident-safe view-transition helper and adds the vt-media class to the media; unchanged output for ident-safe prefixes apart from that class. Any source edit invalidates this exact LF-normalized exception. Horizontal layout is a named card container query from a 32rem card width inside a display: contents layout wrapper; z and duration tokens with fallbacks.",
     "sha256": "6402d3ee0b2549494f3ccb389ed75b476f4e840f853d99daad9e307dda321a5b"
   },
   {
     "path": "src/components/PartnersPanel.astro",
-    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Use a standalone presentation-data type rather than importing the collection mapper; retain panel markup and styles. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
+    "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Use a standalone presentation-data type rather than importing the collection mapper; retain panel markup and styles. No client theme/content. Any edit invalidates this exact LF-normalized exception. Fixed logo backplate recorded as a token-exempt exception.",
     "sha256": "5748e3a7603e56db7a816745be5ed1d92ea10dd6ca5ff4bf4d17554096c9c912"
   },
   {
@@ -306,7 +306,7 @@
   },
   {
     "path": "src/components/dev/Styleguide.astro",
-    "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception.",
+    "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception. Shows type steps -1 to 5, the heading map and the space scale; opts into section joins.",
     "sha256": "679b1a2273c772e099e8633afe4509426dd26cc6ab563f0da11b66227cdb47f8"
   },
   {
@@ -342,7 +342,7 @@
   },
   {
     "path": "src/components/PhotoGallery.astro",
-    "reason": "Reusable gallery primitive: additive opt-in full-frame image fit preserves existing cover presentation; no client art direction or page assembly. Exact LF-normalized source; edits invalidate this exception.",
+    "reason": "Reusable gallery primitive: additive opt-in full-frame image fit preserves existing cover presentation; no client art direction or page assembly. Exact LF-normalized source; edits invalidate this exception. Fixed caption scrim recorded as a token-exempt exception.",
     "sha256": "48c264cac28db39ca2f9ee1fd38e85936ef2b2afeb53169654974ce6b3ffdc20"
   },
   {
@@ -371,7 +371,7 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. An opt-in darkReaderLock prop emits the documented <meta name=\"darkreader-lock\"> for dark-by-design sites; it is off by default. Any source edit invalidates this exact LF-normalized exception.",
+    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. An opt-in darkReaderLock prop emits the documented <meta name=\"darkreader-lock\"> for dark-by-design sites; it is off by default. Any source edit invalidates this exact LF-normalized exception. Opt-in sectionJoins root attribute; scroll reveal observer runs only without CSS scroll-driven animations.",
     "sha256": "af5cd2093bc4b39b602a8013a48cf9203e9f7834608f9fb1769b7486243e36af"
   },
   {
@@ -436,7 +436,7 @@
   },
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
-    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged.",
+    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins.",
     "sha256": "1f2c5f2d6cddfa27172934f50b244c049491ead7dc867793a47a9697e8db3230"
   },
   {
@@ -561,7 +561,7 @@
   },
   {
     "path": "src/lib/layout-style.ts",
-    "reason": "Approved automatic-spacing starter infrastructure: shared attribute/style merge helper; no client visual implementation.",
+    "reason": "Approved automatic-spacing starter infrastructure: shared attribute/style merge helper; no client visual implementation. Gap token names map to spacing custom properties; other strings pass through.",
     "sha256": "9f3b14ae158009d8186ee587a8803ac2fc6e219acbb0faa6baa6af9768327b82"
   },
   {

@@ -44,7 +44,7 @@ export function canvasSource(directory, { styles = ['src/styles/global.css'], ro
   });
   if (!declarations.length || declarations.length > 1000) throw Error('Missing or excessive semantic token declarations');
   ast.walkAtRules('theme', node => {
-    if (node.params.trim()) throw Error('Non-default @theme requires rendered-site sampling');
+    if (!['', 'static'].includes(node.params.trim())) throw Error('Non-default @theme requires rendered-site sampling');
     const rule = postcss.rule({ selector: ':root' }); rule.append(node.nodes.map(child => child.clone()));
     const layer = postcss.atRule({ name: 'layer', params: 'theme' }); layer.append(rule); node.replaceWith(layer);
   });

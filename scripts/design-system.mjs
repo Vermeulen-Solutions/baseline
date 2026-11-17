@@ -487,7 +487,8 @@ export function addMissingContractTokens(css) {
 function tokenScopes(css) {
   const ast = postcss.parse(css);
   const scopes = { theme: [], root: [], dark: [], light: [] };
-  ast.walkAtRules('theme', node => { if (node.params.trim() === '') scopes.theme.push(node); });
+  // `@theme static` is the same token block; Tailwind then emits every token, used or not.
+  ast.walkAtRules('theme', node => { if (['', 'static'].includes(node.params.trim())) scopes.theme.push(node); });
   ast.walkRules(node => {
     const scope = { ':root':'root', '[data-surface="dark"]':'dark', '[data-surface="light"]':'light' }[node.selector.trim()];
     if (scope) scopes[scope].push(node);

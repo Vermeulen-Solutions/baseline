@@ -224,3 +224,8 @@ test('design:tokens --format dtcg exports source tokens with types, aliases and 
   const strict = exportDtcg(applyStrictTheme(readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8')));
   assert.ok(!Object.values(strict).some(group => group && typeof group === 'object' && Object.keys(group).some(key => key.includes('*'))), 'namespace resets are not tokens');
 });
+
+test('an @theme static block is the token block', () => {
+  const tokens = parseDesignTokens('@theme static {\n\t--radius-card: 0.75rem;\n}\n');
+  assert.equal(tokens.theme['--radius-card'], '0.75rem');
+});
