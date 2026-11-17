@@ -92,7 +92,7 @@
   {
     "path": "src/dev/PrimitivesFixture.astro",
     "reason": "Synthetic test fixture for interaction primitives (Tabs, ThemeSelect, CopyButton, Announcer) and ClientRouter navigation; development/fixture builds only.",
-    "sha256": "8b0ab75091609efd98bfe015869ed4b7f9afcd8fdfedad8971fde252ac39f35e"
+    "sha256": "4a78487c10f024a8cd8c864f55d8527747294cab946b893792c436d31f2659ad"
   },
   {
     "path": "src/lib/form-transport.ts",
@@ -146,12 +146,12 @@
   {
     "path": "src/styles/global.css",
     "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Sticky-header state contract (paint-only data-scrolled, hysteresis data-compact), opt-in held header and media-morph view-transition rules with reduced-motion fallback; no new tokens or colours. One-row starter header: a native Menu disclosure on phones with the links inline from 48rem, a brand that gives way under enlarged text, existing tokens only. Shared focus ring restored on the search component's field. Exact LF-normalized source hash.",
-    "sha256": "a3b6d798f3738f6494442b355252763a0f686d01dad29a2ffcc9122e2c68698d"
+    "sha256": "2475f961954a826bd40ecef0cf0a7981b3d0a3ccca94474d26eac59a1e78e5f7"
   },
   {
     "path": "src/layouts/Base.astro",
     "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change.",
-    "sha256": "d1f045a1788de16e5fd38746f17a8329a48a3ad2d5aff6cea4af89041a1993bb"
+    "sha256": "17a2793dc59428690bd1abed1dc1aa09338a79f8983cdd30f83d7778ac2c5482"
   },
   {
     "path": "src/components/Container.astro",
@@ -166,7 +166,7 @@
   {
     "path": "src/components/Section.astro",
     "reason": "Starter infrastructure: section spacing moves to the layered global spacing contract with a data-spacing opt-out; semantic section markup and accessible naming are preserved. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "bbc9bb49669cf2a3d50c5be9cc6c006737785715bddd48b446ff3ed364caf013"
+    "sha256": "d3b7b5d71ae6008f8fe4e36a7d4148463be975976ca27ccab4e52f83f310a2b6"
   },
   {
     "path": "src/live.config.ts",
@@ -302,7 +302,7 @@
   {
     "path": "src/components/dev/Styleguide.astro",
     "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "e7f084f9f195d629608d439112eb760bfa9e609c0e6492c670ed2a143edd235c"
+    "sha256": "633a9f1694a3b6fdba404b9bf902a367259c31d1c784ff710cc94410597d96be"
   },
   {
     "path": "src/utils/grid-guide.ts",
@@ -367,7 +367,7 @@
   {
     "path": "src/layouts/SiteShell.astro",
     "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. An opt-in darkReaderLock prop emits the documented <meta name=\"darkreader-lock\"> for dark-by-design sites; it is off by default. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "71bfbd6b516f20a9f91c880e67790dada74c8bfd16f05f79a7a6ac8e17770067"
+    "sha256": "d9d057cb0d8ef23eed32767ff39e476a9b136655a7cf6947d5ba5fe0a2db1450"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -432,7 +432,7 @@
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
     "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged.",
-    "sha256": "6a966928d2626965917f61814dd5e08f171d527d3dbe468120375954bd7ccaed"
+    "sha256": "1f2c5f2d6cddfa27172934f50b244c049491ead7dc867793a47a9697e8db3230"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",

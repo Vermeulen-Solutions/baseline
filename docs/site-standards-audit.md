@@ -53,6 +53,10 @@ Schema measurement accepts a caller-supplied **closed, consistent offline SQLite
 
 These rules come from updating live sites to EmDash 1.5. The certified standards profile does not cover Workers yet, so they are checked by `audit:site` and `fleet:status` rather than pinned in the standards (`scripts/workers-rules.mjs`).
 
+### Section rhythm
+
+One fluid section step (`--spacing-section`) is set once and used by every section; a site recalibrates it in one place rather than per page or per breakpoint, following the Bricks fluid-spacing model. Two sections on the same ground share one step: the second drops its start padding (`SiteShell sectionJoins="shared"`). Where the ground changes, both keep full padding. Named exceptions are `<Section spacing="medium|content|none">`; contextual spacing belongs to content inside text (editorial flow controls), never to sections. `audit:ui` reports a same-ground join wider than 1.5 section steps as `empty-band`. See [design framework](design-framework.md#section-rhythm-one-fluid-step-set-once).
+
 ### Declared imports
 
 `declared-imports` warns when site source imports an `@emdash-cms/*` package that `package.json` does not declare. npm only hoists a dependency's own dependencies by accident: EmDash 1.5 nests `@emdash-cms/admin` under `emdash`, and a plugin page importing it undeclared stopped type-checking and building. Declare it at the exact version EmDash uses.

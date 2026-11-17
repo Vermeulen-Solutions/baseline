@@ -112,7 +112,8 @@ test('--widths auto keeps the given or default widths as the base, and --crop/--
   assert.equal(mixed.autoWidths, true);
   assert.deepEqual(mixed.widths, [320, 1440]);
   assert.throws(() => parseArgs([...base, '--widths', 'auto,100']), /--widths/);
-  assert.deepEqual([parseArgs(base).crop, parseArgs(base).band], [15, 160]);
+  assert.deepEqual([parseArgs(base).crop, parseArgs(base).band], [15, null]);
+  assert.equal(parseArgs([...base, '--band', '200']).band, 200);
   assert.throws(() => parseArgs([...base, '--crop', '0']), /--crop/);
   assert.throws(() => parseArgs([...base, '--band', '-1']), /--band/);
 });
@@ -183,6 +184,19 @@ test('empty bands are gaps between content on one ground with no rule, measured 
   assert.deepEqual(emptyBands([block('a', 0, 300), block('spacer', null, null), block('b', 500, 900)], 160), [{ sig: 'a → b', gap: 200 }]);
   assert.deepEqual(emptyBands([block('a', 0, 300), block('band', null, null, { ground: 'navy' }), block('b', 500, 900)], 160), []);
   assert.deepEqual(emptyBands([block('a', 0, 300), block('b', 500, 900, { ignored: true }), block('c', 1100, 1200)], 160), []);
+});
+
+test('the empty-band limit follows the page section step unless --band fixes it', async () => {
+  const { bandThreshold, emptyBands } = await import('../scripts/audit-ui.mjs');
+  // A 144px step (9rem at 1440px): a same-ground join of one step passes, two stacked steps do not.
+  assert.deepEqual(bandThreshold({ sectionStep: 144 }), { limit: 216, basis: 'section-step', step: 144 });
+  const block = (sig, top, bottom) => ({ sig, top, bottom, ground: 'white', edgeTop: false, edgeBottom: false, ignored: false });
+  const limit = bandThreshold({ sectionStep: 144 }).limit;
+  assert.deepEqual(emptyBands([block('a', 0, 300), block('b', 300 + 144 + 20, 900)], limit), []);
+  assert.deepEqual(emptyBands([block('a', 0, 300), block('b', 300 + 288 + 20, 900)], limit), [{ sig: 'a → b', gap: 308 }]);
+  // --band is an explicit override; a page without the token keeps the earlier 160px limit.
+  assert.deepEqual(bandThreshold({ band: 400, sectionStep: 144 }), { limit: 400, basis: 'fixed' });
+  assert.deepEqual(bandThreshold({ band: null, sectionStep: 0 }), { limit: 160, basis: 'fallback' });
 });
 
 // Opt-in browser run against a fixture page with one example of each defect class found by eye

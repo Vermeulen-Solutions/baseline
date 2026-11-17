@@ -12,13 +12,15 @@ interface Props {
   dir?: 'ltr' | 'rtl';
   skipLinkLabel?: string;
   spacingPolicy?: 'legacy' | 'automatic-v2';
+  /** 'shared': two sections on the same ground share one section step (see docs/design-framework.md). Omitted keeps every section's full padding. */
+  sectionJoins?: 'shared' | 'separate';
   /** Optional initial root surface mode ('light' | 'dark' | 'system') for sites with a daylight/dark toggle. */
   surface?: 'light' | 'dark' | 'system';
   /** Opt out of the Dark Reader extension for sites whose public pages are dark by design; it otherwise recolours light text on a dark ground to near-black. */
   darkReaderLock?: boolean;
 }
 
-const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', surface, darkReaderLock = false } = Astro.props;
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', sectionJoins, surface, darkReaderLock = false } = Astro.props;
 const resolvedDir = dir ?? getLocaleDirection(lang);
 ---
 <!doctype html>
@@ -26,6 +28,7 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
   lang={lang}
   dir={resolvedDir}
   data-spacing-policy={spacingPolicy === 'automatic-v2' ? 'automatic-v2' : 'legacy'}
+  data-section-joins={sectionJoins === 'shared' ? 'shared' : undefined}
   data-surface={surface === 'dark' || surface === 'light' ? surface : undefined}
   data-surface-default={surface === 'dark' || surface === 'light' || surface === 'system' ? surface : undefined}
   data-surface-mode={surface === 'system' ? 'system' : undefined}

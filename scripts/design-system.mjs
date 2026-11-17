@@ -42,6 +42,15 @@ export const REQUIRED_THEME_TOKENS = [
   '--ease-spring',
 ];
 
+/**
+ * Starter @theme tokens that are part of the vocabulary but not of the required
+ * contract: older sites without them stay valid, and the starter keeps them in
+ * step with CONTRACT_STARTER_VALUES.optional.
+ */
+export const OPTIONAL_THEME_TOKENS = [
+  '--spacing-section-m',
+];
+
 export const REQUIRED_ROOT_TOKENS = [
   '--color-link',
   '--measure-reading',

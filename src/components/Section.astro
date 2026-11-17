@@ -3,7 +3,8 @@ import type { HTMLAttributes } from 'astro/types';
 import { layoutStyle } from '../lib/layout-style';
 interface Props extends HTMLAttributes<'section'> {
 	labelledBy: string;
-	spacing?: "content" | "section" | "none";
+	/** Section step: full (`section`, default), `medium`, `content` or `none`. */
+	spacing?: "content" | "medium" | "section" | "none";
 	class?: string;
 	gap?: string;
 	layout?: 'stack' | 'custom';
@@ -11,7 +12,7 @@ interface Props extends HTMLAttributes<'section'> {
 
 const { labelledBy: rawLabel, spacing: rawSpacing, gap, layout, class: className, 'class:list': classes, style, ...attributes } = Astro.props;
 const labelledBy = typeof rawLabel === 'string' && rawLabel.trim() ? rawLabel.trim() : undefined;
-const spacing = rawSpacing === 'content' || rawSpacing === 'none' ? rawSpacing : 'section';
+const spacing = rawSpacing === 'content' || rawSpacing === 'medium' || rawSpacing === 'none' ? rawSpacing : 'section';
 ---
 
 <section

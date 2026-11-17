@@ -58,11 +58,25 @@ Spacing grows proportionally with the screen, maintaining balanced visual weight
 | `--spacing-content` | `clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)` | 16px | 24px | Flow margins, card inner padding |
 | `--spacing-grid` | `clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem)` | 20px | 36px | Column gaps, figure margins |
 | `--spacing-container`| `clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)` | 16px | 32px | Page horizontal gutter padding |
-| `--spacing-section` | `clamp(3rem, calc(1rem + 10vi), 9rem)` | 48px | 144px | Vertical section breathing room |
+| `--spacing-section` | `clamp(3rem, calc(1rem + 10vi), 9rem)` | 48px | 144px | Vertical section breathing room (full section step) |
+| `--spacing-section-m` | `clamp(2rem, calc(0.6667rem + 6.6667vi), 6rem)` | 32px | 96px | Medium section step (`<Section spacing="medium">`) |
 | `--spacing-xl-to-sm` | `clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem)` | 12px | 64px | High-contrast padding/gap bridge |
 | `--spacing-2xl-to-md` | `clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem)` | 20px | 104px | Hero/spotlight padding bridge |
 
 `--spacing-section` interpolates between its bounds without per-breakpoint padding overrides. Check actual page pacing and use a deliberate layout breakpoint when the content requires a different composition.
+
+### Section rhythm: one fluid step, set once
+
+Baseline follows the fluid-spacing model of builders such as Bricks and Automatic.css: **one fluid section step is set once and used by every section**. Pages do not tune section padding per breakpoint or per page; a site that wants roomier or tighter pacing recalibrates `--spacing-section` (or the `--layout-section-padding` alias) once.
+
+- **Same-ground joins pay one step.** When two sections stand on the same ground, the second drops its start padding: the first section's end padding is the whole join. Two full paddings stacked on one ground read as an empty band, not as a stronger break.
+- **A ground change keeps both paddings.** Where the background changes (a `data-surface`, a `data-ground`, a background or surface class such as `.surface-spotlight` or `bg-*`, an inline background, or an `.is-bg` child), both sections keep their full padding, because each needs room inside its own ground.
+- **Exceptions are named sizes, not numbers.** `<Section spacing="medium">` uses `--spacing-section-m`, `spacing="content"` uses `--spacing-content`, and `spacing="none"` removes the padding. `data-join="separate"` on a section keeps its joins at full padding.
+- **Contextual spacing is for content inside text, not for sections.** Bricks' contextual spacing (space that depends on the neighbouring element) corresponds to Baseline's editorial flow controls (`--heading-spacing`, `--list-spacing` and the others in section 4). It never sizes sections.
+
+The join rule is opted in per site with `data-section-joins="shared"` on the root element, which `SiteShell sectionJoins="shared"` writes. The starter's Base layouts and newly generated static sites set it. A section that paints its own background through a scoped style the rule cannot see must say so with `data-ground` (any value) or `data-surface`; otherwise the next section joins it without start padding. CSS cannot compare two sections' `data-ground` values, so two adjacent sections with the same custom ground keep both paddings unless the second takes `spacing="none"` deliberately.
+
+Existing sites keep their current spacing until they adopt the rule: both the `legacy` and the versioned `automatic-v2` spacing policies are unchanged without the attribute. To adopt it, add `sectionJoins="shared"` to the site-owned Base's `SiteShell`, then inspect each stacked-section join; `npm run audit:ui` reports remaining `empty-band` joins measured against the page's own `--spacing-section`.
 
 ---
 
@@ -93,7 +107,7 @@ Owned CSS uses `@layer base` or `@layer components`. The document establishes `t
 
 | Owner | Automatic-v2 behavior | Local control |
 | --- | --- | --- |
-| Section | Block padding; column stack of direct children with container gap | `spacing="section|content|none"`, `gap`, `layout="stack|custom"` |
+| Section | Block padding (one section step; same-ground joins share it with `sectionJoins="shared"`); column stack of direct children with container gap | `spacing="section|medium|content|none"`, `gap`, `layout="stack|custom"` |
 | Ordinary Container | Centered reading/content/wide measure; column stack with content gap | `width`, `gap`, `layout="stack|custom"` |
 | Breakout Container | Named-track grid; content gap, preserving subgrid propagation | `breakout`, `gap`, track classes |
 | Grid | Intrinsic auto-fit columns; grid gap | `minimum="compact|standard|wide"`, `gap` |

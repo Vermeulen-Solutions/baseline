@@ -22,6 +22,7 @@
 	--spacing-grid: clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem);
 	--spacing-container: clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem);
 	--spacing-section: clamp(3rem, calc(1rem + 10vi), 9rem);
+	--spacing-section-m: clamp(2rem, calc(0.6667rem + 6.6667vi), 6rem);
 	--spacing-2xl-to-md: clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem);
 	--spacing-xl-to-sm: clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem);
 
@@ -139,6 +140,10 @@
 
 	:where(:root:not([data-spacing-policy="automatic-v2"])) :where([data-spacing="content"]) {
 		--section-padding: var(--spacing-content);
+	}
+
+	:where(:root:not([data-spacing-policy="automatic-v2"])) :where([data-spacing="medium"]) {
+		--section-padding: var(--spacing-section-m, var(--spacing-section));
 	}
 
 	:where(:root:not([data-spacing-policy="automatic-v2"])) :where([data-spacing="none"]) {
@@ -1369,6 +1374,7 @@
 		padding-block: var(--section-padding);
 	}
 	:where([data-spacing-policy="automatic-v2"]) :where(.section[data-spacing="content"]) { --section-padding: var(--spacing-content); }
+	:where([data-spacing-policy="automatic-v2"]) :where(.section[data-spacing="medium"]) { --section-padding: var(--spacing-section-m, var(--spacing-section)); }
 	:where([data-spacing-policy="automatic-v2"]) :where(.section[data-spacing="none"]) { --section-padding: 0px; }
 	:where([data-spacing-policy="automatic-v2"]) :where(.container-shell) { --content-gap: var(--layout-content-gap); }
 	:where([data-spacing-policy="automatic-v2"]) :where(.section, .container-shell):where([data-layout="stack"]) {
@@ -1386,6 +1392,23 @@
 	:where([data-spacing-policy="automatic-v2"]) :where(.site-main .content-grid) { --_gutter: 0px; }
 	:where([data-spacing-policy="automatic-v2"]) :where(.site-main .content-grid .content--full-safe) { padding-inline: 0; }
 	:where([data-spacing-policy="automatic-v2"]) :where(.section, .container-shell, .grid-auto) > :where(*) { min-inline-size: 0; }
+
+	/* Same-ground section joins, opted in per site with data-section-joins="shared" on the root
+	   (SiteShell sectionJoins="shared"); both spacing policies keep their earlier behaviour without it.
+	   Two sections on the same ground share one section step: the second drops its start padding, so
+	   the first section's end padding is the whole join. Where the ground changes (a data-surface,
+	   a data-ground, a background or surface class, an inline background or an .is-bg child) both
+	   keep their full padding. data-join="separate" keeps a single join at full padding. */
+	:where([data-section-joins="shared"]) :where(main > section, .section):where(:not([data-surface], [data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"]))
+		+ :where(main > section, .section):where(:not([data-surface], [data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"])) {
+		padding-block-start: 0;
+	}
+	:where([data-section-joins="shared"]) :where(main > section, .section):where([data-surface="dark"]):where(:not([data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"]))
+		+ :where(main > section, .section):where([data-surface="dark"]):where(:not([data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"])),
+	:where([data-section-joins="shared"]) :where(main > section, .section):where([data-surface="light"]):where(:not([data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"]))
+		+ :where(main > section, .section):where([data-surface="light"]):where(:not([data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"])) {
+		padding-block-start: 0;
+	}
 
 	/* High-contrast forced-colors mode contracts: use system colors for interactive boundaries */
 	@media (forced-colors: active) {

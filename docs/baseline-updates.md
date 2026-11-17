@@ -51,7 +51,7 @@ and remaining acceptance, and do not deploy.
 - images cut by the frame around them (`image-clipped`), for example a portrait whose leftover minimum height shows only the top of the face;
 - photographs whose `object-fit: cover` frame hides more than 15% on one side (`image-cover-cropped`, threshold `--crop`); mark images meant to be cropped (backgrounds, textures) with `data-audit-crop-ok`;
 - `::before`/`::after` borders, outlines or glyphs that reach outside their element and touch text or a control outside it (`decoration-overlap`);
-- at widths of 1024 px and up, more than 160 px between the content of two consecutive blocks of `<main>` on the same ground with no rule between them (`empty-band`, threshold `--band`), as when one section's end padding stacks on the next section's start padding;
+- at widths of 1024 px and up, a gap between the content of two consecutive blocks of `<main>` on the same ground with no rule between them that exceeds 1.5 times the page's own resolved `--spacing-section` (160 px on a page without that token; `--band <px>` sets a fixed limit), as when one section's end padding stacks on the next section's start padding (`empty-band`);
 - with `--contrast`: text contrast at rest and on every hovered element (`low-contrast`, `hover-low-contrast`);
 - horizontal overflow, broken images, HTTP errors, console errors and failed requests.
 

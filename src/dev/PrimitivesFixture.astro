@@ -22,7 +22,7 @@ const isPageB = navParam === 'page-b';
 const title = isPageB ? 'Primitives Fixture - Page B' : 'Primitives Fixture - Page A';
 ---
 
-<SiteShell title={title} spacingPolicy="automatic-v2">
+<SiteShell title={title} spacingPolicy="automatic-v2" sectionJoins="shared">
   <ClientRouter slot="head" />
   <meta slot="head" name="robots" content="noindex, nofollow" />
   <header slot="header" class="site-header">

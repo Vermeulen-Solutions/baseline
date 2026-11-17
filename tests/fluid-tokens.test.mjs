@@ -66,7 +66,8 @@ test('authored presets retain their own transition domains and diagnostic sample
   for (const lane of Object.keys(AESTHETIC_LANES)) {
     const audit = auditDesignTokens(applyTokenOverrides(css, lane));
     assert.equal(audit.valid, true, audit.errors.join('\n'));
-    assert.equal(audit.fluid.tokens.length, 12);
+    assert.equal(audit.fluid.tokens.length, Object.keys(audit.tokens.theme).filter(key => /^--(?:text-step-|spacing-)/.test(key)).length);
+    assert.ok(audit.fluid.tokens.length >= 12);
     for (const token of audit.fluid.tokens) {
       assert.equal(token.unit, 'vi');
       let previous = 0;
