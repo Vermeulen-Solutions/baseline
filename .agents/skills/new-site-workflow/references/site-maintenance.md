@@ -104,7 +104,16 @@ installed release notes and verify:
 
 - The core package, its exact companions, the Cloudflare adapter and any
   `@emdash-cms/sandbox-workerd` install resolve one `emdash` version
-  (`npm ls emdash` / `pnpm why emdash`). The sandbox runner vendors its own core.
+  (`npm ls emdash` / `pnpm why emdash`). The sandbox runner vendors its own core:
+  EmDash 1.5 needs runner 0.9.7 (0.9.6 pulls EmDash 1.4.0).
+- On Workers with EmDash 1.5 or later, `@astrojs/cloudflare` is 14.4 or newer.
+  Older adapters leave a `require("path")` in the Worker bundle and every page
+  answers 500; a local Node build does not show it.
+- Every `@emdash-cms/*` package the site's own source imports is declared in
+  `package.json` (EmDash 1.5 no longer hoists `@emdash-cms/admin`).
+- A site cache provider keys HTML edge-cache entries per build, so the deploy
+  cannot serve the previous build's pages pointing at deleted stylesheets.
+  `audit:site` and `fleet:status` check these three Workers rules.
 - Every Astro config, including a separate Worker config, passes the canonical
   origin through `emdash({ siteUrl })`; runtime `EMDASH_SITE_URL` is not enough.
 - The release's public-HTML cache policy is present. EmDash 1.4 removed
@@ -113,11 +122,23 @@ installed release notes and verify:
   for the old core version is not automatically compatible.
 - Starter-derived rehearsals are treated as templates. Readiness text, collection
   slugs and expected content may not exist in a replaced site.
-- A D1 Time Travel bookmark is recorded before deployment; `wrangler d1 export`
-  cannot dump EmDash FTS5 databases. Explicit local rehearsals that refuse
-  `CI`/`GITHUB_ACTIONS` are run with the variable unset, not with a weakened guard.
+- A D1 Time Travel bookmark is recorded before deployment, and a release that
+  runs EmDash migrations is rehearsed first on a local copy: `npm run
+  db:export-d1` (plain `wrangler d1 export` refuses EmDash's FTS5 tables), then
+  `npm run db:rehearse` with the updated build and `--compare` after the first
+  request. Never rehearse on a preview version bound to the production D1: it
+  migrates production. Registry plugins are updated in the admin under Plugins,
+  Check for updates, ideally before the core update so the rehearsal covers them.
+  Explicit local rehearsals that refuse `CI`/`GITHUB_ACTIONS` are run with the
+  variable unset, not with a weakened guard.
 - The exact branch, build/deploy command, deployed version and
-  `/_emdash/api/health` result are recorded; every exposed hostname is checked.
+  `/_emdash/api/health` result are recorded; every exposed hostname is checked
+  with `npm run check:live -- --origin <url>` (every sitemap page and every
+  stylesheet answers).
+- An older site may not have `db:rehearse`, `check:live` or `audit:site`. Run
+  them from a current Baseline checkout inside the site folder, for example
+  `node <baseline>/scripts/d1-rehearse.mjs ...`; they read the site's own
+  configuration, and `db:rehearse` also uses the site's own Wrangler.
 - On Node sites with local media storage, when the upgrade touches Astro, EmDash,
   Sharp or image configuration, the installed `npm run check:native-images`
   passes. It builds and serves disposable fixtures, checks responsive WebP

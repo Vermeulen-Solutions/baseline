@@ -39,9 +39,11 @@
 // - decoration-overlap: a ::before/::after border, outline or glyph that reaches outside its host
 //   and comes within 4px of text or a control outside it. Found on a real site: a dashed outline
 //   drawn with a negative inset ran into the buttons above its figure at tablet widths only;
-// - empty-band (at widths of 1024px and up): more than --band px (160) between the content of two
-//   consecutive blocks of <main> on the same ground with no rule between them, as when the end
-//   padding of one section stacks on the start padding of the next;
+// - empty-band (at widths of 1024px and up): a gap between the content of two consecutive blocks of
+//   <main> on the same ground with no rule between them that is clearly above one section step, as
+//   when the end padding of one section stacks on the start padding of the next. The limit is 1.5
+//   times the page's own resolved --spacing-section (a same-ground join pays one step), or 160px
+//   on a page without that token; --band <px> sets a fixed limit instead;
 // - overflow-x, broken-image, http, console-error and failed-request.
 // --widths auto adds one width on each side of the breakpoints in the site's stylesheets (read
 // from the first five routes) to the given or default widths. Found on a real site: two defects
@@ -136,8 +138,12 @@ export function coverCrop({ naturalWidth, naturalHeight, width, height, position
 
 // A decoration (a ::before/::after box) that reaches outside its host, and the text or controls
 // outside the host it touches (within `margin` px). For a drawn outline or border, content inside
-// the ring (`inner`) is not touched; a pseudo-element with text has no inner area.
-export function decorationHits({ rect, inner, host }, obstacles, margin = 4) {
+// the ring (`inner`) is not touched; a pseudo-element with text has no inner area. `clip` is the box
+// its host and ancestors with overflow clipping leave visible: only that part can be drawn, so a
+// decoration that a clipping footer cuts off at its edge does not touch the content beyond it.
+export function decorationHits({ rect: drawn, inner, host, clip }, obstacles, margin = 4) {
+  const rect = clip ? { left: Math.max(drawn.left, clip.left), right: Math.min(drawn.right, clip.right), top: Math.max(drawn.top, clip.top), bottom: Math.min(drawn.bottom, clip.bottom) } : drawn;
+  if (rect.right <= rect.left || rect.bottom <= rect.top) return { outside: 0, hits: [] };
   const outside = Math.max(host.left - rect.left, rect.right - host.right, host.top - rect.top, rect.bottom - host.bottom);
   if (outside <= 2) return { outside: Math.max(0, Math.round(outside)), hits: [] };
   const near = (a, b) => a.left < b.right + margin && a.right > b.left - margin && a.top < b.bottom + margin && a.bottom > b.top - margin;
@@ -162,8 +168,18 @@ export function emptyBands(blocks, threshold) {
   return out;
 }
 
+// A same-ground join pays one section step; half a step more allows for the content's own
+// leading and margins. Pages without --spacing-section keep the earlier fixed limit.
+export const BAND_STEP_FACTOR = 1.5;
+export const BAND_FALLBACK_PX = 160;
+export function bandThreshold({ band = null, sectionStep = 0 } = {}) {
+  if (Number.isFinite(band)) return { limit: band, basis: 'fixed' };
+  if (Number.isFinite(sectionStep) && sectionStep > 0) return { limit: Math.round(sectionStep * BAND_STEP_FACTOR), basis: 'section-step', step: Math.round(sectionStep) };
+  return { limit: BAND_FALLBACK_PX, basis: 'fallback' };
+}
+
 export function parseArgs(argv) {
-  const out = { widths: DEFAULT_WIDTHS, autoWidths: false, samples: [], hide: [], edge: 8, badge: 3, maxHover: 80, tabs: 45, routes: [], textScale: parseTextScale(DEFAULT_TEXT_SCALE), contrast: false, crop: 15, band: 160 };
+  const out = { widths: DEFAULT_WIDTHS, autoWidths: false, samples: [], hide: [], edge: 8, badge: 3, maxHover: 80, tabs: 45, routes: [], textScale: parseTextScale(DEFAULT_TEXT_SCALE), contrast: false, crop: 15, band: null };
   for (let i = 0; i < argv.length; i++) {
     const flag = argv[i], value = () => { const v = argv[++i]; if (v === undefined || v.startsWith('--')) throw Error('Missing value for ' + flag); return v; };
     if (flag === '--help' || flag === '-h') out.help = true;
@@ -199,7 +215,8 @@ export function parseArgs(argv) {
   }
   if (!out.widths.length || out.widths.some(w => !Number.isInteger(w) || w < 200 || w > 3840)) throw Error('--widths must be integers between 200 and 3840, optionally with "auto"');
   if (!Number.isFinite(out.crop) || out.crop <= 0 || out.crop >= 100) throw Error('--crop must be a percentage between 0 and 100');
-  for (const k of ['edge', 'badge', 'maxHover', 'tabs', 'band']) if (!Number.isFinite(out[k]) || out[k] < 0) throw Error(`--${k} must be a non-negative number`);
+  for (const k of ['edge', 'badge', 'maxHover', 'tabs']) if (!Number.isFinite(out[k]) || out[k] < 0) throw Error(`--${k} must be a non-negative number`);
+  if (out.band !== null && (!Number.isFinite(out.band) || out.band < 0)) throw Error('--band must be a non-negative number');
   return out;
 }
 
@@ -429,7 +446,7 @@ function mediaQueryTexts() {
 }
 
 // Runs in the page. Content images shown with object-fit: cover, with what is needed to compute
-// how much of them the frame hides. Mark images meant to be cropped with data-audit-crop-ok.
+// how much of them the frame hides. Mark images meant to be cropped with data-audit-crop-ok. Empty bands are measured against 1.5 times the page's own --spacing-section (160px without it); --band sets a fixed limit.
 function coverImages() {
   const out = [];
   for (const img of document.images) {
@@ -494,8 +511,15 @@ function decorationObstacles(decos) {
     const h = host.getBoundingClientRect(), dx = h.left - d.hostBox.left, dy = h.top - d.hostBox.top;
     const shift = r => r && { left: r.left + dx, right: r.right + dx, top: r.top + dy, bottom: r.bottom + dy };
     const rect = shift(d.rect), inner = shift(d.inner), m = 8;
+    // What the host and its overflow-clipping ancestors leave visible, per axis.
+    const clip = { left: -Infinity, right: Infinity, top: -Infinity, bottom: Infinity };
+    for (let el = host; el && el !== document.documentElement; el = el.parentElement) {
+      const s = getComputedStyle(el), r = el.getBoundingClientRect();
+      if (s.overflowX !== 'visible') { clip.left = Math.max(clip.left, r.left); clip.right = Math.min(clip.right, r.right); }
+      if (s.overflowY !== 'visible') { clip.top = Math.max(clip.top, r.top); clip.bottom = Math.min(clip.bottom, r.bottom); }
+    }
     const obstacles = all.filter(o => !host.contains(o.node) && !(o.node.nodeType === 1 && o.node.contains(host)) && o.rect.left < rect.right + m && o.rect.right > rect.left - m && o.rect.top < rect.bottom + m && o.rect.bottom > rect.top - m).slice(0, 10).map(({ sig, text, rect }) => ({ sig, text, rect }));
-    return { ...d, sig: sig(host) + '::' + d.pseudo, rect, inner, host: box(h), obstacles };
+    return { ...d, sig: sig(host) + '::' + d.pseudo, rect, inner, host: box(h), clip, obstacles };
   }).filter(Boolean);
 }
 
@@ -528,6 +552,17 @@ function bandBlocks() {
     const heading = block.querySelector('h1, h2, h3, h4')?.textContent.trim().replace(/\s+/g, ' ').slice(0, 24);
     return { sig: block.tagName.toLowerCase() + [...block.classList].slice(0, 2).map(c => '.' + c).join('') + (heading ? ` "${heading}"` : ''), top: top === Infinity ? null : top, bottom: top === Infinity ? null : bottom, ground: own, edgeTop: edge(s, 'Top'), edgeBottom: edge(s, 'Bottom'), ignored: !!block.closest('[data-audit-ignore]') };
   });
+}
+
+// Runs in the page. The resolved --spacing-section of the main content in px (0 when unset).
+function sectionStep() {
+  const host = document.querySelector('main, [role="main"]') || document.body;
+  const probe = document.createElement('div');
+  probe.style.cssText = 'position:absolute;visibility:hidden;inline-size:0;block-size:0;padding:0;padding-block-start:var(--spacing-section, 0px)';
+  host.append(probe);
+  const px = parseFloat(getComputedStyle(probe).paddingBlockStart) || 0;
+  probe.remove();
+  return px;
 }
 
 // Pseudo-element boxes through the DevTools protocol (the page cannot measure them itself), as
@@ -627,7 +662,11 @@ export async function audit(options, hooks = {}) {
           for (const hit of hits.filter((h, i) => hits.findIndex(o => o.sig === h.sig) === i).slice(0, 3)) note('decoration-overlap', { sig: d.sig, detail: `touches ${hit.sig}`, text: hit.text, note: `reaches ${outside}px outside its host` });
         }
         await page.evaluate(() => document.querySelectorAll('[data-audit-pseudo]').forEach(el => el.removeAttribute('data-audit-pseudo')));
-        if (width >= 1024) for (const band of emptyBands(await page.evaluate(bandBlocks), options.band)) note('empty-band', { sig: band.sig, note: `${band.gap}px without content` });
+        if (width >= 1024) {
+          const threshold = bandThreshold({ band: options.band, sectionStep: await page.evaluate(sectionStep).catch(() => 0) });
+          const basis = threshold.basis === 'section-step' ? `${BAND_STEP_FACTOR} × the ${threshold.step}px section step` : threshold.basis === 'fixed' ? '--band' : 'no --spacing-section on the page';
+          for (const band of emptyBands(await page.evaluate(bandBlocks), threshold.limit)) note('empty-band', { sig: band.sig, note: `${band.gap}px without content (limit ${threshold.limit}px: ${basis})` });
+        }
         for (const c of [...new Set(consoleErrors)]) note('console-error', { sig: c.slice(0, 140) });
         for (const f of [...new Set(failed)]) note('failed-request', { sig: f.slice(0, 160) });
         // Text fit at the normal size, measured per element so a clipping shell cannot hide it.
@@ -699,7 +738,7 @@ export async function audit(options, hooks = {}) {
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const options = parseArgs(process.argv.slice(2));
-    if (options.help) console.log('Usage: audit:ui -- --base <origin> (--routes /,/contact | --routes-file <file> | --sitemap) [--widths 390,768,1440|auto|auto,320,390,1440] [--sample "^/news/.+=3"] [--hide "#dev-panel"] [--edge 8] [--badge 3] [--max-hover 80] [--tabs 45] [--text-scale root:1.6,root:2,text:1.5,text:2|off] [--contrast] [--crop 15] [--band 160] [--out report.json]\n"auto" adds one width on each side of the site\'s own breakpoints to the given (or default) widths. Enlarged-text checks run at the given widths up to 500px; hover, focus and contrast at the widest given width. Mark images meant to be cropped with data-audit-crop-ok. --contrast also measures hovered elements. Progress is printed to stderr and --out is rewritten after every route, so an interrupted run keeps its findings; allow about half a minute per route and phone width. Mark deliberate exceptions in markup with data-audit-ignore. Git Bash: MSYS_NO_PATHCONV=1 when a route is "/".');
+    if (options.help) console.log('Usage: audit:ui -- --base <origin> (--routes /,/contact | --routes-file <file> | --sitemap) [--widths 390,768,1440|auto|auto,320,390,1440] [--sample "^/news/.+=3"] [--hide "#dev-panel"] [--edge 8] [--badge 3] [--max-hover 80] [--tabs 45] [--text-scale root:1.6,root:2,text:1.5,text:2|off] [--contrast] [--crop 15] [--band <px>] [--out report.json]\n"auto" adds one width on each side of the site\'s own breakpoints to the given (or default) widths. Enlarged-text checks run at the given widths up to 500px; hover, focus and contrast at the widest given width. Mark images meant to be cropped with data-audit-crop-ok. --contrast also measures hovered elements. Progress is printed to stderr and --out is rewritten after every route, so an interrupted run keeps its findings; allow about half a minute per route and phone width. Mark deliberate exceptions in markup with data-audit-ignore. Git Bash: MSYS_NO_PATHCONV=1 when a route is "/".');
     else {
       let chosen = options.widths;
       const { audited, widths, breakpoints, entries } = await audit(options, {

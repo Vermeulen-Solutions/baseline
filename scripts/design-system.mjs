@@ -42,6 +42,93 @@ export const REQUIRED_THEME_TOKENS = [
   '--ease-spring',
 ];
 
+/**
+ * Starter @theme tokens that are part of the vocabulary but not of the required
+ * contract: older sites without them stay valid, and the starter keeps them in
+ * step with CONTRACT_STARTER_VALUES.optional.
+ */
+export const SPACE_STEP_MULTIPLIERS = { '3xs': 0.25, '2xs': 0.5, xs: 0.75, s: 1, m: 1.5, l: 2, xl: 3, '2xl': 4, '3xl': 6 };
+// Adjacent pairs plus the pairs the semantic section tokens sit on.
+export const SPACE_PAIRS = [
+  ...Object.keys(SPACE_STEP_MULTIPLIERS).slice(0, -1).map((step, index) => [step, Object.keys(SPACE_STEP_MULTIPLIERS)[index + 1]]),
+  ['s', 'l'], ['l', '2xl'], ['xl', '3xl'],
+];
+
+export const OPTIONAL_THEME_TOKENS = [
+  '--text-body',
+  '--text-step-3',
+  '--text-step-4',
+  '--text-step-5',
+  '--spacing-section-m',
+  ...Object.keys(SPACE_STEP_MULTIPLIERS).map(step => `--spacing-${step}`),
+  ...SPACE_PAIRS.map(([from, to]) => `--spacing-${from}-${to}`),
+  '--duration-fast',
+  '--duration-base',
+  '--duration-slow',
+  '--duration-slower',
+  '--z-behind',
+  '--z-raised',
+  '--z-sticky',
+  '--z-skip',
+  '--z-overlay',
+  '--breakpoint-sm',
+  '--breakpoint-md',
+];
+
+/**
+ * WCAG 1.4.4 resize text: a fluid text token whose maximum is at most 2.5 times its
+ * minimum lets 200% enlargement be reached at every viewport width with browser zoom
+ * (Maxwell Barvian, Smashing Magazine, 2023). design:tokens fails a token above it.
+ */
+export const MAX_TEXT_RATIO = 2.5;
+const RESIZE_TEXT_EXCEPTION = /resize-text-exception:\s*\S/;
+
+/**
+ * Tailwind namespaces whose defaults compete with Baseline's tokens. A strict theme clears them at
+ * the top of @theme, so bg-indigo-500, text-4xl, rounded-xl or shadow-2xl no longer compile and the
+ * site's own tokens (declared after the reset) are the only vocabulary. New sites get it from the
+ * profile generator and --init-client; an existing site opts in with --strict-theme after
+ * `npm run check:css -- --guardrails` shows it uses none of the defaults.
+ */
+export const STRICT_THEME_NAMESPACES = ['--color-*', '--text-*', '--radius-*', '--shadow-*'];
+
+export function hasStrictTheme(css) {
+  const theme = parseDesignTokens(css).theme;
+  return STRICT_THEME_NAMESPACES.every(name => theme[name] === 'initial');
+}
+
+/** Prepends the namespace reset to the @theme block; a stylesheet that has it is returned unchanged. */
+export function applyStrictTheme(css) {
+  if (hasStrictTheme(css)) return css;
+  const { ast, scopes } = tokenScopes(css);
+  const theme = scopes.theme[0];
+  if (!theme) throw new Error('Cannot apply the strict theme: the stylesheet has no @theme block.');
+  const before = theme.first?.raws?.before ?? '\n\t';
+  const nodes = [
+    postcss.comment({ text: 'Strict theme: Tailwind\'s default colours, type sizes, radii and shadows are cleared, so only the tokens below compile. Remove a line to restore that namespace.', raws: { before, left: ' ', right: ' ' } }),
+    ...STRICT_THEME_NAMESPACES.filter(name => !theme.nodes.some(node => node.type === 'decl' && node.prop === name)).map(name => postcss.decl({ prop: name, value: 'initial', raws: { before: before.replace(/^\n*/, '\n'), between: ': ' } })),
+  ];
+  theme.prepend(...nodes);
+  const next = theme.nodes[nodes.length];
+  if (next) next.raws.before = '\n' + before.replace(/^\n*/, '\n');
+  const result = ast.toString();
+  tokenScopes(result);
+  return result;
+}
+
+/** Text tokens whose declaration is directly preceded by a reviewed resize-text-exception comment. */
+export function textRatioExceptions(css) {
+  const allowed = new Set();
+  postcss.parse(css).walkAtRules('theme', node => {
+    node.each(child => {
+      if (child.type !== 'decl') return;
+      const previous = child.prev();
+      if (previous?.type === 'comment' && RESIZE_TEXT_EXCEPTION.test(previous.text)) allowed.add(child.prop);
+    });
+  });
+  return allowed;
+}
+
 export const REQUIRED_ROOT_TOKENS = [
   '--color-link',
   '--measure-reading',
@@ -293,8 +380,8 @@ export const CONTRACT_STARTER_VALUES = {
     '--text-step-0': 'clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)',
     '--text-step-1': 'clamp(1.25rem, calc(1rem + 1.25vi), 2rem)',
     '--text-step-2': 'clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem)',
-    '--text-step-3-to-1': 'clamp(1.25rem, calc(0.25rem + 5vi), 4.25rem)',
-    '--text-step-2-to-0': 'clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem)',
+    '--text-step-3-to-1': 'clamp(1.75rem, calc(0.9167rem + 4.1667vi), 4.25rem)',
+    '--text-step-2-to-0': 'clamp(1.3125rem, calc(0.6667rem + 3.2292vi), 3.25rem)',
     '--spacing-content': 'clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)',
     '--spacing-grid': 'clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem)',
     '--spacing-container': 'clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)',
@@ -400,7 +487,8 @@ export function addMissingContractTokens(css) {
 function tokenScopes(css) {
   const ast = postcss.parse(css);
   const scopes = { theme: [], root: [], dark: [], light: [] };
-  ast.walkAtRules('theme', node => { if (node.params.trim() === '') scopes.theme.push(node); });
+  // `@theme static` is the same token block; Tailwind then emits every token, used or not.
+  ast.walkAtRules('theme', node => { if (['', 'static'].includes(node.params.trim())) scopes.theme.push(node); });
   ast.walkRules(node => {
     const scope = { ':root':'root', '[data-surface="dark"]':'dark', '[data-surface="light"]':'light' }[node.selector.trim()];
     if (scope) scopes[scope].push(node);
@@ -707,12 +795,23 @@ export function auditDesignTokens(css, { cssPath = 'src/styles/global.css' } = {
     reference: { rootFontPx: 16, viewportSizePx: 1280, writingMode: 'horizontal-tb', zoomModel: 'fixed physical viewport; CSS viewport divided by zoom; root font unchanged' },
     tokens: [],
   };
+  const ratioExceptions = textRatioExceptions(css);
+  // Grace period: a stylesheet that predates the rule (no strict theme, no --text-step-3) gets a
+  // warning naming the fix, so syncing this script does not fail an older site's verification.
+  // Merging the current global.css adopts the scale and turns the warning into a failure.
+  const enforceTextRatio = Object.hasOwn(tokens.theme, '--text-step-3') || hasStrictTheme(css);
+  const warnings = [];
   for (const key of fluidTokens) {
     const clampError = validateClampToken(key, tokens.theme[key]);
     if (clampError) errors.push(clampError);
     else {
       try {
-        fluid.tokens.push(diagnoseFluidToken(key, tokens.theme[key]));
+        const diagnosis = diagnoseFluidToken(key, tokens.theme[key]);
+        fluid.tokens.push(diagnosis);
+        const ratio = diagnosis.maxRem / diagnosis.minRem;
+        if (key.startsWith('--text-') && ratio > MAX_TEXT_RATIO + 5e-4 && !ratioExceptions.has(key)) {
+          (enforceTextRatio ? errors : warnings).push(`Token ${key}: maximum ${diagnosis.maxRem}rem is ${round4(ratio)} times its minimum ${diagnosis.minRem}rem; text tokens keep max <= ${MAX_TEXT_RATIO} x min so 200% text enlargement stays reachable (WCAG 1.4.4). Raise the minimum to at least ${round4(diagnosis.maxRem / MAX_TEXT_RATIO)}rem, or record a reviewed exception with a /* resize-text-exception: <reason> */ comment directly before the declaration.`);
+        }
       } catch (error) {
         errors.push(`Token ${key}: ${error.message}`);
       }
@@ -772,6 +871,7 @@ export function auditDesignTokens(css, { cssPath = 'src/styles/global.css' } = {
   return {
     valid: errors.length === 0,
     errors,
+    warnings,
     tokens,
     contrast,
     fluid,
@@ -824,14 +924,31 @@ export function generateTypeScale({ ratio = 1.25, baseMinRem = 1, baseMaxRem = 1
     throw new Error(`Invalid type scale ratio '${String(ratio)}'. Expected 1.05..1.8 or one of: ${Object.keys(TYPE_SCALE_RATIOS).join(', ')}`);
   }
   const minR = 1 + (r - 1) * 0.65;
+  // A minimum below max / 2.5 would fail the resize-text rule; raise it to that floor.
+  const text = (minRem, maxRem) => buildFluidClamp(Math.max(minRem, Math.ceil(round4(maxRem) / MAX_TEXT_RATIO * 1e4) / 1e4), maxRem);
   return {
     '--text-step--1': buildFluidClamp(Math.max(0.8125, baseMinRem / minR), Math.max(0.9375, baseMaxRem / r)),
     '--text-step-0': buildFluidClamp(baseMinRem, baseMaxRem),
     '--text-step-1': buildFluidClamp(baseMinRem * minR, baseMaxRem * r),
     '--text-step-2': buildFluidClamp(baseMinRem * (minR ** 2), baseMaxRem * (r ** 2)),
-    '--text-step-2-to-0': buildFluidClamp(baseMinRem, baseMaxRem * (r ** 2)),
-    '--text-step-3-to-1': buildFluidClamp(baseMinRem * minR, baseMaxRem * (r ** 3)),
+    '--text-step-3': text(baseMinRem * (minR ** 3), baseMaxRem * (r ** 3)),
+    '--text-step-4': text(baseMinRem * (minR ** 4), baseMaxRem * (r ** 4)),
+    '--text-step-5': text(baseMinRem * (minR ** 5), baseMaxRem * (r ** 5)),
+    '--text-step-2-to-0': text(baseMinRem, baseMaxRem * (r ** 2)),
+    '--text-step-3-to-1': text(baseMinRem * minR, baseMaxRem * (r ** 3)),
   };
+}
+
+/**
+ * The primitive fluid space scale: Utopia's step multipliers (3xs..3xl) of a base step s
+ * and the space pairs in SPACE_PAIRS. Every step grows from its minimum to minimum x
+ * (baseMaxRem / baseMinRem) between 20 and 80rem.
+ */
+export function generateSpacePrimitives({ baseMinRem = 1, baseMaxRem = 1.5 } = {}) {
+  const tokens = {};
+  for (const [step, multiplier] of Object.entries(SPACE_STEP_MULTIPLIERS)) tokens[`--spacing-${step}`] = buildFluidClamp(baseMinRem * multiplier, baseMaxRem * multiplier);
+  for (const [from, to] of SPACE_PAIRS) tokens[`--spacing-${from}-${to}`] = buildFluidClamp(baseMinRem * SPACE_STEP_MULTIPLIERS[from], baseMaxRem * SPACE_STEP_MULTIPLIERS[to]);
+  return tokens;
 }
 
 /**
@@ -849,6 +966,9 @@ export function generateSpaceScale({ ratio = 1.5, baseMinRem = 1, baseMaxRem = 1
     '--spacing-xl-to-sm': buildFluidClamp(baseMinRem * 0.75, baseMaxRem * (r ** 1.75)),
     '--spacing-2xl-to-md': buildFluidClamp(baseMinRem * 1.25, baseMaxRem * (r ** 2.4)),
     '--spacing-section': buildFluidClamp(baseMinRem * 2.5, baseMaxRem * (r ** 3.1)),
+    // Medium section step: two thirds of the full step at both ends.
+    '--spacing-section-m': buildFluidClamp(baseMinRem * 2.5 * (2 / 3), baseMaxRem * (r ** 3.1) * (2 / 3)),
+    ...generateSpacePrimitives({ baseMinRem, baseMaxRem }),
   };
 }
 
@@ -1346,10 +1466,96 @@ export function applyTokenOverrides(css, presetOrOverrides) {
   return result;
 }
 
+/**
+ * Design Tokens Community Group format (2025.10) export of the source tokens. CSS stays the
+ * authority: the export is generated, never edited. Fluid clamp() tokens carry their minimum as
+ * $value and their full range under $extensions["dev.baseline.fluid"]; a token that is exactly
+ * var(--other) becomes an alias; values the format cannot express (relative-colour shadows,
+ * color-mix(), linear() easing) are listed under $extensions["dev.baseline.css-only"].
+ */
+const DTCG_GROUPS = [
+  ['--color-', 'color'], ['--font-', 'font'], ['--text-', 'text'], ['--spacing-', 'spacing'], ['--radius-', 'radius'],
+  ['--shadow-', 'shadow'], ['--ease-', 'ease'], ['--duration-', 'duration'], ['--z-', 'z'], ['--breakpoint-', 'breakpoint'],
+  ['--measure-', 'measure'], ['--layout-', 'layout'],
+];
+
+function dtcgPath(name) {
+  const group = DTCG_GROUPS.find(([prefix]) => name.startsWith(prefix));
+  return group ? [group[1], name.slice(group[0].length)] : ['other', name.slice(2)];
+}
+
+function dtcgDimension(text) {
+  const match = String(text).trim().match(/^(-?\d*\.?\d+)(px|rem)$/);
+  return match ? { value: Number(match[1]), unit: match[2] } : null;
+}
+
+function dtcgToken(name, value, aliases) {
+  const text = String(value).trim();
+  const alias = text.match(/^var\(\s*(--[\w-]+)\s*\)$/);
+  if (alias && aliases.has(alias[1])) return { $value: `{${dtcgPath(alias[1]).join('.')}}` };
+  // An optional site hook with a fallback, var(--undefined-hook, value), exports its fallback.
+  const hook = text.match(/^var\(\s*(--[\w-]+)\s*,\s*([\s\S]+)\)$/);
+  if (hook && !aliases.has(hook[1])) return dtcgToken(name, hook[2], aliases);
+  if (name.startsWith('--color-') || name === '--surface-glass') {
+    try {
+      const { L, C, H } = parseToOklch(text);
+      return { $type: 'color', $value: { colorSpace: 'oklch', components: [round4(L / 100), C, H] } };
+    } catch { return null; }
+  }
+  if (name.startsWith('--font-')) return { $type: 'fontFamily', $value: text.split(',').map(part => part.trim().replace(/^["']|["']$/g, '')) };
+  if (name.startsWith('--ease-')) {
+    const bezier = text.match(/^cubic-bezier\(([^)]+)\)$/);
+    return bezier ? { $type: 'cubicBezier', $value: bezier[1].split(',').map(Number) } : null;
+  }
+  if (name.startsWith('--duration-')) {
+    const match = text.match(/^(\d*\.?\d+)(ms|s)$/);
+    return match ? { $type: 'duration', $value: { value: Number(match[1]), unit: match[2] } } : null;
+  }
+  if (name.startsWith('--z-')) return /^-?\d+$/.test(text) ? { $type: 'number', $value: Number(text) } : null;
+  const dimension = dtcgDimension(text);
+  if (dimension) return { $type: 'dimension', $value: dimension };
+  if (/^clamp\(/i.test(text)) {
+    try {
+      const { minRem, maxRem, transitionRem } = parseFluidClamp(text);
+      return {
+        $type: 'dimension',
+        $value: { value: minRem, unit: 'rem' },
+        $extensions: { 'dev.baseline.fluid': { min: { value: minRem, unit: 'rem' }, max: { value: maxRem, unit: 'rem' }, viewportRem: transitionRem && { from: round4(transitionRem.min), to: round4(transitionRem.max) }, css: text } },
+      };
+    } catch { return null; }
+  }
+  return null;
+}
+
+export function exportDtcg(css) {
+  const tokens = parseDesignTokens(css);
+  const aliases = new Set([...Object.keys(tokens.theme), ...Object.keys(tokens.root)].filter(name => !name.includes('*')));
+  const out = { $description: 'Generated from src/styles/global.css by design:tokens --format dtcg (DTCG 2025.10). CSS is the authority; regenerate instead of editing.' };
+  const cssOnly = {};
+  const put = (target, [group, key], token) => { (target[group] ??= {})[key] = token; };
+  for (const [scope, entries] of [['theme', tokens.theme], ['root', tokens.root]]) {
+    for (const [name, value] of Object.entries(entries)) {
+      if (name.includes('*')) continue;
+      const token = dtcgToken(name, value, aliases);
+      if (token) put(out, dtcgPath(name), { ...token, $extensions: { ...token.$extensions, 'dev.baseline.css': { property: name, scope: scope === 'theme' ? '@theme' : ':root' } } });
+      else cssOnly[name] = value;
+    }
+  }
+  const dark = {};
+  for (const [name, value] of Object.entries(tokens.dark)) {
+    const token = dtcgToken(name, value, aliases);
+    if (token) put(dark, dtcgPath(name), token); else cssOnly[`[data-surface="dark"] ${name}`] = value;
+  }
+  if (Object.keys(dark).length) out['surface-dark'] = { $description: 'Overrides inside [data-surface="dark"]', ...dark };
+  out.$extensions = { 'dev.baseline.css-only': cssOnly };
+  return out;
+}
+
 const CLI_USAGE = [
   'npm run design:tokens -- [options]',
   '  --css <file>                 Stylesheet to audit (default src/styles/global.css)',
   '  --json                       Machine-readable report',
+  '  --format dtcg [--out <file>] Export the source tokens as DTCG 2025.10 JSON (stdout, or the file)',
   '  --list-lanes                 List the aesthetic lane presets',
   '  --lane <id>                  Apply a lane preset',
   '  --type-scale <ratio|name>    Generate the fluid type scale',
@@ -1359,12 +1565,13 @@ const CLI_USAGE = [
   '  --set <token>=<value>        Set one token; prefix --root: or --dark: for those scopes (repeatable)',
   '  --add-missing                Insert missing contract tokens with starter values',
   '  --write                      Save a validated candidate (changes are a preview without it)',
-  '  --init-client                Apply the lane, save, write the record and calibration, prune starter exceptions',
+  '  --init-client                Apply the lane and the strict theme, save, write the record and calibration, prune starter exceptions',
+  '  --strict-theme               Clear Tailwind\'s default colour, text, radius and shadow namespaces in @theme',
   '  --write-record [file]        Write the Art Direction Record (default AGENTS.md)',
   '  --write-calibration [file]   Write the token calibration (default audit/component-calibration.md)',
 ].join('\n');
-const CLI_BOOLEAN_FLAGS = { '--json': 'json', '--list-lanes': 'listLanes', '--add-missing': 'addMissing', '--write': 'write', '--init-client': 'initClient', '--help': 'help' };
-const CLI_VALUE_FLAGS = { '--css': 'css', '--lane': 'lane', '--type-scale': 'typeScale', '--space-scale': 'spaceScale', '--seed-accent': 'seedAccent', '--seed-canvas': 'seedCanvas' };
+const CLI_BOOLEAN_FLAGS = { '--json': 'json', '--list-lanes': 'listLanes', '--add-missing': 'addMissing', '--write': 'write', '--init-client': 'initClient', '--strict-theme': 'strictTheme', '--help': 'help' };
+const CLI_VALUE_FLAGS = { '--format': 'format', '--out': 'out', '--css': 'css', '--lane': 'lane', '--type-scale': 'typeScale', '--space-scale': 'spaceScale', '--seed-accent': 'seedAccent', '--seed-canvas': 'seedCanvas' };
 // The file is optional: `true` selects the default target.
 const CLI_OPTIONAL_VALUE_FLAGS = { '--write-record': 'writeRecord', '--write-calibration': 'writeCalibration' };
 
@@ -1453,6 +1660,15 @@ function main() {
   const initClient = Boolean(options.initClient);
   const json = Boolean(options.json);
 
+  if (options.format !== undefined) {
+    if (options.format !== 'dtcg') throw new Error(`Unknown --format ${options.format}. Supported: dtcg.`);
+    const exported = JSON.stringify(exportDtcg(readFileSync(cssPath, 'utf8')), null, 2) + '\n';
+    if (options.out) { writeFileSync(resolve(options.out), exported, 'utf8'); console.error('Wrote DTCG tokens to ' + resolve(options.out)); }
+    else process.stdout.write(exported);
+    return;
+  }
+  if (options.out !== undefined) throw new Error('--out requires --format dtcg.');
+
   if (options.listLanes) {
     for (const [id, lane] of Object.entries(AESTHETIC_LANES)) {
       console.log(`- ${id} (${lane.name}): ${lane.description}`);
@@ -1473,13 +1689,20 @@ function main() {
     hasMutationRequest = true;
   }
 
+  // Generated scales also emit optional vocabulary (steps 3-5, the space scale); a stylesheet
+  // that does not declare those tokens yet keeps its own set rather than failing.
+  const scaleOptional = new Set();
   if (options.typeScale) {
-    combinedOverrides = mergeOverrides(combinedOverrides, { theme: generateTypeScale({ ratio: options.typeScale }) });
+    const scale = generateTypeScale({ ratio: options.typeScale });
+    Object.keys(scale).filter(name => OPTIONAL_THEME_TOKENS.includes(name)).forEach(name => scaleOptional.add(name));
+    combinedOverrides = mergeOverrides(combinedOverrides, { theme: scale });
     hasMutationRequest = true;
   }
 
   if (options.spaceScale) {
-    combinedOverrides = mergeOverrides(combinedOverrides, { theme: generateSpaceScale({ ratio: options.spaceScale }) });
+    const scale = generateSpaceScale({ ratio: options.spaceScale });
+    Object.keys(scale).filter(name => OPTIONAL_THEME_TOKENS.includes(name)).forEach(name => scaleOptional.add(name));
+    combinedOverrides = mergeOverrides(combinedOverrides, { theme: scale });
     hasMutationRequest = true;
   }
 
@@ -1503,11 +1726,20 @@ function main() {
     hasMutationRequest = true;
   }
 
+  // A new client site starts without Tailwind's default palette, type, radius and shadow sets.
+  const strictTheme = Boolean(options.strictTheme) || initClient;
+  if (strictTheme) hasMutationRequest = true;
+
   const source = readFileSync(cssPath, 'utf8');
   const sourceGap = contractGap(source);
   // Missing tokens are inserted first so --set and presets can then adjust them.
   const withContract = addMissing ? addMissingContractTokens(source) : source;
-  const css = hasMutationRequest ? applyTokenOverrides(withContract,combinedOverrides) : source;
+  if (scaleOptional.size && combinedOverrides.theme) {
+    const declared = parseDesignTokens(withContract).theme;
+    for (const name of scaleOptional) if (!Object.hasOwn(declared, name)) delete combinedOverrides.theme[name];
+  }
+  const overridden = hasMutationRequest ? applyTokenOverrides(withContract,combinedOverrides) : source;
+  const css = strictTheme ? applyStrictTheme(overridden) : overridden;
   const added = addMissing ? sourceGap.missing : undefined;
   const report = auditDesignTokens(css, { cssPath: cssLabel });
   const fontAudit = auditFontLoading(css, process.cwd(), cssPath);
@@ -1602,6 +1834,10 @@ function main() {
       ? '- EmDash edit proxies: NOT APPLICABLE (static foundation)'
       : `- EmDash edit proxies: ${proxyAudit.valid ? 'PASS' : 'FAIL'} (${proxyAudit.checkedRoutes.length} single-entry routes, ${proxyAudit.collectionRoutes.length} collection routes)`);
     console.log(`- Fluid mathematics: ${report.fluid.tokens.length} bounded affine tokens (vi default; reference root 16px, horizontal writing)`);
+    if (report.warnings.length) {
+      console.log(`- Resize-text warnings: ${report.warnings.length} (this stylesheet predates the 2.5x rule; it fails once the current type scale is adopted)`);
+      for (const warning of report.warnings) console.log(`  [WARN] ${warning}`);
+    }
     const advisoryCount = report.fluid.tokens.filter(token => token.advisories.length).length;
     if (advisoryCount) console.log(`- Fluid advisories: ${advisoryCount} tokens; inspect --json fluid.tokens (advisory only, rendered acceptance required)`);
     console.log('- Spacing contexts (bounded reference values; starter consumers, not a downstream site inventory):');

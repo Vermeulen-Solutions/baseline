@@ -228,6 +228,18 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/d1-rehearse.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/check-live.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/workers-rules.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/d1-snapshot.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -589,6 +601,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "src/styles/global.css": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/styles/registry-aliases.css": {
       "disposition": "shared",
       "static": "copy"
     },
@@ -1530,6 +1546,18 @@
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/fleet-status.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/fleet-status.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/delivery-tools.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/update-plan.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -1592,6 +1620,66 @@
     },
     "tests/docs-links.test.mjs": {
       "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/derived-order.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editorial-order/admin.tsx": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editorial-order/config.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editorial-order/index.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editorial-order/order.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editorial-order/runtime.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editorial-order/styles.css": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editor-ui/admin.tsx": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editor-ui/config.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editor-ui/index.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editor-ui/labels.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editor-ui/runtime.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/plugins/editor-ui/styles.css": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "scripts/cms-admin-metadata.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/editor-experience.test.mjs": {
+      "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     }
   }

@@ -193,3 +193,39 @@ test('contract messages name the audited stylesheet, and both colour consumers s
   assert.ok(malformed.errors.some(error => /unsupported color syntax for --color-text/.test(error)), malformed.errors.join('\n'));
   assert.ok(!malformed.errors.some(error => error.includes('NaN')));
 });
+
+test('the strict theme clears Tailwind default namespaces before the site tokens, once', async () => {
+  const { applyStrictTheme, hasStrictTheme, STRICT_THEME_NAMESPACES } = await import('../scripts/design-system.mjs');
+  const css = '@theme {\n\t--color-page: oklch(99% 0 0);\n\t--radius-card: 0.75rem;\n}\n';
+  const strict = applyStrictTheme(css);
+  assert.equal(hasStrictTheme(css), false);
+  assert.equal(hasStrictTheme(strict), true);
+  assert.equal(applyStrictTheme(strict), strict, 'applying twice changes nothing');
+  // The resets come first so the tokens declared after them are kept.
+  const order = [...STRICT_THEME_NAMESPACES, '--color-page', '--radius-card'].map(name => strict.indexOf(name));
+  assert.deepEqual([...order].sort((a, b) => a - b), order);
+  assert.equal(parseDesignTokens(strict).theme['--color-page'], 'oklch(99% 0 0)');
+  assert.throws(() => applyStrictTheme(':root { --x: 1px; }'), /no @theme block/);
+});
+
+test('design:tokens --format dtcg exports source tokens with types, aliases and fluid ranges', async () => {
+  const { exportDtcg } = await import('../scripts/design-system.mjs');
+  const exported = exportDtcg(readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8'));
+  assert.deepEqual(exported.color.page.$value, { colorSpace: 'oklch', components: [0.99, 0.004, 250] });
+  assert.equal(exported.layout['section-padding'].$value, '{spacing.section}');
+  assert.deepEqual(exported.spacing.section.$value, { value: 3, unit: 'rem' });
+  assert.deepEqual(exported.spacing.section.$extensions['dev.baseline.fluid'].max, { value: 9, unit: 'rem' });
+  assert.deepEqual(exported.ease.smooth, { $type: 'cubicBezier', $value: [0.22, 1, 0.36, 1], $extensions: { 'dev.baseline.css': { property: '--ease-smooth', scope: '@theme' } } });
+  assert.deepEqual(exported.duration.fast.$value, { value: 150, unit: 'ms' });
+  assert.equal(exported.z.sticky.$value, 40);
+  assert.equal(exported['surface-dark'].color.surface.$type, 'color');
+  assert.ok('--shadow-sm' in exported.$extensions['dev.baseline.css-only'], 'relative-colour shadows stay CSS-only');
+  const { applyStrictTheme } = await import('../scripts/design-system.mjs');
+  const strict = exportDtcg(applyStrictTheme(readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8')));
+  assert.ok(!Object.values(strict).some(group => group && typeof group === 'object' && Object.keys(group).some(key => key.includes('*'))), 'namespace resets are not tokens');
+});
+
+test('an @theme static block is the token block', () => {
+  const tokens = parseDesignTokens('@theme static {\n\t--radius-card: 0.75rem;\n}\n');
+  assert.equal(tokens.theme['--radius-card'], '0.75rem');
+});

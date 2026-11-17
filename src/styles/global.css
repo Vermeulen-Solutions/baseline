@@ -1,29 +1,74 @@
 @layer theme, base, vendor, astro, components, utilities;
 @import "tailwindcss";
+/* Opt-in aliases for registry components in quarantine: @import "./registry-aliases.css"; */
 
 /*
+ * Map of this file.
+ * Core: the @theme tokens; base (document, spacing policies, headings, surfaces, motion and print
+ * contracts); components layer (site shell, editorial flow, containers and grids, Section joins,
+ * buttons, sticky header, view transitions, skeletons, dialogs, forced colours).
+ * Optional recipes, marked "Optional recipe" below: telemetry eyebrow and badges, surface physics
+ * (elevated, glass, spotlight, grain), hairline and blueprint grids, crosshair frames, UI
+ * specimens, stacked cards, card entrance, data bars, bento grid, drop cap and reel. They encode
+ * one aesthetic; use one only when the site's Art Direction Record selects it.
+ *
  * Neutral starting tokens, not a finished brand theme.
  * Fluid values grow between 20rem and 80rem viewport widths.
+ * `static` emits every token even when no utility uses it, so var(--token) works in component
+ * styles and inline styles that Tailwind's scanner cannot see.
  */
-@theme {
+@theme static {
 	--font-body: ui-sans-serif, system-ui, sans-serif;
 	--font-display: ui-sans-serif, system-ui, sans-serif;
 	--font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
 	--font-accent: Georgia, Cambria, "Times New Roman", Times, serif;
 
+	/* Body text stays at the reader's 1rem; it is not fluid. Steps are for headings and display.
+	   Every fluid text token keeps max <= 2.5 x min so 200% text enlargement stays reachable
+	   (WCAG 1.4.4); design:tokens fails a token above that ratio. */
+	--text-body: 1rem;
 	--text-step--1: clamp(0.875rem, calc(0.8333rem + 0.2083vi), 1rem);
 	--text-step-0: clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem);
 	--text-step-1: clamp(1.25rem, calc(1rem + 1.25vi), 2rem);
 	--text-step-2: clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem);
-	--text-step-3-to-1: clamp(1.25rem, calc(0.25rem + 5vi), 4.25rem);
-	--text-step-2-to-0: clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem);
+	--text-step-3: clamp(2.125rem, calc(1.4167rem + 3.5417vi), 4.25rem);
+	--text-step-4: clamp(2.5rem, calc(1.5rem + 5vi), 5.5rem);
+	--text-step-5: clamp(3rem, calc(1.6667rem + 6.6667vi), 7rem);
+	--text-step-3-to-1: clamp(1.75rem, calc(0.9167rem + 4.1667vi), 4.25rem);
+	--text-step-2-to-0: clamp(1.3125rem, calc(0.6667rem + 3.2292vi), 3.25rem);
 
+	/* Semantic spacing. content = --spacing-s, section = --spacing-xl-3xl and
+	   section-m = --spacing-l-2xl on the scale below; grid and container sit between steps. */
 	--spacing-content: clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem);
 	--spacing-grid: clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem);
 	--spacing-container: clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem);
 	--spacing-section: clamp(3rem, calc(1rem + 10vi), 9rem);
+	--spacing-section-m: clamp(2rem, calc(0.6667rem + 6.6667vi), 6rem);
 	--spacing-2xl-to-md: clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem);
 	--spacing-xl-to-sm: clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem);
+
+	/* Fluid space scale (Utopia multipliers of s; each step grows 1.5x from 20 to 80rem) and
+	   space pairs for a deliberate jump. Utilities: p-s, gap-m, py-xl-3xl. */
+	--spacing-3xs: clamp(0.25rem, calc(0.2083rem + 0.2083vi), 0.375rem);
+	--spacing-2xs: clamp(0.5rem, calc(0.4167rem + 0.4167vi), 0.75rem);
+	--spacing-xs: clamp(0.75rem, calc(0.625rem + 0.625vi), 1.125rem);
+	--spacing-s: clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem);
+	--spacing-m: clamp(1.5rem, calc(1.25rem + 1.25vi), 2.25rem);
+	--spacing-l: clamp(2rem, calc(1.6667rem + 1.6667vi), 3rem);
+	--spacing-xl: clamp(3rem, calc(2.5rem + 2.5vi), 4.5rem);
+	--spacing-2xl: clamp(4rem, calc(3.3333rem + 3.3333vi), 6rem);
+	--spacing-3xl: clamp(6rem, calc(5rem + 5vi), 9rem);
+	--spacing-3xs-2xs: clamp(0.25rem, calc(0.0833rem + 0.8333vi), 0.75rem);
+	--spacing-2xs-xs: clamp(0.5rem, calc(0.2917rem + 1.0417vi), 1.125rem);
+	--spacing-xs-s: clamp(0.75rem, calc(0.5rem + 1.25vi), 1.5rem);
+	--spacing-s-m: clamp(1rem, calc(0.5833rem + 2.0833vi), 2.25rem);
+	--spacing-m-l: clamp(1.5rem, calc(1rem + 2.5vi), 3rem);
+	--spacing-l-xl: clamp(2rem, calc(1.1667rem + 4.1667vi), 4.5rem);
+	--spacing-xl-2xl: clamp(3rem, calc(2rem + 5vi), 6rem);
+	--spacing-2xl-3xl: clamp(4rem, calc(2.3333rem + 8.3333vi), 9rem);
+	--spacing-s-l: clamp(1rem, calc(0.3333rem + 3.3333vi), 3rem);
+	--spacing-l-2xl: clamp(2rem, calc(0.6667rem + 6.6667vi), 6rem);
+	--spacing-xl-3xl: clamp(3rem, calc(1rem + 10vi), 9rem);
 
 	--color-page: oklch(99% 0.004 250);
 	--color-surface: oklch(100% 0 0);
@@ -63,6 +108,24 @@
 		1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%,
 		0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1
 	);
+
+	/* Motion durations. Loops and progress indicators keep their own lengths. */
+	--duration-fast: 150ms;
+	--duration-base: 200ms;
+	--duration-slow: 250ms;
+	--duration-slower: 380ms;
+
+	/* Layering, lowest to highest. */
+	--z-behind: -1;
+	--z-raised: 1;
+	--z-sticky: 40;
+	--z-skip: 100;
+	--z-overlay: 9999;
+
+	/* The two shared layout thresholds (Tailwind sm: and md:). Media queries cannot read custom
+	   properties, so @media rules in this file write the same values and name the token. */
+	--breakpoint-sm: 40rem;
+	--breakpoint-md: 48rem;
 }
 
 @layer base {
@@ -141,6 +204,10 @@
 		--section-padding: var(--spacing-content);
 	}
 
+	:where(:root:not([data-spacing-policy="automatic-v2"])) :where([data-spacing="medium"]) {
+		--section-padding: var(--spacing-section-m, var(--spacing-section));
+	}
+
 	:where(:root:not([data-spacing-policy="automatic-v2"])) :where([data-spacing="none"]) {
 		--section-padding: 0px;
 		--container-gap: 0px;
@@ -201,6 +268,23 @@
 		font-size: var(--text-step-1);
 		letter-spacing: var(--letter-spacing-display, -0.018em);
 		line-height: 1.12;
+	}
+
+	/* Heading map: h1 step 2, h2 step 1, h3 step 0, h4 body size, h5 and h6 step -1. */
+	h3 {
+		font-size: var(--text-step-0);
+		line-height: 1.2;
+	}
+
+	h4 {
+		font-size: var(--text-body);
+		line-height: 1.3;
+	}
+
+	h5,
+	h6 {
+		font-size: var(--text-step--1);
+		line-height: 1.3;
 	}
 
 	p,
@@ -328,7 +412,7 @@
 
 	::view-transition-old(root),
 	::view-transition-new(root) {
-		animation-duration: 250ms;
+		animation-duration: var(--duration-slow);
 		animation-timing-function: var(--ease-smooth);
 	}
 
@@ -350,17 +434,17 @@
 	}
 
 	:root[data-vt-direction="forward"]::view-transition-old(root) {
-		animation: 180ms var(--ease-smooth) both vt-slide-out-left;
+		animation: var(--duration-base) var(--ease-smooth) both vt-slide-out-left;
 	}
 	:root[data-vt-direction="forward"]::view-transition-new(root) {
-		animation: 240ms var(--ease-smooth) both vt-slide-in-right;
+		animation: var(--duration-slow) var(--ease-smooth) both vt-slide-in-right;
 	}
 
 	:root[data-vt-direction="back"]::view-transition-old(root) {
-		animation: 180ms var(--ease-smooth) both vt-slide-out-right;
+		animation: var(--duration-base) var(--ease-smooth) both vt-slide-out-right;
 	}
 	:root[data-vt-direction="back"]::view-transition-new(root) {
-		animation: 240ms var(--ease-smooth) both vt-slide-in-left;
+		animation: var(--duration-slow) var(--ease-smooth) both vt-slide-in-left;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -425,7 +509,7 @@
 		content: "";
 		position: absolute;
 		inset: 0;
-		z-index: 1;
+		z-index: var(--z-raised);
 		cursor: pointer;
 	}
 
@@ -442,8 +526,8 @@
 		position: absolute;
 		inset-block-start: 0.5rem;
 		inset-inline-start: 0.5rem;
-		/* Keyboard navigation must paint above the sticky header (layer 40). */
-		z-index: 100;
+		/* Keyboard navigation must paint above the sticky header (--z-sticky). */
+		z-index: var(--z-skip);
 		transform: translateY(-150%);
 		border-radius: var(--radius-control);
 		padding: 0.75rem 1rem;
@@ -506,7 +590,7 @@
 
 	/* Below 48rem a text title wraps onto two lines, then ends in an ellipsis. The end padding keeps
 	   the last glyph's edge inside the clip. */
-	@media not (min-width: 48rem) {
+	@media not (min-width: 48rem) { /* --breakpoint-md */
 		.site-nav:has(> .site-menu) > .site-brand:not(:has(> .site-logo)) {
 			display: -webkit-box;
 			-webkit-box-orient: vertical;
@@ -548,7 +632,7 @@
 		position: absolute;
 		inset-inline: 0;
 		inset-block-start: 100%;
-		z-index: 1;
+		z-index: var(--z-raised);
 		display: flex;
 		flex-direction: column;
 		max-block-size: calc(100dvb - 100%);
@@ -571,7 +655,7 @@
 
 	/* From 48rem the same links sit inline in the header row and the Menu control is not shown.
 	   A browser without ::details-content keeps the working Menu disclosure at every width. */
-	@media (min-width: 48rem) {
+	@media (min-width: 48rem) { /* --breakpoint-md */
 		@supports selector(::details-content) {
 			.site-menu {
 				flex: 0 1 auto;
@@ -616,7 +700,7 @@
 	/* Inside the Menu panel, search results open in the flow of the scrolling panel instead of as a
 	   dropdown the panel would clip. The search component's scoped styles are unlayered, hence the
 	   priority. The two conditions are the two cases in which the panel is shown. */
-	@media not (min-width: 48rem) {
+	@media not (min-width: 48rem) { /* --breakpoint-md */
 		.site-menu__results {
 			position: static !important;
 			max-block-size: none !important;
@@ -677,6 +761,9 @@
 	.collection-item > :where(*), .article-stack > :where(*) { margin-block: 0; }
 	:where(.article-stack time, .collection-item time) { display: block; }
 	.article-taxonomies { display: flex; flex-wrap: wrap; gap: var(--spacing-content); }
+	/* Widget titles are compact labels, not section headings: they keep the body size whatever
+	   the heading map gives h3. */
+	:where(.widget__title) { font-size: var(--text-body); line-height: 1.15; }
 	/* The shared widget area has one page owner; group its native output. */
 	:where([data-spacing-policy="automatic-v2"] [data-widget-area] > .widget) {
 		display: flex;
@@ -772,6 +859,12 @@
 		gap: var(--grid-gap, var(--spacing-grid));
 	}
 
+	/* Grid items are named inline-size query containers, so a component in a cell can respond to
+	   the cell rather than to the viewport (Grid slots, on by default). */
+	:where(.grid-auto[data-slots="container"]) > :where(*) {
+		container: card-slot / inline-size;
+	}
+
 	.grid-auto--compact {
 		--grid-min: 14rem;
 	}
@@ -795,7 +888,7 @@
 		inline-size: 100%;
 		block-size: 100%;
 		object-fit: cover;
-		z-index: -1;
+		z-index: var(--z-behind);
 		pointer-events: none;
 	}
 
@@ -815,7 +908,7 @@
 		mask-image: linear-gradient(to right, transparent, #000 var(--fade-amount, 25%), #000 calc(100% - var(--fade-amount, 25%)), transparent);
 	}
 
-	/* 4-voice typography, telemetry metadata, surface physics, and architectural grids. */
+	/* Optional recipe: 4-voice typography and telemetry metadata (eyebrow, accent voice, badges). */
 	.eyebrow-telemetry {
 		display: inline-flex;
 		align-items: center;
@@ -863,6 +956,7 @@
 		box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-action) 22%, transparent);
 	}
 
+	/* Optional recipe: surface physics (elevated, glass, spotlight). */
 	.surface-elevated {
 		background: var(--color-elevated);
 		border: 1px solid var(--color-border);
@@ -881,6 +975,7 @@
 		background-image: radial-gradient(circle at 50% 0%, color-mix(in oklch, var(--color-action) 14%, transparent) 0%, transparent 70%);
 	}
 
+	/* Optional recipe: architectural grids and frames (hairline grid, blueprint, crosshair). */
 	.grid-hairline {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
@@ -929,6 +1024,7 @@
 		inset-inline-end: -0.35rem;
 	}
 
+	/* Optional recipe: framed UI specimen. */
 	.ui-specimen {
 		border: 1px solid var(--color-border-strong);
 		border-radius: var(--radius-card);
@@ -950,6 +1046,7 @@
 		color: var(--color-muted);
 	}
 
+	/* Optional recipe: sticky stacked cards. */
 	.stack-cards {
 		display: flex;
 		flex-direction: column;
@@ -966,6 +1063,7 @@
 		box-shadow: var(--surface-highlight), 0 -12px 36px -8px color-mix(in oklch, var(--color-text) 16%, transparent), var(--shadow-md);
 	}
 
+	/* Optional recipe: card entrance. The scroll reveal below it is core. */
 	@keyframes baseline-card-in {
 		from {
 			opacity: 0;
@@ -982,23 +1080,44 @@
 			animation: baseline-card-in var(--duration-normal, 260ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
 		}
 
-		:where(html[data-reveal-ready]) :where([data-reveal]:not(.is-revealed)) {
-			opacity: 0;
-			transform: translateY(var(--reveal-distance, 1rem));
+		/* Scroll reveal. Where scroll-driven animations are supported, CSS reveals [data-reveal]
+		   as it enters the viewport and no script runs; --reveal-range sets how far into its entry
+		   it is fully shown. Elsewhere SiteShell's IntersectionObserver path below takes over. */
+		@supports (animation-timeline: view()) {
+			:where([data-reveal]) {
+				animation: baseline-reveal linear both;
+				animation-timeline: view();
+				animation-range: entry 0% entry var(--reveal-range, 40%);
+			}
 		}
 
-		:where(html[data-reveal-ready]) :where([data-reveal]) {
-			transition:
-				opacity var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms),
-				transform var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms);
-		}
+		@supports not (animation-timeline: view()) {
+			:where(html[data-reveal-ready]) :where([data-reveal]:not(.is-revealed)) {
+				opacity: 0;
+				transform: translateY(var(--reveal-distance, 1rem));
+			}
 
-		:where(html[data-reveal-ready]) :where([data-reveal].is-revealed) {
-			opacity: 1;
-			transform: translateY(0);
+			:where(html[data-reveal-ready]) :where([data-reveal]) {
+				transition:
+					opacity var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms),
+					transform var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms);
+			}
+
+			:where(html[data-reveal-ready]) :where([data-reveal].is-revealed) {
+				opacity: 1;
+				transform: translateY(0);
+			}
 		}
 	}
 
+	@keyframes baseline-reveal {
+		from {
+			opacity: 0;
+			transform: translateY(var(--reveal-distance, 1rem));
+		}
+	}
+
+	/* Optional recipe: CSS data bars. */
 	.viz-bars {
 		display: flex;
 		align-items: flex-end;
@@ -1014,7 +1133,7 @@
 		border-radius: calc(var(--radius-sm, 0.25rem) * 0.75) calc(var(--radius-sm, 0.25rem) * 0.75) 0 0;
 		background: color-mix(in oklch, var(--color-action) var(--bar-mix, 38%), var(--color-elevated));
 		border-block-start: 1px solid color-mix(in oklch, var(--color-action) 75%, transparent);
-		transition: background-color var(--duration-fast, 150ms) var(--ease-smooth), transform var(--duration-fast, 150ms) var(--ease-smooth);
+		transition: background-color var(--duration-fast) var(--ease-smooth), transform var(--duration-fast) var(--ease-smooth);
 	}
 
 	:where(.viz-bar:hover, .viz-bar:focus-visible, .viz-bar[data-active]) {
@@ -1036,7 +1155,7 @@
 		text-decoration: none;
 		box-shadow: var(--surface-highlight), var(--shadow-sm);
 		cursor: pointer;
-		transition: transform 150ms var(--ease-snappy), background-color 150ms var(--ease-smooth), border-color 150ms var(--ease-smooth), box-shadow 150ms var(--ease-smooth);
+		transition: transform var(--duration-fast) var(--ease-snappy), background-color var(--duration-fast) var(--ease-smooth), border-color var(--duration-fast) var(--ease-smooth), box-shadow var(--duration-fast) var(--ease-smooth);
 	}
 
 	:where(.btn:hover) {
@@ -1074,20 +1193,21 @@
 
 	:where(.icon-nudge) {
 		display: inline-block;
-		transition: transform 220ms var(--ease-spring);
+		transition: transform var(--duration-base) var(--ease-spring);
 	}
 
 	:where(.btn:hover, .btn:focus-visible, .card:hover, .card:focus-within, a:hover, a:focus-visible) :where(.icon-nudge) {
 		transform: translateX(0.2rem);
 	}
 
+	/* Optional recipe: bento grid. */
 	.bento-grid {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
 		gap: var(--grid-gap, var(--layout-grid-gap, var(--spacing-grid)));
 	}
 
-	@media (min-width: 48rem) {
+	@media (min-width: 48rem) { /* --breakpoint-md */
 		.bento-grid {
 			grid-template-columns: repeat(12, minmax(0, 1fr));
 		}
@@ -1105,6 +1225,7 @@
 		.bento-row-2 { grid-row: span 2; }
 	}
 
+	/* Optional recipe: grain texture. */
 	.surface-grain {
 		position: relative;
 		isolation: isolate;
@@ -1115,7 +1236,7 @@
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
-		z-index: 1;
+		z-index: var(--z-raised);
 		opacity: var(--grain-opacity, 0.035);
 		mix-blend-mode: overlay;
 		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -1125,8 +1246,8 @@
 	:where([data-sticky-header]) {
 		position: sticky;
 		inset-block-start: 0;
-		z-index: 40;
-		transition: background-color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth), box-shadow 200ms var(--ease-smooth), padding-block 200ms var(--ease-smooth);
+		z-index: var(--z-sticky);
+		transition: background-color var(--duration-base) var(--ease-smooth), border-color var(--duration-base) var(--ease-smooth), box-shadow var(--duration-base) var(--ease-smooth), padding-block var(--duration-base) var(--ease-smooth);
 		border-block-end: 1px solid transparent;
 	}
 
@@ -1148,6 +1269,7 @@
 		display: none;
 	}
 
+	/* Optional recipe: editorial drop cap. */
 	:where(.prose-dropcap > p:first-of-type)::first-letter {
 		float: inline-start;
 		font-family: var(--font-display);
@@ -1159,6 +1281,7 @@
 		color: var(--color-text);
 	}
 
+	/* Optional recipe: horizontal scroll-snap reel. */
 	.reel-snap {
 		display: grid;
 		grid-auto-flow: column;
@@ -1209,7 +1332,7 @@
 	/* List-to-detail photo morphs: mediaTransition() in src/lib/view-transition.ts and Card media. The
 	   group clips to the card radius and both snapshots cover it while the box changes aspect ratio. */
 	::view-transition-group(*.vt-media) {
-		animation-duration: 380ms;
+		animation-duration: var(--duration-slower);
 		animation-timing-function: var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
 		overflow: clip;
 		border-radius: var(--radius-card);
@@ -1319,7 +1442,7 @@
 		inset-block-start: 0;
 		inset-inline: 0;
 		block-size: 2px;
-		z-index: 9999;
+		z-index: var(--z-overlay);
 		background: var(--color-action);
 		box-shadow: 0 0 8px color-mix(in oklch, var(--color-action) 70%, transparent);
 		transform-origin: 0% 50%;
@@ -1347,7 +1470,7 @@
 		:where(dialog[open]) {
 			opacity: 1;
 			transform: translateY(0) scale(1);
-			transition: opacity 180ms var(--ease-smooth), transform 180ms var(--ease-smooth);
+			transition: opacity var(--duration-base) var(--ease-smooth), transform var(--duration-base) var(--ease-smooth);
 		}
 
 		@starting-style {
@@ -1369,6 +1492,7 @@
 		padding-block: var(--section-padding);
 	}
 	:where([data-spacing-policy="automatic-v2"]) :where(.section[data-spacing="content"]) { --section-padding: var(--spacing-content); }
+	:where([data-spacing-policy="automatic-v2"]) :where(.section[data-spacing="medium"]) { --section-padding: var(--spacing-section-m, var(--spacing-section)); }
 	:where([data-spacing-policy="automatic-v2"]) :where(.section[data-spacing="none"]) { --section-padding: 0px; }
 	:where([data-spacing-policy="automatic-v2"]) :where(.container-shell) { --content-gap: var(--layout-content-gap); }
 	:where([data-spacing-policy="automatic-v2"]) :where(.section, .container-shell):where([data-layout="stack"]) {
@@ -1386,6 +1510,23 @@
 	:where([data-spacing-policy="automatic-v2"]) :where(.site-main .content-grid) { --_gutter: 0px; }
 	:where([data-spacing-policy="automatic-v2"]) :where(.site-main .content-grid .content--full-safe) { padding-inline: 0; }
 	:where([data-spacing-policy="automatic-v2"]) :where(.section, .container-shell, .grid-auto) > :where(*) { min-inline-size: 0; }
+
+	/* Same-ground section joins, opted in per site with data-section-joins="shared" on the root
+	   (SiteShell sectionJoins="shared"); both spacing policies keep their earlier behaviour without it.
+	   Two sections on the same ground share one section step: the second drops its start padding, so
+	   the first section's end padding is the whole join. Where the ground changes (a data-surface,
+	   a data-ground, a background or surface class, an inline background or an .is-bg child) both
+	   keep their full padding. data-join="separate" keeps a single join at full padding. */
+	:where([data-section-joins="shared"]) :where(main > section, .section):where(:not([data-surface], [data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"]))
+		+ :where(main > section, .section):where(:not([data-surface], [data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"])) {
+		padding-block-start: 0;
+	}
+	:where([data-section-joins="shared"]) :where(main > section, .section):where([data-surface="dark"]):where(:not([data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"]))
+		+ :where(main > section, .section):where([data-surface="dark"]):where(:not([data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"])),
+	:where([data-section-joins="shared"]) :where(main > section, .section):where([data-surface="light"]):where(:not([data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"]))
+		+ :where(main > section, .section):where([data-surface="light"]):where(:not([data-ground], [class*="bg-"], [class*="surface-"], [style*="background"], :has(> .is-bg), [data-join="separate"])) {
+		padding-block-start: 0;
+	}
 
 	/* High-contrast forced-colors mode contracts: use system colors for interactive boundaries */
 	@media (forced-colors: active) {

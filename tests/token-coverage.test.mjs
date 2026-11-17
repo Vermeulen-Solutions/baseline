@@ -7,6 +7,7 @@ import {
   AESTHETIC_LANES,
   TYPE_SCALE_RATIOS,
   REQUIRED_THEME_TOKENS,
+  OPTIONAL_THEME_TOKENS,
   REQUIRED_ROOT_TOKENS,
   REQUIRED_DARK_SURFACE_TOKENS,
   parseDesignTokens,
@@ -61,6 +62,8 @@ const PUBLIC_CONTRACT_TOKENS = new Set([
   '--ease-snappy',
   '--ease-spring',
   '--measure-content-safe',
+  // Media queries cannot read custom properties; these name the thresholds for Tailwind sm:/md:.
+  '--breakpoint-sm', '--breakpoint-md',
   '--layout-section-padding', '--layout-container-gap', '--layout-content-gap', '--layout-grid-gap',
 ]);
 
@@ -89,7 +92,7 @@ test('global.css declares all required semantic tokens, valid fluid clamps, and 
   const css = readFileSync(GLOBAL_CSS_PATH, 'utf8');
   const audit = auditDesignTokens(css);
   assert.equal(audit.valid, true, audit.errors.join('\n'));
-  assert.equal(Object.keys(audit.tokens.theme).length, REQUIRED_THEME_TOKENS.length);
+  assert.deepEqual(Object.keys(audit.tokens.theme).filter(token => !token.endsWith('-*')).sort(), [...REQUIRED_THEME_TOKENS, ...OPTIONAL_THEME_TOKENS].sort());
   assert.equal(Object.keys(audit.tokens.root).length, REQUIRED_ROOT_TOKENS.length);
   assert.equal(Object.keys(audit.tokens.dark).length, REQUIRED_DARK_SURFACE_TOKENS.length);
 });
@@ -121,8 +124,9 @@ test('every authored token in global.css is either consumed in src/ or part of t
     const varUsage = new RegExp(`var\\(\\s*${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`);
     const dynamicUsage = token.startsWith('--color-') && combinedSource.includes('--color-${');
     const stepUsage = token.startsWith('--text-step-') && combinedSource.includes('--text-step-${');
+    const spaceUsage = token.startsWith('--spacing-') && combinedSource.includes('--spacing-${');
     assert.ok(
-      varUsage.test(combinedSource) || dynamicUsage || stepUsage,
+      varUsage.test(combinedSource) || dynamicUsage || stepUsage || spaceUsage,
       `Authored token ${token} has no consumer in src/ and is not listed in PUBLIC_CONTRACT_TOKENS`,
     );
   }

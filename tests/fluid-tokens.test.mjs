@@ -13,10 +13,16 @@ const digest = value => createHash('sha256').update(JSON.stringify(value)).diges
 
 test('generator preserves previously emitted scales and authored lane values', () => {
   // Captured independently from the Phase 5 source, before mathematical hardening.
+  // The resize-text rule (max <= 2.5 x min) deliberately raised some bridge minimums and the scales
+  // gained steps 3-5, the medium section step and the primitive space scale; every earlier
+  // non-bridge value is unchanged.
+  const pick = (scale, keys) => Object.fromEntries(keys.map(key => [key, scale[key]]));
   assert.equal(digest({
-    type: Object.keys(TYPE_SCALE_RATIOS).map(ratio => generateTypeScale({ ratio })),
-    space: [1.25, 1.5, 2.2].map(ratio => generateSpaceScale({ ratio })),
-  }), '9c49768d6ed034d7aa9d2c43b8b9de051b20cd92255c2ae7efae44f6002a6cd8');
+    type: Object.keys(TYPE_SCALE_RATIOS).map(ratio => pick(generateTypeScale({ ratio }), ['--text-step--1', '--text-step-0', '--text-step-1', '--text-step-2'])),
+    space: [1.25, 1.5, 2.2].map(ratio => pick(generateSpaceScale({ ratio }), ['--spacing-content', '--spacing-container', '--spacing-grid', '--spacing-xl-to-sm', '--spacing-2xl-to-md', '--spacing-section'])),
+  }), '02039ea9fa08e4e27414df4260aeb81418fa9569dac215da9f6c690a20e07501');
+  // Bridges that already met the rule keep their earlier values.
+  assert.equal(generateTypeScale({ ratio: 'major-third' })['--text-step-3-to-1'], buildFluidClamp(1.1625, 1.375 * 1.25 ** 3));
   assert.equal(digest(AESTHETIC_LANES), 'd754fbdb6cfcf1c7f82352c69364a11ab53540a17cca5e2a30384e254f1ce535');
 });
 
@@ -66,7 +72,8 @@ test('authored presets retain their own transition domains and diagnostic sample
   for (const lane of Object.keys(AESTHETIC_LANES)) {
     const audit = auditDesignTokens(applyTokenOverrides(css, lane));
     assert.equal(audit.valid, true, audit.errors.join('\n'));
-    assert.equal(audit.fluid.tokens.length, 12);
+    assert.equal(audit.fluid.tokens.length, Object.keys(audit.tokens.theme).filter(key => /^--(?:text-step-|spacing-)/.test(key)).length);
+    assert.ok(audit.fluid.tokens.length >= 12);
     for (const token of audit.fluid.tokens) {
       assert.equal(token.unit, 'vi');
       let previous = 0;
@@ -149,4 +156,37 @@ test('evaluator rejects nonfinite environments and arithmetic overflow', () => {
     assert.throws(() => evaluateFluidClamp(value, environment));
   }
   assert.throws(() => evaluateFluidClamp('clamp(1e308rem, 5vi, 1e308rem)', { viewportSizePx: 320 }), /overflow/);
+});
+
+test('text tokens above 2.5 x their minimum fail unless a reviewed exception precedes them', async () => {
+  const { auditDesignTokens, generateSpacePrimitives, MAX_TEXT_RATIO, parseDesignTokens } = await import('../scripts/design-system.mjs');
+  const css = readFileSync('src/styles/global.css', 'utf8');
+  const wide = css.replace(/--text-step-2-to-0: [^;]+;/, '--text-step-2-to-0: clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem);');
+  const failing = auditDesignTokens(wide);
+  assert.equal(failing.valid, false);
+  // An older stylesheet (no --text-step-3, no strict theme) gets a warning instead of a failure.
+  const withoutStep3 = wide.replace(/\t--text-step-3: [^;]+;\n/, '');
+  assert.notEqual(withoutStep3, wide);
+  const older = auditDesignTokens(withoutStep3);
+  assert.equal(older.valid, true, older.errors.join('\n'));
+  assert.ok(older.warnings.some(warning => warning.includes('--text-step-2-to-0') && warning.includes('resize-text-exception')));
+  const { applyStrictTheme } = await import('../scripts/design-system.mjs');
+  assert.equal(auditDesignTokens(applyStrictTheme(withoutStep3)).valid, false, 'the strict theme marks a current stylesheet');
+  assert.ok(failing.errors.some(error => error.includes('--text-step-2-to-0') && error.includes('WCAG 1.4.4') && error.includes('1.3rem')));
+  const excepted = wide.replace('--text-step-2-to-0:', '/* resize-text-exception: display line wraps; checked at 200% */\n\t--text-step-2-to-0:');
+  assert.equal(auditDesignTokens(excepted).valid, true, auditDesignTokens(excepted).errors.join('\n'));
+  // Spacing tokens are not text and are not held to the ratio.
+  for (const ratio of Object.keys(TYPE_SCALE_RATIOS)) {
+    for (const [name, value] of Object.entries(generateTypeScale({ ratio }))) {
+      const { minRem, maxRem } = parseFluidClamp(value);
+      assert.ok(maxRem / minRem <= MAX_TEXT_RATIO + 5e-4, `${ratio} ${name}`);
+    }
+  }
+  // The semantic spacing tokens sit on the primitive scale.
+  const theme = parseDesignTokens(css).theme;
+  const primitives = generateSpacePrimitives();
+  for (const [name, value] of Object.entries(primitives)) assert.equal(theme[name], value, name);
+  assert.equal(theme['--spacing-content'], theme['--spacing-s']);
+  assert.equal(theme['--spacing-section'], theme['--spacing-xl-3xl']);
+  assert.equal(theme['--spacing-section-m'], theme['--spacing-l-2xl']);
 });

@@ -291,6 +291,14 @@
     "tier": "unit",
     "reason": "Retired-file list contract, a clean checkout and manifests, detection in throwaway sites, the doctor warning and update:plan rows; small temporary Git repository only"
   },
+  "fleet-status.test.mjs": {
+    "tier": "unit",
+    "reason": "Fleet status from throwaway site folders and one throwaway Git repository: kinds, hosting, locked versions, standards comparison, Markdown report and config validation"
+  },
+  "delivery-tools.test.mjs": {
+    "tier": "unit",
+    "reason": "Workers delivery rules, D1 export safeguards, rehearsal and live-check helpers with throwaway folders and stubbed git and fetch; no network"
+  },
   "update-plan.test.mjs": {
     "tier": "unit",
     "reason": "Read-only classification of upstream changes against a site using a throwaway Git repository"
@@ -326,5 +334,9 @@
   "docs-links.test.mjs": {
     "tier": "unit",
     "reason": "Relative link and heading-anchor resolution for repository documents and maintained skills, on a temporary tree and the checked-in files"
+  },
+  "editor-experience.test.mjs": {
+    "tier": "unit",
+    "reason": "Derived display order, editorial order page helpers, per-locale select labels and admin-metadata plan safety; pure functions, no CMS runtime"
   }
 }

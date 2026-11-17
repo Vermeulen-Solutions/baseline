@@ -30,7 +30,7 @@ The generator uses linear interpolation between requested sizes and viewport end
 
 The global-token validator supports a deliberately bounded grammar: positive ordered `rem` bounds and an affine `rem + vi` term (optionally inside `calc()`), or a direct viewport term. Negative intercepts, finite decimal/exponent numbers and existing `vw` values are supported; generated scales continue to use `vi`. CSS binary `+`/`-` requires surrounding whitespace. Negative slopes, zero slopes with varying bounds, malformed expressions, non-finite coefficients/domains and overflowing reference evaluations fail. General CSS math, variables and container units are outside this contract. `cqi` needs a separately documented inline-size container and matching validators/specimens before adoption; adding a substring containing `vi` cannot bypass that boundary.
 
-The JSON report models a fixed 1280px physical viewport, 16px root and horizontal writing. At estimated 200%/400% zoom, CSS viewport size shrinks to 640/320px while the root stays 16 CSS pixels. `effectiveSizeRatio` compares the enlarged modeled size against the initial size. A ratio below the requested zoom factor produces a text-token advisory, not an audit failure or a WCAG verdict. `rootFontSamples` separately evaluate 16/20/32px roots at a fixed 1280 CSS-pixel viewport. These calculations describe assumptions; they do not reproduce text-only browser resizing, font metrics, clipping, wrapping or focus behavior.
+The JSON report models a fixed 1280px physical viewport, 16px root and horizontal writing. At estimated 200%/400% zoom, CSS viewport size shrinks to 640/320px while the root stays 16 CSS pixels. `effectiveSizeRatio` compares the enlarged modeled size against the initial size. A ratio below the requested zoom factor produces a text-token advisory, not an audit failure or a WCAG verdict. Separately, `design:tokens` **fails** any fluid `--text-*` token whose maximum exceeds 2.5 times its minimum: under that bound, 200% text enlargement is reachable at every viewport width with browser zoom (WCAG 1.4.4 resize text; see [Maxwell Barvian, Smashing Magazine](https://www.smashingmagazine.com/2023/11/addressing-accessibility-concerns-fluid-type/)). Raise the minimum, or record a reviewed exception with a `/* resize-text-exception: <reason> */` comment directly before the declaration, for example for display text that is verified to wrap at 200%. The type-scale generator raises a bridge or high step's minimum to that floor. A stylesheet that predates the rule (no strict theme and no `--text-step-3`) gets a warning naming the fix instead of a failure, so syncing the script does not stop an older site's verification; merging the current `global.css` adopts the scale and the rule then fails. `rootFontSamples` separately evaluate 16/20/32px roots at a fixed 1280 CSS-pixel viewport. These calculations describe assumptions; they do not reproduce text-only browser resizing, font metrics, clipping, wrapping or focus behavior.
 
 Use `npm run test:design` and `npm run verify` for mathematical checks. Run the existing local Windows `npm run test:visual:functional` for actual Chromium 200%/400% zoom, 320px reflow, text spacing and keyboard journeys. Numerical results do not replace rendered acceptance or manual assistive-technology and text-only resize checks. No browser/screenshot suite runs in CI or production builds.
 
@@ -40,12 +40,22 @@ Defined in `src/styles/global.css` under Tailwind v4's `@theme`:
 
 | Token | Formula | 320px Viewport | 1280px Viewport | Intended Role |
 | :--- | :--- | :--- | :--- | :--- |
-| `--text-step--1` | `clamp(0.875rem, calc(0.8333rem + 0.2083vi), 1rem)` | 14px | 16px | Captions, metadata, fine print |
-| `--text-step-0` | `clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)` | 16px | 24px | Body copy, default interface text |
-| `--text-step-1` | `clamp(1.25rem, calc(1rem + 1.25vi), 2rem)` | 20px | 32px | Section headings (`<h2>`), cards |
-| `--text-step-2` | `clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem)` | 28px | 52px | Page titles (`<h1>`), hero display |
-| `--text-step-2-to-0` | `clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem)` | 16px | 52px | High-contrast display bridge |
-| `--text-step-3-to-1` | `clamp(1.25rem, calc(0.25rem + 5vi), 4.25rem)` | 20px | 68px | Dramatic hero display bridge |
+| `--text-body` | `1rem` | 16px | 16px | Body copy and default interface text: the reader's own size, not fluid |
+| `--text-step--1` | `clamp(0.875rem, calc(0.8333rem + 0.2083vi), 1rem)` | 14px | 16px | Captions, metadata, fine print, `<h5>`/`<h6>` |
+| `--text-step-0` | `clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)` | 16px | 24px | Lead and large text, `<h3>`, card titles |
+| `--text-step-1` | `clamp(1.25rem, calc(1rem + 1.25vi), 2rem)` | 20px | 32px | Section headings (`<h2>`) |
+| `--text-step-2` | `clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem)` | 28px | 52px | Page titles (`<h1>`) |
+| `--text-step-3` | `clamp(2.125rem, calc(1.4167rem + 3.5417vi), 4.25rem)` | 34px | 68px | Hero display |
+| `--text-step-4` | `clamp(2.5rem, calc(1.5rem + 5vi), 5.5rem)` | 40px | 88px | Large display |
+| `--text-step-5` | `clamp(3rem, calc(1.6667rem + 6.6667vi), 7rem)` | 48px | 112px | Poster display |
+| `--text-step-2-to-0` | `clamp(1.3125rem, calc(0.6667rem + 3.2292vi), 3.25rem)` | 21px | 52px | High-contrast display bridge |
+| `--text-step-3-to-1` | `clamp(1.75rem, calc(0.9167rem + 4.1667vi), 4.25rem)` | 28px | 68px | Dramatic hero display bridge |
+
+**Body text is `1rem`, not fluid.** `--text-step-0` is lead or large text; never set paragraphs to it by default. Following [OddBird's advice on fluid type](https://oddbird.net/2025/02/12/fluid-type/), the root size stays the reader's, and only headings and display text scale with the viewport.
+
+**Heading map.** `h1` uses step 2, `h2` step 1, `h3` step 0, `h4` the body size (bold), and `h5`/`h6` step −1. Card titles use step 0 inside the card. `/_styleguide` shows the map. A site that wants a different hierarchy changes these rules once in `global.css`, not per page.
+
+Every fluid text token keeps its maximum at most 2.5 times its minimum (see the diagnostic contract above). The two bridges were retuned to meet it: `--text-step-2-to-0` now starts at 21px instead of 16px and `--text-step-3-to-1` at 28px instead of 20px.
 
 All headings apply `text-wrap: balance` by default to prevent awkward single-word typographic orphans.
 
@@ -58,11 +68,43 @@ Spacing grows proportionally with the screen, maintaining balanced visual weight
 | `--spacing-content` | `clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)` | 16px | 24px | Flow margins, card inner padding |
 | `--spacing-grid` | `clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem)` | 20px | 36px | Column gaps, figure margins |
 | `--spacing-container`| `clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)` | 16px | 32px | Page horizontal gutter padding |
-| `--spacing-section` | `clamp(3rem, calc(1rem + 10vi), 9rem)` | 48px | 144px | Vertical section breathing room |
+| `--spacing-section` | `clamp(3rem, calc(1rem + 10vi), 9rem)` | 48px | 144px | Vertical section breathing room (full section step) |
+| `--spacing-section-m` | `clamp(2rem, calc(0.6667rem + 6.6667vi), 6rem)` | 32px | 96px | Medium section step (`<Section spacing="medium">`) |
 | `--spacing-xl-to-sm` | `clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem)` | 12px | 64px | High-contrast padding/gap bridge |
 | `--spacing-2xl-to-md` | `clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem)` | 20px | 104px | Hero/spotlight padding bridge |
 
+#### Fluid space scale (primitives)
+
+Below the semantic tokens sits a complete fluid space scale with [Utopia's](https://utopia.fyi/blog/painting-with-a-fluid-space-palette/) step multipliers of a base step `s` (1rem at 20rem, 1.5rem at 80rem). Use a step or a pair instead of inventing a value; Tailwind turns them into utilities such as `p-s`, `gap-m` or `py-xl-3xl`.
+
+| Step | 320px | 1280px | | Pair | 320px | 1280px |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `--spacing-3xs` | 4px | 6px | | `--spacing-3xs-2xs` | 4px | 12px |
+| `--spacing-2xs` | 8px | 12px | | `--spacing-2xs-xs` | 8px | 18px |
+| `--spacing-xs` | 12px | 18px | | `--spacing-xs-s` | 12px | 24px |
+| `--spacing-s` | 16px | 24px | | `--spacing-s-m` | 16px | 36px |
+| `--spacing-m` | 24px | 36px | | `--spacing-m-l` | 24px | 48px |
+| `--spacing-l` | 32px | 48px | | `--spacing-l-xl` | 32px | 72px |
+| `--spacing-xl` | 48px | 72px | | `--spacing-xl-2xl` | 48px | 96px |
+| `--spacing-2xl` | 64px | 96px | | `--spacing-2xl-3xl` | 64px | 144px |
+| `--spacing-3xl` | 96px | 144px | | `--spacing-s-l`, `--spacing-l-2xl`, `--spacing-xl-3xl` | 16/32/48px | 48/96/144px |
+
+The semantic tokens keep their names and values and sit on this scale: `--spacing-content` equals `--spacing-s`, `--spacing-section` equals `--spacing-xl-3xl` and `--spacing-section-m` equals `--spacing-l-2xl` (a unit test holds these equal). `--spacing-grid` and `--spacing-container` sit between steps. The semantic tokens stay literal `clamp()` values rather than `var()` aliases, because older sites adopt required contract tokens one at a time and need self-contained values. `npm run design:tokens -- --space-scale <ratio>` regenerates the semantic set and the primitives (`generateSpacePrimitives`) together; a stylesheet without the primitives keeps its own set.
+
 `--spacing-section` interpolates between its bounds without per-breakpoint padding overrides. Check actual page pacing and use a deliberate layout breakpoint when the content requires a different composition.
+
+### Section rhythm: one fluid step, set once
+
+Baseline follows the fluid-spacing model of builders such as Bricks and Automatic.css: **one fluid section step is set once and used by every section**. Pages do not tune section padding per breakpoint or per page; a site that wants roomier or tighter pacing recalibrates `--spacing-section` (or the `--layout-section-padding` alias) once.
+
+- **Same-ground joins pay one step.** When two sections stand on the same ground, the second drops its start padding: the first section's end padding is the whole join. Two full paddings stacked on one ground read as an empty band, not as a stronger break.
+- **A ground change keeps both paddings.** Where the background changes (a `data-surface`, a `data-ground`, a background or surface class such as `.surface-spotlight` or `bg-*`, an inline background, or an `.is-bg` child), both sections keep their full padding, because each needs room inside its own ground.
+- **Exceptions are named sizes, not numbers.** `<Section spacing="medium">` uses `--spacing-section-m`, `spacing="content"` uses `--spacing-content`, and `spacing="none"` removes the padding. `data-join="separate"` on a section keeps its joins at full padding.
+- **Contextual spacing is for content inside text, not for sections.** Bricks' contextual spacing (space that depends on the neighbouring element) corresponds to Baseline's editorial flow controls (`--heading-spacing`, `--list-spacing` and the others in section 4). It never sizes sections.
+
+The join rule is opted in per site with `data-section-joins="shared"` on the root element, which `SiteShell sectionJoins="shared"` writes. The starter's Base layouts and newly generated static sites set it. A section that paints its own background through a scoped style the rule cannot see must say so with `data-ground` (any value) or `data-surface`; otherwise the next section joins it without start padding. CSS cannot compare two sections' `data-ground` values, so two adjacent sections with the same custom ground keep both paddings unless the second takes `spacing="none"` deliberately.
+
+Existing sites keep their current spacing until they adopt the rule: both the `legacy` and the versioned `automatic-v2` spacing policies are unchanged without the attribute. To adopt it, add `sectionJoins="shared"` to the site-owned Base's `SiteShell`, then inspect each stacked-section join; `npm run audit:ui` reports remaining `empty-band` joins measured against the page's own `--spacing-section`.
 
 ---
 
@@ -89,14 +131,18 @@ Baseline provides small, semantic Astro layout primitives located in `src/compon
 
 Owned CSS uses `@layer base` or `@layer components`. The document establishes `theme, base, vendor, astro, components, utilities` before stylesheet loading. PhotoSwipe is imported into `vendor`; contextual defaults use `:where()` so utilities override them. `check:css` parses owned CSS, Astro styles and local imports, including static overlays. This does not certify third-party admin/editor CSS.
 
+**Token guardrails.** `@import "tailwindcss"` brings Tailwind's whole default vocabulary (`bg-indigo-500`, `text-4xl`, `rounded-xl`, `p-7`, `p-[37px]`), and agents reach for it when a named token would do. `check:css` therefore prints advisory guardrails: default-palette, default type-size, radius and shadow utilities, numeric spacing multipliers, arbitrary values and registry alias classes in Astro markup; raw `gap` props on Section, Container and Grid; and raw colour literals, spacing of 1rem or more and numeric `z-index` in author CSS outside custom property definitions and `@theme` (spacing below 1rem is the compact scale for control internals). Record a reviewed exception with a `token-exempt: <reason>` comment before the declaration, or on the same or previous line in markup. `--strict-guardrails` turns the advisories into failures for a site that wants them enforced.
+
+**Strict theme for new sites.** `design:tokens --init-client` prepends `--color-*: initial`, `--text-*: initial`, `--radius-*: initial` and `--shadow-*: initial` to `@theme`, so those Tailwind defaults no longer compile and the site's own tokens, declared after the reset, are the only vocabulary. `--spacing` (the numeric multiplier) and the font, breakpoint and container namespaces stay, and `bg-transparent`/`bg-current` are static utilities that still work. Existing sites are unchanged; one adopts it deliberately with `design:tokens -- --strict-theme --write` once the guardrails show no default utilities in use. The profile generator does not apply it: the generated `global.css` has to stay byte-identical to upstream so `sync:baseline` can compare it.
+
 `SiteShell spacingPolicy="automatic-v2"` activates structural defaults. Its default is `legacy`, protecting downstream site-owned Bases. Current starter and newly generated Bases explicitly activate v2. Upgrade activation is a reviewed site migration; see [baseline updates](baseline-updates.md).
 
 | Owner | Automatic-v2 behavior | Local control |
 | --- | --- | --- |
-| Section | Block padding; column stack of direct children with container gap | `spacing="section|content|none"`, `gap`, `layout="stack|custom"` |
+| Section | Block padding (one section step; same-ground joins share it with `sectionJoins="shared"`); column stack of direct children with container gap | `spacing="section|medium|content|none"`, `gap`, `layout="stack|custom"` |
 | Ordinary Container | Centered reading/content/wide measure; column stack with content gap | `width`, `gap`, `layout="stack|custom"` |
 | Breakout Container | Named-track grid; content gap, preserving subgrid propagation | `breakout`, `gap`, track classes |
-| Grid | Intrinsic auto-fit columns; grid gap | `minimum="compact|standard|wide"`, `gap` |
+| Grid | Intrinsic auto-fit columns; grid gap; each item a named `card-slot` inline-size query container | `minimum="compact|standard|wide"`, `gap`, `slots={false}` |
 | Site main | Horizontal page gutters once; no inferred block spacing | Compose explicit Sections |
 | RichText | Editorial sibling rhythm and bounded prose presentation | Six public flow controls, or `flow={false}` |
 
@@ -126,11 +172,15 @@ Use `layout="custom"` when the caller owns display, direction and gaps. Ordinary
 </Container>
 ```
 
+`gap` takes a token name or, for compatibility, any CSS length. Names map to custom properties: `none` (0), the semantic `content`, `grid`, `container`, `section` and `section-m`, and the space scale's steps and pairs (`s`, `m`, `xl-3xl` …) become `var(--spacing-<name>)`. TypeScript offers the names (`LayoutGap` in `src/lib/layout-style.ts`); `npm run check:css` reports raw lengths as advisories.
+
 The components preserve ordinary HTML attributes, IDs, ARIA, class/class:list and string/object styles. A `gap` prop wins over the same local custom property in passed style; a real `gap-*` utility wins over the default property through layers. Invalid enum inputs normalize to documented defaults; empty/non-string optional gap values are omitted. These normalization rules do not validate arbitrary caller CSS.
 
 Breakout children normally occupy the reading track (`--measure-reading`). `.content--feature`, `.content--wide`, `.content--full` and `.content--full-safe` select wider named tracks. Within the padded site shell, the grid does not add another gutter; full/full-safe extend to the shell content edge. Viewport-edge bleed requires a caller-owned shell composition and rendered verification. Native image placement hints must match those actual bounds.
 
 ### `<Card />` (Turnkey Accessible Card & Concentric Radius)
+
+`layout="horizontal"` is stacked by default and goes side by side only when the card itself is at least 32rem wide: a horizontal card is its own named query container (`container: card / inline-size`) and enhances at `min-width`, so the same card stacks in a narrow grid cell or sidebar and sits side by side as a full-width feature, whatever the viewport. Because it measures its own width, give a horizontal card a definite width when it sits in a flex row. Media and body sit in a `.card-layout` wrapper that has no box (`display: contents`) for a stacked card.
 
 `<Card>` renders a semantic `<article class="card">` and uses `.clickable-parent` on the heading's `<a>` tag so the entire card is clickable while screen readers announce only the heading as the link name. Paired with `.focus-parent` (`:focus-within:has(:focus-visible)`), keyboard navigation draws a single focus ring on the card perimeter without sticky mouse outlines. Customize cards via `--card-bg`, `--card-text`, `--card-muted`, `--card-border-color`, `--card-radius`, `--card-padding`, `--card-frame-padding`, `--card-gap`, `--card-shadow`, automatic concentric media radius (`--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))`), and optional `transitionName="<prefix>"` (which sets `view-transition-name: <prefix>-media` and `<prefix>-title` for shared-element View Transition morphing into detail routes alongside `.vt-morph`).
 
@@ -139,6 +189,8 @@ Breakout children normally occupy the reading track (`--measure-reading`). `.con
 - **Derived Per-Surface Tokens (`color-mix` physics)**: `:where(html, [data-surface="dark"], [data-surface="light"])` derives `--font-mono`, `--font-accent`, `--color-elevated` (third surface tier above `--color-page` and `--color-surface`), `--color-border-strong` (emphasized hairline), `--color-action-subtle` (12% brand tint), `--surface-glass` (translucent surface), and `--surface-highlight` (`1px` top inner specular edge) automatically across light and dark surface contexts.
 - **Optical Typography & 4-Voice Helpers**: `h1` and `h2` apply size-linked optical display tracking (`-0.025em` / `-0.018em`) and tight leading (`1.08` / `1.12`); `p, li, dd, figcaption, blockquote` apply `text-wrap: pretty` and `hanging-punctuation: first allow-end`; `::selection` tints text selection with `--color-action`; `.eyebrow-telemetry` formats monospace uppercase labels for real metadata such as dates, versions and status (not kicker labels or decorative section coordinates); `.font-accent` provides an optional inline italic serif contrast voice inside display headlines where the brand has that voice; `.tabular-nums` locks numeric alignment for counters and metrics; `.prose-dropcap` styles 3-line editorial drop caps; and `.badge-pill` + `.status-dot` render live telemetry status pills.
 - **Tactile Action Hierarchy & Micro-Physics**: `.btn` (primary solid with `--surface-highlight`), `.btn--secondary` (elevated surface `--color-elevated` with `--color-border-strong`), and `.btn--ghost` provide surface-aware action styling for both `<a>` and `<button>` elements with `:active` press scale (`translateY(1px) scale(0.99)`) and `.icon-nudge` trailing arrow choreography (`var(--ease-spring)`).
+- **Optional recipes**: the decorative families below and in the previous bullets (telemetry eyebrow and badges, surface physics, hairline/blueprint grids and crosshair frames, UI specimens, stacked cards, card entrance, data bars, bento grid, grain, drop cap and reel) are optional, marked "Optional recipe" in `global.css`. Use one only when the Art Direction Record selects that aesthetic. They stay in the one stylesheet so reviewed updates keep merging cleanly; a site may delete the recipes it does not use.
+- **Scroll reveal**: `data-reveal` is CSS-first. Where `animation-timeline: view()` is supported, the element fades in as it enters the viewport with no script (`--reveal-range`, default 40% of its entry, and `--reveal-distance`); SiteShell's IntersectionObserver path, which also honours `data-reveal-delay`, runs only in browsers without scroll-driven animations. Reduced motion shows the content without movement either way.
 - **Asymmetric Bento Grids, Tactile Surfaces & Architectural Utilities**: `.bento-grid` + `.bento-span-4|5|6|7|8|12` + `.bento-row-2` compose asymmetric 12-column Bento layouts; `.reel-snap` provides zero-JS horizontal scroll-snap galleries; `.section-defer` (`content-visibility: auto; contain-intrinsic-block-size: auto 32rem`) defers offscreen section layout/paint; native `<dialog>` elements receive `@starting-style` entry animations and blurred `::backdrop` styling; `.surface-elevated`, `.surface-glass`, `.surface-spotlight`, and `.surface-grain` (zero-asset inline SVG `<feTurbulence>` texture) provide raised, translucent, radial-bleed, and paper/film grain surfaces; `.grid-hairline` builds exposed `1px` cell-wall matrices; `.bg-grid-blueprint` and `.frame-crosshair` add blueprint grid backdrops and corner registration ticks; `.ui-specimen` + `.ui-specimen__header` frame live-coded HTML/SVG hero and feature product consoles; `.stack-cards` + `.stack-card` (`--stack-index`, `--stack-base`, `--stack-step`) build zero-JS sticky physical card stacks with upward depth shadows; and `.viz-bars` + `.viz-bar` (`--bar-value`, `--viz-height`, `--viz-gap`) render pure-CSS telemetry histograms inside Bento cards and interactive links.
 - **Navigation, surfaces and declarative interactions (`SiteShell.astro`)**: Opt into ClientRouter through the head slot. Per-navigation ownership governs loading, scroll intent, warming and temporary morph names; the top progress indicator waits 600ms. Directional transitions and targeted/persistent swaps are opt-in contracts with reduced-motion and BFCache cleanup. See [navigation lifecycle](reusable-public-patterns.md#navigation-lifecycle-and-warming), [directional transitions](reusable-public-patterns.md#directional-transitions) and [targeted swaps](reusable-public-patterns.md#targeted-swaps-and-persistence) for selectors, timing, fallback and retained-DOM limits. The shell also supports explicit surface defaults and unified theme controls, sticky-header state, reveal hooks and category filters; [theme selection](reusable-public-patterns.md#theme-selector-and-surface-controls) documents preference/default ownership.
 - **Native Astro platform capabilities**: Use the configured Astro fonts API and `astro:assets` for self-hosted fonts, and import local SVGs as Astro components. Shared `Form.astro` provides native submission with optional fetch enhancement; [form transport](reusable-public-patterns.md#progressively-enhanced-forms) documents static endpoint boundaries and EmDash Action handling. [Skeleton geometry](reusable-public-patterns.md#skeleton-loading-geometry) is shared CSS; `server:defer` requires an appropriate EmDash server runtime and must not promote a static profile. Native prefetch/speculation options are site configuration choices; verify the installed Astro API and browser behavior instead of assuming prerender support or a latency guarantee.
@@ -168,6 +220,9 @@ Nested list indentation, list-item rhythm and internal quote paragraphs are boun
 
 - **Multi-Layer OKLCH Shadows (`@theme`):** `--shadow-sm` (3-stop), `--shadow-md` (4-stop), and `--shadow-lg` (6-stop) derived from `oklch(from var(--color-text) l c h / alpha)`.
 - **Curated Easing Curves (`@theme`):** `--ease-smooth`, `--ease-snappy`, and physics-inspired `--ease-spring` (via CSS `linear()`).
+- **Motion durations (`@theme`):** `--duration-fast` (150ms, hover and press feedback), `--duration-base` (200ms, header state, dialogs, outgoing view transitions), `--duration-slow` (250ms, incoming view transitions) and `--duration-slower` (380ms, shared-element media morphs). Loops and progress indicators (shimmer, navigation progress) keep their own lengths. `--duration-normal` remains an optional site override hook for the card entrance and reveal timings.
+- **Layering (`@theme`):** `--z-behind` (−1, `.is-bg` media), `--z-raised` (1, stretched links, menu panel, grain), `--z-sticky` (40, sticky header), `--z-skip` (100, skip link above the header) and `--z-overlay` (9999, navigation progress). Card raises its own controls one step above its stretched link.
+- **Breakpoints (`@theme`):** `--breakpoint-sm` (40rem) and `--breakpoint-md` (48rem) name the two shared thresholds and drive Tailwind's `sm:` and `md:` variants. Media queries cannot read custom properties, so `@media` rules write the same value and name the token in a comment. Component-specific thresholds (for example PhotoGallery's columns) stay with their component; prefer a container query when a component responds to its slot rather than to the viewport.
 - **Background & Mask Helpers:** Mark background media with `.is-bg` (its parent automatically becomes `position: relative; isolation: isolate` via `:where(:has(> .is-bg))`), and apply `.fade--bottom`, `.fade--top`, `.fade--block`, or `.fade--inline` (`--fade-amount: 25%`) for surface-independent `mask-image` fades.
 - **Contextual Surface Scopes:** Apply `data-surface="dark"` or `data-surface="light"` to any section or card to remap `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, `--color-focus`, and `--color-link` together. Text links retain action ink by default, use the existing light focus ink on dark surfaces, and restore action ink on nested light surfaces. Optional `--surface-dark-link` / `--surface-light-link` aliases support calibrated overrides without changing solid-action colors.
 
@@ -206,6 +261,12 @@ Available presets: `neutral`, `technical-systems`, `product-led-minimalism`, `ed
    npm run design:tokens -- --write-calibration
    npm run test:design
    ```
+4. **Export the source tokens as DTCG JSON** for Style Dictionary, Tokens Studio, Penpot or an agent that should read a compact token list instead of the stylesheet:
+   ```sh
+   npm run design:tokens -- --format dtcg --out audit/tokens.dtcg.json
+   ```
+The export follows the [DTCG 2025.10 format](https://www.designtokens.org/tr/2025.10/format/): typed colour (OKLCH components), dimension, font family, cubic Bézier, duration and number tokens, `{group.token}` aliases for tokens that are exactly `var(--other)` (the `--layout-*` aliases), and dark-surface overrides under `surface-dark`. A fluid token's `$value` is its minimum; its maximum, viewport range and original `clamp()` sit in `$extensions["dev.baseline.fluid"]`. Values the format cannot express (relative-colour shadows, `color-mix()`, `linear()` easing) are listed under `$extensions["dev.baseline.css-only"]`. CSS stays the authority: regenerate the file, never edit it. The canvas kit's per-viewport `390.tokens.json`/`1440.tokens.json` are browser-sampled values for canvases; this export is the source, with its fluid ranges and aliases intact.
+
 This directly parses `src/styles/global.css`, verifies 14 WCAG contrast pairs across default, dark and restored-light contexts (including 4.5:1 text-link gates), checks fluid `clamp()` bounds, confirms `/_styleguide` swatch and `src/` consumer coverage, and writes a deterministic `## Token Calibration` section (bound to the LF-normalised SHA-256 of `src/styles/global.css`) into `audit/component-calibration.md`.
 
 ---

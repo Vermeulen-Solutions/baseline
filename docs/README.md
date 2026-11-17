@@ -84,12 +84,14 @@ How to query EmDash collections in Astro templates and bind live editing field p
 - **[EmDash 1.3 Adoption Review](emdash-1.3-upgrade-review.md)** Native AI-training policy, contributor permissions, revisions/custom editor callbacks, scoped MCP names, guest bylines and focused runtime verification.
 - **[Internationalization (i18n)](internationalization.md)**  
 Native row-per-locale multilingual architecture linked by translation groups, avoiding anti-pattern duplicate language columns (e.g. `title_en`).
+- **[Choosing Registry Plugins](plugin-selection.md)** Reviewing permissions and Cloudflare support, needs better met in the site itself, and plugins worth considering or avoiding.
 - **[Forms & Verification](forms-adoption.md)**  
 Form handling, server-side recovery validation, and Cloudflare Turnstile spam protection.
 - **[Migration Acceptance Contract](migration-acceptance.md)** Versioned schemas, bounded live HTTP checks and offline replay.
 - **[Offline Content Inventory Contracts](migration-content-inventories.md)** Explicit entity mappings, private offline snapshots and count-only reconciliation reports; editor acceptance remains separate.
 - **[WordPress Importer Fidelity Matrix](importer-fidelity-matrix.md)** Runtime-tested behavior for WXR and Exporter paths across blocks, galleries, SEO, bylines, and retry non-synchronization.
 - **[Migration Cutover: Content Freeze & Delta Reconciliation](migration-cutover.md)** Pre-cutover editorial freeze, snapshot-driven delta classification, slug-shift redirects, DNS switchover and rollback safety.
+- **[Editor Experience](editor-experience.md)** Derived ordering instead of display-order numbers, a drag-and-drop order page, localised select labels, list columns, help page, hidden admin areas and a reviewed admin-metadata script for non-technical editors.
 - **[Client and Editor Handoff Guide](editor-handoff.md)** CMS roles/permissions, Portable Text daily publishing workflows, form submission handling, and peripheral service inventory checklist.
 
 ---

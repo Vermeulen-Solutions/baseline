@@ -91,3 +91,13 @@ test('T03-T05 CLI validates before writes and binds calibration to the saved can
     assert.equal(JSON.parse(run('--set','--root:--layout-grid-gap=0','--write','--json').stdout).mode,'no-op');
   } finally { fs.rmSync(dir,{recursive:true,force:true}); }
 });
+
+test('layout gap props accept token names and keep raw lengths for compatibility', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../src/lib/layout-style.ts', import.meta.url), 'utf8');
+  // The helper is TypeScript; check the mapping table and its pass-through rule from source.
+  assert.match(source, /if \(gap === 'none'\) return '0px';/);
+  assert.match(source, /GAP_TOKENS\.has\(gap\) \? `var\(--spacing-\$\{gap\}\)` : gap/);
+  for (const name of ['content', 'grid', 'container', 'section', 'section-m', '3xs', 's', '3xl', 'xl-3xl']) assert.ok(source.includes(`'${name}'`), name);
+  for (const file of ['Section', 'Container', 'Grid']) assert.match(readFileSync(new URL(`../src/components/${file}.astro`, import.meta.url), 'utf8'), /gap\?: LayoutGap;/, file);
+});

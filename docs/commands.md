@@ -22,7 +22,7 @@ Run npm commands from the project that owns the work. This reference distinguish
 
 In the root, full verify includes lint, CSS/art-direction/token checks, the full test suite and typecheck. The test runner executes bounded unit tests followed by sequential database, HTTP, importer and generated-project rehearsals. `test:unit` and `test:rehearsal` select those tiers independently. [CONTRIBUTING.md](../CONTRIBUTING.md) covers test classification, CI budgets and maintainer acceptance; [engineering evidence](../audit/engineering-maintenance-plan.md) records the measured scope.
 
-Use `npm run design:tokens -- --init-client --lane <lane>` to initialize a real client site. Read [art direction](art-direction-workflow.md) and the [design framework](design-framework.md) before writing/calibrating tokens.
+Use `npm run design:tokens -- --init-client --lane <lane>` to initialize a real client site. It also applies the strict theme: Tailwind's default colour, type-size, radius and shadow namespaces are cleared at the top of `@theme` so only the site's tokens compile. An existing site adopts it on its own with `npm run design:tokens -- --strict-theme --write`, after `npm run check:css -- --guardrails` shows it uses none of those defaults. Read [art direction](art-direction-workflow.md) and the [design framework](design-framework.md) before writing/calibrating tokens.
 
 `design:tokens -- --json` includes `fontLoading.preflight` with bounded local reference/case/format checks, role mappings and unresolved-source advice. See [font preflight](font-preflight.md); static source validation does not replace actual rendered-font readback. For a scoped design change, omit `--write` to preview the candidate, then review the exact CSS change and apply the same arguments. The installed `site-art-direction/references/token-handoff.md` describes this handoff without a new importer.
 
@@ -128,6 +128,7 @@ Commands that the workflow and skills name but the sections above do not. Scope 
 | `npm run audit:ui -- --base <origin> --routes <list>` | All profiles, against any origin; needs a local Chromium | Rendered UI audit: off-screen and squeezed text, enlarged phone text, contrast, hover states, clipped and cover-cropped images, decorations touching content and stacked empty bands; `--widths auto` adds widths around the site's own breakpoints |
 | `npm run capture:routes -- --base <origin> --routes <list> --out <dir>` | All profiles, against any origin; needs a local Chromium | Before/after full-page and viewport captures, optionally with a concept CSS overlay |
 | `npm run record:motion` | Root tooling | Record a real route with headless Chromium as a GIF for image-only review surfaces |
+| `npm run cms:admin-metadata -- --base <origin> --plan <file>` | Root EmDash | Print, then with `--apply` write and read back, reviewed admin metadata: field widgets, labels, added select options, list columns, quick create ([editor experience](editor-experience.md)) |
 | `npm run audit:cms-roundtrip` | Root tooling, disposable EmDash copy only | Check edit targets, save, publish and public reload without touching real content |
 | `npm run fixtures:build` / `fixtures:serve` | All profiles | Build and serve isolated styleguide fixtures ([styleguide fixtures](styleguide-fixtures.md)); never deploy the output |
 | `npm run test:visual:update` / `test:visual:sensitivity` / `test:visual:functional` | Root EmDash, local Windows | Update reviewed screenshots explicitly, prove the comparison detects a change, and run functional browser checks ([visual regression](visual-regression.md)) |
@@ -137,12 +138,14 @@ Commands that the workflow and skills name but the sections above do not. Scope 
 
 | Command | Scope | Purpose |
 | --- | --- | --- |
-| `npm run lint:scripts` / `lint:templates` / `check:css` | All profiles | Script syntax, Astro template accessibility lint and CSS layer/spacing contracts; all part of `verify` |
+| `npm run lint:scripts` / `lint:templates` / `check:css` | All profiles | Script syntax, Astro template accessibility lint and CSS layer/spacing contracts; all part of `verify`. `check:css` also prints advisory token guardrails (Tailwind default palette, type, radius and shadow utilities, numeric spacing and arbitrary-value classes, raw `gap` props, and raw colour, ≥1rem spacing and z-index values outside token definitions); `-- --guardrails` lists every finding, `-- --strict-guardrails` fails on them |
 | `npm run check:release-artifact` | All profiles | Confirm the build output matches the configured profile; also runs automatically after `build` (`postbuild`) and before `start` (`prestart`, `prestart:local`) |
 | `npm run build:timings` | All profiles | Build with Astro timing output |
 | `npm run check:native-images` | Root EmDash, Node with local media | Disposable fixture check of responsive image output, including media uploaded after the build; needs port 4332 |
 | `npm run check:cache` | Root EmDash | Local memory-cache rehearsal of the cache contracts; does not certify Workers Cache |
 | `npm run check:production-setup` | Root EmDash | Read the deployed setup status; passes only on the actual JSON `needsSetup: false` |
+| `npm run check:live -- --origin <url> [--strict-seo]` | Any deployed site | After a deploy: every sitemap page answers 200 (or redirects to one) and every stylesheet they use answers 200; read-only GET requests. Also warns about search-facing problems: sitemap URLs that redirect, a canonical that is not the page itself, more or fewer than one description, repeated hreflang, and head hreflang that differs from the sitemap. `--strict-seo` makes them fail |
+| `npm run db:rehearse` | EmDash, Workers | Load a `db:export-d1` copy into a fresh local D1 with the active plugin bundles, print the exact `wrangler dev` command, then `--compare` row counts after the first request; see [Cloudflare recovery](cloudflare-backup-restore.md#portable-copy-and-a-local-upgrade-rehearsal) |
 | `npm run check:emdash-current` | Root EmDash, opt-in local | Built integration rehearsal of the installed EmDash version on a disposable project |
 | `npm run check:docs-mcp` | Root EmDash | Read-only transport check of the configured documentation MCP servers |
 | `npm run assets:retain` | Root EmDash, Workers | Merge previous build assets into the new adapter output so cached pages keep loading their files |
@@ -159,6 +162,7 @@ Commands that the workflow and skills name but the sections above do not. Scope 
 | `npm run sync:emdash-skills` / `sync:site-skills` / `sync:impeccable` / `sync:upstream-skills` | Root EmDash | Stage reviewed skill snapshots; staging is not permission to overwrite local drift ([skill synchronization](skill-synchronization.md)) |
 | `npm run init:profile -- --profile static|static-sveltia --out <new-directory>` | Root | Generate a static project into an empty directory ([platform profiles](platform-profiles.md)) |
 | `npm run site:register` | Root EmDash | Record a new or launched site in the private registry, or leave a pending-registration artifact ([site registry](site-registry.md)) |
+| `npm run fleet:status -- --config <private fleet.json>` | Root tooling | Read-only table of every site in a private fleet list: Git state, kind, hosting, versions, and each Baseline site against the pinned standards ([site registry](site-registry.md#fleet-status)) |
 | `npm run mcp:token` | Root EmDash | Create a personal access token for the site MCP endpoint |
 | `npm run workflow:replay` | Root maintainer | Replay a recorded workflow brief against a disposable project ([workflow replay](workflow-replay.md)) |
 

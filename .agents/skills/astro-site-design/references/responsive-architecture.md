@@ -18,6 +18,8 @@ For a media query threshold: make it a shared Tailwind breakpoint only when two 
 
 ## Container query rules
 
+Baseline's shipped primitives follow these rules: `Grid` makes each item a named `card-slot` inline-size container (`slots={false}` opts out), and a horizontal `Card` is its own named `card` container that goes side by side from a 32rem card width and stays stacked otherwise.
+
 - **Query an ancestor, never the element itself.** A card cannot query its own size to restyle itself, because its size would depend on the styles the query applies. Its descendants can query it, or the card can query an ancestor.
 - **Put the container on the slot, not the whole grid.** For a list of cards, let the grid use intrinsic columns and make each item wrapper the query container. Querying the grid measures the entire grid, so every card would switch at the grid's width rather than its own. Prefer semantic list markup when the content is a list; the `<li>` can be the wrapper.
 - **Use a close, explicit wrapper.** The container need not be the direct parent, but a wrapper owned by the structural Astro component or the caller makes the contract visible in markup.

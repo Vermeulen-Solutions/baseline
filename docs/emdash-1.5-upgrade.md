@@ -14,6 +14,15 @@ Adopt this as a reviewed dependency and source update, preserving site-owned con
 - **`emdash()` options are now type-checked.** A wrong-typed value stops `astro dev`, `astro build` and `astro sync` with an error naming the option; an unknown option logs a warning. Fix what the error names rather than removing the option.
 - **Type checking is stricter in templates.** `emdash/ui` now resolves from package declarations, so `<PortableText>`, `Blocks` and other component props are checked, and `MediaItem` fields such as `alt` and `width` are `T | null`. A block component whose `Props` carries a string index signature is no longer assignable to the Portable Text component map; declare the props it actually reads.
 
+Lessons from updating live Workers sites:
+
+- **`@astrojs/cloudflare` 14.4 or newer.** EmDash 1.5 renders through `sanitize-html`, which brings in PostCSS; older adapters leave its `require("path")` in the Workers bundle and every page answers 500. `audit:site` and `fleet:status` flag it.
+- **`@emdash-cms/sandbox-workerd` 0.9.7.** Version 0.9.6 depends on EmDash 1.4.0 exactly, so upgrading core alone fails to resolve. 0.9.7 also fixes the Windows binary path, so pins of `workerd` or its Windows binary added as a workaround can go; left in place, their stale binary fails the install check of newer `workerd` versions.
+- **Declare what the site imports.** A plugin page importing `@emdash-cms/admin` without declaring it stops building: 1.5 nests it under `emdash`. Declare it at the exact version.
+- **Key the HTML edge cache per build** before deploying, or cached pages keep pointing at the previous build's stylesheets. See [site standards audit](site-standards-audit.md#workers-delivery).
+- **Registry plugins update in the admin**, under Plugins, Check for updates. A registry page for an installed plugin shows its newest version next to a disabled "Installed" button even when an older version is installed. Check the version on the Plugins list.
+- **Rehearse on a copy** with `npm run db:export-d1` and `npm run db:rehearse`, and run `npm run check:live` after the deploy; see [Cloudflare recovery](cloudflare-backup-restore.md#portable-copy-and-a-local-upgrade-rehearsal).
+
 After deployment, `GET /_emdash/api/health` reports the running version. Record a D1 Time Travel bookmark before a Workers deployment as before; see [Cloudflare recovery](cloudflare-backup-restore.md).
 
 ## Staging and going live

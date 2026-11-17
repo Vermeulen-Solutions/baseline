@@ -166,6 +166,20 @@ const englishHref = englishTranslation ? `/en/${englishTranslation.slug}` : "/en
 <a href={englishHref} hreflang="en">English</a>
 ```
 
+When you merge locales yourself (for example a helper that queries every locale and de-duplicates the entries), key them by locale and slug, never by slug alone: a French and an English entry often share a slug, such as a place name (`/le-lieu/parc-central/` and `/en/the-venue/parc-central/`), and de-duplicating by slug silently drops one of them from listings and sitemaps.
+
+### Search-facing URLs when locale paths differ
+
+EmDash builds two search-facing outputs from each collection's single `urlPattern` plus Astro's locale prefix: the generated `/sitemap.xml` and `/sitemap-{collection}.xml`, and the hreflang links `<EmDashHead>` adds for an entry passed as page `content`. That is correct when the English route is the French route with `/en` in front. It is wrong as soon as the localized slugs or section names in section 1 differ (`/actualites/{slug}` and `/en/news/{slug}`), or when a collection has no pattern (EmDash then uses `/{collection}/{slug}`). The result is a sitemap and hreflang links that point at addresses the site does not serve, or at CMS-only routes that duplicate real ones, while the language switcher looks right.
+
+Resolve every search-facing URL through the same route knowledge as the language switcher:
+
+1. **Sitemap.** Create `src/pages/sitemap.xml.ts`; EmDash does not inject its own route when the site defines one. Also create `src/pages/sitemap-[collection].xml.ts` that permanently redirects to `/sitemap.xml`, so the generated per-collection files disappear. List each public route once, with `<xhtml:link>` alternates only for real translations (`generateSitemapXml` in `src/lib/sitemap.ts` writes the XML). Query each locale separately, and leave out records whose route only redirects.
+2. **hreflang.** Plugin `page:metadata` contributions win over EmDash's own for the same `hreflang` value. A small native plugin can return `fr`, `en` and `x-default` links for every public page from the same resolver the switcher uses; then the layout writes no hreflang tags of its own. Keep passing `content` to the page context, because that is how the SEO panel's description, canonical and noindex reach the page.
+3. **One address per page.** A catch-all route that also resolves entries by bare slug serves copies of real pages (`/accueil` beside `/`, `/en/juniors` beside `/en/teams/juniors/`). Redirect such requests permanently (301) to the entry's real route, and name one form of each address in the canonical, the way `defaultCanonicalUrl` does.
+
+After each deploy, `npm run check:live -- --origin <url>` reports sitemap URLs that redirect, pages whose canonical is not themselves, repeated hreflang values, and head hreflang that differs from the sitemap. Add `--strict-seo` to fail on any of them. Compare against production data, not only a local copy: slugs can differ between the two (for example English records that kept their French slugs), and only the live check sees what search engines see.
+
 ---
 
 ## 6. Translation Workflow & `@swiss.ky/linguadash`

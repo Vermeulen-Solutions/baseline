@@ -1,0 +1,37 @@
+/*
+ * Opt-in registry aliases for component quarantine.
+ *
+ * Components sourced from shadcn/ui-style registries (shadcn MCP, 21st.dev) use utilities such as
+ * bg-background, text-foreground, bg-primary, border-input and ring-ring. With this file imported,
+ * those utilities resolve to Baseline's tokens and follow data-surface, so a component can be
+ * inspected on /_styleguide before it is transmuted. It is a quarantine aid, not a second
+ * vocabulary: transmute the component to Baseline's own tokens before promoting it, and
+ * `npm run check:css` reports alias classes as advisories.
+ *
+ * To use it, import it from src/styles/global.css directly after `@import "tailwindcss";`:
+ *   @import "./registry-aliases.css";
+ *
+ * `@theme inline` makes each utility reference the Baseline token itself, so it resolves on the
+ * element (inside a data-surface section too) rather than once on the root.
+ *
+ * Not aliased: shadcn's --muted is a background while Baseline's --color-muted is muted text, so
+ * bg-muted keeps Baseline's meaning; use bg-secondary or bg-accent in quarantined markup instead.
+ * Baseline has no destructive colour; define one in the site's tokens when a component needs it.
+ */
+@theme inline {
+	--color-background: var(--color-page);
+	--color-foreground: var(--color-text);
+	--color-card: var(--color-surface);
+	--color-card-foreground: var(--color-text);
+	--color-popover: var(--color-surface);
+	--color-popover-foreground: var(--color-text);
+	--color-primary: var(--color-action);
+	--color-primary-foreground: var(--color-on-action);
+	--color-secondary: var(--color-elevated);
+	--color-secondary-foreground: var(--color-text);
+	--color-muted-foreground: var(--color-muted);
+	--color-accent: var(--color-action-subtle);
+	--color-accent-foreground: var(--color-text);
+	--color-input: var(--color-border);
+	--color-ring: var(--color-focus);
+}

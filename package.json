@@ -60,6 +60,7 @@
     "db:export-seed": "node scripts/db-export-seed.mjs",
     "db:export-d1": "node scripts/d1-export.mjs",
     "db:pull-remote": "node scripts/d1-snapshot.mjs",
+    "db:rehearse": "node scripts/d1-rehearse.mjs",
     "media:prepare": "node scripts/prepare-images.mjs",
     "media:upload": "node scripts/upload-prepared-media.mjs",
     "rehearse:media": "node scripts/rehearse-media-preparation.mjs",
@@ -79,6 +80,7 @@
     "sync:upstream-skills": "node scripts/sync-upstream-skills.mjs",
     "update:all": "node scripts/auto-update.mjs",
     "site:register": "node scripts/register-site.mjs",
+    "fleet:status": "node scripts/fleet-status.mjs",
     "mcp:token": "node scripts/create-mcp-token.mjs",
     "init:profile": "node scripts/init-profile.mjs",
     "sync:baseline": "node scripts/sync-baseline.mjs",
@@ -91,6 +93,7 @@
     "setup:hooks": "node scripts/setup-hooks.mjs",
     "check:css": "node scripts/check-css-contracts.mjs",
     "check:production-setup": "node scripts/check-production-setup.mjs",
+    "check:live": "node scripts/check-live.mjs",
     "assets:retain": "node scripts/retain-build-assets.mjs",
     "check:cache": "node tests/cache.integration.mjs",
     "baseline:inspect": "node scripts/inspect-project.mjs",
@@ -113,6 +116,7 @@
     "update:plan": "node scripts/update-plan.mjs",
     "audit:ui": "node scripts/audit-ui.mjs",
     "audit:cms-roundtrip": "node scripts/cms-roundtrip.mjs",
+    "cms:admin-metadata": "node scripts/cms-admin-metadata.mjs",
     "design:canvas-check": "node scripts/canvas-board-check.mjs"
   },
   "dependencies": {

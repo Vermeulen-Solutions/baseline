@@ -35,6 +35,12 @@ npm run migration:verify -- --manifest tests/fixtures/migration-acceptance/manif
 | `--out <new-directory>` | Default `.emdash/migration-acceptance/run-<UUID>/`, or `.baseline/backups/migration-acceptance/run-<UUID>/` for static profiles. Existing destinations and linked path components are refused. |
 | `--help` | Usage only, exit 0, no report. Cannot be combined with other flags. |
 
+### Legacy URLs the capture does not list
+
+A WordPress export lists what the site holds today. Search engines also request addresses it no longer holds or never exported: posts deleted before the export (WordPress may itself redirect them), plugin routes such as gallery or form pages, category and pagination archives, the old sitemap addresses (`/sitemap_index.xml`, `/wp-sitemap.xml`) and old spellings of a page's slug. Before declaring the manifest complete, ask the owner for a search-performance export of the legacy site (for Google Search Console: Performance, full date range, the **Pages** tab, exported as CSV) and give every listed URL with clicks or impressions a disposition: retained, redirected in one hop to the page that now answers it, or removed. Read the legacy site's own response for addresses missing from the export; a URL it already redirects tells you where it should go.
+
+The export is the owner's analytics data: keep it outside Git, or reduce it to the bare URL list before tracking anything, and remove it once the post-cutover check has passed.
+
 Duplicate/unknown flags and invalid values return 2. There is **no `--target` override**: edit the explicit manifest and rebind observations. There is **no `--strict` switch**: required declarations always govern acceptance. No install, deployment, media upload, redirect creation or CMS mutation occurs. Live collection issues anonymous GET/HEAD requests only; review origins and scope before running it against a real site.
 
 Default output is git-ignored. An explicit `--out` can name a new reviewed directory elsewhere, for example `audit/sanitized-example-001`; it is not an automatic redaction feature. To maintain `audit/migration-report.md`, inspect and sanitize a generated Markdown report, then deliberately copy it there. The CLI never replaces an existing report. Source URLs, expectations and observation reasons can be private even when all evidence is local.

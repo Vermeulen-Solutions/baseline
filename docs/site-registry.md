@@ -9,3 +9,13 @@ Run `npm run site:register -- --input <private-json> --registry <authorized-priv
 The registry is identity and lifecycle metadata only. It intentionally excludes domains, Worker IDs, database names, bookmarks, deployment commands and other fleet operations data; keep those in separately authorized private deployment records. Store the registry itself in a private, backed-up repository or equivalent controlled store rather than a single local working directory. A proposal written to a local private path is useful review material, but it is not yet central registration.
 
 Without `--registry`, the command records `.emdash/pending-registration/<siteId>.json`, with an explicit pending reason. Use that path when access/configuration is absent; it is not completed central registration. Keep it out of Git and hand it to the authorized maintainer. Repeated identical registrations preserve the file. Repository renames retain `previousRepositories` under the same site ID; archive rather than deleting history. Reopening an archived site requires `--reactivate`. Writes use an exclusive lock and atomic file rename; stale locks after a process failure require verified local recovery.
+
+## Fleet status
+
+The registry records identity and lifecycle; it does not say whether a site is up to date. `npm run fleet:status -- --config <private fleet.json> [--out <STATUS.md>] [--json]` reads that from the local checkouts instead of from hand-kept notes. The config lists each site's identifier and folder, relative to the config file:
+
+```json
+{ "sites": [ { "id": "example-site", "path": "../sites/example-site" } ] }
+```
+
+For every site the command reports the Git state (branch, commit, uncommitted files, ahead or behind as of the last fetch), whether it is a generated Baseline project, an earlier Baseline copy or another project, its hosting from config files, its Astro and EmDash versions as locked, and, for Baseline sites, every certified dependency and the Node range that differ from the standards this checkout pins. It is read-only and uses no network. Keep the config and the report with the registry in private storage; sites that were not built from Baseline can be listed too, as port candidates.

@@ -52,6 +52,12 @@ When an organization has multiple distinct variants, sub-teams, or cohorts withi
 - Every editorial collection must use native row-per-locale architecture: each record has a `locale` (matching the site's configured locales, e.g. `defaultLocale` and secondary locales) and a shared `translation_group` ULID.
 - Cross-collection relations link parents and children via `translation_group`s so that referencing an item automatically resolves to the matching locale row in public queries.
 - Never duplicate fields with language suffixes (avoid `title_en`, `description_en` columns).
+- Loaded entries (`getEmDashCollection`, `getEmDashEntry`) expose the group as `data.translationGroup`, not `data.translation_group`. Code keyed on the snake-case name silently falls back to the entry id and shows one item twice across locales.
+
+### Editor-facing fields
+- Do not add a "display order" number when the order follows from the data (weekday and time, taxonomy order then name, category order then title): use `src/lib/derived-order.ts`. For a truly editorial order, keep a non-translatable number field owned by a drag-and-drop admin page (`src/plugins/editorial-order/`).
+- Localise select labels with a field widget instead of renaming stored values, and set list columns, quick create and field labels with a reviewed `npm run cms:admin-metadata` plan. The two sides of a relation are one link; never model the reverse direction as a second field.
+- Read [docs/editor-experience.md](../../../docs/editor-experience.md) before shaping the admin for non-technical editors.
 
 ### SSR Query Hygiene: Parallelization, Scoped References & Zero N+1 Waterfalls
 - **Parallelize independent queries (`Promise.all`):** In `Base.astro`, shared page shells, and route templates, always wrap independent `getSiteSettingsWithCacheHint`, `getMenuWithCacheHint`, `getEmDashCollection`, and `getEmDashEntry` calls in `Promise.all([...])`. Sequential `await` statements multiply D1/SQLite round-trip latency during cold SSR renders and logged-in admin browsing.
@@ -71,7 +77,7 @@ When modifying content models on an active site with existing content in SQLite 
    - Repeated JSON arrays that should be relational rows.
    - Ambiguous free-text fields where editors type inconsistent strings.
    - Orphaned, confusing, or unused legacy fields (e.g. free-text location notes, scratch marker columns).
-3. Create a snapshot backup before running schema modifications. On Workers, record a D1 Time Travel bookmark as the recovery point and take a verified copy with `npm run db:export-d1` (plain `wrangler d1 export` refuses databases with EmDash's FTS5 search tables); see `docs/cloudflare-backup-restore.md`.
+3. Create a snapshot backup before running schema modifications. On Workers, record a D1 Time Travel bookmark as the recovery point and take a verified copy with `npm run db:export-d1` (plain `wrangler d1 export` refuses databases with EmDash's FTS5 search tables). For a change that rewrites or migrates existing rows, rehearse it on that copy first with `npm run db:rehearse` and compare row counts; see `docs/cloudflare-backup-restore.md`.
 4. **Present the Schema Evolution Plan to the user:**
    Do not modify tables immediately without presenting a plain-English proposal:
    > **Content Model Audit Findings**
