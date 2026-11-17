@@ -62,6 +62,8 @@ const PUBLIC_CONTRACT_TOKENS = new Set([
   '--ease-snappy',
   '--ease-spring',
   '--measure-content-safe',
+  // Media queries cannot read custom properties; these name the thresholds for Tailwind sm:/md:.
+  '--breakpoint-sm', '--breakpoint-md',
   '--layout-section-padding', '--layout-container-gap', '--layout-content-gap', '--layout-grid-gap',
 ]);
 
@@ -122,8 +124,9 @@ test('every authored token in global.css is either consumed in src/ or part of t
     const varUsage = new RegExp(`var\\(\\s*${token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`);
     const dynamicUsage = token.startsWith('--color-') && combinedSource.includes('--color-${');
     const stepUsage = token.startsWith('--text-step-') && combinedSource.includes('--text-step-${');
+    const spaceUsage = token.startsWith('--spacing-') && combinedSource.includes('--spacing-${');
     assert.ok(
-      varUsage.test(combinedSource) || dynamicUsage || stepUsage,
+      varUsage.test(combinedSource) || dynamicUsage || stepUsage || spaceUsage,
       `Authored token ${token} has no consumer in src/ and is not listed in PUBLIC_CONTRACT_TOKENS`,
     );
   }

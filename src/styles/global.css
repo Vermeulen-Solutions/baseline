@@ -11,13 +11,22 @@
 	--font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
 	--font-accent: Georgia, Cambria, "Times New Roman", Times, serif;
 
+	/* Body text stays at the reader's 1rem; it is not fluid. Steps are for headings and display.
+	   Every fluid text token keeps max <= 2.5 x min so 200% text enlargement stays reachable
+	   (WCAG 1.4.4); design:tokens fails a token above that ratio. */
+	--text-body: 1rem;
 	--text-step--1: clamp(0.875rem, calc(0.8333rem + 0.2083vi), 1rem);
 	--text-step-0: clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem);
 	--text-step-1: clamp(1.25rem, calc(1rem + 1.25vi), 2rem);
 	--text-step-2: clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem);
-	--text-step-3-to-1: clamp(1.25rem, calc(0.25rem + 5vi), 4.25rem);
-	--text-step-2-to-0: clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem);
+	--text-step-3: clamp(2.125rem, calc(1.4167rem + 3.5417vi), 4.25rem);
+	--text-step-4: clamp(2.5rem, calc(1.5rem + 5vi), 5.5rem);
+	--text-step-5: clamp(3rem, calc(1.6667rem + 6.6667vi), 7rem);
+	--text-step-3-to-1: clamp(1.75rem, calc(0.9167rem + 4.1667vi), 4.25rem);
+	--text-step-2-to-0: clamp(1.3125rem, calc(0.6667rem + 3.2292vi), 3.25rem);
 
+	/* Semantic spacing. content = --spacing-s, section = --spacing-xl-3xl and
+	   section-m = --spacing-l-2xl on the scale below; grid and container sit between steps. */
 	--spacing-content: clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem);
 	--spacing-grid: clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem);
 	--spacing-container: clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem);
@@ -25,6 +34,29 @@
 	--spacing-section-m: clamp(2rem, calc(0.6667rem + 6.6667vi), 6rem);
 	--spacing-2xl-to-md: clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem);
 	--spacing-xl-to-sm: clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem);
+
+	/* Fluid space scale (Utopia multipliers of s; each step grows 1.5x from 20 to 80rem) and
+	   space pairs for a deliberate jump. Utilities: p-s, gap-m, py-xl-3xl. */
+	--spacing-3xs: clamp(0.25rem, calc(0.2083rem + 0.2083vi), 0.375rem);
+	--spacing-2xs: clamp(0.5rem, calc(0.4167rem + 0.4167vi), 0.75rem);
+	--spacing-xs: clamp(0.75rem, calc(0.625rem + 0.625vi), 1.125rem);
+	--spacing-s: clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem);
+	--spacing-m: clamp(1.5rem, calc(1.25rem + 1.25vi), 2.25rem);
+	--spacing-l: clamp(2rem, calc(1.6667rem + 1.6667vi), 3rem);
+	--spacing-xl: clamp(3rem, calc(2.5rem + 2.5vi), 4.5rem);
+	--spacing-2xl: clamp(4rem, calc(3.3333rem + 3.3333vi), 6rem);
+	--spacing-3xl: clamp(6rem, calc(5rem + 5vi), 9rem);
+	--spacing-3xs-2xs: clamp(0.25rem, calc(0.0833rem + 0.8333vi), 0.75rem);
+	--spacing-2xs-xs: clamp(0.5rem, calc(0.2917rem + 1.0417vi), 1.125rem);
+	--spacing-xs-s: clamp(0.75rem, calc(0.5rem + 1.25vi), 1.5rem);
+	--spacing-s-m: clamp(1rem, calc(0.5833rem + 2.0833vi), 2.25rem);
+	--spacing-m-l: clamp(1.5rem, calc(1rem + 2.5vi), 3rem);
+	--spacing-l-xl: clamp(2rem, calc(1.1667rem + 4.1667vi), 4.5rem);
+	--spacing-xl-2xl: clamp(3rem, calc(2rem + 5vi), 6rem);
+	--spacing-2xl-3xl: clamp(4rem, calc(2.3333rem + 8.3333vi), 9rem);
+	--spacing-s-l: clamp(1rem, calc(0.3333rem + 3.3333vi), 3rem);
+	--spacing-l-2xl: clamp(2rem, calc(0.6667rem + 6.6667vi), 6rem);
+	--spacing-xl-3xl: clamp(3rem, calc(1rem + 10vi), 9rem);
 
 	--color-page: oklch(99% 0.004 250);
 	--color-surface: oklch(100% 0 0);
@@ -64,6 +96,24 @@
 		1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%,
 		0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1
 	);
+
+	/* Motion durations. Loops and progress indicators keep their own lengths. */
+	--duration-fast: 150ms;
+	--duration-base: 200ms;
+	--duration-slow: 250ms;
+	--duration-slower: 380ms;
+
+	/* Layering, lowest to highest. */
+	--z-behind: -1;
+	--z-raised: 1;
+	--z-sticky: 40;
+	--z-skip: 100;
+	--z-overlay: 9999;
+
+	/* The two shared layout thresholds (Tailwind sm: and md:). Media queries cannot read custom
+	   properties, so @media rules in this file write the same values and name the token. */
+	--breakpoint-sm: 40rem;
+	--breakpoint-md: 48rem;
 }
 
 @layer base {
@@ -208,6 +258,23 @@
 		line-height: 1.12;
 	}
 
+	/* Heading map: h1 step 2, h2 step 1, h3 step 0, h4 body size, h5 and h6 step -1. */
+	h3 {
+		font-size: var(--text-step-0);
+		line-height: 1.2;
+	}
+
+	h4 {
+		font-size: var(--text-body);
+		line-height: 1.3;
+	}
+
+	h5,
+	h6 {
+		font-size: var(--text-step--1);
+		line-height: 1.3;
+	}
+
 	p,
 	li {
 		max-width: var(--measure-reading);
@@ -333,7 +400,7 @@
 
 	::view-transition-old(root),
 	::view-transition-new(root) {
-		animation-duration: 250ms;
+		animation-duration: var(--duration-slow);
 		animation-timing-function: var(--ease-smooth);
 	}
 
@@ -355,17 +422,17 @@
 	}
 
 	:root[data-vt-direction="forward"]::view-transition-old(root) {
-		animation: 180ms var(--ease-smooth) both vt-slide-out-left;
+		animation: var(--duration-base) var(--ease-smooth) both vt-slide-out-left;
 	}
 	:root[data-vt-direction="forward"]::view-transition-new(root) {
-		animation: 240ms var(--ease-smooth) both vt-slide-in-right;
+		animation: var(--duration-slow) var(--ease-smooth) both vt-slide-in-right;
 	}
 
 	:root[data-vt-direction="back"]::view-transition-old(root) {
-		animation: 180ms var(--ease-smooth) both vt-slide-out-right;
+		animation: var(--duration-base) var(--ease-smooth) both vt-slide-out-right;
 	}
 	:root[data-vt-direction="back"]::view-transition-new(root) {
-		animation: 240ms var(--ease-smooth) both vt-slide-in-left;
+		animation: var(--duration-slow) var(--ease-smooth) both vt-slide-in-left;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -430,7 +497,7 @@
 		content: "";
 		position: absolute;
 		inset: 0;
-		z-index: 1;
+		z-index: var(--z-raised);
 		cursor: pointer;
 	}
 
@@ -447,8 +514,8 @@
 		position: absolute;
 		inset-block-start: 0.5rem;
 		inset-inline-start: 0.5rem;
-		/* Keyboard navigation must paint above the sticky header (layer 40). */
-		z-index: 100;
+		/* Keyboard navigation must paint above the sticky header (--z-sticky). */
+		z-index: var(--z-skip);
 		transform: translateY(-150%);
 		border-radius: var(--radius-control);
 		padding: 0.75rem 1rem;
@@ -511,7 +578,7 @@
 
 	/* Below 48rem a text title wraps onto two lines, then ends in an ellipsis. The end padding keeps
 	   the last glyph's edge inside the clip. */
-	@media not (min-width: 48rem) {
+	@media not (min-width: 48rem) { /* --breakpoint-md */
 		.site-nav:has(> .site-menu) > .site-brand:not(:has(> .site-logo)) {
 			display: -webkit-box;
 			-webkit-box-orient: vertical;
@@ -553,7 +620,7 @@
 		position: absolute;
 		inset-inline: 0;
 		inset-block-start: 100%;
-		z-index: 1;
+		z-index: var(--z-raised);
 		display: flex;
 		flex-direction: column;
 		max-block-size: calc(100dvb - 100%);
@@ -576,7 +643,7 @@
 
 	/* From 48rem the same links sit inline in the header row and the Menu control is not shown.
 	   A browser without ::details-content keeps the working Menu disclosure at every width. */
-	@media (min-width: 48rem) {
+	@media (min-width: 48rem) { /* --breakpoint-md */
 		@supports selector(::details-content) {
 			.site-menu {
 				flex: 0 1 auto;
@@ -621,7 +688,7 @@
 	/* Inside the Menu panel, search results open in the flow of the scrolling panel instead of as a
 	   dropdown the panel would clip. The search component's scoped styles are unlayered, hence the
 	   priority. The two conditions are the two cases in which the panel is shown. */
-	@media not (min-width: 48rem) {
+	@media not (min-width: 48rem) { /* --breakpoint-md */
 		.site-menu__results {
 			position: static !important;
 			max-block-size: none !important;
@@ -800,7 +867,7 @@
 		inline-size: 100%;
 		block-size: 100%;
 		object-fit: cover;
-		z-index: -1;
+		z-index: var(--z-behind);
 		pointer-events: none;
 	}
 
@@ -1019,7 +1086,7 @@
 		border-radius: calc(var(--radius-sm, 0.25rem) * 0.75) calc(var(--radius-sm, 0.25rem) * 0.75) 0 0;
 		background: color-mix(in oklch, var(--color-action) var(--bar-mix, 38%), var(--color-elevated));
 		border-block-start: 1px solid color-mix(in oklch, var(--color-action) 75%, transparent);
-		transition: background-color var(--duration-fast, 150ms) var(--ease-smooth), transform var(--duration-fast, 150ms) var(--ease-smooth);
+		transition: background-color var(--duration-fast) var(--ease-smooth), transform var(--duration-fast) var(--ease-smooth);
 	}
 
 	:where(.viz-bar:hover, .viz-bar:focus-visible, .viz-bar[data-active]) {
@@ -1041,7 +1108,7 @@
 		text-decoration: none;
 		box-shadow: var(--surface-highlight), var(--shadow-sm);
 		cursor: pointer;
-		transition: transform 150ms var(--ease-snappy), background-color 150ms var(--ease-smooth), border-color 150ms var(--ease-smooth), box-shadow 150ms var(--ease-smooth);
+		transition: transform var(--duration-fast) var(--ease-snappy), background-color var(--duration-fast) var(--ease-smooth), border-color var(--duration-fast) var(--ease-smooth), box-shadow var(--duration-fast) var(--ease-smooth);
 	}
 
 	:where(.btn:hover) {
@@ -1079,7 +1146,7 @@
 
 	:where(.icon-nudge) {
 		display: inline-block;
-		transition: transform 220ms var(--ease-spring);
+		transition: transform var(--duration-base) var(--ease-spring);
 	}
 
 	:where(.btn:hover, .btn:focus-visible, .card:hover, .card:focus-within, a:hover, a:focus-visible) :where(.icon-nudge) {
@@ -1092,7 +1159,7 @@
 		gap: var(--grid-gap, var(--layout-grid-gap, var(--spacing-grid)));
 	}
 
-	@media (min-width: 48rem) {
+	@media (min-width: 48rem) { /* --breakpoint-md */
 		.bento-grid {
 			grid-template-columns: repeat(12, minmax(0, 1fr));
 		}
@@ -1120,7 +1187,7 @@
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
-		z-index: 1;
+		z-index: var(--z-raised);
 		opacity: var(--grain-opacity, 0.035);
 		mix-blend-mode: overlay;
 		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -1130,8 +1197,8 @@
 	:where([data-sticky-header]) {
 		position: sticky;
 		inset-block-start: 0;
-		z-index: 40;
-		transition: background-color 200ms var(--ease-smooth), border-color 200ms var(--ease-smooth), box-shadow 200ms var(--ease-smooth), padding-block 200ms var(--ease-smooth);
+		z-index: var(--z-sticky);
+		transition: background-color var(--duration-base) var(--ease-smooth), border-color var(--duration-base) var(--ease-smooth), box-shadow var(--duration-base) var(--ease-smooth), padding-block var(--duration-base) var(--ease-smooth);
 		border-block-end: 1px solid transparent;
 	}
 
@@ -1214,7 +1281,7 @@
 	/* List-to-detail photo morphs: mediaTransition() in src/lib/view-transition.ts and Card media. The
 	   group clips to the card radius and both snapshots cover it while the box changes aspect ratio. */
 	::view-transition-group(*.vt-media) {
-		animation-duration: 380ms;
+		animation-duration: var(--duration-slower);
 		animation-timing-function: var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
 		overflow: clip;
 		border-radius: var(--radius-card);
@@ -1324,7 +1391,7 @@
 		inset-block-start: 0;
 		inset-inline: 0;
 		block-size: 2px;
-		z-index: 9999;
+		z-index: var(--z-overlay);
 		background: var(--color-action);
 		box-shadow: 0 0 8px color-mix(in oklch, var(--color-action) 70%, transparent);
 		transform-origin: 0% 50%;
@@ -1352,7 +1419,7 @@
 		:where(dialog[open]) {
 			opacity: 1;
 			transform: translateY(0) scale(1);
-			transition: opacity 180ms var(--ease-smooth), transform 180ms var(--ease-smooth);
+			transition: opacity var(--duration-base) var(--ease-smooth), transform var(--duration-base) var(--ease-smooth);
 		}
 
 		@starting-style {

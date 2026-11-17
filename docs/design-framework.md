@@ -30,7 +30,7 @@ The generator uses linear interpolation between requested sizes and viewport end
 
 The global-token validator supports a deliberately bounded grammar: positive ordered `rem` bounds and an affine `rem + vi` term (optionally inside `calc()`), or a direct viewport term. Negative intercepts, finite decimal/exponent numbers and existing `vw` values are supported; generated scales continue to use `vi`. CSS binary `+`/`-` requires surrounding whitespace. Negative slopes, zero slopes with varying bounds, malformed expressions, non-finite coefficients/domains and overflowing reference evaluations fail. General CSS math, variables and container units are outside this contract. `cqi` needs a separately documented inline-size container and matching validators/specimens before adoption; adding a substring containing `vi` cannot bypass that boundary.
 
-The JSON report models a fixed 1280px physical viewport, 16px root and horizontal writing. At estimated 200%/400% zoom, CSS viewport size shrinks to 640/320px while the root stays 16 CSS pixels. `effectiveSizeRatio` compares the enlarged modeled size against the initial size. A ratio below the requested zoom factor produces a text-token advisory, not an audit failure or a WCAG verdict. `rootFontSamples` separately evaluate 16/20/32px roots at a fixed 1280 CSS-pixel viewport. These calculations describe assumptions; they do not reproduce text-only browser resizing, font metrics, clipping, wrapping or focus behavior.
+The JSON report models a fixed 1280px physical viewport, 16px root and horizontal writing. At estimated 200%/400% zoom, CSS viewport size shrinks to 640/320px while the root stays 16 CSS pixels. `effectiveSizeRatio` compares the enlarged modeled size against the initial size. A ratio below the requested zoom factor produces a text-token advisory, not an audit failure or a WCAG verdict. Separately, `design:tokens` **fails** any fluid `--text-*` token whose maximum exceeds 2.5 times its minimum: under that bound, 200% text enlargement is reachable at every viewport width with browser zoom (WCAG 1.4.4 resize text; see [Maxwell Barvian, Smashing Magazine](https://www.smashingmagazine.com/2023/11/addressing-accessibility-concerns-fluid-type/)). Raise the minimum, or record a reviewed exception with a `/* resize-text-exception: <reason> */` comment directly before the declaration, for example for display text that is verified to wrap at 200%. The type-scale generator raises a bridge or high step's minimum to that floor. `rootFontSamples` separately evaluate 16/20/32px roots at a fixed 1280 CSS-pixel viewport. These calculations describe assumptions; they do not reproduce text-only browser resizing, font metrics, clipping, wrapping or focus behavior.
 
 Use `npm run test:design` and `npm run verify` for mathematical checks. Run the existing local Windows `npm run test:visual:functional` for actual Chromium 200%/400% zoom, 320px reflow, text spacing and keyboard journeys. Numerical results do not replace rendered acceptance or manual assistive-technology and text-only resize checks. No browser/screenshot suite runs in CI or production builds.
 
@@ -40,12 +40,22 @@ Defined in `src/styles/global.css` under Tailwind v4's `@theme`:
 
 | Token | Formula | 320px Viewport | 1280px Viewport | Intended Role |
 | :--- | :--- | :--- | :--- | :--- |
-| `--text-step--1` | `clamp(0.875rem, calc(0.8333rem + 0.2083vi), 1rem)` | 14px | 16px | Captions, metadata, fine print |
-| `--text-step-0` | `clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)` | 16px | 24px | Body copy, default interface text |
-| `--text-step-1` | `clamp(1.25rem, calc(1rem + 1.25vi), 2rem)` | 20px | 32px | Section headings (`<h2>`), cards |
-| `--text-step-2` | `clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem)` | 28px | 52px | Page titles (`<h1>`), hero display |
-| `--text-step-2-to-0` | `clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem)` | 16px | 52px | High-contrast display bridge |
-| `--text-step-3-to-1` | `clamp(1.25rem, calc(0.25rem + 5vi), 4.25rem)` | 20px | 68px | Dramatic hero display bridge |
+| `--text-body` | `1rem` | 16px | 16px | Body copy and default interface text: the reader's own size, not fluid |
+| `--text-step--1` | `clamp(0.875rem, calc(0.8333rem + 0.2083vi), 1rem)` | 14px | 16px | Captions, metadata, fine print, `<h5>`/`<h6>` |
+| `--text-step-0` | `clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)` | 16px | 24px | Lead and large text, `<h3>`, card titles |
+| `--text-step-1` | `clamp(1.25rem, calc(1rem + 1.25vi), 2rem)` | 20px | 32px | Section headings (`<h2>`) |
+| `--text-step-2` | `clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem)` | 28px | 52px | Page titles (`<h1>`) |
+| `--text-step-3` | `clamp(2.125rem, calc(1.4167rem + 3.5417vi), 4.25rem)` | 34px | 68px | Hero display |
+| `--text-step-4` | `clamp(2.5rem, calc(1.5rem + 5vi), 5.5rem)` | 40px | 88px | Large display |
+| `--text-step-5` | `clamp(3rem, calc(1.6667rem + 6.6667vi), 7rem)` | 48px | 112px | Poster display |
+| `--text-step-2-to-0` | `clamp(1.3125rem, calc(0.6667rem + 3.2292vi), 3.25rem)` | 21px | 52px | High-contrast display bridge |
+| `--text-step-3-to-1` | `clamp(1.75rem, calc(0.9167rem + 4.1667vi), 4.25rem)` | 28px | 68px | Dramatic hero display bridge |
+
+**Body text is `1rem`, not fluid.** `--text-step-0` is lead or large text; never set paragraphs to it by default. Following [OddBird's advice on fluid type](https://oddbird.net/2025/02/12/fluid-type/), the root size stays the reader's, and only headings and display text scale with the viewport.
+
+**Heading map.** `h1` uses step 2, `h2` step 1, `h3` step 0, `h4` the body size (bold), and `h5`/`h6` step −1. Card titles use step 0 inside the card. `/_styleguide` shows the map. A site that wants a different hierarchy changes these rules once in `global.css`, not per page.
+
+Every fluid text token keeps its maximum at most 2.5 times its minimum (see the diagnostic contract above). The two bridges were retuned to meet it: `--text-step-2-to-0` now starts at 21px instead of 16px and `--text-step-3-to-1` at 28px instead of 20px.
 
 All headings apply `text-wrap: balance` by default to prevent awkward single-word typographic orphans.
 
@@ -62,6 +72,24 @@ Spacing grows proportionally with the screen, maintaining balanced visual weight
 | `--spacing-section-m` | `clamp(2rem, calc(0.6667rem + 6.6667vi), 6rem)` | 32px | 96px | Medium section step (`<Section spacing="medium">`) |
 | `--spacing-xl-to-sm` | `clamp(0.75rem, calc(-0.3333rem + 5.4167vi), 4rem)` | 12px | 64px | High-contrast padding/gap bridge |
 | `--spacing-2xl-to-md` | `clamp(1.25rem, calc(-0.5rem + 8.75vi), 6.5rem)` | 20px | 104px | Hero/spotlight padding bridge |
+
+#### Fluid space scale (primitives)
+
+Below the semantic tokens sits a complete fluid space scale with [Utopia's](https://utopia.fyi/blog/painting-with-a-fluid-space-palette/) step multipliers of a base step `s` (1rem at 20rem, 1.5rem at 80rem). Use a step or a pair instead of inventing a value; Tailwind turns them into utilities such as `p-s`, `gap-m` or `py-xl-3xl`.
+
+| Step | 320px | 1280px | | Pair | 320px | 1280px |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `--spacing-3xs` | 4px | 6px | | `--spacing-3xs-2xs` | 4px | 12px |
+| `--spacing-2xs` | 8px | 12px | | `--spacing-2xs-xs` | 8px | 18px |
+| `--spacing-xs` | 12px | 18px | | `--spacing-xs-s` | 12px | 24px |
+| `--spacing-s` | 16px | 24px | | `--spacing-s-m` | 16px | 36px |
+| `--spacing-m` | 24px | 36px | | `--spacing-m-l` | 24px | 48px |
+| `--spacing-l` | 32px | 48px | | `--spacing-l-xl` | 32px | 72px |
+| `--spacing-xl` | 48px | 72px | | `--spacing-xl-2xl` | 48px | 96px |
+| `--spacing-2xl` | 64px | 96px | | `--spacing-2xl-3xl` | 64px | 144px |
+| `--spacing-3xl` | 96px | 144px | | `--spacing-s-l`, `--spacing-l-2xl`, `--spacing-xl-3xl` | 16/32/48px | 48/96/144px |
+
+The semantic tokens keep their names and values and sit on this scale: `--spacing-content` equals `--spacing-s`, `--spacing-section` equals `--spacing-xl-3xl` and `--spacing-section-m` equals `--spacing-l-2xl` (a unit test holds these equal). `--spacing-grid` and `--spacing-container` sit between steps. The semantic tokens stay literal `clamp()` values rather than `var()` aliases, because older sites adopt required contract tokens one at a time and need self-contained values. `npm run design:tokens -- --space-scale <ratio>` regenerates the semantic set and the primitives (`generateSpacePrimitives`) together; a stylesheet without the primitives keeps its own set.
 
 `--spacing-section` interpolates between its bounds without per-breakpoint padding overrides. Check actual page pacing and use a deliberate layout breakpoint when the content requires a different composition.
 
@@ -182,6 +210,9 @@ Nested list indentation, list-item rhythm and internal quote paragraphs are boun
 
 - **Multi-Layer OKLCH Shadows (`@theme`):** `--shadow-sm` (3-stop), `--shadow-md` (4-stop), and `--shadow-lg` (6-stop) derived from `oklch(from var(--color-text) l c h / alpha)`.
 - **Curated Easing Curves (`@theme`):** `--ease-smooth`, `--ease-snappy`, and physics-inspired `--ease-spring` (via CSS `linear()`).
+- **Motion durations (`@theme`):** `--duration-fast` (150ms, hover and press feedback), `--duration-base` (200ms, header state, dialogs, outgoing view transitions), `--duration-slow` (250ms, incoming view transitions) and `--duration-slower` (380ms, shared-element media morphs). Loops and progress indicators (shimmer, navigation progress) keep their own lengths. `--duration-normal` remains an optional site override hook for the card entrance and reveal timings.
+- **Layering (`@theme`):** `--z-behind` (−1, `.is-bg` media), `--z-raised` (1, stretched links, menu panel, grain), `--z-sticky` (40, sticky header), `--z-skip` (100, skip link above the header) and `--z-overlay` (9999, navigation progress). Card raises its own controls one step above its stretched link.
+- **Breakpoints (`@theme`):** `--breakpoint-sm` (40rem) and `--breakpoint-md` (48rem) name the two shared thresholds and drive Tailwind's `sm:` and `md:` variants. Media queries cannot read custom properties, so `@media` rules write the same value and name the token in a comment. Component-specific thresholds (for example PhotoGallery's columns) stay with their component; prefer a container query when a component responds to its slot rather than to the viewport.
 - **Background & Mask Helpers:** Mark background media with `.is-bg` (its parent automatically becomes `position: relative; isolation: isolate` via `:where(:has(> .is-bg))`), and apply `.fade--bottom`, `.fade--top`, `.fade--block`, or `.fade--inline` (`--fade-amount: 25%`) for surface-independent `mask-image` fades.
 - **Contextual Surface Scopes:** Apply `data-surface="dark"` or `data-surface="light"` to any section or card to remap `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, `--color-focus`, and `--color-link` together. Text links retain action ink by default, use the existing light focus ink on dark surfaces, and restore action ink on nested light surfaces. Optional `--surface-dark-link` / `--surface-light-link` aliases support calibrated overrides without changing solid-action colors.
 

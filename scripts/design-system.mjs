@@ -47,9 +47,54 @@ export const REQUIRED_THEME_TOKENS = [
  * contract: older sites without them stay valid, and the starter keeps them in
  * step with CONTRACT_STARTER_VALUES.optional.
  */
-export const OPTIONAL_THEME_TOKENS = [
-  '--spacing-section-m',
+export const SPACE_STEP_MULTIPLIERS = { '3xs': 0.25, '2xs': 0.5, xs: 0.75, s: 1, m: 1.5, l: 2, xl: 3, '2xl': 4, '3xl': 6 };
+// Adjacent pairs plus the pairs the semantic section tokens sit on.
+export const SPACE_PAIRS = [
+  ...Object.keys(SPACE_STEP_MULTIPLIERS).slice(0, -1).map((step, index) => [step, Object.keys(SPACE_STEP_MULTIPLIERS)[index + 1]]),
+  ['s', 'l'], ['l', '2xl'], ['xl', '3xl'],
 ];
+
+export const OPTIONAL_THEME_TOKENS = [
+  '--text-body',
+  '--text-step-3',
+  '--text-step-4',
+  '--text-step-5',
+  '--spacing-section-m',
+  ...Object.keys(SPACE_STEP_MULTIPLIERS).map(step => `--spacing-${step}`),
+  ...SPACE_PAIRS.map(([from, to]) => `--spacing-${from}-${to}`),
+  '--duration-fast',
+  '--duration-base',
+  '--duration-slow',
+  '--duration-slower',
+  '--z-behind',
+  '--z-raised',
+  '--z-sticky',
+  '--z-skip',
+  '--z-overlay',
+  '--breakpoint-sm',
+  '--breakpoint-md',
+];
+
+/**
+ * WCAG 1.4.4 resize text: a fluid text token whose maximum is at most 2.5 times its
+ * minimum lets 200% enlargement be reached at every viewport width with browser zoom
+ * (Maxwell Barvian, Smashing Magazine, 2023). design:tokens fails a token above it.
+ */
+export const MAX_TEXT_RATIO = 2.5;
+const RESIZE_TEXT_EXCEPTION = /resize-text-exception:\s*\S/;
+
+/** Text tokens whose declaration is directly preceded by a reviewed resize-text-exception comment. */
+export function textRatioExceptions(css) {
+  const allowed = new Set();
+  postcss.parse(css).walkAtRules('theme', node => {
+    node.each(child => {
+      if (child.type !== 'decl') return;
+      const previous = child.prev();
+      if (previous?.type === 'comment' && RESIZE_TEXT_EXCEPTION.test(previous.text)) allowed.add(child.prop);
+    });
+  });
+  return allowed;
+}
 
 export const REQUIRED_ROOT_TOKENS = [
   '--color-link',
@@ -302,8 +347,8 @@ export const CONTRACT_STARTER_VALUES = {
     '--text-step-0': 'clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)',
     '--text-step-1': 'clamp(1.25rem, calc(1rem + 1.25vi), 2rem)',
     '--text-step-2': 'clamp(1.75rem, calc(1.25rem + 2.5vi), 3.25rem)',
-    '--text-step-3-to-1': 'clamp(1.25rem, calc(0.25rem + 5vi), 4.25rem)',
-    '--text-step-2-to-0': 'clamp(1rem, calc(0.25rem + 3.75vi), 3.25rem)',
+    '--text-step-3-to-1': 'clamp(1.75rem, calc(0.9167rem + 4.1667vi), 4.25rem)',
+    '--text-step-2-to-0': 'clamp(1.3125rem, calc(0.6667rem + 3.2292vi), 3.25rem)',
     '--spacing-content': 'clamp(1rem, calc(0.8333rem + 0.8333vi), 1.5rem)',
     '--spacing-grid': 'clamp(1.25rem, calc(0.9167rem + 1.6667vi), 2.25rem)',
     '--spacing-container': 'clamp(1rem, calc(0.6667rem + 1.6667vi), 2rem)',
@@ -716,12 +761,18 @@ export function auditDesignTokens(css, { cssPath = 'src/styles/global.css' } = {
     reference: { rootFontPx: 16, viewportSizePx: 1280, writingMode: 'horizontal-tb', zoomModel: 'fixed physical viewport; CSS viewport divided by zoom; root font unchanged' },
     tokens: [],
   };
+  const ratioExceptions = textRatioExceptions(css);
   for (const key of fluidTokens) {
     const clampError = validateClampToken(key, tokens.theme[key]);
     if (clampError) errors.push(clampError);
     else {
       try {
-        fluid.tokens.push(diagnoseFluidToken(key, tokens.theme[key]));
+        const diagnosis = diagnoseFluidToken(key, tokens.theme[key]);
+        fluid.tokens.push(diagnosis);
+        const ratio = diagnosis.maxRem / diagnosis.minRem;
+        if (key.startsWith('--text-') && ratio > MAX_TEXT_RATIO + 5e-4 && !ratioExceptions.has(key)) {
+          errors.push(`Token ${key}: maximum ${diagnosis.maxRem}rem is ${round4(ratio)} times its minimum ${diagnosis.minRem}rem; text tokens keep max <= ${MAX_TEXT_RATIO} x min so 200% text enlargement stays reachable (WCAG 1.4.4). Raise the minimum to at least ${round4(diagnosis.maxRem / MAX_TEXT_RATIO)}rem, or record a reviewed exception with a /* resize-text-exception: <reason> */ comment directly before the declaration.`);
+        }
       } catch (error) {
         errors.push(`Token ${key}: ${error.message}`);
       }
@@ -833,14 +884,31 @@ export function generateTypeScale({ ratio = 1.25, baseMinRem = 1, baseMaxRem = 1
     throw new Error(`Invalid type scale ratio '${String(ratio)}'. Expected 1.05..1.8 or one of: ${Object.keys(TYPE_SCALE_RATIOS).join(', ')}`);
   }
   const minR = 1 + (r - 1) * 0.65;
+  // A minimum below max / 2.5 would fail the resize-text rule; raise it to that floor.
+  const text = (minRem, maxRem) => buildFluidClamp(Math.max(minRem, Math.ceil(round4(maxRem) / MAX_TEXT_RATIO * 1e4) / 1e4), maxRem);
   return {
     '--text-step--1': buildFluidClamp(Math.max(0.8125, baseMinRem / minR), Math.max(0.9375, baseMaxRem / r)),
     '--text-step-0': buildFluidClamp(baseMinRem, baseMaxRem),
     '--text-step-1': buildFluidClamp(baseMinRem * minR, baseMaxRem * r),
     '--text-step-2': buildFluidClamp(baseMinRem * (minR ** 2), baseMaxRem * (r ** 2)),
-    '--text-step-2-to-0': buildFluidClamp(baseMinRem, baseMaxRem * (r ** 2)),
-    '--text-step-3-to-1': buildFluidClamp(baseMinRem * minR, baseMaxRem * (r ** 3)),
+    '--text-step-3': text(baseMinRem * (minR ** 3), baseMaxRem * (r ** 3)),
+    '--text-step-4': text(baseMinRem * (minR ** 4), baseMaxRem * (r ** 4)),
+    '--text-step-5': text(baseMinRem * (minR ** 5), baseMaxRem * (r ** 5)),
+    '--text-step-2-to-0': text(baseMinRem, baseMaxRem * (r ** 2)),
+    '--text-step-3-to-1': text(baseMinRem * minR, baseMaxRem * (r ** 3)),
   };
+}
+
+/**
+ * The primitive fluid space scale: Utopia's step multipliers (3xs..3xl) of a base step s
+ * and the space pairs in SPACE_PAIRS. Every step grows from its minimum to minimum x
+ * (baseMaxRem / baseMinRem) between 20 and 80rem.
+ */
+export function generateSpacePrimitives({ baseMinRem = 1, baseMaxRem = 1.5 } = {}) {
+  const tokens = {};
+  for (const [step, multiplier] of Object.entries(SPACE_STEP_MULTIPLIERS)) tokens[`--spacing-${step}`] = buildFluidClamp(baseMinRem * multiplier, baseMaxRem * multiplier);
+  for (const [from, to] of SPACE_PAIRS) tokens[`--spacing-${from}-${to}`] = buildFluidClamp(baseMinRem * SPACE_STEP_MULTIPLIERS[from], baseMaxRem * SPACE_STEP_MULTIPLIERS[to]);
+  return tokens;
 }
 
 /**
@@ -858,6 +926,9 @@ export function generateSpaceScale({ ratio = 1.5, baseMinRem = 1, baseMaxRem = 1
     '--spacing-xl-to-sm': buildFluidClamp(baseMinRem * 0.75, baseMaxRem * (r ** 1.75)),
     '--spacing-2xl-to-md': buildFluidClamp(baseMinRem * 1.25, baseMaxRem * (r ** 2.4)),
     '--spacing-section': buildFluidClamp(baseMinRem * 2.5, baseMaxRem * (r ** 3.1)),
+    // Medium section step: two thirds of the full step at both ends.
+    '--spacing-section-m': buildFluidClamp(baseMinRem * 2.5 * (2 / 3), baseMaxRem * (r ** 3.1) * (2 / 3)),
+    ...generateSpacePrimitives({ baseMinRem, baseMaxRem }),
   };
 }
 
@@ -1482,13 +1553,20 @@ function main() {
     hasMutationRequest = true;
   }
 
+  // Generated scales also emit optional vocabulary (steps 3-5, the space scale); a stylesheet
+  // that does not declare those tokens yet keeps its own set rather than failing.
+  const scaleOptional = new Set();
   if (options.typeScale) {
-    combinedOverrides = mergeOverrides(combinedOverrides, { theme: generateTypeScale({ ratio: options.typeScale }) });
+    const scale = generateTypeScale({ ratio: options.typeScale });
+    Object.keys(scale).filter(name => OPTIONAL_THEME_TOKENS.includes(name)).forEach(name => scaleOptional.add(name));
+    combinedOverrides = mergeOverrides(combinedOverrides, { theme: scale });
     hasMutationRequest = true;
   }
 
   if (options.spaceScale) {
-    combinedOverrides = mergeOverrides(combinedOverrides, { theme: generateSpaceScale({ ratio: options.spaceScale }) });
+    const scale = generateSpaceScale({ ratio: options.spaceScale });
+    Object.keys(scale).filter(name => OPTIONAL_THEME_TOKENS.includes(name)).forEach(name => scaleOptional.add(name));
+    combinedOverrides = mergeOverrides(combinedOverrides, { theme: scale });
     hasMutationRequest = true;
   }
 
@@ -1516,6 +1594,10 @@ function main() {
   const sourceGap = contractGap(source);
   // Missing tokens are inserted first so --set and presets can then adjust them.
   const withContract = addMissing ? addMissingContractTokens(source) : source;
+  if (scaleOptional.size && combinedOverrides.theme) {
+    const declared = parseDesignTokens(withContract).theme;
+    for (const name of scaleOptional) if (!Object.hasOwn(declared, name)) delete combinedOverrides.theme[name];
+  }
   const css = hasMutationRequest ? applyTokenOverrides(withContract,combinedOverrides) : source;
   const added = addMissing ? sourceGap.missing : undefined;
   const report = auditDesignTokens(css, { cssPath: cssLabel });

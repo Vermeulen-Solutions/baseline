@@ -52,8 +52,10 @@ const specimenTocHeadings: readonly HeadingRecord[] = [
       <Container width="wide">
         <div class="flow"><h1>Starter component styleguide</h1><p>Inspect the existing neutral tokens and public components. These synthetic examples do not define a client theme or prove CMS editing.</p><p>Development only: edit tokens in <code>src/styles/global.css</code> and run <code>npm run design:tokens</code> to audit contrast, fluid scales, and specimen coverage.</p></div>
         <Section labelledBy="typography"><div class="flow"><h2 id="typography">Typography</h2>
-          {['-1', '0', '1', '2'].map(step => <p style={`font-size:var(--text-step-${step})`}><code>--text-step-{step}</code> Reading at a fluid scale</p>)}
-          <h3>Nested heading</h3><h4>Fourth-level heading</h4><h5>Fifth-level heading</h5><h6>Sixth-level heading</h6>
+          {['-1', '0', '1', '2', '3', '4', '5'].map(step => <p style={`font-size:var(--text-step-${step})`}><code>--text-step-{step}</code> Reading at a fluid scale</p>)}
+          <h3>Nested heading (step 0)</h3><h4>Fourth-level heading (body size)</h4><h5>Fifth-level heading (step -1)</h5><h6>Sixth-level heading (step -1)</h6>
+          <h3>Space scale</h3>
+          <ul class="space-scale">{['3xs', '2xs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl'].map(step => <li><code>--spacing-{step}</code><span class="space-scale__bar" style={`inline-size:var(--spacing-${step})`}></span></li>)}</ul>
           <Container width="reading"><p class="stress">ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789. Font specimens inherit the source family and weight; fixture builds use pinned Noto Sans. A longer heading or translated sentence should wrap naturally without forced line breaks.</p><p class="stress">OneUnbrokenIdentifierToCheckIntrinsicSizingAndWrappingAcrossTheNarrowestSupportedContainer</p></Container>
         </div></Section>
         <Section labelledBy="palette"><div class="flow"><h2 id="palette">Semantic palette</h2><p>{coverage.surfaceModes}</p>
@@ -178,6 +180,9 @@ const specimenTocHeadings: readonly HeadingRecord[] = [
   .specimen-fields label, .specimen-field { display:grid; gap:.5rem; }
   .specimen-fields input:not([type=checkbox],[type=radio]), .specimen-fields textarea, .specimen-fields select { min-inline-size:0; inline-size:100%; padding:.5rem; border:1px solid var(--color-border); border-radius:var(--radius-control); color:var(--color-text); background:var(--color-surface); }
   .specimen-fields .choice { display:flex; align-items:center; min-block-size:2.75rem; }
+  .space-scale { display:grid; gap:.5rem; padding:0; list-style:none; }
+  .space-scale li { display:grid; grid-template-columns:minmax(0, 10rem) 1fr; align-items:center; gap:var(--spacing-content); }
+  .space-scale__bar { display:block; block-size:.75rem; background:var(--color-action); }
   .breakout-specimen { padding:var(--spacing-content); border:1px dashed var(--color-border); border-radius:var(--radius-control); background:var(--color-surface); }
 }
 </style>
