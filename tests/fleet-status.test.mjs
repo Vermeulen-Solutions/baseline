@@ -114,3 +114,25 @@ test('Workers rules flag an old Cloudflare adapter on EmDash 1.5 and an HTML cac
     assert.equal(htmlCacheKeyedPerBuild(dir), true);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
+
+test('the fleet record adds status, origins, adoption and the last deploy, and flags a stale adoption', () => {
+  const dir = mkdtempSync(path.join(os.tmpdir(), 'fleet-record-'));
+  try {
+    const write = value => { const file = path.join(dir, 'fleet.json'); writeFileSync(file, JSON.stringify(value)); return file; };
+    assert.throws(() => loadFleet(write({ sites: [{ id: 'a', path: 'a', status: 'retired' }] })), /status must be one of/);
+    assert.throws(() => loadFleet(write({ sites: [{ id: 'a', path: 'a', origins: ['example.org'] }] })), /origins must be a list of http/);
+    assert.throws(() => loadFleet(write({ sites: [{ id: 'a', path: 'a', adopted: { standards: 'latest' } }] })), /adopted\.standards/);
+    assert.throws(() => loadFleet(write({ sites: [{ id: 'a', path: 'a', deploy: { date: 'yesterday' } }] })), /deploy\.date/);
+    const site = path.join(dir, 'a');
+    put(site, 'scripts/check-art-direction.mjs', '');
+    put(site, 'package.json', { engines: { node: certified.nodeEngineRange }, dependencies: { astro: certified.dependencies.astro } });
+    const config = write({ sites: [{ id: 'a', path: 'a', status: 'preview', origins: ['https://a.example.org'], adopted: { standards: '0.0.1', date: '2026-01-02' }, deploy: { date: '2026-01-03', version: 'w-123', rollback: 'roll back to w-122' } }] });
+    const report = fleetStatus(config);
+    const [status] = report.sites;
+    assert.deepEqual(status.record, { status: 'preview', origins: ['https://a.example.org'], adopted: { standards: '0.0.1', date: '2026-01-02' }, deploy: { date: '2026-01-03', version: 'w-123', rollback: 'roll back to w-122', log: null } });
+    assert.equal(status.standards.current, false, 'a record that names an older release is not current');
+    const markdown = markdownStatus(report);
+    assert.match(markdown, /- fleet record says standards 0\.0\.1: follow the release notes after it/);
+    assert.match(markdown, /## Deployments[\s\S]*\| a \| preview \| https:\/\/a\.example\.org \| 0\.0\.1 \(2026-01-02\) \| 2026-01-03 \(w-123\) \| roll back to w-122 \|/);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
