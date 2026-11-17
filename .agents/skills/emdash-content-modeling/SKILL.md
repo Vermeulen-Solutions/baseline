@@ -71,7 +71,7 @@ When modifying content models on an active site with existing content in SQLite 
    - Repeated JSON arrays that should be relational rows.
    - Ambiguous free-text fields where editors type inconsistent strings.
    - Orphaned, confusing, or unused legacy fields (e.g. free-text location notes, scratch marker columns).
-3. Create a snapshot backup before running schema modifications. On Workers, record a D1 Time Travel bookmark as the recovery point and take a verified copy with `npm run db:export-d1` (plain `wrangler d1 export` refuses databases with EmDash's FTS5 search tables); see `docs/cloudflare-backup-restore.md`.
+3. Create a snapshot backup before running schema modifications. On Workers, record a D1 Time Travel bookmark as the recovery point and take a verified copy with `npm run db:export-d1` (plain `wrangler d1 export` refuses databases with EmDash's FTS5 search tables). For a change that rewrites or migrates existing rows, rehearse it on that copy first with `npm run db:rehearse` and compare row counts; see `docs/cloudflare-backup-restore.md`.
 4. **Present the Schema Evolution Plan to the user:**
    Do not modify tables immediately without presenting a plain-English proposal:
    > **Content Model Audit Findings**
