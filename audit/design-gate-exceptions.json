@@ -307,7 +307,7 @@
   {
     "path": "src/components/dev/Styleguide.astro",
     "reason": "Shared neutral starter calibration: render actual composition specimens, pass the platform-owned body slot with native Markdown fallback and replace repeated control-row CSS with Cluster; no client page. Any edit invalidates this exact LF-normalized exception. Shows type steps -1 to 5, the heading map and the space scale; opts into section joins.",
-    "sha256": "679b1a2273c772e099e8633afe4509426dd26cc6ab563f0da11b66227cdb47f8"
+    "sha256": "a273f37af7dbebeee1ec12077cf9081f527b5d5e3dc698be82288bc7c42ba608"
   },
   {
     "path": "src/utils/grid-guide.ts",

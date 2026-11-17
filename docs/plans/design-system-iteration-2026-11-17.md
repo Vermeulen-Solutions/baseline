@@ -12,7 +12,8 @@ Implementation report for the owner's review. Scope: the spacing changes approve
 | `54c55be` | B.1: advisory token guardrails in `check:css`; strict theme for new client sites |
 | `74d174a` | B.8: `design:tokens --format dtcg` |
 | `77035fc` | B.8: CSS scroll-driven reveal by default, opt-in registry aliases, optional recipes marked |
-| (last) | Release notes, gate reasons, renewed visual references and this report |
+| `43a16a0` | Fix: `@theme static` so every token is emitted; compact widget titles; renewed visual references; release notes; gate reasons |
+| (last) | Styleguide specimen fixes from `audit:ui`, final renewed references and this report |
 
 ## Per item
 
@@ -86,9 +87,34 @@ Implementation report for the owner's review. Scope: the spacing changes approve
 - **Registry aliases:** `src/styles/registry-aliases.css` (`@theme inline`, not imported by default; one commented import line in `global.css`). Trial build confirmed `bg-primary` compiles to `var(--color-action)`. `bg-muted` is deliberately not aliased (shadcn's muted is a background, Baseline's is ink).
 - **Skipped:** anchor positioning (the audit flagged it as a trial with conflicting support dates; out of scope).
 
+### Found during verification
+
+- **Unused tokens were not emitted.** Tailwind v4 drops theme variables that no utility uses, so `var(--spacing-m)` or `var(--text-step-4)` in a component `<style>` or inline style resolved to nothing (the styleguide's step 3–5 and space-scale specimens showed it). `global.css` now declares `@theme static`, which emits the whole token block; `design-system.mjs`, `canvas-kit.mjs` and `audit-design-system.mjs` accept it. This also protects existing tokens that sites reference only through `var()`.
+- **Widget titles.** EmDash renders widget titles as `h3`; under the new heading map they grew to step 0 in the footer. `.widget__title` keeps the body size, so the starter routes render exactly as before.
+- **Styleguide specimens.** `audit:ui` flagged the new step-5 line overflowing at 2× text and a squeezed space-scale label at 2× root size; both specimens now wrap.
+
 ## Verification
 
-See the final section of this report, completed after the last run.
+All on Node 24.22.3, Windows, Playwright 1.65.1 with Chromium 1255.
+
+- `npm run verify:fast` (lint, `check:css`, art-direction gate, `design:tokens`, unit tier): pass, also as the pre-commit hook on every commit.
+- `node scripts/run-tests.mjs --tier unit`, `npm run check:docs`, `npm run lint:scripts`: pass.
+- `npm run typecheck`: 0 errors. `npm run build`: pass, also with the strict theme and with the registry alias import switched on (both trial builds reverted).
+- `npm run test:visual`: pass after renewing the references below (112 passed, 44 skipped by the suite's own design).
+- `npm run audit:ui` against the dev server (`/`, `/posts`, `/_styleguide` at 390/768/1440 with enlarged text): **no `empty-band`** findings; no finding on the starter routes. Remaining findings are in code this branch does not change: the logo ticker's off-screen marquee items at enlarged text, the styleguide's nine-link header wrapping at enlarged text, a fieldset legend 1px from its edge, and PhotoGallery's justified rows cropping a 3:2 image. `/posts/welcome` redirected to 404 on the fresh dev database (no sample post), so it was left out.
+- Not run: `npm run test:profiles` (the generated-profile rehearsal) and `test:visual:functional`; profile generation is covered by the unit-tier platform-profile and sync tests.
+
+### Renewed visual references
+
+Only styleguide-based captures changed; the starter routes (home, page, posts, post, category, tag, not-found) are byte-identical. Each candidate was reviewed side by side against the previous image.
+
+| References (390, 768, 1440 unless noted) | Reason |
+| --- | --- |
+| `styleguide`, `styleguide-no-js` | Section joins remove stacked padding between styleguide sections; heading map labels; type steps 3–5 and the space-scale specimen added |
+| `controls`, `controls-focus`, `sensitivity-control`, `composition`, `composition-open` | The captured section joins the previous one on the same ground, so its start padding is gone; content unchanged |
+| `zoom-200`, `zoom-400` (1440), `text-spacing-320` (390) | Same styleguide changes at browser zoom and with text-spacing overrides |
+| `gallery-open` (390, 768) | Lightbox over the styleguide: the page behind it sits at a different scroll position |
+| `ticker-active`, `ticker-reduced`, `ticker-rtl` | 1px height or sub-pixel shifts from the layout above; ticker content unchanged. Two (`chromium-1440/ticker-rtl`, `chromium-768/ticker-reduced`) were re-encoded with zero changed pixels and kept so the manifest hashes stay consistent |
 
 ## Owner decisions
 
