@@ -42,6 +42,8 @@ Because EmDash sandbox plugins run in an isolated WebAssembly/V8 worker sandbox 
 | **Event Management & Ticketing** | `@vermeulen.solutions/eventual` | Comprehensive event lifecycle management, multi-session schedules, venues, speaker profiles, registrations, and calendar exports. Avoids writing custom event schemas and complex datetime logic. | [Eventual on EmDash Registry](https://plugins.emdashcms.com/plugins/@vermeulen.solutions/eventual) |
 | **Translation Dashboards & AI Translation** | `@swiss.ky/linguadash` | Multilingual progress overview, side-by-side translation comparison editor, and automated translation drafting (DeepL/OpenAI) using EmDash's native row-per-locale model. | [LinguaDash on EmDash Registry](https://plugins.emdashcms.com/plugins/@swiss.ky/linguadash) |
 
+Before choosing any other Registry plugin, read `docs/plugin-selection.md` when installed: it covers the pre-install review (permissions, network hosts, Cloudflare support), Cloudflare limits, and needs such as site mail, structured data, form spam protection and bilingual sitemaps that belong in the site rather than in a plugin. A Registry install on a deployed site is a production change that needs the owner's approval.
+
 When an official registry plugin matches the site requirements:
 1. Enable the sandbox runner according to the hosting matrix above.
 2. Install the plugin via `npx emdash plugins add <plugin-name>`.
