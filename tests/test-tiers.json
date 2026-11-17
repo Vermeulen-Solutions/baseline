@@ -334,5 +334,9 @@
   "docs-links.test.mjs": {
     "tier": "unit",
     "reason": "Relative link and heading-anchor resolution for repository documents and maintained skills, on a temporary tree and the checked-in files"
+  },
+  "editor-experience.test.mjs": {
+    "tier": "unit",
+    "reason": "Derived display order, editorial order page helpers, per-locale select labels and admin-metadata plan safety; pure functions, no CMS runtime"
   }
 }

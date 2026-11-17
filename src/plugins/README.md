@@ -23,6 +23,12 @@ Set `options.breadcrumbs: false` when another plugin owns breadcrumb output.
 Different contribution IDs are distinct even when schema types match; share
 the IDs to override these fallbacks, or disable the relevant baseline output.
 
+`editorial-order/` and `editor-ui/` are inactive templates for non-technical
+editors: a drag-and-drop order page, and a select-label widget, list columns,
+a "where this appears" panel, a help page and a dashboard card. Set their
+`config.ts`, translate their text and import them explicitly; see
+`docs/editor-experience.md`.
+
 The future media guard can use the typed `media:beforeUpload` and
 `media:afterUpload` hooks. Before-upload can modify file information or reject
 an upload; after-upload observes the saved media. Verify installed hook/event

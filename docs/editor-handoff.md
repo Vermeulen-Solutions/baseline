@@ -10,6 +10,12 @@ The examples below describe the CMS foundation. Static projects use their file-o
 
 ---
 
+## Make the admin fit the editor
+
+Before handoff, remove what the editor would need to ask about: display-order numbers, select values in another language, a crowded sidebar, lists that do not say what an entry is for. [Editor experience](editor-experience.md) has the steps, templates and a reviewed metadata script.
+
+---
+
 ## 1. Roles and Permissions Model
 
 EmDash provides role-based access control to protect schema integrity and critical configuration while empowering content creators:

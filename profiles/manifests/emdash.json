@@ -123,6 +123,21 @@
     "scripts/retain-build-assets.mjs",
     "tests/production-hardening.test.mjs",
     "src/plugins/baseline-metadata/index.ts",
+    "src/lib/derived-order.ts",
+    "src/plugins/editorial-order/admin.tsx",
+    "src/plugins/editorial-order/config.ts",
+    "src/plugins/editorial-order/index.ts",
+    "src/plugins/editorial-order/order.ts",
+    "src/plugins/editorial-order/runtime.ts",
+    "src/plugins/editorial-order/styles.css",
+    "src/plugins/editor-ui/admin.tsx",
+    "src/plugins/editor-ui/config.ts",
+    "src/plugins/editor-ui/index.ts",
+    "src/plugins/editor-ui/labels.ts",
+    "src/plugins/editor-ui/runtime.ts",
+    "src/plugins/editor-ui/styles.css",
+    "scripts/cms-admin-metadata.mjs",
+    "tests/editor-experience.test.mjs",
     "tests/asset-retention.test.mjs",
     "tests/cache.integration.mjs",
     "standards/site-audit-report.schema.json",
@@ -203,7 +218,8 @@
     "db:check-backup",
     "check:hosted-auth",
     "migration:check-library",
-    "migration:check-editorial"
+    "migration:check-editorial",
+    "cms:admin-metadata"
   ],
   "checks": [
     "check:schema-budget"
