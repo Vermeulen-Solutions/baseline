@@ -4,7 +4,7 @@ import { execFileSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { compareWithStandard, fleetStatus, htmlCacheKeyedPerBuild, loadFleet, markdownStatus, repositoryName, versionAtLeast } from '../scripts/fleet-status.mjs';
+import { compareWithStandard, fleetStatus, siteStatus, htmlCacheKeyedPerBuild, loadFleet, markdownStatus, repositoryName, versionAtLeast } from '../scripts/fleet-status.mjs';
 import { STANDARD } from '../scripts/audit-site.mjs';
 
 // Portable: throwaway site folders and one throwaway Git repository; no network.
@@ -55,12 +55,25 @@ test('fleet status classifies sites, reads locked versions and compares Baseline
     assert.equal(site('gone-site').missing, true);
 
     const markdown = markdownStatus(report);
-    assert.match(markdown, /\| current-site \| Baseline copy \(emdash\) \| cloudflare \| [^|]+ \| [^|]+ \| current \(/);
-    assert.match(markdown, /\| current-site \|.*1 uncommitted \|/);
-    assert.match(markdown, /\| old-static \| Baseline static \|.*behind: 2 \| not a Git repository \|/);
-    assert.match(markdown, /\| other-site \| other \| netlify \| 5\.7\.0 \| - \| n\/a \|/);
+    assert.match(markdown, /\*\*1 of 3 Baseline sites match standards /);
+    assert.match(markdown, /\| current-site \| copy \(emdash\) \| cloudflare \| [^|]+ \| [^|]+ \| current \| not pinned \| not pinned \|.*1 uncommitted \|/);
+    assert.match(markdown, /\| old-static \| static \|.*\| behind: 2 \|.*\| not a Git repository \|/);
+    assert.match(markdown, /## Other projects[\s\S]*\| other-site \| netlify \| 5\.7\.0 \|/);
     assert.match(markdown, /\| gone-site \| missing \|/);
-    assert.match(markdown, /## Behind the standards\n\n- \*\*old-static:\*\* astro 7\.0\.1/);
+    assert.match(markdown, /### old-static\n\n- astro 7\.0\.1/);
+    assert.doesNotMatch(markdown, /### current-site/);
+
+    // With a release that pins its distribution, skills and helpers count too, and a site page is linked.
+    put(path.join(dir, "private"), "sites/current-site.md", "# current-site");
+    put(current, ".agents/skills/impeccable/SKILL.md", "old");
+    const pinned = { ...JSON.parse(readFileSync(new URL(`../standards/baselines/${STANDARD.version}.json`, import.meta.url), "utf8")), distribution: { skills: { impeccable: { files: 1, sha256: "0".repeat(64) } }, optionalSkills: [], emdashOnlySkills: [], tools: {}, impeccable: {} } };
+    const [withPins] = loadFleet(config).filter(site => site.id === "current-site").map(site => siteStatus(site, pinned));
+    assert.equal(withPins.page, "sites/current-site.md");
+    assert.equal(withPins.standards.current, false);
+    assert.deepEqual(withPins.standards.distributionBehind, ["skills differ from the release: impeccable"]);
+    const pinnedMarkdown = markdownStatus({ ...report, sites: [withPins] });
+    assert.match(pinnedMarkdown, /\| \[current-site\]\(sites\/current-site\.md\) \|.*\| current \| 1 differ \| none installed \|/);
+    assert.match(pinnedMarkdown, /### current-site\n\n- skills differ from the release: impeccable/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 

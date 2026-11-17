@@ -87,7 +87,11 @@ and npx.cmd. These launchers avoid execution-policy friction.
    editor/HTTP checks. Updating reference images requires explicit --update,
    reviewed PNG/manifest differences and an explanation. Never update goldens to
    hide an unexplained failure.
-6. Author Markdown documentation in `docs/` with unwrapped paragraphs (soft-wrapped /
+6. Add a change note for anything sites receive: `npm run standards:change -- --slug <name>`
+   writes `standards/changes/<name>.md`; fill in what it affects and what a site does.
+   CI refuses changes to shipped files without one (`bump: none` when sites are not
+   affected). Releases gather the notes; see [standards releases](docs/standards-releases.md).
+7. Author Markdown documentation in `docs/` with unwrapped paragraphs (soft-wrapped /
    one line per paragraph) or semantic line breaks rather than hard wrapping at
    80 columns. `npm run check:docs` verifies documentation formatting.
 
