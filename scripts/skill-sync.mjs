@@ -4,7 +4,7 @@ import { createHash, randomUUID } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 
 export const sources = {
-  emdash: { repository: 'emdash-cms/emdash', prefix: 'skills/', manifest: 'upstream-skills.json', skills: ['building-emdash-site', 'creating-plugins', 'emdash-cli'] },
+  emdash: { repository: 'emdash-cms/emdash', prefix: 'skills/', manifest: 'upstream-skills.json', skills: ['building-emdash-site', 'creating-plugins', 'emdash-cli', 'upgrading-emdash'] },
   site: { repository: 'Vermeulen-Solutions/baseline', prefix: '.agents/skills/', manifest: 'site-skills.json', skills: ['new-site-workflow', 'site-art-direction', 'penpot-site-design', 'openpencil-site-design', 'opendesign-site-design', 'impeccable', 'astro-site-design', 'emdash-site-setup', 'emdash-content-modeling', 'wordpress-to-emdash-content', 'emdash-production-cutover'], bundledOptionalSkills: ['brilliant-site-design'] },
 };
 export const hash = value => createHash('sha256').update(value).digest('hex');

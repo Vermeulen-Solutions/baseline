@@ -338,5 +338,9 @@
   "editor-experience.test.mjs": {
     "tier": "unit",
     "reason": "Derived display order, editorial order page helpers, per-locale select labels and admin-metadata plan safety; pure functions, no CMS runtime"
+  },
+  "standards-changes.test.mjs": {
+    "tier": "unit",
+    "reason": "Change-note format, release aggregation, digest pinning and distribution comparison in throwaway folders and a throwaway Git repository"
   }
 }

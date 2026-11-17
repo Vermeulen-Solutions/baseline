@@ -33,6 +33,9 @@ jobs:
             base=$(git hash-object -t tree /dev/null)
           fi
           npm run check:art-direction -- --base "$base"
+          echo "DIFF_BASE=$base" >> "$GITHUB_ENV"
+      - name: Require a standards change note for changes sites receive
+        run: npm run standards:check -- --base "$DIFF_BASE"
       - run: npm run check:ci-fast
       - uses: actions/upload-artifact@v7
         if: always()

@@ -12,7 +12,10 @@
 // - hosting from its config files (Wrangler, Netlify, Vercel, Firebase);
 // - Astro, EmDash and adapter versions as locked (package-lock.json) or declared, and engines.node;
 // - for Baseline sites: each certified dependency and the Node range against standards/baselines/<STANDARD>.json,
-//   plus two Workers delivery rules learned on live EmDash 1.5 updates (WORKERS_RULES).
+//   plus two Workers delivery rules learned on live EmDash 1.5 updates (WORKERS_RULES);
+// - when the release pins its distribution: each skill folder and sync/audit helper against the
+//   release's content hashes, and the installed Impeccable version (standards-distribution.mjs).
+// A site's page in sites/<id>.md next to the config is linked from the report when it exists.
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -20,6 +23,7 @@ import { fileURLToPath } from 'node:url';
 import { argumentsOf, isMain } from './infrastructure-io.mjs';
 import { STANDARD, satisfiesCertified } from './audit-site.mjs';
 import { WORKERS_RULES, htmlCacheKeyedPerBuild, versionAtLeast } from './workers-rules.mjs';
+import { compareDistribution, distributionLags } from './standards-distribution.mjs';
 
 export { WORKERS_RULES, htmlCacheKeyedPerBuild, versionAtLeast };
 
@@ -35,7 +39,8 @@ export function loadFleet(configFile) {
     if (seen.has(site.id)) throw new Error(`duplicate site id: ${site.id}`);
     if (typeof site.path !== 'string' || !site.path.trim()) throw new Error(`site ${site.id} needs a path`);
     seen.add(site.id);
-    return { id: site.id, path: path.resolve(path.dirname(configFile), site.path) };
+    const page = path.join(path.dirname(configFile), 'sites', `${site.id}.md`);
+    return { id: site.id, path: path.resolve(path.dirname(configFile), site.path), page: fs.existsSync(page) ? `sites/${site.id}.md` : null };
   });
 }
 
@@ -108,14 +113,19 @@ export function compareWithStandard(site, manifest) {
   return { standard: manifest.standardsVersion, current: behind.length === 0, behind };
 }
 
-export function siteStatus({ id, path: dir }, manifest) {
-  if (!fs.existsSync(dir)) return { id, path: dir, missing: true };
+export function siteStatus({ id, path: dir, page = null }, manifest) {
+  if (!fs.existsSync(dir)) return { id, path: dir, page, missing: true };
   const kind = kindOf(dir);
   const names = ['astro', 'emdash', '@emdash-cms/cloudflare', '@astrojs/cloudflare', '@astrojs/node', '@astrojs/netlify', 'wrangler', ...Object.keys(manifest.runtimeProfiles['node-sqlite'].dependencies)];
   const { versions, engines } = versionsOf(dir, [...new Set(names)]);
   const hosting = hostingOf(dir);
-  const status = { id, path: dir, ...kind, hosting, versions, engines, git: gitState(dir), htmlCacheKeyedPerBuild: hosting === 'cloudflare' ? htmlCacheKeyedPerBuild(dir) : null };
+  const status = { id, path: dir, page, ...kind, hosting, versions, engines, git: gitState(dir), htmlCacheKeyedPerBuild: hosting === 'cloudflare' ? htmlCacheKeyedPerBuild(dir) : null };
   status.standards = kind.kind === 'other' ? null : compareWithStandard(status, manifest);
+  if (status.standards && manifest.distribution) {
+    status.distribution = compareDistribution(dir, manifest.distribution, kind.profile === 'emdash' ? 'emdash' : 'static');
+    status.standards.distributionBehind = distributionLags(status.distribution);
+    status.standards.current = status.standards.current && status.standards.distributionBehind.length === 0;
+  }
   return status;
 }
 
@@ -125,28 +135,66 @@ export function fleetStatus(configFile, { baselineRoot = root } = {}) {
   return { generatedAt: new Date().toISOString(), standard: STANDARD.version, sites: loadFleet(configFile).map(site => siteStatus(site, manifest)) };
 }
 
+const cell = value => value === null || value === undefined || value === '' ? '-' : String(value).replaceAll('|', '\\|');
+
+function gitCell(g) {
+  if (!g) return 'not a Git repository';
+  return `${g.branch ?? 'detached'} ${g.head} (${g.lastCommit})${g.uncommitted ? `, ${g.uncommitted} uncommitted` : ''}${g.ahead ? `, ${g.ahead} unpushed` : ''}${g.behind ? `, ${g.behind} to pull` : ''}`;
+}
+
+function skillsCell(site) {
+  const d = site.distribution;
+  if (!d) return 'not pinned';
+  const parts = [];
+  if (d.skills.differs.length) parts.push(`${d.skills.differs.length} differ`);
+  if (d.skills.missing.length) parts.push(`${d.skills.missing.length} missing`);
+  return parts.length ? parts.join(', ') : `current (${d.skills.current.length})`;
+}
+
+function helpersCell(site) {
+  const d = site.distribution;
+  if (!d) return 'not pinned';
+  if (!d.tools.current.length && !d.tools.differs.length) return 'none installed';
+  return d.tools.differs.length ? `${d.tools.differs.length} differ` : `current (${d.tools.current.length})`;
+}
+
 export function markdownStatus(report) {
-  const cell = value => value === null || value === undefined || value === '' ? '-' : String(value).replaceAll('|', '\\|');
+  const link = site => site.page ? `[${cell(site.id)}](${site.page})` : cell(site.id);
+  const baseline = report.sites.filter(site => site.missing || site.standards);
+  const others = report.sites.filter(site => !site.missing && !site.standards);
+  const current = baseline.filter(site => site.standards?.current).length;
   const lines = [
-    `# Fleet status`,
+    '# Fleet status',
     '',
-    `Generated ${report.generatedAt.slice(0, 16).replace('T', ' ')} UTC against Baseline standards ${report.standard}. Read from local checkouts; Git ahead/behind is as of each checkout's last fetch.`,
+    `Generated ${report.generatedAt.slice(0, 16).replace('T', ' ')} UTC against Baseline standards ${report.standard}, from local checkouts (Git ahead/behind as of each checkout's last fetch).`,
     '',
-    '| Site | Kind | Hosting | Astro | EmDash | Standards | Git |',
-    '| --- | --- | --- | --- | --- | --- | --- |',
+    `**${current} of ${baseline.length} Baseline sites match standards ${report.standard}.**`,
+    '',
+    '## Baseline sites',
+    '',
+    '| Site | Kind | Hosting | Astro | EmDash | Dependencies | Skills | Helpers | Git |',
+    '| --- | --- | --- | --- | --- | --- | --- | --- | --- |',
   ];
-  for (const site of report.sites) {
-    if (site.missing) { lines.push(`| ${cell(site.id)} | missing | - | - | - | - | folder not found |`); continue; }
-    const kind = site.kind === 'baseline' ? `Baseline ${site.profile ?? ''}`.trim() : site.kind === 'baseline-copy' ? `Baseline copy${site.profile ? ` (${site.profile})` : ''}` : 'other';
-    const standards = !site.standards ? 'n/a' : site.standards.current ? `current (${site.standards.standard})` : `behind: ${site.standards.behind.length}`;
-    const g = site.git;
-    const gitCell = !g ? 'not a Git repository' : `${g.branch ?? 'detached'} ${g.head} (${g.lastCommit})${g.uncommitted ? `, ${g.uncommitted} uncommitted` : ''}${g.ahead ? `, ${g.ahead} unpushed` : ''}${g.behind ? `, ${g.behind} to pull` : ''}`;
-    lines.push(`| ${cell(site.id)} | ${cell(kind)} | ${cell(site.hosting)} | ${cell(site.versions.astro)} | ${cell(site.versions.emdash)} | ${cell(standards)} | ${cell(gitCell)} |`);
+  for (const site of baseline) {
+    if (site.missing) { lines.push(`| ${link(site)} | missing | - | - | - | - | - | - | folder not found |`); continue; }
+    const kind = site.kind === 'baseline' ? `${site.profile ?? 'generated'}` : `copy${site.profile ? ` (${site.profile})` : ''}`;
+    const dependencies = site.standards.behind.length ? `behind: ${site.standards.behind.length}` : 'current';
+    lines.push(`| ${link(site)} | ${cell(kind)} | ${cell(site.hosting)} | ${cell(site.versions.astro)} | ${cell(site.versions.emdash)} | ${dependencies} | ${skillsCell(site)} | ${helpersCell(site)} | ${cell(gitCell(site.git))} |`);
   }
-  const behind = report.sites.filter(site => site.standards && !site.standards.current);
+  const behind = baseline.filter(site => site.standards && !site.standards.current);
   if (behind.length) {
-    lines.push('', '## Behind the standards', '');
-    for (const site of behind) lines.push(`- **${site.id}:** ${site.standards.behind.join('; ')}`);
+    lines.push('', `## What each site needs for ${report.standard}`, '');
+    for (const site of behind) {
+      lines.push(`### ${site.id}`, '');
+      for (const item of site.standards.behind) lines.push(`- ${item}`);
+      for (const item of site.standards.distributionBehind ?? []) lines.push(`- ${item}`);
+      lines.push('');
+    }
+    lines.pop();
+  }
+  if (others.length) {
+    lines.push('', '## Other projects', '', 'Not built from Baseline; listed for the record, not compared.', '', '| Site | Hosting | Astro | Git |', '| --- | --- | --- | --- |');
+    for (const site of others) lines.push(`| ${link(site)} | ${cell(site.hosting)} | ${cell(site.versions.astro)} | ${cell(gitCell(site.git))} |`);
   }
   return lines.join('\n') + '\n';
 }

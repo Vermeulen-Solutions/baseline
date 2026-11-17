@@ -24,6 +24,8 @@ jobs:
         run: npm update --save --no-audit --no-fund
       - name: Propose third-party skill updates (Impeccable & EmDash mirrors)
         run: npm run sync:upstream-skills
+      - name: Write the standards change note for this proposal
+        run: node scripts/standards-changes.mjs upstream-note
       - name: Prove the resulting lockfile installs cleanly
         run: npm ci --no-audit --no-fund
       - run: npm run verify
@@ -105,7 +107,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git checkout -B "$branch"
-          git add package.json package-lock.json .agents/skills/ .emdash/upstream-skills.json .emdash/impeccable-source.json
+          git add package.json package-lock.json .agents/skills/ .emdash/upstream-skills.json .emdash/impeccable-source.json profiles/manifests/shared.json standards/changes/
           git commit -m "$title"
           git push -f origin "$branch"
 
