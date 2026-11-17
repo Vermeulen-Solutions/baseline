@@ -24,6 +24,12 @@ test('Workers rules: adapter minimum on EmDash 1.5, per-build HTML cache keys, d
     assert.equal(htmlCacheKeyedPerBuild(dir), null);
     put(dir, 'src/lib/cloudflare-cache-provider.mjs', "const cacheKey = new Request(url.toString(), { method: 'GET' });");
     assert.equal(htmlCacheKeyedPerBuild(dir), false);
+    // Retaining the previous builds' assets on deploy also keeps cached HTML working.
+    put(dir, 'package.json', JSON.stringify({ scripts: { 'assets:retain': 'node scripts/retain-build-assets.mjs', test: 'npm run assets:retain' } }));
+    assert.equal(htmlCacheKeyedPerBuild(dir), false, 'a retention script nobody runs on build or deploy does not count');
+    put(dir, 'package.json', JSON.stringify({ scripts: { 'deploy:worker': 'npm run assets:retain -- --assets dist/client/_astro && wrangler deploy' } }));
+    assert.equal(htmlCacheKeyedPerBuild(dir), true);
+    put(dir, 'package.json', '{}');
     put(dir, 'src/lib/cloudflare-cache-provider.mjs', 'export const toEdgeCacheKey = (url, buildId) => url + buildId;');
     assert.equal(htmlCacheKeyedPerBuild(dir), true);
     // A plugin admin page importing the admin package that only EmDash declares.

@@ -24,6 +24,17 @@ export async function syncImpeccable(root = ROOT, options = {}) {
     skills: ['impeccable']
   };
 
+  // A site whose site-skill receipt manages Impeccable takes it from Baseline's curated copy
+  // (sync:site-skills); fetching upstream here would rewrite managed files behind that receipt.
+  if (!options.allowManaged && !options.check) {
+    try {
+      const receipt = JSON.parse(await fs.readFile(path.join(root, '.emdash', 'site-skills.json'), 'utf8'));
+      if (Array.isArray(receipt.skills) && receipt.skills.includes('impeccable')) {
+        throw new Error("Impeccable is managed by this site's skill sync (.emdash/site-skills.json). Run npm run sync:site-skills -- --stage instead; it brings Baseline's reviewed Impeccable and its record.");
+      }
+    } catch (error) { if (error.code !== 'ENOENT' && !(error instanceof SyntaxError)) throw error; }
+  }
+
   const ref = options.ref ?? 'main';
   const candidate = options.candidate ?? await download(config, ref);
 

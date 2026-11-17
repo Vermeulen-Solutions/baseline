@@ -165,7 +165,8 @@ test('text tokens above 2.5 x their minimum fail unless a reviewed exception pre
   const failing = auditDesignTokens(wide);
   assert.equal(failing.valid, false);
   // An older stylesheet (no --text-step-3, no strict theme) gets a warning instead of a failure.
-  const withoutStep3 = wide.replace(/\t--text-step-3: [^;]+;\n/, '');
+  // Windows checkouts with core.autocrlf=true read the stylesheet with CRLF line endings.
+  const withoutStep3 = wide.replace(/\t--text-step-3: [^;]+;\r?\n/, '');
   assert.notEqual(withoutStep3, wide);
   const older = auditDesignTokens(withoutStep3);
   assert.equal(older.valid, true, older.errors.join('\n'));
