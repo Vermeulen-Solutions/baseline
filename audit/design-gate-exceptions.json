@@ -82,7 +82,7 @@
   {
     "path": "src/components/Steps.astro",
     "reason": "Functional content primitive: semantic ol with role=list, CSS counter badges, and named item slots. Exact LF-normalized source hash.",
-    "sha256": "b05b558b6caf97c1589cb73a5032dd68fe16000b811703f58a8b43d4755d6820"
+    "sha256": "089b53feda199f5a7fb2b89a49bc0627c4702e587bdb50afb6b29bcb6ff990c4"
   },
   {
     "path": "src/components/PortableTextHeading.astro",
@@ -246,7 +246,7 @@
   {
     "path": "src/components/PartnersPanel.astro",
     "reason": "Issue #5 approved Steps 1–2 reusable starter infrastructure: Use a standalone presentation-data type rather than importing the collection mapper; retain panel markup and styles. No client theme/content. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "0b467e023f31e837688286c9d9e27a04fdda0ec1e5a8050f0cdc42a7bb994820"
+    "sha256": "5748e3a7603e56db7a816745be5ed1d92ea10dd6ca5ff4bf4d17554096c9c912"
   },
   {
     "path": "src/components/FormError.astro",
@@ -338,7 +338,7 @@
   {
     "path": "src/components/PhotoGallery.astro",
     "reason": "Reusable gallery primitive: additive opt-in full-frame image fit preserves existing cover presentation; no client art direction or page assembly. Exact LF-normalized source; edits invalidate this exception.",
-    "sha256": "29bb7eb4675273654383002ec04d23a2b6f7bd1075d94ddefd2da1bba36ad850"
+    "sha256": "48c264cac28db39ca2f9ee1fd38e85936ef2b2afeb53169654974ce6b3ffdc20"
   },
   {
     "path": "src/utils/reference-overlay.ts",

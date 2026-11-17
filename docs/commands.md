@@ -22,7 +22,7 @@ Run npm commands from the project that owns the work. This reference distinguish
 
 In the root, full verify includes lint, CSS/art-direction/token checks, the full test suite and typecheck. The test runner executes bounded unit tests followed by sequential database, HTTP, importer and generated-project rehearsals. `test:unit` and `test:rehearsal` select those tiers independently. [CONTRIBUTING.md](../CONTRIBUTING.md) covers test classification, CI budgets and maintainer acceptance; [engineering evidence](../audit/engineering-maintenance-plan.md) records the measured scope.
 
-Use `npm run design:tokens -- --init-client --lane <lane>` to initialize a real client site. Read [art direction](art-direction-workflow.md) and the [design framework](design-framework.md) before writing/calibrating tokens.
+Use `npm run design:tokens -- --init-client --lane <lane>` to initialize a real client site. It also applies the strict theme: Tailwind's default colour, type-size, radius and shadow namespaces are cleared at the top of `@theme` so only the site's tokens compile. An existing site adopts it on its own with `npm run design:tokens -- --strict-theme --write`, after `npm run check:css -- --guardrails` shows it uses none of those defaults. Read [art direction](art-direction-workflow.md) and the [design framework](design-framework.md) before writing/calibrating tokens.
 
 `design:tokens -- --json` includes `fontLoading.preflight` with bounded local reference/case/format checks, role mappings and unresolved-source advice. See [font preflight](font-preflight.md); static source validation does not replace actual rendered-font readback. For a scoped design change, omit `--write` to preview the candidate, then review the exact CSS change and apply the same arguments. The installed `site-art-direction/references/token-handoff.md` describes this handoff without a new importer.
 
@@ -137,7 +137,7 @@ Commands that the workflow and skills name but the sections above do not. Scope 
 
 | Command | Scope | Purpose |
 | --- | --- | --- |
-| `npm run lint:scripts` / `lint:templates` / `check:css` | All profiles | Script syntax, Astro template accessibility lint and CSS layer/spacing contracts; all part of `verify` |
+| `npm run lint:scripts` / `lint:templates` / `check:css` | All profiles | Script syntax, Astro template accessibility lint and CSS layer/spacing contracts; all part of `verify`. `check:css` also prints advisory token guardrails (Tailwind default palette, type, radius and shadow utilities, numeric spacing and arbitrary-value classes, raw `gap` props, and raw colour, ≥1rem spacing and z-index values outside token definitions); `-- --guardrails` lists every finding, `-- --strict-guardrails` fails on them |
 | `npm run check:release-artifact` | All profiles | Confirm the build output matches the configured profile; also runs automatically after `build` (`postbuild`) and before `start` (`prestart`, `prestart:local`) |
 | `npm run build:timings` | All profiles | Build with Astro timing output |
 | `npm run check:native-images` | Root EmDash, Node with local media | Disposable fixture check of responsive image output, including media uploaded after the build; needs port 4332 |

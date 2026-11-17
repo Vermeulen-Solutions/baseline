@@ -193,3 +193,17 @@ test('contract messages name the audited stylesheet, and both colour consumers s
   assert.ok(malformed.errors.some(error => /unsupported color syntax for --color-text/.test(error)), malformed.errors.join('\n'));
   assert.ok(!malformed.errors.some(error => error.includes('NaN')));
 });
+
+test('the strict theme clears Tailwind default namespaces before the site tokens, once', async () => {
+  const { applyStrictTheme, hasStrictTheme, STRICT_THEME_NAMESPACES } = await import('../scripts/design-system.mjs');
+  const css = '@theme {\n\t--color-page: oklch(99% 0 0);\n\t--radius-card: 0.75rem;\n}\n';
+  const strict = applyStrictTheme(css);
+  assert.equal(hasStrictTheme(css), false);
+  assert.equal(hasStrictTheme(strict), true);
+  assert.equal(applyStrictTheme(strict), strict, 'applying twice changes nothing');
+  // The resets come first so the tokens declared after them are kept.
+  const order = [...STRICT_THEME_NAMESPACES, '--color-page', '--radius-card'].map(name => strict.indexOf(name));
+  assert.deepEqual([...order].sort((a, b) => a - b), order);
+  assert.equal(parseDesignTokens(strict).theme['--color-page'], 'oklch(99% 0 0)');
+  assert.throws(() => applyStrictTheme(':root { --x: 1px; }'), /no @theme block/);
+});

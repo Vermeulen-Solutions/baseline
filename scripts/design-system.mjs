@@ -83,6 +83,39 @@ export const OPTIONAL_THEME_TOKENS = [
 export const MAX_TEXT_RATIO = 2.5;
 const RESIZE_TEXT_EXCEPTION = /resize-text-exception:\s*\S/;
 
+/**
+ * Tailwind namespaces whose defaults compete with Baseline's tokens. A strict theme clears them at
+ * the top of @theme, so bg-indigo-500, text-4xl, rounded-xl or shadow-2xl no longer compile and the
+ * site's own tokens (declared after the reset) are the only vocabulary. New sites get it from the
+ * profile generator and --init-client; an existing site opts in with --strict-theme after
+ * `npm run check:css -- --guardrails` shows it uses none of the defaults.
+ */
+export const STRICT_THEME_NAMESPACES = ['--color-*', '--text-*', '--radius-*', '--shadow-*'];
+
+export function hasStrictTheme(css) {
+  const theme = parseDesignTokens(css).theme;
+  return STRICT_THEME_NAMESPACES.every(name => theme[name] === 'initial');
+}
+
+/** Prepends the namespace reset to the @theme block; a stylesheet that has it is returned unchanged. */
+export function applyStrictTheme(css) {
+  if (hasStrictTheme(css)) return css;
+  const { ast, scopes } = tokenScopes(css);
+  const theme = scopes.theme[0];
+  if (!theme) throw new Error('Cannot apply the strict theme: the stylesheet has no @theme block.');
+  const before = theme.first?.raws?.before ?? '\n\t';
+  const nodes = [
+    postcss.comment({ text: 'Strict theme: Tailwind\'s default colours, type sizes, radii and shadows are cleared, so only the tokens below compile. Remove a line to restore that namespace.', raws: { before, left: ' ', right: ' ' } }),
+    ...STRICT_THEME_NAMESPACES.filter(name => !theme.nodes.some(node => node.type === 'decl' && node.prop === name)).map(name => postcss.decl({ prop: name, value: 'initial', raws: { before: before.replace(/^\n*/, '\n'), between: ': ' } })),
+  ];
+  theme.prepend(...nodes);
+  const next = theme.nodes[nodes.length];
+  if (next) next.raws.before = '\n' + before.replace(/^\n*/, '\n');
+  const result = ast.toString();
+  tokenScopes(result);
+  return result;
+}
+
 /** Text tokens whose declaration is directly preceded by a reviewed resize-text-exception comment. */
 export function textRatioExceptions(css) {
   const allowed = new Set();
@@ -1439,11 +1472,12 @@ const CLI_USAGE = [
   '  --set <token>=<value>        Set one token; prefix --root: or --dark: for those scopes (repeatable)',
   '  --add-missing                Insert missing contract tokens with starter values',
   '  --write                      Save a validated candidate (changes are a preview without it)',
-  '  --init-client                Apply the lane, save, write the record and calibration, prune starter exceptions',
+  '  --init-client                Apply the lane and the strict theme, save, write the record and calibration, prune starter exceptions',
+  '  --strict-theme               Clear Tailwind\'s default colour, text, radius and shadow namespaces in @theme',
   '  --write-record [file]        Write the Art Direction Record (default AGENTS.md)',
   '  --write-calibration [file]   Write the token calibration (default audit/component-calibration.md)',
 ].join('\n');
-const CLI_BOOLEAN_FLAGS = { '--json': 'json', '--list-lanes': 'listLanes', '--add-missing': 'addMissing', '--write': 'write', '--init-client': 'initClient', '--help': 'help' };
+const CLI_BOOLEAN_FLAGS = { '--json': 'json', '--list-lanes': 'listLanes', '--add-missing': 'addMissing', '--write': 'write', '--init-client': 'initClient', '--strict-theme': 'strictTheme', '--help': 'help' };
 const CLI_VALUE_FLAGS = { '--css': 'css', '--lane': 'lane', '--type-scale': 'typeScale', '--space-scale': 'spaceScale', '--seed-accent': 'seedAccent', '--seed-canvas': 'seedCanvas' };
 // The file is optional: `true` selects the default target.
 const CLI_OPTIONAL_VALUE_FLAGS = { '--write-record': 'writeRecord', '--write-calibration': 'writeCalibration' };
@@ -1590,6 +1624,10 @@ function main() {
     hasMutationRequest = true;
   }
 
+  // A new client site starts without Tailwind's default palette, type, radius and shadow sets.
+  const strictTheme = Boolean(options.strictTheme) || initClient;
+  if (strictTheme) hasMutationRequest = true;
+
   const source = readFileSync(cssPath, 'utf8');
   const sourceGap = contractGap(source);
   // Missing tokens are inserted first so --set and presets can then adjust them.
@@ -1598,7 +1636,8 @@ function main() {
     const declared = parseDesignTokens(withContract).theme;
     for (const name of scaleOptional) if (!Object.hasOwn(declared, name)) delete combinedOverrides.theme[name];
   }
-  const css = hasMutationRequest ? applyTokenOverrides(withContract,combinedOverrides) : source;
+  const overridden = hasMutationRequest ? applyTokenOverrides(withContract,combinedOverrides) : source;
+  const css = strictTheme ? applyStrictTheme(overridden) : overridden;
   const added = addMissing ? sourceGap.missing : undefined;
   const report = auditDesignTokens(css, { cssPath: cssLabel });
   const fontAudit = auditFontLoading(css, process.cwd(), cssPath);

@@ -93,3 +93,31 @@ test('data-scrolled stays paint-only: size changes keyed to the single scroll th
     '[data-scrolled-marker] { padding-block: 0 }',
   ]) assert.deepEqual(messages(css), [], css);
 });
+
+test('token guardrails report default Tailwind vocabulary, arbitrary values and raw values as advisories', async () => {
+  const { inspectMarkupGuardrails, inspectCssGuardrails, classTokens } = await import('../scripts/css-contracts.mjs');
+  assert.deepEqual(classTokens('md:hover:bg-indigo-500 !p-4 -mt-2'), ['bg-indigo-500', 'p-4', 'mt-2']);
+  const markup = [
+    '<div class="bg-indigo-500 text-4xl rounded-xl shadow-xl p-7 gap-6 p-[37px] bg-background">',
+    '<div class="bg-surface text-step-1 rounded-card shadow-md p-s gap-content p-0 rounded-full">',
+    '<div class:list={["text-sm", cond && "border-zinc-200"]}>',
+    '<!-- token-exempt: matches the partner brand sheet -->',
+    '<div class="bg-white">',
+    '<Grid gap="37px"><Grid gap="m"><Section gap="var(--spacing-content)">',
+  ].join('\n');
+  const findings = inspectMarkupGuardrails(markup, 'src/pages/x.astro');
+  assert.deepEqual(findings.map(item => [item.line, item.rule]), [
+    [1, 'default-palette'], [1, 'default-text-size'], [1, 'default-radius'], [1, 'default-shadow'],
+    [1, 'numeric-spacing'], [1, 'numeric-spacing'], [1, 'arbitrary-value'], [1, 'registry-alias'],
+    [3, 'default-text-size'], [3, 'default-palette'],
+    [6, 'raw-gap'],
+  ]);
+  const css = [
+    '@theme { --color-x: #123456; }',
+    '.a { color: #fff; padding: 2rem; margin: 0.5rem; z-index: 40; gap: var(--spacing-m, 24px); }',
+    '.b { --local: 24px; background: color-mix(in oklch, var(--color-text) 10%, transparent); mask-image: linear-gradient(#000, transparent); }',
+    '.c { /* token-exempt: fixed backplate for logo art */ background: #171717; z-index: var(--z-raised); }',
+    '.d { background: oklch(from var(--color-text) l c h / 0.5); box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1); }',
+  ].join('\n');
+  assert.deepEqual(inspectCssGuardrails(css).map(item => [item.line, item.rule]), [[2, 'raw-color'], [2, 'raw-spacing'], [2, 'raw-z-index'], [5, 'raw-color']]);
+});

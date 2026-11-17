@@ -150,3 +150,109 @@ export function analyzeFlow(css) {
   const guard=twoSided && !unknownEdges && [...requiredMedia].every(tag=>guardedMedia.has(tag));
   return { verified:count>0 && !unknownEdges, flowRuleCount:count, flowDuplicateMarginGuard:!unknownEdges && (guard || (!twoSided && count===1)) };
 }
+
+// Token guardrails (advisory). Agents reach for Tailwind's default vocabulary and raw values when a
+// named token would do; these findings point at each one. A preceding comment containing
+// "token-exempt: <reason>" (CSS) or a "token-exempt: <reason>" note on the same or previous line
+// (markup) records a reviewed exception.
+const PALETTE = 'slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose';
+const COLOR_UTILITY = '(?:bg|text|border(?:-[xytrblse])?|ring|ring-offset|outline|fill|stroke|from|via|to|decoration|divide|placeholder|shadow|accent|caret)';
+export const GUARDRAIL_CLASS_RULES = [
+  { id: 'default-palette', re: new RegExp(`^${COLOR_UTILITY}-(?:${PALETTE})-\\d{2,3}(?:\\/\\d+)?$`), hint: 'Tailwind default palette; use a semantic colour (bg-surface, text-muted, border-border) or data-surface' },
+  { id: 'default-palette', re: new RegExp(`^${COLOR_UTILITY}-(?:white|black)(?:\\/\\d+)?$`), hint: 'raw white/black; use a semantic colour token or data-surface' },
+  { id: 'default-text-size', re: /^text-(?:xs|sm|base|lg|xl|[2-9]xl)$/, hint: 'Tailwind default type size; use text-body or text-step-*' },
+  { id: 'default-radius', re: /^rounded(?:-[trblse]{1,2})?-(?:xs|sm|md|lg|xl|2xl|3xl|4xl)$/, hint: 'Tailwind default radius; use rounded-control or rounded-card' },
+  { id: 'default-shadow', re: /^shadow-(?:2xs|xs|xl|2xl)$/, hint: 'Tailwind default shadow; use shadow-sm, shadow-md or shadow-lg (Baseline tokens)' },
+  { id: 'numeric-spacing', re: /^(?:p[xytrblse]?|m[xytrblse]?|gap(?:-[xy])?|space-[xy]|inset(?:-[xy])?|top|right|bottom|left|start|end)-(?:[1-9]\d*(?:\.5)?|0\.5)$/, hint: 'numeric spacing multiplier; use a token utility (p-s, gap-content, py-section, gap-m)' },
+  { id: 'arbitrary-value', re: /^[a-z][a-z0-9-]*-\[[^\]]+\]$|^\[[^\]]+\]$/, hint: 'arbitrary value; name it as a token or a component rule' },
+  { id: 'registry-alias', re: /^(?:bg|text|border|ring|outline)-(?:background|foreground|primary(?:-foreground)?|secondary(?:-foreground)?|muted-foreground|accent(?:-foreground)?|card(?:-foreground)?|popover(?:-foreground)?|input|destructive(?:-foreground)?)$/, hint: 'registry (shadcn-style) alias vocabulary; transmute to Baseline tokens before promoting the component (src/styles/registry-aliases.css is for quarantine only)' },
+];
+const GAP_NAMES = new Set(['none', 'content', 'grid', 'container', 'section', 'section-m', '3xs', '2xs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl', '3xs-2xs', '2xs-xs', 'xs-s', 's-m', 'm-l', 'l-xl', 'xl-2xl', '2xl-3xl', 's-l', 'l-2xl', 'xl-3xl']);
+const SPACING_PROPERTY = /^(?:padding|margin|gap|row-gap|column-gap|inset|top|right|bottom|left)(?:-(?:block|inline|top|right|bottom|left)(?:-(?:start|end))?)?$/;
+const COLOR_LITERAL = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch|hwb)\(\s*(?!from\b)/i;
+const EXEMPT = /token-exempt:\s*\S/;
+
+/** Class names of one class attribute value or class:list expression, without variants or !. */
+export function classTokens(text) {
+  return String(text).split(/\s+/).filter(Boolean).map(name => name.replace(/^!|!$/g, '').split(':').pop().replace(/^-/, ''));
+}
+
+/** Advisory findings for utility classes and gap props in Astro markup. */
+export function inspectMarkupGuardrails(source, file = 'component.astro') {
+  const findings = [];
+  const lines = String(source).split('\n');
+  const exempt = index => EXEMPT.test(lines[index] || '') || EXEMPT.test(lines[index - 1] || '');
+  lines.forEach((line, index) => {
+    if (exempt(index)) return;
+    for (const match of line.matchAll(/\bclass(?::list)?=(?:"([^"]*)"|'([^']*)'|\{([^}]*)\})/g)) {
+      const values = match[3] !== undefined ? [...match[3].matchAll(/(["'`])((?:(?!\1).)*)\1/g)].map(m => m[2]) : [match[1] ?? match[2]];
+      for (const name of values.flatMap(classTokens)) {
+        const rule = GUARDRAIL_CLASS_RULES.find(candidate => candidate.re.test(name));
+        if (rule) findings.push({ file, line: index + 1, rule: rule.id, message: `${name}: ${rule.hint}` });
+      }
+    }
+    for (const match of line.matchAll(/<(Section|Container|Grid)\b[^>]*?\sgap=(?:"([^"]*)"|'([^']*)')/g)) {
+      const value = (match[2] ?? match[3]).trim();
+      if (value && !GAP_NAMES.has(value) && !/^var\(--(?:spacing|layout)-[a-z0-9-]+\)$/.test(value)) findings.push({ file, line: index + 1, rule: 'raw-gap', message: `<${match[1]} gap="${value}">: use a token name (content, grid, s, m …)` });
+    }
+  });
+  return findings;
+}
+
+/** Removes var() and url() groups so fallbacks and data URIs are not read as raw values. */
+function stripGroups(value) {
+  let out = '', depth = 0;
+  for (let i = 0; i < value.length; i++) {
+    if (depth === 0 && /^(?:var|url)\(/i.test(value.slice(i, i + 4))) { depth = 1; i += value[i + 3] === '(' ? 3 : 2; continue; }
+    if (depth) { if (value[i] === '(') depth++; else if (value[i] === ')') depth--; continue; }
+    out += value[i];
+  }
+  return out;
+}
+
+/**
+ * Advisory findings for raw colour, spacing and z-index values in author CSS. Spacing below 1rem
+ * (16px) is the compact scale for control internals and is not reported. Custom property
+ * declarations are where raw values belong (token definitions), so they are skipped, as is @theme.
+ */
+export function inspectCssGuardrails(css, { file = 'stylesheet.css', lineOffset = 0 } = {}) {
+  const findings = [];
+  let root;
+  try { root = postcss.parse(css, { from: file }); } catch { return findings; }
+  root.walkDecls(decl => {
+    if (decl.prop.startsWith('--')) return;
+    for (let node = decl.parent; node; node = node.parent) if (node.type === 'atrule' && (node.name === 'theme' || /keyframes$/.test(node.name))) return;
+    const previous = decl.prev();
+    if (previous?.type === 'comment' && EXEMPT.test(previous.text)) return;
+    const value = stripGroups(decl.value);
+    const at = { file, line: (decl.source?.start?.line || 1) + lineOffset };
+    // Mask gradients use black and transparent as alpha, not as colour.
+    if (!decl.prop.includes('mask') && COLOR_LITERAL.test(value)) findings.push({ ...at, rule: 'raw-color', message: `${decl.prop}: ${decl.value.slice(0, 60)}; use a colour token` });
+    if (SPACING_PROPERTY.test(decl.prop)) {
+      const raw = [...value.matchAll(/(?<![\w.-])(\d*\.?\d+)(px|rem)\b/g)].filter(([, number, unit]) => Number(number) >= (unit === 'px' ? 16 : 1));
+      if (raw.length) findings.push({ ...at, rule: 'raw-spacing', message: `${decl.prop}: ${decl.value.slice(0, 60)}; use a spacing token (--spacing-s, --spacing-content …)` });
+    }
+    if (decl.prop === 'z-index' && /^-?\d+$/.test(decl.value.trim()) && decl.value.trim() !== '0') findings.push({ ...at, rule: 'raw-z-index', message: `z-index: ${decl.value}; use a layering token (--z-raised, --z-sticky …)` });
+  });
+  return findings;
+}
+
+/** Advisory guardrail findings for the same source inputs check:css reads. */
+export function inspectGuardrailTree(rootDir = process.cwd(), roots = ['src', 'profiles/static/project/src']) {
+  const findings = [], seen = new Set();
+  const visit = filename => {
+    if (!fs.existsSync(filename) || seen.has(filename) || fs.lstatSync(filename).isSymbolicLink()) return;
+    if (fs.statSync(filename).isDirectory()) { for (const name of fs.readdirSync(filename)) visit(path.join(filename, name)); return; }
+    if (!/\.(?:astro|css)$/.test(filename)) return;
+    seen.add(filename);
+    const file = path.relative(rootDir, filename).replaceAll('\\', '/');
+    const source = fs.readFileSync(filename, 'utf8');
+    try {
+      if (filename.endsWith('.astro')) findings.push(...inspectMarkupGuardrails(source, file));
+      const inputs = filename.endsWith('.css') ? [{ css: source, file }] : astroStyleInputs(source, file);
+      for (const input of inputs) findings.push(...inspectCssGuardrails(input.css, input));
+    } catch { /* Parse errors are reported by the contract check itself. */ }
+  };
+  for (const dir of roots) visit(path.resolve(rootDir, dir));
+  return { files: seen.size, findings };
+}
