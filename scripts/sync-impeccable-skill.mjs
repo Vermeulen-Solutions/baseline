@@ -2,7 +2,7 @@ import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
-import { download, inventory, hash } from './skill-sync.mjs';
+import { download, updateProfileManifest } from './skill-sync.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -100,11 +100,16 @@ export async function syncImpeccable(root = ROOT, options = {}) {
   await fs.writeFile(sourcePath, JSON.stringify(updatedMeta, null, 2) + '\n');
   await fs.writeFile(path.join(targetDir, 'PROVENANCE.json'), JSON.stringify(updatedMeta, null, 2) + '\n');
 
+  // Static profiles ship only the skill files the shared manifest lists, so a file new in
+  // this release must be listed or generated sites get references to files they lack.
+  const profileManifestAdded = await updateProfileManifest(root, config.skills, candidate.files);
+
   return {
     status: 'applied',
     version,
     commitSha: candidate.commitSha,
-    fileCount: Object.keys(candidate.files).length
+    fileCount: Object.keys(candidate.files).length,
+    ...(profileManifestAdded.length ? { profileManifestAdded } : {})
   };
 }
 

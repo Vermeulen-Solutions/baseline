@@ -363,6 +363,13 @@
     ".agents/skills/brilliant-site-design/SKILL.md",
     ".agents/skills/brilliant-site-design/agents/openai.yaml",
     ".agents/skills/brilliant-site-design/references/connection-and-recovery.md",
-    ".agents/skills/brilliant-site-design/references/baseline-mapping-and-export.md"
+    ".agents/skills/brilliant-site-design/references/baseline-mapping-and-export.md",
+    ".agents/skills/impeccable/agents/impeccable_motion_reviewer.toml",
+    ".agents/skills/impeccable/reference/critique-rubric.md",
+    ".agents/skills/impeccable/reference/degraded/motion-reviewer.md",
+    ".agents/skills/impeccable/reference/foundations.md",
+    ".agents/skills/impeccable/reference/new-work-comp.md",
+    ".agents/skills/impeccable/reference/new-work-world.md",
+    ".agents/skills/impeccable/scripts/engine-checksums.txt"
   ]
 }
