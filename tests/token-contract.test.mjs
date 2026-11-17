@@ -207,3 +207,20 @@ test('the strict theme clears Tailwind default namespaces before the site tokens
   assert.equal(parseDesignTokens(strict).theme['--color-page'], 'oklch(99% 0 0)');
   assert.throws(() => applyStrictTheme(':root { --x: 1px; }'), /no @theme block/);
 });
+
+test('design:tokens --format dtcg exports source tokens with types, aliases and fluid ranges', async () => {
+  const { exportDtcg } = await import('../scripts/design-system.mjs');
+  const exported = exportDtcg(readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8'));
+  assert.deepEqual(exported.color.page.$value, { colorSpace: 'oklch', components: [0.99, 0.004, 250] });
+  assert.equal(exported.layout['section-padding'].$value, '{spacing.section}');
+  assert.deepEqual(exported.spacing.section.$value, { value: 3, unit: 'rem' });
+  assert.deepEqual(exported.spacing.section.$extensions['dev.baseline.fluid'].max, { value: 9, unit: 'rem' });
+  assert.deepEqual(exported.ease.smooth, { $type: 'cubicBezier', $value: [0.22, 1, 0.36, 1], $extensions: { 'dev.baseline.css': { property: '--ease-smooth', scope: '@theme' } } });
+  assert.deepEqual(exported.duration.fast.$value, { value: 150, unit: 'ms' });
+  assert.equal(exported.z.sticky.$value, 40);
+  assert.equal(exported['surface-dark'].color.surface.$type, 'color');
+  assert.ok('--shadow-sm' in exported.$extensions['dev.baseline.css-only'], 'relative-colour shadows stay CSS-only');
+  const { applyStrictTheme } = await import('../scripts/design-system.mjs');
+  const strict = exportDtcg(applyStrictTheme(readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8')));
+  assert.ok(!Object.values(strict).some(group => group && typeof group === 'object' && Object.keys(group).some(key => key.includes('*'))), 'namespace resets are not tokens');
+});

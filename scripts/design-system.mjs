@@ -1459,10 +1459,96 @@ export function applyTokenOverrides(css, presetOrOverrides) {
   return result;
 }
 
+/**
+ * Design Tokens Community Group format (2025.10) export of the source tokens. CSS stays the
+ * authority: the export is generated, never edited. Fluid clamp() tokens carry their minimum as
+ * $value and their full range under $extensions["dev.baseline.fluid"]; a token that is exactly
+ * var(--other) becomes an alias; values the format cannot express (relative-colour shadows,
+ * color-mix(), linear() easing) are listed under $extensions["dev.baseline.css-only"].
+ */
+const DTCG_GROUPS = [
+  ['--color-', 'color'], ['--font-', 'font'], ['--text-', 'text'], ['--spacing-', 'spacing'], ['--radius-', 'radius'],
+  ['--shadow-', 'shadow'], ['--ease-', 'ease'], ['--duration-', 'duration'], ['--z-', 'z'], ['--breakpoint-', 'breakpoint'],
+  ['--measure-', 'measure'], ['--layout-', 'layout'],
+];
+
+function dtcgPath(name) {
+  const group = DTCG_GROUPS.find(([prefix]) => name.startsWith(prefix));
+  return group ? [group[1], name.slice(group[0].length)] : ['other', name.slice(2)];
+}
+
+function dtcgDimension(text) {
+  const match = String(text).trim().match(/^(-?\d*\.?\d+)(px|rem)$/);
+  return match ? { value: Number(match[1]), unit: match[2] } : null;
+}
+
+function dtcgToken(name, value, aliases) {
+  const text = String(value).trim();
+  const alias = text.match(/^var\(\s*(--[\w-]+)\s*\)$/);
+  if (alias && aliases.has(alias[1])) return { $value: `{${dtcgPath(alias[1]).join('.')}}` };
+  // An optional site hook with a fallback, var(--undefined-hook, value), exports its fallback.
+  const hook = text.match(/^var\(\s*(--[\w-]+)\s*,\s*([\s\S]+)\)$/);
+  if (hook && !aliases.has(hook[1])) return dtcgToken(name, hook[2], aliases);
+  if (name.startsWith('--color-') || name === '--surface-glass') {
+    try {
+      const { L, C, H } = parseToOklch(text);
+      return { $type: 'color', $value: { colorSpace: 'oklch', components: [round4(L / 100), C, H] } };
+    } catch { return null; }
+  }
+  if (name.startsWith('--font-')) return { $type: 'fontFamily', $value: text.split(',').map(part => part.trim().replace(/^["']|["']$/g, '')) };
+  if (name.startsWith('--ease-')) {
+    const bezier = text.match(/^cubic-bezier\(([^)]+)\)$/);
+    return bezier ? { $type: 'cubicBezier', $value: bezier[1].split(',').map(Number) } : null;
+  }
+  if (name.startsWith('--duration-')) {
+    const match = text.match(/^(\d*\.?\d+)(ms|s)$/);
+    return match ? { $type: 'duration', $value: { value: Number(match[1]), unit: match[2] } } : null;
+  }
+  if (name.startsWith('--z-')) return /^-?\d+$/.test(text) ? { $type: 'number', $value: Number(text) } : null;
+  const dimension = dtcgDimension(text);
+  if (dimension) return { $type: 'dimension', $value: dimension };
+  if (/^clamp\(/i.test(text)) {
+    try {
+      const { minRem, maxRem, transitionRem } = parseFluidClamp(text);
+      return {
+        $type: 'dimension',
+        $value: { value: minRem, unit: 'rem' },
+        $extensions: { 'dev.baseline.fluid': { min: { value: minRem, unit: 'rem' }, max: { value: maxRem, unit: 'rem' }, viewportRem: transitionRem && { from: round4(transitionRem.min), to: round4(transitionRem.max) }, css: text } },
+      };
+    } catch { return null; }
+  }
+  return null;
+}
+
+export function exportDtcg(css) {
+  const tokens = parseDesignTokens(css);
+  const aliases = new Set([...Object.keys(tokens.theme), ...Object.keys(tokens.root)].filter(name => !name.includes('*')));
+  const out = { $description: 'Generated from src/styles/global.css by design:tokens --format dtcg (DTCG 2025.10). CSS is the authority; regenerate instead of editing.' };
+  const cssOnly = {};
+  const put = (target, [group, key], token) => { (target[group] ??= {})[key] = token; };
+  for (const [scope, entries] of [['theme', tokens.theme], ['root', tokens.root]]) {
+    for (const [name, value] of Object.entries(entries)) {
+      if (name.includes('*')) continue;
+      const token = dtcgToken(name, value, aliases);
+      if (token) put(out, dtcgPath(name), { ...token, $extensions: { ...token.$extensions, 'dev.baseline.css': { property: name, scope: scope === 'theme' ? '@theme' : ':root' } } });
+      else cssOnly[name] = value;
+    }
+  }
+  const dark = {};
+  for (const [name, value] of Object.entries(tokens.dark)) {
+    const token = dtcgToken(name, value, aliases);
+    if (token) put(dark, dtcgPath(name), token); else cssOnly[`[data-surface="dark"] ${name}`] = value;
+  }
+  if (Object.keys(dark).length) out['surface-dark'] = { $description: 'Overrides inside [data-surface="dark"]', ...dark };
+  out.$extensions = { 'dev.baseline.css-only': cssOnly };
+  return out;
+}
+
 const CLI_USAGE = [
   'npm run design:tokens -- [options]',
   '  --css <file>                 Stylesheet to audit (default src/styles/global.css)',
   '  --json                       Machine-readable report',
+  '  --format dtcg [--out <file>] Export the source tokens as DTCG 2025.10 JSON (stdout, or the file)',
   '  --list-lanes                 List the aesthetic lane presets',
   '  --lane <id>                  Apply a lane preset',
   '  --type-scale <ratio|name>    Generate the fluid type scale',
@@ -1478,7 +1564,7 @@ const CLI_USAGE = [
   '  --write-calibration [file]   Write the token calibration (default audit/component-calibration.md)',
 ].join('\n');
 const CLI_BOOLEAN_FLAGS = { '--json': 'json', '--list-lanes': 'listLanes', '--add-missing': 'addMissing', '--write': 'write', '--init-client': 'initClient', '--strict-theme': 'strictTheme', '--help': 'help' };
-const CLI_VALUE_FLAGS = { '--css': 'css', '--lane': 'lane', '--type-scale': 'typeScale', '--space-scale': 'spaceScale', '--seed-accent': 'seedAccent', '--seed-canvas': 'seedCanvas' };
+const CLI_VALUE_FLAGS = { '--format': 'format', '--out': 'out', '--css': 'css', '--lane': 'lane', '--type-scale': 'typeScale', '--space-scale': 'spaceScale', '--seed-accent': 'seedAccent', '--seed-canvas': 'seedCanvas' };
 // The file is optional: `true` selects the default target.
 const CLI_OPTIONAL_VALUE_FLAGS = { '--write-record': 'writeRecord', '--write-calibration': 'writeCalibration' };
 
@@ -1566,6 +1652,15 @@ function main() {
   const cssPath = resolve(cssLabel);
   const initClient = Boolean(options.initClient);
   const json = Boolean(options.json);
+
+  if (options.format !== undefined) {
+    if (options.format !== 'dtcg') throw new Error(`Unknown --format ${options.format}. Supported: dtcg.`);
+    const exported = JSON.stringify(exportDtcg(readFileSync(cssPath, 'utf8')), null, 2) + '\n';
+    if (options.out) { writeFileSync(resolve(options.out), exported, 'utf8'); console.error('Wrote DTCG tokens to ' + resolve(options.out)); }
+    else process.stdout.write(exported);
+    return;
+  }
+  if (options.out !== undefined) throw new Error('--out requires --format dtcg.');
 
   if (options.listLanes) {
     for (const [id, lane] of Object.entries(AESTHETIC_LANES)) {

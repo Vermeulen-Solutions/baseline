@@ -259,6 +259,12 @@ Available presets: `neutral`, `technical-systems`, `product-led-minimalism`, `ed
    npm run design:tokens -- --write-calibration
    npm run test:design
    ```
+4. **Export the source tokens as DTCG JSON** for Style Dictionary, Tokens Studio, Penpot or an agent that should read a compact token list instead of the stylesheet:
+   ```sh
+   npm run design:tokens -- --format dtcg --out audit/tokens.dtcg.json
+   ```
+The export follows the [DTCG 2025.10 format](https://www.designtokens.org/tr/2025.10/format/): typed colour (OKLCH components), dimension, font family, cubic Bézier, duration and number tokens, `{group.token}` aliases for tokens that are exactly `var(--other)` (the `--layout-*` aliases), and dark-surface overrides under `surface-dark`. A fluid token's `$value` is its minimum; its maximum, viewport range and original `clamp()` sit in `$extensions["dev.baseline.fluid"]`. Values the format cannot express (relative-colour shadows, `color-mix()`, `linear()` easing) are listed under `$extensions["dev.baseline.css-only"]`. CSS stays the authority: regenerate the file, never edit it. The canvas kit's per-viewport `390.tokens.json`/`1440.tokens.json` are browser-sampled values for canvases; this export is the source, with its fluid ranges and aliases intact.
+
 This directly parses `src/styles/global.css`, verifies 14 WCAG contrast pairs across default, dark and restored-light contexts (including 4.5:1 text-link gates), checks fluid `clamp()` bounds, confirms `/_styleguide` swatch and `src/` consumer coverage, and writes a deterministic `## Token Calibration` section (bound to the LF-normalised SHA-256 of `src/styles/global.css`) into `audit/component-calibration.md`.
 
 ---
