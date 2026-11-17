@@ -138,8 +138,12 @@ export function coverCrop({ naturalWidth, naturalHeight, width, height, position
 
 // A decoration (a ::before/::after box) that reaches outside its host, and the text or controls
 // outside the host it touches (within `margin` px). For a drawn outline or border, content inside
-// the ring (`inner`) is not touched; a pseudo-element with text has no inner area.
-export function decorationHits({ rect, inner, host }, obstacles, margin = 4) {
+// the ring (`inner`) is not touched; a pseudo-element with text has no inner area. `clip` is the box
+// its host and ancestors with overflow clipping leave visible: only that part can be drawn, so a
+// decoration that a clipping footer cuts off at its edge does not touch the content beyond it.
+export function decorationHits({ rect: drawn, inner, host, clip }, obstacles, margin = 4) {
+  const rect = clip ? { left: Math.max(drawn.left, clip.left), right: Math.min(drawn.right, clip.right), top: Math.max(drawn.top, clip.top), bottom: Math.min(drawn.bottom, clip.bottom) } : drawn;
+  if (rect.right <= rect.left || rect.bottom <= rect.top) return { outside: 0, hits: [] };
   const outside = Math.max(host.left - rect.left, rect.right - host.right, host.top - rect.top, rect.bottom - host.bottom);
   if (outside <= 2) return { outside: Math.max(0, Math.round(outside)), hits: [] };
   const near = (a, b) => a.left < b.right + margin && a.right > b.left - margin && a.top < b.bottom + margin && a.bottom > b.top - margin;
@@ -507,8 +511,15 @@ function decorationObstacles(decos) {
     const h = host.getBoundingClientRect(), dx = h.left - d.hostBox.left, dy = h.top - d.hostBox.top;
     const shift = r => r && { left: r.left + dx, right: r.right + dx, top: r.top + dy, bottom: r.bottom + dy };
     const rect = shift(d.rect), inner = shift(d.inner), m = 8;
+    // What the host and its overflow-clipping ancestors leave visible, per axis.
+    const clip = { left: -Infinity, right: Infinity, top: -Infinity, bottom: Infinity };
+    for (let el = host; el && el !== document.documentElement; el = el.parentElement) {
+      const s = getComputedStyle(el), r = el.getBoundingClientRect();
+      if (s.overflowX !== 'visible') { clip.left = Math.max(clip.left, r.left); clip.right = Math.min(clip.right, r.right); }
+      if (s.overflowY !== 'visible') { clip.top = Math.max(clip.top, r.top); clip.bottom = Math.min(clip.bottom, r.bottom); }
+    }
     const obstacles = all.filter(o => !host.contains(o.node) && !(o.node.nodeType === 1 && o.node.contains(host)) && o.rect.left < rect.right + m && o.rect.right > rect.left - m && o.rect.top < rect.bottom + m && o.rect.bottom > rect.top - m).slice(0, 10).map(({ sig, text, rect }) => ({ sig, text, rect }));
-    return { ...d, sig: sig(host) + '::' + d.pseudo, rect, inner, host: box(h), obstacles };
+    return { ...d, sig: sig(host) + '::' + d.pseudo, rect, inner, host: box(h), clip, obstacles };
   }).filter(Boolean);
 }
 

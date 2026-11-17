@@ -173,6 +173,22 @@ test('decorations report the content outside their host they touch, not the cont
   assert.deepEqual(decorationHits({ rect: { left: 98, right: 502, top: 198, bottom: 502 }, inner: null, host }, [button]), { outside: 2, hits: [] });
 });
 
+test('a decoration clipped by its host or an ancestor only touches what can be drawn', async () => {
+  const { decorationHits } = await import('../scripts/audit-ui.mjs');
+  // A footer with overflow: clip and a ring reaching 150px above it: the page text above is never painted over.
+  const host = { left: 0, right: 800, top: 1000, bottom: 1400 };
+  const ring = { rect: { left: 500, right: 900, top: 850, bottom: 1250 }, inner: null, host };
+  const above = { sig: 'p', text: 'Last line of the page', rect: { left: 520, right: 780, top: 900, bottom: 920 } };
+  const inside = { sig: 'a.button', text: 'Get in touch', rect: { left: 560, right: 700, top: 1040, bottom: 1080 } };
+  assert.deepEqual(decorationHits(ring, [above]).hits, [above], 'unclipped, the overlap is reported as before');
+  assert.deepEqual(decorationHits({ ...ring, clip: { left: 0, right: 800, top: 1000, bottom: 1400 } }, [above, inside]), { outside: 0, hits: [] });
+  // Clipping only one axis still reports what the other axis lets through.
+  const sideways = { rect: { left: 700, right: 900, top: 1100, bottom: 1200 }, inner: null, host };
+  const right = { sig: 'aside', text: 'Beside', rect: { left: 810, right: 880, top: 1120, bottom: 1140 } };
+  assert.deepEqual(decorationHits({ ...sideways, clip: { left: -Infinity, right: Infinity, top: 1000, bottom: 1400 } }, [right]).hits, [right]);
+  assert.deepEqual(decorationHits({ ...sideways, clip: { left: 0, right: 800, top: -Infinity, bottom: Infinity } }, [right]).hits, []);
+});
+
 test('empty bands are gaps between content on one ground with no rule, measured across empty blocks', async () => {
   const { emptyBands } = await import('../scripts/audit-ui.mjs');
   const block = (sig, top, bottom, extra = {}) => ({ sig, top, bottom, ground: 'white', edgeTop: false, edgeBottom: false, ignored: false, ...extra });
