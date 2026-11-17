@@ -3,6 +3,7 @@
   "id": "shared",
   "files": [
     "src/styles/global.css",
+    "src/styles/registry-aliases.css",
     "src/layouts/SiteShell.astro",
     "src/components/Section.astro",
     "src/components/Container.astro",

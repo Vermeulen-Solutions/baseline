@@ -604,6 +604,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/styles/registry-aliases.css": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/utils/site-identity.ts": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"

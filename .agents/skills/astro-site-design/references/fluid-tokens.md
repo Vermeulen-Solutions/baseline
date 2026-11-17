@@ -31,7 +31,7 @@ Use Tailwind's matching `@theme` namespace for values that should create utility
 
 ## Pure-CSS scroll-driven entrance recipe
 
-When an art direction calls for subtle scroll-triggered entrance reveals without client JavaScript, use a single parameterized `@keyframes` rule driven by CSS `animation-timeline: view()` (supported behind `@supports (animation-timeline: view())` and disabled automatically under `prefers-reduced-motion: reduce`):
+Baseline's shipped `data-reveal` already works this way: `global.css` reveals it with `animation-timeline: view()` where supported and SiteShell's IntersectionObserver is only the fallback. Use `data-reveal` first. For a custom entrance beyond it, use a single parameterized `@keyframes` rule driven by CSS `animation-timeline: view()` (supported behind `@supports (animation-timeline: view())` and disabled automatically under `prefers-reduced-motion: reduce`):
 
 ```css
 @keyframes enter-view {

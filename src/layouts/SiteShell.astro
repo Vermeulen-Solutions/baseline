@@ -822,7 +822,11 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
           });
 
           const reveals = document.querySelectorAll('[data-reveal]');
-          if (reveals.length > 0) {
+          // Scroll-driven animations reveal [data-reveal] in CSS (global.css); the observer below is
+          // the fallback for browsers without animation-timeline. is-revealed stays set for site CSS.
+          if (reveals.length > 0 && typeof CSS !== 'undefined' && CSS.supports?.('animation-timeline: view()')) {
+            reveals.forEach((el) => el.classList.add('is-revealed'));
+          } else if (reveals.length > 0) {
             const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             reveals.forEach((el) => {
               const delay = el.getAttribute('data-reveal-delay');

@@ -1,7 +1,17 @@
 @layer theme, base, vendor, astro, components, utilities;
 @import "tailwindcss";
+/* Opt-in aliases for registry components in quarantine: @import "./registry-aliases.css"; */
 
 /*
+ * Map of this file.
+ * Core: the @theme tokens; base (document, spacing policies, headings, surfaces, motion and print
+ * contracts); components layer (site shell, editorial flow, containers and grids, Section joins,
+ * buttons, sticky header, view transitions, skeletons, dialogs, forced colours).
+ * Optional recipes, marked "Optional recipe" below: telemetry eyebrow and badges, surface physics
+ * (elevated, glass, spotlight, grain), hairline and blueprint grids, crosshair frames, UI
+ * specimens, stacked cards, card entrance, data bars, bento grid, drop cap and reel. They encode
+ * one aesthetic; use one only when the site's Art Direction Record selects it.
+ *
  * Neutral starting tokens, not a finished brand theme.
  * Fluid values grow between 20rem and 80rem viewport widths.
  */
@@ -893,7 +903,7 @@
 		mask-image: linear-gradient(to right, transparent, #000 var(--fade-amount, 25%), #000 calc(100% - var(--fade-amount, 25%)), transparent);
 	}
 
-	/* 4-voice typography, telemetry metadata, surface physics, and architectural grids. */
+	/* Optional recipe: 4-voice typography and telemetry metadata (eyebrow, accent voice, badges). */
 	.eyebrow-telemetry {
 		display: inline-flex;
 		align-items: center;
@@ -941,6 +951,7 @@
 		box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-action) 22%, transparent);
 	}
 
+	/* Optional recipe: surface physics (elevated, glass, spotlight). */
 	.surface-elevated {
 		background: var(--color-elevated);
 		border: 1px solid var(--color-border);
@@ -959,6 +970,7 @@
 		background-image: radial-gradient(circle at 50% 0%, color-mix(in oklch, var(--color-action) 14%, transparent) 0%, transparent 70%);
 	}
 
+	/* Optional recipe: architectural grids and frames (hairline grid, blueprint, crosshair). */
 	.grid-hairline {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--grid-min, 16rem)), 1fr));
@@ -1007,6 +1019,7 @@
 		inset-inline-end: -0.35rem;
 	}
 
+	/* Optional recipe: framed UI specimen. */
 	.ui-specimen {
 		border: 1px solid var(--color-border-strong);
 		border-radius: var(--radius-card);
@@ -1028,6 +1041,7 @@
 		color: var(--color-muted);
 	}
 
+	/* Optional recipe: sticky stacked cards. */
 	.stack-cards {
 		display: flex;
 		flex-direction: column;
@@ -1044,6 +1058,7 @@
 		box-shadow: var(--surface-highlight), 0 -12px 36px -8px color-mix(in oklch, var(--color-text) 16%, transparent), var(--shadow-md);
 	}
 
+	/* Optional recipe: card entrance. The scroll reveal below it is core. */
 	@keyframes baseline-card-in {
 		from {
 			opacity: 0;
@@ -1060,23 +1075,44 @@
 			animation: baseline-card-in var(--duration-normal, 260ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
 		}
 
-		:where(html[data-reveal-ready]) :where([data-reveal]:not(.is-revealed)) {
-			opacity: 0;
-			transform: translateY(var(--reveal-distance, 1rem));
+		/* Scroll reveal. Where scroll-driven animations are supported, CSS reveals [data-reveal]
+		   as it enters the viewport and no script runs; --reveal-range sets how far into its entry
+		   it is fully shown. Elsewhere SiteShell's IntersectionObserver path below takes over. */
+		@supports (animation-timeline: view()) {
+			:where([data-reveal]) {
+				animation: baseline-reveal linear both;
+				animation-timeline: view();
+				animation-range: entry 0% entry var(--reveal-range, 40%);
+			}
 		}
 
-		:where(html[data-reveal-ready]) :where([data-reveal]) {
-			transition:
-				opacity var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms),
-				transform var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms);
-		}
+		@supports not (animation-timeline: view()) {
+			:where(html[data-reveal-ready]) :where([data-reveal]:not(.is-revealed)) {
+				opacity: 0;
+				transform: translateY(var(--reveal-distance, 1rem));
+			}
 
-		:where(html[data-reveal-ready]) :where([data-reveal].is-revealed) {
-			opacity: 1;
-			transform: translateY(0);
+			:where(html[data-reveal-ready]) :where([data-reveal]) {
+				transition:
+					opacity var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms),
+					transform var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms);
+			}
+
+			:where(html[data-reveal-ready]) :where([data-reveal].is-revealed) {
+				opacity: 1;
+				transform: translateY(0);
+			}
 		}
 	}
 
+	@keyframes baseline-reveal {
+		from {
+			opacity: 0;
+			transform: translateY(var(--reveal-distance, 1rem));
+		}
+	}
+
+	/* Optional recipe: CSS data bars. */
 	.viz-bars {
 		display: flex;
 		align-items: flex-end;
@@ -1159,6 +1195,7 @@
 		transform: translateX(0.2rem);
 	}
 
+	/* Optional recipe: bento grid. */
 	.bento-grid {
 		display: grid;
 		grid-template-columns: minmax(0, 1fr);
@@ -1183,6 +1220,7 @@
 		.bento-row-2 { grid-row: span 2; }
 	}
 
+	/* Optional recipe: grain texture. */
 	.surface-grain {
 		position: relative;
 		isolation: isolate;
@@ -1226,6 +1264,7 @@
 		display: none;
 	}
 
+	/* Optional recipe: editorial drop cap. */
 	:where(.prose-dropcap > p:first-of-type)::first-letter {
 		float: inline-start;
 		font-family: var(--font-display);
@@ -1237,6 +1276,7 @@
 		color: var(--color-text);
 	}
 
+	/* Optional recipe: horizontal scroll-snap reel. */
 	.reel-snap {
 		display: grid;
 		grid-auto-flow: column;

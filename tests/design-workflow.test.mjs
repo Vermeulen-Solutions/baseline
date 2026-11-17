@@ -332,3 +332,16 @@ test('contract starter suggestions mirror the starter stylesheet', async () => {
     }
   }
 });
+
+test('reveal is CSS scroll-driven by default with the observer as fallback; registry aliases stay opt-in', () => {
+  const css = readFileSync('src/styles/global.css', 'utf8');
+  const shell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
+  assert.match(css, /@supports \(animation-timeline: view\(\)\) \{\s*:where\(\[data-reveal\]\) \{\s*animation: baseline-reveal linear both;\s*animation-timeline: view\(\);/);
+  assert.match(css, /@supports not \(animation-timeline: view\(\)\) \{\s*:where\(html\[data-reveal-ready\]\)/, 'the hiding rule applies only on the observer path');
+  assert.ok(shell.includes("CSS.supports?.('animation-timeline: view()')"), 'SiteShell skips the observer where CSS reveals');
+  const aliases = readFileSync('src/styles/registry-aliases.css', 'utf8');
+  assert.match(aliases, /@theme inline \{/);
+  assert.ok(!/#[0-9a-f]{3,8}\b|oklch\(\d/i.test(aliases), 'aliases point at Baseline tokens only');
+  assert.match(css, /^\/\* Opt-in aliases for registry components in quarantine: @import "\.\/registry-aliases\.css"; \*\/$/m, 'the import ships commented out');
+  assert.ok(css.includes('Optional recipe: bento grid.'), 'decorative families are marked optional');
+});
