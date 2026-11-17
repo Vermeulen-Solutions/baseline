@@ -551,8 +551,8 @@
   },
   {
     "path": "src/plugins/README.md",
-    "reason": "Starter infrastructure documentation for the site-owned metadata hook, ownership options and shared core CSP/deduplication path; no client visual design. Any source edit invalidates this LF-normalized exception.",
-    "sha256": "4692d3b71fddce97e12a7271b9db67a38a3c1ec7fb276855ca15483432a96879"
+    "reason": "Starter infrastructure documentation for the site-owned metadata hook and the inactive editor admin templates; no client visual design. Any source edit invalidates this LF-normalized exception.",
+    "sha256": "1da1d0c93fd151ead9a45a681c76b810762278e8f1c2561b4a50adffc74e3f06"
   },
   {
     "path": "src/styles/photoswipe.css",
@@ -644,5 +644,70 @@
     "path": "src/lib/view-transition.ts",
     "reason": "Non-visual view-transition utility: ident-safe transition names from slugs and the media class pairing used by Card and list rows; no styles or markup. Exact LF-normalized source hash.",
     "sha256": "1e9802bba24a9c8c30331b1c62121249523346a2a9c6e4f10853e8300942417a"
+  },
+  {
+    "path": "src/lib/derived-order.ts",
+    "reason": "Non-visual ordering utility: pure comparators deriving display order from weekday/time, list rank and taxonomy order; no markup, tokens or presentation. Exact LF-normalized source hash.",
+    "sha256": "80c106ca7aac7c051124c8eb6feabf6d4e6035b1ea644ac4562537668a852525"
+  },
+  {
+    "path": "src/plugins/editorial-order/admin.tsx",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "3d43fed9d305e754d3f939224b3d26f8a54ba8c35249b418e0946528363407a8"
+  },
+  {
+    "path": "src/plugins/editorial-order/config.ts",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "404a6102d63d819d03dd5cf70235e0ba0f7e25f2457c0b43360f94d07d5a0af4"
+  },
+  {
+    "path": "src/plugins/editorial-order/index.ts",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "045d2b5f1c51e744033f55e0b67e12a9a1701d7fbbd75cbbabd21a55aeb6cfee"
+  },
+  {
+    "path": "src/plugins/editorial-order/order.ts",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "f888db5e4134340c1c7602096aa09b97255194047344e9b7e2572a69d3eb7455"
+  },
+  {
+    "path": "src/plugins/editorial-order/runtime.ts",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "d58cb98b38a38e2831b63b0dc98def2a47ec6d4366a33b153f3502ba02b8a614"
+  },
+  {
+    "path": "src/plugins/editorial-order/styles.css",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "68a6c89c208750fc4280ef1ca8c8726990605bd6934d511a386f0e2e6aa71013"
+  },
+  {
+    "path": "src/plugins/editor-ui/admin.tsx",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "2f63b92512251801414797eac6a16d78deecef8a988ebdf12a746feae180af37"
+  },
+  {
+    "path": "src/plugins/editor-ui/config.ts",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "2ea4c7ad1a21c64f74e3840a68dee4bc9c28606b95b9028d1f54098a231e354f"
+  },
+  {
+    "path": "src/plugins/editor-ui/index.ts",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "0e3bd3e2a0104a16f4882d22c3d7baf97b4e31ad24b543d670b2ac4aa9f6cb49"
+  },
+  {
+    "path": "src/plugins/editor-ui/labels.ts",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "dc17f9ba053ed9d9e6c020bc1c5926de9b38cf941bcb17861c0afdafe703dbe2"
+  },
+  {
+    "path": "src/plugins/editor-ui/runtime.ts",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "fd52c19b2da3bbb4f06a1308d3435e1ab0638fa02dab821afcdc9f65add74f19"
+  },
+  {
+    "path": "src/plugins/editor-ui/styles.css",
+    "reason": "Inactive EmDash admin plugin template for non-technical editors (docs/editor-experience.md): renders only inside /_emdash/admin when a site imports it; no public UI, tokens, assets or routes. Exact LF-normalized source hash.",
+    "sha256": "befcdf4b9f2aaeef7222a4fea21e2e2e645077c3c9bfe226bdda2b3fc644c66f"
   }
 ]

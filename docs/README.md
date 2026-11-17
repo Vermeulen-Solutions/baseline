@@ -91,6 +91,7 @@ Form handling, server-side recovery validation, and Cloudflare Turnstile spam pr
 - **[Offline Content Inventory Contracts](migration-content-inventories.md)** Explicit entity mappings, private offline snapshots and count-only reconciliation reports; editor acceptance remains separate.
 - **[WordPress Importer Fidelity Matrix](importer-fidelity-matrix.md)** Runtime-tested behavior for WXR and Exporter paths across blocks, galleries, SEO, bylines, and retry non-synchronization.
 - **[Migration Cutover: Content Freeze & Delta Reconciliation](migration-cutover.md)** Pre-cutover editorial freeze, snapshot-driven delta classification, slug-shift redirects, DNS switchover and rollback safety.
+- **[Editor Experience](editor-experience.md)** Derived ordering instead of display-order numbers, a drag-and-drop order page, localised select labels, list columns, help page, hidden admin areas and a reviewed admin-metadata script for non-technical editors.
 - **[Client and Editor Handoff Guide](editor-handoff.md)** CMS roles/permissions, Portable Text daily publishing workflows, form submission handling, and peripheral service inventory checklist.
 
 ---

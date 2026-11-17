@@ -116,6 +116,7 @@
     "update:plan": "node scripts/update-plan.mjs",
     "audit:ui": "node scripts/audit-ui.mjs",
     "audit:cms-roundtrip": "node scripts/cms-roundtrip.mjs",
+    "cms:admin-metadata": "node scripts/cms-admin-metadata.mjs",
     "design:canvas-check": "node scripts/canvas-board-check.mjs"
   },
   "dependencies": {
