@@ -1606,6 +1606,14 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "scripts/check-quality.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/check-quality.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "tests/audit-ui.test.mjs": {
       "disposition": "shared",
       "static": "copy"
