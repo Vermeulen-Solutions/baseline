@@ -42,6 +42,28 @@ test('breadcrumb and organization graphs use real absolute facts and serialize h
   assert.equal(taxonomyRobots(0), 'noindex, follow'); assert.equal(taxonomyRobots(1), undefined);
 });
 
+test('the organization graph adds social profiles and site-owned business facts', async () => {
+  const { socialProfiles } = await import('../src/lib/structured-data.ts');
+  const site = 'https://example.test';
+  assert.deepEqual(socialProfiles({ instagram: '@studio.x', github: 'studio', youtube: 'channel', twitter: '', facebook: 'https://www.facebook.com/studio', linkedin: 'studio' }), [
+    'https://www.instagram.com/studio.x', 'https://github.com/studio', 'https://www.youtube.com/@channel', 'https://www.facebook.com/studio',
+  ], 'handles become profile URLs; a LinkedIn handle is ambiguous and left out');
+  assert.deepEqual(socialProfiles({ instagram: 'bad handle!', twitter: 'javascript:alert(1)' }), []);
+  const graph = organizationGraph('Atelier', site, undefined, {
+    type: ['ProfessionalService', 'LocalBusiness'], telephone: ' +41 22 000 00 00 ', email: 'hello@example.test',
+    address: { addressLocality: 'Geneva', addressCountry: 'CH', streetAddress: ' ' }, areaServed: ['Geneva', ' '],
+    sameAs: ['https://maps.app.goo.gl/abc', 'ftp://nope'], social: { instagram: 'atelier' }, priceRange: 'CHF 2000+',
+  });
+  assert.deepEqual(graph['@type'], ['ProfessionalService', 'LocalBusiness']);
+  assert.equal(graph.telephone, '+41 22 000 00 00');
+  assert.deepEqual(graph.address, { '@type': 'PostalAddress', addressLocality: 'Geneva', addressCountry: 'CH' });
+  assert.deepEqual(graph.areaServed, [{ '@type': 'Place', name: 'Geneva' }]);
+  assert.deepEqual(graph.sameAs, ['https://www.instagram.com/atelier', 'https://maps.app.goo.gl/abc']);
+  assert.equal(graph.priceRange, 'CHF 2000+');
+  assert.equal(organizationGraph('A', site, undefined, { type: 'not a type' })['@type'], 'Organization');
+  assert.equal('aggregateRating' in graph, false, 'never a self-awarded rating');
+});
+
 test('URL normalization preserves case-sensitive assets, auth, queries, escapes and unsafe methods', () => {
   const url = path => new URL(path, 'https://example.test');
   assert.equal(normalizedPageLocation(url('/Posts/Story/?Campaign=ABC')), '/posts/story?Campaign=ABC');
