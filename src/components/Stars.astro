@@ -1,0 +1,61 @@
+---
+/**
+ * A star rating, read as one picture: "Rated 4.8 out of 5". Empty and partly empty stars keep their
+ * outline, so a 4 never reads as a 5, and the stars take the surrounding text colour (set `color` on
+ * a parent for a brand colour that still clears 3:1 against its ground, WCAG 1.4.11).
+ *
+ * Pass `decorative` when the words beside the stars already say the rating (for example inside a
+ * link reading "4.8 on Google, 23 reviews"); the stars are then hidden from screen readers.
+ * Show only a rating that exists somewhere a visitor can check: a public review or a profile total.
+ */
+interface Props {
+  rating: number;
+  max?: number;
+  /** {rating} and {max} are replaced. */
+  label?: string;
+  decorative?: boolean;
+  class?: string;
+}
+
+const { rating, max = 5, label = 'Rated {rating} out of {max}', decorative = false, class: className } = Astro.props;
+const total = Math.max(1, Math.min(10, Math.round(max)));
+const value = Math.max(0, Math.min(total, Number(rating) || 0));
+const shown = Math.round(value * 10) / 10;
+const id = `stars-${Math.random().toString(36).slice(2, 10)}`;
+const star = 'M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z';
+const stars = Array.from({ length: total }, (_, index) => Math.max(0, Math.min(1, value - index)));
+---
+<svg
+  class:list={['stars', className]}
+  viewBox={`0 0 ${total * 24} 24`}
+  role={decorative ? undefined : 'img'}
+  aria-label={decorative ? undefined : label.replace('{rating}', String(shown)).replace('{max}', String(total))}
+  aria-hidden={decorative ? 'true' : undefined}
+  focusable="false"
+>
+  <defs>
+    {stars.map((fill, index) => fill > 0 && fill < 1 && (
+      <linearGradient id={`${id}-${index}`}>
+        <stop offset={fill} stop-color="currentColor" />
+        <stop offset={fill} stop-color="currentColor" stop-opacity="0" />
+      </linearGradient>
+    ))}
+  </defs>
+  {stars.map((fill, index) => (
+    <path
+      d={star}
+      transform={`translate(${index * 24} 0)`}
+      fill={fill >= 1 ? 'currentColor' : fill <= 0 ? 'none' : `url(#${id}-${index})`}
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linejoin="round"
+    />
+  ))}
+</svg>
+
+<style>
+@layer components {
+  .stars { display: inline-block; block-size: 1em; inline-size: auto; vertical-align: -0.125em; overflow: visible; }
+  @media (forced-colors: active) { .stars { color: CanvasText; } }
+}
+</style>

@@ -1059,6 +1059,18 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/components/Stars.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/quotes.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/quotes.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/components/Disclosure.astro": {
       "disposition": "shared",
       "static": "copy"
