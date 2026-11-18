@@ -39,6 +39,16 @@ test('HTML auditor catches 404s, same-origin absolute links and broken anchors',
   assert.equal(errors.filter(e => e.rule === 'anchor').length, 1);
 }));
 
+test('HTML auditor flags a directory page linked without its trailing slash', () => fixture({
+  'index.html': '<link rel=canonical href="https://example.com/"><a href="/about">No slash</a><a href="/about/">Slash</a><a href="/about/#team">Slash and fragment</a><a href="/notes">File page</a><a href="/file.pdf">File</a>',
+  'about/index.html': '<h1 id="team">About</h1>',
+  'notes.html': '<h1>Notes</h1>',
+  'file.pdf': '',
+}, root => {
+  const errors = auditHTMLIntegrity(root).errors;
+  assert.deepEqual(errors.map(e => [e.rule, e.message]), [['link-slash', 'Link without its trailing slash: /about (the page is about/index.html; static hosts redirect it)']]);
+}));
+
 test('HTML auditor checks delivered image metadata and ignores fake tags in raw text/comments', () => fixture({
   'index.html': `<!-- <img> --><script>const fake = '<img>';</script><style>/* <img> */</style><textarea><img></textarea>
     <img width=320 height=200 alt="Photo > sunrise"><img style="aspect-ratio: 4 / 3" alt=Photo><img width=20 height=10 alt="">

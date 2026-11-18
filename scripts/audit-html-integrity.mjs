@@ -111,6 +111,9 @@ export function auditHTMLIntegrity(directory = 'dist') {
           if (relative.split('/').includes('..') || relative.includes('\\') || relative.includes('\0')) throw Error('Unsafe path');
           const target = [relative, relative.replace(/\/$/, '') + '/index.html', relative + '.html'].find(candidate => files.has(candidate)) ?? (relative === '' && files.has('index.html') ? 'index.html' : null);
           if (!target) { fail(file, 'link', `Missing internal destination: ${href}`); continue; }
+          // A directory page linked without its slash costs a redirect: Cloudflare static assets answer
+          // /about with a 307 to /about/, and Search Console reports the page as "Page with redirect".
+          if (relative !== '' && !relative.endsWith('/') && target === relative + '/index.html') fail(file, 'link-slash', `Link without its trailing slash: ${href} (the page is ${target}; static hosts redirect it)`);
           if (url.hash && pages.has(target) && !pages.get(target).anchors.has(decodeURIComponent(url.hash.slice(1)))) fail(file, 'anchor', `Missing anchor: ${href}`);
         } catch { fail(file, 'link', `Invalid internal URL: ${href}`); }
       }
