@@ -25,6 +25,9 @@ test('imports the site lacks block an adoption', () => {
   const has = file => file === 'src/lib/present.ts';
   assert.deepEqual(missingImports('src/components/X.astro', Buffer.from("import a from '../lib/present.ts';\nimport b from '../lib/absent';\nimport c from 'astro:assets';\nimport d from '@scope/pkg/sub';\n"), has, new Set()), ['local ../lib/absent', 'package @scope/pkg']);
   assert.deepEqual(missingImports('README.md', Buffer.from("import x from 'y'"), has, new Set()), []);
+  // Comments and test strings are not imports; dynamic and side-effect imports are.
+  const source = "/** @param {import('../lib/typed.js').T} t */\n// import gone from './gone';\nconst pattern = /from '\\.\\.\\/lib'/;\nassert.match(text, /import x from 'fixture'/);\nimport './side-effect.css';\nconst lazy = await import('./lazy.ts');\n";
+  assert.deepEqual(missingImports('src/lib/X.ts', Buffer.from(source), () => false, new Set()), ['local ./side-effect.css', 'local ./lazy.ts']);
 });
 
 test('a site file is current, behind, edited or missing, and only untouched files are replaced', () => {

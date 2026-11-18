@@ -66,8 +66,17 @@ function blobKnown(bytes) {
 export function missingImports(target, incoming, has, declared) {
   if (!/\.(?:astro|[cm]?js|ts|css)$/.test(target)) return [];
   const reasons = [];
-  for (const [, specifier] of incoming.toString('utf8').matchAll(/(?:\b(?:import|export)\s+(?:[^;'"\n]*?\s+from\s*)?|\bimport\s*\(\s*|@import\s+)["']([^"']+)["']/g)) {
+  // Real import statements only: comments (JSDoc `import('…')` types) and strings in tests are not imports.
+  const code = incoming.toString('utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const specifiers = [
+    ...code.matchAll(/^\s*(?:import|export)\b[^'"`;]*?\bfrom\s*['"]([^'"]+)['"]/gm),
+    ...code.matchAll(/^\s*import\s*['"]([^'"]+)['"]/gm),
+    ...code.matchAll(/\bimport\(\s*['"]([^'"]+)['"]\s*\)/g),
+    ...code.matchAll(/^\s*@import\s+(?:url\(\s*)?['"]([^'"]+)['"]/gm),
+  ].map(match => match[1]);
+  for (const specifier of specifiers) {
     if (/^(?:node:|astro:|virtual:|https?:|data:|#|\/)/.test(specifier)) continue;
+    if (!specifier.startsWith('.') && !/^(?:@[\w.-]+\/)?[\w.-]+(?:\/.*)?$/.test(specifier)) continue;
     if (specifier.startsWith('.')) {
       const relative = path.posix.normalize(path.posix.join(path.posix.dirname(target), specifier.split(/[?#]/)[0]));
       const options = path.posix.extname(relative) ? [relative] : [relative, ...['.ts', '.js', '.mjs', '.astro', '/index.ts', '/index.js'].map(ext => relative + ext)];
