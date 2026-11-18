@@ -102,10 +102,14 @@ export function plan(site, { files = [] } = {}) {
   });
   const adopting = new Set(entries.filter(entry => entry.status === 'behind' || entry.status === 'missing' && files.includes(entry.target)).map(entry => entry.target));
   const has = file => adopting.has(file) || fs.existsSync(path.join(site, file));
-  for (const entry of entries) {
-    if (!adopting.has(entry.target)) continue;
-    const needs = missingImports(entry.target, entry.incoming, has, declared);
-    if (needs.length) { entry.status = 'blocked'; entry.needs = needs; adopting.delete(entry.target); }
+  // Blocking one file can block another that imports it, in any order: repeat until nothing changes.
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const entry of entries) {
+      if (!adopting.has(entry.target)) continue;
+      const needs = missingImports(entry.target, entry.incoming, has, declared);
+      if (needs.length) { entry.status = 'blocked'; entry.needs = needs; adopting.delete(entry.target); changed = true; }
+    }
   }
   return { site, platform, commit, entries, adopting: [...adopting].sort(), receipt };
 }
