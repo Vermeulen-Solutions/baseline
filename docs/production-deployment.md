@@ -112,6 +112,18 @@ And `astro.config.mjs` configures:
 cloudflare({ imageService: 'cloudflare-binding' })
 ```
 
+#### E. Workers plan limits
+
+EmDash runs on the Workers Free plan; only sandboxed registry plugins need Workers Paid, for the Worker Loader binding ([EmDash plugin sandbox](https://docs.emdashcms.com/deployment/plugin-sandbox/)). Free allows 10 ms of CPU time per request and 100,000 requests a day ([Workers limits](https://developers.cloudflare.com/workers/platform/limits/)). Time spent waiting on D1, R2 or KV does not count as CPU time, so a render that waits on many queries can still fit.
+
+Baseline's Cloudflare cache provider (`src/lib/cloudflare-cache-provider.mjs`) runs inside the Worker so it can skip the cache for signed-in and query-string requests and key HTML per build; every page view, cached or not, is therefore a Worker request and counts toward the daily limit. EmDash's documented Workers Cache sits in front of the Worker instead, so its hits do not run the Worker ([EmDash on Cloudflare](https://docs.emdashcms.com/deployment/cloudflare/#workers-cache)); `docs/edge-cache-lifecycle.md` explains why Baseline uses its own provider.
+
+Read the Worker's CPU time and request counts in the Cloudflare dashboard (the Worker's **Metrics**) before choosing a plan. Move a site to Workers Paid when its CPU time per request approaches 10 ms, its traffic approaches the daily limit, or it needs sandboxed plugins. Record the plan and the measured numbers in the project notes.
+
+#### F. Cold renders on D1
+
+A page the cache cannot answer is rendered by the Worker, and each EmDash query it makes is a round trip to D1; a page with many sequential reads pays that distance every time. Measure before tuning: `npm run check:live -- --origin <url> --timing` reports cold (every page cache bypassed) and warm response times per page and the `cf-placement` header. Smart Placement, which runs the Worker near the database, is a measured site decision (`docs/edge-cache-lifecycle.md`). After every deploy the HTML cache starts empty (keys are per build), so the first request to each page in each Cloudflare location pays a cold render; a warm-up cannot run from GitHub Actions while Bot Fight Mode is on (see the cutover skill). Node.js with a local SQLite file does not have this cost: its reads are local.
+
 ---
 
 ## 3. Staging & Multi-Environment Architecture

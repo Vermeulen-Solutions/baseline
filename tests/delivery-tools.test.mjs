@@ -7,7 +7,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { htmlCacheKeyedPerBuild, undeclaredEmDashImports, versionAtLeast, workersAdapterStatus } from '../scripts/workers-rules.mjs';
 import { assertSafeDestination, gitIgnoreStatus, oversizedStatements } from '../scripts/d1-export.mjs';
 import { compareCounts, databaseHealth, findD1File, loadExport, pluginBundlePrefixes, tableCounts } from '../scripts/d1-rehearse.mjs';
-import { checkLive, parseSitemap, reroot, sitemapAlternates, stylesheetHrefs } from '../scripts/check-live.mjs';
+import { checkLive, coldUrl, measureTiming, median, parseSitemap, reroot, sitemapAlternates, stylesheetHrefs } from '../scripts/check-live.mjs';
 
 // Portable: throwaway folders, a stubbed `git` and a stubbed fetch; no network, Wrangler or CMS.
 const scratch = prefix => mkdtempSync(path.join(os.tmpdir(), prefix));
@@ -141,4 +141,31 @@ test('live check warns about search-facing problems by path and fails them only 
     'The sitemap lists https://staging.example/slug, which redirects (301) to https://staging.example/real/',
   ]);
   assert.equal((await checkLive({ origin: 'https://staging.example', strictSeo: true }, fetcher)).ok, false);
+});
+
+test('live timing separates cold renders from warm cache answers and never times a non-200', async () => {
+  assert.equal(median([]), null);
+  assert.equal(median([30, 10, 20]), 20);
+  assert.equal(median([40, 10, 20, 30]), 25);
+  assert.equal(coldUrl('https://site.example/about?x=1', 'abc'), 'https://site.example/about?x=1&check-live-cold=abc');
+  const seen = [];
+  const timer = async url => {
+    seen.push(url);
+    const cold = url.includes('check-live-cold=');
+    if (url.includes('/blocked')) return { ms: 5, status: 403, cache: null, placement: null };
+    return { ms: cold ? (url.endsWith('t2') ? 900 : 700) : 80, status: 200, cache: cold ? 'MISS' : 'HIT', placement: cold ? null : 'remote-DFW' };
+  };
+  let tokens = 0;
+  const result = await measureTiming(['https://site.example/', 'https://site.example/blocked'], { samples: 3, timer, token: () => `t${tokens++}` });
+  const home = result.pages[0];
+  assert.equal(home.coldMs, 700, 'median of 700, 700, 900');
+  assert.equal(home.warmMs, 80);
+  assert.deepEqual(home.cache, ['HIT']);
+  assert.deepEqual(home.placement, ['remote-DFW']);
+  assert.equal(new Set(seen.filter(url => url.includes('check-live-cold=')).map(url => url.split('check-live-cold=')[1])).size, 6, 'every cold sample has its own token');
+  assert.deepEqual(result.pages[1], { url: 'https://site.example/blocked', coldMs: null, warmMs: null, cache: [], placement: [] });
+  assert.equal(result.problems.length, 6, 'each blocked sample is reported');
+  assert.equal(result.coldMedianMs, 700);
+  assert.equal(result.warmMedianMs, 80);
+  assert.deepEqual(result.slowestCold.map(item => item.url), ['https://site.example/']);
 });

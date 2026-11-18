@@ -13,6 +13,14 @@
 // without exactly one canonical naming itself, or without exactly one meta description; a repeated
 // hreflang; and hreflang links in the page head that differ from the sitemap's alternates for that
 // URL. Paths are compared, not hosts, for the same reason as above.
+//
+// --timing [--samples 3] [--timing-pages 20] also measures response time per page from this
+// machine: warm (repeat requests, which a route or edge cache can answer) and cold (each request
+// carries a unique query string, so no page cache can answer and the server renders). It reports
+// medians, the slowest cold pages and the cache and placement headers seen. Timing is time to
+// response headers, including the network to this machine; compare runs from the same place.
+// Run it locally: Cloudflare bot protection answers data-centre runners (GitHub Actions) with a
+// challenge, which would be measured instead of the site.
 import { argumentsOf, isMain } from './infrastructure-io.mjs';
 
 const TIMEOUT_MS = 20_000;
@@ -126,6 +134,61 @@ export async function sitemapPages(origin, fetcher = get) {
   return (await sitemapEntries(origin, fetcher)).pages;
 }
 
+// Time to response headers for one GET, with the cache and placement headers that explain it.
+async function timeRequest(url) {
+  const started = performance.now();
+  const response = await fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(TIMEOUT_MS), headers: { 'User-Agent': 'baseline-check-live' } });
+  const ms = performance.now() - started;
+  await response.arrayBuffer();
+  const header = name => response.headers.get(name);
+  return { ms, status: response.status, cache: header('cf-cache-status') ?? header('x-astro-cache'), placement: header('cf-placement') };
+}
+
+export function median(values) {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+}
+
+// A unique query string per request keeps every page cache out of the cold sample.
+export function coldUrl(page, token) {
+  const url = new URL(page);
+  url.searchParams.set('check-live-cold', token);
+  return url.href;
+}
+
+// Cold and warm medians per page, then across pages. A sample that does not answer 200 is
+// reported and left out of the medians, so a challenge or an error page is never timed as the site.
+export async function measureTiming(pages, { samples = 3, timer = timeRequest, token = () => Math.random().toString(36).slice(2) } = {}) {
+  const results = [];
+  const problems = [];
+  for (const page of pages) {
+    const cold = [], warm = [], caches = new Set(), placements = new Set();
+    for (let index = 0; index < samples; index++) {
+      const sample = await timer(coldUrl(page, token()));
+      if (sample.status === 200) cold.push(sample.ms); else problems.push(`${page} cold sample answered ${sample.status}`);
+    }
+    await timer(page);
+    for (let index = 0; index < samples; index++) {
+      const sample = await timer(page);
+      if (sample.status === 200) warm.push(sample.ms); else problems.push(`${page} warm sample answered ${sample.status}`);
+      if (sample.cache) caches.add(sample.cache);
+      if (sample.placement) placements.add(sample.placement);
+    }
+    results.push({ url: page, coldMs: median(cold), warmMs: median(warm), cache: [...caches], placement: [...placements] });
+  }
+  const timed = results.filter(item => item.coldMs !== null && item.warmMs !== null);
+  return {
+    samples,
+    pages: results,
+    problems,
+    coldMedianMs: median(timed.map(item => item.coldMs)),
+    warmMedianMs: median(timed.map(item => item.warmMs)),
+    slowestCold: [...timed].sort((a, b) => b.coldMs - a.coldMs).slice(0, 5),
+  };
+}
+
 export async function checkLive({ origin, maxPages = 300, strictSeo = false }, fetcher = get) {
   const base = new URL(origin).origin;
   const report = { origin: base, health: null, pages: [], redirects: [], failures: [], warnings: [], stylesheets: [], extra: {} };
@@ -170,7 +233,8 @@ if (isMain(import.meta.url)) {
   try {
     const argv = process.argv.slice(2);
     const strictSeo = argv.includes('--strict-seo');
-    const args = argumentsOf(argv.filter(arg => arg !== '--strict-seo'), ['--origin', '--max-pages']);
+    const timing = argv.includes('--timing');
+    const args = argumentsOf(argv.filter(arg => arg !== '--strict-seo' && arg !== '--timing'), ['--origin', '--max-pages', '--samples', '--timing-pages']);
     if (!args.origin) throw new Error('Specify --origin <https://site>');
     const report = await checkLive({ origin: args.origin, maxPages: args['max-pages'] ? Number(args['max-pages']) : 300, strictSeo });
     const ok200 = report.pages.filter(page => page.status === 200).length;
@@ -182,6 +246,17 @@ if (isMain(import.meta.url)) {
     for (const warning of report.warnings.slice(0, 40)) console.log(`[check:live] WARN ${warning}`);
     if (report.warnings.length > 40) console.log(`[check:live] WARN and ${report.warnings.length - 40} more`);
     for (const failure of report.failures) console.log(`[check:live] FAIL ${failure}`);
+    if (timing) {
+      const samples = Math.max(1, Math.min(10, Number(args.samples ?? 3) || 3));
+      const limit = Math.max(1, Number(args['timing-pages'] ?? 20) || 20);
+      const timed = report.pages.filter(page => page.status === 200).slice(0, limit).map(page => page.url);
+      const result = await measureTiming(timed, { samples });
+      const ms = value => (value === null ? 'n/a' : `${Math.round(value)} ms`);
+      console.log(`[check:live] Timing (${timed.length} pages, ${samples} samples each, time to response headers from this machine):`);
+      console.log(`[check:live]   cold (cache bypassed) median ${ms(result.coldMedianMs)}; warm (repeat) median ${ms(result.warmMedianMs)}.`);
+      for (const page of result.slowestCold) console.log(`[check:live]   slowest cold ${new URL(page.url).pathname}: ${ms(page.coldMs)} cold, ${ms(page.warmMs)} warm${page.cache.length ? `, cache ${page.cache.join('/')}` : ''}${page.placement.length ? `, placement ${page.placement.join('/')}` : ''}`);
+      for (const problem of result.problems.slice(0, 10)) console.log(`[check:live]   WARN ${problem}`);
+    }
     if (!report.ok) process.exitCode = 1;
   } catch (err) {
     console.error(`[check:live] Error: ${err.message}`);

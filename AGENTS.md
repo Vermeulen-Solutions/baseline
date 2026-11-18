@@ -111,7 +111,8 @@ for direction, implementation and rendered critique.
   proxies; verify actual typing, save and reload when changing edit targets.
   Render editorial content through RichText. A seed is not a content migration.
 - Preserve navigation when adding routes, and use 301 redirects when renaming or
-  removing existing public routes. Code deployment does not transfer CMS records/media.
+  removing existing public routes, each path in one place: EmDash Redirects for content,
+  `astro.config.mjs` for code-owned paths (docs/site-working-rules.md). Code deployment does not transfer CMS records/media.
 - Write documentation with unwrapped paragraphs (soft-wrapped / one line per paragraph)
   or semantic line breaks; avoid artificial hard-wrapping at 80 columns.
 - Before changing the relevant behavior, read the task reference below. Detailed
