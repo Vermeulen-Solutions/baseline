@@ -121,6 +121,10 @@
       "target": "src/pages/sitemap.xml.ts"
     },
     {
+      "source": "profiles/static/project/src/pages/site.webmanifest.ts",
+      "target": "src/pages/site.webmanifest.ts"
+    },
+    {
       "source": "profiles/static/project/tests/static-foundation.test.mjs",
       "target": "tests/static-foundation.test.mjs"
     },

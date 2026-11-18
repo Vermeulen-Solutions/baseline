@@ -14,6 +14,9 @@ const metadata = resolveStaticMetadata(pageProps, site, { siteUrl: Astro.site, u
   <Fragment slot="head">
     <StaticMetadata metadata={metadata} />
     <link rel="icon" type="image/svg+xml" href={routePath('/favicon.svg', routing)} />
+    {/* From `npm run icons`: the home-screen icon iOS asks for, and the manifest with the app icons. */}
+    <link rel="apple-touch-icon" href={routePath('/apple-touch-icon.png', routing)} />
+    <link rel="manifest" href={routePath('/site.webmanifest', routing)} />
   </Fragment>
   <header slot="header" class="site-header" data-sticky-header data-vt-header>
     <nav class="site-nav" aria-label="Primary navigation">

@@ -307,6 +307,10 @@
     "tier": "unit",
     "reason": "Read-only classification of upstream changes against a site using a throwaway Git repository"
   },
+  "generate-icons.test.mjs": {
+    "tier": "unit",
+    "reason": "App icons from the favicon: argument guards, sizes and opacity of each icon on its ground colour, shipped defaults, the web manifest builder and the layout links"
+  },
   "html-parity.test.mjs": {
     "tier": "unit",
     "reason": "Rendered-HTML parity: argument guards, route file names, build-noise normalizing, labelled diffs, and capture/compare with a fake fetch (markup, status, unstable and missing routes)"
