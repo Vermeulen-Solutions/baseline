@@ -4,6 +4,13 @@ import { createHash } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
+// A local file is compared by content, not line endings: a Windows checkout with core.autocrlf
+// rewrites managed text files to CRLF, and the upstream hashes describe the LF bytes.
+const localHash = bytes => {
+  if (bytes.includes(0)) return hash(bytes);
+  try { return hash(new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(bytes).replaceAll('\r\n', '\n')); }
+  catch { return hash(bytes); }
+};
 const json = value => JSON.stringify(value, null, 2) + '\n';
 const legacySkills = ['new-site-workflow', 'site-art-direction', 'astro-site-design', 'impeccable'];
 const skills = [...legacySkills, 'penpot-site-design', 'openpencil-site-design', 'opendesign-site-design', 'brilliant-site-design'];
@@ -107,7 +114,7 @@ export async function stageBaseline({ root = process.cwd(), commit, readSource }
     const incomingHash = hash(incoming);
     if (incomingHash === record.sha256) continue;
     const current = await bytes(root, target);
-    const currentHash = current === null ? null : hash(current);
+    const currentHash = current === null ? null : localHash(current);
     const migration = await migrationReasons(root, target, incoming);
     entries.push({ target, source: record.source, baseHash: record.sha256, currentHash, incomingHash, migrationReasons: migration, conflict: migration.length > 0 || currentHash !== record.sha256 && currentHash !== incomingHash });
     payloads.set(`.baseline/updates/${commit}/files/${target}`, incoming);
@@ -138,7 +145,7 @@ export async function applyBaseline({ root = process.cwd(), commit } = {}) {
     if (seen.has(entry.target) || !record || !selected(entry.target, record, config.skills) || entry.source !== record.source || entry.baseHash !== record.sha256 || !digest(entry.incomingHash)) throw new Error('Stage exceeds installed profile membership');
     seen.add(entry.target);
     const current = await bytes(root, entry.target);
-    const currentHash = current === null ? null : hash(current);
+    const currentHash = current === null ? null : localHash(current);
     if (entry.currentHash !== currentHash) throw new Error('Local file changed after staging: ' + entry.target);
     const incoming = await bytes(root, `.baseline/updates/${commit}/files/${entry.target}`);
     if (!incoming || hash(incoming) !== entry.incomingHash) throw new Error('Staged bytes changed: ' + entry.target);
