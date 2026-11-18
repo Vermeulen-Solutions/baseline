@@ -45,6 +45,8 @@
 //   times the page's own resolved --spacing-section (a same-ground join pays one step), or 160px
 //   on a page without that token; --band <px> sets a fixed limit instead;
 // - overflow-x, broken-image, http, console-error and failed-request.
+// --open-details opens every closed <details> outside the header and navigation before measuring, so
+// folded content (accordions, phone folds) is checked too. Run one pass with it at phone widths.
 // --widths auto adds one width on each side of the breakpoints in the site's stylesheets (read
 // from the first five routes) to the given or default widths. Found on a real site: two defects
 // lived only between about 600 and 990px, where no default width looked.
@@ -197,6 +199,7 @@ export function parseArgs(argv) {
     else if (flag === '--band') out.band = Number(value());
     else if (flag === '--sample') { const [pattern, n] = value().split(/=(?=\d+$)/); out.samples.push({ pattern: new RegExp(pattern), keep: Number(n ?? 3) }); }
     else if (flag === '--hide') out.hide.push(...value().split(',').map(s => s.trim()).filter(Boolean));
+    else if (flag === '--open-details') out.openDetails = true;
     else if (flag === '--edge') out.edge = Number(value());
     else if (flag === '--badge') out.badge = Number(value());
     else if (flag === '--max-hover') out.maxHover = Number(value());
@@ -567,6 +570,18 @@ function sectionStep() {
 
 // Pseudo-element boxes through the DevTools protocol (the page cannot measure them itself), as
 // decorations with their host's box in the same coordinates.
+// Opens every closed <details> outside the page header and navigation (a menu opened over the page
+// would be measured as a defect of its own). Returns how many it opened.
+export function openFolds() {
+  let opened = 0;
+  for (const details of document.querySelectorAll('details:not([open])')) {
+    if (details.closest('header, nav, [role="banner"], [role="navigation"]')) continue;
+    details.open = true;
+    opened++;
+  }
+  return opened;
+}
+
 async function measureDecorations(page, candidates) {
   if (!candidates.length) return [];
   const cdp = await page.context().newCDPSession(page);
@@ -644,6 +659,9 @@ export async function audit(options, hooks = {}) {
         const note = (kind, extra) => issues.push({ kind, route: final, width, ...extra });
         if (response && response.status() >= 400) note('http', { sig: String(response.status()) });
         if (options.hide.length) await page.addStyleTag({ content: `${options.hide.join(',')}{display:none!important}` }).catch(() => {});
+        // Content inside a closed <details> is never laid out, so its defects stay hidden until a
+        // visitor opens it (found on a real site: a table caption one word wide inside a phone fold).
+        if (options.openDetails) await page.evaluate(openFolds).catch(() => {});
         await page.evaluate(async () => { for (let y = 0; y < document.documentElement.scrollHeight; y += 700) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 60)); } window.scrollTo(0, 0); });
         await page.waitForTimeout(300);
         for (const hit of await page.evaluate(edgeCheck, { min: options.edge, badge: options.badge })) note('edge-at-rest', hit);
@@ -738,7 +756,7 @@ export async function audit(options, hooks = {}) {
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const options = parseArgs(process.argv.slice(2));
-    if (options.help) console.log('Usage: audit:ui -- --base <origin> (--routes /,/contact | --routes-file <file> | --sitemap) [--widths 390,768,1440|auto|auto,320,390,1440] [--sample "^/news/.+=3"] [--hide "#dev-panel"] [--edge 8] [--badge 3] [--max-hover 80] [--tabs 45] [--text-scale root:1.6,root:2,text:1.5,text:2|off] [--contrast] [--crop 15] [--band <px>] [--out report.json]\n"auto" adds one width on each side of the site\'s own breakpoints to the given (or default) widths. Enlarged-text checks run at the given widths up to 500px; hover, focus and contrast at the widest given width. Mark images meant to be cropped with data-audit-crop-ok. --contrast also measures hovered elements. Progress is printed to stderr and --out is rewritten after every route, so an interrupted run keeps its findings; allow about half a minute per route and phone width. Mark deliberate exceptions in markup with data-audit-ignore. Git Bash: MSYS_NO_PATHCONV=1 when a route is "/".');
+    if (options.help) console.log('Usage: audit:ui -- --base <origin> (--routes /,/contact | --routes-file <file> | --sitemap) [--widths 390,768,1440|auto|auto,320,390,1440] [--sample "^/news/.+=3"] [--hide "#dev-panel"] [--open-details] [--edge 8] [--badge 3] [--max-hover 80] [--tabs 45] [--text-scale root:1.6,root:2,text:1.5,text:2|off] [--contrast] [--crop 15] [--band <px>] [--out report.json]\n"auto" adds one width on each side of the site\'s own breakpoints to the given (or default) widths. Enlarged-text checks run at the given widths up to 500px; hover, focus and contrast at the widest given width. Mark images meant to be cropped with data-audit-crop-ok. --contrast also measures hovered elements. Progress is printed to stderr and --out is rewritten after every route, so an interrupted run keeps its findings; allow about half a minute per route and phone width. Mark deliberate exceptions in markup with data-audit-ignore. Git Bash: MSYS_NO_PATHCONV=1 when a route is "/".');
     else {
       let chosen = options.widths;
       const { audited, widths, breakpoints, entries } = await audit(options, {

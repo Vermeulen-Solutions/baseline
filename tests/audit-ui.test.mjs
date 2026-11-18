@@ -269,3 +269,15 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
     } finally { server.close(); }
   });
 }
+
+test('--open-details is opt-in and opens folds outside the header and navigation', async () => {
+  assert.equal(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/']).openDetails, undefined);
+  assert.equal(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--open-details']).openDetails, true);
+  const { openFolds } = await import('../scripts/audit-ui.mjs');
+  const make = (inside) => ({ open: false, closest: selector => (inside && selector.includes(inside) ? {} : null) });
+  const folds = [make(null), make('header'), make('nav'), make(null)];
+  const previous = globalThis.document;
+  globalThis.document = { querySelectorAll: () => folds };
+  try { assert.equal(openFolds(), 2); } finally { globalThis.document = previous; }
+  assert.deepEqual(folds.map(f => f.open), [true, false, false, true]);
+});
