@@ -426,8 +426,8 @@
   },
   {
     "path": "profiles/static/project/src/content.config.ts",
-    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "0494e62c9ed4ec64b0711acc50732041b496873277a9d81ccf816039e3bbb66c"
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception. Optional updatedAt (never before publishedAt) for the sitemap lastmod and dateModified.",
+    "sha256": "09a8e365c3a43d4f31468362eb4c7d20a0d43a81f6d46def5fdc997d26942c38"
   },
   {
     "path": "profiles/static/project/src/env.d.ts",
@@ -451,8 +451,8 @@
   },
   {
     "path": "profiles/static/project/src/pages/sitemap.xml.ts",
-    "reason": "Functional static starter search indexing route: publication-aware XML sitemap endpoint with host-scope and origin enforcement. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "b42b0767f945a8db4f782fdbf2870f80193455c616312eef0aa2b4e52eba33d7"
+    "reason": "Functional static starter search indexing route: publication-aware XML sitemap endpoint with host-scope and origin enforcement. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception. lastmod uses updatedAt, else publishedAt.",
+    "sha256": "e9e903cb66b00c05983861ebd7a957cc6217c76ad4644cd7cfe883b6c9068d02"
   },
   {
     "path": "profiles/static/project/src/pages/404.astro",
@@ -471,8 +471,8 @@
   },
   {
     "path": "profiles/static/project/src/pages/posts/[...id].astro",
-    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "e7c29b9b05e9ac3928d594b985f0482d05b22cc121dd46d22ffa2f1a35fce114"
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception. Passes updatedAt as modifiedAt.",
+    "sha256": "0cad77913a3fd0c90cd62fa79319e490dec726bc05b4186f0f8550dccf294884"
   },
   {
     "path": "profiles/static/project/src/pages/_styleguide.astro",
@@ -486,8 +486,8 @@
   },
   {
     "path": "profiles/static-sveltia/project/public/admin/config.yml",
-    "reason": "Static Sveltia admin infrastructure: pinned editor entry and paired collection form, no client art direction.",
-    "sha256": "bc20a3d62d516123dbe3377dd006d552ac95c63051f8f3760155d822e078bcb4"
+    "reason": "Static Sveltia admin infrastructure: pinned editor entry and paired collection form, no client art direction. Optional Updated date field matching the posts schema.",
+    "sha256": "8e20ac763b97dc6ba6684ce92cd47ae0ace3cfac864b6c649d00ff2e0d2bd324"
   },
   {
     "path": "src/utils/page-metadata.ts",

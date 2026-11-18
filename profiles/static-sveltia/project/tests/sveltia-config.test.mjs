@@ -16,13 +16,13 @@ test('Sveltia form, frontmatter and native image paths match the Astro collectio
   assert.equal(posts.create, true);
   assert.equal(posts.format, 'yaml-frontmatter');
   assert.equal(posts.extension, 'md');
-  const widgets = { title: 'string', description: 'text', publishedAt: 'datetime', draft: 'boolean', hero: 'image', heroAlt: 'string', body: 'markdown' };
+  const widgets = { title: 'string', description: 'text', publishedAt: 'datetime', updatedAt: 'datetime', draft: 'boolean', hero: 'image', heroAlt: 'string', body: 'markdown' };
   assert.deepEqual(posts.fields.map(f => f.name).sort(), Object.keys(widgets).sort());
   for (const field of posts.fields) {
     assert.equal(field.widget, widgets[field.name]);
     if (field.name !== 'body') assert.match(schema, new RegExp(`\\b${field.name}:`));
   }
-  for (const name of ['hero', 'heroAlt', 'draft']) assert.equal(posts.fields.find(f => f.name === name).required, false);
+  for (const name of ['hero', 'heroAlt', 'draft', 'updatedAt']) assert.equal(posts.fields.find(f => f.name === name).required, false);
   assert.equal(posts.fields.find(f => f.name === 'draft').default, false);
   assert.match(schema, /hero && !post.heroAlt/);
   const reference = posts.public_folder + '/pilot-grid.jpg';

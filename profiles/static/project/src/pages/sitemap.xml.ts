@@ -18,7 +18,8 @@ export const GET: APIRoute = async (context) => {
       { url: routePath('/posts/', routing), priority: 0.8, changeFrequency: 'daily' },
       ...posts.map((p) => ({
         url: postUrl(p.id),
-        lastModified: p.data.publishedAt,
+        // Only a date someone wrote down: the update date, else the publication date, never the build date.
+        lastModified: p.data.updatedAt ?? p.data.publishedAt,
         changeFrequency: 'weekly' as const,
         priority: 0.7,
       })),
