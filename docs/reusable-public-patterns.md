@@ -184,6 +184,8 @@ For local fault probes, development builds accept destination query parameters `
 
 `Form.astro` renders a native form with `method="POST"` by default. Its additional props are `action?: FormActionConfig`, `method?: string`, `enhance?: boolean` (default `true`), `successMessage?: string` and `errorMessage?: string`, alongside native form attributes. The default slot contains labelled controls; named `success` and `errors` slots provide feedback content. Supply a unique stable `id` beginning with a letter and containing only word characters, colons, dots or hyphens; otherwise a generated ID is used. The supplied `class` belongs to the outer `.form-container`; the inner form uses `.flow`.
 
+**Inline field errors.** An enhanced form shows a message under a field only after the visitor has touched it and left it invalid (`:user-invalid`, with a blur fallback where that selector is missing), never on load. Write the message in the page's language with `data-error-required`, `data-error-type`, `data-error-pattern`, `data-error-too-short`, `data-error-too-long`, `data-error-range-underflow`, `data-error-range-overflow` or `data-error-step` on the field; without one the browser's own message is used. The message is linked through `aria-describedby` (an existing hint stays) and `aria-invalid`, and both clear as soon as the value is valid. Server errors from `FormError` are left alone.
+
 ```astro
 ---
 import Form from '../components/Form.astro';

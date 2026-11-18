@@ -346,3 +346,14 @@ test('Form.astro primitive complies with 0 KB JS fallback, unique error summary 
   assert.ok(component.includes('@layer components'), 'Styles must belong to @layer components');
   assert.ok(component.includes(':where([aria-busy="true"])'), 'Contextual styles must use :where()');
 });
+
+test('enhanced forms show inline field errors only after interaction, in the page language', () => {
+  const component = readFileSync('src/components/Form.astro', 'utf8').replace(/\r\n/g, '\n');
+  assert.match(component, /field\.matches\(':user-invalid'\)/);
+  assert.match(component, /\['valueMissing', 'errorRequired'\]/);
+  assert.match(component, /return field\.dataset\[key\] \|\| field\.validationMessage/);
+  assert.match(component, /field\.setAttribute\('aria-invalid', 'true'\)/);
+  assert.match(component, /described\.add\(id\)/, 'the message joins any existing aria-describedby');
+  assert.match(component, /setupFieldErrors\(form\);/);
+  assert.match(component, /\.form-container :global\(\.field-error\)/);
+});

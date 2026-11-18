@@ -64,10 +64,65 @@ const transport = resolveFormTransport(actionProp, installedProfile);
 </div>
 
 <script>
+  // Inline field errors, shown only after the visitor has touched a field (the browser's
+  // :user-invalid state), never while the page first loads. The message comes from the field's
+  // data-error-* attribute for the failed constraint (data-error-required, data-error-type,
+  // data-error-pattern, data-error-too-short, data-error-too-long, data-error-range-underflow,
+  // data-error-range-overflow, data-error-step), so it can be written in the page's language,
+  // else from the browser. It is linked with aria-describedby and aria-invalid, and clears as soon
+  // as the value is valid. Errors rendered by the server (FormError) are left alone.
+  const CONSTRAINTS: [keyof ValidityState, string][] = [
+    ['valueMissing', 'errorRequired'], ['typeMismatch', 'errorType'], ['patternMismatch', 'errorPattern'],
+    ['tooShort', 'errorTooShort'], ['tooLong', 'errorTooLong'], ['rangeUnderflow', 'errorRangeUnderflow'],
+    ['rangeOverflow', 'errorRangeOverflow'], ['stepMismatch', 'errorStep'],
+  ];
+  const userInvalidSupported = typeof CSS !== 'undefined' && CSS.supports?.('selector(:user-invalid)');
+  type Field = HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement;
+  function fieldMessage(field: Field) {
+    for (const [constraint, key] of CONSTRAINTS) if (field.validity[constraint]) return field.dataset[key] || field.validationMessage;
+    return field.validationMessage;
+  }
+  function showFieldError(field: Field) {
+    const touched = userInvalidSupported ? field.matches(':user-invalid') : field.dataset.fieldTouched === 'true' && !field.validity.valid;
+    const id = `${field.id || field.name}-field-error`;
+    let message = document.getElementById(id);
+    if (touched) {
+      if (!message) {
+        message = document.createElement('p');
+        message.id = id;
+        message.className = 'field-error';
+        message.dataset.fieldError = '';
+        field.insertAdjacentElement('afterend', message);
+      }
+      message.textContent = fieldMessage(field);
+      field.setAttribute('aria-invalid', 'true');
+      const described = new Set((field.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean));
+      described.add(id);
+      field.setAttribute('aria-describedby', [...described].join(' '));
+    } else if (message?.hasAttribute('data-field-error')) {
+      message.remove();
+      field.removeAttribute('aria-invalid');
+      const described = (field.getAttribute('aria-describedby') || '').split(/\s+/).filter(token => token && token !== id);
+      if (described.length) field.setAttribute('aria-describedby', described.join(' '));
+      else field.removeAttribute('aria-describedby');
+    }
+  }
+  function setupFieldErrors(form: HTMLFormElement) {
+    for (const field of form.querySelectorAll<Field>('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), textarea, select')) {
+      if (!field.id && !field.name) continue;
+      const update = () => showFieldError(field);
+      field.addEventListener('blur', () => { field.dataset.fieldTouched = 'true'; update(); });
+      field.addEventListener('input', update);
+      field.addEventListener('change', update);
+      field.addEventListener('invalid', () => { field.dataset.fieldTouched = 'true'; queueMicrotask(update); });
+    }
+  }
+
   function setupForms() {
     document.querySelectorAll<HTMLFormElement>('form[data-form-enhanced]').forEach((form) => {
       if (form.dataset.formBound) return;
       form.dataset.formBound = 'true';
+      setupFieldErrors(form);
 
       const container = form.closest('[data-form-container]');
       const successBox = container?.querySelector<HTMLElement>('[data-form-success]');
@@ -275,6 +330,13 @@ const transport = resolveFormTransport(actionProp, installedProfile);
     border: 1px solid var(--color-border, #ccc);
     border-radius: var(--radius-card, 0.5rem);
     background: var(--color-surface, #fff);
+  }
+
+  /* Inline field messages are inserted by the script, so they are not scoped. */
+  .form-container :global(.field-error) {
+    margin-block-start: var(--spacing-3xs, 0.25rem);
+    color: var(--color-accent, #c00);
+    font-size: var(--text-step--1, 0.875rem);
   }
 
   .form-errors {
