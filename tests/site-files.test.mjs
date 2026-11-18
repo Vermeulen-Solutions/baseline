@@ -42,6 +42,8 @@ test('a site file is current, behind, edited or missing, and only untouched file
     write('src/lib/form-transport.ts', head('src/lib/form-transport.ts'));
     const older = execFileSync('git', ['log', '--format=%H', '-2', '--', 'src/components/Form.astro']).toString().trim().split('\n')[1];
     write('src/components/Form.astro', execFileSync('git', ['show', `${older}:src/components/Form.astro`]));
+    // A static site's sync:baseline record of a managed file it is about to receive, and of one it keeps.
+    write('.baseline/managed-files.json', JSON.stringify({ files: { 'src/components/Form.astro': { source: 'src/components/Form.astro', sha256: 'old', ownership: 'shared' }, 'src/lib/consent.ts': { source: 'src/lib/consent.ts', sha256: 'mine', ownership: 'shared' } } }));
     const result = plan(site, { files: ['src/components/Hours.astro'] });
     const status = Object.fromEntries(result.entries.map(entry => [entry.target, entry.status]));
     assert.equal(status['src/lib/opening-hours.ts'], 'current');
@@ -59,6 +61,10 @@ test('a site file is current, behind, edited or missing, and only untouched file
     const receipt = JSON.parse(fs.readFileSync(path.join(site, '.baseline/owned-files.json'), 'utf8'));
     assert.deepEqual(Object.keys(receipt.files).sort(), ['src/components/Form.astro', 'src/components/Hours.astro', 'src/lib/form-transport.ts', 'src/lib/opening-hours.ts']);
     assert.equal(receipt.baseline.commit, result.commit);
+    const managed = JSON.parse(fs.readFileSync(path.join(site, '.baseline/managed-files.json'), 'utf8')).files;
+    assert.equal(managed['src/components/Form.astro'].sha256, receipt.files['src/components/Form.astro'].sha256, 'sync:baseline sees the update as current, not as a local edit');
+    assert.equal(managed['src/components/Form.astro'].lastUpdateCommit, result.commit);
+    assert.equal(managed['src/lib/consent.ts'].sha256, 'mine', 'a file site:files did not write keeps its record');
     // A recorded file the site never touched is behind even when Baseline never committed those bytes.
     receipt.files['src/lib/consent.ts'] = { source: 'src/lib/consent.ts', sha256: execFileSync('node', ['-e', "process.stdout.write(require('crypto').createHash('sha256').update('// my own consent\\n').digest('hex'))"]).toString(), commit: result.commit };
     fs.writeFileSync(path.join(site, '.baseline/owned-files.json'), JSON.stringify(receipt));

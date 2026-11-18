@@ -38,7 +38,10 @@ const [
 	getMenuWithCacheHint("primary"),
 ]);
 const { siteTitle, siteTagline, siteLogo } = resolveStarterSiteIdentity(settings);
-const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
+// The site name is added when the whole title fits the 60 characters search results show (and
+// check:quality enforces); a longer page title stands alone, the name is still in og:site_name.
+const brandedTitle = `${title} — ${siteTitle}`;
+const fullTitle = title.includes(siteTitle) || brandedTitle.length > 60 ? title : brandedTitle;
 const pageDescription = description ?? siteTagline;
 const siteUrl = resolvePublicSiteUrl(settings.url, Astro.site, Astro.url);
 const publicBase = import.meta.env.BASE_URL.replace(/\/+$/, '');

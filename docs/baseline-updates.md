@@ -13,6 +13,31 @@ Sites update to a tagged [standards release](standards-releases.md), not to `mai
 
 The rest of this guide covers specific migrations and the general workflow for sites too old to have these helpers.
 
+### Taking the visible changes on a built site
+
+What taking the 0.3.0–0.5.0 visible changes on six built sites taught:
+
+- **Compare like with like.**
+  - Capture before and after on the same data. A site's local D1 copy can lag production by entries.
+  - Build the maintenance branch's base for the before captures, then the branch for the after ones.
+  - Restart `wrangler dev` after each build.
+  - A site whose plugins come from a registry (for example Eventual) cannot render locally. Upload the branch as a preview version (`wrangler versions upload`), which uses the production database and takes no traffic, and compare it with production. This is safe only when the update changes no EmDash version, because a Worker on a new version migrates the production database on its first request. Then promote exactly that version with `wrangler versions deploy <id>@100%`.
+- **Enlarged text.** Run `audit:ui --widths auto` and look for text off screen at 160% and 200% root size. The usual causes:
+  - grid tracks of plain `1fr` (use `minmax(0, 1fr)`);
+  - flex or grid items aligned to `start`, which size to their longest word (stretch them, or cap them with `max-inline-size: 100%`);
+  - columns set in rem, which double with the text (cap them with `min(5.5rem, 28vw)`);
+  - a header that cannot wrap.
+
+Media queries do not follow root size, but container queries in rem do. A `@container (max-width: 16rem)` layout applies only to enlarged text. Use `overflow-wrap: break-word`, not `hyphens: auto`: hyphenation applies at normal sizes too and broke desktop mastheads.
+- **Hover gating.** Wrap each rule whose selectors are all `:hover` in `@media (hover: hover)`. Leave rules that pair hover with focus alone, and skip rules already inside a hover query. A postcss walk that checks ancestors does this safely; a text search double-wraps.
+- **Optional vocabulary needs current tooling.** `@theme static` on a stylesheet that keeps Tailwind's default namespaces emits every default variable; keep plain `@theme` there. A fork with an older `design-system.mjs` or older token tests (token coverage, fluid token count) fails on the optional space scale and breakpoint tokens. Leave them out, or update the tooling first.
+- **Baseline's embeds on a bespoke palette.** `VideoEmbed` and `MapEmbed` read `--color-surface`, `--color-text`, `--color-border`, `--color-border-strong` and `--color-focus`, and style inside `@layer components`. Map the tokens on the embed's container, and restate the poster fill if the site's unlayered `img` rules win.
+- **A default share image needs no production write.** A 1200×630 file in `public/`, passed as Base's fallback `image`, works per language and ships with the code.
+- **Accessible names start with the visible text** (axe `label-content-name-mismatch`): language switches showing "EN" or "FR", and links whose visible text is a hostname.
+- **The EmDash sitemap lists the pages collection at `/pages/<slug>`.** A site that renders its pages elsewhere needs a 301 for each (in `astro.config.mjs` `redirects`); `check:live` reports the 404s.
+- **`site:files` on a full Baseline fork** offers Baseline's own repository tests too. A test that reads data files (`standards/baselines/*.json`, the profile inventories) or tests a subject the site kept fails: adopt a test only together with its subject, and classify every new test in `tests/test-tiers.json`. A static site's Card and SiteShell stay blocked until their new library files are adopted with them (`--files src/lib/view-transition.ts,...`), because bounded sync adds no paths.
+- **Git Bash:** set `MSYS_NO_PATHCONV=1` per command (`MSYS_NO_PATHCONV=1 npm run capture:routes -- …`). Exported, it turns `/c/dev/...` script paths into `C:\c\dev\...`.
+
 ## Notes on the November 2026 design-system iteration
 
 The design-system iteration of November 2026 changes shared components, `scripts/design-system.mjs`, `scripts/css-contracts.mjs`, `scripts/audit-ui.mjs` and the starter `global.css`. Review these visible or behavioural changes when adopting it:

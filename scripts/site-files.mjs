@@ -30,6 +30,7 @@ import { ownershipOf } from './init-profile.mjs';
 
 const ROOT = fileURLToPath(new URL('../', import.meta.url));
 const RECEIPT = '.baseline/owned-files.json';
+const MANAGED = '.baseline/managed-files.json';
 const CODE = /^(?:src\/(?:components|lib|layouts|dev)\/|scripts\/|tests\/)/;
 const hash = value => createHash('sha256').update(value).digest('hex');
 const lf = bytes => bytes.includes(0) ? bytes : Buffer.from(bytes.toString('utf8').replaceAll('\r\n', '\n'));
@@ -143,6 +144,21 @@ export function apply(result) {
   }
   receipt.files = Object.fromEntries(Object.entries(receipt.files).sort(([a], [b]) => a.localeCompare(b)));
   write(path.join(site, RECEIPT), JSON.stringify(receipt, null, 2) + '\n');
+  // A static site's sync:baseline keeps its own record of the files it manages. Record the new
+  // bytes there too, or its next run would read this update as a local edit.
+  const managedPath = path.join(site, MANAGED);
+  if (written.length && fs.existsSync(managedPath)) {
+    const managed = JSON.parse(fs.readFileSync(managedPath, 'utf8'));
+    const files = managed.files ?? managed;
+    let touched = false;
+    for (const entry of entries) {
+      if (!written.includes(entry.target) || !files[entry.target]) continue;
+      files[entry.target].sha256 = hash(entry.incoming);
+      files[entry.target].lastUpdateCommit = commit;
+      touched = true;
+    }
+    if (touched) write(managedPath, JSON.stringify(managed, null, 2) + '\n');
+  }
   return written;
 }
 

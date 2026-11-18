@@ -74,7 +74,10 @@ async function migrationReasons(root, target, incoming) {
   const source = String(incoming), reasons = new Set();
   const pkg = await readJSON(root, 'package.json');
   const declared = { ...pkg.dependencies, ...pkg.devDependencies };
-  const imports = [...source.matchAll(/(?:\b(?:import|export)\s+(?:[^;'"\n]*?\s+from\s*)?|\bimport\s*\(\s*|@import\s+)["']([^"']+)["']/g)].map(match => match[1]);
+  // Comments are not imports: a JSDoc type such as {import('./x.mjs').Options} named a file the
+  // site does not need and blocked an otherwise clean update.
+  const code = source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:"'\\])\/\/[^\n]*/g, '$1');
+  const imports = [...code.matchAll(/(?:\b(?:import|export)\s+(?:[^;'"\n]*?\s+from\s*)?|\bimport\s*\(\s*|@import\s+)["']([^"']+)["']/g)].map(match => match[1]);
   for (const specifier of imports) {
     if (/^(?:node:|astro:|virtual:|https?:|data:|#)/.test(specifier)) continue;
     if (specifier.startsWith('.')) {

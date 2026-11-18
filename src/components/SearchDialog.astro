@@ -247,8 +247,10 @@ const shortcuts = ['Control+K', 'Meta+K', ...(slashShortcut ? ['/'] : [])].join(
       overflow-wrap: anywhere;
     }
 
-    .search__results :global(.search__result-link:hover) {
-      border-color: var(--search-border);
+    @media (hover: hover) {
+      .search__results :global(.search__result-link:hover) {
+        border-color: var(--search-border);
+      }
     }
 
     .search__results :global(.search__result-title) {
@@ -277,8 +279,10 @@ const shortcuts = ['Control+K', 'Meta+K', ...(slashShortcut ? ['/'] : [])].join(
         border-color: CanvasText;
       }
 
-      .search__results :global(.search__result-link:hover) {
-        border-color: Highlight;
+      @media (hover: hover) {
+        .search__results :global(.search__result-link:hover) {
+          border-color: Highlight;
+        }
       }
 
       .search__results :global(.search__result-excerpt mark) {

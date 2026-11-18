@@ -204,8 +204,10 @@ if (!targetId) {
       transition: background 150ms ease, border-color 150ms ease;
     }
 
-    .copy-button:hover {
-      background: color-mix(in oklch, currentColor 8%, transparent);
+    @media (hover: hover) {
+      .copy-button:hover {
+        background: color-mix(in oklch, currentColor 8%, transparent);
+      }
     }
 
     .copy-button[data-state="copied"] {
