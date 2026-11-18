@@ -298,6 +298,15 @@ import Announcer from '../components/Announcer.astro';
 - **Copy and cancellation:** The Clipboard API has an `execCommand('copy')` fallback with focus restoration. The component owns cancellation and reset timers on removal or navigation. The separate `copyText(text, { signal })` utility in `src/lib/clipboard.ts` accepts an external AbortSignal; CopyButton has no signal prop.
 - **Announcements:** Announcer renders polite and assertive live-region channels under its explicit `id` (default `site-announcer`). It creates no automatic singleton. Mount the matching container once per ID. `announce(announcerId, message, { priority: 'polite' | 'assertive', signal })` from `src/lib/announce.ts` writes plain text to an existing region; missing containers return `false`.
 
+### Before/after comparison (`BeforeAfter.astro`)
+
+Two pictures of the same view on one frame, for renovations, gardens, treatments, restorations and redesigns. Pass `before`, `after` (imported images or URLs with `width`/`height`), `beforeAlt` and `afterAlt`; `beforeLabel`, `afterLabel`, `sliderLabel`, `valueText` (with `{percent}`), `hint`, `caption` and `start` (0 to 100) localize and tune it.
+
+- **Native control:** an invisible `<input type="range">` covers the picture, so arrow keys, Home, End and screen readers work without extra code, and the read-out (`aria-valuetext`) says how much of the before picture shows. A click anywhere jumps the divider; on touch screens the script does the same, because iOS Safari does not jump a range to a tap. Dragging works but is never required (WCAG 2.5.7).
+- **Without JavaScript** the two pictures stand one after the other with their labels; the slider and its hint stay hidden.
+- **Honest use:** only a real before of the same view, ideally the same framing. Keep the labels plain; a product or platform name on the picture reads as something to buy. Size both images alike: the after picture sets the frame and the before picture covers it.
+- Focus shows on the handle; forced-colors mode draws the handle in the system text colour.
+
 ### Theme selector and surface controls
 
 ```astro

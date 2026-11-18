@@ -315,6 +315,10 @@
     "tier": "unit",
     "reason": "Rendered-HTML parity: argument guards, route file names, build-noise normalizing, labelled diffs, and capture/compare with a fake fetch (markup, status, unstable and missing routes)"
   },
+  "before-after.test.mjs": {
+    "tier": "unit",
+    "reason": "Before/after comparison contract: native range input hidden until ready, labels and value read-out, no-JS stacked fallback, touch jump, focus and forced-colors styles, tokens only"
+  },
   "check-quality.test.mjs": {
     "tier": "unit",
     "reason": "Portable route quality gates: argument guards, budget validation and layering, layout-shift session windows, JSON-LD types, target spacing, weight and budget issues and --init; the fixture-site browser run is opt-in (BASELINE_UI_BROWSER_TESTS=1)"

@@ -779,5 +779,10 @@
     "path": "profiles/static/project/src/pages/site.webmanifest.ts",
     "reason": "Non-visual endpoint: /site.webmanifest from the static site config. Exact LF-normalized source hash.",
     "sha256": "146b2468656e304b5a0cb31e7831fefef84c6348659abb81a061400fed8161f1"
+  },
+  {
+    "path": "src/components/BeforeAfter.astro",
+    "reason": "Shared presentation primitive: a before/after comparison on a native range input (keyboard, screen reader, tap to jump, no drag needed), stacked pictures without JavaScript; token colours, focus ring and forced-colors handle. Exact LF-normalized source hash.",
+    "sha256": "3a8bdebcc4da81cbccea02c7a241efd42d5749f9bd8f7623a0bf401ed9fefc11"
   }
 ]

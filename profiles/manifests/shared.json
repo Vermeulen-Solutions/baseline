@@ -71,6 +71,7 @@
     "eslint.config.mjs",
     "tests/template-lint.test.mjs",
     "src/components/Disclosure.astro",
+    "src/components/BeforeAfter.astro",
     "src/components/Cluster.astro",
     "src/components/Sidebar.astro",
     "src/components/dev/CompositionSpecimens.astro",
