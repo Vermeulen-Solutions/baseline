@@ -2,7 +2,7 @@
 
 ## Daemon discovery and MCP setup
 
-Discover an existing `open-design` MCP server or running local daemon before prompting for setup. Otherwise follow [docs/opendesign-onboarding.md](../../../../docs/opendesign-onboarding.md) when present:
+Discover an existing `open-design` MCP server or running local daemon before prompting for setup. Otherwise follow [docs/opendesign-onboarding.md](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/opendesign-onboarding.md) when present:
 
 1. **Daemon CLI entrypoint:** The OpenDesign desktop app bundles its CLI and MCP server inside `resources/app/prebundled/daemon/daemon-cli.mjs` (on Windows typically `C:\Users\<user>\AppData\Local\Programs\Open Design\resources\app\prebundled\daemon\daemon-cli.mjs`) alongside its bundled `resources/open-design/` catalog. Never add OpenDesign packages to a site's `package.json` or lockfile.
 2. **Ephemeral desktop port vs. standalone default:** Standalone `od` defaults to `http://127.0.0.1:7456`, whereas the running OpenDesign desktop app allocates an ephemeral loopback port for its daemon (for example `11285`) and pairs it with a local Next.js web sidecar (for example `6409` or `6411`). Discover the active daemon port from the running `Open Design` process listening sockets or pass `--daemon-url http://127.0.0.1:<port>` (or set `OD_DAEMON_URL=http://127.0.0.1:<port>`).
@@ -47,7 +47,7 @@ node "<path-to>/daemon-cli.mjs" plugin doctor od-astro-baseline-export --json
    ```powershell
    node "<path-to>/daemon-cli.mjs" lint C:/path/to/concept.html --fail-on p1 --json
    ```
-   Resolve confirmed defects and reconcile native aesthetic rules with the accepted direction. Add `data-od-id="<section-slug>"` to sections to satisfy `missing-section-anchor`. Both linters inspect source; neither measures contrast or layout clipping. Verify those in the actual rendered artifact. See [artifact lint](../../../../docs/artifact-lint.md) for the portable rule selection and limits.
+   Resolve confirmed defects and reconcile native aesthetic rules with the accepted direction. Add `data-od-id="<section-slug>"` to sections to satisfy `missing-section-anchor`. Both linters inspect source; neither measures contrast or layout clipping. Verify those in the actual rendered artifact. See [artifact lint](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/artifact-lint.md) (`docs/artifact-lint.md` in a Baseline checkout) for the portable rule selection and limits.
 3. **Register artifact and export (`od artifacts create` & `od export`):**
    ```powershell
    node "<path-to>/daemon-cli.mjs" artifacts create --project client-concept-a --name concept-preview.html --input C:/path/to/concept.html

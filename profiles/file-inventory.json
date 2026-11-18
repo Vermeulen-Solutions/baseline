@@ -1705,6 +1705,10 @@
     "tests/editor-experience.test.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/skill-links.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }
