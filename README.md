@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7.4.0-BC52EE" alt="Astro 7.4.0" /></a>
+  <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7.4.12-BC52EE" alt="Astro 7.4.12" /></a>
   <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind-v4-06B6D4" alt="Tailwind CSS v4" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT license" /></a>
 </p>
@@ -229,7 +229,7 @@ guide you through any machine setup or editor sign-in that needs your involvemen
 > [!TIP]
 > **Need a prompt for a specific task?** You don't have to search manually. Ask your coding assistant:
 > *“Find the best prompt in `docs/prompt-library.md` to [what you want to do], fill in the details for this project, and run it.”*
-> The [prompt library](docs/prompt-library.md) contains recipes for WordPress migrations, token calibration, layout refactoring, visual critique passes, local testing, production cutover, and upgrading earlier Baseline sites.
+> The [prompt library](docs/prompt-library.md) contains recipes for WordPress migrations, token calibration, layout refactoring, visual critique passes, pre-launch quality checks, production cutover, everyday changes on a live site, taking a new standards release, and upgrading earlier Baseline sites.
 
 **Optional references**
 
@@ -242,11 +242,13 @@ guide you through any machine setup or editor sign-in that needs your involvemen
 - **A design foundation you can make your own.** Shared colors, typography, and
   spacing adapt across screen sizes. [Design tools](docs/design-framework.md)
 - **Reusable Astro components.** Layout, images, galleries, navigation patterns,
-  and forms give you a starting vocabulary. [Components and patterns](docs/reusable-public-patterns.md)
+  forms, consent-aware analytics, click-to-load video and maps, opening hours
+  and ratings give you a starting vocabulary. [Components and patterns](docs/reusable-public-patterns.md)
 - **A place to refine the details.** The development styleguide lets you review
   components before assembling pages. [Design workflow](docs/art-direction-workflow.md)
 - **Checks alongside the build.** Checks cover code, types,
-  design tokens, and other implementation contracts. [Checks and tested scope](docs/support-boundaries.md)
+  design tokens and other implementation contracts, and route quality gates
+  check page weight, accessibility, metadata and launch readiness on the built site. [Checks and tested scope](docs/support-boundaries.md)
 
 <a id="daily-commands"></a>
 
@@ -258,10 +260,12 @@ Keep working through your assistant:
 | --- | --- |
 | Preview the site | “Start the local preview and give me its URL.” |
 | Resume unfinished work | “Continue the authorized local build from the current source and handoff, preserve established decisions, and report the preview and remaining acceptance.” |
-| Make a change | “Update [page or feature], following the site's existing design and content model.” |
+| Make a change | “Update [page or feature], following the site's existing design and content model.” The [day-2 prompt](docs/prompt-library.md#day-2-change-on-a-live-site) covers pages, rebrands, forms, languages, video, maps, opening hours and analytics. |
+| Check before launch | Use the [pre-launch quality prompt](docs/prompt-library.md#pre-launch-quality-and-launch-readiness-checks): route quality, accessibility, share images and launch readiness. |
 | Review the result | “Check the changed pages, run the applicable verification, and report anything still pending.” |
 | Find a recipe | “Find the best prompt in docs/prompt-library.md to [what you want to do] and adapt it for this site.” |
 | Bring an older site up to date | Use the [existing-site update prompt](docs/prompt-library.md#bringing-an-existing-site-up-to-date) to review and integrate dependencies, skills and Baseline features. |
+| Take a new Baseline release | Use the [standards release prompt](docs/prompt-library.md#taking-a-standards-release-on-a-site); [standards releases](docs/standards-releases.md) explains what a release pins. |
 
 Your assistant can also open the component styleguide and guide you to the content
 editor when your setup includes one. The [command reference](docs/commands.md)
@@ -280,7 +284,7 @@ Use these guides as references for you or your coding assistant.
 | Change the visual direction or layout | [Art direction](docs/art-direction-workflow.md) · [Design framework](docs/design-framework.md) · [Penpot setup](docs/penpot-onboarding.md) · [OpenPencil setup](docs/openpencil-onboarding.md) |
 | Work with CMS content or move from WordPress | [Editorial editing](docs/emdash-editorial-canvas.md) · [WordPress content](docs/wordpress-content-modeling.md) |
 | Publish the site | [Platform and hosting choices](docs/platform-profiles.md) · [EmDash deployment](docs/production-deployment.md) |
-| Review Baseline or skill updates | [Site updates](docs/baseline-updates.md) · [Reviewed maintenance](docs/automated-upstream-updates.md) |
+| Review Baseline or skill updates | [Site updates](docs/baseline-updates.md) · [Standards releases](docs/standards-releases.md) · [Reviewed maintenance](docs/automated-upstream-updates.md) |
 
 [Browse all documentation →](docs/README.md)
 

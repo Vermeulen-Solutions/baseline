@@ -27,7 +27,7 @@ This separately requested export requires `CLOUDFLARE_API_TOKEN` and can tempora
 
 Baseline accepts either a closed binary SQLite database or a raw D1 SQL export via `--db-snapshot <file>` or `--d1-dump <dump.sql>`. When a SQL dump is supplied, schema DDL is ingested into an isolated scratch SQLite database to measure physical collection widths without requiring manual conversion or loading row data.
 
-The source is the exact standalone `standards/baselines/0.1.1.json` artifact. Its digest must be `a30dfde700dac0ead090ca19f743312d5bb4cd886aa51facd387c372db56b2c4`, corresponding to the original immutable commit recorded in it. `--standards-file` accepts only an identical offline artifact. Missing or changed bytes abort. Mutable main or an identical version label is insufficient; another standards version needs a reviewed resolver extension.
+The source is the exact standalone `standards/baselines/<version>.json` artifact of the current release (0.5.0). `STANDARD` in `scripts/audit-site.mjs` pins its version, certified commit and SHA-256, and `npm run standards:release` updates all three; a diagnosis refuses to run when the bytes do not match. `--standards-file` accepts only an identical offline artifact. Missing or changed bytes abort. Mutable main or an identical version label is insufficient; another standards version needs a reviewed resolver extension.
 
 ## Implemented coverage
 

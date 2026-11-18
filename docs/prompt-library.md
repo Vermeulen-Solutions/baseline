@@ -22,6 +22,7 @@ Audit requests should produce a recommended follow-up plan with meaningful user 
 - [8. Production Cutover & Corporate Email Safety (Stage 7)](#8-production-cutover--corporate-email-safety)
 - [9. Brownfield Site Maintenance & Upgrades](#9-brownfield-site-maintenance--upgrades)
 - [10. Design Iteration: HTML, Brilliant, OpenPencil or Penpot](#10-design-iteration-opendesign-openpencil-penpot-or-astro)
+- [11. Maintaining Baseline: Change Notes & Standards Releases](#11-maintaining-baseline-change-notes--standards-releases)
 
 ---
 
@@ -123,7 +124,7 @@ concrete remaining decision or action. Respect an explicitly local-only scope.
 Use this prompt when your site requires specialized functionality (e.g. event management, registration, or translation dashboards) before writing custom code.
 
 ```markdown
-We are planning specialized site capabilities. Before we build custom code or relational schemas from scratch, check the curated EmDash Plugin Registry (https://plugins.emdashcms.com/) for official sandboxed plugins.
+We are planning specialized site capabilities. Before we build custom code or relational schemas from scratch, check the curated EmDash Plugin Registry (https://plugins.emdashcms.com/) for official sandboxed plugins, following docs/plugin-selection.md for permissions, Cloudflare support and needs better met in the site itself.
 
 Desired capability: [E.g., Event management & ticketing / Multilingual translation dashboard]
 
@@ -244,7 +245,7 @@ Let's calibrate our design tokens in src/styles/global.css to match our Art Dire
 
 1. Initialize or update from the closest Aesthetic Lane preset or brand seed (`npm run design:tokens -- --init-client --lane <lane-id>` or `--seed-accent <hex> --type-scale <ratio> --write`).
 2. Customize the `@theme`, `:root`, and `[data-surface="dark"]` tokens in `src/styles/global.css` for our brand palette, loaded font families, and spatial density.
-3. Run `npm run design:tokens -- --write-calibration` and `npm run verify` to verify all 10 WCAG AA contrast pairs across light and dark surfaces, fluid `clamp()` bounds, custom font loading, EmDash edit proxies, and `/_styleguide` swatch coverage.
+3. Run `npm run design:tokens -- --write-calibration` and `npm run verify` to verify the 14 built-in WCAG AA contrast pairs (plus any `@contrast-pair` comments the site declares) across light and dark surfaces, fluid `clamp()` bounds, custom font loading, EmDash edit proxies, and `/_styleguide` swatch coverage.
 ```
 
 ---
@@ -319,8 +320,29 @@ Please run our local visual regression test suite with `npm run test:visual`.
 If there are any diffs:
 1. Explain what changed visually in the captured viewports (mobile, tablet, desktop).
 2. Distinguish intentional design changes from unintended layout breaks.
-3. If the changes are intentional and approved, update the baselines with `npm run test:visual -- --update`.
+3. If the changes are intentional and approved, update the baselines with `npm run test:visual:update`.
 4. Run `npm run typecheck` and `npm run check:dev-tools` to ensure dev tools remain excluded from production builds.
+```
+
+### Pre-Launch Quality and Launch-Readiness Checks
+Use this before a launch, and after any change that touches many routes. It runs on every profile; `check:quality` and `audit:ui` need a local Chromium (`npx playwright install chromium` once).
+
+```text
+Run the pre-launch quality checks on this site and fix what they find.
+
+Build the site and serve it locally with npm run preview, never the dev server.
+Against that origin run:
+- npm run check:quality -- --base <origin> --sitemap (on the first run add
+  --init to write page-budget.json, then review its numbers with me);
+- npm run audit:ui -- --base <origin> --sitemap --widths auto;
+- on EmDash, npm run audit:html on the fresh build; on static sites,
+  npm run check:dev-tools.
+
+Treat launch-readiness findings (placeholder, default-identity,
+form-no-destination, share-image) as blockers: ask me for the missing facts
+instead of inventing them. Fix the other findings in source and rerun. Report
+what remains, with the reason each one is kept, and which acceptance (editor
+saves, form delivery, analytics on the production hostname) still needs a person.
 ```
 
 ---
@@ -385,7 +407,7 @@ live checks, or name the concrete remaining decision/action.
 
 ### Bringing an Existing Site Up to Date
 
-Use this for a complete catch-up, covering packages, agent guidance and Baseline capabilities through the agreed release endpoint. Open the target site or a current Baseline checkout with access to it. The [existing-site update workflow](baseline-updates.md#existing-site-update-workflow) owns the process, including sites too old to have today's helpers or receipts. For a read-only assessment, replace the request to apply updates with "diagnose and propose only; do not modify the target."
+Use this for a complete catch-up, covering packages, agent guidance and Baseline capabilities through the agreed release endpoint. Open the target site or a current Baseline checkout with access to it. The [existing-site update workflow](baseline-updates.md#existing-site-update-workflow) owns the process, including sites too old to have today's helpers or receipts. For a read-only assessment, replace the request to apply updates with "diagnose and propose only; do not modify the target." A site that has already adopted a standards release takes the next one with the [standards release prompt](#taking-a-standards-release-on-a-site) instead.
 
 ```text
 Bring this existing site up to date with applicable current Baseline capabilities.
@@ -422,6 +444,47 @@ conflicts, actual checks, pending acceptance and recovery point in the existing
 tracker or a short handoff. Complete the agreed commit/push/deploy steps after
 verification, or retain a reviewable local diff when the scope is local-only.
 Do not infer release authority, production content writes or DNS cutover.
+```
+
+### Taking a Standards Release on a Site
+
+Use this when a site that already follows Baseline moves to a new tagged standards release. The [standards release steps](baseline-updates.md#taking-a-standards-release) own the process; the [existing-site prompt](#bringing-an-existing-site-up-to-date) above remains for sites too old to have adopted a release.
+
+```text
+Bring this site to Baseline standards release [version].
+
+Site: [folder]
+Baseline checkout: [path, checked out at tag standards-v<version>]
+Last adopted release: [version from the fleet record, or unknown]
+Release scope: [repository/branch, deployment target and authorized actions;
+or explicitly local-only]
+
+Follow "Taking a standards release" in docs/baseline-updates.md. Read every
+release note in standards/releases/ from the adopted release up to [version]
+and sort each change for this site's platform: arrives with the sync, copy the
+named files, review and merge by hand, or a decision for the owner.
+
+Before changing anything, record the site's current check results and capture
+its routes from the Baseline checkout (capture:routes, parity:html capture).
+
+Skills: on EmDash, stage and apply sync:site-skills and sync:emdash-skills; on
+static sites, stage and apply sync:baseline at the release commit and copy new
+skill files by hand. Code: run npm run site:files -- --site <folder> from the
+Baseline checkout, review current, behind, edited, missing and blocked files,
+then --apply (name missing files to adopt with --files). Merge edited and
+site-owned files (Base.astro, global.css) by hand from .baseline/incoming/.
+Install development dependencies a note pins, at the exact version.
+
+Do not decide visible changes or owner settings (analytics ids, consent mode,
+CSP mode) for the owner: list them as open decisions.
+
+Verify with the site's verify and build, capture:routes --compare and
+parity:html compare against the earlier captures, and check:quality and audit:ui
+on a local build; explain every difference. Write
+docs/maintenance/standards-<version>-update.md in the site (adopted, deferred,
+open decisions, checks), commit .baseline/owned-files.json, and tell me what to
+record as the site's adopted release in the fleet record. Complete the agreed
+commit/push/deploy steps, then run check:live against the production origin.
 ```
 
 ### Running a Diagnostic Site Standards Audit
@@ -560,14 +623,46 @@ the managed update path and its provenance records.
 
 For emdash, use the installed sync:site-skills and sync:emdash-skills helpers
 with --check for comparisons, then stage applicable candidates following
-docs/skill-synchronization.md. If an older installation lacks a helper or guide,
-report the available update path before attempting changes.
+docs/skill-synchronization.md. Report the helper and notInstalled fields; stage
+a skill the site should start managing with --stage --add-skill <name>. Static
+sync cannot add paths, so list new skill files for a reviewed manual copy. If an
+older installation lacks a helper or guide, report the available update path
+before attempting changes.
 
 Review candidate diffs, provenance, licenses, local customizations and conflicts.
 Report the proposed application scope and apply within the existing
 authorization; leave unresolved ownership or conflicts for review. Report
 staged, applied and deferred changes accurately, then run applicable installed
 checks. Preserve client-owned content, calibrated design and configuration.
+```
+
+### Day-2 Change on a Live Site
+
+Use this for an everyday request on a site that is already built: a new page, a rebrand, a form, a language, a collection, a component, a video, a map or opening hours, or turning on analytics. The recipes live in `.agents/skills/new-site-workflow/references/day-2-recipes.md`; the more specific day-2 prompts below remain for token, layout, route and deployment work.
+
+```text
+Make this change on the site: [request, in the owner's words]
+
+Site: [folder]   Live URL: [origin, if any]
+Release scope: [repository/branch, deployment target and authorized actions;
+or explicitly local-only]
+
+Read AGENTS.md (and PRODUCT.md if the site has one), then the matching recipe
+in .agents/skills/new-site-workflow/references/day-2-recipes.md. The site's own
+conventions and Art Direction Record win over the recipe's examples. Reuse the
+shipped components (docs/reusable-public-patterns.md in Baseline) before
+writing new ones, give their labels the page's language, and do not edit a
+Baseline-owned file in place: change a site copy instead.
+
+Record decisions you made without asking under Assumptions in PRODUCT.md, and
+mark facts nobody supplied with [[placeholder: …]] instead of inventing them.
+
+Verify as the recipe says: npm run verify, a local build served with npm run
+preview, npm run check:quality -- --base <origin> --routes <changed routes>,
+and for visible changes audit:ui on those routes and the art-direction gate.
+Then complete the agreed commit/push/deploy steps, run check:live against the
+production origin after a deploy, and report what changed, the checks run and
+anything I still have to provide.
 ```
 
 ### Day-2 Design System & Token Updates (Client Request)
@@ -616,7 +711,7 @@ Please:
 4. For assets: place photographic/vector images in `src/assets/` using `<ResponsiveImage>` or native Astro `<Image>`, or upload to the CMS Media Library (never put content images in `public/`).
 5. If the page should be discoverable, update the actual navigation owner: for example `src/config/site.ts` in static profiles or live EmDash menus. Update seeds separately only when changing new-install defaults; editing a seed does not update an existing site's menu records.
 6. On EmDash sites, preserve live editing with the correct `{...entry.edit.*}` field proxies. Verify typing, save and reload when edit targets change, reporting any acceptance that access prevents.
-7. Run the installed verification, build and release checks. Inspect the route/section, links, draft exclusion where applicable, keyboard behavior and responsive reflow; report remaining editorial or launch acceptance.
+7. Run the installed verification, build and release checks, and `npm run check:quality -- --base <local preview origin> --routes <new route>` (title, description, one `h1`, share image). Inspect the route/section, links, draft exclusion where applicable, keyboard behavior and responsive reflow; report remaining editorial or launch acceptance.
 ```
 
 ### Day-2 Renaming, Moving, or Deprecating Routes (Client Request)
@@ -629,9 +724,9 @@ We need to [rename / move / remove] an existing route based on client feedback:
 
 Please:
 1. Move or remove the target route template/content.
-2. Set up a permanent 301 redirect from the old URL to the new destination (in `astro.config.mjs` `redirects` for static sites, or EmDash redirect middleware for CMS sites) to protect SEO and backlinks.
+2. Set up a permanent 301 redirect from the old URL to the new destination to protect SEO and backlinks, each path in one place: EmDash Redirects (admin) for content-owned URLs on CMS sites, `astro.config.mjs` `redirects` for code-owned routes and on static sites (docs/site-working-rules.md).
 3. Update all internal links across existing pages and site menus (header, footer, CMS menus).
-4. Run `npm run verify` to confirm all checks and link integrity pass.
+4. Run `npm run verify` and, on a local build, `npm run check:quality -- --base <origin> --routes <changed routes>`; on EmDash also `npm run audit:html`. After deployment run `npm run check:live -- --origin <production URL>`: every sitemap page must answer 200 and the old URL must redirect.
 ```
 
 ### Day-2 Deploying Changes to Staging (Cloudflare Workers)
@@ -646,7 +741,7 @@ Please:
 3. Follow the site's existing migration mode and EmDash upgrade work order. Added/pending migrations or data-changing actions need a database recovery point before startup/deploy; on D1, record a Time Travel bookmark with existing Wrangler access. Use a separate migration command/token only if the site already uses that workflow or the migration requires it. Reuse existing media/key recovery versions when unchanged (docs/cloudflare-backup-restore.md).
 4. Deploy to the staging environment:
    `npx wrangler deploy --env staging`
-5. Verify the live staging URL (e.g. https://staging.client-site.com) and confirm `X-Robots-Tag: noindex` or `<meta name="robots" content="noindex">` is present.
+5. Verify the live staging URL (e.g. https://staging.client-site.com) with `npm run check:live -- --origin <staging URL>` and confirm `X-Robots-Tag: noindex` or `<meta name="robots" content="noindex">` is present.
 ```
 
 ### Day-2 Cloning Production Content to Staging (EmDash Site Transfer)
@@ -675,7 +770,7 @@ Please:
 3. Follow the site's existing migration mode and EmDash upgrade work order. Added/pending migrations or data-changing actions need a database recovery point before startup/deploy; on D1, record a Time Travel bookmark with existing Wrangler access. Use a separate migration command/token only if the site already uses that workflow or the migration requires it. Reuse existing media/key recovery versions when unchanged (docs/cloudflare-backup-restore.md).
 4. Deploy the updated worker and assets:
    `npx wrangler deploy`
-5. Smoke-check changed production routes, assets and required bindings. Verify setup status when launching/changing authentication, and publish/purge or scheduled tasks when this release changes those features. Record unobserved acceptance honestly.
+5. Run `npm run check:live -- --origin <production URL>` (every sitemap page and stylesheet answers 200) against every exposed hostname, then smoke-check changed production routes, assets and required bindings. Verify setup status when launching/changing authentication, and publish/purge or scheduled tasks when this release changes those features. Record unobserved acceptance honestly.
 ```
 
 ### Day-2 Emergency Deployment Rollback (Cloudflare Workers & D1)
@@ -758,3 +853,29 @@ Prepare a portable design brief for another agent to iterate in [OpenDesign / Op
 Read the attached Baseline handoff and relevant installed tool skill/API. Reconnect privately and inspect the saved file/page/board IDs and current state against dated evidence. Reuse [approved choice and scope]; resolve any material newer-draft difference. Translate through actual Section/Container/Grid/Sidebar/Card APIs, source fluid tokens and the installed profile's real content bindings. Never paste absolute canvas markup into public routes. Calibrate on /_styleguide, implement one representative route, compare/fix browser output before rollout, then verify every affected route and relevant state. Finish [authorized commit/push/deploy endpoint]. Report any concrete acceptance limits rather than treating canvas exports or a successful build as browser proof.
 ```
 
+---
+
+## 11. Maintaining Baseline: Change Notes & Standards Releases
+
+These prompts are for work on Baseline itself ([CONTRIBUTING.md](../CONTRIBUTING.md)). Every change that reaches sites needs a change note in the same pull request (`npm run standards:change -- --slug <name> --bump <major|minor|patch|none> --title "…"`); CI runs `standards:check -- --base` and refuses shipped-file changes without one. Baseline is public: never name client sites, their domains or routes in commits, notes or docs.
+
+### Cutting a Standards Release
+
+```text
+Cut Baseline standards release [version] from main.
+
+Follow docs/standards-releases.md step by step. List pending notes with
+npm run standards:check -- --list and confirm [version] covers the largest bump.
+Certify the candidate commit (docs/phase-3-certification.md) and record the
+evidence; update standards/manifest.json by hand for what certification
+decides, leaving standardsVersion to the script. Run npm run standards:release
+with --dry-run, then for real with --source-commit <certified SHA> and a short
+--title, and write the release summary, evidence and known gaps around the
+generated section of standards/releases/[version].md.
+
+Run npm run verify, commit, tag standards-v[version], and push the commit and
+the tag. Then publish the GitHub release from the tag (gh release create
+--verify-tag --latest) with the release notes as its body and relative links
+rewritten to the tag. The release is finished only when gh release list shows
+it as Latest. Report the tag, the release URL and the certified commit.
+```
