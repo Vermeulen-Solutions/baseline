@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import { getLocaleDirection } from '../lib/locale';
+import { speculationRules, type PrefetchEagerness } from '../lib/speculation-rules';
 
 interface Props {
   title: string;
@@ -24,10 +25,18 @@ interface Props {
    * Mark the persistent header data-vt-header so it holds still. Omitted keeps plain page loads.
    */
   pageTransitions?: 'none' | 'cross-document';
+  /**
+   * Same-origin link prefetch through speculation rules, no script (Chromium; other browsers ignore it).
+   * 'moderate' prefetches after a short hover, 'conservative' only once a click starts. Prefetch only,
+   * never prerender. Keep 'off' in edit mode and when a <ClientRouter> is slotted, whose own hover
+   * warm-up below takes over. Omitted is 'off'.
+   */
+  prefetch?: PrefetchEagerness;
 }
 
-const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', sectionJoins, surface, darkReaderLock = false, pageTransitions = 'none' } = Astro.props;
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', sectionJoins, surface, darkReaderLock = false, pageTransitions = 'none', prefetch = 'off' } = Astro.props;
 const resolvedDir = dir ?? getLocaleDirection(lang);
+const prefetchRules = speculationRules(prefetch);
 ---
 <!doctype html>
 <html
@@ -49,6 +58,7 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
     {darkReaderLock === true && <meta name="darkreader-lock" />}
     {metadataOwner === 'shell' && description && <meta name="description" content={description} />}
     {metadataOwner === 'shell' && canonical && <link rel="canonical" href={canonical} />}
+    {prefetchRules && <script type="speculationrules" is:inline set:html={prefetchRules}></script>}
     <script>
       import { swapFunctions } from 'astro:transitions/client';
       import { initThemeController } from '../lib/theme';

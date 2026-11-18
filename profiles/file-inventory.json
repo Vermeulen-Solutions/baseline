@@ -508,6 +508,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/lib/speculation-rules.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/lib/partner.ts": {
       "disposition": "shared",
       "static": "copy"
@@ -1731,6 +1735,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "src/pages/llms.txt.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/speculation-rules.test.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },

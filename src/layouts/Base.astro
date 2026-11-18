@@ -48,9 +48,11 @@ if (Astro.cache?.enabled) {
 	Astro.cache.set(menuCacheHint);
 }
 
-// Cross-document page transitions for visitors; the visual editor keeps plain navigation. A site
-// that adds <ClientRouter /> sets this to 'none' (see docs/design-framework.md).
-const pageTransitions = getRequestContext()?.editMode ? 'none' : 'cross-document';
+// Cross-document page transitions and link prefetch for visitors; the visual editor keeps plain
+// navigation. A site that adds <ClientRouter /> sets both to off (see docs/design-framework.md).
+const editMode = getRequestContext()?.editMode === true;
+const pageTransitions = editMode ? 'none' : 'cross-document';
+const prefetch = editMode ? 'off' : 'moderate';
 
 const pageCtx = createPublicPageContext({
 	Astro,
@@ -70,7 +72,7 @@ const pageCtx = createPublicPageContext({
 });
 ---
 
-<SiteShell spacingPolicy="automatic-v2" sectionJoins="shared" pageTransitions={pageTransitions} title={fullTitle} metadataOwner="platform" lang={Astro.currentLocale ?? 'en'} surface={surface}>
+<SiteShell spacingPolicy="automatic-v2" sectionJoins="shared" pageTransitions={pageTransitions} prefetch={prefetch} title={fullTitle} metadataOwner="platform" lang={Astro.currentLocale ?? 'en'} surface={surface}>
 		<Fragment slot="head">
 			<EmDashHead page={pageCtx} />
 			{!settings.favicon?.url && <link rel="icon" type="image/svg+xml" href={fallbackFavicon} />}

@@ -136,7 +136,8 @@ test('cross-document page transitions are opt-in, reduced-motion aware and hold 
   const shell = read('src/layouts/SiteShell.astro');
   assert.match(shell, /pageTransitions = 'none'/, 'off unless a layout opts in');
   assert.match(shell, /\{pageTransitions === 'cross-document' && <style is:inline>@media \(prefers-reduced-motion: no-preference\) \{ @view-transition \{ navigation: auto; \} \}<\/style>\}/);
-  assert.match(read('src/layouts/Base.astro'), /const pageTransitions = getRequestContext\(\)\?\.editMode \? 'none' : 'cross-document';/, 'the visual editor keeps plain navigation');
+  assert.match(read('src/layouts/Base.astro'), /const editMode = getRequestContext\(\)\?\.editMode === true;/);
+  assert.match(read('src/layouts/Base.astro'), /const pageTransitions = editMode \? 'none' : 'cross-document';/, 'the visual editor keeps plain navigation');
   assert.match(read('src/layouts/Base.astro'), /pageTransitions=\{pageTransitions\}/);
   assert.match(read('profiles/static/project/src/layouts/Base.astro'), /pageTransitions="cross-document"/, 'static Base opts in');
   for (const file of ['src/layouts/Base.astro', 'profiles/static/project/src/layouts/Base.astro']) {
