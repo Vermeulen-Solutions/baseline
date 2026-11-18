@@ -66,6 +66,15 @@ export const RETIRED = Object.freeze([
     dependencies: ['@google/design.md'],
     removal: 'Follow "Retiring the default DESIGN.md package" in docs/baseline-updates.md: uninstall the package, remove design:check, design:export, the script and its test. Keep any site-owned DESIGN.md references.',
   },
+  {
+    commit: '0f970fc',
+    date: '2026-11-18',
+    title: 'PROJECT.example.md (one brief: PRODUCT.md)',
+    paths: ['PROJECT.example.md'],
+    mounts: [],
+    dependencies: [],
+    removal: 'Delete PROJECT.example.md; PRODUCT.example.md replaces it. A filled PROJECT.md is not retired automatically: merge it into PRODUCT.md following "One brief" in docs/project-context.md, then delete it and update the link in AGENTS.md.',
+  },
 ]);
 
 const readText = file => { try { return statSync(file).isFile() ? readFileSync(file, 'utf8') : null; } catch { return null; } };
