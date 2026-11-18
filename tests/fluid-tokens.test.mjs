@@ -166,7 +166,8 @@ test('text tokens above 2.5 x their minimum fail unless a reviewed exception pre
   assert.equal(failing.valid, false);
   // An older stylesheet (no --text-step-3, no strict theme) gets a warning instead of a failure.
   // Windows checkouts with core.autocrlf=true read the stylesheet with CRLF line endings.
-  const withoutStep3 = wide.replace(/\t--text-step-3: [^;]+;\r?\n/, '');
+  // A site whose tokens were initialised for a client already has the strict theme; drop it too.
+  const withoutStep3 = wide.replace(/\t--text-step-3: [^;]+;\r?\n/, '').replace(/^\s*--(?:color|text|radius|shadow)-\*: initial;\r?\n/gm, '');
   assert.notEqual(withoutStep3, wide);
   const older = auditDesignTokens(withoutStep3);
   assert.equal(older.valid, true, older.errors.join('\n'));
@@ -183,11 +184,17 @@ test('text tokens above 2.5 x their minimum fail unless a reviewed exception pre
       assert.ok(maxRem / minRem <= MAX_TEXT_RATIO + 5e-4, `${ratio} ${name}`);
     }
   }
-  // The semantic spacing tokens sit on the primitive scale.
+  // The starter's semantic spacing tokens sit on the default primitive scale. A stylesheet initialised
+  // for a client (it carries the strict theme) sets its own lane values, so only the names are checked.
   const theme = parseDesignTokens(css).theme;
   const primitives = generateSpacePrimitives();
-  for (const [name, value] of Object.entries(primitives)) assert.equal(theme[name], value, name);
-  assert.equal(theme['--spacing-content'], theme['--spacing-s']);
-  assert.equal(theme['--spacing-section'], theme['--spacing-xl-3xl']);
-  assert.equal(theme['--spacing-section-m'], theme['--spacing-l-2xl']);
+  const { hasStrictTheme } = await import('../scripts/design-system.mjs');
+  if (hasStrictTheme(css)) {
+    for (const name of [...Object.keys(primitives), '--spacing-content', '--spacing-section', '--spacing-section-m']) assert.ok(theme[name], name);
+  } else {
+    for (const [name, value] of Object.entries(primitives)) assert.equal(theme[name], value, name);
+    assert.equal(theme['--spacing-content'], theme['--spacing-s']);
+    assert.equal(theme['--spacing-section'], theme['--spacing-xl-3xl']);
+    assert.equal(theme['--spacing-section-m'], theme['--spacing-l-2xl']);
+  }
 });

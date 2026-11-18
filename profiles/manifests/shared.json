@@ -171,7 +171,10 @@
     "src/components/ConsentBanner.astro",
     "src/components/VideoEmbed.astro",
     "src/components/MapEmbed.astro",
-    "tests/consent.test.mjs"
+    "tests/consent.test.mjs",
+    "src/lib/content-security-policy.ts",
+    "scripts/static-csp.mjs",
+    "tests/static-csp.test.mjs"
   ],
   "packages": {
     "dependencies": [

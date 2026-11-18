@@ -395,6 +395,10 @@
     "tier": "unit",
     "reason": "Analytics and consent: id validation, hosts, modes and versions, Consent Mode state, stored choices, data-track parameters, and the loader, banner and click-to-load embed contracts"
   },
+  "static-csp.test.mjs": {
+    "tier": "unit",
+    "reason": "Static Content-Security-Policy: build settings, site-wide inline hashes, _headers merging and the opt-in build hook"
+  },
   "site-files.test.mjs": {
     "tier": "unit",
     "reason": "Baseline-owned code in a site: platform candidates, missing imports, current/behind/edited/missing classification, backups, incoming copies and the ownership receipt"

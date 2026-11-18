@@ -1796,8 +1796,8 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "src/lib/content-security-policy.ts": {
-      "disposition": "emdash-only",
-      "static": "omit-until-explicitly-allowlisted"
+      "disposition": "shared",
+      "static": "copy"
     },
     "tests/content-security-policy.test.mjs": {
       "disposition": "emdash-only",
@@ -1876,6 +1876,14 @@
       "static": "copy"
     },
     "tests/consent.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/static-csp.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/static-csp.test.mjs": {
       "disposition": "shared",
       "static": "copy"
     },
