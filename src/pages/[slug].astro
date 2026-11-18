@@ -10,13 +10,13 @@ import { resolvePublicSiteUrl } from "../utils/page-metadata";
 const slug = decodeSlug(Astro.params.slug);
 
 if (!slug) {
-	return Astro.redirect("/404");
+	return Astro.rewrite("/404");
 }
 
 const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
 
 if (!page) {
-	return Astro.redirect("/404");
+	return Astro.rewrite("/404");
 }
 
 const { data: settings, cacheHint: settingsCacheHint } = await getSiteSettingsWithCacheHint();
