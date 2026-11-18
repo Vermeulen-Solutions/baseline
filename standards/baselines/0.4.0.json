@@ -1,0 +1,777 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.4.0",
+  "status": "certified-scoped",
+  "reviewedAt": "2026-11-18",
+  "stableReleaseRef": "refs/tags/standards-v0.4.0",
+  "runtimeProfiles": {
+    "node-sqlite": {
+      "status": "certified-scoped",
+      "nodeMinimum": "22.23.4",
+      "nodeObserved": "24.22.3",
+      "dependencies": {
+        "astro": "7.4.12",
+        "emdash": "1.5.0",
+        "@astrojs/node": "11.1.13",
+        "@astrojs/react": "7.1.9",
+        "react": "19.3.1",
+        "react-dom": "19.3.1",
+        "tailwindcss": "^4.3.3"
+      },
+      "evidence": "audit/certification-2026-11-18/README.md",
+      "serverBundling": "Vite ssr.noExternal zod: resolve dependency-local versions before emitting server chunks",
+      "nodeTested": [
+        "22.23.4",
+        "24.22.3"
+      ],
+      "additionalEvidence": [
+        "audit/certification-2026-11-18/verification-0.3.1.json",
+        "audit/certification-2026-11-18/verification.json",
+        "audit/certification-2026-11-16/README.md",
+        "audit/certification-2026-11-16/verification.json",
+        "audit/visual-renderer-2026-11-16/README.md"
+      ],
+      "nodeRecommended": "24 LTS (current security patch)",
+      "nodeEngineRange": "^22.23.4 || ^24.22.1 || >=26.12.1",
+      "browser": {
+        "platform": "win32-x64",
+        "playwright": "1.65.1",
+        "chromiumRevision": "1255",
+        "node": "24.22.3",
+        "scope": "Local-only; not a cross-platform browser matrix"
+      },
+      "applicability": {
+        "i18n": "not enabled; opt-in locale matrix required",
+        "routeCaching": "disabled; opt-in shared cache-hint review required",
+        "forms": "optional; live provider delivery unverified",
+        "galleryOuterKey": "regenerated during observed inline conversion; semantic image data preserved"
+      }
+    },
+    "cloudflare-d1-r2": {
+      "status": "unverified",
+      "reason": "Optional adapter/resources and Worker delivery not certified",
+      "phase": "Phase 5 (#8/#9)"
+    }
+  },
+  "checks": [
+    {
+      "id": "art-direction",
+      "command": "npm run check:art-direction",
+      "level": "required",
+      "availability": "shipped"
+    },
+    {
+      "id": "unit",
+      "command": "npm test",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "unit and rehearsal tiers from tests/test-tiers.json"
+    },
+    {
+      "id": "typecheck",
+      "command": "npm run typecheck",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local; excluded from fast automated CI"
+    },
+    {
+      "id": "build",
+      "command": "npm run build",
+      "level": "required",
+      "availability": "shipped"
+    },
+    {
+      "id": "html-integrity",
+      "command": "npm run audit:html",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local, against a fresh build"
+    },
+    {
+      "id": "html-integrity",
+      "command": "npm run audit:html",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local, against a fresh build"
+    },
+    {
+      "id": "production-dev-tools-exclusion",
+      "command": "npm run check:dev-tools",
+      "level": "required",
+      "availability": "shipped",
+      "execution": "local; excluded from fast automated CI"
+    },
+    {
+      "id": "upstream-availability",
+      "command": "npm run check:upstream",
+      "level": "advisory",
+      "availability": "shipped",
+      "offline": "unverified"
+    },
+    {
+      "id": "schema-budget",
+      "command": "npm run check:schema-budget",
+      "level": "required-when-database-present",
+      "availability": "shipped; certified fresh SQLite physical widths 17/19; remote/missing DB remains unmeasured",
+      "offline": "missing database is unmeasured"
+    },
+    {
+      "id": "release-artifact-profile",
+      "command": "npm run check:release-artifact",
+      "level": "required-before-release",
+      "availability": "shipped; marker is packaging metadata, not authentication"
+    },
+    {
+      "id": "visual-regression",
+      "command": "npm run test:visual",
+      "level": "local-review-required-for-visual-changes",
+      "availability": "shipped",
+      "execution": "Windows only; Node 24.22.3 / Playwright 1.65.1 / Chromium revision 1255; prohibited in CI/build/deployment",
+      "evidence": "audit/visual-renderer-2026-11-16/README.md"
+    },
+    {
+      "id": "rendered-ui",
+      "command": "npm run audit:ui",
+      "level": "advisory",
+      "availability": "shipped on every profile",
+      "execution": "Local Chromium against a running origin; excluded from CI/build/deployment"
+    },
+    {
+      "id": "rendered-ui",
+      "command": "npm run audit:ui",
+      "level": "advisory",
+      "availability": "shipped on every profile",
+      "execution": "Local Chromium against a running origin; excluded from CI/build/deployment"
+    }
+  ],
+  "pending": [
+    "Workers/D1/R2 parity and R2/WordPress ingestion (#8/#9)",
+    "Native forms real notification/Turnstile providers",
+    "Opt-in multilingual/cache/full admin/plugin block matrix",
+    "Reviewed upstream skill snapshot refresh (emdash, site and impeccable candidates available); existing drift preserved",
+    "TypeScript 7 (major), evaluated when @astrojs/check and @typescript-eslint/parser support it"
+  ],
+  "releasePolicy": "Scoped standards certification only. Downstream audits must resolve and pin the published immutable standards reference and manifest digest; unsupported scopes remain unverified. Latest supported security patches are recommended; declared engine compatibility is not certification of every admitted Node version.",
+  "automatedCI": {
+    "node": "24.22.3",
+    "matrix": false,
+    "checks": [
+      "art-direction",
+      "script-syntax-lint",
+      "schema-budget",
+      "unit",
+      "normal-build"
+    ],
+    "visual": false,
+    "targetSeconds": 60,
+    "timingScope": "Local command rehearsal excludes checkout, setup, install and network; not a GitHub runtime guarantee",
+    "localRehearsalSeconds": 21.593,
+    "pushBranchesOnly": true
+  },
+  "certification": {
+    "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
+    "sourceCommit": "64f8827e93ecb5bd1095f60cbf1e193d94f8411b",
+    "sourceTree": "65c0083db60d077791a1dfcae57a50a32ce18725",
+    "receipt": "audit/certification-2026-11-18/verification.json",
+    "releaseNotes": "standards/releases/0.4.0.md",
+    "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles.",
+    "frameworkEvidence": "audit/certification-2026-11-16/README.md (0.2.0; runtime dependencies, schema and editor code unchanged since)",
+    "rendererEvidence": "audit/visual-renderer-2026-11-16/README.md",
+    "sourceEvidence": "audit/certification-2026-11-18/README.md",
+    "patchEvidence": "audit/certification-2026-11-18/verification-0.3.1.json (0.3.1: skills and static sync helper only; 0.3.0 evidence applies to the runtime)"
+  },
+  "distribution": {
+    "skills": {
+      "astro-site-design": {
+        "files": 18,
+        "sha256": "431eed48e593fab1ec4e8272f2e396409091babb674d597028a1576674568de9"
+      },
+      "brilliant-site-design": {
+        "files": 4,
+        "sha256": "05b5b66fb0b3d214f2bbe8d2337424b3abc7e07ffb281c3233dff211074d0616"
+      },
+      "building-emdash-site": {
+        "files": 5,
+        "sha256": "d03265360e5bddcf95cb0b5a2ad653b10edfcfd202bac64fffc1bf8c4b9dc90b"
+      },
+      "creating-plugins": {
+        "files": 13,
+        "sha256": "3889d4618cefda3e3cbb33a1b27040617deadab3cfdeb81a1da9015191746103"
+      },
+      "emdash-cli": {
+        "files": 2,
+        "sha256": "09a89e923bfaad4fa687897a4d2ca57eb04c30a3eaaf9a4a04f0e7e5e8d96c45"
+      },
+      "emdash-content-modeling": {
+        "files": 4,
+        "sha256": "9ed863025c166421869c80374a80d43018fc30eea8beef29d89c4db81e636af6"
+      },
+      "emdash-production-cutover": {
+        "files": 2,
+        "sha256": "8ee314d31d369e4b071e893a680c55bf7b96bc8c0767d6fa94ecef0c482d791d"
+      },
+      "emdash-site-setup": {
+        "files": 2,
+        "sha256": "f663309088f5d59672b8557b4047545acdc3625b00b81f5a3ccf6c3ed3fbbe65"
+      },
+      "impeccable": {
+        "files": 71,
+        "sha256": "3b9572b018eb34c63674783d6be10dcbfcbe6d33f6524b7dc579b89e90bb560c"
+      },
+      "new-site-workflow": {
+        "files": 16,
+        "sha256": "8d6a202287a44824f8eeb6ebb6653723ab4694722a661f80c7c70942071cf709"
+      },
+      "opendesign-site-design": {
+        "files": 8,
+        "sha256": "7ed851542fde521b5d10a985f16c031177b6036d1d7f0780a2e3e748d02cecd1"
+      },
+      "openpencil-site-design": {
+        "files": 11,
+        "sha256": "0a0a453a36352623053e793481fd15146f27ec6974795f212c845c3d3a9edf82"
+      },
+      "penpot-site-design": {
+        "files": 7,
+        "sha256": "4b65fb7d915c2283172fdd6fc7500ed1be1ad73285e03f7c46fe9df3d3f30a94"
+      },
+      "site-art-direction": {
+        "files": 11,
+        "sha256": "d72fae71b70825c677a4ebe8500cfc138ddf12ffc40106587d73d4c86bc29f24"
+      },
+      "upgrading-emdash": {
+        "files": 1,
+        "sha256": "92b82f6c07da4c950c133bd07d7516874319fecfdf79e47a3fbb73e92fe14061"
+      },
+      "wordpress-to-emdash-content": {
+        "files": 3,
+        "sha256": "973cc1d5113e0a78f9b4e4667575f36901533aad25bc3a54f9a4ec8b48878b5f"
+      }
+    },
+    "optionalSkills": [
+      "penpot-site-design",
+      "openpencil-site-design",
+      "opendesign-site-design",
+      "brilliant-site-design"
+    ],
+    "emdashOnlySkills": [
+      "building-emdash-site",
+      "creating-plugins",
+      "emdash-cli",
+      "upgrading-emdash",
+      "emdash-site-setup",
+      "emdash-content-modeling",
+      "wordpress-to-emdash-content",
+      "emdash-production-cutover"
+    ],
+    "tools": {
+      "scripts/skill-sync.mjs": "7f1b41f6d573b9110fdd0f5ae59324451a564932a795b94b1468bd5199e113d6",
+      "scripts/sync-site-skills.mjs": "5e2e817f4e707ef60212c5cf52abaa78268e761511c3ab5196a9372085fb518e",
+      "scripts/sync-emdash-skills.mjs": "f8b8682a9a715440f4c05c418a86c716c9aae155c341b28b2cc63835f60f3f45",
+      "scripts/sync-impeccable-skill.mjs": "30c26f51c0afeebdd66798bb2af75950872dde7cd25e6ae2a74b9ba386694cf7",
+      "scripts/sync-baseline.mjs": "6a4c2c79f5440b6ccf197137bb3826ba1aac1a8b5d1311af84b64ce0c0e28bad",
+      "scripts/audit-ui.mjs": "a4bb5459e8b744e4fc1d4e85fcc92cfaac2a3086f45a92f93c02e8dd8c43208c",
+      "scripts/check-quality.mjs": "d2ec8a5422397aee73e8b7cd91cad9acc0a43cf3f3df1b7b93a744d3b6b2c42a",
+      "scripts/html-parity.mjs": "8c235c92cb93a7fa017feaf91822982f7e905745c5a23d9db9b0d84ff08d01ab",
+      "scripts/capture-routes.mjs": "49258a18d3ddf360eb3797b5fb35a48dbf47e64fa7c1af703465ffde27c1c31f"
+    },
+    "impeccable": {
+      "skillVersion": "4.9.2",
+      "launcherVersion": "0.1.25",
+      "upstreamCommit": "d41d9860b0094dcb68030657da63461212835aaa"
+    }
+  },
+  "changes": [
+    {
+      "slug": "app-icons-manifest",
+      "title": "App icons and a web manifest",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "components",
+        "tooling",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/generate-icons.mjs",
+        "tests/generate-icons.test.mjs",
+        "src/lib/web-manifest.ts",
+        "src/pages/site.webmanifest.ts",
+        "src/layouts/Base.astro",
+        "public/apple-touch-icon.png",
+        "public/icon-192.png",
+        "public/icon-512.png",
+        "public/icon-maskable-512.png"
+      ]
+    },
+    {
+      "slug": "before-after",
+      "title": "Before/after comparison",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "components",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "src/components/BeforeAfter.astro"
+      ]
+    },
+    {
+      "slug": "cache-404-guard",
+      "title": "The cache rehearsal proves a missing page is never cached",
+      "bump": "patch",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "tooling",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "tests/cache.integration.mjs"
+      ]
+    },
+    {
+      "slug": "cloudflare-workers-guidance",
+      "title": "Cloudflare Workers guidance: admin hostname, bot protection, redirects, plan limits and timing",
+      "bump": "patch",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "tooling",
+        "skills",
+        "docs"
+      ],
+      "adoption": "sync",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/check-live.mjs"
+      ]
+    },
+    {
+      "slug": "cms-route-hardening",
+      "title": "Real 404 status, security headers, /llms.txt and a quiet unknown-block fallback",
+      "bump": "minor",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "components",
+        "delivery"
+      ],
+      "adoption": "manual",
+      "visible": false,
+      "database": false,
+      "files": [
+        "src/middleware.ts",
+        "src/lib/security-headers.ts",
+        "src/pages/llms.txt.ts",
+        "src/lib/llms-txt.ts",
+        "src/components/RichText.astro",
+        "src/components/PortableTextUnknown.astro",
+        "src/lib/portable-text-fallback.ts",
+        "\"src/pages/[slug].astro\"",
+        "\"src/pages/posts/[slug].astro\"",
+        "\"src/pages/category/[slug].astro\"",
+        "\"src/pages/tag/[slug].astro\""
+      ]
+    },
+    {
+      "slug": "computed-csp",
+      "title": "A Content-Security-Policy computed from each page, report-only first",
+      "bump": "minor",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "components",
+        "tooling",
+        "skills",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "src/lib/content-security-policy.ts",
+        "src/middleware.ts",
+        "src/env.d.ts",
+        "scripts/check-quality.mjs"
+      ]
+    },
+    {
+      "slug": "contact-intake-scoring",
+      "title": "Contact forms: score suspicious submissions, flag or hold them, never lose one",
+      "bump": "patch",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "skills"
+      ],
+      "adoption": "sync",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "content-gates",
+      "title": "Sections open with their first entry; folded content gets audited",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "components",
+        "tooling",
+        "skills",
+        "docs"
+      ],
+      "adoption": "manual",
+      "visible": true,
+      "database": false,
+      "files": [
+        "scripts/audit-ui.mjs"
+      ]
+    },
+    {
+      "slug": "content-trust-techniques",
+      "title": "Guidance: content patterns, trust pages and measurement, interaction techniques",
+      "bump": "patch",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "skills"
+      ],
+      "adoption": "sync",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "copy-rules",
+      "title": "Wording rules checked on the text visitors read",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "tooling",
+        "skills"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/check-quality.mjs",
+        "tests/check-quality.test.mjs"
+      ]
+    },
+    {
+      "slug": "crlf-test-reads",
+      "title": "Tests read sources as LF",
+      "bump": "none",
+      "platforms": [],
+      "areas": [],
+      "adoption": "none",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "design-skill-motion-guidance",
+      "title": "Design skill: exit easing, top-layer exits, cross-document transitions",
+      "bump": "patch",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "skills"
+      ],
+      "adoption": "sync",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "emdash-field-rules",
+      "title": "Content-modeling skill: field rules EmDash does and does not enforce",
+      "bump": "patch",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "skills"
+      ],
+      "adoption": "sync",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "fleet-drift",
+      "title": "fleet:drift lists what sites changed in Baseline-owned files",
+      "bump": "none",
+      "platforms": [],
+      "areas": [],
+      "adoption": "none",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "html-parity",
+      "title": "Rendered-HTML parity for updates and refactors",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "tooling",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/html-parity.mjs",
+        "tests/html-parity.test.mjs"
+      ]
+    },
+    {
+      "slug": "interaction-and-hardening",
+      "title": "Zero-JS interaction choreography: page transitions, dialog exits, hover gating",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "styles",
+        "components"
+      ],
+      "adoption": "manual",
+      "visible": true,
+      "database": false,
+      "files": [
+        "src/styles/global.css",
+        "src/layouts/SiteShell.astro",
+        "src/layouts/Base.astro",
+        "src/components/Card.astro",
+        "src/components/Heading.astro",
+        "src/components/PhotoGallery.astro",
+        "scripts/css-contracts.mjs",
+        "scripts/design-system.mjs"
+      ]
+    },
+    {
+      "slug": "organization-graph",
+      "title": "A fuller Organization graph: social profiles and business facts",
+      "bump": "minor",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "components",
+        "skills",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "src/lib/structured-data.ts",
+        "src/plugins/baseline-metadata/index.ts"
+      ]
+    },
+    {
+      "slug": "repo-url-check",
+      "title": "Baseline repository URLs on main are checked",
+      "bump": "none",
+      "platforms": [],
+      "areas": [],
+      "adoption": "none",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "route-quality-gates",
+      "title": "Route quality gates with a per-site page budget",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "tooling",
+        "skills",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/check-quality.mjs",
+        "tests/check-quality.test.mjs"
+      ]
+    },
+    {
+      "slug": "single-product-brief",
+      "title": "One brief: PRODUCT.md",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "skills",
+        "docs",
+        "tooling"
+      ],
+      "adoption": "manual",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "sitewide-metadata-checks",
+      "title": "Titles, descriptions and JSON-LD graphs checked across the site",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "tooling",
+        "skills"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/check-quality.mjs",
+        "tests/check-quality.test.mjs"
+      ]
+    },
+    {
+      "slug": "speculation-prefetch",
+      "title": "Link prefetch through speculation rules",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "components",
+        "docs",
+        "skills"
+      ],
+      "adoption": "manual",
+      "visible": false,
+      "database": false,
+      "files": [
+        "src/lib/speculation-rules.ts",
+        "src/layouts/SiteShell.astro",
+        "src/layouts/Base.astro"
+      ]
+    },
+    {
+      "slug": "static-lastmod-slash-links",
+      "title": "Real update dates in static sitemaps, slashless links flagged, HSTS and security.txt at cutover",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "tooling",
+        "content-model",
+        "skills"
+      ],
+      "adoption": "manual",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/audit-html-integrity.mjs"
+      ]
+    },
+    {
+      "slug": "sveltia-updates",
+      "title": "Sveltia CMS 0.269.0 and weekly Sveltia pin proposals",
+      "bump": "patch",
+      "platforms": [
+        "static"
+      ],
+      "areas": [
+        "dependencies",
+        "tooling",
+        "docs"
+      ],
+      "adoption": "manual",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "testimonials",
+      "title": "Testimonials and public reviews, shown as written",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "components",
+        "skills"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "src/lib/quotes.ts",
+        "src/components/Stars.astro"
+      ]
+    },
+    {
+      "slug": "voice-copy-rules",
+      "title": "Voice rules become copy rules",
+      "bump": "patch",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "skills",
+        "docs"
+      ],
+      "adoption": "sync",
+      "visible": false,
+      "database": false,
+      "files": []
+    }
+  ]
+}

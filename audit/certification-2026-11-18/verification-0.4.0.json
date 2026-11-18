@@ -1,0 +1,123 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.4.0",
+  "recordedAt": "2026-11-18T14:36:54.365Z",
+  "sourceCommit": "64f8827e93ecb5bd1095f60cbf1e193d94f8411b",
+  "scope": "Minor on 0.3.1: route quality gates, CSP, prefetch, metadata and structured data checks, components (BeforeAfter, Stars), app icons, fleet and update tooling, skills and docs. Runtime dependencies (Astro 7.4.12, EmDash 1.5.0, adapters) unchanged; database schema unchanged.",
+  "cleanCheckout": {
+    "22.23.4": {
+      "node": "v22.23.4",
+      "commit": "37ae0fd9973cab2aa3090db26a10e3029937f1a6",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 0
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 136
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 374,
+          "rerunWithTestFix": "64f8827"
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 22
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 70
+        },
+        "ci-fast": {
+          "exit": 0,
+          "seconds": 60,
+          "rerunWithTestFix": "64f8827"
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 17
+        },
+        "build-seeded": {
+          "exit": 0,
+          "seconds": 20
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 3
+        }
+      }
+    },
+    "24.22.3": {
+      "node": "v24.22.3",
+      "commit": "37ae0fd9973cab2aa3090db26a10e3029937f1a6",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 0
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 165
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 343,
+          "rerunWithTestFix": "64f8827"
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 37
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 68
+        },
+        "ci-fast": {
+          "exit": 0,
+          "seconds": 54,
+          "rerunWithTestFix": "64f8827"
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 12
+        },
+        "build-seeded": {
+          "exit": 0,
+          "seconds": 13
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 2
+        }
+      }
+    }
+  },
+  "visual": {
+    "node": "24.22.3",
+    "playwright": "1.65.1",
+    "result": "111 passed, 1 failed under load (gallery root typecheck timed out: exit null); passed alone in 15.5 s",
+    "commit": "0e1b20d (docs-only difference from the certified commit)"
+  },
+  "findings": [
+    "The first candidate (37ae0fd) failed verify and ci-fast in both CRLF clean clones (core.autocrlf=true): four tests matched source with LF line endings. Fixed in 64f8827 (tests normalize what they read); verify and ci-fast then passed in both clones, and every other step had passed on 37ae0fd, whose distributed files are identical to 64f8827 apart from the four tests and a change note.",
+    "Deferred upstream updates (development tooling only): @cloudflare/workers-types 5.20261118.1, @types/node 26.6.6, @typescript-eslint/parser 8.73.0, parse5 8.1.1, typescript 7.0.2; emdash upstream skills update available."
+  ]
+}
