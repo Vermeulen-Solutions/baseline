@@ -151,6 +151,18 @@ test('profile sync stages shared changes and skills, preserves calibrated tokens
   assert.deepEqual(await fs.readFile(path.join(root, 'package.json')), pkg);
   assert.ok(!stage.entries.some(e => /public\/admin|src\/pages|src\/content|src\/config|layouts\/Base|building-emdash/.test(e.target)));
 }));
+test('a managed file Git checked out with CRLF line endings is not a local change', () => fixture(async root => {
+  const commit = 'c'.repeat(40);
+  const file = '.agents/skills/new-site-workflow/SKILL.md';
+  const lf = await fs.readFile(path.join(root, file), 'utf8');
+  assert.doesNotMatch(lf, /\r/);
+  await fs.writeFile(path.join(root, file), lf.replaceAll('\n', '\r\n'));
+  const stage = await stageBaseline({ root, commit, readSource: readSource((relative, bytes) => relative === file ? Buffer.concat([bytes, Buffer.from('\n<!-- upstream revision -->\n')]) : bytes) });
+  assert.deepEqual(stage.entries.map(entry => [entry.target, entry.conflict]), [[file, false]]);
+  const result = await applyBaseline({ root, commit });
+  assert.deepEqual([result.applied, result.conflicts], [[file], []]);
+  assert.match(await fs.readFile(path.join(root, file), 'utf8'), /upstream revision/);
+}));
 test('sync refuses changed local files and altered staged payloads before any writes', () => fixture(async root => {
   const commit = 'b'.repeat(40), target = 'src/layouts/SiteShell.astro';
   await stageBaseline({ root, commit, readSource: readSource((file, bytes) => file === target ? Buffer.concat([bytes, Buffer.from('\n<!-- update -->')]) : bytes) });
