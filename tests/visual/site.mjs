@@ -8,6 +8,7 @@ import { randomBytes } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import assert from 'node:assert/strict';
 import { assertReleaseArtifact } from '../../scripts/assert-release-artifact.mjs';
+import { copyConfigImports } from '../../scripts/dev-tools-checks.mjs';
 import { visualContract } from './contract.mjs';
 
 export async function startVisualSite(root, reportDir, { signal, onDevReady, prepareStage, afterReleaseBuild, devOnly = false, releaseOnly = false, expectWelcome = true, fixedClock = true, dependencyRoot = root } = {}) {
@@ -90,6 +91,8 @@ export async function startVisualSite(root, reportDir, { signal, onDevReady, pre
     await copyFile(path.join(root, 'scripts/dev-tools-integration.mjs'), path.join(stage, 'scripts/dev-tools-integration.mjs'));
     await copyFile(path.join(root, 'scripts/dev-tools-middleware.mjs'), path.join(stage, 'scripts/dev-tools-middleware.mjs'));
     for (const name of ['client-bundles.mjs', 'process-runner.mjs', 'baseline-features-integration.mjs']) await copyFile(path.join(root, 'scripts', name), path.join(stage, 'scripts', name));
+    // Copy every local module the config reaches (for example the static CSP writer the features integration imports).
+    await copyConfigImports(root, stage, 'astro.config.mjs');
     await symlink(path.join(dependencyRoot, 'node_modules'), path.join(stage, 'node_modules'), process.platform === 'win32' ? 'junction' : 'dir');
     // Trusted local rehearsals can add synthetic source/seed fixtures only to this owned copy.
     await prepareStage?.({ stage, origin });
