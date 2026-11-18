@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 import { sources } from '../scripts/skill-sync.mjs';
 import { EMDASH_ONLY_SKILLS, OPTIONAL_SKILLS } from '../scripts/standards-distribution.mjs';
 
@@ -38,4 +39,22 @@ test('Baseline-owned skills link only to files every receiving site has', () => 
   };
   walk('');
   assert.deepEqual(problems, []);
+});
+
+// Links by URL point at Baseline's main branch, so a renamed or deleted file would break them
+// without any local link check noticing. Every such URL must name a file that exists here.
+test('Baseline repository URLs on main name files that exist', () => {
+  const tracked = execFileSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' }).split('\0')
+    .filter(file => /\.(?:md|mjs|js|ts|astro|json|ya?ml|html)$/.test(file));
+  const url = /https:\/\/github\.com\/Vermeulen-Solutions\/baseline\/(?:blob|raw|tree)\/main\/([^\s)"'`#?>]+)/g;
+  const missing = [];
+  for (const file of tracked) {
+    const full = path.join(root, file);
+    if (!fs.existsSync(full)) continue;
+    for (const [, target] of fs.readFileSync(full, 'utf8').matchAll(url)) {
+      const local = decodeURIComponent(target).replace(/[.,;:]+$/, '');
+      if (!fs.existsSync(path.join(root, local))) missing.push(`${file}: ${local}`);
+    }
+  }
+  assert.deepEqual(missing, []);
 });

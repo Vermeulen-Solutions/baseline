@@ -353,7 +353,7 @@
   },
   "skill-links.test.mjs": {
     "tier": "unit",
-    "reason": "Links in Baseline-owned skills stay inside what every receiving site installs"
+    "reason": "Links in Baseline-owned skills stay inside what every receiving site installs, and Baseline repository URLs on main name files that exist; reads tracked files only"
   },
   "sveltia-pin.test.mjs": {
     "tier": "unit",
