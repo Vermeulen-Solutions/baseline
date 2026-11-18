@@ -351,6 +351,10 @@
     "tier": "unit",
     "reason": "Speculation-rules prefetch JSON, its exclusions against URL patterns and selectors, and the SiteShell/Base wiring; source and pure-function checks only"
   },
+  "content-security-policy.test.mjs": {
+    "tier": "unit",
+    "reason": "Computed Content-Security-Policy: mode parsing, inline script/style extraction, browser-equal hashes, extra-source validation, route/cookie/response skips, report and enforce headers, middleware order"
+  },
   "interaction-hardening.test.mjs": {
     "tier": "unit",
     "reason": "Security headers, real 404 rewrites, llms.txt builder, Portable Text fallback, hover/motion/dialog CSS contracts, opt-in page transitions and undefined scale-token guardrail; source and pure-function checks only"

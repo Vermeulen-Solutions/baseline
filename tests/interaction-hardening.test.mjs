@@ -36,7 +36,8 @@ test('security headers survive immutable responses and skip protocol upgrades', 
   assert.deepEqual(missingSecurityHeaders(101, new Headers()), []);
   assert.deepEqual(missingSecurityHeaders(200, new Headers({ Upgrade: 'websocket' })), []);
   const middleware = read('src/middleware.ts');
-  assert.match(middleware, /export const onRequest = defineMiddleware\(async \(context, next\) => withSecurityHeaders\(await handle\(context, next\)\)\);/);
+  // Every response leaves through withSecurityHeaders, after the optional computed policy.
+  assert.match(middleware, /export const onRequest = defineMiddleware\(async \(context, next\) => \{[\s\S]*?withContentSecurityPolicy\(await handle\(context, next\)[\s\S]*?return withSecurityHeaders\(response\);\n\}\);/);
 });
 
 test('missing CMS entries answer with the 404 page and a 404 status, not a redirect', () => {

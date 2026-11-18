@@ -26,7 +26,9 @@
 // - target-size (WCAG 2.2 SC 2.5.8, phone width): a control smaller than 24 by 24 CSS px whose
 //   24px circle reaches another control. Links inside a sentence are exempt, as in the criterion;
 // - focus-obscured (WCAG 2.2 SC 2.4.11): a control reached with Tab that is entirely covered (by a
-//   sticky header, a cookie bar, a floating button) or entirely off screen, at both widths.
+//   sticky header, a cookie bar, a floating button) or entirely off screen, at both widths;
+// - csp-violation: anything the page's Content-Security-Policy blocks or, in report-only mode,
+//   would block (CSP_MODE in src/lib/content-security-policy.ts), at the phone width.
 // Sideways overflow, invisible focus rings, broken images and console errors belong to audit:ui.
 //
 // THE BUDGET FILE. page-budget.json at the site root is the site's own: Baseline never ships or syncs
@@ -238,6 +240,11 @@ export function formatIssue(issue) {
 function observeLayout() {
   window.__qualityShifts = [];
   window.__qualityLcp = null;
+  window.__qualityCsp = [];
+  document.addEventListener('securitypolicyviolation', e => {
+    const source = e.sourceFile ? `${e.sourceFile.replace(/^https?:\/\/[^/]+/, '')}:${e.lineNumber}` : '';
+    window.__qualityCsp.push({ disposition: e.disposition, directive: e.effectiveDirective, blocked: e.blockedURI || 'inline', source });
+  });
   try {
     new PerformanceObserver(list => { for (const e of list.getEntries()) window.__qualityShifts.push({ value: e.value, startTime: e.startTime, hadRecentInput: e.hadRecentInput }); }).observe({ type: 'layout-shift', buffered: true });
     new PerformanceObserver(list => { const all = list.getEntries(); const e = all[all.length - 1]; if (e) window.__qualityLcp = { url: e.url || '', element: e.element ? e.element.tagName.toLowerCase() : '' }; }).observe({ type: 'largest-contentful-paint', buffered: true });
@@ -390,6 +397,8 @@ export async function measureRoute(browser, base, route, { tabs = 40 } = {}) {
         try { jsonLdTypes(JSON.parse(text), types); } catch (error) { issues.push({ kind: 'json-ld', route, value: `block ${index + 1} does not parse`, detail: String(error.message).slice(0, 80) }); }
       });
       measurement.jsonLdTypes = [...types].sort();
+      // Report-only violations fire the same event, so a site can clear them before enforcing.
+      for (const v of await page.evaluate(() => window.__qualityCsp ?? [])) issues.push({ kind: 'csp-violation', route, value: `${v.directive} ${v.blocked}`, detail: `${v.disposition === 'report' ? 'report-only' : 'blocked'}${v.source ? ` at ${v.source}` : ''}` });
       for (const target of crowdedTargets(await page.evaluate(targetBoxes))) issues.push({ kind: 'target-size', route, width: viewport.width, value: `${target.sig} ${target.width}x${target.height}`, detail: `24px circle reaches ${target.neighbour}` });
     }
     await page.evaluate(() => scrollTo(0, 0));
