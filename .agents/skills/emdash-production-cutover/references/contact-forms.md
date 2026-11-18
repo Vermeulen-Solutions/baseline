@@ -34,6 +34,17 @@ Maintain sender configuration in one place. A dedicated form binding can restric
 
 When the site stores submissions, store first and send second, and record the delivery state on the stored record: a send failure must not turn an accepted submission into a retry or a lost message. Hard-coded fallback recipients are a hazard: when mail is enabled later, everything goes to that address. Prefer a server-side runtime variable (Worker `vars`) with no default, where unset means stored only.
 
+## Suspicious submissions: score, flag, hold
+
+A honeypot and a rate limit stop the crude bots, but what gets past them is mixed: a real lead on a work VPN that shows up in another country next to a hand-typed SEO pitch. Do not let one signal block a message. Store every accepted submission first, then score it:
+
+- **Points with reasons.** Each signal adds points and a sentence a person can read ("3 links in the message", "name contains a URL", "sent 2 seconds after the page loaded", "message in a different script from the site's languages"). Keep the weights in one small module with tests, so a change in weighting can be reviewed.
+- **Two thresholds.** Below the flag line the message is mailed as normal. From the flag line it is mailed with a marker at the start of the subject (for example `[Check]`) and the reasons at the top of the body, so the owner or a mail filter can sort it. From the hold line it is stored only, with no email.
+- **Held is not deleted.** Give the owner a way to list held submissions (a short `wrangler d1 execute` command in the site's notes, or an admin screen) and look at them weekly at first. Never delete held records automatically; a false hold is a lost customer.
+- **Calibrate on real data.** Start with conservative thresholds (flag early, hold late) and adjust from the stored spam the site actually receives, recording each change and the examples behind it in the site's form notes.
+- **Weak signals stay weak.** Request country (`request.cf.country`) is a hint, not proof; VPNs and travel make it wrong. A page-load timestamp in a hidden field only counts if the server signed it; otherwise a bot can copy it. Free-mail and short names are normal for real people.
+- **Privacy.** Store only what scoring and follow-up need, set a retention period for submissions (held ones included), and name the storage in the site's privacy notice. Do not keep IP addresses longer than the rate limit needs them.
+
 Before the production domain's sender is onboarded, mail can leave from a sender subdomain the operator has already verified in the same Cloudflare account, to a recipient the owner names, so forms are testable on the preview hostname without sending to the client's inbox. At cutover, change the sender (binding `allowed_sender_addresses` and the single sender setting) and the recipient in one change, deploy, and send one test per form.
 
 ## Email construction
@@ -92,6 +103,8 @@ Test meaningful endpoint boundaries using the project's test tooling and a stubb
 | Oversized body, including absent declared length | 413 before full parsing; no send |
 | Unsupported content type | 415; no send |
 | Filled honeypot | Quiet success; no CMS query or send |
+| Submission between the flag and hold scores | Stored; mailed with the subject marker and its reasons at the top |
+| Submission at or above the hold score | Stored as held; no email; listed by the site's held-submissions command |
 | Rate limit or failed challenge | Rejected before send; useful feedback |
 | Invalid recipient or failed CMS query | Deliberate configured behavior; no accidental recipient |
 | Provider failure | Actionable failure; retained input where supported; no automatic resend |
