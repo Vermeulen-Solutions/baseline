@@ -49,7 +49,7 @@ const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
       text-decoration: none;
       opacity: 0;
       color: var(--color-muted, currentColor);
-      transition: opacity var(--duration-fast, 150ms) var(--ease-standard, ease);
+      transition: opacity var(--duration-fast, 150ms) var(--ease-smooth, ease);
     }
 
     .heading-target:hover .heading-anchor,
@@ -58,9 +58,9 @@ const Tag = `h${level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
     }
 
     .heading-anchor:focus-visible {
-      outline: 2px solid var(--color-focus, currentColor);
-      outline-offset: 2px;
-      border-radius: var(--radius-sm, 2px);
+      outline: var(--focus-ring-width, 2px) solid var(--color-focus, currentColor);
+      outline-offset: var(--focus-ring-offset, 2px);
+      border-radius: var(--radius-control, 2px);
     }
 
     .heading-anchor__symbol {

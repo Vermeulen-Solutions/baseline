@@ -82,6 +82,12 @@
 
 	--radius-control: 0.375rem;
 	--radius-card: 0.75rem;
+	/* Fully rounded ends for pills, dots and circular skeletons, whatever their size. */
+	--radius-pill: 9999px;
+
+	/* One focus ring for every interactive element; components reuse these, never their own sizes. */
+	--focus-ring-width: 0.2rem;
+	--focus-ring-offset: 0.2rem;
 
 	--shadow-sm:
 		0 2px 4px -1px oklch(from var(--color-text) l c h / 0.04),
@@ -108,6 +114,9 @@
 		1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%,
 		0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1
 	);
+	/* Leaving: starts slowly and accelerates away, for closing dialogs and dismissed panels.
+	   Entrances use --ease-smooth; an exit is shorter than its entrance (--duration-fast). */
+	--ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
 	/* Motion durations. Loops and progress indicators keep their own lengths. */
 	--duration-fast: 150ms;
@@ -320,13 +329,17 @@
 		text-underline-offset: 0.18em;
 	}
 
-	a:hover {
-		text-decoration-thickness: 0.12em;
+	/* Hover styles apply only where a pointer can hover; on touch screens a tapped element would
+	   otherwise keep its hover look until the next tap elsewhere. Focus styles are never gated. */
+	@media (hover: hover) {
+		a:hover {
+			text-decoration-thickness: 0.12em;
+		}
 	}
 
 	:focus-visible {
-		outline: 0.2rem solid var(--color-focus);
-		outline-offset: 0.2rem;
+		outline: var(--focus-ring-width, 0.2rem) solid var(--color-focus);
+		outline-offset: var(--focus-ring-offset, 0.2rem);
 	}
 
 	button,
@@ -514,8 +527,8 @@
 	}
 
 	.focus-parent:focus-within:has(:focus-visible) {
-		outline: 0.2rem solid var(--color-focus);
-		outline-offset: 0.2rem;
+		outline: var(--focus-ring-width, 0.2rem) solid var(--color-focus);
+		outline-offset: var(--focus-ring-offset, 0.2rem);
 	}
 
 	.focus-parent:focus-within:has(:focus-visible) :focus-visible {
@@ -651,6 +664,24 @@
 	/* A closed panel has no boxes at all, so nothing measures or reaches its hidden content. */
 	.site-menu:where(:not([open])) > .site-menu__panel {
 		display: none;
+	}
+
+	/* The open panel settles in from just above the header edge: opacity and translate only, so
+	   nothing is laid out twice. Closing is instant, as a native disclosure is. From 48rem the
+	   panel is shown without [open], so this never runs on the inline header. */
+	@media (prefers-reduced-motion: no-preference) {
+		.site-menu[open] > .site-menu__panel {
+			transition:
+				opacity var(--duration-base) var(--ease-smooth),
+				translate var(--duration-base) var(--ease-smooth);
+		}
+
+		@starting-style {
+			.site-menu[open] > .site-menu__panel {
+				opacity: 0;
+				translate: 0 -0.5rem;
+			}
+		}
 	}
 
 	/* From 48rem the same links sit inline in the header row and the Menu control is not shown.
@@ -937,7 +968,7 @@
 		align-items: center;
 		gap: 0.5rem;
 		padding: 0.25rem 0.75rem;
-		border-radius: 9999px;
+		border-radius: var(--radius-pill);
 		border: 1px solid color-mix(in oklch, var(--color-action) 28%, var(--color-border));
 		background: var(--color-action-subtle);
 		color: var(--color-text);
@@ -951,7 +982,7 @@
 		display: inline-block;
 		inline-size: 0.5rem;
 		block-size: 0.5rem;
-		border-radius: 9999px;
+		border-radius: var(--radius-pill);
 		background: var(--color-action);
 		box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-action) 22%, transparent);
 	}
@@ -1077,7 +1108,7 @@
 
 	@media (prefers-reduced-motion: no-preference) {
 		.animate-card-in {
-			animation: baseline-card-in var(--duration-normal, 260ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) both;
+			animation: baseline-card-in var(--duration-normal, var(--duration-slow)) var(--ease-smooth) both;
 		}
 
 		/* Scroll reveal. Where scroll-driven animations are supported, CSS reveals [data-reveal]
@@ -1099,8 +1130,8 @@
 
 			:where(html[data-reveal-ready]) :where([data-reveal]) {
 				transition:
-					opacity var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms),
-					transform var(--duration-normal, 320ms) var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) var(--reveal-delay, 0ms);
+					opacity var(--duration-normal, var(--duration-slower)) var(--ease-smooth) var(--reveal-delay, 0ms),
+					transform var(--duration-normal, var(--duration-slower)) var(--ease-smooth) var(--reveal-delay, 0ms);
 			}
 
 			:where(html[data-reveal-ready]) :where([data-reveal].is-revealed) {
@@ -1130,14 +1161,20 @@
 		flex: 1 1 0%;
 		min-inline-size: 0.25rem;
 		block-size: min(100%, max(8%, var(--bar-value, 50%)));
-		border-radius: calc(var(--radius-sm, 0.25rem) * 0.75) calc(var(--radius-sm, 0.25rem) * 0.75) 0 0;
+		border-radius: calc(var(--radius-control) * 0.5) calc(var(--radius-control) * 0.5) 0 0;
 		background: color-mix(in oklch, var(--color-action) var(--bar-mix, 38%), var(--color-elevated));
 		border-block-start: 1px solid color-mix(in oklch, var(--color-action) 75%, transparent);
 		transition: background-color var(--duration-fast) var(--ease-smooth), transform var(--duration-fast) var(--ease-smooth);
 	}
 
-	:where(.viz-bar:hover, .viz-bar:focus-visible, .viz-bar[data-active]) {
+	:where(.viz-bar:focus-visible, .viz-bar[data-active]) {
 		background: var(--color-action);
+	}
+
+	@media (hover: hover) {
+		:where(.viz-bar:hover) {
+			background: var(--color-action);
+		}
 	}
 
 	:where(.btn) {
@@ -1158,9 +1195,13 @@
 		transition: transform var(--duration-fast) var(--ease-snappy), background-color var(--duration-fast) var(--ease-smooth), border-color var(--duration-fast) var(--ease-smooth), box-shadow var(--duration-fast) var(--ease-smooth);
 	}
 
-	:where(.btn:hover) {
-		background: color-mix(in oklch, var(--color-action) 90%, var(--color-text) 10%);
-		text-decoration: none;
+	/* Button choreography: colour shifts ease, the press moves the button (a composited transform)
+	   and hover styles exist only where a pointer can hover. Every variant reuses the same tokens. */
+	@media (hover: hover) {
+		:where(.btn:hover) {
+			background: color-mix(in oklch, var(--color-action) 90%, var(--color-text) 10%);
+			text-decoration: none;
+		}
 	}
 
 	:where(.btn:active:not(:disabled)) {
@@ -1174,9 +1215,11 @@
 		box-shadow: var(--surface-highlight);
 	}
 
-	:where(.btn--secondary:hover) {
-		background: color-mix(in oklch, var(--color-elevated) 88%, var(--color-text) 12%);
-		border-color: color-mix(in oklch, var(--color-border-strong) 75%, var(--color-text) 25%);
+	@media (hover: hover) {
+		:where(.btn--secondary:hover) {
+			background: color-mix(in oklch, var(--color-elevated) 88%, var(--color-text) 12%);
+			border-color: color-mix(in oklch, var(--color-border-strong) 75%, var(--color-text) 25%);
+		}
 	}
 
 	:where(.btn--ghost) {
@@ -1186,9 +1229,11 @@
 		box-shadow: none;
 	}
 
-	:where(.btn--ghost:hover) {
-		background: var(--color-elevated);
-		border-color: var(--color-border);
+	@media (hover: hover) {
+		:where(.btn--ghost:hover) {
+			background: var(--color-elevated);
+			border-color: var(--color-border);
+		}
 	}
 
 	:where(.icon-nudge) {
@@ -1196,8 +1241,14 @@
 		transition: transform var(--duration-base) var(--ease-spring);
 	}
 
-	:where(.btn:hover, .btn:focus-visible, .card:hover, .card:focus-within, a:hover, a:focus-visible) :where(.icon-nudge) {
+	:where(.btn:focus-visible, .card:focus-within, a:focus-visible) :where(.icon-nudge) {
 		transform: translateX(0.2rem);
+	}
+
+	@media (hover: hover) {
+		:where(.btn:hover, .card:hover, a:hover) :where(.icon-nudge) {
+			transform: translateX(0.2rem);
+		}
 	}
 
 	/* Optional recipe: bento grid. */
@@ -1307,8 +1358,11 @@
 	/* Hold the header across navigations. A named header whose height differs between two pages (a
 	   compact scrolled header leaving, a tall one arriving) otherwise crossfades as a ghosted double
 	   header. Opt in with data-vt-header on the page's single sticky header, or give a header that is
-	   already named view-transition-class: vt-header. */
-	:where([data-sticky-header][data-vt-header]) {
+	   already named view-transition-class: vt-header.
+	   The name applies only while a transition runs: a permanently named element is composited on
+	   its own layer, which changes how its text is antialiased at rest. A browser without
+	   :active-view-transition matches nothing inside :where() and crossfades the header instead. */
+	:where(html:active-view-transition) :where([data-sticky-header][data-vt-header]) {
 		view-transition-name: site-header;
 		view-transition-class: vt-header;
 	}
@@ -1333,7 +1387,7 @@
 	   group clips to the card radius and both snapshots cover it while the box changes aspect ratio. */
 	::view-transition-group(*.vt-media) {
 		animation-duration: var(--duration-slower);
-		animation-timing-function: var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1));
+		animation-timing-function: var(--ease-smooth);
 		overflow: clip;
 		border-radius: var(--radius-card);
 	}
@@ -1390,13 +1444,13 @@
 
 	.skeleton-shimmer--text {
 		--skeleton-height: 1em;
-		--skeleton-radius: var(--radius-control, 4px);
+		--skeleton-radius: var(--radius-control);
 		min-block-size: var(--skeleton-height, 1em);
 		margin-block: 0.25em;
 	}
 
 	.skeleton-shimmer--circle {
-		--skeleton-radius: 9999px;
+		--skeleton-radius: var(--radius-pill);
 		--skeleton-aspect-ratio: 1 / 1;
 		--skeleton-width: var(--skeleton-size, 3rem);
 		--skeleton-height: var(--skeleton-size, 3rem);
@@ -1406,7 +1460,7 @@
 
 	.skeleton-shimmer--card {
 		--skeleton-height: var(--skeleton-card-height, 12rem);
-		--skeleton-radius: var(--card-radius, var(--radius-container, 12px));
+		--skeleton-radius: var(--radius-card);
 		min-block-size: var(--skeleton-height, 12rem);
 	}
 
@@ -1446,7 +1500,7 @@
 		background: var(--color-action);
 		box-shadow: 0 0 8px color-mix(in oklch, var(--color-action) 70%, transparent);
 		transform-origin: 0% 50%;
-		animation: baseline-vt-progress 2.4s var(--ease-out, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
+		animation: baseline-vt-progress 2.4s var(--ease-smooth) forwards;
 		pointer-events: none;
 	}
 
@@ -1466,17 +1520,52 @@
 		-webkit-backdrop-filter: blur(8px);
 	}
 
+	/* Dialog choreography, no script: it rises in over --duration-base and leaves faster on
+	   --ease-exit. display and overlay change discretely at the end of the exit, so a closing modal
+	   stays in the top layer until it has faded. The backdrop fades with it. A browser without
+	   allow-discrete drops those declarations and opens and closes at once. */
 	@media (prefers-reduced-motion: no-preference) {
+		:where(dialog) {
+			opacity: 0;
+			transform: translateY(0.5rem) scale(0.98);
+			transition:
+				opacity var(--duration-fast) var(--ease-exit),
+				transform var(--duration-fast) var(--ease-exit),
+				overlay var(--duration-fast) var(--ease-exit) allow-discrete,
+				display var(--duration-fast) var(--ease-exit) allow-discrete;
+		}
+
 		:where(dialog[open]) {
 			opacity: 1;
 			transform: translateY(0) scale(1);
-			transition: opacity var(--duration-base) var(--ease-smooth), transform var(--duration-base) var(--ease-smooth);
+			transition-duration: var(--duration-base);
+			transition-timing-function: var(--ease-smooth);
 		}
 
 		@starting-style {
 			:where(dialog[open]) {
 				opacity: 0;
 				transform: translateY(0.5rem) scale(0.98);
+			}
+		}
+
+		:where(dialog)::backdrop {
+			opacity: 0;
+			transition:
+				opacity var(--duration-fast) var(--ease-exit),
+				overlay var(--duration-fast) var(--ease-exit) allow-discrete,
+				display var(--duration-fast) var(--ease-exit) allow-discrete;
+		}
+
+		:where(dialog[open])::backdrop {
+			opacity: 1;
+			transition-duration: var(--duration-base);
+			transition-timing-function: var(--ease-smooth);
+		}
+
+		@starting-style {
+			:where(dialog[open])::backdrop {
+				opacity: 0;
 			}
 		}
 	}

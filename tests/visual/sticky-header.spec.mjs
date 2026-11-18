@@ -143,15 +143,19 @@ test('behavior held header and media morph rules apply to live view-transition p
     media.id = 'vt-media-probe';
     media.style.cssText = 'view-transition-name: post-probe; view-transition-class: vt-media; inline-size: 12rem; block-size: 8rem; background: currentColor';
     document.querySelector('main').prepend(media);
-    const named = getComputedStyle(header).viewTransitionName;
+    // At rest the header is unnamed (a named element is composited and antialiases differently);
+    // the name applies only while a transition is active.
+    const resting = getComputedStyle(header).viewTransitionName;
     const transition = document.startViewTransition(() => {
       // The incoming header is taller and the photo changes aspect ratio, as on a detail page.
       header.style.paddingBlock = '2rem';
       media.style.inlineSize = '24rem';
     });
     await transition.ready;
+    const named = getComputedStyle(header).viewTransitionName;
     const style = (pseudo, property) => getComputedStyle(document.documentElement, pseudo)[property];
     const result = {
+      resting,
       named,
       oldHeaderDisplay: style('::view-transition-old(site-header)', 'display'),
       newHeaderAnimation: style('::view-transition-new(site-header)', 'animationName'),
@@ -170,6 +174,7 @@ test('behavior held header and media morph rules apply to live view-transition p
     return result;
   });
   const motion = await probe();
+  expect(motion.resting, 'the header is not named at rest').toBe('none');
   expect(motion.named).toBe('site-header');
   expect(motion.oldHeaderDisplay, 'the outgoing header must not ghost over the incoming one').toBe('none');
   expect(motion.newHeaderAnimation, 'the incoming header must not fade in').toBe('none');
