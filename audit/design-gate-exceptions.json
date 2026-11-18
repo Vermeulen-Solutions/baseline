@@ -482,7 +482,7 @@
   {
     "path": "profiles/static-sveltia/project/public/admin/index.html",
     "reason": "Static Sveltia admin infrastructure: pinned editor entry and paired collection form, no client art direction.",
-    "sha256": "a85614f9cefb636d6a36fc0ee018933e8cc91384b9c8ea0cbd84e058f36c96ae"
+    "sha256": "92c8535d1ee9e5d3801595f9d7f0184aa9544cdb287281816300c79f282a0c2e"
   },
   {
     "path": "profiles/static-sveltia/project/public/admin/config.yml",

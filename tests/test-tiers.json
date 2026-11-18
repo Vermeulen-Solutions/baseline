@@ -342,5 +342,9 @@
   "standards-changes.test.mjs": {
     "tier": "unit",
     "reason": "Change-note format, release aggregation, digest pinning and distribution comparison in throwaway folders and a throwaway Git repository"
+  },
+  "sveltia-pin.test.mjs": {
+    "tier": "unit",
+    "reason": "Sveltia CMS pin parsing, version comparison, SRI and gate-hash rewriting against a fixture page with injected lookups; no network"
   }
 }

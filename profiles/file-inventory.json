@@ -356,6 +356,10 @@
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/sveltia-pin.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/test-visual.mjs": {
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
@@ -1567,6 +1571,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "tests/standards-changes.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/sveltia-pin.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },

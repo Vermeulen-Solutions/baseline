@@ -4,6 +4,7 @@ import { pathToFileURL } from 'node:url';
 import { collectBaseline } from './audit-baseline.mjs';
 import { sources } from './skill-sync.mjs';
 import { execFileSync } from 'node:child_process';
+import { checkSveltiaPin } from './sveltia-pin.mjs';
 const tuple = version => /^\d+\.\d+\.\d+$/.test(version ?? '') ? version.split('.').map(Number) : null;
 const compare = (a, b) => { const x = tuple(a), y = tuple(b); for (let i = 0; i < 3; i++) if (x[i] !== y[i]) return x[i] - y[i]; return 0; };
 async function get(url) { const response = await fetch(url, { headers: { 'User-Agent': 'emdash-starter-meta-review' }, signal: AbortSignal.timeout(15000) }); if (!response.ok) { if (url.startsWith('https://api.github.com/') && [401, 403, 404].includes(response.status)) return JSON.parse(execFileSync('gh', ['api', url.slice('https://api.github.com/'.length)], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] })); throw Error('Upstream HTTP ' + response.status); } return response.json(); }
@@ -46,11 +47,16 @@ export async function collectUpdates(root, lookup = {}) {
   let node;
   try { const releases = await (lookup.node ?? (() => get('https://nodejs.org/dist/index.json')))(); const stable = releases.filter(r => tuple(r.version.replace(/^v/, ''))).sort((a, b) => compare(a.version.slice(1), b.version.slice(1))); node = { running: process.version, declared: baseline.node.declared, latestStable: stable.at(-1)?.version, latestLts: stable.filter(r => r.lts).at(-1)?.version, runningMajorPatch: stable.filter(r => tuple(r.version.slice(1))[0] === tuple(process.version.slice(1))[0]).at(-1)?.version, status: 'observed', source: 'https://nodejs.org/en/about/previous-releases' }; }
   catch (error) { node = { status: 'unverified', reason: error.message }; }
-  return { formatVersion: 1, reviewedAt: new Date().toISOString(), mutation: false, packages, node, skills, decision: 'Review current official changelogs/migration guides; record dated adopt/defer decisions and revisit triggers. Availability and declared peers do not certify compatibility.' };
+  // CDN-loaded scripts that npm update never sees; absent when this checkout has no such profile.
+  const sveltia = await checkSveltiaPin(root, { packageLookup });
+  const pins = sveltia ? [sveltia] : [];
+  return { formatVersion: 1, reviewedAt: new Date().toISOString(), mutation: false, packages, pins, node, skills, decision: 'Review current official changelogs/migration guides; record dated adopt/defer decisions and revisit triggers. Availability and declared peers do not certify compatibility.' };
 }
 export function upstreamSummary(report) {
   const updates = report.packages.filter(p => p.upstreamStatus === 'update-available');
   const skillReviews = report.skills.filter(s => s.status === 'review-required');
+  const pins = report.pins ?? [];
+  const pinUpdates = pins.filter(p => p.upstreamStatus === 'update-available');
   const actions = [];
   if (updates.length) {
     actions.push(`1. **Evaluate package updates (${updates.map(p => `${p.name} -> ${p.availableStable}`).join(', ')}):** Review changelogs against docs/starter-meta-review.md.`);
@@ -58,13 +64,16 @@ export function upstreamSummary(report) {
   if (skillReviews.length) {
     actions.push(`2. **Review skill updates (${skillReviews.map(s => `${s.kind}${s.availableVersion ? ` (${s.recordedVersion} -> ${s.availableVersion})` : ''}`).join(', ')}):** Run skill sync helpers or preview staged updates.`);
   }
+  if (pinUpdates.length) {
+    actions.push(`3. **Move pinned CDN scripts (${pinUpdates.map(p => `${p.name} ${p.pinned} -> ${p.availableStable}`).join(', ')}):** Run \`node scripts/sveltia-pin.mjs --apply\`, then \`npm run test:profiles\`; review the release notes.`);
+  }
   if (report.node.latestLts && report.node.running !== report.node.latestLts) {
-    actions.push(`3. **Node Runtime Alignment:** Running ${report.node.running}; latest LTS is ${report.node.latestLts}. Verify engines.node in package.json.`);
+    actions.push(`4. **Node Runtime Alignment:** Running ${report.node.running}; latest LTS is ${report.node.latestLts}. Verify engines.node in package.json.`);
   }
   if (!actions.length) {
-    actions.push(`✔ All packages, skills, and runtimes are currently up to date.`);
+    actions.push(`✔ All packages, skills, pinned scripts and runtimes are currently up to date.`);
   }
-  return `\n## Upstream Updates Summary\n- Packages: ${report.packages.length} checked (${updates.length} updates available)\n- Skills: ${report.skills.length} sources (${skillReviews.length} updates available)\n- Node: ${report.node.running ?? 'unknown'}\n\n### Recommended Next Steps\n${actions.join('\n')}\n`;
+  return `\n## Upstream Updates Summary\n- Packages: ${report.packages.length} checked (${updates.length} updates available)\n- Skills: ${report.skills.length} sources (${skillReviews.length} updates available)\n- Pinned CDN scripts: ${pins.length} checked (${pinUpdates.length} updates available)\n- Node: ${report.node.running ?? 'unknown'}\n\n### Recommended Next Steps\n${actions.join('\n')}\n`;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

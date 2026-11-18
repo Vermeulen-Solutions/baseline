@@ -64,6 +64,7 @@
     "scripts/schema-column-budget.mjs",
     "scripts/skill-sync.mjs",
     "scripts/sqlite-schema.mjs",
+    "scripts/sveltia-pin.mjs",
     "scripts/sync-emdash-skills.mjs",
     "scripts/sync-impeccable-skill.mjs",
     "scripts/sync-r2-media.mjs",

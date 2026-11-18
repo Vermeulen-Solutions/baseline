@@ -4,6 +4,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { collectUpdates } from './check-upstream-updates.mjs';
 import { runSync } from './skill-sync.mjs';
 import { syncImpeccable } from './sync-impeccable-skill.mjs';
+import { applySveltiaPin, SVELTIA_PACKAGE } from './sveltia-pin.mjs';
 import { execNpmSync } from './process-runner.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -13,16 +14,18 @@ function git(args, cwd = ROOT) {
 }
 
 export async function autoUpdate(root = ROOT, options = {}) {
-  console.log('🔍 Checking for upstream updates across packages, skills, and Impeccable...');
+  console.log('🔍 Checking for upstream updates across packages, skills, Impeccable and pinned CDN scripts...');
   const report = await collectUpdates(root);
 
   const packageUpdates = report.packages.filter(p => p.upstreamStatus === 'update-available');
   const skillUpdates = report.skills.filter(s => s.status === 'review-required');
+  const pinUpdates = (report.pins ?? []).filter(p => p.upstreamStatus === 'update-available');
 
   console.log(`📦 Packages with updates: ${packageUpdates.length}`);
   console.log(`✨ Skills with updates: ${skillUpdates.length}`);
+  console.log(`📌 Pinned CDN scripts with updates: ${pinUpdates.length}`);
 
-  if (packageUpdates.length === 0 && skillUpdates.length === 0) {
+  if (packageUpdates.length === 0 && skillUpdates.length === 0 && pinUpdates.length === 0) {
     console.log('✔ Everything is already up to date!');
     return { updated: false, changes: [] };
   }
@@ -62,6 +65,23 @@ export async function autoUpdate(root = ROOT, options = {}) {
     }
   }
 
+  // 3. Move the Sveltia CMS pin (a CDN script that npm update never sees)
+  let profilesAffected = false;
+  const sveltiaPin = pinUpdates.find(p => p.name === SVELTIA_PACKAGE);
+  if (sveltiaPin) {
+    console.log(`📥 Moving the Sveltia CMS pin (${sveltiaPin.pinned} -> ${sveltiaPin.availableStable}) and recomputing its integrity...`);
+    try {
+      const result = await applySveltiaPin(root, { version: sveltiaPin.availableStable });
+      if (result.status === 'applied') {
+        appliedChanges.push(`Sveltia CMS ${result.from} -> ${result.to} (${result.integrity})`);
+        profilesAffected = true;
+        console.log('✔ Sveltia CMS pin moved.');
+      }
+    } catch (err) {
+      console.warn('Failed to move the Sveltia CMS pin:', err.message);
+    }
+  }
+
   // Check if any files were changed on disk
   const status = git(['status', '--porcelain']);
   if (!status) {
@@ -74,6 +94,8 @@ export async function autoUpdate(root = ROOT, options = {}) {
     execNpmSync(['run', 'lint'], { cwd: root, stdio: 'inherit' });
     execNpmSync(['run', 'check:schema-budget'], { cwd: root, stdio: 'inherit' });
     execFileSync(process.execPath, ['--test', 'tests/meta-review.test.mjs', 'tests/audit-coverage.test.mjs'], { cwd: ROOT, stdio: 'inherit' });
+    // A moved editor pin is only proposed once both generated static profiles install, build and serve.
+    if (profilesAffected) execNpmSync(['run', 'test:profiles'], { cwd: root, stdio: 'inherit' });
     console.log('✔ Verification suite passed!');
   } catch (err) {
     console.error('❌ Verification failed after updates!');

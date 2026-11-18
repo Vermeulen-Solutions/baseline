@@ -1,6 +1,6 @@
 # Reviewed upstream maintenance
 
-Baseline maintenance workflows produce verified proposals for review. The root upstream review runs weekly; when dependency or third-party skill updates pass verification, it opens or updates a Pull Request on `automation/upstream-update` (or an Issue if Pull Request creation is restricted by repository policy) pointing to review documentation, package changes and skill diffs. Generated static profile maintenance workflows remain manual and read-only.
+Baseline maintenance workflows produce verified proposals for review. The root upstream review runs weekly; when dependency, third-party skill or Sveltia CMS pin updates pass verification, it opens or updates a Pull Request on `automation/upstream-update` (or an Issue if Pull Request creation is restricted by repository policy) pointing to review documentation, package changes, skill diffs and the pin change. Generated static profile maintenance workflows remain manual and read-only.
 
 ## Root Baseline dependency and skill proposals
 
@@ -10,13 +10,30 @@ The root [upstream-update.yml](../.github/workflows/upstream-update.yml) runs ev
 gh workflow run upstream-update.yml --repo Vermeulen-Solutions/baseline
 ```
 
-It installs the existing lockfile with `npm ci --no-audit --no-fund`, proposes in-range dependency changes with `npm update --save --no-audit --no-fund`, checks third-party skills with `npm run sync:upstream-skills`, then proves the resulting lockfile with another clean `npm ci`. Exact version pins remain pinned; this is not a major-version or certification upgrade.
+It installs the existing lockfile with `npm ci --no-audit --no-fund`, proposes in-range dependency changes with `npm update --save --no-audit --no-fund`, checks third-party skills with `npm run sync:upstream-skills`, moves the Sveltia CMS pin (below), then proves the resulting lockfile with another clean `npm ci`. Exact version pins remain pinned; this is not a major-version or certification upgrade.
 
 The candidate checkout runs `npm run verify`, `npm run build`, and `npm run test:profiles`. Root verification includes script syntax, art direction, token audits, unit tests, Astro typecheck and the applicable schema budget preflight. Both generated static profiles receive independent installation, verification, builds and HTTP checks. The workflow does not fabricate a SQLite dummy table or run screenshot regression.
 
 The final steps upload `upstream-dependency-review` containing `upstream-update.patch` from `git diff --binary`. When all verification checks pass and updates are proposed, the workflow stages the updates on `automation/upstream-update` and opens or updates a Pull Request with verification evidence and review guidelines. If GitHub Actions PR creation is restricted under repository settings, it opens an Issue instead. An unchanged candidate produces an empty patch and creates neither a branch nor a notification.
 
 Inspect the Pull Request (or download the artifact from the Actions run), review changelogs against [starter meta-review](starter-meta-review.md) and [skill synchronization](skill-synchronization.md), and merge when satisfied. Failed candidate runs remain proposals, upload diagnostic artifacts, and do not open a Pull Request.
+
+## Sveltia CMS pin
+
+The `static-sveltia` profile loads the editor from a CDN in `profiles/static-sveltia/project/public/admin/index.html`: an exact `@sveltia/cms@x.y.z` URL with a SHA-384 Subresource Integrity value. It is not an npm dependency, so `npm update` never sees it. `npm run check:upstream` reads the pinned version from that page and reports it under `pins` as `update-available` when npm's latest release is newer.
+
+The weekly job runs `node scripts/sveltia-pin.mjs --apply`. It downloads the exact file the page will load from unpkg, refuses to continue unless jsDelivr serves identical bytes, computes `sha384-<base64>` from those bytes and rewrites three things together: the URL version and `integrity` attribute, the version named in the profile's `docs/sveltia-cms.md`, and the reviewed design-gate hash for the admin page in `audit/design-gate-exceptions.json`. It moves that hash only while it still matches the page it is replacing; a stale or hand-edited exception stops the update for a person to review. Any failure writes nothing. The pin change is then a proposal like every other: it reaches a Pull Request only after `npm run verify`, `npm run build` and `npm run test:profiles` pass, and the Pull Request shows the old and new script lines. Review the [Sveltia CMS releases](https://github.com/sveltia/sveltia-cms/releases) between the two versions before merging; Sveltia is still in beta and minor releases can change behavior.
+
+To check or move the pin by hand:
+
+```sh
+node scripts/sveltia-pin.mjs --check
+node scripts/sveltia-pin.mjs --apply
+node scripts/sveltia-pin.mjs --apply --version 0.269.0
+npm run test:profiles
+```
+
+Generated sites own their `public/admin/index.html`, so `sync:baseline` does not move their pin. The weekly change note tells a site to copy the new `<script>` tag (version and integrity together) and, when the page is otherwise unchanged, the new gate hash.
 
 ## Independent verification of the automation branch
 
