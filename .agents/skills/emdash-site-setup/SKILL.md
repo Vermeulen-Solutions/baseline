@@ -29,7 +29,7 @@ Keep hosting and plugin sandboxing as separate decisions:
 | Cloudflare Workers | No | Cloudflare adapter, D1, R2, and Wrangler. Omit Worker Loader and `sandboxRunner` to avoid enabling unused sandbox infrastructure. |
 | Cloudflare Workers | Yes | Cloudflare adapter, D1, R2, `sandbox()`, Worker Loader binding `LOADER`, and `PluginBridge` export. Cloudflare requires its Workers Paid plan for Worker Loader. |
 
-A Cloudflare-hosted site without registry sandbox plugins does **not** need Worker Loader just because it runs on Workers. Conversely, a Node-hosted site that needs registry plugins still needs a sandbox runner (`workerd`). Do not use `sandbox: false` in production.
+A Cloudflare-hosted site without registry sandbox plugins does **not** need Worker Loader just because it runs on Workers, and it runs on the Workers Free plan; check its CPU time and daily requests against the Free limits before choosing a plan (`docs/production-deployment.md`, Workers plan limits). Conversely, a Node-hosted site that needs registry plugins still needs a sandbox runner (`workerd`). Do not use `sandbox: false` in production.
 
 ### Curated Registry Sandbox Plugins Evaluation
 
