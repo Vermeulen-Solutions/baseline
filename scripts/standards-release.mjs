@@ -169,7 +169,7 @@ if (isMain(import.meta.url)) {
     const result = prepareRelease({ version: args.version, sourceCommit: args['source-commit'], date: args.date, title: args.title, dryRun: Boolean(args['dry-run']) });
     if (result.dryRun) { process.stdout.write(result.releaseNotesText); delete result.releaseNotesText; }
     console.log(JSON.stringify(result, null, 2));
-    if (!result.dryRun) console.log(`Next: review the diff, run npm run verify, commit, then tag the release commit: git tag -a standards-v${result.version} -m "Standards ${result.version}"`);
+    if (!result.dryRun) console.log(`Next: review the diff, run npm run verify, commit, then tag the release commit: git tag -a standards-v${result.version} -m "Standards ${result.version}". Push both, then publish the GitHub release (docs/standards-releases.md, step 4).`);
   } catch (error) {
     console.error(`[standards-release] ${error.message}`);
     process.exitCode = 1;

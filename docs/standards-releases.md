@@ -50,6 +50,13 @@ What a site does to take it.
 
 The version must be at least the bump the notes ask for (below 1.0 a `major` note raises the minor number). The script sets the release fields in the manifest, pins the distribution (`distribution`: a hash per skill folder, a hash per pinned helper, the Impeccable version) and the note digest (`changes`), copies the manifest to `standards/baselines/<version>.json`, pins that file's SHA-256 in `STANDARD` (`scripts/audit-site.mjs`), admits the release in the audit report schemas, writes the **Changes for sites** section of `standards/releases/<version>.md` and deletes the notes. Text outside the generated section is kept, so write the release summary, evidence and known gaps around it.
 3. **Review and tag.** Run `npm run verify`, commit, and tag the release commit: `git tag -a standards-v<version> -m "Standards <version>"`. Push the commit and the tag.
+4. **Publish.** Create the GitHub release from the pushed tag, so the releases page lists it and marks it Latest:
+
+   ```sh
+   gh release create standards-v<version> --verify-tag --latest --title "Standards <version>" --notes-file <notes>
+   ```
+
+The notes file is `standards/releases/<version>.md` without its title line, with relative links rewritten to `https://github.com/Vermeulen-Solutions/baseline/blob/standards-v<version>/…` so they resolve from the releases page. A tag without a release is not finished: `gh release list` must show the new version as Latest.
 
 ## How sites use a release
 
