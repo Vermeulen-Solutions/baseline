@@ -1,10 +1,12 @@
 import { defineMiddleware } from 'astro:middleware';
+import type { APIContext, MiddlewareNext } from 'astro';
 import { normalizedPageLocation } from './lib/page-url';
 import { robotsCacheControl } from './lib/robots-cache';
+import { withSecurityHeaders } from './lib/security-headers';
 
 const IMMUTABLE_MEDIA_CACHE = 'public, max-age=31536000, immutable';
 
-export const onRequest = defineMiddleware(async (context, next) => {
+const handle = async (context: APIContext, next: MiddlewareNext): Promise<Response> => {
   if (import.meta.env.NORMALIZE_PAGE_URLS === '1') {
     const location = normalizedPageLocation(context.url, context.request.method);
     if (location) return context.redirect(location, 301);
@@ -57,4 +59,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
   }
   return response;
-});
+};
+
+// Every response leaves with the baseline security headers it does not already set (src/lib/security-headers.ts).
+export const onRequest = defineMiddleware(async (context, next) => withSecurityHeaders(await handle(context, next)));

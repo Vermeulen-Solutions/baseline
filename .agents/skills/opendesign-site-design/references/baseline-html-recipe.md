@@ -4,7 +4,7 @@ Read [connection-and-cli.md](connection-and-cli.md) and the bundled [Baseline De
 
 ## 1. Semantic token mapping rule (`token-map` to Baseline)
 
-Whether you start from an existing site's `npm run design:canvas-kit` output ([canvas-kit.md](../../../../docs/canvas-kit.md)), one of Baseline's four Aesthetic Lanes, or one of OpenDesign's 154 bundled `DESIGN.md` systems, always declare the prototype's `:root` and `[data-surface="dark"]` blocks using Baseline's canonical property names:
+Whether you start from an existing site's `npm run design:canvas-kit` output ([canvas-kit.md](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/canvas-kit.md) (`docs/canvas-kit.md` in a Baseline checkout)), one of Baseline's four Aesthetic Lanes, or one of OpenDesign's 154 bundled `DESIGN.md` systems, always declare the prototype's `:root` and `[data-surface="dark"]` blocks using Baseline's canonical property names:
 
 ```css
 :root {
@@ -83,7 +83,7 @@ Structure every top-level section with `data-od-id="<section-id>"` and match Bas
 
 ## 3. Pre-handoff checklist (artifact preflight & export)
 
-Run `npm run design:artifact-check -- <artifact.html> --opendesign --json` when installed. Resolve P1 findings and review P2 signals with the actual render. Native `od lint` is optional for app/seed-specific policy; neither source pass measures contrast or clipping. See [artifact lint](../../../../docs/artifact-lint.md).
+Run `npm run design:artifact-check -- <artifact.html> --opendesign --json` when installed. Resolve P1 findings and review P2 signals with the actual render. Native `od lint` is optional for app/seed-specific policy; neither source pass measures contrast or clipping. See [artifact lint](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/artifact-lint.md) (`docs/artifact-lint.md` in a Baseline checkout).
 
 1. **Uppercase tracking (`all-caps-no-tracking`):** Every element with `text-transform: uppercase` (`.eyebrow-telemetry`, `.badge-pill`, tags) must include `letter-spacing: 0.06em` to `0.12em`.
 2. **Section anchors (`missing-section-anchor`):** Every `<section>` must carry a descriptive `data-od-id` attribute.

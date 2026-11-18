@@ -1,0 +1,40 @@
+---
+/**
+ * Fallback for a Portable Text block type that no renderer handles (RichText's `unknownType`).
+ *
+ * The library default prints a hidden warning into every public page, with an inline style. Here a
+ * public build renders nothing and logs one server warning per type, so the gap is visible to the
+ * developer without leaking into crawled HTML. Development shows a labelled placeholder in the
+ * page flow so a missing renderer is noticed while building. Register the real component in
+ * RichText's `type` map to replace this.
+ */
+import { noteUnknownPortableTextType, unknownPortableTextLabel } from '../lib/portable-text-fallback';
+
+interface Props {
+  node?: { _type?: unknown; _key?: unknown };
+  isInline?: boolean;
+}
+
+const { node, isInline = false } = Astro.props;
+const label = unknownPortableTextLabel(node?._type);
+noteUnknownPortableTextType(label);
+const Tag = isInline ? 'span' : 'div';
+---
+{import.meta.env.DEV && (
+  <Tag class="pt-unknown" role="note" data-portabletext-unknown={label}>
+    No renderer for block type <code>{label}</code>. Add one to RichText.
+  </Tag>
+)}
+<style>
+@layer components {
+  .pt-unknown {
+    display: block;
+    border: 1px dashed var(--color-border-strong);
+    border-radius: var(--radius-control);
+    padding: var(--spacing-2xs) var(--spacing-xs);
+    color: var(--color-muted);
+    font-size: var(--text-step--1);
+  }
+  span.pt-unknown { display: inline-block; }
+}
+</style>

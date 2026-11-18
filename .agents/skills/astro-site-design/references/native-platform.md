@@ -38,7 +38,7 @@ Status checked 2026-11-10 against `web-features` 3.45.0. Check a row's status ag
 | Inert background outside a dialog | `inert` | Widely | Needed only for custom non-dialog overlays |
 | Animate an overlay opening | `@starting-style`, `transition-behavior: allow-discrete` | Newly | Without support the overlay appears instantly, which is acceptable |
 | Keep an overlay on top while it closes | `overlay` in the transition list | Limited, Chromium only | Exit animation may be cut short elsewhere; never depend on it |
-| Page navigation transitions | `<ClientRouter fallback="swap" />` from the shell | Same-document Newly; cross-document Limited, no Firefox | Do not add `@view-transition` beside ClientRouter. The shell's guards keep the CMS editor on native navigation |
+| Page navigation transitions | Zero-JS: `SiteShell pageTransitions="cross-document"` (the starter Base default). Same-document swaps: `<ClientRouter fallback="swap" />` from the shell | Cross-document Limited, no Firefox; same-document Newly | Without support pages load normally. Choose one: a site that adds ClientRouter sets `pageTransitions="none"`. EmDash's Base turns cross-document transitions off in visual edit mode, and the shell's guards keep the CMS editor on native navigation |
 | Light and dark appearance | `ThemeSelect` or `data-surface-toggle` | Shipped | Do not add a separate `<meta name="color-scheme">` toggle |
 | Component responds to its own width | Container queries | Widely | See [responsive architecture](responsive-architecture.md) |
 | Aligned nested grids | `subgrid` | Widely | Use freely |

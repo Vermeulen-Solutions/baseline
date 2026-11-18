@@ -15,6 +15,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { argumentsOf, isMain } from './infrastructure-io.mjs';
+import { parseSveltiaPin, SVELTIA_ADMIN_HTML } from './sveltia-pin.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 export const CHANGES_DIR = 'standards/changes';
@@ -138,26 +139,30 @@ What a site does to take this change, or "Nothing" when it arrives by itself.
 }
 
 // The note the weekly upstream job writes for its own proposal (one fixed name, rewritten each run).
-export function upstreamNote({ dependencies = false, skills = [], impeccable = null }) {
-  if (!dependencies && !skills.length) return null;
-  const areas = [...(dependencies ? ['dependencies'] : []), ...(skills.length ? ['skills'] : [])];
+export function upstreamNote({ dependencies = false, skills = [], impeccable = null, sveltia = null }) {
+  if (!dependencies && !skills.length && !sveltia) return null;
+  const areas = [...(dependencies || sveltia ? ['dependencies'] : []), ...(skills.length ? ['skills'] : [])];
+  const platforms = dependencies || skills.length ? ['emdash', 'static'] : ['static'];
   const lines = [];
   if (skills.length) lines.push(`Third-party skills refreshed from upstream: ${skills.join(', ')}.${impeccable ? ` Impeccable moves from ${impeccable.from} to ${impeccable.to}.` : ''}`);
   if (dependencies) lines.push('Baseline\'s lockfile takes in-range dependency updates; certified top-level versions are unchanged unless the release notes say otherwise.');
+  if (sveltia) lines.push(`Sveltia CMS, which the static-sveltia profile loads from a CDN, moves from ${sveltia.from} to ${sveltia.to}. Its SRI value was recomputed from the published file, and both generated static profiles were rebuilt and served against it.`);
   const forSites = [
     ...(skills.length ? ['Run the site\'s skill sync (`npm run sync:site-skills -- --stage`, review, `--apply`; static sites use `sync:baseline`) to receive the refreshed skills.'] : []),
     ...(dependencies ? ['Nothing is required for dependencies: each site keeps its own lockfile and updates it in its own maintenance.'] : []),
+    ...(sveltia ? ['Static Sveltia sites own `public/admin/index.html`, so the sync does not touch it. Copy the Sveltia `<script>` tag from Baseline\'s `profiles/static-sveltia/project/public/admin/index.html`, keeping its version and `integrity` together. If the site\'s `audit/design-gate-exceptions.json` lists that page and the page is otherwise unchanged, copy the new `sha256` from Baseline\'s entry for it. Run `npm run verify` and `npm run build`, then test sign-in, save and publish on the deployed editor. Other sites: nothing.'] : []),
   ];
+  const named = [...skills, ...(sveltia ? [`Sveltia CMS ${sveltia.to}`] : [])];
   return `---
 bump: patch
-platforms: [emdash, static]
+platforms: [${platforms.join(', ')}]
 areas: [${areas.join(', ')}]
-adoption: ${skills.length ? 'sync' : 'none'}
+adoption: ${sveltia ? 'manual' : skills.length ? 'sync' : 'none'}
 visible: no
 database: no
 ---
 
-# Weekly upstream refresh${skills.length ? ` (${skills.join(', ')})` : ''}
+# Weekly upstream refresh${named.length ? ` (${named.join(', ')})` : ''}
 
 ${lines.join('\n\n')}
 
@@ -204,7 +209,13 @@ if (isMain(import.meta.url)) {
         const after = JSON.parse(fs.readFileSync(path.join(root, '.emdash/impeccable-source.json'), 'utf8'));
         if (before.declaredSkillVersion !== after.declaredSkillVersion) impeccable = { from: before.declaredSkillVersion, to: after.declaredSkillVersion };
       }
-      const text = upstreamNote({ dependencies: changed.some(file => /^package(-lock)?\.json$/.test(file)), skills, impeccable });
+      let sveltia = null;
+      if (changed.includes(SVELTIA_ADMIN_HTML)) {
+        const before = parseSveltiaPin(execFileSync('git', ['show', `HEAD:${SVELTIA_ADMIN_HTML}`], { cwd: root, encoding: 'utf8' })).version;
+        const after = parseSveltiaPin(fs.readFileSync(path.join(root, SVELTIA_ADMIN_HTML), 'utf8')).version;
+        if (before !== after) sveltia = { from: before, to: after };
+      }
+      const text = upstreamNote({ dependencies: changed.some(file => /^package(-lock)?\.json$/.test(file)), skills, impeccable, sveltia });
       const file = path.join(root, CHANGES_DIR, 'upstream-update.md');
       if (text) { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, text); console.log(`Wrote ${CHANGES_DIR}/upstream-update.md`); }
       else console.log('No upstream changes; no note written.');

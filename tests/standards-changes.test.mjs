@@ -148,4 +148,9 @@ test('the weekly upstream job writes a valid note only when something changed', 
   assert.deepEqual([parsed.meta.bump, parsed.meta.adoption, parsed.meta.areas], ['patch', 'sync', ['dependencies', 'skills']]);
   assert.match(parsed.body, /Impeccable moves from 4.8.1 to 4.9.2/);
   assert.equal(parseNote(upstreamNote({ dependencies: true })).meta.adoption, 'none');
+  const sveltia = parseNote(upstreamNote({ sveltia: { from: '0.248.0', to: '0.269.0' } }));
+  assert.deepEqual(validateNote(sveltia), []);
+  assert.deepEqual([sveltia.meta.platforms, sveltia.meta.areas, sveltia.meta.adoption], [['static'], ['dependencies'], 'manual']);
+  assert.match(sveltia.title, /Sveltia CMS 0\.269\.0/);
+  assert.match(sveltia.body, /moves from 0\.248\.0 to 0\.269\.0[\s\S]*public\/admin\/index\.html/);
 });

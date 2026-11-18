@@ -342,5 +342,17 @@
   "standards-changes.test.mjs": {
     "tier": "unit",
     "reason": "Change-note format, release aggregation, digest pinning and distribution comparison in throwaway folders and a throwaway Git repository"
+  },
+  "interaction-hardening.test.mjs": {
+    "tier": "unit",
+    "reason": "Security headers, real 404 rewrites, llms.txt builder, Portable Text fallback, hover/motion/dialog CSS contracts, opt-in page transitions and undefined scale-token guardrail; source and pure-function checks only"
+  },
+  "skill-links.test.mjs": {
+    "tier": "unit",
+    "reason": "Links in Baseline-owned skills stay inside what every receiving site installs"
+  },
+  "sveltia-pin.test.mjs": {
+    "tier": "unit",
+    "reason": "Sveltia CMS pin parsing, version comparison, SRI and gate-hash rewriting against a fixture page with injected lookups; no network"
   }
 }

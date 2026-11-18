@@ -100,6 +100,15 @@ for direction, implementation and rendered critique.
   Keep CSS in named base or components layers; contextual defaults use :where().
   Preserve the spacing hierarchy and avoid combining layout gaps with flow margins
   for the same relationship. Read the detailed layout contracts before changing them.
+- Interaction CSS stays zero-JS and token-bound: hover only inside `@media (hover: hover)`,
+  focus never gated, animate opacity/transform/translate/scale only, new motion inside
+  `prefers-reduced-motion: no-preference`, and only defined scale tokens (`--duration-*`,
+  `--ease-*`, `--radius-*`, `--focus-ring-*`; `check:css -- --guardrails` flags others).
+  Prefer native `<details>`, `<dialog>`, popover and the shell's cross-document page
+  transitions over scripts; see design-framework.md section 5.
+- A missing CMS entry returns `Astro.rewrite("/404")`, never a redirect. Keep the
+  middleware's security headers, `/llms.txt` sections and RichText block renderers in
+  step with new routes, collections and Portable Text types.
 - Store content images in src/assets/ or the EmDash Media Library; use native
   Astro processing. Before adding/uploading new imagery in a greenfield build
   or day-2 maintenance, use `npm run media:prepare`, inspect its results and use
