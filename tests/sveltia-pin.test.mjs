@@ -11,7 +11,8 @@ import {
 import { collectUpdates, upstreamSummary } from '../scripts/check-upstream-updates.mjs';
 
 // Portable: a checked-in fixture page, throwaway folders and injected lookups; no network.
-const fixture = readFileSync(fileURLToPath(new URL('./fixtures/sveltia-pin/index.html', import.meta.url)), 'utf8');
+// LF, so the CRLF variant the gate test builds is a real CRLF file in a CRLF checkout too.
+const fixture = readFileSync(fileURLToPath(new URL('./fixtures/sveltia-pin/index.html', import.meta.url)), 'utf8').replace(/\r\n/g, '\n');
 const FIXTURE_BYTES = Buffer.from('fixture 1.2.3');
 const NEXT_BYTES = Buffer.from('fixture 1.10.0');
 const guide = 'Intro.\n\nThe admin HTML pins Sveltia **1.2.3** with SHA-384 SRI; review the version and integrity together.\n';

@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
-const source = readFileSync(new URL('../src/components/BeforeAfter.astro', import.meta.url), 'utf8');
+// LF, so the source patterns hold in a CRLF checkout (core.autocrlf=true on Windows).
+const source = readFileSync(new URL('../src/components/BeforeAfter.astro', import.meta.url), 'utf8').replace(/\r\n/g, '\n');
 const markup = source.split('<style>')[0];
 const style = source.slice(source.indexOf('<style>'), source.indexOf('</style>'));
 const script = source.slice(source.indexOf('<script>'));
