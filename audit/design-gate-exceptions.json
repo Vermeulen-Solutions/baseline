@@ -571,8 +571,8 @@
   },
   {
     "path": "src/lib/structured-data.ts",
-    "reason": "Starter metadata-only helpers: breadcrumb/organization graphs and taxonomy indexing; no client visual implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "12a11ea0bcf37548795e48d18e22bcbf935ed8a2af0a7d141d044f600f174729"
+    "reason": "Starter metadata-only helpers: breadcrumb/organization graphs and taxonomy indexing; no client visual implementation. Any source edit invalidates this exact LF-normalized exception. Organization graph adds social profiles and site-owned business facts.",
+    "sha256": "18723edf4e25ff0369ce34cfbda229b4dc0d67ba43a1d6295726fb2875e06d6d"
   },
   {
     "path": "src/lib/robots-cache.ts",
@@ -602,8 +602,8 @@
   },
   {
     "path": "src/plugins/baseline-metadata/index.ts",
-    "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "52c4b4b773ad17d9edc716dba62b490086468ac1f8a411a9ebed9ec18f6811e5"
+    "reason": "Functional starter metadata infrastructure: route additive graphs through the supported native metadata hook and core deduplication/CSP renderer. Existing visual design and tokens remain intact. Any source edit invalidates this exact LF-normalized exception. Passes social settings and options.organization to the Organization graph.",
+    "sha256": "418ce4903619199635a6a55580eb437e09e5253a909cb284298b6e2b8d3c26fc"
   },
   {
     "path": "src/lib/public-feed-cache.ts",
