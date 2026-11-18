@@ -155,8 +155,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode. Links the apple-touch-icon and the web manifest.",
-    "sha256": "c926fed9cf71b875f3b0e4d6077e41f1ef80d4aa3b58ade532aac31398d9c857"
+    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode. Links the apple-touch-icon and the web manifest. Renders Analytics and ConsentBanner in body-end (nothing without analytics ids).",
+    "sha256": "1dde32b6add5c7fc7f1af7082391f3a26ecd3d06f04ebc979cc511ca15c11ffc"
   },
   {
     "path": "src/components/Container.astro",
@@ -322,8 +322,8 @@
   },
   {
     "path": "src/env.d.ts",
-    "reason": "Starter infrastructure only: optional Workers binding types, baseline capabilities virtual module typing, and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception. Types CSP_MODE and CSP_SOURCES.",
-    "sha256": "6ecb13de835fd63a0c204b1db0b071d45d9ce43437dd2cda6bea01805e64c746"
+    "reason": "Starter infrastructure only: optional Workers binding types, baseline capabilities virtual module typing, and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception. Types CSP_MODE and CSP_SOURCES. Types the PUBLIC_* analytics and consent variables.",
+    "sha256": "5b07d8049212db3b81a476b8e1a44be580fffb69914b45a078c70bc5b4b3aa00"
   },
   {
     "path": "src/assets/styleguide-small.svg",
@@ -431,13 +431,13 @@
   },
   {
     "path": "profiles/static/project/src/env.d.ts",
-    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "bfbac11bc2d22d74e3c8777fbbefc934603e1a2ce54ce57fd23af41e7313dc89"
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception. Types the PUBLIC_* analytics and consent variables.",
+    "sha256": "3fbaff11e9fcc9ffd5f9adea861187cfd91eb341a4ab84640fe1a329e458829a"
   },
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
-    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell. Links the apple-touch-icon and the web manifest. Navigation skips gated sections.",
-    "sha256": "693c6f4faf4df2e1b9655dd4f75b40b7d377c57cd0c7fdc5ff41e7ae7118b2e9"
+    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell. Links the apple-touch-icon and the web manifest. Navigation skips gated sections. Renders Analytics and ConsentBanner in body-end (nothing without analytics ids).",
+    "sha256": "22649be94798ba5b7386d3c8b0198f5946c22515c72260797f6b8c1f38875ada"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",
@@ -804,5 +804,35 @@
     "path": "src/components/Hours.astro",
     "reason": "Shared presentation primitive: an opening-hours table (caption, one row per weekday in the page locale, closed days labelled) with token borders. Exact LF-normalized source hash.",
     "sha256": "674701d8e589b25466b99553b0e4b51f07678c8de4db88c172df0791f100f2d2"
+  },
+  {
+    "path": "src/lib/consent.ts",
+    "reason": "Non-visual utility: analytics and consent configuration (ids, production hosts, Consent Mode v2 state, versioned choices, data-track parameters). Exact LF-normalized source hash.",
+    "sha256": "a1490eec8178e3639cb892afb822a1d9b4c44a3ae57e729bb4ccc8fefb9f9156"
+  },
+  {
+    "path": "src/lib/load-on-click.ts",
+    "reason": "Non-visual utility: third-party frames inserted only when the visitor clicks. Exact LF-normalized source hash.",
+    "sha256": "a099cb749a542367df0e31ac1d6017acecc6d32ebff059ce7f45af961609939a"
+  },
+  {
+    "path": "src/components/Analytics.astro",
+    "reason": "Non-visual loader: Cloudflare Web Analytics, GA4 or GTM only on production hostnames, GA/GTM under Google Consent Mode v2 (denied by default, or strict); renders nothing without ids. Exact LF-normalized source hash.",
+    "sha256": "5fd87fa19311954ddbf6218063e8792baa9c220bcbaf34cf1d4284f04ccfeb1b"
+  },
+  {
+    "path": "src/components/ConsentBanner.astro",
+    "reason": "Shared presentation primitive: a non-modal consent banner (accept, reject, choose per category; reopened by data-consent-open) in token colours with visible focus; hidden until a consent tag is configured. Exact LF-normalized source hash.",
+    "sha256": "9b693d41e49034ba061a98a77436e046b8bf953ee63eaeb1920dccbe9bf55efb"
+  },
+  {
+    "path": "src/components/VideoEmbed.astro",
+    "reason": "Shared presentation primitive: a YouTube (no-cookie) or Vimeo (dnt) video loaded only on click, with a plain link without JavaScript; token colours, focus ring, forced-colors play icon. Exact LF-normalized source hash.",
+    "sha256": "12d68232bd32eb089199372a4624384acade97d45f2363409d4c7bda6a50804f"
+  },
+  {
+    "path": "src/components/MapEmbed.astro",
+    "reason": "Shared presentation primitive: a map frame loaded only on click, with the address and a link to the map; token colours. Exact LF-normalized source hash.",
+    "sha256": "9dff73e17c463f45ad66c5aa73869420f0728ec608e02f211d5ee3cec331f700"
   }
 ]

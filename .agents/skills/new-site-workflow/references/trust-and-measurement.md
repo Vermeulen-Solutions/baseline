@@ -20,6 +20,8 @@ Whatever the tier:
 - **List their origins in the Content-Security-Policy** (`CSP_SOURCES`), for example `script-src https://static.cloudflareinsights.com; connect-src https://cloudflareinsights.com`.
 - **Name every provider in the privacy notice**, with what it records and for how long.
 
+**In Baseline:** `src/components/Analytics.astro` and `ConsentBanner.astro` are already in both Base layouts and render nothing until an id is set in the build environment: `PUBLIC_CF_BEACON_TOKEN` (tier 1), `PUBLIC_GA_ID` or `PUBLIC_GTM_ID` (tiers 2 and 3, under Google Consent Mode v2, denied by default; `PUBLIC_CONSENT_MODE=strict` loads nothing before consent), with `PUBLIC_ANALYTICS_HOSTS` listing the production hostnames. Give the banner the site's language through its props, add a `data-consent-open` "Cookie settings" link to the footer, bump `PUBLIC_CONSENT_VERSION` when the categories change, and add the origins to `CSP_SOURCES` (see `.env.example`). `data-track="event_name"` (plus `data-track-*` parameters) sends click events. For maps and videos use `MapEmbed.astro` and `VideoEmbed.astro`, which contact the provider only when the visitor clicks.
+
 Recommend tier 1 by default. Add tier 2 or 3 when the owner has a concrete use (ad conversion tracking, a usability problem to watch) and accepts the banner that comes with it.
 
 ## Privacy notice: structure

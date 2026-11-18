@@ -1,0 +1,66 @@
+---
+/**
+ * A YouTube or Vimeo video that loads nothing from the platform until the visitor asks for it: no
+ * cookies, no tracking requests and no player weight on page load. A poster (optional) and a play
+ * button stand in; one click swaps in the player (YouTube's no-cookie domain, Vimeo with
+ * do-not-track) and starts it. Without JavaScript the button is a plain link to the video.
+ * Name the provider in the privacy notice as embedded content loaded on click.
+ */
+import ResponsiveImage from './ResponsiveImage.astro';
+import type { ResponsiveImageProps } from '../lib/responsive-image';
+
+interface Props {
+  provider: 'youtube' | 'vimeo';
+  /** The video id: the part after watch?v= on YouTube, the number on Vimeo. */
+  id: string;
+  /** What the video is; it names the play button and the player. */
+  title: string;
+  poster?: ResponsiveImageProps['src'];
+  posterAlt?: string;
+  /** Visible play label; {title} is replaced. */
+  playLabel?: string;
+  /** Plain link text without JavaScript; {provider} is replaced. */
+  linkLabel?: string;
+  aspectRatio?: string;
+}
+
+const { provider, id, title, poster, posterAlt = '', playLabel = 'Play video: {title}', linkLabel = 'Watch on {provider}', aspectRatio = '16 / 9' } = Astro.props;
+const safeId = /^[A-Za-z0-9_-]{6,20}$/.test(id) ? id : '';
+const name = provider === 'vimeo' ? 'Vimeo' : 'YouTube';
+const src = provider === 'vimeo'
+  ? `https://player.vimeo.com/video/${safeId}?dnt=1&autoplay=1`
+  : `https://www.youtube-nocookie.com/embed/${safeId}?autoplay=1&rel=0`;
+const href = provider === 'vimeo' ? `https://vimeo.com/${safeId}` : `https://www.youtube.com/watch?v=${safeId}`;
+---
+{safeId && (
+  <figure class="video-embed" style={`aspect-ratio: ${aspectRatio}`} data-load-iframe={src} data-load-title={title}>
+    {poster && <ResponsiveImage src={poster} alt={posterAlt} class="video-embed__poster" />}
+    <a class="video-embed__play" href={href} data-load-trigger>
+      <span class="video-embed__icon" aria-hidden="true"></span>
+      <span>{playLabel.replace('{title}', title)}</span>
+      <span class="sr-only" data-load-fallback>{linkLabel.replace('{provider}', name)}</span>
+    </a>
+  </figure>
+)}
+
+<script>
+  import { setupLoadOnClick } from '../lib/load-on-click';
+  setupLoadOnClick();
+  document.addEventListener('astro:page-load', () => setupLoadOnClick());
+</script>
+
+<style>
+@layer components {
+  .video-embed { position: relative; margin: 0; overflow: hidden; border-radius: var(--radius-card, 0.75rem); background: var(--color-elevated, var(--color-surface)); }
+  .video-embed :global(.video-embed__poster), .video-embed :global(iframe) { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: cover; border: 0; }
+  .video-embed__play {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--spacing-2xs, 0.5rem);
+    color: var(--color-text); text-decoration: none; font-weight: 600; text-align: center; padding: var(--spacing-s, 1rem);
+  }
+  .video-embed__play > span:not(.video-embed__icon):not(.sr-only) { padding: 0.25em 0.75em; border-radius: var(--radius-pill, 9999px); background: var(--color-surface); }
+  .video-embed__icon { inline-size: 3.5rem; block-size: 3.5rem; border-radius: var(--radius-pill, 9999px); background: var(--color-surface); box-shadow: var(--shadow-md); position: relative; }
+  .video-embed__icon::after { content: ""; position: absolute; inset-block-start: 50%; inset-inline-start: 54%; translate: -50% -50%; border-block: 0.6rem solid transparent; border-inline-start: 1rem solid var(--color-text); }
+  .video-embed__play:focus-visible { outline: var(--focus-ring-width, 0.2rem) solid var(--color-focus); outline-offset: calc(-1 * var(--focus-ring-width, 0.2rem)); }
+  @media (forced-colors: active) { .video-embed__icon::after { border-inline-start-color: CanvasText; } }
+}
+</style>

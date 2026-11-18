@@ -11,6 +11,8 @@ import LiveSearch from "emdash/ui/search";
 import { resolveStarterSiteIdentity } from "../utils/site-identity";
 import { defaultCanonicalUrl, resolvePublicSiteUrl } from "../utils/page-metadata";
 import SiteShell from "./SiteShell.astro";
+import Analytics from "../components/Analytics.astro";
+import ConsentBanner from "../components/ConsentBanner.astro";
 
 interface Props {
 	title: string;
@@ -116,4 +118,7 @@ const pageCtx = createPublicPageContext({
 		</footer>
 
 		<EmDashBodyEnd slot="body-end" page={pageCtx} />
+		{/* Nothing renders until PUBLIC_GA_ID, PUBLIC_GTM_ID or PUBLIC_CF_BEACON_TOKEN is set (src/lib/consent.ts). */}
+		<Analytics slot="body-end" />
+		<ConsentBanner slot="body-end" />
 </SiteShell>
