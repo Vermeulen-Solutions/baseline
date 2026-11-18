@@ -45,7 +45,10 @@ test('fleet status classifies sites, reads locked versions and compares Baseline
     const site = id => report.sites.find(s => s.id === id);
     assert.equal(report.standard, STANDARD.version);
     assert.deepEqual([site('current-site').kind, site('current-site').profile, site('current-site').hosting], ['baseline-copy', 'emdash', 'cloudflare']);
-    assert.equal(site('current-site').standards.current, true, site('current-site').standards.behind.join('; '));
+    // Dependencies match; the release also pins its skills, which this bare fixture does not carry.
+    assert.deepEqual(site('current-site').standards.behind, []);
+    assert.ok(site('current-site').standards.distributionBehind.some(item => item.startsWith('skills not installed:')));
+    assert.equal(site('current-site').standards.current, false);
     assert.deepEqual([site('current-site').git.uncommitted, site('current-site').git.repository], [1, null]);
     assert.deepEqual([site('old-static').kind, site('old-static').profile, site('old-static').versions.astro], ['baseline', 'static', '7.0.1'], 'the locked version wins over the declared range');
     assert.equal(site('old-static').git, null);
@@ -55,13 +58,13 @@ test('fleet status classifies sites, reads locked versions and compares Baseline
     assert.equal(site('gone-site').missing, true);
 
     const markdown = markdownStatus(report);
-    assert.match(markdown, /\*\*1 of 3 Baseline sites match standards /);
-    assert.match(markdown, /\| current-site \| copy \(emdash\) \| cloudflare \| [^|]+ \| [^|]+ \| current \| not pinned \| not pinned \|.*1 uncommitted \|/);
+    assert.match(markdown, /\*\*0 of 3 Baseline sites match standards /);
+    assert.match(markdown, /\| current-site \| copy \(emdash\) \| cloudflare \| [^|]+ \| [^|]+ \| current \| \d+ missing \| none installed \|.*1 uncommitted \|/);
     assert.match(markdown, /\| old-static \| static \|.*\| behind: 2 \|.*\| not a Git repository \|/);
     assert.match(markdown, /## Other projects[\s\S]*\| other-site \| netlify \| 5\.7\.0 \|/);
     assert.match(markdown, /\| gone-site \| missing \|/);
     assert.match(markdown, /### old-static\n\n- astro 7\.0\.1/);
-    assert.doesNotMatch(markdown, /### current-site/);
+    assert.match(markdown, /### current-site\n\n- skills not installed: /, 'the pinned skills are listed, not the matching dependencies');
 
     // With a release that pins its distribution, skills and helpers count too, and a site page is linked.
     put(path.join(dir, "private"), "sites/current-site.md", "# current-site");
