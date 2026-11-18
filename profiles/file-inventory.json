@@ -1826,6 +1826,18 @@
     "tests/skill-links.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/components/Stars.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/quotes.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/quotes.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }
