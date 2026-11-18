@@ -1562,6 +1562,14 @@
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/fleet-drift.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/fleet-drift.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/standards-changes.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
