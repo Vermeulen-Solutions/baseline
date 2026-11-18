@@ -35,3 +35,11 @@ Against the committed reference images (renewed and reviewed with the design-sys
 - The Workers/D1/R2 profile stays unverified as a certified profile. The four Workers sites' EmDash 1.5 migrations were rehearsed on local copies and deployed one by one; see each site's maintenance record.
 - The editor rehearsal, `check:emdash-current` and the existing-database restore drill were not rerun: the runtime dependencies, database schema and editor code are unchanged since 0.2.0, whose receipts ([2026-11-16](../certification-2026-11-16/README.md)) remain valid.
 - The visual suite ran once; `--repeat=3` and the sensitivity run were not repeated.
+
+## Standards 0.4.0 (2026-11-18)
+
+Certified source: commit `64f8827e93ecb5bd1095f60cbf1e193d94f8411b`. Machine record: [verification-0.4.0.json](verification-0.4.0.json). Runtime dependencies (Astro 7.4.12, EmDash 1.5.0, the adapters) and the database schema are unchanged from 0.3.1; deferred updates are development tooling only (TypeScript 7.0.2, type packages, a lint parser) and the upstream EmDash skills refresh.
+
+Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3: doctor, `npm ci`, verify, build, release artifact, schema budget, dev tools, ci-fast, seed, seeded build and `audit:html` all pass. The first candidate (`37ae0fd`) failed verify and ci-fast in both clones: four tests matched source with LF line endings. Fixed in `64f8827` (tests normalize what they read); verify (343 s and 374 s) and ci-fast then passed in both clones. The two commits differ only in those four tests and a change note.
+
+Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 111 passed; the gallery root-typecheck behavior test timed out under load (its child process killed) and passed alone in 15.5 s, as during the 0.4.0 work. Not covered: the Workers/D1/R2 profile (unchanged scope), the editor rehearsal and restore drill (editor and schema unchanged), repeated visual runs.
