@@ -44,7 +44,7 @@ test('a site file is current, behind, edited or missing, and only untouched file
     write('src/components/Form.astro', execFileSync('git', ['show', `${older}:src/components/Form.astro`]));
     // A static site's sync:baseline record of a managed file it is about to receive, and of one it keeps.
     write('.baseline/managed-files.json', JSON.stringify({ files: { 'src/components/Form.astro': { source: 'src/components/Form.astro', sha256: 'old', ownership: 'shared' }, 'src/lib/consent.ts': { source: 'src/lib/consent.ts', sha256: 'mine', ownership: 'shared' } } }));
-    const result = plan(site, { files: ['src/components/Hours.astro'] });
+    const result = plan(site, { files: ['src/components/Form.astro', 'src/components/Hours.astro', 'src/lib/consent.ts'] });
     const status = Object.fromEntries(result.entries.map(entry => [entry.target, entry.status]));
     assert.equal(status['src/lib/opening-hours.ts'], 'current');
     assert.equal(status['src/lib/consent.ts'], 'edited');
@@ -70,5 +70,38 @@ test('a site file is current, behind, edited or missing, and only untouched file
     fs.writeFileSync(path.join(site, '.baseline/owned-files.json'), JSON.stringify(receipt));
     assert.equal(plan(site).entries.find(entry => entry.target === 'src/lib/consent.ts').status, 'behind');
     assert.throws(() => plan(site, { files: ['src/pages/index.astro'] }), /Not a Baseline-owned code file/);
+  } finally { fs.rmSync(site, { recursive: true, force: true }); }
+});
+
+test('--files adopts exactly the named files and leaves other behind files alone', () => {
+  const site = fs.mkdtempSync(path.join(os.tmpdir(), 'site-files-'));
+  try {
+    const pkg = JSON.parse(head('package.json').toString('utf8'));
+    fs.writeFileSync(path.join(site, 'package.json'), JSON.stringify({ dependencies: { emdash: pkg.dependencies.emdash, ...pkg.dependencies }, devDependencies: pkg.devDependencies }));
+    const write = (file, bytes) => { fs.mkdirSync(path.dirname(path.join(site, file)), { recursive: true }); fs.writeFileSync(path.join(site, file), bytes); };
+    const older = file => execFileSync('git', ['show', `${execFileSync('git', ['log', '--format=%H', '-2', '--', file]).toString().trim().split('\n')[1]}:${file}`]);
+    // Two behind files and an edited one, as on a full Baseline fork.
+    write('src/lib/form-transport.ts', older('src/lib/form-transport.ts'));
+    write('src/lib/reading-time.ts', older('src/lib/reading-time.ts'));
+    write('src/lib/consent.ts', '// my own consent\n');
+    const status = result => Object.fromEntries(result.entries.map(entry => [entry.target, entry.status]));
+    assert.deepEqual(plan(site).adopting, ['src/lib/form-transport.ts', 'src/lib/reading-time.ts'], 'without --files every behind file is adopted');
+    const result = plan(site, { files: ['src/lib/form-transport.ts'] });
+    assert.equal(status(result)['src/lib/reading-time.ts'], 'behind');
+    assert.deepEqual(result.adopting, ['src/lib/form-transport.ts']);
+    assert.deepEqual(apply(result), ['src/lib/form-transport.ts']);
+    assert.ok(fs.readFileSync(path.join(site, 'src/lib/form-transport.ts')).equals(head('src/lib/form-transport.ts')), 'the named behind file is replaced');
+    assert.ok(fs.readFileSync(path.join(site, 'src/lib/reading-time.ts')).equals(older('src/lib/reading-time.ts')), 'a behind file that is not named stays untouched');
+    const short = result.commit.slice(0, 12);
+    assert.ok(!fs.existsSync(path.join(site, '.baseline/backups', short, 'src/lib/reading-time.ts')));
+    assert.ok(!fs.existsSync(path.join(site, '.baseline/incoming', short, 'src/lib/consent.ts')), 'an edited file that is not named gets no incoming copy');
+    const receipt = JSON.parse(fs.readFileSync(path.join(site, '.baseline/owned-files.json'), 'utf8'));
+    assert.ok(!('src/lib/reading-time.ts' in receipt.files));
+    // A named file whose new dependency is missing stays blocked until the dependency is named too.
+    const blocked = plan(site, { files: ['src/components/Hours.astro'] });
+    assert.equal(status(blocked)['src/components/Hours.astro'], 'blocked');
+    assert.deepEqual(blocked.entries.find(entry => entry.target === 'src/components/Hours.astro').needs, ['local ../lib/opening-hours']);
+    assert.deepEqual(blocked.adopting, []);
+    assert.deepEqual(plan(site, { files: ['src/components/Hours.astro', 'src/lib/opening-hours.ts'] }).adopting, ['src/components/Hours.astro', 'src/lib/opening-hours.ts']);
   } finally { fs.rmSync(site, { recursive: true, force: true }); }
 });

@@ -15,11 +15,14 @@
 // - missing: Baseline has it and the site does not. Adopted only when named with --files, because a
 //   new file usually needs wiring;
 // - blocked: the incoming version imports a local file or package the site does not have (and that
-//   this run does not bring along).
-// --apply copies the behind files (and the named missing ones), keeps each replaced original under
-// .baseline/backups/<commit>/, and records every current or adopted file with its hash and commit in
-// .baseline/owned-files.json, so the next run knows the site never touched them. Nothing else is
-// written. Line endings follow Baseline's committed (LF) bytes; Git normalizes them on commit.
+//   this run does not bring along, so name a file's new dependencies with it).
+// Without --files, --apply copies every behind file and writes Baseline's version of every edited one
+// to .baseline/incoming/. With --files a,b it touches exactly the named files, behind or missing, and
+// leaves every other file alone: a site that is a full Baseline fork would otherwise take Baseline's
+// own repository tests. Replaced originals are kept under .baseline/backups/<commit>/, and every
+// current or adopted file is recorded with its hash and commit in .baseline/owned-files.json, so the
+// next run knows the site never touched them. Nothing else is written. Line endings follow
+// Baseline's committed (LF) bytes; Git normalizes them on commit.
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -110,7 +113,9 @@ export function plan(site, { files = [] } = {}) {
     const recorded = receipt.files?.[target]?.sha256 === hash(current);
     return { source, target, status: recorded || blobKnown(current) ? 'behind' : 'edited', incoming };
   });
-  const adopting = new Set(entries.filter(entry => entry.status === 'behind' || entry.status === 'missing' && files.includes(entry.target)).map(entry => entry.target));
+  // Named files are exactly what this run adopts; without names, every behind file is.
+  const named = files.length ? new Set(files) : null;
+  const adopting = new Set(entries.filter(entry => named ? named.has(entry.target) && ['behind', 'missing'].includes(entry.status) : entry.status === 'behind').map(entry => entry.target));
   const has = file => adopting.has(file) || fs.existsSync(path.join(site, file));
   // Blocking one file can block another that imports it, in any order: repeat until nothing changes.
   for (let changed = true; changed;) {
@@ -121,16 +126,16 @@ export function plan(site, { files = [] } = {}) {
       if (needs.length) { entry.status = 'blocked'; entry.needs = needs; adopting.delete(entry.target); changed = true; }
     }
   }
-  return { site, platform, commit, entries, adopting: [...adopting].sort(), receipt };
+  return { site, platform, commit, entries, adopting: [...adopting].sort(), named: named ? [...named].sort() : null, receipt };
 }
 
 export function apply(result) {
-  const { site, commit, entries, adopting, receipt } = result;
+  const { site, commit, entries, adopting, named, receipt } = result;
   const short = commit.slice(0, 12);
   const write = (file, bytes) => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, bytes); };
   const written = [];
   for (const entry of entries) {
-    if (entry.status === 'edited') write(path.join(site, '.baseline/incoming', short, entry.target), entry.incoming);
+    if (entry.status === 'edited' && (!named || named.includes(entry.target))) write(path.join(site, '.baseline/incoming', short, entry.target), entry.incoming);
     if (!adopting.includes(entry.target)) continue;
     const local = path.join(site, entry.target);
     if (fs.existsSync(local)) write(path.join(site, '.baseline/backups', short, entry.target), fs.readFileSync(local));
@@ -171,7 +176,7 @@ function summary(result) {
 if (isMain(import.meta.url)) {
   try {
     const args = argumentsOf(process.argv.slice(2), ['--site', '--files'], ['--apply', '--json', '--help']);
-    if (args.help || !args.site) { console.log('site:files -- --site <path> [--files a,b] [--apply] [--json]'); process.exitCode = args.help ? 0 : 1; }
+    if (args.help || !args.site) { console.log('site:files -- --site <path> [--files a,b] [--apply] [--json]\n  --apply alone replaces every behind file; with --files it writes only the named files.'); process.exitCode = args.help ? 0 : 1; }
     else {
       const result = plan(path.resolve(args.site), { files: args.files ? args.files.split(',').map(file => file.trim()).filter(Boolean) : [] });
       const report = summary(result);
