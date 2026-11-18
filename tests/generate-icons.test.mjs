@@ -50,8 +50,11 @@ test('the manifest names the site, keeps the browser chrome and lists the icons 
   assert.equal(webManifest({ name: '' }).name, 'Website');
 });
 
-test('both Base layouts link the touch icon and the manifest', () => {
-  for (const file of ['src/layouts/Base.astro', 'profiles/static/project/src/layouts/Base.astro']) {
+test('the Base layouts link the touch icon and the manifest', () => {
+  // A generated site has one Base layout; the Baseline checkout also has the static profile's.
+  const layouts = ['src/layouts/Base.astro', 'profiles/static/project/src/layouts/Base.astro'].filter(file => existsSync(new URL(`../${file}`, import.meta.url)));
+  assert.ok(layouts.length >= 1);
+  for (const file of layouts) {
     const layout = read(file);
     assert.match(layout, /rel="apple-touch-icon"/, file);
     assert.match(layout, /rel="manifest"/, file);
