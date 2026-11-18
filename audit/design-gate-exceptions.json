@@ -101,8 +101,8 @@
   },
   {
     "path": "src/components/Form.astro",
-    "reason": "Functional starter infrastructure: accessible dual-transport form primitive with 0 KB JS baseline and inline progressive enhancement. Exact LF-normalized source hash.",
-    "sha256": "4d15522c69b703e8142128f248f207ae4d987547374216b62ca4c9e4a3405c3a"
+    "reason": "Functional starter infrastructure: accessible dual-transport form primitive with 0 KB JS baseline and inline progressive enhancement. Exact LF-normalized source hash. Inline field errors after interaction (:user-invalid), localized through data-error-* attributes, linked with aria-describedby and aria-invalid.",
+    "sha256": "662e181ae712cde326bf4dbd5df0e74d77c6babe19a1077e107f9030ce679656"
   },
   {
     "path": "src/lib/publication-feed.ts",
