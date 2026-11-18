@@ -177,6 +177,7 @@
       "typescript",
       "sharp",
       "@fontsource/noto-sans",
+      "@axe-core/playwright",
       "@playwright/test",
       "eslint",
       "eslint-plugin-astro",

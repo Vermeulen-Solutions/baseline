@@ -36,6 +36,9 @@
 // - copy-rule: a site wording rule from the budget's `copy` list matched in the text a visitor
 //   reads (code, quotations, hidden text and [data-copy-ignore] are skipped), for example
 //   { "pattern": "\\bwe\\b", "why": "the studio is one person: say I" } or a banned phrase.
+// - axe (phone width): WCAG 2.x A/AA violations of serious or critical impact, from @axe-core/playwright
+//   when installed (--no-axe skips it); share-image: an indexable page without og:image, or one that
+//   does not load or is over 600 KB, which link previews drop;
 // - launch readiness, at the phone width: `placeholder` (a [[placeholder: …]] marker left in the
 //   copy, or an empty slot marked data-placeholder), `default-identity` (the starter's title, site
 //   name or tagline, or an example.com / .test / .invalid address), `multiple-h1`, `inline-handler`
@@ -95,6 +98,7 @@ export function parseArgs(argv) {
     else if (flag === '--budget') out.budget = msysToNative(value());
     else if (flag === '--tabs') out.tabs = Number(value());
     else if (flag === '--init') out.init = true;
+    else if (flag === '--no-axe') out.axe = false;
     else if (flag === '--out') out.out = msysToNative(value());
     else throw Error('Unknown option: ' + flag);
   }
@@ -505,7 +509,37 @@ async function tabThrough(page, route, width, tabs, issues) {
 
 // Measures one route at the phone width (weight, fonts, JSON-LD, islands, first viewport, targets,
 // focus, layout shift), then at the desktop width (first viewport, focus, layout shift).
-export async function measureRoute(browser, base, route, { tabs = 40 } = {}) {
+// Link previews (WhatsApp is the usual one) drop a picture over about 600 KB.
+export const SHARE_IMAGE_MAX_KB = 600;
+export async function shareImageIssues(page, pageUrl, content) {
+  if (!content.trim()) return [{ kind: 'share-image', value: 'missing', detail: 'no og:image: link previews show no picture' }];
+  let url;
+  try { url = new URL(content, pageUrl).href; } catch { return [{ kind: 'share-image', value: content.slice(0, 80), detail: 'not a URL' }]; }
+  try {
+    const response = await page.request.get(url, { timeout: 30000 });
+    if (!response.ok()) return [{ kind: 'share-image', value: `HTTP ${response.status()}`, detail: url }];
+    const size = kb((await response.body()).length);
+    if (!/^image\//.test(response.headers()['content-type'] ?? '')) return [{ kind: 'share-image', value: response.headers()['content-type'] || 'no content type', detail: `${url} is not an image` }];
+    if (size > SHARE_IMAGE_MAX_KB) return [{ kind: 'share-image', value: size, limit: SHARE_IMAGE_MAX_KB, detail: `${url}: link previews drop it` }];
+  } catch (error) { return [{ kind: 'share-image', value: 'unreachable', detail: `${url}: ${String(error.message).split('\n')[0].slice(0, 80)}` }]; }
+  return [];
+}
+
+// WCAG 2.x A/AA (2.2 included), serious and critical impact only: the violations that block people.
+export const AXE_TAGS = Object.freeze(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']);
+export async function axeIssues(AxeBuilder, page) {
+  const results = await new AxeBuilder({ page }).withTags([...AXE_TAGS]).exclude('[data-quality-ignore]').analyze();
+  return results.violations
+    .filter(v => v.impact === 'serious' || v.impact === 'critical')
+    .map(v => ({ kind: 'axe', value: `${v.id} (${v.nodes.length})`, detail: `${v.impact}: ${v.help} at ${v.nodes[0]?.target?.join(' ') ?? '?'}` }));
+}
+
+function loadAxe() {
+  for (const base of [path.join(process.cwd(), 'package.json'), import.meta.url]) { try { return createRequire(base)('@axe-core/playwright').default; } catch {} }
+  return null;
+}
+
+export async function measureRoute(browser, base, route, { tabs = 40, axe = null } = {}) {
   const url = new URL(route, base).href;
   const issues = [];
   const measurement = { route };
@@ -539,6 +573,7 @@ export async function measureRoute(browser, base, route, { tabs = 40 } = {}) {
         title: document.title,
         description: document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '',
         noindex: /\bnoindex\b/i.test(document.querySelector('meta[name="robots"]')?.getAttribute('content') ?? ''),
+        shareImage: document.querySelector('meta[property="og:image"]')?.getAttribute('content') ?? '',
       }));
       const sizeOf = href => ok.find(s => s.url === href)?.bytes ?? 0;
       const lcpUrl = page_.lcp?.url && !page_.lcp.url.startsWith('data:') ? page_.lcp.url : null;
@@ -560,6 +595,8 @@ export async function measureRoute(browser, base, route, { tabs = 40 } = {}) {
       measurement.jsonLdTypes = [...types].sort();
       const noindexHeader = /\bnoindex\b/i.test(documentResponse.headers()['x-robots-tag'] ?? '');
       Object.assign(measurement, { title: page_.title.trim(), description: page_.description.trim(), noindex: page_.noindex || noindexHeader || documentResponse.status() >= 400 });
+      if (!measurement.noindex) for (const issue of await shareImageIssues(page, url, page_.shareImage)) issues.push({ ...issue, route });
+      if (axe) for (const issue of await axeIssues(axe, page)) issues.push({ ...issue, route, width: viewport.width });
       measurement.copyText = await page.evaluate(visibleCopy);
       for (const f of await page.evaluate(launchFindings, [...STARTER_IDENTITY])) issues.push({ kind: f.kind, route, value: f.value, ...(f.detail ? { detail: f.detail } : {}) });
       // Report-only violations fire the same event, so a site can clear them before enforcing.
@@ -606,11 +643,13 @@ export async function checkQuality(options, hooks = {}) {
   if (!routes.length) throw Error('No routes to check');
   const budgetPath = options.budget ?? BUDGET_FILE;
   const budget = existsSync(budgetPath) ? parseBudget(readFileSync(budgetPath, 'utf8'), budgetPath) : null;
+  const axe = options.axe === false ? null : loadAxe();
+  if (options.axe !== false && !axe) hooks.progress?.('axe skipped: install @axe-core/playwright for the accessibility scan');
   const browser = await chromium.launch();
   const measurements = [], issues = [];
   try {
     for (const [index, route] of routes.entries()) {
-      const result = await measureRoute(browser, options.base, route, { tabs: options.tabs });
+      const result = await measureRoute(browser, options.base, route, { tabs: options.tabs, axe });
       measurements.push(result.measurement);
       issues.push(...result.issues, ...(options.init ? [] : budgetIssues(result.measurement, budget)));
       delete result.measurement.copyText; // page text stays out of the report
@@ -625,7 +664,7 @@ export async function checkQuality(options, hooks = {}) {
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   if (options.help) {
-    console.log('Usage: npm run check:quality -- --base http://127.0.0.1:4321 (--sitemap | --routes /,/about | --routes-file routes.txt) [--sample "^/posts/=3"] [--budget page-budget.json] [--tabs 40] [--init] [--out report.json]');
+    console.log('Usage: npm run check:quality -- --base http://127.0.0.1:4321 (--sitemap | --routes /,/about | --routes-file routes.txt) [--sample "^/posts/=3"] [--budget page-budget.json] [--tabs 40] [--no-axe] [--init] [--out report.json]');
     return;
   }
   const result = await checkQuality(options, { progress: line => process.stderr.write(line + '\n') });
