@@ -62,7 +62,7 @@ try {
       ...(body ? { body: JSON.stringify(body) } : {}), redirect: 'manual',
     });
     const result = await response.json();
-    assert.equal(response.status, 200, route + ': ' + JSON.stringify(result.error));
+    assert.equal(response.status, method === 'POST' && route.split('/').length === 2 ? 201 : 200, route + ': ' + JSON.stringify(result.error));
     assert.equal(result.success, true, route);
     assert.notEqual(response.headers.get('x-astro-cache'), 'HIT', 'admin responses are private');
     return result.data;
@@ -85,6 +85,21 @@ try {
     return warm(route);
   };
   await warm('/'); await warm('/posts/welcome'); await warm('/category/general');
+
+  // A missing entry renders the 404 page through a rewrite. The memory cache stores any response
+  // with a lifetime, whatever its status, so a cached 404 would hide the entry once it is published.
+  for (const route of ['/posts/cache-late-post', '/cache-late-page', '/tag/cache-late-tag']) {
+    for (const attempt of [1, 2]) {
+      const missing = await page(route);
+      assert.equal(missing.status, 404, route + ' answers 404 (attempt ' + attempt + ')');
+      assert.notEqual(missing.cache, 'HIT', route + ' must never be served from the route cache');
+    }
+  }
+  const late = (await api('content/posts', 'POST', { slug: 'cache-late-post', data: { title: 'Cache late post' } })).item;
+  await api('content/posts/' + late.id + '/publish', 'POST', { _rev: late._rev });
+  await fresh('/posts/cache-late-post', 'Cache late post');
+  receipt.checks.push('missing entries answer 404 without being cached, and a later publish under that slug is served at once');
+
   const original = (await api('content/posts/welcome')).item;
   await api('content/posts/' + original.id, 'PUT', { _rev: original._rev, data: { title: 'Welcome cache published title' } });
   const pending = (await api('content/posts/' + original.id)).item;
