@@ -166,8 +166,10 @@ const defaultVal = defaultValue && seenValues.has(defaultValue) ? defaultValue :
       transition: background 120ms ease, border-color 120ms ease;
     }
 
-    .tabs__tab:hover {
-      background: color-mix(in oklch, currentColor 8%, transparent);
+    @media (hover: hover) {
+      .tabs__tab:hover {
+        background: color-mix(in oklch, currentColor 8%, transparent);
+      }
     }
 
     .tabs__tab[aria-selected="true"] {

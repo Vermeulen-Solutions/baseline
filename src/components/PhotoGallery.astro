@@ -194,7 +194,9 @@ const jsonLd = galleryJsonLd(photos, {
   /* Opt in without host overrides that can lose to Astro's scoped selectors. */
   .photo-gallery[data-fit="contain"] a { height: auto; }
   .photo-gallery[data-fit="contain"] :global(img) { height: auto; object-fit: contain; }
-  .photo-gallery[data-fit="contain"] a:hover :global(img) { transform: none; }
+  @media (hover: hover) {
+    .photo-gallery[data-fit="contain"] a:hover :global(img) { transform: none; }
+  }
 
   /* Grid Layout Fallback */
   .photo-gallery[data-layout="grid"] {
@@ -243,8 +245,10 @@ const jsonLd = galleryJsonLd(photos, {
     transition: transform 0.3s ease;
   }
 
-  .photo-gallery a:hover :global(img) {
-    transform: scale(1.03);
+  @media (hover: hover) {
+    .photo-gallery a:hover :global(img) {
+      transform: scale(1.03);
+    }
   }
 
   .photo-gallery :global(.emdash-image) {

@@ -132,9 +132,11 @@ const renderedListHtml = renderTocList(tocNodes);
                   border-color var(--duration-fast, 120ms) ease;
     }
 
-    .toc :global(.toc__link:hover) {
-      color: var(--color-text, currentColor);
-      background: color-mix(in oklch, currentColor 5%, transparent);
+    @media (hover: hover) {
+      .toc :global(.toc__link:hover) {
+        color: var(--color-text, currentColor);
+        background: color-mix(in oklch, currentColor 5%, transparent);
+      }
     }
 
     .toc :global(.toc__link:focus-visible) {

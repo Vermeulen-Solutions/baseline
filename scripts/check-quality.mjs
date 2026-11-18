@@ -497,6 +497,12 @@ async function scrollThrough(page) {
 
 async function tabThrough(page, route, width, tabs, issues) {
   const seen = new Set();
+  // With `scroll-behavior: smooth` a browser scrolls the focused control into view over a few
+  // hundred milliseconds; measuring straight after Tab would report it as off screen. Scroll at
+  // once for the check (the page's own setting is left for visitors).
+  await page.evaluate(() => {
+    for (const el of [document.documentElement, document.body]) el?.style.setProperty('scroll-behavior', 'auto', 'important');
+  }).catch(() => {});
   for (let i = 0; i < tabs; i++) {
     await page.keyboard.press('Tab');
     const state = await page.evaluate(focusedVisibility);

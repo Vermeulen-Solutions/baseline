@@ -136,7 +136,8 @@ export function resolveStaticMetadata(input: PageMetadata, site: MetadataSite, c
     graphs.push({ '@context': 'https://schema.org', '@type': 'WebSite', name: site.title, url: root.href, inLanguage: site.language });
   }
   return {
-    title: input.title === site.title ? site.title : `${input.title} — ${site.title}`,
+    // The site name is added only when the whole title fits the 60 characters search results show.
+    title: input.title === site.title || `${input.title} — ${site.title}`.length > 60 ? input.title : `${input.title} — ${site.title}`,
     pageTitle: input.title, siteName: site.title, description, language: site.language,
     openGraphLocale: /^[a-z]{2,3}-[A-Z]{2}$/.test(site.language) ? site.language.replace('-', '_') : undefined,
     canonical, pageType, image, article, graphs, robots: input.robots,

@@ -37,7 +37,7 @@
   {
     "path": "src/components/Tabs.astro",
     "reason": "Functional interaction primitive: WAI-ARIA tablist with 0-KB JS visible fallback, named panel slots, and progressive enhancement. Exact LF-normalized source hash.",
-    "sha256": "aaadb46e4449f94ac42a632ccad1d0defc7529a66b137db38803aa94a30e8088"
+    "sha256": "ea869950c2b3ccd99f376fdb74facfe794eb92d751ddb17cb52fe1aadd7662f3"
   },
   {
     "path": "src/components/Announcer.astro",
@@ -47,7 +47,7 @@
   {
     "path": "src/components/CopyButton.astro",
     "reason": "Functional interaction primitive: accessible copy-to-clipboard button targeting element text/value with timeout cleanup. Exact LF-normalized source hash.",
-    "sha256": "12cd3166c5dda8cdade9cf2ccb9ea04f81a7b5ddcf1c90a735e19fe4a1fe4c92"
+    "sha256": "864552ce21f50253c49021879e2e08282a1c777e8ef807fb51f6773af8b05ff1"
   },
   {
     "path": "src/lib/headings.ts",
@@ -72,7 +72,7 @@
   {
     "path": "src/components/TableOfContents.astro",
     "reason": "Functional navigation primitive: progressive semantic nav with zero-JS nested ol fallback and pure-DOM scroll spy. Exact LF-normalized source hash.",
-    "sha256": "262dce3ec576e86165f322b76f23e8b76dada8aaf83c2d2e87d8cbb93d002a0a"
+    "sha256": "24b6b6bccfca8733e410f4a9f59c22fa38b5da70810ba01fa05f2b20958bcbfc"
   },
   {
     "path": "src/components/Callout.astro",
@@ -156,7 +156,7 @@
   {
     "path": "src/layouts/Base.astro",
     "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode. Links the apple-touch-icon and the web manifest. Renders Analytics and ConsentBanner in body-end (nothing without analytics ids).",
-    "sha256": "1dde32b6add5c7fc7f1af7082391f3a26ecd3d06f04ebc979cc511ca15c11ffc"
+    "sha256": "1265b4f8a3faf02af9c3d36e410c210990ed07aa9601b6aebf6d1e01ecdf211b"
   },
   {
     "path": "src/components/Container.astro",
@@ -246,7 +246,7 @@
   {
     "path": "src/components/Card.astro",
     "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; layout=\"horizontal\" rules reordered narrow-first (stacked default, side by side above a 40rem viewport, restacked in a query container of 32rem or less) with the same breakpoints and outcomes and no new visual values; no client theme or page implementation. transitionName now resolves through the shared ident-safe view-transition helper and adds the vt-media class to the media; unchanged output for ident-safe prefixes apart from that class. Any source edit invalidates this exact LF-normalized exception. Horizontal layout is a named card container query from a 32rem card width inside a display: contents layout wrapper; z and duration tokens with fallbacks. Clickable cards zoom their media by --card-media-hover-scale (1.03, set 1 to disable) on pointer hover and keyboard focus: a composited scale inside the clipped media box, gated on reduced motion; no layout change.",
-    "sha256": "36d944cd0ebcd2700a9c23f422f4c90154c1f906cd9136085f28e57770125909"
+    "sha256": "578fc2c01b470869638cdc7b9dac46b3fc2deafef9e6447c7b679622f1217168"
   },
   {
     "path": "src/components/PartnersPanel.astro",
@@ -343,7 +343,7 @@
   {
     "path": "src/components/PhotoGallery.astro",
     "reason": "Reusable gallery primitive: additive opt-in full-frame image fit preserves existing cover presentation; no client art direction or page assembly. Exact LF-normalized source; edits invalidate this exception. Fixed caption scrim recorded as a token-exempt exception. Gallery link radius reads --radius-control (same 0.375rem fallback) instead of the undefined --radius-sm.",
-    "sha256": "c890f40711e9751d4c0369f0acafe6d7f1b888f11f1b3115c75b1f1f9075c843"
+    "sha256": "d393fb9ce676562a63c766f50c06bbae98a54126c7212c76a675482e9c482e53"
   },
   {
     "path": "src/utils/reference-overlay.ts",
@@ -502,7 +502,7 @@
   {
     "path": "profiles/static/project/src/lib/metadata.ts",
     "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "100111a0805981de27ff6db319c248df48e58e370cffe44629474d1323ac93b5"
+    "sha256": "b525bb8e9c8272ff33de1f5293622ed6f97de54715c5ff8080f9b06ddef61d6c"
   },
   {
     "path": "profiles/static/project/src/lib/json-ld.ts",
@@ -638,7 +638,7 @@
   {
     "path": "src/components/SearchDialog.astro",
     "reason": "Functional interaction primitive: optional native <dialog> site search using Baseline tokens and client-overridable --search-* hooks, hidden trigger until enhanced and explicit no-JS fallback link. Exact LF-normalized source hash.",
-    "sha256": "322df773dbdd18522e52c9a21f7d2f483d779783de2122906b03ab60fe9cfa17"
+    "sha256": "7db5739e2e6329f8372cab21c928b21485b71e980d5c666abcc0ba87f608901c"
   },
   {
     "path": "src/lib/view-transition.ts",

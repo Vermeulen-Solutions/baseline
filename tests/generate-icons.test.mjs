@@ -8,7 +8,8 @@ import { webManifest, shortName } from '../src/lib/web-manifest.ts';
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
 test('arguments keep the defaults and refuse bad colours and padding', () => {
-  assert.deepEqual(parseArgs([]), { source: 'public/favicon.svg', out: 'public', background: '#ffffff', padding: 0.1 });
+  assert.deepEqual(parseArgs([]), { source: 'public/favicon.svg', out: 'public', background: '#ffffff', padding: 0.1, opaque: false });
+  assert.equal(parseArgs(['--opaque']).opaque, true);
   assert.equal(parseArgs(['--background', '#1B2531']).background, '#1B2531');
   assert.throws(() => parseArgs(['--background', 'white']), /six-digit hex/);
   assert.throws(() => parseArgs(['--padding', '0.5']), /from 0 to 0.3/);
@@ -32,6 +33,15 @@ test('icons render at their sizes; the touch and maskable icons are opaque on th
   assert.deepEqual([...data.subarray(0, 3)], [0x11, 0x22, 0x33]);
 });
 
+test('--opaque puts every size on the ground colour, so a light mark stays visible', async () => {
+  const sharp = createRequire(import.meta.url)('sharp');
+  const svg = Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="12" fill="#fff"/></svg>');
+  const icons = await renderIcons(svg, { background: '#332318', padding: 0.15, opaque: true });
+  for (const icon of ICONS) assert.equal((await sharp(icons[icon.file]).stats()).isOpaque, true, icon.file);
+  const { data } = await sharp(icons['icon-512.png']).raw().toBuffer({ resolveWithObject: true });
+  assert.deepEqual([...data.subarray(0, 3)], [0x33, 0x23, 0x18], 'corner is the ground');
+});
+
 test('Baseline ships the generated icons next to its favicon', () => {
   for (const icon of ICONS) assert.ok(existsSync(new URL(`../public/${icon.file}`, import.meta.url)), icon.file);
 });
@@ -50,13 +60,16 @@ test('the manifest names the site, keeps the browser chrome and lists the icons 
   assert.equal(webManifest({ name: '' }).name, 'Website');
 });
 
-test('the Base layouts link the touch icon and the manifest', () => {
-  // A generated site has one Base layout; the Baseline checkout also has the static profile's.
-  const layouts = ['src/layouts/Base.astro', 'profiles/static/project/src/layouts/Base.astro'].filter(file => existsSync(new URL(`../${file}`, import.meta.url)));
-  assert.ok(layouts.length >= 1);
-  for (const file of layouts) {
-    const layout = read(file);
-    assert.match(layout, /rel="apple-touch-icon"/, file);
-    assert.match(layout, /rel="manifest"/, file);
+test('the layouts link the touch icon and the manifest', () => {
+  // Each layout set links them once, from Base or from SiteShell (a site may move the head there).
+  // A generated site has one set; the Baseline checkout also has the static profile's.
+  const sets = [['src/layouts/Base.astro', 'src/layouts/SiteShell.astro'], ['profiles/static/project/src/layouts/Base.astro', 'profiles/static/project/src/layouts/SiteShell.astro']]
+    .map(files => files.filter(file => existsSync(new URL(`../${file}`, import.meta.url))))
+    .filter(files => files.length);
+  assert.ok(sets.length >= 1);
+  for (const files of sets) {
+    const head = files.map(read).join('\n');
+    assert.match(head, /rel="apple-touch-icon"/, files[0]);
+    assert.match(head, /rel="manifest"/, files[0]);
   }
 });

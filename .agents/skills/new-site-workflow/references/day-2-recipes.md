@@ -16,7 +16,7 @@ Every recipe ends the same way: `npm run verify`, a build served locally, and `n
 - **Colours and type:** change the tokens in `src/styles/global.css` (`@theme`): surfaces, text, action and focus colours, `--font-body` and `--font-display`. Never hard-code a colour in a component. Run `npm run design:tokens` for contrast and record the change in the Art Direction Record.
 - **Fonts:** self-host them (`@fontsource-variable/*` or files in `public/fonts/` with `@font-face`), preload only the first screen's face, and check them with `docs/font-preflight.md`.
 - **Logo and icons:** replace `public/favicon.svg`, then `npm run icons -- --background "#<brand ground>"` and commit the PNGs. On EmDash also set the logo in the site settings.
-- **Name and share image:** the site title and tagline (EmDash settings, or `src/config/site.ts`), the default share image (EmDash SEO settings), and the business facts in the metadata plugin's `options.organization`.
+- **Name and share image:** the site title and tagline (EmDash settings, or `src/config/site.ts`), the default share image (EmDash SEO settings, or a 1200×630 file in `public/` that Base passes as the fallback `image`; one per language when the headline differs), and the business facts in the metadata plugin's `options.organization`.
 - **Check:** `design:tokens`, the art-direction gate, `check:quality` (no `default-identity`, no contrast findings from axe), `audit:ui`, and a look at the share image and home-screen icon.
 
 ## Connect a form
@@ -47,6 +47,7 @@ Every recipe ends the same way: `npm run verify`, a build served locally, and `n
 ## Show a video, a map or opening hours
 
 - `VideoEmbed.astro` (YouTube or Vimeo) and `MapEmbed.astro` contact the provider only on click; name the provider in the privacy notice and add its origin to `frame-src` in `CSP_SOURCES` when a CSP is on.
+- On a site with its own palette, map the tokens these components read (`--color-surface`, `--color-text`, `--color-border`, `--color-border-strong`, `--color-focus`) onto the site's colours on the embed's container. They style inside `@layer components`, so a site's unlayered `img` or `figcaption` rules win: restate the poster fill there if the poster does not cover the frame. `VideoEmbed` expects the current `ResponsiveImage` (which accepts imported images); on an older one, narrow `poster` to a URL string.
 - Opening hours go in one list passed to both `Hours.astro` and the metadata plugin's `options.organization.openingHours`, so the page and search results agree.
 - **Check:** no request to the provider before the click (`check:quality` lists none in `csp-violation` either), and the hours match the business's public listing.
 

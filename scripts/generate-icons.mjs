@@ -3,12 +3,14 @@
 //
 //   npm run icons                                   # from public/favicon.svg, white ground
 //   npm run icons -- --source brand/mark.svg --background "#1b2531" --padding 0.12
+//   npm run icons -- --source brand/logo-white.png --background "#332318" --opaque
 //
 // Writes into public/ (commit them; they ship to visitors):
 // - apple-touch-icon.png (180px): iOS uses it for a home-screen bookmark, and without it shows a
 //   screenshot of the page. iOS draws transparency as black, so this one sits on --background;
 // - icon-192.png and icon-512.png: the manifest's icons for Android and installed shortcuts,
-//   transparent around the mark;
+//   transparent around the mark, or on --background with --opaque (a light mark on transparency
+//   disappears on a light launcher);
 // - icon-maskable-512.png: Android crops icons to a circle or squircle, so the mark sits inside the
 //   safe zone (the middle 80% circle) on --background.
 // The manifest (/site.webmanifest) lists them; the Base layouts link the touch icon and manifest.
@@ -28,7 +30,7 @@ export const ICONS = Object.freeze([
 ]);
 
 export function parseArgs(argv) {
-  const out = { source: 'public/favicon.svg', out: 'public', background: '#ffffff', padding: 0.1 };
+  const out = { source: 'public/favicon.svg', out: 'public', background: '#ffffff', padding: 0.1, opaque: false };
   for (let i = 0; i < argv.length; i++) {
     const flag = argv[i], value = () => { const v = argv[++i]; if (v === undefined || v.startsWith('--')) throw Error('Missing value for ' + flag); return v; };
     if (flag === '--help' || flag === '-h') out.help = true;
@@ -36,6 +38,7 @@ export function parseArgs(argv) {
     else if (flag === '--out') out.out = msysToNative(value());
     else if (flag === '--background') out.background = value();
     else if (flag === '--padding') out.padding = Number(value());
+    else if (flag === '--opaque') out.opaque = true;
     else throw Error('Unknown option: ' + flag);
   }
   if (!/^#[0-9a-f]{6}$/i.test(out.background)) throw Error('--background must be a six-digit hex colour, for example #ffffff');
@@ -49,17 +52,19 @@ function loadSharp() {
 }
 
 // Every icon as PNG bytes, from SVG or raster source bytes.
-export async function renderIcons(source, { background = '#ffffff', padding = 0.1 } = {}) {
+export async function renderIcons(source, { background = '#ffffff', padding = 0.1, opaque = false } = {}) {
   const sharp = loadSharp();
   const out = {};
   for (const icon of ICONS) {
-    const pad = icon.padding ?? padding;
+    const ground = icon.ground || opaque;
+    // On a ground the mark needs room around it: the transparent sizes take --padding when opaque.
+    const pad = icon.padding === 0 && opaque ? padding : icon.padding ?? padding;
     const inner = Math.round(icon.size * (1 - 2 * pad));
     // Render large and scale down, so an SVG stays sharp at every size.
     const mark = await sharp(source, { density: 384 }).resize(inner, inner, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer();
-    const canvas = sharp({ create: { width: icon.size, height: icon.size, channels: 4, background: icon.ground ? background : { r: 0, g: 0, b: 0, alpha: 0 } } });
+    const canvas = sharp({ create: { width: icon.size, height: icon.size, channels: 4, background: ground ? background : { r: 0, g: 0, b: 0, alpha: 0 } } });
     let image = canvas.composite([{ input: mark, gravity: 'center' }]);
-    if (icon.ground) image = sharp(await image.png().toBuffer()).flatten({ background });
+    if (ground) image = sharp(await image.png().toBuffer()).flatten({ background });
     out[icon.file] = await image.png({ compressionLevel: 9 }).toBuffer();
   }
   return out;
@@ -67,7 +72,7 @@ export async function renderIcons(source, { background = '#ffffff', padding = 0.
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
-  if (options.help) { console.log('Usage: npm run icons -- [--source public/favicon.svg] [--background "#ffffff"] [--padding 0.1] [--out public]'); return; }
+  if (options.help) { console.log('Usage: npm run icons -- [--source public/favicon.svg] [--background "#ffffff"] [--padding 0.1] [--opaque] [--out public]'); return; }
   const icons = await renderIcons(fs.readFileSync(options.source), options);
   fs.mkdirSync(options.out, { recursive: true });
   for (const [file, bytes] of Object.entries(icons)) {
