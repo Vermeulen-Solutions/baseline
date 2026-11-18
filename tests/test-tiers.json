@@ -342,5 +342,9 @@
   "standards-changes.test.mjs": {
     "tier": "unit",
     "reason": "Change-note format, release aggregation, digest pinning and distribution comparison in throwaway folders and a throwaway Git repository"
+  },
+  "skill-links.test.mjs": {
+    "tier": "unit",
+    "reason": "Links in Baseline-owned skills stay inside what every receiving site installs"
   }
 }
