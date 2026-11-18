@@ -291,6 +291,10 @@
     "tier": "unit",
     "reason": "Retired-file list contract, a clean checkout and manifests, detection in throwaway sites, the doctor warning and update:plan rows; small temporary Git repository only"
   },
+  "fleet-drift.test.mjs": {
+    "tier": "unit",
+    "reason": "Site changes to Baseline-owned skills and helpers: LF content hashes, known/changed/added sorting against every version in a throwaway Baseline history, labelled patches against the adopted release, and refusal to write inside Baseline or a site"
+  },
   "fleet-status.test.mjs": {
     "tier": "unit",
     "reason": "Fleet status from throwaway site folders and one throwaway Git repository: kinds, hosting, locked versions, standards comparison, Markdown report and config validation"
