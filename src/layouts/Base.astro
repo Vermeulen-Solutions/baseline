@@ -39,7 +39,8 @@ const { siteTitle, siteTagline, siteLogo } = resolveStarterSiteIdentity(settings
 const fullTitle = title.includes(siteTitle) ? title : `${title} — ${siteTitle}`;
 const pageDescription = description ?? siteTagline;
 const siteUrl = resolvePublicSiteUrl(settings.url, Astro.site, Astro.url);
-const fallbackFavicon = `${import.meta.env.BASE_URL.replace(/\/+$/, '')}/favicon.svg`;
+const publicBase = import.meta.env.BASE_URL.replace(/\/+$/, '');
+const fallbackFavicon = `${publicBase}/favicon.svg`;
 // Undefined uses the public default; explicit null lets error pages opt out.
 const pageCanonical = canonical === undefined ? defaultCanonicalUrl(siteUrl, Astro.url.pathname) : canonical;
 
@@ -76,6 +77,9 @@ const pageCtx = createPublicPageContext({
 		<Fragment slot="head">
 			<EmDashHead page={pageCtx} />
 			{!settings.favicon?.url && <link rel="icon" type="image/svg+xml" href={fallbackFavicon} />}
+			{/* From `npm run icons`: the home-screen icon iOS asks for, and the manifest with the app icons. */}
+			<link rel="apple-touch-icon" href={`${publicBase}/apple-touch-icon.png`} />
+			<link rel="manifest" href={`${publicBase}/site.webmanifest`} />
 		</Fragment>
 		<EmDashBodyStart slot="body-start" page={pageCtx} />
 

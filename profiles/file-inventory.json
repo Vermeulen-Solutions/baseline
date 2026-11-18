@@ -882,6 +882,11 @@
       "static": "overlay",
       "target": "src/pages/sitemap.xml.ts"
     },
+    "profiles/static/project/src/pages/site.webmanifest.ts": {
+      "disposition": "static-overlay",
+      "static": "overlay",
+      "target": "src/pages/site.webmanifest.ts"
+    },
     "profiles/static/project/tests/static-foundation.test.mjs": {
       "disposition": "static-overlay",
       "static": "overlay",
@@ -1530,6 +1535,34 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "public/apple-touch-icon.png": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "public/icon-192.png": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "public/icon-512.png": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "public/icon-maskable-512.png": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "scripts/generate-icons.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/generate-icons.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/web-manifest.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "scripts/capture-routes.mjs": {
       "disposition": "shared",
       "static": "copy"
@@ -1767,6 +1800,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "src/pages/llms.txt.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/site.webmanifest.ts": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
