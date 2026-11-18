@@ -237,9 +237,40 @@ export function inspectCssGuardrails(css, { file = 'stylesheet.css', lineOffset 
   return findings;
 }
 
+// Closed token scales. A var() naming a member nobody defines is a typo or a retired name: it
+// silently falls back (or resolves to Tailwind's default theme, which is not Baseline's vocabulary),
+// so the component drifts from the theme without any error.
+export const SCALE_TOKEN_PREFIXES = ['duration', 'ease', 'radius', 'shadow', 'z', 'focus-ring'];
+// Documented site override hooks: deliberately undefined in the starter and always read with a
+// fallback (docs/design-framework.md). Add a name here only together with its documentation.
+export const SCALE_TOKEN_HOOKS = new Set(['--duration-normal']);
+const SCALE_REFERENCE = new RegExp(String.raw`var\(\s*(--(?:${SCALE_TOKEN_PREFIXES.join('|')})-[\w-]+)`, 'g');
+
+/** Custom property names declared anywhere in the given texts (CSS, style blocks, inline styles, scripts). */
+export function definedCustomProperties(texts) {
+  const names = new Set();
+  for (const text of texts) {
+    for (const match of String(text).matchAll(/(--[\w-]+)\s*:/g)) names.add(match[1]);
+    for (const match of String(text).matchAll(/setProperty\(\s*['"`](--[\w-]+)/g)) names.add(match[1]);
+  }
+  return names;
+}
+
+/** Advisory findings for var() references to scale tokens (duration, ease, radius …) that are never defined. */
+export function inspectTokenReferences(source, defined, { file = 'stylesheet.css' } = {}) {
+  const findings = [];
+  String(source).split('\n').forEach((line, index) => {
+    for (const match of line.matchAll(SCALE_REFERENCE)) {
+      if (!defined.has(match[1]) && !SCALE_TOKEN_HOOKS.has(match[1])) findings.push({ file, line: index + 1, rule: 'undefined-token', message: `${match[1]} is not defined in this project; use a token from the @theme scale (Tailwind's default theme is not Baseline vocabulary)` });
+    }
+  });
+  return findings;
+}
+
 /** Advisory guardrail findings for the same source inputs check:css reads. */
 export function inspectGuardrailTree(rootDir = process.cwd(), roots = ['src', 'profiles/static/project/src']) {
   const findings = [], seen = new Set();
+  const sources = [];
   const visit = filename => {
     if (!fs.existsSync(filename) || seen.has(filename) || fs.lstatSync(filename).isSymbolicLink()) return;
     if (fs.statSync(filename).isDirectory()) { for (const name of fs.readdirSync(filename)) visit(path.join(filename, name)); return; }
@@ -247,6 +278,7 @@ export function inspectGuardrailTree(rootDir = process.cwd(), roots = ['src', 'p
     seen.add(filename);
     const file = path.relative(rootDir, filename).replaceAll('\\', '/');
     const source = fs.readFileSync(filename, 'utf8');
+    sources.push({ file, source });
     try {
       if (filename.endsWith('.astro')) findings.push(...inspectMarkupGuardrails(source, file));
       const inputs = filename.endsWith('.css') ? [{ css: source, file }] : astroStyleInputs(source, file);
@@ -254,5 +286,15 @@ export function inspectGuardrailTree(rootDir = process.cwd(), roots = ['src', 'p
     } catch { /* Parse errors are reported by the contract check itself. */ }
   };
   for (const dir of roots) visit(path.resolve(rootDir, dir));
+  // Definitions may also live in scripts that write inline styles (--card-aspect, --vt-name …).
+  const scripts = [];
+  const collectScripts = filename => {
+    if (!fs.existsSync(filename) || fs.lstatSync(filename).isSymbolicLink()) return;
+    if (fs.statSync(filename).isDirectory()) { for (const name of fs.readdirSync(filename)) collectScripts(path.join(filename, name)); return; }
+    if (/\.(?:ts|mjs|js)$/.test(filename)) scripts.push(fs.readFileSync(filename, 'utf8'));
+  };
+  for (const dir of roots) collectScripts(path.resolve(rootDir, dir));
+  const defined = definedCustomProperties([...sources.map(item => item.source), ...scripts]);
+  for (const { file, source } of sources) findings.push(...inspectTokenReferences(source, defined, { file }));
   return { files: seen.size, findings };
 }

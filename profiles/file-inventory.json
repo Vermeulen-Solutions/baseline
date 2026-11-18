@@ -1714,6 +1714,30 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "src/components/PortableTextUnknown.astro": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/portable-text-fallback.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/security-headers.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/lib/llms-txt.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/pages/llms.txt.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/interaction-hardening.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "tests/skill-links.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"

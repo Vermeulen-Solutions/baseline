@@ -39,7 +39,7 @@ A menu, dialog, disclosure or toast is first a component with focus, keyboard an
 - Menus, popovers and tooltips grow from their trigger: set `transform-origin` toward the trigger. Centered dialogs keep a centered origin.
 - Use percentage translates (`translateY(100%)`) for elements of unknown size rather than fixed pixels.
 - Never use `ease-in` on interface motion; it delays the moment the visitor is watching. Use a strong ease-out for entering and exiting, ease-in-out for movement on screen, and `linear` only for constant motion such as progress.
-- Extend the site's existing tokens before introducing curves. The starter ships `--ease-smooth` and `--ease-snappy` (both strong ease-out curves) and `--ease-spring`, a `linear()` curve that overshoots; keep the overshoot for small playful details, not dialogs, menus or reading content. Do not hand-roll a near-duplicate curve.
+- Extend the site's existing tokens before introducing curves. The starter ships `--ease-smooth` and `--ease-snappy` (both strong ease-out curves), `--ease-spring`, a `linear()` curve that overshoots, and `--ease-exit`, an accelerating curve for an element leaving; keep the overshoot for small playful details, not dialogs, menus or reading content. Durations are `--duration-fast`, `--duration-base`, `--duration-slow` and `--duration-slower`. Do not hand-roll a near-duplicate curve, and do not reach for Tailwind's default names (`--ease-out`, `--ease-in-out`, `--radius-sm`): they are not Baseline tokens, and `npm run check:css -- --guardrails` reports them as `undefined-token`.
 
 | Element | Typical duration |
 | --- | --- |
@@ -56,12 +56,13 @@ Interface motion stays under 300 ms unless a recorded reason applies. Exits are 
 - Use transitions, not keyframes, for anything a visitor can trigger repeatedly: a transition retargets from its current value, while a keyframe restarts from zero. Click a toggle or open a menu twice quickly to check.
 - Exit along the path the element entered: a drawer from the right leaves to the right.
 - Slow where the visitor is deciding, fast where the system responds: a deliberate hold or confirm can take longer, while its release snaps back.
-- Gate hover motion behind `@media (hover: hover) and (pointer: fine)`. Touch screens fire a hover on tap, leaving cards lifted or icons nudged after the finger moves on. Colour changes that also mark focus can stay ungated.
+- Gate hover motion behind `@media (hover: hover) and (pointer: fine)`. Touch screens fire a hover on tap, leaving cards lifted or icons nudged after the finger moves on. The starter `global.css` puts every `:hover` rule inside `@media (hover: hover)`; keep new ones there too. Give keyboard focus the same feedback wherever hover does more than change colour (Card's media zoom and `.icon-nudge` do both).
+- Exit a top-layer element (dialog, popover) with `display` and `overlay` in the transition list as `allow-discrete`, so it stays visible until it has faded. The starter's `<dialog>` rules show the pattern: `--duration-base` on `--ease-smooth` in, `--duration-fast` on `--ease-exit` out, backdrop fading alongside.
 - Every motion-carried state also needs a static cue: colour, icon, label or position. Motion is never the only feedback.
 
 ## Reduced motion in the starter
 
-The starter's global `prefers-reduced-motion: reduce` rule collapses every animation and transition to near zero, removes view-transition slides and keeps `data-reveal` content visible. State changes therefore happen instantly for those visitors. Design for that: content and selected state must never depend on an animation completing. When a short opacity or colour transition genuinely aids comprehension under reduced motion, add a deliberately scoped exception for that element and remove only the spatial movement. Do not weaken the global rule.
+The starter's global `prefers-reduced-motion: reduce` rule collapses every animation and transition to near zero, removes view-transition slides and keeps `data-reveal` content visible. Write new motion inside `@media (prefers-reduced-motion: no-preference)` as well, as the starter's `@starting-style` blocks and cross-document `@view-transition` rule are; the global rule is the backstop. State changes therefore happen instantly for those visitors. Design for that: content and selected state must never depend on an animation completing. When a short opacity or colour transition genuinely aids comprehension under reduced motion, add a deliberately scoped exception for that element and remove only the spatial movement. Do not weaken the global rule.
 
 ## Performance diagnosis
 

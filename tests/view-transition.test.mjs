@@ -38,7 +38,7 @@ test('the stylesheet ships the matching media group and held-header rules, with 
   for (const rule of [
     `::view-transition-group(*.${MEDIA_TRANSITION_CLASS}) {`,
     `::view-transition-old(*.${MEDIA_TRANSITION_CLASS}), ::view-transition-new(*.${MEDIA_TRANSITION_CLASS}) { block-size: 100%; object-fit: cover; }`,
-    ':where([data-sticky-header][data-vt-header]) { view-transition-name: site-header; view-transition-class: vt-header; }',
+    ':where(html:active-view-transition) :where([data-sticky-header][data-vt-header]) { view-transition-name: site-header; view-transition-class: vt-header; }',
     '::view-transition-old(site-header) { display: none; }',
     '::view-transition-new(site-header) { animation: none; }',
     '::view-transition-old(*.vt-header) { display: none; }',

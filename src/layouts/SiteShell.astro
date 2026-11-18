@@ -18,9 +18,15 @@ interface Props {
   surface?: 'light' | 'dark' | 'system';
   /** Opt out of the Dark Reader extension for sites whose public pages are dark by design; it otherwise recolours light text on a dark ground to near-black. */
   darkReaderLock?: boolean;
+  /**
+   * 'cross-document': same-origin page loads crossfade with a native view transition, no script
+   * (the browser's @view-transition rule; skipped with reduced motion and in browsers without it).
+   * Mark the persistent header data-vt-header so it holds still. Omitted keeps plain page loads.
+   */
+  pageTransitions?: 'none' | 'cross-document';
 }
 
-const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', sectionJoins, surface, darkReaderLock = false } = Astro.props;
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', sectionJoins, surface, darkReaderLock = false, pageTransitions = 'none' } = Astro.props;
 const resolvedDir = dir ?? getLocaleDirection(lang);
 ---
 <!doctype html>
@@ -36,6 +42,7 @@ const resolvedDir = dir ?? getLocaleDirection(lang);
 >
   <head>
     <style is:inline>@layer theme, base, vendor, astro, components, utilities;</style>
+    {pageTransitions === 'cross-document' && <style is:inline>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>

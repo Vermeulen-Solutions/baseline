@@ -4,6 +4,7 @@ import { getEditMeta } from 'emdash';
 import EditorialImage from './EditorialImage.astro';
 import PhotoGallery from './PhotoGallery.astro';
 import PortableTextHeading from './PortableTextHeading.astro';
+import PortableTextUnknown from './PortableTextUnknown.astro';
 import { decoratePortableHeadingBlocks } from '../lib/emdash-headings.ts';
 
 interface Props {
@@ -30,6 +31,8 @@ const portableTextComponents = {
     image: EditorialImage,
     gallery: PhotoGallery,
   },
+  // Types with no renderer: nothing in public HTML, a server warning, a placeholder in development.
+  unknownType: PortableTextUnknown,
   block: {
     h1: PortableTextHeading,
     h2: PortableTextHeading,

@@ -62,6 +62,8 @@ const hasDescription = Boolean(description || Astro.slots.has('default') || Obje
   --card-frame-padding: 0px;
   --card-gap: var(--spacing-content);
   --card-shadow: none;
+  /* A clickable card's media zooms this much on hover or keyboard focus; 1 turns it off. */
+  --card-media-hover-scale: 1.03;
   --card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)));
   position: relative;
   isolation: isolate;
@@ -87,6 +89,15 @@ const hasDescription = Boolean(description || Astro.slots.has('default') || Obje
 @media (hover: hover) and (pointer: fine) {
   .card--clickable:hover { border-color: var(--color-action); }
   .card--clickable:hover .card-action { text-decoration: underline; }
+}
+/* The media zoom is a composited scale inside the clipped media box: no layout moves. Pointer
+   hover and keyboard focus share it, and it is off with reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .card--clickable .card-media :global(img) { transition: scale var(--duration-slower, 380ms) var(--ease-smooth, ease); }
+  .card--clickable:focus-within:has(:focus-visible) .card-media :global(img) { scale: var(--card-media-hover-scale); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .card--clickable:hover .card-media :global(img) { scale: var(--card-media-hover-scale); }
 }
 /* The layout wrapper adds no box for a stacked card: media and body stay flex children of the card. */
 .card-layout { display: contents; }
