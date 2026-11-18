@@ -386,5 +386,9 @@
   "quotes.test.mjs": {
     "tier": "unit",
     "reason": "Client quotes and reviews: highlight validation, escaped marking without changing words, sentence excerpts, same-person matching and the Stars rating contract"
+  },
+  "opening-hours.test.mjs": {
+    "tier": "unit",
+    "reason": "Opening hours: invalid days and times dropped, OpeningHoursSpecification, locale day names and split/closed days, and the Hours table contract"
   }
 }

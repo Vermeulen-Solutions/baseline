@@ -307,6 +307,10 @@ Two pictures of the same view on one frame, for renovations, gardens, treatments
 - **Honest use:** only a real before of the same view, ideally the same framing. Keep the labels plain; a product or platform name on the picture reads as something to buy. Size both images alike: the after picture sets the frame and the before picture covers it.
 - Focus shows on the handle; forced-colors mode draws the handle in the system text colour.
 
+### Opening hours (`Hours.astro`)
+
+A table of the week from the same `openingHours` list the Organization structured data reads (`src/lib/opening-hours.ts`): keep the list in one module and pass it to both, so the page and search results agree. Day names and times follow `locale`; a day without an entry shows `closedLabel`; a split day lists both ranges. Invalid days or times are dropped, never guessed. `caption` names the table (`hideCaption` keeps it for screen readers only).
+
 ### Theme selector and surface controls
 
 ```astro

@@ -62,6 +62,9 @@ test('the organization graph adds social profiles and site-owned business facts'
   assert.equal(graph.priceRange, 'CHF 2000+');
   assert.equal(organizationGraph('A', site, undefined, { type: 'not a type' })['@type'], 'Organization');
   assert.equal('aggregateRating' in graph, false, 'never a self-awarded rating');
+  const open = organizationGraph('A', site, undefined, { type: 'LocalBusiness', openingHours: [{ days: ['Monday'], opens: '09:00', closes: '17:00' }, { days: ['Funday'], opens: '09:00', closes: '17:00' }] });
+  assert.deepEqual(open.openingHoursSpecification, [{ '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday'], opens: '09:00', closes: '17:00' }]);
+  assert.equal('openingHoursSpecification' in graph, false, 'no hours, no field');
 });
 
 test('URL normalization preserves case-sensitive assets, auth, queries, escapes and unsafe methods', () => {

@@ -161,7 +161,10 @@
     "docs/licenses/modern-web-guidance-Apache-2.0.txt",
     "src/components/Stars.astro",
     "src/lib/quotes.ts",
-    "tests/quotes.test.mjs"
+    "tests/quotes.test.mjs",
+    "src/lib/opening-hours.ts",
+    "src/components/Hours.astro",
+    "tests/opening-hours.test.mjs"
   ],
   "packages": {
     "dependencies": [

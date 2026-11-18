@@ -1,4 +1,7 @@
 import type { CreatePublicPageContextInput } from 'emdash/page';
+import { openingHoursSpecification, type OpeningHours } from './opening-hours.ts';
+
+export type { OpeningHours } from './opening-hours.ts';
 
 function httpUrl(value: string, siteUrl: string): string | undefined {
   try {
@@ -29,7 +32,10 @@ export interface OrganizationDetails {
   /** Profile URLs beyond the social settings, e.g. the Google Business Profile. */
   sameAs?: string[];
   priceRange?: string;
+  /** Regular opening hours, on the 24-hour clock; the Hours component renders the same list. */
+  openingHours?: OpeningHours[];
 }
+
 
 // EmDash's social settings hold usernames ("Your Instagram username"). A full URL is kept as is; a
 // handle becomes the profile URL where the platform's address is unambiguous. LinkedIn is left out
@@ -73,6 +79,7 @@ export function organizationGraph(name: string, siteUrl: string, logo?: string, 
     ...(Object.keys(address).length ? { address: { '@type': 'PostalAddress', ...address } } : {}),
     ...(areaServed.length ? { areaServed: areaServed.map(place => ({ '@type': 'Place', name: place })) } : {}),
     ...(text(details.priceRange) ? { priceRange: text(details.priceRange) } : {}),
+    ...(openingHoursSpecification(details.openingHours).length ? { openingHoursSpecification: openingHoursSpecification(details.openingHours) } : {}),
     ...(sameAs.length ? { sameAs } : {}),
   };
 }
