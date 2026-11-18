@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.3.0",
+  "recordedAt": "2026-11-18T00:47:07.652Z",
+  "sourceCommit": "f87db802d0c2992d618f9ed2f887c91fa0c9634e",
+  "sourceTree": "d565e6d38a0f84ab3c2010924dc72de0d056889f",
+  "lockfileSHA256": "b0530d9ca5c0ed74588da3e1fcb15d2bf7fa387e8422c57637ddcd0c07be9eb5",
+  "versionDecision": {
+    "unchanged": {
+      "astro": "7.4.12",
+      "emdash": "1.5.0",
+      "@astrojs/node": "11.1.13",
+      "@astrojs/react": "7.1.9",
+      "react": "19.3.1",
+      "react-dom": "19.3.1"
+    },
+    "deferred": {
+      "@cloudflare/workers-types": "5.20261117.1 (daily types; no runtime effect)",
+      "@types/node": "26.x (major)",
+      "@typescript-eslint/parser": "8.73.0 (lint tooling; next weekly upstream proposal)",
+      "parse5": "8.x (major)",
+      "typescript": "7.0.2 (major; @astrojs/check and @typescript-eslint/parser do not accept it yet)"
+    },
+    "skills": "EmDash upstream e7608c6 available; left for the weekly reviewed proposal"
+  },
+  "cleanCheckout": {
+    "22.23.4": {
+      "node": "v22.23.4",
+      "commit": "f87db802d0c2992d618f9ed2f887c91fa0c9634e",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 158
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 258
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 19
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 2
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 2
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 65
+        },
+        "ci-fast": {
+          "exit": 0,
+          "seconds": 59
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 12
+        },
+        "build-seeded": {
+          "exit": 0,
+          "seconds": 15
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 3
+        }
+      }
+    },
+    "24.22.3": {
+      "node": "v24.22.3",
+      "commit": "f87db802d0c2992d618f9ed2f887c91fa0c9634e",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 0
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 140
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 230
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 15
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 2
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 57
+        },
+        "ci-fast": {
+          "exit": 0,
+          "seconds": 56
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 3
+        },
+        "build-seeded": {
+          "exit": 0,
+          "seconds": 13
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 3
+        }
+      }
+    }
+  },
+  "localSuites": {
+    "visual": {
+      "node": "24.22.3",
+      "playwright": "1.65.1",
+      "chromiumRevision": "1255",
+      "result": "112 passed",
+      "seconds": 430,
+      "references": "unchanged from the committed set (renewed and reviewed in 43a16a0)"
+    }
+  },
+  "findings": [
+    "First candidate (3caf2e0) failed verify in clean clones: core.autocrlf=true gave CRLF global.css and a resize-text test regex matched LF only; fixed in 77a9ae7 and the whole unit tier passed in a CRLF clone",
+    "check:dev-tools and audit:html each failed once on the first candidate from a Google font fetch error and an SSR snapshot deadline while other builds ran concurrently; both passed on the certified commit with nothing else running"
+  ],
+  "notCovered": [
+    "Workers/D1/R2 parity (Phase 5); live Workers migrations were rehearsed per site, not certified",
+    "editor rehearsal, check:emdash-current and the restore drill were not rerun: the runtime dependencies, schema and editor code are unchanged since 0.2.0, whose receipts remain valid",
+    "visual --repeat=3 and sensitivity runs (single run only)"
+  ]
+}

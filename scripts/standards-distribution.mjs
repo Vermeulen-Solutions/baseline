@@ -22,7 +22,7 @@ export const PINNED_TOOLS = Object.freeze([
 ]);
 // Installed only when a site chooses the design surface they serve.
 export const OPTIONAL_SKILLS = Object.freeze(['penpot-site-design', 'openpencil-site-design', 'opendesign-site-design', 'brilliant-site-design']);
-export const EMDASH_ONLY_SKILLS = Object.freeze(['building-emdash-site', 'creating-plugins', 'emdash-cli', 'emdash-site-setup', 'emdash-content-modeling', 'wordpress-to-emdash-content', 'emdash-production-cutover']);
+export const EMDASH_ONLY_SKILLS = Object.freeze(['building-emdash-site', 'creating-plugins', 'emdash-cli', 'upgrading-emdash', 'emdash-site-setup', 'emdash-content-modeling', 'wordpress-to-emdash-content', 'emdash-production-cutover']);
 // Local caches inside a skill folder that are never distributed (Impeccable's downloaded engine).
 const IGNORED = [/^impeccable\/scripts\/bin\//, /(^|\/)node_modules\//, /(^|\/)\.DS_Store$/];
 
