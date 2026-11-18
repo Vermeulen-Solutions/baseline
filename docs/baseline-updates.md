@@ -1,5 +1,20 @@
 # Keeping an existing site up to date
 
+## Taking a standards release
+
+Sites update to a tagged [standards release](standards-releases.md), not to `main`. Work from a Baseline checkout at the release tag (`standards-v<version>`) and the site on a maintenance branch:
+
+1. **Read the release notes** from the site's adopted release up to the new one (`standards/releases/<version>.md`, one file per release). Each change says which platforms it affects and how a site takes it: it arrives with the site's sync, copy the named files, review and merge by hand, or it changes how pages look and needs a decision per site. The private fleet record's `adopted` field ([site registry](site-registry.md#fleet-status)) names the release to start from.
+2. **Skills.** EmDash sites stage and apply `sync:site-skills` (Impeccable arrives only this way) and `sync:emdash-skills`, adding a skill the notes introduce with `--stage --add-skill <name>` ([skill synchronization](skill-synchronization.md)). Static sites take installed shared files through `sync:baseline` ([bounded synchronization](#bounded-synchronization-for-generated-static-sites)) and copy new skill files by hand, because bounded sync cannot add paths.
+3. **Baseline-owned code.** `npm run site:files -- --site <path>` compares the site's components, `src/lib`, layouts, scripts and tests that Baseline ships to its platform: `current`, `behind` (a version Baseline once had, so nobody edited it), `edited`, `missing` or `blocked` (the incoming version imports something the site lacks). `--apply` replaces the behind files and adopts the missing ones named with `--files a,b`; it keeps each replaced original under `.baseline/backups/<commit>/`, writes Baseline's version of edited files to `.baseline/incoming/<commit>/` to merge by hand, and records adopted files in `.baseline/owned-files.json`. Commit that receipt; keep the backup and incoming folders out of Git. Site-owned files (`Base.astro`, pages, content, configuration, `global.css`) are never candidates: merge their changes from the notes by hand.
+4. **Dependencies and owner decisions.** Install any development dependency a note names at its exact pinned version and review the lockfile. Changes that alter how pages look, and settings only the owner can choose (analytics ids, consent mode, a CSP mode), stay open decisions: list them in the site's update record rather than choosing for the owner.
+5. **Verify** with the before/after evidence described below (`capture:routes`, `parity:html`), the site's own verify and build, and `check:quality` and `audit:ui` against a local build.
+6. **Record** the adopted release and its date in the fleet record, and keep a short update note in the site (for example `docs/maintenance/standards-<version>-update.md`) listing what was adopted, deferred and left for the owner. `fleet:status` then reports the site as current, and `fleet:drift` lists Baseline-owned skills and pinned helpers the site has changed or added, as candidates to bring back into Baseline.
+
+The rest of this guide covers specific migrations and the general workflow for sites too old to have these helpers.
+
+## Notes on the November 2026 design-system iteration
+
 The design-system iteration of November 2026 changes shared components, `scripts/design-system.mjs`, `scripts/css-contracts.mjs`, `scripts/audit-ui.mjs` and the starter `global.css`. Review these visible or behavioural changes when adopting it:
 
 - **Section joins are opt-in.** `global.css` gains the same-ground join rule, but it applies only under `data-section-joins="shared"` (`SiteShell sectionJoins="shared"` in the site-owned Base); neither the `legacy` nor the `automatic-v2` policy changes without it. Adopt it by adding the prop, then inspect each stacked-section join and mark sections that paint their own background through scoped styles with `data-ground`. `<Section spacing="medium">` and `--spacing-section-m` are additive.

@@ -2,6 +2,45 @@
 
 These are neutral infrastructure, not a client theme. Choose brand tokens and a real art direction before composing site pages. No client assets, sponsor collection, form storage or mail provider is installed by these patterns.
 
+## Component index
+
+Every reusable component Baseline ships, where it is documented, and which profiles receive it (`profiles/file-inventory.json`). "All" means the root EmDash foundation and both static profiles. Props below are read from the component source; when this page and a component disagree, the component wins and this page needs a fix.
+
+| Component | Profiles | Purpose | Documented in |
+| --- | --- | --- | --- |
+| `SiteShell.astro` (`src/layouts/`) | All | Document, head, landmarks, theme, transitions, prefetch | [Page shell](#page-shell-siteshellastro) |
+| `Section`, `Container`, `Grid` | All | Section rhythm, measures, intrinsic grids | [Layout primitives](#layout-primitives-section-container-grid) |
+| `Disclosure`, `Cluster`, `Sidebar` | All | Native details, wrapping rows, main-first sidebar | [Native composition](native-composition.md) |
+| `Card` | All | Semantic article card with stretched link | [Cards](#cards) |
+| `ResponsiveImage` | All | Native Astro `getImage` responsive images | [Responsive media](#responsive-media) |
+| `EmDashImage`, `EditorialImage`, `PhotoGallery`, `RichText` | EmDash (static has its own `RichText`) | CMS images, Portable Text, justified galleries | [Responsive media](#responsive-media), [PhotoGallery](#justified-photogallery-css-flexbox-engine) |
+| `PartnersPanel`, `CMSPartnersPanel`, `LogoTicker` | All (`CMSPartnersPanel` EmDash) | Partner logos and marquee | [CMS-owned partners](#cms-owned-partners), [LogoTicker](#logoticker-0-kb-client-javascript) |
+| `Form`, `FormError` | All | Progressively enhanced forms, error summaries | [Forms](#progressively-enhanced-forms), [Form recovery](#form-recovery-and-error-summaries) |
+| `Tabs`, `CopyButton`, `Announcer`, `ThemeSelect` | All | Accessible interactive controls | [Accessible interactive primitives](#accessible-interactive-primitives) |
+| `BeforeAfter`, `Stars`, `Hours` | All | Comparison slider, star rating, opening hours | [Before/after](#beforeafter-comparison-beforeafterastro), [Ratings and quotes](#ratings-and-quotes-starsastro-srclibquotests), [Opening hours](#opening-hours-hoursastro) |
+| `Analytics`, `ConsentBanner`, `VideoEmbed`, `MapEmbed` | All | Consent-aware analytics, click-to-load embeds | [Analytics, consent and embeds](#analytics-consent-and-embeds) |
+| `Heading`, `TableOfContents`, `Callout`, `Steps` | All | Content navigation and structure | [Content navigation](#content-navigation-and-structured-primitives) |
+| `SearchDialog` | All, when search is configured | Pagefind search in a native dialog | [Optional site search](search.md) |
+| `PostListItem` | EmDash | Starter blog list row (`post`, `showDate`) | Starter routes |
+| `StaticMetadata` (`profiles/static/project/src/components/`) | Static profiles | Build-time title, description, canonical and JSON-LD | [Metadata phase 2](verification/metadata-phase-2.md) |
+
+`PortableTextHeading` and `PortableTextUnknown` are internal RichText block renderers, and `src/components/dev/` holds the development styleguide; neither is a component for site pages.
+
+## Page shell (`SiteShell.astro`)
+
+The site-owned `Base.astro` wraps `SiteShell`, which owns the document, one title, global styles, the skip link and landmarks. Props: `title` (required), `description`, `canonical`, `metadataOwner` (`shell` default, or `platform` when EmDashHead or `StaticMetadata` renders description and canonical), `lang` (default `en`), `dir` (derived from `lang` when omitted), `skipLinkLabel` (default `Skip to content`), `spacingPolicy` (`legacy` default, `automatic-v2` in current Bases; see [design framework](design-framework.md)), `sectionJoins` (`shared` lets two sections on the same ground share one section step; omitted keeps full padding), `surface` (`light`, `dark` or `system` initial surface mode), `darkReaderLock` (opt out of the Dark Reader extension on dark-by-design sites), `pageTransitions` (`none` default, or `cross-document` for the script-free `@view-transition` crossfade; mark the header `data-vt-header`) and `prefetch` (`off` default, `conservative` or `moderate`; see [link prefetch](#navigation-lifecycle-and-warming)). Slots: default, `head`, `header`, `footer`, `body-start` and `body-end`.
+
+## Layout primitives (`Section`, `Container`, `Grid`)
+
+The full spacing contract is in the [design framework](design-framework.md#cascade-and-layout-spacing-contract); this is the prop summary.
+
+- **Section:** `labelledBy` (the heading ID), `spacing` (`section` default, `medium`, `content` or `none`), `gap` and `layout` (`stack` or `custom` when the caller owns display and gaps).
+- **Container:** `width` (`content` default, `reading` or `wide`), `breakout` (switch to the `.content-grid` tracks below), `gap` and `layout`.
+- **Grid:** `minimum` (`standard` default, `compact` or `wide` column minimum), `gap` and `slots` (default `true`: each item is a named `card-slot` inline-size query container, so cards inside respond to their cell; `false` leaves items as they are).
+- **`gap`** takes a token name from `src/lib/layout-style.ts`: `none`, a semantic step (`content`, `grid`, `container`, `section`, `section-m`), a fluid space step (`3xs` … `3xl`) or a pair (`s-m`, `l-2xl` …). It resolves to `var(--spacing-<name>)`. A raw CSS length still works for compatibility, and `check:css` reports it as an advisory.
+
+All three forward other HTML attributes, `class`, `class:list` and `style`.
+
 ## Native structural composition
 
 Compose open-slot `Disclosure`, `Cluster` and `Sidebar` alongside `Section`, `Container`, `Grid` and `Card`. Disclosure delegates toggling, grouping and closed-content focus exclusion to native details/summary; Cluster wraps children, and Sidebar preserves main-first DOM order while adapting to its host's width. See [native composition](native-composition.md) for exact slots and semantic limits. Both foundations run the same production specimens; Markdown and Portable Text remain platform-owned. Existing sites follow the explicit [architecture upgrade](architecture-hardening-upgrade.md) before adopting shared specimens that import new paths.
@@ -27,7 +66,9 @@ RichText wraps EmDash PortableText with shared image/gallery renderers. Use it i
 
 `Card.astro` also supports optional EmDash visual-editor field annotations (`titleEdit`, `descriptionEdit`, `actionEdit`), a `description` string prop alongside the default slot, `<slot name="title-extra" />` and `<slot name="action-icon" />`, and root attribute forwarding (`...rest`) so domain cards (`NewsCard`, `TeamCard`, `GalleryCard`) can compose `<Card>` directly without forking its accessible HTML structure.
 
-Use `layout="horizontal"` for wide rows (which stacks automatically via `@container (max-width: 32rem)` and `@media (max-width: 40rem)`), `imageFit="contain"` for full posters/artwork, and `imageAspect` for an intentional frame. Customize appearance via CSS custom properties (`--card-bg`, `--card-text`, `--card-muted`, `--card-border-width`, `--card-border-color`, `--card-radius`, `--card-padding`, `--card-frame-padding`, `--card-gap`, `--card-shadow`) and concentric inner media radius (`--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))`). Card actions align at the bottom of equal-height grid rows. Stress long/translated titles, absent media, uneven copy and odd final rows; don't force equal slots to fill empty space.
+Props: `title` (required), `href`, `action`, `description`, `image` (imported image or URL), `imageAlt`, `imageWidth`/`imageHeight` (native size for a URL), `sizes`, `headingLevel` (`2`, `3` or `4`; default `3`), `layout` (`stacked` default or `horizontal`), `imageFit` (`cover` default or `contain`), `imageAspect` (default `3 / 2`), the three edit annotations, `transitionName` (see [list rows](#navigation-lifecycle-and-warming)) and `class`. Slots: default, `media` (replaces the image), `metadata`, `title-extra` and `action-icon`.
+
+Use `layout="horizontal"` for wide rows: the card is its own named query container (`container: card / inline-size`) and goes side by side only when the card itself is at least 32rem wide, so it stays stacked in a narrow grid cell or sidebar wherever it sits. Media and body sit in a `.card-layout` wrapper; give a horizontal card a definite width in a flex row. Use `imageFit="contain"` for full posters/artwork and `imageAspect` for an intentional frame. Customize appearance via CSS custom properties (`--card-bg`, `--card-text`, `--card-muted`, `--card-border-width`, `--card-border-color`, `--card-radius`, `--card-padding`, `--card-frame-padding`, `--card-gap`, `--card-shadow`, `--card-media-hover-scale`) and concentric inner media radius (`--card-media-radius: max(0px, calc(var(--card-radius) - var(--card-frame-padding)))`). Card actions align at the bottom of equal-height grid rows. Stress long/translated titles, absent media, uneven copy and odd final rows; don't force equal slots to fill empty space.
 
 ## Editorial breakout grid (`.content-grid`)
 
@@ -45,6 +86,8 @@ To audit and modernize a downstream site built on an earlier baseline snapshot:
 2. Synchronize skills (`npm run sync:site-skills` and `npm run sync:emdash-skills`) to upgrade legacy v1 manifests to v2 and pull updated specialist skills.
 3. Merge the additive token/reset/rhythm/layout primitives (`interpolate-size: allow-keywords`, cross-step fluid tokens, duplicate-margin `.flow` guards, `.content-grid` + `subgrid`, `.clickable-parent` / `.focus-parent`, `.is-bg` / `.fade--*`, and `[data-surface]`) into `src/styles/global.css` while preserving the site's brand tokens and Art Direction Record.
 4. Upgrade `Container.astro` (`breakout` prop), `EditorialImage.astro` / `PhotoGallery.astro` / `RichText.astro`, and refactor whole-card `<a>` components (`EditorialCard.astro`, `*Card.astro`) to semantic `<article>` + `.clickable-parent` + `.focus-parent` + `--card-media-radius`.
+
+To bring in a component a site does not have yet, or replace Baseline-owned components the site never edited, run `npm run site:files -- --site <path>` from a Baseline checkout and adopt with `--apply` (new files named with `--files`); see [Baseline updates](baseline-updates.md#taking-a-standards-release). Site-edited components are never replaced; Baseline's version is written beside them to merge by hand.
 
 ## CMS-owned partners
 
@@ -86,6 +129,8 @@ Baseline emphasizes progressive enhancement: interactive widgets should remain f
 ```astro
 <PhotoGallery value={entry.data.gallery} fit="contain" breakout={false} />
 ```
+
+Props: `value` (Portable Text blocks; the first `gallery` block is used) or `node` (one gallery block), `layout` (`justified` default or `grid`, which honours the block's `columns`, 1 to 6, default 3), `fit` (`cover` default or `contain`), `breakout` (`feature` default, `wide`, `full-safe` or `false`, applied inside a `.content-grid`), `title` (the JSON-LD gallery name; defaults to the block's title) and `locale` (`fr` or `en` for the viewer's labels; defaults from the page locale). The component is EmDash-only.
 
 - **Pure CSS Flexbox Sizing:** Computes proportional `flex-grow` and aspect ratios on the server. Images share equal heights within each row, with leftover space absorbed cleanly by a trailing flex spacer.
 - **Progressive Enhancement:** PhotoSwipe 5 (MIT) is loaded only when a visitor clicks an image to open the full-screen touch lightbox. If JavaScript fails or is disabled, clicking simply navigates to the original image.
@@ -302,7 +347,7 @@ import Announcer from '../components/Announcer.astro';
 
 ### Before/after comparison (`BeforeAfter.astro`)
 
-Two pictures of the same view on one frame, for renovations, gardens, treatments, restorations and redesigns. Pass `before`, `after` (imported images or URLs with `width`/`height`), `beforeAlt` and `afterAlt`; `beforeLabel`, `afterLabel`, `sliderLabel`, `valueText` (with `{percent}`), `hint`, `caption` and `start` (0 to 100) localize and tune it.
+Two pictures of the same view on one frame, for renovations, gardens, treatments, restorations and redesigns. Pass `before`, `after` (imported images, or URLs with `width`/`height`), `beforeAlt` and `afterAlt`, and `sizes` when the frame is not full width. `beforeLabel` (`Before`), `afterLabel` (`After`), `sliderLabel`, `valueText` (with `{percent}`), `hint`, `caption` and `start` (0 to 100, default 50) localize and tune it; every default is English, so pass all labels on a page in another language.
 
 - **Native control:** an invisible `<input type="range">` covers the picture, so arrow keys, Home, End and screen readers work without extra code, and the read-out (`aria-valuetext`) says how much of the before picture shows. A click anywhere jumps the divider; on touch screens the script does the same, because iOS Safari does not jump a range to a tap. Dragging works but is never required (WCAG 2.5.7).
 - **Without JavaScript** the two pictures stand one after the other with their labels; the slider and its hint stay hidden.
@@ -311,11 +356,38 @@ Two pictures of the same view on one frame, for renovations, gardens, treatments
 
 ### Opening hours (`Hours.astro`)
 
-A table of the week from the same `openingHours` list the Organization structured data reads (`src/lib/opening-hours.ts`): keep the list in one module and pass it to both, so the page and search results agree. Day names and times follow `locale`; a day without an entry shows `closedLabel`; a split day lists both ranges. Invalid days or times are dropped, never guessed. `caption` names the table (`hideCaption` keeps it for screen readers only).
+A table of the week from the same `openingHours` list the Organization structured data reads (`src/lib/opening-hours.ts`): keep the list in one module and pass it to both, so the page and search results agree. On EmDash sites the structured data reads `options.organization.openingHours` in the baseline-metadata plugin; `openingHoursSpecification(hours)` builds the schema.org nodes from the same list on any site.
 
-### Analytics, consent and embeds (`Analytics.astro`, `ConsentBanner.astro`, `VideoEmbed.astro`, `MapEmbed.astro`)
+```astro
+---
+import Hours from '../components/Hours.astro';
+import type { OpeningHours } from '../lib/opening-hours';
+const hours: OpeningHours[] = [
+  { days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], opens: '09:00', closes: '18:00' },
+  { days: ['Saturday'], opens: '09:00', closes: '12:30' },
+];
+---
+<Hours hours={hours} locale="fr-CH" closedLabel="Fermé" caption="Horaires d'ouverture" />
+```
 
-Both Base layouts render `Analytics` and `ConsentBanner` at the end of the body; they produce nothing until a measurement id is set in the build environment, and load tags only on `PUBLIC_ANALYTICS_HOSTS`. The loader is one inline script fed by a JSON block, so the computed Content-Security-Policy hashes it. Cloudflare Web Analytics loads directly (cookie-free). GA4 and GTM set Google Consent Mode v2 defaults (everything denied) before any tag, load the tag after idle (or, in `strict` mode, only after consent), and apply a stored choice at once; choices are stored per `PUBLIC_CONSENT_VERSION`. The banner is a non-modal region with Accept all, Reject all and Choose (one checkbox per configured category); it never takes focus on load, and any `[data-consent-open]` element reopens it with focus on Accept. Every label is a prop. `VideoEmbed` (YouTube via youtube-nocookie.com, Vimeo with `dnt=1`) and `MapEmbed` render a stand-in with a real link and insert the provider's frame only on click.
+Props: `hours` (required; each entry is English weekday names plus 24-hour `HH:MM` times), `locale` (BCP 47, default `en`), `closedLabel` (default `Closed`), `caption` (default `Opening hours`), `hideCaption` (keeps the caption for screen readers only) and `class`. Day names and times follow `locale`; a day without an entry shows `closedLabel`; a split day lists both ranges. Invalid days or times are dropped, never guessed.
+
+### Ratings and quotes (`Stars.astro`, `src/lib/quotes.ts`)
+
+`Stars` draws a rating read as one phrase, "Rated 4.8 out of 5". Props: `rating` (required), `max` (default 5, at most 10), `label` (default `Rated {rating} out of {max}`; both placeholders are replaced, so translate it), `decorative` (hide the stars from screen readers when adjacent text already states the rating) and `class`. Partly filled stars keep their outline, so 4 never reads as 5. The stars take the surrounding text colour: set `color` on a parent for a brand colour that still clears 3:1 against its ground. Show only a rating a visitor can check, such as a public review profile total.
+
+`src/lib/quotes.ts` shows client quotes and public reviews exactly as written. `markedQuote(quote, highlight, markClass?)` returns escaped HTML paragraphs with the key phrase inside `<mark>`; `excerpt(quote, highlight)` returns the sentence holding that phrase, word for word, with an ellipsis where the quote continues; `highlightProblem(quote, highlight)` returns a message when the phrase is not in the quote verbatim (call it where quotes load and stop the build or drop the highlight); `samePerson(a, b)` matches two spellings of one name by first and last word. None of them rewrite the words. The `emdash-content-modeling` skill's testimonials rules cover the content model, and `check:quality` flags a rating or review on the site's own Organization as self-serving JSON-LD.
+
+### Analytics, consent and embeds
+
+Both Base layouts render `Analytics` and `ConsentBanner` at the end of the body; they produce nothing until a measurement id is set in the build environment, and load tags only on the production hostnames in `PUBLIC_ANALYTICS_HOSTS` (comma-separated; empty means nowhere). The loader is one inline script fed by a JSON block, so the computed Content-Security-Policy hashes it; add the tag origins to `CSP_SOURCES`. Cloudflare Web Analytics loads directly (cookie-free). GA4 and GTM set Google Consent Mode v2 defaults (everything denied) before any tag, load the tag after idle (or, in `strict` mode, only after consent), and apply a stored choice at once; choices are stored under `baseline-consent` per consent version, so raising the version asks every visitor again. The `new-site-workflow` skill's trust-and-measurement reference covers choosing a tier with the owner.
+
+- **`Analytics` props** fall back to build environment variables: `gaId` (`PUBLIC_GA_ID`, `G-…`), `gtmId` (`PUBLIC_GTM_ID`, `GTM-…`), `cloudflareToken` (`PUBLIC_CF_BEACON_TOKEN`), `hosts` (`PUBLIC_ANALYTICS_HOSTS`), `mode` (`consent-mode` default, or `strict` through `PUBLIC_CONSENT_MODE`), `version` (`PUBLIC_CONSENT_VERSION`, default 1) and `categories` (`analytics` by default; add `marketing` for ad storage). Malformed ids are ignored. Any element with `data-track="event_name"` sends that event on click, with each `data-track-*` attribute as a parameter.
+- **`ConsentBanner`** appears only when GA4 or GTM is configured, the page is on a production hostname and the visitor has not chosen. It is a non-modal region with Accept all, Reject all and Choose (one checkbox per configured category); it never takes focus on load, and any `[data-consent-open]` element (a footer "Cookie settings" link) reopens it with focus on Accept. Props, all with English defaults: `heading`, `text`, `acceptLabel`, `rejectLabel`, `chooseLabel`, `saveLabel`, `privacyHref`, `privacyLabel` and `categoryLabels` (`{ analytics: { label, description }, marketing: … }`). Without JavaScript no tag loads and the banner stays hidden.
+- **`VideoEmbed`** props: `provider` (`youtube` or `vimeo`), `id` (the video id; anything else renders no player), `title` (names the button and player), `poster` and `posterAlt`, `playLabel` (`Play video: {title}`), `linkLabel` (`Watch on {provider}`) and `aspectRatio` (default `16 / 9`). YouTube plays from youtube-nocookie.com, Vimeo with `dnt=1`.
+- **`MapEmbed`** props: `embed` (the provider's https embed URL, such as an OpenStreetMap export or a Google Maps embed), `href` (the place on the provider), `title`, `address` (shown before the map loads), `showLabel` (`Show map`), `openLabel` (`Open in maps`) and `aspectRatio` (default `4 / 3`). Non-https URLs are dropped.
+
+Both embeds render a stand-in with a real link and insert the provider's frame only on click (`setupLoadOnClick()` in `src/lib/load-on-click.ts`, which moves focus to the new frame); until then the provider receives no request. Without JavaScript the button is a link to the provider. Name each provider in the privacy notice as content loaded on click, and add its origin to `frame-src` in `CSP_SOURCES` when a CSP is on.
 
 ### Theme selector and surface controls
 
@@ -346,7 +418,7 @@ import Heading from '../components/Heading.astro';
 <Heading level={2} id="getting-started" anchor anchorLabel="Direct link to Getting Started">Getting Started</Heading>
 ```
 
-`id` and `level` (`1` through `6`) define the native heading. `anchor` defaults to `false`; opt in for the keyboard-focusable permalink. The link has an `aria-label` (default `Direct link to this section`), while only its decorative `#` span is `aria-hidden`. There is no custom icon prop or automatic heading ID generation. Optional `class` is supported.
+`id` and `level` (`1` through `6`, default `2`) define the native heading. `anchor` defaults to `false`; opt in for the keyboard-focusable permalink. The link has an `aria-label` (default `Direct link to this section`), while only its decorative `#` span is `aria-hidden`. There is no custom icon prop or automatic heading ID generation. Optional `class` is supported.
 
 Use `slugifyHeading(text)` from `src/lib/headings.ts` when generating explicit IDs. It preserves Unicode marks needed by scripts such as Devanagari, strips Latin combining accents and quoted HTML tags, and normalizes whitespace. It is stateless: use `deduplicateHeadingId(baseId, seenIds)` with a shared Set or Map to reserve emitted IDs within a document. Keep permanent incoming links tied to stable content identities where available.
 

@@ -136,4 +136,4 @@ Follow the [handoff checks for the installed profile](commands.md#before-handoff
 
 Static sites deploy their verified dist/ to static hosting with correct missing-page behavior. EmDash requires its configured server runtime and persistent database, media and secrets. Cloudflare adoption is separately configured and verified. Use [platform guidance](platform-profiles.md) and the [production runbook](production-deployment.md); copying code does not move CMS data.
 
-For optional CMS content tools and documentation MCP connections, see [agent configuration](agent-documentation.md). For starter, dependency or skill updates, use the [reviewed maintenance procedures](automated-upstream-updates.md).
+For optional CMS content tools and documentation MCP connections, see [agent configuration](agent-documentation.md). For starter, dependency or skill updates, use the [reviewed maintenance procedures](automated-upstream-updates.md); a built site moves to a new [standards release](standards-releases.md) as described in [taking a standards release](baseline-updates.md#taking-a-standards-release).

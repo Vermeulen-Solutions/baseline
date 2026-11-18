@@ -10,6 +10,8 @@
 | Find a command or the final verification steps | [Command reference](commands.md) |
 | Build a site with your assistant | [Prompt library](prompt-library.md) · [Delivery workflow](site-delivery-workflow.md) |
 | Bring an older site up to date | [Update workflow](baseline-updates.md#existing-site-update-workflow) · [Copy-paste prompt](prompt-library.md#bringing-an-existing-site-up-to-date) |
+| Take a new standards release on a site | [Taking a standards release](baseline-updates.md#taking-a-standards-release) · [Prompt](prompt-library.md#taking-a-standards-release-on-a-site) |
+| Make an everyday change on a live site | [Day-2 prompt](prompt-library.md#day-2-change-on-a-live-site) |
 | Improve Baseline itself | [Contributor guide](../CONTRIBUTING.md) |
 
 ## Reference guides
@@ -58,9 +60,12 @@ Agent instructions require saving the art-direction record before visual impleme
 - **[Design Framework & Token Physics](design-framework.md)**  
 Bounded fluid scales, root-font/inline-axis assumptions and diagnostics, reading measures (`68ch`), and structural layout primitives.
 - **[Brilliant Onboarding](brilliant-onboarding.md)** Recommended canvas when editable prototyping is requested without a settled tool, with tested native components/modes, export/undo limits and native Astro proof.
+- **[Canvas Kit](canvas-kit.md)** Source-derived tokens and semantic previews for an external design canvas.
+- **[HTML Artifact Preflight](artifact-lint.md)** `design:artifact-check` for HTML concepts and exports, without OpenDesign or a browser.
+- **Canvas onboarding:** [OpenPencil](openpencil-onboarding.md) (local `.fig` canvas), [Penpot](penpot-onboarding.md) (shared cloud review) and optional [OpenDesign](opendesign-onboarding.md).
 - **[Native Composition](native-composition.md)** Open-slot Disclosure, Cluster and Sidebar contracts, intrinsic wrapping, CMS/static content ownership and manual acceptance limits.
 - **[Reusable Public Patterns & Primitives](reusable-public-patterns.md)**  
-Shared contracts and examples for Cards/media, ClientRouter lifecycle and warming, progressive forms, skeleton geometry, directional transitions and persistent swaps, accessible Tabs/CopyButton/theme controls, heading/TOC/Callout/Steps primitives, and platform capabilities. The guide maps Tranches 1–5 and distinguishes native fallbacks from browser enhancements and server-only capabilities.
+An index of every shipped component with its props: SiteShell, Section/Container/Grid with token `gap`, Cards/media and galleries, ClientRouter lifecycle, warming and speculation-rules prefetch, progressive forms with inline field errors, skeleton geometry, directional transitions and persistent swaps, accessible Tabs/CopyButton/theme controls, BeforeAfter, Stars and quote helpers, Hours, consent-aware Analytics, ConsentBanner, click-to-load VideoEmbed/MapEmbed, heading/TOC/Callout/Steps primitives, and platform capabilities.
 - **[Optional Site Search](search.md)** Opt-in Pagefind SearchDialog with native `<dialog>`, lazy bundle loading, profile-aware `search:index`, explicit EmDash public exports and configuration-versus-readiness receipts.
 - **[CMS Metadata Ownership Verification](verification/metadata-phase-1.md)** Shared-shell compatibility, article semantics, public-origin defaults, editor/plugin precedence, and the disposable local metadata rehearsal.
 - **[Static Metadata and Safe JSON-LD](verification/metadata-phase-2.md)** Static/Sveltia ownership, public URL and image policy, independent profile verification, and explicit existing-site adoption.
@@ -87,6 +92,7 @@ Native row-per-locale multilingual architecture linked by translation groups, av
 - **[Choosing Registry Plugins](plugin-selection.md)** Reviewing permissions and Cloudflare support, needs better met in the site itself, and plugins worth considering or avoiding.
 - **[Forms & Verification](forms-adoption.md)**  
 Form handling, server-side recovery validation, and Cloudflare Turnstile spam protection.
+- **[Editor-Facing Migration Review](migration-review.md)** Resuming a migration safely and the `migration:check-library` / `migration:check-editorial` reviews.
 - **[Migration Acceptance Contract](migration-acceptance.md)** Versioned schemas, bounded live HTTP checks and offline replay.
 - **[Offline Content Inventory Contracts](migration-content-inventories.md)** Explicit entity mappings, private offline snapshots and count-only reconciliation reports; editor acceptance remains separate.
 - **[WordPress Importer Fidelity Matrix](importer-fidelity-matrix.md)** Runtime-tested behavior for WXR and Exporter paths across blocks, galleries, SEO, bylines, and retry non-synchronization.
@@ -134,6 +140,7 @@ Curated prompts for new sites, component quarantine, WP migrations, live token t
 Connecting coding assistants to official Astro/EmDash docs, optional design MCP sources (`designmd-mcp`, `21st.dev`, `Nicelydone`, `Stitch`) used through shared reference research and component quarantine, and generating site-level access tokens with `npm run mcp:token`.
 - **[Skill Synchronization](skill-synchronization.md)**  
 Managing staged updates for mirrored EmDash skills (`sync:emdash-skills`) and shared Vermeulen-maintained skills (`sync:site-skills`) while protecting local customizations.
+- **[Local Workflow Replays](workflow-replay.md)** `workflow:replay` fixtures for re-running recorded workflow briefs.
 - **[Automated Upstream Updates & CI Maintenance](automated-upstream-updates.md)**  
 Reviewed maintenance patches: weekly root dependency proposals, manual profile-filtered static source proposals, verification artifacts and explicit skill updates.
 - **[Dependency Advisory Review — October 2026](dependency-review-2026-10-25.md)** Compatible Sharp/transitive patches, remaining Zod paths, profile audit results and existing-site adoption.
@@ -149,8 +156,16 @@ Read-only SQLite vs. Cloudflare D1 structural parity (`db:diff`), 50-column phys
 - **[Production Deployment & Cloudflare Cutover](production-deployment.md)**  
 Standalone Node.js deployment, Cloudflare Workers/D1/R2 setup, R2 media sync, serverless sessions, and the critical corporate mail DNS preservation checklist (protecting Google Workspace / Microsoft 365).
 - **[Node.js + SQLite Production Backup & Disaster Recovery](node-backup-restore.md)** Consistent SQLite acquisition (.backup / VACUUM INTO), synchronized media/secret bundles, retention schedules, and isolated restore drills.
+- **[Standards Releases & Change Notes](standards-releases.md)**  
+Change notes for every change sites receive, `standards:check`, cutting a release with `standards:release`, tagging and publishing it, and how sites take it.
+- **[Production HTML Integrity](html-integrity.md)** `audit:html` over emitted HTML and linked SSR routes.
+- **[Backup Identity & Hosted Sign-In Checks](release-trust.md)** `db:check-backup` and `check:hosted-auth` for EmDash.
+- **[Runtime Targets](runtime-targets.md)** Explicit Node and Workers configuration and downstream extensions.
+- **[Cloudflare Worker Candidate Smoke Check](cloudflare-worker-candidate.md)** Exercising a candidate Worker before it takes production traffic.
+- **[Opt-In Public-Feed Caching](public-feed-cache-integration.md)** Request-owned freshness for SSR feed pages.
+- **[Client Bundle Inspection](client-bundles.md)** `build:analyze` for client JavaScript ownership.
 - **[Site Standards Diagnostic Engine](site-standards-audit.md)**  
-Using `npm run audit:site` to diagnose existing sites against the certified `standards-v0.1.1` baseline, and applying deterministic modernization recipes.
+Using `npm run audit:site` to diagnose existing sites against the current certified standards release (`standards/baselines/<version>.json`, pinned in `scripts/audit-site.mjs`), and applying deterministic modernization recipes.
 - **[Starter Meta-Review Process](starter-meta-review.md)**  
 Methodology for recurring evaluation of upstream Astro, adapter, and EmDash releases.
 - **[Site Registry Contract](site-registry.md)**  
@@ -165,7 +180,8 @@ Private site registry conventions for agencies managing multiple client deployme
 - **[Clean-History Public Release](public-release.md)**  
 How this repository was sanitized and extracted from internal development history.
 - **[Phase 3 Standards Certification](phase-3-certification.md)**  
-Release certification notes and tested scopes for the `standards-v0.1.1` baseline.
+The certification sequence each standards release follows, from the first `standards-v0.1.1` to the current release.
+- **Completed plans and trials:** [font and token follow-up](font-and-token-followup-plan.md), [visual audit acceptance](visual-audit-acceptance-plan.md), [workflow delivery](workflow-delivery-followup-plan.md), [workflow replay follow-up](workflow-replay-followup-plan.md) and the [design-surface trial](design-tool-comparison-2026-10-26.md); current plans are under [plans/](plans/).
 - **[Third-Party Licenses](licenses/)**  
 Attributions for included upstream libraries (EmDash, Noto Sans OFL, PhotoSwipe, Impeccable).
 
