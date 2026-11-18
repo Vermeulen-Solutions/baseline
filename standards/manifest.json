@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "standardsVersion": "0.3.0",
+  "standardsVersion": "0.3.1",
   "status": "certified-scoped",
   "reviewedAt": "2026-11-18",
-  "stableReleaseRef": "refs/tags/standards-v0.3.0",
+  "stableReleaseRef": "refs/tags/standards-v0.3.1",
   "runtimeProfiles": {
     "node-sqlite": {
       "status": "certified-scoped",
@@ -25,6 +25,7 @@
         "24.22.3"
       ],
       "additionalEvidence": [
+        "audit/certification-2026-11-18/verification-0.3.1.json",
         "audit/certification-2026-11-18/verification.json",
         "audit/certification-2026-11-16/README.md",
         "audit/certification-2026-11-16/verification.json",
@@ -169,24 +170,25 @@
   },
   "certification": {
     "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
-    "sourceCommit": "f87db802d0c2992d618f9ed2f887c91fa0c9634e",
-    "sourceTree": "d565e6d38a0f84ab3c2010924dc72de0d056889f",
+    "sourceCommit": "7b87a587ab45e28eb3add2ef105a2edd430b4dac",
+    "sourceTree": "151f89a594648823ec75b077872c39371fb59c11",
     "receipt": "audit/certification-2026-11-18/verification.json",
-    "releaseNotes": "standards/releases/0.3.0.md",
+    "releaseNotes": "standards/releases/0.3.1.md",
     "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles.",
     "frameworkEvidence": "audit/certification-2026-11-16/README.md (0.2.0; runtime dependencies, schema and editor code unchanged since)",
     "rendererEvidence": "audit/visual-renderer-2026-11-16/README.md",
-    "sourceEvidence": "audit/certification-2026-11-18/README.md"
+    "sourceEvidence": "audit/certification-2026-11-18/README.md",
+    "patchEvidence": "audit/certification-2026-11-18/verification-0.3.1.json (0.3.1: skills and static sync helper only; 0.3.0 evidence applies to the runtime)"
   },
   "distribution": {
     "skills": {
       "astro-site-design": {
         "files": 17,
-        "sha256": "7a3410eb2cd67afcf3da9e39a10856e704622588d01f5c7c838a42ea2331d1de"
+        "sha256": "430b5fc27545515f71256ab758b9ba967f651644e47a91034451bb875b3eae1d"
       },
       "brilliant-site-design": {
         "files": 4,
-        "sha256": "3fd419715ee7f16efa6a53e3b808626f49c41dc63eabe80d1e7b27da0e24fc5b"
+        "sha256": "05b5b66fb0b3d214f2bbe8d2337424b3abc7e07ffb281c3233dff211074d0616"
       },
       "building-emdash-site": {
         "files": 5,
@@ -202,7 +204,7 @@
       },
       "emdash-content-modeling": {
         "files": 4,
-        "sha256": "7d998b4bc3f561988e28d7f5241296fc05d695e06efcd4a1a780baba87b65435"
+        "sha256": "4ad06071c936300de06517d12db574e0581c7253a3931f72508f72d0baca6023"
       },
       "emdash-production-cutover": {
         "files": 2,
@@ -222,19 +224,19 @@
       },
       "opendesign-site-design": {
         "files": 8,
-        "sha256": "32e083b6007ebc07a4b2631c35007be2f492bc500d0273f9c941a4352d94b76e"
+        "sha256": "7ed851542fde521b5d10a985f16c031177b6036d1d7f0780a2e3e748d02cecd1"
       },
       "openpencil-site-design": {
         "files": 11,
-        "sha256": "ae81ef0cdae1a7a0864a4b18b9927cb7b31a58040f2e4292dc6d238d1c49872b"
+        "sha256": "0a0a453a36352623053e793481fd15146f27ec6974795f212c845c3d3a9edf82"
       },
       "penpot-site-design": {
         "files": 7,
-        "sha256": "381639990b05790e7b7db30d3ff73a4764d0744f7d4c736d56166c539467ad7e"
+        "sha256": "4b65fb7d915c2283172fdd6fc7500ed1be1ad73285e03f7c46fe9df3d3f30a94"
       },
       "site-art-direction": {
         "files": 11,
-        "sha256": "87dd3b273a313666faedc98eacebab5eaccc6daef63647ac9fdd7578d25f2701"
+        "sha256": "0136682cc48a7642deec7e4dcfb7d9e725af0b70d348649f1ab5080d03da9803"
       },
       "upgrading-emdash": {
         "files": 1,
@@ -266,7 +268,7 @@
       "scripts/sync-site-skills.mjs": "5e2e817f4e707ef60212c5cf52abaa78268e761511c3ab5196a9372085fb518e",
       "scripts/sync-emdash-skills.mjs": "f8b8682a9a715440f4c05c418a86c716c9aae155c341b28b2cc63835f60f3f45",
       "scripts/sync-impeccable-skill.mjs": "30c26f51c0afeebdd66798bb2af75950872dde7cd25e6ae2a74b9ba386694cf7",
-      "scripts/sync-baseline.mjs": "97e12ca5f20ec259fdc59e3adaceffbbdb06b59f83330c5eaaf8e46726ec1b0f",
+      "scripts/sync-baseline.mjs": "6a4c2c79f5440b6ccf197137bb3826ba1aac1a8b5d1311af84b64ce0c0e28bad",
       "scripts/audit-ui.mjs": "fa7e878c16bfa3b542dd55f32e8ee6bc1e731a0bd74f315fec6c3fb8c6bf7c51",
       "scripts/capture-routes.mjs": "49258a18d3ddf360eb3797b5fb35a48dbf47e64fa7c1af703465ffde27c1c31f"
     },
@@ -278,142 +280,9 @@
   },
   "changes": [
     {
-      "slug": "baseline-lockfile",
-      "title": "In-range lockfile refresh in Baseline's own checkout",
-      "bump": "none",
-      "platforms": [],
-      "areas": [],
-      "adoption": "none",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "crlf-token-test",
-      "title": "The resize-text token test passes in Windows checkouts with core.autocrlf",
-      "bump": "none",
-      "platforms": [],
-      "areas": [],
-      "adoption": "none",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "design-checks",
-      "title": "Token guardrails, resize-text ratio and fairer rendered-UI audits",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/design-system.mjs",
-        "scripts/css-contracts.mjs",
-        "scripts/check-css-contracts.mjs",
-        "scripts/audit-ui.mjs",
-        "scripts/audit-design-system.mjs"
-      ]
-    },
-    {
-      "slug": "editor-experience",
-      "title": "A guide and templates for an admin non-technical editors can use",
-      "bump": "minor",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "components",
-        "docs",
-        "tooling"
-      ],
-      "adoption": "manual",
-      "visible": false,
-      "database": false,
-      "files": [
-        "docs/editor-experience.md",
-        "src/lib/derived-order.ts",
-        "src/plugins/editor-ui/admin.tsx",
-        "src/plugins/editor-ui/config.ts",
-        "scripts/cms-admin-metadata.mjs"
-      ]
-    },
-    {
-      "slug": "fleet-record",
-      "title": "Fleet record fields for status, origins, adopted release and last deploy",
-      "bump": "none",
-      "platforms": [],
-      "areas": [],
-      "adoption": "none",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "layout-primitives",
-      "title": "Container-query Card and Grid, opt-in section joins and CSS-first reveal",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "styles"
-      ],
-      "adoption": "manual",
-      "visible": true,
-      "database": false,
-      "files": [
-        "src/components/Card.astro",
-        "src/components/Grid.astro",
-        "src/components/Section.astro",
-        "src/components/Container.astro",
-        "src/lib/layout-style.ts",
-        "src/layouts/SiteShell.astro",
-        "src/styles/registry-aliases.css"
-      ]
-    },
-    {
-      "slug": "release-tooling",
-      "title": "Change notes, release preparation and fleet status for skills and helpers",
-      "bump": "none",
-      "platforms": [],
-      "areas": [],
-      "adoption": "none",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "site-impeccable-record",
-      "title": "Impeccable in a site comes only from the site skill sync",
+      "slug": "skill-repo-links",
+      "title": "Skills link to Baseline's docs by URL instead of paths sites do not have",
       "bump": "patch",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "skills",
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/skill-sync.mjs",
-        "scripts/sync-impeccable-skill.mjs"
-      ]
-    },
-    {
-      "slug": "skills-refresh",
-      "title": "Skill refresh: Impeccable 4.9.2, upgrade and delivery routing, plugin selection",
-      "bump": "minor",
       "platforms": [
         "emdash",
         "static"
@@ -427,79 +296,20 @@
       "files": []
     },
     {
-      "slug": "sync-helpers",
-      "title": "Skill sync helpers list new files for static profiles and know upgrading-emdash",
+      "slug": "sync-baseline-line-endings",
+      "title": "Bounded sync ignores line endings when it compares local files",
       "bump": "patch",
       "platforms": [
-        "emdash",
         "static"
       ],
       "areas": [
-        "tooling",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/skill-sync.mjs",
-        "scripts/sync-impeccable-skill.mjs"
-      ]
-    },
-    {
-      "slug": "type-scale-and-headings",
-      "title": "Type steps, heading sizes and a resize-text rule in the starter stylesheet",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "styles"
-      ],
-      "adoption": "manual",
-      "visible": true,
-      "database": false,
-      "files": [
-        "src/styles/global.css"
-      ]
-    },
-    {
-      "slug": "workers-asset-retention-rule",
-      "title": "The Workers HTML cache rule accepts asset retention on deploy",
-      "bump": "patch",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "delivery",
         "tooling"
       ],
-      "adoption": "none",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "workers-delivery-tools",
-      "title": "Verified D1 copies, local upgrade rehearsal and live checks for Workers sites",
-      "bump": "minor",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "delivery",
-        "tooling",
-        "docs"
-      ],
       "adoption": "copy",
       "visible": false,
       "database": false,
       "files": [
-        "scripts/d1-export.mjs",
-        "scripts/d1-rehearse.mjs",
-        "scripts/check-live.mjs",
-        "scripts/workers-rules.mjs"
+        "scripts/sync-baseline.mjs"
       ]
     }
   ]
