@@ -19,6 +19,7 @@ export const PINNED_TOOLS = Object.freeze([
   'scripts/sync-baseline.mjs',
   'scripts/audit-ui.mjs',
   'scripts/check-quality.mjs',
+  'scripts/html-parity.mjs',
   'scripts/capture-routes.mjs',
 ]);
 // Installed only when a site chooses the design surface they serve.

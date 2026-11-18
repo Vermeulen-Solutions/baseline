@@ -120,6 +120,7 @@
     "update:plan": "node scripts/update-plan.mjs",
     "audit:ui": "node scripts/audit-ui.mjs",
     "check:quality": "node scripts/check-quality.mjs",
+    "parity:html": "node scripts/html-parity.mjs",
     "audit:cms-roundtrip": "node scripts/cms-roundtrip.mjs",
     "cms:admin-metadata": "node scripts/cms-admin-metadata.mjs",
     "design:canvas-check": "node scripts/canvas-board-check.mjs"

@@ -133,6 +133,8 @@
     "tests/audit-ui.test.mjs",
     "scripts/check-quality.mjs",
     "tests/check-quality.test.mjs",
+    "scripts/html-parity.mjs",
+    "tests/html-parity.test.mjs",
     "scripts/capture-routes.mjs",
     "tests/capture-routes.test.mjs",
     "docs/page-performance.md",

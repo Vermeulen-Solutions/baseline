@@ -1622,6 +1622,14 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "scripts/html-parity.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/html-parity.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "tests/audit-ui.test.mjs": {
       "disposition": "shared",
       "static": "copy"

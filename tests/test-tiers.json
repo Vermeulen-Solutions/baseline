@@ -307,6 +307,10 @@
     "tier": "unit",
     "reason": "Read-only classification of upstream changes against a site using a throwaway Git repository"
   },
+  "html-parity.test.mjs": {
+    "tier": "unit",
+    "reason": "Rendered-HTML parity: argument guards, route file names, build-noise normalizing, labelled diffs, and capture/compare with a fake fetch (markup, status, unstable and missing routes)"
+  },
   "check-quality.test.mjs": {
     "tier": "unit",
     "reason": "Portable route quality gates: argument guards, budget validation and layering, layout-shift session windows, JSON-LD types, target spacing, weight and budget issues and --init; the fixture-site browser run is opt-in (BASELINE_UI_BROWSER_TESTS=1)"
