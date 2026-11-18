@@ -356,6 +356,10 @@
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/sveltia-pin.mjs": {
+      "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/test-visual.mjs": {
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
@@ -1570,6 +1574,10 @@
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "tests/sveltia-pin.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "docs/standards-releases.md": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -1728,6 +1736,10 @@
     },
     "tests/interaction-hardening.test.mjs": {
       "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/skill-links.test.mjs": {
+      "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     }
   }

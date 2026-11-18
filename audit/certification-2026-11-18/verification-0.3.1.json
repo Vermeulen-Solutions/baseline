@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.3.1",
+  "recordedAt": "2026-11-18T09:03:28.566Z",
+  "sourceCommit": "7b87a587ab45e28eb3add2ef105a2edd430b4dac",
+  "scope": "Patch on 0.3.0: skill links and the bounded static sync helper only; runtime dependencies, schema, components and visual references unchanged, so the 0.3.0 visual and framework evidence applies",
+  "cleanCheckout": {
+    "22.23.4": {
+      "node": "v22.23.4",
+      "commit": "7b87a587ab45e28eb3add2ef105a2edd430b4dac",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 142
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 230
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 15
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 61
+        },
+        "ci-fast": {
+          "exit": 0,
+          "seconds": 55
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 12
+        },
+        "build-seeded": {
+          "exit": 0,
+          "seconds": 14
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 3
+        }
+      }
+    },
+    "24.22.3": {
+      "node": "v24.22.3",
+      "commit": "7b87a587ab45e28eb3add2ef105a2edd430b4dac",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 137
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 225
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 13
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 49
+        },
+        "ci-fast": {
+          "exit": 0,
+          "seconds": 49
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 11
+        },
+        "build-seeded": {
+          "exit": 0,
+          "seconds": 12
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 2
+        }
+      }
+    }
+  },
+  "findings": [
+    "A first 0.3.1 candidate (8bc044b) failed five baseline-sync tests in a CRLF clone: normalizing local files to LF missed receipts recorded from CRLF bytes; fixed in 7b87a58 to match either form"
+  ]
+}

@@ -24,13 +24,16 @@ jobs:
         run: npm update --save --no-audit --no-fund
       - name: Propose third-party skill updates (Impeccable & EmDash mirrors)
         run: npm run sync:upstream-skills
+      - name: Propose the Sveltia CMS pin update (CDN script that npm update never sees)
+        # Downloads the exact file, cross-checks it against a second CDN and recomputes the SRI; writes nothing on failure.
+        run: node scripts/sveltia-pin.mjs --apply
       - name: Write the standards change note for this proposal
         run: node scripts/standards-changes.mjs upstream-note
       - name: Prove the resulting lockfile installs cleanly
         run: npm ci --no-audit --no-fund
       - run: npm run verify
       - run: npm run build
-      - name: Verify both static profiles against the proposed dependency versions
+      - name: Verify both static profiles against the proposed dependency versions and Sveltia pin
         run: npm run test:profiles
       - name: Save the reviewed dependency proposal
         if: always()
@@ -55,8 +58,13 @@ jobs:
 
           deps_diff=$(git diff package.json | grep -E '^\+[ ]+"' | sed 's/^+ *//' || true)
           skill_diff=$(git diff --stat .agents/skills/ .emdash/upstream-skills.json .emdash/impeccable-source.json || true)
+          sveltia_file="profiles/static-sveltia/project/public/admin/index.html"
+          sveltia_diff=$(git diff "$sveltia_file" | grep -E '^[-+] .*sveltia-cms\.js' | sed -E 's/^([-+]) +/\1 /' || true)
 
-          if [ -n "$deps_diff" ] && [ -n "$skill_diff" ]; then
+          if [ -n "$sveltia_diff" ] && [ -z "$deps_diff" ] && [ -z "$skill_diff" ]; then
+            title="chore(sveltia): weekly verified Sveltia CMS pin update review"
+            issue_title="[Upstream Review] Verified Sveltia CMS pin update available"
+          elif [ -n "$deps_diff" ] && [ -n "$skill_diff" ]; then
             title="chore(upstream): weekly verified dependency and skill update review"
             issue_title="[Upstream Review] Verified dependency and skill updates available"
           elif [ -n "$skill_diff" ]; then
@@ -67,7 +75,9 @@ jobs:
             issue_title="[Upstream Review] Verified dependency updates available"
           fi
 
-          if [ -z "$deps_diff" ]; then
+          if [ -z "$deps_diff" ] && git diff --quiet package-lock.json; then
+            deps_summary="No npm dependency changes."
+          elif [ -z "$deps_diff" ]; then
             deps_summary="In-range lockfile dependencies only (transitive updates)."
           else
             deps_summary=$(printf '%s\n%s\n%s' "\`\`\`json" "$deps_diff" "\`\`\`")
@@ -91,6 +101,17 @@ jobs:
               "\`\`\`")
           fi
 
+          if [ -n "$sveltia_diff" ]; then
+            body=$(printf '%s\n' \
+              "$body" \
+              "" \
+              "### Sveltia CMS pin (static-sveltia profile)" \
+              "The editor script is loaded from a CDN, so \`npm update\` never sees it. The new SRI was computed from the downloaded bytes, which matched a second CDN. Review the [Sveltia CMS releases](https://github.com/sveltia/sveltia-cms/releases) between the two versions." \
+              "\`\`\`diff" \
+              "$sveltia_diff" \
+              "\`\`\`")
+          fi
+
           body=$(printf '%s\n' \
             "$body" \
             "" \
@@ -107,7 +128,8 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git checkout -B "$branch"
-          git add package.json package-lock.json .agents/skills/ .emdash/upstream-skills.json .emdash/impeccable-source.json profiles/manifests/shared.json standards/changes/
+          git add package.json package-lock.json .agents/skills/ .emdash/upstream-skills.json .emdash/impeccable-source.json profiles/manifests/shared.json standards/changes/ \
+            "$sveltia_file" profiles/static-sveltia/project/docs/sveltia-cms.md audit/design-gate-exceptions.json
           git commit -m "$title"
           git push -f origin "$branch"
 

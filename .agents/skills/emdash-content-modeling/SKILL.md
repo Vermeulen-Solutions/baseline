@@ -57,7 +57,7 @@ When an organization has multiple distinct variants, sub-teams, or cohorts withi
 ### Editor-facing fields
 - Do not add a "display order" number when the order follows from the data (weekday and time, taxonomy order then name, category order then title): use `src/lib/derived-order.ts`. For a truly editorial order, keep a non-translatable number field owned by a drag-and-drop admin page (`src/plugins/editorial-order/`).
 - Localise select labels with a field widget instead of renaming stored values, and set list columns, quick create and field labels with a reviewed `npm run cms:admin-metadata` plan. The two sides of a relation are one link; never model the reverse direction as a second field.
-- Read [docs/editor-experience.md](../../../docs/editor-experience.md) before shaping the admin for non-technical editors.
+- Read [docs/editor-experience.md](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/editor-experience.md) before shaping the admin for non-technical editors.
 
 ### Field rules EmDash enforces, and the ones it does not (verified on EmDash 1.5.0)
 - **Decide `required` and `unique` when a field is created.** Changing either on an existing field fails with `FIELD_UPDATE_REQUIRES_MIGRATION`, whether or not the collection has entries. Changing a field's type also needs a content migration (`FIELD_TYPE_CHANGE_REQUIRES_MIGRATION`), except between text-like types. A field added to a live collection is therefore optional; when the site needs it filled, the template enforces the rule (leave an incomplete entry out of a listing, show a fallback) and the field label says what is expected.
