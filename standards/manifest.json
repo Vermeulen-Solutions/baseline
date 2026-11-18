@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "standardsVersion": "0.4.0",
+  "standardsVersion": "0.5.0",
   "status": "certified-scoped",
   "reviewedAt": "2026-11-18",
-  "stableReleaseRef": "refs/tags/standards-v0.4.0",
+  "stableReleaseRef": "refs/tags/standards-v0.5.0",
   "runtimeProfiles": {
     "node-sqlite": {
       "status": "certified-scoped",
@@ -25,6 +25,7 @@
         "24.22.3"
       ],
       "additionalEvidence": [
+        "audit/certification-2026-11-18/verification-0.4.0.json",
         "audit/certification-2026-11-18/verification-0.3.1.json",
         "audit/certification-2026-11-18/verification.json",
         "audit/certification-2026-11-16/README.md",
@@ -170,10 +171,10 @@
   },
   "certification": {
     "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
-    "sourceCommit": "64f8827e93ecb5bd1095f60cbf1e193d94f8411b",
-    "sourceTree": "65c0083db60d077791a1dfcae57a50a32ce18725",
-    "receipt": "audit/certification-2026-11-18/verification.json",
-    "releaseNotes": "standards/releases/0.4.0.md",
+    "sourceCommit": "004e89bc15f7805b91cd335bd08a95a106798510",
+    "sourceTree": "dd28d11abfa6a6255fc952293a1a8cd7d3f48da1",
+    "receipt": "audit/certification-2026-11-18/verification-0.5.0.json",
+    "releaseNotes": "standards/releases/0.5.0.md",
     "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles.",
     "frameworkEvidence": "audit/certification-2026-11-16/README.md (0.2.0; runtime dependencies, schema and editor code unchanged since)",
     "rendererEvidence": "audit/visual-renderer-2026-11-16/README.md",
@@ -184,7 +185,7 @@
     "skills": {
       "astro-site-design": {
         "files": 18,
-        "sha256": "431eed48e593fab1ec4e8272f2e396409091babb674d597028a1576674568de9"
+        "sha256": "a9aa7a974e8d75a096e99a420937bfdae376150c2329b7ceecc671f9000afe01"
       },
       "brilliant-site-design": {
         "files": 4,
@@ -219,8 +220,8 @@
         "sha256": "3b9572b018eb34c63674783d6be10dcbfcbe6d33f6524b7dc579b89e90bb560c"
       },
       "new-site-workflow": {
-        "files": 16,
-        "sha256": "8d6a202287a44824f8eeb6ebb6653723ab4694722a661f80c7c70942071cf709"
+        "files": 17,
+        "sha256": "8576b259a9237b2cd8dc9e026a027637bab711e57ff5c529b781c35f74dd727d"
       },
       "opendesign-site-design": {
         "files": 8,
@@ -270,7 +271,7 @@
       "scripts/sync-impeccable-skill.mjs": "30c26f51c0afeebdd66798bb2af75950872dde7cd25e6ae2a74b9ba386694cf7",
       "scripts/sync-baseline.mjs": "6a4c2c79f5440b6ccf197137bb3826ba1aac1a8b5d1311af84b64ce0c0e28bad",
       "scripts/audit-ui.mjs": "a4bb5459e8b744e4fc1d4e85fcc92cfaac2a3086f45a92f93c02e8dd8c43208c",
-      "scripts/check-quality.mjs": "d2ec8a5422397aee73e8b7cd91cad9acc0a43cf3f3df1b7b93a744d3b6b2c42a",
+      "scripts/check-quality.mjs": "7d5894641704f3b1c7f0e4505e8484d84710626489686c07195bf66679a666b7",
       "scripts/html-parity.mjs": "8c235c92cb93a7fa017feaf91822982f7e905745c5a23d9db9b0d84ff08d01ab",
       "scripts/capture-routes.mjs": "49258a18d3ddf360eb3797b5fb35a48dbf47e64fa7c1af703465ffde27c1c31f"
     },
@@ -282,195 +283,8 @@
   },
   "changes": [
     {
-      "slug": "app-icons-manifest",
-      "title": "App icons and a web manifest",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/generate-icons.mjs",
-        "tests/generate-icons.test.mjs",
-        "src/lib/web-manifest.ts",
-        "src/pages/site.webmanifest.ts",
-        "src/layouts/Base.astro",
-        "public/apple-touch-icon.png",
-        "public/icon-192.png",
-        "public/icon-512.png",
-        "public/icon-maskable-512.png"
-      ]
-    },
-    {
-      "slug": "before-after",
-      "title": "Before/after comparison",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/components/BeforeAfter.astro"
-      ]
-    },
-    {
-      "slug": "cache-404-guard",
-      "title": "The cache rehearsal proves a missing page is never cached",
-      "bump": "patch",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "tests/cache.integration.mjs"
-      ]
-    },
-    {
-      "slug": "cloudflare-workers-guidance",
-      "title": "Cloudflare Workers guidance: admin hostname, bot protection, redirects, plan limits and timing",
-      "bump": "patch",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "sync",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-live.mjs"
-      ]
-    },
-    {
-      "slug": "cms-route-hardening",
-      "title": "Real 404 status, security headers, /llms.txt and a quiet unknown-block fallback",
-      "bump": "minor",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "components",
-        "delivery"
-      ],
-      "adoption": "manual",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/middleware.ts",
-        "src/lib/security-headers.ts",
-        "src/pages/llms.txt.ts",
-        "src/lib/llms-txt.ts",
-        "src/components/RichText.astro",
-        "src/components/PortableTextUnknown.astro",
-        "src/lib/portable-text-fallback.ts",
-        "\"src/pages/[slug].astro\"",
-        "\"src/pages/posts/[slug].astro\"",
-        "\"src/pages/category/[slug].astro\"",
-        "\"src/pages/tag/[slug].astro\""
-      ]
-    },
-    {
-      "slug": "computed-csp",
-      "title": "A Content-Security-Policy computed from each page, report-only first",
-      "bump": "minor",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "components",
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/lib/content-security-policy.ts",
-        "src/middleware.ts",
-        "src/env.d.ts",
-        "scripts/check-quality.mjs"
-      ]
-    },
-    {
-      "slug": "contact-intake-scoring",
-      "title": "Contact forms: score suspicious submissions, flag or hold them, never lose one",
-      "bump": "patch",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "skills"
-      ],
-      "adoption": "sync",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "content-gates",
-      "title": "Sections open with their first entry; folded content gets audited",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "manual",
-      "visible": true,
-      "database": false,
-      "files": [
-        "scripts/audit-ui.mjs"
-      ]
-    },
-    {
-      "slug": "content-trust-techniques",
-      "title": "Guidance: content patterns, trust pages and measurement, interaction techniques",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills"
-      ],
-      "adoption": "sync",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "copy-rules",
-      "title": "Wording rules checked on the text visitors read",
+      "slug": "axe-share-images",
+      "title": "Accessibility scan and share-image check in check:quality",
       "bump": "minor",
       "platforms": [
         "emdash",
@@ -478,6 +292,7 @@
       ],
       "areas": [
         "tooling",
+        "dependencies",
         "skills"
       ],
       "adoption": "copy",
@@ -489,286 +304,209 @@
       ]
     },
     {
-      "slug": "crlf-test-reads",
-      "title": "Tests read sources as LF",
-      "bump": "none",
-      "platforms": [],
-      "areas": [],
-      "adoption": "none",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "design-skill-motion-guidance",
-      "title": "Design skill: exit easing, top-layer exits, cross-document transitions",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills"
-      ],
-      "adoption": "sync",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "emdash-field-rules",
-      "title": "Content-modeling skill: field rules EmDash does and does not enforce",
-      "bump": "patch",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "skills"
-      ],
-      "adoption": "sync",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "fleet-drift",
-      "title": "fleet:drift lists what sites changed in Baseline-owned files",
-      "bump": "none",
-      "platforms": [],
-      "areas": [],
-      "adoption": "none",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "html-parity",
-      "title": "Rendered-HTML parity for updates and refactors",
+      "slug": "consent-analytics",
+      "title": "Analytics with consent, and embeds that load on click",
       "bump": "minor",
       "platforms": [
         "emdash",
         "static"
-      ],
-      "areas": [
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/html-parity.mjs",
-        "tests/html-parity.test.mjs"
-      ]
-    },
-    {
-      "slug": "interaction-and-hardening",
-      "title": "Zero-JS interaction choreography: page transitions, dialog exits, hover gating",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "styles",
-        "components"
-      ],
-      "adoption": "manual",
-      "visible": true,
-      "database": false,
-      "files": [
-        "src/styles/global.css",
-        "src/layouts/SiteShell.astro",
-        "src/layouts/Base.astro",
-        "src/components/Card.astro",
-        "src/components/Heading.astro",
-        "src/components/PhotoGallery.astro",
-        "scripts/css-contracts.mjs",
-        "scripts/design-system.mjs"
-      ]
-    },
-    {
-      "slug": "organization-graph",
-      "title": "A fuller Organization graph: social profiles and business facts",
-      "bump": "minor",
-      "platforms": [
-        "emdash"
       ],
       "areas": [
         "components",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/lib/structured-data.ts",
-        "src/plugins/baseline-metadata/index.ts"
-      ]
-    },
-    {
-      "slug": "repo-url-check",
-      "title": "Baseline repository URLs on main are checked",
-      "bump": "none",
-      "platforms": [],
-      "areas": [],
-      "adoption": "none",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "route-quality-gates",
-      "title": "Route quality gates with a per-site page budget",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-quality.mjs",
-        "tests/check-quality.test.mjs"
-      ]
-    },
-    {
-      "slug": "single-product-brief",
-      "title": "One brief: PRODUCT.md",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
         "docs",
+        "skills"
+      ],
+      "adoption": "copy",
+      "visible": true,
+      "database": false,
+      "files": [
+        "src/lib/consent.ts",
+        "src/lib/load-on-click.ts",
+        "src/components/Analytics.astro",
+        "src/components/ConsentBanner.astro",
+        "src/components/VideoEmbed.astro",
+        "src/components/MapEmbed.astro",
+        "src/layouts/Base.astro",
+        "src/env.d.ts"
+      ]
+    },
+    {
+      "slug": "day-2-recipes",
+      "title": "Day-2 recipes for everyday requests",
+      "bump": "patch",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "skills"
+      ],
+      "adoption": "sync",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "field-errors",
+      "title": "Inline field errors in enhanced forms",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "components",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": true,
+      "database": false,
+      "files": [
+        "src/components/Form.astro"
+      ]
+    },
+    {
+      "slug": "launch-checks",
+      "title": "Launch readiness in check:quality, and placeholders instead of inventions",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "tooling",
+        "skills",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/check-quality.mjs",
+        "tests/check-quality.test.mjs",
+        "PRODUCT.example.md"
+      ]
+    },
+    {
+      "slug": "opening-hours",
+      "title": "Opening hours, on the page and in structured data from one list",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "components",
+        "docs"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "src/lib/opening-hours.ts",
+        "src/components/Hours.astro",
+        "src/lib/structured-data.ts"
+      ]
+    },
+    {
+      "slug": "replay-control-arm",
+      "title": "Workflow replay control arm without agent guidance",
+      "bump": "patch",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "tooling",
+        "docs"
+      ],
+      "adoption": "none",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "site-files-transitive",
+      "title": "site:files: transitive blocking and a stricter import scan",
+      "bump": "none",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
         "tooling"
       ],
-      "adoption": "manual",
+      "adoption": "none",
       "visible": false,
       "database": false,
       "files": []
     },
     {
-      "slug": "sitewide-metadata-checks",
-      "title": "Titles, descriptions and JSON-LD graphs checked across the site",
-      "bump": "minor",
+      "slug": "site-files",
+      "title": "Adopting Baseline-owned code in a built site",
+      "bump": "none",
       "platforms": [
         "emdash",
         "static"
       ],
       "areas": [
-        "tooling",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-quality.mjs",
-        "tests/check-quality.test.mjs"
-      ]
-    },
-    {
-      "slug": "speculation-prefetch",
-      "title": "Link prefetch through speculation rules",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "docs",
-        "skills"
-      ],
-      "adoption": "manual",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/lib/speculation-rules.ts",
-        "src/layouts/SiteShell.astro",
-        "src/layouts/Base.astro"
-      ]
-    },
-    {
-      "slug": "static-lastmod-slash-links",
-      "title": "Real update dates in static sitemaps, slashless links flagged, HSTS and security.txt at cutover",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "content-model",
-        "skills"
-      ],
-      "adoption": "manual",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-html-integrity.mjs"
-      ]
-    },
-    {
-      "slug": "sveltia-updates",
-      "title": "Sveltia CMS 0.269.0 and weekly Sveltia pin proposals",
-      "bump": "patch",
-      "platforms": [
-        "static"
-      ],
-      "areas": [
-        "dependencies",
         "tooling",
         "docs"
       ],
-      "adoption": "manual",
+      "adoption": "none",
       "visible": false,
       "database": false,
       "files": []
     },
     {
-      "slug": "testimonials",
-      "title": "Testimonials and public reviews, shown as written",
+      "slug": "static-csp",
+      "title": "Content-Security-Policy for static sites",
       "bump": "minor",
       "platforms": [
-        "emdash",
         "static"
       ],
       "areas": [
-        "components",
-        "skills"
+        "tooling",
+        "docs"
       ],
       "adoption": "copy",
       "visible": false,
       "database": false,
       "files": [
-        "src/lib/quotes.ts",
-        "src/components/Stars.astro"
+        "scripts/static-csp.mjs",
+        "scripts/baseline-features-integration.mjs",
+        "src/lib/content-security-policy.ts"
       ]
     },
     {
-      "slug": "voice-copy-rules",
-      "title": "Voice rules become copy rules",
+      "slug": "token-tests-client-lanes",
+      "title": "Token tests pass on a site with its own lane",
       "bump": "patch",
       "platforms": [
         "emdash",
         "static"
       ],
       "areas": [
-        "skills",
-        "docs"
+        "tooling"
       ],
-      "adoption": "sync",
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "tests/fluid-tokens.test.mjs",
+        "tests/token-contract.test.mjs"
+      ]
+    },
+    {
+      "slug": "visual-config-imports",
+      "title": "The visual suite copies every module the config imports",
+      "bump": "none",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "tooling"
+      ],
+      "adoption": "none",
       "visible": false,
       "database": false,
       "files": []
