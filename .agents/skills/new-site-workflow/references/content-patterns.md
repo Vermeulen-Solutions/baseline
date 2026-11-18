@@ -2,6 +2,10 @@
 
 Read this when shaping collections and page content for a client site: what a post opens with, how a portfolio or project entry is modelled, how quotes and reviews are kept, and when a section is ready to be linked. EmDash sites also follow the field rules in the `emdash-content-modeling` skill (search metadata, testimonials and reviews); static sites apply the same rules in `src/content.config.ts`.
 
+## Placeholders, never inventions
+
+When a fact, image or approval is missing, write a visible marker instead of inventing it: `[[placeholder: opening hours]]` in copy, or an empty image slot carrying `data-placeholder="team photo"`. List each one under Placeholders in `PRODUCT.md`, and record any decision you made without asking under Assumptions. `npm run check:quality` reports every marker still on a page (`placeholder`), the starter's own name or tagline and example addresses (`default-identity`), so nothing invented or left over reaches launch.
+
 ## Answer first
 
 People and answer engines read the top of a page and decide. Give articles and guides fields that put the answer there:
