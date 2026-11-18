@@ -98,7 +98,7 @@ For Sveltia, follow docs/sveltia-cms.md inside the generated project to configur
 
 Read the site's AGENTS.md and use its checked-in skills. Provide purpose, audience, pages/content, editing needs, and real brand assets or references. The [prompt library](prompt-library.md) has Express and Standard kickoff examples.
 
-Before client-specific visual implementation, establish the Art Direction Record in AGENTS.md, initialize the real site tokens, and calibrate production components on the local styleguide. Your assistant follows the gate and the relevant steps in [the design workflow](art-direction-workflow.md). This replaces starter samples with choices based on the actual site brief. An optional [project brief](project-context.md), starting from [PROJECT.example.md](../PROJECT.example.md), can hold durable client context.
+Before client-specific visual implementation, establish the Art Direction Record in AGENTS.md, initialize the real site tokens, and calibrate production components on the local styleguide. Your assistant follows the gate and the relevant steps in [the design workflow](art-direction-workflow.md). This replaces starter samples with choices based on the actual site brief. An optional [project brief](project-context.md), starting from [PRODUCT.example.md](../PRODUCT.example.md), can hold durable client context.
 
 ## Local destinations
 

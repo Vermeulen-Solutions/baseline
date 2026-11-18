@@ -270,7 +270,7 @@ export function findBrokenLinks(targets = ['docs'], { skip = [] } = {}) {
 }
 
 // Root documents and maintained skills whose links must resolve. Upstream mirrors are not ours to repair.
-export const LINK_TARGETS = ['docs', 'AGENTS.md', 'CONTRIBUTING.md', 'README.md', 'PROJECT.example.md', '.agents/skills'];
+export const LINK_TARGETS = ['docs', 'AGENTS.md', 'CONTRIBUTING.md', 'README.md', 'PRODUCT.example.md', '.agents/skills'];
 export const LINK_SKIP = [
   '.agents/skills/impeccable/', '.agents/skills/building-emdash-site/', '.agents/skills/creating-plugins/',
   '.agents/skills/emdash-cli/', '.agents/skills/upgrading-emdash/', '.agents/skills/openpencil-site-design/references/upstream/',

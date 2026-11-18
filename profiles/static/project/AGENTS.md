@@ -21,14 +21,14 @@ admin SPA and paired form only; read `docs/sveltia-cms.md` for OAuth proxy/PAT s
 For an audit request, lead with an actionable follow-up plan and meaningful user decisions, using findings as supporting evidence. An audit alone does not authorize implementing the plan. Follow `new-site-workflow`'s **Audit requests and release completion** guidance: agree the implementation/release scope, then complete verification, commit, push and applicable deployment without repeated continuation prompts. Respect explicit audit-only or local-only scope.
 
 Keep site decisions in their established home: here by default, or in an explicitly
-adopted optional `PROJECT.md` linked here. Keep working rules and the compact Art
-Direction Record in this file. `PROJECT.md` holds brief, scope, ownership and
-nonvisual rationale; the selected optional `DESIGN.md` holds visual references
+adopted optional `PRODUCT.md` linked here. Keep working rules and the compact Art
+Direction Record in this file. `PRODUCT.md` is the one brief (the `impeccable` skill
+reads the same file): audience, scope, ownership and nonvisual rationale; the selected optional `DESIGN.md` holds visual references
 and interchange. CSS and configuration own implemented values. Keep one home per
 fact, link actual sources, and resolve disagreements by subject and evidence.
 Current progress belongs in the existing tracker or a short handoff when needed.
 Missing optional records do not block authorized work. See `docs/project-context.md`
-and `PROJECT.example.md`; neither creates an extra checkpoint or approval claim.
+and `PRODUCT.example.md`; neither creates an extra checkpoint or approval claim.
 
 During new-site design setup, follow `new-site-workflow`'s **Layout spacing choice**
 in either track: briefly explain responsive spacing for sections, content groups,

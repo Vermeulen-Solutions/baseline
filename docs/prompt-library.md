@@ -88,7 +88,7 @@ Read existing decisions first. Choose core or deeper discovery from the actual
 uncertainties, ask one to three related questions at a time, and continue useful
 independent work while required answers are pending. Do not invent factual answers.
 Record a strategic synthesis in the established context home, keeping facts,
-recommendations and assumptions distinct. Keep PROJECT.md optional.
+recommendations and assumptions distinct. Keep PRODUCT.md optional.
 
 Select a representative priority route, write its page brief and actual draft
 copy, and map visitor questions to answers, evidence, sections and next actions

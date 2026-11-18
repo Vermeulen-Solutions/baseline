@@ -106,7 +106,7 @@ export function inspectProject(directory = process.cwd(), options = {}) {
   } else if (typeof pkg.dependencies?.emdash === 'string') profile = { id: 'emdash', foundation: 'emdash', declaredRuntime: null, evidence: 'package.json dependency; no installed profile receipt' };
   const entries = {
     instructions: ['AGENTS.md', 'README.md'],
-    context: ['PROJECT.md', 'PROJECT.example.md', 'HANDOFF.md', 'docs/project-context.md'],
+    context: ['PRODUCT.md', 'PRODUCT.example.md', 'PROJECT.md', 'HANDOFF.md', 'docs/project-context.md'],
     configuration: ['baseline.config.json', 'astro.config.mjs'],
     design: ['DESIGN.md', 'src/styles/global.css', 'src/layouts/Base.astro', 'src/layouts/SiteShell.astro', 'audit/component-calibration.md', 'docs/design-framework.md', 'docs/native-composition.md'],
     content: profile.foundation === 'emdash' ? ['src/live.config.ts', 'seed/seed.json'] : ['src/content.config.ts', 'src/content', 'src/config/site.ts'],

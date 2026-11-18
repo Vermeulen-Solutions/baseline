@@ -97,7 +97,7 @@
     "tests/media-preparation.test.mjs",
     "docs/media-preparation.md",
     "docs/project-inspection.md",
-    "PROJECT.example.md",
+    "PRODUCT.example.md",
     "docs/project-context.md",
     "docs/penpot-onboarding.md",
     "docs/openpencil-onboarding.md",
