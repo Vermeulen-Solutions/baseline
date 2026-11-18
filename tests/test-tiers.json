@@ -307,13 +307,17 @@
     "tier": "unit",
     "reason": "Read-only classification of upstream changes against a site using a throwaway Git repository"
   },
+  "generate-icons.test.mjs": {
+    "tier": "unit",
+    "reason": "App icons from the favicon: argument guards, sizes and opacity of each icon on its ground colour, shipped defaults, the web manifest builder and the layout links"
+  },
   "html-parity.test.mjs": {
     "tier": "unit",
     "reason": "Rendered-HTML parity: argument guards, route file names, build-noise normalizing, labelled diffs, and capture/compare with a fake fetch (markup, status, unstable and missing routes)"
   },
-  "quotes.test.mjs": {
+  "before-after.test.mjs": {
     "tier": "unit",
-    "reason": "Client quotes and reviews: highlight validation, escaped marking without changing words, sentence excerpts, same-person matching and the Stars rating contract"
+    "reason": "Before/after comparison contract: native range input hidden until ready, labels and value read-out, no-JS stacked fallback, touch jump, focus and forced-colors styles, tokens only"
   },
   "check-quality.test.mjs": {
     "tier": "unit",
@@ -378,5 +382,9 @@
   "sveltia-pin.test.mjs": {
     "tier": "unit",
     "reason": "Sveltia CMS pin parsing, version comparison, SRI and gate-hash rewriting against a fixture page with injected lookups; no network"
+  },
+  "quotes.test.mjs": {
+    "tier": "unit",
+    "reason": "Client quotes and reviews: highlight validation, escaped marking without changing words, sentence excerpts, same-person matching and the Stars rating contract"
   }
 }
