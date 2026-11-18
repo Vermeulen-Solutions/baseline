@@ -4,14 +4,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { sources } from '../scripts/skill-sync.mjs';
-import { OPTIONAL_SKILLS } from '../scripts/standards-distribution.mjs';
+import { EMDASH_ONLY_SKILLS, OPTIONAL_SKILLS } from '../scripts/standards-distribution.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const skillsRoot = path.join(root, '.agents/skills');
 
 // Sites receive skills through skill sync, not Baseline's docs or audit folders, and may not install the
-// optional design-surface skills. A relative link from a skill must therefore stay inside .agents/skills,
-// resolve to a file, and only reach an optional skill from another optional skill. Anything else links to
+// optional design-surface skills, and static sites never receive the EmDash-only skills. A relative link
+// from a skill must therefore stay inside .agents/skills, resolve to a file, and only reach an optional or
+// EmDash-only skill from a skill of the same kind. Anything else links to
 // Baseline's repository by URL, with the local path beside it.
 test('Baseline-owned skills link only to files every receiving site has', () => {
   const problems = [];
@@ -30,6 +31,7 @@ test('Baseline-owned skills link only to files every receiving site has', () => 
         if (!target.startsWith('.agents/skills/')) { problems.push(`${child}: ${href} leaves .agents/skills (link ${target} by URL)`); continue; }
         if (!fs.existsSync(path.join(root, target))) { problems.push(`${child}: ${href} does not exist`); continue; }
         const targetSkill = target.split('/')[2];
+        if (targetSkill !== skill && EMDASH_ONLY_SKILLS.includes(targetSkill) && !EMDASH_ONLY_SKILLS.includes(skill)) problems.push(`${child}: ${href} reaches the EmDash-only ${targetSkill}, which static sites do not receive (link it by URL)`);
         if (targetSkill !== skill && OPTIONAL_SKILLS.includes(targetSkill) && !OPTIONAL_SKILLS.includes(skill)) problems.push(`${child}: ${href} reaches the optional ${targetSkill}, which a site may not install (link it by URL)`);
       }
     }
