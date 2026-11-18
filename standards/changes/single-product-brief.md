@@ -27,4 +27,4 @@ On a site with both `PROJECT.md` and `PRODUCT.md`:
 2. Delete `PROJECT.md`.
 3. Update the link in `AGENTS.md`.
 
-A site with only `PROJECT.md` renames it after mapping its sections. Delete `PROJECT.example.md`; `doctor` reports it once this release lists it as retired.
+A site with only `PROJECT.md` renames it after mapping its sections. Delete `PROJECT.example.md`; `doctor` and `update:plan` report it as retired.
