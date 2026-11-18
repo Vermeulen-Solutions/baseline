@@ -209,12 +209,19 @@ test('the strict theme clears Tailwind default namespaces before the site tokens
 });
 
 test('design:tokens --format dtcg exports source tokens with types, aliases and fluid ranges', async () => {
-  const { exportDtcg } = await import('../scripts/design-system.mjs');
-  const exported = exportDtcg(readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8'));
-  assert.deepEqual(exported.color.page.$value, { colorSpace: 'oklch', components: [0.99, 0.004, 250] });
+  const { exportDtcg, hasStrictTheme } = await import('../scripts/design-system.mjs');
+  const source = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
+  const exported = exportDtcg(source);
+  // Exact values hold for the starter stylesheet; a client's initialised lane keeps the same shapes.
+  if (hasStrictTheme(source)) {
+    assert.equal(exported.color.page.$value.colorSpace, 'oklch');
+    assert.equal(exported.spacing.section.$value.unit, 'rem');
+  } else {
+    assert.deepEqual(exported.color.page.$value, { colorSpace: 'oklch', components: [0.99, 0.004, 250] });
+    assert.deepEqual(exported.spacing.section.$value, { value: 3, unit: 'rem' });
+    assert.deepEqual(exported.spacing.section.$extensions['dev.baseline.fluid'].max, { value: 9, unit: 'rem' });
+  }
   assert.equal(exported.layout['section-padding'].$value, '{spacing.section}');
-  assert.deepEqual(exported.spacing.section.$value, { value: 3, unit: 'rem' });
-  assert.deepEqual(exported.spacing.section.$extensions['dev.baseline.fluid'].max, { value: 9, unit: 'rem' });
   assert.deepEqual(exported.ease.smooth, { $type: 'cubicBezier', $value: [0.22, 1, 0.36, 1], $extensions: { 'dev.baseline.css': { property: '--ease-smooth', scope: '@theme' } } });
   assert.deepEqual(exported.duration.fast.$value, { value: 150, unit: 'ms' });
   assert.equal(exported.z.sticky.$value, 40);

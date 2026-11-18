@@ -79,6 +79,36 @@ function installedVersions(site, pkg) {
   const declared = { ...(pkg.dependencies ?? {}), ...(pkg.devDependencies ?? {}) };
   return Object.fromEntries(Object.keys(declared).sort().flatMap(name => { const file = path.join(site, 'node_modules', name, 'package.json'); return fs.existsSync(file) ? [[name, JSON.parse(fs.readFileSync(file)).version]] : []; }));
 }
+// The control arm runs the same task without agent guidance: the skills, agent
+// configuration and AGENTS.md instructions are removed, and AGENTS.md keeps only
+// its Art Direction Record because the design gate reads it as project data.
+export const AGENT_GUIDANCE = Object.freeze(['.agents', '.claude', '.cursor', '.github/copilot-instructions.md', 'CLAUDE.md']);
+export function stripAgentGuidance(site) {
+  const removed = [];
+  for (const entry of AGENT_GUIDANCE) {
+    const target = path.join(site, entry);
+    if (!fs.existsSync(target)) continue;
+    noLinks(target); fs.rmSync(target, { recursive: true, force: true }); removed.push(entry);
+  }
+  const agents = path.join(site, 'AGENTS.md');
+  if (fs.existsSync(agents)) {
+    const text = fs.readFileSync(agents, 'utf8').replaceAll('\r\n', '\n');
+    const start = text.search(/^## Art Direction Record\s*$/m);
+    const record = start < 0 ? '' : text.slice(start).split(/\n(?=## )/)[0].trimEnd();
+    fs.writeFileSync(agents, record ? '# Project\n\n' + record + '\n' : '# Project\n');
+    removed.push('AGENTS.md (reduced to its Art Direction Record)');
+  }
+  return removed;
+}
+export function controlDifferences(sourceMap, controlMap, removed) {
+  const prefixes = removed.filter(entry => !entry.startsWith('AGENTS.md')).map(entry => entry.replaceAll('\\', '/'));
+  const guidance = file => prefixes.some(prefix => file === prefix || file.startsWith(prefix + '/'));
+  const keys = [...new Set([...Object.keys(sourceMap), ...Object.keys(controlMap)])].sort();
+  const differences = keys.filter(file => sourceMap[file] !== controlMap[file]);
+  // Only removed guidance and the reduced AGENTS.md may differ, and no guidance may remain.
+  const unexpected = keys.filter(file => guidance(file) ? Object.hasOwn(controlMap, file) : file !== 'AGENTS.md' && differences.includes(file));
+  return { differences, unexpected };
+}
 export function validateDispatch(receipt, scenario, currentSource) {
   for (const name of requiredChecks(scenario)) {
     const check = receipt.preflight.find(entry => entry.command?.argv?.indexOf('run') > 0 && entry.command.argv.at(entry.command.argv.indexOf('run') + 1) === name);
@@ -161,7 +191,7 @@ import Card from '../components/Card.astro';
     for (const file of ['docs/project-context.md', 'PRODUCT.example.md']) fs.rmSync(path.join(site, file), { force: true });
   }
 }
-export async function prepare(out, selected = 'all') {
+export async function prepare(out, selected = 'all', { control = false } = {}) {
   const destination = noLinks(path.resolve(out));
   if (contains(ROOT, destination) || contains(destination, ROOT) || fs.existsSync(destination) || !/^baseline-workflow-replay-/.test(path.basename(destination))) throw Error('Use a new sibling directory named baseline-workflow-replay-<name>; never an existing project.');
   const scenarios = selected === 'all' ? Object.keys(SCENARIOS) : [selected];
@@ -173,7 +203,7 @@ export async function prepare(out, selected = 'all') {
   // Freeze all criteria and prompt templates before preparing or dispatching any arm.
   const protocol = { schemaVersion: 2, frozenAt: new Date().toISOString(), scenarios: SCENARIOS, criteriaIds: Object.fromEntries(Object.entries(SCENARIOS).map(([name, value]) => [name, value.criteria.map((_, i) => `${name}-${String(i + 1).padStart(2, '0')}`)])), sourcePolicy: { static: ['src/pages/index.astro'], sveltia: ['schema', 'article', 'editor-form', 'focused-helper-or-test-or-doc'], cms: [], 'older-profile': ['HANDOFF.md'] }, sourceInputs: inputs, harness: harnessHashes(), limits: ['One pair per scenario is exploratory.', 'Emitted bytes are not model tokens; model usage, cost and comparable elapsed time are unavailable.', 'Runner use is an instructed convention, not filesystem/process confinement.', 'No production data, browser editor login, hosted OAuth, D1 or R2 acceptance.'] };
   protocol.sha256 = hash(JSON.stringify(protocol)); write(path.join(destination, 'protocol.json'), protocol); state.protocolSHA256 = protocol.sha256; write(path.join(destination, 'state.json'), state);
-  for (const scenario of scenarios) for (const arm of scenario === 'older-profile' ? ['source'] : ['source', 'inspect']) {
+  for (const scenario of scenarios) for (const arm of scenario === 'older-profile' ? ['source'] : ['source', 'inspect', ...(control ? ['bare'] : [])]) {
     assertInputsFrozen(state);
     const id = scenario + '-' + arm, directory = path.join(destination, id), site = path.join(directory, 'site');
     fs.mkdirSync(directory); const trial = { id, scenario, arm, directory, site, ready: false }; state.trials.push(trial); saveTrial(state, trial);
@@ -181,10 +211,10 @@ export async function prepare(out, selected = 'all') {
     let omitted = [];
     if (scenario === 'cms') { fs.mkdirSync(site); omitted = copyCMS(site); }
     else await initProfile({ profile: SCENARIOS[scenario].profile, out: site });
-    let installMode = scenario === 'cms' || arm === 'inspect' ? 'ci' : 'install', canonicalLock = null;
-    if (scenario !== 'cms' && arm === 'inspect') {
+    let installMode = scenario === 'cms' || arm !== 'source' ? 'ci' : 'install', canonicalLock = null;
+    if (scenario !== 'cms' && arm !== 'source') {
       const sourceTrial = state.trials.find(item => item.scenario === scenario && item.arm === 'source');
-      if (!sourceTrial) throw Error('Pair source arm must establish its lock before inspection arm');
+      if (!sourceTrial) throw Error('Pair source arm must establish its lock before the other arms');
       if (!fs.readFileSync(path.join(sourceTrial.site, 'package.json')).equals(fs.readFileSync(path.join(site, 'package.json')))) throw Error('Pair package manifests differ before independent install');
       canonicalLock = path.join(state.out, `canonical-lock-${scenario}.json`);
       fs.copyFileSync(path.join(sourceTrial.site, 'package-lock.json'), canonicalLock);
@@ -196,6 +226,7 @@ export async function prepare(out, selected = 'all') {
     if (scenario !== 'cms' && arm === 'source') { canonicalLock = path.join(state.out, `canonical-lock-${scenario}.json`); fs.copyFileSync(path.join(site, 'package-lock.json'), canonicalLock); }
     noLinks(path.join(site, 'node_modules'));
     if (scenario !== 'cms') await decorate(trial);
+    if (arm === 'bare') { trial.removed = stripAgentGuidance(site); saveTrial(state, trial); }
     initializeGit(site);
     const encryptionKey = 'emdash_enc_v1_' + randomBytes(32).toString('base64url');
     write(path.join(directory, 'private.json'), { encryptionKey });
@@ -227,7 +258,7 @@ export async function prepare(out, selected = 'all') {
     fs.writeFileSync(path.join(directory, 'prompt.txt'), promptText(trial));
   }
   for (const scenario of scenarios.filter(name => name !== 'older-profile')) {
-    const pair = state.trials.filter(trial => trial.scenario === scenario);
+    const pair = state.trials.filter(trial => trial.scenario === scenario && trial.arm !== 'bare');
     if (pair.length !== 2) throw Error(`Pair incomplete: ${scenario}`);
     const first = JSON.parse(fs.readFileSync(path.join(pair[0].directory, 'receipt.json'))), second = JSON.parse(fs.readFileSync(path.join(pair[1].directory, 'receipt.json')));
     const keys = [...new Set([...Object.keys(first.source), ...Object.keys(second.source)])].sort();
@@ -237,12 +268,22 @@ export async function prepare(out, selected = 'all') {
     write(path.join(destination, `pair-${scenario}.json`), pairReceipt);
     if (!equivalent) throw Error(`pair-equivalence-failed: ${scenario}; ${differences.slice(0, 10).join(', ')}`);
     for (const trial of pair) { trial.ready = true; saveTrial(state, trial); }
+    const bare = state.trials.find(trial => trial.scenario === scenario && trial.arm === 'bare');
+    if (bare) {
+      const third = JSON.parse(fs.readFileSync(path.join(bare.directory, 'receipt.json')));
+      const { differences: changed, unexpected } = controlDifferences(first.source, third.source, bare.removed ?? []);
+      const sameToolchain = first.lockSHA256 === third.lockSHA256 && JSON.stringify(first.installed) === JSON.stringify(third.installed) && first.node === third.node && JSON.stringify(first.harness) === JSON.stringify(third.harness);
+      const controlReceipt = { scenario, trials: [pair[0].id, bare.id], equivalent: sameToolchain && unexpected.length === 0, removed: bare.removed ?? [], differences: changed, unexpected };
+      write(path.join(destination, `control-${scenario}.json`), controlReceipt);
+      if (!controlReceipt.equivalent) throw Error(`control-equivalence-failed: ${scenario}; ${unexpected.slice(0, 10).join(', ') || 'toolchain differs'}`);
+      bare.ready = true; saveTrial(state, bare);
+    }
   }
   return state;
 }
 function promptText(trial) {
   const runner = fileURLToPath(import.meta.url);
-  return `You are a fresh evaluator in a disposable Baseline fixture. Work only in ${trial.directory}; project ${trial.site}. Read AGENTS.md and README.md first, then applicable local skills. Preserve established art direction. Dependencies are independently installed; do not install dependencies, deploy, use external credentials, commit, spawn agents, inspect other trials, original source, parent history or controller files. No forced PRODUCT.md adoption.\n\nUse this runner for discovery reads/searches and npm/MCP operations: node "${runner}" tool --out "${path.dirname(trial.directory)}" --trial ${trial.id} -- <action> <argv...>. Actions: read <relative-file...>; files [relative-directory...]; search <regex> [relative-path...]; run <npm-script> [args...]; capabilities; mcp tools [tool-name]; mcp <tool-name> '<JSON>'; preview start|status|stop; artifact <relative-dist-html-css-json...>. Direct file edits/apply_patch are permitted. Build before preview; use only this assigned loopback preview. Record browser/web observations outside this runner honestly. Runner is telemetry by convention, not enforced confinement.\n\n${trial.arm === 'inspect' ? 'Run baseline:inspect --json near the start, then read authoritative sources as needed.' : 'Use ordinary source discovery. Do not run baseline:inspect or read its implementation/report.'}\n\nTask: ${SCENARIOS[trial.scenario].task.replaceAll('{{id}}', trial.id)}\n\nRun relevant available checks. Write ${path.join(trial.directory, 'result.json')} with summary, changedFiles, checks [{command,result}], clarificationsNeeded, blockers, outsideRunnerReads, and for CMS created id/slug/status plus permission explanation. Report observed outcomes only. Finish with a short summary.\n`;
+  return `You are a fresh evaluator in a disposable Baseline fixture. Work only in ${trial.directory}; project ${trial.site}. ${trial.arm === 'bare' ? 'Read README.md first.' : 'Read AGENTS.md and README.md first, then applicable local skills.'} Preserve established art direction. Dependencies are independently installed; do not install dependencies, deploy, use external credentials, commit, spawn agents, inspect other trials, original source, parent history or controller files. No forced PRODUCT.md adoption.\n\nUse this runner for discovery reads/searches and npm/MCP operations: node "${runner}" tool --out "${path.dirname(trial.directory)}" --trial ${trial.id} -- <action> <argv...>. Actions: read <relative-file...>; files [relative-directory...]; search <regex> [relative-path...]; run <npm-script> [args...]; capabilities; mcp tools [tool-name]; mcp <tool-name> '<JSON>'; preview start|status|stop; artifact <relative-dist-html-css-json...>. Direct file edits/apply_patch are permitted. Build before preview; use only this assigned loopback preview. Record browser/web observations outside this runner honestly. Runner is telemetry by convention, not enforced confinement.\n\n${trial.arm === 'inspect' ? 'Run baseline:inspect --json near the start, then read authoritative sources as needed.' : 'Use ordinary source discovery. Do not run baseline:inspect or read its implementation/report.'}\n\nTask: ${SCENARIOS[trial.scenario].task.replaceAll('{{id}}', trial.id)}\n\nRun relevant available checks. Write ${path.join(trial.directory, 'result.json')} with summary, changedFiles, checks [{command,result}], clarificationsNeeded, blockers, outsideRunnerReads, and for CMS created id/slug/status plus permission explanation. Report observed outcomes only. Finish with a short summary.\n`;
 }
 async function startCMS(trial, encryptionKey) {
   const port = await availableLoopbackPort(), origin = 'http://127.0.0.1:' + port;
@@ -394,7 +435,7 @@ async function cleanup(state) {
   return receipt;
 }
 export function isPublicEvidence(relative) {
-  if (/^(?:protocol\.json|pair-[a-z-]+\.json|dispatch\.json|repository-checks\.json|operator-review\.json|fixture-removal\.json|old-residual-resolution\.json|closure\.json|manifest\.json)$/.test(relative)) return true;
+  if (/^(?:protocol\.json|(?:pair|control)-[a-z-]+\.json|dispatch\.json|repository-checks\.json|operator-review\.json|fixture-removal\.json|old-residual-resolution\.json|closure\.json|manifest\.json)$/.test(relative)) return true;
   const file = relative.split('/').at(-1);
   return /^(?:receipt|install|baseline-observations|baseline-cms|cms-after|acceptance|review|result|after-source|source-changes|preview)\.json$/.test(file) || /^install-[0-9a-f-]{36}\.json$/i.test(file) || /^(?:preflight|grade)-[^/]+-[0-9a-f-]{36}\.json$/i.test(file) || /^(?:prompt\.txt|trace\.jsonl|changes\.patch)$/.test(file) || /^(?:install|preflight-[^/]+|grade-[^/]+)-[0-9a-f-]+\.log$/i.test(file);
 }
@@ -437,6 +478,7 @@ function deriveClosure(state, destination) {
     if (!trial.ready || receipt.preflight?.some(item => item.exitCode !== 0) || !receipt.preflight?.length) blockers.push(`${trial.id}: missing/failed applicable preflight`);
     if (trial.scenario !== 'older-profile' && !pair) blockers.push(`${trial.id}: pair equivalence receipt missing`);
     if (pair && !pair.equivalent) blockers.push(`${trial.id}: pair is not source/toolchain equivalent`);
+    if (trial.arm === 'bare') { const controlFile = path.join(state.out, `control-${trial.scenario}.json`); if (!fs.existsSync(controlFile) || JSON.parse(fs.readFileSync(controlFile, 'utf8')).equivalent !== true) blockers.push(`${trial.id}: control equivalence receipt missing or failed`); }
     if (!receipt.harness || JSON.stringify(receipt.harness) !== JSON.stringify(harnessHashes())) blockers.push(`${trial.id}: frozen harness identity mismatch`);
     if (!state.sourceInputs || receipt.sourceInputsSHA256 !== hash(JSON.stringify(state.sourceInputs)) || receipt.protocolSHA256 !== state.protocolSHA256) blockers.push(`${trial.id}: source/protocol receipt does not match frozen run`);
     if (!trace.complete || trace.requests !== trace.results) blockers.push(`${trial.id}: incomplete runner trace`);
@@ -478,8 +520,8 @@ export function archiveReplay(state, destination, { repositoryRoot = ROOT } = {}
   const copied = [], secrets = [];
   for (const trial of state.trials) { try { const config = privateOf(trial); secrets.push(config.token, config.encryptionKey, config.stopURL); } catch {} }
   const sourceFiles = [];
-  for (const relative of ['protocol.json', 'cleanup.json', ...fs.readdirSync(state.out).filter(name => /^(?:pair|canonical-lock)-[a-z-]+\.json$/.test(name)), 'dispatch.json', 'repository-checks.json', 'operator-review.json', 'fixture-removal.json', 'old-residual-resolution.json']) if (fs.existsSync(path.join(state.out, relative))) sourceFiles.push(relative);
-  const rootAllowed = new Set(['.replay-owned.json', 'state.json', 'protocol.json', 'cleanup.json', 'dispatch.json', 'repository-checks.json', 'operator-review.json', 'fixture-removal.json', 'old-residual-resolution.json', 'closure.json', ...state.trials.map(trial => trial.id), ...fs.readdirSync(state.out).filter(name => /^(?:pair|canonical-lock)-[a-z-]+\.json$/.test(name))]);
+  for (const relative of ['protocol.json', 'cleanup.json', ...fs.readdirSync(state.out).filter(name => /^(?:pair|control|canonical-lock)-[a-z-]+\.json$/.test(name)), 'dispatch.json', 'repository-checks.json', 'operator-review.json', 'fixture-removal.json', 'old-residual-resolution.json']) if (fs.existsSync(path.join(state.out, relative))) sourceFiles.push(relative);
+  const rootAllowed = new Set(['.replay-owned.json', 'state.json', 'protocol.json', 'cleanup.json', 'dispatch.json', 'repository-checks.json', 'operator-review.json', 'fixture-removal.json', 'old-residual-resolution.json', 'closure.json', ...state.trials.map(trial => trial.id), ...fs.readdirSync(state.out).filter(name => /^(?:pair|control|canonical-lock)-[a-z-]+\.json$/.test(name))]);
   for (const name of fs.readdirSync(state.out)) if (!rootAllowed.has(name)) throw Error('Archive refuses unexpected run-root path: ' + name);
   for (const trial of state.trials) {
     if (!fs.existsSync(trial.directory)) { if (!fs.existsSync(path.join(dest, trial.id, 'receipt.json'))) throw Error('Archived evidence missing for removed trial: ' + trial.id); continue; }
@@ -522,10 +564,10 @@ export function archiveReplay(state, destination, { repositoryRoot = ROOT } = {}
 }
 async function main() {
   const [action, ...values] = process.argv.slice(2), separator = values.indexOf('--');
-  const args = argumentsOf(separator < 0 ? values : values.slice(0, separator), ['--out', '--scenario', '--trial', '--dest'], ['--help']);
-  if (!action || action === '--help' || args.help) { console.log('workflow-replay.mjs prepare --out <new-sibling-baseline-workflow-replay-name> [--scenario all|static|sveltia|cms|older-profile]\n  prompt|serve|snapshot|grade --out <replay> --trial <id>\n  tool --out <replay> --trial <id> -- capabilities|read|files|search|run|mcp|preview|artifact <argv...>\n  cleanup --out <replay>\n  archive --out <replay> --dest <new-owned-directory-within-audit>'); return; }
+  const args = argumentsOf(separator < 0 ? values : values.slice(0, separator), ['--out', '--scenario', '--trial', '--dest'], ['--help', '--without-skills']);
+  if (!action || action === '--help' || args.help) { console.log('workflow-replay.mjs prepare --out <new-sibling-baseline-workflow-replay-name> [--scenario all|static|sveltia|cms|older-profile] [--without-skills]\n  prompt|serve|snapshot|grade --out <replay> --trial <id>\n  tool --out <replay> --trial <id> -- capabilities|read|files|search|run|mcp|preview|artifact <argv...>\n  cleanup --out <replay>\n  archive --out <replay> --dest <new-owned-directory-within-audit>'); return; }
   if (!args.out) throw Error('Explicit --out required');
-  if (action === 'prepare') { await prepare(args.out, args.scenario); return; }
+  if (action === 'prepare') { await prepare(args.out, args.scenario, { control: Boolean(args['without-skills']) }); return; }
   const state = load(args.out);
   if (action === 'archive') { if (!args.dest) throw Error('Explicit --dest required'); console.log(JSON.stringify(archiveReplay(state, args.dest), null, 2)); return; }
   if (state.lifecycle === 'cleaned' && ['prompt', 'serve', 'tool'].includes(action)) throw Error('terminal-run: cleaned replay cannot be served, dispatched, or provisioned');
@@ -533,7 +575,7 @@ async function main() {
   const trial = trialOf(state, args.trial);
   if (action === 'snapshot') { write(path.join(trial.directory, 'after-source.json'), sourceHashes(trial.site)); console.log(git(trial.site, ['status', '--short'])); return; }
   if (!trial.ready) throw Error('Preflight is not green; dispatch refused');
-  if (action === 'prompt') { assertInputsFrozen(state); const protocol = JSON.parse(fs.readFileSync(path.join(state.out, 'protocol.json'))), receipt = JSON.parse(fs.readFileSync(path.join(trial.directory, 'receipt.json'))); if (protocol.sha256 !== state.protocolSHA256 || JSON.stringify(receipt.harness) !== JSON.stringify(harnessHashes())) throw Error('harness-changed: frozen protocol or evaluator harness differs'); validateRuntimeIdentity(receipt, trial, protocol); if (trial.scenario !== 'older-profile' && JSON.parse(fs.readFileSync(path.join(state.out, `pair-${trial.scenario}.json`))).equivalent !== true) throw Error('pair-equivalence-failed: no dispatch allowed'); validateDispatch(receipt, trial.scenario, sourceHashes(trial.site)); console.log(fs.readFileSync(path.join(trial.directory, 'prompt.txt'), 'utf8')); return; }
+  if (action === 'prompt') { assertInputsFrozen(state); const protocol = JSON.parse(fs.readFileSync(path.join(state.out, 'protocol.json'))), receipt = JSON.parse(fs.readFileSync(path.join(trial.directory, 'receipt.json'))); if (protocol.sha256 !== state.protocolSHA256 || JSON.stringify(receipt.harness) !== JSON.stringify(harnessHashes())) throw Error('harness-changed: frozen protocol or evaluator harness differs'); validateRuntimeIdentity(receipt, trial, protocol); if (trial.scenario !== 'older-profile' && JSON.parse(fs.readFileSync(path.join(state.out, `pair-${trial.scenario}.json`))).equivalent !== true) throw Error('pair-equivalence-failed: no dispatch allowed'); if (trial.arm === 'bare' && JSON.parse(fs.readFileSync(path.join(state.out, `control-${trial.scenario}.json`))).equivalent !== true) throw Error('control-equivalence-failed: no dispatch allowed'); validateDispatch(receipt, trial.scenario, sourceHashes(trial.site)); console.log(fs.readFileSync(path.join(trial.directory, 'prompt.txt'), 'utf8')); return; }
   if (action === 'serve') { await serve(state, trial); return; }
   if (action === 'grade') { assertInputsFrozen(state); const receipt = JSON.parse(fs.readFileSync(path.join(trial.directory, 'receipt.json'))); if (JSON.stringify(receipt.harness) !== JSON.stringify(harnessHashes())) throw Error('harness-changed: grader differs from frozen run'); const { gradeTrial } = await import('./workflow-replay-grade.mjs'); const report = await gradeTrial(trial); console.log(JSON.stringify(report, null, 2)); if (report.status !== 'pass') process.exitCode = 1; return; }
   if (action === 'tool' && separator >= 0) {
