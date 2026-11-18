@@ -66,8 +66,17 @@ function blobKnown(bytes) {
 export function missingImports(target, incoming, has, declared) {
   if (!/\.(?:astro|[cm]?js|ts|css)$/.test(target)) return [];
   const reasons = [];
-  for (const [, specifier] of incoming.toString('utf8').matchAll(/(?:\b(?:import|export)\s+(?:[^;'"\n]*?\s+from\s*)?|\bimport\s*\(\s*|@import\s+)["']([^"']+)["']/g)) {
+  // Real import statements only: comments (JSDoc `import('…')` types) and strings in tests are not imports.
+  const code = incoming.toString('utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  const specifiers = [
+    ...code.matchAll(/^\s*(?:import|export)\b[^'"`;]*?\bfrom\s*['"]([^'"]+)['"]/gm),
+    ...code.matchAll(/^\s*import\s*['"]([^'"]+)['"]/gm),
+    ...code.matchAll(/\bimport\(\s*['"]([^'"]+)['"]\s*\)/g),
+    ...code.matchAll(/^\s*@import\s+(?:url\(\s*)?['"]([^'"]+)['"]/gm),
+  ].map(match => match[1]);
+  for (const specifier of specifiers) {
     if (/^(?:node:|astro:|virtual:|https?:|data:|#|\/)/.test(specifier)) continue;
+    if (!specifier.startsWith('.') && !/^(?:@[\w.-]+\/)?[\w.-]+(?:\/.*)?$/.test(specifier)) continue;
     if (specifier.startsWith('.')) {
       const relative = path.posix.normalize(path.posix.join(path.posix.dirname(target), specifier.split(/[?#]/)[0]));
       const options = path.posix.extname(relative) ? [relative] : [relative, ...['.ts', '.js', '.mjs', '.astro', '/index.ts', '/index.js'].map(ext => relative + ext)];
@@ -102,10 +111,14 @@ export function plan(site, { files = [] } = {}) {
   });
   const adopting = new Set(entries.filter(entry => entry.status === 'behind' || entry.status === 'missing' && files.includes(entry.target)).map(entry => entry.target));
   const has = file => adopting.has(file) || fs.existsSync(path.join(site, file));
-  for (const entry of entries) {
-    if (!adopting.has(entry.target)) continue;
-    const needs = missingImports(entry.target, entry.incoming, has, declared);
-    if (needs.length) { entry.status = 'blocked'; entry.needs = needs; adopting.delete(entry.target); }
+  // Blocking one file can block another that imports it, in any order: repeat until nothing changes.
+  for (let changed = true; changed;) {
+    changed = false;
+    for (const entry of entries) {
+      if (!adopting.has(entry.target)) continue;
+      const needs = missingImports(entry.target, entry.incoming, has, declared);
+      if (needs.length) { entry.status = 'blocked'; entry.needs = needs; adopting.delete(entry.target); changed = true; }
+    }
   }
   return { site, platform, commit, entries, adopting: [...adopting].sort(), receipt };
 }
