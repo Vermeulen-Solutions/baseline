@@ -21,8 +21,12 @@
 //   script or transition before it can paint, which delays the largest paint and can leave a blank
 //   first screen;
 // - island: an <astro-island> (hydrated framework component) on a route the budget does not allow;
-// - json-ld: a JSON-LD block that does not parse, or a route missing the schema.org types its budget
-//   lists under `jsonLd`;
+// - json-ld: a JSON-LD block that does not parse, a route missing the schema.org types its budget
+//   lists under `jsonLd`, an @id defined twice or referenced but never defined on the page, or a
+//   rating or review on the site's own organization (self-serving: Google never shows it);
+// - title / description: a missing title or one over `titleChars` (60), and on indexable pages a
+//   description missing, under `descriptionMinChars` (70) or over `descriptionMaxChars` (160);
+// - duplicate-title / duplicate-description: the same text on more than one indexable route;
 // - target-size (WCAG 2.2 SC 2.5.8, phone width): a control smaller than 24 by 24 CSS px whose
 //   24px circle reaches another control. Links inside a sentence are exempt, as in the criterion;
 // - focus-obscured (WCAG 2.2 SC 2.4.11): a control reached with Tab that is entirely covered (by a
@@ -64,6 +68,10 @@ export const DEFAULT_LIMITS = Object.freeze({
   fontPreloads: 3,
   fontFileKB: 120,
   layoutShift: 0.05,
+  // Search results show about 60 characters of a title and 160 of a description.
+  titleChars: 60,
+  descriptionMinChars: 70,
+  descriptionMaxChars: 160,
 });
 const LIMIT_KEYS = Object.keys(DEFAULT_LIMITS);
 export const PHONE = Object.freeze({ width: 390, height: 844 });
@@ -213,6 +221,59 @@ export function crowdedTargets(targets, min = 24) {
     if (neighbour) failures.push({ ...target, neighbour: neighbour.sig });
   });
   return failures;
+}
+
+// Types Google treats as the business itself: review markup on them is self-serving and never shown.
+const SELF_TYPES = new Set(['Organization', 'LocalBusiness', 'Corporation', 'ProfessionalService', 'NGO', 'EducationalOrganization']);
+const isSelfType = type => SELF_TYPES.has(type) || /(?:Business|Organization|Store)$/.test(type);
+
+// JSON-LD across one page's blocks: every @id defined once, every reference resolving to a node on
+// the page, and no rating or review on the site's own organization.
+export function jsonLdGraphIssues(values) {
+  const defined = new Map(), refs = new Set(), problems = [];
+  const visit = node => {
+    if (Array.isArray(node)) { node.forEach(visit); return; }
+    if (!plainObject(node)) return;
+    const keys = Object.keys(node).filter(k => k !== '@context');
+    if (typeof node['@id'] === 'string') {
+      if (keys.length === 1) refs.add(node['@id']);
+      else defined.set(node['@id'], (defined.get(node['@id']) ?? 0) + 1);
+    }
+    const types = [node['@type']].flat().filter(t => typeof t === 'string').map(t => t.replace(/^https?:\/\/schema\.org\//, ''));
+    if (types.some(isSelfType) && (node.aggregateRating || node.review)) problems.push(`self-serving ${node.aggregateRating ? 'aggregateRating' : 'review'} on ${types.join('/')}`);
+    for (const [key, child] of Object.entries(node)) if (key !== '@id' && key !== '@type') visit(child);
+  };
+  values.forEach(visit);
+  for (const [id, count] of defined) if (count > 1) problems.push(`${id} is defined ${count} times`);
+  for (const id of refs) if (!defined.has(id)) problems.push(`reference ${id} is not defined on the page`);
+  return problems;
+}
+
+// Title and description against the route's limits. Noindex pages only need a title.
+export function metadataIssues(measurement, limits) {
+  const { route, title = '', description = '', noindex = false } = measurement;
+  const issues = [];
+  if (!title.trim()) issues.push({ kind: 'title', route, value: 'missing' });
+  else if (title.length > limits.titleChars) issues.push({ kind: 'title', route, value: title.length, limit: limits.titleChars, detail: title });
+  if (noindex) return issues;
+  if (!description.trim()) issues.push({ kind: 'description', route, value: 'missing' });
+  else if (description.length > limits.descriptionMaxChars) issues.push({ kind: 'description', route, value: description.length, limit: limits.descriptionMaxChars, detail: 'too long for search results' });
+  else if (description.length < limits.descriptionMinChars) issues.push({ kind: 'description', route, value: `${description.length} < ${limits.descriptionMinChars}`, detail: 'too short to say what the page offers' });
+  return issues;
+}
+
+// Titles and descriptions shared by more than one indexable route.
+export function duplicateIssues(measurements) {
+  const issues = [];
+  for (const key of ['title', 'description']) {
+    const seen = new Map();
+    for (const m of measurements) {
+      if (m.noindex || !m[key]?.trim()) continue;
+      seen.set(m[key], [...(seen.get(m[key]) ?? []), m.route]);
+    }
+    for (const [text, routes] of seen) if (routes.length > 1) issues.push({ kind: `duplicate-${key}`, route: routes[0], value: `${routes.length} routes`, detail: `${routes.join(', ')}: "${text.slice(0, 70)}"` });
+  }
+  return issues;
 }
 
 const kb = bytes => Math.round(bytes / 102.4) / 10;
@@ -427,6 +488,9 @@ export async function measureRoute(browser, base, route, { tabs = 40 } = {}) {
         islands: document.querySelectorAll('astro-island').length,
         jsonLd: [...document.querySelectorAll('script[type="application/ld+json"]')].map(s => s.textContent ?? ''),
         lcp: window.__qualityLcp,
+        title: document.title,
+        description: document.querySelector('meta[name="description"]')?.getAttribute('content') ?? '',
+        noindex: /\bnoindex\b/i.test(document.querySelector('meta[name="robots"]')?.getAttribute('content') ?? ''),
       }));
       const sizeOf = href => ok.find(s => s.url === href)?.bytes ?? 0;
       const lcpUrl = page_.lcp?.url && !page_.lcp.url.startsWith('data:') ? page_.lcp.url : null;
@@ -440,11 +504,14 @@ export async function measureRoute(browser, base, route, { tabs = 40 } = {}) {
         fontPreloads: page_.fontPreloads.map(href => ({ url: href, kb: kb(sizeOf(href)) })),
         islands: page_.islands,
       });
-      const types = new Set();
+      const types = new Set(), parsed = [];
       page_.jsonLd.forEach((text, index) => {
-        try { jsonLdTypes(JSON.parse(text), types); } catch (error) { issues.push({ kind: 'json-ld', route, value: `block ${index + 1} does not parse`, detail: String(error.message).slice(0, 80) }); }
+        try { const value = JSON.parse(text); parsed.push(value); jsonLdTypes(value, types); } catch (error) { issues.push({ kind: 'json-ld', route, value: `block ${index + 1} does not parse`, detail: String(error.message).slice(0, 80) }); }
       });
+      for (const problem of jsonLdGraphIssues(parsed)) issues.push({ kind: 'json-ld', route, value: problem });
       measurement.jsonLdTypes = [...types].sort();
+      const noindexHeader = /\bnoindex\b/i.test(documentResponse.headers()['x-robots-tag'] ?? '');
+      Object.assign(measurement, { title: page_.title.trim(), description: page_.description.trim(), noindex: page_.noindex || noindexHeader || documentResponse.status() >= 400 });
       measurement.copyText = await page.evaluate(visibleCopy);
       // Report-only violations fire the same event, so a site can clear them before enforcing.
       for (const v of await page.evaluate(() => window.__qualityCsp ?? [])) issues.push({ kind: 'csp-violation', route, value: `${v.directive} ${v.blocked}`, detail: `${v.disposition === 'report' ? 'report-only' : 'blocked'}${v.source ? ` at ${v.source}` : ''}` });
@@ -466,7 +533,7 @@ export function budgetIssues(measurement, budget) {
   const copyIssues = (budget?.copy?.length && measurement.copyText ? copyMatches(measurement.copyText, budget.copy) : [])
     .map(found => ({ kind: 'copy-rule', route: measurement.route, value: `"${found.match}"${found.count > 1 ? ` (${found.count}x)` : ''}`, detail: `${found.rule.why || found.rule.pattern}: …${found.context}…` }));
   const limits = limitsFor(budget, measurement.route);
-  const issues = measurement.htmlKB === undefined ? [] : weightIssues(measurement.route, measurement, limits);
+  const issues = measurement.htmlKB === undefined ? [] : [...weightIssues(measurement.route, measurement, limits), ...metadataIssues(measurement, limits)];
   for (const [key, width] of [['layoutShiftPhone', PHONE.width], ['layoutShiftDesktop', DESKTOP.width]]) {
     if (measurement[key] > limits.layoutShift) issues.push({ kind: 'layout-shift', route: measurement.route, width, value: measurement[key], limit: limits.layoutShift });
   }
@@ -501,6 +568,7 @@ export async function checkQuality(options, hooks = {}) {
       hooks.progress?.(`${index + 1}/${routes.length} ${route}`);
     }
   } finally { await browser.close(); }
+  if (!options.init) issues.push(...duplicateIssues(measurements.filter(m => m.htmlKB !== undefined)));
   const written = options.init ? initBudget(measurements.filter(m => m.htmlKB !== undefined), budget) : null;
   return { routes, budget: budget ? budgetPath : null, measurements, issues, written };
 }
