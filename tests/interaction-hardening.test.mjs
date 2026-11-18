@@ -8,7 +8,8 @@ import { buildLlmsTxt, entryLink, isNoIndexEntry, llmsLine } from '../src/lib/ll
 import { noteUnknownPortableTextType, resetUnknownPortableTextReports, unknownPortableTextLabel } from '../src/lib/portable-text-fallback.ts';
 import { definedCustomProperties, inspectGuardrailTree, inspectTokenReferences } from '../scripts/css-contracts.mjs';
 
-const read = file => readFileSync(file, 'utf8');
+// LF, so the source patterns hold in a CRLF checkout (core.autocrlf=true on Windows).
+const read = file => readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
 const html = { 'Content-Type': 'text/html; charset=utf-8' };
 
 test('security headers are added only where missing and never replace a route policy', () => {
