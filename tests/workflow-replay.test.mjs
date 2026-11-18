@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import { commandPolicy, runOperation, mcpResult, processResult, cleanEnv, inventory } from '../scripts/workflow-replay-runner.mjs';
-import { prepare, validateDispatch, sourceHashes, sourceInputs, archiveReplay, isPublicEvidence } from '../scripts/workflow-replay.mjs';
+import { prepare, validateDispatch, stripAgentGuidance, controlDifferences, sourceHashes, sourceInputs, archiveReplay, isPublicEvidence } from '../scripts/workflow-replay.mjs';
 import { sourceChangeAllowed, captureCmsBaseline, compareCmsBaseline, hasUnapprovedLaunchDate } from '../scripts/workflow-replay-grade.mjs';
 import { execFileSync } from 'node:child_process';
 
@@ -23,6 +23,22 @@ test('installed bounded commands include the previously withheld gates and repor
   assert.equal(commandPolicy({ scripts: { 'baseline:inspect': '' } }, 'inspect').find(entry => entry.name === 'baseline:inspect').allowed, true);
   assert.equal(commandPolicy({ scripts: { custom: '' } }, 'inspect').find(entry => entry.name === 'custom').status, 'outside-bounded-policy');
 });
+test('the control arm withholds inspection and runs without agent guidance', async () => fixture(async site => {
+  assert.equal(commandPolicy({ scripts: { 'baseline:inspect': '' } }, 'bare').find(entry => entry.name === 'baseline:inspect').status, 'withheld-for-bare-arm');
+  fs.mkdirSync(path.join(site, '.agents/skills/demo'), { recursive: true });
+  fs.writeFileSync(path.join(site, '.agents/skills/demo/SKILL.md'), 'skill\n');
+  fs.writeFileSync(path.join(site, 'CLAUDE.md'), 'Read AGENTS.md\n');
+  fs.writeFileSync(path.join(site, 'AGENTS.md'), '# Guidance\r\n\r\nUse the skills.\r\n\r\n## Art Direction Record\r\n\r\n- **Lane:** editorial-paper\r\n\r\n## Workflow\r\n\r\nRun verify.\r\n');
+  fs.writeFileSync(path.join(site, 'README.md'), 'readme\n');
+  const removed = stripAgentGuidance(site);
+  assert.deepEqual(removed, ['.agents', 'CLAUDE.md', 'AGENTS.md (reduced to its Art Direction Record)']);
+  assert.equal(fs.existsSync(path.join(site, '.agents')), false);
+  assert.equal(fs.readFileSync(path.join(site, 'AGENTS.md'), 'utf8'), '# Project\n\n## Art Direction Record\n\n- **Lane:** editorial-paper\n');
+  const source = { 'AGENTS.md': 'a', 'CLAUDE.md': 'c', '.agents/skills/demo/SKILL.md': 's', 'README.md': 'r', 'package.json': 'p' };
+  assert.deepEqual(controlDifferences(source, { 'AGENTS.md': 'b', 'README.md': 'r', 'package.json': 'p' }, removed).unexpected, []);
+  assert.deepEqual(controlDifferences(source, { 'AGENTS.md': 'b', 'README.md': 'changed', 'package.json': 'p' }, removed).unexpected, ['README.md']);
+  assert.deepEqual(controlDifferences(source, { ...source, 'AGENTS.md': 'b' }, removed).unexpected, ['.agents/skills/demo/SKILL.md', 'CLAUDE.md']);
+}));
 test('trace retains immutable npm script/argv, failure status, output bounds and redaction', async () => fixture(async site => {
   const trace = path.join(site, 'trace.jsonl'), argv = ['verify', '--some-flag', 'two words'];
   let actual;
@@ -106,7 +122,9 @@ test('CMS baseline hashes every seeded content record plus menus and settings, a
 test('real process status and capture-tail counts are observable; environment excludes credentials', async () => {
   const result = await processResult(process.execPath, ['-e', 'process.stdout.write("x".repeat(2100000));process.stderr.write("failure");process.exitCode=7'], process.cwd());
   assert.equal(result.exitCode, 7); assert.equal(result.stdoutBytes, 2100000); assert.equal(result.stdout.length, 2000000); assert.equal(result.stderr, 'failure');
-  assert.equal(cleanEnv().EMDASH_TOKEN, undefined); assert.equal(cleanEnv().SITE_URL, undefined);
+  const previous = process.env.SITE_URL; process.env.SITE_URL = 'https://operator-site.example';
+  try { assert.equal(cleanEnv().EMDASH_TOKEN, undefined); assert.equal(cleanEnv().SITE_URL, 'https://workflow-replay.example', 'the operator origin never reaches a fixture'); }
+  finally { if (previous === undefined) delete process.env.SITE_URL; else process.env.SITE_URL = previous; }
 });
 test('process capture redacts credentials that cross stream chunks and the retained-tail boundary', async () => {
   const secret = 'ec_pat_boundary-secret-value';

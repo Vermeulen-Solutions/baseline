@@ -12,8 +12,8 @@ import { npmInvocation } from './process-runner.mjs';
 export const COMMANDS = Object.freeze(['doctor', 'verify:fast', 'verify', 'build', 'audit:html', 'check:dev-tools', 'check:art-direction', 'design:tokens', 'test', 'test:unit', 'test:design', 'typecheck', 'baseline:inspect']);
 export function commandPolicy(pkg, arm) {
   const known = COMMANDS.map(name => {
-    const supported = Object.hasOwn(pkg.scripts ?? {}, name), allowed = supported && !(name === 'baseline:inspect' && arm === 'source');
-    return { name, supported, allowed, status: !supported ? 'not-installed' : !allowed ? 'withheld-for-source-arm' : 'allowed' };
+    const supported = Object.hasOwn(pkg.scripts ?? {}, name), allowed = supported && !(name === 'baseline:inspect' && arm !== 'inspect');
+    return { name, supported, allowed, status: !supported ? 'not-installed' : !allowed ? `withheld-for-${arm}-arm` : 'allowed' };
   });
   return [...known, ...Object.keys(pkg.scripts ?? {}).filter(name => !COMMANDS.includes(name)).sort().map(name => ({ name, supported: true, allowed: false, status: 'outside-bounded-policy' }))];
 }
@@ -30,7 +30,8 @@ export function bounded(value, limit = 24000) {
 }
 export function cleanEnv(extra = {}) {
   const env = Object.fromEntries(Object.entries(process.env).filter(([name]) => /^(PATH|PATHEXT|SYSTEMROOT|WINDIR|COMSPEC|TEMP|TMP|HOME|USERPROFILE|LOCALAPPDATA|APPDATA)$/i.test(name)));
-  return { ...env, ASTRO_TELEMETRY_DISABLED: '1', ...extra };
+  // Production builds refuse public feeds without an origin; fixtures get a reserved placeholder.
+  return { ...env, ASTRO_TELEMETRY_DISABLED: '1', SITE_URL: 'https://workflow-replay.example', ...extra };
 }
 export async function processResult(command, argv, cwd, { env = cleanEnv(), timeout = 900000, redactions = [] } = {}) {
   return new Promise(resolve => {
@@ -163,7 +164,7 @@ export async function runOperation({ site, trialDirectory, arm, trace, privateCo
       if (policy?.status === 'outside-bounded-policy') result = { exitCode: 2, kind: 'outside-bounded-policy', requested: identity.argv, stdout: `Installed command is outside bounded policy: ${name}` };
       else if (!policy && Object.hasOwn(pkg.scripts ?? {}, name)) result = { exitCode: 2, kind: 'outside-bounded-policy', requested: identity.argv, stdout: `Installed command is outside bounded policy: ${name}` };
       else if (!policy?.supported) result = { exitCode: 2, kind: 'unsupported-command', requested: identity.argv, stdout: `Command is not installed: ${name}. Installed bounded policy: ${JSON.stringify(commandPolicy(pkg, arm))}` };
-      else if (!policy.allowed) result = { exitCode: 2, kind: 'withheld-command', stdout: `${name} is withheld in the source-discovery arm.` };
+      else if (!policy.allowed) result = { exitCode: 2, kind: 'withheld-command', stdout: `${name} is withheld in the ${arm} arm.` };
       else {
         const invocation = npmInvocation(['run', name, ...(args.length ? ['--', ...args] : [])]);
         const heavy = ['verify', 'verify:fast', 'build', 'audit:html'].includes(name), lockPath = trialDirectory && path.join(trialDirectory, '.heavy-command-lock.json'), lockId = randomUUID();
