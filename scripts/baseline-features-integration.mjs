@@ -2,6 +2,7 @@ import { rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { resolvePublicCapabilities } from '../src/lib/capabilities.ts';
+import { writeStaticCsp } from './static-csp.mjs';
 
 const VIRTUAL_MODULE_ID = 'virtual:baseline/capabilities';
 const RESOLVED_VIRTUAL_MODULE_ID = '\0' + VIRTUAL_MODULE_ID;
@@ -21,6 +22,7 @@ export default function baselineFeatures(options = {}) {
   let publicCapabilities;
   let outDir;
   let output = 'static';
+  let root;
 
   return {
     name: 'baseline-features',
@@ -56,10 +58,13 @@ export default function baselineFeatures(options = {}) {
       },
       'astro:config:done': ({ config }) => {
         outDir = config.outDir;
+        root = config.root;
         output = config.output;
       },
-      'astro:build:done': async ({ dir }) => {
+      'astro:build:done': async ({ dir, logger }) => {
         const artifact = fileURLToPath(outDir);
+        // Static builds get a computed Content-Security-Policy when CSP_MODE is set; EmDash computes it per response.
+        if (output === 'static') await writeStaticCsp({ directory: artifact, root: fileURLToPath(root), logger });
         // A rebuilt artifact never inherits a previous index's readiness claim.
         await rm(path.join(artifact, SEARCH_INDEX_RECEIPT), { force: true });
         if (!publicCapabilities?.search) {
