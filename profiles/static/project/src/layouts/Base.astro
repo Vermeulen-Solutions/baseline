@@ -4,11 +4,17 @@ import { site } from '../config/site';
 import { routing } from '../config/routing';
 import StaticMetadata from '../components/StaticMetadata.astro';
 import { resolveStaticMetadata, routePath, type PageMetadata } from '../lib/metadata';
+import { gatedRoutes } from '../lib/posts';
 type Props = PageMetadata & {
   surface?: 'light' | 'dark' | 'system';
 };
 const { surface, ...pageProps } = Astro.props;
 const metadata = resolveStaticMetadata(pageProps, site, { siteUrl: Astro.site, url: Astro.url, routing });
+// Sections with nothing published yet stay out of the menu (src/lib/posts.ts gatedRoutes).
+const gated = new Set(await gatedRoutes());
+const navigation = site.navigation
+  .map(item => ({ ...item, href: item.href.startsWith('/') && !item.href.startsWith('//') ? routePath(item.href, routing) : item.href }))
+  .filter(item => !gated.has(item.href));
 ---
 <SiteShell spacingPolicy="automatic-v2" sectionJoins="shared" pageTransitions="cross-document" prefetch="moderate" title={metadata.title} metadataOwner="platform" lang={metadata.language} surface={surface}>
   <Fragment slot="head">
@@ -26,7 +32,7 @@ const metadata = resolveStaticMetadata(pageProps, site, { siteUrl: Astro.site, u
       <details class="site-menu">
         <summary class="site-menu__toggle">Menu</summary>
         <div class="site-menu__panel">
-          {site.navigation.map(item => <a href={item.href.startsWith('/') && !item.href.startsWith('//') ? routePath(item.href, routing) : item.href}>{item.label}</a>)}
+          {navigation.map(item => <a href={item.href}>{item.label}</a>)}
         </div>
       </details>
     </nav>

@@ -436,13 +436,13 @@
   },
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
-    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell. Links the apple-touch-icon and the web manifest.",
-    "sha256": "a1b5a28de7d454cc8d746a069d8f73c0bd5b32a3a88bb68554f1177199d21c3a"
+    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell. Links the apple-touch-icon and the web manifest. Navigation skips gated sections.",
+    "sha256": "693c6f4faf4df2e1b9655dd4f75b40b7d377c57cd0c7fdc5ff41e7ae7118b2e9"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",
-    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "e0b9a19fb5021bae4974ab107cdd0ead400e5c34c074d0bcbb97a1d3f049d5c4"
+    "reason": "Functional static starter metadata infrastructure: single metadata owner, safe data serialization, actual post/image facts and consistent deploy-base URL policy. Existing neutral visual system and content schema preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception. gatedRoutes(): sections with nothing published stay out of the menu, sitemap and index.",
+    "sha256": "7ef7a4e93113522170bce7c30edad49fe11422b09ea6775c918bd383cd2edc68"
   },
   {
     "path": "profiles/static/project/src/pages/rss.xml.ts",
@@ -451,8 +451,8 @@
   },
   {
     "path": "profiles/static/project/src/pages/sitemap.xml.ts",
-    "reason": "Functional static starter search indexing route: publication-aware XML sitemap endpoint with host-scope and origin enforcement. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception. lastmod uses updatedAt, else publishedAt.",
-    "sha256": "e9e903cb66b00c05983861ebd7a957cc6217c76ad4644cd7cfe883b6c9068d02"
+    "reason": "Functional static starter search indexing route: publication-aware XML sitemap endpoint with host-scope and origin enforcement. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception. lastmod uses updatedAt, else publishedAt. Gated sections stay out of the sitemap.",
+    "sha256": "ea5a680f6472b40387fcbac6cf0660a2b31ea6659877c291b1700fd40bb8816e"
   },
   {
     "path": "profiles/static/project/src/pages/404.astro",
@@ -466,8 +466,8 @@
   },
   {
     "path": "profiles/static/project/src/pages/posts/index.astro",
-    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception.",
-    "sha256": "f86aaa12d0870fdc337f1dcac88cf5a46b24426448a5561dedc3901e7c2d3c17"
+    "reason": "Approved Issue #5 neutral static starter overlay: typed sample content, native assets and reusable pilot routes; no client theme or identity. Exact LF-normalized source; any edit invalidates this exception. noindex, follow until the first post is published.",
+    "sha256": "3fc5b0f172ac69e15aeb9e6769697f38b9445c98be61a58d956c4fe014a79c3d"
   },
   {
     "path": "profiles/static/project/src/pages/posts/[...id].astro",
