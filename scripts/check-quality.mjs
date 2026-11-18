@@ -36,6 +36,10 @@
 // - copy-rule: a site wording rule from the budget's `copy` list matched in the text a visitor
 //   reads (code, quotations, hidden text and [data-copy-ignore] are skipped), for example
 //   { "pattern": "\\bwe\\b", "why": "the studio is one person: say I" } or a banned phrase.
+// - launch readiness, at the phone width: `placeholder` (a [[placeholder: …]] marker left in the
+//   copy, or an empty slot marked data-placeholder), `default-identity` (the starter's title, site
+//   name or tagline, or an example.com / .test / .invalid address), `multiple-h1`, `inline-handler`
+//   (onclick= and friends, which a CSP blocks), `javascript-url` and `form-no-destination`.
 // Sideways overflow, invisible focus rings, broken images and console errors belong to audit:ui.
 //
 // THE BUDGET FILE. page-budget.json at the site root is the site's own: Baseline never ships or syncs
@@ -380,6 +384,50 @@ function visibleCopy() {
   return lines.join('\n');
 }
 
+// Launch readiness, read from the page as a visitor gets it. Markers and starter identity are
+// what an agent leaves behind when it could not fill something in; the rest is markup that a
+// Content-Security-Policy or a screen reader trips over.
+export const STARTER_IDENTITY = Object.freeze(['My Site', 'Built with EmDash', 'A static Astro site built with Baseline.']);
+function launchFindings(starter) {
+  const found = [];
+  const sig = el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : el.classList.length ? '.' + [...el.classList].slice(0, 2).join('.') : '');
+  const text = document.body.innerText || '';
+  for (const match of text.matchAll(/\[\[placeholder:\s*([^\]]*?)\s*\]\]/g)) found.push({ kind: 'placeholder', value: `"${match[1].slice(0, 80)}"` });
+  for (const el of document.querySelectorAll('[data-placeholder]')) found.push({ kind: 'placeholder', value: `${sig(el)} ${el.getAttribute('data-placeholder') || 'empty slot'}`.trim() });
+  const h1s = [...document.querySelectorAll('h1')].filter(h => !h.closest('[hidden], template'));
+  if (h1s.length > 1) found.push({ kind: 'multiple-h1', value: `${h1s.length} <h1>`, detail: h1s.map(h => (h.textContent || '').trim().slice(0, 40)).join(' | ') });
+  for (const el of document.querySelectorAll('*')) {
+    const handler = [...el.attributes].find(a => /^on[a-z]+$/.test(a.name));
+    if (handler) found.push({ kind: 'inline-handler', value: `${sig(el)} ${handler.name}` });
+    for (const name of ['href', 'src', 'action', 'formaction']) {
+      const value = el.getAttribute(name);
+      if (value && /^\s*javascript:/i.test(value)) found.push({ kind: 'javascript-url', value: `${sig(el)} ${name}` });
+    }
+  }
+  for (const form of document.querySelectorAll('form')) {
+    const action = form.getAttribute('action');
+    if (action !== null && /^\s*(#.*)?$/.test(action) && !form.hasAttribute('data-quality-ignore')) found.push({ kind: 'form-no-destination', value: sig(form), detail: `action="${action}" sends the form nowhere` });
+  }
+  const identity = [
+    ['title', document.title],
+    ['site name', document.querySelector('meta[property="og:site_name"]')?.getAttribute('content') ?? ''],
+    ['description', document.querySelector('meta[name="description"]')?.getAttribute('content') ?? ''],
+  ];
+  for (const [where, value] of identity) {
+    const hit = starter.find(s => value.trim() === s || value.split(/\s[|—–-]\s/).map(part => part.trim()).includes(s));
+    if (hit) found.push({ kind: 'default-identity', value: `"${hit}"`, detail: `${where} still uses the starter's` });
+  }
+  const urls = [...document.querySelectorAll('a[href], link[rel="canonical"], meta[property="og:url"]')].map(el => el.getAttribute('href') || el.getAttribute('content') || '');
+  const placeholderHost = /(?:^|[/@.])(?:example\.(?:com|org|net)|[a-z0-9-]+\.(?:test|invalid|example))(?:[/:?#]|$)/i;
+  const hosts = new Set();
+  for (const value of urls) {
+    const address = value.replace(/^mailto:/i, '');
+    if (placeholderHost.test(address)) hosts.add(address.slice(0, 60));
+  }
+  for (const host of hosts) found.push({ kind: 'default-identity', value: host, detail: 'a placeholder address or domain' });
+  return found;
+}
+
 function targetBoxes() {
   const sig = el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : el.classList.length ? '.' + [...el.classList].slice(0, 2).join('.') : '') + (el.textContent?.trim() ? ` "${el.textContent.trim().slice(0, 24)}"` : el.getAttribute('aria-label') ? ` [${el.getAttribute('aria-label').slice(0, 24)}]` : '');
   const inSentence = el => {
@@ -513,6 +561,7 @@ export async function measureRoute(browser, base, route, { tabs = 40 } = {}) {
       const noindexHeader = /\bnoindex\b/i.test(documentResponse.headers()['x-robots-tag'] ?? '');
       Object.assign(measurement, { title: page_.title.trim(), description: page_.description.trim(), noindex: page_.noindex || noindexHeader || documentResponse.status() >= 400 });
       measurement.copyText = await page.evaluate(visibleCopy);
+      for (const f of await page.evaluate(launchFindings, [...STARTER_IDENTITY])) issues.push({ kind: f.kind, route, value: f.value, ...(f.detail ? { detail: f.detail } : {}) });
       // Report-only violations fire the same event, so a site can clear them before enforcing.
       for (const v of await page.evaluate(() => window.__qualityCsp ?? [])) issues.push({ kind: 'csp-violation', route, value: `${v.directive} ${v.blocked}`, detail: `${v.disposition === 'report' ? 'report-only' : 'blocked'}${v.source ? ` at ${v.source}` : ''}` });
       for (const target of crowdedTargets(await page.evaluate(targetBoxes))) issues.push({ kind: 'target-size', route, width: viewport.width, value: `${target.sig} ${target.width}x${target.height}`, detail: `24px circle reaches ${target.neighbour}` });

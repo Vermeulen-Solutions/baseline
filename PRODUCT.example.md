@@ -79,6 +79,21 @@ web
 | --- | --- | --- | --- | --- |
 | [claim, sample or result] | [source/date] | [approved use / draft / restricted / unknown] | [role] | [page/section or task] |
 
+## Facts
+
+[Only what the owner supplied: address, opening hours, phone, prices, people, services. Never inferred; a fact
+nobody gave stays missing and becomes a placeholder.]
+
+## Placeholders
+
+[Every `[[placeholder: …]]` marker and empty photo slot still on the site, by page. Remove a line when it is
+filled. `npm run check:quality` reports any marker still visible.]
+
+## Assumptions
+
+[Decisions made without asking (an unattended run, "just do it"), one line each, for the owner to confirm or
+reverse. Move a confirmed one to Decisions and open questions.]
+
 ## Product Principles
 
 [Three to five durable strategic principles derived from confirmed answers; no visual recipes.]
@@ -103,7 +118,7 @@ Link the actual sources rather than copying their values:
 
 - Installed profile/runtime and configuration: [paths]
 - Content model, routes, navigation and locale rules: [paths or focused inventory]
-- Page briefs: [page notes or route inventory]
+- Page briefs and status: [page notes or route inventory; one line per page: page → sections → planned, built or needs content]
 - Visual direction: `AGENTS.md` → Art Direction Record; [selected `DESIGN.md`, if used]
 - Shipped design values and calibration: `src/styles/global.css`; [calibration evidence]
 - Other evidence and durable decisions: [paths]

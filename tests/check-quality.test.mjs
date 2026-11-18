@@ -177,6 +177,8 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       <script type="application/ld+json">{ not json }</script>
       </head><body><header>Sticky header</header><a class="under" href="/hidden">Under the header</a>
       <main style="padding-top: 140px"><h1 class="fade">Hidden heading</h1><p>We build websites.</p>
+      <p>[[placeholder: opening hours]]</p><h1>A second heading</h1><button onclick="go()">Go</button>
+      <a href="javascript:void(0)">Nowhere</a><form action="#"><button>Send</button></form><a href="mailto:hello@example.com">Mail</a>
       <div class="icons"><a href="/1" aria-label="One"></a><a href="/2" aria-label="Two"></a></div>
       <astro-island></astro-island><div id="slot"></div><p>Below</p><p style="height:2000px">Tall</p></main>
       <script>setTimeout(() => { const d = document.createElement('div'); d.className = 'late'; document.getElementById('slot').append(d); }, 300);</script>
@@ -198,7 +200,7 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       const { issues, measurements } = await checkQuality(options);
       const on = route => [...new Set(issues.filter(i => i.route === route).map(i => i.kind))].sort();
       assert.deepEqual(on('/'), [], 'the clean page passes');
-      assert.deepEqual(on('/broken'), ['copy-rule', 'csp-violation', 'description', 'first-viewport-hidden', 'focus-obscured', 'inline-css-weight', 'island', 'json-ld', 'layout-shift', 'target-size']);
+      assert.deepEqual(on('/broken'), ['copy-rule', 'csp-violation', 'default-identity', 'description', 'first-viewport-hidden', 'focus-obscured', 'form-no-destination', 'inline-css-weight', 'inline-handler', 'island', 'javascript-url', 'json-ld', 'layout-shift', 'multiple-h1', 'placeholder', 'target-size']);
       assert.ok(measurements.find(m => m.route === '/').jsonLdTypes.includes('Organization'));
       assert.ok(issues.some(i => i.kind === 'csp-violation' && /script-src-elem inline/.test(i.value) && /report-only/.test(i.detail)), 'report-only violations are reported');
       assert.ok(issues.some(i => i.kind === 'focus-obscured' && /Under the header/.test(i.value) && /header/.test(i.detail)));
