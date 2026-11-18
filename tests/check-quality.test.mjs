@@ -161,6 +161,7 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
     const big = 'x'.repeat(60 * 1024);
     const clean = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Clean</title>
       <meta name="description" content="A clean fixture page that passes every quality gate, with a description of a sensible length.">
+      <meta property="og:image" content="/og.png">
       <style>body { margin: 0; font: 16px/1.5 sans-serif } a { display: inline-block; padding: 12px }</style>
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Fixture"}</script>
       </head><body><main><h1>Clean</h1><p>Text with an <a href="/a">inline link</a> in it.</p><a href="/b">Big enough</a>
@@ -183,7 +184,10 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       <astro-island></astro-island><div id="slot"></div><p>Below</p><p style="height:2000px">Tall</p></main>
       <script>setTimeout(() => { const d = document.createElement('div'); d.className = 'late'; document.getElementById('slot').append(d); }, 300);</script>
       </body></html>`;
+    // A 1×1 PNG share image for the clean page.
+    const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64');
     const server = createServer((req, res) => {
+      if (req.url === '/og.png') { res.writeHead(200, { 'content-type': 'image/png' }); res.end(png); return; }
       const html = req.url.startsWith('/broken') ? broken : clean;
       const headers = { 'content-type': 'text/html' };
       // Report-only: the broken page's inline script would be blocked, and nothing is.
@@ -200,7 +204,7 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       const { issues, measurements } = await checkQuality(options);
       const on = route => [...new Set(issues.filter(i => i.route === route).map(i => i.kind))].sort();
       assert.deepEqual(on('/'), [], 'the clean page passes');
-      assert.deepEqual(on('/broken'), ['copy-rule', 'csp-violation', 'default-identity', 'description', 'first-viewport-hidden', 'focus-obscured', 'form-no-destination', 'inline-css-weight', 'inline-handler', 'island', 'javascript-url', 'json-ld', 'layout-shift', 'multiple-h1', 'placeholder', 'target-size']);
+      assert.deepEqual(on('/broken'), ['axe', 'copy-rule', 'csp-violation', 'default-identity', 'description', 'first-viewport-hidden', 'focus-obscured', 'form-no-destination', 'inline-css-weight', 'inline-handler', 'island', 'javascript-url', 'json-ld', 'layout-shift', 'multiple-h1', 'placeholder', 'share-image', 'target-size']);
       assert.ok(measurements.find(m => m.route === '/').jsonLdTypes.includes('Organization'));
       assert.ok(issues.some(i => i.kind === 'csp-violation' && /script-src-elem inline/.test(i.value) && /report-only/.test(i.detail)), 'report-only violations are reported');
       assert.ok(issues.some(i => i.kind === 'focus-obscured' && /Under the header/.test(i.value) && /header/.test(i.detail)));

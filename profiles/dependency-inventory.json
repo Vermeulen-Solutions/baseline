@@ -100,6 +100,16 @@
       "versionSource": "package.json#/devDependencies/@fontsource/noto-sans",
       "reason": "Shared Astro presentation, design or verification tooling"
     },
+    "@axe-core/playwright": {
+      "section": "devDependencies",
+      "profiles": [
+        "static",
+        "static-sveltia",
+        "emdash"
+      ],
+      "versionSource": "package.json#/devDependencies/@axe-core/playwright",
+      "reason": "Accessibility scan (WCAG A/AA) in check:quality, loaded only when the check runs"
+    },
     "@playwright/test": {
       "section": "devDependencies",
       "profiles": [
