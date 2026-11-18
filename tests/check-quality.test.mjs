@@ -5,7 +5,37 @@ import assert from 'node:assert/strict';
 import {
   DEFAULT_LIMITS, parseArgs, parseBudget, normalRoute, limitsFor, largestShiftWindow, jsonLdTypes,
   crowdedTargets, weightIssues, initBudget, budgetIssues, formatIssue, parseCopyRules, copyMatches,
+  jsonLdGraphIssues, metadataIssues, duplicateIssues,
 } from '../scripts/check-quality.mjs';
+
+test('JSON-LD graphs: ids defined once, references resolved, no rating on the site\'s own organization', () => {
+  const org = { '@type': 'Organization', '@id': 'https://example.test/#org', name: 'Example' };
+  const page = { '@context': 'https://schema.org', '@type': 'WebPage', '@id': 'https://example.test/#page', publisher: { '@id': 'https://example.test/#org' } };
+  assert.deepEqual(jsonLdGraphIssues([{ '@context': 'https://schema.org', '@graph': [org, page] }]), []);
+  assert.deepEqual(jsonLdGraphIssues([page]), ['reference https://example.test/#org is not defined on the page']);
+  assert.deepEqual(jsonLdGraphIssues([org, { ...org }]), ['https://example.test/#org is defined 2 times']);
+  assert.deepEqual(jsonLdGraphIssues([{ '@type': 'Dentist', name: 'X', aggregateRating: { ratingValue: 5 } }]), [], 'not every LocalBusiness subtype is named; only the common business types are flagged');
+  assert.deepEqual(jsonLdGraphIssues([{ '@type': ['ProfessionalService', 'LocalBusiness'], name: 'X', aggregateRating: { ratingValue: 5 } }]), ['self-serving aggregateRating on ProfessionalService/LocalBusiness']);
+  assert.deepEqual(jsonLdGraphIssues([{ '@type': 'Product', name: 'X', review: { reviewRating: 5 } }]), [], 'reviews of a product are fine');
+});
+
+test('titles and descriptions are sized for search results; noindex pages need only a title', () => {
+  const limits = { titleChars: 60, descriptionMinChars: 70, descriptionMaxChars: 160 };
+  const ok = { route: '/', title: 'Home | Example', description: 'x'.repeat(100) };
+  assert.deepEqual(metadataIssues(ok, limits), []);
+  assert.deepEqual(metadataIssues({ ...ok, title: '' }, limits).map(i => [i.kind, i.value]), [['title', 'missing']]);
+  assert.deepEqual(metadataIssues({ ...ok, title: 'x'.repeat(61) }, limits).map(i => [i.kind, i.value, i.limit]), [['title', 61, 60]]);
+  assert.deepEqual(metadataIssues({ ...ok, description: 'Short.' }, limits).map(i => i.kind), ['description']);
+  assert.deepEqual(metadataIssues({ ...ok, description: 'x'.repeat(161) }, limits).map(i => i.limit), [160]);
+  assert.deepEqual(metadataIssues({ ...ok, description: '', noindex: true }, limits), []);
+});
+
+test('the same title or description on two indexable routes is reported once with every route', () => {
+  const m = (route, title, description, noindex = false) => ({ route, title, description, noindex });
+  const issues = duplicateIssues([m('/', 'Home', 'Same words'), m('/about', 'About', 'Same words'), m('/contact', 'Contact', 'Same words'), m('/404', 'Home', 'Gone', true)]);
+  assert.deepEqual(issues.map(i => [i.kind, i.value]), [['duplicate-description', '3 routes']]);
+  assert.match(issues[0].detail, /^\/, \/about, \/contact: "Same words"$/);
+});
 
 test('arguments need an origin and routes, and refuse Git Bash path conversion', () => {
   assert.deepEqual(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/,/about']).routes, ['/', '/about']);
@@ -83,7 +113,7 @@ test('weight issues name the measure, the value and the limit', () => {
 });
 
 test('budget issues cover layout shift, islands and required JSON-LD types', () => {
-  const m = { route: '/', htmlKB: 10, inlineCssKB: 1, scriptKB: 1, imagesKB: 0, largestImage: null, lcpImage: null, fontPreloads: [], islands: 2, jsonLdTypes: ['WebPage'], layoutShiftPhone: 0.08, layoutShiftDesktop: 0.01 };
+  const m = { route: '/', title: 'Home', description: 'A description long enough for search results, about what this page offers.', htmlKB: 10, inlineCssKB: 1, scriptKB: 1, imagesKB: 0, largestImage: null, lcpImage: null, fontPreloads: [], islands: 2, jsonLdTypes: ['WebPage'], layoutShiftPhone: 0.08, layoutShiftDesktop: 0.01 };
   const budget = parseBudget(JSON.stringify({ jsonLd: { '/': ['WebPage', 'Organization'] } }));
   assert.deepEqual(budgetIssues(m, budget).map(i => [i.kind, i.width ?? null]), [['layout-shift', 390], ['island', null], ['json-ld', null]]);
   const allowed = parseBudget(JSON.stringify({ islands: ['/'], limits: { layoutShift: 0.1 } }));
@@ -130,6 +160,7 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
     const path = await import('node:path');
     const big = 'x'.repeat(60 * 1024);
     const clean = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Clean</title>
+      <meta name="description" content="A clean fixture page that passes every quality gate, with a description of a sensible length.">
       <style>body { margin: 0; font: 16px/1.5 sans-serif } a { display: inline-block; padding: 12px }</style>
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Fixture"}</script>
       </head><body><main><h1>Clean</h1><p>Text with an <a href="/a">inline link</a> in it.</p><a href="/b">Big enough</a>
@@ -167,7 +198,7 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       const { issues, measurements } = await checkQuality(options);
       const on = route => [...new Set(issues.filter(i => i.route === route).map(i => i.kind))].sort();
       assert.deepEqual(on('/'), [], 'the clean page passes');
-      assert.deepEqual(on('/broken'), ['copy-rule', 'csp-violation', 'first-viewport-hidden', 'focus-obscured', 'inline-css-weight', 'island', 'json-ld', 'layout-shift', 'target-size']);
+      assert.deepEqual(on('/broken'), ['copy-rule', 'csp-violation', 'description', 'first-viewport-hidden', 'focus-obscured', 'inline-css-weight', 'island', 'json-ld', 'layout-shift', 'target-size']);
       assert.ok(measurements.find(m => m.route === '/').jsonLdTypes.includes('Organization'));
       assert.ok(issues.some(i => i.kind === 'csp-violation' && /script-src-elem inline/.test(i.value) && /report-only/.test(i.detail)), 'report-only violations are reported');
       assert.ok(issues.some(i => i.kind === 'focus-obscured' && /Under the header/.test(i.value) && /header/.test(i.detail)));
