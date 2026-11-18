@@ -2,7 +2,7 @@
 
 ## Desktop fast path and version-matched setup
 
-Discover an existing OpenPencil MCP connection first. If already connected, skip installation and run the read-only identity check below. Otherwise follow [docs/openpencil-onboarding.md](../../../../docs/openpencil-onboarding.md) when present and the [official MCP guide](https://openpencil.dev/programmable/mcp-server):
+Discover an existing OpenPencil MCP connection first. If already connected, skip installation and run the read-only identity check below. Otherwise follow [docs/openpencil-onboarding.md](https://github.com/Vermeulen-Solutions/baseline/blob/main/docs/openpencil-onboarding.md) when present and the [official MCP guide](https://openpencil.dev/programmable/mcp-server):
 
 1. Install the official [OpenPencil desktop release](https://github.com/open-pencil/open-pencil/releases) (`open-pencil/open-pencil`, distinct from commercial Pencil) and the matching global MCP package outside the site repository, for example `npm.cmd install -g @open-pencil/mcp@0.16.0`. Never add `@open-pencil/*` packages to a site's `package.json` or lockfile.
 2. Open the desktop app with the intended document. Register `openpencil-mcp` as a **stdio** server in the user's private MCP client configuration (on Windows, invoking Node with the installed `dist/stdio.mjs` entry avoids `.cmd` wrapper friction). Do not alter global client configuration without the user's setup scope.
