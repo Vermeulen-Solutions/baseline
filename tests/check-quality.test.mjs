@@ -129,7 +129,10 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       </body></html>`;
     const server = createServer((req, res) => {
       const html = req.url.startsWith('/broken') ? broken : clean;
-      res.writeHead(['/', '/broken'].includes(req.url) ? 200 : 404, { 'content-type': 'text/html' });
+      const headers = { 'content-type': 'text/html' };
+      // Report-only: the broken page's inline script would be blocked, and nothing is.
+      if (req.url === '/broken') headers['content-security-policy-report-only'] = "script-src 'self'";
+      res.writeHead(['/', '/broken'].includes(req.url) ? 200 : 404, headers);
       res.end(html);
     });
     await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -139,8 +142,9 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       const { issues, measurements } = await checkQuality(options);
       const on = route => [...new Set(issues.filter(i => i.route === route).map(i => i.kind))].sort();
       assert.deepEqual(on('/'), [], 'the clean page passes');
-      assert.deepEqual(on('/broken'), ['first-viewport-hidden', 'focus-obscured', 'inline-css-weight', 'island', 'json-ld', 'layout-shift', 'target-size']);
+      assert.deepEqual(on('/broken'), ['csp-violation', 'first-viewport-hidden', 'focus-obscured', 'inline-css-weight', 'island', 'json-ld', 'layout-shift', 'target-size']);
       assert.ok(measurements.find(m => m.route === '/').jsonLdTypes.includes('Organization'));
+      assert.ok(issues.some(i => i.kind === 'csp-violation' && /script-src-elem inline/.test(i.value) && /report-only/.test(i.detail)), 'report-only violations are reported');
       assert.ok(issues.some(i => i.kind === 'focus-obscured' && /Under the header/.test(i.value) && /header/.test(i.detail)));
     } finally { server.close(); }
   });

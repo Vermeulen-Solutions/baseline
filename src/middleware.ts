@@ -3,6 +3,7 @@ import type { APIContext, MiddlewareNext } from 'astro';
 import { normalizedPageLocation } from './lib/page-url';
 import { robotsCacheControl } from './lib/robots-cache';
 import { withSecurityHeaders } from './lib/security-headers';
+import { cspMode, parseSources, withContentSecurityPolicy } from './lib/content-security-policy';
 
 const IMMUTABLE_MEDIA_CACHE = 'public, max-age=31536000, immutable';
 
@@ -62,4 +63,17 @@ const handle = async (context: APIContext, next: MiddlewareNext): Promise<Respon
 };
 
 // Every response leaves with the baseline security headers it does not already set (src/lib/security-headers.ts).
-export const onRequest = defineMiddleware(async (context, next) => withSecurityHeaders(await handle(context, next)));
+// Off unless the build sets CSP_MODE=report or enforce (see src/lib/content-security-policy.ts).
+const CSP_MODE = cspMode(import.meta.env.CSP_MODE);
+const CSP_EXTRA = parseSources(import.meta.env.CSP_SOURCES);
+
+export const onRequest = defineMiddleware(async (context, next) => {
+  const response = await withContentSecurityPolicy(await handle(context, next), {
+    mode: CSP_MODE,
+    pathname: context.url.pathname,
+    method: context.request.method,
+    cookie: context.request.headers.get('cookie'),
+    extra: CSP_EXTRA,
+  });
+  return withSecurityHeaders(response);
+});

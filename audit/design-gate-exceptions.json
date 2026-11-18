@@ -322,8 +322,8 @@
   },
   {
     "path": "src/env.d.ts",
-    "reason": "Starter infrastructure only: optional Workers binding types, baseline capabilities virtual module typing, and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "e38d3e0c1f41d2ddb1ea96f78b80b0e3293095842e5ff3e19dab45e77056a09e"
+    "reason": "Starter infrastructure only: optional Workers binding types, baseline capabilities virtual module typing, and trusted plugin directory documentation; no public UI, theme, assets or routes. Any edit invalidates this exact LF-normalized exception. Types CSP_MODE and CSP_SOURCES.",
+    "sha256": "6ecb13de835fd63a0c204b1db0b071d45d9ce43437dd2cda6bea01805e64c746"
   },
   {
     "path": "src/assets/styleguide-small.svg",
@@ -597,8 +597,8 @@
   },
   {
     "path": "src/middleware.ts",
-    "reason": "Functional starter request policy: opt-in page redirects, bounded robots caching and explicit browser revalidation for public HTML without an existing policy/session cookie; no client visual implementation. Exact LF-normalized source hash. Non-visual production hardening: wraps the existing media/robots/HTML cache middleware so every response receives missing baseline security headers. Exact LF-normalized source hash.",
-    "sha256": "205a49475d6db2d6504393d048b122bbf95e1998066ec802933eef38a2bff294"
+    "reason": "Functional starter request policy: opt-in page redirects, bounded robots caching and explicit browser revalidation for public HTML without an existing policy/session cookie; no client visual implementation. Exact LF-normalized source hash. Non-visual production hardening: wraps the existing media/robots/HTML cache middleware so every response receives missing baseline security headers. Exact LF-normalized source hash. Applies the optional computed Content-Security-Policy (CSP_MODE) before the baseline security headers.",
+    "sha256": "dd1fa5418d11dd224734e395b24fadc73f5207d80d23f3a950eacf1f3593db01"
   },
   {
     "path": "src/plugins/baseline-metadata/index.ts",
@@ -739,5 +739,10 @@
     "path": "src/lib/speculation-rules.ts",
     "reason": "Non-visual utility: builds the speculation-rules JSON for same-origin document prefetch (prefetch only, internal paths and opted-out links excluded). Exact LF-normalized source hash.",
     "sha256": "91df0d8ee7ea71dc6406d983b4c851c4469f96ea7de8d108abc76792b96c3ca6"
+  },
+  {
+    "path": "src/lib/content-security-policy.ts",
+    "reason": "Non-visual production hardening: an optional Content-Security-Policy computed from each public HTML response (hashes of its inline scripts and styles), report-only or enforced by CSP_MODE; skips the EmDash admin and signed-in requests. Exact LF-normalized source hash.",
+    "sha256": "68b3a3630790fed9c0792fbe9c774d42b7117ad4087bd2d5b8453b4d77601ceb"
   }
 ]

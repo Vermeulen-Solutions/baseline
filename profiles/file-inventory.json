@@ -1746,6 +1746,14 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "src/lib/content-security-policy.ts": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/content-security-policy.test.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "src/lib/llms-txt.ts": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"

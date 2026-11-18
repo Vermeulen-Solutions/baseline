@@ -1,6 +1,10 @@
 interface ImportMetaEnv {
   readonly STARTER_TEST_FIXTURES: boolean;
   readonly STARTER_EMDASH_VERSION: string;
+  /** 'report' or 'enforce' turns on the computed Content-Security-Policy (src/lib/content-security-policy.ts). */
+  readonly CSP_MODE?: string;
+  /** Extra CSP sources, "directive source source; directive source". */
+  readonly CSP_SOURCES?: string;
 }
 
 // Optional capabilities for trusted in-repo plugins. Node/SQLite provisions none
