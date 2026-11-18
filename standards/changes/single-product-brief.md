@@ -17,7 +17,7 @@ There is now one brief, `PRODUCT.md`. `PRODUCT.example.md` follows Impeccable's 
 - **Claims:** go under Evidence on Hand.
 - **Page briefs:** stay in the page notes.
 
-`PROJECT.example.md` is retired. `baseline:inspect` still reports a legacy `PROJECT.md` so it can be found and merged, and `docs/project-context.md` gives the merge, section by section. Skills, `AGENTS.md` templates and docs now name `PRODUCT.md`.
+`PROJECT.example.md` is retired (listed in `scripts/retired-paths.mjs`). `baseline:inspect` still reports a legacy `PROJECT.md` so it can be found and merged, and `docs/project-context.md` gives the merge, section by section. Skills, `AGENTS.md` templates and docs now name `PRODUCT.md`.
 
 ## For sites
 
