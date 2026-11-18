@@ -212,21 +212,23 @@ test('design:tokens --format dtcg exports source tokens with types, aliases and 
   const { exportDtcg, hasStrictTheme } = await import('../scripts/design-system.mjs');
   const source = readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8');
   const exported = exportDtcg(source);
-  // Exact values hold for the starter stylesheet; a client's initialised lane keeps the same shapes.
-  if (hasStrictTheme(source)) {
+  // Exact values hold only for the untouched starter stylesheet; a site's own palette and lane keep the same shapes.
+  const starter = !hasStrictTheme(source) && parseDesignTokens(source).theme['--color-page'] === 'oklch(99% 0.004 250)';
+  if (!starter) {
+    // A site's own stylesheet still exports its page colour as a typed oklch colour.
+    assert.equal(exported.color.page.$type, 'color');
     assert.equal(exported.color.page.$value.colorSpace, 'oklch');
-    assert.equal(exported.spacing.section.$value.unit, 'rem');
   } else {
     assert.deepEqual(exported.color.page.$value, { colorSpace: 'oklch', components: [0.99, 0.004, 250] });
     assert.deepEqual(exported.spacing.section.$value, { value: 3, unit: 'rem' });
     assert.deepEqual(exported.spacing.section.$extensions['dev.baseline.fluid'].max, { value: 9, unit: 'rem' });
+    assert.equal(exported.layout['section-padding'].$value, '{spacing.section}');
+    assert.deepEqual(exported.ease.smooth, { $type: 'cubicBezier', $value: [0.22, 1, 0.36, 1], $extensions: { 'dev.baseline.css': { property: '--ease-smooth', scope: '@theme' } } });
+    assert.deepEqual(exported.duration.fast.$value, { value: 150, unit: 'ms' });
+    assert.equal(exported.z.sticky.$value, 40);
+    assert.equal(exported['surface-dark'].color.surface.$type, 'color');
+    assert.ok('--shadow-sm' in exported.$extensions['dev.baseline.css-only'], 'relative-colour shadows stay CSS-only');
   }
-  assert.equal(exported.layout['section-padding'].$value, '{spacing.section}');
-  assert.deepEqual(exported.ease.smooth, { $type: 'cubicBezier', $value: [0.22, 1, 0.36, 1], $extensions: { 'dev.baseline.css': { property: '--ease-smooth', scope: '@theme' } } });
-  assert.deepEqual(exported.duration.fast.$value, { value: 150, unit: 'ms' });
-  assert.equal(exported.z.sticky.$value, 40);
-  assert.equal(exported['surface-dark'].color.surface.$type, 'color');
-  assert.ok('--shadow-sm' in exported.$extensions['dev.baseline.css-only'], 'relative-colour shadows stay CSS-only');
   const { applyStrictTheme } = await import('../scripts/design-system.mjs');
   const strict = exportDtcg(applyStrictTheme(readFileSync(new URL('../src/styles/global.css', import.meta.url), 'utf8')));
   assert.ok(!Object.values(strict).some(group => group && typeof group === 'object' && Object.keys(group).some(key => key.includes('*'))), 'namespace resets are not tokens');

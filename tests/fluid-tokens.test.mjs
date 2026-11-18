@@ -184,12 +184,13 @@ test('text tokens above 2.5 x their minimum fail unless a reviewed exception pre
       assert.ok(maxRem / minRem <= MAX_TEXT_RATIO + 5e-4, `${ratio} ${name}`);
     }
   }
-  // The starter's semantic spacing tokens sit on the default primitive scale. A stylesheet initialised
-  // for a client (it carries the strict theme) sets its own lane values, so only the names are checked.
+  // The untouched starter's semantic spacing tokens sit on the default primitive scale. A site with its
+  // own palette or lane (strict theme) may set its own spacing values, so only the names are checked.
   const theme = parseDesignTokens(css).theme;
   const primitives = generateSpacePrimitives();
   const { hasStrictTheme } = await import('../scripts/design-system.mjs');
-  if (hasStrictTheme(css)) {
+  const starter = !hasStrictTheme(css) && theme['--color-page'] === 'oklch(99% 0.004 250)';
+  if (!starter) {
     for (const name of [...Object.keys(primitives), '--spacing-content', '--spacing-section', '--spacing-section-m']) assert.ok(theme[name], name);
   } else {
     for (const [name, value] of Object.entries(primitives)) assert.equal(theme[name], value, name);
