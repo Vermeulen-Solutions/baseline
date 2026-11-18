@@ -28,14 +28,18 @@
 // - focus-obscured (WCAG 2.2 SC 2.4.11): a control reached with Tab that is entirely covered (by a
 //   sticky header, a cookie bar, a floating button) or entirely off screen, at both widths;
 // - csp-violation: anything the page's Content-Security-Policy blocks or, in report-only mode,
-//   would block (CSP_MODE in src/lib/content-security-policy.ts), at the phone width.
+//   would block (CSP_MODE in src/lib/content-security-policy.ts), at the phone width;
+// - copy-rule: a site wording rule from the budget's `copy` list matched in the text a visitor
+//   reads (code, quotations, hidden text and [data-copy-ignore] are skipped), for example
+//   { "pattern": "\\bwe\\b", "why": "the studio is one person: say I" } or a banned phrase.
 // Sideways overflow, invisible focus rings, broken images and console errors belong to audit:ui.
 //
 // THE BUDGET FILE. page-budget.json at the site root is the site's own: Baseline never ships or syncs
 // it, and this script works without it on the defaults below. `limits` overrides defaults for every
 // route, `pages["/gallery"]` overrides single keys for one route (with the reason in "_why"),
-// `jsonLd` lists the schema.org types a route must carry ({ "/": ["Organization"] }) and `islands`
-// lists the routes that may hydrate components. `--init` measures the routes and writes the file:
+// `jsonLd` lists the schema.org types a route must carry ({ "/": ["Organization"] }), `islands`
+// lists the routes that may hydrate components and `copy` lists wording rules (pattern, flags
+// defaulting to "i", why). `--init` measures the routes and writes the file:
 // each limit is the median route plus 25% (never below what the defaults allow), and a route above
 // that gets its own entry with a "_why" to fill in. Tighten the numbers over time; a budget far above
 // reality never fails.
@@ -113,7 +117,7 @@ export function parseBudget(text, source = BUDGET_FILE) {
     }
     return limits;
   };
-  for (const key of Object.keys(data)) if (!key.startsWith('_') && !['limits', 'pages', 'jsonLd', 'islands'].includes(key)) throw Error(`${source}: unknown key "${key}"`);
+  for (const key of Object.keys(data)) if (!key.startsWith('_') && !['limits', 'pages', 'jsonLd', 'islands', 'copy'].includes(key)) throw Error(`${source}: unknown key "${key}"`);
   const pages = {};
   if (data.pages !== undefined) {
     if (!plainObject(data.pages)) throw Error(`${source}: pages must be an object`);
@@ -131,7 +135,34 @@ export function parseBudget(text, source = BUDGET_FILE) {
     }
   }
   if (data.islands !== undefined && (!Array.isArray(data.islands) || data.islands.some(r => typeof r !== 'string' || !r.startsWith('/')))) throw Error(`${source}: islands must be a list of routes`);
-  return { limits: limitsOf(data.limits, 'limits'), pages, jsonLd, islands: (data.islands ?? []).map(normalRoute) };
+  return { limits: limitsOf(data.limits, 'limits'), pages, jsonLd, islands: (data.islands ?? []).map(normalRoute), copy: parseCopyRules(data.copy, source) };
+}
+
+// Site wording rules checked on the rendered text: [{ "pattern": "\\bwe\\b", "flags": "i", "why": "..." }].
+export function parseCopyRules(rules, source = BUDGET_FILE) {
+  if (rules === undefined) return [];
+  if (!Array.isArray(rules)) throw Error(`${source}: copy must be a list of rules`);
+  return rules.map((rule, index) => {
+    if (!plainObject(rule) || typeof rule.pattern !== 'string' || !rule.pattern) throw Error(`${source}: copy[${index}] needs a pattern`);
+    const flags = rule.flags ?? 'i';
+    if (typeof flags !== 'string' || !/^[imsu]*$/.test(flags)) throw Error(`${source}: copy[${index}].flags may only use i, m, s and u`);
+    try { new RegExp(rule.pattern, flags); } catch { throw Error(`${source}: copy[${index}].pattern is not a regular expression`); }
+    if (rule.why !== undefined && typeof rule.why !== 'string') throw Error(`${source}: copy[${index}].why must be text`);
+    return { pattern: rule.pattern, flags, why: rule.why ?? '' };
+  });
+}
+
+// Matches of the copy rules in one page's text, one entry per rule with a count and the first context.
+export function copyMatches(text, rules) {
+  const found = [];
+  for (const rule of rules) {
+    const matches = [...text.matchAll(new RegExp(rule.pattern, rule.flags.includes('g') ? rule.flags : rule.flags + 'g'))];
+    if (!matches.length) continue;
+    const first = matches[0];
+    const context = text.slice(Math.max(0, first.index - 30), first.index + first[0].length + 30).replace(/\s+/g, ' ').trim();
+    found.push({ rule, count: matches.length, match: first[0], context });
+  }
+  return found;
 }
 
 // Routes compare without a trailing slash (except the root), so "/about" and "/about/" match.
@@ -225,6 +256,7 @@ export function initBudget(measurements, existing = null) {
     pages: { ...(existing?.pages ?? {}), ...pages },
     jsonLd: existing?.jsonLd ?? {},
     islands: existing?.islands ?? [],
+    ...(existing?.copy?.length ? { copy: existing.copy.map(({ pattern, flags, why }) => ({ pattern, flags, ...(why ? { why } : {}) })) } : {}),
   };
 }
 
@@ -269,6 +301,22 @@ function firstViewportHidden() {
     }
   }
   return out;
+}
+
+// The text a visitor reads: visible text nodes outside code, quotations, hidden elements and
+// [data-copy-ignore] (someone else's words, such as a quoted client), one line per element.
+function visibleCopy() {
+  const skip = 'script, style, noscript, template, code, pre, kbd, samp, blockquote, q, [data-copy-ignore], [hidden], [aria-hidden="true"]';
+  const lines = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    const parent = node.parentElement;
+    const text = node.textContent?.replace(/\s+/g, ' ').trim();
+    if (!text || !parent || parent.closest(skip)) continue;
+    if (parent.checkVisibility && !parent.checkVisibility({ visibilityProperty: true })) continue;
+    lines.push(text);
+  }
+  return lines.join('\n');
 }
 
 function targetBoxes() {
@@ -397,6 +445,7 @@ export async function measureRoute(browser, base, route, { tabs = 40 } = {}) {
         try { jsonLdTypes(JSON.parse(text), types); } catch (error) { issues.push({ kind: 'json-ld', route, value: `block ${index + 1} does not parse`, detail: String(error.message).slice(0, 80) }); }
       });
       measurement.jsonLdTypes = [...types].sort();
+      measurement.copyText = await page.evaluate(visibleCopy);
       // Report-only violations fire the same event, so a site can clear them before enforcing.
       for (const v of await page.evaluate(() => window.__qualityCsp ?? [])) issues.push({ kind: 'csp-violation', route, value: `${v.directive} ${v.blocked}`, detail: `${v.disposition === 'report' ? 'report-only' : 'blocked'}${v.source ? ` at ${v.source}` : ''}` });
       for (const target of crowdedTargets(await page.evaluate(targetBoxes))) issues.push({ kind: 'target-size', route, width: viewport.width, value: `${target.sig} ${target.width}x${target.height}`, detail: `24px circle reaches ${target.neighbour}` });
@@ -414,6 +463,8 @@ export async function measureRoute(browser, base, route, { tabs = 40 } = {}) {
 
 // Issues that depend on the budget, added to the browser findings.
 export function budgetIssues(measurement, budget) {
+  const copyIssues = (budget?.copy?.length && measurement.copyText ? copyMatches(measurement.copyText, budget.copy) : [])
+    .map(found => ({ kind: 'copy-rule', route: measurement.route, value: `"${found.match}"${found.count > 1 ? ` (${found.count}x)` : ''}`, detail: `${found.rule.why || found.rule.pattern}: …${found.context}…` }));
   const limits = limitsFor(budget, measurement.route);
   const issues = measurement.htmlKB === undefined ? [] : weightIssues(measurement.route, measurement, limits);
   for (const [key, width] of [['layoutShiftPhone', PHONE.width], ['layoutShiftDesktop', DESKTOP.width]]) {
@@ -423,7 +474,7 @@ export function budgetIssues(measurement, budget) {
   const required = budget?.jsonLd?.[normalRoute(measurement.route)] ?? [];
   const missing = required.filter(t => !measurement.jsonLdTypes?.includes(t));
   if (missing.length) issues.push({ kind: 'json-ld', route: measurement.route, value: `missing ${missing.join(', ')}`, detail: `found ${measurement.jsonLdTypes?.join(', ') || 'none'}` });
-  return issues;
+  return [...issues, ...copyIssues];
 }
 
 export async function checkQuality(options, hooks = {}) {
@@ -446,6 +497,7 @@ export async function checkQuality(options, hooks = {}) {
       const result = await measureRoute(browser, options.base, route, { tabs: options.tabs });
       measurements.push(result.measurement);
       issues.push(...result.issues, ...(options.init ? [] : budgetIssues(result.measurement, budget)));
+      delete result.measurement.copyText; // page text stays out of the report
       hooks.progress?.(`${index + 1}/${routes.length} ${route}`);
     }
   } finally { await browser.close(); }

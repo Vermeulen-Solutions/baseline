@@ -4,7 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   DEFAULT_LIMITS, parseArgs, parseBudget, normalRoute, limitsFor, largestShiftWindow, jsonLdTypes,
-  crowdedTargets, weightIssues, initBudget, budgetIssues, formatIssue,
+  crowdedTargets, weightIssues, initBudget, budgetIssues, formatIssue, parseCopyRules, copyMatches,
 } from '../scripts/check-quality.mjs';
 
 test('arguments need an origin and routes, and refuse Git Bash path conversion', () => {
@@ -90,9 +90,28 @@ test('budget issues cover layout shift, islands and required JSON-LD types', () 
   assert.deepEqual(budgetIssues(m, allowed), []);
 });
 
+test('copy rules are validated, matched case-insensitively by default and reported once per rule', () => {
+  assert.deepEqual(parseCopyRules(undefined), []);
+  assert.deepEqual(parseCopyRules([{ pattern: '\\bwe\\b', why: 'one person' }]), [{ pattern: '\\bwe\\b', flags: 'i', why: 'one person' }]);
+  assert.throws(() => parseCopyRules({}), /copy must be a list/);
+  assert.throws(() => parseCopyRules([{ why: 'x' }]), /copy\[0\] needs a pattern/);
+  assert.throws(() => parseCopyRules([{ pattern: '(' }]), /not a regular expression/);
+  assert.throws(() => parseCopyRules([{ pattern: 'x', flags: 'g' }]), /may only use i, m, s and u/);
+  const rules = parseCopyRules([{ pattern: '\\bwe\\b', why: 'one person: say I' }, { pattern: 'world-class' }]);
+  const found = copyMatches('Hello.\nWe build sites, and we answer fast.\nNothing else.', rules);
+  assert.deepEqual(found.map(f => [f.match, f.count]), [['We', 2]]);
+  assert.match(found[0].context, /We build sites/);
+  const budget = parseBudget(JSON.stringify({ copy: [{ pattern: '\\bwe\\b', why: 'one person: say I' }] }));
+  const issues = budgetIssues({ route: '/about', copyText: 'We build sites.', jsonLdTypes: [] }, budget);
+  assert.deepEqual(issues.map(i => [i.kind, i.value]), [['copy-rule', '"We"']]);
+  assert.match(issues[0].detail, /^one person: say I: …We build sites\.…$/);
+  assert.deepEqual(budgetIssues({ route: '/', copyText: 'I build sites.', jsonLdTypes: [] }, budget), []);
+});
+
 test('--init writes the median route plus 25%, and gives heavy routes their own entry', () => {
   const route = (r, htmlKB, imagesKB) => ({ route: r, htmlKB, inlineCssKB: 2, scriptKB: 30, imagesKB, largestImage: null, lcpImage: null, fontPreloads: [] });
-  const written = initBudget([route('/', 180, 100), route('/about', 170, 120), route('/gallery', 175, 3000)], { jsonLd: { '/': ['Organization'] }, islands: ['/search'] });
+  const written = initBudget([route('/', 180, 100), route('/about', 170, 120), route('/gallery', 175, 3000)], { jsonLd: { '/': ['Organization'] }, islands: ['/search'], copy: [{ pattern: 'x', flags: 'i', why: '' }] });
+  assert.deepEqual(written.copy, [{ pattern: 'x', flags: 'i' }], 'existing copy rules are kept');
   assert.equal(written.limits.htmlKB, 220, 'median 175 plus 25% rounded up to 10');
   assert.equal(written.limits.imagesKB, DEFAULT_LIMITS.imagesKB, 'never below the default');
   assert.equal(written.pages['/gallery'].imagesKB, 3750);
@@ -106,11 +125,15 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
   test('a real browser run finds each defect class on a fixture site', { timeout: 300000 }, async () => {
     const { createServer } = await import('node:http');
     const { checkQuality } = await import('../scripts/check-quality.mjs');
+    const fs = await import('node:fs');
+    const os = await import('node:os');
+    const path = await import('node:path');
     const big = 'x'.repeat(60 * 1024);
     const clean = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Clean</title>
       <style>body { margin: 0; font: 16px/1.5 sans-serif } a { display: inline-block; padding: 12px }</style>
       <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Fixture"}</script>
-      </head><body><main><h1>Clean</h1><p>Text with an <a href="/a">inline link</a> in it.</p><a href="/b">Big enough</a></main></body></html>`;
+      </head><body><main><h1>Clean</h1><p>Text with an <a href="/a">inline link</a> in it.</p><a href="/b">Big enough</a>
+      <blockquote>We loved working with them.</blockquote><p data-copy-ignore>Our family, as we say.</p><code>we()</code></main></body></html>`;
     const broken = `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Broken</title>
       <style>/* ${big} */
         body { margin: 0; font: 16px/1.5 sans-serif }
@@ -122,7 +145,7 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       </style>
       <script type="application/ld+json">{ not json }</script>
       </head><body><header>Sticky header</header><a class="under" href="/hidden">Under the header</a>
-      <main style="padding-top: 140px"><h1 class="fade">Hidden heading</h1>
+      <main style="padding-top: 140px"><h1 class="fade">Hidden heading</h1><p>We build websites.</p>
       <div class="icons"><a href="/1" aria-label="One"></a><a href="/2" aria-label="Two"></a></div>
       <astro-island></astro-island><div id="slot"></div><p>Below</p><p style="height:2000px">Tall</p></main>
       <script>setTimeout(() => { const d = document.createElement('div'); d.className = 'late'; document.getElementById('slot').append(d); }, 300);</script>
@@ -138,11 +161,13 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
     await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
     try {
       const base = `http://127.0.0.1:${server.address().port}`;
-      const options = { ...parseArgs(['--base', base, '--routes', '/,/broken', '--tabs', '10']), budget: 'missing-budget-for-test.json' };
+      const budgetFile = path.join(os.tmpdir(), `check-quality-budget-${process.pid}.json`);
+      fs.writeFileSync(budgetFile, JSON.stringify({ copy: [{ pattern: '\\bwe\\b', why: 'one person: say I' }] }));
+      const options = { ...parseArgs(['--base', base, '--routes', '/,/broken', '--tabs', '10']), budget: budgetFile };
       const { issues, measurements } = await checkQuality(options);
       const on = route => [...new Set(issues.filter(i => i.route === route).map(i => i.kind))].sort();
       assert.deepEqual(on('/'), [], 'the clean page passes');
-      assert.deepEqual(on('/broken'), ['csp-violation', 'first-viewport-hidden', 'focus-obscured', 'inline-css-weight', 'island', 'json-ld', 'layout-shift', 'target-size']);
+      assert.deepEqual(on('/broken'), ['copy-rule', 'csp-violation', 'first-viewport-hidden', 'focus-obscured', 'inline-css-weight', 'island', 'json-ld', 'layout-shift', 'target-size']);
       assert.ok(measurements.find(m => m.route === '/').jsonLdTypes.includes('Organization'));
       assert.ok(issues.some(i => i.kind === 'csp-violation' && /script-src-elem inline/.test(i.value) && /report-only/.test(i.detail)), 'report-only violations are reported');
       assert.ok(issues.some(i => i.kind === 'focus-obscured' && /Under the header/.test(i.value) && /header/.test(i.detail)));
