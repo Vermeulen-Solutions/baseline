@@ -1878,6 +1878,14 @@
     "tests/consent.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/site-files.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/site-files.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
     }
   }
 }

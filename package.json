@@ -82,6 +82,7 @@
     "site:register": "node scripts/register-site.mjs",
     "fleet:status": "node scripts/fleet-status.mjs",
     "fleet:drift": "node scripts/fleet-drift.mjs",
+    "site:files": "node scripts/site-files.mjs",
     "standards:change": "node scripts/standards-changes.mjs new",
     "standards:check": "node scripts/standards-changes.mjs check",
     "standards:release": "node scripts/standards-release.mjs",
