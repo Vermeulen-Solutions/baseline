@@ -784,5 +784,15 @@
     "path": "src/components/BeforeAfter.astro",
     "reason": "Shared presentation primitive: a before/after comparison on a native range input (keyboard, screen reader, tap to jump, no drag needed), stacked pictures without JavaScript; token colours, focus ring and forced-colors handle. Exact LF-normalized source hash.",
     "sha256": "3a8bdebcc4da81cbccea02c7a241efd42d5749f9bd8f7623a0bf401ed9fefc11"
+  },
+  {
+    "path": "src/lib/quotes.ts",
+    "reason": "Non-visual utility: client quotes shown exactly as written, with an escaped key-phrase mark, sentence excerpts and highlight validation. Exact LF-normalized source hash.",
+    "sha256": "59123d3c0e20a7569566a93c826c4def0f251c61d37d78a03b5f5183e4073ba5"
+  },
+  {
+    "path": "src/components/Stars.astro",
+    "reason": "Shared presentation primitive: an accessible star rating (one image with a label, outlined empty stars, partial fill, decorative mode) in the surrounding text colour, with forced-colors support. Exact LF-normalized source hash.",
+    "sha256": "6e1d7f3c98573aaef7a2af2c12e9ae96602c9600d3b6cafb8f6be4db5326697e"
   }
 ]

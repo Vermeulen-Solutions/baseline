@@ -158,7 +158,10 @@
     "tests/artifact-lint.test.mjs",
     "docs/artifact-lint.md",
     "docs/licenses/open-design-Apache-2.0.txt",
-    "docs/licenses/modern-web-guidance-Apache-2.0.txt"
+    "docs/licenses/modern-web-guidance-Apache-2.0.txt",
+    "src/components/Stars.astro",
+    "src/lib/quotes.ts",
+    "tests/quotes.test.mjs"
   ],
   "packages": {
     "dependencies": [
