@@ -134,7 +134,7 @@ When a direction is replaced, update the Art Direction Record, record which deci
 > **ART DIRECTION GATE:**
 > Follow the canonical visual implementation gate in `AGENTS.md` (*Before client-specific visual implementation* on the EmDash foundation, *Shared design authority* on generated static sites). Save the complete record before site-specific visual implementation and run `npm run check:art-direction -- --require-record`. The gate covers all visual implementation, not only templates and components. Its documented scoped exceptions permit infrastructure fixes and isolated concept studies. The CLI/CI validate structure and changed-file exceptions; they do not block writes or prove decision quality.
 
-Use an adopted `PROJECT.md` as brief evidence when present, and identify the selected `DESIGN.md` or concept reference when used. Keep the brief, larger visual reference and implemented CSS distinct; do not copy the gate record into competing documents. Write the Art Direction Record directly in `AGENTS.md` using this exact markdown schema:
+Use an adopted `PRODUCT.md` as brief evidence when present, and identify the selected `DESIGN.md` or concept reference when used. Keep the brief, larger visual reference and implemented CSS distinct; do not copy the gate record into competing documents. Write the Art Direction Record directly in `AGENTS.md` using this exact markdown schema:
 
 ```markdown
 ## Art Direction Record

@@ -20,7 +20,7 @@ async function fixture(run, profile = 'static') {
 const readSource = transform => async relative => transform(relative, await fs.readFile(new URL(relative, source)));
 
 test('bounded updates preserve adopted context, design and handoff even if misclassified as managed', () => fixture(async root => {
-  const names = ['PROJECT.md', 'DESIGN.md', 'HANDOFF.md'];
+  const names = ['PRODUCT.md', 'PROJECT.md', 'DESIGN.md', 'HANDOFF.md'];
   const managedPath = path.join(root, '.baseline/managed-files.json'), managed = JSON.parse(await fs.readFile(managedPath, 'utf8'));
   for (const name of names) {
     const body = '# Site-owned ' + name + '\nExisting client decision evidence.\n';

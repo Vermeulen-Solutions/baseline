@@ -53,12 +53,12 @@ specialists and never add CMS dependencies to satisfy an inapplicable check.
   spacing and brief-led density (balanced if unspecified). Discuss custom spacing
   when a material design decision requires it.
 - Keep site facts in their established home: here by default, or an explicitly
-  adopted optional PROJECT.md. Keep working rules and the compact Art Direction
+  adopted optional PRODUCT.md (the one brief). Keep working rules and the compact Art Direction
   Record here. DESIGN.md may hold selected visual references; CSS/configuration
   own implemented values. Use the existing tracker or a short handoff for progress.
   Resolve conflicts by subject and evidence rather than filename precedence.
   Missing optional documents do not block authorized work. See
-  [project context](docs/project-context.md) and PROJECT.example.md.
+  [project context](docs/project-context.md) and PRODUCT.example.md.
 - Use checked-in skills on a fresh clone. Refresh skills only when intentionally
   checking upstream updates or refreshing an older checkout; follow
   [skill synchronization](docs/skill-synchronization.md).

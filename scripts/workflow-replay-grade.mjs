@@ -152,7 +152,7 @@ async function gradeTrialImpl(trial) {
   });
   if (trial.scenario === 'older-profile') {
     await check('missing optional references and recovered handoff facts', async () => {
-      for (const file of ['docs/project-context.md', 'PROJECT.example.md', 'PROJECT.md']) assert.equal(fs.existsSync(path.join(trial.site, file)), false, file);
+      for (const file of ['docs/project-context.md', 'PRODUCT.example.md', 'PRODUCT.md']) assert.equal(fs.existsSync(path.join(trial.site, file)), false, file);
       const text = fs.readFileSync(path.join(trial.site, 'HANDOFF.md'), 'utf8');
       for (const regex of [/team leads/i, /English/i, /static/i, /workshops@northline\.example\.test/, /editor/i, /maintainer/i, /quarterly/i, /assum/i, /(?:routes|listing|index)/i]) assert.match(text, regex);
       assert.ok(hasUnapprovedLaunchDate(text), 'Handoff must state that no launch date is approved');

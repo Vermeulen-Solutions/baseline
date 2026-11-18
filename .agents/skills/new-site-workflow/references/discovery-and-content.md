@@ -32,7 +32,7 @@ Adapt the vocabulary to the site's purpose. For a public information service, us
 
 ## Synthesize before designing
 
-In the fact's established home (`AGENTS.md`, or an explicitly adopted optional `PROJECT.md`), record a concise interpretation:
+In the fact's established home (`AGENTS.md`, or an explicitly adopted optional `PRODUCT.md`), record a concise interpretation:
 
 - Priority audience and situation; offer/service; primary outcome and next action, with secondary journeys where real.
 - Recommended positioning and lead message, connected to a defensible difference or useful visitor outcome.
