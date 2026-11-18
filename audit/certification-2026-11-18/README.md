@@ -44,6 +44,14 @@ Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3: doc
 
 Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 111 passed; the gallery root-typecheck behavior test timed out under load (its child process killed) and passed alone in 15.5 s, as during the 0.4.0 work. Not covered: the Workers/D1/R2 profile (unchanged scope), the editor rehearsal and restore drill (editor and schema unchanged), repeated visual runs.
 
+## Standards 0.5.1 (2026-11-18)
+
+Certified source: commit `377e9a856432531bc96acb2008e0a8ebe0fc7237`. Machine record: [verification-0.5.1.json](verification-0.5.1.json). A patch on 0.5.0 that fixes what taking the visible changes on six built sites found. Runtime and development dependencies and the database schema are unchanged.
+
+Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3: doctor, `npm ci`, verify (338 s and 273 s), build, release artifact, schema budget, dev tools, seed, seeded build and `audit:html` all pass. `check:ci-fast` passed every check but exceeded its 60 s local budget again (78 s and 69 s; unit tests 53 s and 48 s). Speeding up the fast tier stays a follow-up.
+
+Visual suite (Windows, Node 24.22.3, Playwright 1.65.1) on the certified commit: 111 passed. The gallery root-typecheck behavior test timed out under load and passed alone in 16.6 s, as in 0.4.0 and 0.5.0. Not covered: the Workers/D1/R2 profile, the editor rehearsal and the restore drill (editor and schema unchanged).
+
 ## Standards 0.5.0 (2026-11-18)
 
 Certified source: commit `004e89bc15f7805b91cd335bd08a95a106798510`. Machine record: [verification-0.5.0.json](verification-0.5.0.json). Runtime dependencies (Astro 7.4.12, EmDash 1.5.0, the adapters) and the database schema are unchanged from 0.4.0. One development dependency was added: `@axe-core/playwright` 4.14.0 for the accessibility scan in `check:quality`.

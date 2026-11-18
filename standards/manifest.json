@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "standardsVersion": "0.5.0",
+  "standardsVersion": "0.5.1",
   "status": "certified-scoped",
   "reviewedAt": "2026-11-18",
-  "stableReleaseRef": "refs/tags/standards-v0.5.0",
+  "stableReleaseRef": "refs/tags/standards-v0.5.1",
   "runtimeProfiles": {
     "node-sqlite": {
       "status": "certified-scoped",
@@ -25,6 +25,7 @@
         "24.22.3"
       ],
       "additionalEvidence": [
+        "audit/certification-2026-11-18/verification-0.5.0.json",
         "audit/certification-2026-11-18/verification-0.4.0.json",
         "audit/certification-2026-11-18/verification-0.3.1.json",
         "audit/certification-2026-11-18/verification.json",
@@ -171,10 +172,10 @@
   },
   "certification": {
     "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
-    "sourceCommit": "004e89bc15f7805b91cd335bd08a95a106798510",
-    "sourceTree": "dd28d11abfa6a6255fc952293a1a8cd7d3f48da1",
-    "receipt": "audit/certification-2026-11-18/verification-0.5.0.json",
-    "releaseNotes": "standards/releases/0.5.0.md",
+    "sourceCommit": "377e9a856432531bc96acb2008e0a8ebe0fc7237",
+    "sourceTree": "e34375071912be2a974abace4c8fff84a46788cf",
+    "receipt": "audit/certification-2026-11-18/verification-0.5.1.json",
+    "releaseNotes": "standards/releases/0.5.1.md",
     "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles.",
     "frameworkEvidence": "audit/certification-2026-11-16/README.md (0.2.0; runtime dependencies, schema and editor code unchanged since)",
     "rendererEvidence": "audit/visual-renderer-2026-11-16/README.md",
@@ -221,7 +222,7 @@
       },
       "new-site-workflow": {
         "files": 17,
-        "sha256": "8576b259a9237b2cd8dc9e026a027637bab711e57ff5c529b781c35f74dd727d"
+        "sha256": "83a788d7e9e2578a8167b342cc9cfcdf0246bd771e8571094a83c09aae9e2080"
       },
       "opendesign-site-design": {
         "files": 8,
@@ -269,9 +270,9 @@
       "scripts/sync-site-skills.mjs": "5e2e817f4e707ef60212c5cf52abaa78268e761511c3ab5196a9372085fb518e",
       "scripts/sync-emdash-skills.mjs": "f8b8682a9a715440f4c05c418a86c716c9aae155c341b28b2cc63835f60f3f45",
       "scripts/sync-impeccable-skill.mjs": "30c26f51c0afeebdd66798bb2af75950872dde7cd25e6ae2a74b9ba386694cf7",
-      "scripts/sync-baseline.mjs": "6a4c2c79f5440b6ccf197137bb3826ba1aac1a8b5d1311af84b64ce0c0e28bad",
+      "scripts/sync-baseline.mjs": "1928b61a2dfda67f360a396f6ecc6c777f0ca2e6a2fe5a24043bb3087d436e9b",
       "scripts/audit-ui.mjs": "a4bb5459e8b744e4fc1d4e85fcc92cfaac2a3086f45a92f93c02e8dd8c43208c",
-      "scripts/check-quality.mjs": "7d5894641704f3b1c7f0e4505e8484d84710626489686c07195bf66679a666b7",
+      "scripts/check-quality.mjs": "9ab9adfce78699e103b26642459cc94f5d3a228d5fc860b4d2b73eca9d6bd7ff",
       "scripts/html-parity.mjs": "8c235c92cb93a7fa017feaf91822982f7e905745c5a23d9db9b0d84ff08d01ab",
       "scripts/capture-routes.mjs": "49258a18d3ddf360eb3797b5fb35a48dbf47e64fa7c1af703465ffde27c1c31f"
     },
@@ -283,151 +284,43 @@
   },
   "changes": [
     {
-      "slug": "axe-share-images",
-      "title": "Accessibility scan and share-image check in check:quality",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "dependencies",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-quality.mjs",
-        "tests/check-quality.test.mjs"
-      ]
-    },
-    {
-      "slug": "consent-analytics",
-      "title": "Analytics with consent, and embeds that load on click",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "docs",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": true,
-      "database": false,
-      "files": [
-        "src/lib/consent.ts",
-        "src/lib/load-on-click.ts",
-        "src/components/Analytics.astro",
-        "src/components/ConsentBanner.astro",
-        "src/components/VideoEmbed.astro",
-        "src/components/MapEmbed.astro",
-        "src/layouts/Base.astro",
-        "src/env.d.ts"
-      ]
-    },
-    {
-      "slug": "day-2-recipes",
-      "title": "Day-2 recipes for everyday requests",
+      "slug": "component-hover-gating",
+      "title": "Hover effects in shared components only where a pointer can hover",
       "bump": "patch",
       "platforms": [
         "emdash",
         "static"
       ],
       "areas": [
-        "skills"
-      ],
-      "adoption": "sync",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "field-errors",
-      "title": "Inline field errors in enhanced forms",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": true,
-      "database": false,
-      "files": [
-        "src/components/Form.astro"
-      ]
-    },
-    {
-      "slug": "launch-checks",
-      "title": "Launch readiness in check:quality, and placeholders instead of inventions",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
+        "components"
       ],
       "adoption": "copy",
       "visible": false,
       "database": false,
       "files": [
-        "scripts/check-quality.mjs",
-        "tests/check-quality.test.mjs",
-        "PRODUCT.example.md"
+        "src/components/Card.astro",
+        "src/components/CopyButton.astro",
+        "src/components/PhotoGallery.astro",
+        "src/components/SearchDialog.astro",
+        "src/components/TableOfContents.astro",
+        "src/components/Tabs.astro"
       ]
     },
     {
-      "slug": "opening-hours",
-      "title": "Opening hours, on the page and in structured data from one list",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/lib/opening-hours.ts",
-        "src/components/Hours.astro",
-        "src/lib/structured-data.ts"
-      ]
-    },
-    {
-      "slug": "replay-control-arm",
-      "title": "Workflow replay control arm without agent guidance",
-      "bump": "patch",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "tooling",
-        "docs"
-      ],
+      "slug": "docs-audit-0-5",
+      "title": "Documentation caught up with standards 0.3.0 to 0.5.0",
+      "bump": "none",
+      "platforms": [],
+      "areas": [],
       "adoption": "none",
       "visible": false,
       "database": false,
       "files": []
     },
     {
-      "slug": "site-files-transitive",
-      "title": "site:files: transitive blocking and a stricter import scan",
-      "bump": "none",
+      "slug": "focus-check-smooth-scroll",
+      "title": "check:quality no longer reports controls off screen on smooth-scrolling pages",
+      "bump": "patch",
       "platforms": [
         "emdash",
         "static"
@@ -435,51 +328,112 @@
       "areas": [
         "tooling"
       ],
-      "adoption": "none",
+      "adoption": "copy",
       "visible": false,
       "database": false,
-      "files": []
+      "files": [
+        "scripts/check-quality.mjs"
+      ]
     },
     {
-      "slug": "site-files",
-      "title": "Adopting Baseline-owned code in a built site",
-      "bump": "none",
+      "slug": "icons-opaque",
+      "title": "App icons for light marks, and a portable icon test",
+      "bump": "patch",
       "platforms": [
         "emdash",
         "static"
       ],
       "areas": [
-        "tooling",
-        "docs"
+        "tooling"
       ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/generate-icons.mjs",
+        "tests/generate-icons.test.mjs"
+      ]
+    },
+    {
+      "slug": "release-publish-step",
+      "title": "The release procedure ends with publishing the GitHub release",
+      "bump": "none",
+      "platforms": [],
+      "areas": [],
       "adoption": "none",
       "visible": false,
       "database": false,
       "files": []
     },
     {
-      "slug": "static-csp",
-      "title": "Content-Security-Policy for static sites",
-      "bump": "minor",
+      "slug": "rollout-guidance",
+      "title": "Guidance from taking the visible changes on built sites",
+      "bump": "patch",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "skills",
+        "docs"
+      ],
+      "adoption": "sync",
+      "visible": false,
+      "database": false,
+      "files": [
+        ".agents/skills/new-site-workflow/references/day-2-recipes.md"
+      ]
+    },
+    {
+      "slug": "site-files-managed-record",
+      "title": "site:files keeps a static site's sync record in step",
+      "bump": "none",
+      "platforms": [],
+      "areas": [],
+      "adoption": "none",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "sync-baseline-comment-imports",
+      "title": "sync:baseline ignores imports in comments",
+      "bump": "patch",
       "platforms": [
         "static"
       ],
       "areas": [
-        "tooling",
-        "docs"
+        "tooling"
       ],
       "adoption": "copy",
       "visible": false,
       "database": false,
       "files": [
-        "scripts/static-csp.mjs",
-        "scripts/baseline-features-integration.mjs",
-        "src/lib/content-security-policy.ts"
+        "scripts/sync-baseline.mjs"
       ]
     },
     {
-      "slug": "token-tests-client-lanes",
-      "title": "Token tests pass on a site with its own lane",
+      "slug": "titles-within-sixty",
+      "title": "Page titles add the site name only when it fits",
+      "bump": "patch",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "components"
+      ],
+      "adoption": "manual",
+      "visible": true,
+      "database": false,
+      "files": [
+        "src/layouts/Base.astro",
+        "profiles/static/project/src/lib/metadata.ts"
+      ]
+    },
+    {
+      "slug": "token-tests-own-palette",
+      "title": "Token tests pass on a site with its own palette",
       "bump": "patch",
       "platforms": [
         "emdash",
@@ -495,21 +449,6 @@
         "tests/fluid-tokens.test.mjs",
         "tests/token-contract.test.mjs"
       ]
-    },
-    {
-      "slug": "visual-config-imports",
-      "title": "The visual suite copies every module the config imports",
-      "bump": "none",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "tooling"
-      ],
-      "adoption": "none",
-      "visible": false,
-      "database": false,
-      "files": []
     }
   ]
 }
