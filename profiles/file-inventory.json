@@ -1838,6 +1838,18 @@
     "tests/quotes.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "src/lib/opening-hours.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Hours.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/opening-hours.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

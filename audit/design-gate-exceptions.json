@@ -571,8 +571,8 @@
   },
   {
     "path": "src/lib/structured-data.ts",
-    "reason": "Starter metadata-only helpers: breadcrumb/organization graphs and taxonomy indexing; no client visual implementation. Any source edit invalidates this exact LF-normalized exception. Organization graph adds social profiles and site-owned business facts.",
-    "sha256": "18723edf4e25ff0369ce34cfbda229b4dc0d67ba43a1d6295726fb2875e06d6d"
+    "reason": "Starter metadata-only helpers: breadcrumb/organization graphs and taxonomy indexing; no client visual implementation. Any source edit invalidates this exact LF-normalized exception. Organization graph adds social profiles and site-owned business facts. Organization graph adds openingHoursSpecification from options.organization.openingHours.",
+    "sha256": "947feada66d4227a1135dfe1ac0613899e7ff8ffe843b86134a973a651758adf"
   },
   {
     "path": "src/lib/robots-cache.ts",
@@ -794,5 +794,15 @@
     "path": "src/components/Stars.astro",
     "reason": "Shared presentation primitive: an accessible star rating (one image with a label, outlined empty stars, partial fill, decorative mode) in the surrounding text colour, with forced-colors support. Exact LF-normalized source hash.",
     "sha256": "6e1d7f3c98573aaef7a2af2c12e9ae96602c9600d3b6cafb8f6be4db5326697e"
+  },
+  {
+    "path": "src/lib/opening-hours.ts",
+    "reason": "Non-visual utility: opening hours validated once and shared by the Organization structured data and the Hours table. Exact LF-normalized source hash.",
+    "sha256": "69199a263bf24bf1d7ab0d5db5b62c7fb40408072c15d1b2f273251e707b655f"
+  },
+  {
+    "path": "src/components/Hours.astro",
+    "reason": "Shared presentation primitive: an opening-hours table (caption, one row per weekday in the page locale, closed days labelled) with token borders. Exact LF-normalized source hash.",
+    "sha256": "674701d8e589b25466b99553b0e4b51f07678c8de4db88c172df0791f100f2d2"
   }
 ]
