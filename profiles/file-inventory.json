@@ -1850,6 +1850,34 @@
     "tests/opening-hours.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "src/lib/consent.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/load-on-click.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/Analytics.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/ConsentBanner.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/VideoEmbed.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/MapEmbed.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/consent.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

@@ -1,0 +1,131 @@
+---
+/**
+ * The consent banner for GA4 or Tag Manager (see Analytics.astro). It appears only when such a tag
+ * is configured, the page is on a production hostname and the visitor has not decided yet; it
+ * never takes focus or blocks the page. Accept all, Reject all and Choose are equally easy.
+ * Any element with data-consent-open (a "Cookie settings" link in the footer) opens it again.
+ * Every label is a prop, so the banner speaks the page's language. Without JavaScript no tag
+ * loads, so the banner stays hidden.
+ */
+import type { ConsentCategory } from '../lib/consent';
+
+interface Props {
+  heading?: string;
+  text?: string;
+  acceptLabel?: string;
+  rejectLabel?: string;
+  chooseLabel?: string;
+  saveLabel?: string;
+  privacyHref?: string;
+  privacyLabel?: string;
+  categoryLabels?: Partial<Record<ConsentCategory, { label: string; description: string }>>;
+}
+
+const {
+  heading = 'Your privacy',
+  text = 'We use cookies to measure visits and improve the site. You choose which ones.',
+  acceptLabel = 'Accept all',
+  rejectLabel = 'Reject all',
+  chooseLabel = 'Choose',
+  saveLabel = 'Save choice',
+  privacyHref,
+  privacyLabel = 'Privacy notice',
+  categoryLabels = {},
+} = Astro.props;
+const labels: Record<ConsentCategory, { label: string; description: string }> = {
+  analytics: { label: 'Statistics', description: 'Visits and pages viewed, to improve the site.', ...categoryLabels.analytics },
+  marketing: { label: 'Marketing', description: 'Measuring ads and personalising them.', ...categoryLabels.marketing },
+};
+---
+<section class="consent-banner" aria-labelledby="consent-banner-heading" data-consent-banner hidden>
+  <h2 id="consent-banner-heading" class="consent-banner__heading">{heading}</h2>
+  <p class="consent-banner__text">{text} {privacyHref && <a href={privacyHref}>{privacyLabel}</a>}</p>
+  <details class="consent-banner__choices">
+    <summary>{chooseLabel}</summary>
+    {(Object.keys(labels) as ConsentCategory[]).map(category => (
+      <label class="consent-banner__category" data-consent-category={category}>
+        <input type="checkbox" name={category} />
+        <span><strong>{labels[category].label}</strong> {labels[category].description}</span>
+      </label>
+    ))}
+    <button type="button" class="consent-banner__button" data-consent-save>{saveLabel}</button>
+  </details>
+  <div class="consent-banner__actions">
+    <button type="button" class="consent-banner__button" data-consent-reject>{rejectLabel}</button>
+    <button type="button" class="consent-banner__button" data-consent-accept>{acceptLabel}</button>
+  </div>
+</section>
+
+<script>
+  type Choice = Record<string, boolean>;
+  type Consent = { config: { categories: string[] }; decided: boolean; categories: Choice; save: (choice: Choice) => void };
+  const consent = () => (window as unknown as { baselineConsent?: Consent }).baselineConsent;
+  function setup() {
+    const banner = document.querySelector<HTMLElement>('[data-consent-banner]');
+    const api = consent();
+    if (!banner || !api || banner.dataset.bound) return;
+    banner.dataset.bound = 'true';
+    // Offer only the categories the site configured.
+    for (const row of banner.querySelectorAll<HTMLElement>('[data-consent-category]')) {
+      if (!api.config.categories.includes(row.dataset.consentCategory ?? '')) row.remove();
+    }
+    const boxes = () => [...banner.querySelectorAll<HTMLInputElement>('input[type="checkbox"]')];
+    const close = (choice: Choice) => { api.save(choice); banner.hidden = true; };
+    const all = (value: boolean) => Object.fromEntries(api.config.categories.map(category => [category, value]));
+    banner.querySelector('[data-consent-accept]')?.addEventListener('click', () => close(all(true)));
+    banner.querySelector('[data-consent-reject]')?.addEventListener('click', () => close(all(false)));
+    banner.querySelector('[data-consent-save]')?.addEventListener('click', () => close(Object.fromEntries(boxes().map(box => [box.name, box.checked]))));
+    const open = () => {
+      for (const box of boxes()) box.checked = api.categories[box.name] === true;
+      banner.hidden = false;
+      banner.querySelector<HTMLElement>('[data-consent-accept]')?.focus();
+    };
+    document.addEventListener('click', event => {
+      const trigger = event.target instanceof Element ? event.target.closest('[data-consent-open]') : null;
+      if (!trigger) return;
+      event.preventDefault();
+      open();
+    });
+    if (!api.decided) banner.hidden = false;
+  }
+  setup();
+  document.addEventListener('astro:page-load', setup);
+</script>
+
+<style>
+@layer components {
+  .consent-banner {
+    position: fixed;
+    inset-inline: var(--spacing-s, 1rem);
+    inset-block-end: var(--spacing-s, 1rem);
+    z-index: var(--z-overlay, 50);
+    max-inline-size: 36rem;
+    margin-inline: auto;
+    padding: var(--spacing-s, 1rem);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-card, 0.75rem);
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: var(--shadow-lg);
+  }
+  .consent-banner[hidden] { display: none; }
+  .consent-banner__heading { margin: 0 0 var(--spacing-3xs, 0.25rem); font-size: var(--text-step-1, 1.125rem); }
+  .consent-banner__text { margin: 0 0 var(--spacing-2xs, 0.5rem); }
+  .consent-banner__choices { margin-block-end: var(--spacing-2xs, 0.5rem); }
+  .consent-banner__choices summary { cursor: pointer; min-block-size: 1.5rem; }
+  .consent-banner__category { display: flex; gap: var(--spacing-2xs, 0.5rem); align-items: start; margin-block: var(--spacing-2xs, 0.5rem); }
+  .consent-banner__category input { inline-size: 1.25rem; block-size: 1.25rem; margin-block-start: 0.15rem; }
+  .consent-banner__actions { display: flex; flex-wrap: wrap; gap: var(--spacing-2xs, 0.5rem); justify-content: flex-end; }
+  .consent-banner__button {
+    min-block-size: 2.75rem;
+    padding-inline: var(--spacing-s, 1rem);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-control, 0.375rem);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+  }
+  .consent-banner__button:focus-visible { outline: var(--focus-ring-width, 0.2rem) solid var(--color-focus); outline-offset: var(--focus-ring-offset, 0.2rem); }
+}
+</style>

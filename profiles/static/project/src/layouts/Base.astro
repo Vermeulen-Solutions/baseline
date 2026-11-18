@@ -3,6 +3,8 @@ import SiteShell from './SiteShell.astro';
 import { site } from '../config/site';
 import { routing } from '../config/routing';
 import StaticMetadata from '../components/StaticMetadata.astro';
+import Analytics from '../components/Analytics.astro';
+import ConsentBanner from '../components/ConsentBanner.astro';
 import { resolveStaticMetadata, routePath, type PageMetadata } from '../lib/metadata';
 import { gatedRoutes } from '../lib/posts';
 type Props = PageMetadata & {
@@ -39,4 +41,7 @@ const navigation = site.navigation
   </header>
   <slot />
   <footer slot="footer" class="site-footer"><p>Built with Astro and Baseline.</p></footer>
+  {/* Nothing renders until PUBLIC_GA_ID, PUBLIC_GTM_ID or PUBLIC_CF_BEACON_TOKEN is set (src/lib/consent.ts). */}
+  <Analytics slot="body-end" />
+  <ConsentBanner slot="body-end" />
 </SiteShell>

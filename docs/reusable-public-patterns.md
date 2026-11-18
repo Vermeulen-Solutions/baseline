@@ -313,6 +313,10 @@ Two pictures of the same view on one frame, for renovations, gardens, treatments
 
 A table of the week from the same `openingHours` list the Organization structured data reads (`src/lib/opening-hours.ts`): keep the list in one module and pass it to both, so the page and search results agree. Day names and times follow `locale`; a day without an entry shows `closedLabel`; a split day lists both ranges. Invalid days or times are dropped, never guessed. `caption` names the table (`hideCaption` keeps it for screen readers only).
 
+### Analytics, consent and embeds (`Analytics.astro`, `ConsentBanner.astro`, `VideoEmbed.astro`, `MapEmbed.astro`)
+
+Both Base layouts render `Analytics` and `ConsentBanner` at the end of the body; they produce nothing until a measurement id is set in the build environment, and load tags only on `PUBLIC_ANALYTICS_HOSTS`. The loader is one inline script fed by a JSON block, so the computed Content-Security-Policy hashes it. Cloudflare Web Analytics loads directly (cookie-free). GA4 and GTM set Google Consent Mode v2 defaults (everything denied) before any tag, load the tag after idle (or, in `strict` mode, only after consent), and apply a stored choice at once; choices are stored per `PUBLIC_CONSENT_VERSION`. The banner is a non-modal region with Accept all, Reject all and Choose (one checkbox per configured category); it never takes focus on load, and any `[data-consent-open]` element reopens it with focus on Accept. Every label is a prop. `VideoEmbed` (YouTube via youtube-nocookie.com, Vimeo with `dnt=1`) and `MapEmbed` render a stand-in with a real link and insert the provider's frame only on click.
+
 ### Theme selector and surface controls
 
 ```astro

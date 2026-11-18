@@ -5,6 +5,13 @@ interface ImportMetaEnv {
   readonly CSP_MODE?: string;
   /** Extra CSP sources, "directive source source; directive source". */
   readonly CSP_SOURCES?: string;
+  /** Analytics (src/components/Analytics.astro): measurement ids, production hostnames and consent. */
+  readonly PUBLIC_GA_ID?: string;
+  readonly PUBLIC_GTM_ID?: string;
+  readonly PUBLIC_CF_BEACON_TOKEN?: string;
+  readonly PUBLIC_ANALYTICS_HOSTS?: string;
+  readonly PUBLIC_CONSENT_MODE?: string;
+  readonly PUBLIC_CONSENT_VERSION?: string;
 }
 
 // Optional capabilities for trusted in-repo plugins. Node/SQLite provisions none

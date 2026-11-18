@@ -164,7 +164,14 @@
     "tests/quotes.test.mjs",
     "src/lib/opening-hours.ts",
     "src/components/Hours.astro",
-    "tests/opening-hours.test.mjs"
+    "tests/opening-hours.test.mjs",
+    "src/lib/consent.ts",
+    "src/lib/load-on-click.ts",
+    "src/components/Analytics.astro",
+    "src/components/ConsentBanner.astro",
+    "src/components/VideoEmbed.astro",
+    "src/components/MapEmbed.astro",
+    "tests/consent.test.mjs"
   ],
   "packages": {
     "dependencies": [

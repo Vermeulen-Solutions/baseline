@@ -1,0 +1,112 @@
+---
+/**
+ * Analytics with consent built in. Renders nothing until a measurement id is set in the build
+ * environment (PUBLIC_CF_BEACON_TOKEN, PUBLIC_GA_ID or PUBLIC_GTM_ID), and loads tags only on the
+ * production hostnames in PUBLIC_ANALYTICS_HOSTS. Cloudflare Web Analytics is cookie-free and
+ * loads directly. GA4 and Tag Manager start in Google Consent Mode v2 with everything denied
+ * (`consent-mode`), or do not load until the visitor agrees (`strict`); pair them with
+ * <ConsentBanner />. Elements with data-track="event_name" send that event on click, with every
+ * data-track-* attribute as a parameter. See src/lib/consent.ts and the trust-and-measurement
+ * reference. On sites with a Content-Security-Policy, add the tag origins to CSP_SOURCES.
+ */
+import { analyticsConfig, type AnalyticsInput } from '../lib/consent';
+
+type Props = AnalyticsInput;
+const env = import.meta.env;
+const config = analyticsConfig({
+  gaId: Astro.props.gaId ?? env.PUBLIC_GA_ID,
+  gtmId: Astro.props.gtmId ?? env.PUBLIC_GTM_ID,
+  cloudflareToken: Astro.props.cloudflareToken ?? env.PUBLIC_CF_BEACON_TOKEN,
+  hosts: Astro.props.hosts ?? env.PUBLIC_ANALYTICS_HOSTS,
+  mode: Astro.props.mode ?? (env.PUBLIC_CONSENT_MODE === 'strict' ? 'strict' : 'consent-mode'),
+  version: Astro.props.version ?? (Number(env.PUBLIC_CONSENT_VERSION) || 1),
+  categories: Astro.props.categories,
+});
+// "<" is escaped so the JSON can never close its own script element.
+const json = config ? JSON.stringify(config).replace(/</g, '\\u003c') : '';
+---
+{config && (
+  <>
+    <script type="application/json" id="baseline-analytics" set:html={json}></script>
+    <script is:inline>
+      (function () {
+        var el = document.getElementById('baseline-analytics');
+        if (!el) return;
+        var c;
+        try { c = JSON.parse(el.textContent); } catch (e) { return; }
+        // Production hostnames only: previews, staging and local builds never send data.
+        if (c.hosts.indexOf(location.hostname.toLowerCase()) === -1) return;
+        function load(src, attrs) {
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = src;
+          for (var k in attrs || {}) s.setAttribute(k, attrs[k]);
+          document.head.appendChild(s);
+        }
+        if (c.cloudflareToken) load('https://static.cloudflareinsights.com/beacon.min.js', { defer: '', 'data-cf-beacon': JSON.stringify({ token: c.cloudflareToken }) });
+        if (!c.needsConsent) return;
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        window.gtag = window.gtag || gtag;
+        gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', wait_for_update: 500 });
+        var stored = null;
+        try {
+          var raw = localStorage.getItem(c.storageKey);
+          var parsed = raw && JSON.parse(raw);
+          if (parsed && parsed.version === c.version && parsed.categories) stored = parsed.categories;
+        } catch (e) { /* storage unavailable: treated as undecided */ }
+        var loaded = false;
+        function loadTags() {
+          if (loaded) return;
+          loaded = true;
+          if (c.gtmId) {
+            window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+            load('https://www.googletagmanager.com/gtm.js?id=' + encodeURIComponent(c.gtmId));
+          }
+          if (c.gaId) {
+            load('https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(c.gaId));
+            gtag('js', new Date());
+            gtag('config', c.gaId);
+          }
+        }
+        var idle = window.requestIdleCallback || function (fn) { return setTimeout(fn, 1); };
+        function apply(categories) {
+          var update = {};
+          for (var category in c.types) {
+            for (var i = 0; i < c.types[category].length; i++) update[c.types[category][i]] = categories[category] ? 'granted' : 'denied';
+          }
+          gtag('consent', 'update', update);
+          if (c.mode !== 'strict' || categories.analytics || categories.marketing) idle(loadTags);
+        }
+        if (stored) apply(stored);
+        else if (c.mode !== 'strict') idle(loadTags);
+        window.baselineConsent = {
+          config: c,
+          decided: !!stored,
+          categories: stored || {},
+          save: function (choice) {
+            var clean = {};
+            for (var i = 0; i < c.categories.length; i++) clean[c.categories[i]] = choice[c.categories[i]] === true;
+            try { localStorage.setItem(c.storageKey, JSON.stringify({ version: c.version, categories: clean, at: new Date().toISOString() })); } catch (e) { /* not remembered */ }
+            this.decided = true;
+            this.categories = clean;
+            apply(clean);
+            document.dispatchEvent(new CustomEvent('baseline:consent', { detail: clean }));
+          },
+        };
+        document.addEventListener('click', function (event) {
+          var target = event.target && event.target.closest ? event.target.closest('[data-track]') : null;
+          if (!target) return;
+          var params = {};
+          for (var i = 0; i < target.attributes.length; i++) {
+            var a = target.attributes[i];
+            if (a.name.indexOf('data-track-') !== 0) continue;
+            var key = a.name.slice(11).replace(/-/g, '_');
+            if (key) params[key] = /^-?\d+(\.\d+)?$/.test(a.value) ? Number(a.value) : a.value;
+          }
+          gtag('event', target.getAttribute('data-track'), params);
+        }, true);
+      })();
+    </script>
+  </>
+)}
