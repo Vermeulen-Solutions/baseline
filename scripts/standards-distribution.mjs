@@ -18,6 +18,7 @@ export const PINNED_TOOLS = Object.freeze([
   'scripts/sync-impeccable-skill.mjs',
   'scripts/sync-baseline.mjs',
   'scripts/audit-ui.mjs',
+  'scripts/check-quality.mjs',
   'scripts/capture-routes.mjs',
 ]);
 // Installed only when a site chooses the design surface they serve.
