@@ -744,5 +744,10 @@
     "path": "src/lib/content-security-policy.ts",
     "reason": "Non-visual production hardening: an optional Content-Security-Policy computed from each public HTML response (hashes of its inline scripts and styles), report-only or enforced by CSP_MODE; skips the EmDash admin and signed-in requests. Exact LF-normalized source hash.",
     "sha256": "68b3a3630790fed9c0792fbe9c774d42b7117ad4087bd2d5b8453b4d77601ceb"
+  },
+  {
+    "path": "src/components/BeforeAfter.astro",
+    "reason": "Shared presentation primitive: a before/after comparison on a native range input (keyboard, screen reader, tap to jump, no drag needed), stacked pictures without JavaScript; token colours, focus ring and forced-colors handle. Exact LF-normalized source hash.",
+    "sha256": "3a8bdebcc4da81cbccea02c7a241efd42d5749f9bd8f7623a0bf401ed9fefc11"
   }
 ]

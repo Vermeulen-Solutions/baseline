@@ -1059,6 +1059,14 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/components/BeforeAfter.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/before-after.test.mjs": {
+      "disposition": "shared",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "src/components/Disclosure.astro": {
       "disposition": "shared",
       "static": "copy"

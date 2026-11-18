@@ -1,0 +1,176 @@
+---
+/**
+ * Two pictures of the same place compared on one frame: a renovation, a garden, a treatment, a
+ * redesign. A native range input does the work, so arrow keys, Home, End and screen readers come
+ * free, and a tap or click anywhere on the picture moves the divider (dragging works, but nothing
+ * needs it: WCAG 2.5.7). Without JavaScript the two pictures stand one after the other with their
+ * labels, and the slider stays hidden.
+ *
+ * Use it only with a real "before" taken of the same view. Keep the labels plain ("Before",
+ * "After"); a brand or product name on top of the picture reads as something the visitor must buy.
+ */
+import ResponsiveImage from './ResponsiveImage.astro';
+import type { ResponsiveImageProps } from '../lib/responsive-image';
+
+interface Props {
+  before: ResponsiveImageProps['src'];
+  beforeAlt: string;
+  after: ResponsiveImageProps['src'];
+  afterAlt: string;
+  /** Native size for string URLs; imported images carry their own. */
+  width?: number;
+  height?: number;
+  sizes?: string;
+  beforeLabel?: string;
+  afterLabel?: string;
+  /** The slider's accessible name. */
+  sliderLabel?: string;
+  /** How the value is read out; {percent} is replaced with the share of the before picture showing. */
+  valueText?: string;
+  /** The instruction shown once the slider works. */
+  hint?: string;
+  caption?: string;
+  /** Where the divider starts, 0 to 100. */
+  start?: number;
+}
+
+const {
+  before, beforeAlt, after, afterAlt, width, height, sizes,
+  beforeLabel = 'Before', afterLabel = 'After',
+  sliderLabel = 'Compare before and after',
+  valueText = '{percent} percent of the before picture showing',
+  hint = 'Drag the divider, tap anywhere on the picture, or use the arrow keys to compare.',
+  caption, start = 50,
+} = Astro.props;
+const position = Math.min(100, Math.max(0, Math.round(Number(start) || 0)));
+---
+<figure class="before-after" data-before-after data-value-text={valueText}>
+  <div class="before-after__frame" dir="ltr" style={`--before-after-position: ${position}%`}>
+    <div class="before-after__layer before-after__layer--after">
+      <ResponsiveImage src={after} alt={afterAlt} width={width} height={height} sizes={sizes} />
+      <span class="before-after__label before-after__label--after">{afterLabel}</span>
+    </div>
+    <div class="before-after__layer before-after__layer--before">
+      <ResponsiveImage src={before} alt={beforeAlt} width={width} height={height} sizes={sizes} />
+      <span class="before-after__label before-after__label--before">{beforeLabel}</span>
+    </div>
+    <input
+      class="before-after__range"
+      type="range"
+      min="0"
+      max="100"
+      step="1"
+      value={position}
+      aria-label={sliderLabel}
+      aria-valuetext={valueText.replace('{percent}', String(position))}
+      hidden
+    />
+    <span class="before-after__handle" aria-hidden="true"></span>
+  </div>
+  <figcaption class="before-after__caption">
+    {caption && <span>{caption}</span>}
+    <span class="before-after__hint" hidden>{hint}</span>
+  </figcaption>
+</figure>
+
+<style>
+@layer components {
+  .before-after { margin: 0; }
+  .before-after__frame { position: relative; display: grid; gap: var(--spacing-s, 1rem); }
+  .before-after__layer { position: relative; }
+  .before-after__layer :global(img), .before-after__layer :global(.image-fallback) { display: block; inline-size: 100%; block-size: auto; }
+  .before-after__label {
+    position: absolute;
+    inset-block-start: var(--spacing-2xs, 0.5rem);
+    padding: 0.2em 0.6em;
+    border-radius: var(--radius-pill, 9999px);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--text-step--1, 0.875rem);
+  }
+  .before-after__label--before { inset-inline-start: var(--spacing-2xs, 0.5rem); }
+  .before-after__label--after { inset-inline-end: var(--spacing-2xs, 0.5rem); }
+  .before-after__caption { margin-block-start: var(--spacing-2xs, 0.5rem); color: var(--color-muted); }
+  .before-after__caption > * + * { margin-inline-start: 0.5em; }
+
+  /* With the script: one frame, the before picture clipped to the left of the divider. */
+  .before-after[data-ready] .before-after__frame { display: block; overflow: hidden; border-radius: var(--radius-card, 0.75rem); touch-action: pan-y; }
+  .before-after[data-ready] .before-after__layer--before {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 calc(100% - var(--before-after-position)) 0 0);
+  }
+  .before-after[data-ready] .before-after__layer--before :global(img) { block-size: 100%; object-fit: cover; }
+  .before-after__range {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+  }
+  .before-after__handle { display: none; }
+  .before-after[data-ready] .before-after__handle {
+    display: block;
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: var(--before-after-position);
+    inline-size: 0.2rem;
+    translate: -50% 0;
+    background: var(--color-surface);
+    box-shadow: 0 0 0 1px var(--color-border-strong);
+    pointer-events: none;
+  }
+  .before-after[data-ready] .before-after__handle::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    translate: -50% -50%;
+    border-radius: var(--radius-pill, 9999px);
+    background: var(--color-surface);
+    box-shadow: 0 0 0 1px var(--color-border-strong);
+  }
+  .before-after__range:focus-visible ~ .before-after__handle::after {
+    outline: var(--focus-ring-width, 0.2rem) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset, 0.2rem);
+  }
+  @media (forced-colors: active) {
+    .before-after[data-ready] .before-after__handle, .before-after[data-ready] .before-after__handle::after { background: CanvasText; box-shadow: none; }
+  }
+}
+</style>
+
+<script>
+  // Turns each comparison on: show the slider and hint, follow the value, and let a tap anywhere on
+  // the picture move the divider (iOS Safari does not jump a range input to a tap).
+  const ready = (figure: HTMLElement) => {
+    if (figure.hasAttribute('data-ready')) return;
+    const frame = figure.querySelector<HTMLElement>('.before-after__frame');
+    const range = figure.querySelector<HTMLInputElement>('.before-after__range');
+    const hint = figure.querySelector<HTMLElement>('.before-after__hint');
+    if (!frame || !range) return;
+    const template = figure.dataset.valueText || '{percent}';
+    const show = () => {
+      frame.style.setProperty('--before-after-position', `${range.value}%`);
+      range.setAttribute('aria-valuetext', template.replace('{percent}', range.value));
+    };
+    range.hidden = false;
+    if (hint) hint.hidden = false;
+    figure.setAttribute('data-ready', '');
+    range.addEventListener('input', show);
+    range.addEventListener('pointerdown', (event) => {
+      if (event.pointerType !== 'touch') return;
+      const box = frame.getBoundingClientRect();
+      range.value = String(Math.round(Math.min(100, Math.max(0, ((event.clientX - box.left) / box.width) * 100))));
+      show();
+    });
+    show();
+  };
+  const start = () => document.querySelectorAll<HTMLElement>('[data-before-after]').forEach(ready);
+  start();
+  document.addEventListener('astro:page-load', start);
+</script>
