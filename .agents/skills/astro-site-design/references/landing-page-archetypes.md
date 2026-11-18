@@ -398,8 +398,8 @@ To avoid repetitive equal-width 3-column card rows and flat link styling, combin
      <div slot="fallback" class="skeleton-shimmer" style="block-size: 2.5rem; inline-size: 14rem;" aria-hidden="true"></div>
    </LiveTelemetryBanner>
    ```
-5. **Speculation Rules Prerendering (`experimental.clientPrerender`) & Progressive-Enhancement `astro:actions` Forms:**
-   - Enable `prefetch: { prefetchAll: true, defaultStrategy: 'hover' }, experimental: { clientPrerender: true }` in `astro.config.mjs` on static sites so Chromium browsers prerender hovered links via `<script type="speculationrules">`.
+5. **Speculation Rules Prefetch & Progressive-Enhancement `astro:actions` Forms:**
+   - The starter Base layouts pass `prefetch="moderate"` to `<SiteShell>`, which emits a static `<script type="speculationrules">` so Chromium browsers prefetch hovered same-origin links with no script. Use `"conservative"` for click-start only, `"off"` with ClientRouter. Do not switch on Astro's `prefetch` config or `experimental.clientPrerender` as well: two prefetchers double the requests, and prerender runs a page's scripts and analytics before the visitor arrives.
    - Use `defineAction({ accept: 'form', input: z.object(...) })` in `src/actions/index.ts` so `<form method="POST" action={actions.contact}>` validates on the server with zero client JS required.
 
 ## Schema.org structured data patterns

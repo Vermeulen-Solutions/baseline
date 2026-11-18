@@ -155,8 +155,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged.",
-    "sha256": "ea3c83bb7f5a23deacc65a9ccdf610fa710378bba1bb40152f7f3892e451fac9"
+    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode.",
+    "sha256": "79f381c001ce536332df1436ec46d0ba090a36e6440af020aa1e47fcb2c76762"
   },
   {
     "path": "src/components/Container.astro",
@@ -371,8 +371,8 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. An opt-in darkReaderLock prop emits the documented <meta name=\"darkreader-lock\"> for dark-by-design sites; it is off by default. Any source edit invalidates this exact LF-normalized exception. Opt-in sectionJoins root attribute; scroll reveal observer runs only without CSS scroll-driven animations. Opt-in pageTransitions=\"cross-document\" prop emits an inline @view-transition rule inside prefers-reduced-motion: no-preference; default none keeps existing sites unchanged.",
-    "sha256": "06785ea9a290791f06cf1fb9769936468285c94a64feef416aeee46e0f7db962"
+    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. An opt-in darkReaderLock prop emits the documented <meta name=\"darkreader-lock\"> for dark-by-design sites; it is off by default. Any source edit invalidates this exact LF-normalized exception. Opt-in sectionJoins root attribute; scroll reveal observer runs only without CSS scroll-driven animations. Opt-in pageTransitions=\"cross-document\" prop emits an inline @view-transition rule inside prefers-reduced-motion: no-preference; default none keeps existing sites unchanged. Opt-in prefetch prop (off by default) emits a static speculation-rules JSON block for same-origin document prefetch; no script, no prerender.",
+    "sha256": "8a94c3c7bb576b20e267315a0b93b38288f5e48b3221944866514d3ff8c3d3ec"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -436,8 +436,8 @@
   },
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
-    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged.",
-    "sha256": "3b01540414869fde9bee446567b11e59b9c5ee85391d5e9b85122786e8b4f96e"
+    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell.",
+    "sha256": "02ca4928f6ef5e69e5556cd87c540521beff746d86f6259674596c9e94678b51"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",
@@ -734,5 +734,10 @@
     "path": "src/pages/llms.txt.ts",
     "reason": "Non-visual text endpoint: /llms.txt for published pages and posts with cache hints; no HTML or presentation. Exact LF-normalized source hash.",
     "sha256": "34bf8c103c9f588b8c1a8566b0aad58e945bee4b92f0a54a9ef573a146cf58f7"
+  },
+  {
+    "path": "src/lib/speculation-rules.ts",
+    "reason": "Non-visual utility: builds the speculation-rules JSON for same-origin document prefetch (prefetch only, internal paths and opted-out links excluded). Exact LF-normalized source hash.",
+    "sha256": "91df0d8ee7ea71dc6406d983b4c851c4469f96ea7de8d108abc76792b96c3ca6"
   }
 ]
