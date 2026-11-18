@@ -155,8 +155,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode.",
-    "sha256": "79f381c001ce536332df1436ec46d0ba090a36e6440af020aa1e47fcb2c76762"
+    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode. Links the apple-touch-icon and the web manifest.",
+    "sha256": "c926fed9cf71b875f3b0e4d6077e41f1ef80d4aa3b58ade532aac31398d9c857"
   },
   {
     "path": "src/components/Container.astro",
@@ -436,8 +436,8 @@
   },
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
-    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell.",
-    "sha256": "02ca4928f6ef5e69e5556cd87c540521beff746d86f6259674596c9e94678b51"
+    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell. Links the apple-touch-icon and the web manifest.",
+    "sha256": "a1b5a28de7d454cc8d746a069d8f73c0bd5b32a3a88bb68554f1177199d21c3a"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",
@@ -744,5 +744,40 @@
     "path": "src/lib/content-security-policy.ts",
     "reason": "Non-visual production hardening: an optional Content-Security-Policy computed from each public HTML response (hashes of its inline scripts and styles), report-only or enforced by CSP_MODE; skips the EmDash admin and signed-in requests. Exact LF-normalized source hash.",
     "sha256": "68b3a3630790fed9c0792fbe9c774d42b7117ad4087bd2d5b8453b4d77601ceb"
+  },
+  {
+    "path": "public/apple-touch-icon.png",
+    "reason": "Generated app icon (npm run icons) from the neutral starter favicon; no client branding. Exact LF-normalized source hash.",
+    "sha256": "9c3cd87c386cd1997bfc075cef61c3101652f6ef0fde66b1a4168895c387ce1d"
+  },
+  {
+    "path": "public/icon-192.png",
+    "reason": "Generated app icon (npm run icons) from the neutral starter favicon; no client branding. Exact LF-normalized source hash.",
+    "sha256": "ddd784d697d0a028d811114e0b2dda442ee206389b33841192245bb89c38d1bd"
+  },
+  {
+    "path": "public/icon-512.png",
+    "reason": "Generated app icon (npm run icons) from the neutral starter favicon; no client branding. Exact LF-normalized source hash.",
+    "sha256": "b5b9f37e22d84bca9e41cbacb7686ef994657b8e4e316c5e5b0ee6b4e556d76f"
+  },
+  {
+    "path": "public/icon-maskable-512.png",
+    "reason": "Generated app icon (npm run icons) from the neutral starter favicon; no client branding. Exact LF-normalized source hash.",
+    "sha256": "08bc6f9716879cdce074c869346732cfb3ac0cccb473d1245329f147916b47ca"
+  },
+  {
+    "path": "src/lib/web-manifest.ts",
+    "reason": "Non-visual utility: the web app manifest (name, short name, icons; display browser). Exact LF-normalized source hash.",
+    "sha256": "019eea80b3d7119ee0bb936b7f910e4caada0bf8c5ae2326087fe33ab9743d86"
+  },
+  {
+    "path": "src/pages/site.webmanifest.ts",
+    "reason": "Non-visual endpoint: /site.webmanifest from the EmDash site title. Exact LF-normalized source hash.",
+    "sha256": "10dca8e3883071fe54fb3aba3691a79e2990055bf3df5c2e6bce6250cab631d7"
+  },
+  {
+    "path": "profiles/static/project/src/pages/site.webmanifest.ts",
+    "reason": "Non-visual endpoint: /site.webmanifest from the static site config. Exact LF-normalized source hash.",
+    "sha256": "146b2468656e304b5a0cb31e7831fefef84c6348659abb81a061400fed8161f1"
   }
 ]
