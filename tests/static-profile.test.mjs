@@ -55,7 +55,7 @@ test('static developer tools inject only dev/fixture routes, prerender static fi
       const routes = [], definitions = [];
       const plugin = devTools({ platform: 'static', fixtures });
       await plugin.hooks['astro:config:setup']({ config: { output: 'static' }, command, injectRoute: route => routes.push(route), injectScript: () => {}, updateConfig: config => definitions.push(config.vite.define) });
-      const expectedPatterns = command === 'dev' || (command === 'build' && fixtures) ? ['/_styleguide', '/_primitives-fixture'] : [];
+      const expectedPatterns = command === 'dev' || (command === 'build' && fixtures) ? ['/_styleguide', '/_primitives-fixture', '/_expressive', '/_expressive-detail', '/_expressive-before', '/_expressive-after'] : [];
       assert.deepEqual(routes.map(route => route.pattern), expectedPatterns);
       for (const route of routes) assert.equal(route.prerender, true);
       assert.ok(!Object.hasOwn(definitions[0], 'import.meta.env.STARTER_EMDASH_VERSION'));
