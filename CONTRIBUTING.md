@@ -126,6 +126,8 @@ review, not evidence of synchronization.
 
 Preserve the concrete selectors, CSS values, composition recipes, named tools and explicit decision checkpoints that encode a maintained skill's intent. These instructions must remain usable by faster or less capable models, without assuming expert inference. Resolve an overbroad rule with a scoped exception or a clearer default before removing its examples; explain any intentional removal. Structural validators and application tests do not establish equivalent model behavior. When evaluating a substantial rewrite, use representative tasks with the intended model/runtime when available and label untested behavioral claims honestly.
 
+Write and review changes to maintained skills and instruction files with [skill writing](docs/skill-writing.md): one path, branches only on a fact the agent can check, required steps backed by a check, rules with their reasons, and cost reduced by design rather than by a light mode. `npm run check:skills` checks the wording and is part of `lint`.
+
 Keep root AGENTS.md site-first, with a short route here for maintainer tasks.
 Generated static sites use profiles/static/project/AGENTS.md; their instructions
 must remain usable with only installed files. Do not add mandatory references to
