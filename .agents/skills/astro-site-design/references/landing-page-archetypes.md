@@ -1,6 +1,6 @@
 # Marketing landing page archetypes and conversion patterns
 
-Read when composing high-conversion marketing pages, product showcases, waitlists, or campaigns. Use Baseline's native primitives (`Section`, `Container`, `Grid`, `Card`, `PhotoGallery`, `LogoTicker`, and `Disclosure`) rather than rigid monolithic widgets.
+Read when composing high-conversion marketing pages, product showcases, waitlists, or campaigns. These patterns come from software and product marketing. For an organisation, a place or a maker (a club, an association, a school, a church, a workshop, a local business), start from `site-art-direction/references/distinctive-direction.md` instead and borrow from here only what a page's visitors need (a clear next step, honest proof, a short FAQ). Use Baseline's native primitives (`Section`, `Container`, `Grid`, `Card`, `PhotoGallery`, `LogoTicker`, and `Disclosure`) rather than rigid monolithic widgets.
 
 ## The six core page archetypes
 

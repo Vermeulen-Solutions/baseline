@@ -21,6 +21,16 @@ test('a complete record passes, including a ban that mentions the word "placehol
   assert.deepEqual(validateRecord(record.replaceAll('\n', '\r\n')), []);
 });
 
+test('the lanes for organisations, places and makers are accepted, and the optional direction fields do not break the record', () => {
+  for (const lane of ['Atelier & Craft', 'Civic & Community', 'Club & Fixture']) {
+    const withLane = record.replace(/- \*\*Aesthetic Lane:\*\* .+/, `- **Aesthetic Lane:** ${lane} — the visitor's own world, adapted to this site`);
+    assert.deepEqual(validateRecord(withLane), [], lane);
+  }
+  const withIdea = record.trimEnd() + '\n- **Governing Idea:** The term\'s course catalogue: contents page first, courses as coded entries, prices as a rate card\n- **Signature Moments:** Home: one fitted line; course page: the cover at full width\n';
+  assert.deepEqual(validateRecord(withIdea), []);
+  assert.ok(validateRecord(record.replace(/- \*\*Aesthetic Lane:\*\* .+/, '- **Aesthetic Lane:** Craftsy Vibes — anything')).length, 'an unknown lane is still rejected');
+});
+
 test('template markers and undecided values are rejected', () => {
   const cases = {
     angleTemplate: record.replace('Orbit — the real logo becomes a slowly turning system around the client\'s project.', '<concrete visual narrative>'),
