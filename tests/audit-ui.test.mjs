@@ -6,7 +6,8 @@ import { parseArgs, parseSitemap, sampleRoutes, aggregate, formatReport } from '
 test('audit:ui arguments need an origin and a route source, and reject Git Bash path conversion', () => {
   assert.throws(() => parseArgs(['--routes', '/']), /--base/);
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321']), /--routes, --routes-file or --sitemap/);
-  assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'C:/Program Files/Git/']), /MSYS_NO_PATHCONV=1/);
+  assert.deepEqual(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'C:/Program Files/Git/']).routes, ['/'], 'Git Bash rewrites are undone');
+  assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'D:/sites/page']), /MSYS_NO_PATHCONV=1/);
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--sitemap', '--widths', '100']), /--widths/);
   const options = parseArgs(['--base', 'http://127.0.0.1:4321', '--sitemap', '--sample', '^/news/.+=2', '--hide', '#dev-panel']);
   assert.deepEqual(options.widths, [390, 768, 1440]);

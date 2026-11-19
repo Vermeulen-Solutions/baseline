@@ -29,6 +29,23 @@ export function msysToNative(p, platform = process.platform) {
   return match ? `${match[1].toUpperCase()}:/${match[3]}` : p;
 }
 
+// Git Bash rewrites a route argument such as "/" or "/about" into a path under its own install
+// directory ("C:/Program Files/Git/about") before Node sees it. Undo that, so a route works with or
+// without MSYS_NO_PATHCONV=1. A Windows path outside the Git install is returned unchanged.
+export function restoreGitBashRoute(route, env = process.env) {
+  if (typeof route !== 'string' || !/^[A-Za-z]:[\\/]/.test(route)) return route;
+  const path = route.replace(/\\/g, '/');
+  const roots = [env.EXEPATH, env.MSYS_ROOT, 'C:/Program Files/Git', 'C:/Program Files (x86)/Git']
+    .filter(Boolean)
+    .map((root) => root.replace(/\\/g, '/').replace(/\/(?:usr\/)?bin\/?$/i, '').replace(/\/+$/, ''));
+  for (const root of roots) {
+    const lower = path.toLowerCase();
+    if (lower === root.toLowerCase()) return '/';
+    if (lower.startsWith(root.toLowerCase() + '/')) return path.slice(root.length) || '/';
+  }
+  return route;
+}
+
 export function parseArgs(argv) {
   const out = { widths: DEFAULT_WIDTHS, frames: [0, 900, 1800], repeat: 2, hide: [], css: [], click: [] };
   for (let i = 0; i < argv.length; i++) {
@@ -49,6 +66,7 @@ export function parseArgs(argv) {
   if (out.help || out.compare) return out;
   if (!out.base || !/^https?:\/\//.test(out.base)) throw Error('--base must be an http(s) origin, for example http://127.0.0.1:4321');
   if (!out.routes?.length) throw Error('--routes needs a comma-separated list such as /,/contact');
+  out.routes = out.routes.map(r => restoreGitBashRoute(r));
   for (const r of out.routes) {
     if (/^[A-Za-z]:[\\/]/.test(r)) throw Error(`Route "${r}" looks like a Windows path: Git Bash converted it. Re-run with MSYS_NO_PATHCONV=1.`);
     if (!r.startsWith('/')) throw Error(`Route "${r}" must start with /`);

@@ -60,7 +60,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { msysToNative } from './capture-routes.mjs';
+import { msysToNative, restoreGitBashRoute } from './capture-routes.mjs';
 
 export const DEFAULT_WIDTHS = [390, 768, 1440];
 
@@ -212,6 +212,7 @@ export function parseArgs(argv) {
   if (out.help) return out;
   if (!out.base || !/^https?:\/\//.test(out.base)) throw Error('--base must be an http(s) origin, for example http://127.0.0.1:4321');
   if (!out.routes.length && !out.routesFile && !out.sitemap) throw Error('Give --routes, --routes-file or --sitemap');
+  out.routes = out.routes.map(r => restoreGitBashRoute(r));
   for (const r of out.routes) {
     if (/^[A-Za-z]:[\\/]/.test(r)) throw Error(`Route "${r}" looks like a Windows path: Git Bash converted it. Re-run with MSYS_NO_PATHCONV=1.`);
     if (!r.startsWith('/')) throw Error(`Route "${r}" must start with /`);

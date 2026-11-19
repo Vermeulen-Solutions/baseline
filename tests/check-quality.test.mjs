@@ -42,7 +42,8 @@ test('arguments need an origin and routes, and refuse Git Bash path conversion',
   assert.throws(() => parseArgs(['--routes', '/']), /--base must be an http\(s\) origin/);
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321/about', '--routes', '/']), /--base must be an http\(s\) origin/);
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321']), /Give --routes/);
-  assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'C:/Program Files/Git/']), /MSYS_NO_PATHCONV/);
+  assert.deepEqual(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'C:/Program Files/Git/']).routes, ['/'], 'Git Bash rewrites are undone');
+  assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'D:/sites/page']), /MSYS_NO_PATHCONV/);
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--tabs', '-1']), /--tabs/);
   assert.equal(parseArgs(['--base', 'https://example.test', '--sitemap', '--init']).init, true);
 });
