@@ -6,8 +6,9 @@ import os from 'node:os';
 import path from 'node:path';
 
 // Portable: pure argument, naming and comparison logic; no browser is launched.
-test('capture:routes arguments reject Git Bash path conversion and incomplete runs', () => {
-  assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'C:/Program Files/Git/', '--out', 'x']), /MSYS_NO_PATHCONV=1/);
+test('capture:routes arguments undo Git Bash path conversion and reject incomplete runs', () => {
+  assert.deepEqual(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'C:/Program Files/Git/,C:/Program Files/Git/contact', '--out', 'x']).routes, ['/', '/contact'], 'Git Bash rewrites are undone');
+  assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'D:/sites/page', '--out', 'x']), /MSYS_NO_PATHCONV=1/);
   assert.throws(() => parseArgs(['--base', '127.0.0.1:4321', '--routes', '/', '--out', 'x']), /http\(s\) origin/);
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/']), /--out/);
   const options = parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/,/contact', '--out', 'x', '--frames', '0,900']);

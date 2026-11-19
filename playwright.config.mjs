@@ -15,7 +15,8 @@ export default defineConfig({
   fullyParallel: false, workers: 1, retries: 0,
   timeout: 45000, globalTimeout: 600000, maxFailures: 3,
   forbidOnly: !!process.env.CI,
-  updateSnapshots: updating ? 'all' : 'none',
+  // 'changed' writes missing goldens and rewrites only mismatching ones, so passing goldens keep their bytes.
+  updateSnapshots: updating ? 'changed' : 'none',
   snapshotPathTemplate: '{testDir}/baselines/{platform}/{projectName}/{arg}{ext}',
   outputDir: '.emdash/visual/results',
   reporter: [['list'], ['html', { outputFolder: '.emdash/visual/report', open: 'never' }], ['json', { outputFile: '.emdash/visual/results.json' }]],
