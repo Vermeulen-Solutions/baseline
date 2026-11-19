@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Scroll reveal written as animation longhands so the production minifier keeps animation-timeline; no visual change beyond the reveal running on built sites.",
-    "sha256": "989b9e66624bba2f9f8993d20ad995eabc9ef2064a0fb75a7c63460e758346a5"
+    "reason": "Classed list items (parts of built objects) take their grid width; prose list items keep the reading measure.",
+    "sha256": "d355c2208788aa89c0fd3779b2396688912c6b3fd608df700379e037e9624ada"
   },
   {
     "path": "src/styles/registry-aliases.css",
@@ -386,8 +386,8 @@
   },
   {
     "path": "src/lib/responsive-image.ts",
-    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "bb5e2433efb607ae64755bd9df4c7878788e54196149a9d1ddf9250f4ef1bd30"
+    "reason": "Responsive candidates up to 2800px within the file width, so wide photographs are not stretched on large or dense screens; no layout change.",
+    "sha256": "0a038762a545d0100cb7b51c5d138a56e14c20dea0c9adaf015d26da8a09baa0"
   },
   {
     "path": "src/components/dev/EmDashStyleguide.astro",

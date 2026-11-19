@@ -22,7 +22,9 @@ test('native image metadata bounds responsive candidates and preserves authored 
   assert.equal(responsiveImageInput(metadata, 600).height, 400);
   assert.deepEqual(responsiveImageInput({ ...metadata, width: 96, height: 64 }).widths, []);
   assert.deepEqual(responsiveImageInput('/photo.jpg').widths, []);
-  assert.deepEqual(responsiveImageInput('/photo.jpg', 1800, 1200).widths, [480, 800, 1400]);
+  assert.deepEqual(responsiveImageInput('/photo.jpg', 1800, 1200).widths, [480, 800, 1400, 1800]);
+  // A wide photograph shown full width on a large or dense screen gets candidates up to its own width.
+  assert.deepEqual(responsiveImageInput('/photo.jpg', 3200, 2133).widths, [480, 800, 1400, 2000, 2800]);
   assert.deepEqual(responsiveImageInput('/photo.jpg', NaN, 1200).widths, []);
 });
 
