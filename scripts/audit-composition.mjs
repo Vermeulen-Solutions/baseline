@@ -37,7 +37,8 @@
 // - with --references <references.md>: each selected reference's live page is measured the same way
 //   (at the wide width, consent declined) and every route is printed beside the references' median on
 //   drawn objects, running animations, rotated or masked objects, surfaces, colours, type sizes and
-//   elements, with an arrow where the page has under half. Advisory: the Stage 5 comparison reads it.
+//   elements, and the studio level (STUDIO_LEVEL), with an arrow where the page has under half of the
+//   higher. Advisory: the Stage 5 comparison reads it.
 // It also prints the measurements behind them: largest h1 and h2, body size, image cover and
 // full-width media count. bare-page, soft-photo and world-motion are the floor: each says the
 // recorded world is missing from the built page, so the command exits 1 on them. The other
@@ -161,17 +162,27 @@ const median = (values) => { const v = [...values].sort((a, b) => a - b); return
 const measureOf = (craft, key) => key === 'layers' ? (craft.rotated ?? 0) + (craft.masked ?? 0) : craft[key] ?? 0;
 
 /**
- * The page against its selected references, measure by measure: the references' median and the
- * page's count, with `short` set where the page has under half of it. Studio-built sites for small
- * clients carry 13 to 119 drawings, 70 to 140 running animations and 34 to 44 colours on a home
- * page; trial builds that passed every other check had 0 to 15, 0 to 19 and 11 to 19.
+ * The level of a made world: the median of three home pages that small independent studios built for
+ * small clients (a race, an embroidery shop, a school), measured with this audit. Trial builds that
+ * passed every other check had 2 to 20 drawings, 19 to 156 running animations and 8 to 18 colours.
+ * The selected references can be quiet, well-set sites (one trial's measured 1 drawing, 5.5 animations
+ * and 12.5 colours), so the page is marked against whichever level is higher.
+ */
+export const STUDIO_LEVEL = Object.freeze({ drawn: 10, motion: 136, layers: 26, surfaces: 8, colours: 41, typeSizes: 24, elements: 654 });
+
+/**
+ * The page against its selected references and the studio level, measure by measure: the references'
+ * median, the studio level and the page's count, with `short` set where the page has under half of the
+ * higher of the two.
  */
 export function assessAgainst(craft, references) {
   if (!references.length) return [];
   return GAP_MEASURES.map(([key, label]) => {
     const ref = median(references.map((r) => measureOf(r, key)));
+    const studio = STUDIO_LEVEL[key];
+    const target = Math.max(ref, studio);
     const value = measureOf(craft, key);
-    return { key, label, page: value, references: ref, short: ref >= 3 && value < ref / 2 };
+    return { key, label, page: value, references: ref, studio, short: target >= 3 && value < target / 2 };
   });
 }
 
@@ -189,8 +200,8 @@ export function selectedSources(markdown) {
 
 export function formatAgainst(gap, count) {
   const short = gap.filter((g) => g.short);
-  const rows = gap.map((g) => `    ${g.short ? '→' : ' '} ${g.label}: ${g.page} here, ${g.references} on the references`);
-  const head = `  Against the ${count} selected reference${count === 1 ? '' : 's'} (median): ${short.length ? `under half on ${short.map((g) => g.key).join(', ')}` : 'level or above on every measure'}`;
+  const rows = gap.map((g) => `    ${g.short ? '→' : ' '} ${g.label}: ${g.page} here, ${g.references} on the references, ${g.studio} at the studio level`);
+  const head = `  Against the ${count} selected reference${count === 1 ? '' : 's'} (median) and the studio level (studio-built home pages): ${short.length ? `under half on ${short.map((g) => g.key).join(', ')}` : 'at least half of both on every measure'}`;
   return [head, ...rows].join('\n');
 }
 
