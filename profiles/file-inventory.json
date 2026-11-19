@@ -1156,6 +1156,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "tests/world-record.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "tests/reference-research.test.mjs": {
       "disposition": "shared",
       "static": "copy"

@@ -91,12 +91,12 @@ The maker's bench and the finished piece. For artists, sculptors, craftspeople, 
   - *Details:* Captions in the body face at a small step, with the material, size and year as facts.
 - **Color Physics:**
   - *Canvas:* The material's own ground: unbleached paper, plaster, linen (`oklch(96% 0.012 80)`), or a deep workshop shade for night views.
-  - *Accent:* One colour from the material (oxidised copper, ochre, oak, clay), used for actions only.
-- **Surfaces & Borders:** Photographs carry the page; frames take one shape from the work (`data-shape`); hairline rules, no shadows on photographs.
-- **Composition:** Image-led. The work at full width (`MediaStage`), works as numbered plates or a ruled index with previews (`IndexList preview`), the maker at work as one large photograph.
+  - *Palette:* Four to six colours from the material and the maker's own things (oxidised copper, ochre, oak, clay, the ink of their stamp), each with a role; one of them for actions.
+- **Surfaces & Borders:** Grounds from the workshop's materials (paper labels, end grain, linen, plaster) with edges from the craft (a cut line, a torn label, a stitched seam); photographs framed as the workshop frames things (mounts with numbers, labels, tags), with the shadow the object would cast; hairline rules for lists.
+- **Composition:** Object-led. Each section is one of the workshop's objects (the order slip, the price label, the record of a piece, the plate in a catalogue of works); the work at full width (`MediaStage`) when the photograph is strong, otherwise framed; works as plates or an index with previews (`IndexList preview`); one working feature from the craft (a request composed the way the maker prices).
 - **Density:** Spacious; few, large pictures.
 - **Token preset to seed:** `editorial-paper`.
-- **Anti-Patterns:** Tools or textures in the hero instead of the finished work; thumbnail grids on the home page; stock photographs of hands.
+- **Anti-Patterns:** Tools in the hero instead of the finished work; thumbnail grids on the home page; stock photographs of hands; a page of headings, paragraphs and bare photographs with no object, surface or motion from the craft.
 
 ---
 
@@ -112,7 +112,7 @@ The noticeboard, the newsletter and the programme. For associations, municipalit
 - **Color Physics:**
   - *Canvas:* Light and friendly; two to four colours from the organisation's logo or place, used as grounds for distinct kinds of content (agenda, appeals, news), never all on one screen.
   - *Accent:* The strongest logo colour for actions, checked at 4.5:1.
-- **Surfaces & Borders:** Notices as ruled rows or pinned items, one frame shape from the place (a window arch, a doorway, a leaf), soft corners.
+- **Surfaces & Borders:** Notices as the organisation's own objects (pinned notices, a programme sheet, a register, a reply card), a frame shape from the place (a window arch, a doorway, a leaf), grounds from its printed matter (paper, card), soft corners.
 - **Composition:** The next date first. Programmes and registers as `IndexList` with dated leads; one photograph of the people or the place at full width; ways to take part as a short, specific list rather than three cards.
 - **Density:** Standard; scannable lists, generous type.
 - **Token preset to seed:** `neutral`.
@@ -132,7 +132,7 @@ The scoreboard, the team sheet and the season. For sports clubs, leagues, venues
 - **Color Physics:**
   - *Canvas:* The club colours: often a dark ground with one kit colour, or a light ground with two.
   - *Accent:* The kit's brightest colour for actions and live states, checked for contrast on both grounds.
-- **Surfaces & Borders:** Sharp or slightly rounded, hairline rules for tables, one shape from the sport (a pitch line, a court corner).
+- **Surfaces & Borders:** The club's objects (the fixture board, the team sheet, the ticket, the scoreboard) with the sport's marks (pitch lines, a court corner), sharp or slightly rounded, hairline rules for tables.
 - **Composition:** The next fixture and the last result first; teams as line-ups or ruled lists; one team photograph at full width; sponsors as a register, not a logo wall of equal tiles.
 - **Density:** Standard to compact for fixtures and results; spacious for the club's story.
 - **Token preset to seed:** `neutral`.

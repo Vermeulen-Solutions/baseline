@@ -59,6 +59,53 @@ export function validateRecord(markdown) {
   return errors;
 }
 
+// The site's world and its decisions (site-art-direction/references/world-building.md), required
+// with the reference research for a new direction.
+export const WORLD_PARTS = Object.freeze(['Source object', 'Inventory', 'Objects', 'Surfaces', 'Type', 'Motion', 'Photographs', 'Feature']);
+export const WORLD_BAR = Object.freeze({ inventory: 12, decisions: 3 });
+
+export function validateWorld(markdown) {
+  const lines = String(markdown ?? '').split(/\r?\n/);
+  const start = lines.findIndex(line => /^## Art Direction Record\s*$/.test(line));
+  if (start < 0) return ['World: no ## Art Direction Record section.'];
+  const end = lines.findIndex((line, index) => index > start && /^## /.test(line));
+  const section = lines.slice(start + 1, end < 0 ? undefined : end);
+  const block = name => {
+    const at = section.findIndex(line => new RegExp(`^\\s*- \\*\\*${name}:\\*\\*\\s*$`).test(line));
+    if (at < 0) return null;
+    const items = [];
+    for (const line of section.slice(at + 1)) {
+      if (/^\s*- \*\*/.test(line) || !/^\s+- /.test(line)) break;
+      items.push(line.replace(/^\s+- /, '').trim());
+    }
+    return items;
+  };
+  const errors = [];
+  const world = block('World');
+  if (!world) errors.push('World: add the "- **World:**" block (site-art-direction/references/world-building.md).');
+  else {
+    for (const part of WORLD_PARTS) {
+      const item = world.find(entry => entry.toLowerCase().startsWith(part.toLowerCase() + ':'));
+      const value = item?.slice(part.length + 1).trim() ?? '';
+      if (!value || UNDECIDED.test(value)) errors.push(`World: "${part}" needs a concrete value.`);
+      else if (part === 'Inventory') {
+        const count = value.split(';').map(v => v.trim()).filter(Boolean).length;
+        if (count < WORLD_BAR.inventory) errors.push(`World: the inventory lists ${count} things; list at least ${WORLD_BAR.inventory}, separated by semicolons.`);
+      } else if (part === 'Motion') {
+        const count = value.split(/[;,]/).map(v => v.trim()).filter(Boolean).length;
+        if (count < 3) errors.push('World: name at least three motions, separated by semicolons.');
+      }
+    }
+  }
+  const decisions = block('Decisions');
+  if (!decisions) errors.push('Decisions: add the "- **Decisions:**" block with the easy version and ours for the look, the feature and the content.');
+  else {
+    const valid = decisions.filter(entry => /\bEasy:\s*\S.+\bOurs:\s*\S/.test(entry) && !UNDECIDED.test(entry));
+    if (valid.length < WORLD_BAR.decisions) errors.push(`Decisions: ${valid.length} entr${valid.length === 1 ? 'y' : 'ies'} with "Easy: … Ours: …"; write at least ${WORLD_BAR.decisions} (the look, the feature, the content).`);
+  }
+  return errors;
+}
+
 export function validateCssAlignment(markdown, css) {
   if (!css) return [];
   const laneMatch = String(markdown ?? '').match(/^\s*- \*\*Aesthetic Lane:\*\*[ \t]*(Technical Systems|Product-Led Minimalism|Editorial Paper|Luminous Futurism)\b/m);
@@ -277,6 +324,8 @@ function main() {
       const capturedImages = dir => existsSync(dir) ? readdirSync(dir, { recursive: true }).filter(name => /\.(png|jpe?g|webp)$/i.test(String(name))).length : 0;
       errors.push(...validateReferences(readFileSync(REFERENCES_FILE, 'utf8'), { capturedImages }).map(error => `${REFERENCES_FILE}: ${error}`));
     }
+    // The same new direction builds its world and writes its decisions down.
+    errors.push(...validateWorld(agentsMd).map(error => `AGENTS.md: ${error}`));
   }
   if (recordErrors.length) { console.error(formatRecordDiagnostics(agentsMd, errors)); process.exitCode = 1; }
   else if (errors.length) {

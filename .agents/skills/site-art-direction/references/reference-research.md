@@ -12,6 +12,7 @@ Write the brief in one line, then run at least three searches and record them wo
 | --- | --- | --- |
 | The same trade, anywhere | the best-made sites of the trade in other cities and countries: "`<trade>` studio", "`<trade>` workshop", the trade's name in the site's language and in English | `site` |
 | Neighbouring trades that share the subject or the material | a woodcarver: furniture makers, stone carvers, timber architects, a forestry museum; a bakery: a mill, a roastery | `site` |
+| Studio case studies | the work pages of small independent studios that design and build sites for trades like this one ("web design studio case study `<trade>`", "website for a `<trade>` case study"): they show the finished site and say what each decision refused | `site` |
 | Curated galleries | a category of a site gallery (siteinspire, minimal.gallery, httpster, Awwwards and similar) matching the trade or the material | `site` |
 | The owner's own and supplied references | everything the owner names, and their earlier sites | `owner` |
 | Written directions | [open-design.ai/prompts](https://open-design.ai/prompts/), [superdesign.dev](https://superdesign.dev/), [designprompts.dev](https://designprompts.dev/), community `DESIGN.md` sources (`designmd-mcp` / [designmd.ai/explore](https://designmd.ai/explore)) | `prompt` or `system` |
@@ -42,8 +43,8 @@ Score each candidate from its screenshots, 0 to 3 per line, on this card:
 | **specificity** | could be any business | the trade, not this business | some parts only this business could have | cover the logo and you still know whose it is |
 | **type** | default fonts, flat hierarchy | correct but generic | a pairing with character, a clear scale | type that carries the identity |
 | **photographs** | stock or none | real but small and boxed | real, well chosen, given room | photography is the design: sized, sequenced, treated as one set |
-| **composition** | the same section shape throughout | some variety, still a template | each section shaped by its content | a rhythm with a signature moment |
-| **craft** | broken alignment, crowded | tidy, no care in the details | consistent spacing, edges and details | every detail resolved |
+| **composition** | the same section shape throughout | some variety, still a template | each section shaped by its content | every section an object from the subject's world, with a signature moment |
+| **craft** | broken alignment, crowded | tidy, no care in the details | consistent spacing, edges and details | a made world: surfaces, drawn objects, type treatments and motion, every detail resolved |
 | **phone** | broken or cramped | works, says less | planned for the phone | as strong as the desktop |
 | **fit** | wrong trade, wrong audience | the idea transfers with effort | a clear lesson for this brief | made for a brief like this one |
 

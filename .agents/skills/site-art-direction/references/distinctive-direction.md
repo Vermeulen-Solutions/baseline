@@ -2,7 +2,7 @@
 
 Read at the concept checkpoint of a new site or a significant redesign, before choosing the lane, and again when a rendered page looks competent but forgettable. The lanes, tokens and recipes give a site a consistent surface; they do not give it an idea. Sites built from them alone come out alike: a kicker label, a heading on the left and a lead on the right, a grid of equal cards, a band of a different colour, the same again, a centred closing call to action. Every check passes and nobody remembers the site.
 
-The sites people remember in the same sectors (a school, a church, a sports club, a sculptor, a village association) do not use more effects. They make a few decisions that come from the subject and hold them on every page. This reference turns those decisions into steps. Record their results in the Art Direction Record (see [the record's extra fields](#record-it)).
+The sites people remember in the same sectors (a school, a church, a sports club, a sculptor, a village association) make a few decisions that come from the subject, hold them on every page, and then build them out in craft: every section is an object from the subject's world, dressed in its materials, with type, depth and motion of its own. This reference turns the decisions into steps; [world building](world-building.md) builds them. Restraint is not the goal: a page reduced to headings, paragraphs and photographs is the template however tidy it is. Record the results in the Art Direction Record (see [the record's extra fields](#record-it)).
 
 A trial build that followed these steps but took the easy answer at each one (the example idea from the table, a split hero called a "signature moment", every photograph in the same frame) produced a tidier version of the same template. Each step below therefore says what does not count.
 
@@ -44,15 +44,15 @@ For each content type in the route inventory, ask what that thing looks like in 
 
 Cards remain right for things that really are cards (a member card, a ticket). Rows ruled with hairlines suit most lists; a box around a list makes it look like a card. A grid of equal framed thumbnails is a card grid even without card borders.
 
-## 3. Take one shape, one accent and one or two typefaces from the subject
+## 3. Take the shapes, the palette and the type from the subject
 
-- **One shape** repeated on photograph frames where it means something: the arch of the church, the leaf of the garden, the folder tab of the archive (`data-shape`). Mixing shapes reads as decoration.
-- **One accent colour** used sparingly for actions and emphasis. A client's, partner's or team's colours stay inside their own material (their logo, their kit, their photograph), not in the site's chrome.
-- **Type from the subject:** a display face with a reason (an engraved serif for a 19th-century building, a condensed sans for a sports scoreboard, a book face for a course catalogue), and a body face for reading. Set the display face large once per page (`.display-fit`), not every heading at the same large size.
+- **Shapes from the world's objects:** the arch of the church on its photographs, the ticket's notches, the tag's hole, the folder tab of the archive (`data-shape` for photograph frames). Each shape belongs to one object and means it; shapes that belong to nothing read as decoration.
+- **A palette of four to six colours with roles,** sampled from the client's own artefacts (logo, sign, packaging) and the materials: a ground, an ink, one or two materials, an action colour and a mark colour (the stamp, the paint dot). Actions keep one colour so they stay recognisable. A client's, partner's or team's colours stay inside their own material, not in the site's chrome.
+- **Type from the subject, in three voices:** a display face with a reason and a treatment from the world (an engraved serif for a 19th-century building, a condensed sans painted like a sign, a stamped face for a label), a reading face, and a utility voice for the objects' labels and figures. Use the scale: one or two display lines a page at six to eight times the body size, section titles clearly smaller, labels at 11 to 13px.
 
 ## 4. Give each page archetype one signature moment
 
-The signature moment is what a visitor describes after closing the tab. Decide one per page archetype and spend the page's visual budget there; everything else stays quiet.
+The signature moment is what a visitor describes after closing the tab. Decide one per page archetype and make it the largest and most different thing on the page. The other sections are not quiet for it: each is still one of the world's objects, fully made, at a smaller scale.
 
 A signature moment passes **all three** tests:
 
@@ -95,6 +95,7 @@ Owner photographs are often phone pictures of different ages, light and colour. 
 
 - **Choose three.** Find the three sharpest, best-lit photographs of the strongest subjects; they carry the large moments. The rest go into an index or a gallery page.
 - **Size by what the eye sees.** A photograph about 1000px wide looks fine at full width on a phone and at around 1000px on a desktop. Use `MediaStage bleed={false} stage="ratio"` in a wide column, or crop tighter around the subject with `focus`. Judge the result by eye at 1440px before deciding a photograph cannot be shown large.
+- **Frame them in the world.** A phone photograph inside one of the world's objects (a hoop, a numbered mount, a label window, a slide) reads as chosen; the same photograph in a bare full-width rectangle shows every flaw. See [world building](world-building.md#2-build-the-kit).
 - **Unify them.** One treatment on every photograph makes mismatched pictures read as a set: `data-tone="warm"` (evens out colour casts), `"mono"` (black and white), or `"duotone"` (the site's ink and paper), from the expressive layer. Choose one for the site, not one per photograph.
 - **Crop to a detail.** A tight crop (the carved eye, the grain, a hand on the ball) holds up at a large size where the whole photograph does not.
 - **Let type carry it.** When no photograph can be large, the page's big moment is a fitted line, and the photographs stay honest at their size.
@@ -106,13 +107,14 @@ Before broad implementation, and on every rendered primary route, run `npm run a
 
 - Cover the logo: could this be any organisation's site in the same sector? Name the elements that say whose it is.
 - Is the hero a heading beside a photograph? That is the template's opening, however good the photograph.
-- Count the section openings that use kicker + heading + lead. More than two on a page is the template.
+- Count the section openings that use the same generic label + heading + lead. More than two on a page is the template. Field labels that belong to an object (a ticket's `START`, a course code) are part of the object and do not count.
+- Name the object each section is. A section that is only a heading, a paragraph and a photograph is bare: one a page at most.
 - Count equal grids, framed or not. More than one on a page, or one on every page, is the template.
 - Is there anything at full width other than a coloured band?
 - Does every page end on the same call to action?
 - Does the page pass the thumbnail test of section 4?
 
-Fix the cause in the direction, not by adding effects. A finding the direction keeps is recorded with its reason in the Art Direction Record; "the photographs are low resolution" is not a reason on its own (see section 6).
+Fix the cause in the direction and its world, not with effects that belong to no object. A finding the direction keeps is recorded with its reason in the Art Direction Record; "the photographs are low resolution" is not a reason on its own (see section 6).
 
 ## Record it
 
@@ -123,4 +125,4 @@ Add two lines to the Art Direction Record, after the required fields:
 - **Signature Moments:** [Per page archetype: the one moment, the capability that delivers it, and how it passes the three tests]
 ```
 
-`check:art-direction` accepts the record without them, but the site's direction is not complete until they are written.
+`check:art-direction` accepts the record without them, but the site's direction is not complete until they are written. The `World` and `Decisions` blocks from [world building](world-building.md#record-it) follow them; those two are checked with the reference research.
