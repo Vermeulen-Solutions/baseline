@@ -406,5 +406,9 @@
   "expressive-layer.test.mjs": {
     "tier": "unit",
     "reason": "Expressive layer contracts: opt-in CSS gated by reduced motion and feature support, editor at rest, SiteShell transitionStyle, and the cross-document transition script run against a simulated page"
+  },
+  "audit-composition.test.mjs": {
+    "tier": "unit",
+    "reason": "Composition audit: pure assessment of section models (kicker and split openings, card grids, structural repeats, full-width media, closing band, signature), arguments and report text; no browser"
   }
 }

@@ -1939,6 +1939,14 @@
       "disposition": "shared",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/audit-composition.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/audit-composition.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/components/dev/ExpressiveCompare.astro": {
       "disposition": "shared",
       "static": "copy"
