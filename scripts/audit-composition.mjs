@@ -22,7 +22,12 @@
 // - no-signature: nothing on the page is larger or different in kind (no stage, fitted line or
 //   index with previews, and no heading markedly larger than the page's other headings, such as
 //   an opening line at least twice their size);
-// - first-screen-heading (narrowest width): the page's h1 is not on the first screen.
+// - first-screen-heading (narrowest width): the page's h1 is not on the first screen;
+// - bare-page: the page is made only of type, photographs and rules. Three or more of five things
+//   from a made world are missing: a surface (a textured or patterned ground, an edge), drawn objects
+//   (three or more SVG or canvas drawings at least 32px), three type voices, depth (a rotated or
+//   masked object) and motion (an animation running after a scroll). Measured on studio-built sites
+//   for comparable trades, all five are present; on bare trial builds, four were missing.
 // It also prints the measurements behind them: largest h1 and h2, body size, image cover and
 // full-width media count. None of this fails a build unless --strict is given; the findings are
 // prompts for the site-art-direction skill's distinctive-direction steps, not a design verdict.
@@ -62,6 +67,17 @@ export function sectionSignature(section) {
 }
 
 /** Findings for one page model, measured in the browser by measurePage(). Pure, so it is unit tested. */
+/** Which of the five ingredients of a made world a page lacks (see the bare-page note above). */
+export function bareIngredients(craft) {
+  const missing = [];
+  if (!(craft.surfaces >= 1)) missing.push('surface');
+  if (!(craft.drawn >= 3)) missing.push('drawn objects');
+  if (!(craft.voices >= 3)) missing.push('three type voices');
+  if (!(craft.rotated >= 1 || craft.masked >= 1)) missing.push('depth');
+  if (!(craft.motion >= 1)) missing.push('motion');
+  return missing;
+}
+
 export function assessComposition(model) {
   const findings = [];
   const sections = model.sections ?? [];
@@ -88,6 +104,10 @@ export function assessComposition(model) {
   const statement = (model.h2Max >= 2.5 * model.bodySize && model.h2Max >= 1.6 * (model.h2Median || model.h2Max))
     || (model.h1Size >= 5 * model.bodySize && model.h1Size >= 2 * (model.h2Median || model.h1Size));
   if (!model.signature && !statement && !sections.some((s) => s.fullBleedMedia)) add('no-signature', 'Nothing on the page is larger or different in kind from the rest. Give the page one signature moment: a stage, a fitted line, an index that previews what it lists, a programme with dates set very large.');
+  if (model.craft) {
+    const missing = bareIngredients(model.craft);
+    if (missing.length >= 3) add('bare-page', `The page is made only of type, photographs and rules: no ${missing.join(', no ')}. Build each section as an object from the site's world, on a surface from its materials, with its type treatment and named motions (site-art-direction/references/world-building.md).`, { missing });
+  }
   if (model.narrow && model.narrow.h1Bottom !== null && model.narrow.h1Bottom > model.narrow.viewportHeight) add('first-screen-heading', `At ${model.narrow.width}px the page heading starts below the first screen. Shorten the picture above it or move the heading onto it.`);
   return findings;
 }
@@ -199,12 +219,39 @@ export function measurePage() {
     imageCover: +(imageArea / (vw * document.documentElement.scrollHeight)).toFixed(2),
     fullWidthMedia: fullWidth,
     signature: Boolean(main.querySelector('.display-fit, .media-stage, .index-list[data-preview]')),
+    craft: (() => {
+      const all = [...document.body.querySelectorAll('*')].filter(visible);
+      const size = (el, w, h) => { const r = el.getBoundingClientRect(); return r.width >= w && r.height >= h; };
+      const families = {};
+      for (const el of all) {
+        if (![...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) continue;
+        const family = getComputedStyle(el).fontFamily.split(',')[0].replace(/["']/g, '').trim();
+        families[family] = (families[family] || 0) + 1;
+      }
+      let surfaces = 0;
+      let drawn = 0;
+      let rotated = 0;
+      let masked = 0;
+      for (const el of all) {
+        const s = getComputedStyle(el);
+        const pseudo = ['::before', '::after'].some((p) => getComputedStyle(el, p).backgroundImage !== 'none');
+        if (size(el, 120, 40) && (s.backgroundImage !== 'none' || pseudo)) surfaces++;
+        if ((el.tagName.toLowerCase() === 'svg' || el.tagName === 'CANVAS') && size(el, 32, 32)) drawn++;
+        const matrix = s.transform.match(/^matrix\(([^,]+),\s*([^,]+)/);
+        if (matrix && Math.abs(parseFloat(matrix[2])) > 0.005 && size(el, 16, 16)) rotated++;
+        const mask = (s.maskImage && s.maskImage !== 'none') || (s.webkitMaskImage && s.webkitMaskImage !== 'none') || s.clipPath !== 'none';
+        if (mask && size(el, 40, 40)) masked++;
+      }
+      const voices = Object.values(families).filter((n) => n >= 3).length;
+      return { elements: all.length, voices, surfaces, drawn, rotated, masked, motion: 0 };
+    })(),
     sections: records,
   };
 }
 
 export function formatRoute(route, model, findings) {
-  const head = `${route}: h1 ${Math.round(model.h1Size)}px, largest h2 ${Math.round(model.h2Max)}px, body ${Math.round(model.bodySize)}px, image cover ${model.imageCover}, full-width media ${model.fullWidthMedia}, ${model.sections.length} sections`;
+  const head = `${route}: h1 ${Math.round(model.h1Size)}px, largest h2 ${Math.round(model.h2Max)}px, body ${Math.round(model.bodySize)}px, image cover ${model.imageCover}, full-width media ${model.fullWidthMedia}, ${model.sections.length} sections`
+    + (model.craft ? `; ${model.craft.elements} elements, ${model.craft.voices} type voices, ${model.craft.surfaces} surfaces, ${model.craft.drawn} drawings, ${model.craft.rotated + model.craft.masked} rotated or masked, ${model.craft.motion} animations` : '');
   if (!findings.length) return `${head}\n  no template signs found`;
   return [head, ...findings.map((f) => `  [${f.code}] ${f.message}`)].join('\n');
 }
@@ -224,8 +271,21 @@ async function main() {
     for (const route of options.routes) {
       const page = await browser.newPage({ viewport: { width: wide, height: 900 } });
       await page.goto(options.base + route, { waitUntil: 'networkidle' }).catch(() => page.waitForTimeout(3000));
+      // Motion first, with motion allowed: the most animations running while the visitor scrolls through.
+      const motion = await page.evaluate(async () => {
+        const height = document.documentElement.scrollHeight;
+        let most = 0;
+        for (let y = 0; y < height; y += 600) {
+          scrollTo(0, y);
+          await new Promise((resolve) => setTimeout(resolve, 100));
+          most = Math.max(most, document.getAnimations().length);
+        }
+        scrollTo(0, 0);
+        return most;
+      });
       await page.emulateMedia({ reducedMotion: 'reduce' });
       const model = await page.evaluate(measurePage);
+      model.craft.motion = motion;
       await page.close();
       if (narrow !== wide) {
         const phone = await browser.newPage({ viewport: { width: narrow, height: 844 } });
