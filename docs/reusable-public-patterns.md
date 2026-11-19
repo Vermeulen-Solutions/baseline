@@ -20,6 +20,7 @@ Every reusable component Baseline ships, where it is documented, and which profi
 | `BeforeAfter`, `Stars`, `Hours` | All | Comparison slider, star rating, opening hours | [Before/after](#beforeafter-comparison-beforeafterastro), [Ratings and quotes](#ratings-and-quotes-starsastro-srclibquotests), [Opening hours](#opening-hours-hoursastro) |
 | `Analytics`, `ConsentBanner`, `VideoEmbed`, `MapEmbed` | All | Consent-aware analytics, click-to-load embeds | [Analytics, consent and embeds](#analytics-consent-and-embeds) |
 | `Heading`, `TableOfContents`, `Callout`, `Steps` | All | Content navigation and structure | [Content navigation](#content-navigation-and-structured-primitives) |
+| `MediaStage`, `IndexList`, `src/styles/expressive.css` | All | Image-led stage, ruled index, bleed, frame shapes, fitted display line, scroll-driven reveals, page-transition styles (opt-in) | [Expressive layer](#expressive-layer-opt-in) |
 | `SearchDialog` | All, when search is configured | Pagefind search in a native dialog | [Optional site search](search.md) |
 | `PostListItem` | EmDash | Starter blog list row (`post`, `showDate`) | Starter routes |
 | `StaticMetadata` (`profiles/static/project/src/components/`) | Static profiles | Build-time title, description, canonical and JSON-LD | [Metadata phase 2](verification/metadata-phase-2.md) |
@@ -28,7 +29,7 @@ Every reusable component Baseline ships, where it is documented, and which profi
 
 ## Page shell (`SiteShell.astro`)
 
-The site-owned `Base.astro` wraps `SiteShell`, which owns the document, one title, global styles, the skip link and landmarks. Props: `title` (required), `description`, `canonical`, `metadataOwner` (`shell` default, or `platform` when EmDashHead or `StaticMetadata` renders description and canonical), `lang` (default `en`), `dir` (derived from `lang` when omitted), `skipLinkLabel` (default `Skip to content`), `spacingPolicy` (`legacy` default, `automatic-v2` in current Bases; see [design framework](design-framework.md)), `sectionJoins` (`shared` lets two sections on the same ground share one section step; omitted keeps full padding), `surface` (`light`, `dark` or `system` initial surface mode), `darkReaderLock` (opt out of the Dark Reader extension on dark-by-design sites), `pageTransitions` (`none` default, or `cross-document` for the script-free `@view-transition` crossfade; mark the header `data-vt-header`) and `prefetch` (`off` default, `conservative` or `moderate`; see [link prefetch](#navigation-lifecycle-and-warming)). Slots: default, `head`, `header`, `footer`, `body-start` and `body-end`.
+The site-owned `Base.astro` wraps `SiteShell`, which owns the document, one title, global styles, the skip link and landmarks. Props: `title` (required), `description`, `canonical`, `metadataOwner` (`shell` default, or `platform` when EmDashHead or `StaticMetadata` renders description and canonical), `lang` (default `en`), `dir` (derived from `lang` when omitted), `skipLinkLabel` (default `Skip to content`), `spacingPolicy` (`legacy` default, `automatic-v2` in current Bases; see [design framework](design-framework.md)), `sectionJoins` (`shared` lets two sections on the same ground share one section step; omitted keeps full padding), `surface` (`light`, `dark` or `system` initial surface mode), `darkReaderLock` (opt out of the Dark Reader extension on dark-by-design sites), `pageTransitions` (`none` default, or `cross-document` for the script-free `@view-transition` crossfade; mark the header `data-vt-header`) and `prefetch` (`off` default, `conservative` or `moderate`; see [link prefetch](#navigation-lifecycle-and-warming)) and `transitionStyle` (`fade`, `lift`, `curtain` or `wipe`; omitted changes nothing; see [page-transition styles](#page-transition-styles-and-arrival)). Slots: default, `head`, `header`, `footer`, `body-start` and `body-end`.
 
 ## Layout primitives (`Section`, `Container`, `Grid`)
 
@@ -141,6 +142,71 @@ Existing sites can adopt the updated component through a reviewed Baseline updat
 ## Focus and contextual surfaces
 
 `data-surface="dark"` and `data-surface="light"` establish contextual surface relationships (`color-scheme`, `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, and `--color-focus`) Customizable via `--surface-dark-*` and `--surface-light-*` tokens so a dark section inside a light page (or a light card inside a dark hero) automatically adapts its text, muted copy, border, and focus ring. Set surface tokens from the real site palette and verify contrast against their actual grounds. Tables, filters and count/status belong together; deduplicate contacts without hiding distinct roles. Calendar actions should represent a real dated appointment, not imply a recurring schedule from a programme period.
+
+## Expressive layer (opt-in)
+
+Composition, type and motion capabilities for sites whose art direction calls for them: a photograph that takes the whole width, a shape repeated from the subject, one line set as large as its column, a heading that rises into place, a page that turns instead of blinking. They live in `src/styles/expressive.css` and two components. Nothing applies until a page uses an attribute, a class or a component, so importing the stylesheet changes no existing page. The starter Base layouts import it after `global.css`; an existing site adds the same import to its `Base.astro` when it adopts one of them. Every motion runs only with `prefers-reduced-motion: no-preference` and, for scroll effects, only where `animation-timeline: view()` is supported; elsewhere the content is simply in place. The EmDash visual editor keeps everything at rest. Inspect them on `/_expressive` (development and fixture builds only, like `/_styleguide`; add `?router` to see the same pages under `<ClientRouter />`).
+
+Choose them from the Art Direction Record, not to fill a page: the `site-art-direction` skill's **governing idea** and **signature moment** say which ones a site needs, and two or three per site is usually plenty.
+
+### Full bleed (`.bleed`)
+
+`.bleed` makes an element span the viewport whatever gutter and measure its column has, for a photograph or a ground that should run edge to edge. Its parent column must be centred, as the shell's main and Containers are. `100vw` includes a classic scrollbar, so the root clips the few pixels that would otherwise scroll sideways (`:root:has(.bleed) { overflow-x: clip }`). Put text inside a bleed element back in a `Container`.
+
+### `MediaStage.astro`
+
+One photograph at full width (or framed in the column with `bleed={false}`) with the section's words on it. On a wide stage the words sit on a scrim drawn from the dark-surface tokens; on a narrow stage (under 40rem of its own width) they move below the picture onto the page ground, and the picture gets shorter so the heading stays on a phone's first screen.
+
+```astro
+---
+import MediaStage from '../components/MediaStage.astro';
+import workshop from '../assets/workshop.jpg';
+---
+<MediaStage image={workshop} alt="The workshop at first light, chisels on the bench" priority focus="40% 35%" caption="The workshop, early morning.">
+  <h1>Made by hand, one piece at a time.</h1>
+  <p>Short lead under the heading.</p>
+</MediaStage>
+```
+
+Props: `image` (imported image or URL with `width`/`height`), `alt`, `sizes`, `bleed` (default `true`), `stage` (`screen` default, `tall`, or `ratio` to keep the picture's own proportions), `align` (`start`, `center`, `end`), `scrim` (`bottom` default, `full`, `none` for a picture with its own quiet area), `focus` (CSS `object-position`, the part to keep when the stage crops), `priority` (eager and high priority for the first-screen picture), `caption`, `motion` (`recede` or `frame`, see below), `heroMedia` (the destination of a card morph) and `optimize`. The default slot holds the words. Check the rendered contrast of the words over the actual photograph at wide widths, and use `scrim="full"` when a busy picture needs it; `audit:ui` and axe cannot see the picture under the text.
+
+### `IndexList.astro`
+
+A ruled index for things a visitor scans and compares (works, courses, teams, services, programme items, documents): rows separated by hairlines rather than boxed cards. Each row can have a `lead` (a number, a course code or a date, only when it carries information), `meta` facts, a `description` and an `href` that covers the row with one link (`.clickable-parent`, focus drawn on the row). With `preview`, a row's `image` appears beside it on hover and keyboard focus for a fine pointer only; it is decorative (`alt=""`, `aria-hidden`) because the linked page shows the same picture, and it morphs into that page's `MediaStage heroMedia` on cross-document transitions.
+
+Props: `items` (`{ title, href?, lead?, meta?, description?, image?, imageWidth?, imageHeight? }[]`), `ordered` (`ol` when the order means something), `headingLevel` (`2`, `3` default, `4`), `preview`, `optimizePreview` (`false` for SVG artwork) and `class`. Set `--index-title-size` to change the title step.
+
+### Frame shapes (`data-shape`)
+
+`data-shape="arch|round|leaf|tab"` on an image frame gives it one shape taken from the site's subject: a chapel's arch, a pebble, a leaf for a garden, a folder tab for an archive. Repeat one shape on a site's photographs rather than mixing several. `arch` gives any portrait frame a semicircular top; `leaf` and `tab` use `--radius-shape`. Keep faces and subjects away from the rounded edge, and check with `audit:ui`'s `image-cover-cropped`.
+
+### Fitted display line (`.display-fit`)
+
+One large line per page, sized to its column: a statement, a closing line, the site's name over the footer. Put the line in a `.display-fit` box and set `--fit` to the line's width in ems (measure it once in the browser: the line's width at `white-space: nowrap` divided by its font size). The size is `clamp(var(--display-fit-min, 3rem), 100cqi / var(--fit), 2.5 × --display-fit-min)`. A size that follows the container does not grow with browser zoom, so the line is held between a rem floor and a cap of 2.5 times it, the rule `design:tokens` applies to fluid type: zooming far enough always doubles it (WCAG 1.4.4), and at high zoom or with a longer translation it wraps rather than overflowing. Raise `--display-fit-min` for a larger line (the cap follows it), then check 320px. Where `text-box` is supported the box is trimmed to the capitals and the baseline, so the space around it is the space you set. A decorative repeat of the site's name takes `aria-hidden="true"`.
+
+### Scroll-driven reveals
+
+| Attribute | Effect | Use it on |
+| --- | --- | --- |
+| `data-reveal="frame"` | The frame opens upwards as it arrives and the picture settles from a slight zoom (`--reveal-zoom`, default 1.12) | An image frame below the first screen |
+| `data-reveal="mask"` | The heading rises out of its own line: the clip stays where the heading rests while the text moves into it | Section headings below the first screen; never the page's `h1` |
+| `data-scroll="open"` | The ground opens from an inset, rounded band to its full width as it arrives (`--open-inset`) | A `.bleed` section with its own background |
+| `data-scroll="recede"` | The hero steps back as it scrolls away: a little smaller (`--recede-scale`) with rounded corners | The first-screen `MediaStage` (`motion="recede"`) |
+| `data-scroll="rise"` | The children rise into place from below as the element arrives (`--rise-distance`); the element clips its own overflow | A closing band or the footer |
+
+They are CSS only, so content that starts on the first screen is already at its end state and nothing hides the Largest Contentful Paint. In browsers without scroll-driven animations `data-reveal="frame"` and `"mask"` fall back to the shell's IntersectionObserver fade, and the `data-scroll` effects are simply at rest.
+
+### Page-transition styles and arrival
+
+`SiteShell transitionStyle` writes `data-transition-style` on the root. `fade` keeps the crossfade; `lift` steps the old page back while the new one rises in; `curtain` and `wipe` uncover the new page from below or from the side over a dimmed old page. Going back plays the movement the other way. The styles work with `pageTransitions="cross-document"` and with a slotted `<ClientRouter />`, and the shell's header hold (`data-vt-header`) and media morphs keep working on top of them. Durations come from `--duration-base` and `--duration-stage` (560ms).
+
+Any style also turns on **arrival**: elements marked `data-arrive` (`"1"` to `"3"` for stages) come in after the page in short steps. They are named (`view-transition-name: match-element`) only while a transition runs, so they cost nothing at rest. Mark the heading, the lead and one more block, not every element.
+
+With cross-document transitions, a small inline head script (`src/lib/page-transition-script.ts`) supplies what a router otherwise would: the direction (history traversal compares entry indexes; a link compares path depth; `data-vt-direction="back|forward"` on the link or an ancestor overrides it) and the morph of a picked card (`[data-vt-card]` or `.card` with `.card-media` or `[data-vt-media]`) into the arriving page's `[data-vt-hero-media]`. Only the picked card is named. It is emitted only when `transitionStyle` is set, and the EmDash Base leaves transitions off in visual edit mode. Under reduced motion or in browsers without view transitions pages load as before.
+
+### Weight and support
+
+`expressive.css` is about 10 KB before compression (about 2 KB compressed) and has no script; `MediaStage` and `IndexList` ship no script; the transition script is about 3 KB inline and only on sites that set `transitionStyle`. Scroll-driven animations run in Chromium and Safari 26; view-transition types of motion run in Chromium and Safari 18+; `match-element` arrival in Chromium and recent Safari. Firefox and older browsers show the pages at rest, with the ordinary crossfade or a plain page load.
 
 ## Tranche coverage
 

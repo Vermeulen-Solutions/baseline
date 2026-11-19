@@ -174,7 +174,20 @@
     "tests/consent.test.mjs",
     "src/lib/content-security-policy.ts",
     "scripts/static-csp.mjs",
-    "tests/static-csp.test.mjs"
+    "tests/static-csp.test.mjs",
+    "src/styles/expressive.css",
+    "src/lib/page-transition-script.ts",
+    "src/components/MediaStage.astro",
+    "src/components/IndexList.astro",
+    "src/components/dev/ExpressiveDemo.astro",
+    "src/dev/ExpressiveFixture.astro",
+    "src/dev/ExpressiveDetailFixture.astro",
+    "src/assets/expressive-plate-valley.svg",
+    "src/assets/expressive-plate-dusk.svg",
+    "src/assets/expressive-plate-field.svg",
+    "src/components/dev/ExpressiveCompare.astro",
+    "src/dev/ExpressiveCompareBefore.astro",
+    "src/dev/ExpressiveCompareAfter.astro"
   ],
   "packages": {
     "dependencies": [

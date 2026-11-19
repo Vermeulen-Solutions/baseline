@@ -402,5 +402,9 @@
   "site-files.test.mjs": {
     "tier": "unit",
     "reason": "Baseline-owned code in a site: platform candidates, missing imports, current/behind/edited/missing classification, backups, incoming copies and the ownership receipt"
+  },
+  "expressive-layer.test.mjs": {
+    "tier": "unit",
+    "reason": "Expressive layer contracts: opt-in CSS gated by reduced motion and feature support, editor at rest, SiteShell transitionStyle, and the cross-document transition script run against a simulated page"
   }
 }

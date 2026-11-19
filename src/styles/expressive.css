@@ -1,0 +1,375 @@
+/*
+ * Expressive layer: opt-in composition, type and motion capabilities.
+ *
+ * Nothing here applies until a page uses one of its attributes or classes, so importing this file
+ * changes no existing page. Import it after global.css (the starter Base layouts do):
+ *   import '../styles/expressive.css';
+ *
+ * Map of this file.
+ * - .bleed: full viewport width out of the shell gutter, for media and grounds.
+ * - [data-shape]: one frame shape taken from the site's motif (arch, round, leaf, tab).
+ * - .display-fit: one large line sized to its container, trimmed to the capitals.
+ * - [data-reveal="frame" | "mask"]: scroll-driven media and heading reveals.
+ * - [data-scroll="open" | "recede" | "rise"]: scroll-driven grounds, heroes and footers.
+ * - html[data-transition-style]: page-transition styles, and [data-arrive] arrival choreography.
+ * Every motion sits inside prefers-reduced-motion: no-preference and is skipped in the EmDash
+ * visual editor; without support the content is simply in place. Documented in
+ * docs/reusable-public-patterns.md (Expressive layer).
+ */
+
+@layer components {
+	:root {
+		/* Frame shapes: the radius a leaf or tab corner takes, from the fluid space scale. */
+		--radius-shape: clamp(2rem, calc(1.3333rem + 3.3333vi), 4rem);
+		/* A staged sequence (a curtain, an arrival) is longer than interface motion. */
+		--duration-stage: 560ms;
+	}
+
+	/* Full bleed. The element spans the viewport, whatever gutter and measure its column has. Its
+	   parent column must be centred, as the shell's main and Containers are. 100vw includes a classic
+	   scrollbar, so the root clips the few pixels that would otherwise scroll sideways. */
+	.bleed {
+		inline-size: 100vw;
+		max-inline-size: none;
+		margin-inline: calc(50% - 50vw);
+	}
+
+	:root:has(.bleed) {
+		overflow-x: clip;
+	}
+
+	/* A bleed element has left the shell gutter: its Containers take the gutter back. */
+	:where(.bleed) > :where(.container-shell, .content-grid) {
+		padding-inline: var(--spacing-container);
+	}
+
+	/* Frame shapes. One shape, taken from the site's subject (a chapel's arch, a pebble, a leaf, a
+	   folder tab), repeated on its photographs. The shape crops at most a corner: keep faces and
+	   subjects away from the rounded edge (check with audit:ui's image-cover-cropped). */
+	:where([data-shape]) {
+		overflow: clip;
+	}
+
+	:where([data-shape="arch"]) {
+		/* Oversized radii scale down to half the width: a semicircular top on any portrait frame. */
+		border-start-start-radius: 100vmax;
+		border-start-end-radius: 100vmax;
+	}
+
+	:where([data-shape="round"]) {
+		border-radius: 50%;
+	}
+
+	:where([data-shape="leaf"]) {
+		border-start-start-radius: var(--radius-shape);
+		border-end-end-radius: var(--radius-shape);
+	}
+
+	:where([data-shape="tab"]) {
+		border-start-end-radius: var(--radius-shape);
+	}
+
+	/* One large line, sized to its container. Set --fit on the box to the line's width in ems
+	   (measure once: scrollWidth / font-size). A size that follows the container does not grow
+	   with browser zoom, so it is held between a rem floor and a cap of 2.5 times that floor, the
+	   rule design:tokens applies to fluid type: zooming far enough always doubles the line (WCAG
+	   1.4.4), and at high zoom or with a long translation it wraps instead of overflowing. Raise
+	   --display-fit-min for a larger line; the cap follows it. */
+	.display-fit {
+		container-type: inline-size;
+	}
+
+	.display-fit > :where(*) {
+		font-family: var(--font-display);
+		font-size: clamp(var(--display-fit-min, 3rem), calc(100cqi / var(--fit, 6)), calc(var(--display-fit-min, 3rem) * 2.5));
+		line-height: var(--display-fit-leading, 0.92);
+		letter-spacing: var(--display-fit-tracking, -0.035em);
+		text-wrap: balance;
+		/* At the rem floor (large text on a phone) one long word may not fit: break it rather than
+		   let it run off the screen. */
+		overflow-wrap: break-word;
+		hyphens: auto;
+		max-inline-size: none;
+		margin: 0;
+	}
+
+	@supports (text-box: trim-both cap alphabetic) {
+		.display-fit > :where(*) {
+			text-box: trim-both cap alphabetic;
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		@supports (animation-timeline: view()) {
+			/* A photograph's frame opens upwards as it arrives and the picture settles from a slight
+			   zoom. Mark the frame (a figure or a wrapper), not the img. */
+			:where([data-reveal="frame"]) {
+				animation-name: expressive-frame-open;
+				animation-range: entry 0% entry var(--reveal-range, 70%);
+			}
+
+			:where([data-reveal="frame"]) :where(img) {
+				animation: expressive-frame-settle linear both;
+				animation-timeline: view();
+				animation-range: entry 0% cover 50%;
+			}
+
+			/* A heading rises out of its own line as it arrives: the clip stays where the heading
+			   rests while the text moves up into it. For headings below the first screen. */
+			:where([data-reveal="mask"]) {
+				animation-name: expressive-mask-rise;
+				animation-range: entry 0% entry var(--reveal-range, 80%);
+			}
+
+			/* A ground opens from an inset, rounded band to its full width as it arrives. Put it on a
+			   section with its own background, usually a .bleed one. */
+			:where([data-scroll="open"]) {
+				animation: expressive-open linear both;
+				animation-timeline: view();
+				animation-range: entry 0% cover 35%;
+			}
+
+			/* A hero steps back as it scrolls away: a little smaller, with rounded corners. */
+			:where([data-scroll="recede"]) {
+				animation: expressive-recede linear both;
+				animation-timeline: view();
+				animation-range: exit 0% exit 100%;
+				transform-origin: 50% 0%;
+			}
+
+			/* A closing band or footer rises into its place from below as it arrives. The element
+			   clips its own overflow, so the travel never lengthens the page. */
+			:where([data-scroll="rise"]) {
+				overflow: clip;
+				view-timeline: --expressive-rise block;
+			}
+
+			:where([data-scroll="rise"]) > :where(*) {
+				animation: expressive-rise linear both;
+				animation-timeline: --expressive-rise;
+				animation-range: entry 0% entry 100%;
+			}
+
+			/* The visual editor keeps everything at rest. */
+			:where(:root:has(#emdash-toolbar)) :where([data-reveal="frame"], [data-reveal="frame"] img, [data-reveal="mask"], [data-scroll], [data-scroll="rise"] > *) {
+				animation: none;
+			}
+		}
+	}
+
+	@keyframes expressive-frame-open {
+		from {
+			clip-path: inset(var(--reveal-frame-start, 100%) 0 0 0);
+		}
+		to {
+			clip-path: inset(0 0 0 0);
+		}
+	}
+
+	@keyframes expressive-frame-settle {
+		from {
+			scale: var(--reveal-zoom, 1.12);
+		}
+		to {
+			scale: 1;
+		}
+	}
+
+	@keyframes expressive-mask-rise {
+		from {
+			translate: 0 100%;
+			clip-path: inset(-0.25em -0.1em 100% -0.1em);
+		}
+		to {
+			translate: 0 0;
+			clip-path: inset(-0.25em -0.1em -0.25em -0.1em);
+		}
+	}
+
+	@keyframes expressive-open {
+		from {
+			clip-path: inset(0 var(--open-inset, clamp(1rem, 6vi, 6rem)) round var(--radius-card));
+		}
+		to {
+			clip-path: inset(0 0 round 0);
+		}
+	}
+
+	@keyframes expressive-recede {
+		to {
+			scale: var(--recede-scale, 0.92);
+			border-radius: var(--radius-card);
+		}
+	}
+
+	@keyframes expressive-rise {
+		from {
+			translate: 0 var(--rise-distance, 40%);
+		}
+		to {
+			translate: 0 0;
+		}
+	}
+
+	/* Page-transition styles: SiteShell transitionStyle writes data-transition-style on the root,
+	   for cross-document transitions and for ClientRouter alike. The direction comes from
+	   data-vt-direction (back plays the movement the other way). The plain crossfade stays the
+	   default; the shell's header hold and media morphs keep working on top of every style. */
+	html[data-transition-style="lift"]::view-transition-old(root) {
+		animation: expressive-vt-step-back var(--duration-base) var(--ease-exit) both;
+	}
+
+	html[data-transition-style="lift"]::view-transition-new(root) {
+		animation: expressive-vt-lift var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="lift"][data-vt-direction="back"]::view-transition-new(root) {
+		animation-name: expressive-vt-settle;
+	}
+
+	html[data-transition-style="curtain"]::view-transition-old(root) {
+		animation: expressive-vt-dim var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="curtain"]::view-transition-new(root) {
+		animation: expressive-vt-curtain-up var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="curtain"][data-vt-direction="back"]::view-transition-new(root) {
+		animation-name: expressive-vt-curtain-down;
+	}
+
+	html[data-transition-style="wipe"]::view-transition-old(root) {
+		animation: expressive-vt-dim var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="wipe"]::view-transition-new(root) {
+		animation: expressive-vt-wipe-forward var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="wipe"][data-vt-direction="back"]::view-transition-new(root) {
+		animation-name: expressive-vt-wipe-back;
+	}
+
+	/* Arrival: elements marked data-arrive come in after the page, in stages (data-arrive="1" to
+	   "3"), while the rest of the page is already there. They are named only during a transition. */
+	:where(html[data-transition-style]:active-view-transition) :where([data-arrive]) {
+		view-transition-name: match-element;
+		view-transition-class: arrive;
+	}
+
+	:where(html[data-transition-style]:active-view-transition) :where([data-arrive="2"]) {
+		view-transition-class: arrive arrive-2;
+	}
+
+	:where(html[data-transition-style]:active-view-transition) :where([data-arrive="3"]) {
+		view-transition-class: arrive arrive-3;
+	}
+
+	::view-transition-old(*.arrive) {
+		animation: expressive-vt-out var(--duration-fast) var(--ease-exit) both;
+	}
+
+	::view-transition-new(*.arrive) {
+		animation: expressive-vt-arrive var(--duration-stage) var(--ease-smooth) both;
+		animation-delay: 80ms;
+	}
+
+	::view-transition-new(*.arrive-2) {
+		animation-delay: 160ms;
+	}
+
+	::view-transition-new(*.arrive-3) {
+		animation-delay: 240ms;
+	}
+
+	::view-transition-group(*.arrive) {
+		animation-duration: var(--duration-stage);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		html[data-transition-style]::view-transition-old(root),
+		html[data-transition-style]::view-transition-new(root),
+		::view-transition-group(*.arrive),
+		::view-transition-old(*.arrive),
+		::view-transition-new(*.arrive) {
+			animation: none !important;
+		}
+	}
+
+	@keyframes expressive-vt-step-back {
+		to {
+			opacity: 0;
+			scale: 0.97;
+		}
+	}
+
+	@keyframes expressive-vt-lift {
+		from {
+			opacity: 0;
+			translate: 0 clamp(1rem, 4vi, 3rem);
+		}
+	}
+
+	@keyframes expressive-vt-settle {
+		from {
+			opacity: 0;
+			scale: 1.02;
+		}
+	}
+
+	@keyframes expressive-vt-dim {
+		to {
+			opacity: 0.6;
+		}
+	}
+
+	@keyframes expressive-vt-curtain-up {
+		from {
+			clip-path: inset(100% 0 0 0);
+		}
+		to {
+			clip-path: inset(0 0 0 0);
+		}
+	}
+
+	@keyframes expressive-vt-curtain-down {
+		from {
+			clip-path: inset(0 0 100% 0);
+		}
+		to {
+			clip-path: inset(0 0 0 0);
+		}
+	}
+
+	@keyframes expressive-vt-wipe-forward {
+		from {
+			clip-path: inset(0 0 0 100%);
+		}
+		to {
+			clip-path: inset(0 0 0 0);
+		}
+	}
+
+	@keyframes expressive-vt-wipe-back {
+		from {
+			clip-path: inset(0 100% 0 0);
+		}
+		to {
+			clip-path: inset(0 0 0 0);
+		}
+	}
+
+	@keyframes expressive-vt-out {
+		to {
+			opacity: 0;
+		}
+	}
+
+	@keyframes expressive-vt-arrive {
+		from {
+			opacity: 0;
+			translate: 0 0.75rem;
+		}
+	}
+}

@@ -1,0 +1,7 @@
+---
+// Development and fixture builds only, injected by scripts/dev-tools-integration.mjs like /_styleguide.
+import ExpressiveDemo from '../components/dev/ExpressiveDemo.astro';
+Astro.response.headers.set('Cache-Control', 'no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+---
+<ExpressiveDemo page="detail" />

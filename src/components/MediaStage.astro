@@ -1,0 +1,195 @@
+---
+/**
+ * An image-led stage: one photograph at full width (or framed in the column) with the section's
+ * words on it, on a scrim drawn from the tokens. On a narrow stage the words move below the picture
+ * instead of covering it, so faces and subjects stay in view on a phone. See
+ * docs/reusable-public-patterns.md (Expressive layer) and src/styles/expressive.css.
+ */
+import type { HTMLAttributes } from 'astro/types';
+import ResponsiveImage from './ResponsiveImage.astro';
+import type { ResponsiveImageProps } from '../lib/responsive-image';
+
+interface Props extends Omit<HTMLAttributes<'div'>, 'title'> {
+  image: ResponsiveImageProps['src'];
+  /** Describe what the photograph shows; empty only when it is decoration next to the same words. */
+  alt: string;
+  width?: number;
+  height?: number;
+  /** Defaults to the full viewport width for `bleed`, the column width otherwise. */
+  sizes?: string;
+  /** Span the viewport, out of the shell gutter (default), or stay in the column. */
+  bleed?: boolean;
+  /** `screen` fills most of the first screen, `tall` about two thirds, `ratio` keeps the picture's own proportions. */
+  stage?: 'screen' | 'tall' | 'ratio';
+  /** Where the words sit on a wide stage. */
+  align?: 'start' | 'center' | 'end';
+  /** `bottom` darkens the lower part behind the words, `full` the whole picture, `none` nothing (for pictures with their own quiet area). */
+  scrim?: 'bottom' | 'full' | 'none';
+  /** CSS object-position: the part of the picture to keep when the stage crops it, such as `50% 30%`. */
+  focus?: string;
+  /** The first-screen picture: eager and high priority (it is usually the Largest Contentful Paint). */
+  priority?: boolean;
+  /** A line saying what the photograph shows, under it. */
+  caption?: string;
+  /** Opt-in motion from expressive.css: `recede` steps back as it scrolls away, `frame` opens as it arrives. */
+  motion?: 'recede' | 'frame';
+  /** Mark the picture as the destination of a card or index-row morph (data-vt-hero-media). */
+  heroMedia?: boolean;
+  optimize?: boolean;
+}
+
+const {
+  image, alt, width: imageWidth, height: imageHeight, sizes, bleed = true, stage: rawStage, align: rawAlign, scrim: rawScrim,
+  focus, priority = false, caption, motion, heroMedia = false, optimize = true, class: className, style, ...attributes
+} = Astro.props;
+const stage = rawStage === 'tall' || rawStage === 'ratio' ? rawStage : 'screen';
+const align = rawAlign === 'center' || rawAlign === 'end' ? rawAlign : 'start';
+const scrim = rawScrim === 'full' || rawScrim === 'none' ? rawScrim : 'bottom';
+const hasWords = Astro.slots.has('default');
+const focusStyle = typeof focus === 'string' && /^[\w\s%.-]{1,40}$/.test(focus) ? `--stage-focus: ${focus}` : undefined;
+const inlineStyle = [focusStyle, typeof style === 'string' ? style : undefined].filter(Boolean).join('; ') || undefined;
+---
+
+<div
+  {...attributes}
+  class:list={['media-stage', bleed && 'bleed', className]}
+  data-stage={stage}
+  data-align={align}
+  data-scrim={scrim}
+  data-words={hasWords ? '' : undefined}
+  data-scroll={motion === 'recede' ? 'recede' : undefined}
+  data-reveal={motion === 'frame' ? 'frame' : undefined}
+  style={inlineStyle}
+>
+  <div class="media-stage__layout">
+  {/* A stage crops by design around its focus point; stage="ratio" shows the whole photograph and keeps audit:ui's crop check. */}
+  <div class="media-stage__picture" data-vt-hero-media={heroMedia ? '' : undefined} data-audit-crop-ok={stage === 'ratio' ? undefined : ''}>
+    <ResponsiveImage
+      src={image}
+      alt={alt}
+      width={imageWidth}
+      height={imageHeight}
+      sizes={sizes ?? (bleed ? '100vw' : '(max-width: 88rem) 100vw, 88rem')}
+      loading={priority ? 'eager' : 'lazy'}
+      fetchpriority={priority ? 'high' : undefined}
+      optimize={optimize}
+    />
+  </div>
+  {hasWords && <div class="media-stage__words"><div class="media-stage__inner flow"><slot /></div></div>}
+  {caption && <p class="media-stage__caption">{caption}</p>}
+  </div>
+</div>
+
+<style>
+@layer components {
+  .media-stage {
+    --stage-scrim: var(--surface-dark-bg, oklch(18% 0.02 260));
+    /* The stage is the query container; its layout child changes with the stage's width. */
+    container: media-stage / inline-size;
+    position: relative;
+    isolation: isolate;
+  }
+
+  .media-stage__layout {
+    display: grid;
+    grid-template-areas: "picture" "words" "caption";
+  }
+
+  .media-stage__picture {
+    grid-area: picture;
+    position: relative;
+    overflow: clip;
+    min-block-size: var(--stage-min, 18rem);
+  }
+
+  .media-stage[data-stage="screen"] .media-stage__picture { block-size: min(88svh, 56rem); }
+  .media-stage[data-stage="tall"] .media-stage__picture { block-size: min(66svh, 44rem); }
+  /* While the words sit below the picture (a narrow stage), the picture leaves room for them on
+     the first screen, so the heading is never pushed out of view. */
+  .media-stage[data-words][data-stage="screen"] .media-stage__picture { block-size: min(52svh, 56rem); }
+  .media-stage[data-words][data-stage="tall"] .media-stage__picture { block-size: min(42svh, 44rem); }
+
+  .media-stage__picture :global(img) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none;
+    object-fit: cover;
+    object-position: var(--stage-focus, 50% 50%);
+  }
+
+  .media-stage[data-stage="ratio"] .media-stage__picture { min-block-size: 0; }
+  .media-stage[data-stage="ratio"] .media-stage__picture :global(img) { block-size: auto; }
+
+  /* Narrow stage: the words follow the picture on the page ground, in the page's own colours. */
+  .media-stage__words {
+    grid-area: words;
+    color: var(--color-text);
+    padding-block: var(--spacing-content);
+    padding-inline: var(--spacing-container);
+  }
+
+  .media-stage:not(.bleed) .media-stage__words { padding-inline: 0; }
+
+  .media-stage__inner {
+    max-inline-size: var(--stage-measure, 40rem);
+  }
+
+  .media-stage__caption {
+    grid-area: caption;
+    font-size: var(--text-step--1);
+    color: var(--color-muted);
+    padding-block-start: var(--spacing-2xs);
+    padding-inline: var(--spacing-container);
+  }
+
+  .media-stage:not(.bleed) .media-stage__caption { padding-inline: 0; }
+
+  /* Wide stage: the words sit on the picture, over a scrim from the text token. */
+  @container media-stage (min-width: 40rem) {
+    .media-stage[data-words] .media-stage__layout {
+      grid-template-areas: "stack" "caption";
+    }
+
+    .media-stage[data-words][data-stage="screen"] .media-stage__picture { block-size: min(88svh, 56rem); }
+    .media-stage[data-words][data-stage="tall"] .media-stage__picture { block-size: min(66svh, 44rem); }
+
+    .media-stage[data-words] .media-stage__picture,
+    .media-stage[data-words] .media-stage__words {
+      grid-area: stack;
+    }
+
+    .media-stage[data-words] .media-stage__words {
+      /* The words take the dark-surface tokens, without the surface's own background. */
+      color-scheme: dark;
+      --color-text: var(--surface-dark-text, oklch(96% 0.005 250));
+      --color-muted: var(--surface-dark-muted, oklch(72% 0.015 260));
+      --color-focus: var(--color-focus-on-dark);
+      --color-link: var(--surface-dark-link, var(--color-focus-on-dark));
+      z-index: var(--z-raised);
+      display: flex;
+      align-items: flex-end;
+      color: var(--color-text);
+      padding-block: var(--spacing-xl-3xl, var(--spacing-section));
+      padding-inline: max(var(--spacing-container), calc((100cqi - var(--measure-wide)) / 2 + var(--spacing-container)));
+    }
+
+    .media-stage[data-words][data-align="center"] .media-stage__words { justify-content: center; text-align: center; }
+    .media-stage[data-words][data-align="center"] .media-stage__inner { margin-inline: auto; }
+    .media-stage[data-words][data-align="end"] .media-stage__words { justify-content: flex-end; }
+
+    /* The scrim is the words' own background, so it covers exactly the area the words stand on. */
+    .media-stage[data-words][data-scrim="bottom"] .media-stage__words {
+      background-image: linear-gradient(to top, color-mix(in oklch, var(--stage-scrim) 78%, transparent) 0%, color-mix(in oklch, var(--stage-scrim) 40%, transparent) 45%, transparent 75%);
+    }
+
+    .media-stage[data-words][data-scrim="full"] .media-stage__words {
+      background-image: linear-gradient(color-mix(in oklch, var(--stage-scrim) 58%, transparent), color-mix(in oklch, var(--stage-scrim) 58%, transparent));
+    }
+  }
+
+  @media (forced-colors: active) {
+    .media-stage__words { background: Canvas; color: CanvasText; }
+  }
+}
+</style>
