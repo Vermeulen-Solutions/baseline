@@ -51,6 +51,10 @@ A menu, dialog, disclosure or toast is first a component with focus, keyboard an
 
 Interface motion stays under 300 ms unless a recorded reason applies. Exits are as fast as or faster than entrances. Stagger only content that appears as a list, at 30–80 ms per item with a capped total, and never block interaction while it plays.
 
+## Page transitions and arrival
+
+For motion between pages use `SiteShell transitionStyle` and `data-arrive` from the expressive layer before writing anything: they are CSS view transitions with a 3 KB head script for cross-document direction and card morphs, and they work with and without `<ClientRouter />`. A cover that hides the page while the next one loads, a canvas or a shader between pages needs a client router and an animation library; that is a recorded dependency decision for a site whose identity is kinetic, not a default. Keep page transitions under about 600 ms (`--duration-stage` is 560 ms), let the destination's heading and lead arrive in at most three stages, and never delay a click: a transition that is still running must not block the next navigation.
+
 ## Interruption, exit and pointer gating
 
 - Use transitions, not keyframes, for anything a visitor can trigger repeatedly: a transition retargets from its current value, while a keyframe restarts from zero. Click a toggle or open a menu twice quickly to check.

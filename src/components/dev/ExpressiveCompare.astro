@@ -1,0 +1,137 @@
+---
+/**
+ * Development comparison: the same synthetic workshop content composed twice. `template` is the
+ * way sites built from the shared primitives usually come out (a kicker and a split heading on
+ * every section, card grids, a centred closing band); `directed` follows the distinctive-direction
+ * method (governing idea: a catalogue of works) with the expressive layer. No client material.
+ */
+import '../../styles/expressive.css';
+import SiteShell from '../../layouts/SiteShell.astro';
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import Grid from '../Grid.astro';
+import Card from '../Card.astro';
+import MediaStage from '../MediaStage.astro';
+import IndexList from '../IndexList.astro';
+import valleySvg from '../../assets/expressive-plate-valley.svg';
+import duskSvg from '../../assets/expressive-plate-dusk.svg';
+import fieldSvg from '../../assets/expressive-plate-field.svg';
+
+interface Props {
+  variant: 'template' | 'directed';
+}
+
+const { variant } = Astro.props;
+const plates = [
+  { src: valleySvg.src, width: 1600, height: 1000 },
+  { src: duskSvg.src, width: 900, height: 1200 },
+  { src: fieldSvg.src, width: 1200, height: 900 },
+];
+const works = [
+  { title: 'Heron, in oak', year: '2026', material: 'Oak, 180 cm', text: 'Carved from a fallen oak on the river path, where it now stands.' },
+  { title: 'Owl and her young', year: '2025', material: 'Walnut, 90 cm', text: 'A commission for a school garden, from a tree the school planted.' },
+  { title: 'The long bench', year: '2025', material: 'Larch, 4 m', text: 'A bench along a vineyard wall, carved with the vines it faces.' },
+];
+const services = [
+  { title: 'Live carving', meta: ['Half a day', 'Fairs and festivals'], text: 'A piece carved in public, start to finish.' },
+  { title: 'A piece for your garden', meta: ['From a tree on site'], text: 'A fallen or felled tree turned into a sculpture where it stood.' },
+  { title: 'Carving lessons', meta: ['Saturday mornings', 'Up to six people'], text: 'Tools, safety and a first piece to take home.' },
+];
+---
+
+<SiteShell title={variant === 'template' ? 'Composition: template' : 'Composition: directed'} lang="en" spacingPolicy="automatic-v2" sectionJoins="shared" pageTransitions="cross-document" transitionStyle={variant === 'directed' ? 'lift' : undefined}>
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  <header slot="header" class="site-header" data-sticky-header data-vt-header>
+    <nav class="site-nav" aria-label="Demo"><a class="site-brand" href="#main-content">Oak &amp; Hand workshop</a></nav>
+  </header>
+  <main id="main-content" class="site-main" tabindex="-1" data-expressive-demo={`compare-${variant}`}>
+    {variant === 'template' ? (
+      <>
+        <Section labelledBy="t-hero">
+          <Container width="wide" class="compare-split">
+            <div class="flow">
+              <p class="compare-kicker">Woodcarving workshop</p>
+              <h1 id="t-hero">Sculptures carved from local trees</h1>
+              <p>Each piece starts with a tree that fell or had to be felled nearby, and ends where people can see it.</p>
+              <p><a class="btn" href="#t-works">See the works</a></p>
+            </div>
+            <img src={plates[1].src} width={plates[1].width} height={plates[1].height} alt="Synthetic plate: hills at dusk" class="compare-hero-photo" />
+          </Container>
+        </Section>
+        <Section labelledBy="t-works">
+          <Container width="wide" class="flow">
+            <div class="compare-split compare-head"><div><p class="compare-kicker">Recent work</p><h2 id="t-works">The latest pieces</h2></div><p>Three pieces from the last two years, in public places and private gardens.</p></div>
+            <Grid minimum="standard">{works.map((work, i) => <Card title={work.title} href="#t-works" image={plates[i].src} imageWidth={plates[i].width} imageHeight={plates[i].height} imageAlt="Synthetic plate"><p>{work.text}</p></Card>)}</Grid>
+          </Container>
+        </Section>
+        <Section labelledBy="t-services">
+          <Container width="wide" class="flow">
+            <div class="compare-split compare-head"><div><p class="compare-kicker">Services</p><h2 id="t-services">What we offer</h2></div><p>Live carving, commissions and lessons.</p></div>
+            <Grid minimum="standard">{services.map((service) => <Card title={service.title}><p>{service.text}</p></Card>)}</Grid>
+          </Container>
+        </Section>
+        <Section labelledBy="t-cta" data-surface="dark" class="compare-band">
+          <Container width="content" class="flow compare-center">
+            <p class="compare-kicker">Get in touch</p>
+            <h2 id="t-cta">Let's imagine what your tree could become.</h2>
+            <p><a class="btn" href="#main-content">Contact the workshop</a></p>
+          </Container>
+        </Section>
+      </>
+    ) : (
+      <>
+        <MediaStage image={plates[0].src} width={plates[0].width} height={plates[0].height} alt="Synthetic plate: a valley at first light, standing in for the workshop's best photograph" priority motion="recede" focus="65% 40%" optimize={false}>
+          <h1 data-arrive>Sculptures carved from the trees that fell here.</h1>
+          <p data-arrive="2">Each piece starts with a local tree and ends where people can see it.</p>
+        </MediaStage>
+        <Section labelledBy="d-works">
+          <Container width="wide">
+            <h2 id="d-works" data-reveal="mask">Works, 2025–2026</h2>
+            <IndexList ordered preview optimizePreview={false} items={works.map((work, i) => ({ lead: `Plate ${String(i + 1).padStart(2, '0')}`, title: work.title, meta: [work.material, work.year], description: work.text, href: '#d-works', image: plates[i].src, imageWidth: plates[i].width, imageHeight: plates[i].height }))} />
+          </Container>
+        </Section>
+        <Section labelledBy="d-statement">
+          <Container width="wide">
+            <div class="display-fit" style="--fit: 10.6"><h2 id="d-statement" data-reveal="mask">No tree is cut for a sculpture.</h2></div>
+          </Container>
+        </Section>
+        <Section labelledBy="d-services">
+          <Container width="wide" class="compare-pair">
+            <figure class="compare-figure"><div data-shape="arch" data-reveal="frame"><img src={plates[1].src} width={plates[1].width} height={plates[1].height} alt="Synthetic plate: hills at dusk, in the arch the workshop uses for every photograph" loading="lazy" /></div><figcaption>The workshop door, every Saturday morning.</figcaption></figure>
+            <div class="flow">
+              <h2 id="d-services">Three ways to work together</h2>
+              <IndexList items={services.map((service) => ({ title: service.title, meta: service.meta, description: service.text }))} headingLevel={3} />
+              <p>Write to <a href="#main-content">the workshop</a> with a photograph of the tree.</p>
+            </div>
+          </Container>
+        </Section>
+        <section class="compare-closing" data-scroll="rise" aria-label="Closing">
+          <Container width="wide"><div class="display-fit" style="--fit: 7.6; --display-fit-min: 4rem"><p aria-hidden="true">Oak &amp; Hand</p></div></Container>
+        </section>
+      </>
+    )}
+  </main>
+</SiteShell>
+
+<style>
+@layer components {
+  .compare-split { display: grid; gap: var(--spacing-grid); align-items: center; }
+  @media (min-width: 48rem) { /* --breakpoint-md */
+    .compare-split { grid-template-columns: 1fr 1fr; }
+    .compare-pair { display: grid; grid-template-columns: 5fr 7fr; gap: var(--spacing-xl); align-items: end; }
+  }
+  .compare-head { align-items: end; }
+  .compare-kicker { font-size: var(--text-step--1); text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-muted); }
+  .compare-hero-photo { inline-size: 100%; block-size: auto; border-radius: var(--radius-card); }
+  .compare-band { padding-block: var(--spacing-section); }
+  .compare-center { text-align: center; align-items: center; }
+  .compare-center h2 { text-align: center; }
+  .compare-figure { margin: 0; display: grid; gap: var(--spacing-2xs); }
+  .compare-figure > div { aspect-ratio: 3 / 4; }
+  .compare-figure img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .compare-figure figcaption { font-size: var(--text-step--1); color: var(--color-muted); }
+  .compare-closing { padding-block: var(--spacing-section-m) 0; }
+  /* Text links outside RichText take no underline from the reset; a link inside a sentence needs one. */
+  .compare-pair p a { text-decoration-line: underline; }
+}
+</style>

@@ -1,0 +1,178 @@
+---
+/**
+ * A ruled index: rows separated by hairlines instead of boxed cards, for things a visitor scans
+ * and compares (works, courses, teams, services, programme items, documents). Each row can carry a
+ * lead (a number, a code or a date), metadata, a line of description and a link that covers the
+ * row. With `preview`, a row's picture appears beside it on pointer hover and keyboard focus, as a
+ * duplicate of what the linked page shows; without a fine pointer it is not shown at all.
+ * See docs/reusable-public-patterns.md (Expressive layer).
+ */
+import type { HTMLAttributes } from 'astro/types';
+import ResponsiveImage from './ResponsiveImage.astro';
+import type { ResponsiveImageProps } from '../lib/responsive-image';
+
+export interface IndexListItem {
+  title: string;
+  href?: string;
+  /** A number, code or date before the title: only when it carries information (an order, a course code, a date). */
+  lead?: string;
+  /** Short facts after the title, such as a place, a year or a material. */
+  meta?: string[];
+  description?: string;
+  /** A picture for the hover preview (decorative: it repeats what the linked page shows). */
+  image?: ResponsiveImageProps['src'];
+  imageWidth?: number;
+  imageHeight?: number;
+}
+
+interface Props extends HTMLAttributes<'ol'> {
+  items: IndexListItem[];
+  /** `ol` when the order carries meaning, `ul` otherwise. */
+  ordered?: boolean;
+  headingLevel?: 2 | 3 | 4;
+  preview?: boolean;
+  /** Pass false for SVG or original artwork previews. */
+  optimizePreview?: boolean;
+}
+
+const { items = [], ordered = false, headingLevel = 3, preview = false, optimizePreview = true, class: className, ...attributes } = Astro.props;
+const List = ordered ? 'ol' : 'ul';
+const Heading = `h${headingLevel === 2 || headingLevel === 4 ? headingLevel : 3}` as 'h2' | 'h3' | 'h4';
+const rows = items.filter((item) => item && typeof item.title === 'string' && item.title.trim());
+---
+
+{rows.length > 0 && (
+  <List {...attributes} class:list={['index-list', className]} role="list" data-preview={preview ? '' : undefined} data-editorial-island>
+    {rows.map((item) => (
+      <li class:list={['index-list__row', item.href && 'focus-parent']} data-vt-card={preview && item.image && item.href ? '' : undefined}>
+        {item.lead && <span class="index-list__lead tabular-nums">{item.lead}</span>}
+        <div class="index-list__main">
+          <Heading class="index-list__title">
+            {item.href ? <a class="clickable-parent" href={item.href}>{item.title}</a> : item.title}
+          </Heading>
+          {item.description && <p class="index-list__description">{item.description}</p>}
+        </div>
+        {item.meta && item.meta.length > 0 && <p class="index-list__meta">{item.meta.map((fact, index) => <>{index > 0 && <span aria-hidden="true"> · </span>}<span>{fact}</span></>)}</p>}
+        {preview && item.image && (
+          <span class="index-list__preview" aria-hidden="true" data-vt-media>
+            <ResponsiveImage src={item.image} alt="" width={item.imageWidth} height={item.imageHeight} sizes="16rem" optimize={optimizePreview} />
+          </span>
+        )}
+      </li>
+    ))}
+  </List>
+)}
+
+<style>
+@layer components {
+  .index-list {
+    list-style: none;
+    /* Block margins belong to the parent's flow or gap; only the indent is removed. */
+    margin-inline: 0;
+    padding: 0;
+    border-block-start: 1px solid var(--color-border-strong);
+    container: index-list / inline-size;
+  }
+
+  .index-list__row {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--spacing-3xs) var(--spacing-grid);
+    align-items: baseline;
+    max-inline-size: none;
+    padding-block: var(--spacing-s);
+    border-block-end: 1px solid var(--color-border-strong);
+  }
+
+  .index-list__lead,
+  .index-list__meta {
+    margin: 0;
+    font-size: var(--text-step--1);
+    color: var(--color-muted);
+    max-inline-size: none;
+  }
+
+  .index-list__title {
+    margin: 0;
+    font-size: var(--index-title-size, var(--text-step-1));
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .index-list__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .index-list__description {
+    margin: var(--spacing-3xs) 0 0;
+    color: var(--color-muted);
+  }
+
+  @container index-list (min-width: 40rem) {
+    .index-list__row {
+      grid-template-columns: minmax(3ch, max-content) minmax(0, 1fr) minmax(0, 14rem);
+    }
+
+    .index-list__row:not(:has(.index-list__lead)) .index-list__main { grid-column: 1 / 3; }
+    .index-list__meta { text-align: end; }
+  }
+
+  .index-list__preview {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: 0;
+    inline-size: 14rem;
+    aspect-ratio: 4 / 3;
+    overflow: clip;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+    opacity: 0;
+    translate: 0 -50%;
+    z-index: var(--z-raised);
+    display: none;
+  }
+
+  .index-list__preview :global(img) {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  /* Hover and focus: the preview appears beside the row and the title is underlined. */
+  @media (hover: hover) and (pointer: fine) {
+    .index-list__preview { display: block; }
+
+    .index-list__row:hover .index-list__preview,
+    .index-list__row:focus-within .index-list__preview {
+      opacity: 1;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .index-list__preview {
+        scale: 0.96;
+        transition: opacity var(--duration-fast) var(--ease-smooth), scale var(--duration-base) var(--ease-smooth);
+      }
+
+      .index-list__row:hover .index-list__preview,
+      .index-list__row:focus-within .index-list__preview {
+        scale: 1;
+      }
+    }
+
+    /* No movement on the title: a transform would make it the containing block of the stretched
+       link and shrink the hover area under the pointer. */
+    .index-list__row:has(a):hover .index-list__title {
+      text-decoration: underline;
+      text-underline-offset: 0.15em;
+    }
+  }
+
+  .index-list__row:has(a:focus-visible) .index-list__title {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+}
+</style>

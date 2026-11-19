@@ -19,6 +19,26 @@ Use a primitive only for a visitor need from the brief or page briefs. Record ea
 | Hear the result of an in-page action (copy, filter, search) | `Announcer` | Mounted once in the layout | None; it is the shared live region |
 | Judge whether to read an article now | `readingTime()` in `src/lib/reading-time.ts` | Article and post templates, sometimes listings | Pass the page's `locale`; format `minutes` with localized copy, because the returned `text` is English only |
 
+## Expressive layer: composition and motion that carry a direction
+
+These are chosen at Stage 4, from the Art Direction Record's governing idea and signature moment, and built at Stage 5. They live in `src/styles/expressive.css` (imported by the starter Base layouts after `global.css`) plus two components; `docs/reusable-public-patterns.md` (Expressive layer) has every prop. Inspect them on `/_expressive` in development. Pick the two or three a direction needs; using all of them on one page is its own kind of template.
+
+| Visitor need or direction | Use | Instead of |
+| --- | --- | --- |
+| The subject is a place, a craft, a person or a team, and real photography exists | `MediaStage` (full bleed; words on a scrim, below the picture on a phone) | A text hero beside a small rounded photo in a card |
+| Scan and compare many similar things: works, courses, teams, services, programme items | `IndexList` (ruled rows, optional hover preview) | A third grid of equal cards |
+| One shape belongs to the subject (a chapel arch, a leaf, a folder tab, a pebble) | `data-shape` on every photograph frame of the site, one shape only | Default rounded corners everywhere |
+| One sentence carries the site (a statement, the closing line, the name over the footer) | `.display-fit` with a measured `--fit`, once per page | A bigger `h2` in every section |
+| A picture or ground should arrive rather than appear | `data-reveal="frame"`, `data-scroll="open"`, `data-scroll="rise"` below the first screen | A fade-up on every block |
+| Pages should feel like one object moving, not separate documents blinking | `SiteShell transitionStyle` (`lift`, `curtain`, `wipe`) with `data-arrive` on the heading and lead, and `heroMedia` on detail pages | A router or animation library added for one effect |
+
+Rules that keep them honest:
+
+- **The first screen is never hidden.** Scroll effects start below it; the page `h1` never takes `data-reveal="mask"`. `MediaStage` with `priority` is the Largest Contentful Paint and paints at full opacity.
+- **Words over a photograph are checked on the real photograph** at wide widths, with `scrim="full"` where it is busy. Automated contrast checks cannot see the picture.
+- **Measure `--fit`, then check 320px and 200% text.** The line must wrap, not overflow.
+- **One transition style per site**, recorded in the Art Direction Record with the reason it suits the subject (a curtain for a theatre, a lift for a catalogue, a wipe for a sequence). Reduced motion and the visual editor get plain page loads automatically.
+
 Disclosure, Cluster, Sidebar, LogoTicker, PhotoGallery, PartnersPanel and Form have their own guidance in the skill, `docs/native-composition.md` and `docs/reusable-public-patterns.md` when installed.
 
 ## Contracts to keep

@@ -1894,6 +1894,62 @@
     "tests/site-files.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/styles/expressive.css": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/lib/page-transition-script.ts": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/MediaStage.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/IndexList.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/components/dev/ExpressiveDemo.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/dev/ExpressiveFixture.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/dev/ExpressiveDetailFixture.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/assets/expressive-plate-valley.svg": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/assets/expressive-plate-dusk.svg": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/assets/expressive-plate-field.svg": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/expressive-layer.test.mjs": {
+      "disposition": "shared",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "src/components/dev/ExpressiveCompare.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/dev/ExpressiveCompareBefore.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "src/dev/ExpressiveCompareAfter.astro": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

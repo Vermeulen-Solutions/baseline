@@ -1,0 +1,169 @@
+---
+/**
+ * Development demo of the expressive layer (src/styles/expressive.css, MediaStage, IndexList and
+ * SiteShell transitionStyle). Synthetic plates and neutral copy only; no client material.
+ * Rendered by /_expressive and /_expressive-detail, which exist in development and fixture builds.
+ */
+import '../../styles/expressive.css';
+import SiteShell from '../../layouts/SiteShell.astro';
+import Section from '../Section.astro';
+import Container from '../Container.astro';
+import MediaStage from '../MediaStage.astro';
+import IndexList from '../IndexList.astro';
+import ResponsiveImage from '../ResponsiveImage.astro';
+import valleySvg from '../../assets/expressive-plate-valley.svg';
+import duskSvg from '../../assets/expressive-plate-dusk.svg';
+import fieldSvg from '../../assets/expressive-plate-field.svg';
+import { capabilities } from 'virtual:baseline/capabilities';
+import { ClientRouter } from 'astro:transitions';
+
+interface Props {
+  page: 'index' | 'detail';
+}
+
+const { page } = Astro.props;
+// SVG imports are components; ResponsiveImage takes their URL and native size.
+const valley = { src: valleySvg.src, width: 1600, height: 1000 };
+const dusk = { src: duskSvg.src, width: 900, height: 1200 };
+const field = { src: fieldSvg.src, width: 1200, height: 900 };
+const base = import.meta.env.BASE_URL.replace(/\/+$/, '');
+const slash = capabilities.trailingSlash === 'always' ? '/' : '';
+// ?router (development only) renders the same pages under <ClientRouter /> to check both navigation models.
+const router = !Astro.isPrerendered && Astro.url.searchParams.has('router');
+const query = router ? '?router' : '';
+const detail = `${base}/_expressive-detail${slash}${query}`;
+const home = `${base}/_expressive${slash}${query}`;
+const styles = ['fade', 'lift', 'curtain', 'wipe'] as const;
+const works = [
+  { lead: '01', title: 'Valley study, morning', meta: ['Plate', '1600 × 1000'], description: 'A wide plate: the stage crops it to the screen and keeps its focus point.', image: valley.src, imageWidth: 1600, imageHeight: 1000, href: detail },
+  { lead: '02', title: 'Dusk, in an arch', meta: ['Plate', '900 × 1200'], description: 'A portrait plate that takes the arch shape without losing its subject.', image: dusk.src, imageWidth: 900, imageHeight: 1200, href: detail },
+  { lead: '03', title: 'Field, early summer', meta: ['Plate', '1200 × 900'], description: 'Rows are ruled with hairlines, not boxed as cards.', image: field.src, imageWidth: 1200, imageHeight: 900, href: detail },
+];
+---
+
+<SiteShell title={page === 'index' ? 'Expressive layer demo' : 'Expressive layer: detail'} lang="en" spacingPolicy="automatic-v2" sectionJoins="shared" pageTransitions={router ? 'none' : 'cross-document'} prefetch="off" transitionStyle="lift">
+  <Fragment slot="head">
+    <meta name="robots" content="noindex, nofollow" />
+    {router && <ClientRouter fallback="swap" />}
+    {/* Demo only: the switcher below keeps a chosen style for the visit. */}
+    <script is:inline data-astro-rerun>try { const s = sessionStorage.getItem('expressive-demo-style'); if (s) document.documentElement.setAttribute('data-transition-style', s); } catch {}</script>
+  </Fragment>
+  <header slot="header" class="site-header" data-sticky-header data-vt-header>
+    <nav class="site-nav" aria-label="Demo">
+      <a class="site-brand" href={home}>Expressive layer</a>
+    </nav>
+  </header>
+
+  <main id="main-content" class="site-main" tabindex="-1" data-expressive-demo={page}>
+    {page === 'index' ? (
+      <>
+        <MediaStage image={valley.src} width={1600} height={1000} alt="Synthetic plate: layered hills under a pale sun" priority motion="recede" focus="70% 40%" optimize={false} caption="Plate 01 — a synthetic landscape standing in for a photograph.">
+          <h1 data-arrive>Made by hand, one piece at a time.</h1>
+          <p data-arrive="2">An image-led stage: the picture spans the screen, the words sit on a scrim from the tokens, and on a phone they move below the picture.</p>
+          <p data-arrive="3"><a class="btn" href={detail}>Open a detail page</a></p>
+        </MediaStage>
+
+        <Section labelledBy="statement">
+          <Container width="wide">
+            <div class="display-fit" style="--fit: 12.5">
+              <h2 id="statement" data-reveal="mask">One line, sized to its column.</h2>
+            </div>
+            <p class="expressive-demo__note">The fitted line fills its container and still wraps at 200% text size. Below the first screen it rises out of its own line as it arrives.</p>
+          </Container>
+        </Section>
+
+        <Section labelledBy="shapes">
+          <Container width="wide">
+            <h2 id="shapes" data-reveal="mask">One shape from the subject</h2>
+            <div class="expressive-demo__frames">
+              <figure>
+                <div data-shape="arch" data-reveal="frame" class="expressive-demo__frame" style="aspect-ratio: 900 / 1200"><ResponsiveImage src={dusk.src} width={900} height={1200} alt="Synthetic plate: hills at dusk in an arched frame" sizes="(max-width: 48rem) 100vw, 30vw" optimize={false} /></div>
+                <figcaption>Arch: a chapel's window, a gateway</figcaption>
+              </figure>
+              <figure>
+                <div data-shape="leaf" data-reveal="frame" class="expressive-demo__frame" style="aspect-ratio: 1200 / 900"><ResponsiveImage src={field.src} width={1200} height={900} alt="Synthetic plate: a field in a leaf-shaped frame" sizes="(max-width: 48rem) 100vw, 30vw" optimize={false} /></div>
+                <figcaption>Leaf: a garden, a nursery</figcaption>
+              </figure>
+              <figure>
+                <div data-shape="tab" data-reveal="frame" class="expressive-demo__frame" style="aspect-ratio: 1600 / 1000"><ResponsiveImage src={valley.src} width={1600} height={1000} alt="Synthetic plate: a valley in a frame with one rounded corner" sizes="(max-width: 48rem) 100vw, 30vw" optimize={false} /></div>
+                <figcaption>Tab: an archive, a folder of records</figcaption>
+              </figure>
+            </div>
+          </Container>
+        </Section>
+
+        <Section labelledBy="index">
+          <Container width="wide">
+            <h2 id="index" data-reveal="mask">An index, not a grid of cards</h2>
+            <IndexList items={works} ordered preview optimizePreview={false} headingLevel={3} />
+          </Container>
+        </Section>
+
+        <section class="bleed expressive-demo__band" data-surface="dark" data-scroll="open" aria-labelledby="band">
+          <Container width="content">
+            <h2 id="band">A ground that opens as it arrives</h2>
+            <p>The band starts inset with rounded corners and opens to the full width while it scrolls in. Without scroll-driven animations, or with reduced motion, it is simply full width.</p>
+          </Container>
+        </section>
+
+        <section class="expressive-demo__closing" data-scroll="rise" aria-label="Closing">
+          <Container width="wide">
+            <div class="display-fit" style="--fit: 6.4; --display-fit-min: 4rem"><p aria-hidden="true">Expressive layer</p></div>
+          </Container>
+        </section>
+      </>
+    ) : (
+      <>
+        <MediaStage image={dusk.src} width={900} height={1200} alt="Synthetic plate: hills at dusk" stage="tall" heroMedia priority focus="50% 45%" optimize={false}>
+          <h1 data-arrive>Dusk, in an arch</h1>
+          <p data-arrive="2">The picture you picked grows into this one. Going back plays the transition the other way.</p>
+        </MediaStage>
+        <Section labelledBy="detail-body">
+          <Container width="reading" class="flow">
+            <h2 id="detail-body" data-arrive="3">A detail page</h2>
+            <p>Arrival choreography names the heading, the lead and this section only while a transition runs, so they come in after the page in three short stages.</p>
+            <p><a href={home} data-vt-direction="back">Back to the demo</a></p>
+          </Container>
+        </Section>
+      </>
+    )}
+    <Section labelledBy="demo-controls" spacing="medium">
+      <Container width="wide" class="flow">
+        <h2 id="demo-controls" class="expressive-demo__note">Demo controls</h2>
+        <label class="expressive-demo__switch">Page transition
+          <select id="expressive-demo-style">{styles.map((style) => <option value={style}>{style}</option>)}</select>
+        </label>
+        <p class="expressive-demo__note">Add <code>?router</code> to the address to see the same pages under ClientRouter.</p>
+      </Container>
+    </Section>
+  </main>
+</SiteShell>
+
+<script>
+  const select = document.getElementById('expressive-demo-style');
+  if (select instanceof HTMLSelectElement) {
+    select.value = document.documentElement.getAttribute('data-transition-style') ?? 'lift';
+    select.addEventListener('change', () => {
+      document.documentElement.setAttribute('data-transition-style', select.value);
+      try { sessionStorage.setItem('expressive-demo-style', select.value); } catch { /* Storage blocked: this page only. */ }
+    });
+  }
+</script>
+
+<style>
+@layer components {
+  .expressive-demo__switch { display: inline-flex; gap: var(--spacing-2xs); align-items: center; font-size: var(--text-step--1); }
+  .expressive-demo__note { color: var(--color-muted); }
+  .expressive-demo__frames {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+    gap: var(--spacing-grid);
+    align-items: start;
+  }
+  .expressive-demo__frames figure { margin: 0; display: grid; gap: var(--spacing-2xs); }
+  .expressive-demo__frames figcaption { font-size: var(--text-step--1); color: var(--color-muted); }
+  .expressive-demo__frame :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .expressive-demo__band { padding-block: var(--spacing-section); }
+  .expressive-demo__closing { padding-block: var(--spacing-section-m) 0; }
+}
+</style>

@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { getLocaleDirection } from '../lib/locale';
 import { speculationRules, type PrefetchEagerness } from '../lib/speculation-rules';
+import { pageTransitionScript } from '../lib/page-transition-script';
 
 interface Props {
   title: string;
@@ -32,11 +33,21 @@ interface Props {
    * warm-up below takes over. Omitted is 'off'.
    */
   prefetch?: PrefetchEagerness;
+  /**
+   * Opt-in page-transition style from src/styles/expressive.css: 'fade' keeps the crossfade,
+   * 'lift' steps the old page back and lifts the new one in, 'curtain' and 'wipe' uncover the new
+   * page (from below or from the side, reversed going back). Any value also turns on [data-arrive]
+   * arrival choreography, and with cross-document transitions a small head script that sets the
+   * direction and morphs a picked card's media into [data-vt-hero-media]. Omitted changes nothing.
+   */
+  transitionStyle?: 'fade' | 'lift' | 'curtain' | 'wipe';
 }
 
-const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', sectionJoins, surface, darkReaderLock = false, pageTransitions = 'none', prefetch = 'off' } = Astro.props;
+const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', sectionJoins, surface, darkReaderLock = false, pageTransitions = 'none', prefetch = 'off', transitionStyle: rawTransitionStyle } = Astro.props;
 const resolvedDir = dir ?? getLocaleDirection(lang);
 const prefetchRules = speculationRules(prefetch);
+const transitionStyle = rawTransitionStyle === 'fade' || rawTransitionStyle === 'lift' || rawTransitionStyle === 'curtain' || rawTransitionStyle === 'wipe' ? rawTransitionStyle : undefined;
+const transitionScript = transitionStyle && pageTransitions === 'cross-document' ? pageTransitionScript() : undefined;
 ---
 <!doctype html>
 <html
@@ -48,10 +59,12 @@ const prefetchRules = speculationRules(prefetch);
   data-surface-default={surface === 'dark' || surface === 'light' || surface === 'system' ? surface : undefined}
   data-surface-mode={surface === 'system' ? 'system' : undefined}
   data-visual-fonts={import.meta.env.STARTER_TEST_FIXTURES ? '' : undefined}
+  data-transition-style={transitionStyle}
 >
   <head>
     <style is:inline>@layer theme, base, vendor, astro, components, utilities;</style>
     {pageTransitions === 'cross-document' && <style is:inline>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>}
+    {transitionScript && <script is:inline set:html={transitionScript}></script>}
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>

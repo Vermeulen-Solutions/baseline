@@ -155,8 +155,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode. Links the apple-touch-icon and the web manifest. Renders Analytics and ConsentBanner in body-end (nothing without analytics ids).",
-    "sha256": "1265b4f8a3faf02af9c3d36e410c210990ed07aa9601b6aebf6d1e01ecdf211b"
+    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode. Links the apple-touch-icon and the web manifest. Renders Analytics and ConsentBanner in body-end (nothing without analytics ids). Imports the opt-in expressive layer stylesheet, which applies nothing until a page uses its attributes.",
+    "sha256": "f9fd81fe11b047e41e315b8117a201c4bacc2163cab37cd289982ad62c7bd7f4"
   },
   {
     "path": "src/components/Container.astro",
@@ -371,8 +371,8 @@
   },
   {
     "path": "src/layouts/SiteShell.astro",
-    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. An opt-in darkReaderLock prop emits the documented <meta name=\"darkreader-lock\"> for dark-by-design sites; it is off by default. Any source edit invalidates this exact LF-normalized exception. Opt-in sectionJoins root attribute; scroll reveal observer runs only without CSS scroll-driven animations. Opt-in pageTransitions=\"cross-document\" prop emits an inline @view-transition rule inside prefers-reduced-motion: no-preference; default none keeps existing sites unchanged. Opt-in prefetch prop (off by default) emits a static speculation-rules JSON block for same-origin document prefetch; no script, no prerender.",
-    "sha256": "8a94c3c7bb576b20e267315a0b93b38288f5e48b3221944866514d3ff8c3d3ec"
+    "reason": "Functional starter infrastructure: add NoScroll, dynamic click-time card-to-hero view transition morphing with lifecycle-safe cleanup, directional slide transitions (TurnSignal), targeted replacement swap (ReplacementSwap), persistent element preservation (data-vt-persist), deterministic latency/failure testing hooks (?_vt_delay, ?_vt_fail), dir attribute support, and system/cross-tab surface sync, and an inert data-pagefind-body marker on main for optional search indexing; preserve document/title/landmarks and surface contracts. Sticky header controller adds a data-compact size state with hysteresis and per-header offsets; data-scrolled is unchanged. An opt-in darkReaderLock prop emits the documented <meta name=\"darkreader-lock\"> for dark-by-design sites; it is off by default. Opt-in transitionStyle prop (fade, lift, curtain, wipe) writes data-transition-style for the expressive layer and, with cross-document transitions only, an inline head script for direction and picked-card morphs; omitted, the document is unchanged. Any source edit invalidates this exact LF-normalized exception. Opt-in sectionJoins root attribute; scroll reveal observer runs only without CSS scroll-driven animations. Opt-in pageTransitions=\"cross-document\" prop emits an inline @view-transition rule inside prefers-reduced-motion: no-preference; default none keeps existing sites unchanged. Opt-in prefetch prop (off by default) emits a static speculation-rules JSON block for same-origin document prefetch; no script, no prerender.",
+    "sha256": "bc4953ff57cd8fed69f75069aaa6a4b0c2e04f2d27b0d269e3df003ab7925705"
   },
   {
     "path": "src/components/EmDashImage.astro",
@@ -436,8 +436,8 @@
   },
   {
     "path": "profiles/static/project/src/layouts/Base.astro",
-    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell. Links the apple-touch-icon and the web manifest. Navigation skips gated sections. Renders Analytics and ConsentBanner in body-end (nothing without analytics ids).",
-    "sha256": "22649be94798ba5b7386d3c8b0198f5946c22515c72260797f6b8c1f38875ada"
+    "reason": "Functional static starter asset delivery: add a real prepared neutral SVG favicon with the existing deploy-base/file-suffix URL policy; preserve metadata ownership, content and navigation. Neutral starter header markup: the navigation links sit in one native Menu disclosure so the phone header stays on one row; desktop layout unchanged. Generated static Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell. Links the apple-touch-icon and the web manifest. Navigation skips gated sections. Renders Analytics and ConsentBanner in body-end (nothing without analytics ids). Imports the opt-in expressive layer stylesheet, which applies nothing until a page uses its attributes.",
+    "sha256": "2fd0889cb1776dacf7c8185c28e2e5e57ae321cca4805846fff4093000b3b250"
   },
   {
     "path": "profiles/static/project/src/lib/posts.ts",
@@ -834,5 +834,70 @@
     "path": "src/components/MapEmbed.astro",
     "reason": "Shared presentation primitive: a map frame loaded only on click, with the address and a link to the map; token colours. Exact LF-normalized source hash.",
     "sha256": "9dff73e17c463f45ad66c5aa73869420f0728ec608e02f211d5ee3cec331f700"
+  },
+  {
+    "path": "src/styles/expressive.css",
+    "reason": "Shared opt-in presentation layer: bleed, frame shapes, fitted display line, scroll-driven reveals and page-transition styles. Every rule needs an attribute or class a page adds; motion sits inside reduced-motion and feature guards and rests in the visual editor. Token-bound. Exact LF-normalized source hash.",
+    "sha256": "b558d8f7ac0ab515c9a5a39ac2f2de84382a805be03514476eadfdf42bed38ac"
+  },
+  {
+    "path": "src/lib/page-transition-script.ts",
+    "reason": "Functional starter infrastructure: the inline head script behind SiteShell transitionStyle on cross-document view transitions (direction through pageswap/pagereveal, picked-card media morph, cleanup on finish and BFCache). Emitted only when a site opts in. Exact LF-normalized source hash.",
+    "sha256": "ebd4c192f56f9a59cef1a282d07e23c5aa03b99daaca7d4b1a9062cb1f076ced"
+  },
+  {
+    "path": "src/components/MediaStage.astro",
+    "reason": "Shared presentation primitive: an image-led stage, full bleed or in the column, with words on a token scrim on wide stages and below the picture on narrow ones; eager/high-priority first-screen image, forced-colors fallback. Exact LF-normalized source hash.",
+    "sha256": "9026c9f630991679f8a5be87f8541eb0e3d7797b300b023ee47b1bd5126e4989"
+  },
+  {
+    "path": "src/components/IndexList.astro",
+    "reason": "Shared presentation primitive: a ruled index list with one stretched link per row and an optional decorative hover preview for fine pointers; token colours, focus on the row. Exact LF-normalized source hash.",
+    "sha256": "b51204ea95215f6b7d70c5436ffc52f9a5f198c56e642d95279d471359585170"
+  },
+  {
+    "path": "src/components/dev/ExpressiveDemo.astro",
+    "reason": "Development-only demo of the expressive layer (injected /_expressive routes, absent from release builds); synthetic plates and neutral copy, no client material. Exact LF-normalized source hash.",
+    "sha256": "33b96030e9b87925f9a471bab61b6f26abebb29706853fcfbb5d5ac403924a29"
+  },
+  {
+    "path": "src/dev/ExpressiveFixture.astro",
+    "reason": "Development and fixture-build entry for /_expressive, injected like /_styleguide; renders the expressive demo. Exact LF-normalized source hash.",
+    "sha256": "2dbdabf212efb24d3e43fad6938d8348fd6612445e70ea81d6aad9a16ed2ce37"
+  },
+  {
+    "path": "src/dev/ExpressiveDetailFixture.astro",
+    "reason": "Development and fixture-build entry for /_expressive-detail, injected like /_styleguide; renders the expressive demo's detail page. Exact LF-normalized source hash.",
+    "sha256": "0c49a2ac4cedab27d93759deeafa344584c57b335c5e7ab9ac9c8d6b16797ccd"
+  },
+  {
+    "path": "src/assets/expressive-plate-valley.svg",
+    "reason": "Synthetic demo artwork for the expressive layer: generated layered hills, no photograph or client material. Exact LF-normalized source hash.",
+    "sha256": "6ec2c7e97ac6b018165a5d26f7263e7fc194df0502b037e00266200970086408"
+  },
+  {
+    "path": "src/assets/expressive-plate-dusk.svg",
+    "reason": "Synthetic demo artwork for the expressive layer: generated layered hills, no photograph or client material. Exact LF-normalized source hash.",
+    "sha256": "c8249719041bc9f02a3861b129b0384b795c689603bcc7aba87bef1a1549a579"
+  },
+  {
+    "path": "src/assets/expressive-plate-field.svg",
+    "reason": "Synthetic demo artwork for the expressive layer: generated layered hills, no photograph or client material. Exact LF-normalized source hash.",
+    "sha256": "59a24a481540ee15fb0efa2884a73d320df9e9e001d5bca613085a81f296b13a"
+  },
+  {
+    "path": "src/components/dev/ExpressiveCompare.astro",
+    "reason": "Development-only comparison for the expressive layer (injected /_expressive-before and /_expressive-after routes, absent from release builds): the same synthetic content composed as a template and as a directed page. No client material. Exact LF-normalized source hash.",
+    "sha256": "0718e05945108bfa88513ce7526cb9112c17c5e235ec139590be3be6b12cb2ea"
+  },
+  {
+    "path": "src/dev/ExpressiveCompareBefore.astro",
+    "reason": "Development and fixture-build entry for /_expressive-before, injected like /_styleguide. Exact LF-normalized source hash.",
+    "sha256": "648e31f82a13336fb5027be6e6d22036f1d7929008c1325e7a54fbaf072eb178"
+  },
+  {
+    "path": "src/dev/ExpressiveCompareAfter.astro",
+    "reason": "Development and fixture-build entry for /_expressive-after, injected like /_styleguide. Exact LF-normalized source hash.",
+    "sha256": "eacd0dcf252aaba57a58c5966945c4c11a9fc2c1628b4ad27f342bec53159144"
   }
 ]

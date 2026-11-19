@@ -19,6 +19,13 @@ Every recipe ends the same way: `npm run verify`, a build served locally, and `n
 - **Name and share image:** the site title and tagline (EmDash settings, or `src/config/site.ts`), the default share image (EmDash SEO settings, or a 1200×630 file in `public/` that Base passes as the fallback `image`; one per language when the headline differs), and the business facts in the metadata plugin's `options.organization`.
 - **Check:** `design:tokens`, the art-direction gate, `check:quality` (no `default-identity`, no contrast findings from axe), `audit:ui`, and a look at the share image and home-screen icon.
 
+## Give a page a signature moment
+
+- Read the Art Direction Record first: the governing idea says what the moment is about. One per page archetype is enough: an image-led stage for a place or a craft, one fitted line for a statement, an index that previews the work, a page transition that suits the subject.
+- Use the expressive layer (`docs/reusable-public-patterns.md`, Expressive layer): `MediaStage`, `IndexList`, `data-shape`, `.display-fit`, the `data-reveal`/`data-scroll` effects and `SiteShell transitionStyle`. On an older site, adopt `src/styles/expressive.css` and the component with `npm run site:files -- --site <path> --files <paths> --apply` from a Baseline checkout and add `import '../styles/expressive.css';` after the SiteShell import in `Base.astro`.
+- Use real photographs prepared with `media:prepare`; pass `priority` and a `focus` point to a first-screen stage.
+- **Check:** `audit:ui` at 390, 768 and 1440 (no sideways scroll, no hidden first screen, crops), the words over the photograph by eye at wide widths, 200% text on a fitted line, and reduced motion.
+
 ## Connect a form
 
 - Follow the emdash-production-cutover skill's contact-forms reference on EmDash sites: store first, then send, with honeypot, rate limit or challenge, and the suspicious-submission scoring. On static sites point `Form.astro`'s `action` at the site's own endpoint or a provider, never at `#`.

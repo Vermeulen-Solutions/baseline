@@ -1,0 +1,7 @@
+---
+// Development and fixture builds only, injected by scripts/dev-tools-integration.mjs like /_styleguide.
+import ExpressiveCompare from '../components/dev/ExpressiveCompare.astro';
+Astro.response.headers.set('Cache-Control', 'no-store');
+Astro.response.headers.set('X-Robots-Tag', 'noindex, nofollow');
+---
+<ExpressiveCompare variant="directed" />
