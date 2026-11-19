@@ -7,13 +7,13 @@ visible: no
 database: no
 ---
 
-# The world's motion comes in four layers
+# The world's motion comes in four layers; labels and lettering come from the world
 
-Measured on studio-built sites for a race and an embroidery shop, both built with Astro and plain CSS, no animation library: their home pages run 70 to 140 animations, in four layers. Nearly every part of every section arrives as it enters the screen (50 to 110 entrances, a list item by item); seven or eight motions belong to the subject (mud lands, words are stamped, a route draws itself, contour lines drift with the scroll); one or two slow loops keep the page alive (a ticker, a floating hero, a breathing display line); and every control answers. The trial builds ran two world motions and nothing else, although the starter ships the entrance layer (`data-reveal`).
+Measured on studio-built sites for a race and an embroidery shop, both built with Astro and plain CSS with no animation library: their home pages run 70 to 140 animations, and the page feels alive because the motion belongs to the subject (mud lands on the page, words are stamped, a route draws itself, contour lines drift with the scroll). The trial builds ran two world motions and nothing else.
 
-- World building's motion step names the four layers: entrances with `data-reveal` on each part of a section, three to five named world motions, one or two ambient loops of 8 seconds or more, and feedback. Recipes show a list arriving item by item through a growing `--reveal-range` (and `data-reveal-delay` for the observer fallback) and an ambient loop paused on hover and focus.
-- The interaction motion reference keeps its restraint for controls and for text being read, and points to world building for the site's motion. Impeccable's question of whether the site moves is answered by the recorded world.
-- The Impeccable passes keep the four layers: `animate` and `quieter` tune their timing rather than removing them.
+- World building's motion step names four layers: one orchestrated arrival on the first screen, three to five named world motions that bring the objects in as the visitor scrolls (with the starter's quiet `data-reveal` entrance for the plain text between them), one or two ambient loops of 8 seconds or more, and feedback. Recipes show a world motion on a view timeline, a register arriving item by item, and an ambient loop paused on hover and focus.
+- Labels and the utility voice come from the world's own lettering. The same sites use dozens of small capitals, mono labels, middle dots and arrows as the printing of their bibs, tickets and boards, so the guidance names what makes them work (the object's real fields) rather than banning them.
+- The interaction motion reference keeps its restraint for controls and for text being read, and points to world building for the site's motion. The Impeccable passes keep the four layers: `animate` and `quieter` tune their timing rather than removing them.
 
 ## For sites
 
