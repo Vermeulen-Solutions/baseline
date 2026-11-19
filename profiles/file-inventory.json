@@ -1148,6 +1148,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "tests/reference-research.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "scripts/styleguide-integration.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"

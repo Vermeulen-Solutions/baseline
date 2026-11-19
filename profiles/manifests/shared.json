@@ -80,6 +80,7 @@
     "tests/fluid-tokens.test.mjs",
     "tests/token-contract.test.mjs",
     "tests/art-direction.test.mjs",
+    "tests/reference-research.test.mjs",
     "docs/design-framework.md",
     "docs/architecture-hardening-upgrade.md",
     "docs/upgrades/architecture-hardening-static.patch",

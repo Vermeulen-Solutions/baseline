@@ -72,6 +72,105 @@ export function validateCssAlignment(markdown, css) {
   return [];
 }
 
+// Reference research (site-art-direction/references/reference-research.md): candidates found and
+// captured, each scored on one scorecard, at least three selected above the bar, and the chosen
+// concept scored on the same card at or above the selected references' median.
+export const REFERENCE_DIMENSIONS = Object.freeze(['first screen', 'specificity', 'type', 'photographs', 'composition', 'craft', 'phone', 'fit']);
+export const REFERENCE_BAR = Object.freeze({ total: 17, specificity: 2, fit: 2, candidates: 8, sites: 5, selected: 3, searches: 3 });
+export const REFERENCES_FILE = 'audit/references/references.md';
+
+function tableRows(markdown, heading) {
+  const start = markdown.search(new RegExp(`^###\\s+${heading}\\s*$`, 'mi'));
+  if (start < 0) return null;
+  const body = markdown.slice(start).split(/\r?\n/).slice(1);
+  const rows = [];
+  for (const line of body) {
+    if (/^#{1,3}\s/.test(line)) break;
+    if (!/^\s*\|/.test(line) || /^\s*\|[\s:|-]+\|\s*$/.test(line)) continue;
+    rows.push(line.trim().replace(/^\||\|$/g, '').split('|').map(cell => cell.trim()));
+  }
+  return rows.slice(1); // the first row is the header
+}
+
+function scoreRow(cells, label, errors) {
+  const scores = cells.slice(0, REFERENCE_DIMENSIONS.length).map(Number);
+  if (scores.length < REFERENCE_DIMENSIONS.length || scores.some(s => !Number.isInteger(s) || s < 0 || s > 3)) {
+    errors.push(`${label}: each of ${REFERENCE_DIMENSIONS.join(', ')} needs a score from 0 to 3.`);
+    return null;
+  }
+  const total = Number(cells[REFERENCE_DIMENSIONS.length]);
+  const sum = scores.reduce((a, b) => a + b, 0);
+  if (total !== sum) errors.push(`${label}: total ${cells[REFERENCE_DIMENSIONS.length]} should be ${sum}.`);
+  return { scores: Object.fromEntries(REFERENCE_DIMENSIONS.map((d, i) => [d, scores[i]])), total: sum };
+}
+
+const median = values => { const s = [...values].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : 0; };
+
+/**
+ * @param {string} markdown the references file
+ * @param {{ capturedImages?: (dir: string) => number }} [io] how many images a capture folder holds
+ */
+export function validateReferences(markdown, io = {}) {
+  const text = String(markdown ?? '');
+  const errors = [];
+  const field = name => (text.match(new RegExp(`^\\s*- \\*\\*${name}:\\*\\*[ \\t]*(.*)$`, 'mi'))?.[1] ?? '').trim();
+  for (const name of ['Brief', 'Judged by']) {
+    const value = field(name);
+    if (!value || UNDECIDED.test(value)) errors.push(`${name} needs a concrete value.`);
+  }
+  const searches = [...field('Searches').matchAll(/"[^"]{3,}"|“[^”]{3,}”/g)];
+  if (searches.length < REFERENCE_BAR.searches) errors.push(`Searches needs at least ${REFERENCE_BAR.searches} quoted queries actually run.`);
+
+  const candidates = tableRows(text, 'Candidates');
+  if (!candidates) return [...errors, 'Missing the ### Candidates table.'];
+  const parsed = [];
+  for (const cells of candidates) {
+    const [id, source, kind, ...rest] = cells;
+    const label = `Candidate ${id || '?'}`;
+    if (!id || !source || !/^(https?:\/\/\S+|[\w./-]+)$/.test(source)) { errors.push(`${label}: needs an id and a URL or path.`); continue; }
+    if (!/^(site|prompt|template|system|owner)$/.test(kind)) errors.push(`${label}: kind must be site, prompt, template, system or owner.`);
+    const score = scoreRow(rest, label, errors);
+    const verdict = rest[REFERENCE_DIMENSIONS.length + 1] ?? '';
+    if (!/^(selected|owner|rejected:\s*\S.{3,})$/i.test(verdict)) errors.push(`${label}: verdict must be selected, owner, or "rejected: <reason>".`);
+    parsed.push({ id, source, kind, score, verdict: verdict.toLowerCase().split(':')[0] });
+  }
+  if (parsed.length < REFERENCE_BAR.candidates) errors.push(`Found ${parsed.length} candidates; judge at least ${REFERENCE_BAR.candidates}.`);
+  if (parsed.filter(c => c.kind === 'site').length < REFERENCE_BAR.sites) errors.push(`At least ${REFERENCE_BAR.sites} candidates must be real sites (kind site).`);
+  if (!parsed.some(c => /^(prompt|template|system)$/.test(c.kind))) errors.push('At least one candidate must be a design prompt, template or system.');
+
+  const selected = parsed.filter(c => c.verdict === 'selected');
+  if (selected.length < REFERENCE_BAR.selected) errors.push(`Selected ${selected.length}; select at least ${REFERENCE_BAR.selected} above the bar, searching again if too few pass.`);
+  if (selected.filter(c => c.kind === 'site').length < 2) errors.push('At least two selected references must be real sites.');
+  for (const c of selected) {
+    if (!c.score) continue;
+    if (c.score.total < REFERENCE_BAR.total) errors.push(`Candidate ${c.id} is selected with ${c.score.total}/24; the bar is ${REFERENCE_BAR.total}.`);
+    if (c.score.scores.specificity < REFERENCE_BAR.specificity) errors.push(`Candidate ${c.id} is selected with specificity ${c.score.scores.specificity}; the bar is ${REFERENCE_BAR.specificity}.`);
+    if (c.score.scores.fit < REFERENCE_BAR.fit) errors.push(`Candidate ${c.id} is selected with fit ${c.score.scores.fit}; the bar is ${REFERENCE_BAR.fit}.`);
+    const section = text.match(new RegExp(`^####\\s+${c.id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b[^\\n]*\\n([\\s\\S]*?)(?=^#{2,4}\\s|(?![\\s\\S]))`, 'm'))?.[1] ?? '';
+    const sub = name => (section.match(new RegExp(`^\\s*- \\*\\*${name}:\\*\\*[ \\t]*(.*)$`, 'mi'))?.[1] ?? '').trim();
+    if (!section) { errors.push(`Selected ${c.id} needs its own #### ${c.id} section.`); continue; }
+    for (const name of ['Idea we take', 'What we refuse']) if (!sub(name) || UNDECIDED.test(sub(name))) errors.push(`Selected ${c.id}: ${name} needs a concrete value.`);
+    const captured = sub('Captured').replace(/`/g, '');
+    if (!captured) errors.push(`Selected ${c.id}: Captured needs the folder of its screenshots.`);
+    else if (io.capturedImages && io.capturedImages(captured) < 2) errors.push(`Selected ${c.id}: ${captured} needs at least two screenshots (wide and phone).`);
+  }
+
+  const bar = median(selected.filter(c => c.score && c.kind !== 'owner').map(c => c.score.total));
+  const concepts = tableRows(text, 'Concepts against the bar');
+  if (!concepts) return [...errors, 'Missing the ### Concepts against the bar table: score each concept on the same card.'];
+  const scored = concepts.map(([name, ...rest]) => ({ name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict: (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').toLowerCase() }));
+  const chosen = scored.filter(c => c.verdict === 'chosen');
+  if (scored.length < 2) errors.push('Score at least two concepts against the bar.');
+  if (chosen.length !== 1) errors.push('Mark exactly one concept "chosen" (the others "not chosen").');
+  for (const c of chosen) {
+    if (!c.score) continue;
+    if (c.score.total < bar) errors.push(`The chosen concept scores ${c.score.total}/24, under the selected references' median of ${bar}: raise it before building.`);
+    const weak = REFERENCE_DIMENSIONS.filter(d => c.score.scores[d] < 2);
+    if (weak.length) errors.push(`The chosen concept scores under 2 on ${weak.join(', ')}.`);
+  }
+  return errors;
+}
+
 export function isVisualPath(file) {
   return /^(src|public)\//.test(file.replaceAll('\\', '/'));
 }
@@ -170,7 +269,20 @@ function main() {
   }
   const css = existsSync('src/styles/global.css') ? readFileSync('src/styles/global.css', 'utf8') : null;
   const errors = [...recordErrors, ...validateCssAlignment(agentsMd, css)];
-  if (errors.length) { console.error(formatRecordDiagnostics(agentsMd, errors)); process.exitCode = 1; }
+  // A new direction (Stage 4) needs judged references; a record that names the file keeps it valid.
+  const namesReferences = /^\s*- \*\*References:\*\*[ \t]*\S/m.test(agentsMd);
+  if (args.includes('--require-references') || namesReferences) {
+    if (!existsSync(REFERENCES_FILE)) errors.push(`Reference research is missing: write ${REFERENCES_FILE} (site-art-direction/references/reference-research.md).`);
+    else {
+      const capturedImages = dir => existsSync(dir) ? readdirSync(dir, { recursive: true }).filter(name => /\.(png|jpe?g|webp)$/i.test(String(name))).length : 0;
+      errors.push(...validateReferences(readFileSync(REFERENCES_FILE, 'utf8'), { capturedImages }).map(error => `${REFERENCES_FILE}: ${error}`));
+    }
+  }
+  if (recordErrors.length) { console.error(formatRecordDiagnostics(agentsMd, errors)); process.exitCode = 1; }
+  else if (errors.length) {
+    console.error(['Art direction gate: FAIL', ...errors.map(error => `  - ${error}`), 'Recheck: npm run check:art-direction -- --require-record --require-references'].join('\n'));
+    process.exitCode = 1;
+  }
   else {
     console.log('Art direction record is structurally valid.');
     console.log('👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.');
