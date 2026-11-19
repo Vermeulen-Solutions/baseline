@@ -12,7 +12,7 @@ Write the brief in one line, then run at least three searches and record them wo
 | --- | --- | --- |
 | The same trade, anywhere | the best-made sites of the trade in other cities and countries: "`<trade>` studio", "`<trade>` workshop", the trade's name in the site's language and in English | `site` |
 | Neighbouring trades that share the subject or the material | a woodcarver: furniture makers, stone carvers, timber architects, a forestry museum; a bakery: a mill, a roastery | `site` |
-| Studio case studies | the work pages of small independent studios that design and build sites for trades like this one ("web design studio case study `<trade>`", "website for a `<trade>` case study"): they show the finished site and say what each decision refused | `site` |
+| Studio case studies | the work pages of small independent studios that design and build sites for trades like this one ("web design studio case study `<trade>`", "website for a `<trade>` case study", "small business website case study studio"): they show the finished site and say what each decision refused. Capture the client's live site the case study shows, not the case-study page; a race, a shop or a school is as good a lesson as the same trade | `study` |
 | Curated galleries | a category of a site gallery (siteinspire, minimal.gallery, httpster, Awwwards and similar) matching the trade or the material | `site` |
 | The owner's own and supplied references | everything the owner names, and their earlier sites | `owner` |
 | Written directions | [open-design.ai/prompts](https://open-design.ai/prompts/), [superdesign.dev](https://superdesign.dev/), [designprompts.dev](https://designprompts.dev/), community `DESIGN.md` sources (`designmd-mcp` / [designmd.ai/explore](https://designmd.ai/explore)) | `prompt` or `system` |
@@ -56,7 +56,7 @@ Score each candidate from its screenshots, 0 to 3 per line, on this card:
 
 ## 4. Select at least three above the bar
 
-Select a candidate only with a total of 17 or more (of 24), specificity 2 or more and fit 2 or more. Select at least three, at least two of them real sites, and choose for different lessons rather than three of the same idea. If fewer than three pass, search again with new queries (neighbouring trades and galleries always give more) and add the new searches; the bar does not move. An owner's reference is kept as `owner` whatever it scores, and stated as a constraint; it does not count towards the three and does not lower the bar.
+Select a candidate only with a total of 17 or more (of 24), specificity 2 or more and fit 2 or more. Select at least three, at least two of them real sites and at least one a studio case study (`study`), and choose for different lessons rather than three of the same idea. The case study sets the level: the best-made site of a small trade is usually tidy and quiet, while a studio-built site for a small client shows a made world, and the concept and the built pages are compared with it. If fewer than three pass, search again with new queries (neighbouring trades and galleries always give more) and add the new searches; the bar does not move. An owner's reference is kept as `owner` whatever it scores, and stated as a constraint; it does not count towards the three and does not lower the bar.
 
 For each selected reference write the idea taken (a structure, a way of showing the work, a type scale, a pacing) and what is refused (its palette, its brand devices, anything that would make this site a copy). Never copy a reference's code, copy, photographs or signature effect.
 

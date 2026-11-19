@@ -1986,6 +1986,14 @@
     "src/dev/ExpressiveCompareAfter.astro": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/design-sheet.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/design-sheet.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }
