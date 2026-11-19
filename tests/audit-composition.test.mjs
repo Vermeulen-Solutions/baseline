@@ -156,3 +156,22 @@ test('the selected references are read from the references file, owner reference
   assert.deepEqual(selectedSources(file), [{ id: 'a', url: 'https://maker.test/', kind: 'site' }, { id: 'b', url: 'https://client.test/', kind: 'study' }]);
   assert.equal(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--references', 'audit/references/references.md']).references, 'audit/references/references.md');
 });
+
+test('four or more sections built the same way are a repeated run, even on alternating grounds', () => {
+  const works = page([
+    section({ mediaCount: 1, fullBleedMedia: true }),
+    ...Array.from({ length: 6 }, (_, i) => section({ mediaCount: 1, ground: i % 2 === 0 })),
+    section({ list: true }),
+  ]);
+  const run = assessComposition(works).find((finding) => finding.code === 'repeated-run');
+  assert.equal(run?.count, 6);
+  assert.match(run.message, /Sections 2 to 7 are 6 in a row/);
+  const three = page([section({ mediaCount: 1, fullBleedMedia: true }), ...Array.from({ length: 3 }, (_, i) => section({ mediaCount: 1, ground: i % 2 === 0 })), section({ list: true })]);
+  assert.ok(!codes(three).includes('repeated-run'));
+});
+
+test('a section that sets its entries as tall blocks one after another is a repeated run', () => {
+  const works = page([section({ mediaCount: 1, fullBleedMedia: true }), section({ mediaCount: 12, itemRun: 12 }), section({ list: true })]);
+  assert.match(assessComposition(works).find((f) => f.code === 'repeated-run')?.message ?? '', /Section 2 sets 12 tall items/);
+  assert.ok(!codes(page([section({ mediaCount: 1, fullBleedMedia: true }), section({ mediaCount: 3, itemRun: 3 })])).includes('repeated-run'));
+});

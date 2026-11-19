@@ -86,7 +86,7 @@ export function parseArgs(argv) {
 }
 
 // The privacy-preserving answer on a consent banner, in the languages Baseline sites are built in.
-export const DECLINE = /^\s*(tout refuser|refuser( tout| et fermer)?|continuer sans accepter|reject( all)?|decline( all)?|deny( all)?|only (necessary|essential)|(use )?necessary (cookies )?only|alle ablehnen|ablehnen|nur (notwendige|erforderliche)( cookies)?|rifiuta( tutto)?|rechazar( todo)?|alles weigeren|weigeren)\s*$/i;
+export const DECLINE = /^\s*(tout refuser|refuser( tout| et fermer| les (cookies )?non[ -]essentiels)?|continuer sans accepter|reject( all)?|decline( all)?|deny( all)?|only (necessary|essential)|(use )?necessary (cookies )?only|alle ablehnen|ablehnen|nur (notwendige|erforderliche)( cookies)?|rifiuta( tutto)?|rechazar( todo)?|alles weigeren|weigeren)\s*$/i;
 // A challenge page instead of the site: never captured as if it were the site.
 export const BOT_WALL = /just a moment|attention required|verify you are (a )?human|are you a robot|checking your browser|access denied|request unsuccessful|enable javascript and cookies to continue/i;
 export const isBotWall = (title, text) => BOT_WALL.test(`${title}\n${String(text).slice(0, 2000)}`);
@@ -145,6 +145,7 @@ async function capture(options) {
       for (const route of options.routes) for (let run = 0; run < options.repeat; run++) try {
         const response = await page.goto(new URL(route, options.base).href, { waitUntil: 'load', timeout: 60000 });
         await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+        if (response && response.status() >= 400) throw Error(`HTTP ${response.status()}: the route answered with an error page`);
         if (isBotWall(await page.title(), await page.evaluate(() => document.body?.innerText ?? ''))) throw Error('a bot wall answered instead of the site');
         if (options.declineConsent) {
           for (const frame of page.frames()) {
@@ -166,6 +167,11 @@ async function capture(options) {
           window.scrollTo(0, 0);
         });
         await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
+        // Scroll-driven entrances are measured against the viewport at scroll 0, so a full-page shot shows
+        // every object below the first screen in its start pose (invisible rows, flat drawings). Show the
+        // page as a visitor sees it after scrolling: each finite animation at its end.
+        await page.addStyleTag({ content: '*,*::before,*::after{animation-timeline:auto!important;animation-delay:0s!important}' });
+        await page.evaluate(() => { for (const a of document.getAnimations()) { try { if (Number.isFinite(a.effect?.getComputedTiming().endTime)) a.finish(); } catch {} } });
         await page.waitForTimeout(500);
         const height = await page.evaluate(() => document.documentElement.scrollHeight);
         const overflowX = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
@@ -220,7 +226,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       const { summary, skipped } = await capture(options);
       for (const r of summary) console.log(`${r.width} ${r.status} ${r.route} ${r.kind}${r.overflowX ? ' OVERFLOW-X' : ''}${r.deterministic ? '' : ' NON-DETERMINISTIC'}`);
       for (const s of skipped) console.log(`${s.width} SKIPPED ${s.route} ${s.kind}: ${s.reason}`);
-      if (!summary.length) process.exitCode = 1;
+      if (!summary.length || skipped.some(s => s.kind === 'page')) process.exitCode = 1;
     }
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }
