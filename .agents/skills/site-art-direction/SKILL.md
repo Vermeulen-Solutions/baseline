@@ -166,7 +166,7 @@ The record should constrain implementation without prescribing every CSS value. 
 
 Before handing off, test the proposal:
 
-- Does the governing idea change at least three structural choices, and does each page archetype have one signature moment that only this subject would have? Run `npm run audit:composition` on a rendered representative route where installed; its findings point at the template look.
+- Does the governing idea name something only this client has (not the stock idea for the sector), and change at least three structural choices? Does each page archetype have one signature moment that passes the three tests in [distinctive direction](references/distinctive-direction.md): only this subject, twice the scale or a different kind, still recognisable as a thumbnail? A split hero, a step row, an equal grid or a closing call to action never counts. Run `npm run audit:composition` on a rendered representative route where installed; its findings point at the template look.
 - Could it plausibly belong to many unrelated organizations after replacing the logo and accent color? If so, strengthen the connection to the actual content or identity. Baseline's own recipes count here too: mono kicker labels, numbered section indices, an italic accent word in every headline, glass navigation and the bento → metric strip → dark band sequence read as generated when used by default (see the generic-fingerprint check in `astro-site-design`).
 - Does the hierarchy support visitor tasks and realistic content lengths?
 - Can the direction repeat across all page archetypes without every section using the same composition?

@@ -150,7 +150,7 @@ test('behavior expressive content without JavaScript', async ({ browser }, info)
 test('capture expressive layer at rest', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await open(page);
-  for (const [selector, name] of [['.media-stage', 'expressive-stage.png'], ['section[aria-labelledby="statement"]', 'expressive-statement.png'], ['section[aria-labelledby="shapes"]', 'expressive-shapes.png'], ['section[aria-labelledby="index"]', 'expressive-index.png']]) {
+  for (const [selector, name] of [['.media-stage', 'expressive-stage.png'], ['section[aria-labelledby="statement"]', 'expressive-statement.png'], ['section[aria-labelledby="shapes"]', 'expressive-shapes.png'], ['section[aria-labelledby="index"]', 'expressive-index.png'], ['section[aria-labelledby="tones"]', 'expressive-tones.png']]) {
     const region = page.locator(selector).first();
     await region.scrollIntoViewIfNeeded();
     // Lazy images load once in view; wait for the ones in this region.

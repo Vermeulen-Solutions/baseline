@@ -34,7 +34,7 @@ test('every scroll-driven effect sits inside reduced-motion and feature guards',
 
 test('the layer is opt-in: every rule needs an attribute or class a page adds', () => {
   const rules = [...css.matchAll(/^\t([^@\s/}][^{}]*)\{/gm)].map((match) => match[1].trim());
-  const optIn = /\.bleed|\.display-fit|data-shape|data-reveal|data-scroll|data-transition-style|data-arrive|\.arrive|^:root$|:root:has\(\.bleed\)/;
+  const optIn = /\.bleed|\.display-fit|data-shape|data-tone|data-reveal|data-scroll|data-transition-style|data-arrive|\.arrive|^:root$|:root:has\(\.bleed\)/;
   for (const selector of rules) {
     if (/^(from|to|\d)/.test(selector)) continue;
     assert.match(selector, optIn, `rule "${selector}" applies only after a page opts in`);
@@ -57,6 +57,15 @@ test('colours and motion values come from tokens', () => {
   for (const ease of css.matchAll(/var\(--ease-([a-z]+)\)/g)) assert.ok(['smooth', 'snappy', 'spring', 'exit'].includes(ease[1]), ease[0]);
   assert.match(css, /--duration-stage: 560ms;/);
   assert.match(css, /--radius-shape: clamp\(/);
+});
+
+test('photograph treatments apply only where a frame or image asks for one, and duotone inks come from tokens', () => {
+  assert.match(css, /:where\(\[data-tone="warm"\]\) :where\(img\),\s*:where\(img\[data-tone="warm"\]\) \{\s*filter: sepia\(0\.28\)/);
+  assert.match(css, /:where\(\[data-tone="mono"\]\) :where\(img\)/);
+  assert.match(css, /:where\(\[data-tone="duotone"\]\)::before \{\s*background-color: var\(--tone-ink\);\s*mix-blend-mode: color;/);
+  assert.match(css, /:where\(\[data-tone="duotone"\]\)::after \{\s*background-color: var\(--tone-paper\);\s*mix-blend-mode: multiply;/);
+  assert.match(css, /--tone-ink: var\(--color-action\);/);
+  assert.match(stage, /data-tone=\{tone === 'warm' \|\| tone === 'mono' \|\| tone === 'duotone' \? tone : undefined\}/);
 });
 
 test('the fitted line stays between a rem floor and 2.5 times it, so browser zoom can always double it', () => {

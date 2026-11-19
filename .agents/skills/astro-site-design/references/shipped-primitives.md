@@ -29,6 +29,7 @@ These are chosen at Stage 4, from the Art Direction Record's governing idea and 
 | Scan and compare many similar things: works, courses, teams, services, programme items | `IndexList` (ruled rows, optional hover preview) | A third grid of equal cards |
 | One shape belongs to the subject (a chapel arch, a leaf, a folder tab, a pebble) | `data-shape` on every photograph frame of the site, one shape only | Default rounded corners everywhere |
 | One sentence carries the site (a statement, the closing line, the name over the footer) | `.display-fit` with a measured `--fit`, once per page | A bigger `h2` in every section |
+| The owner's photographs are mixed phone pictures of different ages and light | Choose the three best for the large moments, one `data-tone` treatment on every photograph, tight crops with `focus` | Every photograph small, in the same frame, to hide its quality |
 | A picture or ground should arrive rather than appear | `data-reveal="frame"`, `data-scroll="open"`, `data-scroll="rise"` below the first screen | A fade-up on every block |
 | Pages should feel like one object moving, not separate documents blinking | `SiteShell transitionStyle` (`lift`, `curtain`, `wipe`) with `data-arrive` on the heading and lead, and `heroMedia` on detail pages | A router or animation library added for one effect |
 
@@ -37,6 +38,7 @@ Rules that keep them honest:
 - **The first screen is never hidden.** Scroll effects start below it; the page `h1` never takes `data-reveal="mask"`. `MediaStage` with `priority` is the Largest Contentful Paint and paints at full opacity.
 - **Words over a photograph are checked on the real photograph** at wide widths, with `scrim="full"` where it is busy. Automated contrast checks cannot see the picture.
 - **Measure `--fit`, then check 320px and 200% text.** The line must wrap, not overflow.
+- **A signature moment passes the three tests** in `site-art-direction/references/distinctive-direction.md` (only this subject; twice the scale or a different kind; still recognisable as a thumbnail). A split hero, a step row, an equal grid or a closing call to action never counts, and `audit:composition` reports `split-hero`, `uniform-gallery` and `no-signature` when a page falls back on them.
 - **One transition style per site**, recorded in the Art Direction Record with the reason it suits the subject (a curtain for a theatre, a lift for a catalogue, a wipe for a sequence). Reduced motion and the visual editor get plain page loads automatically.
 
 Disclosure, Cluster, Sidebar, LogoTicker, PhotoGallery, PartnersPanel and Form have their own guidance in the skill, `docs/native-composition.md` and `docs/reusable-public-patterns.md` when installed.
