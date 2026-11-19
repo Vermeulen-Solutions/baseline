@@ -7,6 +7,7 @@ Start here when the task is writing, rewriting or editing site copy: a homepage,
 | Task | Read | What it gives you |
 | --- | --- | --- |
 | Before writing anything | [discovery-and-content.md](discovery-and-content.md) → Interview prompts, Synthesize before designing | Audience, offer, next action, voice and **who speaks** (first person, studio name, visitor address), facts and restrictions |
+| Voice, the fact sheet, the device budget and the tells of model copy | [copy-voice.md](copy-voice.md) | One register per client from the owner's facts; what gives model-written copy away, in English and French, and the `copy-tell` check |
 | Planning a page's copy | [discovery-and-content.md](discovery-and-content.md) → Plan important pages before composition | Page brief: visitor, purpose, lead message, question coverage, section argument, draft copy at real length |
 | Claims and proof | [discovery-and-content.md](discovery-and-content.md) → Claims, evidence and missing proof | The claim → source → permitted use ledger; no invented testimonials, metrics or promises |
 | Headlines, section order, conversion copy | `astro-site-design/references/landing-page-archetypes.md` → Conversion copywriting engine | Outcome-led headline patterns and section pacing for marketing pages |

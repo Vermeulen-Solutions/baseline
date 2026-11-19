@@ -36,6 +36,10 @@
 // - copy-rule: a site wording rule from the budget's `copy` list matched in the text a visitor
 //   reads (code, quotations, hidden text and [data-copy-ignore] are skipped), for example
 //   { "pattern": "\\bwe\\b", "why": "the studio is one person: say I" } or a banned phrase.
+// - copy-tell: a tell of model-written copy on English or French pages (scripts/copy-tells.mjs): a
+//   word or stock line that stands in for a fact, template residue, a stale copyright year, or a
+//   device used so often it is a habit (two-fragment headings, contrast frames, virtue words).
+//   `copyAllow` in the budget lists words the trade uses literally; `"copyTells": false` turns it off.
 // - axe (phone width): WCAG 2.x A/AA violations of serious or critical impact, from @axe-core/playwright
 //   when installed (--no-axe skips it); share-image: an indexable page without og:image, or one that
 //   does not load or is over 600 KB, which link previews drop;
@@ -64,6 +68,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseSitemap, sampleRoutes } from './audit-ui.mjs';
 import { msysToNative, restoreGitBashRoute } from './capture-routes.mjs';
+import { copyTells } from './copy-tells.mjs';
 
 export const DEFAULT_LIMITS = Object.freeze({
   htmlKB: 150,
@@ -134,7 +139,7 @@ export function parseBudget(text, source = BUDGET_FILE) {
     }
     return limits;
   };
-  for (const key of Object.keys(data)) if (!key.startsWith('_') && !['limits', 'pages', 'jsonLd', 'islands', 'copy'].includes(key)) throw Error(`${source}: unknown key "${key}"`);
+  for (const key of Object.keys(data)) if (!key.startsWith('_') && !['limits', 'pages', 'jsonLd', 'islands', 'copy', 'copyAllow', 'copyTells'].includes(key)) throw Error(`${source}: unknown key "${key}"`);
   const pages = {};
   if (data.pages !== undefined) {
     if (!plainObject(data.pages)) throw Error(`${source}: pages must be an object`);
@@ -152,7 +157,9 @@ export function parseBudget(text, source = BUDGET_FILE) {
     }
   }
   if (data.islands !== undefined && (!Array.isArray(data.islands) || data.islands.some(r => typeof r !== 'string' || !r.startsWith('/')))) throw Error(`${source}: islands must be a list of routes`);
-  return { limits: limitsOf(data.limits, 'limits'), pages, jsonLd, islands: (data.islands ?? []).map(normalRoute), copy: parseCopyRules(data.copy, source) };
+  if (data.copyAllow !== undefined && (!Array.isArray(data.copyAllow) || data.copyAllow.some(w => typeof w !== 'string' || !w.trim()))) throw Error(`${source}: copyAllow must be a list of words`);
+  if (data.copyTells !== undefined && typeof data.copyTells !== 'boolean') throw Error(`${source}: copyTells must be true or false`);
+  return { limits: limitsOf(data.limits, 'limits'), pages, jsonLd, islands: (data.islands ?? []).map(normalRoute), copy: parseCopyRules(data.copy, source), copyAllow: data.copyAllow ?? [], copyTells: data.copyTells ?? true };
 }
 
 // Site wording rules checked on the rendered text: [{ "pattern": "\\bwe\\b", "flags": "i", "why": "..." }].
@@ -327,6 +334,8 @@ export function initBudget(measurements, existing = null) {
     jsonLd: existing?.jsonLd ?? {},
     islands: existing?.islands ?? [],
     ...(existing?.copy?.length ? { copy: existing.copy.map(({ pattern, flags, why }) => ({ pattern, flags, ...(why ? { why } : {}) })) } : {}),
+    ...(existing?.copyAllow?.length ? { copyAllow: existing.copyAllow } : {}),
+    ...(existing?.copyTells === false ? { copyTells: false } : {}),
   };
 }
 
@@ -387,6 +396,15 @@ function visibleCopy() {
     lines.push(text);
   }
   return lines.join('\n');
+}
+
+// The page language and its visible headings, for the copy tells.
+function copyFrame() {
+  const skip = 'script, style, noscript, template, blockquote, q, [data-copy-ignore], [hidden], [aria-hidden="true"]';
+  const headings = [...document.querySelectorAll('h1, h2, h3, h4')]
+    .filter(h => !h.closest(skip) && (!h.checkVisibility || h.checkVisibility({ visibilityProperty: true })))
+    .map(h => (h.innerText || h.textContent || '').replace(/\s+/g, ' ').trim()).filter(Boolean);
+  return { copyLang: document.documentElement.lang || '', copyHeadings: headings };
 }
 
 // Launch readiness, read from the page as a visitor gets it. Markers and starter identity are
@@ -605,6 +623,7 @@ export async function measureRoute(browser, base, route, { tabs = 40, axe = null
       if (!measurement.noindex) for (const issue of await shareImageIssues(page, url, page_.shareImage)) issues.push({ ...issue, route });
       if (axe) for (const issue of await axeIssues(axe, page)) issues.push({ ...issue, route, width: viewport.width });
       measurement.copyText = await page.evaluate(visibleCopy);
+      Object.assign(measurement, await page.evaluate(copyFrame));
       for (const f of await page.evaluate(launchFindings, [...STARTER_IDENTITY])) issues.push({ kind: f.kind, route, value: f.value, ...(f.detail ? { detail: f.detail } : {}) });
       // Report-only violations fire the same event, so a site can clear them before enforcing.
       for (const v of await page.evaluate(() => window.__qualityCsp ?? [])) issues.push({ kind: 'csp-violation', route, value: `${v.directive} ${v.blocked}`, detail: `${v.disposition === 'report' ? 'report-only' : 'blocked'}${v.source ? ` at ${v.source}` : ''}` });
@@ -625,6 +644,8 @@ export async function measureRoute(browser, base, route, { tabs = 40, axe = null
 export function budgetIssues(measurement, budget) {
   const copyIssues = (budget?.copy?.length && measurement.copyText ? copyMatches(measurement.copyText, budget.copy) : [])
     .map(found => ({ kind: 'copy-rule', route: measurement.route, value: `"${found.match}"${found.count > 1 ? ` (${found.count}x)` : ''}`, detail: `${found.rule.why || found.rule.pattern}: …${found.context}…` }));
+  const tells = budget?.copyTells === false || !measurement.copyText ? [] : copyTells({ text: measurement.copyText, headings: measurement.copyHeadings, lang: measurement.copyLang, allow: budget?.copyAllow ?? [] });
+  for (const found of tells) copyIssues.push({ kind: 'copy-tell', route: measurement.route, value: `${found.tell} ${found.value}${found.count > 1 && !found.value.endsWith('on the page') ? ` (${found.count}x)` : ''}`, detail: found.detail });
   const limits = limitsFor(budget, measurement.route);
   const issues = measurement.htmlKB === undefined ? [] : [...weightIssues(measurement.route, measurement, limits), ...metadataIssues(measurement, limits)];
   for (const [key, width] of [['layoutShiftPhone', PHONE.width], ['layoutShiftDesktop', DESKTOP.width]]) {
@@ -660,6 +681,8 @@ export async function checkQuality(options, hooks = {}) {
       measurements.push(result.measurement);
       issues.push(...result.issues, ...(options.init ? [] : budgetIssues(result.measurement, budget)));
       delete result.measurement.copyText; // page text stays out of the report
+      delete result.measurement.copyHeadings;
+      delete result.measurement.copyLang;
       hooks.progress?.(`${index + 1}/${routes.length} ${route}`);
     }
   } finally { await browser.close(); }

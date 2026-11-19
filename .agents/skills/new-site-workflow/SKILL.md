@@ -80,7 +80,7 @@ Read only the one that matches the request:
 
 | When | Read |
 | --- | --- |
-| Writing, rewriting or editing site copy (copywriting or copyediting) | [references/copywriting.md](references/copywriting.md), which routes to the brief, claims, conversion-copy and microcopy guidance |
+| Writing, rewriting or editing site copy (copywriting or copyediting) | [references/copywriting.md](references/copywriting.md), which routes to the brief, claims, conversion-copy and microcopy guidance; [references/copy-voice.md](references/copy-voice.md) for voice and the tells of model copy |
 | Requested participant studies, uncertain findability or supplied research to synthesize | [references/visitor-research.md](references/visitor-research.md). Reuse settled discovery; a straightforward site does not need a new study. Distinguish actual participant evidence from owner review, agent critique and synthetic rehearsal |
 | Motion, illustration, charts, editable vectors, 3D or video | [capability routing](../site-art-direction/references/capability-routing.md). Reuse the chosen surface and runtime, load installed guidance first, discover a skill only for a real gap, and test a representative result in its destination. A capability request is not a reason to switch tools or replay discovery |
 | Delegation is authorized and work is independent | [references/parallel-delivery.md](references/parallel-delivery.md); one writer per shared file, instance or canvas |
