@@ -27,7 +27,7 @@ function file({ candidates, concepts, selectedSections = ['a', 'b', 'c'], search
     `| B | ${weak.join(' | ')} | 11 | not chosen |`,
   ];
   const sections = selectedSections.map(id => `#### ${id} — source\n- **Captured:** audit/references/${id}/\n- **Idea we take:** the work at full width, then a dated register\n- **What we refuse:** its grey sans-serif labels`).join('\n\n');
-  return `## Reference research\n- **Brief:** a woodcarver who sculpts fallen trees where they stand\n- **Searches:** ${searches}\n- **Judged by:** a reviewer sub-agent given only the screenshots and this card\n\n### Candidates\n${header}\n${list.join('\n')}\n\n### Selected\n${sections}\n\n### Concepts against the bar\n${conceptHeader}\n${conceptRows.join('\n')}\n`;
+  return `## Reference research\n- **Brief:** a furniture maker who builds tables from local oak\n- **Searches:** ${searches}\n- **Judged by:** a reviewer sub-agent given only the screenshots and this card\n\n### Candidates\n${header}\n${list.join('\n')}\n\n### Selected\n${sections}\n\n### Concepts against the bar\n${conceptHeader}\n${conceptRows.join('\n')}\n`;
 }
 const images = (count) => ({ capturedImages: () => count });
 
