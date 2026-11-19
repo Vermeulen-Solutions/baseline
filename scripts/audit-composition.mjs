@@ -17,8 +17,11 @@
 //   when that repeat is structural (cards, media, or a kicker or split opening);
 // - no-full-width-media: photographs cover at least a tenth of the page but none spans the viewport;
 // - closing-band: the page ends on a centred heading and button on a ground of its own;
-// - no-signature: nothing on the page is larger or different in kind (no stage, fitted line,
-//   index with previews, shaped frames, or a heading at least 2.5 times the body size beyond h1);
+// - split-hero: the page opens with its heading beside a photograph narrower than 60% of the screen;
+// - uniform-gallery: six or more pictures in equal frames in one grid, none larger than the rest;
+// - no-signature: nothing on the page is larger or different in kind (no stage, fitted line or
+//   index with previews, and no heading markedly larger than the page's other headings, such as
+//   an opening line at least twice their size);
 // - first-screen-heading (narrowest width): the page's h1 is not on the first screen.
 // It also prints the measurements behind them: largest h1 and h2, body size, image cover and
 // full-width media count. None of this fails a build unless --strict is given; the findings are
@@ -79,8 +82,12 @@ export function assessComposition(model) {
   if (photographic && !sections.some((s) => s.fullBleedMedia)) add('no-full-width-media', 'The page has photographs but none spans the viewport. One photograph at full width (MediaStage) usually says more than many small ones.');
   const last = sections.at(-1);
   if (last && last.centered && last.action && last.ground && sections.length >= 4) add('closing-band', 'The page ends on a centred heading and button on a band of its own: the most common template ending. End on something that belongs to the subject, or a quieter, specific next step.');
-  const statement = model.h2Max >= 2.5 * model.bodySize;
-  if (!model.signature && !statement && !sections.some((s) => s.fullBleedMedia)) add('no-signature', 'Nothing on the page is larger or different in kind. Give the page one signature moment (a stage, a fitted line, an index with previews, a dated programme).');
+  if (model.splitHero) add('split-hero', 'The page opens with its heading beside a photograph: the opening of the template, however good the photograph. Put the words on the picture (MediaStage), let one line carry the first screen, or open with the content itself.');
+  if (model.uniformGallery) add('uniform-gallery', `${model.uniformGallery} photographs sit in a grid of equal frames with none larger: a card grid without the borders. Show a few large and the rest as an index (IndexList preview), or vary the sizes by importance.`, { count: model.uniformGallery });
+  // A statement is a heading markedly larger than the page's other headings, not one of many large ones.
+  const statement = (model.h2Max >= 2.5 * model.bodySize && model.h2Max >= 1.6 * (model.h2Median || model.h2Max))
+    || (model.h1Size >= 5 * model.bodySize && model.h1Size >= 2 * (model.h2Median || model.h1Size));
+  if (!model.signature && !statement && !sections.some((s) => s.fullBleedMedia)) add('no-signature', 'Nothing on the page is larger or different in kind from the rest. Give the page one signature moment: a stage, a fitted line, an index that previews what it lists, a programme with dates set very large.');
   if (model.narrow && model.narrow.h1Bottom !== null && model.narrow.h1Bottom > model.narrow.viewportHeight) add('first-screen-heading', `At ${model.narrow.width}px the page heading starts below the first screen. Shorten the picture above it or move the heading onto it.`);
   return findings;
 }
@@ -160,14 +167,38 @@ export function measurePage() {
     if (r.width >= vw * 0.95) fullWidth++;
   }
   const h1 = main.querySelector('h1') ?? document.querySelector('h1');
+  // Split hero: the first section holds the h1 and its largest picture beside it, narrower than 60%.
+  let splitHero = false;
+  const first = sections[0];
+  if (first && h1 && first.contains(h1)) {
+    const hr = h1.getBoundingClientRect();
+    const pictures = [...first.querySelectorAll('img, video')].filter(visible).map((m) => m.getBoundingClientRect()).sort((a, b) => b.width * b.height - a.width * a.height);
+    const pic = pictures[0];
+    if (pic && pic.width < vw * 0.6 && pic.width > vw * 0.2) splitHero = (pic.left >= hr.right - 8 || pic.right <= hr.left + 8) && pic.top < hr.bottom + 200 && pic.bottom > hr.top;
+  }
+  // Uniform gallery: six or more pictures in equal frames in one grid, none at least 1.5 times larger.
+  let uniformGallery = 0;
+  for (const el of main.querySelectorAll('*')) {
+    const kids = [...el.children].filter(visible).filter((k) => k.querySelector('img'));
+    if (kids.length < 6) continue;
+    const boxes = kids.map((k) => k.querySelector('img').getBoundingClientRect()).filter((r) => r.width >= 80);
+    if (boxes.length < 6) continue;
+    const areas = boxes.map((r) => r.width * r.height);
+    const widths = boxes.map((r) => r.width);
+    if (Math.max(...widths) - Math.min(...widths) <= Math.max(...widths) * 0.06 && Math.max(...areas) < 1.5 * Math.min(...areas)) uniformGallery = Math.max(uniformGallery, boxes.length);
+  }
+  const h2Sizes = sizes('h2').sort((a, b) => a - b);
   return {
+    splitHero,
+    uniformGallery,
+    h2Median: h2Sizes.length ? h2Sizes[Math.floor(h2Sizes.length / 2)] : 0,
     width: vw,
     bodySize,
     h1Size: h1 ? px(h1, 'fontSize') : 0,
     h2Max: Math.max(0, ...sizes('h2')),
     imageCover: +(imageArea / (vw * document.documentElement.scrollHeight)).toFixed(2),
     fullWidthMedia: fullWidth,
-    signature: Boolean(main.querySelector('.display-fit, .media-stage, .index-list[data-preview], [data-shape]')),
+    signature: Boolean(main.querySelector('.display-fit, .media-stage, .index-list[data-preview]')),
     sections: records,
   };
 }

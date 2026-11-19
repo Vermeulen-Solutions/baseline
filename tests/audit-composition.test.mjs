@@ -40,9 +40,18 @@ test('photographs at a tenth of the page without one at full width are reported;
   assert.ok(!codes(page([section({ mediaCount: 1 })], { imageCover: 0.02, signature: true })).includes('no-full-width-media'));
 });
 
-test('a statement heading counts as a signature moment', () => {
+test('a statement heading counts as a signature moment only when it stands out from the other headings', () => {
   assert.ok(codes(page([section()])).includes('no-signature'));
-  assert.ok(!codes(page([section()], { h2Max: 44 })).includes('no-signature'));
+  assert.ok(!codes(page([section()], { h2Max: 44, h2Median: 24 })).includes('no-signature'), 'one heading markedly larger');
+  assert.ok(codes(page([section()], { h2Max: 88, h2Median: 88 })).includes('no-signature'), 'every heading equally large is not a statement');
+  assert.ok(!codes(page([section()], { h1Size: 200, h2Max: 60, h2Median: 60 })).includes('no-signature'), 'a giant opening line is a statement');
+});
+
+test('the split hero and a uniform gallery are reported', () => {
+  assert.deepEqual(codes(page([section({ fullBleedMedia: false })], { splitHero: true, signature: true })), ['split-hero']);
+  const gallery = assessComposition(page([section()], { uniformGallery: 15, signature: true }));
+  assert.equal(gallery[0].code, 'uniform-gallery');
+  assert.match(gallery[0].message, /^15 photographs sit in a grid of equal frames/);
 });
 
 test('the page heading must be on a phone first screen', () => {
