@@ -100,6 +100,9 @@ test('CLI keeps requiring the record after visual work is committed', () => {
     assert.equal(run().status, 1, 'committed visual implementation must still require the record');
     writeFileSync(join(directory, 'AGENTS.md'), record);
     assert.equal(run().status, 0);
+    // A --require-* flag runs its check even when the changed-files shortcut would pass.
+    const requireReferences = spawnSync(process.execPath, [script, '--changed', '--require-references'], { cwd: directory, encoding: 'utf8' });
+    assert.equal(requireReferences.status, 1, 'the npm script adds --changed; --require-references must not pass vacuously');
   } finally {
     assert.equal(dirname(resolve(directory)), resolve(tmpdir()));
     assert.ok(basename(directory).startsWith('emdash-design-gate-'));

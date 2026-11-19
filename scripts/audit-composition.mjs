@@ -13,6 +13,8 @@
 // - kicker-openings: three or more sections open with a small uppercase label above the heading;
 // - split-openings: three or more sections open with the heading on one side and a lead beside it;
 // - card-grids: two or more sections are grids of three or more equal boxed items;
+// - repeated-run: four or more sections in a row, or four or more tall items inside one section, are
+//   built the same way whatever their grounds (a register of twelve works as twelve identical blocks);
 // - repeated-neighbours: two adjacent sections share the same opening, content kind and ground,
 //   when that repeat is structural (cards, media, or a kicker or split opening);
 // - no-full-width-media: photographs cover at least a tenth of the page but none spans the viewport;
@@ -113,6 +115,16 @@ export function assessComposition(model) {
     const structural = ['cards', 'media'].includes(kind) || ['kicker', 'split'].includes(opening);
     if (a === sectionSignature(sections[i]) && structural) add('repeated-neighbours', `Sections ${i} and ${i + 1} open, hold and stand the same way (${a.replaceAll('|', ', ')}). Change the width, the ground or the kind of content between neighbours.`, { at: i });
   }
+  // A run of four or more sections built the same way reads as one template repeated, even when the
+  // grounds alternate (a register of twelve works as twelve identical sections).
+  let run = 1;
+  for (let i = 1; i <= sections.length; i++) {
+    const same = i < sections.length && sectionSignature(sections[i]).split('|').slice(0, 2).join('|') === sectionSignature(sections[i - 1]).split('|').slice(0, 2).join('|');
+    if (same) { run++; continue; }
+    if (run >= 4) add('repeated-run', `Sections ${i - run + 1} to ${i} are ${run} in a row built the same way (${sectionSignature(sections[i - 1]).split('|').slice(0, 2).join(', ')}), whatever their grounds. Set a run of like items as one object (a register, a woodpile, a wall of plates, an index) with one or two shown large, not as a section each.`, { count: run });
+    run = 1;
+  }
+  for (const [i, section] of sections.entries()) if (section.itemRun >= 4) add('repeated-run', `Section ${i + 1} sets ${section.itemRun} tall items one after another the same way. Set the run as one object (a register, a woodpile, a wall of plates, an index) with one or two shown large, and vary scale and placement between the rest.`, { count: section.itemRun, at: i + 1 });
   const photographic = sections.some((s) => s.mediaCount > 0) && model.imageCover >= 0.1;
   if (photographic && !sections.some((s) => s.fullBleedMedia)) add('no-full-width-media', 'The page has photographs but none spans the viewport. One photograph at full width (MediaStage) usually says more than many small ones.');
   const last = sections.at(-1);
@@ -257,6 +269,17 @@ export function measurePage() {
     const media = [...section.querySelectorAll('img, video, picture')].filter(visible).filter((m) => m.getBoundingClientRect().width >= 80);
     const sr = section.getBoundingClientRect();
     const fullBleedMedia = media.some((m) => m.getBoundingClientRect().width >= vw * 0.95) || (sr.width >= vw * 0.95 && s.backgroundImage !== 'none' && /url\(/.test(s.backgroundImage));
+    // The longest run of tall, like items inside the section (each at least 40% of a screen, holding a
+    // picture, same tag and first class): a register laid out as one block per entry.
+    let itemRun = 0;
+    {
+      const key = (el) => el.getBoundingClientRect().height >= innerHeight * 0.4 && el.querySelector('img, picture, video') ? `${el.tagName}.${el.classList[0] ?? ''}` : null;
+      for (const container of [section, ...section.querySelectorAll('*')]) {
+        if (container.children.length < 4) continue;
+        let n = 0, last = null;
+        for (const kid of container.children) { const k = visible(kid) ? key(kid) : null; n = k && k === last ? n + 1 : (k ? 1 : 0); last = k; itemRun = Math.max(itemRun, n); }
+      }
+    }
     const list = Boolean(section.querySelector('.index-list, ol[role="list"], table')) || [...section.querySelectorAll('ul, ol')].some((l) => l.children.length >= 4 && [...l.children].every((li) => li.getBoundingClientRect().width > sr.width * 0.6));
     return {
       tag: section.tagName.toLowerCase(),
@@ -267,6 +290,7 @@ export function measurePage() {
       list,
       mediaCount: media.length,
       fullBleedMedia,
+      itemRun,
       width: Math.round(sr.width),
     };
   });
@@ -337,6 +361,11 @@ export function measurePage() {
         const s = getComputedStyle(el);
         if ([...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) { typeSizes.add(Math.round(parseFloat(s.fontSize))); colours.add(s.color); }
         if (s.backgroundColor !== 'rgba(0, 0, 0, 0)' && s.backgroundColor !== 'transparent') colours.add(s.backgroundColor);
+        // Drawn objects carry colour too: SVG fills, strokes and gradient stops.
+        if (el instanceof SVGElement) {
+          for (const paint of [s.fill, s.stroke]) if (paint && /^rgb/.test(paint) && paint !== 'rgba(0, 0, 0, 0)') colours.add(paint);
+          if (el.tagName.toLowerCase() === 'stop' && s.stopColor) colours.add(s.stopColor);
+        }
         const pseudo = ['::before', '::after'].some((p) => getComputedStyle(el, p).backgroundImage !== 'none');
         if (size(el, 120, 40) && (s.backgroundImage !== 'none' || pseudo)) surfaces++;
         if ((el.tagName.toLowerCase() === 'svg' || el.tagName === 'CANVAS') && size(el, 32, 32)) drawn++;

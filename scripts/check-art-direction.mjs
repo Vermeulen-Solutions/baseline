@@ -332,7 +332,9 @@ function main() {
   const git = (...gitArgs) => execFileSync('git', gitArgs, { encoding: 'utf8' }).split('\0').filter(Boolean);
   const agentsMd = existsSync('AGENTS.md') ? readFileSync('AGENTS.md', 'utf8') : '';
   const recordErrors = validateRecord(agentsMd);
-  if (args.includes('--changed') && !args.includes('--require-record')) {
+  // Any --require-* flag asks for that check whatever changed: without this, a fresh site with no
+  // visual change passed --require-references through the changed-files shortcut below.
+  if (args.includes('--changed') && !args.some(arg => arg.startsWith('--require-'))) {
     let gitReady = true;
     try { execFileSync('git', ['rev-parse', '--verify', base], { stdio: 'pipe' }); }
     catch (error) {
