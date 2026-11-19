@@ -92,7 +92,8 @@ with `npm run design:tokens -- --init-client --lane <lane>`, replace sample cont
 and calibrate primitives on /_styleguide before broad page assembly. Record
 observations in audit/component-calibration.md; a generated checklist is not
 browser evidence. Use site-art-direction, astro-site-design and impeccable
-for direction, implementation and rendered critique.
+for direction, implementation and rendered critique; run Impeccable by its
+commands as new-site-workflow's impeccable-passes.md sets out.
 
 ## Implementation essentials
 

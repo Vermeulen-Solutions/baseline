@@ -41,7 +41,8 @@ why a surface is unaffected when that matters to understanding the result.
 ## Spacing and shared components
 
 Use `astro-site-design` for implementation and the established visual gate and
-bounded `impeccable` critique when applicable. Preserve the site's selected
+Impeccable passes in [impeccable-passes.md](impeccable-passes.md#day-2-changes)
+when applicable. Preserve the site's selected
 direction and shell policy. `docs/design-framework.md` and
 `docs/native-composition.md` describe the installed controls.
 

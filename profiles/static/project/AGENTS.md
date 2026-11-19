@@ -13,17 +13,18 @@ lockfile and use `npm ci` once it has been created by the initial `npm install`.
 
 Use the checked-in `new-site-workflow`, `site-art-direction`, `astro-site-design`
 and `impeccable` skills for the applicable brief, art direction, calibration and
-public Astro implementation stages. Their EmDash-only sections do not apply to
+public Astro implementation stages; run Impeccable by its commands as
+`new-site-workflow/references/impeccable-passes.md` sets out. Their EmDash-only sections do not apply to
 this profile. Do not load CMS setup/modeling/plugin skills or add database,
 React, server-adapter or EmDash dependencies. `static-sveltia` adds the pinned
 admin SPA and paired form only; read `docs/sveltia-cms.md` for OAuth proxy/PAT setup.
 
 For an audit request, lead with an actionable follow-up plan and meaningful user decisions, using findings as supporting evidence. An audit alone does not authorize implementing the plan. Follow `new-site-workflow`'s **Audit requests and release completion** guidance: agree the implementation/release scope, then complete verification, commit, push and applicable deployment without repeated continuation prompts. Respect explicit audit-only or local-only scope.
 
-Keep site decisions in their established home: here by default, or in an explicitly
-adopted optional `PRODUCT.md` linked here. Keep working rules and the compact Art
+Keep site decisions in their established home: a new site writes its brief in
+`PRODUCT.md` (from `PRODUCT.example.md`) linked here; an older site may keep it here. Keep working rules and the compact Art
 Direction Record in this file. `PRODUCT.md` is the one brief (the `impeccable` skill
-reads the same file): audience, scope, ownership and nonvisual rationale; the selected optional `DESIGN.md` holds visual references
+reads only that file): audience, scope, ownership and nonvisual rationale; the selected optional `DESIGN.md` holds visual references
 and interchange. CSS and configuration own implemented values. Keep one home per
 fact, link actual sources, and resolve disagreements by subject and evidence.
 Current progress belongs in the existing tracker or a short handoff when needed.

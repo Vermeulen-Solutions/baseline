@@ -19,6 +19,8 @@ For a WordPress rebuild or migration on any profile, read `docs/wordpress-migrat
 
 For WordPress migrations, the evidence inventory must include a content-candidate register for repeated or independently managed material that is not necessarily a registered custom post type. Record the source evidence, proposed model, migration method, confidence, and open questions for each candidate. Keep a substantial register in `audit/content-candidate-register.md` and link it from `AGENTS.md`; a small migration may keep it directly in `AGENTS.md`.
 
+On a new site, write the brief in `PRODUCT.md` (start from `PRODUCT.example.md`) and link it from `AGENTS.md`: the Impeccable passes at Stages 5 and 6 read the brief from that file only ([impeccable-passes.md](impeccable-passes.md)). An existing site keeps the brief where it already lives.
+
 **Gate:** the repository contains a brief and concise strategic synthesis, an evidence inventory including material claim/use restrictions and content gaps with owners, and—when migration is in scope—a content-candidate register sufficient to distinguish facts, user decisions, recommendations and open assumptions. Unknowns remain explicit; missing proof does not authorize fabricated claims or prevent honest local drafts.
 
 **Stage 1 completion:** Summarize the brief and evidence. If platform is undecided, present the Stage 2 profile choices below with a recommendation based on editing needs; do not assume Node/SQLite as the only default.
