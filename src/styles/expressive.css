@@ -166,7 +166,9 @@
 			}
 
 			:where([data-reveal="frame"]) :where(img) {
-				animation: expressive-frame-settle linear both;
+				animation-name: expressive-frame-settle;
+				animation-timing-function: linear;
+				animation-fill-mode: both;
 				animation-timeline: view();
 				animation-range: entry 0% cover 50%;
 			}
@@ -181,14 +183,18 @@
 			/* A ground opens from an inset, rounded band to its full width as it arrives. Put it on a
 			   section with its own background, usually a .bleed one. */
 			:where([data-scroll="open"]) {
-				animation: expressive-open linear both;
+				animation-name: expressive-open;
+				animation-timing-function: linear;
+				animation-fill-mode: both;
 				animation-timeline: view();
 				animation-range: entry 0% cover 35%;
 			}
 
 			/* A hero steps back as it scrolls away: a little smaller, with rounded corners. */
 			:where([data-scroll="recede"]) {
-				animation: expressive-recede linear both;
+				animation-name: expressive-recede;
+				animation-timing-function: linear;
+				animation-fill-mode: both;
 				animation-timeline: view();
 				animation-range: exit 0% exit 100%;
 				transform-origin: 50% 0%;
@@ -202,7 +208,9 @@
 			}
 
 			:where([data-scroll="rise"]) > :where(*) {
-				animation: expressive-rise linear both;
+				animation-name: expressive-rise;
+				animation-timing-function: linear;
+				animation-fill-mode: both;
 				animation-timeline: --expressive-rise;
 				animation-range: entry 0% entry 100%;
 			}

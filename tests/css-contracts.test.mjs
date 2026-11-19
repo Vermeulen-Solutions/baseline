@@ -121,3 +121,12 @@ test('token guardrails report default Tailwind vocabulary, arbitrary values and 
   ].join('\n');
   assert.deepEqual(inspectCssGuardrails(css).map(item => [item.line, item.rule]), [[2, 'raw-color'], [2, 'raw-spacing'], [2, 'raw-z-index'], [5, 'raw-color']]);
 });
+
+test('an animation shorthand beside animation-timeline in one rule fails: the minifier folds it into a value browsers reject', () => {
+  const broken = inspectAuthorCSS('@layer components { .plate { animation: plate-hangs linear both; animation-timeline: view(); animation-range: entry 0% entry 45%; } }');
+  assert.equal(broken.length, 1);
+  assert.match(broken[0].message, /folded by the minifier/);
+  assert.deepEqual(inspectAuthorCSS('@layer components { .plate { animation-name: plate-hangs; animation-timing-function: linear; animation-fill-mode: both; animation-timeline: view(); } }'), []);
+  // A shorthand alone, or a timeline set in another rule, is not folded.
+  assert.deepEqual(inspectAuthorCSS('@layer components { .stamp { animation: stamp-lands 240ms ease-out both; } .plate { animation-timeline: view(); } }'), []);
+});

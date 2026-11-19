@@ -45,7 +45,10 @@ Baseline's shipped `data-reveal` already works this way: `global.css` reveals it
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .reveal-on-scroll {
-      animation: enter-view linear both;
+      /* Longhands: the minifier folds a shorthand and a timeline into a value browsers reject. */
+      animation-name: enter-view;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
       animation-timeline: view();
       animation-range: entry 10% cover 28%;
     }
