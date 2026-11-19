@@ -101,6 +101,12 @@ async function main() {
       } else await assert.rejects(fs.stat(path.join(root, 'dist/admin')), { code: 'ENOENT' });
       const result = spawnSync(process.execPath, ['tests/static-pilot.integration.mjs', '--root', root, '--site-url', fixtureSite, ...(publicBrowser ? ['--public-browser'] : [])], { cwd: source, stdio: 'inherit', timeout: publicBrowser ? 240000 : 120000 });
       assert.equal(result.status, 0, 'Generated profile HTTP integration');
+      // A local build with no public origin succeeds and leaves the sitemap and the feed out.
+      const localEnv = { ...process.env }; delete localEnv.SITE_URL;
+      const local = spawnNpmSync(['run', 'build'], { cwd: root, stdio: 'inherit', timeout: 300000, env: localEnv });
+      assert.equal(local.status, 0, `${profile}: npm run build without SITE_URL`);
+      for (const relative of ['dist/sitemap.xml', 'dist/rss.xml']) await assert.rejects(fs.stat(path.join(root, relative)), { code: 'ENOENT' });
+      await fs.stat(path.join(root, 'dist/index.html'));
       receipts.push({ profile, root, independentInstall: true, cleanInstall: true, databasePackages: 0, verify: 'passed', production: 'passed', fixtures: 'passed', http: 'passed', ...(publicBrowser && { publicBrowser: 'passed' }) });
     }
     console.log(JSON.stringify(receipts, null, 2));
