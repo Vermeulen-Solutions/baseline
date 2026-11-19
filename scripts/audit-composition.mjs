@@ -34,6 +34,10 @@
 // - world-motion (once per run): an animation the Art Direction Record names in World › Motion
 //   (`stamp-lands`) never ran on the audited routes while scrolling. Read from AGENTS.md in the
 //   working directory, or --record <file>.
+// - with --references <references.md>: each selected reference's live page is measured the same way
+//   (at the wide width, consent declined) and every route is printed beside the references' median on
+//   drawn objects, running animations, rotated or masked objects, surfaces, colours, type sizes and
+//   elements, with an arrow where the page has under half. Advisory: the Stage 5 comparison reads it.
 // It also prints the measurements behind them: largest h1 and h2, body size, image cover and
 // full-width media count. bare-page, soft-photo and world-motion are the floor: each says the
 // recorded world is missing from the built page, so the command exits 1 on them. The other
@@ -43,7 +47,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { msysToNative, restoreGitBashRoute } from './capture-routes.mjs';
+import { DECLINE, isBotWall, msysToNative, restoreGitBashRoute } from './capture-routes.mjs';
 import { worldMotionNames } from './check-art-direction.mjs';
 
 /** Findings that fail the run: the recorded world is missing from the built page. */
@@ -61,6 +65,7 @@ export function parseArgs(argv) {
     else if (flag === '--strict') out.strict = true;
     else if (flag === '--out') out.out = msysToNative(value());
     else if (flag === '--record') out.record = msysToNative(value());
+    else if (flag === '--references') out.references = msysToNative(value());
     else if (flag === '--help' || flag === '-h') out.help = true;
     else throw Error('Unknown flag ' + flag);
   }
@@ -139,6 +144,54 @@ export function assessWorldMotion(named, ran) {
   const missing = named.filter((name) => !seen.has(name));
   if (!missing.length) return null;
   return { code: 'world-motion', missing, message: `The Art Direction Record names ${missing.map((n) => `\`${n}\``).join(', ')} in World › Motion, and ${missing.length === 1 ? 'it never ran' : 'none of them ran'} on these routes while scrolling. Build each on the object it belongs to as a CSS animation of that name (with prefers-reduced-motion: no-preference), or correct the record.` };
+}
+
+/** What a made page has in quantity, measured the same way on the page and on its references. */
+export const GAP_MEASURES = Object.freeze([
+  ['drawn', 'drawn objects (SVG or canvas, 32px or more)'],
+  ['motion', 'animations running while scrolling'],
+  ['layers', 'rotated or masked objects'],
+  ['surfaces', 'surfaces (textured or patterned grounds)'],
+  ['colours', 'colours'],
+  ['typeSizes', 'type sizes'],
+  ['elements', 'visible elements'],
+]);
+
+const median = (values) => { const v = [...values].sort((a, b) => a - b); return v.length ? (v.length % 2 ? v[(v.length - 1) / 2] : (v[v.length / 2 - 1] + v[v.length / 2]) / 2) : 0; };
+const measureOf = (craft, key) => key === 'layers' ? (craft.rotated ?? 0) + (craft.masked ?? 0) : craft[key] ?? 0;
+
+/**
+ * The page against its selected references, measure by measure: the references' median and the
+ * page's count, with `short` set where the page has under half of it. Studio-built sites for small
+ * clients carry 13 to 119 drawings, 70 to 140 running animations and 34 to 44 colours on a home
+ * page; trial builds that passed every other check had 0 to 15, 0 to 19 and 11 to 19.
+ */
+export function assessAgainst(craft, references) {
+  if (!references.length) return [];
+  return GAP_MEASURES.map(([key, label]) => {
+    const ref = median(references.map((r) => measureOf(r, key)));
+    const value = measureOf(craft, key);
+    return { key, label, page: value, references: ref, short: ref >= 3 && value < ref / 2 };
+  });
+}
+
+/** The selected references' live sources in a references file (owner references aside). */
+export function selectedSources(markdown) {
+  const out = [];
+  for (const line of markdown.split('\n')) {
+    const cells = line.split('|').map((c) => c.trim());
+    if (cells.length < 6 || !/^https?:\/\//.test(cells[2] ?? '')) continue;
+    const verdict = cells.at(-2) ?? '';
+    if (/^selected\b/i.test(verdict) && cells[3] !== 'owner') out.push({ id: cells[1], url: cells[2], kind: cells[3] });
+  }
+  return out;
+}
+
+export function formatAgainst(gap, count) {
+  const short = gap.filter((g) => g.short);
+  const rows = gap.map((g) => `    ${g.short ? '→' : ' '} ${g.label}: ${g.page} here, ${g.references} on the references`);
+  const head = `  Against the ${count} selected reference${count === 1 ? '' : 's'} (median): ${short.length ? `under half on ${short.map((g) => g.key).join(', ')}` : 'level or above on every measure'}`;
+  return [head, ...rows].join('\n');
 }
 
 /** Runs in the page: reads the top-level sections of <main>. */
@@ -267,8 +320,12 @@ export function measurePage() {
       let drawn = 0;
       let rotated = 0;
       let masked = 0;
+      const typeSizes = new Set();
+      const colours = new Set();
       for (const el of all) {
         const s = getComputedStyle(el);
+        if ([...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) { typeSizes.add(Math.round(parseFloat(s.fontSize))); colours.add(s.color); }
+        if (s.backgroundColor !== 'rgba(0, 0, 0, 0)' && s.backgroundColor !== 'transparent') colours.add(s.backgroundColor);
         const pseudo = ['::before', '::after'].some((p) => getComputedStyle(el, p).backgroundImage !== 'none');
         if (size(el, 120, 40) && (s.backgroundImage !== 'none' || pseudo)) surfaces++;
         if ((el.tagName.toLowerCase() === 'svg' || el.tagName === 'CANVAS') && size(el, 32, 32)) drawn++;
@@ -278,7 +335,7 @@ export function measurePage() {
         if (mask && size(el, 40, 40)) masked++;
       }
       const voices = Object.values(families).filter((n) => n >= 3).length;
-      return { elements: all.length, voices, surfaces, drawn, rotated, masked, motion: 0 };
+      return { elements: all.length, voices, surfaces, drawn, rotated, masked, typeSizes: typeSizes.size, colours: colours.size, motion: 0 };
     })(),
     sections: records,
   };
@@ -291,12 +348,58 @@ export function formatRoute(route, model, findings) {
   return [head, ...findings.map((f) => `  [${f.code}] ${f.message}`)].join('\n');
 }
 
+/** Loads a page at the wide width, scrolls it with motion allowed, then measures it with motion reduced. */
+async function measureWide(browser, url, width, { declineConsent = false } = {}) {
+  const page = await browser.newPage({ viewport: { width, height: 900 } });
+  try {
+    await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 }).catch(() => page.waitForTimeout(3000));
+    if (declineConsent) {
+      if (isBotWall(await page.title(), await page.evaluate(() => document.body?.innerText ?? ''))) throw Error('a bot wall answered instead of the site');
+      for (const frame of page.frames()) {
+        const button = frame.locator('button, [role="button"], a, input[type="button"], input[type="submit"]').filter({ hasText: DECLINE }).first();
+        if (await button.count().catch(() => 0) && await button.isVisible().catch(() => false)) { await button.click({ timeout: 3000 }).catch(() => {}); await page.waitForTimeout(600); break; }
+      }
+    }
+    // Motion first, with motion allowed: the most animations running while the visitor scrolls through.
+    const motion = await page.evaluate(async () => {
+      const height = document.documentElement.scrollHeight;
+      let most = 0;
+      const names = new Set();
+      for (let y = 0; y < height; y += 600) {
+        scrollTo(0, y);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        const running = document.getAnimations();
+        most = Math.max(most, running.length);
+        for (const animation of running) if (animation.animationName || animation.id) names.add(animation.animationName || animation.id);
+      }
+      scrollTo(0, 0);
+      return { most, names: [...names] };
+    });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const model = await page.evaluate(measurePage);
+    model.craft.motion = motion.most;
+    model.craft.motionNames = motion.names;
+    const measured = await page.evaluate(async (images) => Promise.all(images.map((p) => new Promise((resolve) => {
+      const probe = new Image();
+      probe.onload = () => resolve({ ...p, natural: probe.naturalWidth });
+      probe.onerror = () => resolve({ ...p, natural: 0 });
+      probe.src = p.url;
+    }))), model.wideImages);
+    model.softPhotos = softPhotos(measured, await page.evaluate(() => devicePixelRatio));
+    return model;
+  } finally {
+    await page.close();
+  }
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
-  if (options.help) { console.log('Usage: npm run audit:composition -- --base <origin> --routes /,/about [--widths 1440,390] [--record AGENTS.md] [--json] [--out file] [--strict]'); return; }
+  if (options.help) { console.log('Usage: npm run audit:composition -- --base <origin> --routes /,/about [--widths 1440,390] [--record AGENTS.md] [--references audit/references/references.md] [--json] [--out file] [--strict]'); return; }
   const recordFile = options.record ?? (existsSync('AGENTS.md') ? 'AGENTS.md' : null);
   if (options.record && !existsSync(options.record)) throw Error(`--record file not found: ${options.record}`);
+  if (options.references && !existsSync(options.references)) throw Error(`--references file not found: ${options.references}`);
   const named = recordFile ? worldMotionNames(readFileSync(recordFile, 'utf8')) : [];
+  const sources = options.references ? selectedSources(readFileSync(options.references, 'utf8')) : [];
   const ran = new Set();
   // The same browser lookup as audit:ui: the site's own @playwright/test first, then Baseline's.
   let chromium;
@@ -306,38 +409,23 @@ async function main() {
   const wide = Math.max(...options.widths);
   const narrow = Math.min(...options.widths);
   const results = [];
+  const references = [];
   try {
+    // The selected references, measured the same way at the same width (their live pages, consent declined).
+    for (const source of sources) {
+      try { references.push({ ...source, craft: (await measureWide(browser, source.url, wide, { declineConsent: true })).craft }); }
+      catch (error) { references.push({ ...source, skipped: error.message.split('\n')[0] }); }
+    }
+    const measuredRefs = references.filter((r) => r.craft).map((r) => r.craft);
+    if (!options.json) {
+      for (const r of references) {
+        if (r.craft) console.log(`reference ${r.id} (${r.kind}) ${r.url}: ${GAP_MEASURES.map(([key]) => `${key} ${measureOf(r.craft, key)}`).join(', ')}`);
+        else console.log(`reference ${r.id} ${r.url}: SKIPPED, ${r.skipped}`);
+      }
+    }
     for (const route of options.routes) {
-      const page = await browser.newPage({ viewport: { width: wide, height: 900 } });
-      await page.goto(options.base + route, { waitUntil: 'networkidle' }).catch(() => page.waitForTimeout(3000));
-      // Motion first, with motion allowed: the most animations running while the visitor scrolls through.
-      const motion = await page.evaluate(async () => {
-        const height = document.documentElement.scrollHeight;
-        let most = 0;
-        const names = new Set();
-        for (let y = 0; y < height; y += 600) {
-          scrollTo(0, y);
-          await new Promise((resolve) => setTimeout(resolve, 100));
-          const running = document.getAnimations();
-          most = Math.max(most, running.length);
-          for (const animation of running) if (animation.animationName || animation.id) names.add(animation.animationName || animation.id);
-        }
-        scrollTo(0, 0);
-        return { most, names: [...names] };
-      });
-      for (const name of motion.names) ran.add(name);
-      await page.emulateMedia({ reducedMotion: 'reduce' });
-      const model = await page.evaluate(measurePage);
-      model.craft.motion = motion.most;
-      model.craft.motionNames = motion.names;
-      const measured = await page.evaluate(async (images) => Promise.all(images.map((p) => new Promise((resolve) => {
-        const probe = new Image();
-        probe.onload = () => resolve({ ...p, natural: probe.naturalWidth });
-        probe.onerror = () => resolve({ ...p, natural: 0 });
-        probe.src = p.url;
-      }))), model.wideImages);
-      model.softPhotos = softPhotos(measured, await page.evaluate(() => devicePixelRatio));
-      await page.close();
+      const model = await measureWide(browser, options.base + route, wide);
+      for (const name of model.craft.motionNames) ran.add(name);
       if (narrow !== wide) {
         const phone = await browser.newPage({ viewport: { width: narrow, height: 844 } });
         await phone.goto(options.base + route, { waitUntil: 'networkidle' }).catch(() => phone.waitForTimeout(3000));
@@ -345,8 +433,12 @@ async function main() {
         await phone.close();
       }
       const findings = assessComposition(model);
-      results.push({ route, model, findings });
-      if (!options.json) console.log(formatRoute(route, model, findings));
+      const against = assessAgainst(model.craft, measuredRefs);
+      results.push({ route, model, findings, against });
+      if (!options.json) {
+        console.log(formatRoute(route, model, findings));
+        if (against.length) console.log(formatAgainst(against, measuredRefs.length));
+      }
     }
   } finally {
     await browser.close();
@@ -355,13 +447,14 @@ async function main() {
   const all = results.flatMap((r) => r.findings).concat(worldMotion ? [worldMotion] : []);
   const floor = all.filter((f) => FLOOR.includes(f.code)).length;
   const advisory = all.length - floor;
-  const report = { routes: results, site: worldMotion ? [worldMotion] : [], named };
+  const report = { routes: results, site: worldMotion ? [worldMotion] : [], named, references };
   if (options.json) console.log(JSON.stringify(report, null, 2));
   if (options.out) writeFileSync(options.out, JSON.stringify(report, null, 2));
   if (!options.json) {
     if (worldMotion) console.log(`[world-motion] ${worldMotion.message}`);
     else if (named.length) console.log(`World › Motion: ${named.map((n) => `\`${n}\``).join(', ')} ran.`);
     console.log(`Composition audit: ${floor} floor finding${floor === 1 ? '' : 's'} (bare-page, soft-photo, world-motion: fix them), ${advisory} advisory, on ${results.length} route${results.length === 1 ? '' : 's'}. See site-art-direction/references/world-building.md and distinctive-direction.md.`);
+    if (references.length) console.log('The measures against the references are what the page still has to build to reach their level; they go to the Stage 5 comparison (new-site-workflow/references/impeccable-passes.md).');
   }
   if (floor || (options.strict && advisory)) process.exitCode = 1;
 }
