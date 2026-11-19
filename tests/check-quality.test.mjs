@@ -139,6 +139,17 @@ test('copy rules are validated, matched case-insensitively by default and report
   assert.deepEqual(budgetIssues({ route: '/', copyText: 'I build sites.', jsonLdTypes: [] }, budget), []);
 });
 
+test('copy tells are reported on the page language, unless the site allows the word or turns them off', () => {
+  const page = { route: '/', copyText: 'Une table sur mesure, un écrin pour vos repas. Plongez dans le bois.', copyLang: 'fr', copyHeadings: [], jsonLdTypes: [] };
+  assert.deepEqual(budgetIssues(page, null).map(i => [i.kind, i.value]), [['copy-tell', 'slop word "écrin"'], ['copy-tell', 'slop word "plongez"']]);
+  assert.deepEqual(budgetIssues(page, parseBudget(JSON.stringify({ copyAllow: ['écrin', 'Plongez'] }))), []);
+  assert.deepEqual(budgetIssues(page, parseBudget(JSON.stringify({ copyTells: false }))), []);
+  assert.throws(() => parseBudget(JSON.stringify({ copyAllow: 'écrin' })), /copyAllow must be a list/);
+  assert.throws(() => parseBudget(JSON.stringify({ copyTells: 'no' })), /copyTells must be true or false/);
+  const written = initBudget([{ route: '/', htmlKB: 10, inlineCssKB: 1, scriptKB: 1, imageKB: 10, largestImageKB: 5, lcpImageKB: 5, fontPreloads: 0 }], { copyAllow: ['écrin'], copyTells: false });
+  assert.deepEqual([written.copyAllow, written.copyTells], [['écrin'], false], '--init keeps the copy settings');
+});
+
 test('--init writes the median route plus 25%, and gives heavy routes their own entry', () => {
   const route = (r, htmlKB, imagesKB) => ({ route: r, htmlKB, inlineCssKB: 2, scriptKB: 30, imagesKB, largestImage: null, lcpImage: null, fontPreloads: [] });
   const written = initBudget([route('/', 180, 100), route('/about', 170, 120), route('/gallery', 175, 3000)], { jsonLd: { '/': ['Organization'] }, islands: ['/search'], copy: [{ pattern: 'x', flags: 'i', why: '' }] });
@@ -178,7 +189,7 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       </style>
       <script type="application/ld+json">{ not json }</script>
       </head><body><header>Sticky header</header><a class="under" href="/hidden">Under the header</a>
-      <main style="padding-top: 140px"><h1 class="fade">Hidden heading</h1><p>We build websites.</p>
+      <main style="padding-top: 140px"><h1 class="fade">Hidden heading</h1><p>We build seamless websites.</p>
       <p>[[placeholder: opening hours]]</p><h1>A second heading</h1><button onclick="go()">Go</button>
       <a href="javascript:void(0)">Nowhere</a><form action="#"><button>Send</button></form><a href="mailto:hello@example.com">Mail</a>
       <div class="icons"><a href="/1" aria-label="One"></a><a href="/2" aria-label="Two"></a></div>
@@ -205,7 +216,7 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       const { issues, measurements } = await checkQuality(options);
       const on = route => [...new Set(issues.filter(i => i.route === route).map(i => i.kind))].sort();
       assert.deepEqual(on('/'), [], 'the clean page passes');
-      assert.deepEqual(on('/broken'), ['axe', 'copy-rule', 'csp-violation', 'default-identity', 'description', 'first-viewport-hidden', 'focus-obscured', 'form-no-destination', 'inline-css-weight', 'inline-handler', 'island', 'javascript-url', 'json-ld', 'layout-shift', 'multiple-h1', 'placeholder', 'share-image', 'target-size']);
+      assert.deepEqual(on('/broken'), ['axe', 'copy-rule', 'copy-tell', 'csp-violation', 'default-identity', 'description', 'first-viewport-hidden', 'focus-obscured', 'form-no-destination', 'inline-css-weight', 'inline-handler', 'island', 'javascript-url', 'json-ld', 'layout-shift', 'multiple-h1', 'placeholder', 'share-image', 'target-size']);
       assert.ok(measurements.find(m => m.route === '/').jsonLdTypes.includes('Organization'));
       assert.ok(issues.some(i => i.kind === 'csp-violation' && /script-src-elem inline/.test(i.value) && /report-only/.test(i.detail)), 'report-only violations are reported');
       assert.ok(issues.some(i => i.kind === 'focus-obscured' && /Under the header/.test(i.value) && /header/.test(i.detail)));

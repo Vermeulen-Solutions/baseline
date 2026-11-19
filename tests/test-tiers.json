@@ -323,6 +323,10 @@
     "tier": "unit",
     "reason": "Portable route quality gates: argument guards, budget validation and layering, layout-shift session windows, JSON-LD types, target spacing, weight and budget issues and --init; the fixture-site browser run is opt-in (BASELINE_UI_BROWSER_TESTS=1)"
   },
+  "copy-tells.test.mjs": {
+    "tier": "unit",
+    "reason": "Tells of model-written copy in English and French: page language, words and stock lines with a site allow list, residue, stale year, and devices reported only as habits (two-fragment and number-pair headings, contrast frames, negation runs, virtue words)"
+  },
   "audit-ui.test.mjs": {
     "tier": "unit",
     "reason": "Portable rendered UI audit: argument guards, sitemap/index parsing, template sampling, hover targets, header row counting, breakpoint widths, cover-crop, decoration and empty-band geometry, progress lines and issue aggregation; the fixture-page browser run is opt-in (BASELINE_UI_BROWSER_TESTS=1)"

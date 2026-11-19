@@ -1663,6 +1663,14 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "scripts/copy-tells.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/copy-tells.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "scripts/html-parity.mjs": {
       "disposition": "shared",
       "static": "copy"
