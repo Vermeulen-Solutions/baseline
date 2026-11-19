@@ -158,11 +158,14 @@ async function capture(options) {
         await page.evaluate(async () => {
           await document.fonts.ready;
           for (let y = 0; y < document.documentElement.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 100)); }
-          document.querySelectorAll('img[loading="lazy"]').forEach(img => { img.loading = 'eager'; });
+          // Only images still waiting are made eager. An image with sizes="auto, …" must stay lazy: turning it eager
+          // makes "auto" invalid, the browser picks another source, and a full-page capture paints the photograph blank.
+          document.querySelectorAll('img[loading="lazy"]').forEach(img => { if (!img.complete && !/^\s*auto\b/i.test(img.getAttribute('sizes') ?? '')) img.loading = 'eager'; });
           await Promise.all([...document.images].map(img => img.complete ? null : new Promise(r => { img.onload = img.onerror = r; setTimeout(r, 8000); })));
           await Promise.all([...document.images].map(img => img.decode().catch(() => null)));
           window.scrollTo(0, 0);
         });
+        await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
         await page.waitForTimeout(500);
         const height = await page.evaluate(() => document.documentElement.scrollHeight);
         const overflowX = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);

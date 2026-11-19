@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { assessComposition, assessWorldMotion, FLOOR, parseArgs, sectionSignature, formatRoute, softPhotos } from '../scripts/audit-composition.mjs';
+import { assessAgainst, assessComposition, assessWorldMotion, FLOOR, formatAgainst, GAP_MEASURES, parseArgs, sectionSignature, selectedSources, formatRoute, softPhotos } from '../scripts/audit-composition.mjs';
 
 const section = (overrides = {}) => ({ tag: 'section', heading: 'A heading', kicker: false, split: false, centered: false, ground: false, action: false, cardGrid: false, list: false, mediaCount: 0, fullBleedMedia: false, width: 1376, ...overrides });
 const page = (sections, overrides = {}) => ({ width: 1440, bodySize: 16, h1Size: 72, h2Max: 36, imageCover: 0.2, fullWidthMedia: 0, signature: false, sections, ...overrides });
@@ -109,4 +109,37 @@ test('motions named in the record must run; the floor findings are the built wor
   assert.match(missing.message, /`route-draws`, `lid-twists` in World › Motion, and none of them ran/);
   assert.deepEqual([...FLOOR], ['bare-page', 'soft-photo', 'world-motion']);
   assert.equal(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--record', 'site/AGENTS.md']).record, 'site/AGENTS.md');
+});
+
+test('the page is measured against its selected references: under half of their median is marked', () => {
+  const page = { drawn: 2, motion: 19, rotated: 3, masked: 2, surfaces: 4, colours: 18, typeSizes: 18, elements: 191 };
+  const refs = [
+    { drawn: 10, motion: 141, rotated: 20, masked: 6, surfaces: 5, colours: 41, typeSizes: 24, elements: 654 },
+    { drawn: 69, motion: 136, rotated: 40, masked: 20, surfaces: 63, colours: 30, typeSizes: 20, elements: 1113 },
+    { drawn: 0, motion: 71, rotated: 4, masked: 4, surfaces: 8, colours: 44, typeSizes: 27, elements: 636 },
+  ];
+  const gap = assessAgainst(page, refs);
+  assert.deepEqual(gap.map((g) => g.key), GAP_MEASURES.map(([key]) => key));
+  const by = Object.fromEntries(gap.map((g) => [g.key, g]));
+  assert.equal(by.drawn.references, 10);
+  assert.equal(by.layers.references, 26);
+  assert.deepEqual(gap.filter((g) => g.short).map((g) => g.key), ['drawn', 'motion', 'layers', 'colours', 'elements']);
+  assert.match(formatAgainst(gap, 3), /under half on drawn, motion, layers, colours, elements/);
+  assert.match(formatAgainst(gap, 3), /→ drawn objects \(SVG or canvas, 32px or more\): 2 here, 10 on the references/);
+  // A measure the references barely have is never marked, and no references means no comparison.
+  assert.equal(assessAgainst({ ...page, drawn: 0 }, [{ drawn: 2 }, { drawn: 2 }]).find((g) => g.key === 'drawn').short, false);
+  assert.deepEqual(assessAgainst(page, []), []);
+});
+
+test('the selected references are read from the references file, owner references aside', () => {
+  const file = [
+    '| id | source | kind | first screen | total | verdict |',
+    '|---|---|---|---|---|---|',
+    '| a | https://maker.test/ | site | 3 | 21 | selected |',
+    '| b | https://client.test/ | study | 3 | 20 | selected |',
+    '| c | https://old.test/ | owner | 1 | 9 | kept: the owner likes its colours |',
+    '| d | https://other.test/ | site | 1 | 9 | rejected: stock photographs |',
+  ].join('\n');
+  assert.deepEqual(selectedSources(file), [{ id: 'a', url: 'https://maker.test/', kind: 'site' }, { id: 'b', url: 'https://client.test/', kind: 'study' }]);
+  assert.equal(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--references', 'audit/references/references.md']).references, 'audit/references/references.md');
 });
