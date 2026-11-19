@@ -32,7 +32,7 @@ export function responsiveImageInput(src: unknown, width?: number, height?: numb
   const resolvedWidth = dimension(width) ?? nativeWidth;
   const resolvedHeight = dimension(height) ?? (metadata && resolvedWidth ? dimension(resolvedWidth * metadata.height / metadata.width) : nativeHeight);
   const widths = original && nativeWidth && nativeHeight && nativeWidth >= 800
-    ? [...new Set([480, 800, 1400].map(candidate => Math.min(candidate, nativeWidth)))]
+    ? [...new Set([480, 800, 1400, 2000, 2800].map(candidate => Math.min(candidate, nativeWidth)))]
     : [];
   const aspectRatio = resolvedWidth && resolvedHeight ? resolvedWidth / resolvedHeight : 4 / 3;
   return { original, src: metadata ?? original, width: resolvedWidth, height: resolvedHeight, nativeWidth, nativeHeight, widths, aspectRatio };
