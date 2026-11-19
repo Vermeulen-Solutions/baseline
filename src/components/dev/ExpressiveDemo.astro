@@ -10,6 +10,7 @@ import Section from '../Section.astro';
 import Container from '../Container.astro';
 import MediaStage from '../MediaStage.astro';
 import IndexList from '../IndexList.astro';
+import PhotoSet from '../PhotoSet.astro';
 import ResponsiveImage from '../ResponsiveImage.astro';
 import valleySvg from '../../assets/expressive-plate-valley.svg';
 import duskSvg from '../../assets/expressive-plate-dusk.svg';
@@ -113,6 +114,36 @@ const works = [
           </Container>
         </Section>
 
+        <Section labelledBy="sets">
+          <Container width="wide">
+            <h2 id="sets">Sets of photographs, each section a different one</h2>
+            <div class="expressive-demo__sets">
+              <PhotoSet layout="trio" optimize={false} items={[
+                { image: dusk.src, width: 900, height: 1200, alt: 'Synthetic plate: hills at dusk, the whole scene', caption: 'Trio: three sizes of one subject' },
+                { image: field.src, width: 1200, height: 900, alt: 'Synthetic plate: the field, closer', focus: '30% 60%' },
+                { image: valley.src, width: 1600, height: 1000, alt: 'Synthetic plate: the valley, a detail', focus: '80% 40%' },
+              ]} />
+              <PhotoSet layout="tallSmall" optimize={false} items={[
+                { image: dusk.src, width: 900, height: 1200, alt: 'Synthetic plate: hills at dusk', href: detail },
+                { image: field.src, width: 1200, height: 900, alt: 'Synthetic plate: a field, a square detail', focus: '60% 50%' },
+              ]}>
+                <h3>Tall and small</h3>
+                <p>The section's words at the top of the other half, a small square at its foot. The tall picture leads to a detail page and answers the pointer.</p>
+              </PhotoSet>
+              <PhotoSet layout="strip" optimize={false} items={[
+                { image: valley.src, width: 1600, height: 1000, alt: 'Synthetic plate: detail one', focus: '20% 50%' },
+                { image: field.src, width: 1200, height: 900, alt: 'Synthetic plate: detail two', focus: '50% 70%' },
+                { image: dusk.src, width: 900, height: 1200, alt: 'Synthetic plate: detail three', focus: '50% 30%' },
+                { image: valley.src, width: 1600, height: 1000, alt: 'Synthetic plate: detail four', focus: '85% 45%' },
+              ]} />
+              <PhotoSet layout="pair" ratio="portrait" optimize={false} items={[
+                { image: dusk.src, width: 900, height: 1200, alt: 'Synthetic plate: dusk, left of a pair', caption: 'Pair, portrait' },
+                { image: field.src, width: 1200, height: 900, alt: 'Synthetic plate: field, right of a pair', focus: '40% 50%', caption: 'One ratio, tops level' },
+              ]} />
+            </div>
+          </Container>
+        </Section>
+
         <section class="bleed expressive-demo__band" data-surface="dark" data-scroll="open" aria-labelledby="band">
           <Container width="content">
             <h2 id="band">A ground that opens as it arrives</h2>
@@ -178,6 +209,7 @@ const works = [
   .expressive-demo__frames figcaption { font-size: var(--text-step--1); color: var(--color-muted); }
   .expressive-demo__frame :global(img) { inline-size: 100%; block-size: 100%; object-fit: cover; }
   .expressive-demo__band { padding-block: var(--spacing-section); }
+  .expressive-demo__sets { display: grid; gap: var(--spacing-section-m); }
   .expressive-demo__closing { padding-block: var(--spacing-section-m) 0; }
 }
 </style>

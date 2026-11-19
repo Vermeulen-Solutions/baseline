@@ -858,7 +858,7 @@
   {
     "path": "src/components/dev/ExpressiveDemo.astro",
     "reason": "Development-only demo of the expressive layer (injected /_expressive routes, absent from release builds); synthetic plates and neutral copy, no client material. Exact LF-normalized source hash.",
-    "sha256": "5120d7954f6da9c089b2681051105ac48aaf4352cc8e16a88745da8da744f3a2"
+    "sha256": "a747ceff77d6b75ff5b3b2a071da468876d07bfcbff1731f5b28b5e6a07155c0"
   },
   {
     "path": "src/dev/ExpressiveFixture.astro",
@@ -899,5 +899,10 @@
     "path": "src/dev/ExpressiveCompareAfter.astro",
     "reason": "Development and fixture-build entry for /_expressive-after, injected like /_styleguide. Exact LF-normalized source hash.",
     "sha256": "eacd0dcf252aaba57a58c5966945c4c11a9fc2c1628b4ad27f342bec53159144"
+  },
+  {
+    "path": "src/components/PhotoSet.astro",
+    "reason": "Opt-in expressive component: composed photograph sets (pair, trio, strip, tall and small) from existing tokens; reviewed on /_expressive at 390, 768 and 1440 with geometry checks and a visual golden.",
+    "sha256": "75677781612cc8cec74a491d32eb7e0d1b6296c1c8f2231f92b69e676cd00c03"
   }
 ]

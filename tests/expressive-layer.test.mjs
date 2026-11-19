@@ -190,6 +190,18 @@ test('IndexList rows are a real list with one stretched link, and the preview is
   assert.doesNotMatch(index, /\.index-list__title \{[^}]*translate/, 'the title never moves under the pointer');
 });
 
+test('PhotoSet checks its count per layout, crops by design and moves a linked picture only for a fine pointer', () => {
+  const set = read('src/components/PhotoSet.astro');
+  assert.match(set, /const counts = \{ pair: \[2, 2\], trio: \[3, 3\], strip: \[3, 6\], tallSmall: \[2, 2\] \} as const;/);
+  assert.match(set, /throw new Error\(`PhotoSet: layout "\$\{layout\}" takes/);
+  assert.match(set, /container: photo-set \/ inline-size;/);
+  assert.match(set, /@container photo-set \(min-width: 40rem\)/);
+  assert.match(set, /class="photo-set__frame" data-tone=\{toneValue\} data-audit-crop-ok/, 'audit:ui knows the frame crops on purpose');
+  assert.match(set, /@media \(hover: hover\) and \(pointer: fine\) and \(prefers-reduced-motion: no-preference\)/);
+  assert.match(set, /<figure class="photo-set__item"/);
+  assert.doesNotMatch(set, /#[0-9a-f]{3,8}\b|\d+ms/i, 'colours and durations come from tokens');
+});
+
 test('the transition script is a classic inline script with no module syntax', () => {
   assert.doesNotMatch(scriptSource.slice(scriptSource.indexOf('return `')), /\bimport\b|\bexport\b/);
   assert.match(scriptSource, /if \(!\('onpagereveal' in window\)\) return;/);

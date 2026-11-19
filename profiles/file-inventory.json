@@ -1915,6 +1915,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "src/components/PhotoSet.astro": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "src/components/IndexList.astro": {
       "disposition": "shared",
       "static": "copy"

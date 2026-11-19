@@ -182,6 +182,7 @@
     "src/styles/expressive.css",
     "src/lib/page-transition-script.ts",
     "src/components/MediaStage.astro",
+    "src/components/PhotoSet.astro",
     "src/components/IndexList.astro",
     "src/components/dev/ExpressiveDemo.astro",
     "src/dev/ExpressiveFixture.astro",

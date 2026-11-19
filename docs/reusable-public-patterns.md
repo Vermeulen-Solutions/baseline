@@ -20,7 +20,7 @@ Every reusable component Baseline ships, where it is documented, and which profi
 | `BeforeAfter`, `Stars`, `Hours` | All | Comparison slider, star rating, opening hours | [Before/after](#beforeafter-comparison-beforeafterastro), [Ratings and quotes](#ratings-and-quotes-starsastro-srclibquotests), [Opening hours](#opening-hours-hoursastro) |
 | `Analytics`, `ConsentBanner`, `VideoEmbed`, `MapEmbed` | All | Consent-aware analytics, click-to-load embeds | [Analytics, consent and embeds](#analytics-consent-and-embeds) |
 | `Heading`, `TableOfContents`, `Callout`, `Steps` | All | Content navigation and structure | [Content navigation](#content-navigation-and-structured-primitives) |
-| `MediaStage`, `IndexList`, `src/styles/expressive.css` | All | Image-led stage, ruled index, bleed, frame shapes, photograph treatments, fitted display line, scroll-driven reveals, page-transition styles (opt-in) | [Expressive layer](#expressive-layer-opt-in) |
+| `MediaStage`, `IndexList`, `PhotoSet`, `src/styles/expressive.css` | All | Image-led stage, ruled index, bleed, frame shapes, photograph treatments, fitted display line, scroll-driven reveals, page-transition styles (opt-in) | [Expressive layer](#expressive-layer-opt-in) |
 | `SearchDialog` | All, when search is configured | Pagefind search in a native dialog | [Optional site search](search.md) |
 | `PostListItem` | EmDash | Starter blog list row (`post`, `showDate`) | Starter routes |
 | `StaticMetadata` (`profiles/static/project/src/components/`) | Static profiles | Build-time title, description, canonical and JSON-LD | [Metadata phase 2](verification/metadata-phase-2.md) |
@@ -176,6 +176,32 @@ A ruled index for things a visitor scans and compares (works, courses, teams, se
 
 Props: `items` (`{ title, href?, lead?, meta?, description?, image?, imageWidth?, imageHeight? }[]`), `ordered` (`ol` when the order means something), `headingLevel` (`2`, `3` default, `4`), `preview`, `optimizePreview` (`false` for SVG artwork) and `class`. Set `--index-title-size` to change the title step.
 
+### `PhotoSet.astro`
+
+A composed set of photographs for one section, so sections built round pictures differ from one another instead of each putting words beside one photograph or a grid of equal frames:
+
+| `layout` | Wide (40rem of its own width and up) | Narrow |
+| --- | --- | --- |
+| `pair` | Two photographs on half the width each, one ratio (`ratio="landscape"` 4:3, or `"portrait"` 4:5), tops level | Stacked |
+| `trio` | Three sizes of one subject (the room, its table, a cup): 4:5 on five columns, 1:1 on four, 4:3 on three, tops on one line | The first across, the other two side by side |
+| `strip` | Three to six square details in one row: hands, tools, materials | Two up |
+| `tallSmall` | A tall 4:5 photograph on half the width; the section's words (the slot) at the top of the other half and a small square at its foot, level with the tall one | Words, the tall one, the small one at half width |
+
+```astro
+---
+import PhotoSet from '../components/PhotoSet.astro';
+---
+<PhotoSet layout="tallSmall" items={[
+  { image: table, alt: "The oak table in the client's kitchen", href: '/works/kitchen-table/' },
+  { image: joint, alt: "A dovetail joint at the table's corner", focus: '40% 60%' },
+]}>
+  <h2>The kitchen table</h2>
+  <p>Six weeks from the sawn boards to the table, joined without screws.</p>
+</PhotoSet>
+```
+
+Props: `layout`, `items` (`{ image, alt, width?, height?, focus?, href?, caption? }[]`; the count must suit the layout or the build stops with the reason), `ratio` (pair only), `tone` (the site's `data-tone` treatment) and `optimize`. Frames crop by design (`object-fit: cover` around `focus`, marked for `audit:ui`), square by default; set `--photo-radius` for the site's corner. A photograph with `href` is a link that comes a little closer under a fine pointer (none under reduced motion). `caption` is a short line (a work's title and year), never a description of what is visible. No script.
+
 ### Frame shapes (`data-shape`)
 
 `data-shape="arch|round|leaf|tab"` on an image frame gives it one shape taken from the site's subject: a chapel's arch, a pebble, a leaf for a garden, a folder tab for an archive. Repeat one shape on a site's photographs rather than mixing several. `arch` gives any portrait frame a semicircular top; `leaf` and `tab` use `--radius-shape`. Keep faces and subjects away from the rounded edge, and check with `audit:ui`'s `image-cover-cropped`.
@@ -210,7 +236,7 @@ With cross-document transitions, a small inline head script (`src/lib/page-trans
 
 ### Weight and support
 
-`expressive.css` is about 10 KB before compression (about 2 KB compressed) and has no script; `MediaStage` and `IndexList` ship no script; the transition script is about 3 KB inline and only on sites that set `transitionStyle`. Scroll-driven animations run in Chromium and Safari 26; view-transition types of motion run in Chromium and Safari 18+; `match-element` arrival in Chromium and recent Safari. Firefox and older browsers show the pages at rest, with the ordinary crossfade or a plain page load.
+`expressive.css` is about 10 KB before compression (about 2 KB compressed) and has no script; `MediaStage`, `IndexList` and `PhotoSet` ship no script; the transition script is about 3 KB inline and only on sites that set `transitionStyle`. Scroll-driven animations run in Chromium and Safari 26; view-transition types of motion run in Chromium and Safari 18+; `match-element` arrival in Chromium and recent Safari. Firefox and older browsers show the pages at rest, with the ordinary crossfade or a plain page load.
 
 ## Tranche coverage
 
