@@ -20,7 +20,7 @@ Optional discovery: `npm run baseline:inspect -- --json` reports the installed
 profile, commands, skills, source entry points and declared core component props.
 See [project inspection](docs/project-inspection.md) for its read-only scope and limits.
 
-For durable client context, optionally adapt [PRODUCT.example.md](PRODUCT.example.md) into `PRODUCT.md`, the one brief that the `impeccable` skill also reads.
+For durable client context, adapt [PRODUCT.example.md](PRODUCT.example.md) into `PRODUCT.md`, the one brief; the `impeccable` skill reads only that file.
 [Document scope](docs/project-context.md) separates the brief, working rules,
 selected design reference, implemented source and current handoff.
 
