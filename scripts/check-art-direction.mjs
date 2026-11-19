@@ -39,7 +39,7 @@ export function validateRecord(markdown) {
     return value;
   };
   const lane = field('Aesthetic Lane');
-  if (!/^(Technical Systems|Product-Led Minimalism|Editorial Paper|Luminous Futurism)(?:\s*[—:;-].+)?$/.test(lane)
+  if (!/^(Technical Systems|Product-Led Minimalism|Editorial Paper|Luminous Futurism|Atelier & Craft|Civic & Community|Club & Fixture)(?:\s*[—:;-].+)?$/.test(lane)
       && !/^Custom \/ existing brand\s*[—:;-]\s*\S.+$/.test(lane)) {
     errors.push('Aesthetic Lane must name a reference lane, or Custom / existing brand with a rationale.');
   }

@@ -1,6 +1,6 @@
 # Aesthetic Lanes Reference
 
-When setting art direction for a site or landing page, choose a primary lane from the four starting profiles below, or **Custom / existing brand — rationale**. These profiles are hypotheses, not sector rules or universal coverage. Brief, real brand evidence, accessibility, language coverage, and user tasks override their sample fonts, palettes, radii, and anti-patterns.
+When setting art direction for a site or landing page, choose a primary lane from the seven starting profiles below (four for software and product sites, three for organisations, places and makers), or **Custom / existing brand — rationale**. These profiles are hypotheses, not sector rules or universal coverage. Brief, real brand evidence, accessibility, language coverage, and user tasks override their sample fonts, palettes, radii, and anti-patterns.
 
 ---
 
@@ -75,6 +75,68 @@ Deep cosmos, refractive glass, glowing edge highlights, dynamic gradients, and h
 - **Surfaces & Borders:** Frosted glassmorphism (`backdrop-filter: blur(16px)`), luminous edge borders (`box-shadow: inset 0 1px 0 0 rgba(255,255,255,0.2)`), ambient radial backdrops.
 - **Density:** Varied / Cinematic (`--spacing-section: clamp(4rem, 12vi, 10rem)`).
 - **Anti-Patterns:** Flat washed-out light mode, warm parchment paper, retro serif fonts, low-contrast muddy grays.
+
+---
+
+The three lanes below are for organisations, places and makers: the clubs, associations, schools, churches, workshops and local businesses most Baseline sites serve. The four above suit software, data and product sites. Do not pick a technical lane for an organisation because its palette looks modern; pick the lane whose physical world the visitor recognises, then take the governing idea from [distinctive direction](distinctive-direction.md). These three have no `design:tokens` preset yet: seed with the closest one named in each (`--lane editorial-paper` or `--lane neutral`), then set the values the lane describes.
+
+## 5. Atelier & Craft
+
+The maker's bench and the finished piece. For artists, sculptors, craftspeople, restorers, small producers and workshops whose work is physical and photographs well.
+
+- **Narrative Anchors:** A catalogue of works with numbered plates, a workshop bench with tools laid out, material labels and offcuts, an exhibition wall with captions.
+- **Typography:**
+  - *Display:* A serif or a humanist sans with visible craft (`Fraunces`, `Newsreader`, `Cormorant`, `Instrument Serif`, or a grotesk with character such as `Bricolage Grotesque`).
+  - *Body:* A calm reading face (`Source Serif 4`, `Inter`, `Atkinson Hyperlegible`).
+  - *Details:* Captions in the body face at a small step, with the material, size and year as facts.
+- **Color Physics:**
+  - *Canvas:* The material's own ground: unbleached paper, plaster, linen (`oklch(96% 0.012 80)`), or a deep workshop shade for night views.
+  - *Accent:* One colour from the material (oxidised copper, ochre, oak, clay), used for actions only.
+- **Surfaces & Borders:** Photographs carry the page; frames take one shape from the work (`data-shape`); hairline rules, no shadows on photographs.
+- **Composition:** Image-led. The work at full width (`MediaStage`), works as numbered plates or a ruled index with previews (`IndexList preview`), the maker at work as one large photograph.
+- **Density:** Spacious; few, large pictures.
+- **Token preset to seed:** `editorial-paper`.
+- **Anti-Patterns:** Tools or textures in the hero instead of the finished work; thumbnail grids on the home page; stock photographs of hands.
+
+---
+
+## 6. Civic & Community
+
+The noticeboard, the newsletter and the programme. For associations, municipalities, schools, churches, parishes, cultural centres and charities whose visitors come for dates, people and how to take part.
+
+- **Narrative Anchors:** A village noticeboard with dated notices, a parish newsletter in issues, a school's course catalogue, a building with its history, a programme of events.
+- **Typography:**
+  - *Display:* A face with civic warmth (`Bricolage Grotesque`, `Fraunces`, `Literata`, `Public Sans` heavy, or a titling serif for an old institution).
+  - *Body:* Highly legible for every age (`Atkinson Hyperlegible`, `Source Sans 3`, `Public Sans`), at least 1.0625rem.
+  - *Details:* Dates and times large and in tabular figures; names of people and places as plain text.
+- **Color Physics:**
+  - *Canvas:* Light and friendly; two to four colours from the organisation's logo or place, used as grounds for distinct kinds of content (agenda, appeals, news), never all on one screen.
+  - *Accent:* The strongest logo colour for actions, checked at 4.5:1.
+- **Surfaces & Borders:** Notices as ruled rows or pinned items, one frame shape from the place (a window arch, a doorway, a leaf), soft corners.
+- **Composition:** The next date first. Programmes and registers as `IndexList` with dated leads; one photograph of the people or the place at full width; ways to take part as a short, specific list rather than three cards.
+- **Density:** Standard; scannable lists, generous type.
+- **Token preset to seed:** `neutral`.
+- **Anti-Patterns:** A corporate hero with a slogan and two buttons; three equal "Our mission / Our values / Our team" cards; dates hidden inside cards.
+
+---
+
+## 7. Club & Fixture
+
+The scoreboard, the team sheet and the season. For sports clubs, leagues, venues and event series whose visitors come for fixtures, results, teams and how to join.
+
+- **Narrative Anchors:** A fixtures list on the clubhouse wall, a team sheet with numbers and positions, a scoreboard, a season table, kit colours.
+- **Typography:**
+  - *Display:* Condensed and loud (`Oswald`, `Big Shoulders Display`, `Barlow Condensed`, `Anton`), set large once per page.
+  - *Body:* A sturdy sans (`Barlow`, `Inter`, `Nunito Sans`).
+  - *Details:* Scores, dates and numbers in tabular figures, set larger than labels.
+- **Color Physics:**
+  - *Canvas:* The club colours: often a dark ground with one kit colour, or a light ground with two.
+  - *Accent:* The kit's brightest colour for actions and live states, checked for contrast on both grounds.
+- **Surfaces & Borders:** Sharp or slightly rounded, hairline rules for tables, one shape from the sport (a pitch line, a court corner).
+- **Composition:** The next fixture and the last result first; teams as line-ups or ruled lists; one team photograph at full width; sponsors as a register, not a logo wall of equal tiles.
+- **Density:** Standard to compact for fixtures and results; spacious for the club's story.
+- **Token preset to seed:** `neutral`.
+- **Anti-Patterns:** Fixtures as cards with a date badge; a stock stadium photograph; numbered section indices that are not shirt numbers or ranks.
 
 ## Custom / existing brand
 
