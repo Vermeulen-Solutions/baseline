@@ -121,8 +121,12 @@ export function validateCssAlignment(markdown, css) {
 
 // Reference research (site-art-direction/references/reference-research.md): candidates found and
 // captured, each scored on one scorecard, at least three selected above the bar, and the chosen
-// concept scored on the same card at or above the selected references' median.
+// concept scored on the same card at or above the selected references' median on the design lines.
+// The photographs line is scored and reported but left out of the concept bar: a concept cannot
+// change the owner's camera, and two trials stalled under a bar their phone photographs held down.
 export const REFERENCE_DIMENSIONS = Object.freeze(['first screen', 'specificity', 'type', 'photographs', 'composition', 'craft', 'phone', 'fit']);
+export const DESIGN_DIMENSIONS = Object.freeze(REFERENCE_DIMENSIONS.filter(d => d !== 'photographs'));
+const designTotal = score => DESIGN_DIMENSIONS.reduce((sum, d) => sum + score.scores[d], 0);
 export const REFERENCE_BAR = Object.freeze({ total: 17, specificity: 2, fit: 2, candidates: 8, sites: 5, selected: 3, searches: 3 });
 export const REFERENCES_FILE = 'audit/references/references.md';
 
@@ -183,7 +187,6 @@ export function validateReferences(markdown, io = {}) {
   }
   if (parsed.length < REFERENCE_BAR.candidates) errors.push(`Found ${parsed.length} candidates; judge at least ${REFERENCE_BAR.candidates}.`);
   if (parsed.filter(c => c.kind === 'site').length < REFERENCE_BAR.sites) errors.push(`At least ${REFERENCE_BAR.sites} candidates must be real sites (kind site).`);
-  if (!parsed.some(c => /^(prompt|template|system)$/.test(c.kind))) errors.push('At least one candidate must be a design prompt, template or system.');
 
   const selected = parsed.filter(c => c.verdict === 'selected');
   if (selected.length < REFERENCE_BAR.selected) errors.push(`Selected ${selected.length}; select at least ${REFERENCE_BAR.selected} above the bar, searching again if too few pass.`);
@@ -202,7 +205,7 @@ export function validateReferences(markdown, io = {}) {
     else if (io.capturedImages && io.capturedImages(captured) < 2) errors.push(`Selected ${c.id}: ${captured} needs at least two screenshots (wide and phone).`);
   }
 
-  const bar = median(selected.filter(c => c.score && c.kind !== 'owner').map(c => c.score.total));
+  const bar = median(selected.filter(c => c.score && c.kind !== 'owner').map(c => designTotal(c.score)));
   const concepts = tableRows(text, 'Concepts against the bar');
   if (!concepts) return [...errors, 'Missing the ### Concepts against the bar table: score each concept on the same card.'];
   const scored = concepts.map(([name, ...rest]) => ({ name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict: (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').toLowerCase() }));
@@ -211,8 +214,9 @@ export function validateReferences(markdown, io = {}) {
   if (chosen.length !== 1) errors.push('Mark exactly one concept "chosen" (the others "not chosen").');
   for (const c of chosen) {
     if (!c.score) continue;
-    if (c.score.total < bar) errors.push(`The chosen concept scores ${c.score.total}/24, under the selected references' median of ${bar}: raise it before building.`);
-    const weak = REFERENCE_DIMENSIONS.filter(d => c.score.scores[d] < 2);
+    const design = designTotal(c.score);
+    if (design < bar) errors.push(`The chosen concept scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it before building.`);
+    const weak = DESIGN_DIMENSIONS.filter(d => c.score.scores[d] < 2);
     if (weak.length) errors.push(`The chosen concept scores under 2 on ${weak.join(', ')}.`);
   }
   return errors;

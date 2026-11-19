@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseArgs, routeSlug, shotName, summarize, compareSummaries, msysToNative, diffBox } from '../scripts/capture-routes.mjs';
+import { parseArgs, routeSlug, shotName, summarize, compareSummaries, msysToNative, diffBox, DECLINE, isBotWall } from '../scripts/capture-routes.mjs';
 import { mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -64,4 +64,12 @@ test('diffBox reports the bounding box of differing pixels, including size chang
     const grown = await diffBox(a, c);
     assert.equal(grown.y, 10); assert.equal(grown.height, 2);
   } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('reference captures decline consent banners and skip bot walls', () => {
+  for (const label of ['Tout refuser', 'Refuser', 'Continuer sans accepter', 'Reject all', 'Only necessary', 'Alle ablehnen', 'Nur notwendige Cookies', 'Rifiuta tutto']) assert.match(label, DECLINE, label);
+  for (const label of ['Accepter', 'Accept all', 'Paramètres', 'Refuser les conditions de vente du magasin']) assert.doesNotMatch(label, DECLINE, label);
+  assert.equal(isBotWall('Just a moment...', 'Checking your browser before accessing'), true);
+  assert.equal(isBotWall('Atelier du bois', 'Sculptures en bois de chêne. Accès au parking derrière l\'atelier.'), false);
+  assert.equal(parseArgs(['--base', 'https://example.org', '--routes', '/', '--out', 'x', '--decline-consent']).declineConsent, true);
 });
