@@ -64,6 +64,18 @@ export function validateRecord(markdown) {
 export const WORLD_PARTS = Object.freeze(['Source object', 'Inventory', 'Objects', 'Surfaces', 'Type', 'Motion', 'Photographs', 'Feature']);
 export const WORLD_BAR = Object.freeze({ inventory: 12, decisions: 3 });
 
+const motionNamesIn = value => [...new Set([...String(value).matchAll(/`([A-Za-z_-][\w-]*)`/g)].map(match => match[1]))];
+
+/** The @keyframes names the record's World › Motion line promises (audit:composition checks they run). */
+export function worldMotionNames(markdown) {
+  const lines = String(markdown ?? '').split(/\r?\n/);
+  const start = lines.findIndex(line => /^## Art Direction Record\s*$/.test(line));
+  if (start < 0) return [];
+  const end = lines.findIndex((line, index) => index > start && /^## /.test(line));
+  const line = lines.slice(start + 1, end < 0 ? undefined : end).find(entry => /^\s+- Motion:/.test(entry));
+  return line ? motionNamesIn(line.replace(/^\s+- Motion:/, '')) : [];
+}
+
 export function validateWorld(markdown) {
   const lines = String(markdown ?? '').split(/\r?\n/);
   const start = lines.findIndex(line => /^## Art Direction Record\s*$/.test(line));
@@ -92,8 +104,8 @@ export function validateWorld(markdown) {
         const count = value.split(';').map(v => v.trim()).filter(Boolean).length;
         if (count < WORLD_BAR.inventory) errors.push(`World: the inventory lists ${count} things; list at least ${WORLD_BAR.inventory}, separated by semicolons.`);
       } else if (part === 'Motion') {
-        const count = value.split(/[;,]/).map(v => v.trim()).filter(Boolean).length;
-        if (count < 3) errors.push('World: name at least three motions, separated by semicolons.');
+        const names = motionNamesIn(value);
+        if (names.length < 3) errors.push(`World: Motion names ${names.length} animation${names.length === 1 ? '' : 's'} in backticks; name at least three by their @keyframes names (\`stamp-lands\`: the stamp on the label), so audit:composition can check they run.`);
       }
     }
   }
