@@ -1,0 +1,369 @@
+{
+  "note": "Findings that predate check:skills. Each is cleaned up by rewriting the line (docs/skill-writing.md); then delete its entry. The line number is for reading only; an entry matches on file, rule, phrase and the line text.",
+  "entries": [
+    {
+      "file": ".agents/skills/astro-site-design/SKILL.md",
+      "line": 69,
+      "rule": "judgment-branch",
+      "match": "where appropriate",
+      "key": "f398eedb46fe"
+    },
+    {
+      "file": ".agents/skills/astro-site-design/SKILL.md",
+      "line": 88,
+      "rule": "judgment-branch",
+      "match": "where practical",
+      "key": "05d517bb699d"
+    },
+    {
+      "file": ".agents/skills/astro-site-design/SKILL.md",
+      "line": 90,
+      "rule": "judgment-branch",
+      "match": "as appropriate",
+      "key": "5785ae828aff"
+    },
+    {
+      "file": ".agents/skills/astro-site-design/SKILL.md",
+      "line": 151,
+      "rule": "judgment-branch",
+      "match": "where relevant",
+      "key": "95f091b7cde5"
+    },
+    {
+      "file": ".agents/skills/astro-site-design/references/component-quarantine.md",
+      "line": 50,
+      "rule": "judgment-branch",
+      "match": "where appropriate",
+      "key": "984e9df56930"
+    },
+    {
+      "file": ".agents/skills/astro-site-design/references/migration-visual-audit.md",
+      "line": 68,
+      "rule": "judgment-branch",
+      "match": "where appropriate",
+      "key": "2fe385027e28"
+    },
+    {
+      "file": ".agents/skills/astro-site-design/references/screen-reader-checks.md",
+      "line": 10,
+      "rule": "judgment-branch",
+      "match": "as appropriate",
+      "key": "deb052d5d81f"
+    },
+    {
+      "file": ".agents/skills/brilliant-site-design/SKILL.md",
+      "line": 28,
+      "rule": "judgment-branch",
+      "match": "as needed",
+      "key": "e3ae90f06637"
+    },
+    {
+      "file": ".agents/skills/brilliant-site-design/references/baseline-mapping-and-export.md",
+      "line": 65,
+      "rule": "judgment-branch",
+      "match": "where appropriate",
+      "key": "01ae4b27c859"
+    },
+    {
+      "file": ".agents/skills/brilliant-site-design/references/baseline-mapping-and-export.md",
+      "line": 114,
+      "rule": "judgment-branch",
+      "match": "when needed",
+      "key": "d6e6dec74d2c"
+    },
+    {
+      "file": ".agents/skills/brilliant-site-design/references/connection-and-recovery.md",
+      "line": 10,
+      "rule": "judgment-branch",
+      "match": "when useful",
+      "key": "53b0f56c47e2"
+    },
+    {
+      "file": ".agents/skills/brilliant-site-design/references/connection-and-recovery.md",
+      "line": 61,
+      "rule": "judgment-branch",
+      "match": "when useful",
+      "key": "e77b8c431fbe"
+    },
+    {
+      "file": ".agents/skills/brilliant-site-design/references/connection-and-recovery.md",
+      "line": 63,
+      "rule": "judgment-branch",
+      "match": "if needed",
+      "key": "a5dba179bb58"
+    },
+    {
+      "file": ".agents/skills/emdash-content-modeling/references/versioned-blocks.md",
+      "line": 13,
+      "rule": "judgment-branch",
+      "match": "when needed",
+      "key": "4d6100e57707"
+    },
+    {
+      "file": ".agents/skills/emdash-production-cutover/SKILL.md",
+      "line": 86,
+      "rule": "judgment-branch",
+      "match": "when needed",
+      "key": "a0b99656a7fc"
+    },
+    {
+      "file": ".agents/skills/emdash-production-cutover/SKILL.md",
+      "line": 88,
+      "rule": "judgment-branch",
+      "match": "when appropriate",
+      "key": "6c805c62cb7a"
+    },
+    {
+      "file": ".agents/skills/emdash-production-cutover/references/contact-forms.md",
+      "line": 17,
+      "rule": "judgment-branch",
+      "match": "if needed",
+      "key": "de83ab5b8d66"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/SKILL.md",
+      "line": 25,
+      "rule": "judgment-branch",
+      "match": "when it helps",
+      "key": "29f1172ab1d7"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/references/brief-platform-content.md",
+      "line": 18,
+      "rule": "judgment-branch",
+      "match": "optionally",
+      "key": "7971f8001ca9"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/references/copy-voice.md",
+      "line": 18,
+      "rule": "judgment-branch",
+      "match": "where possible",
+      "key": "5d1bfccc940f"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/references/decisions-and-release.md",
+      "line": 27,
+      "rule": "judgment-branch",
+      "match": "when relevant",
+      "key": "51d445afbc3e"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/references/decisions-and-release.md",
+      "line": 31,
+      "rule": "judgment-branch",
+      "match": "when useful",
+      "key": "f53f33ba839b"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/references/discovery-and-content.md",
+      "line": 15,
+      "rule": "judgment-branch",
+      "match": "when needed",
+      "key": "996e9fd02c99"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/references/discovery-and-content.md",
+      "line": 26,
+      "rule": "judgment-branch",
+      "match": "when useful",
+      "key": "5decd1f7decd"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/references/discovery-and-content.md",
+      "line": 76,
+      "rule": "judgment-branch",
+      "match": "where relevant",
+      "key": "0d994c7622d7"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/references/site-maintenance.md",
+      "line": 76,
+      "rule": "judgment-branch",
+      "match": "when needed",
+      "key": "85897bfa8c11"
+    },
+    {
+      "file": ".agents/skills/new-site-workflow/references/site-maintenance.md",
+      "line": 132,
+      "rule": "judgment-branch",
+      "match": "ideally",
+      "key": "1a9f8b96910d"
+    },
+    {
+      "file": ".agents/skills/opendesign-site-design/SKILL.md",
+      "line": 31,
+      "rule": "judgment-branch",
+      "match": "Optionally",
+      "key": "09f0fc523788"
+    },
+    {
+      "file": ".agents/skills/opendesign-site-design/SKILL.md",
+      "line": 53,
+      "rule": "judgment-branch",
+      "match": "optionally",
+      "key": "763ac1046120"
+    },
+    {
+      "file": ".agents/skills/openpencil-site-design/SKILL.md",
+      "line": 19,
+      "rule": "judgment-branch",
+      "match": "when needed",
+      "key": "dff97acd4335"
+    },
+    {
+      "file": ".agents/skills/openpencil-site-design/references/scoped-review.md",
+      "line": 9,
+      "rule": "judgment-branch",
+      "match": "when helpful",
+      "key": "6c183051d96b"
+    },
+    {
+      "file": ".agents/skills/penpot-site-design/references/baseline-recipes.md",
+      "line": 39,
+      "rule": "judgment-branch",
+      "match": "where relevant",
+      "key": "cefa0de0155a"
+    },
+    {
+      "file": ".agents/skills/penpot-site-design/references/handoff-and-astro.md",
+      "line": 9,
+      "rule": "judgment-branch",
+      "match": "if useful",
+      "key": "53ea1bdbfcbc"
+    },
+    {
+      "file": ".agents/skills/site-art-direction/references/brand-assets.md",
+      "line": 7,
+      "rule": "judgment-branch",
+      "match": "when appropriate",
+      "key": "45b0f1e46f55"
+    },
+    {
+      "file": ".agents/skills/site-art-direction/references/capability-routing.md",
+      "line": 7,
+      "rule": "judgment-branch",
+      "match": "when useful",
+      "key": "3de24a9660fb"
+    },
+    {
+      "file": ".agents/skills/site-art-direction/references/capability-routing.md",
+      "line": 19,
+      "rule": "judgment-branch",
+      "match": "when needed",
+      "key": "e705379ce742"
+    },
+    {
+      "file": ".agents/skills/site-art-direction/references/design-iteration.md",
+      "line": 90,
+      "rule": "judgment-branch",
+      "match": "as needed",
+      "key": "f5864c1f494b"
+    },
+    {
+      "file": ".agents/skills/site-art-direction/references/design-iteration.md",
+      "line": 105,
+      "rule": "judgment-branch",
+      "match": "if needed",
+      "key": "28b2ecdff76a"
+    },
+    {
+      "file": ".agents/skills/site-art-direction/references/editorial-illustration.md",
+      "line": 7,
+      "rule": "judgment-branch",
+      "match": "as appropriate",
+      "key": "5abccfef1c99"
+    },
+    {
+      "file": ".agents/skills/site-art-direction/references/editorial-illustration.md",
+      "line": 9,
+      "rule": "judgment-branch",
+      "match": "where relevant",
+      "key": "9fc41b1428de"
+    },
+    {
+      "file": ".agents/skills/site-art-direction/references/external-prompt-adaptation.md",
+      "line": 41,
+      "rule": "judgment-branch",
+      "match": "where relevant",
+      "key": "cd513606480f"
+    },
+    {
+      "file": ".agents/skills/site-art-direction/references/external-prompt-adaptation.md",
+      "line": 45,
+      "rule": "shouting",
+      "match": "MUST",
+      "key": "85b31201f489"
+    },
+    {
+      "file": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+      "line": 12,
+      "rule": "judgment-branch",
+      "match": "optionally",
+      "key": "ac95aed0e9f5"
+    },
+    {
+      "file": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+      "line": 24,
+      "rule": "shouting",
+      "match": "ALWAYS",
+      "key": "8a8be0d8bf0d"
+    },
+    {
+      "file": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+      "line": 24,
+      "rule": "shouting",
+      "match": "NEVER",
+      "key": "8a8be0d8bf0d"
+    },
+    {
+      "file": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+      "line": 74,
+      "rule": "shouting",
+      "match": "MUST",
+      "key": "aca9b2842277"
+    },
+    {
+      "file": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+      "line": 75,
+      "rule": "shouting",
+      "match": "MUST",
+      "key": "73fb63703ab5"
+    },
+    {
+      "file": ".agents/skills/wordpress-to-emdash-content/SKILL.md",
+      "line": 82,
+      "rule": "shouting",
+      "match": "NEVER",
+      "key": "9bb8ffa3193b"
+    },
+    {
+      "file": ".agents/skills/wordpress-to-emdash-content/references/forms.md",
+      "line": 81,
+      "rule": "judgment-branch",
+      "match": "when needed",
+      "key": "b4f2b1378a40"
+    },
+    {
+      "file": ".agents/skills/wordpress-to-emdash-content/references/forms.md",
+      "line": 157,
+      "rule": "judgment-branch",
+      "match": "when useful",
+      "key": "a3cf50bc15a2"
+    },
+    {
+      "file": ".agents/skills/wordpress-to-emdash-content/references/forms.md",
+      "line": 251,
+      "rule": "judgment-branch",
+      "match": "as appropriate",
+      "key": "f8328bd64694"
+    },
+    {
+      "file": "profiles/static/project/AGENTS.md",
+      "line": 30,
+      "rule": "judgment-branch",
+      "match": "when needed",
+      "key": "1940dee2639a"
+    }
+  ]
+}

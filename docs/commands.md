@@ -64,6 +64,7 @@ For the root maintainer's disposable workflow pilot, `npm run rehearse:workflow`
 | `npm run baseline:inspect -- --structure --json` | All profiles, when installed | Inspect bounded source relationships and repeated-render observations; runtime behavior remains unverified |
 | `npm run audit:page -- --url <loopback-public-url> --out <fresh-report-directory>` | All profiles, opt-in local | Record controlled public-page loading/resource and rendered-font evidence ([scope](page-performance.md)) |
 | `npm run check:docs` | Root EmDash | Check documentation Markdown for unwrapped paragraphs, and that relative links and `#anchors` in `docs/`, the root documents and maintained skills resolve; part of `lint` |
+| `npm run check:skills` | Root EmDash | Check the wording of Baseline's own skills and agent instructions: branches left to the agent's judgment ("when possible", "if needed"), capitalised commands, a `SKILL.md` over 500 lines or without a third-person description. Findings older than the check are recorded in `audit/skill-wording-debt.json`; see [skill writing](skill-writing.md); part of `lint` |
 | `npm run check:dev-tools` | All profiles | Check production development-tool isolation |
 | `npm run build:analyze` | Root EmDash | Build and inspect client JavaScript ownership |
 | `npm run start:local` | Root EmDash | Run the built Node artifact using the local .env |

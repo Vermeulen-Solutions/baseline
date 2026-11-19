@@ -323,6 +323,10 @@
     "tier": "unit",
     "reason": "Before/after comparison contract: native range input hidden until ready, labels and value read-out, no-JS stacked fallback, touch jump, focus and forced-colors styles, tokens only"
   },
+  "skill-wording.test.mjs": {
+    "tier": "unit",
+    "reason": "Skill wording rules on in-memory Markdown and a temporary tree, and Baseline's own skills against the recorded debt; no network"
+  },
   "check-quality.test.mjs": {
     "tier": "unit",
     "reason": "Portable route quality gates: argument guards, budget validation and layering, layout-shift session windows, JSON-LD types, target spacing, weight and budget issues and --init; the fixture-site browser run is opt-in (BASELINE_UI_BROWSER_TESTS=1)"

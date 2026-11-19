@@ -13,6 +13,7 @@ async function main() {
     ['syntax-lint', ['scripts/check-script-syntax.mjs']],
     ['template-lint', ['node_modules/eslint/bin/eslint.js', 'src', 'profiles/static/project/src', '--max-warnings', '0']],
     ['docs-format', ['scripts/check-docs-format.mjs']],
+    ['skill-wording', ['scripts/check-skill-wording.mjs']],
     ['design-tokens', ['scripts/design-system.mjs']],
     ['schema-budget', ['scripts/check-schema-budget.mjs']],
     ['unit-tests', testInvocation('unit').args],
