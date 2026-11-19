@@ -5,9 +5,9 @@ import { routePath } from '../lib/metadata';
 import { generateSitemapXml } from '../lib/sitemap';
 
 export const GET: APIRoute = async (context) => {
-  if (!context.site?.href) {
-    throw new Error('Refusing to generate public XML sitemap without a configured public origin (set SITE_URL in build environment).');
-  }
+  // Without SITE_URL there is no public origin for absolute URLs: the sitemap is left out of the build
+  // (Astro skips an empty error response and logs it), so a local build and preview still work.
+  if (!context.site?.href) return new Response(null, { status: 404, statusText: 'SITE_URL is not set' });
   const [posts, gated] = await Promise.all([publishedPosts(), gatedRoutes()]);
   const siteUrl = context.site.href;
   const xml = generateSitemapXml({

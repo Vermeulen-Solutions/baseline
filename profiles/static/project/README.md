@@ -65,8 +65,9 @@ Normal production builds omit the styleguide route; configure static hosting to
 serve `404.html` with status 404 for missing URLs, without an SPA fallback.
 
 Set `SITE_URL` in the build environment to enable public canonical, social and
-structured-data URLs. Without it, URL-dependent metadata is omitted rather than
-using the build/preview hostname. `src/config/routing.ts` supplies Astro and the
+structured-data URLs, the XML sitemap and the RSS feed. Without it, URL-dependent
+metadata, the sitemap and the feed are omitted (the build logs both as skipped)
+rather than using the build/preview hostname, so a local build still works. `src/config/routing.ts` supplies Astro and the
 metadata resolver with one base/slash/output policy; its default is directory
 output with trailing slashes. `Base.astro` supplies the sole static metadata
 renderer through the shared shell's head slot. Posts use their real publication

@@ -446,13 +446,13 @@
   },
   {
     "path": "profiles/static/project/src/pages/rss.xml.ts",
-    "reason": "Functional static starter syndication route: publication-aware RSS 2.0 XML endpoint with base-path and origin enforcement. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
-    "sha256": "27fb57f08f7691948415b928431e2798bff50373475521237ccc207379ec7177"
+    "reason": "Functional static starter syndication route: publication-aware RSS 2.0 XML endpoint with base-path enforcement, left out of a build without SITE_URL. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception.",
+    "sha256": "1c0f95fc5c2d31e6c58dcbb03042537078a10938aab81877c7277a465a1685ec"
   },
   {
     "path": "profiles/static/project/src/pages/sitemap.xml.ts",
-    "reason": "Functional static starter search indexing route: publication-aware XML sitemap endpoint with host-scope and origin enforcement. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception. lastmod uses updatedAt, else publishedAt. Gated sections stay out of the sitemap.",
-    "sha256": "ea5a680f6472b40387fcbac6cf0660a2b31ea6659877c291b1700fd40bb8816e"
+    "reason": "Functional static starter search indexing route: publication-aware XML sitemap endpoint with host-scope enforcement, left out of a build without SITE_URL. Existing neutral visual presentation preserved; not a client implementation. Any edit invalidates this exact LF-normalized exception. lastmod uses updatedAt, else publishedAt. Gated sections stay out of the sitemap.",
+    "sha256": "eeb21140cb6936576dbc70fb641abc65823d20257f644da85e54f5acbe86a6ec"
   },
   {
     "path": "profiles/static/project/src/pages/404.astro",
