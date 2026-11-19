@@ -65,7 +65,7 @@ Use the concrete patterns below as the modernization candidates to inspect, and 
 | Back-to-back uniform 3-column card rows (`<Grid min="18rem">`) | **Asymmetric Pacing**: Alternate uniform grids with 12-column `.bento-grid` (`8/4` or `7/5` splits), exposed `1px` `.grid-hairline` matrices, `<Sidebar>` narrative splits, or `.stack-cards` sticky sequences. |
 | Low-res screenshots, generic hero stock photos, or flat boxed callouts | **Live-Coded `.ui-specimen` or Editorial Frame**: Frame key workflows, schedules, or community highlights in a `.ui-specimen` window (`.ui-specimen__header`) or `.frame-crosshair` / `.prose-dropcap` editorial showcase. |
 | Single button style or unstyled text links for secondary actions | **3-Tier Tactile Actions**: Pair primary `.btn` with `.btn--secondary` (translucent surface + hairline border) and `.btn--ghost` with `<span class="icon-nudge">&rarr;</span>`. |
-| Abrupt page navigation or static header | **View Transitions & Scroll Choreography**: Pass `transitionName={`post-${slug}`}` on `<Card>` for shared-element morphing, enable `data-sticky-header` on `.site-header`, add `data-reveal` staggered entrances, and offer FOUC-free `[data-surface-toggle]` where appropriate. |
+| Abrupt page navigation or static header | **View Transitions & Scroll Choreography**: Pass `transitionName={`post-${slug}`}` on `<Card>` for shared-element morphing, enable `data-sticky-header` on `.site-header`, add `data-reveal` staggered entrances, and offer FOUC-free `[data-surface-toggle]` when the site has a dark theme. |
 
 ### 4. Verify content and asset meaning
 

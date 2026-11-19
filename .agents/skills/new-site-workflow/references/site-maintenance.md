@@ -73,7 +73,7 @@ local; test a shared default across the consumers it actually changes.
 - **emdash:** use `emdash-content-modeling` and the relevant building/CLI skills.
   Inspect the selected instance's schema and existing entries through supported
   tools. Preserve records with an appropriate compatible migration; use dual
-  reads/backfills when needed. Update queries, forms/live edit targets and
+  reads/backfills while old and new shapes coexist. Update queries, forms/live edit targets and
   templates together. Seed changes describe new installs and do not migrate
   live records. Include remote databases only when they are configured and in
   scope; source edits do not transfer CMS content or media.
@@ -129,7 +129,7 @@ installed release notes and verify:
   `npm run db:rehearse` with the updated build and `--compare` after the first
   request. Never rehearse on a preview version bound to the production D1: it
   migrates production. Registry plugins are updated in the admin under Plugins,
-  Check for updates, ideally before the core update so the rehearsal covers them.
+  Check for updates before the core update, so the rehearsal covers them.
   Explicit local rehearsals that refuse `CI`/`GITHUB_ACTIONS` are run with the
   variable unset, not with a weakened guard.
 - The exact branch, build/deploy command, deployed version and

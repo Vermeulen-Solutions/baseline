@@ -4,7 +4,7 @@ Read for a requested logo/icon refinement, favicon, asset variants or a coherent
 
 ## Work from the real master
 
-Inspect the native/vector source, its actual paths, fonts, colours and intended placements. Keep the original unchanged. Extract an existing symbol from a lockup when appropriate; do not shrink the entire wordmark/tagline into a favicon. Preserve geometry during extraction. A simplified small-size companion is a proposed variant, not silently the new master. Keep identifiable letters and meaningful negative space.
+Inspect the native/vector source, its actual paths, fonts, colours and intended placements. Keep the original unchanged. Extract an existing symbol from a lockup when the lockup has one; do not shrink the entire wordmark/tagline into a favicon. Preserve geometry during extraction. A simplified small-size companion is a proposed variant, not silently the new master. Keep identifiable letters and meaningful negative space.
 
 For a new mark, use the site's settled identity brief and compare a small set of meaningfully different ideas before developing the chosen one. Do not repeat a full discovery interview or generate a complete identity kit unless that is the assignment. Native vector tools and authored SVG are valid paths; a raster concept is not editable vector delivery.
 

@@ -15,7 +15,7 @@ Professional copy uses the same devices. The difference is that its details are 
 
 ## 1. The fact sheet
 
-Before the first sentence, write down from the brief, the owner's files and any existing site, in their words where possible:
+Before the first sentence, write down from the brief, the owner's files and any existing site, in their words when they wrote them:
 
 | Field | Feeds |
 |---|---|

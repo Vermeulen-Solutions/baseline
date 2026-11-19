@@ -4,9 +4,9 @@ Read when a site needs related article, service, process, hero or empty-state il
 
 ## Plan what the pictures explain
 
-For each needed image, name the page/topic, the reader's question, the idea the image adds, the placement/crop and whether it is informative or decorative. Avoid an interchangeable stock metaphor or an image for every heading. Keep essential instructions, claims and diagram labels available as HTML/text as appropriate; invented results and simulated successful submissions are not visual proof.
+For each needed image, name the page/topic, the reader's question, the idea the image adds, the placement/crop and whether it is informative or decorative. Avoid an interchangeable stock metaphor or an image for every heading. Keep essential instructions, claims and diagram labels available as HTML text; invented results and simulated successful submissions are not visual proof.
 
-Define the shared visual language once in the current concept notes: palette roles, geometry or line treatment, perspective, level of detail, lighting/material where relevant, framing and background/transparency. Also name what varies with the topic. Use one useful approved reference when it exists. Do not pin every object and position so tightly that different topics collapse into copies of the same composition.
+Define the shared visual language once in the current concept notes: palette roles, geometry or line treatment, perspective, level of detail, lighting and material for rendered images, framing and background/transparency. Also name what varies with the topic. Use one useful approved reference when it exists. Do not pin every object and position so tightly that different topics collapse into copies of the same composition.
 
 ## Choose the medium for the deliverable
 

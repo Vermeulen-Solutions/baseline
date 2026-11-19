@@ -7,7 +7,7 @@ Choose a representative route/task and an available actual reader/browser pair. 
 ## Execute the relevant tasks
 
 1. **Find the page and its content.** Listen to the page identity, navigate landmarks/headings, and follow a real content link. Check reading order, useful names and whether repeated decoration obscures the content. With NVDA in browse mode, `D` moves between landmarks, `H` between headings, and `NVDA+F7` opens the elements list.
-2. **Complete a keyboard task.** Tab/Shift+Tab to the actual controls, activate them and listen for name, role and state. Use browse and focus modes as appropriate (`NVDA+Space` switches them). For a menu or dialog, check entering, Escape/closing and focus return; do not require a custom widget when a native element already works.
+2. **Complete a keyboard task.** Tab/Shift+Tab to the actual controls, activate them and listen for name, role and state. Use browse mode to read and focus mode to operate controls (`NVDA+Space` switches them). For a menu or dialog, check entering, Escape/closing and focus return; do not require a custom widget when a native element already works.
 3. **Exercise a relevant error and recovery.** On a local/test form, submit invalid input, locate the error, correct it and verify the announced result. Avoid a real enquiry, subscriber record or message solely to complete a test. Use an authorized test endpoint or stop at validation and label successful submission untested.
 4. **Check dynamic updates when present.** Trigger a filter/result change, asynchronous status or validation update. Listen for useful updates without duplicate chatter or lost focus. A `role="status"` attribute or a passing DOM test does not prove what the reader announced.
 
