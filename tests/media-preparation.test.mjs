@@ -116,6 +116,19 @@ test('static profiles use their own ignored staging and require no CMS package',
   }
 }));
 
+test('a compliant photograph that carries camera metadata is re-encoded without it, not kept byte for byte', () => fixture(async ({ source, projectRoot, out, put }) => {
+  const plain = await sharp({ create: { width: 120, height: 80, channels: 3, background: '#7a5c3e' } }).jpeg().toBuffer();
+  const camera = await sharp({ create: { width: 120, height: 80, channels: 3, background: '#7a5c3e' } }).withExif({ IFD0: { Make: 'PhoneMaker', Model: 'Phone 3' } }).jpeg().toBuffer();
+  assert.ok((await sharp(camera).metadata()).exif);
+  put('plain.jpg', plain); put('camera.jpg', camera);
+  const stage = out(); prepareImages({ source, out: stage }, { projectRoot });
+  const entries = Object.fromEntries(verifyPreparedStage(stage, { projectRoot }).manifest.entries.map(entry => [entry.path, entry]));
+  assert.equal(entries['plain.jpg'].output.treatment, 'already-within-policy'); assert.equal(entries['plain.jpg'].output.sha256, imageHash(plain));
+  assert.equal(entries['camera.jpg'].output.treatment, 'photo-webp-srgb-oriented');
+  const prepared = await sharp(path.join(stage, entries['camera.jpg'].output.path)).metadata();
+  assert.equal(prepared.exif, undefined); assert.equal(prepared.xmp, undefined);
+}));
+
 test('excessive inputs and larger conversion candidates never silently become upload files', () => fixture(async ({ source, projectRoot, out, put }) => {
   const huge = path.join(source, 'too-large.png'); fs.writeFileSync(huge, ''); fs.truncateSync(huge, 32 * 1024 * 1024 + 1);
   put('too-wide.png', await sharp({ create: { width: 20001, height: 1, channels: 3, background: '#667788' } }).png().toBuffer());
