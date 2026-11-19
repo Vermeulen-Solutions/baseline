@@ -72,3 +72,16 @@ test('the report names the measurements and each finding', () => {
   assert.match(text, /^\/: h1 72px, largest h2 36px, body 16px, image cover 0\.2, full-width media 0, 3 sections/);
   assert.match(text, /\[kicker-openings\] 3 sections open with a small label/);
 });
+
+test('a page made only of type, photographs and rules is reported as bare; a made world is not', () => {
+  const designed = { fullBleedMedia: true, mediaCount: 1, ground: true };
+  const bare = page([section(designed)], { signature: true, craft: { elements: 150, voices: 1, surfaces: 0, drawn: 0, rotated: 0, masked: 0, motion: 0 } });
+  const finding = assessComposition(bare).find((f) => f.code === 'bare-page');
+  assert.deepEqual(finding.missing, ['surface', 'drawn objects', 'three type voices', 'depth', 'motion']);
+  const made = page([section(designed)], { signature: true, craft: { elements: 700, voices: 3, surfaces: 4, drawn: 13, rotated: 7, masked: 0, motion: 7 } });
+  assert.deepEqual(codes(made), []);
+  // Two missing ingredients is a quieter world, not a bare page.
+  const calm = page([section(designed)], { signature: true, craft: { elements: 500, voices: 3, surfaces: 2, drawn: 1, rotated: 0, masked: 2, motion: 0 } });
+  assert.deepEqual(codes(calm), []);
+  assert.match(formatRoute('/', made, []), /700 elements, 3 type voices, 4 surfaces, 13 drawings, 7 rotated or masked, 7 animations/);
+});
