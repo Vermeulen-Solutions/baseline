@@ -99,6 +99,20 @@ const works = [
           </Container>
         </Section>
 
+        <Section labelledBy="tones">
+          <Container width="wide">
+            <h2 id="tones">One treatment for mixed photographs</h2>
+            <div class="expressive-demo__frames">
+              {(['warm', 'mono', 'duotone'] as const).map((tone) => (
+                <figure>
+                  <div data-tone={tone} class="expressive-demo__frame" style="aspect-ratio: 1200 / 900"><ResponsiveImage src={field.src} width={1200} height={900} alt={`Synthetic plate: a field, ${tone} treatment`} sizes="(max-width: 48rem) 100vw, 30vw" optimize={false} /></div>
+                  <figcaption><code>data-tone="{tone}"</code></figcaption>
+                </figure>
+              ))}
+            </div>
+          </Container>
+        </Section>
+
         <section class="bleed expressive-demo__band" data-surface="dark" data-scroll="open" aria-labelledby="band">
           <Container width="content">
             <h2 id="band">A ground that opens as it arrives</h2>

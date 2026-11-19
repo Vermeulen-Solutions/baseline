@@ -837,8 +837,8 @@
   },
   {
     "path": "src/styles/expressive.css",
-    "reason": "Shared opt-in presentation layer: bleed, frame shapes, fitted display line, scroll-driven reveals and page-transition styles. Every rule needs an attribute or class a page adds; motion sits inside reduced-motion and feature guards and rests in the visual editor. Token-bound. Exact LF-normalized source hash.",
-    "sha256": "b558d8f7ac0ab515c9a5a39ac2f2de84382a805be03514476eadfdf42bed38ac"
+    "reason": "Shared opt-in presentation layer: bleed, frame shapes, photograph treatments, fitted display line, scroll-driven reveals and page-transition styles. Every rule needs an attribute or class a page adds; motion sits inside reduced-motion and feature guards and rests in the visual editor. Token-bound. Exact LF-normalized source hash.",
+    "sha256": "43e4419b9abbb9cacc6bcc133ea370ca6d8726761abe578ef60f58e3b42040cc"
   },
   {
     "path": "src/lib/page-transition-script.ts",
@@ -847,8 +847,8 @@
   },
   {
     "path": "src/components/MediaStage.astro",
-    "reason": "Shared presentation primitive: an image-led stage, full bleed or in the column, with words on a token scrim on wide stages and below the picture on narrow ones; eager/high-priority first-screen image, forced-colors fallback. Exact LF-normalized source hash.",
-    "sha256": "9026c9f630991679f8a5be87f8541eb0e3d7797b300b023ee47b1bd5126e4989"
+    "reason": "Shared presentation primitive: an image-led stage, full bleed or in the column, with words on a token scrim on wide stages and below the picture on narrow ones; eager/high-priority first-screen image, forced-colors fallback; optional photograph treatment (tone). Exact LF-normalized source hash.",
+    "sha256": "acb7f823a09824f1fdc6b7b5ebd78ada3b9d8d0f93e1109bc62287f4d9b74017"
   },
   {
     "path": "src/components/IndexList.astro",
@@ -858,7 +858,7 @@
   {
     "path": "src/components/dev/ExpressiveDemo.astro",
     "reason": "Development-only demo of the expressive layer (injected /_expressive routes, absent from release builds); synthetic plates and neutral copy, no client material. Exact LF-normalized source hash.",
-    "sha256": "33b96030e9b87925f9a471bab61b6f26abebb29706853fcfbb5d5ac403924a29"
+    "sha256": "5120d7954f6da9c089b2681051105ac48aaf4352cc8e16a88745da8da744f3a2"
   },
   {
     "path": "src/dev/ExpressiveFixture.astro",

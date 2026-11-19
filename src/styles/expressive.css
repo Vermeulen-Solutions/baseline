@@ -8,6 +8,7 @@
  * Map of this file.
  * - .bleed: full viewport width out of the shell gutter, for media and grounds.
  * - [data-shape]: one frame shape taken from the site's motif (arch, round, leaf, tab).
+ * - [data-tone]: one photograph treatment for the whole site (warm, mono, duotone).
  * - .display-fit: one large line sized to its container, trimmed to the capitals.
  * - [data-reveal="frame" | "mask"]: scroll-driven media and heading reveals.
  * - [data-scroll="open" | "recede" | "rise"]: scroll-driven grounds, heroes and footers.
@@ -23,6 +24,10 @@
 		--radius-shape: clamp(2rem, calc(1.3333rem + 3.3333vi), 4rem);
 		/* A staged sequence (a curtain, an arrival) is longer than interface motion. */
 		--duration-stage: 560ms;
+		/* Photograph treatment inks: duotone prints the photograph's light and shade in the action
+		   colour (the ink) and holds its highlights to the page ground (the paper). */
+		--tone-ink: var(--color-action);
+		--tone-paper: var(--color-page, var(--color-surface));
 	}
 
 	/* Full bleed. The element spans the viewport, whatever gutter and measure its column has. Its
@@ -67,6 +72,58 @@
 
 	:where([data-shape="tab"]) {
 		border-start-end-radius: var(--radius-shape);
+	}
+
+	/* Photograph treatments. Owner photographs of different ages, cameras and light read as one set
+	   when they share a treatment: warm evens out colour casts, mono turns them black and white,
+	   duotone prints them in the site's ink and paper (--tone-ink, --tone-paper). Put data-tone on the frame around the img
+	   (duotone draws its inks on the frame); choose one treatment for the whole site. */
+	:where([data-tone="warm"]) :where(img),
+	:where(img[data-tone="warm"]) {
+		filter: sepia(0.28) saturate(1.08) contrast(1.04);
+	}
+
+	:where([data-tone="mono"]) :where(img),
+	:where(img[data-tone="mono"]) {
+		filter: grayscale(1) contrast(1.06);
+	}
+
+	:where([data-tone="duotone"]) {
+		position: relative;
+		isolation: isolate;
+	}
+
+	:where([data-tone="duotone"]) :where(img) {
+		filter: grayscale(1) contrast(1.15);
+	}
+
+	/* A filtered img paints like a positioned element, so both inks are raised above it. */
+	:where([data-tone="duotone"])::before,
+	:where([data-tone="duotone"])::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: var(--z-raised);
+		pointer-events: none;
+	}
+
+	/* The color blend takes the ink's hue and strength and keeps the photograph's own light and
+	   shade; multiply then holds the whites to the paper. */
+	:where([data-tone="duotone"])::before {
+		background-color: var(--tone-ink);
+		mix-blend-mode: color;
+	}
+
+	:where([data-tone="duotone"])::after {
+		background-color: var(--tone-paper);
+		mix-blend-mode: multiply;
+	}
+
+	@media (forced-colors: active) {
+		:where([data-tone="duotone"])::before,
+		:where([data-tone="duotone"])::after {
+			display: none;
+		}
 	}
 
 	/* One large line, sized to its container. Set --fit on the box to the line's width in ems

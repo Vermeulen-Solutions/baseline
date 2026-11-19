@@ -4,21 +4,26 @@ Read at the concept checkpoint of a new site or a significant redesign, before c
 
 The sites people remember in the same sectors (a school, a church, a sports club, a sculptor, a village association) do not use more effects. They make a few decisions that come from the subject and hold them on every page. This reference turns those decisions into steps. Record their results in the Art Direction Record (see [the record's extra fields](#record-it)).
 
+A trial build that followed these steps but took the easy answer at each one (the example idea from the table, a split hero called a "signature moment", every photograph in the same frame) produced a tidier version of the same template. Each step below therefore says what does not count.
+
 ## 1. Name the governing idea
 
 Write one sentence that says what the site **is**, as an object, for its visitors. Not a mood ("warm and modern") and not a sector ("a club website"): a thing with a known form.
 
-| Subject | A governing idea that decides layouts |
-| --- | --- |
-| A school or a course provider | The term's course catalogue: a contents page, course codes, covers, a rate card |
-| A church or a parish | Its building and its newsletter: the arch as frame, the dated history, issues of the newsletter, the order of service |
-| A sports club | The fixtures list and the team sheet: results in tabular figures, squads as line-ups, the season as a table |
-| A sculptor, a maker or a workshop | A catalogue of works: numbered plates with captions, the workshop bench, materials named like a label |
-| A village or neighbourhood association | The noticeboard: dated notices, pinned announcements, the next meeting first |
-| An events product or a venue | The programme: dates and times set large, the running order, the ticket |
-| A studio or a consultancy | Its own body of work: real projects at full size, the work order, the process as a schedule |
+Write **three** candidate ideas, from the client's own material: their words (what they repeat, what they are proud of, how they describe their work), their photographs (what keeps appearing), their place, their habits. Discard the first one you wrote: it is the one any agent would write for any client in the sector. Choose the one that names something only this client has.
 
-The idea passes when it changes at least three structural choices (what the home page leads with, how a list is set, how a detail page opens). If it changes only colours or an illustration, it is a mood: try again. A preserve-identity redesign can take its idea from the existing brand.
+| Subject | The stock idea (do not stop here) | A specific idea from the client's own material |
+| --- | --- | --- |
+| A school | "A course catalogue" | The term as a timetable on the classroom wall, because the school is known for its Wednesday workshops |
+| A church | "The building and its newsletter" | The bell tower that the village sees from everywhere, framing every photograph |
+| A rowing club | "Fixtures and team sheets" | The boathouse board where crews are chalked up each morning |
+| A potter | "A catalogue of works" | The kiln's firing log: each piece with its firing date, clay and glaze, the way the studio already labels its shelves |
+| A village association | "A noticeboard" | The village fountain where neighbours meet, and the dates that bring them there |
+| An events product | "The programme" | The door list on the night: the moment the product exists for |
+
+The middle column is what every agent writes; it is only a starting category. The right column shows the kind of specificity to reach, invented here for illustration: never copy it, find the client's own.
+
+The idea passes when it (a) names something no competitor could claim, and (b) changes at least three structural choices (what the home page leads with, how a list is set, how a detail page opens). If it changes only colours or an illustration, it is a mood: try again. A preserve-identity redesign can take its idea from the existing brand.
 
 ## 2. Set content as the real object it is
 
@@ -26,8 +31,8 @@ For each content type in the route inventory, ask what that thing looks like in 
 
 | Content | As a card grid | As the real object |
 | --- | --- | --- |
-| Courses, classes, programmes | Equal cards with an image | A contents page: code, title, teacher, day, ruled rows (`IndexList` with `lead`) |
-| Works, products, projects | Thumbnail cards | Numbered plates, large, with a caption saying what and when (`MediaStage`, figures with captions) |
+| Courses, classes, programmes | Equal cards with an image | A contents page or timetable: code, title, teacher, day, ruled rows (`IndexList` with `lead`) |
+| Works, products, projects | Thumbnail cards | A few works large and the rest as an index that previews them (`MediaStage`, `IndexList preview`) |
 | Testimonials | Quote cards with stars | Letters or notes, in the writer's words, signed and dated |
 | Prices | Three pricing cards | A rate card or a receipt: items, amounts in tabular figures, what is included |
 | Events, fixtures | Cards with a date badge | A programme or fixtures list: date first, large, then time, place, opponent |
@@ -37,28 +42,36 @@ For each content type in the route inventory, ask what that thing looks like in 
 | Documents, minutes | Download cards | A register: date, title, size, ruled |
 | News | A card grid | A dated noticeboard or a front page with one lead story |
 
-Cards remain right for things that really are cards (a member card, a ticket). Rows ruled with hairlines suit most lists; a box around a list makes it look like a card.
+Cards remain right for things that really are cards (a member card, a ticket). Rows ruled with hairlines suit most lists; a box around a list makes it look like a card. A grid of equal framed thumbnails is a card grid even without card borders.
 
 ## 3. Take one shape, one accent and one or two typefaces from the subject
 
-- **One shape** repeated on every photograph frame: the arch of the church, the leaf of the garden, the folder tab of the archive, the court's rounded corner (`data-shape`). Mixing shapes reads as decoration.
+- **One shape** repeated on photograph frames where it means something: the arch of the church, the leaf of the garden, the folder tab of the archive (`data-shape`). Mixing shapes reads as decoration.
 - **One accent colour** used sparingly for actions and emphasis. A client's, partner's or team's colours stay inside their own material (their logo, their kit, their photograph), not in the site's chrome.
-- **Type from the subject:** a display face with a reason (an engraved serif for a 19th-century building, a condensed sans for a sports scoreboard, a book face for a course catalogue), and a body face for reading. Set the display face large once per page (`.display-fit`), not every heading.
+- **Type from the subject:** a display face with a reason (an engraved serif for a 19th-century building, a condensed sans for a sports scoreboard, a book face for a course catalogue), and a body face for reading. Set the display face large once per page (`.display-fit`), not every heading at the same large size.
 
 ## 4. Give each page archetype one signature moment
 
-Decide, per page archetype, the one thing a visitor will remember, and spend the page's visual budget there. Everything else stays quiet.
+The signature moment is what a visitor describes after closing the tab. Decide one per page archetype and spend the page's visual budget there; everything else stays quiet.
+
+A signature moment passes **all three** tests:
+
+1. **Only this subject.** It could not appear unchanged on a competitor's site.
+2. **Different in scale or kind from everything around it.** At least twice the size of the page's other elements in one dimension (the full width of the screen, most of the first screen, a line set several times the heading size), or a different medium (the page moving as one object between pages, a map or timeline drawn to scale, a before/after comparison).
+3. **Recognisable as a thumbnail.** Shrink a screenshot of the page to a quarter of its width: the moment is still the first thing you see.
+
+These are **never** signature moments, however they are styled: a heading beside a photograph (the split hero), a row of three steps or cards, a grid of equal thumbnails, a ruled list on its own, a closing call to action, a photograph in the same frame and size as the others, a large heading that is the same size as every other heading on the page.
 
 | Signature moment | Fits | Baseline capability |
 | --- | --- | --- |
-| The work, the place or the people at full width | Craft, hospitality, places, clubs with good photographs | `MediaStage` with real photography |
-| One sentence set as large as the column | Associations, studios, statements | `.display-fit` |
-| A list that previews what it lists | Portfolios, course lists, teams | `IndexList preview` |
-| A timeline or a programme with dates set large | Churches, clubs, festivals, schools | `IndexList` with dated `lead`, large tabular figures |
-| Moving between pages as one object | Catalogues, portfolios, programmes | `SiteShell transitionStyle`, `data-arrive`, `heroMedia` |
-| A ground that opens or a footer that rises | A long home page that needs a turn | `data-scroll="open"`, `data-scroll="rise"` |
+| The work, the place or the people at full width, words on the picture | Craft, hospitality, places, clubs | `MediaStage` |
+| One sentence set as large as the column | Associations, studios, statements | `.display-fit` (once per page) |
+| A list that previews what it lists, the preview growing into the page it opens | Portfolios, course lists, teams | `IndexList preview` + `SiteShell transitionStyle` + `MediaStage heroMedia` |
+| A timeline or programme with dates set very large | Churches, clubs, festivals, schools | `IndexList` with dated `lead`, `--index-title-size` raised, tabular figures |
+| Moving between pages as one object | Catalogues, portfolios, programmes | `SiteShell transitionStyle`, `data-arrive` |
+| A ground that opens as it arrives | A long home page that needs a turn | `.bleed` + `data-scroll="open"` |
 
-One moment per page. Two moments compete; five are a demo.
+The home page's moment is in its first two screens. One moment per page: two compete; five are a demo. Check it on the rendered page at 1440px and 390px with the thumbnail test, and with `npm run audit:composition`, whose `no-signature`, `split-hero` and `uniform-gallery` findings name the usual misses.
 
 ## 5. Plan the page's pacing by weight
 
@@ -66,34 +79,47 @@ Write each primary page as a sequence of weights before building it: **heavy** (
 
 - Example for a club's home page: heavy (team photograph stage with the next fixture) → light (fixtures list) → medium (one story with its photograph) → light (sponsors as a ruled register) → heavy (closing line, fitted).
 - Do not open every section the same way. A section heading with a kicker above it and a lead beside it is one option; a heading alone, a heading inside the picture, or no heading at all (a list that explains itself) are others.
+- Do not end every page the same way. A closing call to action on every page is part of the template; end most pages on their own content and a plain, specific next step.
 
 ## 6. Decide the photographs
 
 - **What they show:** the work, the people, the place. Lead with the strongest real photograph, not with tools or a stock texture.
-- **Fewer and larger:** three photographs at full width say more than twelve thumbnails. A gallery belongs on the gallery page.
-- **One or two ratios** for the whole site (a portrait and a landscape), applied the same way everywhere, with `focus` set where the stage crops.
+- **Fewer and larger:** three photographs at full width say more than twelve thumbnails. A gallery belongs on the gallery page, and even there a few works can be large and the rest an index.
+- **One or two ratios** for the whole site (a portrait and a landscape), and each frame takes its photograph's ratio or a deliberate crop: never pillarbox a portrait inside a landscape frame.
 - **Captions** that say what the photograph shows, in the site's voice.
-- **Weak photographs:** use them smaller and in the shape, or not at all; never cover a weak photograph with text. Ask the owner for the few that matter (the team, the building, the best work) and say why in the brief.
+
+### Weak or mixed photographs
+
+Owner photographs are often phone pictures of different ages, light and colour. Weak photographs are a reason to choose and treat them, not a reason to make everything a small framed thumbnail:
+
+- **Choose three.** Find the three sharpest, best-lit photographs of the strongest subjects; they carry the large moments. The rest go into an index or a gallery page.
+- **Size by what the eye sees.** A photograph about 1000px wide looks fine at full width on a phone and at around 1000px on a desktop. Use `MediaStage bleed={false} stage="ratio"` in a wide column, or crop tighter around the subject with `focus`. Judge the result by eye at 1440px before deciding a photograph cannot be shown large.
+- **Unify them.** One treatment on every photograph makes mismatched pictures read as a set: `data-tone="warm"` (evens out colour casts), `"mono"` (black and white), or `"duotone"` (the site's ink and paper), from the expressive layer. Choose one for the site, not one per photograph.
+- **Crop to a detail.** A tight crop (the carved eye, the grain, a hand on the ball) holds up at a large size where the whole photograph does not.
+- **Let type carry it.** When no photograph can be large, the page's big moment is a fitted line, and the photographs stay honest at their size.
+- **Ask for the few that matter.** Name the three photographs the site needs (the team, the building, the best work) in the handoff, and why.
 
 ## 7. Check for the template look
 
 Before broad implementation, and on every rendered primary route, run `npm run audit:composition` (when installed) and look at the page from across the room:
 
 - Cover the logo: could this be any organisation's site in the same sector? Name the elements that say whose it is.
+- Is the hero a heading beside a photograph? That is the template's opening, however good the photograph.
 - Count the section openings that use kicker + heading + lead. More than two on a page is the template.
-- Count equal card grids. More than one on a page, or one on every page, is the template.
+- Count equal grids, framed or not. More than one on a page, or one on every page, is the template.
 - Is there anything at full width other than a coloured band?
-- Is there one moment on the page that only this subject would have?
+- Does every page end on the same call to action?
+- Does the page pass the thumbnail test of section 4?
 
-Fix the cause in the direction, not by adding effects.
+Fix the cause in the direction, not by adding effects. A finding the direction keeps is recorded with its reason in the Art Direction Record; "the photographs are low resolution" is not a reason on its own (see section 6).
 
 ## Record it
 
 Add two lines to the Art Direction Record, after the required fields:
 
 ```markdown
-- **Governing Idea:** [One sentence: what the site is as an object, and the three structural choices it decides]
-- **Signature Moments:** [Per page archetype: the one moment and the capability that delivers it]
+- **Governing Idea:** [One sentence: what the site is as an object, the three candidates considered, and the three structural choices it decides]
+- **Signature Moments:** [Per page archetype: the one moment, the capability that delivers it, and how it passes the three tests]
 ```
 
 `check:art-direction` accepts the record without them, but the site's direction is not complete until they are written.

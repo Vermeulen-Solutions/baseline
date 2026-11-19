@@ -101,7 +101,7 @@ Do not invent facts, testimonials, clients, metrics, team members, or pseudo-rea
 
 ## Explore enough to make a choice
 
-When the brief supports substantially different directions, develop two or three compact concepts and compare them against audience fit, brand continuity, content fit, accessibility, maintainability, and distinctiveness. Select one direction, or present the choice to the user when the directions differ in lane, hero strategy or density.
+When the brief supports substantially different directions, develop two or three compact concepts and compare them against audience fit, brand continuity, content fit, accessibility, maintainability, and distinctiveness. Select one direction, or present the choice to the user when the directions differ in lane, hero strategy or density. When you select, choose for distinctiveness and fix the bolder concept's gaps rather than falling back on the safest one; see the selection step in [design iteration](references/design-iteration.md).
 
 For a new site, significant overhaul or replacement visual world, read [references/design-iteration.md](references/design-iteration.md) before offering a design surface. It holds the surface rule (HTML/browser concepts by default; Brilliant when an editable canvas is requested and no tool is settled; Brilliant, OpenPencil and Penpot named once; OpenDesign optional for an explicitly selected canvas/export workflow or an existing project), the skill and limits for each tool, the side-by-side comparison of two or three structurally distinct directions, and honest efficiency measurement. Reuse a settled surface and working connection rather than repeating the offer; resolve an unavailable chosen surface with the user. Same-agent work is complete; another agent/handoff is optional.
 
@@ -166,7 +166,7 @@ The record should constrain implementation without prescribing every CSS value. 
 
 Before handing off, test the proposal:
 
-- Does the governing idea change at least three structural choices, and does each page archetype have one signature moment that only this subject would have? Run `npm run audit:composition` on a rendered representative route where installed; its findings point at the template look.
+- Does the governing idea name something only this client has (not the stock idea for the sector), and change at least three structural choices? Does each page archetype have one signature moment that passes the three tests in [distinctive direction](references/distinctive-direction.md): only this subject, twice the scale or a different kind, still recognisable as a thumbnail? A split hero, a step row, an equal grid or a closing call to action never counts. Run `npm run audit:composition` on a rendered representative route where installed; its findings point at the template look.
 - Could it plausibly belong to many unrelated organizations after replacing the logo and accent color? If so, strengthen the connection to the actual content or identity. Baseline's own recipes count here too: mono kicker labels, numbered section indices, an italic accent word in every headline, glass navigation and the bento → metric strip → dark band sequence read as generated when used by default (see the generic-fingerprint check in `astro-site-design`).
 - Does the hierarchy support visitor tasks and realistic content lengths?
 - Can the direction repeat across all page archetypes without every section using the same composition?

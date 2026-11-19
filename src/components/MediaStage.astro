@@ -33,6 +33,8 @@ interface Props extends Omit<HTMLAttributes<'div'>, 'title'> {
   caption?: string;
   /** Opt-in motion from expressive.css: `recede` steps back as it scrolls away, `frame` opens as it arrives. */
   motion?: 'recede' | 'frame';
+  /** The site's photograph treatment from expressive.css (`warm`, `mono` or `duotone`). */
+  tone?: 'warm' | 'mono' | 'duotone';
   /** Mark the picture as the destination of a card or index-row morph (data-vt-hero-media). */
   heroMedia?: boolean;
   optimize?: boolean;
@@ -40,7 +42,7 @@ interface Props extends Omit<HTMLAttributes<'div'>, 'title'> {
 
 const {
   image, alt, width: imageWidth, height: imageHeight, sizes, bleed = true, stage: rawStage, align: rawAlign, scrim: rawScrim,
-  focus, priority = false, caption, motion, heroMedia = false, optimize = true, class: className, style, ...attributes
+  focus, priority = false, caption, motion, tone, heroMedia = false, optimize = true, class: className, style, ...attributes
 } = Astro.props;
 const stage = rawStage === 'tall' || rawStage === 'ratio' ? rawStage : 'screen';
 const align = rawAlign === 'center' || rawAlign === 'end' ? rawAlign : 'start';
@@ -63,7 +65,7 @@ const inlineStyle = [focusStyle, typeof style === 'string' ? style : undefined].
 >
   <div class="media-stage__layout">
   {/* A stage crops by design around its focus point; stage="ratio" shows the whole photograph and keeps audit:ui's crop check. */}
-  <div class="media-stage__picture" data-vt-hero-media={heroMedia ? '' : undefined} data-audit-crop-ok={stage === 'ratio' ? undefined : ''}>
+  <div class="media-stage__picture" data-vt-hero-media={heroMedia ? '' : undefined} data-audit-crop-ok={stage === 'ratio' ? undefined : ''} data-tone={tone === 'warm' || tone === 'mono' || tone === 'duotone' ? tone : undefined}>
     <ResponsiveImage
       src={image}
       alt={alt}

@@ -20,7 +20,7 @@ Every reusable component Baseline ships, where it is documented, and which profi
 | `BeforeAfter`, `Stars`, `Hours` | All | Comparison slider, star rating, opening hours | [Before/after](#beforeafter-comparison-beforeafterastro), [Ratings and quotes](#ratings-and-quotes-starsastro-srclibquotests), [Opening hours](#opening-hours-hoursastro) |
 | `Analytics`, `ConsentBanner`, `VideoEmbed`, `MapEmbed` | All | Consent-aware analytics, click-to-load embeds | [Analytics, consent and embeds](#analytics-consent-and-embeds) |
 | `Heading`, `TableOfContents`, `Callout`, `Steps` | All | Content navigation and structure | [Content navigation](#content-navigation-and-structured-primitives) |
-| `MediaStage`, `IndexList`, `src/styles/expressive.css` | All | Image-led stage, ruled index, bleed, frame shapes, fitted display line, scroll-driven reveals, page-transition styles (opt-in) | [Expressive layer](#expressive-layer-opt-in) |
+| `MediaStage`, `IndexList`, `src/styles/expressive.css` | All | Image-led stage, ruled index, bleed, frame shapes, photograph treatments, fitted display line, scroll-driven reveals, page-transition styles (opt-in) | [Expressive layer](#expressive-layer-opt-in) |
 | `SearchDialog` | All, when search is configured | Pagefind search in a native dialog | [Optional site search](search.md) |
 | `PostListItem` | EmDash | Starter blog list row (`post`, `showDate`) | Starter routes |
 | `StaticMetadata` (`profiles/static/project/src/components/`) | Static profiles | Build-time title, description, canonical and JSON-LD | [Metadata phase 2](verification/metadata-phase-2.md) |
@@ -168,7 +168,7 @@ import workshop from '../assets/workshop.jpg';
 </MediaStage>
 ```
 
-Props: `image` (imported image or URL with `width`/`height`), `alt`, `sizes`, `bleed` (default `true`), `stage` (`screen` default, `tall`, or `ratio` to keep the picture's own proportions), `align` (`start`, `center`, `end`), `scrim` (`bottom` default, `full`, `none` for a picture with its own quiet area), `focus` (CSS `object-position`, the part to keep when the stage crops), `priority` (eager and high priority for the first-screen picture), `caption`, `motion` (`recede` or `frame`, see below), `heroMedia` (the destination of a card morph) and `optimize`. The default slot holds the words. Check the rendered contrast of the words over the actual photograph at wide widths, and use `scrim="full"` when a busy picture needs it; `audit:ui` and axe cannot see the picture under the text.
+Props: `image` (imported image or URL with `width`/`height`), `alt`, `sizes`, `bleed` (default `true`), `stage` (`screen` default, `tall`, or `ratio` to keep the picture's own proportions), `align` (`start`, `center`, `end`), `scrim` (`bottom` default, `full`, `none` for a picture with its own quiet area), `focus` (CSS `object-position`, the part to keep when the stage crops), `priority` (eager and high priority for the first-screen picture), `caption`, `motion` (`recede` or `frame`, see below), `tone` (`warm`, `mono` or `duotone`, see below), `heroMedia` (the destination of a card morph) and `optimize`. The default slot holds the words. Check the rendered contrast of the words over the actual photograph at wide widths, and use `scrim="full"` when a busy picture needs it; `audit:ui` and axe cannot see the picture under the text.
 
 ### `IndexList.astro`
 
@@ -179,6 +179,10 @@ Props: `items` (`{ title, href?, lead?, meta?, description?, image?, imageWidth?
 ### Frame shapes (`data-shape`)
 
 `data-shape="arch|round|leaf|tab"` on an image frame gives it one shape taken from the site's subject: a chapel's arch, a pebble, a leaf for a garden, a folder tab for an archive. Repeat one shape on a site's photographs rather than mixing several. `arch` gives any portrait frame a semicircular top; `leaf` and `tab` use `--radius-shape`. Keep faces and subjects away from the rounded edge, and check with `audit:ui`'s `image-cover-cropped`.
+
+### Photograph treatments (`data-tone`)
+
+Owner photographs taken over years, on different phones and in different light, look like a set when they share one treatment. Put `data-tone="warm"` (evens out colour casts), `"mono"` (black and white) or `"duotone"` (the photograph's light and shade printed in `--tone-ink`, the action colour by default, with its highlights held to `--tone-paper`, the page ground) on the frame around an image; `MediaStage` takes it as `tone`. Choose one treatment for the whole site rather than one per photograph, and keep untreated the photographs whose colour is the point (a painting, a product's finish). Duotone draws its inks on the frame with blend modes, so the frame must be a box around the `img`; forced-colors mode drops the inks. It costs no script and no extra image.
 
 ### Fitted display line (`.display-fit`)
 
