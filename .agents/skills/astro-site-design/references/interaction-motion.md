@@ -1,6 +1,6 @@
 # Interaction motion and polish review
 
-Read when implementing or reviewing motion on controls, menus, disclosures, dialogs, toasts, cards, hover/press feedback or page-level reveals, or when an existing animation feels slow, jumpy or janky. Impeccable's `reference/animate.md` decides whether the site needs motion at all and which focal moment deserves authorship. This reference turns that decision into interface mechanics that pass a strict review. It does not ask for more motion: a correct result is sometimes no animation.
+Read when implementing or reviewing motion on controls, menus, disclosures, dialogs, toasts, cards, hover/press feedback or page-level reveals, or when an existing animation feels slow, jumpy or janky. Impeccable's `reference/animate.md` decides whether the site needs motion at all and which focal moment deserves authorship. This reference turns that decision into interface mechanics that pass a strict review. For controls it does not ask for more motion: a correct control sometimes has no animation. The motion of the site's world (entrances on every section's parts, the named world motions and the ambient loops) is set by the four layers in [world building](../../site-art-direction/references/world-building.md), and on a Baseline site the recorded `World` answers Impeccable's question of whether the site moves; this file's restraint applies to controls and to text being read.
 
 ## Decide whether it moves
 
