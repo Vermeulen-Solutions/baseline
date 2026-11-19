@@ -45,7 +45,7 @@ Keep handoff originals outside Git or in the ignored archive. Inspect the genera
 | `--overrides <file.json>` | Policy overrides keyed by exact source-relative file path; unknown paths/fields fail |
 | `--resume` | Verify and resume the identical source selection and policy in the existing stage |
 
-Photographic JPEG/PNG/WebP/AVIF and supported single-frame raster inputs can use the photo preset. Already-compliant files retain their bytes; repeated lossy encoding is avoided. A candidate that is larger than a dimension-compliant source is discarded in favor of the smaller source. A source outside the byte policy still needs a reason or further preparation; it does not silently become an upload candidate.
+Photographic JPEG/PNG/WebP/AVIF and supported single-frame raster inputs can use the photo preset. Already-compliant files retain their bytes, so repeated lossy encoding is avoided, unless they carry EXIF, XMP or IPTC metadata (the camera, the date and often the GPS position): those are re-encoded without it. A candidate that is larger than a dimension-compliant source without metadata is discarded in favor of the smaller source. A source outside the byte policy still needs a reason or further preparation; it does not silently become an upload candidate.
 
 Transformed files are oriented using EXIF, converted to sRGB and written without unneeded embedded metadata. Preserve required credit/licensing/provenance in the editorial operation record. Artwork needs visual inspection, particularly text, fine lines and transparency. The tool cannot infer image purpose from its extension.
 

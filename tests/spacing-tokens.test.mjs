@@ -7,6 +7,8 @@ import { spawnSync } from 'node:child_process';
 import { applyTokenOverrides, resolveSpacing, auditDesignTokens, stylesheetDigest } from '../scripts/design-system.mjs';
 
 const css=fs.readFileSync('src/styles/global.css','utf8');
+// A site's global.css imports its sibling stylesheets (./site.css): copy the folder, then replace global.css.
+const copyStyles=dir=>fs.cpSync('src/styles',dir,{recursive:true});
 test('T01/T06 exact token scope, ambiguity, no-op and narrow context targeting',()=>{
   for(const update of [{root:{'--layout-contaner-gap':'0'}},{theme:{'--layout-container-gap':'0'}},{wrong:{x:'0'}}])assert.throws(()=>applyTokenOverrides(css,update),/Unknown/);
   assert.throws(()=>applyTokenOverrides(css.replace('--layout-grid-gap:','--layout-grid-gap: 0; --layout-grid-gap:'),{root:{'--layout-grid-gap':'0'}}),/Duplicate/);
@@ -21,6 +23,7 @@ test('font source refusal precedes CSS and companion-file writes, and a correcte
   const script=path.resolve('scripts/design-system.mjs');
   try {
     fs.writeFileSync(path.join(dir,'baseline.config.json'),JSON.stringify({foundation:'static'}));
+    copyStyles(dir);
     fs.mkdirSync(path.join(dir,'public/fonts'),{recursive:true});
     fs.mkdirSync(path.join(dir,'audit'));
     fs.copyFileSync('node_modules/@fontsource/noto-sans/files/noto-sans-latin-400-normal.woff2',path.join(dir,'public/fonts/Fixture.woff2'));
@@ -66,6 +69,7 @@ test('T03-T05 CLI validates before writes and binds calibration to the saved can
   const script=path.resolve('scripts/design-system.mjs');
   try {
     fs.writeFileSync(path.join(dir,'baseline.config.json'),JSON.stringify({foundation:'static'}));
+    copyStyles(dir);
     fs.writeFileSync(path.join(dir,'global.css'),css);
     fs.writeFileSync(path.join(dir,'AGENTS.md'),'original record\n');
     fs.mkdirSync(path.join(dir,'audit'));fs.writeFileSync(path.join(dir,'audit/design-gate-exceptions.json'),'[]\n');

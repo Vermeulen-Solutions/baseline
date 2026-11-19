@@ -26,15 +26,18 @@ export async function prepareImage({ source, output, policy }) {
     [extension, mimeType] = formats[meta.format];
     requireImageFact(frames === 1 || policy.preset === 'preserve', 'Animation/multiple pages require a reviewed preserve preset; no automatic flattening');
     const needsOrientation = meta.orientation && meta.orientation !== 1;
+    // EXIF, XMP and IPTC carry the camera, the date and often the GPS position of the owner's house:
+    // a file that has them is re-encoded (Sharp writes none) instead of being kept byte for byte.
+    const carriesMetadata = Boolean(meta.exif || meta.xmp || meta.iptc);
     if (policy.preset === 'preserve') treatment = 'reviewed-original';
-    else if (!needsOrientation && Math.max(width, height) <= policy.maxEdge && bytes.length <= policy.maxBytes) treatment = 'already-within-policy';
+    else if (!needsOrientation && !carriesMetadata && Math.max(width, height) <= policy.maxEdge && bytes.length <= policy.maxBytes) treatment = 'already-within-policy';
     else {
       const candidate = await sharp(bytes, { limitInputPixels: LIMITS.pixels, failOn: 'warning' }).autoOrient().resize({ width: policy.maxEdge, height: policy.maxEdge, fit: 'inside', withoutEnlargement: true }).withIccProfile('srgb').webp({ quality: policy.quality, lossless: policy.preset === 'artwork', alphaQuality: 100, effort: 5 }).toBuffer();
       requireImageFact(candidate.length <= LIMITS.bytes, 'Prepared image exceeds the output byte limit');
       const decoded = sharp(candidate, { limitInputPixels: LIMITS.pixels, failOn: 'warning' }), info = await decoded.metadata();
       await decoded.stats();
       requireImageFact(info.format === 'webp' && (info.pages ?? 1) === 1 && info.width <= policy.maxEdge && info.height <= policy.maxEdge, 'Prepared image failed format/dimension verification');
-      if (!needsOrientation && candidate.length >= bytes.length && Math.max(width, height) <= policy.maxEdge) treatment = 'smaller-original-retained';
+      if (!needsOrientation && !carriesMetadata && candidate.length >= bytes.length && Math.max(width, height) <= policy.maxEdge) treatment = 'smaller-original-retained';
       else { result = candidate; width = info.width; height = info.height; extension = 'webp'; mimeType = 'image/webp'; treatment = policy.preset === 'artwork' ? 'lossless-webp-srgb-oriented' : 'photo-webp-srgb-oriented'; }
     }
   }
