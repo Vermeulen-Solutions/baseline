@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { validateWorld, WORLD_BAR } from '../scripts/check-art-direction.mjs';
+import { validateWorld, worldMotionNames, WORLD_BAR } from '../scripts/check-art-direction.mjs';
 
 // A neutral brief: a beekeeper who sells honey at the market.
 const inventory = 'frame of comb; smoker; jar; lid paper; veil; hive record card; harvest label; market price board; wax; kraft paper; queen dot; batch stamp';
-const record = ({ world = true, inventoryList = inventory, motion = 'stamp lands on the label; route draws itself; lid twists', decisions = 3 } = {}) => [
+const record = ({ world = true, inventoryList = inventory, motion = '`stamp-lands`: the batch stamp on the label; `route-draws`: the flight path; `lid-twists`: the jar lid on hover', decisions = 3 } = {}) => [
   '# Site', '', '## Art Direction Record', '- **Aesthetic Lane:** Atelier & Craft — the hive as a workshop',
   ...(world ? [
     '- **World:**',
@@ -35,11 +35,16 @@ test('a missing world block or decisions block is named', () => {
 
 test('a short inventory, too few motions or a placeholder part fails', () => {
   assert.match(validateWorld(record({ inventoryList: 'jar; smoker; veil' })).join('\n'), new RegExp(`lists 3 things; list at least ${WORLD_BAR.inventory}`));
-  assert.match(validateWorld(record({ motion: 'stamp lands' })).join('\n'), /at least three motions/);
+  assert.match(validateWorld(record({ motion: 'stamp lands; route draws; lid twists' })).join('\n'), /Motion names 0 animations in backticks; name at least three/);
   assert.match(validateWorld(record().replace('in jar-label windows, warm tone', '<the frames>')).join('\n'), /"Photographs" needs a concrete value/);
 });
 
 test('the world block is read only inside the record section', () => {
   const outside = record({ world: false }).replace('## Next section', '## Next section\n- **World:**\n  - Source object: elsewhere');
   assert.match(validateWorld(outside).join('\n'), /add the "- \*\*World:\*\*" block/);
+});
+
+test('the motion names are read from the record for the composition audit', () => {
+  assert.deepEqual(worldMotionNames(record()), ['stamp-lands', 'route-draws', 'lid-twists']);
+  assert.deepEqual(worldMotionNames(record({ world: false })), []);
 });

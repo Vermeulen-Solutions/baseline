@@ -103,7 +103,7 @@ Owner photographs are often phone pictures of different ages, light and colour. 
 
 ## 7. Check for the template look
 
-Before broad implementation, and on every rendered primary route, run `npm run audit:composition` (when installed) and look at the page from across the room:
+Before broad implementation, and on every rendered primary route, run `npm run audit:composition` and look at the page from across the room:
 
 - Cover the logo: could this be any organisation's site in the same sector? Name the elements that say whose it is.
 - Is the hero a heading beside a photograph? That is the template's opening, however good the photograph.

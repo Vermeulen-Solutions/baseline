@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { assessComposition, parseArgs, sectionSignature, formatRoute } from '../scripts/audit-composition.mjs';
+import { assessComposition, assessWorldMotion, FLOOR, parseArgs, sectionSignature, formatRoute, softPhotos } from '../scripts/audit-composition.mjs';
 
 const section = (overrides = {}) => ({ tag: 'section', heading: 'A heading', kicker: false, split: false, centered: false, ground: false, action: false, cardGrid: false, list: false, mediaCount: 0, fullBleedMedia: false, width: 1376, ...overrides });
 const page = (sections, overrides = {}) => ({ width: 1440, bodySize: 16, h1Size: 72, h2Max: 36, imageCover: 0.2, fullWidthMedia: 0, signature: false, sections, ...overrides });
@@ -84,4 +84,29 @@ test('a page made only of type, photographs and rules is reported as bare; a mad
   const calm = page([section(designed)], { signature: true, craft: { elements: 500, voices: 3, surfaces: 2, drawn: 1, rotated: 0, masked: 2, motion: 0 } });
   assert.deepEqual(codes(calm), []);
   assert.match(formatRoute('/', made, []), /700 elements, 3 type voices, 4 surfaces, 13 drawings, 7 rotated or masked, 7 animations/);
+});
+
+test('a wide photograph shown wider than its file is soft; one at its own size, or narrow, is not', () => {
+  const images = [
+    { shown: 1440, natural: 1024, url: 'https://example.org/_astro/bench.abc.webp?v=1' },
+    { shown: 1440, natural: 3000, url: '/_astro/lake.webp' },
+    { shown: 720, natural: 1024, url: '/_astro/plate.webp' },
+    { shown: 800, natural: 0, url: '/_astro/broken.webp' },
+  ];
+  assert.deepEqual(softPhotos(images), [{ shown: 1440, natural: 1024, src: 'bench.abc.webp' }]);
+  // Device pixels count: on a 2x screen the 720px plate needs 1,440 pixels.
+  assert.deepEqual(softPhotos(images, 2).map((p) => p.src), ['bench.abc.webp', 'plate.webp']);
+  const model = page([section({ fullBleedMedia: true, mediaCount: 1 })], { signature: true, softPhotos: softPhotos(images) });
+  assert.deepEqual(codes(model), ['soft-photo']);
+});
+
+test('motions named in the record must run; the floor findings are the built world', () => {
+  assert.equal(assessWorldMotion([], ['baseline-reveal']), null);
+  assert.equal(assessWorldMotion(['stamp-lands', 'route-draws'], ['route-draws', 'stamp-lands', 'baseline-reveal']), null);
+  const missing = assessWorldMotion(['stamp-lands', 'route-draws', 'lid-twists'], ['stamp-lands']);
+  assert.equal(missing.code, 'world-motion');
+  assert.deepEqual(missing.missing, ['route-draws', 'lid-twists']);
+  assert.match(missing.message, /`route-draws`, `lid-twists` in World › Motion, and none of them ran/);
+  assert.deepEqual([...FLOOR], ['bare-page', 'soft-photo', 'world-motion']);
+  assert.equal(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--record', 'site/AGENTS.md']).record, 'site/AGENTS.md');
 });

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Composition audit: does a rendered page read as a template? Advisory.
+// Composition audit: does a rendered page read as a template, and is the recorded world built?
 //
 //   npm run audit:composition -- --base http://127.0.0.1:4321 --routes /,/about
 //   npm run audit:composition -- --base https://preview.example.workers.dev --routes / --json --out ../evidence/composition.json
@@ -28,17 +28,29 @@
 //   (three or more SVG or canvas drawings at least 32px), three type voices, depth (a rotated or
 //   masked object) and motion (an animation running after a scroll). Measured on studio-built sites
 //   for comparable trades, all five are present; on bare trial builds, four were missing.
+// - soft-photo: a photograph at least 40% of the screen wide is shown wider than its pixels (a phone
+//   photograph stretched across a desktop). Owners' photographs are often 600 to 1,500px wide; a
+//   trial home page opened on one at 1,440px and every reviewer named it as the design's ceiling;
+// - world-motion (once per run): an animation the Art Direction Record names in World › Motion
+//   (`stamp-lands`) never ran on the audited routes while scrolling. Read from AGENTS.md in the
+//   working directory, or --record <file>.
 // It also prints the measurements behind them: largest h1 and h2, body size, image cover and
-// full-width media count. None of this fails a build unless --strict is given; the findings are
-// prompts for the site-art-direction skill's distinctive-direction steps, not a design verdict.
-import { writeFileSync } from 'node:fs';
+// full-width media count. bare-page, soft-photo and world-motion are the floor: each says the
+// recorded world is missing from the built page, so the command exits 1 on them. The other
+// findings are advisory prompts for the site-art-direction skill's distinctive-direction steps,
+// not a design verdict, and fail only with --strict.
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { msysToNative, restoreGitBashRoute } from './capture-routes.mjs';
+import { worldMotionNames } from './check-art-direction.mjs';
+
+/** Findings that fail the run: the recorded world is missing from the built page. */
+export const FLOOR = Object.freeze(['bare-page', 'soft-photo', 'world-motion']);
 
 export function parseArgs(argv) {
-  const out = { routes: [], widths: [1440, 390], json: false, strict: false, out: null, base: null };
+  const out = { routes: [], widths: [1440, 390], json: false, strict: false, out: null, base: null, record: null };
   for (let i = 0; i < argv.length; i++) {
     const flag = argv[i];
     const value = () => { const v = argv[++i]; if (v === undefined || v.startsWith('--')) throw Error('Missing value for ' + flag); return v; };
@@ -48,6 +60,7 @@ export function parseArgs(argv) {
     else if (flag === '--json') out.json = true;
     else if (flag === '--strict') out.strict = true;
     else if (flag === '--out') out.out = msysToNative(value());
+    else if (flag === '--record') out.record = msysToNative(value());
     else if (flag === '--help' || flag === '-h') out.help = true;
     else throw Error('Unknown flag ' + flag);
   }
@@ -108,8 +121,24 @@ export function assessComposition(model) {
     const missing = bareIngredients(model.craft);
     if (missing.length >= 3) add('bare-page', `The page is made only of type, photographs and rules: no ${missing.join(', no ')}. Build each section as an object from the site's world, on a surface from its materials, with its type treatment and named motions (site-art-direction/references/world-building.md).`, { missing });
   }
+  for (const photo of model.softPhotos ?? []) add('soft-photo', `A photograph is shown ${photo.shown}px wide from ${photo.natural}px (${photo.src}). Show it at its own size or smaller in an object from the world (a plate, a frame, a detail crop), and let the world carry the width (site-art-direction/references/world-building.md).`, photo);
   if (model.narrow && model.narrow.h1Bottom !== null && model.narrow.h1Bottom > model.narrow.viewportHeight) add('first-screen-heading', `At ${model.narrow.width}px the page heading starts below the first screen. Shorten the picture above it or move the heading onto it.`);
   return findings;
+}
+
+/** Wide photographs shown at more than their pixels: `natural` is the file's own width, `dpr` the device pixel ratio. */
+export function softPhotos(images, dpr = 1) {
+  return images
+    .filter((p) => p.natural > 0 && p.natural < p.shown * dpr * 0.9)
+    .map((p) => ({ shown: p.shown, natural: p.natural, src: p.url.split('?')[0].split('/').pop() }));
+}
+
+/** The record's named motions that never ran on any audited route (null when all ran or none are named). */
+export function assessWorldMotion(named, ran) {
+  const seen = new Set(ran);
+  const missing = named.filter((name) => !seen.has(name));
+  if (!missing.length) return null;
+  return { code: 'world-motion', missing, message: `The Art Direction Record names ${missing.map((n) => `\`${n}\``).join(', ')} in World › Motion, and ${missing.length === 1 ? 'it never ran' : 'none of them ran'} on these routes while scrolling. Build each on the object it belongs to as a CSS animation of that name (with prefers-reduced-motion: no-preference), or correct the record.` };
 }
 
 /** Runs in the page: reads the top-level sections of <main>. */
@@ -207,8 +236,14 @@ export function measurePage() {
     const widths = boxes.map((r) => r.width);
     if (Math.max(...widths) - Math.min(...widths) <= Math.max(...widths) * 0.06 && Math.max(...areas) < 1.5 * Math.min(...areas)) uniformGallery = Math.max(uniformGallery, boxes.length);
   }
+  // Wide photographs; main() loads each chosen file on its own to read its real pixel width
+  // (with a srcset, naturalWidth is scaled by the candidate's density and hides the stretch).
+  const wideImages = [...main.querySelectorAll('img')].filter(visible)
+    .map((img) => ({ shown: Math.round(img.getBoundingClientRect().width), url: img.currentSrc || img.src || '' }))
+    .filter((p) => p.url && !/\.svg(\?|$)/i.test(p.url) && p.shown >= vw * 0.4);
   const h2Sizes = sizes('h2').sort((a, b) => a - b);
   return {
+    wideImages,
     splitHero,
     uniformGallery,
     h2Median: h2Sizes.length ? h2Sizes[Math.floor(h2Sizes.length / 2)] : 0,
@@ -258,7 +293,11 @@ export function formatRoute(route, model, findings) {
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
-  if (options.help) { console.log('Usage: npm run audit:composition -- --base <origin> --routes /,/about [--widths 1440,390] [--json] [--out file] [--strict]'); return; }
+  if (options.help) { console.log('Usage: npm run audit:composition -- --base <origin> --routes /,/about [--widths 1440,390] [--record AGENTS.md] [--json] [--out file] [--strict]'); return; }
+  const recordFile = options.record ?? (existsSync('AGENTS.md') ? 'AGENTS.md' : null);
+  if (options.record && !existsSync(options.record)) throw Error(`--record file not found: ${options.record}`);
+  const named = recordFile ? worldMotionNames(readFileSync(recordFile, 'utf8')) : [];
+  const ran = new Set();
   // The same browser lookup as audit:ui: the site's own @playwright/test first, then Baseline's.
   let chromium;
   for (const base of [path.join(process.cwd(), 'package.json'), import.meta.url]) { try { ({ chromium } = createRequire(base)('@playwright/test')); break; } catch { /* try the next location */ } }
@@ -275,17 +314,29 @@ async function main() {
       const motion = await page.evaluate(async () => {
         const height = document.documentElement.scrollHeight;
         let most = 0;
+        const names = new Set();
         for (let y = 0; y < height; y += 600) {
           scrollTo(0, y);
           await new Promise((resolve) => setTimeout(resolve, 100));
-          most = Math.max(most, document.getAnimations().length);
+          const running = document.getAnimations();
+          most = Math.max(most, running.length);
+          for (const animation of running) if (animation.animationName || animation.id) names.add(animation.animationName || animation.id);
         }
         scrollTo(0, 0);
-        return most;
+        return { most, names: [...names] };
       });
+      for (const name of motion.names) ran.add(name);
       await page.emulateMedia({ reducedMotion: 'reduce' });
       const model = await page.evaluate(measurePage);
-      model.craft.motion = motion;
+      model.craft.motion = motion.most;
+      model.craft.motionNames = motion.names;
+      const measured = await page.evaluate(async (images) => Promise.all(images.map((p) => new Promise((resolve) => {
+        const probe = new Image();
+        probe.onload = () => resolve({ ...p, natural: probe.naturalWidth });
+        probe.onerror = () => resolve({ ...p, natural: 0 });
+        probe.src = p.url;
+      }))), model.wideImages);
+      model.softPhotos = softPhotos(measured, await page.evaluate(() => devicePixelRatio));
       await page.close();
       if (narrow !== wide) {
         const phone = await browser.newPage({ viewport: { width: narrow, height: 844 } });
@@ -300,11 +351,19 @@ async function main() {
   } finally {
     await browser.close();
   }
-  const total = results.reduce((n, r) => n + r.findings.length, 0);
-  if (options.json) console.log(JSON.stringify(results, null, 2));
-  if (options.out) writeFileSync(options.out, JSON.stringify(results, null, 2));
-  if (!options.json) console.log(`Composition audit (advisory): ${total} finding${total === 1 ? '' : 's'} on ${results.length} route${results.length === 1 ? '' : 's'}. See site-art-direction/references/distinctive-direction.md.`);
-  if (options.strict && total) process.exitCode = 1;
+  const worldMotion = assessWorldMotion(named, ran);
+  const all = results.flatMap((r) => r.findings).concat(worldMotion ? [worldMotion] : []);
+  const floor = all.filter((f) => FLOOR.includes(f.code)).length;
+  const advisory = all.length - floor;
+  const report = { routes: results, site: worldMotion ? [worldMotion] : [], named };
+  if (options.json) console.log(JSON.stringify(report, null, 2));
+  if (options.out) writeFileSync(options.out, JSON.stringify(report, null, 2));
+  if (!options.json) {
+    if (worldMotion) console.log(`[world-motion] ${worldMotion.message}`);
+    else if (named.length) console.log(`World › Motion: ${named.map((n) => `\`${n}\``).join(', ')} ran.`);
+    console.log(`Composition audit: ${floor} floor finding${floor === 1 ? '' : 's'} (bare-page, soft-photo, world-motion: fix them), ${advisory} advisory, on ${results.length} route${results.length === 1 ? '' : 's'}. See site-art-direction/references/world-building.md and distinctive-direction.md.`);
+  }
+  if (floor || (options.strict && advisory)) process.exitCode = 1;
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) main().catch((error) => { console.error(error.message); process.exitCode = 1; });
