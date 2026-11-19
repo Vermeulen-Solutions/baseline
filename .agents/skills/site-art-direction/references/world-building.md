@@ -40,6 +40,8 @@ Design these before any page, in the concept, and record them in `World`:
    - *Ambient:* one or two slow loops that keep the world alive (a ticker of the trade's words, drifting contour lines, sawdust settling), 8 seconds or longer per cycle, on a decorative layer, paused on hover and focus.
    - *Feedback:* motion that answers the visitor (opening, choosing, confirming) shows what changed, and the feature's own state changes carry most of it ([interaction motion](../../astro-site-design/references/interaction-motion.md)).
 
+   Two more carry the world across the site. *Between pages:* set `SiteShell transitionStyle` (fade, lift, curtain, wipe) or a page's `data-arrive` to the one that matches the world (a curtain for a stage, a wipe for a sign being repainted), so a page change is part of the world, not a cut; trials that built rich pages left every page change a plain cut. *The scroll itself:* when the site's job is the impression and its sections are staged on the scroll, smooth the wheel scroll ([smooth scroll](../../astro-site-design/references/smooth-scroll.md)); when the visitor comes to do something, leave it native.
+
    Everything holds still under `prefers-reduced-motion`, with the final state shown, and text the visitor is reading never moves once it has arrived.
 8. **One working feature from the client's own material that does the site's job.** A tool, not a decoration: a form that composes the request the way the trade prices it, a finder that suggests where to start, a record or map built from the client's data, a configurator that shows the result before the visitor asks. Infer it from the job and the trade; build it with real behaviour and an honest fallback.
 
