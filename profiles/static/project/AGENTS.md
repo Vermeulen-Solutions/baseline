@@ -27,7 +27,7 @@ Direction Record in this file. `PRODUCT.md` is the one brief (the `impeccable` s
 reads only that file): audience, scope, ownership and nonvisual rationale; the selected optional `DESIGN.md` holds visual references
 and interchange. CSS and configuration own implemented values. Keep one home per
 fact, link actual sources, and resolve disagreements by subject and evidence.
-Current progress belongs in the existing tracker or a short handoff when needed.
+Current progress belongs in the existing tracker, or in a short handoff when the project has none.
 Missing optional records do not block authorized work. See `docs/project-context.md`
 and `PRODUCT.example.md`; neither creates an extra checkpoint or approval claim.
 

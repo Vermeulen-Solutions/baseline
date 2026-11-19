@@ -47,7 +47,7 @@ Downloaded site imagery belongs in `src/assets/` with provenance/native dimensio
 
 ## LogoTicker contract and handoff
 
-`LogoTicker.astro` renders trusted Astro slot markup once and repeats it server-side through Fragment; its CSS needs no script or hydration. Supply only noninteractive, ID-free `<li>` artwork/text; never raw scraped HTML, scripts/islands, links, form controls, SVG IDs or CMS edit proxies. Use standalone vector files via native images where appropriate. If logos need links/editor proxies, use the static PartnersPanel or an unduplicated list. Unique component `id`, translated region/control labels and authored dimensions remain caller responsibilities.
+`LogoTicker.astro` renders trusted Astro slot markup once and repeats it server-side through Fragment; its CSS needs no script or hydration. Supply only noninteractive, ID-free `<li>` artwork/text; never raw scraped HTML, scripts/islands, links, form controls, SVG IDs or CMS edit proxies. Use standalone vector files via native images for logos and illustrations that need no inline styling. If logos need links/editor proxies, use the static PartnersPanel or an unduplicated list. Unique component `id`, translated region/control labels and authored dimensions remain caller responsibilities.
 
 Motion is optional; the persistent native checkbox lets keyboard/touch users stop it, hover/focus pauses it, and reduced motion/print shows one wrapped list. Hidden duplicates are inert and aria-hidden. Check empty/single/many items, short tracks at wide widths, RTL, no-JS and reduced motion. Zero hydration does not imply zero CSS/GPU cost or guaranteed SEO.
 
