@@ -139,7 +139,7 @@ export function validateCssAlignment(markdown, css) {
 export const REFERENCE_DIMENSIONS = Object.freeze(['first screen', 'specificity', 'type', 'photographs', 'composition', 'craft', 'phone', 'fit']);
 export const DESIGN_DIMENSIONS = Object.freeze(REFERENCE_DIMENSIONS.filter(d => d !== 'photographs'));
 const designTotal = score => DESIGN_DIMENSIONS.reduce((sum, d) => sum + score.scores[d], 0);
-export const REFERENCE_BAR = Object.freeze({ total: 17, specificity: 2, fit: 2, candidates: 8, sites: 5, selected: 3, searches: 3 });
+export const REFERENCE_BAR = Object.freeze({ total: 17, specificity: 2, fit: 2, candidates: 8, sites: 5, selected: 3, searches: 3, studyCraft: 3 });
 export const REFERENCES_FILE = 'audit/references/references.md';
 
 function tableRows(markdown, heading) {
@@ -204,7 +204,10 @@ export function validateReferences(markdown, io = {}) {
   const selected = parsed.filter(c => c.verdict === 'selected');
   if (selected.length < REFERENCE_BAR.selected) errors.push(`Selected ${selected.length}; select at least ${REFERENCE_BAR.selected} above the bar, searching again if too few pass.`);
   if (selected.filter(realSite).length < 2) errors.push('At least two selected references must be real sites.');
-  if (!selected.some(c => c.kind === 'study')) errors.push('Select at least one studio case study (kind study): a site a small independent studio built for a small client and shows as a case study. It sets the level the design aims at.');
+  const studies = selected.filter(c => c.kind === 'study');
+  if (!studies.length) errors.push('Select at least one studio case study (kind study): a site a small independent studio built for a small client and shows as a case study. It sets the level the design aims at.');
+  // The case study is there to show a made world; a quiet, well-set site does not (a trial's only study was one face in four sizes).
+  else if (!studies.some(c => c.score?.scores.craft >= REFERENCE_BAR.studyCraft)) errors.push(`The selected case studies score craft ${studies.map(c => `${c.id} ${c.score?.scores.craft ?? '?'}`).join(', ')}; at least one must score ${REFERENCE_BAR.studyCraft}, a made world (surfaces, drawn objects, type treatments and motion), or the level it sets is a quiet site. Search the work pages of studios that build illustrated, layered sites for small clients.`);
   for (const c of selected) {
     if (!c.score) continue;
     if (c.score.total < REFERENCE_BAR.total) errors.push(`Candidate ${c.id} is selected with ${c.score.total}/24; the bar is ${REFERENCE_BAR.total}.`);

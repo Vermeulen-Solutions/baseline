@@ -8,13 +8,14 @@ const row = (id, source, kind, scores, verdict) => `| ${id} | ${source} | ${kind
 const strong = [3, 3, 2, 3, 2, 3, 2, 3]; // 21
 const good = [2, 2, 3, 2, 2, 2, 3, 2]; // 18
 const weak = [1, 1, 1, 2, 1, 2, 2, 1]; // 11
+const madeWorld = [2, 2, 3, 2, 2, 3, 2, 2]; // 18, craft 3: a case study that shows a made world (same design total as good)
 
 function file({ candidates, concepts, selectedSections = ['a', 'b', 'c'], searches = '"furniture maker workshop site", "stone carver portfolio", "woodworker studio"' } = {}) {
   const header = '| id | source | kind | first screen | specificity | type | photographs | composition | craft | phone | fit | total | verdict |\n|---|---|---|---|---|---|---|---|---|---|---|---|---|';
   const list = candidates ?? [
     row('a', 'https://maker-one.test', 'site', strong, 'selected'),
     row('b', 'https://maker-two.test', 'site', good, 'selected'),
-    row('c', 'https://studio.test/work/market-bakery', 'study', good, 'selected'),
+    row('c', 'https://studio.test/work/market-bakery', 'study', madeWorld, 'selected'),
     row('d', 'https://maker-three.test', 'site', weak, 'rejected: kicker and split hero on every section'),
     row('e', 'https://maker-four.test', 'site', weak, 'rejected: stock photographs'),
     row('f', 'https://maker-five.test', 'site', weak, 'rejected: page builder theme'),
@@ -86,6 +87,11 @@ test('the concept bar leaves the photographs line out: the owner\'s camera does 
 test('at least one selected reference is a studio case study', () => {
   const noStudy = file().replace('| c | https://studio.test/work/market-bakery | study |', '| c | https://maker-seven.test | site |');
   assert.match(validateReferences(noStudy, images(2)).join('\n'), /at least one studio case study \(kind study\)/);
+});
+
+test('the case study shows a made world: craft 3, not a quiet well-set site', () => {
+  const quiet = file().replace(/\| c \| https:\/\/studio\.test\/work\/market-bakery \| study \|[^\n]+/, row('c', 'https://studio.test/work/market-bakery', 'study', good, 'selected'));
+  assert.match(validateReferences(quiet, images(2)).join('\n'), new RegExp(`case studies score craft c 2; at least one must score ${REFERENCE_BAR.studyCraft}`));
 });
 
 const comparison = (rows) => `### Built against the references\n| page | round | sheet | the references do | we built |\n|---|---|---|---|---|\n${rows.join('\n')}\n`;

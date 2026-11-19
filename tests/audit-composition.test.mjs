@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { assessAgainst, assessComposition, assessWorldMotion, FLOOR, formatAgainst, GAP_MEASURES, parseArgs, sectionSignature, selectedSources, formatRoute, softPhotos } from '../scripts/audit-composition.mjs';
+import { assessAgainst, assessComposition, assessWorldMotion, FLOOR, formatAgainst, GAP_MEASURES, parseArgs, sectionSignature, selectedSources, formatRoute, softPhotos, STUDIO_LEVEL } from '../scripts/audit-composition.mjs';
 
 const section = (overrides = {}) => ({ tag: 'section', heading: 'A heading', kicker: false, split: false, centered: false, ground: false, action: false, cardGrid: false, list: false, mediaCount: 0, fullBleedMedia: false, width: 1376, ...overrides });
 const page = (sections, overrides = {}) => ({ width: 1440, bodySize: 16, h1Size: 72, h2Max: 36, imageCover: 0.2, fullWidthMedia: 0, signature: false, sections, ...overrides });
@@ -125,10 +125,23 @@ test('the page is measured against its selected references: under half of their 
   assert.equal(by.layers.references, 26);
   assert.deepEqual(gap.filter((g) => g.short).map((g) => g.key), ['drawn', 'motion', 'layers', 'colours', 'elements']);
   assert.match(formatAgainst(gap, 3), /under half on drawn, motion, layers, colours, elements/);
-  assert.match(formatAgainst(gap, 3), /→ drawn objects \(SVG or canvas, 32px or more\): 2 here, 10 on the references/);
-  // A measure the references barely have is never marked, and no references means no comparison.
-  assert.equal(assessAgainst({ ...page, drawn: 0 }, [{ drawn: 2 }, { drawn: 2 }]).find((g) => g.key === 'drawn').short, false);
+  assert.match(formatAgainst(gap, 3), /→ drawn objects \(SVG or canvas, 32px or more\): 2 here, 10 on the references, 10 at the studio level/);
   assert.deepEqual(assessAgainst(page, []), []);
+});
+
+test('quiet references do not lower the level: the page is marked against the studio level too', () => {
+  // One trial's references measured 1 drawing, 5.5 animations and 12.5 colours; its home page passed them all.
+  const quiet = [
+    { drawn: 2, motion: 7, rotated: 2, masked: 3, surfaces: 0, colours: 5, typeSizes: 3, elements: 373 },
+    { drawn: 0, motion: 0, rotated: 0, masked: 0, surfaces: 1, colours: 2, typeSizes: 4, elements: 199 },
+  ];
+  const page = { drawn: 20, motion: 156, rotated: 12, masked: 8, surfaces: 7, colours: 11, typeSizes: 18, elements: 732 };
+  const gap = assessAgainst(page, quiet);
+  assert.deepEqual(gap.filter((g) => g.short).map((g) => g.key), ['colours']);
+  assert.equal(gap.find((g) => g.key === 'colours').studio, STUDIO_LEVEL.colours);
+  // A measure neither the references nor the studio level has much of is never marked.
+  assert.equal(assessAgainst({ ...page, surfaces: 0 }, quiet).find((g) => g.key === 'surfaces').short, true);
+  assert.equal(assessAgainst({ ...page, surfaces: 4 }, quiet).find((g) => g.key === 'surfaces').short, false);
 });
 
 test('the selected references are read from the references file, owner references aside', () => {
