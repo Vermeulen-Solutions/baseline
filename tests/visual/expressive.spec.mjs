@@ -147,11 +147,38 @@ test('behavior expressive content without JavaScript', async ({ browser }, info)
   await context.close();
 });
 
+test('reflow expressive photo sets: tops level, the small square at the tall picture\'s foot, nothing sideways', async ({ page }, info) => {
+  await open(page);
+  await page.locator('#sets').scrollIntoViewIfNeeded();
+  const boxes = async (set) => page.locator(`.photo-set[data-set="${set}"] .photo-set__frame`).evaluateAll((frames) => frames.map((f) => {
+    const r = f.getBoundingClientRect();
+    return { x: Math.round(r.x), y: Math.round(r.y), w: Math.round(r.width), h: Math.round(r.height) };
+  }));
+  const trio = await boxes('trio');
+  const tall = await boxes('tallSmall');
+  const strip = await boxes('strip');
+  // The set switches to its wide layout at 40rem of its own width (the tablet and desktop projects).
+  const wide = await page.locator('.photo-set').first().evaluate((el) => el.getBoundingClientRect().width >= 640);
+  if (wide) {
+    expect(new Set(trio.map((b) => b.y)).size, 'the trio\'s tops are on one line').toBe(1);
+    expect(trio[0].w > trio[1].w && trio[1].w > trio[2].w, 'three sizes, largest first').toBe(true);
+    expect(Math.abs(tall[1].y + tall[1].h - (tall[0].y + tall[0].h)), 'the small square ends level with the tall picture').toBeLessThanOrEqual(2);
+    expect(new Set(strip.map((b) => b.y)).size, 'the strip is one row').toBe(1);
+  } else {
+    expect(strip[0].y === strip[1].y && strip[2].y > strip[0].y, 'the strip runs two up on a phone').toBe(true);
+    expect(trio[1].y, 'the smaller two of the trio run two up under the first').toBe(trio[2].y);
+  }
+  for (const b of strip) expect(Math.abs(b.w - b.h), 'strip details are square').toBeLessThanOrEqual(1);
+  await noOverflow(page);
+});
+
 test('capture expressive layer at rest', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await open(page);
-  for (const [selector, name] of [['.media-stage', 'expressive-stage.png'], ['section[aria-labelledby="statement"]', 'expressive-statement.png'], ['section[aria-labelledby="shapes"]', 'expressive-shapes.png'], ['section[aria-labelledby="index"]', 'expressive-index.png'], ['section[aria-labelledby="tones"]', 'expressive-tones.png']]) {
+  for (const [selector, name] of [['.media-stage', 'expressive-stage.png'], ['section[aria-labelledby="statement"]', 'expressive-statement.png'], ['section[aria-labelledby="shapes"]', 'expressive-shapes.png'], ['section[aria-labelledby="index"]', 'expressive-index.png'], ['section[aria-labelledby="tones"]', 'expressive-tones.png'], ['section[aria-labelledby="sets"]', 'expressive-sets.png']]) {
     const region = page.locator(selector).first();
+    // The sets run taller than a screen, so the capture scrolls: keep the sticky header out of it.
+    if (name === 'expressive-sets.png') await page.addStyleTag({ content: '[data-sticky-header] { position: static !important; }' });
     await region.scrollIntoViewIfNeeded();
     // Lazy images load once in view; wait for the ones in this region.
     await expect.poll(() => region.evaluate((el) => [...el.querySelectorAll('img')].filter((img) => img.getClientRects().length).every((img) => img.complete && img.naturalWidth > 0))).toBe(true);

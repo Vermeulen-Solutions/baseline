@@ -1,0 +1,181 @@
+---
+/**
+ * A composed set of photographs for a section: a pair, an offset trio of three sizes, a strip of
+ * details, or one tall picture beside the section's words with a small one under them. Use it in
+ * place of a grid of equal frames or another section of words beside one photograph, so sections
+ * built round pictures differ from each other. See docs/reusable-public-patterns.md (Expressive
+ * layer) and astro-site-design/references/shipped-primitives.md.
+ */
+import type { HTMLAttributes } from 'astro/types';
+import ResponsiveImage from './ResponsiveImage.astro';
+import type { ResponsiveImageProps } from '../lib/responsive-image';
+
+export interface PhotoSetItem {
+  image: ResponsiveImageProps['src'];
+  /** What the photograph shows. */
+  alt: string;
+  width?: number;
+  height?: number;
+  /** CSS object-position: the part to keep when the frame crops, such as `50% 30%`. */
+  focus?: string;
+  /** A page the photograph leads to; the picture then answers the pointer. */
+  href?: string;
+  /** A short line under the picture: a work's title and year, a place. Not a description of what is visible. */
+  caption?: string;
+}
+
+interface Props extends Omit<HTMLAttributes<'div'>, 'title'> {
+  /**
+   * `pair`: two photographs side by side at one ratio. `trio`: three sizes of one subject, tops on
+   * one line. `strip`: three to six square details. `tallSmall`: a tall photograph with the
+   * section's words (the slot) and a small square under them.
+   */
+  layout: 'pair' | 'trio' | 'strip' | 'tallSmall';
+  items: PhotoSetItem[];
+  /** The pair's ratio: landscape 4:3 (default) or portrait 4:5. */
+  ratio?: 'landscape' | 'portrait';
+  /** The site's photograph treatment from expressive.css. */
+  tone?: 'warm' | 'mono' | 'duotone';
+  optimize?: boolean;
+}
+
+const { layout, items = [], ratio = 'landscape', tone, optimize = true, class: className, ...attributes } = Astro.props;
+const counts = { pair: [2, 2], trio: [3, 3], strip: [3, 6], tallSmall: [2, 2] } as const;
+const range = counts[layout];
+if (!range) throw new Error(`PhotoSet: unknown layout "${layout}" (pair, trio, strip or tallSmall).`);
+if (items.length < range[0] || items.length > range[1]) {
+  throw new Error(`PhotoSet: layout "${layout}" takes ${range[0] === range[1] ? range[0] : `${range[0]} to ${range[1]}`} photographs, got ${items.length}.`);
+}
+const hasWords = Astro.slots.has('default');
+const focusOf = (focus?: string) => (typeof focus === 'string' && /^[\w\s%.-]{1,40}$/.test(focus) ? `--photo-focus: ${focus}` : undefined);
+// The share of the content width each picture takes on a wide set, for its sizes hint.
+const share = {
+  pair: ['50vw', '50vw'],
+  trio: ['42vw', '33vw', '25vw'],
+  strip: items.map(() => `${Math.round(100 / items.length)}vw`),
+  tallSmall: ['50vw', '25vw'],
+}[layout];
+const toneValue = tone === 'warm' || tone === 'mono' || tone === 'duotone' ? tone : undefined;
+---
+
+<div {...attributes} class:list={['photo-set', className]} data-set={layout} data-ratio={layout === 'pair' ? ratio : undefined} data-words={hasWords ? '' : undefined}>
+  <div class="photo-set__layout">
+    {hasWords && <div class="photo-set__words flow"><slot /></div>}
+    {items.map((item, index) => {
+      const picture = (
+        <span class="photo-set__frame" data-tone={toneValue} data-audit-crop-ok style={focusOf(item.focus)}>
+          <ResponsiveImage
+            src={item.image}
+            alt={item.alt}
+            width={item.width}
+            height={item.height}
+            sizes={`(min-width: 40rem) ${share[index]}, 100vw`}
+            optimize={optimize}
+          />
+        </span>
+      );
+      return (
+        <figure class="photo-set__item" data-index={index + 1}>
+          {item.href ? <a class="photo-set__link" href={item.href}>{picture}</a> : picture}
+          {item.caption && <figcaption class="photo-set__caption">{item.caption}</figcaption>}
+        </figure>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+@layer components {
+  .photo-set {
+    /* The set is the query container; its layout child changes with the set's width. */
+    container: photo-set / inline-size;
+  }
+
+  .photo-set__layout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--spacing-grid);
+    align-items: start;
+  }
+
+  .photo-set__item {
+    margin: 0;
+    min-inline-size: 0;
+    grid-column: 1 / -1;
+  }
+
+  .photo-set__words { grid-column: 1 / -1; }
+
+  .photo-set__frame {
+    display: block;
+    position: relative;
+    overflow: clip;
+    aspect-ratio: var(--photo-ratio, 4 / 3);
+    border-radius: var(--photo-radius, 0);
+  }
+
+  .photo-set__frame :global(img),
+  .photo-set__frame :global(.image-fallback) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: none;
+    object-fit: cover;
+    object-position: var(--photo-focus, 50% 50%);
+  }
+
+  .photo-set__link {
+    display: block;
+    color: inherit;
+  }
+
+  .photo-set__link:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 3px;
+  }
+
+  .photo-set__caption {
+    margin-block-start: var(--spacing-2xs);
+    font-size: var(--text-step--1);
+    color: var(--color-muted);
+  }
+
+  /* Narrow set: one picture across, the smaller ones two up. */
+  .photo-set[data-ratio="portrait"] .photo-set__item { --photo-ratio: 4 / 5; }
+  .photo-set[data-set="trio"] .photo-set__item:first-of-type { --photo-ratio: 4 / 5; }
+  .photo-set[data-set="trio"] .photo-set__item:not(:first-of-type),
+  .photo-set[data-set="strip"] .photo-set__item,
+  .photo-set[data-set="tallSmall"] .photo-set__item:last-of-type { --photo-ratio: 1; grid-column: auto; }
+  .photo-set[data-set="tallSmall"] .photo-set__item:first-of-type { --photo-ratio: 4 / 5; }
+
+  @container photo-set (min-width: 40rem) {
+    .photo-set__layout { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+
+    .photo-set[data-set="pair"] .photo-set__item { grid-column: span 6; }
+
+    /* Three sizes of one subject, tops on one line: 4:5 on five columns, 1:1 on four, 4:3 on three. */
+    .photo-set[data-set="trio"] .photo-set__item:nth-of-type(1) { grid-column: span 5; }
+    .photo-set[data-set="trio"] .photo-set__item:nth-of-type(2) { grid-column: span 4; }
+    .photo-set[data-set="trio"] .photo-set__item:nth-of-type(3) { grid-column: span 3; --photo-ratio: 4 / 3; }
+
+    .photo-set[data-set="strip"] .photo-set__layout { grid-template-columns: repeat(var(--strip-count, 4), minmax(0, 1fr)); }
+    .photo-set[data-set="strip"] .photo-set__item { grid-column: auto; }
+    .photo-set[data-set="strip"]:has(.photo-set__item:nth-of-type(3):last-of-type) { --strip-count: 3; }
+    .photo-set[data-set="strip"]:has(.photo-set__item:nth-of-type(5):last-of-type) { --strip-count: 5; }
+    .photo-set[data-set="strip"]:has(.photo-set__item:nth-of-type(6):last-of-type) { --strip-count: 6; }
+
+    /* A tall picture on half the width; the words at the top of the other half, a small square at its foot. */
+    .photo-set[data-set="tallSmall"] .photo-set__layout { grid-template-rows: auto 1fr; }
+    .photo-set[data-set="tallSmall"] .photo-set__item:first-of-type { grid-column: 1 / span 6; grid-row: 1 / span 2; }
+    .photo-set[data-set="tallSmall"] .photo-set__words { grid-column: 8 / -1; grid-row: 1; }
+    .photo-set[data-set="tallSmall"] .photo-set__item:last-of-type { grid-column: 8 / span 3; grid-row: 2; align-self: end; }
+    .photo-set[data-set="tallSmall"]:not([data-words]) .photo-set__item:last-of-type { grid-row: 1 / span 2; }
+  }
+
+  /* A linked photograph answers a fine pointer: it moves a little closer inside its frame. */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .photo-set__link .photo-set__frame :global(img) { transition: scale var(--duration-base) var(--ease-smooth); }
+    .photo-set__link:hover .photo-set__frame :global(img) { scale: 1.03; }
+  }
+}
+</style>

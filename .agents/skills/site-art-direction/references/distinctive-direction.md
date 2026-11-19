@@ -32,7 +32,7 @@ For each content type in the route inventory, ask what that thing looks like in 
 | Content | As a card grid | As the real object |
 | --- | --- | --- |
 | Courses, classes, programmes | Equal cards with an image | A contents page or timetable: code, title, teacher, day, ruled rows (`IndexList` with `lead`) |
-| Works, products, projects | Thumbnail cards | A few works large and the rest as an index that previews them (`MediaStage`, `IndexList preview`) |
+| Works, products, projects | Thumbnail cards | A few works large, each in its own arrangement (`MediaStage`, `PhotoSet`), and the rest as an index that previews them (`IndexList preview`) |
 | Testimonials | Quote cards with stars | Letters or notes, in the writer's words, signed and dated |
 | Prices | Three pricing cards | A rate card or a receipt: items, amounts in tabular figures, what is included |
 | Events, fixtures | Cards with a date badge | A programme or fixtures list: date first, large, then time, place, opponent |
@@ -85,6 +85,7 @@ Write each primary page as a sequence of weights before building it: **heavy** (
 
 - **What they show:** the work, the people, the place. Lead with the strongest real photograph, not with tools or a stock texture.
 - **Fewer and larger:** three photographs at full width say more than twelve thumbnails. A gallery belongs on the gallery page, and even there a few works can be large and the rest an index.
+- **Different arrangements in different sections:** words beside one photograph once a page; elsewhere a pair, an offset trio of three sizes of one subject, a strip of details, a tall picture with a small one (`PhotoSet`), a full-width stage or an index. Neighbouring sections never use the same one.
 - **One or two ratios** for the whole site (a portrait and a landscape), and each frame takes its photograph's ratio or a deliberate crop: never pillarbox a portrait inside a landscape frame.
 - **Captions** that say what the photograph shows, in the site's voice.
 
