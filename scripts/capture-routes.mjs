@@ -15,6 +15,11 @@
 // to C:/... here. Concept overlays for a refinement: --css <file[,file]> injects stylesheets into
 // every capture (use one --out per variant) and --click <selector[,selector]> clicks controls
 // such as a rotation's pause button first. --compare reports the bounding box of differing pixels.
+// For other people's sites (reference research): --decline-consent clicks a banner's reject or
+// necessary-only button first, so the page is judged without it; a page behind a bot wall, or one
+// that does not load, is reported as SKIPPED and the run goes on. A page waits for "load", then up
+// to 15 seconds for the network to settle (busy commerce sites never settle), and a full-page
+// capture that takes over 45 seconds is skipped while its viewport frames are kept.
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -59,6 +64,7 @@ export function parseArgs(argv) {
     else if (flag === '--hide') out.hide = value().split(',').map(s => s.trim()).filter(Boolean);
     else if (flag === '--css') out.css = value().split(',').map(s => msysToNative(s.trim())).filter(Boolean);
     else if (flag === '--click') out.click = value().split(',').map(s => s.trim()).filter(Boolean);
+    else if (flag === '--decline-consent') out.declineConsent = true;
     else if (flag === '--out') out.out = msysToNative(value());
     else if (flag === '--compare') { out.compare = [msysToNative(value()), msysToNative(value())]; }
     else throw Error('Unknown option: ' + flag);
@@ -78,6 +84,12 @@ export function parseArgs(argv) {
   if (!Number.isInteger(out.repeat) || out.repeat < 1 || out.repeat > 3) throw Error('--repeat must be 1, 2 or 3');
   return out;
 }
+
+// The privacy-preserving answer on a consent banner, in the languages Baseline sites are built in.
+export const DECLINE = /^\s*(tout refuser|refuser( tout| et fermer)?|continuer sans accepter|reject( all)?|decline( all)?|deny( all)?|only (necessary|essential)|(use )?necessary (cookies )?only|alle ablehnen|ablehnen|nur (notwendige|erforderliche)( cookies)?|rifiuta( tutto)?|rechazar( todo)?|alles weigeren|weigeren)\s*$/i;
+// A challenge page instead of the site: never captured as if it were the site.
+export const BOT_WALL = /just a moment|attention required|verify you are (a )?human|are you a robot|checking your browser|access denied|request unsuccessful|enable javascript and cookies to continue/i;
+export const isBotWall = (title, text) => BOT_WALL.test(`${title}\n${String(text).slice(0, 2000)}`);
 
 export const routeSlug = route => route === '/' ? 'home' : route.replace(/^\/|\/$/g, '').replace(/[^A-Za-z0-9._-]+/g, '_') || 'home';
 export const shotName = (route, width, kind) => `${routeSlug(route)}-${width}-${kind}.png`;
@@ -125,13 +137,21 @@ async function capture(options) {
   for (const base of [path.join(process.cwd(), 'package.json'), import.meta.url]) { try { ({ chromium } = createRequire(base)('@playwright/test')); break; } catch {} }
   if (!chromium) throw Error('capture:routes needs @playwright/test and an installed Chromium (npx playwright install chromium).');
   mkdirSync(options.out, { recursive: true });
-  const browser = await chromium.launch(), records = [];
+  const browser = await chromium.launch(), records = [], skipped = [];
   try {
     for (const width of options.widths) {
       const context = await browser.newContext({ viewport: { width, height: width < 500 ? 844 : 900 }, reducedMotion: 'reduce' });
       const page = await context.newPage();
-      for (const route of options.routes) for (let run = 0; run < options.repeat; run++) {
-        const response = await page.goto(new URL(route, options.base).href, { waitUntil: 'networkidle', timeout: 90000 });
+      for (const route of options.routes) for (let run = 0; run < options.repeat; run++) try {
+        const response = await page.goto(new URL(route, options.base).href, { waitUntil: 'load', timeout: 60000 });
+        await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+        if (isBotWall(await page.title(), await page.evaluate(() => document.body?.innerText ?? ''))) throw Error('a bot wall answered instead of the site');
+        if (options.declineConsent) {
+          for (const frame of page.frames()) {
+            const button = frame.locator('button, [role="button"], a, input[type="button"], input[type="submit"]').filter({ hasText: DECLINE }).first();
+            if (await button.count().catch(() => 0) && await button.isVisible().catch(() => false)) { await button.click({ timeout: 3000 }).catch(() => {}); await page.waitForTimeout(600); break; }
+          }
+        }
         if (options.hide.length) await page.addStyleTag({ content: `${options.hide.join(',')}{display:none!important}` });
         for (const file of options.css) await page.addStyleTag({ content: readFileSync(file, 'utf8') });
         for (const selector of options.click) { const target = page.locator(selector).first(); if (await target.count()) await target.click(); }
@@ -146,30 +166,38 @@ async function capture(options) {
         await page.waitForTimeout(500);
         const height = await page.evaluate(() => document.documentElement.scrollHeight);
         const overflowX = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
-        const shots = [['full', () => page.screenshot({ fullPage: true })]];
+        const shots = [['full', () => page.screenshot({ fullPage: true, timeout: 45000 })]];
         for (const y of options.frames) if (y === 0 || y < height) shots.push([`frame-${y}`, async () => { await page.evaluate(v => window.scrollTo(0, v), y); await page.waitForTimeout(250); return page.screenshot(); }]);
         for (const [kind, take] of shots) {
-          const buffer = await take();
+          let buffer;
+          try { buffer = await take(); } catch (error) {
+            if (kind !== 'full') throw error;
+            if (run === 0) skipped.push({ route, width, kind, reason: 'the full-page capture took too long; the viewport frames are kept' });
+            continue;
+          }
           const first = records.find(r => r.route === route && r.width === width && r.kind === kind);
           if (run === 0) writeFileSync(path.join(options.out, shotName(route, width, kind)), buffer);
           // Keep a differing repeat so --compare can show where a non-deterministic page changes.
           else if (first && first.sha !== sha(buffer)) writeFileSync(path.join(options.out, shotName(route, width, kind).replace(/\.png$/, `-run${run + 1}.png`)), buffer);
           records.push({ route, width, kind, status: response?.status() ?? null, height, overflowX, sha: sha(buffer) });
         }
+      } catch (error) {
+        if (run === 0) skipped.push({ route, width, kind: 'page', reason: error.message.split('\n')[0] });
+        break;
       }
       await context.close();
     }
   } finally { await browser.close(); }
   const summary = summarize(records);
   writeFileSync(path.join(options.out, 'summary.json'), JSON.stringify(summary, null, 1) + '\n');
-  return summary;
+  return { summary, skipped };
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const options = parseArgs(process.argv.slice(2));
     if (options.help) {
-      console.log('Usage: capture:routes -- --base <origin> --routes /,/contact --out <dir> [--widths 390,768,1440] [--frames 0,900,1800] [--repeat 2] [--hide "#dev-panel"] [--css overlay.css] [--click "[data-pause]"]\n       capture:routes -- --compare <before-dir> <after-dir>\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when a route is "/".');
+      console.log('Usage: capture:routes -- --base <origin> --routes /,/contact --out <dir> [--widths 390,768,1440] [--frames 0,900,1800] [--repeat 2] [--hide "#dev-panel"] [--css overlay.css] [--click "[data-pause]"] [--decline-consent]\n       capture:routes -- --compare <before-dir> <after-dir>\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when a route is "/".');
     } else if (options.compare) {
       const [a, b] = options.compare.map(dir => { const file = path.join(dir, 'summary.json'); if (!existsSync(file)) throw Error('No summary.json in ' + dir); return JSON.parse(readFileSync(file, 'utf8')); });
       const result = compareSummaries(a, b);
@@ -186,8 +214,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       }
       if (result.changed.length || result.missing.length) process.exitCode = 2;
     } else {
-      const summary = await capture(options);
+      const { summary, skipped } = await capture(options);
       for (const r of summary) console.log(`${r.width} ${r.status} ${r.route} ${r.kind}${r.overflowX ? ' OVERFLOW-X' : ''}${r.deterministic ? '' : ' NON-DETERMINISTIC'}`);
+      for (const s of skipped) console.log(`${s.width} SKIPPED ${s.route} ${s.kind}: ${s.reason}`);
+      if (!summary.length) process.exitCode = 1;
     }
   } catch (error) { console.error(error.message); process.exitCode = 1; }
 }

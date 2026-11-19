@@ -35,12 +35,13 @@ test('a complete, judged record passes', () => {
   assert.deepEqual(validateReferences(file(), images(2)), []);
 });
 
-test('too few candidates, too few real sites, no prompt or template, too few searches', () => {
+test('too few candidates, too few real sites, too few searches', () => {
   const few = file({ candidates: [row('a', 'https://a.test', 'site', strong, 'selected'), row('b', 'https://b.test', 'site', good, 'selected'), row('c', 'https://c.test', 'site', good, 'selected')], searches: '"one"' });
   const errors = validateReferences(few, images(2)).join('\n');
   assert.match(errors, new RegExp(`judge at least ${REFERENCE_BAR.candidates}`));
   assert.match(errors, /must be real sites/);
-  assert.match(errors, /design prompt, template or system/);
+  // A prompt, template or system is a kind a candidate may have, not one the list must include.
+  assert.doesNotMatch(errors, /prompt, template or system/);
   assert.match(errors, /at least 3 quoted queries/);
 });
 
@@ -65,10 +66,19 @@ test('a rejected candidate gives its reason', () => {
 
 test('the chosen concept reaches the selected references\' median and scores 2 or more everywhere', () => {
   const low = file({ concepts: [`| A | ${[2, 2, 2, 2, 2, 2, 2, 2].join(' | ')} | 16 | chosen |`, `| B | ${weak.join(' | ')} | 11 | not chosen |`] });
-  assert.match(validateReferences(low, images(2)).join('\n'), /chosen concept scores 16\/24, under the selected references' median of 18/);
+  assert.match(validateReferences(low, images(2)).join('\n'), /chosen concept scores 14\/21 on the design lines \(photographs aside\), under the selected references' median of 16/);
   const gap = file({ concepts: [`| A | ${[3, 3, 3, 3, 3, 3, 1, 3].join(' | ')} | 22 | chosen |`, `| B | ${weak.join(' | ')} | 11 | not chosen |`] });
   assert.match(validateReferences(gap, images(2)).join('\n'), /under 2 on phone/);
   const none = file({ concepts: [`| A | ${good.join(' | ')} | 18 | not chosen |`, `| B | ${weak.join(' | ')} | 11 | not chosen |`] });
   assert.match(validateReferences(none, images(2)).join('\n'), /exactly one concept "chosen"/);
   assert.match(validateReferences(file().replace(/### Concepts against the bar[\s\S]*$/, ''), images(2)).join('\n'), /Missing the ### Concepts against the bar table/);
+});
+
+test('the concept bar leaves the photographs line out: the owner\'s camera does not hold the design down', () => {
+  // References with strong photography (3) and a concept with phone photographs (1), equal elsewhere.
+  const conceptScores = [2, 2, 3, 1, 2, 2, 3, 2]; // 17 in all, 16 on the design lines
+  const other = `| B | ${weak.join(' | ')} | 11 | not chosen |`;
+  assert.deepEqual(validateReferences(file({ concepts: [`| A | ${conceptScores.join(' | ')} | 17 | chosen |`, other] }), images(2)), []);
+  const weakType = [2, 2, 1, 3, 2, 2, 3, 2];
+  assert.match(validateReferences(file({ concepts: [`| A | ${weakType.join(' | ')} | 17 | chosen |`, other] }), images(2)).join('\n'), /under 2 on type/);
 });
