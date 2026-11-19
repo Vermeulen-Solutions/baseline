@@ -341,7 +341,9 @@ export function measurePage() {
         if (size(el, 120, 40) && (s.backgroundImage !== 'none' || pseudo)) surfaces++;
         if ((el.tagName.toLowerCase() === 'svg' || el.tagName === 'CANVAS') && size(el, 32, 32)) drawn++;
         const matrix = s.transform.match(/^matrix\(([^,]+),\s*([^,]+)/);
-        if (matrix && Math.abs(parseFloat(matrix[2])) > 0.005 && size(el, 16, 16)) rotated++;
+        // Turned by transform, or by the independent rotate property ("3deg", "z 3deg", "0 0 1 3deg").
+        const angle = parseFloat(String(s.rotate ?? 'none').match(/-?[\d.]+(?=deg|rad|turn|grad)/)?.[0] ?? '0');
+        if (((matrix && Math.abs(parseFloat(matrix[2])) > 0.005) || Math.abs(angle) > 0.05) && size(el, 16, 16)) rotated++;
         const mask = (s.maskImage && s.maskImage !== 'none') || (s.webkitMaskImage && s.webkitMaskImage !== 'none') || s.clipPath !== 'none';
         if (mask && size(el, 40, 40)) masked++;
       }

@@ -336,7 +336,8 @@ test('contract starter suggestions mirror the starter stylesheet', async () => {
 test('reveal is CSS scroll-driven by default with the observer as fallback; registry aliases stay opt-in', () => {
   const css = readFileSync('src/styles/global.css', 'utf8');
   const shell = readFileSync('src/layouts/SiteShell.astro', 'utf8');
-  assert.match(css, /@supports \(animation-timeline: view\(\)\) \{\s*:where\(\[data-reveal\]\) \{\s*animation: baseline-reveal linear both;\s*animation-timeline: view\(\);/);
+  // Longhands: the minifier folds a shorthand and a timeline into a value browsers reject.
+  assert.match(css, /@supports \(animation-timeline: view\(\)\) \{\s*:where\(\[data-reveal\]\) \{\s*animation-name: baseline-reveal;\s*animation-timing-function: linear;\s*animation-fill-mode: both;\s*animation-timeline: view\(\);/);
   assert.match(css, /@supports not \(animation-timeline: view\(\)\) \{\s*:where\(html\[data-reveal-ready\]\)/, 'the hiding rule applies only on the observer path');
   assert.ok(shell.includes("CSS.supports?.('animation-timeline: view()')"), 'SiteShell skips the observer where CSS reveals');
   const aliases = readFileSync('src/styles/registry-aliases.css', 'utf8');

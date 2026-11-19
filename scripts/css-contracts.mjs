@@ -38,6 +38,15 @@ export function inspectAuthorCSS(css, { file = 'stylesheet.css', lineOffset = 0 
     const outer = layers[0]?.split('.')[0];
     if (!['base','components'].includes(outer) || layers.some(x=>!x)) add(rule,`Author selector must belong to base or components: ${rule.selector}`);
   });
+  // The production CSS minifier folds `animation: x linear both` and `animation-timeline: view()` of one
+  // rule into `animation: linear both x view()`, which browsers reject (the timeline is reset-only in the
+  // shorthand): the animation name computes to none and the scroll-driven motion never runs on the
+  // built site, while the unminified dev server shows it. Longhands survive minification.
+  root.walkRules(rule => {
+    const props = new Set();
+    rule.each(node => { if (node.type === 'decl') props.add(node.prop.toLowerCase()); });
+    if (props.has('animation') && props.has('animation-timeline')) add(rule, `animation shorthand with animation-timeline in one rule is folded by the minifier into a value browsers reject, so the motion never runs on the built site. Write animation-name, animation-timing-function and animation-fill-mode as longhands: ${rule.selector}`);
+  });
   // The shell flips data-scrolled on a single scroll threshold. A size change keyed to it moves the
   // content below, scroll anchoring pulls scrollY back across the threshold and the state flips
   // every frame. Size belongs to [data-compact], which the shell sets with hysteresis.

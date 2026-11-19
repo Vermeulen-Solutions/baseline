@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Neutral shared foundation: root overflow containment, form and embed boundary safety, existing spacing/cascade contracts and functional keyboard skip-link layering above the sticky header, directional view transition slide keyframes with reduced-motion fallback, forced-colors high contrast, print content rules, and code block RTL isolation. Sticky-header state contract (paint-only data-scrolled, hysteresis data-compact), opt-in held header and media-morph view-transition rules with reduced-motion fallback; no new tokens or colours. One-row starter header: a native Menu disclosure on phones with the links inline from 48rem, a brand that gives way under enlarged text, existing tokens only. Shared focus ring restored on the search component's field. Design-system iteration: opt-in same-ground section joins and a medium section step, a primitive fluid space scale, type steps 3-5 with a heading map, retuned bridges under the 2.5x resize-text ratio, layering/motion/breakpoint tokens replacing raw values, Grid slot containers, CSS scroll-driven reveal with the observer fallback, and banners marking optional recipes; neutral starter values only, no client colours. Exact LF-normalized source hash. Interaction overhaul: completes the motion and radius scales with --ease-exit and --radius-pill, adds --focus-ring-width/--focus-ring-offset, replaces dangling --duration-normal, --ease-out, --radius-sm and --radius-container references with defined tokens, gates every :hover rule behind @media (hover: hover), adds reduced-motion-gated dialog entry/exit (allow-discrete display/overlay, backdrop fade) and a Menu panel @starting-style entry; neutral starter values only, no client colours.",
-    "sha256": "57f6076669e4f215005ea1e8fce464f6ed4da3e151bc1b89a25764aefc4ed950"
+    "reason": "Scroll reveal written as animation longhands so the production minifier keeps animation-timeline; no visual change beyond the reveal running on built sites.",
+    "sha256": "989b9e66624bba2f9f8993d20ad995eabc9ef2064a0fb75a7c63460e758346a5"
   },
   {
     "path": "src/styles/registry-aliases.css",
@@ -837,8 +837,8 @@
   },
   {
     "path": "src/styles/expressive.css",
-    "reason": "Shared opt-in presentation layer: bleed, frame shapes, photograph treatments, fitted display line, scroll-driven reveals and page-transition styles. Every rule needs an attribute or class a page adds; motion sits inside reduced-motion and feature guards and rests in the visual editor. Token-bound. Exact LF-normalized source hash.",
-    "sha256": "43e4419b9abbb9cacc6bcc133ea370ca6d8726761abe578ef60f58e3b42040cc"
+    "reason": "Scroll-driven expressive effects written as animation longhands so the production minifier keeps animation-timeline; no visual change beyond the effects running on built sites.",
+    "sha256": "2a13430912bb9e7ef2193bb667b7a1bcff260c6c0eb8b1c79c7d1246e4fb9621"
   },
   {
     "path": "src/lib/page-transition-script.ts",

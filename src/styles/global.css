@@ -1116,7 +1116,9 @@
 		   it is fully shown. Elsewhere SiteShell's IntersectionObserver path below takes over. */
 		@supports (animation-timeline: view()) {
 			:where([data-reveal]) {
-				animation: baseline-reveal linear both;
+				animation-name: baseline-reveal;
+				animation-timing-function: linear;
+				animation-fill-mode: both;
 				animation-timeline: view();
 				animation-range: entry 0% entry var(--reveal-range, 40%);
 			}
