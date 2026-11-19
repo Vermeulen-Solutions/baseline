@@ -529,9 +529,9 @@ Inventory route archetypes and inspect the actual source at desktop and mobile.
 Preserve product truth and editing ownership. Do not treat the old composition
 as fixed unless listed above or mistake utility adoption for a redesign.
 
-Research a small relevant reference shortlist before presenting concepts using
-site-art-direction/references/reference-research.md. Start from supplied references
-and offer inspiration once when needed. The shortlist can include real websites,
+Find, capture and judge references before presenting concepts using
+site-art-direction/references/reference-research.md (required: at least eight
+candidates scored on one card, at least three selected). Candidates can include real websites,
 UX references (Nicelydone, Refero or Kombai where available), prompt libraries,
 community DESIGN.md systems and OpenDesign public/local systems or templates.
 Reading public/local files needs no OpenDesign app, MCP, key or account; a connected

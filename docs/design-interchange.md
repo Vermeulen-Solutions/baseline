@@ -52,7 +52,7 @@ Select sources that answer the design question rather than treating every extern
 ---
 
 ### Step 1: Shared Reference Research (`site-art-direction`)
-Before inventing sections or selecting a design system, use the shared research step. Start from the brief and supplied references; when inspiration is missing, offer it once. A useful shortlist can draw from:
+Before inventing sections or selecting a design system, use the shared research step. It is required: the agent finds, captures and scores at least eight candidates and selects at least three above the bar, whether or not the owner supplied references. Candidates can come from:
 - **Real websites and UX references** (`Nicelydone`, `Refero.design`, `Kombai Gallery` where available): search real web and SaaS screens, onboarding flows, directories, pricing tables and navigation shells. Inspect the actual screens and their responsive states where possible.
 - **Prompt libraries** ([open-design.ai/prompts](https://open-design.ai/prompts/), [superdesign.dev](https://superdesign.dev/), [designprompts.dev](https://designprompts.dev/)): written directions for hierarchy, visual character, layout and motion.
 - **Community and OpenDesign systems/templates** ([designmd.ai/explore](https://designmd.ai/explore), OpenDesign public repository or an already-available local copy): coordinated typography, palette, surfaces, component treatment and worked page composition. Read the relevant `DESIGN.md`, `USAGE.md`, instructions or example; no OpenDesign app, daemon or catalogue-first search is required.

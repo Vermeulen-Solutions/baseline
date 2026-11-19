@@ -271,6 +271,10 @@
     "tier": "unit",
     "reason": "Synthetic older-site token sets: contract gap report, starter suggestions, --add-missing insertion and preview/refusal on an incomplete base"
   },
+  "reference-research.test.mjs": {
+    "tier": "unit",
+    "reason": "Reference research record: enough candidates and real sites, quoted searches, scores and totals on one card, selected references above the bar with captures and lessons, and the chosen concept at the selected median"
+  },
   "art-direction.test.mjs": {
     "tier": "unit",
     "reason": "Portable Art Direction Record validation: template markers and undecided values rejected, real decisions (including bans mentioning placeholders) accepted"

@@ -28,7 +28,7 @@ Execute the same specialist skills and CLI gates as Standard (`check:art-directi
      > - **Collections & Routes:** [List collections and routes]
      >
      > Next is **Checkpoint B (Stages 4–4.5: Art Direction & Component Calibration)**.
-     > **Visual direction:** [Recommend one direction from the brief in plain language, with its density and shared spacing defaults; the side-by-side comparison of two or three directions follows at Checkpoint B. Ask for missing identity/reference information only if needed.]
+     > **Visual direction:** [Recommend one direction from the brief in plain language, with its density and shared spacing defaults; judged references and the side-by-side comparison of two or three directions follow at Checkpoint B. References are found by the agent; ask only for identity information that changes the direction.]
      > - **Look and feel:** [For example: clear and restrained, warm and editorial, or bold and technical; connect the recommendation to this site's audience.]
      > - **Spacing:** Shared responsive defaults, with [brief-led density; balanced if unspecified] and [any deliberate layout exceptions].
      > - **Missing input:** [Ask only an unresolved brand/reference or density question; otherwise record the recommendation/assumption and continue.]
@@ -36,7 +36,7 @@ Execute the same specialist skills and CLI gates as Standard (`check:art-directi
    Include the **Layout spacing choice** explanation from [art-direction-and-calibration.md](art-direction-and-calibration.md#layout-spacing-choice-standard-and-express) in this same handoff. Express uses shared defaults unless the brief or user calls for custom spacing; do not add a separate technical question or checkpoint.
 
 2. **Checkpoint B (Stages 4–4.5 — Art Direction & `/_styleguide` Calibration):**
-   - For a new site or a significant redesign, first run the concept comparison from Stage 4 in [art-direction-and-calibration.md](art-direction-and-calibration.md): two or three structurally distinct directions side by side, with your recommendation, and one selected before tokens are written. Skip it only for a small refinement of an accepted direction.
+   - For a new site or a significant redesign, first run the required [reference research](../../site-art-direction/references/reference-research.md) (at least eight candidates captured and scored, at least three selected above the bar), then the concept comparison from Stage 4 in [art-direction-and-calibration.md](art-direction-and-calibration.md): two or three structurally distinct directions side by side, with your recommendation, and one selected before tokens are written. Skip it only for a small refinement of an accepted direction.
    - Then run `npm run design:tokens -- --init-client --lane <lane>` (or `--seed-accent <hex>`). `--init-client` applies the lane, saves the tokens, writes the record and the calibration table and prunes the starter exceptions in one step; on a site that already has its own tokens, use `--lane <lane> --write --write-record --write-calibration` instead so nothing is pruned. Refine `## Art Direction Record` in `AGENTS.md` and tokens in `src/styles/global.css`, pass `npm run check:art-direction -- --require-record`, and calibrate primitives on `/_styleguide` (`audit/component-calibration.md`).
    - **Checkpoint B Handoff Prompt:**
      > **Express Checkpoint B Complete: Art Direction & `/_styleguide` Calibrated**
