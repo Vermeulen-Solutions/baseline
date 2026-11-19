@@ -9,7 +9,25 @@ Read at Stage 5 and Stage 6, on a day-2 visible change, or whenever a step says 
 3. **One direction process.** `site-art-direction` owns Stage 4: candidate ideas, concepts, the Art Direction Record. Do not also run Impeccable's `shape`, `init` interview or new-work world flow on a Baseline site; that opens a second, competing direction. The Art Direction Record plays the part of `DESIGN.md`; a selected `DESIGN.md` supports it.
 4. **Read [craft-floor.md](../../impeccable/reference/craft-floor.md) before every UI edit** made from a finding, including small ones. On a Baseline site the recorded `World` (see [world building](../../site-art-direction/references/world-building.md)) is the committed world the craft floor defers to, and it decides five of the floor's refusals: a label above a heading is allowed when it is the field label of the object the section is (a ticket's `START`, a course code), never as the same generic label over every section; a row of large figures is allowed when the figures are the subject's real data set as one of its objects (a race's distance and climb on its board); a hard offset shadow is allowed on objects that are physical plates, stamps or signs in the world; a textured or ruled ground is allowed when it is one of the world's recorded surfaces; and grain from a scanned or drawn material is allowed when the material is in the inventory. Every other line of the floor applies unchanged.
 
-## Stage 5: critique each representative page
+## Stage 5, first: raise each representative page to its references
+
+This is the design pass, and it comes before the critique: the critique finds what is wrong, this pass finds what is missing. For each representative page (the home page and one page per archetype that has its own template):
+
+1. Capture the page at 1440 and 390 wide with `npm run capture:routes -- --base <preview origin> --routes <route> --widths 1440,390 --repeat 1 --out audit/compare/<slug>`.
+2. Make one sheet per width with the page first and the selected references after it, the studio case study among them: `npm run design:sheet -- --images audit/compare/<slug>/<file>-1440-full.png,audit/references/<id>/<file>-1440-full.png,… --labels "This page,<id>,…" --out audit/compare/<slug>-1440.jpg`.
+3. Give one fresh sub-agent only the two sheets, the one-line brief and the record's `World`, and ask: "Name the five biggest things the references do that this page does not, in what a visitor sees first: composition and scale, depth and layering, drawn objects and illustration, colour, type, photographs, motion. Write each as an addition this page could build from its own world, not as a copy of the reference, and rank them by how much they would change the first impression." Without sub-agents, answer it yourself from the sheets and say so.
+4. Build the five, from the recorded `World`, in shared components where they repeat. Then record them in `audit/references/references.md`:
+
+   ```markdown
+   ### Built against the references
+   | page | round | sheet | the references do | we built |
+   |---|---|---|---|---|
+   | / | 1 | audit/compare/home-1440.jpg | the race's course poster fills the first screen as one drawn object | the first screen as the log's end, drawn at full width, with the work inside its rings |
+   ```
+
+5. Capture again and run a second round when the first changed the page's composition (a new first screen, a new section object, a change of scale), at most two rounds. `npm run check:art-direction -- --require-comparison` checks the table: every compared page has a sheet and at least five additions in round 1.
+
+## Stage 5, then: critique each representative page for its craft
 
 Run `critique` once per representative page (the home page and one page per archetype that has its own template). The target is the page's source file (`src/pages/index.astro`, `src/pages/oeuvres/index.astro`); the snapshot is keyed and fingerprinted on it. Give both assessments the running preview URL as well. Follow [critique.md](../../impeccable/reference/critique.md) in full; in short:
 
@@ -36,7 +54,7 @@ Then act on the findings with the command each one calls for, loading its refere
 | Labels, buttons, errors, empty states | `clarify` |
 | Breaks or degrades at some widths | `adapt` |
 
-Make each fix in shared tokens or components, not on the one page. Then run `polish <page source>`: it reads the latest snapshot, clears its P0 and P1 issues and closes it with `critique-storage close`. After a `bolder` or `layout` change, critique the home page again; the trend line shows whether the change helped. Stop when the specificity verdict is specific and no P0 or P1 issue is open, or after two rounds, recording what remains.
+Make each fix in shared tokens or components, not on the one page. Then run `polish <page source>`: it reads the latest snapshot, clears its P0 and P1 issues and closes it with `critique-storage close`. Critique a page a second time only when the first round leaves a P0 or P1 issue open, and record what remains after it.
 
 ## Stage 6: the full route set
 

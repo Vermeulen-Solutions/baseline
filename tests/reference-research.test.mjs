@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { validateReferences, REFERENCE_BAR } from '../scripts/check-art-direction.mjs';
+import { validateComparison, validateReferences, COMPARISON_BAR, REFERENCE_BAR } from '../scripts/check-art-direction.mjs';
 
 // Portable: synthetic references files only. The scorecard order is first screen, specificity,
 // type, photographs, composition, craft, phone, fit.
@@ -14,7 +14,7 @@ function file({ candidates, concepts, selectedSections = ['a', 'b', 'c'], search
   const list = candidates ?? [
     row('a', 'https://maker-one.test', 'site', strong, 'selected'),
     row('b', 'https://maker-two.test', 'site', good, 'selected'),
-    row('c', 'https://prompts.test/warm-editorial', 'prompt', good, 'selected'),
+    row('c', 'https://studio.test/work/market-bakery', 'study', good, 'selected'),
     row('d', 'https://maker-three.test', 'site', weak, 'rejected: kicker and split hero on every section'),
     row('e', 'https://maker-four.test', 'site', weak, 'rejected: stock photographs'),
     row('f', 'https://maker-five.test', 'site', weak, 'rejected: page builder theme'),
@@ -81,4 +81,22 @@ test('the concept bar leaves the photographs line out: the owner\'s camera does 
   assert.deepEqual(validateReferences(file({ concepts: [`| A | ${conceptScores.join(' | ')} | 17 | chosen |`, other] }), images(2)), []);
   const weakType = [2, 2, 1, 3, 2, 2, 3, 2];
   assert.match(validateReferences(file({ concepts: [`| A | ${weakType.join(' | ')} | 17 | chosen |`, other] }), images(2)).join('\n'), /under 2 on type/);
+});
+
+test('at least one selected reference is a studio case study', () => {
+  const noStudy = file().replace('| c | https://studio.test/work/market-bakery | study |', '| c | https://maker-seven.test | site |');
+  assert.match(validateReferences(noStudy, images(2)).join('\n'), /at least one studio case study \(kind study\)/);
+});
+
+const comparison = (rows) => `### Built against the references\n| page | round | sheet | the references do | we built |\n|---|---|---|---|---|\n${rows.join('\n')}\n`;
+const addition = (page, round, n) => `| ${page} | ${round} | audit/compare/home-1440.jpg | reference ${n} sets its works as numbered plates on a wall | the register as plates hung on a ruled board |`;
+
+test('each compared page builds the five biggest differences in its first round', () => {
+  const exists = { exists: (file) => file === 'audit/compare/home-1440.jpg' };
+  assert.deepEqual(validateComparison(comparison([1, 2, 3, 4, 5].map((n) => addition('/', 1, n))), exists), []);
+  assert.match(validateComparison(comparison([1, 2].map((n) => addition('/', 1, n))), exists).join('\n'), new RegExp(`round 1 builds 2 additions; build the ${COMPARISON_BAR.additions} biggest`));
+  assert.match(validateComparison(comparison([addition('/', 3, 1)]), exists).join('\n'), /round must be 1 or 2/);
+  assert.match(validateComparison(comparison([addition('/', 1, 1).replace('home-1440', 'missing')]), exists).join('\n'), /the sheet audit\/compare\/missing\.jpg does not exist/);
+  assert.match(validateComparison(comparison(['| / | 1 | audit/compare/home-1440.jpg | TBD | more |']), exists).join('\n'), /"the references do" needs a concrete description/);
+  assert.match(validateComparison('## Nothing here', exists).join('\n'), /Missing the ### Built against the references table/);
 });

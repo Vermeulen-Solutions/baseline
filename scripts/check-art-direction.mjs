@@ -191,18 +191,20 @@ export function validateReferences(markdown, io = {}) {
     const [id, source, kind, ...rest] = cells;
     const label = `Candidate ${id || '?'}`;
     if (!id || !source || !/^(https?:\/\/\S+|[\w./-]+)$/.test(source)) { errors.push(`${label}: needs an id and a URL or path.`); continue; }
-    if (!/^(site|prompt|template|system|owner)$/.test(kind)) errors.push(`${label}: kind must be site, prompt, template, system or owner.`);
+    if (!/^(site|study|prompt|template|system|owner)$/.test(kind)) errors.push(`${label}: kind must be site, study, prompt, template, system or owner.`);
     const score = scoreRow(rest, label, errors);
     const verdict = rest[REFERENCE_DIMENSIONS.length + 1] ?? '';
     if (!/^(selected|owner|rejected:\s*\S.{3,})$/i.test(verdict)) errors.push(`${label}: verdict must be selected, owner, or "rejected: <reason>".`);
     parsed.push({ id, source, kind, score, verdict: verdict.toLowerCase().split(':')[0] });
   }
   if (parsed.length < REFERENCE_BAR.candidates) errors.push(`Found ${parsed.length} candidates; judge at least ${REFERENCE_BAR.candidates}.`);
-  if (parsed.filter(c => c.kind === 'site').length < REFERENCE_BAR.sites) errors.push(`At least ${REFERENCE_BAR.sites} candidates must be real sites (kind site).`);
+  const realSite = c => c.kind === 'site' || c.kind === 'study';
+  if (parsed.filter(realSite).length < REFERENCE_BAR.sites) errors.push(`At least ${REFERENCE_BAR.sites} candidates must be real sites (kind site or study).`);
 
   const selected = parsed.filter(c => c.verdict === 'selected');
   if (selected.length < REFERENCE_BAR.selected) errors.push(`Selected ${selected.length}; select at least ${REFERENCE_BAR.selected} above the bar, searching again if too few pass.`);
-  if (selected.filter(c => c.kind === 'site').length < 2) errors.push('At least two selected references must be real sites.');
+  if (selected.filter(realSite).length < 2) errors.push('At least two selected references must be real sites.');
+  if (!selected.some(c => c.kind === 'study')) errors.push('Select at least one studio case study (kind study): a site a small independent studio built for a small client and shows as a case study. It sets the level the design aims at.');
   for (const c of selected) {
     if (!c.score) continue;
     if (c.score.total < REFERENCE_BAR.total) errors.push(`Candidate ${c.id} is selected with ${c.score.total}/24; the bar is ${REFERENCE_BAR.total}.`);
@@ -230,6 +232,40 @@ export function validateReferences(markdown, io = {}) {
     if (design < bar) errors.push(`The chosen concept scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it before building.`);
     const weak = DESIGN_DIMENSIONS.filter(d => c.score.scores[d] < 2);
     if (weak.length) errors.push(`The chosen concept scores under 2 on ${weak.join(', ')}.`);
+  }
+  return errors;
+}
+
+// Stage 5 comparison pass (new-site-workflow/references/impeccable-passes.md): each representative
+// page captured beside the selected references on one sheet, a fresh reviewer naming what the
+// references do that the page does not, and those additions built, for one or two rounds.
+export const COMPARISON_BAR = Object.freeze({ additions: 5 });
+
+/**
+ * @param {string} markdown the references file
+ * @param {{ exists?: (file: string) => boolean }} [io]
+ */
+export function validateComparison(markdown, io = {}) {
+  const rows = tableRows(String(markdown ?? ''), 'Built against the references');
+  if (!rows) return ['Missing the ### Built against the references table: compare each representative page with the references on a sheet and build what they do that it does not.'];
+  const errors = [];
+  const rounds = new Map();
+  for (const [page, round, sheet, theyDo, weBuilt] of rows) {
+    const label = `Comparison ${page || '?'} round ${round || '?'}`;
+    if (!page || !page.startsWith('/')) { errors.push(`${label}: page must be a route such as /.`); continue; }
+    if (!/^[12]$/.test(round ?? '')) errors.push(`${label}: round must be 1 or 2.`);
+    const sheetPath = (sheet ?? '').replace(/`/g, '');
+    if (!sheetPath) errors.push(`${label}: name the comparison sheet.`);
+    else if (io.exists && !io.exists(sheetPath)) errors.push(`${label}: the sheet ${sheetPath} does not exist.`);
+    for (const [name, value] of [['the references do', theyDo], ['we built', weBuilt]]) if (!value || UNDECIDED.test(value) || value.length < 12) errors.push(`${label}: "${name}" needs a concrete description.`);
+    const key = `${page}|${round}`;
+    rounds.set(key, (rounds.get(key) ?? 0) + 1);
+  }
+  const pages = new Set([...rounds.keys()].map(key => key.split('|')[0]));
+  if (!pages.size) errors.push('Compare at least the home page.');
+  for (const page of pages) {
+    const first = rounds.get(`${page}|1`) ?? 0;
+    if (first < COMPARISON_BAR.additions) errors.push(`Comparison ${page}: round 1 builds ${first} addition${first === 1 ? '' : 's'}; build the ${COMPARISON_BAR.additions} biggest differences the reviewer named.`);
   }
   return errors;
 }
@@ -342,6 +378,11 @@ function main() {
     }
     // The same new direction builds its world and writes its decisions down.
     errors.push(...validateWorld(agentsMd).map(error => `AGENTS.md: ${error}`));
+  }
+  // Stage 5: the built pages compared with the references; a file that has the table keeps it valid.
+  const referencesText = existsSync(REFERENCES_FILE) ? readFileSync(REFERENCES_FILE, 'utf8') : '';
+  if (args.includes('--require-comparison') || /^###\s+Built against the references\s*$/m.test(referencesText)) {
+    errors.push(...validateComparison(referencesText, { exists: existsSync }).map(error => `${REFERENCES_FILE}: ${error}`));
   }
   if (recordErrors.length) { console.error(formatRecordDiagnostics(agentsMd, errors)); process.exitCode = 1; }
   else if (errors.length) {

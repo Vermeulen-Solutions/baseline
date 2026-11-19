@@ -426,5 +426,9 @@
   "audit-composition.test.mjs": {
     "tier": "unit",
     "reason": "Composition audit: pure assessment of section models (kicker and split openings, card grids, structural repeats, full-width media, closing band, signature), arguments and report text; no browser"
+  },
+  "design-sheet.test.mjs": {
+    "tier": "unit",
+    "reason": "Comparison sheet: the layout of page and references cut at the same number of screens, arguments, and a sheet written from two synthetic images"
   }
 }
