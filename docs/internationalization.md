@@ -147,6 +147,14 @@ const { entry: page } = await getEmDashEntry("pages", slug, {
 ---
 ```
 
+### Values written per locale
+
+Each translation is its own row, so a value kept as text is written the way that locale writes it. On a launched club site the French training sessions read `19h30 – 21h30` and the English ones `19:30 – 21:30`; a time parser that read only the `h` form dropped every English session, and the English home page and team pages showed no training times while the French ones were complete. The English schedules page, which printed the text unparsed, hid the fault.
+
+- **Parse every form the locales use**, or store the value in a typed field (a time, a number, a date) instead of text.
+- **Print the value in the page's locale** (`19h30` on French pages, `19:30` on English ones), not in the default locale's form.
+- **Test against each locale's real rows.** A rehearsal copy or local database can hold older translations than production: check the deployed or preview version on every locale before calling it done.
+
 ### Resolving Alternate Language URLs (Language Switcher)
 
 To provide an accurate language toggle link for the current page:

@@ -572,6 +572,41 @@ explicitly local-only scope and identify when no site deployment applies.
 Keep content imports, production edits and DNS cutover separately authorized.
 ```
 
+#### Rehearse the redesign on a copy, then take it live
+
+When the owner wants to see a redesign before deciding on it, run the prompt above on a copy of the site (its own folder, database and Git history, committed as received before any change), with the release scope "local-only, on the copy". The owner reviews the copy and asks for changes there. Once they say to implement it, take it into the site with this prompt:
+
+```text
+Take the reviewed redesign from the copy into the site.
+
+Copy: [folder], reviewed state at [commit]; it started from [commit "as received"]
+Site: [folder], branch [new branch from the site's main]
+Owner's changes after the review: [list, or "none"]
+Release scope: [preview version only / deploy after the checks / local-only]
+
+1. Confirm the copy's starting commit matches the site's current code (compare
+   every source file, ignoring line endings). If the site has moved on, merge
+   rather than copy, and say what differs.
+2. Apply the copy's changes to the site's source, styles, dependencies, design
+   record and concept/record files. Leave out what the copy generated from its own
+   data (`emdash-env.d.ts`, built output) and capture images; they stay with the copy.
+3. Correct the Art Direction Record to what the owner chose: drop what they
+   removed, record what they kept from the previous direction and why, and
+   remove "trial" wording.
+4. Run check:art-direction, the design tests, lint, typecheck and the build.
+5. Check every page the redesign touched, in every locale, against production
+   data: a copy's database can hold older content than production, and a fault
+   in one locale's data does not show on the copy. Where the local build cannot
+   render a page, upload a preview version that takes no traffic and check that.
+   Run check:quality on the touched routes and capture:routes --motion to see
+   the first screen as it paints.
+6. Within the release scope: deploy, run check:live, capture the live pages,
+   record the deploy (version, previous version, rollback command) in the
+   site's maintenance notes, merge the branch and push.
+```
+
+After launch, owner feedback on the live site goes through the same loop: change, check (including the first screen at full motion), deploy, record.
+
 <a id="auditing--redesigning-an-earlier-baseline-site-visual--primitive-upgrade"></a>
 
 ### Modernizing an Earlier Baseline Site (Primitives & Refinement)

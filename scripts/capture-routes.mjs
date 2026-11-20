@@ -20,6 +20,10 @@
 // that does not load, is reported as SKIPPED and the run goes on. A page waits for "load", then up
 // to 15 seconds for the network to settle (busy commerce sites never settle), and a full-page
 // capture that takes over 45 seconds is skipped while its viewport frames are kept.
+// Captures use reduced motion and then finish every animation, so they never show motion at load.
+// --motion captures with full motion instead and adds a `load` frame: the first screen as it paints,
+// taken before any animation is forced to its end (a scroll-driven entrance caught part-way shows
+// there; `check:quality` reports the same as first-viewport-scroll-motion).
 import { mkdirSync, readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
@@ -65,6 +69,7 @@ export function parseArgs(argv) {
     else if (flag === '--css') out.css = value().split(',').map(s => msysToNative(s.trim())).filter(Boolean);
     else if (flag === '--click') out.click = value().split(',').map(s => s.trim()).filter(Boolean);
     else if (flag === '--decline-consent') out.declineConsent = true;
+    else if (flag === '--motion') out.motion = true;
     else if (flag === '--wait') out.wait = Number(value());
     else if (flag === '--route-timeout') out.routeTimeout = Number(value()) * 1000;
     else if (flag === '--out') out.out = msysToNative(value());
@@ -144,7 +149,7 @@ async function capture(options) {
   const browser = await chromium.launch(), records = [], skipped = [];
   try {
     for (const width of options.widths) {
-      const context = await browser.newContext({ viewport: { width, height: width < 500 ? 844 : 900 }, reducedMotion: 'reduce' });
+      const context = await browser.newContext({ viewport: { width, height: width < 500 ? 844 : 900 }, reducedMotion: options.motion ? 'no-preference' : 'reduce' });
       let page = await context.newPage();
       for (const route of options.routes) for (let run = 0; run < options.repeat; run++) {
       // A watchdog per route: some pages never settle (an intro that loops, a script that blocks), and the
@@ -158,6 +163,10 @@ async function capture(options) {
         if (isBotWall(await page.title(), await page.evaluate(() => document.body?.innerText ?? ''))) throw Error('a bot wall answered instead of the site');
         // A site that opens on a preloader or an intro is captured once it has settled.
         if (options.wait) await page.waitForTimeout(options.wait);
+        // The first screen as it paints, before the walk below scrolls the page and the end-state step finishes
+        // every animation. Time-based entrances get a moment to run; scroll-driven ones keep their load progress.
+        let loadShot = null;
+        if (options.motion) { await page.evaluate(() => document.fonts.ready); await page.waitForTimeout(1500); loadShot = await page.screenshot(); }
         if (options.declineConsent) {
           for (const frame of page.frames()) {
             const button = frame.locator('button, [role="button"], a, input[type="button"], input[type="submit"]').filter({ hasText: DECLINE }).first();
@@ -191,6 +200,7 @@ async function capture(options) {
         const viewportWidth = page.viewportSize().width;
         const overflowX = await page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth ?? 0) > document.documentElement.clientWidth + 1);
         const shots = [['full', () => page.screenshot({ fullPage: true, timeout: 45000, clip: { x: 0, y: 0, width: viewportWidth, height } })]];
+        if (loadShot) shots.unshift(['load', async () => loadShot]);
         for (const y of options.frames) if (y === 0 || y < height) shots.push([`frame-${y}`, async () => { await page.evaluate(v => window.scrollTo(0, v), y); await page.waitForTimeout(250); return page.screenshot(); }]);
         for (const [kind, take] of shots) {
           let buffer;
@@ -223,7 +233,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   try {
     const options = parseArgs(process.argv.slice(2));
     if (options.help) {
-      console.log('Usage: capture:routes -- --base <origin> --routes /,/contact --out <dir> [--widths 390,768,1440] [--frames 0,900,1800] [--repeat 2] [--hide "#dev-panel"] [--css overlay.css] [--click "[data-pause]"] [--decline-consent] [--wait 8000] [--route-timeout 180]\n       capture:routes -- --compare <before-dir> <after-dir>\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when a route is "/".');
+      console.log('Usage: capture:routes -- --base <origin> --routes /,/contact --out <dir> [--widths 390,768,1440] [--frames 0,900,1800] [--repeat 2] [--hide "#dev-panel"] [--css overlay.css] [--click "[data-pause]"] [--decline-consent] [--wait 8000] [--route-timeout 180] [--motion]\n       capture:routes -- --compare <before-dir> <after-dir>\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when a route is "/".');
     } else if (options.compare) {
       const [a, b] = options.compare.map(dir => { const file = path.join(dir, 'summary.json'); if (!existsSync(file)) throw Error('No summary.json in ' + dir); return JSON.parse(readFileSync(file, 'utf8')); });
       const result = compareSummaries(a, b);
