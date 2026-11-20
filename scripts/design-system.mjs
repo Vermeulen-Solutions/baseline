@@ -1677,6 +1677,8 @@ function main() {
     for (const [id, lane] of Object.entries(AESTHETIC_LANES)) {
       console.log(`- ${id} (${lane.name}): ${lane.description}`);
     }
+    // The organisation lanes in site-art-direction/references/aesthetic-lanes.md have no preset of their own.
+    console.log('Lanes without a preset (seed from the one named, then set the values the lane describes): Atelier & Craft → editorial-paper; Civic & Community → neutral; Club & Fixture → neutral.');
     return;
   }
 

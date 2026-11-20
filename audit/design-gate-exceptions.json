@@ -837,8 +837,8 @@
   },
   {
     "path": "src/styles/expressive.css",
-    "reason": "Scroll-driven expressive effects written as animation longhands so the production minifier keeps animation-timeline; no visual change beyond the effects running on built sites.",
-    "sha256": "2a13430912bb9e7ef2193bb667b7a1bcff260c6c0eb8b1c79c7d1246e4fb9621"
+    "reason": "Duotone inks follow --tone-inset and the frame radius, so padded, bordered and round frames need no per-frame override; no change for existing frames (inset 0).",
+    "sha256": "903768d2ae383077d9164dbcd451ee471ad3915b21f15a59a3f61e0aa49001a7"
   },
   {
     "path": "src/lib/page-transition-script.ts",
