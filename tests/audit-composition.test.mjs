@@ -175,3 +175,8 @@ test('a section that sets its entries as tall blocks one after another is a repe
   assert.match(assessComposition(works).find((f) => f.code === 'repeated-run')?.message ?? '', /Section 2 sets 12 tall items/);
   assert.ok(!codes(page([section({ mediaCount: 1, fullBleedMedia: true }), section({ mediaCount: 3, itemRun: 3 })])).includes('repeated-run'));
 });
+
+test('a reference source may carry a note after its URL', () => {
+  const file = ['| id | source | kind | first screen | total | verdict |', '|---|---|---|---|---|---|', '| s | https://client.test/ (case study by a small studio) | study | 3 | 21 | selected |'].join('\n');
+  assert.deepEqual(selectedSources(file), [{ id: 's', url: 'https://client.test/', kind: 'study' }]);
+});

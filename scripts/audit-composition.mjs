@@ -205,7 +205,8 @@ export function selectedSources(markdown) {
     const cells = line.split('|').map((c) => c.trim());
     if (cells.length < 6 || !/^https?:\/\//.test(cells[2] ?? '')) continue;
     const verdict = cells.at(-2) ?? '';
-    if (/^selected\b/i.test(verdict) && cells[3] !== 'owner') out.push({ id: cells[1], url: cells[2], kind: cells[3] });
+    // The first URL in the cell: a source may carry a note after it (the studio a case study comes from).
+    if (/^selected\b/i.test(verdict) && cells[3] !== 'owner') out.push({ id: cells[1], url: cells[2].match(/^https?:\/\/\S+/)[0].replace(/[),.;]+$/, ''), kind: cells[3] });
   }
   return out;
 }

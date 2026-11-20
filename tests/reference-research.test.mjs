@@ -106,3 +106,15 @@ test('each compared page builds the five biggest differences in its first round'
   assert.match(validateComparison(comparison(['| / | 1 | audit/compare/home-1440.jpg | TBD | more |']), exists).join('\n'), /"the references do" needs a concrete description/);
   assert.match(validateComparison('## Nothing here', exists).join('\n'), /Missing the ### Built against the references table/);
 });
+
+test('after three scored rounds, a concept within two points of the bar may stand with a recorded gap', () => {
+  // Bar: the selected references' median on the design lines is 16. This concept is 14 there.
+  const close = [2, 2, 2, 3, 2, 2, 2, 2];
+  const rounds = [`| A | ${close.join(' | ')} | 17 | chosen |`, `| A2 | ${weak.join(' | ')} | 11 | not chosen |`, `| A3 | ${weak.join(' | ')} | 11 | not chosen |`];
+  const gap = '\n### Gap to the bar\n- Every reviewer names the stand-in photographs: they do not read as one shoot of this house. The commissioned shoot closes it.\n';
+  assert.deepEqual(validateReferences(file({ concepts: rounds }) + gap, images(2)), []);
+  assert.match(validateReferences(file({ concepts: rounds }), images(2)).join('\n'), /### Gap to the bar section/);
+  assert.match(validateReferences(file({ concepts: rounds.slice(0, 2) }) + gap, images(2)).join('\n'), /under the selected references' median of 16/);
+  const low = [2, 2, 2, 3, 2, 2, 1, 2]; // 13 on the design lines: three under, and phone under 2
+  assert.match(validateReferences(file({ concepts: [`| A | ${low.join(' | ')} | 16 | chosen |`, ...rounds.slice(1)] }) + gap, images(2)).join('\n'), /under the selected references' median of 16/);
+});
