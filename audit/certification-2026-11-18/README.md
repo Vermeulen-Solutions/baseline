@@ -44,6 +44,14 @@ Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3: doc
 
 Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 111 passed; the gallery root-typecheck behavior test timed out under load (its child process killed) and passed alone in 15.5 s, as during the 0.4.0 work. Not covered: the Workers/D1/R2 profile (unchanged scope), the editor rehearsal and restore drill (editor and schema unchanged), repeated visual runs.
 
+## Standards 0.6.0 (2026-11-20)
+
+Certified source: commit `22948b4ce371e7caff923ea2eeca954cbaa2bdc8`. Machine record: [verification-0.6.0.json](verification-0.6.0.json). A minor release from the design sprints (PRs #130–#154). Runtime dependencies (Astro 7.4.12, EmDash 1.5.0, the adapters), development dependencies and the database schema are unchanged from 0.5.1. `check:upstream` on 20 November found Astro 7.4.13, @astrojs/node 11.1.14, TypeScript 7.0.2 (major) and Impeccable 4.10.0 available; all are deferred.
+
+Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3, on `bfd469c` (the certified commit minus PR #154, which only renews local visual reference images): doctor, `npm ci`, verify (358 s and 487 s), build, release artifact, schema budget, dev tools, seed, seeded build and `audit:html` all pass. `check:ci-fast` passed every check on both but exceeded its 60 s local budget (124 s and 114 s) with a design sprint running on the same machine.
+
+Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): against the 0.5.1 references, home, posts and the styleguide differed at 390, because PR #141 moved the reading measure and line height to unclassed list items, and the run stopped at its three-failure limit. The suite does not run in CI, so the sprints' starter changes reached main without renewed references. The references were renewed and reviewed image by image (#154: 17 changed, 18 expressive references added to the hash record); against them 129 passed. The sensitivity self-test timed out once under load and passed alone (8 of 8); the gallery root-typecheck test timed out under load during the renewal and passed alone in 15.7 s, as in 0.4.0–0.5.1.
+
 ## Standards 0.5.1 (2026-11-18)
 
 Certified source: commit `377e9a856432531bc96acb2008e0a8ebe0fc7237`. Machine record: [verification-0.5.1.json](verification-0.5.1.json). A patch on 0.5.0 that fixes what taking the visible changes on six built sites found. Runtime and development dependencies and the database schema are unchanged.
