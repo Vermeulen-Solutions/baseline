@@ -152,7 +152,9 @@ function tableRows(markdown, heading) {
     if (!/^\s*\|/.test(line) || /^\s*\|[\s:|-]+\|\s*$/.test(line)) continue;
     rows.push(line.trim().replace(/^\||\|$/g, '').split('|').map(cell => cell.trim()));
   }
-  return rows.slice(1); // the first row is the header
+  // The first row is the header; a later table under the same heading (one per round) repeats it.
+  const header = (rows[0] ?? []).join('|').toLowerCase();
+  return rows.slice(1).filter(row => row.join('|').toLowerCase() !== header);
 }
 
 function scoreRow(cells, label, errors) {
@@ -228,10 +230,10 @@ export function validateReferences(markdown, io = {}) {
   const bar = median(selected.filter(c => c.score && c.kind !== 'owner').map(c => designTotal(c.score)));
   const concepts = tableRows(text, 'Concepts against the bar');
   if (!concepts) return [...errors, 'Missing the ### Concepts against the bar table: score each concept on the same card.'];
-  const scored = concepts.map(([name, ...rest]) => ({ name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict: (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').toLowerCase().split(/\s*[:—–]\s*|\s+-\s+/)[0].trim() })); // "chosen: <reason>" or "chosen — <reason>" reads as chosen
+  const scored = concepts.map(([name, ...rest]) => ({ name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict: (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').toLowerCase().split(/\s*[:—–(]\s*|\s+-\s+/)[0].trim() })); // "chosen: <reason>", "chosen — <reason>" or "chosen (<reason>)" reads as chosen
   const chosen = scored.filter(c => c.verdict === 'chosen');
   if (scored.length < 2) errors.push('Score at least two concepts against the bar.');
-  if (chosen.length !== 1) errors.push('Mark exactly one concept "chosen" (the others "not chosen").');
+  if (chosen.length !== 1) errors.push('Mark exactly one concept "chosen" (the others "not chosen") in the verdict column; a reason may follow after a colon, a dash or in brackets.');
   for (const c of chosen) {
     if (!c.score) continue;
     const design = designTotal(c.score);

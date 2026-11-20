@@ -187,12 +187,13 @@ export const STUDIO_LEVEL = Object.freeze({ drawn: 10, motion: 136, layers: 26, 
  * median, the studio level and the page's count, with `short` set where the page has under half of the
  * higher of the two.
  */
-export function assessAgainst(craft, references) {
+export function assessAgainst(craft, references, { studio: useStudio = true } = {}) {
   if (!references.length) return [];
   return GAP_MEASURES.map(([key, label]) => {
     const ref = median(references.map((r) => measureOf(r, key)));
-    const studio = STUDIO_LEVEL[key];
-    const target = Math.max(ref, studio);
+    // The studio level is measured on home pages: inner pages are held to the references only.
+    const studio = useStudio ? STUDIO_LEVEL[key] : null;
+    const target = Math.max(ref, studio ?? 0);
     const value = measureOf(craft, key);
     return { key, label, page: value, references: ref, studio, short: target >= 3 && value < target / 2 };
   });
@@ -213,8 +214,8 @@ export function selectedSources(markdown) {
 
 export function formatAgainst(gap, count) {
   const short = gap.filter((g) => g.short);
-  const rows = gap.map((g) => `    ${g.short ? '→' : ' '} ${g.label}: ${g.page} here, ${g.references} on the references, ${g.studio} at the studio level`);
-  const head = `  Against the ${count} selected reference${count === 1 ? '' : 's'} (median) and the studio level (studio-built home pages): ${short.length ? `under half on ${short.map((g) => g.key).join(', ')}` : 'at least half of both on every measure'}`;
+  const rows = gap.map((g) => `    ${g.short ? '→' : ' '} ${g.label}: ${g.page} here, ${g.references} on the references${g.studio === null ? '' : `, ${g.studio} at the studio level`}`);
+  const head = `  Against the ${count} selected reference${count === 1 ? '' : 's'} (median)${gap.some((g) => g.studio !== null) ? ' and the studio level (studio-built home pages)' : ''}: ${short.length ? `under half on ${short.map((g) => g.key).join(', ')}` : 'at least half of both on every measure'}`;
   return [head, ...rows].join('\n');
 }
 
@@ -486,7 +487,7 @@ async function main() {
         await phone.close();
       }
       const findings = assessComposition(model);
-      const against = assessAgainst(model.craft, measuredRefs);
+      const against = assessAgainst(model.craft, measuredRefs, { studio: route === '/' });
       results.push({ route, model, findings, against });
       if (!options.json) {
         console.log(formatRoute(route, model, findings));

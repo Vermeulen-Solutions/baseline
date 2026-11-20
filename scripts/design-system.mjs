@@ -1797,7 +1797,14 @@ function main() {
   }
   if(writeRecord || initClient) {
     const target=typeof writeRecord === 'string'?writeRecord:'AGENTS.md';
-    announce('Wrote ## Art Direction Record to ' + upsertArtDirectionRecord(target,selectedLaneId));
+    // A record that already holds the site's World is the direction itself: --init-client keeps it (a trial's
+    // whole direction was replaced by the lane's generic record with one line of output). --write-record still
+    // replaces it when asked for explicitly.
+    const existing = existsSync(target) ? readFileSync(target, 'utf8') : '';
+    const recordAt = existing.search(/^## Art Direction Record\s*$/m);
+    const recordText = recordAt < 0 ? '' : existing.slice(recordAt).split(/\n(?=## )/)[0];
+    if (!writeRecord && /^\s*- \*\*World:\*\*/m.test(recordText)) announce('Kept the site\'s ## Art Direction Record in ' + target + ' (it records a World); --write-record replaces it.');
+    else announce('Wrote ## Art Direction Record to ' + upsertArtDirectionRecord(target,selectedLaneId));
   }
   if(initClient) {
     const pruned=pruneStarterExceptions('audit/design-gate-exceptions.json');

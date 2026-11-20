@@ -180,3 +180,13 @@ test('a reference source may carry a note after its URL', () => {
   const file = ['| id | source | kind | first screen | total | verdict |', '|---|---|---|---|---|---|', '| s | https://client.test/ (case study by a small studio) | study | 3 | 21 | selected |'].join('\n');
   assert.deepEqual(selectedSources(file), [{ id: 's', url: 'https://client.test/', kind: 'study' }]);
 });
+
+test('inner pages are held to the references only; the studio level is for the home page', () => {
+  const refs = [{ drawn: 2, motion: 12, rotated: 1, masked: 1, surfaces: 1, colours: 8, typeSizes: 8, elements: 400 }];
+  const page = { drawn: 3, motion: 20, rotated: 2, masked: 1, surfaces: 2, colours: 12, typeSizes: 12, elements: 300 };
+  const inner = assessAgainst(page, refs, { studio: false });
+  assert.deepEqual(inner.filter((g) => g.short).map((g) => g.key), []);
+  assert.equal(inner[0].studio, null);
+  assert.doesNotMatch(formatAgainst(inner, 1), /studio level/);
+  assert.ok(assessAgainst(page, refs).some((g) => g.short));
+});

@@ -105,3 +105,23 @@ test('layout gap props accept token names and keep raw lengths for compatibility
   for (const name of ['content', 'grid', 'container', 'section', 'section-m', '3xs', 's', '3xl', 'xl-3xl']) assert.ok(source.includes(`'${name}'`), name);
   for (const file of ['Section', 'Container', 'Grid']) assert.match(readFileSync(new URL(`../src/components/${file}.astro`, import.meta.url), 'utf8'), /gap\?: LayoutGap;/, file);
 });
+
+test('--init-client keeps a record that holds the site World; --write-record still replaces it', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'record-guard-'));
+  const script = path.resolve('scripts/design-system.mjs');
+  try {
+    fs.writeFileSync(path.join(dir, 'baseline.config.json'), JSON.stringify({ foundation: 'static' }));
+    copyStyles(dir);
+    fs.writeFileSync(path.join(dir, 'global.css'), css);
+    fs.mkdirSync(path.join(dir, 'audit')); fs.writeFileSync(path.join(dir, 'audit/design-gate-exceptions.json'), '[]\n');
+    const record = '# Site\n\n## Art Direction Record\n- **Aesthetic Lane:** Custom\n- **World:**\n  - Objects: the service sticker\n\n## Implementation rules\n';
+    fs.writeFileSync(path.join(dir, 'AGENTS.md'), record);
+    const run = (...args) => spawnSync(process.execPath, [script, '--css', 'global.css', ...args], { cwd: dir, encoding: 'utf8' });
+    const init = run('--lane', 'neutral', '--init-client');
+    assert.equal(init.status, 0, init.stderr);
+    assert.match(init.stdout, /Kept the site's ## Art Direction Record/);
+    assert.equal(fs.readFileSync(path.join(dir, 'AGENTS.md'), 'utf8'), record);
+    assert.equal(run('--lane', 'neutral', '--write', '--write-record').status, 0);
+    assert.doesNotMatch(fs.readFileSync(path.join(dir, 'AGENTS.md'), 'utf8'), /the service sticker/);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
