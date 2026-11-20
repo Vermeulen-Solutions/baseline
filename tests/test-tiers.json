@@ -427,6 +427,10 @@
     "tier": "unit",
     "reason": "Composition audit: pure assessment of section models (kicker and split openings, card grids, structural repeats, full-width media, closing band, signature), arguments and report text; no browser"
   },
+  "serve-static.test.mjs": {
+    "tier": "unit",
+    "reason": "Static server for local captures: arguments, request paths kept inside the served folder, and files and folder indexes served on 127.0.0.1 from a temporary folder"
+  },
   "design-sheet.test.mjs": {
     "tier": "unit",
     "reason": "Comparison sheet: the layout of page and references cut at the same number of screens, arguments, and a sheet written from two synthetic images"
