@@ -179,8 +179,11 @@ async function capture(options) {
         await page.evaluate(() => { for (const a of document.getAnimations()) { try { if (Number.isFinite(a.effect?.getComputedTiming().endTime)) a.finish(); } catch {} } });
         await page.waitForTimeout(500);
         const height = await page.evaluate(() => document.documentElement.scrollHeight);
-        const overflowX = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
-        const shots = [['full', () => page.screenshot({ fullPage: true, timeout: 45000 })]];
+        // Wider than the screen, even when `overflow-x: hidden` on html hides it from the visitor: the full-page
+        // capture would show a wider, shifted page than anyone sees, so it is clipped to the viewport width.
+        const viewportWidth = page.viewportSize().width;
+        const overflowX = await page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth ?? 0) > document.documentElement.clientWidth + 1);
+        const shots = [['full', () => page.screenshot({ fullPage: true, timeout: 45000, clip: { x: 0, y: 0, width: viewportWidth, height } })]];
         for (const y of options.frames) if (y === 0 || y < height) shots.push([`frame-${y}`, async () => { await page.evaluate(v => window.scrollTo(0, v), y); await page.waitForTimeout(250); return page.screenshot(); }]);
         for (const [kind, take] of shots) {
           let buffer;
