@@ -56,6 +56,7 @@
     "check:native-images": "node scripts/check-native-images.mjs",
     "check:release-artifact": "node scripts/assert-release-artifact.mjs",
     "check:visual-cleanup": "node tests/visual/cleanup-check.mjs",
+    "check:visual-references": "node scripts/check-visual-references.mjs",
     "check:upstream": "node scripts/check-upstream-updates.mjs",
     "db:diff": "node scripts/db-diff.mjs",
     "db:export-seed": "node scripts/db-export-seed.mjs",

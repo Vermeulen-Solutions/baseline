@@ -40,7 +40,17 @@ What a site does to take it.
 
 ## Cutting a release
 
-1. **Certify.** Follow the [certification sequence](phase-3-certification.md) on the candidate commit and record the evidence. Update `standards/manifest.json` by hand for what certification decides: runtime profile versions, checks, pending items, certification scope, receipts and evidence paths.
+1. **Certify.** First run the Windows visual suite on the candidate and renew what it asks for (below). Then follow the [certification sequence](phase-3-certification.md) on the candidate commit and record the evidence. Update `standards/manifest.json` by hand for what certification decides: runtime profile versions, checks, pending items, certification scope, receipts and evidence paths.
+
+**Visual references before certifying.** Run `npm run test:visual` on the candidate. CI runs on Linux and only checks that every reference image is recorded in `tests/visual/baselines/win32/manifest.json` with its SHA-256; it cannot tell whether a starter change made the references outdated. When a comparison fails, open the diff in the Playwright report. If the change is intended, run `npm run test:visual:update`, review every renewed image, and commit the images with `manifest.json` before certifying; if it is not, fix the source. Certify only on a run with no failures and no reference left to renew. To catch this earlier, CI adds a notice to a pull request that changes `src/styles/`, `src/components/` or `src/layouts/` without touching `tests/visual/baselines/`; the author runs the suite on Windows before merging.
+
+Two tests are known to time out when the whole suite runs on a loaded machine: the gallery root typecheck (`a built gallery survives root typecheck`) and the sensitivity self-test (`tests/visual/sensitivity.spec.mjs`). Both pass when run alone. Rerun only those before treating a timeout as a failure:
+
+   ```sh
+   node node_modules/@playwright/test/cli.js test --config=playwright.config.mjs --grep "root typecheck"
+   npm run test:visual:sensitivity
+   ```
+
 2. **Prepare.** With the certified commit checked out (or with no later change to skills or pinned helpers), run:
 
    ```sh

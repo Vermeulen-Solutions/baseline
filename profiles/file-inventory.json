@@ -224,6 +224,10 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "scripts/check-visual-references.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/check-upstream-updates.mjs": {
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
@@ -738,6 +742,10 @@
     },
     "tests/token-coverage.test.mjs": {
       "disposition": "adapt-before-static",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/visual-references.test.mjs": {
+      "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },
     "tests/visual-policy.test.mjs": {

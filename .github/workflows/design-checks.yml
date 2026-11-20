@@ -36,6 +36,11 @@ jobs:
           echo "DIFF_BASE=$base" >> "$GITHUB_ENV"
       - name: Require a standards change note for changes sites receive
         run: npm run standards:check -- --base "$DIFF_BASE"
+      # CI runs on Linux and cannot render the Windows references: a styles, component or layout
+      # change without renewed references gets a notice, never a failure. Unrecorded or changed
+      # reference images do fail.
+      - name: Check visual reference hashes and notice unrenewed references
+        run: npm run check:visual-references -- --notice-base "$DIFF_BASE"
       - run: npm run check:ci-fast
       - uses: actions/upload-artifact@v7
         if: always()
