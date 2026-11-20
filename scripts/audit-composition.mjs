@@ -225,7 +225,15 @@ export function measurePage() {
   const visible = (el) => { const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden'; };
   const main = document.querySelector('main') ?? document.body;
   let sections = [...main.children].filter(visible);
-  while (sections.length === 1 && sections[0].children.length > 1) sections = [...sections[0].children].filter(visible);
+  // Descend through wrappers: a single child, or one child holding most of the page beside thin decoration
+  // (a pipe or a rule drawn behind every section), is not the page's section list.
+  const mainHeight = main.getBoundingClientRect().height;
+  for (;;) {
+    if (sections.length === 1 && sections[0].children.length > 1) { sections = [...sections[0].children].filter(visible); continue; }
+    const holders = sections.length <= 3 ? sections.filter((s) => s.getBoundingClientRect().height >= mainHeight * 0.8 && [...s.children].filter(visible).length >= 3) : [];
+    if (holders.length === 1) { const width = main.getBoundingClientRect().width; sections = [...holders[0].children].filter(visible).filter((c) => c.getBoundingClientRect().width >= width * 0.25); continue; }
+    break;
+  }
   const paragraphs = [...main.querySelectorAll('p')].filter(visible).map((p) => px(p, 'fontSize')).sort((a, b) => a - b);
   const bodySize = paragraphs[Math.floor(paragraphs.length / 2)] || 16;
   const boxed = (el) => {
