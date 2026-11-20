@@ -128,3 +128,15 @@ test('after three scored rounds, a concept within two points of the bar may stan
 test('a concept verdict may carry its reason after a colon, like a candidate verdict', () => {
   assert.deepEqual(validateReferences(file().replace('| 18 | chosen |', '| 18 | chosen: the strongest idea, built as the pages |'), images(2)), []);
 });
+
+test('before Stage 5 the concept bar is reported, not failed; Stage 5 enforces it', () => {
+  const low = file({ concepts: [`| A | ${[2, 2, 2, 2, 2, 2, 2, 2].join(' | ')} | 16 | chosen |`, `| B | ${weak.join(' | ')} | 11 | not chosen |`] });
+  const notes = [];
+  assert.deepEqual(validateReferences(low, { ...images(2), deferBar: true, notes }), []);
+  assert.match(notes.join('\n'), /under the selected references' median of 16/);
+  assert.match(validateReferences(low, images(2)).join('\n'), /under the selected references' median of 16/);
+});
+
+test('a concept verdict may give its reason after a dash', () => {
+  assert.deepEqual(validateReferences(file().replace('| 18 | chosen |', '| 18 | chosen — improved in round 2 |'), images(2)), []);
+});
