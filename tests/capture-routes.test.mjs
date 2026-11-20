@@ -79,3 +79,10 @@ test('--wait lets a preloader settle before the capture', () => {
   assert.equal(parseArgs([...base, '--wait', '8000']).wait, 8000);
   assert.throws(() => parseArgs([...base, '--wait', '60000']), /--wait must be milliseconds/);
 });
+
+test('--route-timeout bounds each route (seconds), 180 by default', () => {
+  const base = ['--base', 'http://127.0.0.1:4321', '--routes', '/', '--out', 'x'];
+  assert.equal(parseArgs(base).routeTimeout, 180000);
+  assert.equal(parseArgs([...base, '--route-timeout', '60']).routeTimeout, 60000);
+  assert.throws(() => parseArgs([...base, '--route-timeout', '5']), /--route-timeout must be/);
+});

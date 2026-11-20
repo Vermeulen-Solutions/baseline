@@ -52,7 +52,7 @@ export function restoreGitBashRoute(route, env = process.env) {
 }
 
 export function parseArgs(argv) {
-  const out = { widths: DEFAULT_WIDTHS, frames: [0, 900, 1800], repeat: 2, hide: [], css: [], click: [] };
+  const out = { widths: DEFAULT_WIDTHS, frames: [0, 900, 1800], repeat: 2, hide: [], css: [], click: [], routeTimeout: 180000 };
   for (let i = 0; i < argv.length; i++) {
     const flag = argv[i], value = () => { const v = argv[++i]; if (v === undefined || v.startsWith('--')) throw Error('Missing value for ' + flag); return v; };
     if (flag === '--help' || flag === '-h') out.help = true;
@@ -66,6 +66,7 @@ export function parseArgs(argv) {
     else if (flag === '--click') out.click = value().split(',').map(s => s.trim()).filter(Boolean);
     else if (flag === '--decline-consent') out.declineConsent = true;
     else if (flag === '--wait') out.wait = Number(value());
+    else if (flag === '--route-timeout') out.routeTimeout = Number(value()) * 1000;
     else if (flag === '--out') out.out = msysToNative(value());
     else if (flag === '--compare') { out.compare = [msysToNative(value()), msysToNative(value())]; }
     else throw Error('Unknown option: ' + flag);
@@ -83,6 +84,7 @@ export function parseArgs(argv) {
   if (out.widths.some(w => !Number.isInteger(w) || w < 200 || w > 3840)) throw Error('--widths must be integers between 200 and 3840');
   if (out.frames.some(y => !Number.isInteger(y) || y < 0)) throw Error('--frames must be non-negative integers');
   if (!Number.isInteger(out.repeat) || out.repeat < 1 || out.repeat > 3) throw Error('--repeat must be 1, 2 or 3');
+  if (!(Number.isInteger(out.routeTimeout) && out.routeTimeout >= 10000 && out.routeTimeout <= 900000)) throw Error('--route-timeout must be seconds between 10 and 900');
   if (out.wait !== undefined && !(Number.isInteger(out.wait) && out.wait >= 0 && out.wait <= 30000)) throw Error('--wait must be milliseconds between 0 and 30000');
   return out;
 }
@@ -143,8 +145,13 @@ async function capture(options) {
   try {
     for (const width of options.widths) {
       const context = await browser.newContext({ viewport: { width, height: width < 500 ? 844 : 900 }, reducedMotion: 'reduce' });
-      const page = await context.newPage();
-      for (const route of options.routes) for (let run = 0; run < options.repeat; run++) try {
+      let page = await context.newPage();
+      for (const route of options.routes) for (let run = 0; run < options.repeat; run++) {
+      // A watchdog per route: some pages never settle (an intro that loops, a script that blocks), and the
+      // run hung with empty logs. Closing the page makes every pending step throw, so the route is SKIPPED.
+      let timedOut = false;
+      const watchdog = setTimeout(() => { timedOut = true; page.close().catch(() => {}); }, options.routeTimeout);
+      try {
         const response = await page.goto(new URL(route, options.base).href, { waitUntil: 'load', timeout: 60000 });
         await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
         if (response && response.status() >= 400) throw Error(`HTTP ${response.status()}: the route answered with an error page`);
@@ -199,8 +206,10 @@ async function capture(options) {
           records.push({ route, width, kind, status: response?.status() ?? null, height, overflowX, sha: sha(buffer) });
         }
       } catch (error) {
-        if (run === 0) skipped.push({ route, width, kind: 'page', reason: error.message.split('\n')[0] });
+        if (run === 0) skipped.push({ route, width, kind: 'page', reason: timedOut ? `no result within ${options.routeTimeout / 1000}s (--route-timeout)` : error.message.split('\n')[0] });
+        if (page.isClosed()) page = await context.newPage();
         break;
+      } finally { clearTimeout(watchdog); }
       }
       await context.close();
     }
@@ -214,7 +223,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   try {
     const options = parseArgs(process.argv.slice(2));
     if (options.help) {
-      console.log('Usage: capture:routes -- --base <origin> --routes /,/contact --out <dir> [--widths 390,768,1440] [--frames 0,900,1800] [--repeat 2] [--hide "#dev-panel"] [--css overlay.css] [--click "[data-pause]"] [--decline-consent] [--wait 8000]\n       capture:routes -- --compare <before-dir> <after-dir>\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when a route is "/".');
+      console.log('Usage: capture:routes -- --base <origin> --routes /,/contact --out <dir> [--widths 390,768,1440] [--frames 0,900,1800] [--repeat 2] [--hide "#dev-panel"] [--css overlay.css] [--click "[data-pause]"] [--decline-consent] [--wait 8000] [--route-timeout 180]\n       capture:routes -- --compare <before-dir> <after-dir>\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when a route is "/".');
     } else if (options.compare) {
       const [a, b] = options.compare.map(dir => { const file = path.join(dir, 'summary.json'); if (!existsSync(file)) throw Error('No summary.json in ' + dir); return JSON.parse(readFileSync(file, 'utf8')); });
       const result = compareSummaries(a, b);

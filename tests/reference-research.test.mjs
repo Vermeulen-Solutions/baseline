@@ -148,3 +148,8 @@ test('a verdict reason may sit in brackets, and a second round table may repeat 
     + '\nRound 2 below.\n\n| page | round | sheet | the references do | we built |\n|---|---|---|---|---|\n' + addition('/', 2, 6) + '\n';
   assert.deepEqual(validateComparison(twoTables, exists), []);
 });
+
+test('a candidate above the bar may be left out with "not selected: <reason>"', () => {
+  const list = file().replace('rejected: stock photographs', 'not selected: the same lesson as a, a second time');
+  assert.deepEqual(validateReferences(list, images(2)), []);
+});

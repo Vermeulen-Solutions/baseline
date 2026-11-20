@@ -27,8 +27,11 @@ export function validateRecord(markdown) {
   // A second record body elsewhere in the file (for example one pasted into the middle of a
   // sentence, so its heading is not at the start of a line) leaves the section above valid while
   // the newer decision goes unchecked. Found on a real site: the gate kept passing on a stale record.
-  const bodies = [...prose.matchAll(/^\s*- \*\*Aesthetic Lane:\*\*/gm)].length;
-  if (bodies > 1) errors.push(`Found ${bodies} record bodies (lines starting "- **Aesthetic Lane:**"). Keep exactly one, under the ## Art Direction Record heading, and remove the superseded one.`);
+  // A redesign keeps the direction it replaces for the record: a body under a `## Superseded …` or
+  // `## Previous …` heading is history, not a second decision.
+  const live = prose.split(/^(?=## )/m).filter(part => !/^## (Superseded|Previous)\b/i.test(part)).join('');
+  const bodies = [...live.matchAll(/^\s*- \*\*Aesthetic Lane:\*\*/gm)].length;
+  if (bodies > 1) errors.push(`Found ${bodies} record bodies (lines starting "- **Aesthetic Lane:**"). Keep exactly one, under the ## Art Direction Record heading; move a direction a redesign replaces under a "## Superseded Art Direction Record (<date>)" heading, or remove it.`);
   if (/\S[^\n]*## Art Direction Record[ \t]*$/m.test(prose)) errors.push('A line ends with "## Art Direction Record" in the middle of other text: a record was pasted into a sentence. Restore that sentence and keep the record in its own section.');
   const field = name => {
     const matches = [...section.matchAll(new RegExp(`^\\s*- \\*\\*${name}:\\*\\*[ \t]*(.*)$`, 'gm'))];
@@ -197,7 +200,8 @@ export function validateReferences(markdown, io = {}) {
     if (!/^(site|study|prompt|template|system|owner)$/.test(kind)) errors.push(`${label}: kind must be site, study, prompt, template, system or owner.`);
     const score = scoreRow(rest, label, errors);
     const verdict = rest[REFERENCE_DIMENSIONS.length + 1] ?? '';
-    if (!/^(selected|owner|rejected:\s*\S.{3,})$/i.test(verdict)) errors.push(`${label}: verdict must be selected, owner, or "rejected: <reason>".`);
+    // "not selected: <reason>" is a candidate above the bar that was left out for a reason (the same idea as another).
+    if (!/^(selected|owner|(rejected|not selected):\s*\S.{3,})$/i.test(verdict)) errors.push(`${label}: verdict must be selected, owner, "rejected: <reason>" or "not selected: <reason>".`);
     parsed.push({ id, source, kind, score, verdict: verdict.toLowerCase().split(':')[0] });
   }
   if (parsed.length < REFERENCE_BAR.candidates) errors.push(`Found ${parsed.length} candidates; judge at least ${REFERENCE_BAR.candidates}.`);
