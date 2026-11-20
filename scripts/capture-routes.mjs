@@ -65,6 +65,7 @@ export function parseArgs(argv) {
     else if (flag === '--css') out.css = value().split(',').map(s => msysToNative(s.trim())).filter(Boolean);
     else if (flag === '--click') out.click = value().split(',').map(s => s.trim()).filter(Boolean);
     else if (flag === '--decline-consent') out.declineConsent = true;
+    else if (flag === '--wait') out.wait = Number(value());
     else if (flag === '--out') out.out = msysToNative(value());
     else if (flag === '--compare') { out.compare = [msysToNative(value()), msysToNative(value())]; }
     else throw Error('Unknown option: ' + flag);
@@ -82,6 +83,7 @@ export function parseArgs(argv) {
   if (out.widths.some(w => !Number.isInteger(w) || w < 200 || w > 3840)) throw Error('--widths must be integers between 200 and 3840');
   if (out.frames.some(y => !Number.isInteger(y) || y < 0)) throw Error('--frames must be non-negative integers');
   if (!Number.isInteger(out.repeat) || out.repeat < 1 || out.repeat > 3) throw Error('--repeat must be 1, 2 or 3');
+  if (out.wait !== undefined && !(Number.isInteger(out.wait) && out.wait >= 0 && out.wait <= 30000)) throw Error('--wait must be milliseconds between 0 and 30000');
   return out;
 }
 
@@ -147,6 +149,8 @@ async function capture(options) {
         await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
         if (response && response.status() >= 400) throw Error(`HTTP ${response.status()}: the route answered with an error page`);
         if (isBotWall(await page.title(), await page.evaluate(() => document.body?.innerText ?? ''))) throw Error('a bot wall answered instead of the site');
+        // A site that opens on a preloader or an intro is captured once it has settled.
+        if (options.wait) await page.waitForTimeout(options.wait);
         if (options.declineConsent) {
           for (const frame of page.frames()) {
             const button = frame.locator('button, [role="button"], a, input[type="button"], input[type="submit"]').filter({ hasText: DECLINE }).first();
@@ -206,7 +210,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   try {
     const options = parseArgs(process.argv.slice(2));
     if (options.help) {
-      console.log('Usage: capture:routes -- --base <origin> --routes /,/contact --out <dir> [--widths 390,768,1440] [--frames 0,900,1800] [--repeat 2] [--hide "#dev-panel"] [--css overlay.css] [--click "[data-pause]"] [--decline-consent]\n       capture:routes -- --compare <before-dir> <after-dir>\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when a route is "/".');
+      console.log('Usage: capture:routes -- --base <origin> --routes /,/contact --out <dir> [--widths 390,768,1440] [--frames 0,900,1800] [--repeat 2] [--hide "#dev-panel"] [--css overlay.css] [--click "[data-pause]"] [--decline-consent] [--wait 8000]\n       capture:routes -- --compare <before-dir> <after-dir>\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when a route is "/".');
     } else if (options.compare) {
       const [a, b] = options.compare.map(dir => { const file = path.join(dir, 'summary.json'); if (!existsSync(file)) throw Error('No summary.json in ' + dir); return JSON.parse(readFileSync(file, 'utf8')); });
       const result = compareSummaries(a, b);

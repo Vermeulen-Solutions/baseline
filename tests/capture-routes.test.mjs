@@ -73,3 +73,9 @@ test('reference captures decline consent banners and skip bot walls', () => {
   assert.equal(isBotWall('Atelier du bois', 'Sculptures en bois de chêne. Accès au parking derrière l\'atelier.'), false);
   assert.equal(parseArgs(['--base', 'https://example.org', '--routes', '/', '--out', 'x', '--decline-consent']).declineConsent, true);
 });
+
+test('--wait lets a preloader settle before the capture', () => {
+  const base = ['--base', 'http://127.0.0.1:4321', '--routes', '/', '--out', 'x'];
+  assert.equal(parseArgs([...base, '--wait', '8000']).wait, 8000);
+  assert.throws(() => parseArgs([...base, '--wait', '60000']), /--wait must be milliseconds/);
+});

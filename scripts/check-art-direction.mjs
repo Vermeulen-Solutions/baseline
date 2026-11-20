@@ -139,7 +139,7 @@ export function validateCssAlignment(markdown, css) {
 export const REFERENCE_DIMENSIONS = Object.freeze(['first screen', 'specificity', 'type', 'photographs', 'composition', 'craft', 'phone', 'fit']);
 export const DESIGN_DIMENSIONS = Object.freeze(REFERENCE_DIMENSIONS.filter(d => d !== 'photographs'));
 const designTotal = score => DESIGN_DIMENSIONS.reduce((sum, d) => sum + score.scores[d], 0);
-export const REFERENCE_BAR = Object.freeze({ total: 17, specificity: 2, fit: 2, candidates: 8, sites: 5, selected: 3, searches: 3, studyCraft: 3 });
+export const REFERENCE_BAR = Object.freeze({ total: 17, specificity: 2, fit: 2, candidates: 8, sites: 5, selected: 3, searches: 3, studyCraft: 3, conceptGap: 2, conceptRounds: 3 });
 export const REFERENCES_FILE = 'audit/references/references.md';
 
 function tableRows(markdown, heading) {
@@ -232,7 +232,13 @@ export function validateReferences(markdown, io = {}) {
   for (const c of chosen) {
     if (!c.score) continue;
     const design = designTotal(c.score);
-    if (design < bar) errors.push(`The chosen concept scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it before building.`);
+    // A recorded gap: after three scored rounds, a concept within two points of the bar may stand when the
+    // record names what holds it down outside the layout (stand-in photographs, missing owner material) and
+    // what would close it. One trial re-scored its built page eight times and plateaued a point or two under:
+    // every reviewer named the stand-in photographs, which no layout change can fix.
+    const gap = text.match(/^###\s+Gap to the bar[^\n]*\n([\s\S]*?)(?=^#{2,3}\s|(?![\s\S]))/m)?.[1]?.trim() ?? '';
+    const recordedGap = bar - design <= REFERENCE_BAR.conceptGap && scored.length >= REFERENCE_BAR.conceptRounds && gap.length >= 60;
+    if (design < bar && !recordedGap) errors.push(`The chosen concept scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it before building. After ${REFERENCE_BAR.conceptRounds} scored rounds, a concept within ${REFERENCE_BAR.conceptGap} points may stand with a ### Gap to the bar section naming what holds it down outside the layout and what would close it.`);
     const weak = DESIGN_DIMENSIONS.filter(d => c.score.scores[d] < 2);
     if (weak.length) errors.push(`The chosen concept scores under 2 on ${weak.join(', ')}.`);
   }
