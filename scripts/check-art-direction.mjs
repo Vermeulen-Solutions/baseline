@@ -228,7 +228,7 @@ export function validateReferences(markdown, io = {}) {
   const bar = median(selected.filter(c => c.score && c.kind !== 'owner').map(c => designTotal(c.score)));
   const concepts = tableRows(text, 'Concepts against the bar');
   if (!concepts) return [...errors, 'Missing the ### Concepts against the bar table: score each concept on the same card.'];
-  const scored = concepts.map(([name, ...rest]) => ({ name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict: (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').toLowerCase().split(':')[0].trim() })); // "chosen: <reason>" reads as chosen
+  const scored = concepts.map(([name, ...rest]) => ({ name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict: (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').toLowerCase().split(/\s*[:—–]\s*|\s+-\s+/)[0].trim() })); // "chosen: <reason>" or "chosen — <reason>" reads as chosen
   const chosen = scored.filter(c => c.verdict === 'chosen');
   if (scored.length < 2) errors.push('Score at least two concepts against the bar.');
   if (chosen.length !== 1) errors.push('Mark exactly one concept "chosen" (the others "not chosen").');
@@ -241,9 +241,15 @@ export function validateReferences(markdown, io = {}) {
     // every reviewer named the stand-in photographs, which no layout change can fix.
     const gap = text.match(/^###\s+Gap to the bar[^\n]*\n([\s\S]*?)(?=^#{2,3}\s|(?![\s\S]))/m)?.[1]?.trim() ?? '';
     const recordedGap = bar - design <= REFERENCE_BAR.conceptGap && scored.length >= REFERENCE_BAR.conceptRounds && gap.length >= 60;
-    if (design < bar && !recordedGap) errors.push(`The chosen concept scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it, in a concept or in the built page scored with the Stage 5 comparison. After ${REFERENCE_BAR.conceptRounds} scored rounds, a concept within ${REFERENCE_BAR.conceptGap} points may stand with a ### Gap to the bar section naming what holds it down outside the layout and what would close it.`);
+    // The bar may be reached in the built page (Stage 5), so before Stage 5 a concept under it is reported,
+    // not failed (io.deferBar); the Stage 5 gate (--require-comparison) enforces it. Otherwise the gate the
+    // build starts from stays red for the whole build, which reads like a stop.
+    const barIssues = [];
+    if (design < bar && !recordedGap) barIssues.push(`The chosen concept scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it, in a concept or in the built page scored with the Stage 5 comparison. After ${REFERENCE_BAR.conceptRounds} scored rounds, a concept within ${REFERENCE_BAR.conceptGap} points may stand with a ### Gap to the bar section naming what holds it down outside the layout and what would close it.`);
     const weak = DESIGN_DIMENSIONS.filter(d => c.score.scores[d] < 2);
-    if (weak.length) errors.push(`The chosen concept scores under 2 on ${weak.join(', ')}.`);
+    if (weak.length) barIssues.push(`The chosen concept scores under 2 on ${weak.join(', ')}.`);
+    if (io.deferBar && io.notes) io.notes.push(...barIssues);
+    else errors.push(...barIssues);
   }
   return errors;
 }
@@ -388,7 +394,12 @@ function main() {
     if (!existsSync(REFERENCES_FILE)) errors.push(`Reference research is missing: write ${REFERENCES_FILE} (site-art-direction/references/reference-research.md).`);
     else {
       const capturedImages = dir => existsSync(dir) ? readdirSync(dir, { recursive: true }).filter(name => /\.(png|jpe?g|webp)$/i.test(String(name))).length : 0;
-      errors.push(...validateReferences(readFileSync(REFERENCES_FILE, 'utf8'), { capturedImages }).map(error => `${REFERENCES_FILE}: ${error}`));
+      const text = readFileSync(REFERENCES_FILE, 'utf8');
+      // Before Stage 5 (no --require-comparison and no comparison table yet) the concept bar is reported, not failed.
+      const deferBar = !args.includes('--require-comparison') && !/^###\s+Built against the references\s*$/m.test(text);
+      const notes = [];
+      errors.push(...validateReferences(text, { capturedImages, deferBar, notes }).map(error => `${REFERENCES_FILE}: ${error}`));
+      for (const note of notes) console.log(`Concept bar, enforced at Stage 5 (--require-comparison): ${note}`);
     }
     // The same new direction builds its world and writes its decisions down.
     errors.push(...validateWorld(agentsMd).map(error => `AGENTS.md: ${error}`));
