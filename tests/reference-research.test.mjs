@@ -140,3 +140,11 @@ test('before Stage 5 the concept bar is reported, not failed; Stage 5 enforces i
 test('a concept verdict may give its reason after a dash', () => {
   assert.deepEqual(validateReferences(file().replace('| 18 | chosen |', '| 18 | chosen — improved in round 2 |'), images(2)), []);
 });
+
+test('a verdict reason may sit in brackets, and a second round table may repeat the header', () => {
+  assert.deepEqual(validateReferences(file().replace('| 18 | chosen |', '| 18 | chosen (16 of 18 on the design lines) |'), images(2)), []);
+  const exists = { exists: (f) => f === 'audit/compare/home-1440.jpg' };
+  const twoTables = comparison([1, 2, 3, 4, 5].map((n) => addition('/', 1, n)))
+    + '\nRound 2 below.\n\n| page | round | sheet | the references do | we built |\n|---|---|---|---|---|\n' + addition('/', 2, 6) + '\n';
+  assert.deepEqual(validateComparison(twoTables, exists), []);
+});
