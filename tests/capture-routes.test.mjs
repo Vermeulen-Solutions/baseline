@@ -14,6 +14,8 @@ test('capture:routes arguments undo Git Bash path conversion and reject incomple
   const options = parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/,/contact', '--out', 'x', '--frames', '0,900']);
   assert.deepEqual(options.widths, [390, 768, 1440]);
   assert.deepEqual(options.frames, [0, 900]);
+  assert.equal(options.motion, undefined, 'captures use reduced motion unless asked');
+  assert.equal(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--out', 'x', '--motion']).motion, true, '--motion captures with full motion and a load frame');
   assert.equal(options.repeat, 2);
   assert.deepEqual(parseArgs(['--compare', 'a', 'b']).compare, ['a', 'b']);
 });

@@ -54,11 +54,14 @@ Cards remain right for things that really are cards (a member card, a ticket). R
 
 The signature moment is what a visitor describes after closing the tab. Decide one per page archetype and make it the largest and most different thing on the page. The other sections are not quiet for it: each is still one of the world's objects, fully made, at a smaller scale.
 
-A signature moment passes **all three** tests:
+A signature moment passes **all four** tests:
 
 1. **Only this subject.** It could not appear unchanged on a competitor's site.
 2. **Different in scale or kind from everything around it.** At least twice the size of the page's other elements in one dimension (the full width of the screen, most of the first screen, a line set several times the heading size), or a different medium (the page moving as one object between pages, a map or timeline drawn to scale, a before/after comparison).
 3. **Recognisable as a thumbnail.** Shrink a screenshot of the page to a quarter of its width: the moment is still the first thing you see.
+4. **For the page's main visitor.** It answers the question the visitor this page mostly serves arrives with (the brief's audience for the archetype), and its size matches how many of them need it. A tool for people already inside (a members' timetable, a results table, a rota) is not a home-page moment when the home page is visited mostly by newcomers: give it its own page, link it, and let the home page carry a small piece of it at most. On an item page (one team, one product, one service) the moment shows that item's own data; the overview of every item belongs on the overview page.
+
+A sports club's full-week training board passed the first three tests on its home page, and the owner removed it after launch: the home page is visited mostly by prospective members, and twenty rows of every team's sessions answered a member's question while pushing the ways to join down the page. The same data served both audiences as tonight's sessions on a small sheet in the hero (linking to the schedules page) and each team page opening with its own evenings.
 
 These are **never** signature moments, however they are styled: a heading beside a photograph (the split hero), a row of three steps or cards, a grid of equal thumbnails, a ruled list on its own, a closing call to action, a photograph in the same frame and size as the others, a large heading that is the same size as every other heading on the page.
 
@@ -122,7 +125,7 @@ Add two lines to the Art Direction Record, after the required fields:
 
 ```markdown
 - **Governing Idea:** [One sentence: what the site is as an object, the three candidates considered, and the three structural choices it decides]
-- **Signature Moments:** [Per page archetype: the one moment, the capability that delivers it, and how it passes the three tests]
+- **Signature Moments:** [Per page archetype: the one moment, the capability that delivers it, and how it passes the four tests]
 ```
 
 `check:art-direction` accepts the record without them, but the site's direction is not complete until they are written. The `World` and `Decisions` blocks from [world building](world-building.md#record-it) follow them; those two are checked with the reference research.

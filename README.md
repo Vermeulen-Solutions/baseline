@@ -265,6 +265,7 @@ Keep working through your assistant:
 | Review the result | “Check the changed pages, run the applicable verification, and report anything still pending.” |
 | Find a recipe | “Find the best prompt in docs/prompt-library.md to [what you want to do] and adapt it for this site.” |
 | Bring an older site up to date | Use the [existing-site update prompt](docs/prompt-library.md#bringing-an-existing-site-up-to-date) to review and integrate dependencies, skills and Baseline features. |
+| Redesign an existing site | Use the [redesign prompt](docs/prompt-library.md#significant-redesign-of-an-existing-site); to see the result before deciding, [rehearse it on a copy, then take it live](docs/prompt-library.md#rehearse-the-redesign-on-a-copy-then-take-it-live). |
 | Take a new Baseline release | Use the [standards release prompt](docs/prompt-library.md#taking-a-standards-release-on-a-site); [standards releases](docs/standards-releases.md) explains what a release pins. |
 
 Your assistant can also open the component styleguide and guide you to the content

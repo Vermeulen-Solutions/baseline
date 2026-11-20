@@ -186,10 +186,12 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
         .fade { opacity: 0; transition: opacity 2s }
         .icons a { display: inline-block; width: 16px; height: 16px; background: #333 }
         .late { height: 300px; background: #ccc }
+        .enter { height: 200px; background: #ddd; animation: tilt linear both; animation-timeline: view() }
+        @keyframes tilt { from { rotate: -2deg; opacity: .4 } }
       </style>
       <script type="application/ld+json">{ not json }</script>
       </head><body><header>Sticky header</header><a class="under" href="/hidden">Under the header</a>
-      <main style="padding-top: 140px"><h1 class="fade">Hidden heading</h1><p>We build seamless websites.</p>
+      <main style="padding-top: 140px"><div class="enter"></div><h1 class="fade">Hidden heading</h1><p>We build seamless websites.</p>
       <p>[[placeholder: opening hours]]</p><h1>A second heading</h1><button onclick="go()">Go</button>
       <a href="javascript:void(0)">Nowhere</a><form action="#"><button>Send</button></form><a href="mailto:hello@example.com">Mail</a>
       <div class="icons"><a href="/1" aria-label="One"></a><a href="/2" aria-label="Two"></a></div>
@@ -216,7 +218,7 @@ if (process.env.BASELINE_UI_BROWSER_TESTS === '1') {
       const { issues, measurements } = await checkQuality(options);
       const on = route => [...new Set(issues.filter(i => i.route === route).map(i => i.kind))].sort();
       assert.deepEqual(on('/'), [], 'the clean page passes');
-      assert.deepEqual(on('/broken'), ['axe', 'copy-rule', 'copy-tell', 'csp-violation', 'default-identity', 'description', 'first-viewport-hidden', 'focus-obscured', 'form-no-destination', 'inline-css-weight', 'inline-handler', 'island', 'javascript-url', 'json-ld', 'layout-shift', 'multiple-h1', 'placeholder', 'share-image', 'target-size']);
+      assert.deepEqual(on('/broken'), ['axe', 'copy-rule', 'copy-tell', 'csp-violation', 'default-identity', 'description', 'first-viewport-hidden', 'first-viewport-scroll-motion', 'focus-obscured', 'form-no-destination', 'inline-css-weight', 'inline-handler', 'island', 'javascript-url', 'json-ld', 'layout-shift', 'multiple-h1', 'placeholder', 'share-image', 'target-size']);
       assert.ok(measurements.find(m => m.route === '/').jsonLdTypes.includes('Organization'));
       assert.ok(issues.some(i => i.kind === 'csp-violation' && /script-src-elem inline/.test(i.value) && /report-only/.test(i.detail)), 'report-only violations are reported');
       assert.ok(issues.some(i => i.kind === 'focus-obscured' && /Under the header/.test(i.value) && /header/.test(i.detail)));

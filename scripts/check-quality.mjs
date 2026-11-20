@@ -20,6 +20,11 @@
 //   (opacity under 0.5 on itself or an ancestor) or clipped shut straight after load. It waits for a
 //   script or transition before it can paint, which delays the largest paint and can leave a blank
 //   first screen;
+// - first-viewport-scroll-motion: an element on the first screen whose scroll-driven entrance
+//   (`animation-timeline: view()` changing opacity, rotation, scale, blur or clip) is part-way through
+//   straight after load. Its progress comes from where it sits, so the page opens on a half-faded or
+//   half-tilted object that only settles when the visitor scrolls; full-page captures, which finish
+//   every animation, never show it;
 // - island: an <astro-island> (hydrated framework component) on a route the budget does not allow;
 // - json-ld: a JSON-LD block that does not parse, a route missing the schema.org types its budget
 //   lists under `jsonLd`, an @id defined twice or referenced but never defined on the page, or a
@@ -382,6 +387,32 @@ function firstViewportHidden() {
   return out;
 }
 
+// Scroll-driven entrances caught mid-way at load. A view() timeline's progress follows the
+// element's position, so one that already sits on the first screen opens part-way through its
+// keyframes. Only entrance-like changes count: a parallax that only translates is meant to move.
+function firstViewportScrollMotion() {
+  if (typeof ViewTimeline === 'undefined') return [];
+  const sig = el => el.tagName.toLowerCase() + (el.id ? '#' + el.id : el.classList.length ? '.' + [...el.classList].slice(0, 2).join('.') : '');
+  const out = [];
+  const seen = new Set();
+  for (const animation of document.getAnimations()) {
+    if (!(animation.timeline instanceof ViewTimeline)) continue;
+    const el = animation.effect?.target;
+    if (!el || seen.has(el) || el.closest('[data-quality-ignore], [aria-hidden="true"], [inert]')) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2 || r.bottom <= 0 || r.top >= innerHeight || r.right <= 0 || r.left >= innerWidth) continue;
+    const progress = animation.effect.getComputedTiming().progress;
+    if (progress === null || progress <= 0.02 || progress >= 0.98) continue;
+    const frames = animation.effect.getKeyframes();
+    const changes = ['opacity', 'rotate', 'scale', 'filter', 'clipPath'].filter(property => frames.some(frame => property in frame));
+    if (frames.some(frame => /rotate|scale|skew|matrix/.test(String(frame.transform ?? '')))) changes.push('transform');
+    if (!changes.length) continue;
+    seen.add(el);
+    out.push({ sig: sig(el), cause: `${animation.animationName || 'animation'} ${Math.round(progress * 100)}% through at load (${changes.join(', ')})` });
+  }
+  return out;
+}
+
 // The text a visitor reads: visible text nodes outside code, quotations, hidden elements and
 // [data-copy-ignore] (someone else's words, such as a quoted client), one line per element.
 function visibleCopy() {
@@ -579,6 +610,7 @@ export async function measureRoute(browser, base, route, { tabs = 40, axe = null
     catch (error) { issues.push({ kind: 'load-failed', route, width: viewport.width, value: String(error.message).split('\n')[0] }); await context.close(); continue; }
     if (!documentResponse || documentResponse.status() >= 400) { issues.push({ kind: 'http', route, width: viewport.width, value: documentResponse?.status() ?? 'no response' }); await context.close(); continue; }
     for (const hidden of await page.evaluate(firstViewportHidden)) issues.push({ kind: 'first-viewport-hidden', route, width: viewport.width, value: hidden.sig, detail: hidden.cause });
+    for (const moving of await page.evaluate(firstViewportScrollMotion)) issues.push({ kind: 'first-viewport-scroll-motion', route, width: viewport.width, value: moving.sig, detail: moving.cause });
     await settle(page);
     if (viewport === PHONE) {
       const sizes = await Promise.all(responses.map(async r => {
