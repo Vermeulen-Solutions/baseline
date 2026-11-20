@@ -179,6 +179,10 @@
     "tier": "unit",
     "reason": "Token mathematics, font, proxy and specimen contracts"
   },
+  "visual-references.test.mjs": {
+    "tier": "unit",
+    "reason": "Reference image hashes against the visual manifest; no browser captures"
+  },
   "visual-policy.test.mjs": {
     "tier": "rehearsal",
     "reason": "Wrapper processes and graceful cancellation; no browser captures"
