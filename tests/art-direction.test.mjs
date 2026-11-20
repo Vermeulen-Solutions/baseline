@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { validateRecord } from '../scripts/check-art-direction.mjs';
+import { validateRecord, validateRecordDecided } from '../scripts/check-art-direction.mjs';
 
 // Portable: depends only on scripts/check-art-direction.mjs and synthetic records, so
 // generated and older adopting sites can run it (the root design-workflow suite cannot).
@@ -53,4 +53,12 @@ test('a second record body pasted into a sentence is rejected, not silently igno
   assert.ok(errors.some(e => /pasted into a sentence/.test(e)), errors.join(' | '));
   // Mentioning the heading in prose, as the shipped AGENTS.md does, stays valid.
   assert.deepEqual(validateRecord(`Save a complete \`## Art Direction Record\` with every field.\n\n${record}`), []);
+});
+
+test('a record still marked as lane defaults is not decided; the marker elsewhere does not count', () => {
+  const marked = record.replace('## Art Direction Record\n', '## Art Direction Record\n\n<!-- art-direction-record: lane defaults from design:tokens. Replace every line with this site\'s decisions, then delete this comment. -->\n\n');
+  assert.deepEqual(validateRecord(marked), []);
+  assert.equal(validateRecordDecided(marked).length, 1);
+  assert.deepEqual(validateRecordDecided(record), []);
+  assert.deepEqual(validateRecordDecided(`${record}\n## Notes\n<!-- art-direction-record: lane defaults -->\n`), []);
 });

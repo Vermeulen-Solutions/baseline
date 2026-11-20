@@ -27,7 +27,7 @@ import {
   declaredContrastPairs,
   pruneStarterExceptions,
 } from '../scripts/design-system.mjs';
-import { validateRecord, validateCssAlignment } from '../scripts/check-art-direction.mjs';
+import { validateRecord, validateCssAlignment, validateRecordDecided } from '../scripts/check-art-direction.mjs';
 
 const GLOBAL_CSS_PATH = 'src/styles/global.css';
 const FIXTURES_PATH = 'src/dev/styleguide-fixtures.ts';
@@ -362,4 +362,26 @@ test('sites can declare contrast pairs for atmospheric grounds; literal stops an
   assert.equal(site.find(pair => pair.id === 'site:muted-on-#333333').status, 'fail');
   assert.equal(site.find(pair => pair.id === 'site:text-on-surface').minimum, 7);
   assert.ok(audited.errors.some(error => error.includes('site:muted-on-#333333')), 'a failing declared pair fails the audit');
+});
+
+test('a record of lane defaults is marked and fails the --require-* gates until the site writes its own', async () => {
+  const { spawnSync } = await import('node:child_process');
+  const generated = formatArtDirectionRecord('editorial-paper');
+  assert.match(generated, /<!-- art-direction-record: lane defaults/);
+  assert.deepEqual(validateRecord(`# Site\n\n${generated}\n`), [], 'still structurally valid');
+  assert.match(validateRecordDecided(`# Site\n\n${generated}\n`)[0] ?? '', /lane's defaults/);
+  const own = formatArtDirectionRecord('editorial-paper', { metaphor: 'The register of marked trees: tags, stencils and end grain' });
+  assert.doesNotMatch(own, /lane defaults/);
+  assert.deepEqual(validateRecordDecided(own), []);
+  const dir = mkdtempSync(join(tmpdir(), 'lane-defaults-'));
+  const gate = (...args) => spawnSync(process.execPath, [join(process.cwd(), 'scripts/check-art-direction.mjs'), ...args], { cwd: dir, encoding: 'utf8' });
+  try {
+    writeFileSync(join(dir, 'AGENTS.md'), `# Site\n\n${generated}\n`);
+    const failed = gate('--require-record');
+    assert.equal(failed.status, 1, failed.stdout);
+    assert.match(failed.stderr, /still holds the lane's defaults/);
+    writeFileSync(join(dir, 'AGENTS.md'), `# Site\n\n${own}\n`);
+    const passed = gate('--require-record');
+    assert.equal(passed.status, 0, passed.stderr);
+  } finally { rmSync(dir, { recursive: true, force: true }); }
 });

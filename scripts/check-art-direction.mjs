@@ -62,6 +62,20 @@ export function validateRecord(markdown) {
   return errors;
 }
 
+/**
+ * A record that still holds a lane's defaults. `design:tokens --init-client` (and --write-record) write the
+ * lane's generic values with a marker comment (design-system.mjs LANE_DEFAULTS_MARKER); the record is only
+ * structurally valid until the site's own decisions replace them. Checked by every --require-* run.
+ */
+export function validateRecordDecided(markdown) {
+  const lines = String(markdown ?? '').split(/\r?\n/);
+  const start = lines.findIndex(line => /^## Art Direction Record\s*$/.test(line));
+  if (start < 0) return [];
+  const end = lines.findIndex((line, index) => index > start && /^## /.test(line));
+  const marked = lines.slice(start + 1, end < 0 ? undefined : end).some(line => /<!--\s*art-direction-record:\s*lane defaults\b/i.test(line));
+  return marked ? ['The Art Direction Record still holds the lane\'s defaults written by design:tokens (the marker comment under its heading). Replace every line with this site\'s decisions (site-art-direction/references/world-building.md), then delete the comment.'] : [];
+}
+
 // The site's world and its decisions (site-art-direction/references/world-building.md), required
 // with the reference research for a new direction.
 export const WORLD_PARTS = Object.freeze(['Source object', 'Inventory', 'Objects', 'Surfaces', 'Type', 'Motion', 'Photographs', 'Feature']);
@@ -394,6 +408,7 @@ function main() {
   }
   const css = existsSync('src/styles/global.css') ? readFileSync('src/styles/global.css', 'utf8') : null;
   const errors = [...recordErrors, ...validateCssAlignment(agentsMd, css)];
+  if (args.some(arg => arg.startsWith('--require-'))) errors.push(...validateRecordDecided(agentsMd));
   // A new direction (Stage 4) needs judged references; a record that names the file keeps it valid.
   const namesReferences = /^\s*- \*\*References:\*\*[ \t]*\S/m.test(agentsMd);
   if (args.includes('--require-references') || namesReferences) {

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { creditLine, licenceAllowed, needsVisibleCredit, parseArgs, setsInCredits } from '../scripts/design-icons.mjs';
+import { creditLine, KIND_LABEL, licenceAllowed, needsVisibleCredit, orderSets, parseArgs, setKind, setsInCredits } from '../scripts/design-icons.mjs';
 
 test('arguments: search takes a word, get takes set:name ids and a folder', () => {
   assert.equal(parseArgs(['search', 'owl']).subject, 'owl');
@@ -27,4 +27,20 @@ test('credit lines name the set, the author and the licence; the sets in a credi
 
 test('--sets keeps a search to the set a site has chosen', () => {
   assert.deepEqual(parseArgs(['search', 'owl', '--sets', 'game-icons, tabler']).sets, ['game-icons', 'tabler']);
+});
+
+test('search lists figurative sets first and marks UI and emoji sets', () => {
+  assert.equal(setKind('Thematic'), 'figurative');
+  assert.equal(setKind('UI 24px'), 'ui');
+  assert.equal(setKind('UI Multicolor'), 'ui');
+  assert.equal(setKind('Material'), 'ui');
+  assert.equal(setKind('Emoji'), 'emoji');
+  assert.equal(setKind('Holiday / Seasonal'), 'other');
+  assert.equal(setKind(undefined), 'other');
+  assert.match(KIND_LABEL.ui, /interface/);
+  // The order the catalogue returned for "owl": UI sets, emoji, then the one figurative set at the end.
+  const row = (prefix, category, spdx = 'MIT') => ({ prefix, names: ['owl'], info: { category, license: { spdx } } });
+  const found = [row('material-symbols', 'Material', 'Apache-2.0'), row('iconoven', 'UI 24px'), row('openmoji', 'Emoji', 'CC-BY-SA-4.0'), row('noto', 'Emoji', 'Apache-2.0'), row('arcticons', 'High Detail', 'CC-BY-SA-4.0'), row('withicons-lunar', 'Holiday / Seasonal'), row('game-icons', 'Thematic', 'CC-BY-3.0')];
+  assert.deepEqual(orderSets(found).map((r) => r.prefix), ['game-icons', 'withicons-lunar', 'arcticons', 'material-symbols', 'iconoven', 'noto', 'openmoji']);
+  assert.equal(parseArgs(['search', 'owl']).limit, 200);
 });

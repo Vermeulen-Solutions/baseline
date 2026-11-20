@@ -1179,15 +1179,23 @@ export function upsertCalibrationRecord(targetPath, css, cssPath = 'src/styles/g
   return resolved;
 }
 
+/** Written into a record that holds only a lane's defaults; check-art-direction.mjs matches the same text. */
+export const LANE_DEFAULTS_MARKER = '<!-- art-direction-record: lane defaults from design:tokens. Replace every line with this site\'s decisions, then delete this comment. -->';
+
 /**
  * Formats a structurally valid `## Art Direction Record` Markdown section for `AGENTS.md`.
  */
 export function formatArtDirectionRecord(laneId = 'neutral', custom = {}) {
   const lane = laneOf(laneId) ?? AESTHETIC_LANES.neutral;
   const rec = { ...lane.record, ...custom };
+  // The lane's own values are the generic version world building warns against ("archival paper"); a trial's
+  // gate passed on them before any direction existed. Marked, check:art-direction --require-* fails until the
+  // record is the site's own and the marker is gone.
+  const defaults = Object.keys(custom).length === 0;
   return [
     '## Art Direction Record',
     '',
+    ...(defaults ? [LANE_DEFAULTS_MARKER, ''] : []),
     `- **Aesthetic Lane:** ${rec.lane}`,
     `- **Narrative Metaphor:** ${rec.metaphor}`,
     `- **Typography Pairing:** ${rec.typography}`,
@@ -1804,7 +1812,7 @@ function main() {
     const recordAt = existing.search(/^## Art Direction Record\s*$/m);
     const recordText = recordAt < 0 ? '' : existing.slice(recordAt).split(/\n(?=## )/)[0];
     if (!writeRecord && /^\s*- \*\*World:\*\*/m.test(recordText)) announce('Kept the site\'s ## Art Direction Record in ' + target + ' (it records a World); --write-record replaces it.');
-    else announce('Wrote ## Art Direction Record to ' + upsertArtDirectionRecord(target,selectedLaneId));
+    else announce('Wrote ## Art Direction Record to ' + upsertArtDirectionRecord(target,selectedLaneId) + ' with the lane\'s defaults, marked as such: replace them with this site\'s direction (site-art-direction/references/world-building.md); check:art-direction --require-record fails until the marker is gone.');
   }
   if(initClient) {
     const pruned=pruneStarterExceptions('audit/design-gate-exceptions.json');
