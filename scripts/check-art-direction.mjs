@@ -190,7 +190,8 @@ export function validateReferences(markdown, io = {}) {
   for (const cells of candidates) {
     const [id, source, kind, ...rest] = cells;
     const label = `Candidate ${id || '?'}`;
-    if (!id || !source || !/^(https?:\/\/\S+|[\w./-]+)$/.test(source)) { errors.push(`${label}: needs an id and a URL or path.`); continue; }
+    // A URL may carry a note after it (the studio a case study comes from), as audit:composition reads it.
+    if (!id || !source || !/^(https?:\/\/\S+(\s.*)?|[\w./-]+)$/.test(source)) { errors.push(`${label}: needs an id and a URL or path.`); continue; }
     if (!/^(site|study|prompt|template|system|owner)$/.test(kind)) errors.push(`${label}: kind must be site, study, prompt, template, system or owner.`);
     const score = scoreRow(rest, label, errors);
     const verdict = rest[REFERENCE_DIMENSIONS.length + 1] ?? '';
@@ -204,10 +205,12 @@ export function validateReferences(markdown, io = {}) {
   const selected = parsed.filter(c => c.verdict === 'selected');
   if (selected.length < REFERENCE_BAR.selected) errors.push(`Selected ${selected.length}; select at least ${REFERENCE_BAR.selected} above the bar, searching again if too few pass.`);
   if (selected.filter(realSite).length < 2) errors.push('At least two selected references must be real sites.');
-  const studies = selected.filter(c => c.kind === 'study');
-  if (!studies.length) errors.push('Select at least one studio case study (kind study): a site a small independent studio built for a small client and shows as a case study. It sets the level the design aims at.');
-  // The case study is there to show a made world; a quiet, well-set site does not (a trial's only study was one face in four sizes).
-  else if (!studies.some(c => c.score?.scores.craft >= REFERENCE_BAR.studyCraft)) errors.push(`The selected case studies score craft ${studies.map(c => `${c.id} ${c.score?.scores.craft ?? '?'}`).join(', ')}; at least one must score ${REFERENCE_BAR.studyCraft}, a made world (surfaces, drawn objects, type treatments and motion), or the level it sets is a quiet site. Search the work pages of studios that build illustrated, layered sites for small clients.`);
+  // One selected real site must show a made world, or the level the design aims at is a quiet site (a
+  // trial's only case study was one face in four sizes). Proving that a site is a studio's case study cost
+  // two trials half their research time, so any real site at craft 3 sets the level; studio case studies
+  // (kind study) are where one is usually found.
+  const madeWorld = selected.filter(realSite).filter(c => c.score?.scores.craft >= REFERENCE_BAR.studyCraft);
+  if (!madeWorld.length) errors.push(`Select at least one real site that scores ${REFERENCE_BAR.studyCraft} on craft, a made world (surfaces, drawn objects, type treatments and motion): it sets the level the design aims at. The selected sites score craft ${selected.filter(realSite).map(c => `${c.id} ${c.score?.scores.craft ?? '?'}`).join(', ') || 'nothing'}. Studios that build illustrated, layered sites for small clients show them on their work pages (kind study).`);
   for (const c of selected) {
     if (!c.score) continue;
     if (c.score.total < REFERENCE_BAR.total) errors.push(`Candidate ${c.id} is selected with ${c.score.total}/24; the bar is ${REFERENCE_BAR.total}.`);
@@ -238,7 +241,7 @@ export function validateReferences(markdown, io = {}) {
     // every reviewer named the stand-in photographs, which no layout change can fix.
     const gap = text.match(/^###\s+Gap to the bar[^\n]*\n([\s\S]*?)(?=^#{2,3}\s|(?![\s\S]))/m)?.[1]?.trim() ?? '';
     const recordedGap = bar - design <= REFERENCE_BAR.conceptGap && scored.length >= REFERENCE_BAR.conceptRounds && gap.length >= 60;
-    if (design < bar && !recordedGap) errors.push(`The chosen concept scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it before building. After ${REFERENCE_BAR.conceptRounds} scored rounds, a concept within ${REFERENCE_BAR.conceptGap} points may stand with a ### Gap to the bar section naming what holds it down outside the layout and what would close it.`);
+    if (design < bar && !recordedGap) errors.push(`The chosen concept scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it, in a concept or in the built page scored with the Stage 5 comparison. After ${REFERENCE_BAR.conceptRounds} scored rounds, a concept within ${REFERENCE_BAR.conceptGap} points may stand with a ### Gap to the bar section naming what holds it down outside the layout and what would close it.`);
     const weak = DESIGN_DIMENSIONS.filter(d => c.score.scores[d] < 2);
     if (weak.length) errors.push(`The chosen concept scores under 2 on ${weak.join(', ')}.`);
   }
@@ -402,7 +405,8 @@ function main() {
   }
   else {
     console.log('Art direction record is structurally valid.');
-    console.log('👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.');
+    if (args.includes('--require-comparison')) console.log('👉 Next Step (Stage 5, then 6): the Impeccable craft critique of each representative page, then the full route set (new-site-workflow/references/impeccable-passes.md).');
+    else console.log('👉 Next Step (Stage 4.5): Audit tokens with npm run design:tokens, calibrate building blocks on /_styleguide, and record findings in audit/component-calibration.md before implementing pages.');
   }
 }
 

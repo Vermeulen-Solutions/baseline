@@ -84,14 +84,20 @@ test('the concept bar leaves the photographs line out: the owner\'s camera does 
   assert.match(validateReferences(file({ concepts: [`| A | ${weakType.join(' | ')} | 17 | chosen |`, other] }), images(2)).join('\n'), /under 2 on type/);
 });
 
-test('at least one selected reference is a studio case study', () => {
+test('a real site at craft 3 sets the level, whether or not it is a studio case study', () => {
+  // a scores craft 3 as a plain site; no case study is needed.
   const noStudy = file().replace('| c | https://studio.test/work/market-bakery | study |', '| c | https://maker-seven.test | site |');
-  assert.match(validateReferences(noStudy, images(2)).join('\n'), /at least one studio case study \(kind study\)/);
+  assert.deepEqual(validateReferences(noStudy, images(2)), []);
+  // A source may carry a note after its URL.
+  assert.deepEqual(validateReferences(file().replace('| c | https://studio.test/work/market-bakery |', '| c | https://studio.test/work/market-bakery (case study by a small studio) |'), images(2)), []);
 });
 
-test('the case study shows a made world: craft 3, not a quiet well-set site', () => {
-  const quiet = file().replace(/\| c \| https:\/\/studio\.test\/work\/market-bakery \| study \|[^\n]+/, row('c', 'https://studio.test/work/market-bakery', 'study', good, 'selected'));
-  assert.match(validateReferences(quiet, images(2)).join('\n'), new RegExp(`case studies score craft c 2; at least one must score ${REFERENCE_BAR.studyCraft}`));
+test('one selected real site shows a made world: craft 3, not only quiet well-set sites', () => {
+  const quietA = [3, 3, 2, 3, 3, 2, 2, 3]; // 21, craft 2
+  const quiet = file()
+    .replace(/\| a \| https:\/\/maker-one\.test \| site \|[^\n]+/, row('a', 'https://maker-one.test', 'site', quietA, 'selected'))
+    .replace(/\| c \| https:\/\/studio\.test\/work\/market-bakery \| study \|[^\n]+/, row('c', 'https://studio.test/work/market-bakery', 'study', good, 'selected'));
+  assert.match(validateReferences(quiet, images(2)).join('\n'), new RegExp(`at least one real site that scores ${REFERENCE_BAR.studyCraft} on craft`));
 });
 
 const comparison = (rows) => `### Built against the references\n| page | round | sheet | the references do | we built |\n|---|---|---|---|---|\n${rows.join('\n')}\n`;
