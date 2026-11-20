@@ -98,11 +98,14 @@
 	}
 
 	/* A filtered img paints like a positioned element, so both inks are raised above it. */
+	/* --tone-inset matches the inks to a frame with padding or a border (a mount, a plate); a round or
+	   masked frame passes its shape on through border-radius. */
 	:where([data-tone="duotone"])::before,
 	:where([data-tone="duotone"])::after {
 		content: "";
 		position: absolute;
-		inset: 0;
+		inset: var(--tone-inset, 0);
+		border-radius: inherit;
 		z-index: var(--z-raised);
 		pointer-events: none;
 	}
