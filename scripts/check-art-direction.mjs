@@ -228,7 +228,7 @@ export function validateReferences(markdown, io = {}) {
   const bar = median(selected.filter(c => c.score && c.kind !== 'owner').map(c => designTotal(c.score)));
   const concepts = tableRows(text, 'Concepts against the bar');
   if (!concepts) return [...errors, 'Missing the ### Concepts against the bar table: score each concept on the same card.'];
-  const scored = concepts.map(([name, ...rest]) => ({ name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict: (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').toLowerCase() }));
+  const scored = concepts.map(([name, ...rest]) => ({ name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict: (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').toLowerCase().split(':')[0].trim() })); // "chosen: <reason>" reads as chosen
   const chosen = scored.filter(c => c.verdict === 'chosen');
   if (scored.length < 2) errors.push('Score at least two concepts against the bar.');
   if (chosen.length !== 1) errors.push('Mark exactly one concept "chosen" (the others "not chosen").');
@@ -301,7 +301,7 @@ export function formatRecordDiagnostics(markdown, errors) {
     '## Art Direction Record',
     '- **Aesthetic Lane:** <reference lane, or Custom / existing brand — rationale>',
     '- **Narrative Metaphor:** <concrete visual narrative>',
-    '- **Typography Pairing:** Display: <family>, Body: <family>',
+    '- **Typography Pairing:** Display: <family>, Body: <family>, Utility: <family> (the third voice, when the World has one)',
     '- **Token Physics:**',
     '  - Canvas: <concrete surface>',
     '  - Action/Accent: <concrete action color>',

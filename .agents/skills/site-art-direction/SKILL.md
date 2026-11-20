@@ -144,7 +144,7 @@ Use an adopted `PRODUCT.md` as brief evidence when present, and identify the sel
 ## Art Direction Record
 - **Aesthetic Lane:** [Technical Systems | Product-Led Minimalism | Editorial Paper | Luminous Futurism | Custom / existing brand — rationale]
 - **Narrative Metaphor:** [Physical/environmental anchor; concrete application and boundaries]
-- **Typography Pairing:** Display: [Font family], Body: [Font family] (Rationale and reliably served weights)
+- **Typography Pairing:** Display: [Font family], Body: [Font family], Utility: [Font family] (the World's third voice for labels and fields; rationale and reliably served weights)
 - **Token Physics:**
   - Canvas: [Color / texture]
   - Action/Accent: [Color role]

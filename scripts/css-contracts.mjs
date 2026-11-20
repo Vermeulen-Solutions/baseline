@@ -38,6 +38,13 @@ export function inspectAuthorCSS(css, { file = 'stylesheet.css', lineOffset = 0 
     const outer = layers[0]?.split('.')[0];
     if (!['base','components'].includes(outer) || layers.some(x=>!x)) add(rule,`Author selector must belong to base or components: ${rule.selector}`);
   });
+  // A component class named like a Tailwind display or position utility also gets that utility wherever it
+  // is used: a trial's `.contents` section collapsed to nothing (display: contents) with no warning.
+  root.walkRules(rule => {
+    for (const name of rule.selector.match(/\.(?:contents|hidden|invisible|collapse|static|fixed|absolute|relative|sticky|table|container|block|inline|flow-root|isolate)(?![\w-])/g) ?? []) {
+      add(rule, `${name} is also a Tailwind utility that applies wherever the class is used (${name === '.contents' ? 'display: contents' : 'its display, position or visibility'}); give the component a name of its own: ${rule.selector}`);
+    }
+  });
   // The production CSS minifier folds `animation: x linear both` and `animation-timeline: view()` of one
   // rule into `animation: linear both x view()`, which browsers reject (the timeline is reset-only in the
   // shorthand): the animation name computes to none and the scroll-driven motion never runs on the

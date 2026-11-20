@@ -124,3 +124,7 @@ test('after three scored rounds, a concept within two points of the bar may stan
   const low = [2, 2, 2, 3, 2, 2, 1, 2]; // 13 on the design lines: three under, and phone under 2
   assert.match(validateReferences(file({ concepts: [`| A | ${low.join(' | ')} | 16 | chosen |`, ...rounds.slice(1)] }) + gap, images(2)).join('\n'), /under the selected references' median of 16/);
 });
+
+test('a concept verdict may carry its reason after a colon, like a candidate verdict', () => {
+  assert.deepEqual(validateReferences(file().replace('| 18 | chosen |', '| 18 | chosen: the strongest idea, built as the pages |'), images(2)), []);
+});

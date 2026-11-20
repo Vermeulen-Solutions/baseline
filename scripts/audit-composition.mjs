@@ -350,7 +350,9 @@ export function measurePage() {
     h2Max: Math.max(0, ...sizes('h2')),
     imageCover: +(imageArea / (vw * document.documentElement.scrollHeight)).toFixed(2),
     fullWidthMedia: fullWidth,
-    signature: Boolean(main.querySelector('.display-fit, .media-stage, .index-list[data-preview]')),
+    // A signature is also a drawn object at stage size: an SVG or canvas spanning most of the width or a screen tall.
+    signature: Boolean(main.querySelector('.display-fit, .media-stage, .index-list[data-preview]'))
+      || [...main.querySelectorAll('svg, canvas')].some((d) => { const r = d.getBoundingClientRect(); return r.width >= vw * 0.6 || r.height >= Math.min(innerHeight, 900) * 0.45; }),
     craft: (() => {
       const all = [...document.body.querySelectorAll('*')].filter(visible);
       const size = (el, w, h) => { const r = el.getBoundingClientRect(); return r.width >= w && r.height >= h; };
