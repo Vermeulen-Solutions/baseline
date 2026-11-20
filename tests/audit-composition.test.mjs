@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { assessAgainst, assessComposition, assessWorldMotion, FLOOR, formatAgainst, GAP_MEASURES, parseArgs, sectionSignature, selectedSources, formatRoute, softPhotos, STUDIO_LEVEL } from '../scripts/audit-composition.mjs';
+import { assessAgainst, assessComposition, assessWorldMotion, FLOOR, itemLayoutKey, longestItemRun, formatAgainst, GAP_MEASURES, parseArgs, sectionSignature, selectedSources, formatRoute, softPhotos, STUDIO_LEVEL } from '../scripts/audit-composition.mjs';
 
 const section = (overrides = {}) => ({ tag: 'section', heading: 'A heading', kicker: false, split: false, centered: false, ground: false, action: false, cardGrid: false, list: false, mediaCount: 0, fullBleedMedia: false, width: 1376, ...overrides });
 const page = (sections, overrides = {}) => ({ width: 1440, bodySize: 16, h1Size: 72, h2Max: 36, imageCover: 0.2, fullWidthMedia: 0, signature: false, sections, ...overrides });
@@ -189,4 +189,20 @@ test('inner pages are held to the references only; the studio level is for the h
   assert.equal(inner[0].studio, null);
   assert.doesNotMatch(formatAgainst(inner, 1), /studio level/);
   assert.ok(assessAgainst(page, refs).some((g) => g.short));
+});
+
+test('tall items are compared by how they are laid out, not by their tag and class', () => {
+  const item = (overrides = {}) => ({ tag: 'li', cls: 'entry', share: 0.45, pictures: 1, beside: true, ground: 'rgba(0, 0, 0, 0)', ...overrides });
+  const bark = 'rgb(40, 30, 20) image';
+  // A register in five arrangements on three grounds: portrait beside text, full-width spread, mirrored
+  // portrait on bark. No two neighbours are laid out the same way.
+  const varied = [item({ ground: bark }), item({ share: 1, beside: false }), item(), item({ ground: bark }), item({ share: 1, beside: false }), item(), item({ ground: bark })];
+  assert.equal(longestItemRun([varied]), 1);
+  // Seven identical blocks, or blocks that only mirror the picture, are a run.
+  assert.equal(longestItemRun([Array.from({ length: 7 }, () => item())]), 7);
+  assert.equal(itemLayoutKey(item()), itemLayoutKey(item({ share: 0.42 })), 'a mirror image or a few pixels is the same layout');
+  assert.notEqual(itemLayoutKey(item()), itemLayoutKey(item({ pictures: 2 })));
+  // Rows are separate containers; a gap (an item that is not tall) breaks a run.
+  assert.equal(longestItemRun([[item(), item(), null, item(), item(), item()], [item(), item()]]), 3);
+  assert.equal(longestItemRun(undefined), 0);
 });

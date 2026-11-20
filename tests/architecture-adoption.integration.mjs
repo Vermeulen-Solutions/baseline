@@ -60,7 +60,7 @@ try {
     if (customized) {
       // A synthetic fixture record precedes calibration/wrapper edits; no real client direction is invented.
       const agents = await fs.readFile(path.join(root, 'AGENTS.md'), 'utf8');
-      await write(root, 'AGENTS.md', agents + '\n\n' + formatArtDirectionRecord('editorial-paper') + '\n');
+      await write(root, 'AGENTS.md', agents + '\n\n' + formatArtDirectionRecord('editorial-paper', { metaphor: 'Synthetic fixture: a ruled ledger of the rehearsal' }) + '\n');
       await write(root, 'src/styles/global.css', applyTokenOverrides(await fs.readFile(path.join(root, 'src/styles/global.css'), 'utf8'), 'editorial-paper'));
       run(root, ['scripts/check-art-direction.mjs', '--require-record'], profile + ': synthetic calibration established before wrapper changes');
       await write(root, 'src/layouts/Base.astro', (await fs.readFile(path.join(root, 'src/layouts/Base.astro'), 'utf8')).replace('class="site-footer"', 'class="site-footer" data-client-wrapper="retained"'));

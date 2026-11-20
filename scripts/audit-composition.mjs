@@ -13,8 +13,9 @@
 // - kicker-openings: three or more sections open with a small uppercase label above the heading;
 // - split-openings: three or more sections open with the heading on one side and a lead beside it;
 // - card-grids: two or more sections are grids of three or more equal boxed items;
-// - repeated-run: four or more sections in a row, or four or more tall items inside one section, are
-//   built the same way whatever their grounds (a register of twelve works as twelve identical blocks);
+// - repeated-run: four or more sections in a row are built the same way whatever their grounds, or four
+//   or more neighbouring tall items inside one section are laid out the same way (picture size and
+//   placement, ground; a mirror image counts as the same): a register of twelve works as twelve blocks;
 // - repeated-neighbours: two adjacent sections share the same opening, content kind and ground,
 //   when that repeat is structural (cards, media, or a kicker or split opening);
 // - no-full-width-media: photographs cover at least a tenth of the page but none spans the viewport;
@@ -99,6 +100,27 @@ export function bareIngredients(craft) {
   return missing;
 }
 
+/**
+ * How a tall item is laid out, for comparing neighbours: its component, its picture's share of its width
+ * (in fifths), picture beside or above the text, one, two or more pictures, and its ground. A mirror image
+ * (picture left, then right) is the same layout. A trial's register of works in five arrangements on three
+ * grounds was reported as "7 tall items the same way" when items were compared by tag and class only.
+ */
+export function itemLayoutKey(item) {
+  if (!item) return null;
+  return [item.tag, item.cls, Math.round(item.share * 5), Math.min(item.pictures, 3), item.beside ? 'beside' : 'stacked', item.ground].join('|');
+}
+
+/** The longest run of neighbouring items laid out the same way, over a section's rows of items. */
+export function longestItemRun(rows = []) {
+  let longest = 0;
+  for (const row of rows ?? []) {
+    let n = 0, last = null;
+    for (const item of row) { const k = itemLayoutKey(item); n = k && k === last ? n + 1 : (k ? 1 : 0); last = k; longest = Math.max(longest, n); }
+  }
+  return longest;
+}
+
 export function assessComposition(model) {
   const findings = [];
   const sections = model.sections ?? [];
@@ -124,7 +146,7 @@ export function assessComposition(model) {
     if (run >= 4) add('repeated-run', `Sections ${i - run + 1} to ${i} are ${run} in a row built the same way (${sectionSignature(sections[i - 1]).split('|').slice(0, 2).join(', ')}), whatever their grounds. Set a run of like items as one object (a register, a woodpile, a wall of plates, an index) with one or two shown large, not as a section each.`, { count: run });
     run = 1;
   }
-  for (const [i, section] of sections.entries()) if (section.itemRun >= 4) add('repeated-run', `Section ${i + 1} sets ${section.itemRun} tall items one after another the same way. Set the run as one object (a register, a woodpile, a wall of plates, an index) with one or two shown large, and vary scale and placement between the rest.`, { count: section.itemRun, at: i + 1 });
+  for (const [i, section] of sections.entries()) if (section.itemRun >= 4) add('repeated-run', `Section ${i + 1} sets ${section.itemRun} tall items one after another the same way (the same picture size and placement on the same ground). Set the run as one object (a register, a woodpile, a wall of plates, an index) with one or two shown large, and vary scale, arrangement or ground between neighbours; mirroring the picture alone does not count.`, { count: section.itemRun, at: i + 1 });
   const photographic = sections.some((s) => s.mediaCount > 0) && model.imageCover >= 0.1;
   if (photographic && !sections.some((s) => s.fullBleedMedia)) add('no-full-width-media', 'The page has photographs but none spans the viewport. One photograph at full width (MediaStage) usually says more than many small ones.');
   const last = sections.at(-1);
@@ -283,16 +305,33 @@ export function measurePage() {
     const media = [...section.querySelectorAll('img, video, picture')].filter(visible).filter((m) => m.getBoundingClientRect().width >= 80);
     const sr = section.getBoundingClientRect();
     const fullBleedMedia = media.some((m) => m.getBoundingClientRect().width >= vw * 0.95) || (sr.width >= vw * 0.95 && s.backgroundImage !== 'none' && /url\(/.test(s.backgroundImage));
-    // The longest run of tall, like items inside the section (each at least 40% of a screen, holding a
-    // picture, same tag and first class): a register laid out as one block per entry.
-    let itemRun = 0;
-    {
-      const key = (el) => el.getBoundingClientRect().height >= innerHeight * 0.4 && el.querySelector('img, picture, video') ? `${el.tagName}.${el.classList[0] ?? ''}` : null;
-      for (const container of [section, ...section.querySelectorAll('*')]) {
-        if (container.children.length < 4) continue;
-        let n = 0, last = null;
-        for (const kid of container.children) { const k = visible(kid) ? key(kid) : null; n = k && k === last ? n + 1 : (k ? 1 : 0); last = k; itemRun = Math.max(itemRun, n); }
-      }
+    // Runs of tall items inside the section (each at least 40% of a screen, holding a picture): a register
+    // laid out as one block per entry. Each item is measured by how it is laid out (its picture's share of
+    // its width, picture beside or above the text, how many pictures, its ground); longestItemRun compares
+    // neighbours outside the page.
+    const itemRows = [];
+    for (const container of [section, ...section.querySelectorAll('*')]) {
+      if (container.children.length < 4) continue;
+      const row = [...container.children].map((kid) => {
+        if (!visible(kid)) return null;
+        const r = kid.getBoundingClientRect();
+        if (r.height < innerHeight * 0.4) return null;
+        const pictures = [...kid.querySelectorAll('img, video')].filter(visible).map((m) => m.getBoundingClientRect());
+        if (!pictures.length) return null;
+        const big = pictures.reduce((a, b) => (b.width * b.height > a.width * a.height ? b : a));
+        const text = [...kid.querySelectorAll('h2, h3, h4, p, figcaption')].filter(visible).find((t) => t.textContent.trim() && !t.querySelector('img, video'));
+        const t = text?.getBoundingClientRect();
+        const ks = getComputedStyle(kid);
+        return {
+          tag: kid.tagName.toLowerCase(),
+          cls: kid.classList[0] ?? '',
+          share: Math.round((big.width / r.width) * 100) / 100,
+          pictures: pictures.length,
+          beside: Boolean(t && (t.left >= big.right - 4 || t.right <= big.left + 4)),
+          ground: `${ks.backgroundColor}${ks.backgroundImage !== 'none' ? ' image' : ''}`,
+        };
+      });
+      if (row.filter(Boolean).length >= 4) itemRows.push(row);
     }
     const list = Boolean(section.querySelector('.index-list, ol[role="list"], table')) || [...section.querySelectorAll('ul, ol')].some((l) => l.children.length >= 4 && [...l.children].every((li) => li.getBoundingClientRect().width > sr.width * 0.6));
     return {
@@ -304,7 +343,7 @@ export function measurePage() {
       list,
       mediaCount: media.length,
       fullBleedMedia,
-      itemRun,
+      itemRows,
       width: Math.round(sr.width),
     };
   });
@@ -435,6 +474,7 @@ async function measureWide(browser, url, width, { declineConsent = false } = {})
     });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     const model = await page.evaluate(measurePage);
+    for (const section of model.sections) { section.itemRun = longestItemRun(section.itemRows); delete section.itemRows; }
     model.craft.motion = motion.most;
     model.craft.motionNames = motion.names;
     const measured = await page.evaluate(async (images) => Promise.all(images.map((p) => new Promise((resolve) => {
