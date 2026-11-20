@@ -1994,6 +1994,14 @@
     "tests/design-sheet.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/serve-static.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/serve-static.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }

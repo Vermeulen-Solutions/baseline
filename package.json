@@ -123,6 +123,7 @@
     "audit:ui": "node scripts/audit-ui.mjs",
     "audit:composition": "node scripts/audit-composition.mjs",
     "design:sheet": "node scripts/design-sheet.mjs",
+    "serve:static": "node scripts/serve-static.mjs",
     "check:quality": "node scripts/check-quality.mjs",
     "icons": "node scripts/generate-icons.mjs",
     "parity:html": "node scripts/html-parity.mjs",
