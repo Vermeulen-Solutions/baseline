@@ -235,8 +235,12 @@ export function measurePage() {
     if (holders.length === 1) { const width = main.getBoundingClientRect().width; sections = [...holders[0].children].filter(visible).filter((c) => c.getBoundingClientRect().width >= width * 0.25); continue; }
     break;
   }
-  const paragraphs = [...main.querySelectorAll('p')].filter(visible).map((p) => px(p, 'fontSize')).sort((a, b) => a - b);
-  const bodySize = paragraphs[Math.floor(paragraphs.length / 2)] || 16;
+  // The body size is the size most of the reading text is set in: weighted by characters, so a page of short
+  // labels (a frieze, tickets) does not report its label size as the body.
+  const paragraphs = [...main.querySelectorAll('p')].filter(visible).map((p) => ({ size: px(p, 'fontSize'), chars: p.textContent.trim().length })).filter((p) => p.chars > 0).sort((a, b) => a.size - b.size);
+  const totalChars = paragraphs.reduce((sum, p) => sum + p.chars, 0);
+  let seen = 0;
+  const bodySize = paragraphs.find((p) => (seen += p.chars) >= totalChars / 2)?.size || 16;
   const boxed = (el) => {
     const s = getComputedStyle(el);
     const ground = s.backgroundColor !== 'rgba(0, 0, 0, 0)' && s.backgroundColor !== 'transparent';
