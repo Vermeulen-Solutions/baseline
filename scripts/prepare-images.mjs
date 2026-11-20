@@ -211,6 +211,10 @@ export function prepareImages({ source, out, preset, maxEdge, quality, maxBytes,
 }
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
+    if (process.argv.includes('--help') || process.argv.includes('-h')) {
+      console.log('Usage: npm run media:prepare -- --source <folder> --out .baseline/backups/<stage> [--preset photo] [--max-edge 2400] [--quality 85] [--max-bytes 1048576] [--overrides overrides.json] [--reason "<why>"] [--resume]\nThe stage must be inside .baseline/backups/. Files over the byte limit go to review/; lower --quality or raise --max-bytes for them, or list them in --overrides. See docs/media-preparation.md.');
+      process.exit(0);
+    }
     const options = imageOptions(process.argv.slice(2), ['--source', '--out', '--preset', '--max-edge', '--quality', '--max-bytes', '--reason', '--overrides'], ['--resume']);
     const result = prepareImages({ source: options.source, out: options.out, preset: options.preset, reason: options.reason, resume: options.resume, ...(options['max-edge'] !== undefined && { maxEdge: Number(options['max-edge']) }), ...(options.quality !== undefined && { quality: Number(options.quality) }), ...(options['max-bytes'] !== undefined && { maxBytes: Number(options['max-bytes']) }), ...(options.overrides && { overrides: imageJSON(options.overrides) }) });
     console.log(JSON.stringify(result, null, 2)); process.exitCode = result.exitCode;

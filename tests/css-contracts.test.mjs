@@ -130,3 +130,9 @@ test('an animation shorthand beside animation-timeline in one rule fails: the mi
   // A shorthand alone, or a timeline set in another rule, is not folded.
   assert.deepEqual(inspectAuthorCSS('@layer components { .stamp { animation: stamp-lands 240ms ease-out both; } .plate { animation-timeline: view(); } }'), []);
 });
+
+test('a component class named like a Tailwind display or position utility fails', () => {
+  const issues = inspectAuthorCSS('@layer components { .contents { display: grid; } .almanac-contents { display: grid; } .grid { gap: 1rem; } }');
+  assert.equal(issues.length, 1);
+  assert.match(issues[0].message, /\.contents is also a Tailwind utility .*display: contents/);
+});
