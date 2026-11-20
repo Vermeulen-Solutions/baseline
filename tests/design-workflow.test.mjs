@@ -349,3 +349,10 @@ test('reveal is CSS scroll-driven by default with the observer as fallback; regi
   assert.match(css, /^\/\* Opt-in aliases for registry components in quarantine: @import "\.\/registry-aliases\.css"; \*\/$/m, 'the import ships commented out');
   assert.ok(css.includes('Optional recipe: bento grid.'), 'decorative families are marked optional');
 });
+
+test('a redesign keeps the direction it replaces under a Superseded heading; a second live record still fails', () => {
+  const superseded = record + '\n\n## Superseded Art Direction Record (2026-11-15)\n\n- **Aesthetic Lane:** Custom / existing brand — the earlier pitch at night\n';
+  assert.deepEqual(validateRecord(superseded), []);
+  const pasted = record + '\n\n## Notes\n\n- **Aesthetic Lane:** Custom / existing brand — a stale copy\n';
+  assert.match(validateRecord(pasted).join('\n'), /Found 2 record bodies/);
+});
