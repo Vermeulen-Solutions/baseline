@@ -162,7 +162,8 @@ async function capture(options) {
         for (const selector of options.click) { const target = page.locator(selector).first(); if (await target.count()) await target.click(); }
         await page.evaluate(async () => {
           await document.fonts.ready;
-          for (let y = 0; y < document.documentElement.scrollHeight; y += 600) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 100)); }
+          // Slow enough for pages that load their pictures when they come into view (studio case studies).
+          for (let y = 0; y < document.documentElement.scrollHeight; y += 400) { window.scrollTo(0, y); await new Promise(r => setTimeout(r, 220)); }
           // Only images still waiting are made eager. An image with sizes="auto, …" must stay lazy: turning it eager
           // makes "auto" invalid, the browser picks another source, and a full-page capture paints the photograph blank.
           document.querySelectorAll('img[loading="lazy"]').forEach(img => { if (!img.complete && !/^\s*auto\b/i.test(img.getAttribute('sizes') ?? '')) img.loading = 'eager'; });
