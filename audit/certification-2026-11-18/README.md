@@ -44,6 +44,14 @@ Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3: doc
 
 Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 111 passed; the gallery root-typecheck behavior test timed out under load (its child process killed) and passed alone in 15.5 s, as during the 0.4.0 work. Not covered: the Workers/D1/R2 profile (unchanged scope), the editor rehearsal and restore drill (editor and schema unchanged), repeated visual runs.
 
+## Standards 0.7.0 (2026-11-20)
+
+Certified source: commit `dcf4a99744685eecb98ca74c4e55750452aa1a3c`. Machine record: [verification-0.7.0.json](verification-0.7.0.json). A minor release after 0.6.0 (PRs #156–#158); runtime dependencies, development dependencies and the database schema are unchanged.
+
+Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3, on `ca60235` (the tree of the certified merge commit): doctor, `npm ci`, verify, build, release artifact, schema budget, dev tools, seed, seeded build and `audit:html` all pass. `check:ci-fast` passed all ten checks on both and exceeded its 60 s local budget (113 s and 131 s).
+
+Visual suite (Windows, Node 24.22.3, Playwright 1.65.1), now part of the Certify step: 129 passed and no reference image differed; the gallery root-typecheck test timed out under load and passed alone in 18.4 s, as in 0.4.0–0.6.0.
+
 ## Standards 0.6.0 (2026-11-20)
 
 Certified source: commit `22948b4ce371e7caff923ea2eeca954cbaa2bdc8`. Machine record: [verification-0.6.0.json](verification-0.6.0.json). A minor release from the design sprints (PRs #130–#154). Runtime dependencies (Astro 7.4.12, EmDash 1.5.0, the adapters), development dependencies and the database schema are unchanged from 0.5.1. `check:upstream` on 20 November found Astro 7.4.13, @astrojs/node 11.1.14, TypeScript 7.0.2 (major) and Impeccable 4.10.0 available; all are deferred.

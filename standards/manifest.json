@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "standardsVersion": "0.6.0",
+  "standardsVersion": "0.7.0",
   "status": "certified-scoped",
   "reviewedAt": "2026-11-20",
-  "stableReleaseRef": "refs/tags/standards-v0.6.0",
+  "stableReleaseRef": "refs/tags/standards-v0.7.0",
   "runtimeProfiles": {
     "node-sqlite": {
       "status": "certified-scoped",
@@ -172,15 +172,15 @@
   },
   "certification": {
     "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
-    "sourceCommit": "22948b4ce371e7caff923ea2eeca954cbaa2bdc8",
-    "sourceTree": "280c5b42602fdd3bcf5279e98250f2b3e8433501",
-    "receipt": "audit/certification-2026-11-18/verification-0.6.0.json",
-    "releaseNotes": "standards/releases/0.6.0.md",
+    "sourceCommit": "dcf4a99744685eecb98ca74c4e55750452aa1a3c",
+    "sourceTree": "96f47960faf2cf8f3a6f20850a6dc53963d72106",
+    "receipt": "audit/certification-2026-11-18/verification-0.7.0.json",
+    "releaseNotes": "standards/releases/0.7.0.md",
     "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles.",
     "frameworkEvidence": "audit/certification-2026-11-16/README.md (0.2.0; runtime dependencies, schema and editor code unchanged since)",
     "rendererEvidence": "audit/visual-renderer-2026-11-16/README.md",
     "sourceEvidence": "audit/certification-2026-11-18/README.md",
-    "patchEvidence": "audit/certification-2026-11-18/verification-0.6.0.json (0.6.0: clean clones on Node 22.23.4 and 24.22.3 and the visual suite; runtime unchanged since 0.5.1)"
+    "patchEvidence": "audit/certification-2026-11-18/verification-0.7.0.json (0.7.0: clean clones on Node 22.23.4 and 24.22.3 and the visual suite; runtime unchanged since 0.5.1)"
   },
   "distribution": {
     "skills": {
@@ -222,7 +222,7 @@
       },
       "new-site-workflow": {
         "files": 19,
-        "sha256": "bc28b42e749152d6e830726d7eb65d670ef14f159e6fc1570cb3af71701123c5"
+        "sha256": "4dead3b85e4ad108690efd78fe2cdcd539a6a2c20f9f746cd094ffa981481567"
       },
       "opendesign-site-design": {
         "files": 8,
@@ -237,8 +237,8 @@
         "sha256": "4b65fb7d915c2283172fdd6fc7500ed1be1ad73285e03f7c46fe9df3d3f30a94"
       },
       "site-art-direction": {
-        "files": 13,
-        "sha256": "1c6ad62c71f020a1047f5b1020608547e25722b84f89ff495e83ca23c857064d"
+        "files": 14,
+        "sha256": "7152548adf9a1af5a150d9c8014fb9d99950cfa2d49cb4bbba2066e867e6e80d"
       },
       "upgrading-emdash": {
         "files": 1,
@@ -284,111 +284,14 @@
   },
   "changes": [
     {
-      "slug": "art-direction-method",
-      "title": "Art direction for organisations, places and makers: governing idea, content as object, signature moments",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        ".agents/skills/site-art-direction/references/distinctive-direction.md",
-        ".agents/skills/site-art-direction/references/aesthetic-lanes.md",
-        ".agents/skills/site-art-direction/SKILL.md",
-        ".agents/skills/astro-site-design/SKILL.md",
-        "scripts/check-art-direction.mjs"
-      ]
-    },
-    {
-      "slug": "bare-page",
-      "title": "The composition audit reports a bare page",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs"
-      ]
-    },
-    {
-      "slug": "capture-width-body-size",
-      "title": "Captures show the page a visitor sees; the body size is the reading text's",
+      "slug": "concept-built-rows",
+      "title": "Built pages are \"built\" rows in the concepts table",
       "bump": "patch",
       "platforms": [
         "emdash",
         "static"
       ],
       "areas": [
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/capture-routes.mjs",
-        "scripts/audit-composition.mjs"
-      ]
-    },
-    {
-      "slug": "composition-audit-strict",
-      "title": "audit:composition reports the split hero and uniform galleries, and a signature must stand out",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs"
-      ]
-    },
-    {
-      "slug": "composition-audit",
-      "title": "audit:composition reports the template look on rendered pages",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs"
-      ]
-    },
-    {
-      "slug": "concept-bar-at-stage5",
-      "title": "The concept bar is enforced at Stage 5, where it can be reached",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
         "tooling",
         "skills"
       ],
@@ -397,418 +300,46 @@
       "database": false,
       "files": [
         "scripts/check-art-direction.mjs",
-        "tests/reference-research.test.mjs"
-      ]
-    },
-    {
-      "slug": "concept-bar-exit",
-      "title": "The concept bar has an exit, and case studies can be found",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-art-direction.mjs",
         "tests/reference-research.test.mjs",
-        "scripts/capture-routes.mjs",
-        "tests/capture-routes.test.mjs",
-        "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs"
+        ".agents/skills/site-art-direction/references/reference-research.md",
+        ".agents/skills/site-art-direction/SKILL.md"
       ]
     },
     {
-      "slug": "copy-tells",
-      "title": "Copy voice and the tells of model copy",
+      "slug": "drawing-treatments",
+      "title": "Drawn figures get the world's medium and a size; lane-default records no longer pass the gate",
       "bump": "minor",
       "platforms": [
         "emdash",
         "static"
       ],
       "areas": [
-        "tooling",
         "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-quality.mjs",
-        "scripts/copy-tells.mjs",
-        "tests/check-quality.test.mjs",
-        "tests/copy-tells.test.mjs"
-      ]
-    },
-    {
-      "slug": "design-bar",
-      "title": "Reference research: the concept bar judges the design, and captures survive other people's sites",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-art-direction.mjs",
-        "scripts/capture-routes.mjs",
-        "tests/reference-research.test.mjs",
-        "tests/capture-routes.test.mjs"
-      ]
-    },
-    {
-      "slug": "design-icons",
-      "title": "Figures come from a drawn set or a photograph, not from hand-written SVG",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
+        "tooling"
       ],
       "adoption": "copy",
       "visible": false,
       "database": false,
       "files": [
         "scripts/design-icons.mjs",
-        "tests/design-icons.test.mjs"
-      ]
-    },
-    {
-      "slug": "expressive-layer",
-      "title": "Expressive layer: image-led stages, ruled indexes, frame shapes, fitted lines, scroll reveals and page-transition styles",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "styles",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/styles/expressive.css",
-        "src/components/MediaStage.astro",
-        "src/components/IndexList.astro",
-        "src/lib/page-transition-script.ts",
-        "src/layouts/SiteShell.astro"
-      ]
-    },
-    {
-      "slug": "first-screen-scroll-motion",
-      "title": "The first screen never opens on a scroll-driven entrance caught part-way",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-quality.mjs",
-        "tests/check-quality.test.mjs",
-        "scripts/capture-routes.mjs",
-        "tests/capture-routes.test.mjs",
-        ".agents/skills/astro-site-design/references/interaction-techniques.md"
-      ]
-    },
-    {
-      "slug": "impeccable-wiring",
-      "title": "Impeccable runs by its commands, with the brief where it can read it",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        ".agents/skills/new-site-workflow/references/impeccable-passes.md",
-        "profiles/static/project/AGENTS.md",
-        "profiles/static/project/README.md"
-      ]
-    },
-    {
-      "slug": "made-world-reference",
-      "title": "One made-world site sets the level, case study or not",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
+        "scripts/design-system.mjs",
         "scripts/check-art-direction.mjs",
-        "tests/reference-research.test.mjs"
-      ]
-    },
-    {
-      "slug": "measure-the-gap",
-      "title": "The page is measured against its references, and references are found where the level is",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
         "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs",
-        "scripts/capture-routes.mjs"
+        "tests/design-icons.test.mjs",
+        "tests/art-direction.test.mjs",
+        "tests/audit-composition.test.mjs"
       ]
     },
     {
-      "slug": "motion-layers",
-      "title": "The world's motion comes in four layers; labels and lettering come from the world",
+      "slug": "record-heading-prose",
+      "title": "The record heading appears only as the heading in AGENTS.md",
       "bump": "patch",
       "platforms": [
         "emdash",
         "static"
       ],
       "areas": [
-        "skills"
-      ],
-      "adoption": "sync",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "photo-sets",
-      "title": "Photo sets: a different arrangement in each photographed section",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "skills",
         "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/components/PhotoSet.astro"
-      ]
-    },
-    {
-      "slug": "reach-the-references",
-      "title": "Stage 5 raises each page to its references before critiquing it",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/design-sheet.mjs",
-        "tests/design-sheet.test.mjs",
-        "scripts/check-art-direction.mjs",
-        "tests/reference-research.test.mjs"
-      ]
-    },
-    {
-      "slug": "redesign-existing-site",
-      "title": "Redesigning an existing site",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-art-direction.mjs",
-        "tests/design-workflow.test.mjs",
-        "tests/reference-research.test.mjs",
-        "scripts/capture-routes.mjs",
-        "tests/capture-routes.test.mjs"
-      ]
-    },
-    {
-      "slug": "redesign-take-live",
-      "title": "Taking a rehearsed redesign live: the main visitor, each locale's data, and the recipe",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        ".agents/skills/site-art-direction/references/distinctive-direction.md",
-        ".agents/skills/site-art-direction/SKILL.md",
-        ".agents/skills/site-art-direction/references/design-iteration.md",
-        ".agents/skills/astro-site-design/SKILL.md",
-        ".agents/skills/astro-site-design/references/shipped-primitives.md"
-      ]
-    },
-    {
-      "slug": "reference-judging",
-      "title": "Reference research is required and judged",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-art-direction.mjs",
-        "tests/reference-research.test.mjs",
-        "profiles/static/project/AGENTS.md"
-      ]
-    },
-    {
-      "slug": "scroll-motion-longhands",
-      "title": "Scroll-driven motion runs on the built site",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "styles",
-        "tooling",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": true,
-      "database": false,
-      "files": [
-        "src/styles/global.css",
-        "src/styles/expressive.css",
-        "scripts/css-contracts.mjs",
-        "tests/css-contracts.test.mjs",
-        "scripts/audit-composition.mjs"
-      ]
-    },
-    {
-      "slug": "serve-static",
-      "title": "A static server for local captures",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/serve-static.mjs",
-        "tests/serve-static.test.mjs"
-      ]
-    },
-    {
-      "slug": "signature-moments",
-      "title": "Signature moments that are signatures, and one treatment for mixed photographs",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "styles",
-        "components",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/styles/expressive.css",
-        "src/components/MediaStage.astro",
-        ".agents/skills/site-art-direction/references/distinctive-direction.md"
-      ]
-    },
-    {
-      "slug": "site-files-named-only",
-      "title": "site:files --files writes only the named files",
-      "bump": "none",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling"
       ],
       "adoption": "manual",
       "visible": false,
@@ -816,316 +347,20 @@
       "files": []
     },
     {
-      "slug": "skill-writing",
-      "title": "How Baseline skills are written, and a check for their wording",
+      "slug": "visual-reference-check",
+      "title": "Visual reference images are checked against their manifest",
       "bump": "none",
-      "platforms": [],
-      "areas": [],
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "tooling",
+        "docs"
+      ],
       "adoption": "none",
       "visible": false,
       "database": false,
       "files": []
-    },
-    {
-      "slug": "smooth-scroll",
-      "title": "Smooth scroll and page transitions for impression-led sites",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        ".agents/skills/astro-site-design/references/smooth-scroll.md"
-      ]
-    },
-    {
-      "slug": "sprint-starter",
-      "title": "The starter makes room for built objects and wide photographs",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "styles",
-        "components",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": true,
-      "database": false,
-      "files": [
-        "src/styles/global.css",
-        "src/lib/responsive-image.ts",
-        "tests/presentation-boundaries.test.mjs"
-      ]
-    },
-    {
-      "slug": "sprint-tools",
-      "title": "The design gates and captures tell the truth",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-art-direction.mjs",
-        "scripts/capture-routes.mjs",
-        "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs",
-        "tests/design-workflow.test.mjs"
-      ]
-    },
-    {
-      "slug": "sprint5-tools",
-      "title": "Small tool fixes from a design trial for an association",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-art-direction.mjs",
-        "tests/reference-research.test.mjs",
-        "scripts/css-contracts.mjs",
-        "tests/css-contracts.test.mjs",
-        "scripts/audit-composition.mjs",
-        "scripts/prepare-images.mjs"
-      ]
-    },
-    {
-      "slug": "sprint7-guards",
-      "title": "The record is not overwritten; gates read what agents write; inner pages are measured fairly",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/design-system.mjs",
-        "tests/spacing-tokens.test.mjs",
-        "scripts/check-art-direction.mjs",
-        "tests/reference-research.test.mjs",
-        "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs"
-      ]
-    },
-    {
-      "slug": "stage5-steps",
-      "title": "Stage 5 builds cleanly, captures load, wrapped sections are read",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/capture-routes.mjs",
-        "scripts/audit-composition.mjs"
-      ]
-    },
-    {
-      "slug": "starter-trial-fixes",
-      "title": "Prepared photographs lose their camera metadata; the token tests copy the site's stylesheets",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "docs",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/prepare-image.mjs",
-        "tests/media-preparation.test.mjs",
-        "tests/spacing-tokens.test.mjs"
-      ]
-    },
-    {
-      "slug": "static-build-without-site",
-      "title": "A static build without SITE_URL leaves the sitemap and feed out instead of failing",
-      "bump": "patch",
-      "platforms": [
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/pages/sitemap.xml.ts",
-        "src/pages/rss.xml.ts",
-        "README.md"
-      ]
-    },
-    {
-      "slug": "studio-level",
-      "title": "Quiet references no longer set the level",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs",
-        "scripts/check-art-direction.mjs",
-        "tests/reference-research.test.mjs"
-      ]
-    },
-    {
-      "slug": "tone-inset-lanes",
-      "title": "Duotone frames of any shape; lanes without a preset are named",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "styles",
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/styles/expressive.css",
-        "scripts/design-system.mjs"
-      ]
-    },
-    {
-      "slug": "workflow-gates",
-      "title": "The quality check gates Stage 6; critique stops after two rounds; branches named by facts",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "profiles/static/project/AGENTS.md"
-      ]
-    },
-    {
-      "slug": "workflow-tooling",
-      "title": "Workflow fixes: Git Bash routes, visual updates that keep passing goldens, reduced motion in the harness",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/capture-routes.mjs",
-        "scripts/audit-ui.mjs",
-        "scripts/check-quality.mjs"
-      ]
-    },
-    {
-      "slug": "world-building",
-      "title": "Build the site's world: objects, surfaces, type, motion and a working feature",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-art-direction.mjs",
-        "tests/world-record.test.mjs"
-      ]
-    },
-    {
-      "slug": "world-built",
-      "title": "The composition audit checks that the recorded world is built",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs",
-        "scripts/check-art-direction.mjs",
-        "tests/audit-composition.test.mjs",
-        "tests/world-record.test.mjs"
-      ]
     }
   ]
 }
