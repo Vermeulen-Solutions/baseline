@@ -125,6 +125,23 @@ test('after three scored rounds, a concept within two points of the bar may stan
   assert.match(validateReferences(file({ concepts: [`| A | ${low.join(' | ')} | 16 | chosen |`, ...rounds.slice(1)] }) + gap, images(2)).join('\n'), /under the selected references' median of 16/);
 });
 
+test('built pages of the chosen direction are "built: <route>" rows; the bar reads the home page as it stands', () => {
+  const concepts = (...extra) => file({ concepts: [`| A | ${good.join(' | ')} | 18 | chosen |`, `| B | ${weak.join(' | ')} | 11 | not chosen |`, ...extra] });
+  const low = [2, 2, 2, 2, 2, 2, 2, 2]; // 14 on the design lines, under the median of 16
+  // Several built rows sit beside the one chosen concept; none has to be marked "not chosen".
+  assert.deepEqual(validateReferences(concepts(`| A, built | ${low.join(' | ')} | 16 | built: / round 1 |`, `| A, built | ${good.join(' | ')} | 18 | built: / final |`, `| A, built | ${good.join(' | ')} | 18 | built: /works final |`), images(2)), []);
+  // The last home-page row is judged: a final home page under the bar fails even though the concept cleared it.
+  assert.match(validateReferences(concepts(`| A, built | ${good.join(' | ')} | 18 | built: / round 1 |`, `| A, built | ${low.join(' | ')} | 16 | built: / final |`), images(2)).join('\n'), /The built page \/ scores 14\/21 on the design lines/);
+  // Another page under the bar is advice, never a failure.
+  const notes = [];
+  assert.deepEqual(validateReferences(concepts(`| A, built | ${low.join(' | ')} | 16 | built: /works final |`), { ...images(2), notes }), []);
+  assert.match(notes.join('\n'), /^Advisory: the built page \/works scores 14\/21/m);
+  // A built row names its page; built rows do not count as concepts.
+  assert.match(validateReferences(concepts(`| A, built | ${good.join(' | ')} | 18 | built: final |`), images(2)).join('\n'), /a built row names its page/);
+  const one = file({ concepts: [`| A | ${good.join(' | ')} | 18 | chosen |`, `| A, built | ${good.join(' | ')} | 18 | built: / final |`] });
+  assert.match(validateReferences(one, images(2)).join('\n'), /Score at least two concepts/);
+});
+
 test('a concept verdict may carry its reason after a colon, like a candidate verdict', () => {
   assert.deepEqual(validateReferences(file().replace('| 18 | chosen |', '| 18 | chosen: the strongest idea, built as the pages |'), images(2)), []);
 });
