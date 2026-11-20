@@ -2002,6 +2002,14 @@
     "tests/serve-static.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/design-icons.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/design-icons.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }
