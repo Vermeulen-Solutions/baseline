@@ -59,7 +59,7 @@ For motion, illustration, charts, editable vectors, 3D, video or another request
 
 `src/styles/global.css`, the layout primitives, `SiteShell.astro`, `design:tokens`
 and `check:art-direction` are canonical. Before client-specific visual work,
-save a complete `## Art Direction Record` with Aesthetic Lane, Narrative Metaphor,
+save a complete Art Direction Record section (replaced by its heading line) with Aesthetic Lane, Narrative Metaphor,
 Typography Pairing (Display and Body), Token Physics (Canvas, Action/Accent,
 Borders, Spatial Density), and two or three semicolon-separated Site Anti-Patterns.
 Run `npm run check:art-direction -- --require-record` before implementing that work.

@@ -73,8 +73,8 @@ For motion, illustration, charts, editable vectors, 3D, video or another request
 
 ## Before client-specific visual implementation
 
-Save one complete `## Art Direction Record` in this file before site-specific
-visual work, including Aesthetic Lane, Narrative Metaphor, Typography Pairing,
+Save one complete Art Direction Record section in this file before site-specific
+visual work (replace it by its heading line, or with `design:tokens --write-record`), including Aesthetic Lane, Narrative Metaphor, Typography Pairing,
 Token Physics (Canvas, Action/Accent, Borders, Spatial Density), and two or three
 semicolon-separated Site Anti-Patterns. Saving does not require a Git commit.
 Run `npm run check:art-direction -- --require-record` before implementation.

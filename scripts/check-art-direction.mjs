@@ -248,12 +248,35 @@ export function validateReferences(markdown, io = {}) {
   const bar = median(selected.filter(c => c.score && c.kind !== 'owner').map(c => designTotal(c.score)));
   const concepts = tableRows(text, 'Concepts against the bar');
   if (!concepts) return [...errors, 'Missing the ### Concepts against the bar table: score each concept on the same card.'];
-  const scored = concepts.map(([name, ...rest]) => ({ name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict: (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').toLowerCase().split(/\s*[:—–(]\s*|\s+-\s+/)[0].trim() })); // "chosen: <reason>", "chosen — <reason>" or "chosen (<reason>)" reads as chosen
+  // "chosen: <reason>", "chosen — <reason>" or "chosen (<reason>)" reads as chosen. A Stage 5 score of a built
+  // page of the chosen direction is "built: <route> <note>": one trial marked every built row "not chosen"
+  // because the table allowed one "chosen" row, though each was the chosen direction.
+  const scored = concepts.map(([name, ...rest]) => {
+    const raw = (rest[REFERENCE_DIMENSIONS.length + 1] ?? '').trim();
+    const verdict = raw.toLowerCase().split(/\s*[:—–(]\s*|\s+-\s+/)[0].trim();
+    const route = verdict === 'built' ? raw.replace(/^built\s*(?:[:—–(]|\s-\s)?\s*/i, '').match(/^\/\S*/)?.[0] : undefined;
+    return { name, score: scoreRow(rest, `Concept ${name || '?'}`, errors), verdict, route };
+  });
   const chosen = scored.filter(c => c.verdict === 'chosen');
-  if (scored.length < 2) errors.push('Score at least two concepts against the bar.');
-  if (chosen.length !== 1) errors.push('Mark exactly one concept "chosen" (the others "not chosen") in the verdict column; a reason may follow after a colon, a dash or in brackets.');
-  for (const c of chosen) {
+  const built = scored.filter(c => c.verdict === 'built');
+  if (scored.length - built.length < 2) errors.push('Score at least two concepts against the bar.');
+  if (chosen.length !== 1) errors.push('Mark exactly one concept "chosen" (the others "not chosen") in the verdict column; a reason may follow after a colon, a dash or in brackets. A scored built page of the chosen direction is "built: <route>".');
+  for (const b of built) if (!b.route) errors.push(`Concept row ${b.name || '?'}: a built row names its page, for example "built: / round 2".`);
+  // The bar is judged on the home page as it now stands (its last built row), else on the chosen concept.
+  // Other built pages are reported against it, never failed: STUDIO_LEVEL is a home-page measure too.
+  const homeBuilt = built.filter(b => b.route === '/');
+  const judged = homeBuilt.length ? [homeBuilt.at(-1)] : chosen;
+  const lastPerRoute = new Map(built.filter(b => b.route && b.route !== '/').map(b => [b.route, b]));
+  for (const other of lastPerRoute.values()) {
+    if (!other.score || !io.notes) continue;
+    const design = designTotal(other.score);
+    const weak = DESIGN_DIMENSIONS.filter(d => other.score.scores[d] < 2);
+    if (design < bar) io.notes.push(`Advisory: the built page ${other.route} scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines, under the selected references' median of ${bar}.`);
+    if (weak.length) io.notes.push(`Advisory: the built page ${other.route} scores under 2 on ${weak.join(', ')}.`);
+  }
+  for (const c of judged) {
     if (!c.score) continue;
+    const label = c.verdict === 'built' ? `The built page ${c.route}` : 'The chosen concept';
     const design = designTotal(c.score);
     // A recorded gap: after three scored rounds, a concept within two points of the bar may stand when the
     // record names what holds it down outside the layout (stand-in photographs, missing owner material) and
@@ -265,9 +288,9 @@ export function validateReferences(markdown, io = {}) {
     // not failed (io.deferBar); the Stage 5 gate (--require-comparison) enforces it. Otherwise the gate the
     // build starts from stays red for the whole build, which reads like a stop.
     const barIssues = [];
-    if (design < bar && !recordedGap) barIssues.push(`The chosen concept scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it, in a concept or in the built page scored with the Stage 5 comparison. After ${REFERENCE_BAR.conceptRounds} scored rounds, a concept within ${REFERENCE_BAR.conceptGap} points may stand with a ### Gap to the bar section naming what holds it down outside the layout and what would close it.`);
+    if (design < bar && !recordedGap) barIssues.push(`${label} scores ${design}/${DESIGN_DIMENSIONS.length * 3} on the design lines (photographs aside), under the selected references' median of ${bar}: raise it, in a concept or in the built page scored with the Stage 5 comparison. After ${REFERENCE_BAR.conceptRounds} scored rounds, a concept within ${REFERENCE_BAR.conceptGap} points may stand with a ### Gap to the bar section naming what holds it down outside the layout and what would close it.`);
     const weak = DESIGN_DIMENSIONS.filter(d => c.score.scores[d] < 2);
-    if (weak.length) barIssues.push(`The chosen concept scores under 2 on ${weak.join(', ')}.`);
+    if (weak.length) barIssues.push(`${label} scores under 2 on ${weak.join(', ')}.`);
     if (io.deferBar && io.notes) io.notes.push(...barIssues);
     else errors.push(...barIssues);
   }
@@ -420,7 +443,7 @@ function main() {
       const deferBar = !args.includes('--require-comparison') && !/^###\s+Built against the references\s*$/m.test(text);
       const notes = [];
       errors.push(...validateReferences(text, { capturedImages, deferBar, notes }).map(error => `${REFERENCES_FILE}: ${error}`));
-      for (const note of notes) console.log(`Concept bar, enforced at Stage 5 (--require-comparison): ${note}`);
+      for (const note of notes) console.log(note.startsWith('Advisory:') ? note : `Concept bar, enforced at Stage 5 (--require-comparison): ${note}`);
     }
     // The same new direction builds its world and writes its decisions down.
     errors.push(...validateWorld(agentsMd).map(error => `AGENTS.md: ${error}`));
