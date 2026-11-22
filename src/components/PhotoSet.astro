@@ -28,7 +28,9 @@ interface Props extends Omit<HTMLAttributes<'div'>, 'title'> {
   /**
    * `pair`: two photographs side by side at one ratio. `trio`: three sizes of one subject, tops on
    * one line. `strip`: three to six square details. `tallSmall`: a tall photograph with the
-   * section's words (the slot) and a small square under them.
+   * section's words (the slot) and a small square under them. When the number of photographs does
+   * not suit the layout (content changed), the set shows them in the arrangement that fits: one
+   * alone, two as a pair, three as a trio, more as a strip that wraps. Items without an image are left out.
    */
   layout: 'pair' | 'trio' | 'strip' | 'tallSmall';
   items: PhotoSetItem[];
@@ -39,27 +41,41 @@ interface Props extends Omit<HTMLAttributes<'div'>, 'title'> {
   optimize?: boolean;
 }
 
-const { layout, items = [], ratio = 'landscape', tone, optimize = true, class: className, ...attributes } = Astro.props;
+const { layout: wanted, items: given = [], ratio = 'landscape', tone, optimize = true, class: className, ...attributes } = Astro.props;
 const counts = { pair: [2, 2], trio: [3, 3], strip: [3, 6], tallSmall: [2, 2] } as const;
-const range = counts[layout];
-if (!range) throw new Error(`PhotoSet: unknown layout "${layout}" (pair, trio, strip or tallSmall).`);
-if (items.length < range[0] || items.length > range[1]) {
-  throw new Error(`PhotoSet: layout "${layout}" takes ${range[0] === range[1] ? range[0] : `${range[0]} to ${range[1]}`} photographs, got ${items.length}.`);
+const range = counts[wanted];
+if (!range) throw new Error(`PhotoSet: unknown layout "${wanted}" (pair, trio, strip or tallSmall).`);
+// The photographs come from content an owner edits: one is added, one is removed, one has no picture
+// yet. The set then takes the arrangement that fits what is there instead of stopping the build
+// (design trials doubled and halved their content and every page with a fixed count broke or crashed).
+const items = given.filter((item) => item && item.image);
+const count = items.length;
+const layout =
+  count >= range[0] && count <= range[1] ? wanted
+  : count <= 1 ? 'single'
+  : count === 2 ? 'pair'
+  : count === 3 ? 'trio'
+  : 'strip';
+if (layout !== wanted && import.meta.env.DEV) {
+  console.warn(`PhotoSet: layout "${wanted}" takes ${range[0] === range[1] ? range[0] : `${range[0]} to ${range[1]}`} photographs, got ${count}; showing ${count === 0 ? 'none' : `them as "${layout}"`}.`);
 }
+// A strip holds up to six on a row; more wrap into rows of equal length (8 as 4 and 4, 9 as 5 and 4).
+const stripColumns = layout === 'strip' ? Math.ceil(count / Math.ceil(count / 6)) : undefined;
 const hasWords = Astro.slots.has('default');
 const focusOf = (focus?: string) => (typeof focus === 'string' && /^[\w\s%.-]{1,40}$/.test(focus) ? `--photo-focus: ${focus}` : undefined);
 // The share of the content width each picture takes on a wide set, for its sizes hint.
 const share = {
+  single: [hasWords ? '50vw' : '100vw'],
   pair: ['50vw', '50vw'],
   trio: ['42vw', '33vw', '25vw'],
-  strip: items.map(() => `${Math.round(100 / items.length)}vw`),
+  strip: items.map(() => `${Math.round(100 / (stripColumns ?? 4))}vw`),
   tallSmall: ['50vw', '25vw'],
 }[layout];
 const toneValue = tone === 'warm' || tone === 'mono' || tone === 'duotone' ? tone : undefined;
 ---
 
-<div {...attributes} class:list={['photo-set', className]} data-set={layout} data-ratio={layout === 'pair' ? ratio : undefined} data-words={hasWords ? '' : undefined}>
-  <div class="photo-set__layout">
+{(count > 0 || hasWords) && <div {...attributes} class:list={['photo-set', className]} data-set={layout} data-ratio={layout === 'pair' ? ratio : undefined} data-words={hasWords ? '' : undefined}>
+  <div class="photo-set__layout" style={stripColumns ? `--strip-count: ${stripColumns}` : undefined}>
     {hasWords && <div class="photo-set__words flow"><slot /></div>}
     {items.map((item, index) => {
       const picture = (
@@ -82,7 +98,7 @@ const toneValue = tone === 'warm' || tone === 'mono' || tone === 'duotone' ? ton
       );
     })}
   </div>
-</div>
+</div>}
 
 <style>
 @layer components {
@@ -158,11 +174,14 @@ const toneValue = tone === 'warm' || tone === 'mono' || tone === 'duotone' ? ton
     .photo-set[data-set="trio"] .photo-set__item:nth-of-type(2) { grid-column: span 4; }
     .photo-set[data-set="trio"] .photo-set__item:nth-of-type(3) { grid-column: span 3; --photo-ratio: 4 / 3; }
 
+    /* The row length comes from the number of photographs (--strip-count on the layout element). */
     .photo-set[data-set="strip"] .photo-set__layout { grid-template-columns: repeat(var(--strip-count, 4), minmax(0, 1fr)); }
     .photo-set[data-set="strip"] .photo-set__item { grid-column: auto; }
-    .photo-set[data-set="strip"]:has(.photo-set__item:nth-of-type(3):last-of-type) { --strip-count: 3; }
-    .photo-set[data-set="strip"]:has(.photo-set__item:nth-of-type(5):last-of-type) { --strip-count: 5; }
-    .photo-set[data-set="strip"]:has(.photo-set__item:nth-of-type(6):last-of-type) { --strip-count: 6; }
+
+    /* One photograph left: across the set at a wide ratio, or on half the width beside the words. */
+    .photo-set[data-set="single"]:not([data-words]) .photo-set__item { --photo-ratio: 16 / 9; }
+    .photo-set[data-set="single"][data-words] .photo-set__item { grid-column: 1 / span 6; --photo-ratio: 4 / 5; }
+    .photo-set[data-set="single"][data-words] .photo-set__words { grid-column: 8 / -1; }
 
     /* A tall picture on half the width; the words at the top of the other half, a small square at its foot. */
     .photo-set[data-set="tallSmall"] .photo-set__layout { grid-template-rows: auto 1fr; }

@@ -53,6 +53,9 @@
 //   name or tagline, or an example.com / .test / .invalid address), `multiple-h1`, `inline-handler`
 //   (onclick= and friends, which a CSP blocks), `javascript-url` and `form-no-destination`.
 // Sideways overflow, invisible focus rings, broken images and console errors belong to audit:ui.
+// --only <kind,kind> reports those kinds and nothing else, for a check that must hold while the rest is
+// not ready: `--only first-viewport-hidden,first-viewport-scroll-motion` on a design that is still moving
+// (three of seven design sprints finished with a scroll-driven entrance caught part-way on the first screen).
 //
 // THE BUDGET FILE. page-budget.json at the site root is the site's own: Baseline never ships or syncs
 // it, and this script works without it on the defaults below. `limits` overrides defaults for every
@@ -109,10 +112,13 @@ export function parseArgs(argv) {
     else if (flag === '--tabs') out.tabs = Number(value());
     else if (flag === '--init') out.init = true;
     else if (flag === '--no-axe') out.axe = false;
+    else if (flag === '--only') out.only = value().split(',').map(k => k.trim()).filter(Boolean);
     else if (flag === '--out') out.out = msysToNative(value());
     else throw Error('Unknown option: ' + flag);
   }
   if (out.help) return out;
+  if (out.only && (!out.only.length || out.only.some(kind => !/^[a-z][a-z0-9-]*$/.test(kind)))) throw Error('--only takes issue kinds separated by commas, such as first-viewport-hidden,first-viewport-scroll-motion');
+  if (out.only && out.init) throw Error('--only reports some kinds only; run --init without it');
   if (!out.base || !/^https?:\/\/[^/]+\/?$/.test(out.base)) throw Error('--base must be an http(s) origin, for example http://127.0.0.1:4321');
   if (!out.routes.length && !out.routesFile && !out.sitemap) throw Error('Give --routes, --routes-file or --sitemap');
   out.routes = out.routes.map(r => restoreGitBashRoute(r));
@@ -703,8 +709,11 @@ export async function checkQuality(options, hooks = {}) {
   if (!routes.length) throw Error('No routes to check');
   const budgetPath = options.budget ?? BUDGET_FILE;
   const budget = existsSync(budgetPath) ? parseBudget(readFileSync(budgetPath, 'utf8'), budgetPath) : null;
-  const axe = options.axe === false ? null : loadAxe();
-  if (options.axe !== false && !axe) hooks.progress?.('axe skipped: install @axe-core/playwright for the accessibility scan');
+  // --only: report these kinds and nothing else (the first-screen checks while a design is still moving).
+  const only = options.only?.length ? new Set(options.only) : null;
+  const wantsAxe = options.axe !== false && (!only || only.has('axe'));
+  const axe = wantsAxe ? loadAxe() : null;
+  if (wantsAxe && !axe) hooks.progress?.('axe skipped: install @axe-core/playwright for the accessibility scan');
   const browser = await chromium.launch();
   const measurements = [], issues = [];
   try {
@@ -720,13 +729,13 @@ export async function checkQuality(options, hooks = {}) {
   } finally { await browser.close(); }
   if (!options.init) issues.push(...duplicateIssues(measurements.filter(m => m.htmlKB !== undefined)));
   const written = options.init ? initBudget(measurements.filter(m => m.htmlKB !== undefined), budget) : null;
-  return { routes, budget: budget ? budgetPath : null, measurements, issues, written };
+  return { routes, budget: budget ? budgetPath : null, measurements, issues: only ? issues.filter(issue => only.has(issue.kind)) : issues, written, only: only ? [...only] : null };
 }
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   if (options.help) {
-    console.log('Usage: npm run check:quality -- --base http://127.0.0.1:4321 (--sitemap | --routes /,/about | --routes-file routes.txt) [--sample "^/posts/=3"] [--budget page-budget.json] [--tabs 40] [--no-axe] [--init] [--out report.json]');
+    console.log('Usage: npm run check:quality -- --base http://127.0.0.1:4321 (--sitemap | --routes /,/about | --routes-file routes.txt) [--sample "^/posts/=3"] [--budget page-budget.json] [--tabs 40] [--no-axe] [--only kind,kind] [--init] [--out report.json]');
     return;
   }
   const result = await checkQuality(options, { progress: line => process.stderr.write(line + '\n') });
@@ -737,7 +746,7 @@ async function main() {
     console.log(`Wrote ${target} from ${result.measurements.length} routes. Fill in each "_why", then commit it.`);
   }
   const unique = [...new Map(result.issues.map(i => [formatIssue(i), i])).values()];
-  console.log(`Quality: ${result.routes.length} routes${result.budget ? ` against ${result.budget}` : ' on the default limits'}, ${unique.length} issue${unique.length === 1 ? '' : 's'}.`);
+  console.log(`Quality: ${result.routes.length} routes${result.budget ? ` against ${result.budget}` : ' on the default limits'}${result.only ? `, only ${result.only.join(', ')}` : ''}, ${unique.length} issue${unique.length === 1 ? '' : 's'}.`);
   for (const issue of unique) console.log('  ' + formatIssue(issue));
   if (unique.length) process.exitCode = 2;
 }

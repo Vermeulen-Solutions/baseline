@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Classed list items (parts of built objects) take their grid width; prose list items keep the reading measure.",
-    "sha256": "d355c2208788aa89c0fd3779b2396688912c6b3fd608df700379e037e9624ada"
+    "reason": "Starter header: the two-line clamp applies to a plain text title only, at the brand class's own weight, so a brand built from elements keeps the site's layout; no token or page appearance changes for the starter.",
+    "sha256": "27b5a7ac3a010ca909b0337a5894e0b24e106d525f2c8e956756183587c407c1"
   },
   {
     "path": "src/styles/registry-aliases.css",
@@ -902,7 +902,7 @@
   },
   {
     "path": "src/components/PhotoSet.astro",
-    "reason": "Opt-in expressive component: composed photograph sets (pair, trio, strip, tall and small) from existing tokens; reviewed on /_expressive at 390, 768 and 1440 with geometry checks and a visual golden.",
-    "sha256": "75677781612cc8cec74a491d32eb7e0d1b6296c1c8f2231f92b69e676cd00c03"
+    "reason": "Opt-in expressive component: composed photograph sets (pair, trio, strip, tall and small) from existing tokens, taking the arrangement that fits when content changes the number of photographs; reviewed on /_expressive at 390, 768 and 1440 with geometry checks and a visual golden.",
+    "sha256": "3a6ed5bbd970f4cdabab3ce7ce7aef745b1d85d20500385e2c6f4d94473122c4"
   }
 ]

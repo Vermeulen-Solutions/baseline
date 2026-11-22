@@ -206,3 +206,13 @@ test('tall items are compared by how they are laid out, not by their tag and cla
   assert.equal(longestItemRun([[item(), item(), null, item(), item(), item()], [item(), item()]]), 3);
   assert.equal(longestItemRun(undefined), 0);
 });
+
+test('a lazy picture that has not loaded is brought into view and waited for, never read from its fallback src', async () => {
+  const { loadPendingImages } = await import('../scripts/audit-composition.mjs');
+  assert.equal(typeof loadPendingImages, 'function');
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  // Design trials got soft-photo for a full-width picture: the audit read the 800px src beside the srcset before the browser had chosen a file.
+  assert.match(source, /await page\.evaluate\(loadPendingImages\);\s*const model = await page\.evaluate\(measurePage\);/);
+  assert.match(source, /url: img\.currentSrc \|\| \(img\.srcset \? '' : img\.src\) \|\| ''/, 'a picture with a srcset counts only by the file the browser chose');
+  assert.doesNotMatch(source, /url: img\.currentSrc \|\| img\.src \|\| ''/);
+});

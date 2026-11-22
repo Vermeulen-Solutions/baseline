@@ -48,3 +48,17 @@ test('the motion names are read from the record for the composition audit', () =
   assert.deepEqual(worldMotionNames(record()), ['stamp-lands', 'route-draws', 'lid-twists']);
   assert.deepEqual(worldMotionNames(record({ world: false })), []);
 });
+
+test('only the motions the line describes are promised; the starter\'s own words are never counted', () => {
+  // The form design sprints wrote: world motions, then the page transition, the arrival attribute and the scroll library.
+  const mixed = '`dial-sweep`: the bezel turns; `stamp-lands`: the age stamp on the door sheet (`CLUB`); `ticket-rises`: the slips enter with `animation-timeline`; plus `curtain` between pages with `data-arrive`, `Lenis` on a desktop, all inside `prefers-reduced-motion`';
+  assert.deepEqual(worldMotionNames(record({ motion: mixed })), ['dial-sweep', 'stamp-lands', 'ticket-rises']);
+  assert.deepEqual(validateWorld(record({ motion: mixed })), []);
+  // Names followed by a bracket are the same form.
+  assert.deepEqual(worldMotionNames(record({ motion: '`needle-settles` (the gauge needle), `pipe-draws` (the copper run), `stamp-lands` (the Saturday stamp). Native scroll, no `Lenis`, transition `lift`' })), ['needle-settles', 'pipe-draws', 'stamp-lands']);
+  // A starter word is not a world motion even when it is written like one.
+  assert.deepEqual(worldMotionNames(record({ motion: '`lift`: between pages; `stamp-lands`: the stamp; `route-draws`: the path; `lid-twists`: the lid' })), ['stamp-lands', 'route-draws', 'lid-twists']);
+  assert.match(validateWorld(record({ motion: '`lift`: between pages; `wipe`: back; `stamp-lands`: the stamp' })).join('\n'), /Motion names 1 animation in backticks/);
+  // An older record that only lists names keeps every one of them.
+  assert.deepEqual(worldMotionNames(record({ motion: '`stamp-lands`, `route-draws` and `lid-twists`' })), ['stamp-lands', 'route-draws', 'lid-twists']);
+});

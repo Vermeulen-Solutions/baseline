@@ -226,7 +226,10 @@ test('starter header keeps brand and one Menu disclosure on a single row in both
   assert.match(rule('.site-menu'), /flex: none;/);
   assert.match(rule('.site-menu__toggle'), /white-space: nowrap;/);
   assert.match(rule('.site-nav:has(> .site-menu) > .site-brand'), /min-inline-size: 0;/);
-  assert.match(css, /@media not \(min-width: 48rem\) \{ \.site-nav:has\(> \.site-menu\) > \.site-brand:not\(:has\(> \.site-logo\)\) \{[^}]*-webkit-line-clamp: 2;[^}]*overflow: hidden;/);
+  // The two-line clamp is for a plain text title only, at the brand class's own weight: a brand built from
+  // elements (a mark and a name) keeps the site's layout, and a site's brand class can replace the clamp.
+  assert.match(css, /@media not \(min-width: 48rem\) \{ :where\(\.site-nav:has\(> \.site-menu\)\) > \.site-brand:where\(:not\(:has\(> \*\)\)\) \{[^}]*-webkit-line-clamp: 2;[^}]*overflow: hidden;/);
+  assert.doesNotMatch(css, /\.site-brand:not\(:has\(> \.site-logo\)\) \{[^}]*-webkit-box/, 'the clamp no longer outweighs a site brand class');
   assert.match(rule('.site-menu:where(:not([open])) > .site-menu__panel'), /display: none;/);
   // Inline links from 48rem need ::details-content; without it the disclosure stays at every width.
   assert.match(css, /@media \(min-width: 48rem\) \{ @supports selector\(::details-content\) \{ \.site-menu \{[^}]*\} \.site-menu::details-content \{ content-visibility: visible; \} \.site-menu__toggle \{ display: none; \}/);

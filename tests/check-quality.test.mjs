@@ -42,6 +42,10 @@ test('arguments need an origin and routes, and refuse Git Bash path conversion',
   assert.throws(() => parseArgs(['--routes', '/']), /--base must be an http\(s\) origin/);
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321/about', '--routes', '/']), /--base must be an http\(s\) origin/);
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321']), /Give --routes/);
+  // --only names the kinds to report: the first-screen checks at Stage 5, before the rest of the page is ready.
+  assert.deepEqual(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--only', 'first-viewport-hidden, first-viewport-scroll-motion']).only, ['first-viewport-hidden', 'first-viewport-scroll-motion']);
+  assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--only', 'First Screen']), /--only takes issue kinds/);
+  assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--only', 'axe', '--init']), /run --init without it/);
   assert.deepEqual(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'C:/Program Files/Git/']).routes, ['/'], 'Git Bash rewrites are undone');
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', 'D:/sites/page']), /MSYS_NO_PATHCONV/);
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--tabs', '-1']), /--tabs/);

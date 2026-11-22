@@ -83,7 +83,7 @@ The CSS and SVG techniques below build the kit without dependencies. Decorative 
   - Objects: <per page, the object each section is set as>
   - Surfaces: <two or three grounds and the edges between them>
   - Type: <display with its treatment; reading face; utility voice; largest size>
-  - Motion: <three to five motions, each its @keyframes name in backticks and the object it belongs to: `stamp-lands`: the batch stamp on the label; ...>
+  - Motion: <three to five motions, each its @keyframes name in backticks, a colon and the object it belongs to: `stamp-lands`: the batch stamp on the label; ... Name the page transition, the scroll library and other starter words after them without that form: only a backticked name followed by a colon or a bracket is checked as an animation that must run>
   - Photographs: <the frames and the tone treatment>
   - Feature: <the working feature, the job it does and the material it is built from>
 - **Decisions:**
