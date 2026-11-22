@@ -107,7 +107,7 @@ test('motions named in the record must run; the floor findings are the built wor
   assert.equal(missing.code, 'world-motion');
   assert.deepEqual(missing.missing, ['route-draws', 'lid-twists']);
   assert.match(missing.message, /`route-draws`, `lid-twists` in World › Motion, and none of them ran/);
-  assert.deepEqual([...FLOOR], ['bare-page', 'soft-photo', 'world-motion']);
+  assert.deepEqual([...FLOOR], ['bare-page', 'soft-photo', 'world-motion', 'impression-motion']);
   assert.equal(parseArgs(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--record', 'site/AGENTS.md']).record, 'site/AGENTS.md');
 });
 
@@ -215,4 +215,26 @@ test('a lazy picture that has not loaded is brought into view and waited for, ne
   assert.match(source, /await page\.evaluate\(loadPendingImages\);\s*const model = await page\.evaluate\(measurePage\);/);
   assert.match(source, /url: img\.currentSrc \|\| \(img\.srcset \? '' : img\.src\) \|\| ''/, 'a picture with a srcset counts only by the file the browser chose');
   assert.doesNotMatch(source, /url: img\.currentSrc \|\| img\.src \|\| ''/);
+});
+
+test('an impression site must carry a smoothed scroll, moving page changes and a pinned scene', async () => {
+  const { assessImpression, FLOOR: floor } = await import('../scripts/audit-composition.mjs');
+  assert.ok(floor.includes('impression-motion'));
+  const built = { smoothScroll: true, pageTransitions: true, pinnedScenes: 1 };
+  const bare = { smoothScroll: false, pageTransitions: false, pinnedScenes: 0 };
+  // Other tiers, and an audit with no measured route, are never judged.
+  assert.equal(assessImpression('task', [bare]), null);
+  assert.equal(assessImpression('editorial', [bare]), null);
+  assert.equal(assessImpression(null, [bare]), null);
+  assert.equal(assessImpression('impression', []), null);
+  assert.equal(assessImpression('impression', [built]), null);
+  // A piece counts when any audited route has it: the scene sits on the home page, the scroll and the layer on every page.
+  assert.equal(assessImpression('impression', [{ ...built, pinnedScenes: 0 }, built]), null);
+  const missing = assessImpression('impression', [bare, { ...bare, smoothScroll: true }]);
+  assert.equal(missing.code, 'impression-motion');
+  assert.equal(missing.missing.length, 2);
+  assert.match(missing.message, /page changes that move/);
+  assert.match(missing.message, /a pinned scene/);
+  assert.doesNotMatch(missing.message, /a smoothed scroll/);
+  assert.equal(assessImpression('impression', [bare]).missing.length, 3);
 });
