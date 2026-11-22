@@ -81,7 +81,21 @@ export function validateRecordDecided(markdown) {
 export const WORLD_PARTS = Object.freeze(['Source object', 'Inventory', 'Objects', 'Surfaces', 'Type', 'Motion', 'Photographs', 'Feature']);
 export const WORLD_BAR = Object.freeze({ inventory: 12, decisions: 3 });
 
-const motionNamesIn = value => [...new Set([...String(value).matchAll(/`([A-Za-z_-][\w-]*)`/g)].map(match => match[1]))];
+// Words the starter and the platform own. A record often mentions them in backticks beside its world
+// motions (the page-transition style, the arrival attribute, the smooth-scroll library, the motion
+// query), and none of them is a @keyframes name of the site's world: sprint records that named
+// `lift` or `data-arrive` failed the world-motion floor for an animation that was never promised.
+export const NOT_A_WORLD_MOTION = Object.freeze(['fade', 'lift', 'curtain', 'wipe', 'lenis', 'view', 'scroll', 'data-arrive', 'data-reveal', 'data-scroll', 'prefers-reduced-motion', 'no-preference', 'reduce', 'transitionstyle', 'siteshell', 'clientrouter', 'animation-timeline', 'animation-name', 'view-transition', 'infinite', 'linear', 'both', 'forwards']);
+
+// A motion is written as its name and what it belongs to: `stamp-lands`: the stamp on the label, or
+// `stamp-lands` (the stamp on the label). When the line uses that form, only those names count, so a
+// backticked word inside a description is not read as a promise. A line without it (an older record
+// that lists names with commas) keeps every backticked identifier.
+const motionNamesIn = value => {
+  const found = [...String(value).matchAll(/`([A-Za-z_-][\w-]*)`(\s*[:(])?/g)].filter(match => !NOT_A_WORLD_MOTION.includes(match[1].toLowerCase()));
+  const described = found.filter(match => match[2]);
+  return [...new Set((described.length ? described : found).map(match => match[1]))];
+};
 
 /** The @keyframes names the record's World › Motion line promises (audit:composition checks they run). */
 export function worldMotionNames(markdown) {
@@ -122,7 +136,7 @@ export function validateWorld(markdown) {
         if (count < WORLD_BAR.inventory) errors.push(`World: the inventory lists ${count} things; list at least ${WORLD_BAR.inventory}, separated by semicolons.`);
       } else if (part === 'Motion') {
         const names = motionNamesIn(value);
-        if (names.length < 3) errors.push(`World: Motion names ${names.length} animation${names.length === 1 ? '' : 's'} in backticks; name at least three by their @keyframes names (\`stamp-lands\`: the stamp on the label), so audit:composition can check they run.`);
+        if (names.length < 3) errors.push(`World: Motion names ${names.length} animation${names.length === 1 ? '' : 's'} in backticks; name at least three by their @keyframes names, each followed by a colon and what it belongs to (\`stamp-lands\`: the stamp on the label), so audit:composition can check they run. The starter's own words (a transitionStyle value, \`data-arrive\`, \`Lenis\`) are not counted.`);
       }
     }
   }

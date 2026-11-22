@@ -603,10 +603,13 @@
 		overflow-wrap: anywhere;
 	}
 
-	/* Below 48rem a text title wraps onto two lines, then ends in an ellipsis. The end padding keeps
-	   the last glyph's edge inside the clip. */
+	/* Below 48rem a plain text title wraps onto two lines, then ends in an ellipsis. The end padding
+	   keeps the last glyph's edge inside the clip. A brand a site builds from elements (a mark beside
+	   the name, the name and a place) keeps its own layout: the clamp's box turned those children
+	   into a stack and closed the gap between them. The rule stays at the brand class's own weight,
+	   so a site's brand class can replace it. */
 	@media not (min-width: 48rem) { /* --breakpoint-md */
-		.site-nav:has(> .site-menu) > .site-brand:not(:has(> .site-logo)) {
+		:where(.site-nav:has(> .site-menu)) > .site-brand:where(:not(:has(> *))) {
 			display: -webkit-box;
 			-webkit-box-orient: vertical;
 			-webkit-line-clamp: 2;

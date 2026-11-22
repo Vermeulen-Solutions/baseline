@@ -379,8 +379,10 @@ export function measurePage() {
   }
   // Wide photographs; main() loads each chosen file on its own to read its real pixel width
   // (with a srcset, naturalWidth is scaled by the candidate's density and hides the stretch).
+  // Only the file the browser chose counts: a picture with a srcset that still has not loaded is
+  // left out, because its src attribute is a fallback no visitor's browser shows.
   const wideImages = [...main.querySelectorAll('img')].filter(visible)
-    .map((img) => ({ shown: Math.round(img.getBoundingClientRect().width), url: img.currentSrc || img.src || '' }))
+    .map((img) => ({ shown: Math.round(img.getBoundingClientRect().width), url: img.currentSrc || (img.srcset ? '' : img.src) || '' }))
     .filter((p) => p.url && !/\.svg(\?|$)/i.test(p.url) && p.shown >= vw * 0.4);
   const h2Sizes = sizes('h2').sort((a, b) => a - b);
   return {
@@ -445,6 +447,26 @@ export function formatRoute(route, model, findings) {
   return [head, ...findings.map((f) => `  [${f.code}] ${f.message}`)].join('\n');
 }
 
+/**
+ * In the page: brings each lazy picture the scroll did not load into view and waits for it. A lazy
+ * image that has not loaded has no chosen file yet; read from its `src` attribute (the small
+ * fallback beside the srcset) it looked like a photograph stretched to its frame, and design trials
+ * got `soft-photo` for a full-width picture the browser shows from a 2000px file.
+ */
+export async function loadPendingImages() {
+  const pending = [...document.querySelectorAll('img')].filter((img) => !img.complete || !img.currentSrc);
+  for (const img of pending.slice(0, 60)) {
+    if (!img.getClientRects().length) continue;
+    img.scrollIntoView({ block: 'center' });
+    await Promise.race([
+      new Promise((resolve) => { img.addEventListener('load', resolve, { once: true }); img.addEventListener('error', resolve, { once: true }); }),
+      new Promise((resolve) => setTimeout(resolve, 4000)),
+    ]);
+  }
+  if (pending.length) scrollTo(0, 0);
+  return pending.length;
+}
+
 /** Loads a page at the wide width, scrolls it with motion allowed, then measures it with motion reduced. */
 async function measureWide(browser, url, width, { declineConsent = false } = {}) {
   const page = await browser.newPage({ viewport: { width, height: 900 } });
@@ -473,6 +495,7 @@ async function measureWide(browser, url, width, { declineConsent = false } = {})
       return { most, names: [...names] };
     });
     await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.evaluate(loadPendingImages);
     const model = await page.evaluate(measurePage);
     for (const section of model.sections) { section.itemRun = longestItemRun(section.itemRows); delete section.itemRows; }
     model.craft.motion = motion.most;

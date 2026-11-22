@@ -190,10 +190,18 @@ test('IndexList rows are a real list with one stretched link, and the preview is
   assert.doesNotMatch(index, /\.index-list__title \{[^}]*translate/, 'the title never moves under the pointer');
 });
 
-test('PhotoSet checks its count per layout, crops by design and moves a linked picture only for a fine pointer', () => {
+test('PhotoSet fits the photographs it is given, crops by design and moves a linked picture only for a fine pointer', () => {
   const set = read('src/components/PhotoSet.astro');
   assert.match(set, /const counts = \{ pair: \[2, 2\], trio: \[3, 3\], strip: \[3, 6\], tallSmall: \[2, 2\] \} as const;/);
-  assert.match(set, /throw new Error\(`PhotoSet: layout "\$\{layout\}" takes/);
+  // Content changes: a count that does not suit the layout takes the arrangement that fits, and the build goes on.
+  assert.doesNotMatch(set, /throw new Error\(`PhotoSet: layout "\$\{[a-z]+\}" takes/, 'a changed number of photographs never stops the build');
+  assert.match(set, /throw new Error\(`PhotoSet: unknown layout/, 'a misspelt layout is still a build error');
+  assert.match(set, /const items = given\.filter\(\(item\) => item && item\.image\);/, 'an item without a picture is left out');
+  assert.match(set, /count >= range\[0\] && count <= range\[1\] \? wanted\s*: count <= 1 \? 'single'\s*: count === 2 \? 'pair'\s*: count === 3 \? 'trio'\s*: 'strip';/);
+  assert.match(set, /Math\.ceil\(count \/ Math\.ceil\(count \/ 6\)\)/, 'a long strip wraps into rows of equal length');
+  assert.match(set, /\{\(count > 0 \|\| hasWords\) && <div/, 'nothing is rendered for an empty set without words');
+  assert.match(set, /import\.meta\.env\.DEV\) \{\s*console\.warn\(`PhotoSet: layout/, 'the mismatch is said once, while developing');
+  assert.doesNotMatch(set, /:has\(\.photo-set__item:nth-of-type/, 'the strip takes its row length from the count, not from a selector per count');
   assert.match(set, /container: photo-set \/ inline-size;/);
   assert.match(set, /@container photo-set \(min-width: 40rem\)/);
   assert.match(set, /class="photo-set__frame" data-tone=\{toneValue\} data-audit-crop-ok/, 'audit:ui knows the frame crops on purpose');

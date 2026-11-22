@@ -187,6 +187,8 @@ A composed set of photographs for one section, so sections built round pictures 
 | `strip` | Three to six square details in one row: hands, tools, materials | Two up |
 | `tallSmall` | A tall 4:5 photograph on half the width; the section's words (the slot) at the top of the other half and a small square at its foot, level with the tall one | Words, the tall one, the small one at half width |
 
+The photographs usually come from content an owner edits, so the set does not depend on their number. When the count suits the layout (two for `pair` and `tallSmall`, three for `trio`, three to six for `strip`), the layout is used as written. Otherwise the set shows what is there in the arrangement that fits: one photograph alone (across the set, or on half the width beside the words), two as a pair, three as a trio, four or more as a strip, which wraps into rows of equal length past six. An item without an `image` is left out, and a set with no photographs and no words renders nothing. The development server prints one line when this happens, so a mismatch in seed content is noticed.
+
 ```astro
 ---
 import PhotoSet from '../components/PhotoSet.astro';
