@@ -55,13 +55,13 @@ At the new-site or significant-redesign concept checkpoint, offer the design sur
 
 ## Shared design authority
 
-For motion, illustration, charts, editable vectors, 3D, video or another requested capability, follow `site-art-direction/references/capability-routing.md`. Keep the chosen surface and runtime, use relevant installed guidance first, inspect catalogue skills for a concrete gap, and test the actual output before expanding. A motion request does not imply Brilliant; native film and interactive browser behavior require separate acceptance.
+When the record says `Motion Tier: impression`, the smoothed scroll, the Interlude page transitions and a pinned scene are required and may use scripts: build them exactly as `astro-site-design/references/impression-motion.md` sets out. For other motion, illustration, charts, editable vectors, 3D, video or another requested capability, follow `site-art-direction/references/capability-routing.md`. Keep the chosen surface and runtime, use relevant installed guidance first, inspect catalogue skills for a concrete gap, and test the actual output before expanding. A motion request does not imply Brilliant; native film and interactive browser behavior require separate acceptance.
 
 `src/styles/global.css`, the layout primitives, `SiteShell.astro`, `design:tokens`
 and `check:art-direction` are canonical. Before client-specific visual work,
 save a complete Art Direction Record section (replaced by its heading line) with Aesthetic Lane, Narrative Metaphor,
 Typography Pairing (Display and Body), Token Physics (Canvas, Action/Accent,
-Borders, Spatial Density), and two or three semicolon-separated Site Anti-Patterns.
+Borders, Spatial Density), two or three semicolon-separated Site Anti-Patterns, and for a new direction the Motion Tier (task, editorial or impression, with the client's words that decide it; `site-art-direction`, "Record the motion tier").
 Run `npm run check:art-direction -- --require-record` before implementing that work.
 
 This reusable foundation has no invented client art direction. Starter infrastructure

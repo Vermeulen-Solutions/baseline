@@ -63,6 +63,22 @@ Set each level from the strongest signal in the brief:
 | Motion | The audience is task-focused, includes many older or motion-sensitive visitors, or the performance budget is tight | Motion explains a product, process or sequence, the identity is kinetic, or the site's job is the impression (a portfolio, a place, food, an event): there the scroll itself can be smoothed to carry scroll-linked staging ([smooth scroll](../astro-site-design/references/smooth-scroll.md)) | Motion that neither explains nor gives feedback is load and distraction; reduced-motion behaviour is required at every level |
 | Density | There are few high-value actions and the copy carries the brand | Visitors scan many comparable items (schedules, catalogues, data, listings) | Density should match the scanning task: spacious layouts slow comparison, dense ones bury a single message |
 
+### Record the motion tier
+
+The motion level is a recorded decision with consequences, because sites whose clients asked for impact were built with the same motion as a plumber's. Decide it from the client's own words and write it in the record with those words:
+
+`- **Motion Tier:** impression — "On veut un site qui claque, qui donne l'ambiance dès la première seconde"`
+
+| Tier | Choose it when | What the site then carries |
+| --- | --- | --- |
+| `task` | The page's main visitor came to do one thing quickly (call, book, find the hours) and the client did not ask for impact | The world's quiet CSS motions. No scroll library, no pinned scene, page changes as the browser makes them |
+| `editorial` | Neither of the other two rows applies | The world's CSS motions in four layers ([world building](references/world-building.md)) and one of the starter's `transitionStyle` page changes |
+| `impression` | The client's message or answers ask for impact, atmosphere or movement in their own words (a site that strikes, that gives the feel at once, pages that change in motion), or the client is a venue, a club, an event, a festival, or a studio or artist showing visual work | Everything on the editorial row, and three scripted pieces, all required: a smoothed scroll, page transitions with Interlude, and at least one pinned scene. Build them from [impression motion](../astro-site-design/references/impression-motion.md) |
+
+When a client asks for impact and the main visitor also has a task (a club whose visitors want tonight's programme), the tier is `impression` and the task still sits on the first screen: the tier adds motion, it never moves the task.
+
+`check:art-direction -- --require-references` fails until the record has this line with the client's words, and on the `impression` tier `audit:composition` reports `impression-motion` until the three pieces are on the built pages.
+
 When a request needs motion or another specialist capability, follow [capability routing](references/capability-routing.md): keep the chosen surface, combine craft guidance with the correct runtime adapter, and demonstrate actual behavior. Installed Impeccable motion guidance applies across surfaces; Brilliant's timeline is one execution path. Discover external skills only when the installed guidance leaves a concrete gap.
 
 For logo/icon variants or refinement, read [website brand assets](references/brand-assets.md). For a related illustration set or explanatory artwork, read [editorial illustration](references/editorial-illustration.md), which preserves the requested native/vector medium and resolves upstream picture-format defaults for that scope. These are conditional asset tasks, not a new identity workshop on every site.
@@ -162,6 +178,7 @@ Use an adopted `PRODUCT.md` as brief evidence when present, and identify the sel
   - Borders: [Hairline 1px / 8px radius / pill / sharp]
   - Spatial Density: [Compact / Standard / Spacious]
 - **Site Anti-Patterns:** [First concrete ban; second concrete ban; optional third ban]
+- **Motion Tier:** [task | editorial | impression] — "[the client's words that decide it]" [Required for a new direction; on impression, read astro-site-design/references/impression-motion.md]
 - **Governing Idea:** [Optional for the gate, expected for a new direction: what the site is as an object, and the structural choices it decides]
 - **Signature Moments:** [Optional for the gate, expected for a new direction: per page archetype, the one moment and the capability that delivers it]
 - **References:** audit/references/references.md [Required for a new direction; once named, every check:art-direction run validates the file]

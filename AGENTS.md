@@ -76,7 +76,8 @@ For motion, illustration, charts, editable vectors, 3D, video or another request
 Save one complete Art Direction Record section in this file before site-specific
 visual work (replace it by its heading line, or with `design:tokens --write-record`), including Aesthetic Lane, Narrative Metaphor, Typography Pairing,
 Token Physics (Canvas, Action/Accent, Borders, Spatial Density), and two or three
-semicolon-separated Site Anti-Patterns. Saving does not require a Git commit.
+semicolon-separated Site Anti-Patterns, and for a new direction the Motion Tier (task,
+editorial or impression, with the client's words that decide it). Saving does not require a Git commit.
 Run `npm run check:art-direction -- --require-record` before implementation.
 
 The gate applies to visual work regardless of extension or directory. Route
@@ -107,7 +108,10 @@ commands as new-site-workflow's impeccable-passes.md sets out.
   `prefers-reduced-motion: no-preference`, and only defined scale tokens (`--duration-*`,
   `--ease-*`, `--radius-*`, `--focus-ring-*`; `check:css -- --guardrails` flags others).
   Prefer native `<details>`, `<dialog>`, popover and the shell's cross-document page
-  transitions over scripts; see design-framework.md section 5.
+  transitions over scripts; see design-framework.md section 5. One exception, decided in the
+  record: when it says `Motion Tier: impression`, the smoothed scroll, the Interlude page
+  transitions and the pinned scene are required and may use scripts, built exactly as
+  `astro-site-design/references/impression-motion.md` sets out; everything else stays as above.
 - A missing CMS entry returns `Astro.rewrite("/404")`, never a redirect. Keep the
   middleware's security headers, `/llms.txt` sections and RichText block renderers in
   step with new routes, collections and Portable Text types.

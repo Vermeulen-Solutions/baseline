@@ -97,6 +97,40 @@ const motionNamesIn = value => {
   return [...new Set((described.length ? described : found).map(match => match[1]))];
 };
 
+// How much motion the site carries, decided from the client's own words and recorded with them.
+// task: the visitor came to do one thing fast. editorial: the world's CSS motions. impression: the
+// site's job is how it feels, and scripted motion (smoothed scroll, page transitions, pinned scenes)
+// is expected; audit:composition checks that an impression site has them.
+export const MOTION_TIERS = Object.freeze(['task', 'editorial', 'impression']);
+
+const recordSection = markdown => {
+  const lines = String(markdown ?? '').split(/\r?\n/);
+  const start = lines.findIndex(line => /^## Art Direction Record\s*$/.test(line));
+  if (start < 0) return [];
+  const end = lines.findIndex((line, index) => index > start && /^## /.test(line));
+  return lines.slice(start + 1, end < 0 ? undefined : end);
+};
+
+/** The record's Motion Tier: 'task', 'editorial' or 'impression'; null when the record has no such line; 'invalid' for another word. */
+export function motionTier(markdown) {
+  const line = recordSection(markdown).find(entry => /^\s*- \*\*Motion Tier:\*\*/.test(entry));
+  if (!line) return null;
+  const word = (line.replace(/^\s*- \*\*Motion Tier:\*\*/, '').trim().match(/^[A-Za-z]+/) ?? [''])[0].toLowerCase();
+  return MOTION_TIERS.includes(word) ? word : 'invalid';
+}
+
+/** With required: a new direction records its tier and the client's words that decide it. A tier that is present is always checked. */
+export function validateMotionTier(markdown, { required = false } = {}) {
+  const line = recordSection(markdown).find(entry => /^\s*- \*\*Motion Tier:\*\*/.test(entry));
+  const form = '- **Motion Tier:** task | editorial | impression — "<the client\'s words that decide it>"';
+  if (!line) return required ? [`Motion Tier: add the line ${form} to the record (site-art-direction, "Set the expressive range").`] : [];
+  const tier = motionTier(markdown);
+  if (tier === 'invalid') return [`Motion Tier: the first word must be task, editorial or impression (${form}).`];
+  const reason = line.replace(/^\s*- \*\*Motion Tier:\*\*\s*[A-Za-z]+/, '').replace(/^[\s—–:-]+/, '').trim();
+  if (reason.length < 12 || /^[<\[]/.test(reason)) return [`Motion Tier: after "${tier}", quote the client's words that decide it (${form}).`];
+  return [];
+}
+
 /** The @keyframes names the record's World › Motion line promises (audit:composition checks they run). */
 export function worldMotionNames(markdown) {
   const lines = String(markdown ?? '').split(/\r?\n/);
@@ -371,6 +405,7 @@ export function formatRecordDiagnostics(markdown, errors) {
     '  - Borders: <concrete border treatment>',
     '  - Spatial Density: <concrete spacing approach>',
     '- **Site Anti-Patterns:** <first ban>; <second ban>; <optional third ban>',
+    '- **Motion Tier:** <task | editorial | impression> — "<the client\'s words that decide it>"',
   ];
   let fence = null, inRecord = false;
   const received = [];
@@ -462,6 +497,8 @@ function main() {
     // The same new direction builds its world and writes its decisions down.
     errors.push(...validateWorld(agentsMd).map(error => `AGENTS.md: ${error}`));
   }
+  // A new direction (the flag is passed at Stage 4) records its motion tier; a tier that is written is always checked.
+  errors.push(...validateMotionTier(agentsMd, { required: args.includes('--require-references') }).map(error => `AGENTS.md: ${error}`));
   // Stage 5: the built pages compared with the references; a file that has the table keeps it valid.
   const referencesText = existsSync(REFERENCES_FILE) ? readFileSync(REFERENCES_FILE, 'utf8') : '';
   if (args.includes('--require-comparison') || /^###\s+Built against the references\s*$/m.test(referencesText)) {

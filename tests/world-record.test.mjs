@@ -62,3 +62,23 @@ test('only the motions the line describes are promised; the starter\'s own words
   // An older record that only lists names keeps every one of them.
   assert.deepEqual(worldMotionNames(record({ motion: '`stamp-lands`, `route-draws` and `lid-twists`' })), ['stamp-lands', 'route-draws', 'lid-twists']);
 });
+
+test('the motion tier is a recorded decision with the client\'s words', async () => {
+  const { motionTier, validateMotionTier, MOTION_TIERS } = await import('../scripts/check-art-direction.mjs');
+  assert.deepEqual([...MOTION_TIERS], ['task', 'editorial', 'impression']);
+  const withTier = (line) => record().replace('- **World:**', `${line}\n- **World:**`);
+  const impression = withTier('- **Motion Tier:** impression — "We want a site that strikes from the first second"');
+  assert.equal(motionTier(impression), 'impression');
+  assert.deepEqual(validateMotionTier(impression, { required: true }), []);
+  // A new direction must record it; an older record without the line stays valid.
+  assert.equal(motionTier(record()), null);
+  assert.match(validateMotionTier(record(), { required: true }).join('\n'), /Motion Tier: add the line/);
+  assert.deepEqual(validateMotionTier(record()), []);
+  // Another word, or no reason, fails whenever the line is there.
+  assert.equal(motionTier(withTier('- **Motion Tier:** lively')), 'invalid');
+  assert.match(validateMotionTier(withTier('- **Motion Tier:** lively')).join('\n'), /first word must be task, editorial or impression/);
+  assert.match(validateMotionTier(withTier('- **Motion Tier:** task')).join('\n'), /quote the client's words/);
+  assert.match(validateMotionTier(withTier('- **Motion Tier:** task — <the client\'s words>')).join('\n'), /quote the client's words/);
+  // The line is read only inside the record section.
+  assert.equal(motionTier(record().replace('## Next section', '## Next section\n- **Motion Tier:** impression — outside the record')), null);
+});

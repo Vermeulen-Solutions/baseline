@@ -1,6 +1,6 @@
 # Smooth scroll for impression-led sites
 
-Read this when the Art Direction Record sets the motion range to expressive and the site's job is the impression, or when a page's staging is built on the scroll (pinned photographs, view-timeline entrances, layered parallax). Smoothed wheel scrolling gives that staging weight: the page glides and settles instead of jumping by the wheel's steps, and the scroll-linked motion moves with it. It is a recorded dependency decision for one site, never a default.
+Read this when the Art Direction Record sets the motion range to expressive and the site's job is the impression, or when a page's staging is built on the scroll (pinned photographs, view-timeline entrances, layered parallax). Smoothed wheel scrolling gives that staging weight: the page glides and settles instead of jumping by the wheel's steps, and the scroll-linked motion moves with it. It is a recorded dependency decision for one site, never a default. When the record says `Motion Tier: impression` it is required: build it as the first of the three pieces in [impression motion](impression-motion.md).
 
 ## When to reach for it
 
@@ -31,6 +31,8 @@ npm install --save-exact lenis@1.3.27
   import 'lenis/dist/lenis.css';
 
   const w = window as typeof window & { smoothScroll?: Lenis };
+  // With Interlude page transitions: is the transition layer covering the page?
+  const covered = () => { const layer = document.querySelector<HTMLElement>('[data-interlude]'); return Boolean(layer && layer.dataset.state && layer.dataset.state !== 'idle'); };
 
   function start() {
     // The visual editor scrolls natively.
@@ -41,6 +43,8 @@ npm install --save-exact lenis@1.3.27
       allowNestedScroll: true, // menus, lists and lightboxes that scroll inside themselves stay native
       stopInertiaOnNavigate: true,
     });
+    // Started under a page transition's cover: still until the page is shown.
+    if (covered()) w.smoothScroll.stop();
   }
 
   start();
@@ -51,6 +55,8 @@ npm install --save-exact lenis@1.3.27
     w.smoothScroll?.destroy();
     start();
   });
+  // Interlude has uncovered the new page: scroll again. Without Interlude this event never fires.
+  document.addEventListener('interlude:idle', () => w.smoothScroll?.start());
 </script>
 ```
 
