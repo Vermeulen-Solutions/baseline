@@ -184,7 +184,8 @@ async function capture(options) {
           // makes "auto" invalid, the browser picks another source, and a full-page capture paints the photograph blank.
           document.querySelectorAll('img[loading="lazy"]').forEach(img => { if (!img.complete && !/^\s*auto\b/i.test(img.getAttribute('sizes') ?? '')) img.loading = 'eager'; });
           await Promise.all([...document.images].map(img => img.complete ? null : new Promise(r => { img.onload = img.onerror = r; setTimeout(r, 8000); })));
-          await Promise.all([...document.images].map(img => img.decode().catch(() => null)));
+          // A lazy image kept lazy (sizes="auto, …") that is not near the screen never decodes: wait four seconds at most.
+          await Promise.all([...document.images].map(img => Promise.race([img.decode().catch(() => null), new Promise(r => setTimeout(r, 4000))])));
           window.scrollTo(0, 0);
         });
         await page.waitForLoadState('networkidle', { timeout: 8000 }).catch(() => {});
@@ -199,6 +200,14 @@ async function capture(options) {
         // capture would show a wider, shifted page than anyone sees, so it is clipped to the viewport width.
         const viewportWidth = page.viewportSize().width;
         const overflowX = await page.evaluate(() => Math.max(document.documentElement.scrollWidth, document.body?.scrollWidth ?? 0) > document.documentElement.clientWidth + 1);
+        // Which element reaches furthest past the right edge, so the warning says where to look.
+        const overflowBy = overflowX ? await page.evaluate(() => {
+          const edge = document.documentElement.clientWidth; let worst = null;
+          for (const el of document.querySelectorAll('body *')) { const r = el.getBoundingClientRect(); if (r.width && r.right > edge + 1 && (!worst || r.right > worst.right)) worst = { right: r.right, el }; }
+          if (!worst) return null;
+          const el = worst.el; const cls = typeof el.className === 'string' && el.className.trim() ? '.' + el.className.trim().split(/\s+/).slice(0, 2).join('.') : '';
+          return `${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}${cls} reaches ${Math.round(worst.right - edge)}px past the right edge`;
+        }) : null;
         const shots = [['full', () => page.screenshot({ fullPage: true, timeout: 45000, clip: { x: 0, y: 0, width: viewportWidth, height } })]];
         if (loadShot) shots.unshift(['load', async () => loadShot]);
         for (const y of options.frames) if (y === 0 || y < height) shots.push([`frame-${y}`, async () => { await page.evaluate(v => window.scrollTo(0, v), y); await page.waitForTimeout(250); return page.screenshot(); }]);
@@ -213,7 +222,7 @@ async function capture(options) {
           if (run === 0) writeFileSync(path.join(options.out, shotName(route, width, kind)), buffer);
           // Keep a differing repeat so --compare can show where a non-deterministic page changes.
           else if (first && first.sha !== sha(buffer)) writeFileSync(path.join(options.out, shotName(route, width, kind).replace(/\.png$/, `-run${run + 1}.png`)), buffer);
-          records.push({ route, width, kind, status: response?.status() ?? null, height, overflowX, sha: sha(buffer) });
+          records.push({ route, width, kind, status: response?.status() ?? null, height, overflowX, overflowBy, sha: sha(buffer) });
         }
       } catch (error) {
         if (run === 0) skipped.push({ route, width, kind: 'page', reason: timedOut ? `no result within ${options.routeTimeout / 1000}s (--route-timeout)` : error.message.split('\n')[0] });
@@ -251,7 +260,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       if (result.changed.length || result.missing.length) process.exitCode = 2;
     } else {
       const { summary, skipped } = await capture(options);
-      for (const r of summary) console.log(`${r.width} ${r.status} ${r.route} ${r.kind}${r.overflowX ? ' OVERFLOW-X' : ''}${r.deterministic ? '' : ' NON-DETERMINISTIC'}`);
+      for (const r of summary) console.log(`${r.width} ${r.status} ${r.route} ${r.kind}${r.overflowX ? ` OVERFLOW-X${r.overflowBy ? ` (${r.overflowBy})` : ''}` : ''}${r.deterministic ? '' : ' NON-DETERMINISTIC'}`);
       for (const s of skipped) console.log(`${s.width} SKIPPED ${s.route} ${s.kind}: ${s.reason}`);
       if (!summary.length || skipped.some(s => s.kind === 'page')) process.exitCode = 1;
     }

@@ -16,7 +16,10 @@ test('every image is cut at the same number of screens and scaled to one column'
 });
 
 test('arguments need the page, a reference and an output', () => {
-  assert.throws(() => parseArgs(['--images', 'one.png', '--out', 'x.jpg']), /at least one reference/);
+  // One page on its own is a sheet too: Stage 5 asks for a page-only sheet beside the comparison.
+  // A single image passes the count check and is then looked for on disk like any other.
+  assert.throws(() => parseArgs(['--images', 'one.png', '--out', 'x.jpg']), /Image not found: one.png/);
+  assert.throws(() => parseArgs(['--images', ',', '--out', 'x.jpg']), /at least one image/);
   assert.throws(() => parseArgs(['--images', 'a.png,b.png']), /--out/);
   assert.throws(() => parseArgs(['--images', 'missing-a.png,missing-b.png', '--out', 'x.jpg']), /Image not found/);
 });

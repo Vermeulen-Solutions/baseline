@@ -70,6 +70,7 @@ export function parseArgs(argv) {
     else if (flag === '--out') out.out = msysToNative(value());
     else if (flag === '--record') out.record = msysToNative(value());
     else if (flag === '--references') out.references = msysToNative(value());
+    else if (flag === '--refresh-references') out.refreshReferences = true;
     else if (flag === '--help' || flag === '-h') out.help = true;
     else throw Error('Unknown flag ' + flag);
   }
@@ -179,12 +180,21 @@ export function softPhotos(images, dpr = 1) {
  * the facts measured per audited route with motion allowed. Null when the tier is not impression or
  * nothing is missing.
  */
+// Through a scene that tells something, the screen changes: three trial scenes measured 0.2% (one clock hand
+// turning beside three lines of text), 35% (photographs changing in a band) and 58% (five full-screen photographs).
+export const SCENE_CHANGE = 0.25;
+
 export function assessImpression(tier, routes) {
   if (tier !== 'impression' || !routes.length) return null;
   const missing = [];
   if (!routes.some((r) => r.smoothScroll)) missing.push('a smoothed scroll (astro-site-design/references/smooth-scroll.md: no page has the lenis class on <html>)');
   if (!routes.some((r) => r.pageTransitions)) missing.push('page changes that move (astro-site-design/references/impression-motion.md, "Page transitions": no page has the transition layer, [data-interlude])');
   if (!routes.some((r) => r.pinnedScenes > 0)) missing.push('a pinned scene (impression-motion.md, "A pinned scene": no page has a stage that stays on screen while a taller section scrolls past)');
+  else {
+    const changes = routes.map((r) => r.sceneChange).filter((value) => typeof value === 'number');
+    const best = changes.length ? Math.max(...changes) : null;
+    if (best !== null && best < SCENE_CHANGE) missing.push(`a pinned scene that carries the subject (impression-motion.md, "A pinned scene": through the scene only ${Math.round(best * 100)}% of the screen changes; show the site's photographs or content at stage size, so that at least ${Math.round(SCENE_CHANGE * 100)}% changes)`);
+  }
   if (!missing.length) return null;
   return { code: 'impression-motion', missing, message: `The record says Motion Tier: impression, and the built pages lack ${missing.join('; ')}. Build them, or correct the tier in the record with the client's words that decide it.` };
 }
@@ -483,10 +493,25 @@ export async function loadPendingImages() {
   return pending.length;
 }
 
+/** In a blank page: the share of the picture that differs between two screenshots (data URLs of the same size). */
+export async function changedFraction([first, second]) {
+  const load = (src) => new Promise((resolve) => { const img = new Image(); img.onload = () => resolve(img); img.src = src; });
+  const [a, b] = await Promise.all([load(first), load(second)]);
+  const width = 360, height = Math.round(360 * a.height / a.width);
+  const pixels = (img) => { const canvas = new OffscreenCanvas(width, height); const context = canvas.getContext('2d'); context.drawImage(img, 0, 0, width, height); return context.getImageData(0, 0, width, height).data; };
+  const one = pixels(a), two = pixels(b);
+  let changed = 0;
+  for (let i = 0; i < one.length; i += 4) if (Math.max(Math.abs(one[i] - two[i]), Math.abs(one[i + 1] - two[i + 1]), Math.abs(one[i + 2] - two[i + 2])) > 32) changed += 1;
+  return Math.round(1000 * changed / (width * height)) / 1000;
+}
+
 /** Loads a page at the wide width, scrolls it with motion allowed, then measures it with motion reduced. */
-async function measureWide(browser, url, width, { declineConsent = false } = {}) {
+async function measureWide(browser, url, width, { declineConsent = false, scene = false } = {}) {
   const page = await browser.newPage({ viewport: { width, height: 900 } });
   try {
+    // Every animation that starts, from the first paint on: an arrival that plays once at load is over before
+    // the scroll below begins, and sprint sites that recorded one were told it never ran.
+    await page.addInitScript(() => { window.__animationsStarted = []; document.addEventListener('animationstart', (event) => { if (event.animationName) window.__animationsStarted.push(event.animationName); }, true); });
     await page.goto(url, { waitUntil: 'networkidle', timeout: 60000 }).catch(() => page.waitForTimeout(3000));
     if (declineConsent) {
       if (isBotWall(await page.title(), await page.evaluate(() => document.body?.innerText ?? ''))) throw Error('a bot wall answered instead of the site');
@@ -499,7 +524,7 @@ async function measureWide(browser, url, width, { declineConsent = false } = {})
     const motion = await page.evaluate(async () => {
       const height = document.documentElement.scrollHeight;
       let most = 0;
-      const names = new Set();
+      const names = new Set(window.__animationsStarted ?? []);
       for (let y = 0; y < height; y += 600) {
         scrollTo(0, y);
         await new Promise((resolve) => setTimeout(resolve, 100));
@@ -516,13 +541,35 @@ async function measureWide(browser, url, width, { declineConsent = false } = {})
         const track = el.parentElement?.getBoundingClientRect();
         return stage.height >= vh * 0.8 && track && track.height >= vh * 1.8;
       }).length + document.querySelectorAll('.pin-spacer').length;
+      const firstStage = [...document.querySelectorAll('body *')].find((el) => {
+        if (getComputedStyle(el).position !== 'sticky') return false;
+        const stage = el.getBoundingClientRect();
+        const track = el.parentElement?.getBoundingClientRect();
+        return stage.height >= vh * 0.8 && track && track.height >= vh * 1.8;
+      });
+      const trackBox = firstStage?.parentElement.getBoundingClientRect();
       const impression = {
+        sceneTrack: trackBox ? { top: Math.round(trackBox.top + scrollY), height: Math.round(trackBox.height) } : null,
         smoothScroll: document.documentElement.classList.contains('lenis'),
         pageTransitions: Boolean(document.querySelector("[data-interlude]")),
         pinnedScenes,
       };
       return { most, names: [...names], impression };
     });
+    // How much of the screen changes through the first pinned scene: frames near its start, middle and end.
+    if (scene && motion.impression.sceneTrack) {
+      const { top, height: trackHeight } = motion.impression.sceneTrack;
+      const frames = [];
+      for (const at of [0.08, 0.5, 0.92]) {
+        await page.evaluate((y) => scrollTo(0, y), Math.round(top + (trackHeight - 900) * at));
+        await page.waitForTimeout(700);
+        frames.push('data:image/png;base64,' + (await page.screenshot()).toString('base64'));
+      }
+      await page.evaluate(() => scrollTo(0, 0));
+      const differ = await browser.newPage();
+      try { motion.impression.sceneChange = Math.max(await differ.evaluate(changedFraction, [frames[0], frames[1]]), await differ.evaluate(changedFraction, [frames[1], frames[2]]), await differ.evaluate(changedFraction, [frames[0], frames[2]])); }
+      finally { await differ.close(); }
+    }
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.evaluate(loadPendingImages);
     const model = await page.evaluate(measurePage);
@@ -545,7 +592,7 @@ async function measureWide(browser, url, width, { declineConsent = false } = {})
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
-  if (options.help) { console.log('Usage: npm run audit:composition -- --base <origin> --routes /,/about [--widths 1440,390] [--record AGENTS.md] [--references audit/references/references.md] [--json] [--out file] [--strict]'); return; }
+  if (options.help) { console.log('Usage: npm run audit:composition -- --base <origin> --routes /,/about [--widths 1440,390] [--record AGENTS.md] [--references audit/references/references.md] [--refresh-references] [--json] [--out file] [--strict]'); return; }
   const recordFile = options.record ?? (existsSync('AGENTS.md') ? 'AGENTS.md' : null);
   if (options.record && !existsSync(options.record)) throw Error(`--record file not found: ${options.record}`);
   if (options.references && !existsSync(options.references)) throw Error(`--references file not found: ${options.references}`);
@@ -564,19 +611,27 @@ async function main() {
   const references = [];
   try {
     // The selected references, measured the same way at the same width (their live pages, consent declined).
+    // A reference's live page is measured once and kept beside the references file: every later run reuses the
+    // numbers (each pass used to spend 20 to 30 seconds on the network). --refresh-references measures again.
+    const cacheFile = options.references ? path.join(path.dirname(options.references), 'reference-measures.json') : null;
+    let cache = {};
+    if (cacheFile && existsSync(cacheFile) && !options.refreshReferences) { try { cache = JSON.parse(readFileSync(cacheFile, 'utf8')); } catch { cache = {}; } }
     for (const source of sources) {
-      try { references.push({ ...source, craft: (await measureWide(browser, source.url, wide, { declineConsent: true })).craft }); }
+      const key = `${source.url} @${wide}`;
+      if (cache[key]?.craft) { references.push({ ...source, craft: cache[key].craft, measured: cache[key].measured }); continue; }
+      try { const craft = (await measureWide(browser, source.url, wide, { declineConsent: true })).craft; cache[key] = { craft, measured: new Date().toISOString().slice(0, 10) }; references.push({ ...source, craft }); }
       catch (error) { references.push({ ...source, skipped: error.message.split('\n')[0] }); }
     }
+    if (cacheFile && sources.length) writeFileSync(cacheFile, JSON.stringify(cache, null, 1) + '\n');
     const measuredRefs = references.filter((r) => r.craft).map((r) => r.craft);
     if (!options.json) {
       for (const r of references) {
-        if (r.craft) console.log(`reference ${r.id} (${r.kind}) ${r.url}: ${GAP_MEASURES.map(([key]) => `${key} ${measureOf(r.craft, key)}`).join(', ')}`);
+        if (r.craft) console.log(`reference ${r.id} (${r.kind}) ${r.url}: ${GAP_MEASURES.map(([key]) => `${key} ${measureOf(r.craft, key)}`).join(', ')}${r.measured ? ` (measured ${r.measured}, reused; --refresh-references measures again)` : ''}`);
         else console.log(`reference ${r.id} ${r.url}: SKIPPED, ${r.skipped}`);
       }
     }
     for (const route of options.routes) {
-      const model = await measureWide(browser, options.base + route, wide);
+      const model = await measureWide(browser, options.base + route, wide, { scene: tier === 'impression' });
       for (const name of model.craft.motionNames) ran.add(name);
       if (narrow !== wide) {
         const phone = await browser.newPage({ viewport: { width: narrow, height: 844 } });
