@@ -119,3 +119,19 @@ test('a new direction chooses its display face from a specimen sheet', async () 
   // A face that is on no sheet is named, with the command that puts it on one.
   assert.match(validateFaces(withType('Display: Bodoni Moda (from the dial), Body: Archivo'), { required: true, facesText: sheet }).join('\n'), /the display face "Bodoni Moda" is on no specimen sheet.*--include "Bodoni Moda"/);
 });
+
+test('a third voice is chosen from a specimen sheet too, or left out', async () => {
+  const { thirdFace, validateFaces } = await import('../scripts/check-art-direction.mjs');
+  const withType = (value) => record().replace('- **World:**', `- **Typography Pairing:** ${value}\n- **World:**`);
+  const sheet = '# Faces looked at\n\n## Sheet 1: stencil, "Miel du plateau"\n\n- Tektur (`tektur`): display, OFL-1.1, variable\n\n## Sheet 2: typewriter, "N° 0041"\n\n- Cutive Mono (`cutive-mono`): monospace, OFL-1.1\n';
+  assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans, Utility: IBM Plex Mono (dates, prices)')), 'IBM Plex Mono');
+  assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans; Mono: "Cutive Mono"')), 'Cutive Mono');
+  assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans')), null);
+  assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans, Utility: none')), null);
+  assert.deepEqual(validateFaces(withType('Display: Tektur, Body: Work Sans, Utility: Cutive Mono'), { required: true, facesText: sheet }), []);
+  // The display face used again for labels is not a third voice.
+  assert.deepEqual(validateFaces(withType('Display: Tektur, Body: Work Sans, Utility: Tektur'), { required: true, facesText: sheet }), []);
+  const errors = validateFaces(withType('Display: Tektur, Body: Work Sans, Utility: IBM Plex Mono'), { required: true, facesText: sheet });
+  assert.equal(errors.length, 1);
+  assert.match(errors[0], /the third voice "IBM Plex Mono" is on no specimen sheet.*Name that picture.*remove the third voice and set the labels in the reading face/);
+});

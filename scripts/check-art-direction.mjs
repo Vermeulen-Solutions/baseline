@@ -175,14 +175,24 @@ export function displayFace(markdown) {
   return family || null;
 }
 
-/** With required: a new direction has looked at a specimen sheet, and its display face is on one. */
+/** The third voice the record names after Display and Body (Utility, Mono, Labels or Third), or null. */
+export function thirdFace(markdown) {
+  const line = recordSection(markdown).find(entry => /^\s*- \*\*Typography Pairing:\*\*/.test(entry));
+  const family = line?.match(/(?:Utility|Mono|Labels?|Third(?: voice)?):\s*([^,(;\[]+)/i)?.[1].replace(/["'`*]/g, '').replace(/\s+Variable\s*$/i, '').trim();
+  return family && !/^(none|no|aucune?)\b/i.test(family) ? family : null;
+}
+
+/** With required: a new direction has looked at a specimen sheet, and its display face and any third voice are on one. */
 export function validateFaces(markdown, { required = false, facesText = null } = {}) {
   if (facesText === null) return required ? [`Type: no specimen sheet yet. Run npm run design:world -- faces <kind of lettering> --text "<the site's display line>" and choose the display face by looking at the sheet it makes (site-art-direction/references/world-building.md, step 2.3). It writes ${FACES_FILE}.`] : [];
   const family = displayFace(markdown);
   if (!family) return [];
   const looked = [...facesText.matchAll(/^- (.+?) \(`[a-z0-9-]+`\):/gm)].map(match => match[1].toLowerCase());
-  if (looked.includes(family.toLowerCase())) return [];
-  return [`Type: the display face "${family}" is on no specimen sheet in ${FACES_FILE}. Put it on one beside other faces with npm run design:world -- faces <kind of lettering> --text "<the site's display line>" --include "${family}", look at the sheet, and keep it only if it is the best match for the lettering in the site's pictures.`];
+  const third = thirdFace(markdown);
+  const errors = [];
+  if (third && third.toLowerCase() !== family.toLowerCase() && !looked.includes(third.toLowerCase())) errors.push(`Type: the third voice "${third}" is on no specimen sheet in ${FACES_FILE}. A third voice is for a world whose pictures show small lettering made another way (a typed form, a stamped number, a chalked price). Name that picture, run npm run design:world -- faces <the kind that matches it: typewriter, stencil, hand, inscribed> --text "<one of the site's labels>" and choose from the sheet. With no such picture, remove the third voice and set the labels in the reading face.`);
+  if (looked.includes(family.toLowerCase())) return errors;
+  return [...errors, `Type: the display face "${family}" is on no specimen sheet in ${FACES_FILE}. Put it on one beside other faces with npm run design:world -- faces <kind of lettering> --text "<the site's display line>" --include "${family}", look at the sheet, and keep it only if it is the best match for the lettering in the site's pictures.`];
 }
 
 /** The @keyframes names the record's World › Motion line promises (audit:composition checks they run). */

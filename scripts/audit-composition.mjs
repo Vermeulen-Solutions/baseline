@@ -36,6 +36,15 @@
 //   with a World › Sources line) and advisories for older sites: on the same 95 pages no designer-made
 //   page had a small label above three section headings or one italic word in its headline, every one
 //   of the best-ranked generated pages had the first and a third had the second.
+//   A label counts in capitals or tracked small type, and also as a line of a few words under half the
+//   heading's size in lower case or a handwritten face (found on a trial site: five chalk labels above
+//   five headings passed the first rule). The wider rule gives the same shares on the 95 pages.
+// - text-collision (floor under the same rule): one line of text lies over another, at the wide width,
+//   at the narrow width or at three depths of the first pinned scene. Lines are read from the page's
+//   text nodes, trimmed to their letters and cut to the frames that clip them; faint text (under 0.6),
+//   text in a fixed layer, in a turned object, on a path, or printed twice in one place is left out.
+//   Found on trial sites: a dial's caption printed across its number, a scene's two steps on screen at
+//   once. On 43 earlier trial sites it reports five places.
 // - soft-photo: a photograph at least 40% of the screen wide is shown wider than its pixels (a phone
 //   photograph stretched across a desktop). Owners' photographs are often 600 to 1,500px wide; a
 //   trial home page opened on one at 1,440px and every reviewer named it as the design's ceiling;
@@ -62,7 +71,7 @@ import { motionTier, worldMotionNames, worldSources } from './check-art-directio
 /** Findings that fail the run: the recorded world is missing from the built page. */
 export const FLOOR = Object.freeze(['bare-page', 'soft-photo', 'world-motion', 'impression-motion']);
 /** Floor findings for a direction made with sources (its record has a World › Sources line); advisories on older sites. */
-export const SOURCED_FLOOR = Object.freeze(['kicker-openings', 'accent-word']);
+export const SOURCED_FLOOR = Object.freeze(['kicker-openings', 'accent-word', 'text-collision']);
 export const floorCodes = (sourced) => (sourced ? [...FLOOR, ...SOURCED_FLOOR] : [...FLOOR]);
 
 export function parseArgs(argv) {
@@ -171,8 +180,125 @@ export function assessComposition(model) {
     if (missing.length >= 3) add('bare-page', `The page is made only of type, photographs and rules: no ${missing.join(', no ')}. Build each section as an object from the site's world, on a surface from its materials, with its type treatment and named motions (site-art-direction/references/world-building.md).`, { missing });
   }
   for (const photo of model.softPhotos ?? []) add('soft-photo', `A photograph is shown ${photo.shown}px wide from ${photo.natural}px (${photo.src}). Show it at its own size or smaller in an object from the world (a plate, a frame, a detail crop), and let the world carry the width (site-art-direction/references/world-building.md).`, photo);
+  const places = [
+    ...(model.collisions ?? []).map((p) => ({ ...p, where: `at ${model.width ?? 'the wide'}${model.width ? 'px' : ' width'}` })),
+    ...(model.narrow?.collisions ?? []).map((p) => ({ ...p, where: `at ${model.narrow.width}px` })),
+    ...(model.impression?.sceneCollisions ?? []).filter((p) => !(model.collisions ?? []).some((q) => q.over === p.over && q.under === p.under)).map((p) => ({ ...p, where: 'in the pinned scene' })),
+  ];
+  if (places.length) add('text-collision', `${places.length} place${places.length === 1 ? '' : 's'} where one line of text lies over another: ${places.slice(0, 4).map((p) => `"${p.over}" over "${p.under}" ${p.where}`).join('; ')}${places.length > 4 ? '; and more' : ''}. Give each line its own space: make the object larger, shorten the words or move one line. In a pinned scene, one step's words are gone before the next step's arrive.`, { count: places.length, places: places.slice(0, 12) });
   if (model.narrow && model.narrow.h1Bottom !== null && model.narrow.h1Bottom > model.narrow.viewportHeight) add('first-screen-heading', `At ${model.narrow.width}px the page heading starts below the first screen. Shorten the picture above it or move the heading onto it.`);
   return findings;
+}
+
+/**
+ * In the page: every painted line of text as a box in page coordinates, with how solid it is painted.
+ * A line is one line of a text node (or one SVG text element), trimmed to about where its letters are,
+ * cut to the frames that clip it. Text in a fixed layer (a header that rides over the page) or in a turned
+ * object is left out.
+ * `viewportOnly` keeps the lines on screen, for a look at one scroll position, and leaves out a sticky bar.
+ */
+export function textBoxes({ viewportOnly = false } = {}) {
+  const alphaOf = (color) => {
+    const slash = /\/\s*([\d.]+%?)\s*\)/.exec(color);
+    if (slash) return slash[1].endsWith('%') ? parseFloat(slash[1]) / 100 : parseFloat(slash[1]);
+    const legacy = /^rgba\((?:[^,]+,){3}\s*([\d.]+)\s*\)/.exec(color);
+    return legacy ? parseFloat(legacy[1]) : 1;
+  };
+  const cut = (a, b) => ({ left: Math.max(a.left, b.left), top: Math.max(a.top, b.top), right: Math.min(a.right, b.right), bottom: Math.min(a.bottom, b.bottom) });
+  const open = { left: -Infinity, top: -Infinity, right: Infinity, bottom: Infinity };
+  const known = new Map();
+  // What an element inherits from its frames: opacity, the clipping box, a fixed layer, an unknown clip.
+  const frame = (el) => {
+    if (!el || el.nodeType !== 1) return { opacity: 1, clip: open, fixed: false, bar: false, turned: false, unknown: false };
+    if (known.has(el)) return known.get(el);
+    const up = frame(el.parentElement);
+    const s = getComputedStyle(el);
+    let clip = up.clip;
+    let unknown = up.unknown;
+    if (s.overflowX !== 'visible' || s.overflowY !== 'visible') clip = cut(clip, el.getBoundingClientRect());
+    if (s.clipPath !== 'none') {
+      const inset = /^inset\(([^)]*)\)/.exec(s.clipPath);
+      const parts = inset ? inset[1].split(/\s+round\s+/)[0].trim().split(/\s+/) : null;
+      if (parts && parts.every((p) => /^-?[\d.]+(px|%)$/.test(p))) {
+        const r = el.getBoundingClientRect();
+        const [t, rt = t, b = t, l = rt] = parts;
+        const len = (v, size) => (v.endsWith('%') ? (parseFloat(v) / 100) * size : parseFloat(v));
+        clip = cut(clip, { left: r.left + len(l, r.width), top: r.top + len(t, r.height), right: r.right - len(rt, r.width), bottom: r.bottom - len(b, r.height) });
+      } else unknown = true;
+    }
+    // A sticky bar (a header that stays at the top) rides over the page once it is scrolled; a sticky stage is a scene.
+    const bar = up.bar || (s.position === 'sticky' && el.getBoundingClientRect().height < innerHeight * 0.4);
+    // A turned object (a stamp, a card set at an angle) has boxes wider and taller than its letters: its text is left out.
+    const matrix = /^matrix(?:3d)?\(([^)]+)\)/.exec(s.transform)?.[1].split(',').map(Number);
+    const angle = matrix ? Math.abs(Math.atan2(matrix[1], matrix[0]) * 180 / Math.PI) : 0;
+    const turned = up.turned || angle > 0.5 || (s.rotate && s.rotate !== 'none' && parseFloat(s.rotate) !== 0);
+    const out = { opacity: up.opacity * parseFloat(s.opacity), clip, fixed: up.fixed || s.position === 'fixed', bar, turned, unknown };
+    known.set(el, out);
+    return out;
+  };
+  const elements = [];
+  const boxes = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const range = document.createRange();
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    const text = node.textContent.replace(/\s+/g, ' ').trim();
+    const el = node.parentElement;
+    // Text set on a path (a round stamp) has a box as large as the whole path, with room inside for other words.
+    if (!text || !el || el.closest('script, style, noscript, template, option, textPath')) continue;
+    const s = getComputedStyle(el);
+    // A closed <details> keeps its content laid out but unpainted (content-visibility), which checkVisibility knows.
+    if (s.visibility !== 'visible' || el.checkVisibility?.({ visibilityProperty: true }) === false) continue;
+    const f = frame(el);
+    if (f.fixed || f.unknown || f.turned || (viewportOnly && f.bar)) continue;
+    const fill = s.fill && el.namespaceURI === 'http://www.w3.org/2000/svg' ? s.fill : s.color;
+    const alpha = f.opacity * alphaOf(fill);
+    let index = elements.indexOf(el);
+    if (index === -1) index = elements.push(el) - 1;
+    const svg = el.namespaceURI === 'http://www.w3.org/2000/svg';
+    range.selectNodeContents(node);
+    const rects = svg ? [el.getBoundingClientRect()] : [...range.getClientRects()];
+    for (const r of rects) {
+      // The letters sit in the middle of a line's box: leave out the space above capitals and below the baseline.
+      const lettered = svg ? { left: r.left, top: r.top + r.height * 0.15, right: r.right, bottom: r.bottom - r.height * 0.15 } : { left: r.left, top: r.top + r.height * 0.2, right: r.right, bottom: r.bottom - r.height * 0.18 };
+      const shown = cut(lettered, f.clip);
+      const w = shown.right - shown.left;
+      const h = shown.bottom - shown.top;
+      if (w < 4 || h < 4) continue;
+      if (viewportOnly && (shown.bottom < 0 || shown.top > innerHeight || shown.right < 0 || shown.left > innerWidth)) continue;
+      boxes.push({ el: index, text: text.slice(0, 40), x: Math.round(shown.left + scrollX), y: Math.round(shown.top + scrollY), w: Math.round(w), h: Math.round(h), alpha: Math.round(alpha * 100) / 100 });
+    }
+  }
+  // Which lines belong to an element inside another element that also has lines (a link in a paragraph).
+  const inside = elements.map((el) => elements.map((other, i) => (other !== el && other.contains(el) ? i : -1)).filter((i) => i >= 0));
+  return boxes.map((box) => ({ ...box, inside: inside[box.el] }));
+}
+
+/**
+ * Pairs of text lines that lie over one another: both painted solid (alpha 0.6 or more; a ghost word
+ * behind a heading is not), from different elements neither of which is inside the other, sharing at
+ * least 8px of width and 40% of the lower line's letter height. One pair per two elements.
+ */
+export function collidingText(boxes = [], { minAlpha = 0.6 } = {}) {
+  const solid = boxes.filter((b) => b.alpha >= minAlpha).sort((a, b) => a.y - b.y);
+  const pairs = [];
+  const seen = new Set();
+  for (let i = 0; i < solid.length; i++) {
+    const a = solid[i];
+    for (let j = i + 1; j < solid.length; j++) {
+      const b = solid[j];
+      if (b.y >= a.y + a.h) break;
+      // The same words printed twice in one place are one line with a second impression (an offset shadow, an outline).
+      if (a.el === b.el || a.text === b.text || a.inside?.includes(b.el) || b.inside?.includes(a.el)) continue;
+      const w = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+      const h = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+      if (w < 8 || h < Math.min(a.h, b.h) * 0.4) continue;
+      const key = a.el < b.el ? `${a.el}:${b.el}` : `${b.el}:${a.el}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      pairs.push({ over: a.text, under: b.text, y: Math.max(a.y, b.y) });
+    }
+  }
+  return pairs;
 }
 
 /** Wide photographs shown at more than their pixels: `natural` is the file's own width, `dpr` the device pixel ratio. */
@@ -323,10 +449,15 @@ export function measurePage() {
       const before = heading.previousElementSibling ?? heading.parentElement?.previousElementSibling ?? null;
       if (before && visible(before)) {
         const b = getComputedStyle(before);
-        const short = before.textContent.trim().length <= 48;
-        const small = px(before, 'fontSize') <= bodySize * 0.95;
-        const label = b.textTransform === 'uppercase' || parseFloat(b.letterSpacing) / px(before, 'fontSize') >= 0.05;
-        kicker = short && small && label && !before.querySelector('a, button, img');
+        const chars = before.textContent.trim().length;
+        const size = px(before, 'fontSize');
+        const short = chars > 0 && chars <= 48;
+        const small = size <= bodySize * 0.95;
+        const label = b.textTransform === 'uppercase' || parseFloat(b.letterSpacing) / size >= 0.05;
+        // The same label in another dress: a line of a few words under half the heading's size, in lower case
+        // or in a handwritten face. A sentence that leads into the heading is longer than this.
+        const underline = chars > 0 && chars <= 32 && size <= px(heading, 'fontSize') * 0.5;
+        kicker = short && ((small && label) || underline) && !before.querySelector('a, button, img');
       }
       const hr = heading.getBoundingClientRect();
       const lead = [...section.querySelectorAll('p')].filter(visible).find((p) => !heading.contains(p) && p !== before);
@@ -573,11 +704,14 @@ async function measureWide(browser, url, width, { declineConsent = false, scene 
     if (scene && motion.impression.sceneTrack) {
       const { top, height: trackHeight } = motion.impression.sceneTrack;
       const frames = [];
+      const over = new Map();
       for (const at of [0.08, 0.5, 0.92]) {
         await page.evaluate((y) => scrollTo(0, y), Math.round(top + (trackHeight - 900) * at));
         await page.waitForTimeout(700);
         frames.push('data:image/png;base64,' + (await page.screenshot()).toString('base64'));
+        for (const pair of collidingText(await page.evaluate(textBoxes, { viewportOnly: true }))) over.set(`${pair.over}|${pair.under}`, pair);
       }
+      motion.impression.sceneCollisions = [...over.values()];
       await page.evaluate(() => scrollTo(0, 0));
       const differ = await browser.newPage();
       try { motion.impression.sceneChange = Math.max(await differ.evaluate(changedFraction, [frames[0], frames[1]]), await differ.evaluate(changedFraction, [frames[1], frames[2]]), await differ.evaluate(changedFraction, [frames[0], frames[2]])); }
@@ -586,6 +720,10 @@ async function measureWide(browser, url, width, { declineConsent = false, scene 
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.evaluate(loadPendingImages);
     const model = await page.evaluate(measurePage);
+    model.width = width;
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.waitForTimeout(150);
+    model.collisions = collidingText(await page.evaluate(textBoxes));
     for (const section of model.sections) { section.itemRun = longestItemRun(section.itemRows); delete section.itemRows; }
     model.craft.motion = motion.most;
     model.craft.motionNames = motion.names;
@@ -651,6 +789,11 @@ async function main() {
         const phone = await browser.newPage({ viewport: { width: narrow, height: 844 } });
         await phone.goto(options.base + route, { waitUntil: 'networkidle' }).catch(() => phone.waitForTimeout(3000));
         model.narrow = await phone.evaluate(() => { const h1 = document.querySelector('h1'); return { width: innerWidth, viewportHeight: innerHeight, h1Bottom: h1 ? Math.round(h1.getBoundingClientRect().top + Math.min(h1.getBoundingClientRect().height, 40)) : null }; });
+        await phone.emulateMedia({ reducedMotion: 'reduce' });
+        await phone.evaluate(loadPendingImages);
+        await phone.evaluate(() => scrollTo(0, 0));
+        await phone.waitForTimeout(150);
+        model.narrow.collisions = collidingText(await phone.evaluate(textBoxes));
         await phone.close();
       }
       const findings = assessComposition(model);
