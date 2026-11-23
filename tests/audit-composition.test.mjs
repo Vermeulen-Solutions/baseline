@@ -266,9 +266,10 @@ test('an impression scene must change the screen; references are measured once',
 
 test('a label above three headings and an italic word in the page heading are floor findings for a sourced direction only', async () => {
   const { SOURCED_FLOOR, floorCodes } = await import('../scripts/audit-composition.mjs');
-  assert.deepEqual([...SOURCED_FLOOR], ['kicker-openings', 'accent-word', 'text-collision']);
+  const legibility = ['text-collision', 'text-cut', 'text-squeezed', 'text-tiny', 'text-unreadable'];
+  assert.deepEqual([...SOURCED_FLOOR], ['kicker-openings', 'accent-word', ...legibility]);
   assert.deepEqual(floorCodes(false), [...FLOOR]);
-  assert.deepEqual(floorCodes(true), [...FLOOR, 'kicker-openings', 'accent-word', 'text-collision']);
+  assert.deepEqual(floorCodes(true), [...FLOOR, 'kicker-openings', 'accent-word', ...legibility]);
   const accented = page([section()], { accentWord: 'Glycine' });
   const finding = assessComposition(accented).find((f) => f.code === 'accent-word');
   assert.match(finding.message, /one word or phrase in italics for emphasis \("Glycine"\)/);
@@ -317,8 +318,68 @@ test('text-collision reports the places with the width or the scene they were se
 test('the collision measure reads the page from its top, skips unpainted text and leaves a sticky bar out of scene frames', async () => {
   const { readFileSync } = await import('node:fs');
   const source = readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
-  assert.ok(source.includes('await page.evaluate(() => scrollTo(0, 0));\n    await page.waitForTimeout(150);\n    model.collisions = collidingText(await page.evaluate(textBoxes));'));
+  assert.ok(source.includes('await page.evaluate(() => scrollTo(0, 0));\n    await page.waitForTimeout(150);\n    Object.assign(model, legibility ? await readLegibility(browser, page) : { collisions: collidingText(await page.evaluate(textBoxes)) });'));
   assert.ok(source.includes('el.checkVisibility?.({ visibilityProperty: true }) === false'));
-  assert.ok(source.includes('if (f.fixed || f.unknown || f.turned || (viewportOnly && f.bar)) continue;'));
+  assert.ok(source.includes('if (f.fixed || f.unknown || (viewportOnly && f.bar)) continue;'));
   assert.ok(source.includes('collidingText(await page.evaluate(textBoxes, { viewportOnly: true }))'));
+  // A turned object's lines are kept for the size and width measures and left out of the collisions.
+  const { collidingText } = await import('../scripts/audit-composition.mjs');
+  const turned = [{ el: 0, text: 'Billet', x: 0, y: 0, w: 200, h: 40, alpha: 1, inside: [], turned: true }, { el: 1, text: 'Caisse du soir', x: 20, y: 10, w: 120, h: 20, alpha: 1, inside: [] }];
+  assert.deepEqual(collidingText(turned), []);
+});
+
+test('lines cut off, runs squeezed into a few letters and text painted too small are read from the same lines', async () => {
+  const { cutText, squeezedText, tinyText } = await import('../scripts/audit-composition.mjs');
+  const line = (node, text, y, extra = {}) => ({ el: node, node, chars: text.length, text, x: 20, y, w: 200, h: 14, alpha: 1, size: 16, lost: 0, upright: true, turned: false, ...extra });
+  // A ticket wider than the phone: its lines lose part of their width at the screen's edge.
+  assert.deepEqual(cutText([line(0, 'Prochain rendez-vous', 100, { lost: 0.78, w: 60 }), line(1, 'Portes', 130, { lost: 0.19, w: 40 })]), [{ text: 'Prochain rendez-vous', lost: 0.78, y: 100 }, { text: 'Portes', lost: 0.19, y: 130 }]);
+  // A hair off the edge, a word set very large that bleeds on purpose, a faint line and a line wholly out of sight do not count.
+  assert.deepEqual(cutText([line(0, '00h30', 0, { lost: 0.04 }), line(1, 'NUIT', 0, { lost: 0.3, size: 180 }), line(2, 'Programme', 0, { lost: 0.4, alpha: 0.1 }), line(3, 'Menu', 0, { lost: 0.95 })]), []);
+  // One run of text wrapped onto three lines of a few letters: a card a few letters wide.
+  const card = [line(0, 'Troc de printemps', 0, { size: 28 }), line(0, 'Troc de printemps', 30, { size: 28 }), line(0, 'Troc de printemps', 60, { size: 28 })];
+  assert.deepEqual(squeezedText(card), [{ text: 'Troc de printemps', lines: 3, perLine: 5.7, y: 0 }]);
+  // Three short lines broken on purpose are three runs; a paragraph in a full column has long lines; a large heading may stack.
+  assert.deepEqual(squeezedText([line(0, 'Tout le', 0), line(1, 'village,', 30), line(2, 'sur un fil.', 60)]), []);
+  assert.deepEqual(squeezedText([0, 20, 40].map((y) => line(0, 'Chaque mois de juin, la place et la rue se remplissent de tables, de tentes et de monde.', y))), []);
+  assert.deepEqual(squeezedText(card.map((b) => ({ ...b, size: 64 }))), []);
+  // A plan drawn for a wide screen and scaled to a phone: its labels come out at 5px.
+  assert.deepEqual(tinyText([line(0, 'Échallens', 0, { size: 5.4 }), line(1, 'Assens', 20, { size: 8.6 }), line(2, '→', 40, { size: 6 }), line(3, 'Bottens', 60, { size: 5.4, alpha: 0.3 })]), [{ text: 'Échallens', size: 5.4, y: 0 }]);
+});
+
+test('a line that cannot be told from the picture behind it is found from its ground, and a flat ground is left to the contrast check', async () => {
+  const { linesToSample, unreadableText } = await import('../scripts/audit-composition.mjs');
+  const boxes = [
+    { el: 0, node: 0, chars: 28, text: 'La terrasse, sous la glycine', x: 112, y: 2244, w: 529, h: 53, alpha: 1, size: 40, upright: true, turned: false, rgb: [238, 235, 226] },
+    { el: 1, node: 1, chars: 18, text: 'de mai à septembre', x: 112, y: 2308, w: 146, h: 9, alpha: 0.8, size: 12, upright: true, turned: false, rgb: [237, 235, 226] },
+    { el: 2, node: 2, chars: 2, text: 'OK', x: 0, y: 0, w: 30, h: 12, alpha: 1, size: 12, upright: true, turned: false, rgb: [0, 0, 0] },
+    { el: 3, node: 3, chars: 9, text: 'Programme', x: 0, y: 40, w: 300, h: 60, alpha: 1, size: 60, upright: true, turned: false, rgb: null },
+  ];
+  const lines = linesToSample(boxes);
+  // Large type is held to 2 to 1, small type to 3 to 1; two letters or an unknown colour are not sampled.
+  assert.deepEqual(lines.map((l) => [l.text, l.need]), [['La terrasse, sous la glycine', 2], ['de mai à septembre', 3]]);
+  assert.deepEqual(unreadableText(lines, [{ low: 0.7, spread: 57 }, { low: 0.95, spread: 39 }]), [{ text: 'La terrasse, sous la glycine', low: 0.7, y: 2244 }, { text: 'de mai à septembre', low: 0.95, y: 2308 }]);
+  // Mostly clear of the picture's light parts, a flat ground, and a line the screenshot did not reach.
+  assert.deepEqual(unreadableText(lines, [{ low: 0.14, spread: 49 }, { low: 0.9, spread: 2 }]), []);
+  assert.deepEqual(unreadableText(lines, [null, null]), []);
+});
+
+test('the legibility findings name the lines, the width they were seen at and what to do', () => {
+  const model = page([section()], {
+    width: 1440,
+    legibility: { cut: [], squeezed: [], tiny: [], unreadable: [{ text: 'La terrasse, sous la glycine', low: 0.7, y: 2244 }] },
+    narrow: { width: 390, viewportHeight: 844, h1Bottom: 200, collisions: [], legibility: {
+      cut: [{ text: 'Prochain rendez-vous', lost: 0.78, y: 100 }],
+      squeezed: [{ text: 'Troc de printemps', lines: 3, perLine: 5.7, y: 900 }],
+      tiny: [{ text: 'Échallens', size: 5.4, y: 1500 }, { text: 'Assens', size: 5.4, y: 1510 }],
+      unreadable: [],
+    } },
+  });
+  const found = Object.fromEntries(assessComposition(model).map((f) => [f.code, f]));
+  assert.match(found['text-cut'].message, /1 line of text is cut off by a frame or the edge of the screen: at 390px "Prochain rendez-vous" \(78% cut off\)\. Make the words fit/);
+  assert.match(found['text-squeezed'].message, /1 run of text stands in a column a few letters wide: at 390px "Troc de printemps" \(3 lines of 5\.7 characters\)\. Give the text the width/);
+  assert.match(found['text-tiny'].message, /2 lines of text are painted under 9px: at 390px "Échallens" \(5\.4px\), "Assens" \(5\.4px\)\. Set no text under 11px\. Where a drawing is scaled down for this width its labels shrink with it/);
+  assert.match(found['text-unreadable'].message, /1 line of text cannot be told from the picture behind: at 1440px "La terrasse, sous la glycine"\. Put a ground under the words/);
+  assert.equal(found['text-tiny'].count, 2);
+  const clean = { cut: [], squeezed: [], tiny: [], unreadable: [] };
+  assert.equal(codes(page([section()], { width: 1440, legibility: clean, narrow: { width: 390, viewportHeight: 844, h1Bottom: 200, collisions: [], legibility: clean } })).some((code) => code.startsWith('text-')), false);
 });

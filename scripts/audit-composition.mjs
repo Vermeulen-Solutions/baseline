@@ -45,6 +45,14 @@
 //   text in a fixed layer, in a turned object, on a path, or printed twice in one place is left out.
 //   Found on trial sites: a dial's caption printed across its number, a scene's two steps on screen at
 //   once. On 43 earlier trial sites it reports five places.
+// - text-cut, text-squeezed, text-tiny, text-unreadable (floor under the same rule), at the wide and the
+//   narrow width: a line cut off by a frame or the edge of the screen (a tenth of its width or more; not a
+//   strip made to move, an ellipsis, or a word over 72px); one run of text wrapped onto three lines or
+//   more of under eight characters; text painted under 9px; a line that would stand out from the picture
+//   behind it by less than 2 to 1 (large type) or 3 to 1 over 30% of its box, read from screenshots taken
+//   with the text unpainted, with and without its shadows. Found on scored trial sites: date cards a few
+//   letters wide on a phone, a ticket wider than the phone, a plan's labels at 5px, a caption in white
+//   script over white flowers. Scored by eye, craft was the lowest of six questions in every round.
 // - soft-photo: a photograph at least 40% of the screen wide is shown wider than its pixels (a phone
 //   photograph stretched across a desktop). Owners' photographs are often 600 to 1,500px wide; a
 //   trial home page opened on one at 1,440px and every reviewer named it as the design's ceiling;
@@ -71,7 +79,7 @@ import { motionTier, worldMotionNames, worldSources } from './check-art-directio
 /** Findings that fail the run: the recorded world is missing from the built page. */
 export const FLOOR = Object.freeze(['bare-page', 'soft-photo', 'world-motion', 'impression-motion']);
 /** Floor findings for a direction made with sources (its record has a World › Sources line); advisories on older sites. */
-export const SOURCED_FLOOR = Object.freeze(['kicker-openings', 'accent-word', 'text-collision']);
+export const SOURCED_FLOOR = Object.freeze(['kicker-openings', 'accent-word', 'text-collision', 'text-cut', 'text-squeezed', 'text-tiny', 'text-unreadable']);
 export const floorCodes = (sourced) => (sourced ? [...FLOOR, ...SOURCED_FLOOR] : [...FLOOR]);
 
 export function parseArgs(argv) {
@@ -186,15 +194,34 @@ export function assessComposition(model) {
     ...(model.impression?.sceneCollisions ?? []).filter((p) => !(model.collisions ?? []).some((q) => q.over === p.over && q.under === p.under)).map((p) => ({ ...p, where: 'in the pinned scene' })),
   ];
   if (places.length) add('text-collision', `${places.length} place${places.length === 1 ? '' : 's'} where one line of text lies over another: ${places.slice(0, 4).map((p) => `"${p.over}" over "${p.under}" ${p.where}`).join('; ')}${places.length > 4 ? '; and more' : ''}. Give each line its own space: make the object larger, shorten the words or move one line. In a pinned scene, one step's words are gone before the next step's arrive.`, { count: places.length, places: places.slice(0, 12) });
+  for (const [code, key, say] of LEGIBILITY) {
+    const at = [[model.legibility?.[key], model.width], [model.narrow?.legibility?.[key], model.narrow?.width]].filter(([list]) => list?.length);
+    const count = at.reduce((sum, [list]) => sum + list.length, 0);
+    if (count) add(code, say(count, at.map(([list, width]) => `at ${width}px ${list.slice(0, 3).map(LEGIBILITY_EXAMPLE[key]).join(', ')}${list.length > 3 ? ' and more' : ''}`).join('; ')), { count, places: at.flatMap(([list, width]) => list.slice(0, 8).map((p) => ({ ...p, width }))) });
+  }
   if (model.narrow && model.narrow.h1Bottom !== null && model.narrow.h1Bottom > model.narrow.viewportHeight) add('first-screen-heading', `At ${model.narrow.width}px the page heading starts below the first screen. Shorten the picture above it or move the heading onto it.`);
   return findings;
 }
 
+const LEGIBILITY_EXAMPLE = {
+  cut: (p) => `"${p.text}" (${Math.round(p.lost * 100)}% cut off)`,
+  squeezed: (p) => `"${p.text}" (${p.lines} lines of ${p.perLine} characters)`,
+  tiny: (p) => `"${p.text}" (${p.size}px)`,
+  unreadable: (p) => `"${p.text}"`,
+};
+const plural = (count, one, many) => `${count} ${count === 1 ? one : many}`;
+const LEGIBILITY = [
+  ['text-cut', 'cut', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} cut off by a frame or the edge of the screen: ${where}. Make the words fit: a smaller size, fewer words, a wider frame, or let the line wrap.`],
+  ['text-squeezed', 'squeezed', (count, where) => `${plural(count, 'run of text stands', 'runs of text stand')} in a column a few letters wide: ${where}. Give the text the width: stack the objects one under another at this size instead of side by side, or set the label above its value.`],
+  ['text-tiny', 'tiny', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} painted under 9px: ${where}. Set no text under 11px. Where a drawing is scaled down for this width its labels shrink with it: set the labels in HTML over the drawing, make the drawing larger, or show fewer labels.`],
+  ['text-unreadable', 'unreadable', (count, where) => `${plural(count, 'line of text cannot', 'lines of text cannot')} be told from the picture behind: ${where}. Put a ground under the words (a plate, a band, a darkened part of the picture), move them to a calm part of the picture, or change their colour.`],
+];
+
 /**
  * In the page: every painted line of text as a box in page coordinates, with how solid it is painted.
  * A line is one line of a text node (or one SVG text element), trimmed to about where its letters are,
- * cut to the frames that clip it. Text in a fixed layer (a header that rides over the page) or in a turned
- * object is left out.
+ * cut to the frames that clip it. Text in a fixed layer (a header that rides over the page) is left out;
+ * text in a turned object is marked `turned` (its boxes are wider and taller than its letters).
  * `viewportOnly` keeps the lines on screen, for a look at one scroll position, and leaves out a sticky bar.
  */
 export function textBoxes({ viewportOnly = false } = {}) {
@@ -209,13 +236,17 @@ export function textBoxes({ viewportOnly = false } = {}) {
   const known = new Map();
   // What an element inherits from its frames: opacity, the clipping box, a fixed layer, an unknown clip.
   const frame = (el) => {
-    if (!el || el.nodeType !== 1) return { opacity: 1, clip: open, fixed: false, bar: false, turned: false, unknown: false };
+    if (!el || el.nodeType !== 1) return { opacity: 1, clip: open, fixed: false, bar: false, turned: false, unknown: false, scale: 1, strip: false, trimmed: false, blend: false };
     if (known.has(el)) return known.get(el);
     const up = frame(el.parentElement);
     const s = getComputedStyle(el);
     let clip = up.clip;
     let unknown = up.unknown;
     if (s.overflowX !== 'visible' || s.overflowY !== 'visible') clip = cut(clip, el.getBoundingClientRect());
+    // Letters mixed into what is behind them (mix-blend-mode) are not painted in their own colour: no colour to hold against the ground.
+    // A strip made to move sideways (a scroller, a slider, a ticker) cuts its text on purpose; so does an ellipsis.
+    const strip = up.strip || s.overflowX === 'auto' || s.overflowX === 'scroll' || (s.overflowX !== 'visible' && el.scrollWidth > el.clientWidth * 1.5);
+    const trimmed = up.trimmed || s.textOverflow === 'ellipsis' || (s.webkitLineClamp && s.webkitLineClamp !== 'none');
     if (s.clipPath !== 'none') {
       const inset = /^inset\(([^)]*)\)/.exec(s.clipPath);
       const parts = inset ? inset[1].split(/\s+round\s+/)[0].trim().split(/\s+/) : null;
@@ -232,12 +263,33 @@ export function textBoxes({ viewportOnly = false } = {}) {
     const matrix = /^matrix(?:3d)?\(([^)]+)\)/.exec(s.transform)?.[1].split(',').map(Number);
     const angle = matrix ? Math.abs(Math.atan2(matrix[1], matrix[0]) * 180 / Math.PI) : 0;
     const turned = up.turned || angle > 0.5 || (s.rotate && s.rotate !== 'none' && parseFloat(s.rotate) !== 0);
-    const out = { opacity: up.opacity * parseFloat(s.opacity), clip, fixed: up.fixed || s.position === 'fixed', bar, turned, unknown };
+    const scale = up.scale * (matrix ? Math.hypot(matrix[0], matrix[1]) : 1);
+    const out = { opacity: up.opacity * parseFloat(s.opacity), clip, fixed: up.fixed || s.position === 'fixed', bar, turned, unknown, scale, strip, trimmed, blend: up.blend || (s.mixBlendMode && s.mixBlendMode !== 'normal') };
     known.set(el, out);
     return out;
   };
+  // A colour in whatever notation the page uses (rgb, oklch, color-mix), as the three numbers it is painted with.
+  const swatch = document.createElement('canvas').getContext('2d', { willReadFrequently: true });
+  const painted = new Map();
+  const rgbOf = (color) => {
+    if (!painted.has(color)) {
+      let rgb = null;
+      if (swatch) {
+        swatch.clearRect(0, 0, 1, 1);
+        swatch.fillStyle = '#000';
+        swatch.fillStyle = color;
+        swatch.fillRect(0, 0, 1, 1);
+        const [r, g, b, a] = swatch.getImageData(0, 0, 1, 1).data;
+        // Read back unmultiplied; a colour painted fully see-through has no numbers to give.
+        rgb = a ? [r, g, b] : null;
+      }
+      painted.set(color, rgb);
+    }
+    return painted.get(color);
+  };
   const elements = [];
   const boxes = [];
+  let nodes = 0;
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
   const range = document.createRange();
   for (let node = walker.nextNode(); node; node = walker.nextNode()) {
@@ -249,7 +301,7 @@ export function textBoxes({ viewportOnly = false } = {}) {
     // A closed <details> keeps its content laid out but unpainted (content-visibility), which checkVisibility knows.
     if (s.visibility !== 'visible' || el.checkVisibility?.({ visibilityProperty: true }) === false) continue;
     const f = frame(el);
-    if (f.fixed || f.unknown || f.turned || (viewportOnly && f.bar)) continue;
+    if (f.fixed || f.unknown || (viewportOnly && f.bar)) continue;
     const fill = s.fill && el.namespaceURI === 'http://www.w3.org/2000/svg' ? s.fill : s.color;
     const alpha = f.opacity * alphaOf(fill);
     let index = elements.indexOf(el);
@@ -257,6 +309,11 @@ export function textBoxes({ viewportOnly = false } = {}) {
     const svg = el.namespaceURI === 'http://www.w3.org/2000/svg';
     range.selectNodeContents(node);
     const rects = svg ? [el.getBoundingClientRect()] : [...range.getClientRects()];
+    // The size the letters are painted at: a drawing scaled down takes its labels with it.
+    const ctm = svg ? el.getScreenCTM?.() : null;
+    const size = Math.round(parseFloat(s.fontSize) * (ctm ? Math.hypot(ctm.a, ctm.b) : f.scale) * 10) / 10;
+    const upright = svg || s.writingMode === 'horizontal-tb';
+    const id = nodes++;
     for (const r of rects) {
       // The letters sit in the middle of a line's box: leave out the space above capitals and below the baseline.
       const lettered = svg ? { left: r.left, top: r.top + r.height * 0.15, right: r.right, bottom: r.bottom - r.height * 0.15 } : { left: r.left, top: r.top + r.height * 0.2, right: r.right, bottom: r.bottom - r.height * 0.18 };
@@ -265,7 +322,10 @@ export function textBoxes({ viewportOnly = false } = {}) {
       const h = shown.bottom - shown.top;
       if (w < 4 || h < 4) continue;
       if (viewportOnly && (shown.bottom < 0 || shown.top > innerHeight || shown.right < 0 || shown.left > innerWidth)) continue;
-      boxes.push({ el: index, text: text.slice(0, 40), x: Math.round(shown.left + scrollX), y: Math.round(shown.top + scrollY), w: Math.round(w), h: Math.round(h), alpha: Math.round(alpha * 100) / 100 });
+      // How much of the line's width a frame or the edge of the screen cuts away (not a strip made to move, not an ellipsis).
+      const seen = Math.min(shown.right, innerWidth) - Math.max(shown.left, 0);
+      const lost = f.strip || f.trimmed || f.turned || !upright || r.width < 1 ? 0 : Math.round(100 * Math.max(0, 1 - seen / r.width)) / 100;
+      boxes.push({ el: index, node: id, chars: text.length, text: text.slice(0, 40), x: Math.round(shown.left + scrollX), y: Math.round(shown.top + scrollY), w: Math.round(w), h: Math.round(h), alpha: Math.round(alpha * 100) / 100, size, lost, upright, turned: f.turned, rgb: f.blend ? null : rgbOf(fill) });
     }
   }
   // Which lines belong to an element inside another element that also has lines (a link in a paragraph).
@@ -279,7 +339,7 @@ export function textBoxes({ viewportOnly = false } = {}) {
  * least 8px of width and 40% of the lower line's letter height. One pair per two elements.
  */
 export function collidingText(boxes = [], { minAlpha = 0.6 } = {}) {
-  const solid = boxes.filter((b) => b.alpha >= minAlpha).sort((a, b) => a.y - b.y);
+  const solid = boxes.filter((b) => b.alpha >= minAlpha && !b.turned).sort((a, b) => a.y - b.y);
   const pairs = [];
   const seen = new Set();
   for (let i = 0; i < solid.length; i++) {
@@ -299,6 +359,93 @@ export function collidingText(boxes = [], { minAlpha = 0.6 } = {}) {
     }
   }
   return pairs;
+}
+
+const solidLines = (boxes, minAlpha) => boxes.filter((b) => b.alpha >= minAlpha && b.upright !== false);
+const oncePerNode = (boxes) => { const seen = new Set(); return boxes.filter((b) => !seen.has(b.node) && seen.add(b.node)); };
+
+/**
+ * Lines of text that a frame or the edge of the screen cuts off: solid, up to 72px (a word set larger may
+ * bleed off the page on purpose), losing a tenth of their width and 6px or more while part of them shows.
+ */
+export function cutText(boxes = [], { minAlpha = 0.6, maxSize = 72 } = {}) {
+  return oncePerNode(solidLines(boxes, minAlpha).filter((b) => b.size <= maxSize && b.lost >= 0.1 && b.lost < 0.9 && (b.w * b.lost) / (1 - b.lost) >= 6))
+    .map((b) => ({ text: b.text, lost: b.lost, y: b.y }));
+}
+
+/**
+ * Text squeezed into a column a few letters wide: one run of text, up to 32px, that wraps onto three lines
+ * or more with under eight characters a line. Lines broken on purpose are separate runs and do not count.
+ */
+export function squeezedText(boxes = [], { minAlpha = 0.6, maxSize = 32 } = {}) {
+  const runs = new Map();
+  for (const b of solidLines(boxes, minAlpha)) {
+    if (b.size > maxSize) continue;
+    const run = runs.get(b.node) ?? { text: b.text, chars: b.chars, y: b.y, tops: new Set() };
+    run.tops.add(b.y);
+    runs.set(b.node, run);
+  }
+  return [...runs.values()].filter((run) => run.tops.size >= 3 && run.chars / run.tops.size < 8)
+    .map((run) => ({ text: run.text, lines: run.tops.size, perLine: Math.round(10 * run.chars / run.tops.size) / 10, y: run.y }));
+}
+
+/** Text painted under 9px: three letters or more, solid. A drawing scaled down for a phone takes its labels with it. */
+export function tinyText(boxes = [], { minAlpha = 0.6, minSize = 9 } = {}) {
+  return oncePerNode(solidLines(boxes, minAlpha).filter((b) => b.size > 0 && Math.round(b.size) < minSize && b.chars >= 3))
+    .map((b) => ({ text: b.text, size: b.size, y: b.y }));
+}
+
+/** The lines worth holding against what is behind them: solid, with a known colour, wide enough to sample. */
+export function linesToSample(boxes = [], { minAlpha = 0.6, limit = 500 } = {}) {
+  return oncePerNode(solidLines(boxes, minAlpha).filter((b) => b.rgb && !b.turned && b.chars >= 3 && b.w >= 20 && b.h >= 6)).slice(0, limit)
+    .map((b) => ({ text: b.text, x: b.x, y: b.y, w: b.w, h: b.h, rgb: b.rgb, alpha: Math.min(1, b.alpha), need: b.size >= 24 ? 2 : 3 }));
+}
+
+/**
+ * In a blank page: what lies behind each line in a screenshot of the page taken with its text unpainted.
+ * `plain` is the same page photographed with its text painted. `low` is the share of the line's box where the letters would stand out by less than `need` to 1 (the
+ * contrast ratio of WCAG, held to 2 for large type and 3 for small: well under its own limits, so only
+ * text that cannot be told from its ground counts); `spread` says whether the ground is a picture
+ * (a flat ground is the contrast check's business, in audit:ui); `painted` is the share of the box the
+ * letters change, and a line that changes nothing is covered by something else and is not on show.
+ */
+export async function groundsBehind([src, lines, plain = null]) {
+  const load = (from) => new Promise((resolve) => { const i = new Image(); i.onload = () => resolve(i); i.src = from; });
+  const draw = (image) => { const context = new OffscreenCanvas(image.width, image.height).getContext('2d', { willReadFrequently: true }); context.drawImage(image, 0, 0); return context; };
+  const img = await load(src);
+  const context = draw(img);
+  // The same page with its text painted: where a line's box is the same in both, the line is not on show there (something covers it).
+  const shown = plain ? draw(await load(plain)) : null;
+  const linear = (v) => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const luminance = (r, g, b) => 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+  return lines.map((line) => {
+    if (line.x < 0 || line.y < 0 || line.x + line.w > img.width || line.y + line.h > img.height) return null;
+    const data = context.getImageData(line.x, line.y, line.w, line.h).data;
+    const lettered = shown ? shown.getImageData(line.x, line.y, line.w, line.h).data : null;
+    const step = Math.max(1, Math.floor(Math.sqrt((line.w * line.h) / 1500)));
+    let count = 0, low = 0, sum = 0, squares = 0, painted = 0;
+    for (let y = 0; y < line.h; y += step) {
+      for (let x = 0; x < line.w; x += step) {
+        const i = (y * line.w + x) * 4;
+        const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
+        // Letters painted partly see-through take some of the ground's colour.
+        const ink = luminance(...line.rgb.map((v, k) => line.alpha * v + (1 - line.alpha) * [r, g, b][k]));
+        const ground = luminance(r, g, b);
+        if ((Math.max(ink, ground) + 0.05) / (Math.min(ink, ground) + 0.05) < line.need) low += 1;
+        const grey = 0.299 * r + 0.587 * g + 0.114 * b;
+        sum += grey; squares += grey * grey; count += 1;
+        if (lettered && Math.max(Math.abs(lettered[i] - r), Math.abs(lettered[i + 1] - g), Math.abs(lettered[i + 2] - b)) > 24) painted += 1;
+      }
+    }
+    const mean = sum / count;
+    return { low: Math.round(100 * low / count) / 100, spread: Math.round(Math.sqrt(Math.max(0, squares / count - mean * mean))), ...(lettered ? { painted: Math.round(100 * painted / count) / 100 } : {}) };
+  });
+}
+
+/** Lines that cannot be told from the picture behind them: `grounds` is what groundsBehind returned for `lines`. */
+export function unreadableText(lines = [], grounds = [], { minLow = 0.3, minSpread = 8 } = {}) {
+  return lines.map((line, i) => ({ line, ground: grounds[i] })).filter(({ ground }) => ground && ground.low >= minLow && ground.spread >= minSpread && (ground.painted === undefined || ground.painted >= 0.02))
+    .map(({ line, ground }) => ({ text: line.text, low: ground.low, y: line.y }));
 }
 
 /** Wide photographs shown at more than their pixels: `natural` is the file's own width, `dpr` the device pixel ratio. */
@@ -649,8 +796,38 @@ export async function changedFraction([first, second]) {
   return Math.round(1000 * changed / (width * height)) / 1000;
 }
 
+const UNPAINT_TEXT = '*, *::before, *::after { color: transparent !important; -webkit-text-fill-color: transparent !important; -webkit-text-stroke-color: transparent !important; text-decoration-color: transparent !important; } svg text, svg tspan { fill: transparent !important; stroke: transparent !important; }';
+
+/**
+ * What stands in the way of reading the page as it is now laid out: lines over lines, lines cut off,
+ * runs squeezed into a few letters' width, text painted too small, and (from a screenshot taken with the
+ * text unpainted) lines that cannot be told from the picture behind them.
+ */
+export async function readLegibility(browser, page) {
+  const boxes = await page.evaluate(textBoxes);
+  const lines = linesToSample(boxes);
+  let unreadable = [];
+  if (lines.length) {
+    // Twice: with the letters' shadows and without. A dark shadow under light letters is ground that helps;
+    // a glow in the letters' own colour is not ground at all. A line counts when neither picture clears it.
+    const grounds = [];
+    const plain = await page.screenshot({ fullPage: true, type: 'jpeg', quality: 85, animations: 'disabled' }).then((shot) => 'data:image/jpeg;base64,' + shot.toString('base64')).catch(() => null);
+    const sampler = await browser.newPage();
+    try {
+      for (const extra of ['', ' *, *::before, *::after { text-shadow: none !important; }']) {
+        const style = await page.addStyleTag({ content: UNPAINT_TEXT + extra });
+        const shot = await page.screenshot({ fullPage: true, type: 'jpeg', quality: 85, animations: 'disabled' }).catch(() => null);
+        await style.evaluate((node) => node.remove());
+        if (shot) grounds.push(await sampler.evaluate(groundsBehind, ['data:image/jpeg;base64,' + shot.toString('base64'), lines, plain]));
+      }
+    } finally { await sampler.close(); }
+    if (grounds.length === 2) unreadable = unreadableText(lines, lines.map((_, i) => (grounds[0][i] && grounds[1][i] ? (grounds[0][i].low <= grounds[1][i].low ? grounds[0][i] : grounds[1][i]) : null)));
+  }
+  return { collisions: collidingText(boxes), legibility: { cut: cutText(boxes), squeezed: squeezedText(boxes), tiny: tinyText(boxes), unreadable } };
+}
+
 /** Loads a page at the wide width, scrolls it with motion allowed, then measures it with motion reduced. */
-async function measureWide(browser, url, width, { declineConsent = false, scene = false } = {}) {
+async function measureWide(browser, url, width, { declineConsent = false, scene = false, legibility = false } = {}) {
   const page = await browser.newPage({ viewport: { width, height: 900 } });
   try {
     // Every animation that starts, from the first paint on: an arrival that plays once at load is over before
@@ -723,7 +900,7 @@ async function measureWide(browser, url, width, { declineConsent = false, scene 
     model.width = width;
     await page.evaluate(() => scrollTo(0, 0));
     await page.waitForTimeout(150);
-    model.collisions = collidingText(await page.evaluate(textBoxes));
+    Object.assign(model, legibility ? await readLegibility(browser, page) : { collisions: collidingText(await page.evaluate(textBoxes)) });
     for (const section of model.sections) { section.itemRun = longestItemRun(section.itemRows); delete section.itemRows; }
     model.craft.motion = motion.most;
     model.craft.motionNames = motion.names;
@@ -783,7 +960,7 @@ async function main() {
       }
     }
     for (const route of options.routes) {
-      const model = await measureWide(browser, options.base + route, wide, { scene: tier === 'impression' });
+      const model = await measureWide(browser, options.base + route, wide, { scene: tier === 'impression', legibility: true });
       for (const name of model.craft.motionNames) ran.add(name);
       if (narrow !== wide) {
         const phone = await browser.newPage({ viewport: { width: narrow, height: 844 } });
@@ -793,7 +970,7 @@ async function main() {
         await phone.evaluate(loadPendingImages);
         await phone.evaluate(() => scrollTo(0, 0));
         await phone.waitForTimeout(150);
-        model.narrow.collisions = collidingText(await phone.evaluate(textBoxes));
+        Object.assign(model.narrow, await readLegibility(browser, phone));
         await phone.close();
       }
       const findings = assessComposition(model);
