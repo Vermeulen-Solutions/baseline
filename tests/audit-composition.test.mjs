@@ -363,6 +363,28 @@ test('a line that cannot be told from the picture behind it is found from its gr
   assert.deepEqual(unreadableText(lines, [null, null]), []);
 });
 
+test('a letter gone from inside a line that otherwise shows is a candidate for being covered, at that letter', async () => {
+  const { coveredText, linesToSample } = await import('../scripts/audit-composition.mjs');
+  const letters = [[928, 7], [936, 7], [944, 7], [952, 6], [959, 7], [967, 7], [975, 6], [982, 7], [990, 7]];
+  const line = { text: 'Entretien', x: 928, y: 1697, w: 69, h: 7, letters };
+  const shown = { low: 0, spread: 3, painted: 0.5, hidden: 0, side: 'left' };
+  // A valve's stem drawn through the fifth letter of a tag: the point to look at is that letter's middle.
+  assert.deepEqual(coveredText([line], [{ ...shown, struck: [4] }]), [{ text: 'Entretien', hidden: 0.11, letters: 1, x: 963, y: 1701 }]);
+  // Every letter shows; or the letters were not read; or the line is three letters long.
+  assert.deepEqual(coveredText([line], [{ ...shown, struck: [] }]), []);
+  assert.deepEqual(coveredText([line], [shown]), []);
+  assert.deepEqual(coveredText([{ ...line, letters: letters.slice(0, 3) }], [{ ...shown, struck: [1] }]), []);
+  // Most of the letters gone is a line that cannot be read against its ground, which is another finding's business.
+  assert.deepEqual(coveredText([line], [{ ...shown, struck: [1, 2, 4, 6] }]), []);
+  // Display type may be set behind an object on purpose: its letters are not handed over.
+  const box = { el: 0, node: 0, chars: 9, text: 'Entretien', x: 928, y: 1697, w: 69, h: 7, alpha: 1, lost: 0, upright: true, turned: false, rgb: [0, 0, 0], letters };
+  assert.deepEqual(linesToSample([{ ...box, size: 11 }])[0].letters, letters);
+  assert.equal(linesToSample([{ ...box, size: 96 }])[0].letters, undefined);
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  assert.ok(source.includes('await page.evaluate(textBoxes, { letters: true })'));
+  assert.ok(source.includes('const gone = (letter) => letter && letter[0] < 0.1 && letter[1] < 0.5 * depth;'));
+});
+
 test('a line whose letters do not show at one end, or at all, is a candidate for being covered, with the point to look at', async () => {
   const { coveredText } = await import('../scripts/audit-composition.mjs');
   const lines = [
