@@ -1,8 +1,8 @@
 {
   "formatVersion": 2,
-  "source": "https://github.com/emdash-cms/emdash/tree/38b1398a654051284828220cc289c4e700410428/skills/",
-  "ref": "38b1398a654051284828220cc289c4e700410428",
-  "commitSha": "38b1398a654051284828220cc289c4e700410428",
+  "source": "https://github.com/emdash-cms/emdash/tree/23a23add888bb3138f18f5b466ae00993e5ed726/skills/",
+  "ref": "23a23add888bb3138f18f5b466ae00993e5ed726",
+  "commitSha": "23a23add888bb3138f18f5b466ae00993e5ed726",
   "skills": [
     "building-emdash-site",
     "creating-plugins",
@@ -12,11 +12,11 @@
   "files": {
     "building-emdash-site/SKILL.md": "87393083e92b33db4ec77b7037b35bf76f5c77bdf875e3dc233dcde442c12238",
     "building-emdash-site/references/configuration.md": "19c08f821ba1f2f9b4b5a8f2a8de21e97dd72efb52810594d4ee7550973dc1b3",
-    "building-emdash-site/references/querying-and-rendering.md": "824ded645620a806e01a676f99c65c93ff44af9a13016211d410aa66f29eaf30",
+    "building-emdash-site/references/querying-and-rendering.md": "7dacbfd39d1f4dbbbb0694030280f029706ab786af0750f5da1454b2ae19acac",
     "building-emdash-site/references/schema-and-seed.md": "af19fe456292b16bf6bd1e1ebc20327d2c4dcd64694c7dbebaa7136b879ec8ef",
     "building-emdash-site/references/site-features.md": "069d7a524148cc4943c68d4cdfb338c40d81fed0e27f8f16e06e89467b940e9e",
     "creating-plugins/SKILL.md": "34a81edbe2691646bf729ecc3c44bbd82fd237af7db05a24ce3905717ffefe9a",
-    "creating-plugins/references/admin-ui.md": "f7aae0f18bcb0836aed0dd61ae747142765c9f112f1f2966252e9a0ddcaa5ca2",
+    "creating-plugins/references/admin-ui.md": "97d181991985cd39c9cf6527f29285fd5f4eacca86dc234651aa79757c9afbc4",
     "creating-plugins/references/api-routes.md": "5586881b7f1d1ba5f482f822ef2237159d528e774532116b52d3fdea470b4dc0",
     "creating-plugins/references/block-kit.md": "f7ad7b3aa7f71b0d66c1376cc4e5872ee60bbe3445a41ad82338d7fde843c1d8",
     "creating-plugins/references/comments.md": "cc3e1ea3657a41365283b0ae89bfab2852930c01c739cc591d1238e26525e068",
@@ -28,9 +28,9 @@
     "creating-plugins/references/sandbox-boundaries.md": "438da67963f66399c32355d51624214fd9cb596043a21ef8ee7521b5404b4687",
     "creating-plugins/references/storage.md": "12c9dad162f4e4126b476f3fe83929c58d692e8ee9b9a05cc8231a5eb8f93df1",
     "creating-plugins/references/taxonomies-and-redirects.md": "08d047abb33f405b62af59be1e6024f1e9635da527f7d100192d22e95b151f6f",
-    "emdash-cli/EDITING-FLOW.md": "89bb734c199f4c14f85a7ac88805af18cca398e4f9ec7cd74a3d5e29eda48389",
+    "emdash-cli/EDITING-FLOW.md": "3c1bd313f5453ea0c7b7c55e449c10704930620882fedbbb6e3ee827702c6182",
     "emdash-cli/SKILL.md": "ed9782a75ac8708af3e16a43e7540f2a0e4401297dcdedb79b75e55963c9f26f",
     "upgrading-emdash/SKILL.md": "a942be1d972ebccf9e75c869c00a0497c111e6a7747d3f174750258f114fffad"
   },
-  "syncedAt": "2026-11-16T18:04:49.895Z"
+  "syncedAt": "2026-11-23T19:57:04.901Z"
 }

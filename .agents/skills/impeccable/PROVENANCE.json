@@ -1,17 +1,17 @@
 {
   "formatVersion": 1,
-  "declaredSkillVersion": "4.9.2",
-  "launcherVersion": "0.1.25",
-  "distribution": "Codex curated Impeccable 4.9.2",
-  "skillSha256": "12d15997482e6d0734c5f2dcc4f62cea7bcba19953940214cffa5c6a7758aa93",
+  "declaredSkillVersion": "4.10.0",
+  "launcherVersion": "0.1.27",
+  "distribution": "Codex curated Impeccable 4.10.0",
+  "skillSha256": "dc7c49c1ad645d0ab8737e852419bba0a9db27cdceebad3630e88d5f772813be",
   "matchesInstalledCuratedSkill": true,
   "upstreamRepository": "https://github.com/pbakaus/impeccable",
-  "upstreamCommitSha": "d41d9860b0094dcb68030657da63461212835aaa",
+  "upstreamCommitSha": "b49177d32788f2dc585c42831d845dacf1ebed2c",
   "license": {
     "spdx": "Apache-2.0",
     "source": "https://github.com/pbakaus/impeccable/blob/main/LICENSE",
     "blob": "bb3f6d23b1f8025514a62a12b51b47d73e3c9aa9",
     "saved": "docs/licenses/impeccable-Apache-2.0.txt"
   },
-  "syncedAt": "2026-11-16T18:04:46.553Z"
+  "syncedAt": "2026-11-23T19:57:00.356Z"
 }
