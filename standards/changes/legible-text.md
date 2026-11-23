@@ -25,4 +25,4 @@ World building says what usually causes each one in a built world and where its 
 
 ## For sites
 
-Copy the two files; the guidance arrives with the usual skill sync. A direction made with sources makes every line readable at both widths before `audit:composition` passes. The audit takes two full-page screenshots more per route and width.
+Copy the two files; the guidance arrives with the usual skill sync. A direction made with sources makes every line readable at both widths before `audit:composition` passes. The audit takes three full-page screenshots more per route and width.
