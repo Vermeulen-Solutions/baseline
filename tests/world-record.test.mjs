@@ -104,3 +104,18 @@ test('a new direction names the photographs and saved pictures its world is take
   // Windows separators and a leading ./ are read as the same path; words in backticks without an extension are not files.
   assert.deepEqual(worldSources(withSources('`.\\src\\assets\\a.jpg`: x → y; `audit/world/b.png`: the `enamel` sign → z')), ['src/assets/a.jpg', 'audit/world/b.png']);
 });
+
+test('a new direction chooses its display face from a specimen sheet', async () => {
+  const { displayFace, validateFaces } = await import('../scripts/check-art-direction.mjs');
+  const withType = (value) => record().replace('- **World:**', `- **Typography Pairing:** ${value}\n- **World:**`);
+  const sheet = '# Faces looked at\n\n## Sheet 1: stencil, "Miel du plateau"\n\n- Stardos Stencil (`stardos-stencil`): display, OFL-1.1\n- Tektur (`tektur`): display, OFL-1.1, variable\n';
+  assert.equal(displayFace(withType('Display: Tektur Variable (cut like the hive numbers), Body: Work Sans, Utility: Tektur')), 'Tektur');
+  assert.equal(displayFace(withType('Display: "Stardos Stencil", Body: Work Sans')), 'Stardos Stencil');
+  assert.equal(displayFace(record()), null);
+  assert.deepEqual(validateFaces(withType('Display: Tektur Variable, Body: Work Sans'), { required: true, facesText: sheet }), []);
+  // No sheet yet: a new direction is told to make one; an older site is left alone.
+  assert.match(validateFaces(withType('Display: Tektur, Body: Work Sans'), { required: true }).join('\n'), /no specimen sheet yet\. Run npm run design:world -- faces/);
+  assert.deepEqual(validateFaces(withType('Display: Tektur, Body: Work Sans')), []);
+  // A face that is on no sheet is named, with the command that puts it on one.
+  assert.match(validateFaces(withType('Display: Bodoni Moda (from the dial), Body: Archivo'), { required: true, facesText: sheet }).join('\n'), /the display face "Bodoni Moda" is on no specimen sheet.*--include "Bodoni Moda"/);
+});

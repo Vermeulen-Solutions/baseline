@@ -162,6 +162,29 @@ export function validateSources(markdown, { required = false, exists = () => tru
   return errors;
 }
 
+// The display face is chosen by looking. Every trial site took its display face from memory (three club
+// sites the same Didone, three restaurants the same soft serif) and justified it afterwards. design:world
+// faces shows a shortlist with the site's own display line and records the faces in audit/world/faces.md;
+// the face in the record is one of them.
+export const FACES_FILE = 'audit/world/faces.md';
+
+/** The display family the record's Typography Pairing names, without "Variable" and without its rationale. */
+export function displayFace(markdown) {
+  const line = recordSection(markdown).find(entry => /^\s*- \*\*Typography Pairing:\*\*/.test(entry));
+  const family = line?.match(/Display:\s*([^,(;\[]+)/)?.[1].replace(/["'`*]/g, '').replace(/\s+Variable\s*$/i, '').trim();
+  return family || null;
+}
+
+/** With required: a new direction has looked at a specimen sheet, and its display face is on one. */
+export function validateFaces(markdown, { required = false, facesText = null } = {}) {
+  if (facesText === null) return required ? [`Type: no specimen sheet yet. Run npm run design:world -- faces <kind of lettering> --text "<the site's display line>" and choose the display face by looking at the sheet it makes (site-art-direction/references/world-building.md, step 2.3). It writes ${FACES_FILE}.`] : [];
+  const family = displayFace(markdown);
+  if (!family) return [];
+  const looked = [...facesText.matchAll(/^- (.+?) \(`[a-z0-9-]+`\):/gm)].map(match => match[1].toLowerCase());
+  if (looked.includes(family.toLowerCase())) return [];
+  return [`Type: the display face "${family}" is on no specimen sheet in ${FACES_FILE}. Put it on one beside other faces with npm run design:world -- faces <kind of lettering> --text "<the site's display line>" --include "${family}", look at the sheet, and keep it only if it is the best match for the lettering in the site's pictures.`];
+}
+
 /** The @keyframes names the record's World › Motion line promises (audit:composition checks they run). */
 export function worldMotionNames(markdown) {
   const lines = String(markdown ?? '').split(/\r?\n/);
@@ -532,6 +555,8 @@ function main() {
   errors.push(...validateMotionTier(agentsMd, { required: args.includes('--require-references') }).map(error => `AGENTS.md: ${error}`));
   // The same new direction names the photographs and saved pictures its world is taken from.
   errors.push(...validateSources(agentsMd, { required: args.includes('--require-references'), exists: existsSync }).map(error => `AGENTS.md: ${error}`));
+  // And it chose its display face from a specimen sheet; a site that has sheets keeps its face on one.
+  errors.push(...validateFaces(agentsMd, { required: args.includes('--require-references'), facesText: existsSync(FACES_FILE) ? readFileSync(FACES_FILE, 'utf8') : null }).map(error => `AGENTS.md: ${error}`));
   // Stage 5: the built pages compared with the references; a file that has the table keeps it valid.
   const referencesText = existsSync(REFERENCES_FILE) ? readFileSync(REFERENCES_FILE, 'utf8') : '';
   if (args.includes('--require-comparison') || /^###\s+Built against the references\s*$/m.test(referencesText)) {

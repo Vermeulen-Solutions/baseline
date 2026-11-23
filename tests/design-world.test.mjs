@@ -11,7 +11,7 @@ test('arguments: search takes words, get takes numbers, palette takes photograph
   assert.throws(() => parseArgs(['get', 'owl']), /not a number from search/);
   assert.throws(() => parseArgs(['search']), /words to look for/);
   assert.throws(() => parseArgs(['palette']), /folder of photographs/);
-  assert.throws(() => parseArgs(['draw', 'x']), /search, get or palette/);
+  assert.throws(() => parseArgs(['draw', 'x']), /search, get, palette or faces/);
   assert.throws(() => parseArgs(['search', 'x', '--limit', '0']), /--limit/);
   assert.equal(parseArgs([]).help, true);
 });
@@ -58,4 +58,52 @@ test('photograph colours are grouped by share, and the small vivid ones are foun
   assert.ok(Math.abs(vivid[0].share - 0.02) < 1e-9);
   assert.deepEqual(vividColours([...Array(1000).fill(dark)]), []);
   assert.deepEqual(clusterColours([], 4), []);
+});
+
+test('a busy archive is asked again after a wait, and a search that finds nothing is tried with fewer words', async () => {
+  const { broaderSearches, retryDelay } = await import('../scripts/design-world.mjs');
+  assert.deepEqual([retryDelay(0), retryDelay(1), retryDelay(2), retryDelay(3)], [5000, 15000, 30000, null]);
+  assert.equal(retryDelay(0, '12'), 12000);
+  assert.equal(retryDelay(0, '600'), 60000);
+  assert.equal(retryDelay(1, 'soon'), 15000);
+  assert.deepEqual(broaderSearches('service sticker boiler'), ['service sticker', 'service']);
+  assert.deepEqual(broaderSearches('enamel sign'), ['enamel']);
+  assert.deepEqual(broaderSearches('manometer'), []);
+});
+
+test('a shortlist of faces is a repeatable sample of one kind of lettering, without the faces chosen from memory', async () => {
+  const { FACE_CATEGORIES, FACE_POOL, FROM_MEMORY, displayWeight, faceLine, facesInRecord, seededOrder, shortlist, specimenHtml } = await import('../scripts/design-world.mjs');
+  assert.ok(FACE_CATEGORIES.includes('stencil') && FACE_CATEGORIES.includes('hand') && FACE_CATEGORIES.includes('lights'));
+  for (const kind of FACE_CATEGORIES) {
+    assert.ok(FACE_POOL[kind].matches.length > 20, kind);
+    assert.ok(FACE_POOL[kind].ids.split(' ').length >= 8, `${kind} has at least a sheet of faces`);
+    for (const id of FACE_POOL[kind].ids.split(' ')) assert.match(id, /^[a-z0-9-]+$/);
+  }
+  const font = (id, extra = {}) => ({ id, family: id.replace(/-/g, ' '), category: 'display', subsets: ['latin'], styles: ['normal'], weights: [400, 700], license: 'OFL-1.1', variable: false, ...extra });
+  const catalogue = [...FACE_POOL.stencil.ids.split(' ').map((id) => font(id)), font('oswald'), font('not-in-the-pool')];
+  const first = shortlist(catalogue, { category: 'stencil', count: 6, seed: 'site-a/stencil/1' });
+  assert.equal(first.length, 6);
+  assert.deepEqual(first, shortlist(catalogue, { category: 'stencil', count: 6, seed: 'site-a/stencil/1' }));
+  assert.notDeepEqual(first.map((f) => f.id), shortlist(catalogue, { category: 'stencil', count: 6, seed: 'site-b/stencil/1' }).map((f) => f.id));
+  for (const face of first) assert.ok(FACE_POOL.stencil.ids.split(' ').includes(face.id) && !FROM_MEMORY.includes(face.id));
+  // A face the catalogue no longer has is skipped; a remembered face in a pool is never sampled.
+  assert.equal(shortlist([font('tektur')], { category: 'stencil', count: 6, seed: 'x' }).length, 1);
+  assert.equal(shortlist([font('bodoni-moda')], { category: 'didone', count: 6, seed: 'x' }).length, 0);
+  assert.deepEqual(seededOrder([1, 2, 3, 4, 5], 'a').sort(), [1, 2, 3, 4, 5]);
+  assert.equal(displayWeight(font('x', { weights: [300, 400, 600, 800] })), 800);
+  assert.equal(displayWeight(font('x', { weights: [400] })), 400);
+  const html = specimenHtml([font('tektur', { family: 'Tektur' })], 'Une fuite ? <On arrive>');
+  assert.match(html, /fontsource\/fonts\/tektur@latest\/latin-700-normal\.woff2/);
+  assert.match(html, /Une fuite \? &lt;On arrive&gt;/);
+  const line = faceLine(font('tektur', { family: 'Tektur', variable: true }));
+  assert.match(line, /^- Tektur \(`tektur`\): display, OFL-1\.1, weights 400 700, variable; install with `npm install @fontsource-variable\/tektur`$/);
+  assert.deepEqual(facesInRecord(`# Faces\n\n## Sheet 1\n\n${line}\n- Share Tech (\`share-tech\`): sans-serif\n`), ['tektur', 'share tech']);
+});
+
+test('faces takes a kind of lettering and the line to show', () => {
+  assert.equal(parseArgs(['faces', 'stencil', '--text', 'Une fuite ?']).line, 'Une fuite ?');
+  assert.deepEqual(parseArgs(['faces', 'hand', '--text', 'x', '--include', 'Caveat, Barlow Condensed']).include, ['Caveat', 'Barlow Condensed']);
+  assert.throws(() => parseArgs(['faces', 'serif', '--text', 'x']), /kind of lettering, one of: didone/);
+  assert.throws(() => parseArgs(['faces', 'stencil']), /--text/);
+  assert.throws(() => parseArgs(['faces']), /kind of lettering/);
 });
