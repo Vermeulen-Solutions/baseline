@@ -377,7 +377,7 @@ test('the legibility findings name the lines, the width they were seen at and wh
   const found = Object.fromEntries(assessComposition(model).map((f) => [f.code, f]));
   assert.match(found['text-cut'].message, /1 line of text is cut off by a frame or the edge of the screen: at 390px "Prochain rendez-vous" \(78% cut off\)\. Make the words fit/);
   assert.match(found['text-squeezed'].message, /1 run of text stands in a column a few letters wide: at 390px "Troc de printemps" \(3 lines of 5\.7 characters\)\. Give the text the width/);
-  assert.match(found['text-tiny'].message, /2 lines of text are painted under 9px: at 390px "Échallens" \(5\.4px\), "Assens" \(5\.4px\)\. A drawing scaled down takes its labels with it/);
+  assert.match(found['text-tiny'].message, /2 lines of text are painted under 9px: at 390px "Échallens" \(5\.4px\), "Assens" \(5\.4px\)\. Set no text under 11px\. Where a drawing is scaled down for this width its labels shrink with it/);
   assert.match(found['text-unreadable'].message, /1 line of text cannot be told from the picture behind: at 1440px "La terrasse, sous la glycine"\. Put a ground under the words/);
   assert.equal(found['text-tiny'].count, 2);
   const clean = { cut: [], squeezed: [], tiny: [], unreadable: [] };

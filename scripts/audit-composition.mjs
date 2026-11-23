@@ -213,7 +213,7 @@ const plural = (count, one, many) => `${count} ${count === 1 ? one : many}`;
 const LEGIBILITY = [
   ['text-cut', 'cut', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} cut off by a frame or the edge of the screen: ${where}. Make the words fit: a smaller size, fewer words, a wider frame, or let the line wrap.`],
   ['text-squeezed', 'squeezed', (count, where) => `${plural(count, 'run of text stands', 'runs of text stand')} in a column a few letters wide: ${where}. Give the text the width: stack the objects one under another at this size instead of side by side, or set the label above its value.`],
-  ['text-tiny', 'tiny', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} painted under 9px: ${where}. A drawing scaled down takes its labels with it: set the labels in HTML over the drawing, make the drawing larger, or show fewer labels at this width.`],
+  ['text-tiny', 'tiny', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} painted under 9px: ${where}. Set no text under 11px. Where a drawing is scaled down for this width its labels shrink with it: set the labels in HTML over the drawing, make the drawing larger, or show fewer labels.`],
   ['text-unreadable', 'unreadable', (count, where) => `${plural(count, 'line of text cannot', 'lines of text cannot')} be told from the picture behind: ${where}. Put a ground under the words (a plate, a band, a darkened part of the picture), move them to a calm part of the picture, or change their colour.`],
 ];
 
