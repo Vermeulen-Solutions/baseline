@@ -2026,6 +2026,14 @@
     "tests/design-world.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/design-look.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/design-look.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }
