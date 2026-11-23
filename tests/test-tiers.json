@@ -431,6 +431,10 @@
     "tier": "unit",
     "reason": "Composition audit: pure assessment of section models (kicker and split openings, card grids, structural repeats, full-width media, closing band, signature), arguments and report text; no browser"
   },
+  "design-look.test.mjs": {
+    "tier": "unit",
+    "reason": "Look pass: arguments, the screens a page is cut into, the look file (render, parse, what is still open, lines kept for unchanged screens); no browser, no image files"
+  },
   "design-world.test.mjs": {
     "tier": "unit",
     "reason": "World sources: arguments, which archive licences may be shown on a site, the record line of a saved picture, colour conversion and the grouping of photograph colours; no network, no image files"
