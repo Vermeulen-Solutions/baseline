@@ -6,7 +6,7 @@
 //
 // Code draws geometry, diagrams, maps and lettering well and animals, food, plants and people badly: an
 // agent writes every curve as coordinates without seeing them. A site's figurative subjects come from one
-// open-licence set instead, treated as the world's medium (a stencil, a stamp, a burn, a stitch) and shown
+// open-licence set instead, treated as the medium the site's world marks its things with, and shown
 // large: recoloured only, a set figure reads as a logo. `search` lists the sets that have a subject with their
 // licence, figurative sets first (Iconify's "Thematic" category); `get` writes each SVG into
 // the site (no runtime dependency), refuses sets whose licence is not open or asks for share-alike, and
@@ -125,7 +125,7 @@ async function get(ids, outDir) {
   if (mixed.length > 1) console.log(`Warning: ${mixed.join(', ')} are different sets; one set per site keeps the drawings one hand.`);
   const visible = prefixes.filter((p) => needsVisibleCredit(sets[p].license.spdx));
   if (visible.length) console.log(`${visible.join(', ')}: ${sets[visible[0]].license.title} asks for a credit visitors can see (a credits line in the footer or a credits page), not only CREDITS.md.`);
-  console.log('Recoloured only, a set figure reads as a logo: give it the world\'s medium (a spray, stamp or burn filter and its mask), show it at least 480px, and set it on the object it marks. Recipes: site-art-direction/references/drawing-treatments.md.');
+  console.log('Recoloured only, a set figure reads as a logo: give it the medium this world marks its things with (a filter and its mask), show it at least 480px, and set it on the object it marks. Techniques: site-art-direction/references/drawing-treatments.md.');
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {

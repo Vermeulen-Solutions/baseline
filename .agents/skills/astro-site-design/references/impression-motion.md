@@ -69,12 +69,20 @@ Three things change once the client router is on, because a page change no longe
 
 A pinned scene is a section whose stage stays on screen while the visitor scrolls through it, and whose parts move with the scroll. It is plain CSS (a scroll-driven animation on a sticky stage), so it needs no library and works with the smoothed scroll. Build at least one on the home page.
 
-**The scene tells the site's subject; it does not decorate it.** Choose something the client's visitors would want to watch pass: the night hour by hour from the doors opening to the last record, the dish in five times, the hall filling. Then fill the stage with it: each step of the scene shows a photograph or a block of content across at least half the screen, and the steps replace one another as the visitor scrolls. Two trial sites built from the same brief show the difference. One told the club's night through five full-screen photographs with the hour counting up, and 58% of the screen changed through its scene. The other turned one clock hand beside three lines of text for three screens of scrolling, and 0.2% changed: it met every rule and showed nothing. `audit:composition` measures this and fails a scene through which less than a quarter of the screen changes.
+**The scene tells the site's subject; it does not decorate it.** Find the scene in this client's own material, in three steps, and write the answers in `audit/world/notes.md`:
+
+1. List three things about this client that change as you go through them: something that unfolds in time, something you move through in space, something that is made or done in stages, something that is taken apart or put together. Take each from the client's message and photographs, and name the photographs that would show it.
+2. Choose the one with the most photographs that differ from each other, and that no other business of the same trade could show in the same way.
+3. Write its steps, three to six, each with the photograph or block of content that fills the stage at that step.
+
+This page gives no example of a scene on purpose. An earlier version named one, and all three trial sites built from it afterwards made that same scene.
+
+Then fill the stage with it: each step of the scene shows a photograph or a block of content across at least half the screen, and the steps replace one another as the visitor scrolls. Two trial sites built from one brief show the difference. Through one scene 58% of the screen changed from step to step. In the other a single ornament turned beside three lines of text for three screens of scrolling, and 0.2% changed: it met every rule and showed nothing. `audit:composition` measures this and fails a scene through which less than a quarter of the screen changes.
 
 ```astro
 <section class="scene bleed" aria-labelledby="scene-title">
   <div class="scene__stage">
-    <h2 id="scene-title">One evening, three rooms</h2>
+    <h2 id="scene-title"><!-- the scene's title, in the client's words --></h2>
     <div class="scene__plate" data-plate="1">…</div>
     <div class="scene__plate" data-plate="2">…</div>
     <div class="scene__plate" data-plate="3">…</div>
@@ -121,6 +129,8 @@ Rules for a scene:
 - Every word in the scene is readable when nothing animates. Nothing the main visitor came for sits inside a scene.
 - Never put a scene on the first screen: the first screen opens settled.
 - The last step of the scene is as full as the first. A scene that ends on an empty stage leaves the visitor scrolling through nothing.
+- **When the steps sit on top of one another, one step shows at a time.** The example above lays its plates out one below the other, so each only arrives. When each step fills the stage and replaces the one before (the plates share one grid cell or are positioned on the stage), a step must also leave, or the words of two steps show through each other: two trial sites shipped exactly that. Give every step except the last keyframes that arrive and leave (`0% { opacity: 0 } 15% { opacity: 1 } 85% { opacity: 1 } 100% { opacity: 0 }`), give the last step keyframes that only arrive, and set the ranges end to end so that one step's range ends where the next begins (`contain 0% contain 33%`, `contain 33% contain 66%`, `contain 66% contain 100%`). Check it by scrolling slowly through the scene on the built site: at no point are two steps' words readable together.
+- A label that belongs to one step changes with the steps. A large hour, number or title that stays the same through every step while a smaller one beside it changes reads as a mistake.
 - An ornament that turns, a line that draws or a number that counts may accompany the steps; on its own it is not a scene.
 
 **Check.** Build, serve, and run `npm run audit:composition -- --base <origin> --routes <the built pages>`. It prints `Motion Tier impression: smoothed scroll, moving page changes and a pinned scene are present.` when all three pieces are built, or `[impression-motion]` with the piece that is missing. "A pinned scene that carries the subject" means the scene is there and too little of the screen changes through it: make its steps larger, as the paragraph above says, and run the audit again. Then run `npm run check:quality -- --base <origin> --routes <the built pages> --only script-weight,first-viewport-hidden,first-viewport-scroll-motion`. If it reports `script-weight`, the site's own scripts pushed the page over 120 KB: add `"limits": { "scriptKB": 200, "_why": "impression tier: GSAP, the transition engine and the smoothed scroll" }` to `page-budget.json` at the site root, and run it again.

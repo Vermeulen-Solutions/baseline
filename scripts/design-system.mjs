@@ -1686,7 +1686,7 @@ function main() {
       console.log(`- ${id} (${lane.name}): ${lane.description}`);
     }
     // The organisation lanes in site-art-direction/references/aesthetic-lanes.md have no preset of their own.
-    console.log('Lanes without a preset (seed from the one named, then set the values the lane describes): Atelier & Craft → editorial-paper; Civic & Community → neutral; Club & Fixture → neutral.');
+    console.log('Lanes without a preset (Atelier & Craft, Civic & Community, Club & Fixture): seed from neutral, then set the ground, ink and action colour from the client\'s photographs (npm run design:world -- palette <folder>).');
     return;
   }
 

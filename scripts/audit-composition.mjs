@@ -35,7 +35,7 @@
 //   photograph stretched across a desktop). Owners' photographs are often 600 to 1,500px wide; a
 //   trial home page opened on one at 1,440px and every reviewer named it as the design's ceiling;
 // - world-motion (once per run): an animation the Art Direction Record names in World › Motion
-//   (`stamp-lands`) never ran on the audited routes while scrolling. Read from AGENTS.md in the
+//   (its @keyframes name) never ran on the audited routes while scrolling. Read from AGENTS.md in the
 //   working directory, or --record <file>.
 // - with --references <references.md>: each selected reference's live page is measured the same way
 //   (at the wide width, consent declined) and every route is printed beside the references' median on
