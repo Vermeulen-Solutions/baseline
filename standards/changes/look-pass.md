@@ -16,9 +16,10 @@ The agents that built thirteen scored trial sites opened their own screenshots f
 - **A scorecard** (`site-art-direction/references/scorecard.md`, new): six questions scored 0 to 3 from the screens (the look from the client's own thing, a feature that answers the visitor's question, the job on a phone, craft, the made things, one idea carried through), with what usually holds each one at 2. The agent names its lowest question and improves the page for it.
 - **The first screen and the working feature are built first and finished**, at 390px and then at 1440px, before any other section. Trial sites spread their effort evenly over six to eight sections.
 - **`text-against-edge`** (new, in `audit:composition`): a line that begins or ends at the side of the ground it stands on or of the screen, confirmed in a picture of the page taken with its text unpainted. Eight scored sites give twenty places, each one seen by eye before.
+- **`text-covered`** (new): a line partly or wholly behind something laid over it, read from two pictures of the page (text painted and unpainted) and confirmed by what lies on top at that point. Of four trial sites built with the legibility checks, two shipped a caption running under the photograph laid over its neighbour on the phone, and one a row of facts wholly behind a panel at 1440px; twelve public professional home pages give none.
 - **`placeholder-text`** (new): "à confirmer", a "bientôt" tag on its own, digits followed by a row of dashes. Guidance: leave the element out and list the missing fact; build the page's main action with the example the brief gives.
 
-Both findings are floor findings for a direction whose record has a `Sources` line and advisories otherwise.
+The three findings are floor findings for a direction whose record has a `Sources` line and advisories otherwise.
 
 ## For sites
 

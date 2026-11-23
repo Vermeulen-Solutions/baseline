@@ -53,6 +53,9 @@
 //   with the text unpainted, with and without its shadows. Found on scored trial sites: date cards a few
 //   letters wide on a phone, a ticket wider than the phone, a plan's labels at 5px, a caption in white
 //   script over white flowers. Scored by eye, craft was the lowest of six questions in every round.
+// - text-covered (floor under the same rule): a line whose letters change nothing in the picture at one end
+//   (or anywhere) while something else than its own element lies on top there. Two of four trial sites of one
+//   round shipped a caption running under the photograph laid over its neighbour, on the phone only.
 // - text-against-edge (floor under the same rule): a line of up to 72px that begins or ends within 4px of
 //   the side of the ground it stands on (a block in another colour than what it stands on, or with a border
 //   on that side) or of the screen, where the picture shows the ground changing colour beside the line.
@@ -86,7 +89,7 @@ import { motionTier, worldMotionNames, worldSources } from './check-art-directio
 /** Findings that fail the run: the recorded world is missing from the built page. */
 export const FLOOR = Object.freeze(['bare-page', 'soft-photo', 'world-motion', 'impression-motion']);
 /** Floor findings for a direction made with sources (its record has a World › Sources line); advisories on older sites. */
-export const SOURCED_FLOOR = Object.freeze(['kicker-openings', 'accent-word', 'text-collision', 'text-cut', 'text-squeezed', 'text-tiny', 'text-unreadable', 'text-against-edge', 'placeholder-text']);
+export const SOURCED_FLOOR = Object.freeze(['kicker-openings', 'accent-word', 'text-collision', 'text-cut', 'text-squeezed', 'text-tiny', 'text-unreadable', 'text-covered', 'text-against-edge', 'placeholder-text']);
 export const floorCodes = (sourced) => (sourced ? [...FLOOR, ...SOURCED_FLOOR] : [...FLOOR]);
 
 export function parseArgs(argv) {
@@ -215,6 +218,7 @@ const LEGIBILITY_EXAMPLE = {
   squeezed: (p) => `"${p.text}" (${p.lines} lines of ${p.perLine} characters)`,
   tiny: (p) => `"${p.text}" (${p.size}px)`,
   unreadable: (p) => `"${p.text}"`,
+  covered: (p) => `"${p.text}" (${p.hidden === 1 ? 'all of it' : `${Math.round(p.hidden * 100)}% of the line`})`,
   edge: (p) => `"${p.text}" (${p.edge} edge)`,
   placeholder: (p) => `"${p.text}"`,
 };
@@ -224,6 +228,7 @@ const LEGIBILITY = [
   ['text-squeezed', 'squeezed', (count, where) => `${plural(count, 'run of text stands', 'runs of text stand')} in a column a few letters wide: ${where}. Give the text the width: stack the objects one under another at this size instead of side by side, or set the label above its value.`],
   ['text-tiny', 'tiny', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} painted under 9px: ${where}. Set no text under 11px. Where a drawing is scaled down for this width its labels shrink with it: set the labels in HTML over the drawing, make the drawing larger, or show fewer labels.`],
   ['text-unreadable', 'unreadable', (count, where) => `${plural(count, 'line of text cannot', 'lines of text cannot')} be told from the picture behind: ${where}. Put a ground under the words (a plate, a band, a darkened part of the picture), move them to a calm part of the picture, or change their colour.`],
+  ['text-covered', 'covered', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} hidden behind something laid over them: ${where}. Move what covers the words or move the words: a caption goes under its own photograph and clear of the one laid over it; an object set over a block overlaps its picture, not its text.`],
   ['text-against-edge', 'edge', (count, where) => `${plural(count, 'line of text stands', 'lines of text stand')} against the edge of the ground they are on: ${where}. Give the ground an inner margin (padding of 16px or more on a phone, more on a wide screen), or move the words in from the edge; a heading at the top of a new ground needs room above it.`],
   ['placeholder-text', 'placeholder', (count, where) => `${plural(count, 'line stands', 'lines stand')} in for a fact nobody has given: ${where}. Leave the element out (the row, the tag, the link) and list the missing fact in the notes; when it is the page's main action, build it with the example the brief gives.`],
 ];
@@ -501,6 +506,8 @@ export async function groundsBehind([src, lines, plain = null]) {
     const lettered = shown ? shown.getImageData(line.x, line.y, line.w, line.h).data : null;
     const step = Math.max(1, Math.floor(Math.sqrt((line.w * line.h) / 1500)));
     let count = 0, low = 0, sum = 0, squares = 0, painted = 0;
+    // The line in sixteen parts from left to right: how many samples each has, and how many the letters change.
+    const parts = Array.from({ length: 16 }, () => [0, 0]);
     for (let y = 0; y < line.h; y += step) {
       for (let x = 0; x < line.w; x += step) {
         const i = (y * line.w + x) * 4;
@@ -511,11 +518,17 @@ export async function groundsBehind([src, lines, plain = null]) {
         if ((Math.max(ink, ground) + 0.05) / (Math.min(ink, ground) + 0.05) < line.need) low += 1;
         const grey = 0.299 * r + 0.587 * g + 0.114 * b;
         sum += grey; squares += grey * grey; count += 1;
-        if (lettered && Math.max(Math.abs(lettered[i] - r), Math.abs(lettered[i + 1] - g), Math.abs(lettered[i + 2] - b)) > 24) painted += 1;
+        const part = parts[Math.min(15, Math.floor(16 * x / line.w))];
+        part[0] += 1;
+        if (lettered && Math.max(Math.abs(lettered[i] - r), Math.abs(lettered[i + 1] - g), Math.abs(lettered[i + 2] - b)) > 24) { painted += 1; part[1] += 1; }
       }
     }
     const mean = sum / count;
-    return { low: Math.round(100 * low / count) / 100, spread: Math.round(Math.sqrt(Math.max(0, squares / count - mean * mean))), ...(lettered ? { painted: Math.round(100 * painted / count) / 100 } : {}) };
+    // How far in from one end the letters change nothing: that end is behind something, or lost in what is behind it.
+    const run = (list) => { const at = list.findIndex(([samples, changed]) => !samples || changed); return at === -1 ? list.length : at; };
+    const [fromLeft, fromRight] = [run(parts), run([...parts].reverse())];
+    const hidden = lettered ? { hidden: Math.max(fromLeft, fromRight) / 16, side: fromLeft >= fromRight ? 'left' : 'right' } : {};
+    return { low: Math.round(100 * low / count) / 100, spread: Math.round(Math.sqrt(Math.max(0, squares / count - mean * mean))), ...(lettered ? { painted: Math.round(100 * painted / count) / 100 } : {}), ...hidden };
   });
 }
 
@@ -523,6 +536,44 @@ export async function groundsBehind([src, lines, plain = null]) {
 export function unreadableText(lines = [], grounds = [], { minLow = 0.3, minSpread = 8 } = {}) {
   return lines.map((line, i) => ({ line, ground: grounds[i] })).filter(({ ground }) => ground && ground.low >= minLow && ground.spread >= minSpread && (ground.painted === undefined || ground.painted >= 0.02))
     .map(({ line, ground }) => ({ text: line.text, low: ground.low, y: line.y }));
+}
+
+/**
+ * Lines that may be hidden behind something: `grounds` is what groundsBehind returned for `lines`.
+ * Either the letters change nothing at one end of the line (a sixteenth of it or more, and 10px or more)
+ * while they show elsewhere, or they change nothing at all. Each comes with the point to look at;
+ * `coveringShown` keeps the ones where something else than the line's own element lies on top there.
+ */
+export function coveredText(lines = [], grounds = [], { minShare = 1 / 16, minWidth = 10, minPainted = 0.03 } = {}) {
+  return lines.map((line, i) => ({ line, ground: grounds[i] })).filter(({ ground }) => ground && ground.hidden !== undefined)
+    .map(({ line, ground }) => {
+      const whole = ground.painted < 0.01;
+      const width = Math.round(ground.hidden * line.w);
+      if (!whole && (ground.painted < minPainted || ground.hidden < minShare || width < minWidth)) return null;
+      const x = whole ? line.x + line.w / 2 : ground.side === 'left' ? line.x + width / 2 : line.x + line.w - width / 2;
+      return { text: line.text, hidden: whole ? 1 : Math.round(100 * ground.hidden) / 100, x: Math.round(x), y: Math.round(line.y + line.h / 2) };
+    }).filter(Boolean);
+}
+
+/**
+ * In the page: for each point (page coordinates, with the words of the line it belongs to), whether the
+ * element on top there is something else than the one holding those words: a photograph laid over a
+ * caption, a card over a heading. The page is scrolled to each point and back.
+ */
+export function coveringShown(points) {
+  const [left, top] = [scrollX, scrollY];
+  const flat = (text) => text.replace(/\s+/g, ' ');
+  const shown = points.map((point) => {
+    scrollTo(0, Math.max(0, point.y - innerHeight / 2));
+    const [x, y] = [point.x - scrollX, point.y - scrollY];
+    if (x < 0 || x >= innerWidth || y < 0 || y >= innerHeight) return false;
+    const over = document.elementFromPoint(x, y);
+    // A bar that rides over the page (a header, a call bar) covers whatever is scrolled under it: not a fault of the line.
+    for (let el = over; el && el.nodeType === 1; el = el.parentElement) { const position = getComputedStyle(el).position; if (position === 'fixed' || position === 'sticky') return false; }
+    return Boolean(over) && !flat(over.textContent ?? '').includes(point.text.slice(0, 16));
+  });
+  scrollTo(left, top);
+  return shown;
 }
 
 /** Wide photographs shown at more than their pixels: `natural` is the file's own width, `dpr` the device pixel ratio. */
@@ -885,6 +936,7 @@ export async function readLegibility(browser, page) {
   const lines = linesToSample(boxes);
   let unreadable = [];
   let edge = [];
+  let covered = [];
   const candidates = edgeText(boxes);
   if (lines.length) {
     // Twice: with the letters' shadows and without. A dark shadow under light letters is ground that helps;
@@ -903,8 +955,11 @@ export async function readLegibility(browser, page) {
       }
     } finally { await sampler.close(); }
     if (grounds.length === 2) unreadable = unreadableText(lines, lines.map((_, i) => (grounds[0][i] && grounds[1][i] ? (grounds[0][i].low <= grounds[1][i].low ? grounds[0][i] : grounds[1][i]) : null)));
+    // Hidden in both pictures (a shadow that shows where the letters do not is still something to read by).
+    const hidden = grounds.length === 2 ? coveredText(lines, lines.map((_, i) => (grounds[0][i] && grounds[1][i] ? (grounds[0][i].hidden <= grounds[1][i].hidden ? grounds[0][i] : grounds[1][i]) : null))) : [];
+    if (hidden.length) { const shown = await page.evaluate(coveringShown, hidden); covered = hidden.filter((_, i) => shown[i]).map(({ text, hidden: share, y }) => ({ text, hidden: share, y })); }
   }
-  return { collisions: collidingText(boxes), legibility: { cut: cutText(boxes), squeezed: squeezedText(boxes), tiny: tinyText(boxes), unreadable, edge, placeholder: placeholderText(boxes) } };
+  return { collisions: collidingText(boxes), legibility: { cut: cutText(boxes), squeezed: squeezedText(boxes), tiny: tinyText(boxes), unreadable, covered, edge, placeholder: placeholderText(boxes) } };
 }
 
 /** Loads a page at the wide width, scrolls it with motion allowed, then measures it with motion reduced. */

@@ -266,7 +266,7 @@ test('an impression scene must change the screen; references are measured once',
 
 test('a label above three headings and an italic word in the page heading are floor findings for a sourced direction only', async () => {
   const { SOURCED_FLOOR, floorCodes } = await import('../scripts/audit-composition.mjs');
-  const legibility = ['text-collision', 'text-cut', 'text-squeezed', 'text-tiny', 'text-unreadable', 'text-against-edge', 'placeholder-text'];
+  const legibility = ['text-collision', 'text-cut', 'text-squeezed', 'text-tiny', 'text-unreadable', 'text-covered', 'text-against-edge', 'placeholder-text'];
   assert.deepEqual([...SOURCED_FLOOR], ['kicker-openings', 'accent-word', ...legibility]);
   assert.deepEqual(floorCodes(false), [...FLOOR]);
   assert.deepEqual(floorCodes(true), [...FLOOR, 'kicker-openings', 'accent-word', ...legibility]);
@@ -363,6 +363,36 @@ test('a line that cannot be told from the picture behind it is found from its gr
   assert.deepEqual(unreadableText(lines, [null, null]), []);
 });
 
+test('a line whose letters do not show at one end, or at all, is a candidate for being covered, with the point to look at', async () => {
+  const { coveredText } = await import('../scripts/audit-composition.mjs');
+  const lines = [
+    { text: 'L’allée du jardin, un samedi de juin.', x: 20, y: 3140, w: 200, h: 10 },
+    { text: 'Le bar, à 1h du matin.', x: 20, y: 400, w: 160, h: 10 },
+    { text: '28 couverts', x: 40, y: 918, w: 80, h: 10 },
+    { text: 'Fermé.', x: 20, y: 600, w: 40, h: 10 },
+  ];
+  const grounds = [
+    // The right quarter shows no letters: the point to look at is in the middle of that quarter.
+    { low: 0, spread: 3, painted: 0.2, hidden: 0.25, side: 'right' },
+    // Letters from end to end.
+    { low: 0, spread: 3, painted: 0.25, hidden: 0, side: 'left' },
+    // No letters anywhere: the whole line, looked at in its middle.
+    { low: 0, spread: 3, painted: 0, hidden: 1, side: 'left' },
+    // A sixteenth of a short line is a full stop, not a cover.
+    { low: 0, spread: 3, painted: 0.2, hidden: 0.0625, side: 'right' },
+  ];
+  assert.deepEqual(coveredText(lines, grounds), [
+    { text: 'L’allée du jardin, un samedi de juin.', hidden: 0.25, x: 195, y: 3145 },
+    { text: '28 couverts', hidden: 1, x: 80, y: 923 },
+  ]);
+  // Without the picture of the page as it is painted there is nothing to compare: no candidates.
+  assert.deepEqual(coveredText(lines, [{ low: 0, spread: 3 }, null, null, null]), []);
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  // A candidate counts only when something else than its own element lies on top at that point, and a bar that rides over the page is not that.
+  assert.match(source, /covered = hidden\.filter\(\(_, i\) => shown\[i\]\)/);
+  assert.match(source, /position === 'fixed' \|\| position === 'sticky'\) return false/);
+});
+
 test('a line against the side of its ground is a candidate from the boxes, and words standing in for a missing fact are found', async () => {
   const { edgeText, placeholderText } = await import('../scripts/audit-composition.mjs');
   const line = (node, text, extra = {}) => ({ el: node, node, chars: text.length, text, x: 17, y: 100 + node * 30, w: 200, h: 14, alpha: 1, size: 16, lost: 0, upright: true, turned: false, edge: null, ...extra });
@@ -388,9 +418,11 @@ test('the legibility findings name the lines, the width they were seen at and wh
       unreadable: [],
       edge: [{ text: 'Le chauffage qui tient', edge: 'left', y: 4921 }],
       placeholder: [{ text: '079 __ __ __', y: 700 }],
+      covered: [{ text: 'L’allée du jardin, un samedi de juin.', hidden: 0.25, y: 3144 }, { text: 'Salle de bains', hidden: 1, y: 3370 }],
     } },
   });
   const more = Object.fromEntries(assessComposition(model).map((f) => [f.code, f]));
+  assert.match(more['text-covered'].message, /2 lines of text are hidden behind something laid over them: at 390px "L’allée du jardin, un samedi de juin\." \(25% of the line\), "Salle de bains" \(all of it\)\. Move what covers the words or move the words/);
   assert.match(more['text-against-edge'].message, /1 line of text stands against the edge of the ground they are on: at 390px "Le chauffage qui tient" \(left edge\)\. Give the ground an inner margin/);
   assert.match(more['placeholder-text'].message, /1 line stands in for a fact nobody has given: at 390px "079 __ __ __"\. Leave the element out/);
   const found = Object.fromEntries(assessComposition(model).map((f) => [f.code, f]));
