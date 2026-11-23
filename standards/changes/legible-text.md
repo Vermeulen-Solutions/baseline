@@ -10,7 +10,7 @@ files: [scripts/audit-composition.mjs, tests/audit-composition.test.mjs]
 
 # The composition audit reads whether the text can be read
 
-Nine trial sites from three rounds were scored by eye on six questions (does the look come from the client's own thing, is there a feature that does the visitor's job, can it be done on a phone, craft, the made things, one idea carried through). Craft was the lowest question in every round, and what cost the points was nearly always text: date cards a few letters wide on a phone, a ticket wider than the phone, a plan whose labels came out at 5px, a caption in white script over white flowers. The agents that build these sites cannot look at a screenshot, so the audit has to see these for them.
+Nine trial sites from three rounds were scored by eye on six questions (does the look come from the client's own thing, is there a feature that does the visitor's job, can it be done on a phone, craft, the made things, one idea carried through). Craft was the lowest question in every round, and what cost the points was nearly always text: date cards a few letters wide on a phone, a ticket wider than the phone, a plan whose labels came out at 5px, a caption in white script over white flowers. The agents that built these sites looked at their own screenshots fifteen to thirty-eight times a run and shipped these faults all the same, so the audit names them.
 
 `audit:composition` now reads four more things from the lines of text on the page, at the wide and at the narrow width:
 
