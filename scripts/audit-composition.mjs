@@ -56,6 +56,8 @@
 // - text-covered (floor under the same rule): a line whose letters change nothing in the picture at one end
 //   (or anywhere) while something else than its own element lies on top there. Two of four trial sites of one
 //   round shipped a caption running under the photograph laid over its neighbour, on the phone only.
+//   It also reads each letter of a line: one that changes nothing while its neighbours show is behind a
+//   drawn part. One trial site of the next round struck each of five labels through with a valve's stem.
 // - text-against-edge (floor under the same rule): a line of up to 72px that begins or ends within 4px of
 //   the side of the ground it stands on (a block in another colour than what it stands on, or with a border
 //   on that side) or of the screen, where the picture shows the ground changing colour beside the line.
@@ -218,7 +220,7 @@ const LEGIBILITY_EXAMPLE = {
   squeezed: (p) => `"${p.text}" (${p.lines} lines of ${p.perLine} characters)`,
   tiny: (p) => `"${p.text}" (${p.size}px)`,
   unreadable: (p) => `"${p.text}"`,
-  covered: (p) => `"${p.text}" (${p.hidden === 1 ? 'all of it' : `${Math.round(p.hidden * 100)}% of the line`})`,
+  covered: (p) => `"${p.text}" (${p.hidden === 1 ? 'all of it' : p.letters ? `${p.letters} ${p.letters === 1 ? 'letter' : 'letters'} inside the line` : `${Math.round(p.hidden * 100)}% of the line`})`,
   edge: (p) => `"${p.text}" (${p.edge} edge)`,
   placeholder: (p) => `"${p.text}"`,
 };
@@ -228,7 +230,7 @@ const LEGIBILITY = [
   ['text-squeezed', 'squeezed', (count, where) => `${plural(count, 'run of text stands', 'runs of text stand')} in a column a few letters wide: ${where}. Give the text the width: stack the objects one under another at this size instead of side by side, or set the label above its value.`],
   ['text-tiny', 'tiny', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} painted under 9px: ${where}. Set no text under 11px. Where a drawing is scaled down for this width its labels shrink with it: set the labels in HTML over the drawing, make the drawing larger, or show fewer labels.`],
   ['text-unreadable', 'unreadable', (count, where) => `${plural(count, 'line of text cannot', 'lines of text cannot')} be told from the picture behind: ${where}. Put a ground under the words (a plate, a band, a darkened part of the picture), move them to a calm part of the picture, or change their colour.`],
-  ['text-covered', 'covered', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} hidden behind something laid over them: ${where}. Move what covers the words or move the words: a caption goes under its own photograph and clear of the one laid over it; an object set over a block overlaps its picture, not its text.`],
+  ['text-covered', 'covered', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} hidden behind something laid over them: ${where}. Move what covers the words or move the words: a caption goes under its own photograph and clear of the one laid over it; an object set over a block overlaps its picture, not its text; a drawn part (a stem, a needle, a rule) passes beside a label, never through it.`],
   ['text-against-edge', 'edge', (count, where) => `${plural(count, 'line of text stands', 'lines of text stand')} against the edge of the ground they are on: ${where}. Give the ground an inner margin (padding of 16px or more on a phone, more on a wide screen), or move the words in from the edge; a heading at the top of a new ground needs room above it.`],
   ['placeholder-text', 'placeholder', (count, where) => `${plural(count, 'line stands', 'lines stand')} in for a fact nobody has given: ${where}. Leave the element out (the row, the tag, the link) and list the missing fact in the notes; when it is the page's main action, build it with the example the brief gives.`],
 ];
@@ -240,7 +242,7 @@ const LEGIBILITY = [
  * text in a turned object is marked `turned` (its boxes are wider and taller than its letters).
  * `viewportOnly` keeps the lines on screen, for a look at one scroll position, and leaves out a sticky bar.
  */
-export function textBoxes({ viewportOnly = false } = {}) {
+export function textBoxes({ viewportOnly = false, letters = false } = {}) {
   const alphaOf = (color) => {
     const slash = /\/\s*([\d.]+%?)\s*\)/.exec(color);
     if (slash) return slash[1].endsWith('%') ? parseFloat(slash[1]) / 100 : parseFloat(slash[1]);
@@ -340,6 +342,18 @@ export function textBoxes({ viewportOnly = false } = {}) {
     const size = Math.round(parseFloat(s.fontSize) * (ctm ? Math.hypot(ctm.a, ctm.b) : f.scale) * 10) / 10;
     const upright = svg || s.writingMode === 'horizontal-tb';
     const id = nodes++;
+    // Where each letter and digit of the node stands (asked for by the read of covered text): its box, a pixel in from each side.
+    const marks = [];
+    if (letters && !svg && upright && !f.turned && node.length <= 2000) {
+      const one = document.createRange();
+      for (let i = 0; i < node.length; i += 1) {
+        if (!/[\p{L}\p{N}]/u.test(node.data[i])) continue;
+        one.setStart(node, i);
+        one.setEnd(node, i + 1);
+        const m = one.getBoundingClientRect();
+        if (m.width >= 3) marks.push(m);
+      }
+    }
     for (const r of rects) {
       // The letters sit in the middle of a line's box: leave out the space above capitals and below the baseline.
       const lettered = svg ? { left: r.left, top: r.top + r.height * 0.15, right: r.right, bottom: r.bottom - r.height * 0.15 } : { left: r.left, top: r.top + r.height * 0.2, right: r.right, bottom: r.bottom - r.height * 0.18 };
@@ -355,7 +369,9 @@ export function textBoxes({ viewportOnly = false } = {}) {
       const g = f.ground ?? { left: 0, top: -Infinity, right: innerWidth };
       const near = (gap, room) => gap > -2 && gap < room;
       const edge = f.turned || !upright || f.strip ? null : near(r.left - g.left, 4) ? 'left' : near(g.right - r.right, 4) ? 'right' : null;
-      boxes.push({ el: index, node: id, chars: text.length, edge, text: text.slice(0, 40), x: Math.round(shown.left + scrollX), y: Math.round(shown.top + scrollY), w: Math.round(w), h: Math.round(h), alpha: Math.round(alpha * 100) / 100, size, lost, upright, turned: f.turned, rgb: f.blend ? null : rgbOf(fill) });
+      const onLine = marks.filter((m) => m.top + m.height / 2 >= r.top && m.top + m.height / 2 <= r.bottom && m.left >= shown.left && m.right <= shown.right)
+        .map((m) => [Math.ceil(m.left + scrollX), Math.floor(m.right + scrollX) - Math.ceil(m.left + scrollX)]).filter(([, width]) => width >= 2);
+      boxes.push({ el: index, node: id, chars: text.length, edge, text: text.slice(0, 40), x: Math.round(shown.left + scrollX), y: Math.round(shown.top + scrollY), w: Math.round(w), h: Math.round(h), alpha: Math.round(alpha * 100) / 100, size, lost, upright, turned: f.turned, rgb: f.blend ? null : rgbOf(fill), ...(letters ? { letters: onLine } : {}) });
     }
   }
   // Which lines belong to an element inside another element that also has lines (a link in a paragraph).
@@ -480,7 +496,7 @@ export function placeholderText(boxes = [], { minAlpha = 0.6 } = {}) {
 /** The lines worth holding against what is behind them: solid, with a known colour, wide enough to sample. */
 export function linesToSample(boxes = [], { minAlpha = 0.6, limit = 500 } = {}) {
   return oncePerNode(solidLines(boxes, minAlpha).filter((b) => b.rgb && !b.turned && b.chars >= 3 && b.w >= 20 && b.h >= 6)).slice(0, limit)
-    .map((b) => ({ text: b.text, x: b.x, y: b.y, w: b.w, h: b.h, rgb: b.rgb, alpha: Math.min(1, b.alpha), need: b.size >= 24 ? 2 : 3 }));
+    .map((b) => ({ text: b.text, x: b.x, y: b.y, w: b.w, h: b.h, rgb: b.rgb, alpha: Math.min(1, b.alpha), need: b.size >= 24 ? 2 : 3, ...(b.letters && b.size < 72 ? { letters: b.letters } : {}) }));
 }
 
 /**
@@ -528,6 +544,29 @@ export async function groundsBehind([src, lines, plain = null]) {
     const run = (list) => { const at = list.findIndex(([samples, changed]) => !samples || changed); return at === -1 ? list.length : at; };
     const [fromLeft, fromRight] = [run(parts), run([...parts].reverse())];
     const hidden = lettered ? { hidden: Math.max(fromLeft, fromRight) / 16, side: fromLeft >= fromRight ? 'left' : 'right' } : {};
+    // Letter by letter, every pixel: which letters change nothing in their own box (a drawn part crossing the line hides one or two).
+    if (lettered && line.letters) {
+      const read = line.letters.map(([at, width]) => {
+        const [from, to] = [Math.max(0, at - line.x), Math.min(line.w, at - line.x + width)];
+        if (to - from < 2) return null;
+        let changed = 0, most = 0;
+        for (let y = 0; y < line.h; y += 1) {
+          for (let x = from; x < to; x += 1) {
+            const i = (y * line.w + x) * 4;
+            const change = Math.max(Math.abs(lettered[i] - data[i]), Math.abs(lettered[i + 1] - data[i + 1]), Math.abs(lettered[i + 2] - data[i + 2]));
+            most = Math.max(most, change);
+            if (change > 24) changed += 1;
+          }
+        }
+        return [changed / ((to - from) * line.h), most];
+      });
+      const middle = (values) => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)] ?? 0;
+      const [share, depth] = [middle(read.filter(Boolean).map(([part]) => part)), middle(read.filter(Boolean).map(([, deepest]) => deepest))];
+      // Gone: next to nothing changes in the letter's box, and nothing changes much. Half gone: two neighbours, each mostly unchanged.
+      const gone = (letter) => letter && letter[0] < 0.1 && letter[1] < 0.5 * depth;
+      const faint = (letter) => letter && share >= 0.5 && letter[0] < 0.3;
+      hidden.struck = read.map((letter, index) => (gone(letter) || (faint(letter) && (faint(read[index - 1]) || faint(read[index + 1]))) ? index : -1)).filter((index) => index >= 0);
+    }
     return { low: Math.round(100 * low / count) / 100, spread: Math.round(Math.sqrt(Math.max(0, squares / count - mean * mean))), ...(lettered ? { painted: Math.round(100 * painted / count) / 100 } : {}), ...hidden };
   });
 }
@@ -541,15 +580,22 @@ export function unreadableText(lines = [], grounds = [], { minLow = 0.3, minSpre
 /**
  * Lines that may be hidden behind something: `grounds` is what groundsBehind returned for `lines`.
  * Either the letters change nothing at one end of the line (a sixteenth of it or more, and 10px or more)
- * while they show elsewhere, or they change nothing at all. Each comes with the point to look at;
+ * while they show elsewhere, or they change nothing at all, or a few letters inside the line are gone
+ * (`struck`, of the line's `letters`) while the rest show. Each comes with the point to look at;
  * `coveringShown` keeps the ones where something else than the line's own element lies on top there.
  */
-export function coveredText(lines = [], grounds = [], { minShare = 1 / 16, minWidth = 10, minPainted = 0.03 } = {}) {
+export function coveredText(lines = [], grounds = [], { minShare = 1 / 16, minWidth = 10, minPainted = 0.03, maxStruck = 0.4 } = {}) {
   return lines.map((line, i) => ({ line, ground: grounds[i] })).filter(({ ground }) => ground && ground.hidden !== undefined)
     .map(({ line, ground }) => {
       const whole = ground.painted < 0.01;
       const width = Math.round(ground.hidden * line.w);
-      if (!whole && (ground.painted < minPainted || ground.hidden < minShare || width < minWidth)) return null;
+      if (!whole && (ground.painted < minPainted || ground.hidden < minShare || width < minWidth)) {
+        // No end of the line is hidden: is a letter inside it? A few letters gone while most of the line shows.
+        const [struck, count] = [ground.struck ?? [], line.letters?.length ?? 0];
+        if (ground.painted < minPainted || !struck.length || count < 4 || struck.length > maxStruck * count) return null;
+        const [at, wide] = line.letters[struck[0]];
+        return { text: line.text, hidden: Math.max(0.01, Math.round(100 * struck.length / count) / 100), letters: struck.length, x: Math.round(at + wide / 2), y: Math.round(line.y + line.h / 2) };
+      }
       const x = whole ? line.x + line.w / 2 : ground.side === 'left' ? line.x + width / 2 : line.x + line.w - width / 2;
       return { text: line.text, hidden: whole ? 1 : Math.round(100 * ground.hidden) / 100, x: Math.round(x), y: Math.round(line.y + line.h / 2) };
     }).filter(Boolean);
@@ -932,7 +978,7 @@ const UNPAINT_TEXT = '*, *::before, *::after { color: transparent !important; -w
  * text unpainted) lines that cannot be told from the picture behind them.
  */
 export async function readLegibility(browser, page) {
-  const boxes = await page.evaluate(textBoxes);
+  const boxes = await page.evaluate(textBoxes, { letters: true });
   const lines = linesToSample(boxes);
   let unreadable = [];
   let edge = [];
@@ -956,8 +1002,9 @@ export async function readLegibility(browser, page) {
     } finally { await sampler.close(); }
     if (grounds.length === 2) unreadable = unreadableText(lines, lines.map((_, i) => (grounds[0][i] && grounds[1][i] ? (grounds[0][i].low <= grounds[1][i].low ? grounds[0][i] : grounds[1][i]) : null)));
     // Hidden in both pictures (a shadow that shows where the letters do not is still something to read by).
-    const hidden = grounds.length === 2 ? coveredText(lines, lines.map((_, i) => (grounds[0][i] && grounds[1][i] ? (grounds[0][i].hidden <= grounds[1][i].hidden ? grounds[0][i] : grounds[1][i]) : null))) : [];
-    if (hidden.length) { const shown = await page.evaluate(coveringShown, hidden); covered = hidden.filter((_, i) => shown[i]).map(({ text, hidden: share, y }) => ({ text, hidden: share, y })); }
+    const least = (a, b) => ({ ...(a.hidden <= b.hidden ? a : b), struck: (a.struck ?? []).filter((index) => (b.struck ?? []).includes(index)) });
+    const hidden = grounds.length === 2 ? coveredText(lines, lines.map((_, i) => (grounds[0][i] && grounds[1][i] ? least(grounds[0][i], grounds[1][i]) : null))) : [];
+    if (hidden.length) { const shown = await page.evaluate(coveringShown, hidden); covered = hidden.filter((_, i) => shown[i]).map(({ text, hidden: share, letters, y }) => ({ text, hidden: share, ...(letters ? { letters } : {}), y })); }
   }
   return { collisions: collidingText(boxes), legibility: { cut: cutText(boxes), squeezed: squeezedText(boxes), tiny: tinyText(boxes), unreadable, covered, edge, placeholder: placeholderText(boxes) } };
 }
