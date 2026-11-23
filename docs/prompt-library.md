@@ -198,20 +198,28 @@ Please:
 ## 3. Art Direction & The Design Gate
 
 ### Exploring Aesthetic Directions (Before Code)
-Use this prompt to define a visual identity and satisfy the `npm run check:art-direction` gate before any CSS is written.
+Use this prompt to set a site's direction and pass the art-direction gate before any site-specific CSS is written. The steps live in the stage's own references; the prompt sends the agent there and names the gate.
 
 ```markdown
-We are ready for Stage 4: Art Direction. Activate the site-art-direction skill.
+We are ready for Stage 4: Art Direction. Follow Stage 4 in
+.agents/skills/new-site-workflow/references/art-direction-and-calibration.md and
+the site-art-direction skill, every step in their order. Read each reference
+before the step it governs. Do not shorten the stage to choosing a lane and a
+palette: a lane is a starting point for tokens, not a direction.
 
 Brand goals and personality: [E.g., Editorial craftsmanship, technical precision, high-contrast typography, restrained color palette].
 
-Please:
 Before choosing the direction, recommend Brilliant for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer Brilliant, OpenPencil and Penpot choices, keeping OpenDesign optional for an explicitly selected canvas/export workflow or an existing project. Follow `site-art-direction/references/design-iteration.md` for side-by-side comparison and capability boundaries; reuse a settled choice. Use the selected tool’s specialist skill when supplied.
 
-1. Review .agents/skills/site-art-direction/references/aesthetic-lanes.md and propose 2-3 suitable Aesthetic Lanes.
-2. Formulate a Narrative Metaphor, Typography Pairing, and Token Physics (Canvas ground, Action/Accent colors, Borders, and Spatial Density).
-3. Propose 2-3 explicit Site Anti-Patterns (e.g., "No floating cards; no generic purple gradients; no icon pills").
-4. Once we agree, initialize the client site record and tokens via `npm run design:tokens -- --init-client --lane <lane>`, customize `AGENTS.md` and `src/styles/global.css` for our brief, and verify with `npm run check:art-direction -- --require-record`.
+The stage has five parts, each with its own reference under
+.agents/skills/site-art-direction/references/:
+1. Reference research (reference-research.md): candidates found, captured and judged, the selected ones saved in audit/references/references.md.
+2. The distinctive direction (distinctive-direction.md): the governing idea and the signature moments.
+3. The world (world-building.md, with `npm run design:world`): what the site is made of, taken from this client's own things, and the one working feature.
+4. Two or three structurally distinct concepts side by side, held against the selected references, with your recommendation.
+5. Once we agree: the complete Art Direction Record in AGENTS.md with its World and Decisions, and the tokens in src/styles/global.css.
+
+The gate: `npm run check:art-direction -- --require-record --require-references` passes.
 ```
 
 ---
@@ -258,53 +266,81 @@ Use this prompt to build a new page template connected to EmDash.
 ```markdown
 Let's implement the public template for the [Page Name, e.g., Case Studies / Blog Post / Team Directory] route at src/pages/[route].astro.
 
+Before any markup, read Stage 5 in
+.agents/skills/new-site-workflow/references/build-verify-launch.md and write the
+page's section-by-section pacing blueprint as it asks, from the page brief, the
+real copy and the World recorded in AGENTS.md.
+
 Requirements:
-1. Use our layout primitives (<Section>, <Container>, <Grid>, and <Card>) and expressive CSS utilities (`.bento-grid`, `.grid-hairline`, `.ui-specimen`, `.surface-elevated`, `.surface-glass`, `.surface-spotlight`, `.eyebrow-telemetry`, `.font-accent`, `.tabular-nums`, `.btn--secondary`, `.btn--ghost` with `.icon-nudge`) according to our design tokens and `.agents/skills/astro-site-design/references/astro-primitives.md`.
+1. Build each section as the object the World records for it, with our layout primitives (<Section>, <Container>, <Grid>, and <Card>). Read `.agents/skills/astro-site-design/references/astro-primitives.md` and `baseline-utilities.md` first. A decorative utility (`.bento-grid`, `.surface-glass`, `.eyebrow-telemetry` and the like) is used only where the Art Direction Record calls for it, never because it exists.
 2. Query the EmDash collection server-side.
 3. Pass page identity to Base.astro, spread visual editing proxies ({...entry.edit.field}) onto editable elements, and pass `transitionName` on `<Card>` where list-to-detail morphing applies.
 4. If this is an editorial article with wide pull-quotes or galleries, use `<Container breakout>` and `.content-grid`.
-5. Run the 5-Point Visual Self-Critique Rubric and ensure 0 KB of unnecessary client-side JavaScript.
+5. Keep client-side JavaScript to what an interaction needs.
+6. Once the page renders, run the Stage 5 passes on it as `.agents/skills/new-site-workflow/references/impeccable-passes.md` sets out (the comparison pass, the look pass, the craft pass); the prompt in section 6 below does this.
 ```
 
 ---
 
 ## 6. Visual Polish & The Impeccable Critique
 
-### Bounded UI / UX Critique Pass
-Use this prompt once a representative page is rendering in the browser.
+### Raising a Rendered Page: the Stage 5 Passes
+Use this prompt once a representative page is rendering in the browser. It changes the page: three passes, each defined in the workflow's own reference, in this order.
 
 ```markdown
-Activate the impeccable skill and perform a visual critique pass on our rendered [Homepage / About / Case Study] page.
+Run the Stage 5 passes on our rendered [Homepage / About / Case Study] page
+exactly as .agents/skills/new-site-workflow/references/impeccable-passes.md sets
+out. Read each section before running its pass, and follow it where this prompt
+is shorter.
 
-Apply the **5-Point Visual Self-Critique Rubric** in astro-site-design/SKILL.md:
-1. 3-Tier Surface Depth: Base (--color-page) -> Surface (--color-surface) ->
-   Elevated/Glass (--color-elevated, .surface-elevated, .surface-glass) with 1px
-   --color-border hairlines. Use a rhythm breaker only where the page needs one.
-2. Typography Roles: tracked --font-display headings and --font-body around 68ch
-   are required. .font-accent and .eyebrow-telemetry / .tabular-nums only where
-   earned: real metadata, no kicker labels or decorative section indices.
-3. Grid Rhythm & Asymmetry: avoid consecutive equal 3-column card rows; inspect
-   12-column .bento-grid (8/4 or 7/5), .grid-hairline and Sidebar alternatives.
-4. Tactile Action Hierarchy: .btn, .btn--secondary, .btn--ghost, .icon-nudge and
-   .clickable-parent / .focus-parent keyboard accessibility.
-5. Motion & Polish: data-reveal, data-sticky-header, Card transitionName,
-   zero FOUC on surface controls, reduced motion and ordinary navigation fallback.
+1. The comparison pass ("raise each representative page to its references"):
+   the page beside its selected references on one sheet (`npm run design:sheet`),
+   a fresh reviewer naming the five biggest things the references do that the
+   page does not, those built from the site's world and recorded.
+   Gate: `npm run check:art-direction -- --require-comparison`.
+2. The look pass ("look at every screen"): `npm run design:look`, a line for
+   every screen at phone and desktop width, the faults fixed.
+   Gate: `npm run design:look -- --check`.
+3. The craft pass ("critique each representative page for its craft"): the
+   Impeccable context loaded once, `critique` with its two isolated assessments
+   and a persisted snapshot, each finding acted on with the command it calls
+   for, then `polish`. Loading the skill, reading its guidance or running its
+   detector is not the critique.
 
-Use these concrete defaults for new/replacement work. Evaluate every check
-against real content; document specific exceptions for an accepted existing
-direction or route function. Capability counts alone are not quality scores.
-Then run the generic-fingerprint check: remove each default pattern (kicker
-labels, section indices, italic word in every headline, glass nav, repeated
-bento/metric/dark-band sequence, gradient text) that has no content reason.
+Then `npm run audit:composition` against the served build: no floor finding.
 
 Inspect mobile (390x844), desktop (1440x900) and relevant intermediate widths.
-Verify saved capture dimensions, loaded content and live geometry. Exercise
-adopted controls/transitions, keyboard focus and reduced motion; surface switching
-is in scope only when the site offers it. Use a supported available browser if
-the preferred native browser fails, without bypassing a permission/policy denial.
+Make each fix in shared tokens or components. Do not invent a fact the owner has
+not given; what design cannot change (photographs, missing facts, decisions)
+goes into the report as owner tasks, not into another round. Use a supported
+available browser if the preferred native browser fails, without bypassing a
+permission/policy denial.
+```
 
-Provide high-impact findings with route/viewport evidence and concrete edits.
-This request is a critique/proposal; do not assume permission for a redesign.
+### Bounded UI / UX Critique Pass
+Use this prompt for findings only: a report on a rendered page, with nothing changed.
+
+```markdown
+Critique our rendered [Homepage / About / Case Study] page and stop at the
+report: change no files.
+
+Run the Impeccable `critique` command as
+.agents/skills/new-site-workflow/references/impeccable-passes.md ("critique each
+representative page for its craft") and .agents/skills/impeccable/reference/critique.md
+set out: the context loaded once, two isolated assessments (the design review in
+a browser at 390 and 1440 wide; the detector with its browser evidence), one
+report with the score, the design-specificity verdict, the priority issues P0 to
+P3 and the persona red flags, and the snapshot persisted. Loading the skill or
+applying a checklist from memory is not this critique.
+
+Inspect mobile (390x844), desktop (1440x900) and relevant intermediate widths.
+Exercise adopted controls/transitions, keyboard focus and reduced motion. Use a
+supported available browser if the preferred native browser fails, without
+bypassing a permission/policy denial.
+
+For each priority issue give the route/viewport evidence and name the command
+that would fix it, from the table in impeccable-passes.md. This request is a
+critique/proposal; do not assume permission for the fixes or for a redesign.
 ```
 
 ---
