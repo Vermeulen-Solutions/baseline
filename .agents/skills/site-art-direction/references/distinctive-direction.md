@@ -46,9 +46,9 @@ Cards remain right for things that really are cards (a member card, a ticket). R
 
 ## 3. Take the shapes, the palette and the type from the subject
 
-- **Shapes from the world's objects:** the arch of the church on its photographs, the ticket's notches, the tag's hole, the folder tab of the archive (`data-shape` for photograph frames). Each shape belongs to one object and means it; shapes that belong to nothing read as decoration.
-- **A palette of four to six colours with roles,** sampled from the client's own artefacts (logo, sign, packaging) and the materials: a ground, an ink, one or two materials, an action colour and a mark colour (the stamp, the paint dot). Actions keep one colour so they stay recognisable. A client's, partner's or team's colours stay inside their own material, not in the site's chrome.
-- **Type from the subject, in three voices:** a display face with a reason and a treatment from the world (an engraved serif for a 19th-century building, a condensed sans painted like a sign, a stamped face for a label), a reading face, and a utility voice for the objects' labels and figures. Use the scale: one or two display lines a page at six to eight times the body size, section titles clearly smaller, labels at 11 to 13px.
+- **Shapes from the world's objects:** an outline taken from something in the photographs or the saved pictures (`data-shape` for photograph frames). Each shape belongs to one object and means it; shapes that belong to nothing read as decoration.
+- **A palette of four to six colours with roles,** read from the client's own photographs and artefacts with `npm run design:world -- palette` (logo, sign, packaging, the work itself): a ground, an ink, one or two materials, an action colour and a mark colour. Actions keep one colour so they stay recognisable. A client's, partner's or team's colours stay inside their own material, not in the site's chrome.
+- **Type from the subject, in three voices:** a display face with a reason and a treatment from the world (its construction matches lettering you can point at in a photograph or a saved picture), a reading face, and a utility voice for the objects' labels and figures. Use the scale: one or two display lines a page at six to eight times the body size, section titles clearly smaller, labels at 11 to 13px.
 
 ## 4. Give each page archetype one signature moment
 
@@ -98,7 +98,7 @@ Owner photographs are often phone pictures of different ages, light and colour. 
 
 - **Choose three.** Find the three sharpest, best-lit photographs of the strongest subjects; they carry the large moments. The rest go into an index or a gallery page.
 - **Size by what the eye sees.** A photograph about 1000px wide looks fine at full width on a phone and at around 1000px on a desktop. Use `MediaStage bleed={false} stage="ratio"` in a wide column, or crop tighter around the subject with `focus`. Judge the result by eye at 1440px before deciding a photograph cannot be shown large.
-- **Frame them in the world.** A phone photograph inside one of the world's objects (a hoop, a numbered mount, a label window, a slide) reads as chosen; the same photograph in a bare full-width rectangle shows every flaw. See [world building](world-building.md#2-build-the-kit).
+- **Frame them in the world.** A phone photograph inside one of the world's objects, from the inventory, reads as chosen; the same photograph in a bare full-width rectangle shows every flaw. See [world building](world-building.md#2-build-the-kit).
 - **Unify them.** One treatment on every photograph makes mismatched pictures read as a set: `data-tone="warm"` (evens out colour casts), `"mono"` (black and white), or `"duotone"` (the site's ink and paper), from the expressive layer. Choose one for the site, not one per photograph.
 - **Crop to a detail.** A tight crop (the carved eye, the grain, a hand on the ball) holds up at a large size where the whole photograph does not.
 - **Let type carry it.** When no photograph can be large, the page's big moment is a fitted line, and the photographs stay honest at their size.

@@ -69,12 +69,20 @@ Three things change once the client router is on, because a page change no longe
 
 A pinned scene is a section whose stage stays on screen while the visitor scrolls through it, and whose parts move with the scroll. It is plain CSS (a scroll-driven animation on a sticky stage), so it needs no library and works with the smoothed scroll. Build at least one on the home page.
 
-**The scene tells the site's subject; it does not decorate it.** Choose something the client's visitors would want to watch pass: the night hour by hour from the doors opening to the last record, the dish in five times, the hall filling. Then fill the stage with it: each step of the scene shows a photograph or a block of content across at least half the screen, and the steps replace one another as the visitor scrolls. Two trial sites built from the same brief show the difference. One told the club's night through five full-screen photographs with the hour counting up, and 58% of the screen changed through its scene. The other turned one clock hand beside three lines of text for three screens of scrolling, and 0.2% changed: it met every rule and showed nothing. `audit:composition` measures this and fails a scene through which less than a quarter of the screen changes.
+**The scene tells the site's subject; it does not decorate it.** Find the scene in this client's own material, in three steps, and write the answers in `audit/world/notes.md`:
+
+1. List three things about this client that change as you go through them: something that unfolds in time, something you move through in space, something that is made or done in stages, something that is taken apart or put together. Take each from the client's message and photographs, and name the photographs that would show it.
+2. Choose the one with the most photographs that differ from each other, and that no other business of the same trade could show in the same way.
+3. Write its steps, three to six, each with the photograph or block of content that fills the stage at that step.
+
+This page gives no example of a scene on purpose. An earlier version named one, and all three trial sites built from it afterwards made that same scene.
+
+Then fill the stage with it: each step of the scene shows a photograph or a block of content across at least half the screen, and the steps replace one another as the visitor scrolls. Two trial sites built from one brief show the difference. Through one scene 58% of the screen changed from step to step. In the other a single ornament turned beside three lines of text for three screens of scrolling, and 0.2% changed: it met every rule and showed nothing. `audit:composition` measures this and fails a scene through which less than a quarter of the screen changes.
 
 ```astro
 <section class="scene bleed" aria-labelledby="scene-title">
   <div class="scene__stage">
-    <h2 id="scene-title">One evening, three rooms</h2>
+    <h2 id="scene-title"><!-- the scene's title, in the client's words --></h2>
     <div class="scene__plate" data-plate="1">…</div>
     <div class="scene__plate" data-plate="2">…</div>
     <div class="scene__plate" data-plate="3">…</div>

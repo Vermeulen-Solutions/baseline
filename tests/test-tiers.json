@@ -431,6 +431,10 @@
     "tier": "unit",
     "reason": "Composition audit: pure assessment of section models (kicker and split openings, card grids, structural repeats, full-width media, closing band, signature), arguments and report text; no browser"
   },
+  "design-world.test.mjs": {
+    "tier": "unit",
+    "reason": "World sources: arguments, which archive licences may be shown on a site, the record line of a saved picture, colour conversion and the grouping of photograph colours; no network, no image files"
+  },
   "design-icons.test.mjs": {
     "tier": "unit",
     "reason": "Open-licence drawings: arguments, the licence allowlist (no share-alike or non-commercial), visible-credit licences, credit lines and the sets a credits file holds; no network"

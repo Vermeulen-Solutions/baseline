@@ -87,8 +87,8 @@ export const WORLD_BAR = Object.freeze({ inventory: 12, decisions: 3 });
 // `lift` or `data-arrive` failed the world-motion floor for an animation that was never promised.
 export const NOT_A_WORLD_MOTION = Object.freeze(['fade', 'lift', 'curtain', 'wipe', 'lenis', 'view', 'scroll', 'data-arrive', 'data-reveal', 'data-scroll', 'prefers-reduced-motion', 'no-preference', 'reduce', 'transitionstyle', 'siteshell', 'clientrouter', 'animation-timeline', 'animation-name', 'view-transition', 'infinite', 'linear', 'both', 'forwards']);
 
-// A motion is written as its name and what it belongs to: `stamp-lands`: the stamp on the label, or
-// `stamp-lands` (the stamp on the label). When the line uses that form, only those names count, so a
+// A motion is written as its name and what it belongs to: `door-opens`: the cellar door, or
+// `door-opens` (the cellar door). When the line uses that form, only those names count, so a
 // backticked word inside a description is not read as a promise. A line without it (an older record
 // that lists names with commas) keeps every backticked identifier.
 const motionNamesIn = value => {
@@ -131,6 +131,37 @@ export function validateMotionTier(markdown, { required = false } = {}) {
   return [];
 }
 
+// Where the world comes from. Trial sites for unrelated trades shared one look because each took its
+// devices from the same written list; a world taken from this client's photographs and from saved
+// pictures of the trade's real things (design:world) differs from site to site. The record names
+// those files, and the gate checks that they are there.
+export const SOURCE_BAR = Object.freeze({ total: 4, client: 2, world: 2 });
+export const WORLD_SOURCES_DIR = 'audit/world/';
+
+/** The files the record's World › Sources line names, in backticks. */
+export function worldSources(markdown) {
+  const line = recordSection(markdown).find(entry => /^\s+- Sources:/.test(entry));
+  if (!line) return null;
+  return [...new Set([...line.matchAll(/`([^`\s]+\.[A-Za-z0-9]{2,5})`/g)].map(match => match[1].replaceAll('\\', '/').replace(/^\.\//, '')))];
+}
+
+/** With required: a new direction names its sources. A Sources line that is present is always checked. */
+export function validateSources(markdown, { required = false, exists = () => true } = {}) {
+  const sources = worldSources(markdown);
+  const form = '"  - Sources: `<file>`: <what the picture shows> → <what the site builds from it>; …" in the World block';
+  if (!sources) return required ? [`World: add ${form} (site-art-direction/references/world-building.md, step 1). Name at least ${SOURCE_BAR.client} of the client's photographs and at least ${SOURCE_BAR.world} pictures saved by "npm run design:world -- get" under ${WORLD_SOURCES_DIR}.`] : [];
+  const errors = [];
+  const missing = sources.filter(file => !exists(file));
+  if (missing.length) errors.push(`World: Sources names ${missing.map(file => `\`${file}\``).join(', ')}, which ${missing.length === 1 ? 'is' : 'are'} not in the site. Write each path from the site's folder, as the file is saved.`);
+  const found = sources.filter(file => exists(file));
+  const world = found.filter(file => file.startsWith(WORLD_SOURCES_DIR));
+  const client = found.filter(file => !file.startsWith(WORLD_SOURCES_DIR));
+  if (found.length < SOURCE_BAR.total || world.length < SOURCE_BAR.world || client.length < SOURCE_BAR.client) {
+    errors.push(`World: Sources names ${client.length} of the client's photographs and ${world.length} saved pictures under ${WORLD_SOURCES_DIR}; name at least ${SOURCE_BAR.client} and ${SOURCE_BAR.world}, each as a file in backticks. Find and save pictures of the trade's real things with "npm run design:world -- search" and "-- get".`);
+  }
+  return errors;
+}
+
 /** The @keyframes names the record's World › Motion line promises (audit:composition checks they run). */
 export function worldMotionNames(markdown) {
   const lines = String(markdown ?? '').split(/\r?\n/);
@@ -170,7 +201,7 @@ export function validateWorld(markdown) {
         if (count < WORLD_BAR.inventory) errors.push(`World: the inventory lists ${count} things; list at least ${WORLD_BAR.inventory}, separated by semicolons.`);
       } else if (part === 'Motion') {
         const names = motionNamesIn(value);
-        if (names.length < 3) errors.push(`World: Motion names ${names.length} animation${names.length === 1 ? '' : 's'} in backticks; name at least three by their @keyframes names, each followed by a colon and what it belongs to (\`stamp-lands\`: the stamp on the label), so audit:composition can check they run. The starter's own words (a transitionStyle value, \`data-arrive\`, \`Lenis\`) are not counted.`);
+        if (names.length < 3) errors.push(`World: Motion names ${names.length} animation${names.length === 1 ? '' : 's'} in backticks; name at least three by their @keyframes names, each in backticks and followed by a colon and the object it belongs to, so audit:composition can check they run. The starter's own words (a transitionStyle value, \`data-arrive\`, \`Lenis\`) are not counted.`);
       }
     }
   }
@@ -499,6 +530,8 @@ function main() {
   }
   // A new direction (the flag is passed at Stage 4) records its motion tier; a tier that is written is always checked.
   errors.push(...validateMotionTier(agentsMd, { required: args.includes('--require-references') }).map(error => `AGENTS.md: ${error}`));
+  // The same new direction names the photographs and saved pictures its world is taken from.
+  errors.push(...validateSources(agentsMd, { required: args.includes('--require-references'), exists: existsSync }).map(error => `AGENTS.md: ${error}`));
   // Stage 5: the built pages compared with the references; a file that has the table keeps it valid.
   const referencesText = existsSync(REFERENCES_FILE) ? readFileSync(REFERENCES_FILE, 'utf8') : '';
   if (args.includes('--require-comparison') || /^###\s+Built against the references\s*$/m.test(referencesText)) {

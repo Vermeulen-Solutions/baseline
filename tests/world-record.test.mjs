@@ -82,3 +82,25 @@ test('the motion tier is a recorded decision with the client\'s words', async ()
   // The line is read only inside the record section.
   assert.equal(motionTier(record().replace('## Next section', '## Next section\n- **Motion Tier:** impression — outside the record')), null);
 });
+
+test('a new direction names the photographs and saved pictures its world is taken from', async () => {
+  const { validateSources, worldSources, SOURCE_BAR } = await import('../scripts/check-art-direction.mjs');
+  assert.deepEqual({ ...SOURCE_BAR }, { total: 4, client: 2, world: 2 });
+  const withSources = (line) => record().replace('  - Inventory:', `  - Sources: ${line}\n  - Inventory:`);
+  const four = '`src/assets/photos/hives.jpg`: painted hive boxes → the numbered ground; `src/assets/photos/jars.jpg`: jars on a shelf → the product row; `audit/world/12-smoker.jpg`: a tin smoker → the display lettering; `audit/world/34-comb.jpg`: a frame of comb → the edge';
+  const files = ['src/assets/photos/hives.jpg', 'src/assets/photos/jars.jpg', 'audit/world/12-smoker.jpg', 'audit/world/34-comb.jpg'];
+  const exists = (file) => files.includes(file);
+  assert.deepEqual(worldSources(withSources(four)), files);
+  assert.deepEqual(validateSources(withSources(four), { required: true, exists }), []);
+  // An older record without the line stays valid; a new direction must write it.
+  assert.equal(worldSources(record()), null);
+  assert.deepEqual(validateSources(record()), []);
+  assert.match(validateSources(record(), { required: true }).join('\n'), /add "  - Sources: `<file>`/);
+  // A file that is not in the site is named, whenever the line is there.
+  assert.match(validateSources(withSources(four), { exists: (file) => file !== 'audit/world/34-comb.jpg' }).join('\n'), /Sources names `audit\/world\/34-comb\.jpg`, which is not in the site/);
+  // Two of the client's photographs and two saved pictures are the least.
+  const clientOnly = '`src/assets/photos/hives.jpg`: boxes → ground; `src/assets/photos/jars.jpg`: jars → row; `src/assets/photos/veil.jpg`: a veil → frame; `src/assets/photos/market.jpg`: the stall → hero';
+  assert.match(validateSources(withSources(clientOnly), { exists: () => true }).join('\n'), /names 4 of the client's photographs and 0 saved pictures under audit\/world\//);
+  // Windows separators and a leading ./ are read as the same path; words in backticks without an extension are not files.
+  assert.deepEqual(worldSources(withSources('`.\\src\\assets\\a.jpg`: x → y; `audit/world/b.png`: the `enamel` sign → z')), ['src/assets/a.jpg', 'audit/world/b.png']);
+});

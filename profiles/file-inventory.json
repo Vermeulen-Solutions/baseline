@@ -2018,6 +2018,14 @@
     "tests/design-icons.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "scripts/design-world.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/design-world.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
     }
   }
 }
