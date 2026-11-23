@@ -27,7 +27,7 @@ export function parseArgs(argv) {
     else throw Error('Unknown option: ' + flag);
   }
   if (out.help) return out;
-  if (out.images.length < 2) throw Error('--images needs the page and at least one reference, comma-separated');
+  if (out.images.length < 1) throw Error('--images needs at least one image: the page, then its references, comma-separated');
   if (!out.out) throw Error('--out <file.jpg|png> is required');
   if (!Number.isInteger(out.column) || out.column < 200 || out.column > 1440) throw Error('--column must be an integer between 200 and 1440');
   if (!(out.height > 0 && out.height <= 10)) throw Error('--screens must be a number between 0 and 10');

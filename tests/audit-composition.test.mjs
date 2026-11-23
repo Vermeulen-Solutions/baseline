@@ -238,3 +238,25 @@ test('an impression site must carry a smoothed scroll, moving page changes and a
   assert.doesNotMatch(missing.message, /a smoothed scroll/);
   assert.equal(assessImpression('impression', [bare]).missing.length, 3);
 });
+
+test('an impression scene must change the screen; references are measured once', async () => {
+  const { assessImpression, SCENE_CHANGE, parseArgs: parse } = await import('../scripts/audit-composition.mjs');
+  const built = { smoothScroll: true, pageTransitions: true, pinnedScenes: 1 };
+  // One clock hand turning beside three lines of text: the scene exists and shows nothing.
+  const token = assessImpression('impression', [{ ...built, sceneChange: 0.002 }]);
+  assert.equal(token.code, 'impression-motion');
+  assert.match(token.message, /a pinned scene that carries the subject/);
+  assert.match(token.message, /only 0% of the screen changes/);
+  // Photographs changing across the stage pass; the best scene on any audited route counts.
+  assert.equal(assessImpression('impression', [{ ...built, sceneChange: 0.35 }]), null);
+  assert.equal(assessImpression('impression', [{ ...built, sceneChange: 0.01 }, { ...built, sceneChange: 0.58 }]), null);
+  assert.equal(assessImpression('impression', [{ ...built, sceneChange: SCENE_CHANGE }]), null);
+  // A scene that was not measured (another tier's run, an older report) is not judged on it.
+  assert.equal(assessImpression('impression', [built]), null);
+  assert.equal(parse(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--references', 'audit/references/references.md', '--refresh-references']).refreshReferences, true);
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  assert.match(source, /reference-measures\.json/);
+  // An arrival that plays once at load has run: animation starts are recorded from the first paint.
+  assert.match(source, /addInitScript\(\(\) => \{ window\.__animationsStarted = \[\]/);
+  assert.match(source, /const names = new Set\(window\.__animationsStarted \?\? \[\]\)/);
+});

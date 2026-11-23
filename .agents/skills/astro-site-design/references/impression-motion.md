@@ -67,7 +67,9 @@ Three things change once the client router is on, because a page change no longe
 
 ## 3. A pinned scene
 
-A pinned scene is a section whose stage stays on screen while the visitor scrolls through it, and whose parts move with the scroll. It is plain CSS (a scroll-driven animation on a sticky stage), so it needs no library and works with the smoothed scroll. Build at least one on the home page, from an object of the site's world: the evening's three rooms, the dish in five times, the hall filling.
+A pinned scene is a section whose stage stays on screen while the visitor scrolls through it, and whose parts move with the scroll. It is plain CSS (a scroll-driven animation on a sticky stage), so it needs no library and works with the smoothed scroll. Build at least one on the home page.
+
+**The scene tells the site's subject; it does not decorate it.** Choose something the client's visitors would want to watch pass: the night hour by hour from the doors opening to the last record, the dish in five times, the hall filling. Then fill the stage with it: each step of the scene shows a photograph or a block of content across at least half the screen, and the steps replace one another as the visitor scrolls. Two trial sites built from the same brief show the difference. One told the club's night through five full-screen photographs with the hour counting up, and 58% of the screen changed through its scene. The other turned one clock hand beside three lines of text for three screens of scrolling, and 0.2% changed: it met every rule and showed nothing. `audit:composition` measures this and fails a scene through which less than a quarter of the screen changes.
 
 ```astro
 <section class="scene bleed" aria-labelledby="scene-title">
@@ -118,8 +120,10 @@ Rules for a scene:
 - Keep a track between two and four screens (`200svh` to `400svh`). Longer, and the visitor scrolls through nothing.
 - Every word in the scene is readable when nothing animates. Nothing the main visitor came for sits inside a scene.
 - Never put a scene on the first screen: the first screen opens settled.
+- The last step of the scene is as full as the first. A scene that ends on an empty stage leaves the visitor scrolling through nothing.
+- An ornament that turns, a line that draws or a number that counts may accompany the steps; on its own it is not a scene.
 
-**Check.** Build, serve, and run `npm run audit:composition -- --base <origin> --routes <the built pages>`. It prints `Motion Tier impression: smoothed scroll, moving page changes and a pinned scene are present.` when all three pieces are built, or `[impression-motion]` with the piece that is missing. Then run `npm run check:quality -- --base <origin> --routes <the built pages> --only script-weight,first-viewport-hidden,first-viewport-scroll-motion`. If it reports `script-weight`, the site's own scripts pushed the page over 120 KB: add `"limits": { "scriptKB": 200, "_why": "impression tier: GSAP, the transition engine and the smoothed scroll" }` to `page-budget.json` at the site root, and run it again.
+**Check.** Build, serve, and run `npm run audit:composition -- --base <origin> --routes <the built pages>`. It prints `Motion Tier impression: smoothed scroll, moving page changes and a pinned scene are present.` when all three pieces are built, or `[impression-motion]` with the piece that is missing. "A pinned scene that carries the subject" means the scene is there and too little of the screen changes through it: make its steps larger, as the paragraph above says, and run the audit again. Then run `npm run check:quality -- --base <origin> --routes <the built pages> --only script-weight,first-viewport-hidden,first-viewport-scroll-motion`. If it reports `script-weight`, the site's own scripts pushed the page over 120 KB: add `"limits": { "scriptKB": 200, "_why": "impression tier: GSAP, the transition engine and the smoothed scroll" }` to `page-budget.json` at the site root, and run it again.
 
 ## Record it
 
