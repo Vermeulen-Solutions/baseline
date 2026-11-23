@@ -77,7 +77,10 @@ test('a page made only of type, photographs and rules is reported as bare; a mad
   const designed = { fullBleedMedia: true, mediaCount: 1, ground: true };
   const bare = page([section(designed)], { signature: true, craft: { elements: 150, voices: 1, surfaces: 0, drawn: 0, rotated: 0, masked: 0, motion: 0 } });
   const finding = assessComposition(bare).find((f) => f.code === 'bare-page');
-  assert.deepEqual(finding.missing, ['surface', 'drawn objects', 'three type voices', 'depth', 'motion']);
+  assert.deepEqual(finding.missing, ['surface', 'drawn objects', 'depth', 'motion']);
+  // The number of type voices is not an ingredient: designer-made pages use two as often as three.
+  const twoVoices = page([section(designed)], { signature: true, craft: { elements: 600, voices: 2, surfaces: 3, drawn: 4, rotated: 2, masked: 0, motion: 5 } });
+  assert.deepEqual(codes(twoVoices), []);
   const made = page([section(designed)], { signature: true, craft: { elements: 700, voices: 3, surfaces: 4, drawn: 13, rotated: 7, masked: 0, motion: 7 } });
   assert.deepEqual(codes(made), []);
   // Two missing ingredients is a quieter world, not a bare page.
@@ -259,4 +262,63 @@ test('an impression scene must change the screen; references are measured once',
   // An arrival that plays once at load has run: animation starts are recorded from the first paint.
   assert.match(source, /addInitScript\(\(\) => \{ window\.__animationsStarted = \[\]/);
   assert.match(source, /const names = new Set\(window\.__animationsStarted \?\? \[\]\)/);
+});
+
+test('a label above three headings and an italic word in the page heading are floor findings for a sourced direction only', async () => {
+  const { SOURCED_FLOOR, floorCodes } = await import('../scripts/audit-composition.mjs');
+  assert.deepEqual([...SOURCED_FLOOR], ['kicker-openings', 'accent-word', 'text-collision']);
+  assert.deepEqual(floorCodes(false), [...FLOOR]);
+  assert.deepEqual(floorCodes(true), [...FLOOR, 'kicker-openings', 'accent-word', 'text-collision']);
+  const accented = page([section()], { accentWord: 'Glycine' });
+  const finding = assessComposition(accented).find((f) => f.code === 'accent-word');
+  assert.match(finding.message, /one word or phrase in italics for emphasis \("Glycine"\)/);
+  assert.equal(assessComposition(page([section()], { accentWord: null })).some((f) => f.code === 'accent-word'), false);
+  const labelled = page([section({ kicker: true }), section({ kicker: true }), section({ kicker: true })]);
+  assert.match(assessComposition(labelled).find((f) => f.code === 'kicker-openings').message, /Remove the labels: a heading says what its section is/);
+  assert.equal(assessComposition(page([section({ kicker: true }), section({ kicker: true }), section()])).some((f) => f.code === 'kicker-openings'), false);
+});
+
+test('text lying over other text is found from the lines of the page, and a ghost word, a link in its paragraph and a neighbour are not', async () => {
+  const { collidingText } = await import('../scripts/audit-composition.mjs');
+  const line = (el, text, x, y, w, h, extra = {}) => ({ el, text, x, y, w, h, alpha: 1, inside: [], ...extra });
+  // A dial's small caption printed across its large number.
+  const dial = [line(0, '079 000 00 00', 100, 400, 260, 30), line(1, 'Bureau 021 000 00 00', 150, 412, 120, 8)];
+  assert.deepEqual(collidingText(dial), [{ over: '079 000 00 00', under: 'Bureau 021 000 00 00', y: 412 }]);
+  // Two lines of one heading, a link inside its paragraph, and a word beside another share nothing that counts.
+  assert.deepEqual(collidingText([line(0, 'Une fuite ?', 0, 0, 400, 80), line(0, 'On arrive.', 0, 60, 400, 80)]), []);
+  assert.deepEqual(collidingText([line(0, 'Read the', 0, 0, 200, 14), line(1, 'programme', 60, 0, 70, 14, { inside: [0] })]), []);
+  assert.deepEqual(collidingText([line(0, '26', 0, 0, 40, 30), line(1, 'jeu.', 36, 0, 30, 30)]), []);
+  // Tight leading lets the boxes of two lines touch by a few pixels: under 40% of the lower one is not a collision.
+  assert.deepEqual(collidingText([line(0, 'Quatre pannes,', 0, 0, 400, 40), line(1, 'une réponse.', 0, 30, 400, 40)]), []);
+  // A ghost word painted faintly behind a heading is a layer, not a collision; the same word painted solid is one.
+  const ghost = [line(0, 'Programme', 0, 0, 600, 120, { alpha: 0.08 }), line(1, 'Cette semaine', 40, 40, 200, 30)];
+  assert.deepEqual(collidingText(ghost), []);
+  assert.equal(collidingText(ghost.map((b) => ({ ...b, alpha: 1 }))).length, 1);
+  // Two elements meeting on several lines are one place.
+  const steps = [line(0, 'Les portes', 0, 0, 300, 20), line(0, 'ouvrent', 0, 24, 300, 20), line(1, 'La salle', 0, 4, 300, 20), line(1, 'se remplit', 0, 28, 300, 20)];
+  assert.equal(collidingText(steps).length, 1);
+  // The same words printed twice in one place (an offset shadow) are one line.
+  assert.deepEqual(collidingText([line(0, 'L’Almanach', 0, 0, 300, 60), line(1, 'L’Almanach', 3, 3, 300, 60)]), []);
+});
+
+test('text-collision reports the places with the width or the scene they were seen in', () => {
+  const model = page([section()], {
+    collisions: [{ over: '23:00', under: 'Cinq heures, cinq moments.', y: 2574 }],
+    narrow: { width: 390, viewportHeight: 844, h1Bottom: 200, collisions: [{ over: 'Caisse du soir', under: 'Prochain rendez-vous', y: 510 }] },
+    impression: { sceneCollisions: [{ over: 'Les portes', under: 'La salle se remplit', y: 3000 }] },
+  });
+  const finding = assessComposition(model).find((f) => f.code === 'text-collision');
+  assert.equal(finding.count, 3);
+  assert.match(finding.message, /3 places where one line of text lies over another: "23:00" over "Cinq heures, cinq moments." at 1440px; "Caisse du soir" over "Prochain rendez-vous" at 390px; "Les portes" over "La salle se remplit" in the pinned scene/);
+  assert.match(finding.message, /one step's words are gone before the next step's arrive/);
+  assert.equal(codes(page([section()], { collisions: [], narrow: { width: 390, viewportHeight: 844, h1Bottom: 200, collisions: [] } })).includes('text-collision'), false);
+});
+
+test('the collision measure reads the page from its top, skips unpainted text and leaves a sticky bar out of scene frames', async () => {
+  const { readFileSync } = await import('node:fs');
+  const source = readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  assert.ok(source.includes('await page.evaluate(() => scrollTo(0, 0));\n    await page.waitForTimeout(150);\n    model.collisions = collidingText(await page.evaluate(textBoxes));'));
+  assert.ok(source.includes('el.checkVisibility?.({ visibilityProperty: true }) === false'));
+  assert.ok(source.includes('if (f.fixed || f.unknown || f.turned || (viewportOnly && f.bar)) continue;'));
+  assert.ok(source.includes('collidingText(await page.evaluate(textBoxes, { viewportOnly: true }))'));
 });
