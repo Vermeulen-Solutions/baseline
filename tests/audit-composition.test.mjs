@@ -77,7 +77,10 @@ test('a page made only of type, photographs and rules is reported as bare; a mad
   const designed = { fullBleedMedia: true, mediaCount: 1, ground: true };
   const bare = page([section(designed)], { signature: true, craft: { elements: 150, voices: 1, surfaces: 0, drawn: 0, rotated: 0, masked: 0, motion: 0 } });
   const finding = assessComposition(bare).find((f) => f.code === 'bare-page');
-  assert.deepEqual(finding.missing, ['surface', 'drawn objects', 'three type voices', 'depth', 'motion']);
+  assert.deepEqual(finding.missing, ['surface', 'drawn objects', 'depth', 'motion']);
+  // The number of type voices is not an ingredient: designer-made pages use two as often as three.
+  const twoVoices = page([section(designed)], { signature: true, craft: { elements: 600, voices: 2, surfaces: 3, drawn: 4, rotated: 2, masked: 0, motion: 5 } });
+  assert.deepEqual(codes(twoVoices), []);
   const made = page([section(designed)], { signature: true, craft: { elements: 700, voices: 3, surfaces: 4, drawn: 13, rotated: 7, masked: 0, motion: 7 } });
   assert.deepEqual(codes(made), []);
   // Two missing ingredients is a quieter world, not a bare page.
@@ -259,4 +262,18 @@ test('an impression scene must change the screen; references are measured once',
   // An arrival that plays once at load has run: animation starts are recorded from the first paint.
   assert.match(source, /addInitScript\(\(\) => \{ window\.__animationsStarted = \[\]/);
   assert.match(source, /const names = new Set\(window\.__animationsStarted \?\? \[\]\)/);
+});
+
+test('a label above three headings and an italic word in the page heading are floor findings for a sourced direction only', async () => {
+  const { SOURCED_FLOOR, floorCodes } = await import('../scripts/audit-composition.mjs');
+  assert.deepEqual([...SOURCED_FLOOR], ['kicker-openings', 'accent-word']);
+  assert.deepEqual(floorCodes(false), [...FLOOR]);
+  assert.deepEqual(floorCodes(true), [...FLOOR, 'kicker-openings', 'accent-word']);
+  const accented = page([section()], { accentWord: 'Glycine' });
+  const finding = assessComposition(accented).find((f) => f.code === 'accent-word');
+  assert.match(finding.message, /one word or phrase in italics for emphasis \("Glycine"\)/);
+  assert.equal(assessComposition(page([section()], { accentWord: null })).some((f) => f.code === 'accent-word'), false);
+  const labelled = page([section({ kicker: true }), section({ kicker: true }), section({ kicker: true })]);
+  assert.match(assessComposition(labelled).find((f) => f.code === 'kicker-openings').message, /Remove the labels: a heading says what its section is/);
+  assert.equal(assessComposition(page([section({ kicker: true }), section({ kicker: true }), section()])).some((f) => f.code === 'kicker-openings'), false);
 });

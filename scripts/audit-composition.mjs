@@ -26,11 +26,16 @@
 //   index with previews, and no heading markedly larger than the page's other headings, such as
 //   an opening line at least twice their size);
 // - first-screen-heading (narrowest width): the page's h1 is not on the first screen;
-// - bare-page: the page is made only of type, photographs and rules. Three or more of five things
+// - bare-page: the page is made only of type, photographs and rules. Three or more of four things
 //   from a made world are missing: a surface (a textured or patterned ground, an edge), drawn objects
-//   (three or more SVG or canvas drawings at least 32px), three type voices, depth (a rotated or
-//   masked object) and motion (an animation running after a scroll). Measured on studio-built sites
-//   for comparable trades, all five are present; on bare trial builds, four were missing.
+//   (three or more SVG or canvas drawings at least 32px), depth (a rotated or masked object) and motion
+//   (an animation running after a scroll). The number of type voices was a fifth and is no longer
+//   counted: on 95 public pages ranked by professional designers it did not move with their votes, and
+//   four of six designer-made pages had fewer than three.
+// - kicker-openings and accent-word are floor findings for a direction made with sources (a record
+//   with a World › Sources line) and advisories for older sites: on the same 95 pages no designer-made
+//   page had a small label above three section headings or one italic word in its headline, every one
+//   of the best-ranked generated pages had the first and a third had the second.
 // - soft-photo: a photograph at least 40% of the screen wide is shown wider than its pixels (a phone
 //   photograph stretched across a desktop). Owners' photographs are often 600 to 1,500px wide; a
 //   trial home page opened on one at 1,440px and every reviewer named it as the design's ceiling;
@@ -52,10 +57,13 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { DECLINE, isBotWall, msysToNative, restoreGitBashRoute } from './capture-routes.mjs';
-import { motionTier, worldMotionNames } from './check-art-direction.mjs';
+import { motionTier, worldMotionNames, worldSources } from './check-art-direction.mjs';
 
 /** Findings that fail the run: the recorded world is missing from the built page. */
 export const FLOOR = Object.freeze(['bare-page', 'soft-photo', 'world-motion', 'impression-motion']);
+/** Floor findings for a direction made with sources (its record has a World › Sources line); advisories on older sites. */
+export const SOURCED_FLOOR = Object.freeze(['kicker-openings', 'accent-word']);
+export const floorCodes = (sourced) => (sourced ? [...FLOOR, ...SOURCED_FLOOR] : [...FLOOR]);
 
 export function parseArgs(argv) {
   const out = { routes: [], widths: [1440, 390], json: false, strict: false, out: null, base: null, record: null };
@@ -95,7 +103,6 @@ export function bareIngredients(craft) {
   const missing = [];
   if (!(craft.surfaces >= 1)) missing.push('surface');
   if (!(craft.drawn >= 3)) missing.push('drawn objects');
-  if (!(craft.voices >= 3)) missing.push('three type voices');
   if (!(craft.rotated >= 1 || craft.masked >= 1)) missing.push('depth');
   if (!(craft.motion >= 1)) missing.push('motion');
   return missing;
@@ -127,7 +134,8 @@ export function assessComposition(model) {
   const sections = model.sections ?? [];
   const add = (code, message, detail = {}) => findings.push({ code, message, ...detail });
   const kickers = sections.filter((s) => s.kicker).length;
-  if (kickers >= 3) add('kicker-openings', `${kickers} sections open with a small label above the heading. Keep labels for real metadata (a date, a count); let most headings stand alone.`, { count: kickers });
+  if (kickers >= 3) add('kicker-openings', `${kickers} sections open with a small label above the heading. Remove the labels: a heading says what its section is. Keep a small line above a heading only where it is a fact the visitor needs (a date, a price, a count), on at most two sections.`, { count: kickers });
+  if (model.accentWord) add('accent-word', `The page heading sets one word or phrase in italics for emphasis ("${model.accentWord}"). Set the heading in one style, and let its words carry the emphasis.`);
   const splits = sections.filter((s) => s.split).length;
   if (splits >= 3) add('split-openings', `${splits} sections open with the heading on one side and a lead beside it. Vary how sections open: a heading alone, a heading in the picture, or a list that explains itself.`, { count: splits });
   const grids = sections.filter((s) => s.cardGrid).length;
@@ -383,6 +391,10 @@ export function measurePage() {
     if (r.width >= vw * 0.95) fullWidth++;
   }
   const h1 = main.querySelector('h1') ?? document.querySelector('h1');
+  // One word or phrase of the page heading in italics while the rest is upright.
+  const accent = h1 && getComputedStyle(h1).fontStyle !== 'italic'
+    ? [...h1.querySelectorAll('*')].find((el) => getComputedStyle(el).fontStyle === 'italic' && (el.textContent || '').trim() && (el.textContent || '').trim().length < (h1.textContent || '').trim().length)
+    : null;
   // Split hero: the first section holds the h1 and its largest picture beside it, narrower than 60%.
   let splitHero = false;
   const first = sections[0];
@@ -419,6 +431,7 @@ export function measurePage() {
     width: vw,
     bodySize,
     h1Size: h1 ? px(h1, 'fontSize') : 0,
+    accentWord: accent ? (accent.textContent || '').trim().slice(0, 40) : null,
     h2Max: Math.max(0, ...sizes('h2')),
     imageCover: +(imageArea / (vw * document.documentElement.scrollHeight)).toFixed(2),
     fullWidthMedia: fullWidth,
@@ -598,6 +611,7 @@ async function main() {
   if (options.references && !existsSync(options.references)) throw Error(`--references file not found: ${options.references}`);
   const named = recordFile ? worldMotionNames(readFileSync(recordFile, 'utf8')) : [];
   const tier = recordFile ? motionTier(readFileSync(recordFile, 'utf8')) : null;
+  const sourced = recordFile ? worldSources(readFileSync(recordFile, 'utf8')) !== null : false;
   const sources = options.references ? selectedSources(readFileSync(options.references, 'utf8')) : [];
   const ran = new Set();
   // The same browser lookup as audit:ui: the site's own @playwright/test first, then Baseline's.
@@ -653,7 +667,8 @@ async function main() {
   const worldMotion = assessWorldMotion(named, ran);
   const impression = assessImpression(tier, results.map((r) => r.model.impression).filter(Boolean));
   const all = results.flatMap((r) => r.findings).concat(worldMotion ? [worldMotion] : [], impression ? [impression] : []);
-  const floor = all.filter((f) => FLOOR.includes(f.code)).length;
+  const floorList = floorCodes(sourced);
+  const floor = all.filter((f) => floorList.includes(f.code)).length;
   const advisory = all.length - floor;
   const report = { routes: results, site: [worldMotion, impression].filter(Boolean), named, tier, references };
   if (options.json) console.log(JSON.stringify(report, null, 2));
@@ -663,7 +678,7 @@ async function main() {
     if (impression) console.log(`[impression-motion] ${impression.message}`);
     else if (tier === 'impression') console.log('Motion Tier impression: smoothed scroll, moving page changes and a pinned scene are present.');
     else if (named.length) console.log(`World › Motion: ${named.map((n) => `\`${n}\``).join(', ')} ran.`);
-    console.log(`Composition audit: ${floor} floor finding${floor === 1 ? '' : 's'} (bare-page, soft-photo, world-motion, impression-motion: fix them), ${advisory} advisory, on ${results.length} route${results.length === 1 ? '' : 's'}. See site-art-direction/references/world-building.md and distinctive-direction.md.`);
+    console.log(`Composition audit: ${floor} floor finding${floor === 1 ? '' : 's'} (${floorList.join(', ')}: fix them), ${advisory} advisory, on ${results.length} route${results.length === 1 ? '' : 's'}. See site-art-direction/references/world-building.md and distinctive-direction.md.`);
     if (references.length) console.log('The measures against the references are what the page still has to build to reach their level; they go to the Stage 5 comparison (new-site-workflow/references/impeccable-passes.md).');
   }
   if (floor || (options.strict && advisory)) process.exitCode = 1;
