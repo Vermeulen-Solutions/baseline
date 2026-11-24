@@ -25,6 +25,20 @@ test('a word the trade uses literally is allowed by the site, and quoted words a
   assert.deepEqual(tells({ lang: 'en', text: 'A climbing harness and a robust 40 mm rope.', allow: ['robust'] }), []);
 });
 
+test('words of the design process printed for visitors are reported, in either language', () => {
+  assert.deepEqual(tells({ lang: 'en', text: 'The source object: our enamel sign. Each pinned scene tells the night. Pinned scene two.' }),
+    ['process word "source object"', 'process word "pinned scene"']);
+  assert.equal(copyTells({ lang: 'en', text: 'A pinned scene. Another pinned  scene.' })[0].count, 2);
+  assert.deepEqual(tells({ lang: 'fr', text: "L'objet source du site, en premier écran : le panneau émaillé." }),
+    ['process word "objet source"', 'process word "premier écran"']);
+  assert.ok(tells({ lang: 'en', text: "The world's objects, set in their surfaces." }).includes(`process word "the world's objects"`), 'typographic apostrophes match');
+  // Ordinary words pass: only the workflow's two-word phrases are read.
+  assert.deepEqual(tells({ lang: 'en', text: 'A small world of objects. The first photograph. Our signature dish.' }), []);
+  assert.deepEqual(tells({ lang: 'fr', text: 'Le monde du bois, nos objets, notre plat signature.' }), []);
+  // A studio that uses a phrase about its own work allows it.
+  assert.deepEqual(tells({ lang: 'en', text: 'We plan the first screen of every site with you.', allow: ['first screen'] }), []);
+});
+
 test('template and conversation residue is reported on any page', () => {
   assert.deepEqual(tells({ lang: 'en', text: 'Certainly! Here is [Company Name] and {{ phone }}.' }).sort(), ['residue "certainly!"', 'residue "[company name]"', 'residue "{{ phone }}"'].sort());
   assert.deepEqual(tells({ lang: 'fr', text: 'Atelier ouvert. © 2024–2026 Atelier' }), [], 'a range ending this year is current');

@@ -272,6 +272,32 @@ test('an impression scene must change the screen; references are measured once',
   assert.match(source, /const names = new Set\(window\.__animationsStarted \?\? \[\]\)/);
 });
 
+test('an impression scene must hold its finished last step before the stage scrolls away', async () => {
+  const { assessImpression, SCENE_HOLD, sceneHold } = await import('../scripts/audit-composition.mjs');
+  const built = { smoothScroll: true, pageTransitions: true, pinnedScenes: 1, sceneChange: 0.5 };
+  // The last step ends at contain 100%: complete as the stage leaves.
+  const gone = assessImpression('impression', [{ ...built, sceneHold: 0 }]);
+  assert.equal(gone.code, 'impression-motion');
+  assert.match(gone.message, /a pinned scene that holds its last step/);
+  assert.match(gone.message, /only 0\.00 of a screen/);
+  assert.match(gone.message, /contain 70% on a 300svh track/);
+  // contain 90% on a 300svh track leaves 0.2 of a screen: still too little.
+  assert.match(assessImpression('impression', [{ ...built, sceneHold: 0.2 }]).message, /0\.20 of a screen/);
+  // contain 70% on 300svh leaves 0.6; the longest hold on any route counts; unmeasured scenes are not judged.
+  assert.equal(assessImpression('impression', [{ ...built, sceneHold: SCENE_HOLD }]), null);
+  assert.equal(assessImpression('impression', [{ ...built, sceneHold: 0.1 }, { ...built, sceneHold: 0.8 }]), null);
+  assert.equal(assessImpression('impression', [{ ...built, sceneHold: null }]), null);
+  // The measure runs in the page and reads only scroll-driven animations on the scene's track.
+  const source = sceneHold.toString();
+  assert.match(source, /getAnimations\(\{ subtree: true \}\)/);
+  assert.match(source, /instanceof DocumentTimeline/);
+  // The recipe in the guide holds: its last step ends by contain 70% on its 300svh track.
+  const guide = (await import('node:fs')).readFileSync(new URL('../.agents/skills/astro-site-design/references/impression-motion.md', import.meta.url), 'utf8');
+  assert.match(guide, /\.scene \{ block-size: 300svh;/);
+  assert.match(guide, /data-plate="3"\] \{ animation-range: contain 50% contain 70%; \}/);
+  assert.doesNotMatch(guide, /contain \d+% contain (?:9\d|100)%/);
+});
+
 test('a label above three headings and an italic word in the page heading are floor findings for a sourced direction only', async () => {
   const { SOURCED_FLOOR, floorCodes } = await import('../scripts/audit-composition.mjs');
   const legibility = ['text-collision', 'text-cut', 'text-squeezed', 'text-tiny', 'text-unreadable', 'text-covered', 'text-against-edge', 'placeholder-text'];
