@@ -1396,6 +1396,13 @@
 		animation: none;
 	}
 
+	/* The held header stays above everything that moves under it (a photograph growing into the page,
+	   a title travelling up): groups otherwise paint in the order they were captured. */
+	::view-transition-group(site-header),
+	::view-transition-group(*.vt-header) {
+		z-index: var(--z-raised);
+	}
+
 	/* List-to-detail photo morphs: mediaTransition() in src/lib/view-transition.ts and Card media. The
 	   group clips to the card radius and both snapshots cover it while the box changes aspect ratio. */
 	::view-transition-group(*.vt-media) {
@@ -1411,12 +1418,31 @@
 		object-fit: cover;
 	}
 
+	/* The other parts of a picked card (its title, a date, a price: data-vt-part, matched by
+	   data-vt-hero-part on the detail page) travel to their place on the next page with the photograph.
+	   Text keeps its proportions: each snapshot takes the group's height and its own width, and the
+	   group clips what the wider one overhangs, so letters grow or shrink and never stretch. */
+	::view-transition-group(*.vt-part) {
+		animation-duration: var(--duration-slower);
+		animation-timing-function: var(--ease-smooth);
+		overflow: clip;
+	}
+
+	::view-transition-old(*.vt-part),
+	::view-transition-new(*.vt-part) {
+		block-size: 100%;
+		inline-size: auto;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		::view-transition-group(site-header),
 		::view-transition-group(*.vt-header),
 		::view-transition-group(*.vt-media),
 		::view-transition-old(*.vt-media),
-		::view-transition-new(*.vt-media) {
+		::view-transition-new(*.vt-media),
+		::view-transition-group(*.vt-part),
+		::view-transition-old(*.vt-part),
+		::view-transition-new(*.vt-part) {
 			animation: none !important;
 		}
 	}

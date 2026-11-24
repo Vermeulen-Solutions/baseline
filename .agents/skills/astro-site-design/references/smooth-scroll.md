@@ -17,7 +17,7 @@ A site with both jobs (a maker whose site is a portfolio and takes commissions) 
 [Lenis](https://github.com/darkroomengineering/lenis) (MIT) wraps the window's own scroll, so `position: sticky`, anchors, find-in-page and CSS scroll-driven animations (`animation-timeline: view()`) keep working. Touch screens keep their native scroll (its `syncTouch` stays off), and with `prefers-reduced-motion: reduce` it turns the smoothing off by itself. It adds about 6 KB compressed.
 
 ```bash
-npm install --save-exact lenis@1.3.27
+npm install --save-exact lenis@1.3.28
 ```
 
 `src/components/SmoothScroll.astro`, placed once in the layout (`<SmoothScroll slot="body-end" />` inside `SiteShell`):

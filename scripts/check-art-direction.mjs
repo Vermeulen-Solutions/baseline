@@ -85,7 +85,7 @@ export const WORLD_BAR = Object.freeze({ inventory: 12, decisions: 3 });
 // motions (the page-transition style, the arrival attribute, the smooth-scroll library, the motion
 // query), and none of them is a @keyframes name of the site's world: sprint records that named
 // `lift` or `data-arrive` failed the world-motion floor for an animation that was never promised.
-export const NOT_A_WORLD_MOTION = Object.freeze(['fade', 'lift', 'curtain', 'wipe', 'lenis', 'view', 'scroll', 'data-arrive', 'data-reveal', 'data-scroll', 'prefers-reduced-motion', 'no-preference', 'reduce', 'transitionstyle', 'siteshell', 'clientrouter', 'animation-timeline', 'animation-name', 'view-transition', 'infinite', 'linear', 'both', 'forwards']);
+export const NOT_A_WORLD_MOTION = Object.freeze(['fade', 'lift', 'curtain', 'wipe', 'iris', 'blinds', 'slide', 'stack', 'lenis', 'view', 'scroll', 'data-arrive', 'data-reveal', 'data-scroll', 'prefers-reduced-motion', 'no-preference', 'reduce', 'transitionstyle', 'siteshell', 'clientrouter', 'animation-timeline', 'animation-name', 'view-transition', 'infinite', 'linear', 'both', 'forwards']);
 
 // A motion is written as its name and what it belongs to: `door-opens`: the cellar door, or
 // `door-opens` (the cellar door). When the line uses that form, only those names count, so a

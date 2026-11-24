@@ -71,7 +71,7 @@ These are **never** signature moments, however they are styled: a heading beside
 | One sentence set as large as the column | Associations, studios, statements | `.display-fit` (once per page) |
 | A list that previews what it lists, the preview growing into the page it opens | Portfolios, course lists, teams | `IndexList preview` + `SiteShell transitionStyle` + `MediaStage heroMedia` |
 | A timeline or programme with dates set very large | Churches, clubs, festivals, schools | `IndexList` with dated `lead`, `--index-title-size` raised, tabular figures |
-| Moving between pages as one object | Catalogues, portfolios, programmes | `SiteShell transitionStyle`, `data-arrive` |
+| Moving between pages as one object: the picked entry's photograph, title and date travel into the page they open, and back | Catalogues, portfolios, programmes | `SiteShell transitionStyle`, the parts marked at both ends (`data-vt-part` / `data-vt-hero-part`, `[data-vt-title]` / `[data-vt-hero-title]`), `data-arrive` |
 | A ground that opens as it arrives | A long home page that needs a turn | `.bleed` + `data-scroll="open"` |
 
 The home page's moment is in its first two screens. One moment per page: two compete; five are a demo. Check it on the rendered page at 1440px and 390px with the thumbnail test, and with `npm run audit:composition`, whose `no-signature`, `split-hero` and `uniform-gallery` findings name the usual misses.

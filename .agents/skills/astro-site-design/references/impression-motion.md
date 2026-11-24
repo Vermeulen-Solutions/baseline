@@ -8,7 +8,7 @@ Build the three pieces in this order. Each has a check; run it before the next p
 
 ## 1. Smoothed scroll
 
-Follow [smooth scroll](smooth-scroll.md) exactly: install `lenis@1.3.27`, add `src/components/SmoothScroll.astro`, and place `<SmoothScroll slot="body-end" />` in the layout. On this tier it is required, not a choice.
+Follow [smooth scroll](smooth-scroll.md) exactly: install `lenis@1.3.28`, add `src/components/SmoothScroll.astro`, and place `<SmoothScroll slot="body-end" />` in the layout. On this tier it is required, not a choice.
 
 **Check.** Build, serve, and open the home page at 1440 wide: `document.documentElement.classList.contains('lenis')` is `true`.
 
@@ -55,7 +55,24 @@ Interlude is a set of files copied into the site, not a package.
    main:focus { outline: none; }                   /* focus moves to <main> after each page change */
    ```
 
-7. Choose the transition from the world, as the World's Motion line records the other motions: `curtain` (a panel rises and uncovers the next page) or `wipe` (a panel crosses sideways). One link can use another with `data-transition="wipe"`. To use a different transition from `../interlude-src/src/transitions/`, copy its file too and read the comment at its top: it says what else it needs.
+7. Choose the transition from the world, as the World's Motion line records the other motions. The two copied above are `curtain` (a panel rises and uncovers the next page) and `wipe` (a panel crosses sideways). Interlude has twelve more that need no WebGL; when one is closer to how this world changes scene, copy its file from `../interlude-src/src/transitions/` as well, set it as `defaultTransition`, and read the comment at its top, which says what else it needs (the ones marked `old-page` need `src/lib/interlude/old-page.ts` copied too):
+
+   | Transition | What moves | A world it suits |
+   | --- | --- | --- |
+   | `columns` | bars rise one after another to cover the page, then carry on up to reveal the next | slats, shutters, a stage's flats |
+   | `circle` | a circle grows from where the visitor clicked to cover the page, and the next page opens from the same spot | a lens, a porthole, a spotlight |
+   | `stack` (old-page) | the page steps back like a card going onto a pile and a sheet slides up over it | a pile of sheets, programmes, menus |
+   | `slide-over` (old-page) | the next page slides up over this one, which steps back into the dark | a drawer, a sliding door, a night falling |
+   | `peel` (old-page) | the page turns over like a sheet of paper, the fold sweeping from one corner to the other | a poster, a page of a book, a label |
+   | `slices` (old-page) | the page breaks into columns and in each the next page pushes the old one up, column after column | a press, a row of planks or tiles |
+   | `frame` (old-page) | a coloured rectangle grows from the middle and the next page grows inside it as a frame | a gallery, a picture rail, a window |
+   | `cube` (old-page) | the page pulls back as the face of a box, the box turns to the next page and comes forward | a sign that turns, a box, a die |
+   | `corner` (old-page) | a coloured rectangle, a dark one and then the next page grow from the top-left corner | printed matter in layers, a poster run |
+   | `tear` (old-page) | a jagged tear runs down from where the visitor clicked and the two halves pull apart | a ticket stub, a flyer, a wall poster |
+   | `carousel` (old-page) | the page zooms out into a row of the site's pages, slides to the next and zooms in | a set list, a run of rooms, a menu of dishes |
+   | `typewriter` | a dark sheet comes in and a grid of cells types the site's tagline, then erases it | a press, a newsroom, a typed form |
+
+   `frame`, `corner` and others take their colours from the site's CSS when it defines `--red`, `--color-accent` or `--color-bg` (their comments say which), so set those to the world's colours. `carousel` reads its row of pages from the links its `LINKS` selector finds and `typewriter` types a `PHRASE`: point both at the site's own navigation and words before using them. The WebGL ones (`channel`, `dissolve`, `dither`, `ink`, `particles`, `spiral`, `velvet`) need three.js and are not part of this recipe. One link can use another transition with `data-transition="<name>"`.
 
 Three things change once the client router is on, because a page change no longer loads a new document:
 
@@ -139,4 +156,4 @@ Rules for a scene:
 
 ## Record it
 
-On the record's World › Motion line, after the world's motions, say that the scroll is smoothed and which transition the pages use. In the Decisions, name `lenis@1.3.27`, `gsap@3.15.1` and the Interlude commit.
+On the record's World › Motion line, after the world's motions, say that the scroll is smoothed and which transition the pages use. In the Decisions, name `lenis@1.3.28`, `gsap@3.15.1` and the Interlude commit.

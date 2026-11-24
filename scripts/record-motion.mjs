@@ -7,7 +7,9 @@
 //
 // --speed multiplies CSS animation playback (via the DevTools Animation domain) so a slow loop
 // fits a short clip; label such clips honestly ("4x faster"). --scroll positions the page first;
-// --click presses controls (for example a consent button). Needs ffmpeg on PATH for the GIF; without
+// --click presses controls (for example a consent button). --navigate clicks a link with the mouse after
+// a second, so the clip shows the page change (the transition style, the parts that travel, the arrival);
+// --back then returns by history two seconds after the new page arrives (give such a clip --seconds 8). Needs ffmpeg on PATH for the GIF; without
 // it the WebM recording is kept and reported. Keep clips outside Git unless they are review material.
 import { mkdirSync, mkdtempSync, readFileSync, readdirSync, renameSync, rmSync, existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
@@ -17,7 +19,7 @@ import { pathToFileURL } from 'node:url';
 import { msysToNative, reachableBase } from './capture-routes.mjs';
 
 export function parseArgs(argv) {
-  const out = { route: '/', width: 1280, height: 720, seconds: 6, speed: 1, scroll: 0, fps: 12, gifWidth: 720, css: [], click: [] };
+  const out = { route: '/', width: 1280, height: 720, seconds: 6, speed: 1, scroll: 0, fps: 12, gifWidth: 720, css: [], click: [], navigate: null, back: false };
   for (let i = 0; i < argv.length; i++) {
     const flag = argv[i], value = () => { const v = argv[++i]; if (v === undefined || v.startsWith('--')) throw Error('Missing value for ' + flag); return v; };
     if (flag === '--help' || flag === '-h') out.help = true;
@@ -26,6 +28,8 @@ export function parseArgs(argv) {
     else if (flag === '--out') out.out = msysToNative(value());
     else if (flag === '--css') out.css = value().split(',').map(s => msysToNative(s.trim())).filter(Boolean);
     else if (flag === '--click') out.click = value().split(',').map(s => s.trim()).filter(Boolean);
+    else if (flag === '--navigate') out.navigate = value().trim();
+    else if (flag === '--back') out.back = true;
     else if (['--width', '--height', '--seconds', '--speed', '--scroll', '--fps', '--gif-width'].includes(flag)) out[flag.slice(2).replace(/-(\w)/g, (_, c) => c.toUpperCase())] = Number(value());
     else throw Error('Unknown option: ' + flag);
   }
@@ -36,6 +40,7 @@ export function parseArgs(argv) {
   if (!out.out || !/\.(gif|webm)$/i.test(out.out)) throw Error('--out <file.gif|file.webm> is required');
   for (const file of out.css) if (!existsSync(file)) throw Error(`--css file not found: ${file}`);
   if (!(out.seconds > 0 && out.seconds <= 30)) throw Error('--seconds must be between 0 and 30');
+  if (out.back && !out.navigate) throw Error('--back needs --navigate: it returns from the page the clip navigated to');
   if (!(out.speed >= 0.25 && out.speed <= 16)) throw Error('--speed must be between 0.25 and 16');
   for (const key of ['width', 'height', 'fps', 'gifWidth', 'scroll']) if (!Number.isInteger(out[key]) || out[key] < 0) throw Error(`--${key} must be a non-negative integer`);
   return out;
@@ -61,6 +66,19 @@ async function record(options) {
     for (const selector of options.click) { const target = page.locator(selector).first(); if (await target.count()) await target.click(); }
     if (options.speed !== 1) { const cdp = await context.newCDPSession(page); await cdp.send('Animation.enable'); await cdp.send('Animation.setPlaybackRate', { playbackRate: options.speed }); }
     await page.evaluate(y => window.scrollTo(0, y), options.scroll);
+    if (options.navigate) {
+      // A real mouse press on the link, so a style that opens from the click point opens from it.
+      await page.waitForTimeout(1000);
+      const link = page.locator(options.navigate).first();
+      if (!(await link.count())) throw Error(`--navigate: nothing on ${options.route} matches ${options.navigate}`);
+      await link.scrollIntoViewIfNeeded();
+      const box = await link.boundingBox();
+      if (!box) throw Error(`--navigate: ${options.navigate} is not visible`);
+      const before = page.url();
+      await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+      await page.waitForURL((url) => url.href !== before, { timeout: 15000 });
+      if (options.back) { await page.waitForTimeout(2000); await page.goBack(); }
+    }
     await page.waitForTimeout(Math.round((options.seconds + 1) * 1000));
     await context.close();
     const video = readdirSync(dir).find(f => f.endsWith('.webm'));
@@ -81,7 +99,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   try {
     const options = parseArgs(process.argv.slice(2));
     if (!options.help && options.base) options.base = await reachableBase(options.base);
-    if (options.help) console.log('Usage: record:motion -- --base <origin> --route / --out clip.gif [--css overlay.css] [--click selector] [--speed 4] [--seconds 6] [--scroll 0] [--width 1280 --height 720] [--fps 12 --gif-width 720]\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when the route is "/".');
+    if (options.help) console.log('Usage: record:motion -- --base <origin> --route / --out clip.gif [--css overlay.css] [--click selector] [--navigate a-selector [--back]] [--speed 4] [--seconds 6] [--scroll 0] [--width 1280 --height 720] [--fps 12 --gif-width 720]\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when the route is "/".');
     else {
       const result = await record(options);
       console.log(`${result.format}: ${result.out}${options.speed !== 1 ? ` (animations ${options.speed}x faster: label the clip)` : ''}${result.note ? `\n${result.note}` : ''}`);
