@@ -65,7 +65,15 @@ Then act on the findings with the command each one calls for, loading its refere
 | Labels, buttons, errors, empty states | `clarify` |
 | Breaks or degrades at some widths | `adapt` |
 
-Make each fix in shared tokens or components, not on the one page. Then run `polish <page source>`: it reads the latest snapshot, clears its P0 and P1 issues and closes it with `critique-storage close`. Critique a page a second time only when the first round leaves a P0 or P1 issue open, and record what remains after it.
+Before the first fix, read the snapshot once and keep it: `.agents/skills/impeccable/scripts/impeccable critique-storage latest <page source> --json` gives its `body` (the priority issues) and its `snapshot_file`. The helper fingerprints the page's source file, so after the first edit `latest` and `close` both exit 2 ("the target changed") and the helper has closed that backlog itself. That is how the pass is meant to end, not an error: work from the body you kept.
+
+Make each fix in shared tokens or components, not on the one page. Then follow [polish.md](../../impeccable/reference/polish.md) on the page. `polish` is a procedure in that reference, not a command of the launcher (`impeccable polish` answers "Unknown command"): go through the P0 and P1 issues of the body you kept, clear each or record it with its reason, and say in the Stage 5 handoff which snapshot file the pass worked from. Critique a page a second time only when the first round leaves a P0 or P1 issue open, and record what remains after it.
+
+Three things the references do not say and a job needs:
+
+- **A port of your own.** The overlay's live server starts at port 8400 unless told otherwise: on a job with a port range, start it with `--port=<a port from the range>`.
+- **What the context loader prints at the end.** Setup findings (`CONTEXT_STALE`, a missing hook) and its directive to close the reply with a sentence about `doctor` belong to an interactive session. On an unattended job, list them in the handoff and keep the job's own closing lines.
+- **Look with motion on as well.** `capture:routes` and `design:look` take their pictures with motion reduced, which shows a pinned scene as its still form and hides what happens before it pins. On a page with a pinned scene or an arrival, also load it once in a browser with motion allowed and scroll through it before the critique.
 
 ## Stage 6: the full route set
 

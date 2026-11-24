@@ -9,6 +9,8 @@ test('arguments: pages, widths, the output folder and the check', () => {
   // Only the two widths a look is made at.
   assert.deepEqual(options.widths, [390, 1440]);
   assert.equal(parseArgs(['--check', '--src', 'src']).check, true);
+  // Git Bash rewrites "/" and "/programme/" into paths under its install folder: the routes are put back.
+  assert.deepEqual(parseArgs(['--routes', 'C:/Program Files/Git/,C:/Program Files/Git/programme/']).routes, ['/', '/programme/']);
   assert.throws(() => parseArgs(['--nope']), /Unknown argument/);
   assert.equal(slugOf('/'), 'home');
   assert.equal(slugOf('/la-carte/'), 'la-carte');
