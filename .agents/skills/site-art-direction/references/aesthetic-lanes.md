@@ -147,7 +147,7 @@ Use this lane when the profiles force the wrong identity: organic hospitality, p
 1. **Pick a Primary Lane (70% weight)** for your canvas physics, border rules, and spatial density, and an optional **Secondary Inflection (30% weight)** for typography or structural tension (for example, *Editorial Paper* canvas paired with exposed `.grid-hairline` cell walls for an architecture practice).
 2. **Orchestrate the 4-Voice Typographic Hierarchy** (display and body required; accent and mono only where the content earns them):
    - **Display (`--font-display`):** Primary structural headline voice (`-0.03em` to `-0.04em` tracking, `0.95–1.08` line-height).
-   - **Inline Editorial Contrast Accent (`.font-accent` / `--font-accent`):** kept for sites that already use it. Do not add an italic word to an upright headline in a new direction: `audit:composition` reports it as `accent-word`.
+   - **Inline Editorial Contrast Accent (`.font-accent` / `--font-accent`):** earned once, in the page heading, or as the recorded way of setting every heading. An italic word in some headings and not others is what `audit:composition` reports as `accent-word`.
    - **Body (`--font-body`):** High-legibility reading and UI copy (`1.6–1.68` line-height, `60ch–68ch` measure).
    - **Telemetry Monospace (`.eyebrow-telemetry` / `--font-mono` + `.tabular-nums`, optional):** Uppercase `0.75rem` labels (`0.12em` tracking) for real metadata: version pills (`.badge-pill`), dates, status and aligned numeric metrics. Not for kicker labels above headings or decorative section coordinates (`[01 // ARCHITECTURE]`).
 3. **Choose the Hero Visual Specimen & Surface Architecture:**
