@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Starter header: the two-line clamp applies to a plain text title only, at the brand class's own weight, so a brand built from elements keeps the site's layout; no token or page appearance changes for the starter.",
-    "sha256": "27b5a7ac3a010ca909b0337a5894e0b24e106d525f2c8e956756183587c407c1"
+    "reason": "Starter header: the two-line clamp applies to a plain text title only, at the brand class's own weight, so a brand built from elements keeps the site's layout; no token or page appearance changes for the starter. The hidden attribute always hides, whatever display a piece sets for itself; nothing the starter shows changes.",
+    "sha256": "57564ec2178c763c167270c6aed1ea585123ec2c8ab856d8f1c6df659c29d7b1"
   },
   {
     "path": "src/styles/registry-aliases.css",

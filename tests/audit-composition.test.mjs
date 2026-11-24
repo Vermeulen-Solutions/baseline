@@ -17,6 +17,14 @@ test('a templated page is reported: kicker and split openings, card grids, a clo
   assert.deepEqual(codes(templated), ['kicker-openings', 'split-openings', 'card-grids', 'no-full-width-media', 'closing-band', 'no-signature']);
 });
 
+test('an advisory about several sections says which ones, by place and heading', () => {
+  const grids = page([section({ heading: 'Le club' }), section({ heading: 'Nos soirées', cardGrid: true }), section({ heading: null, cardGrid: true }), section({ heading: 'Venir' })]);
+  const finding = assessComposition(grids).find((f) => f.code === 'card-grids');
+  assert.match(finding.message, /keep at most one card grid per page\. They are: section 2 \("Nos soirées"\), section 3\.$/);
+  const splits = page([section({ heading: 'Un', split: true }), section({ heading: 'Deux' }), section({ heading: 'Trois', split: true }), section({ heading: 'Quatre', split: true })]);
+  assert.match(assessComposition(splits).find((f) => f.code === 'split-openings').message, /They are: section 1 \("Un"\), section 3 \("Trois"\), section 4 \("Quatre"\)\.$/);
+});
+
 test('a page with a stage, a ruled list and varied openings is not reported', () => {
   const designed = page([
     section({ fullBleedMedia: true, mediaCount: 1, ground: true }),

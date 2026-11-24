@@ -46,6 +46,11 @@ specialists and never add CMS dependencies to satisfy an inapplicable check.
   greenfield sites (at most six routes, one locale), Standard for complex sites or
   migrations. Load specialist skills as their stages begin. Scoped changes start
   at the earliest affected stage and reuse established decisions.
+- A site can be started by one session and built out by another (for example the
+  most capable model for the direction, system and first screen, a cheaper one for
+  the rest). The handoff is `audit/blueprint.md`; when it exists and lists work not
+  yet built, or the owner asks for the start only, follow new-site-workflow's
+  `references/start-and-build-out.md`.
 - Follow brief/evidence → platform → content/routes → art direction → representative
   implementation/calibration → visual critique → full review and delivery. Continue
   authorized work without mandatory checkpoint stops; record assumptions explicitly.

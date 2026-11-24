@@ -96,9 +96,9 @@ For Sveltia, follow docs/sveltia-cms.md inside the generated project to configur
 
 ## Shape the site
 
-Read the site's AGENTS.md and use its checked-in skills. Provide purpose, audience, pages/content, editing needs, and real brand assets or references. The [prompt library](prompt-library.md) has Express and Standard kickoff examples.
+Read the site's AGENTS.md and use its checked-in skills. Provide purpose, audience, pages/content, editing needs, and real brand assets or references. The [prompt library](prompt-library.md) has Express and Standard kickoff examples. If you have a more capable model and a cheaper one, [start with the capable one and build out with the other](../README.md#start-with-your-best-model): the direction, the design system and the first screen decide most of how the site looks.
 
-Before client-specific visual implementation, establish the Art Direction Record in AGENTS.md, initialize the real site tokens, and calibrate production components on the local styleguide. Your assistant follows the gate and the relevant steps in [the design workflow](art-direction-workflow.md). This replaces starter samples with choices based on the actual site brief. An optional [project brief](project-context.md), starting from [PRODUCT.example.md](../PRODUCT.example.md), can hold durable client context.
+Before client-specific visual implementation, your assistant judges references, builds the site's world from the client's own photographs and objects, and establishes the Art Direction Record in AGENTS.md; it then initializes the real site tokens and calibrates production components on the local styleguide. Hand over the client's photographs and their own words early: the design is taken from them. Your assistant follows the gate and the relevant steps in [the design workflow](art-direction-workflow.md). This replaces starter samples with choices based on the actual site brief. An optional [project brief](project-context.md), starting from [PRODUCT.example.md](../PRODUCT.example.md), can hold durable client context.
 
 ## Local destinations
 

@@ -226,6 +226,45 @@ assumptions, and any steps still needing my involvement.
 The agent checks local requirements and handles the remaining setup commands. It should
 guide you through any machine setup or editor sign-in that needs your involvement.
 
+<a id="start-with-your-best-model"></a>
+
+#### Optional: start with your best model, build with another
+
+How a site looks is mostly decided by its direction, its design system and its first
+screen. If you have a more capable model and a cheaper one, give the start to the
+capable one and the rest to the other. It works in any coding assistant, or across
+two of them: the sessions share the site folder, and the handoff is a file
+(`audit/blueprint.md`). In our trials this gave visibly better pages than the cheaper
+model designing alone, and the start is the smaller part of the work.
+
+Session one, with your most capable model. Paste the profile prompt above, and
+replace its last paragraph with:
+
+```text
+Do the start only, as new-site-workflow's start-and-build-out.md sets out:
+the brief, content and routes, the art direction and design system, then
+the shell, the home page's first screen with its working feature and two
+sections. Write audit/blueprint.md for the builder who follows you, and
+stop there. Start the preview and report the URL, the checks you ran and
+what the blueprint leaves to build.
+```
+
+Session two, with the model that does the rest, in the same folder:
+
+```text
+This Baseline site was started by a designer and is yours to build out.
+
+Detect the host OS and shell before running commands. In Windows PowerShell,
+use npm.cmd and npx.cmd for all npm and npx commands.
+
+Read AGENTS.md, then follow new-site-workflow's start-and-build-out.md as
+the builder: build what audit/blueprint.md lists from the pieces that
+exist, and do not change what it says is fixed. Complete the pages,
+the Stage 5 and 6 passes and applicable verification. Start the preview
+and report the URL, the checks, every place you left the blueprint, and
+any steps still needing my involvement.
+```
+
 > [!TIP]
 > **Need a prompt for a specific task?** You don't have to search manually. Ask your coding assistant:
 > *“Find the best prompt in `docs/prompt-library.md` to [what you want to do], fill in the details for this project, and run it.”*

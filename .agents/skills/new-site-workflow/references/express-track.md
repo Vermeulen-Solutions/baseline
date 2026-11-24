@@ -14,6 +14,8 @@ Present the defaults below briefly at the checkpoint they belong to and record a
 - Use real supplied content or explicitly marked local drafts. Identify the owner of missing material; do not publish filler or assume draft/legal approval.
 - Keep all verification gates and honest evidence. A local verified build is the delivery default until deployment is authorized; deferred manual/editor acceptance stays recorded.
 
+When the work is split between two sessions ([start-and-build-out.md](start-and-build-out.md)), the start covers Checkpoints A and B and, from Checkpoint C, only the shell, the home page's first screen with its feature, two sections and `audit/blueprint.md`. The build-out is the rest of Checkpoint C.
+
 Assess complexity beyond the `<= 6` route / `<= 3` collection / single-locale heuristic: count route archetypes separately from repeated entries and consider migrations, roles, relationships, integrations, authentication/payments and translation. Move to Standard when these warrant it and explain why. Express consolidates decisions; it does not waive modeling, quality or editor acceptance.
 
 ## Checkpoints

@@ -12,7 +12,7 @@ Audit requests should produce a recommended follow-up plan with meaningful user 
 
 ## 🧭 Navigation Quick Links
 
-- [1. Starting a New Site Project (Stage 1–4)](#1-starting-a-new-site-project)
+- [1. Starting a New Site Project (Stage 1–4)](#1-starting-a-new-site-project), including [a start by your best model and the build-out by another](#a-start-by-your-best-model-the-build-out-by-another)
 - [2. WordPress Migration & Candidate Register (Stage 1 & 3)](#2-wordpress-migration--content-modeling)
 - [3. Art Direction & The Design Gate (Stage 4)](#3-art-direction--the-design-gate)
 - [4. Component Sourcing & Styleguide Quarantine (Stage 4.5)](#4-component-sourcing--styleguide-quarantine)
@@ -71,6 +71,44 @@ Here is the context for this project:
 Begin with Stage 1 (Brief & Evidence Discovery), determine the profile, and complete the requested site and verification, then the agreed commit/push/deploy steps and live acceptance. Report stage handoffs and continue authorized work; ask only for consequential missing decisions or external actions not already authorized. Record approved versus assumed choices and any acceptance still pending. Save and check the Art Direction Record, then calibrate on /_styleguide before broad page assembly.
 
 Use discovery-and-content.md for adaptive discovery, strategic synthesis and priority page briefs. Draft actual representative copy before composition, preserve claim/use restrictions and review content clarity alongside technical acceptance. Keep facts, recommendations and assumptions distinct and reuse existing answers.
+```
+
+### A Start by Your Best Model, the Build-Out by Another
+
+Use these two prompts when you have a more capable model and a cheaper one. The direction, the design system and the first screen decide most of how a site looks, and they are the smaller part of the work. The two sessions can run in one coding assistant with two models or in two different assistants: they share the site folder and nothing else, and the handoff is `audit/blueprint.md`. With one model, use a kickoff prompt above instead.
+
+Session one, the most capable model you have:
+
+```markdown
+Read AGENTS.md and follow new-site-workflow under .agents/skills/ in [Express / Standard] for the start only, as its references/start-and-build-out.md sets out.
+
+Detect the host OS and shell before running commands. In Windows PowerShell,
+use npm.cmd and npx.cmd for all npm and npx commands.
+
+- Client / Brand: [Insert Brand Name]
+- Purpose & Routes: [What the site is for and its pages]
+- Primary Audience: [People]
+- Brand assets, photographs and the client's own words: [Locations]
+- Hosting & Locale: [E.g., static, single language (fr)]
+
+Do Stages 1 to 4.5 in full. Then build the shell, the home page's first screen with its one working feature, and two sections under it, with the client's real words. Put every repeated form into the system, with its answer to the pointer and the keyboard on the piece itself. Run design:look and audit:composition on the home page and fix what they name.
+
+Write audit/blueprint.md for the builder who follows you, with the headings the reference lists, and read it once literally before you finish. Add the pointer line under the Art Direction Record. Stop there: do not build the remaining sections. Report the preview URL, the checks you ran and what the blueprint leaves to build.
+```
+
+Session two, the model that does the rest, in the same folder:
+
+```markdown
+This Baseline site was started by a designer and is yours to build out. Read AGENTS.md, then follow new-site-workflow's references/start-and-build-out.md as the builder.
+
+Detect the host OS and shell before running commands. In Windows PowerShell,
+use npm.cmd and npx.cmd for all npm and npx commands.
+
+- Release scope: [Repository/branch, deployment target and authorized commit/push/deploy actions, or explicitly local-only]
+
+Read audit/blueprint.md twice and look at the site in a browser at 390px and 1440px before changing anything. Build the remaining sections and pages in the blueprint's order from the pieces that exist, with the client's real words. Do not change anything under "What is fixed", do not edit the tokens or the system's stylesheet to make a section work, and follow a Baseline rule over a blueprint line when they conflict.
+
+Then run the Stage 5 passes and the Stage 6 checks on the finished pages. Tell any reviewer what is fixed. Report the preview URL, the checks actually run, every place you left the blueprint and why, and what remains.
 ```
 
 ### Discovery and Content Planning Only

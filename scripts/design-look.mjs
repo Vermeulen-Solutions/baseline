@@ -67,6 +67,16 @@ export function parseArgs(argv) {
 /** `/` is `home`; `/la-carte/` is `la-carte`; `/a/b` is `a-b`. */
 export const slugOf = (route) => route.replace(/^\/+|\/+$/g, '').replace(/[^A-Za-z0-9]+/g, '-') || 'home';
 
+/**
+ * What to do with a screen: `asked` is the scroll position asked for, `reached` where the page stands, `last`
+ * where the screen before stood. A page can end above its measured height (a pinned scene that lets go, a
+ * smoothed scroll): the browser then stops at the real foot, and every further screen would repeat it.
+ */
+export function screenStep(asked, reached, last) {
+  if (reached <= last) return { stop: true };
+  return { at: reached, foot: reached < asked - 2 };
+}
+
 /** The scroll positions whose screens cover a page of `pageHeight`, each overlapping the one before a little. */
 export function screenTops(pageHeight, { height, step }, limit = MAX_SCREENS) {
   const tops = [0];
@@ -218,19 +228,27 @@ async function capture(options) {
           await page.goto(options.base + route, { waitUntil: 'networkidle', timeout: 60000 }).catch(() => page.waitForTimeout(3000));
           await page.emulateMedia({ reducedMotion: 'reduce' });
           await page.evaluate(loadPendingImages);
+          // A page that pins a scene or smooths its scroll can change height once reduced motion is on.
+          await page.waitForTimeout(300);
           const pageHeight = await page.evaluate(() => document.documentElement.scrollHeight);
           const tops = screenTops(pageHeight, shape);
           const shots = [];
+          let last = -1;
+          let foot = false;
           for (const top of tops) {
             await page.evaluate((y) => scrollTo(0, y), top);
             await page.waitForTimeout(250);
+            const step = screenStep(top, await page.evaluate(() => Math.round(scrollY)), last);
+            if (step.stop) { foot = true; break; }
             shots.push(await page.screenshot({ animations: 'disabled' }));
+            last = step.at;
+            if (step.foot) { foot = true; break; }
           }
           // A small grey picture of each screen: two looks at the same screen give the same marks.
           const key = `${route} ${width}`;
           marks[key] = await Promise.all(shots.map(async (shot) => [...await sharp(shot).resize(MARK_SIDE, MARK_SIDE, { fit: 'fill' }).greyscale().raw().toBuffer()]));
           const unchanged = marks[key].map((mark, i) => (sameScreen(mark, oldMarks[key]?.[i]) ? i + 1 : null)).filter(Boolean);
-          const beyond = Math.max(0, pageHeight - (tops.at(-1) + shape.height));
+          const beyond = foot ? 0 : Math.max(0, pageHeight - (tops.at(-1) + shape.height));
           const sheets = sheetsOf(shots.length, shape.perSheet);
           const files = [];
           const gap = 16, band = 40;
