@@ -24,7 +24,7 @@ export function satisfiesCertified(observed, expectedRange) {
   return true;
 }
 
-export const STANDARD = Object.freeze({ version: '0.7.0', commit: 'dcf4a99744685eecb98ca74c4e55750452aa1a3c', sha256: '0327fc10087582725eb83806eda97e365c2f9740915779091a4a9a8292315d28' });
+export const STANDARD = Object.freeze({ version: '0.8.0', commit: 'e97252d453fe4b7df1653a0de43f214c4d5b4a31', sha256: '5176555b20b89b1f1922a2f4c7a062a723cd81a8912cf41c237dd659703a5fb6' });
 const starterRoot = fileURLToPath(new URL('../', import.meta.url));
 function loadStandard(file) {
   const bytes = fs.readFileSync(file ?? path.join(starterRoot, `standards/baselines/${STANDARD.version}.json`));
