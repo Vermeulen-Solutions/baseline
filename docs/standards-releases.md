@@ -68,6 +68,16 @@ The version must be at least the bump the notes ask for (below 1.0 a `major` not
 
 The notes file is `standards/releases/<version>.md` without its title line, with relative links rewritten to `https://github.com/Vermeulen-Solutions/baseline/blob/standards-v<version>/…` so they resolve from the releases page. A tag without a release is not finished: `gh release list` must show the new version as Latest.
 
+## Lessons from past releases
+
+- **Name the version from the notes.** Run `npm run standards:check -- --list` before choosing the version: one `minor` note turns a planned patch into a minor release.
+- **A runtime pin bump ships with a release.** Raising the pinned framework or CMS version must come with a standards release in the same pull request: `tests/site-standards-audit.test.mjs` requires the starter to pass its own dependency comparison against the pinned `STANDARD`.
+- **Pass the full commit.** `--source-commit` takes the full 40-character SHA.
+- **A fix found during certification goes before the release commit.** Force-push is blocked, so `git revert` the release commit, commit the fix with its note, and cut the release again. Save the hand-written parts of `standards/releases/<version>.md` first: the script regenerates the file.
+- **Certify on clean clones with Windows line endings.** With `core.autocrlf=true`, a test that looks for multi-line source with `\n` fails; normalise the source with `.replaceAll('\r\n', '\n')` first.
+- **Raising the reviewed CMS version.** Bumping `REVIEWED_EMDASH` means diffing setup, admin and verify, the media REST routes and export-seed against the previous release (`npm pack` both into a scratch folder), and keeping the old version in `HOSTED_AUTH_VERSIONS`.
+- **Keep certification scripts somewhere durable.** A runner script left in a session's temporary folder is lost with it; keep it in the repository or another kept folder.
+
 ## How sites use a release
 
 `npm run fleet:status` compares every site in the private fleet list with the release this checkout pins: certified dependencies and Workers rules, every distributed skill folder (current, differs or missing; design-surface skills are optional), the pinned helpers the site has installed, and the Impeccable version. The `changes` digest in the release says, per change, which platforms it touches and how a site takes it; an update follows the release notes from the site's last adopted release to the new one. Skills come through the site's skill sync (or `sync:baseline` on static sites), Baseline-owned components, libraries, scripts and tests through `npm run site:files -- --site <path> --apply`, and site-owned files by hand. `npm run fleet:drift` goes the other way and lists the Baseline-owned skills and helpers sites have changed. See [Taking a standards release](baseline-updates.md#taking-a-standards-release).
