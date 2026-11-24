@@ -195,7 +195,9 @@ export async function GET({request, url, locals, session}) {
   await activePage.getByRole('textbox', { name: 'Link URL', exact: true }).fill('example.invalid/changed');
   await toolbar.getByRole('button', { name: 'Apply link', exact: true }).click();
   await expect(activePage.locator('.tiptap a')).toHaveAttribute('href', 'https://example.invalid/changed');
-  await activePage.keyboard.press('ArrowLeft');
+  // Leave the editor before clicking the link again: since EmDash 1.6 the edit's selection
+  // survives ArrowLeft, and a click into it selects a word instead of opening the link bar.
+  await activePage.locator('#emdash-toolbar').click({ position: { x: 20, y: 20 } });
   await activePage.locator('.tiptap a').click();
   await linkBar.getByRole('button', { name: 'Remove link', exact: true }).click();
   await expect(activePage.locator('.tiptap a')).toHaveCount(0);

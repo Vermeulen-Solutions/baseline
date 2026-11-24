@@ -14,6 +14,9 @@ if (!slug) {
 }
 
 const { entry: post, cacheHint } = await getEmDashEntry("posts", slug);
+// Set before the miss: the hint then carries the collection tag, so a cached 404 is purged when
+// the entry is published.
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 
 if (!post) {
 	return Astro.rewrite("/404");
@@ -21,11 +24,10 @@ if (!post) {
 
 const { data: settings, cacheHint: settingsCacheHint } = await getSiteSettingsWithCacheHint();
 if (Astro.cache?.enabled) {
-	Astro.cache.set(cacheHint);
 	Astro.cache.set(settingsCacheHint);
 	// Hydrated terms are read with the entry, but term renames invalidate their
 	// taxonomy tag rather than the collection. Register both visible facets.
-	const taxonomyHints = await Promise.all(['category', 'tag'].map(name => getTaxonomyTermsWithCacheHint(name, { includeCounts: false })));
+	const taxonomyHints = await Promise.all(['category', 'tag'].map(name => getTaxonomyTermsWithCacheHint(name, { includeCounts: false, locale: Astro.currentLocale })));
 	for (const { cacheHint: taxonomyHint } of taxonomyHints) Astro.cache.set(taxonomyHint);
 }
 const { siteTitle } = resolveStarterSiteIdentity(settings);

@@ -106,7 +106,10 @@ installed release notes and verify:
 - The core package, its exact companions, the Cloudflare adapter and any
   `@emdash-cms/sandbox-workerd` install resolve one `emdash` version
   (`npm ls emdash` / `pnpm why emdash`). The sandbox runner vendors its own core:
-  EmDash 1.5 needs runner 0.9.7 (0.9.6 pulls EmDash 1.4.0).
+  EmDash 1.5 needs runner 0.9.7 (0.9.6 pulls EmDash 1.4.0); EmDash 1.6 needs 0.9.8.
+- After an upgrade to EmDash 1.6, run `npx emdash media repair-usage --all` once
+  against the deployed site, and pass `{ locale: Astro.currentLocale }` to menu
+  and taxonomy reads on multilingual sites.
 - On Workers with EmDash 1.5 or later, `@astrojs/cloudflare` is 14.4 or newer.
   Older adapters leave a `require("path")` in the Worker bundle and every page
   answers 500; a local Node build does not show it.
@@ -150,7 +153,7 @@ installed release notes and verify:
   for editor/admin bundle growth (`docs/client-bundles.md`), followed by a real
   editor select/type/save/reload check.
 
-See `docs/emdash-1.5-upgrade.md` for current version behavior and
+See `docs/emdash-1.6-upgrade.md` for current version behavior and
 `docs/cloudflare-backup-restore.md` for recovery.
 
 For image additions, use the general `media:prepare` workflow when installed;

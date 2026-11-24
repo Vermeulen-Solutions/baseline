@@ -3,7 +3,7 @@ import { stripVTControlCharacters } from 'node:util';
 import { REVIEWED_EMDASH } from './emdash-reviewed.mjs';
 
 // Releases whose native setup/admin/verify route was read and found to keep the same guard order.
-export const HOSTED_AUTH_VERSIONS = ['1.3.0', '1.4.0', REVIEWED_EMDASH];
+export const HOSTED_AUTH_VERSIONS = ['1.3.0', '1.4.0', '1.5.0', REVIEWED_EMDASH];
 
 export function checkAuthBuildLog(log) {
   requireFact(typeof log === 'string' && log.trim().length > 0, 'A complete successful build log is required');

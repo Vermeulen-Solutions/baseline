@@ -6,6 +6,11 @@ import Section from "../../components/Section.astro";
 import { taxonomyRobots } from '../../lib/structured-data';
 
 const slug = decodeSlug(Astro.params.slug);
+// Set before the miss: a cached 404 for a missing term is purged when the term is created.
+if (Astro.cache?.enabled) {
+  const { cacheHint: taxonomyCacheHint } = await getTaxonomyTermsWithCacheHint('category', { includeCounts: false, locale: Astro.currentLocale });
+  Astro.cache.set(taxonomyCacheHint);
+}
 // Keep getTerm's hierarchical/deep-link and locale fallback semantics.
 const term = slug ? await getTerm('category', slug, { includeCounts: false }) : null;
 
@@ -17,11 +22,7 @@ const { entries: posts, cacheHint } = await getEmDashCollection("posts", {
 	where: { category: term.slug },
 	orderBy: { published_at: "desc" },
 });
-if (Astro.cache?.enabled) {
-  const { cacheHint: taxonomyCacheHint } = await getTaxonomyTermsWithCacheHint('category', { includeCounts: false });
-  Astro.cache.set(cacheHint);
-  Astro.cache.set(taxonomyCacheHint);
-}
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 ---
 
 <Base title={`${term.label} posts`} description={`Posts in ${term.label}`} seo={{ robots: taxonomyRobots(posts.length) }} breadcrumbs={[{ name: 'Home', url: '/' }, { name: term.label, url: Astro.url.pathname }]}>

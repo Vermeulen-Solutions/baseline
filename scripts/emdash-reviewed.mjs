@@ -4,7 +4,7 @@
 // the installed routes/CLI it depends on, then change REVIEWED_EMDASH.
 import fs from 'node:fs';
 
-export const REVIEWED_EMDASH = '1.5.0';
+export const REVIEWED_EMDASH = '1.6.0';
 
 /** Identity string recorded in snapshots, ledgers and receipts produced by a reviewed adapter. */
 export const adapterId = name => 'emdash-' + REVIEWED_EMDASH + '/' + name;

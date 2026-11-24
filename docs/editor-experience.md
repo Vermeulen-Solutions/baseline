@@ -86,7 +86,7 @@ Admin metadata (collection `admin.listColumns` and `admin.quickCreate`, field `w
 
 ```json
 {
-  "emdashVersion": "1.5.0",
+  "emdashVersion": "1.6.0",
   "fields": [
     { "collection": "sessions", "field": "day", "widget": "site-editor-ui:choice", "options": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] },
     { "collection": "partners", "field": "active", "label": "Show on the site (untick to remove the logo)" }

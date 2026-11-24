@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Starter header: the two-line clamp applies to a plain text title only, at the brand class's own weight, so a brand built from elements keeps the site's layout; no token or page appearance changes for the starter. The hidden attribute always hides, whatever display a piece sets for itself; nothing the starter shows changes.",
-    "sha256": "57564ec2178c763c167270c6aed1ea585123ec2c8ab856d8f1c6df659c29d7b1"
+    "reason": "Starter header: the two-line clamp applies to a plain text title only, at the brand class's own weight, so a brand built from elements keeps the site's layout; no token or page appearance changes for the starter. The hidden attribute always hides, whatever display a piece sets for itself; nothing the starter shows changes. The print rule for tab panels uses :is() so it outranks the [hidden] rule in print; no screen change.",
+    "sha256": "21f43ab10ff5b39a72dfd1f1b5aecf8c44bc6bbd989ce4c428e8d4ae3b4c9f35"
   },
   {
     "path": "src/styles/registry-aliases.css",
@@ -155,8 +155,8 @@
   },
   {
     "path": "src/layouts/Base.astro",
-    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode. Links the apple-touch-icon and the web manifest. Renders Analytics and ConsentBanner in body-end (nothing without analytics ids). Imports the opt-in expressive layer stylesheet, which applies nothing until a page uses its attributes.",
-    "sha256": "f9fd81fe11b047e41e315b8117a201c4bacc2163cab37cd289982ad62c7bd7f4"
+    "reason": "Functional neutral starter asset delivery: preserve native metadata/configured favicon ownership and supply the prepared public SVG fallback only when no CMS favicon URL exists. Neutral starter header markup: the menu links and the single search field sit in one native Menu disclosure so the phone header stays on one row. No theme, client brand or editor target change. Starter Base opts into same-ground section joins. Opts into SiteShell cross-document page transitions except in EmDash visual edit mode (getRequestContext().editMode) and holds the sticky header with data-vt-header; markup otherwise unchanged. Passes prefetch=\"moderate\" to SiteShell outside EmDash visual edit mode. Links the apple-touch-icon and the web manifest. Renders Analytics and ConsentBanner in body-end (nothing without analytics ids). Imports the opt-in expressive layer stylesheet, which applies nothing until a page uses its attributes. EmDash 1.6: the primary menu is read in the page locale (Astro.currentLocale); no markup or style change.",
+    "sha256": "e00fdc9301d1a0fb646e9d392d75057752c50016acb8f5dd972e8815f87ad06a"
   },
   {
     "path": "src/components/Container.astro",
@@ -185,8 +185,8 @@
   },
   {
     "path": "src/pages/category/[slug].astro",
-    "reason": "Neutral starter maintenance: extract identical post-list item markup into its native shared component; preserve queries, URLs, image values, empty states, date policy and CSS. No client-specific visual direction or styling change. Functional routing fix: a missing category rewrites to the 404 page (real 404 status) instead of redirecting to /404; presentation unchanged. Exact LF-normalized source hash.",
-    "sha256": "73861a4a95186d24512fade78b447e446650f2abc56bd88e6498437044c7ff0b"
+    "reason": "Neutral starter maintenance: extract identical post-list item markup into its native shared component; preserve queries, URLs, image values, empty states, date policy and CSS. No client-specific visual direction or styling change. Functional routing fix: a missing category rewrites to the 404 page (real 404 status) instead of redirecting to /404; presentation unchanged. Exact LF-normalized source hash. EmDash 1.6: the taxonomy cache hint, read in the page locale, is set before the 404 rewrite; no markup or style change.",
+    "sha256": "5e6b80057849327d5fb04b622bf36dd0e0b4e44993d9fb1eec2bd7bf83ce7fa7"
   },
   {
     "path": "src/pages/index.astro",
@@ -195,23 +195,23 @@
   },
   {
     "path": "src/pages/posts/index.astro",
-    "reason": "Functional cache-contract correction: register supported taxonomy hints for rendered hydrated and batched term labels; preserve current styling, layout, data and metadata. No client visual implementation. Any edit invalidates this LF-normalized exception.",
-    "sha256": "6be50fb7fa22543b8a387c94c4180a2f906f8cb99842b83414a3961a4b84061b"
+    "reason": "Functional cache-contract correction: register supported taxonomy hints for rendered hydrated and batched term labels; preserve current styling, layout, data and metadata. No client visual implementation. Any edit invalidates this LF-normalized exception. EmDash 1.6: the tag cache hint is read in the page locale; no markup or style change.",
+    "sha256": "b9c90c13d0402d0e7886d18afe10f565084772a1d8ab6777d4dc2352cd1175c3"
   },
   {
     "path": "src/pages/posts/[slug].astro",
-    "reason": "Functional cache-contract correction: register supported taxonomy hints for rendered hydrated and batched term labels; preserve current styling, layout, data and metadata. No client visual implementation. Any edit invalidates this LF-normalized exception. Functional routing fix: a missing post rewrites to the 404 page (real 404 status) instead of redirecting to /404; presentation unchanged. Exact LF-normalized source hash.",
-    "sha256": "069a2a0faf7bd3e3552f9d177c8ba7665abcf6bd4563758cecad1756ab395fe5"
+    "reason": "Functional cache-contract correction: register supported taxonomy hints for rendered hydrated and batched term labels; preserve current styling, layout, data and metadata. No client visual implementation. Any edit invalidates this LF-normalized exception. Functional routing fix: a missing post rewrites to the 404 page (real 404 status) instead of redirecting to /404; presentation unchanged. Exact LF-normalized source hash. EmDash 1.6: the entry cache hint is set before the 404 rewrite so a cached miss is purged on publish; no markup or style change.",
+    "sha256": "286ba8fb09cc52978976bf53c83023d1498eab03b789a3672f5ea0c25a0d41d3"
   },
   {
     "path": "src/pages/tag/[slug].astro",
-    "reason": "Neutral starter maintenance: extract identical post-list item markup into its native shared component; preserve queries, URLs, image values, empty states, date policy and CSS. No client-specific visual direction or styling change. Functional routing fix: a missing tag rewrites to the 404 page (real 404 status) instead of redirecting to /404; presentation unchanged. Exact LF-normalized source hash.",
-    "sha256": "3f9c371afde2dfe361f15e8558d2fce8d17679dcfb8e12a7a3544097317e8271"
+    "reason": "Neutral starter maintenance: extract identical post-list item markup into its native shared component; preserve queries, URLs, image values, empty states, date policy and CSS. No client-specific visual direction or styling change. Functional routing fix: a missing tag rewrites to the 404 page (real 404 status) instead of redirecting to /404; presentation unchanged. Exact LF-normalized source hash. EmDash 1.6: the taxonomy cache hint, read in the page locale, is set before the 404 rewrite; no markup or style change.",
+    "sha256": "ab29abce5702604002e01cfffb5b84ffdf3d4b8ce2cd1a6f55fd5ef5f47d3ff7"
   },
   {
     "path": "src/pages/[slug].astro",
-    "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception. Functional routing fix: a missing page rewrites to the 404 page (real 404 status) instead of redirecting to /404; presentation unchanged. Exact LF-normalized source hash.",
-    "sha256": "33ed0b5cf8437a4394fbc3950cb4deb621751b6afdc3f179cd72de6d7b327ba7"
+    "reason": "Starter sample route: section-owned page rhythm and article flow only; existing SEO wiring and content/edit ownership preserved, no client visual implementation. Any source edit invalidates this exact LF-normalized exception. Functional routing fix: a missing page rewrites to the 404 page (real 404 status) instead of redirecting to /404; presentation unchanged. Exact LF-normalized source hash. EmDash 1.6: the entry cache hint is set before the 404 rewrite so a cached miss is purged on publish; no markup or style change.",
+    "sha256": "7644b787d163dbfc0afb229c93d7c6c68a5e988ffc0e7802cdf22adccfdbba34"
   },
   {
     "path": "src/utils/site-identity.ts",

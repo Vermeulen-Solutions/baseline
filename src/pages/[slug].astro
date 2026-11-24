@@ -14,16 +14,16 @@ if (!slug) {
 }
 
 const { entry: page, cacheHint } = await getEmDashEntry("pages", slug);
+// Set before the miss: the hint then carries the collection tag, so a cached 404 is purged when
+// the entry is published.
+if (Astro.cache?.enabled) Astro.cache.set(cacheHint);
 
 if (!page) {
 	return Astro.rewrite("/404");
 }
 
 const { data: settings, cacheHint: settingsCacheHint } = await getSiteSettingsWithCacheHint();
-if (Astro.cache?.enabled) {
-	Astro.cache.set(cacheHint);
-	Astro.cache.set(settingsCacheHint);
-}
+if (Astro.cache?.enabled) Astro.cache.set(settingsCacheHint);
 const { siteTitle } = resolveStarterSiteIdentity(settings);
 
 const seo = getSeoMeta(page, {

@@ -37,7 +37,7 @@ const [
 	{ data: menu, cacheHint: menuCacheHint },
 ] = await Promise.all([
 	getSiteSettingsWithCacheHint(),
-	getMenuWithCacheHint("primary"),
+	getMenuWithCacheHint("primary", { locale: Astro.currentLocale }),
 ]);
 const { siteTitle, siteTagline, siteLogo } = resolveStarterSiteIdentity(settings);
 // The site name is added when the whole title fits the 60 characters search results show (and

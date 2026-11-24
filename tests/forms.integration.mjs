@@ -16,7 +16,7 @@ await fs.mkdir(path.join(root, '.emdash/checks'), { recursive: true });
 const report = await fs.mkdtemp(path.join(root, '.emdash/checks/forms-'));
 const dependencies = await fs.mkdtemp(path.join(os.tmpdir(), 'baseline-forms-deps-'));
 const key = randomBytes(32).toString('hex');
-const receipt = { core: REVIEWED_EMDASH, forms: '0.2.13', node: process.versions.node, scope: 'Disposable Node/SQLite, native npm plugin and built SSR; no external delivery or Worker claim', checks: [], passed: false };
+const receipt = { core: REVIEWED_EMDASH, forms: '0.2.14', node: process.versions.node, scope: 'Disposable Node/SQLite, native npm plugin and built SSR; no external delivery or Worker claim', checks: [], passed: false };
 let site, browser, activePage, origin, adminCookie, editorCookie, token, formId, formPages;
 const check = name => { receipt.checks.push(name); console.log('PASS ' + name); };
 try {
