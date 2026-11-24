@@ -209,6 +209,13 @@ export function prepareImages({ source, out, preset, maxEdge, quality, maxBytes,
     return { ...manifest.summary, status: manifest.entries.every(entry => entry.status === 'ready') ? 'ready' : 'needs-review', exitCode: manifest.entries.every(entry => entry.status === 'ready') ? 0 : 1, manifest: path.join(directory, 'manifest.json') };
   } finally { fs.closeSync(lock); fs.unlinkSync(lockFile); }
 }
+// A refusal that comes from how the command was written carries the form that works. Six designers in a
+// row gave the folder as a plain argument, and five needed up to three tries: the form was only in --help.
+export function usageForRefusal(message) {
+  return /^(Unknown image option|Missing image option value|Duplicate image option|Explicit --source and --out)/.test(String(message))
+    ? 'npm run media:prepare -- --source <folder or file> --out .baseline/backups/<stage name>'
+    : null;
+}
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   try {
     if (process.argv.includes('--help') || process.argv.includes('-h')) {
@@ -218,5 +225,5 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     const options = imageOptions(process.argv.slice(2), ['--source', '--out', '--preset', '--max-edge', '--quality', '--max-bytes', '--reason', '--overrides'], ['--resume']);
     const result = prepareImages({ source: options.source, out: options.out, preset: options.preset, reason: options.reason, resume: options.resume, ...(options['max-edge'] !== undefined && { maxEdge: Number(options['max-edge']) }), ...(options.quality !== undefined && { quality: Number(options.quality) }), ...(options['max-bytes'] !== undefined && { maxBytes: Number(options['max-bytes']) }), ...(options.overrides && { overrides: imageJSON(options.overrides) }) });
     console.log(JSON.stringify(result, null, 2)); process.exitCode = result.exitCode;
-  } catch (error) { console.error(JSON.stringify({ status: 'refused', error: error.message })); process.exitCode = 2; }
+  } catch (error) { const usage = usageForRefusal(error.message); console.error(JSON.stringify({ status: 'refused', error: error.message, ...(usage && { usage }) })); process.exitCode = 2; }
 }
