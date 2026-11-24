@@ -60,7 +60,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { msysToNative, restoreGitBashRoute } from './capture-routes.mjs';
+import { msysToNative, reachableBase, restoreGitBashRoute } from './capture-routes.mjs';
 
 export const DEFAULT_WIDTHS = [390, 768, 1440];
 
@@ -757,6 +757,7 @@ export async function audit(options, hooks = {}) {
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const options = parseArgs(process.argv.slice(2));
+    if (!options.help && options.base) options.base = await reachableBase(options.base);
     if (options.help) console.log('Usage: audit:ui -- --base <origin> (--routes /,/contact | --routes-file <file> | --sitemap) [--widths 390,768,1440|auto|auto,320,390,1440] [--sample "^/news/.+=3"] [--hide "#dev-panel"] [--open-details] [--edge 8] [--badge 3] [--max-hover 80] [--tabs 45] [--text-scale root:1.6,root:2,text:1.5,text:2|off] [--contrast] [--crop 15] [--band <px>] [--out report.json]\n"auto" adds one width on each side of the site\'s own breakpoints to the given (or default) widths. Enlarged-text checks run at the given widths up to 500px; hover, focus and contrast at the widest given width. Mark images meant to be cropped with data-audit-crop-ok. --contrast also measures hovered elements. Progress is printed to stderr and --out is rewritten after every route, so an interrupted run keeps its findings; allow about half a minute per route and phone width. Mark deliberate exceptions in markup with data-audit-ignore. Git Bash: MSYS_NO_PATHCONV=1 when a route is "/".');
     else {
       let chosen = options.widths;

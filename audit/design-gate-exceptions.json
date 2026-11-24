@@ -521,8 +521,8 @@
   },
   {
     "path": "src/components/Disclosure.astro",
-    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. Any source edit invalidates this exact LF-normalized exception.",
-    "sha256": "12f86367c8003bc9ee556daee54df46bce0f61de31056dc30538165f65b3a507"
+    "reason": "Functional starter resilience: normalize malformed editor props, reserve missing-image geometry and synchronize native disclosure accessibility. Existing token system and valid-input presentation preserved; no client theme or page implementation. The default look carries no specificity so a site stylesheet can restyle it; the rendered look is unchanged. Any source edit invalidates this exact LF-normalized exception.",
+    "sha256": "4001024db33ea4bd3f1d54d845269afde1cf5f9d84e104815262bc568954890b"
   },
   {
     "path": "src/components/Cluster.astro",

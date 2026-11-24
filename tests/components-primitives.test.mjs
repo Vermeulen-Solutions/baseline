@@ -392,3 +392,12 @@ test('copyText aborts immediately and does not invoke legacy execCommand fallbac
   assert.equal(execCommandCalled, false, 'execCommand must not be called when operation is aborted');
 });
 
+
+test('Disclosure: the default look has no specificity, so a site stylesheet restyles it with a plain selector', () => {
+  const source = readFileSync(new URL('../src/components/Disclosure.astro', import.meta.url), 'utf8');
+  const style = /<style is:global>([\s\S]*?)<\/style>/.exec(source)?.[1];
+  assert.ok(style, 'Disclosure styles must be global: a scoped rule carries the component attribute and wins over a one-class rule');
+  assert.match(style, /@layer components \{/);
+  const selectors = [...style.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/^\s*([^@{}\n][^{}\n]*?)\s*\{/gm)].map((m) => m[1]);
+  assert.deepEqual(selectors, [':where(.disclosure)', ':where(.disclosure) > :where(summary)', ':where(.disclosure__body)']);
+});

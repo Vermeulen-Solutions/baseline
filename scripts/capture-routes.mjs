@@ -55,6 +55,33 @@ export function restoreGitBashRoute(route, env = process.env) {
   return route;
 }
 
+const LOOPBACK = ['127.0.0.1', 'localhost', '[::1]'];
+
+async function answers(origin) {
+  try { await fetch(origin, { redirect: 'manual', signal: AbortSignal.timeout(5000) }); return true; }
+  // A slow first answer (a dev server compiling) is a server that is there.
+  catch (error) { return error?.name === 'TimeoutError' || error?.name === 'AbortError'; }
+}
+
+// A server started on "localhost" listens on ::1 on some machines and on 127.0.0.1 on others, so one
+// of the two names refuses the connection while the site is up (`astro dev` on Windows answers
+// localhost and refuses 127.0.0.1). When the given origin is a loopback name that does not answer,
+// the other names are tried and the one that answers is used. Any other origin is returned as given.
+export async function reachableBase(base, { probe = answers, log = (line) => console.error(line) } = {}) {
+  let url;
+  try { url = new URL(base); } catch { return base; }
+  if (!LOOPBACK.includes(url.hostname)) return base;
+  if (await probe(base)) return base;
+  for (const host of LOOPBACK.filter((name) => name !== url.hostname)) {
+    const other = new URL(base);
+    other.hostname = host;
+    const candidate = other.href.replace(/\/+$/, '');
+    if (await probe(candidate)) { log(`Nothing answers at ${base}; the site answers at ${candidate}, which is used instead.`); return candidate; }
+  }
+  log(`Nothing answers at ${base}, nor under the other names of this computer (${LOOPBACK.join(', ')}) on port ${url.port || '80'}. Start the site first, for example \`npm run serve:static -- --dir dist --port ${url.port || '4321'}\`, then run this again.`);
+  return base;
+}
+
 export function parseArgs(argv) {
   const out = { widths: DEFAULT_WIDTHS, frames: [0, 900, 1800], repeat: 2, hide: [], css: [], click: [], routeTimeout: 180000 };
   for (let i = 0; i < argv.length; i++) {
@@ -241,6 +268,7 @@ async function capture(options) {
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const options = parseArgs(process.argv.slice(2));
+    if (!options.help && options.base) options.base = await reachableBase(options.base);
     if (options.help) {
       console.log('Usage: capture:routes -- --base <origin> --routes /,/contact --out <dir> [--widths 390,768,1440] [--frames 0,900,1800] [--repeat 2] [--hide "#dev-panel"] [--css overlay.css] [--click "[data-pause]"] [--decline-consent] [--wait 8000] [--route-timeout 180] [--motion]\n       capture:routes -- --compare <before-dir> <after-dir>\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when a route is "/".');
     } else if (options.compare) {
