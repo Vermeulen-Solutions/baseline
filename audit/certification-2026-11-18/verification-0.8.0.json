@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.8.0",
+  "recordedAt": "2026-11-24T19:40:00.000Z",
+  "sourceCommit": "2fe1b0e9278f988b508e98f8978c8afc9d5b971e",
+  "scope": "Minor release after 0.7.0: EmDash and @emdash-cms/auth 1.6.0 (admin and blocks 1.6.0, Kumo 2.19.0, migration 098_user_last_login, Forms target 0.2.14), cache hints set before a 404 and menu/term reads in the page locale; the design rounds after 0.7.0 (look pass, composition audit checked against designers' votes and reading legibility, motion tier, sourced worlds, designer and builder sessions) and fixes (PRs #160-#179). Astro 7.4.12 and the adapters unchanged; the database schema gains users.last_login_at.",
+  "cleanCheckout": {
+    "22.23.4": {
+      "node": "v22.23.4",
+      "commit": "7b05a86136685bc868040f7afe2548520bc98734",
+      "steps": {
+        "doctor": { "exit": 0, "seconds": 1, "commit": "ce8126f" },
+        "npm-ci": { "exit": 0, "seconds": 133, "commit": "ce8126f" },
+        "verify": { "exit": 0, "seconds": 402, "note": "724 unit tests (723 pass, 1 skipped, 0 fail) and 169 rehearsal tests" },
+        "build": { "exit": 0, "seconds": 15 },
+        "release-artifact": { "exit": 0, "seconds": 1, "commit": "ce8126f" },
+        "schema-budget": { "exit": 0, "seconds": 1, "commit": "ce8126f" },
+        "dev-tools": { "exit": 0, "seconds": 56, "commit": "ce8126f" },
+        "ci-fast": { "exit": 1, "seconds": 101, "note": "all 10 checks passed; 100.6 s against the 60 s local budget, as in 0.5.0-0.7.0" },
+        "seed": { "exit": 0, "seconds": 3, "commit": "ce8126f" },
+        "build-seeded": { "exit": 0, "seconds": 14, "commit": "ce8126f" },
+        "audit-html": { "exit": 0, "seconds": 3, "commit": "ce8126f" }
+      }
+    },
+    "24.22.3": {
+      "node": "v24.22.3",
+      "commit": "7b05a86136685bc868040f7afe2548520bc98734",
+      "steps": {
+        "doctor": { "exit": 0, "seconds": 1, "commit": "ce8126f" },
+        "npm-ci": { "exit": 0, "seconds": 129, "commit": "ce8126f" },
+        "verify": { "exit": 0, "seconds": 336, "note": "724 unit and 169 rehearsal tests pass" },
+        "build": { "exit": 0, "seconds": 12 },
+        "release-artifact": { "exit": 0, "seconds": 1, "commit": "ce8126f" },
+        "schema-budget": { "exit": 0, "seconds": 1, "commit": "ce8126f" },
+        "dev-tools": { "exit": 0, "seconds": 50, "commit": "ce8126f" },
+        "ci-fast": { "exit": 1, "seconds": 96, "note": "all 10 checks passed; 95.1 s against the 60 s local budget" },
+        "seed": { "exit": 0, "seconds": 3, "commit": "ce8126f" },
+        "build-seeded": { "exit": 0, "seconds": 12, "commit": "ce8126f" },
+        "audit-html": { "exit": 0, "seconds": 2, "commit": "ce8126f" }
+      }
+    }
+  },
+  "cleanCheckoutNote": "Fresh clones from GitHub with core.autocrlf=true. The full sequence ran on the first candidate ce8126f (same lockfile and runtime). Its verify failed on a test that matched multi-line source with LF endings (fixed in e97252d), and the visual suite found inactive tab panels no longer printing (fixed in 2fe1b0e). The same clones were then moved to the release commit 7b05a86 (certified source 2fe1b0e plus release metadata) and verify, build and ci-fast rerun there; the other steps depend only on the unchanged lockfile, runtime and seed.",
+  "emdashRehearsals": {
+    "node": "26.13.1 (local), Windows",
+    "commit": "b7f6216 with the working tree of the upgrade",
+    "passed": ["npm run build", "npm run audit:html", "npm run check:emdash-current (role boundaries, edit locks, revision diff and restore, inline toolbar links)", "node tests/forms.integration.mjs (Forms 0.2.14)", "node tests/metadata.integration.mjs", "npm run rehearse:importer", "npm run check:cache (a cached 404 for a post and a tag is purged by the publish or term creation that fills the URL)", "npm run check:dev-tools", "node scripts/rehearse-infrastructure.mjs", "npm run test:profiles"],
+    "existingDatabaseUpgrade": "A starter database in the 1.5.0 state (last migration 097_room_storage, no users.last_login_at) was backed up, then migrated in place by the first 1.6.0 build and audit:html run: 098_user_last_login applied, users.last_login_at added, 75 tables, row counts unchanged apart from the 404 log (+1 from the audit) and the migration record."
+  },
+  "visual": {
+    "node": "24.22.3",
+    "playwright": "1.65.1",
+    "commit": "7b05a86",
+    "result": "129 passed, 1 failed under load (the sensitivity self-test timed out before its pixel comparison), which passed alone (10 passed), as in 0.4.0-0.7.0. No reference image differed. An earlier run on e97252d failed the tabs print contract, fixed in 2fe1b0e."
+  },
+  "findings": [
+    "check:ci-fast passed every check on both Node versions but exceeded its 60 s local budget (100.6 s and 95.1 s). Speeding up the fast tier stays a follow-up.",
+    "The [hidden] rule added after 0.7.0 outranked the print rule for tab panels; CI cannot see it because the visual suite is local only. Fixed before release (tabs-print-again).",
+    "A test added after 0.7.0 matched multi-line source with LF line endings and failed in clones with core.autocrlf=true. Fixed before release."
+  ]
+}

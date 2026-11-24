@@ -44,6 +44,20 @@ Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3: doc
 
 Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 111 passed; the gallery root-typecheck behavior test timed out under load (its child process killed) and passed alone in 15.5 s, as during the 0.4.0 work. Not covered: the Workers/D1/R2 profile (unchanged scope), the editor rehearsal and restore drill (editor and schema unchanged), repeated visual runs.
 
+## Standards 0.8.0 (2026-11-24)
+
+Certified source: commit `2fe1b0e9278f988b508e98f8978c8afc9d5b971e`. Machine record: [verification-0.8.0.json](verification-0.8.0.json). A minor release after 0.7.0 that moves the runtime: EmDash and `@emdash-cms/auth` 1.6.0 (Kumo 2.19.0, one migration that adds `users.last_login_at`), with the design rounds since 0.7.0 (PRs #160–#179). Astro 7.4.12 and the adapters are unchanged. `check:upstream` on 24 November also offered Astro 7.4.13 and `@astrojs/node` 11.1.14; both are deferred to keep this release to the EmDash change.
+
+Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3: doctor, `npm ci`, verify, build, release artifact, schema budget, dev tools, seed, seeded build and `audit:html` all pass. The full sequence ran on the first candidate `ce8126f`; verify and build were rerun in the same clones on the release commit `7b05a86` after two fixes found here (below). `check:ci-fast` passed all ten checks on both and exceeded its 60 s local budget (101 s and 95 s).
+
+Because the runtime changed, the EmDash rehearsals that 0.3.0–0.7.0 could reuse were rerun against 1.6.0: `check:emdash-current` (roles, edit locks, revision diff and restore, inline toolbar links), forms with 0.2.14, metadata, importer, cache, dev tools, infrastructure and the generated profiles. Existing-database upgrade: a starter database in the 1.5.0 state was backed up and migrated in place by the first 1.6.0 run (`098_user_last_login` applied, row counts unchanged apart from the 404 log and the migration record).
+
+Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 129 passed and no reference image differed; the sensitivity self-test timed out under load and passed alone, as in 0.4.0–0.7.0.
+
+Found during certification and fixed before the release: a test that matched multi-line source with LF line endings failed in the CRLF clones (`e97252d`), and the visual suite showed that the new `[hidden]` rule kept inactive tab panels from printing (`2fe1b0e`, note "Inactive tab panels print again").
+
+Not covered: the Workers/D1/R2 profile (each Workers site rehearses its own database with `db:export-d1` and `db:rehearse` before deploying 1.6), collaborative editing, the SMTP provider and sandboxed plugins.
+
 ## Standards 0.7.0 (2026-11-20)
 
 Certified source: commit `dcf4a99744685eecb98ca74c4e55750452aa1a3c`. Machine record: [verification-0.7.0.json](verification-0.7.0.json). A minor release after 0.6.0 (PRs #156–#158); runtime dependencies, development dependencies and the database schema are unchanged.
