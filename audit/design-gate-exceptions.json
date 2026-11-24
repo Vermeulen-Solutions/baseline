@@ -145,8 +145,8 @@
   },
   {
     "path": "src/styles/global.css",
-    "reason": "Starter header: the two-line clamp applies to a plain text title only, at the brand class's own weight, so a brand built from elements keeps the site's layout; no token or page appearance changes for the starter. The hidden attribute always hides, whatever display a piece sets for itself; nothing the starter shows changes.",
-    "sha256": "57564ec2178c763c167270c6aed1ea585123ec2c8ab856d8f1c6df659c29d7b1"
+    "reason": "Starter header: the two-line clamp applies to a plain text title only, at the brand class's own weight, so a brand built from elements keeps the site's layout; no token or page appearance changes for the starter. The hidden attribute always hides, whatever display a piece sets for itself; nothing the starter shows changes. The print rule for tab panels uses :is() so it outranks the [hidden] rule in print; no screen change.",
+    "sha256": "21f43ab10ff5b39a72dfd1f1b5aecf8c44bc6bbd989ce4c428e8d4ae3b4c9f35"
   },
   {
     "path": "src/styles/registry-aliases.css",

@@ -490,7 +490,8 @@
 		:where(.skip-link, nav, [role="navigation"], [data-theme-select], .theme-select-container) {
 			display: none !important;
 		}
-		[data-print-content] :where([role="tabpanel"], .tabs__panel) {
+		/* :is() keeps this as specific as the [hidden] rule above, which it follows, so inactive panels print. */
+		[data-print-content] :is([role="tabpanel"], .tabs__panel) {
 			display: block !important;
 		}
 		:where(.callout, .steps__item) {
