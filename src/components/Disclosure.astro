@@ -27,9 +27,13 @@ const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId
   syncDisclosures();
   document.addEventListener('astro:page-load', syncDisclosures);
 </script>
-<style>
+<style is:global>
+/* The default look has no specificity, so a site's stylesheet restyles `.disclosure`, `.disclosure > summary`
+   and `.disclosure__body` from `@layer components` with a plain selector, wherever its rules come in the
+   page. Scoped rules carried the component's attribute and won over a one-class rule in the same layer:
+   a trial builder gave up skinning the component and wrote its own `details` instead. */
 @layer components {
-  .disclosure {
+  :where(.disclosure) {
     min-inline-size: 0;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-control);
@@ -37,12 +41,12 @@ const id = typeof rawId === 'string' && /^[A-Za-z][\w:.-]*$/.test(rawId) ? rawId
     background: var(--color-surface);
     overflow-wrap: anywhere;
   }
-  summary {
+  :where(.disclosure) > :where(summary) {
     display: list-item;
     padding: var(--spacing-content);
     font-weight: var(--font-weight-display, 700);
     cursor: pointer;
   }
-  .disclosure__body { padding: 0 var(--spacing-content) var(--spacing-content); }
+  :where(.disclosure__body) { padding: 0 var(--spacing-content) var(--spacing-content); }
 }
 </style>

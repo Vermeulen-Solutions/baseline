@@ -80,3 +80,28 @@ test('a second look keeps the lines of the screens that did not change and empti
   assert.equal(look.sections[0].screens[0].carried, true);
   assert.match(assessLook(again)[0], /screen 2 has no line yet/);
 });
+
+test('a long page is looked at to its foot, and a page past the limit says what is left', async () => {
+  const { sameScreen, MARK_SIDE } = await import('../scripts/design-look.mjs');
+  const phone = SCREENS[390];
+  // A phone page of 14 687px (a trial page built from a full kit) is 20 screens, the last ending at the foot.
+  const tops = screenTops(14687, phone);
+  assert.equal(tops.length, 20);
+  assert.equal(tops.at(-1) + phone.height, 14687);
+  assert.ok(MAX_SCREENS >= 36, 'a page as long as the longest reference page (about 27 700px on a phone) must fit');
+  // Past the limit the section says how much is outside the look.
+  const markdown = renderLook([{ ...section, beyond: 3200 }], null, '2026-11-24T12:00:00.000Z');
+  assert.match(markdown, /The page goes on 3200px below screen 2, outside this look\. Open the page itself at 390px wide/);
+  assert.doesNotMatch(renderLook([{ ...section, beyond: 0 }], null, '2026-11-24T12:00:00.000Z'), /outside this look/);
+  assert.deepEqual(parseLook(markdown).sections[0].screens.map((s) => s.screen), [1, 2]);
+
+  // Which screens changed: a small drawing added to one screen moves a few cells, and that is a change.
+  const blank = Array.from({ length: MARK_SIDE * MARK_SIDE }, () => 20);
+  assert.equal(sameScreen(blank, [...blank]), true);
+  const withDial = [...blank];
+  for (let row = 4; row < 12; row++) for (let col = 30; col < 35; col++) withDial[row * MARK_SIDE + col] = 28;
+  assert.equal(sameScreen(withDial, blank), false);
+  // Marks from an older look (another size) or no marks at all are a change.
+  assert.equal(sameScreen(blank, blank.slice(0, 576)), false);
+  assert.equal(sameScreen(blank, undefined), false);
+});

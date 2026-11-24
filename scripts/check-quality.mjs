@@ -75,7 +75,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parseSitemap, sampleRoutes } from './audit-ui.mjs';
-import { msysToNative, restoreGitBashRoute } from './capture-routes.mjs';
+import { msysToNative, reachableBase, restoreGitBashRoute } from './capture-routes.mjs';
 import { copyTells } from './copy-tells.mjs';
 
 export const DEFAULT_LIMITS = Object.freeze({
@@ -734,6 +734,7 @@ export async function checkQuality(options, hooks = {}) {
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
+  if (!options.help && options.base) options.base = await reachableBase(options.base);
   if (options.help) {
     console.log('Usage: npm run check:quality -- --base http://127.0.0.1:4321 (--sitemap | --routes /,/about | --routes-file routes.txt) [--sample "^/posts/=3"] [--budget page-budget.json] [--tabs 40] [--no-axe] [--only kind,kind] [--init] [--out report.json]');
     return;

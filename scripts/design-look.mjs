@@ -17,16 +17,33 @@
 // after a fix is short. `--check` passes when every screen has its line, the faults named have an answer
 // under "Fixed", the six scores are written, and no file under `src/` is newer than the screens (a site
 // changed after the look has not been looked at).
-// Git Bash on Windows rewrites a lone "/" argument into a Windows path: set MSYS_NO_PATHCONV=1.
+// A page is looked at to its foot: up to 40 screens a width, and a page longer than that says so in its
+// section. Git Bash on Windows rewrites "/" into a path under its install folder; the routes are put back.
 import { existsSync, mkdirSync, readFileSync, readdirSync, renameSync, statSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { loadPendingImages } from './audit-composition.mjs';
-import { restoreGitBashRoute } from './capture-routes.mjs';
+import { reachableBase, restoreGitBashRoute } from './capture-routes.mjs';
 
 export const SCREENS = Object.freeze({ 390: { height: 844, step: 760, perSheet: 4 }, 1440: { height: 900, step: 810, perSheet: 2 } });
-export const MAX_SCREENS = 14;
+// Trial pages built from a full client kit were 14 and 17 phone screens long and the look stopped at 14,
+// so their last sections were never looked at. Forty covers a page of about 30 000px on a phone.
+export const MAX_SCREENS = 40;
+// Each screen is kept as a small grey picture, MARK_SIDE cells a side, to tell which screens changed.
+export const MARK_SIDE = 48;
+
+/**
+ * True when two marks of a screen show the same picture. One cell is about 30 by 19 pixels of a wide
+ * screen, so a small drawing added to a screen moves a few cells a little: the old test (the average
+ * difference over 24 by 24 cells) called such a screen unchanged. Any one cell that moved counts.
+ */
+export function sameScreen(mark, old) {
+  if (!Array.isArray(mark) || !Array.isArray(old) || old.length !== mark.length || !mark.length) return false;
+  let sum = 0;
+  for (let k = 0; k < mark.length; k++) { const d = Math.abs(mark[k] - old[k]); if (d >= 4) return false; sum += d; }
+  return sum / mark.length < 1;
+}
 export const QUESTIONS = Object.freeze(['Object', 'Feature', 'Phone job', 'Craft', 'Made things', 'One idea']);
 const EMPTY = '…';
 
@@ -160,6 +177,7 @@ export function renderLook(sections, previous = null, stamp = new Date().toISOSt
       }
       lines.push('');
     }
+    if (section.beyond > 0) lines.push(`The page goes on ${section.beyond}px below screen ${section.sheets.flat().at(-1)}, outside this look. Open the page itself at ${section.width}px wide, scroll to its foot, and name what is wrong there in the last screen's line.`, '');
     return `## ${section.route} at ${section.width}px\n\n${lines.join('\n')}`;
   }).join('\n');
   return `${HEADER}\n<!-- screens taken ${stamp} -->\n\n${body}${FOOTER(previous?.scores, previous?.fixed, previous?.lowest)}`;
@@ -210,8 +228,9 @@ async function capture(options) {
           }
           // A small grey picture of each screen: two looks at the same screen give the same marks.
           const key = `${route} ${width}`;
-          marks[key] = await Promise.all(shots.map(async (shot) => [...await sharp(shot).resize(24, 24, { fit: 'fill' }).greyscale().raw().toBuffer()]));
-          const unchanged = marks[key].map((mark, i) => { const old = oldMarks[key]?.[i]; return old && old.length === mark.length && mark.reduce((sum, v, k) => sum + Math.abs(v - old[k]), 0) / mark.length < 1.5 ? i + 1 : null; }).filter(Boolean);
+          marks[key] = await Promise.all(shots.map(async (shot) => [...await sharp(shot).resize(MARK_SIDE, MARK_SIDE, { fit: 'fill' }).greyscale().raw().toBuffer()]));
+          const unchanged = marks[key].map((mark, i) => (sameScreen(mark, oldMarks[key]?.[i]) ? i + 1 : null)).filter(Boolean);
+          const beyond = Math.max(0, pageHeight - (tops.at(-1) + shape.height));
           const sheets = sheetsOf(shots.length, shape.perSheet);
           const files = [];
           const gap = 16, band = 40;
@@ -230,8 +249,8 @@ async function capture(options) {
             await sharp({ create: { width: sheetWidth, height: sheetHeight, channels: 3, background: '#666666' } }).composite(parts).jpeg({ quality: 82 }).toFile(file);
             files.push(file);
           }
-          sections.push({ route, width, sheets, files, unchanged });
-          console.log(`${route} at ${width}px: ${shots.length} screen${shots.length === 1 ? '' : 's'} on ${files.length} sheet${files.length === 1 ? '' : 's'}${previous ? `, ${unchanged.length} unchanged since the last look` : ''}${tops.length === MAX_SCREENS && tops.at(-1) + shape.height < pageHeight ? ` (the page goes on below screen ${MAX_SCREENS})` : ''}`);
+          sections.push({ route, width, sheets, files, unchanged, beyond });
+          console.log(`${route} at ${width}px: ${shots.length} screen${shots.length === 1 ? '' : 's'} on ${files.length} sheet${files.length === 1 ? '' : 's'}${previous ? `, ${unchanged.length} unchanged since the last look` : ''}${beyond > 0 ? ` (the page goes on ${beyond}px below screen ${shots.length}: look at the rest in the page itself)` : ''}`);
         } finally { await page.close(); }
       }
     }
@@ -258,6 +277,7 @@ function check(options) {
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
+  if (!options.help && !options.check && options.base) options.base = await reachableBase(options.base);
   if (options.help) { console.log('Usage: npm run design:look -- --base <origin> --routes /,/about [--out audit/look] [--widths 390,1440]\n       npm run design:look -- --check [--out audit/look] [--src src]'); return; }
   if (options.check) return check(options);
   if (!options.base) throw Error('design:look needs --base <origin of the served build> (or --check).');

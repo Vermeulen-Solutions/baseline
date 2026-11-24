@@ -88,3 +88,25 @@ test('--route-timeout bounds each route (seconds), 180 by default', () => {
   assert.equal(parseArgs([...base, '--route-timeout', '60']).routeTimeout, 60000);
   assert.throws(() => parseArgs([...base, '--route-timeout', '5']), /--route-timeout must be/);
 });
+
+test('a loopback origin that does not answer falls back to the name that does', async () => {
+  const { reachableBase } = await import('../scripts/capture-routes.mjs');
+  const said = [];
+  const log = (line) => said.push(line);
+  const up = (...origins) => async (origin) => origins.includes(origin);
+  // The origin as given answers: it is used unchanged and nothing is said.
+  assert.equal(await reachableBase('http://127.0.0.1:4321', { probe: up('http://127.0.0.1:4321'), log }), 'http://127.0.0.1:4321');
+  assert.deepEqual(said, []);
+  // A dev server that listens on localhost only: 127.0.0.1 refuses, localhost is used and the tool says so.
+  assert.equal(await reachableBase('http://127.0.0.1:4321', { probe: up('http://localhost:4321'), log }), 'http://localhost:4321');
+  assert.match(said[0], /Nothing answers at http:\/\/127\.0\.0\.1:4321; the site answers at http:\/\/localhost:4321/);
+  // The other way round, and the IPv6 name.
+  assert.equal(await reachableBase('http://localhost:4321', { probe: up('http://127.0.0.1:4321'), log }), 'http://127.0.0.1:4321');
+  assert.equal(await reachableBase('http://127.0.0.1:4321', { probe: up('http://[::1]:4321'), log }), 'http://[::1]:4321');
+  // Nothing is up: the origin is returned as given, with what to start.
+  said.length = 0;
+  assert.equal(await reachableBase('http://127.0.0.1:4599', { probe: up(), log }), 'http://127.0.0.1:4599');
+  assert.match(said[0], /Start the site first, for example `npm run serve:static -- --dir dist --port 4599`/);
+  // A public origin is never probed or changed.
+  assert.equal(await reachableBase('https://example.org', { probe: async () => { throw Error('probed'); }, log }), 'https://example.org');
+});

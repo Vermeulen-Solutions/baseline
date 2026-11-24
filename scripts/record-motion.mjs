@@ -14,7 +14,7 @@ import { spawnSync } from 'node:child_process';
 import os from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { msysToNative } from './capture-routes.mjs';
+import { msysToNative, reachableBase } from './capture-routes.mjs';
 
 export function parseArgs(argv) {
   const out = { route: '/', width: 1280, height: 720, seconds: 6, speed: 1, scroll: 0, fps: 12, gifWidth: 720, css: [], click: [] };
@@ -80,6 +80,7 @@ async function record(options) {
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
   try {
     const options = parseArgs(process.argv.slice(2));
+    if (!options.help && options.base) options.base = await reachableBase(options.base);
     if (options.help) console.log('Usage: record:motion -- --base <origin> --route / --out clip.gif [--css overlay.css] [--click selector] [--speed 4] [--seconds 6] [--scroll 0] [--width 1280 --height 720] [--fps 12 --gif-width 720]\nGit Bash: prefix with MSYS_NO_PATHCONV=1 when the route is "/".');
     else {
       const result = await record(options);

@@ -88,7 +88,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { DECLINE, isBotWall, msysToNative, restoreGitBashRoute } from './capture-routes.mjs';
+import { DECLINE, isBotWall, msysToNative, reachableBase, restoreGitBashRoute } from './capture-routes.mjs';
 import { motionTier, worldMotionNames, worldSources } from './check-art-direction.mjs';
 
 /** Findings that fail the run: the recorded world is missing from the built page. */
@@ -1119,6 +1119,7 @@ async function measureWide(browser, url, width, { declineConsent = false, scene 
 
 async function main() {
   const options = parseArgs(process.argv.slice(2));
+  if (!options.help && options.base) options.base = await reachableBase(options.base);
   if (options.help) { console.log('Usage: npm run audit:composition -- --base <origin> --routes /,/about [--widths 1440,390] [--record AGENTS.md] [--references audit/references/references.md] [--refresh-references] [--json] [--out file] [--strict]'); return; }
   const recordFile = options.record ?? (existsSync('AGENTS.md') ? 'AGENTS.md' : null);
   if (options.record && !existsSync(options.record)) throw Error(`--record file not found: ${options.record}`);
