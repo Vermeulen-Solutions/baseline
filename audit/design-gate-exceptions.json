@@ -597,8 +597,8 @@
   },
   {
     "path": "src/middleware.ts",
-    "reason": "Functional starter request policy: opt-in page redirects, bounded robots caching and explicit browser revalidation for public HTML without an existing policy/session cookie; no client visual implementation. Exact LF-normalized source hash. Non-visual production hardening: wraps the existing media/robots/HTML cache middleware so every response receives missing baseline security headers. Exact LF-normalized source hash. Applies the optional computed Content-Security-Policy (CSP_MODE) before the baseline security headers.",
-    "sha256": "dd1fa5418d11dd224734e395b24fadc73f5207d80d23f3a950eacf1f3593db01"
+    "reason": "Functional starter request policy: opt-in page redirects, bounded robots caching and explicit browser revalidation for public HTML without an existing policy/session cookie; no client visual implementation. Exact LF-normalized source hash. Non-visual production hardening: wraps the existing media/robots/HTML cache middleware so every response receives missing baseline security headers. Exact LF-normalized source hash. Applies the optional computed Content-Security-Policy (CSP_MODE) before the baseline security headers. Media caching moved to src/lib/media-edge-cache.mjs: EmDash's browser header kept, one-hour edge copy; no visual change.",
+    "sha256": "cdf0e3e8e29e1a4c1ad549baf814801366ab8281c71fed729f83f658ac4b32c3"
   },
   {
     "path": "src/plugins/baseline-metadata/index.ts",
@@ -617,8 +617,13 @@
   },
   {
     "path": "src/lib/cloudflare-cache-provider.mjs",
-    "reason": "Optional SSR and Cloudflare Workers edge cache infrastructure only; no visual tokens, markup or presentation changes.",
-    "sha256": "9105aac8864d04b4f81d6fb0be325950ca7887a61f58d7b7c6478436bd53f857"
+    "reason": "Optional SSR and Cloudflare Workers edge cache infrastructure only; no visual tokens, markup or presentation changes. Media caching moved to src/lib/media-edge-cache.mjs: EmDash's browser header kept, one-hour edge copy; no visual change.",
+    "sha256": "d045db79493d045362d07117ee4feae9fec978c78631530dcaec65b573de3eaf"
+  },
+  {
+    "path": "src/lib/media-edge-cache.mjs",
+    "reason": "Non-visual delivery helper: bounded edge copy of media responses that keeps EmDash's browser Cache-Control (images can be replaced under the same URL). Exact LF-normalized source hash.",
+    "sha256": "0e7f455ba390054e9999f0dfc251272a8a4a97df380fff98f6b0e90c56c47c65"
   },
   {
     "path": "src/components/PostListItem.astro",

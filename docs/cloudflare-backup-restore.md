@@ -46,14 +46,16 @@ Rehearse a core upgrade on that copy before deploying. **Do not use a Cloudflare
 
 ```sh
 npm run db:export-d1
-npm run db:rehearse -- --from .emdash/backups/<export.sql> --persist-to <empty scratch dir> [--media-sample 20]
-# build the updated site for Workers, then run the command it prints:
-npx wrangler dev --persist-to <scratch dir> --port 8790 --ip 127.0.0.1
+npm run db:rehearse -- --from .emdash/backups/<export.sql> --persist-to .emdash/backups/rehearse-<date> [--media-sample 20]
+# build exactly as the deploy builds (same script, same environment), then run the command it prints:
+npx wrangler dev --persist-to .emdash/backups/rehearse-<date> --port 8790 --ip 127.0.0.1
 # request pages, stop the server, then:
-npm run db:rehearse -- --compare --persist-to <scratch dir>
+npm run db:rehearse -- --compare --persist-to .emdash/backups/rehearse-<date>
 ```
 
-`db:rehearse` lets Wrangler create the local D1 file and loads the export into it. It copies the code of every active registry and marketplace plugin from R2 (`registry/<id>/<version>/`, `marketplace/<id>/<version>/`). Without those objects, pages that call a sandboxed plugin fail with "Plugin route not found", which looks like an upgrade defect. `--media-sample <n>` copies the newest media files; a whole library takes seconds per object, and a sample is enough to see images on the checked pages. Use a fresh, empty `--persist-to` folder for every rehearsal so the copy starts unmigrated.
+`db:rehearse` lets Wrangler create the local D1 file and loads the export into it. It copies the code of every active registry and marketplace plugin from R2 (`registry/<id>/<version>/`, `marketplace/<id>/<version>/`). Without those objects, pages that call a sandboxed plugin fail with "Plugin route not found", which looks like an upgrade defect. `--media-sample <n>` copies the newest media files; a whole library takes seconds per object, and a sample is enough to see images on the checked pages. Use a fresh, empty `--persist-to` folder for every rehearsal so the copy starts unmigrated. The copy holds users, sessions and content, so `db:rehearse` refuses a folder Git would track; keep it under `.emdash/backups/`.
+
+**Build the rehearsal like the deploy.** Use the deploy's own build script and every variable its build environment sets. A plugin a build leaves out is a plugin EmDash forgets on start: on one site the email provider was only included when a sender variable was set, the rehearsal build lacked it, and the first start cleared the site's `emdash:exclusive_hook:email:deliver` selection. A production deploy built the same way would have stopped all mail without an error. Prefer settings that live in code; and when `--compare` reports a row lost from `options`, find which setting it was before deploying.
 
 The first request applies the pending migrations to the copy. Before trusting what you see, make sure the requests appear in that server's own log: stopping a background `wrangler dev` can leave its `workerd` child serving the port, and a new rehearsal then silently answers from the previous one. `db:rehearse` checks the port before printing the command, and `--compare` refuses to run while the port is still in use. The comparison reports the migrations applied, every table whose row count changed, new and dropped tables, `integrity_check` and `foreign_key_check`, and fails when a table lost rows. Also check public routes, media, the admin sign-in redirect and `/_emdash/api/health` on the rehearsal server.
 

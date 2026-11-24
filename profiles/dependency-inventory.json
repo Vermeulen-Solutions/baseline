@@ -304,6 +304,14 @@
       ],
       "versionSource": "package.json#/devDependencies/saxes",
       "reason": "Portable WordPress WXR parsing for one-time migration; no CMS runtime"
+    },
+    "@cloudflare/kumo": {
+      "section": "dependencies",
+      "profiles": [
+        "emdash"
+      ],
+      "versionSource": "package.json#/dependencies/@cloudflare/kumo",
+      "reason": "Admin UI components imported by the editorial-order plugin; the exact version EmDash's admin and blocks require"
     }
   },
   "overrides": {

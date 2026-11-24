@@ -138,6 +138,7 @@
   "dependencies": {
     "@astrojs/node": "11.1.13",
     "@astrojs/react": "7.1.9",
+    "@cloudflare/kumo": "2.19.0",
     "@tailwindcss/vite": "^4.3.5",
     "astro": "7.4.12",
     "emdash": "1.6.0",

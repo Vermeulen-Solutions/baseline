@@ -27,7 +27,7 @@ Baseline's starter pages carry these changes. A site that built its pages from a
 
 ## Behavior to know
 
-- **Media caching.** On sites with a route-cache provider such as `cacheCloudflare()`, media files and eligible resized images are cached for a year and purged when the image is replaced or deleted. This applies only to Astro's stock image services (sharp on Node, `image-service-workerd` on Cloudflare); for those, non-canonical `/_image` URLs for EmDash media answer `301`. Astro's `memoryCache()` and custom image services get no automatic media entries.
+- **Media caching.** On sites with a route-cache provider such as `cacheCloudflare()`, media files and eligible resized images are cached for a year and purged when the image is replaced or deleted. Baseline's own middleware and Cloudflare provider used to mark media `immutable` for a year, which kept a replaced image old in browsers; the release after standards 0.8.0 replaces both with a one-hour edge copy that keeps EmDash's header (see [edge cache lifecycle](edge-cache-lifecycle.md)). A Node site with `private-safe-memory-cache.mjs` names its provider `memory`, or EmDash 1.6 puts images in process memory. This applies only to Astro's stock image services (sharp on Node, `image-service-workerd` on Cloudflare); for those, non-canonical `/_image` URLs for EmDash media answer `301`. Astro's `memoryCache()` and custom image services get no automatic media entries.
 - **Search.** `search()` scores are normalized to 0–1 within each collection and title matches rank first; keep the returned order and review any score threshold. Partly filled search indexes are no longer repaired by themselves: rebuild one with `POST /_emdash/api/search/rebuild` as an Admin, header `X-EmDash-Request: 1`, body `{"collection":"<name>"}`. Built-in search still needs SQLite or D1.
 - **Comment dates** use the site's Timezone setting, or UTC, instead of the server's timezone.
 - **Sitemap** `lastmod` moves when SEO metadata changes, and exact redirects now match paths with file extensions such as `/old/report.pdf`.
@@ -49,6 +49,8 @@ Update a site's editor guide where it mentions distraction-free mode; see [edito
 Unpublish and bulk status changes open a confirmation dialog, and Publish and plugin Uninstall dialogs no longer close on an outside click. Tests that clicked through these need the extra confirmation.
 
 ## Reviewed adapters
+
+Baseline code that overlaps EmDash behaviour is listed in [the overlap register](emdash-overlap.md). Reviewing it against 1.6 after the release found the media caching above, fixed in the release after 0.8.0.
 
 `scripts/emdash-reviewed.mjs` now names 1.6.0. For 1.6.0 the reviewed facts are: the table catalog is unchanged from 1.5.0 (`users` gains a column, which the catalog does not record); `setup/admin/verify` keeps the session, setup-complete, state and nonce guard order, and only the session start after a successful passkey changed; `export-seed` is unchanged; and multipart `POST /_emdash/api/media` and `GET /_emdash/api/media/{id}` are unchanged, with media deletes now purging the route cache and file reads now cached. The hosted-auth probe accepts 1.5.0 as well, because its route did not change between the two. Snapshots, ledgers and receipts written by a 1.5.0 adapter carry that identity and are refused by the 1.6.0 adapter; regenerate them rather than editing the identity.
 

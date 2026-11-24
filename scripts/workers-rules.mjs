@@ -49,9 +49,10 @@ export function retainsPreviousAssets(dir) {
   return Object.entries(scripts).some(([name, command]) => /^(?:deploy|build:worker|build:cloudflare|release)/.test(name) && /assets:retain|retain-build-assets/.test(String(command)));
 }
 
-// @emdash-cms/* packages a site imports from its own source without declaring them. npm only hoists
-// a dependency's dependencies by accident: EmDash 1.5 nests @emdash-cms/admin under emdash, and a
-// site importing it undeclared stopped type-checking and building.
+// @emdash-cms/* packages, and @cloudflare/kumo, that a site imports from its own source without declaring
+// them. npm only hoists a dependency's dependencies by accident: EmDash 1.5 nests @emdash-cms/admin under
+// emdash, and a site importing it undeclared stopped type-checking and building. Kumo is pinned exactly by
+// EmDash's admin and blocks (2.19.0 with EmDash 1.6), and plugin admin pages import it.
 export function undeclaredEmDashImports(dir, declared) {
   const found = new Map();
   const walk = (current, depth) => {
@@ -62,7 +63,7 @@ export function undeclaredEmDashImports(dir, declared) {
       if (entry.isDirectory()) { if (!['node_modules', '.astro', 'dist'].includes(entry.name)) walk(full, depth + 1); continue; }
       if (!/\.(?:m?[jt]sx?|astro)$/.test(entry.name)) continue;
       const text = fs.readFileSync(full, 'utf8');
-      for (const match of text.matchAll(/(?:from\s+|import\s*\(\s*|import\s+)["'](@emdash-cms\/[a-z0-9-]+)(?:\/[^"']*)?["']/g)) {
+      for (const match of text.matchAll(/(?:from\s+|import\s*\(\s*|import\s+)["'](@emdash-cms\/[a-z0-9-]+|@cloudflare\/kumo)(?:\/[^"']*)?["']/g)) {
         if (!declared.has(match[1]) && !found.has(match[1])) found.set(match[1], path.relative(dir, full).replaceAll('\\', '/'));
       }
     }
