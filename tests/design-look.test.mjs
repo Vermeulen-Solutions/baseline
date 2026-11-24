@@ -81,6 +81,19 @@ test('a second look keeps the lines of the screens that did not change and empti
   assert.match(assessLook(again)[0], /screen 2 has no line yet/);
 });
 
+test('a page that ends above its measured height is looked at once at its foot, not repeated', async () => {
+  const { screenStep } = await import('../scripts/design-look.mjs');
+  // The page measured 9000px; with reduced motion its pinned scene lets go and it ends at 7200px on an 860px screen.
+  assert.deepEqual(screenStep(0, 0, -1), { at: 0, foot: false });
+  assert.deepEqual(screenStep(5536, 5536, 4844), { at: 5536, foot: false });
+  // Asked for 6920, the browser stops at 6340: that screen is the foot, taken once.
+  assert.deepEqual(screenStep(6920, 6340, 6228), { at: 6340, foot: true });
+  // Asked further, the page stands where it stood: no more screens.
+  assert.deepEqual(screenStep(7612, 6340, 6340), { stop: true });
+  // A sub-pixel difference between what was asked and reached is not a foot.
+  assert.equal(screenStep(1384, 1383, 692).foot, false);
+});
+
 test('a long page is looked at to its foot, and a page past the limit says what is left', async () => {
   const { sameScreen, MARK_SIDE } = await import('../scripts/design-look.mjs');
   const phone = SCREENS[390];

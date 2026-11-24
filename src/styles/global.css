@@ -138,6 +138,11 @@
 }
 
 @layer base {
+	/* The hidden attribute always hides: a piece's own display (grid, flex) must not bring a hidden row back. */
+	[hidden]:not([hidden="until-found"]) {
+		display: none !important;
+	}
+
 	:root {
 		color-scheme: light;
 		interpolate-size: allow-keywords;

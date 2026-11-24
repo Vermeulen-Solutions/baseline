@@ -31,13 +31,14 @@ Baseline supports two execution models across all surfaces:
 - **Single-Agent Model:** The same agent iterates concepts on the canvas and translates the approved direction into Astro.
 - **Multi-Agent Model (Agent Switch):** A specialized design agent receives the [portable design brief](../.agents/skills/penpot-site-design/assets/design-brief.md), iterates on the canvas, and passes the [design handoff](../.agents/skills/penpot-site-design/assets/design-handoff.md) to an implementation agent that translates the design into Astro primitives and routes.
 
-The core workflow proceeds through five focused steps:
+The core workflow proceeds through six focused steps:
 
 1. **Research and judge references (required):** Follow [reference research](../.agents/skills/site-art-direction/references/reference-research.md): find at least eight candidates among real websites, UX flows, prompt libraries, community systems and OpenDesign public/local systems and templates, capture and score each on one card, select at least three above the bar, and score the concepts on the same card. Read public/local files without the app, MCP or a provider menu.
 2. **Adapt selected references:** Run `npm run design:prompt-check -- <file>` on textual instructions and follow [external reference adaptation](../.agents/skills/site-art-direction/references/external-prompt-adaptation.md): preserve structural intent, map roles, keep approved typography and require real proof. A source cannot select the surface or override the brief.
-3. **Iterate concepts on your chosen surface:** Explore visual directions for a representative page slice (hero, card, typography), get feedback, and select the final direction.
-4. **Establish the native foundation:** Pick an Aesthetic Lane, write the Art Direction Record in `AGENTS.md`, set up tokens in `src/styles/global.css` via `npm run design:tokens`, and verify on `/_styleguide`.
-5. **Source reusable components only after direction selection (optional):** If native primitives leave a real gap, treat a `21st.dev` or other registry blueprint as a candidate and transmute it through [component quarantine](../.agents/skills/astro-site-design/references/component-quarantine.md) on `/_styleguide`. Record source/licence and verify behavior; this is not reference discovery and cannot choose the direction.
+3. **Build the site's world from the client's own things (required for a new direction):** Follow [world building](../.agents/skills/site-art-direction/references/world-building.md): gather the client's photographs and pictures of the trade's real objects with `npm run design:world`, write an inventory of at least twelve things, and take from it one object per section, the surfaces, the type treatment, the named motions and one working feature that does the site's job. The site's material never comes from the references or from a list of styles.
+4. **Iterate concepts on your chosen surface:** Compare two or three structurally distinct directions side by side at desktop and phone width, held against the selected references, get feedback, and select the final direction.
+5. **Establish the native foundation:** Pick an Aesthetic Lane, write the Art Direction Record in `AGENTS.md`, set up tokens in `src/styles/global.css` via `npm run design:tokens`, and verify on `/_styleguide`.
+6. **Source reusable components only after direction selection (optional):** If native primitives leave a real gap, treat a `21st.dev` or other registry blueprint as a candidate and transmute it through [component quarantine](../.agents/skills/astro-site-design/references/component-quarantine.md) on `/_styleguide`. Record source/licence and verify behavior; this is not reference discovery and cannot choose the direction.
 
 See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md) and [AI Agent & Harness Configuration](agent-documentation.md) for tool configuration.
 
@@ -47,7 +48,7 @@ See [AI-Native Visual Design & DESIGN.md Interchange](design-interchange.md) and
 
 Before writing site-specific CSS or template markup, save an `## Art Direction Record` in `AGENTS.md`.
 
-The record must contain five specific elements:
+The record names the lane, the metaphor, the type, the token physics and the anti-patterns, as below. For a new direction it also carries a **World** block (the inventory, the sources by file, the objects, surfaces and named motions), a **Decisions** block (the easy version and ours for the look, the feature and the content), the references it is held to, and a **Motion Tier** line (`task`, `editorial` or `impression`, with the client's words that decide it). `npm run design:tokens -- --init-client --lane <lane>` writes the skeleton; [world building](../.agents/skills/site-art-direction/references/world-building.md) has the full form. The five core elements:
 
 ```markdown
 ## Art Direction Record
@@ -109,8 +110,14 @@ Explicitly defining what **not** to do is often more effective with AI assistant
 Baseline validates the required record and checks changed visual source against Git, subject to exact hash-bound infrastructure exceptions:
 
 ```sh
-# Verify the art direction record:
+# A small refinement of an accepted direction:
 npm run check:art-direction -- --require-record
+
+# A new site or a new direction, before Stage 5 (the judged references, the World and its sources):
+npm run check:art-direction -- --require-record --require-references
+
+# After the representative pages are built (each raised to its references):
+npm run check:art-direction -- --require-record --require-references --require-comparison
 ```
 
 - **In Local Development:** Run this command before implementing new templates or when onboarding a new AI assistant.
@@ -118,3 +125,16 @@ npm run check:art-direction -- --require-record
 - **Exceptions:** Pure infrastructure changes or starter maintenance can be registered as hash-bound exceptions in `audit/design-gate-exceptions.json`.
 
 Saving the record to `AGENTS.md` satisfies the gate for local development; a git commit is not required.
+
+---
+
+## 7. Looking at the Result
+
+A record and a passing gate say what was decided, not how the page looks. Four commands look at the built page, and the stages call for them (see [commands](commands.md)):
+
+- `npm run capture:routes` saves full-page pictures of each route at phone and desktop width.
+- `npm run design:look` cuts each page into screens and asks for one written line per screen: what is on it and what is wrong. The faults named are fixed, and `design:look -- --check` passes when every screen has its line.
+- `npm run design:sheet` puts a page beside its references on one sheet for the Stage 5 comparison pass.
+- `npm run audit:composition` reads the served build against the record: a bare page, a promised motion that never runs, text that collides or is cut. Its floor findings are fixed, not recorded.
+
+These are checks of a floor. They do not make a design good; the direction, the system and the first screen do, which is why a [start by your most capable model](../.agents/skills/new-site-workflow/references/start-and-build-out.md) is worth its cost.

@@ -165,16 +165,18 @@ export function assessComposition(model) {
   const findings = [];
   const sections = model.sections ?? [];
   const add = (code, message, detail = {}) => findings.push({ code, message, ...detail });
+  // Which sections a finding means: their place on the page and their heading, so the builder need not guess.
+  const named = (test) => { const hits = sections.map((s, i) => (test(s) ? `section ${i + 1}${s.heading ? ` ("${s.heading}")` : ''}` : null)).filter(Boolean); return hits.length ? ` They are: ${hits.join(', ')}.` : ''; };
   // A label is earned by a fact; one that only names its section is the reflex. Three of those is the finding.
   const kickers = sections.filter((s) => s.kicker && !s.kickerFact).length;
-  if (kickers >= 3) add('kicker-openings', `${kickers} sections open with a small label that only names the section. A label above a heading is earned by a fact the visitor needs: a date, an hour, a price, a count, a distance. Keep the labels that carry one. Remove the others, or give each the fact of its own section; a bare number (01, 02) is not a fact.`, { count: kickers });
+  if (kickers >= 3) add('kicker-openings', `${kickers} sections open with a small label that only names the section. A label above a heading is earned by a fact the visitor needs: a date, an hour, a price, a count, a distance. Keep the labels that carry one. Remove the others, or give each the fact of its own section; a bare number (01, 02) is not a fact.${named((s) => s.kicker && !s.kickerFact)}`, { count: kickers });
   // An accented phrase is earned once, in the page heading, or as the way every heading is set. In some headings and not others it is the reflex.
   const [accented, headings] = [model.accentHeadings ?? (model.accentWord ? 1 : 0), model.headings ?? 0];
   if (accented >= 2 && accented < Math.ceil(0.8 * headings)) add('accent-word', `${accented} of ${headings} headings set a word or phrase in italics ("${model.accentWord}") and the rest are set in one style. An accented phrase is earned in one of two ways: once, in the page heading, on the words the sentence turns on; or as the direction's way of setting every heading, written in the Art Direction Record. Choose one: keep the page heading's and set the others in one style, or carry it through every heading.`);
   const splits = sections.filter((s) => s.split).length;
-  if (splits >= 3) add('split-openings', `${splits} sections open with the heading on one side and a lead beside it. Vary how sections open: a heading alone, a heading in the picture, or a list that explains itself.`, { count: splits });
+  if (splits >= 3) add('split-openings', `${splits} sections open with the heading on one side and a lead beside it. Vary how sections open: a heading alone, a heading in the picture, or a list that explains itself.${named((s) => s.split)}`, { count: splits });
   const grids = sections.filter((s) => s.cardGrid).length;
-  if (grids >= 2) add('card-grids', `${grids} sections are grids of equal boxed items. Set lists as the objects they are (a ruled index, a programme, a register) and keep at most one card grid per page.`, { count: grids });
+  if (grids >= 2) add('card-grids', `${grids} sections are grids of equal boxed items. Set lists as the objects they are (a ruled index, a programme, a register) and keep at most one card grid per page.${named((s) => s.cardGrid)}`, { count: grids });
   for (let i = 1; i < sections.length; i++) {
     const a = sectionSignature(sections[i - 1]);
     const [opening, kind] = a.split('|');
