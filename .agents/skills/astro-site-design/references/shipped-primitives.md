@@ -32,7 +32,7 @@ These are chosen at Stage 4, from the Art Direction Record's governing idea and 
 | The owner's photographs are mixed phone pictures of different ages and light | Choose the three best for the large moments, one `data-tone` treatment on every photograph, tight crops with `focus` | Every photograph small, in the same frame, to hide its quality |
 | Several sections are built round photographs, or a gallery is a grid of equal frames | `PhotoSet`: `pair`, an offset `trio` of three sizes, a `strip` of square details, or `tallSmall` beside the section's words; a different one in each photographed section | Words beside one photograph in section after section; every picture the same size |
 | A picture or ground should arrive rather than appear | `data-reveal="frame"`, `data-scroll="open"`, `data-scroll="rise"` below the first screen | A fade-up on every block |
-| Pages should feel like one object moving, not separate documents blinking | `SiteShell transitionStyle` (`lift`, `curtain`, `wipe`) with `data-arrive` on the heading and lead, and `heroMedia` on detail pages | A router or animation library added for one effect |
+| Pages should feel like one object moving, not separate documents blinking | `SiteShell transitionStyle` (`lift`, `curtain`, `wipe`, `iris`, `blinds`, `slide`, `stack`) with `data-arrive` on the heading and lead; on list and detail pages, the card's parts marked to travel (`[data-vt-media]`, `[data-vt-title]`, `data-vt-part="date"`) and their places on the detail page (`heroMedia`, `[data-vt-hero-title]`, `data-vt-hero-part="date"`) | A router or animation library added for one effect |
 
 Rules that keep them honest:
 

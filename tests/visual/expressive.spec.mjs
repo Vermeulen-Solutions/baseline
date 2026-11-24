@@ -59,7 +59,11 @@ test('behavior expressive cross-document transition: direction, picked-row morph
     await expect.poll(() => page.evaluate(() => window.__reveal.length)).toBeGreaterThan(0);
     reveal = await page.evaluate(() => window.__reveal.at(-1));
   }
-  expect(reveal).toEqual({ transition: true, direction: 'forward', hero: 'hero-media', arrive: ['match-element', 'match-element', 'match-element'] });
+  expect(reveal).toMatchObject({ transition: true, direction: 'forward', hero: 'hero-media' });
+  // Cross-document arrivals get names of their own from the head script (match-element never pairs
+  // across documents, and Safari ignores it there); an arriving element that is a hero part keeps that name.
+  expect(reveal.arrive.length).toBe(3);
+  for (const name of reveal.arrive) expect(name).toMatch(/^(arrive-\d+|hero-[a-z][a-z0-9-]*)$/);
   await expect.poll(() => page.evaluate(() => document.documentElement.hasAttribute('data-vt-direction'))).toBe(false);
   await expect.poll(() => page.locator('[data-vt-hero-media]').evaluate((el) => el.style.viewTransitionName)).toBe('');
 

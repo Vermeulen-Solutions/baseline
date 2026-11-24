@@ -11,6 +11,14 @@ test('record:motion validates its arguments and refuses converted routes', () =>
   assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--out', 'x.gif', '--css', 'missing.css']), /--css file not found/);
   const options = parseArgs(['--base', 'http://127.0.0.1:4321', '--out', 'clip.gif', '--speed', '4', '--gif-width', '640', '--click', '[data-pause]']);
   assert.equal(options.route, '/'); assert.equal(options.speed, 4); assert.equal(options.gifWidth, 640); assert.deepEqual(options.click, ['[data-pause]']);
+  assert.equal(options.navigate, null); assert.equal(options.back, false);
+});
+
+test('record:motion can film a page change, and back, from a link the clip clicks', () => {
+  const options = parseArgs(['--base', 'http://127.0.0.1:4321', '--out', 'change.gif', '--route', '/works/', '--navigate', '.card a', '--back']);
+  assert.equal(options.navigate, '.card a');
+  assert.equal(options.back, true);
+  assert.throws(() => parseArgs(['--base', 'http://127.0.0.1:4321', '--out', 'x.gif', '--back']), /--back needs --navigate/);
 });
 
 test('GIF conversion uses a generated palette at the requested frame rate and width', () => {

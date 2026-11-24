@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import { getLocaleDirection } from '../lib/locale';
 import { speculationRules, type PrefetchEagerness } from '../lib/speculation-rules';
-import { pageTransitionScript } from '../lib/page-transition-script';
+import { pageTransitionScript, TRANSITION_STYLES, type TransitionStyle } from '../lib/page-transition-script';
 
 interface Props {
   title: string;
@@ -36,18 +36,24 @@ interface Props {
   /**
    * Opt-in page-transition style from src/styles/expressive.css: 'fade' keeps the crossfade,
    * 'lift' steps the old page back and lifts the new one in, 'curtain' and 'wipe' uncover the new
-   * page (from below or from the side, reversed going back). Any value also turns on [data-arrive]
-   * arrival choreography, and with cross-document transitions a small head script that sets the
-   * direction and morphs a picked card's media into [data-vt-hero-media]. Omitted changes nothing.
+   * page (from below or from the side, reversed going back), 'iris' opens it as a circle from the
+   * point clicked, 'blinds' in six strips, 'slide' slides it over the old one from the side and
+   * 'stack' lays it over the old one from below. Any value also turns on [data-arrive] arrival
+   * choreography, and with cross-document transitions a small head script that sets the direction
+   * and the click point and morphs a picked card's parts into the detail page's hero parts
+   * (src/lib/page-transition-script.ts). Omitted changes nothing.
    */
-  transitionStyle?: 'fade' | 'lift' | 'curtain' | 'wipe';
+  transitionStyle?: TransitionStyle;
 }
 
 const { title, description, canonical, metadataOwner = 'shell', lang = 'en', dir, skipLinkLabel = 'Skip to content', spacingPolicy = 'legacy', sectionJoins, surface, darkReaderLock = false, pageTransitions = 'none', prefetch = 'off', transitionStyle: rawTransitionStyle } = Astro.props;
 const resolvedDir = dir ?? getLocaleDirection(lang);
 const prefetchRules = speculationRules(prefetch);
-const transitionStyle = rawTransitionStyle === 'fade' || rawTransitionStyle === 'lift' || rawTransitionStyle === 'curtain' || rawTransitionStyle === 'wipe' ? rawTransitionStyle : undefined;
+const transitionStyle = TRANSITION_STYLES.includes(rawTransitionStyle as TransitionStyle) ? rawTransitionStyle : undefined;
 const transitionScript = transitionStyle && pageTransitions === 'cross-document' ? pageTransitionScript() : undefined;
+// The client-router script (warming, morphs, direction, scroll and focus under <ClientRouter />) is about
+// 30 KB of inline script. A cross-document site cannot have a client router, so it never ships there.
+const routerSupport = pageTransitions !== 'cross-document';
 ---
 <!doctype html>
 <html
@@ -73,11 +79,14 @@ const transitionScript = transitionStyle && pageTransitions === 'cross-document'
     {metadataOwner === 'shell' && canonical && <link rel="canonical" href={canonical} />}
     {prefetchRules && <script type="speculationrules" is:inline set:html={prefetchRules}></script>}
     <script>
-      import { swapFunctions } from 'astro:transitions/client';
       import { initThemeController } from '../lib/theme';
       if (typeof window !== 'undefined') {
-        Object.assign(window, { __astro_swap: swapFunctions });
         initThemeController();
+        // Astro's swap helpers serve only the client router: loaded only where <ClientRouter /> is on the
+        // page, so a cross-document site does not download them. The router script falls back without them.
+        if (document.querySelector('meta[name="astro-view-transitions-enabled"]')) {
+          import('astro:transitions/client').then(({ swapFunctions }) => Object.assign(window, { __astro_swap: swapFunctions })).catch(() => {});
+        }
       }
     </script>
     {import.meta.env.DEV && (
@@ -147,651 +156,9 @@ const transitionScript = transitionStyle && pageTransitions === 'cross-document'
           });
         };
         applySurface(document.documentElement);
-        let vtTimer = 0;
-        let savedScroll = null;
-        let activeMorphCard = null;
-        let activeNavToken = 0;
-        let activePreparedNavToken = 0;
-        let activeTransitionPending = false;
-        let activeDirection = null;
-        let currentViewTransition = null;
-        let currentAssignedElements = [];
-        let inFlightWarmAbort = null;
-        let hoverTimer = 0;
-        const escapeSelector = (s) => (typeof CSS !== 'undefined' && typeof CSS.escape === 'function' ? CSS.escape(s) : s.replace(/([^\w-])/g, '\\$1'));
-        const clearDirection = () => {
-          document.documentElement.removeAttribute('data-vt-direction');
-          activeDirection = null;
-        };
-
-        // Swap fallback helpers & media reification
-        const reifyMediaElements = (root, liveMedia) => {
-          for (const media of root.querySelectorAll('video, audio')) {
-            if (liveMedia && liveMedia.has(media)) continue;
-            const fresh = document.createElement(media.localName);
-            for (const attr of media.attributes) {
-              fresh.setAttribute(attr.name, attr.value);
-            }
-            fresh.innerHTML = media.innerHTML;
-            if (fresh.hasAttribute('muted')) fresh.muted = true;
-            media.replaceWith(fresh);
-          }
-        };
-
-        const attachShadowRoots = (root) => {
-          root.querySelectorAll('template[shadowrootmode]').forEach((template) => {
-            const mode = template.getAttribute('shadowrootmode');
-            const parent = template.parentNode;
-            if ((mode === 'closed' || mode === 'open') && parent instanceof HTMLElement) {
-              if (parent.shadowRoot) {
-                template.remove();
-                return;
-              }
-              const shadowRoot = parent.attachShadow({ mode });
-              shadowRoot.appendChild(template.content);
-              template.remove();
-              attachShadowRoots(shadowRoot);
-            }
-          });
-        };
-
-        const deselectScriptsFallback = (doc) => {
-          for (const s of doc.scripts) {
-            if (!s.hasAttribute('data-astro-rerun')) {
-              s.dataset.astroExec = '';
-            }
-          }
-        };
-
-        const swapRootAttributesFallback = (newDoc) => {
-          const nonOverridable = ['data-astro-transition', 'data-astro-transition-fallback'];
-          const root = document.documentElement;
-          const preserved = [...root.attributes].filter(({ name }) => {
-            root.removeAttribute(name);
-            return nonOverridable.includes(name);
-          });
-          [...newDoc.documentElement.attributes, ...preserved].forEach(({ name, value }) => {
-            root.setAttribute(name, value);
-          });
-        };
-
-        const swapHeadElementsFallback = (newDoc) => {
-          if (newDoc.title) {
-            document.title = newDoc.title;
-          }
-          const PERSIST_ATTR = 'data-astro-transition-persist';
-          const isPersisted = (el) => {
-            const id = el.getAttribute(PERSIST_ATTR);
-            if (id && newDoc.head.querySelector(`[${PERSIST_ATTR}="${escapeSelector(id)}"]`)) return true;
-            if (el.matches('link[rel=stylesheet]')) {
-              const href = el.getAttribute('href');
-              return Boolean(href && newDoc.head.querySelector(`link[rel=stylesheet][href="${escapeSelector(href)}"]`));
-            }
-            if (el.tagName === 'STYLE' && el.textContent) {
-              for (const s of newDoc.head.querySelectorAll('style')) {
-                if (s.textContent === el.textContent) return true;
-              }
-            }
-            if (el.matches('link[rel=preload][as=font]')) {
-              const href = el.getAttribute('href');
-              return Boolean(href && newDoc.head.querySelector(`link[rel=preload][as=font][href="${escapeSelector(href)}"]`));
-            }
-            return false;
-          };
-
-          for (const el of Array.from(document.head.children)) {
-            if (isPersisted(el)) {
-              const id = el.getAttribute(PERSIST_ATTR);
-              const match = id
-                ? newDoc.head.querySelector(`[${PERSIST_ATTR}="${escapeSelector(id)}"]`)
-                : (el.matches('link[rel=stylesheet]')
-                  ? newDoc.head.querySelector(`link[rel=stylesheet][href="${escapeSelector(el.getAttribute('href'))}"]`)
-                  : null);
-              match?.remove();
-            } else {
-              el.remove();
-            }
-          }
-
-          for (const child of Array.from(newDoc.head.childNodes)) {
-            if (child.nodeType === 1 || child.nodeType === 8) {
-              document.head.appendChild(document.adoptNode(child));
-            }
-          }
-        };
-
-        const saveFocusFallback = () => {
-          const activeEl = document.activeElement;
-          if (activeEl?.closest?.('[data-astro-transition-persist], [data-vt-persist]')) {
-            if (activeEl instanceof HTMLInputElement || activeEl instanceof HTMLTextAreaElement) {
-              const start = activeEl.selectionStart;
-              const end = activeEl.selectionEnd;
-              return () => {
-                activeEl.focus();
-                if (typeof start === 'number') activeEl.selectionStart = start;
-                if (typeof end === 'number') activeEl.selectionEnd = end;
-              };
-            }
-            return () => activeEl.focus();
-          }
-          return () => {};
-        };
-        const MAX_WARMED = 30;
-        const warmedPages = new Map();
-        const warmedImages = new Map();
-        const warmImage = (src, srcset, sizes) => {
-          const key = srcset || src;
-          if (!key) return Promise.resolve();
-          const existing = warmedImages.get(key);
-          if (existing) return existing;
-          const promise = new Promise((resolve) => {
-            const img = new Image();
-            img.decoding = 'async';
-            if (sizes) img.sizes = sizes;
-            if (srcset) img.srcset = srcset;
-            if (src) img.src = src;
-            const done = () => resolve();
-            if (typeof img.decode === 'function') {
-              img.decode().then(done, done);
-            } else {
-              img.onload = done;
-              img.onerror = done;
-            }
-          });
-          if (warmedImages.size >= MAX_WARMED) {
-            const firstKey = warmedImages.keys().next().value;
-            if (firstKey) warmedImages.delete(firstKey);
-          }
-          warmedImages.set(key, promise);
-          return promise;
-        };
-        const warmDocumentImages = (doc) => {
-          const imgs = Array.from(doc.querySelectorAll('img[src], img[srcset]')).slice(0, 8);
-          return Promise.all(
-            imgs.map((img) =>
-              warmImage(
-                img.getAttribute('src') || '',
-                img.getAttribute('srcset') || '',
-                img.getAttribute('sizes') || ''
-              )
-            )
-          );
-        };
-        const isPrefetchEligible = (target, url) => {
-          if (!target || !(target instanceof HTMLAnchorElement)) return false;
-          if (target.target && target.target !== '_self') return false;
-          if (target.hasAttribute('download') || target.hasAttribute('data-astro-reload')) return false;
-          if (target.getAttribute('data-astro-prefetch') === 'false' || target.closest('[data-astro-prefetch="false"]')) return false;
-          const conn = navigator['connection'];
-          if (conn && (conn.saveData === true || /2g/.test(conn.effectiveType || ''))) return false;
-          if (url.origin !== location.origin || url.search || url.hash) return false;
-          if (url.pathname.startsWith('/_') || url.pathname.startsWith('/api/') || url.pathname.startsWith('/admin')) return false;
-          if (url.pathname === location.pathname) return false;
-          return true;
-        };
-        const warmPage = (href) => {
-          if (!document.querySelector('meta[name="astro-view-transitions-enabled"]')) return;
-          if (new URLSearchParams(location.search).has('_edit') || document.getElementById('emdash-toolbar')) return;
-          if (warmedPages.has(href)) return;
-          if (inFlightWarmAbort) {
-            inFlightWarmAbort.abort();
-          }
-          const abortController = new AbortController();
-          inFlightWarmAbort = abortController;
-          const promise = fetch(href, { credentials: 'same-origin', signal: abortController.signal, priority: 'low' })
-            .then((res) => (res.ok ? res.text() : ''))
-            .then((html) => {
-              if (!html || abortController.signal.aborted) return;
-              const doc = new DOMParser().parseFromString(html, 'text/html');
-              return warmDocumentImages(doc);
-            })
-            .catch(() => {})
-            .finally(() => {
-              if (inFlightWarmAbort === abortController) {
-                inFlightWarmAbort = null;
-              }
-            });
-          if (warmedPages.size >= MAX_WARMED) {
-            const firstKey = warmedPages.keys().next().value;
-            if (firstKey) warmedPages.delete(firstKey);
-          }
-          warmedPages.set(href, promise);
-        };
-        document.addEventListener('pointerover', (event) => {
-          const target = event.target instanceof Element ? event.target.closest('a[href]') : null;
-          if (!target || !(target instanceof HTMLAnchorElement)) return;
-          try {
-            const url = new URL(target.href, location.href);
-            if (!isPrefetchEligible(target, url)) return;
-            clearTimeout(hoverTimer);
-            hoverTimer = window.setTimeout(() => warmPage(url.href), 20);
-          } catch {}
-        }, { passive: true });
-        document.addEventListener('pointerout', (event) => {
-          const target = event.target instanceof Element ? event.target.closest('a[href]') : null;
-          if (target) {
-            clearTimeout(hoverTimer);
-          }
-        }, { passive: true });
-        const clearAssignedElements = () => {
-          for (const item of currentAssignedElements) {
-            if (item.element instanceof HTMLElement) {
-              item.element.style.viewTransitionName = item.prevValue;
-            }
-          }
-          currentAssignedElements = [];
-          activeMorphCard = null;
-        };
-        const assignTransitionName = (el, name) => {
-          if (el instanceof HTMLElement && !el.style.viewTransitionName) {
-            currentAssignedElements.push({ element: el, prevValue: el.style.viewTransitionName });
-            el.style.viewTransitionName = name;
-          }
-        };
-        const clearVtLoading = () => {
-          clearTimeout(vtTimer);
-          document.documentElement.removeAttribute('data-vt-loading');
-        };
-        const cleanupMorphNames = () => {
-          clearAssignedElements();
-          document.querySelectorAll('.card-media, [data-vt-media], .card-title, [data-vt-title], [data-vt-hero-media], [data-vt-hero-title], .article-stack img, .content--feature img, #post-title').forEach((el) => {
-            if (el instanceof HTMLElement && (el.style.viewTransitionName === 'hero-media' || el.style.viewTransitionName === 'hero-title')) {
-              el.style.viewTransitionName = '';
-            }
-          });
-        };
-        document.addEventListener('astro:before-preparation', (event) => {
-          const navToken = ++activeNavToken;
-          const signal = event && 'signal' in event ? event['signal'] : undefined;
-
-          // Cancel any pending hover warming or in-flight warmup fetches so the active navigation has full priority
-          clearTimeout(hoverTimer);
-          if (inFlightWarmAbort) {
-            inFlightWarmAbort.abort();
-            inFlightWarmAbort = null;
-          }
-
-          // Superseding preparation must release existing assignments immediately so two cards never collide
-          clearAssignedElements();
-
-          // Bind signal abort handler to cleanly tear down loading and morph state if navigation is aborted
-          if (signal) {
-            signal.addEventListener('abort', () => {
-              if (navToken === activeNavToken) {
-                clearVtLoading();
-                cleanupMorphNames();
-                clearDirection();
-                savedScroll = null;
-              }
-            }, { once: true });
-          }
-
-          clearTimeout(vtTimer);
-          vtTimer = window.setTimeout(() => {
-            if (navToken === activeNavToken) {
-              document.documentElement.setAttribute('data-vt-loading', '');
-            }
-          }, 600);
-
-          // Derive NoScroll intent directly from the event's sourceElement or page declaration
-          const sourceEl = event && 'sourceElement' in event && event['sourceElement'] instanceof Element ? event['sourceElement'] : null;
-          const isNoScroll = Boolean(
-            sourceEl?.hasAttribute('data-vt-noscroll') ||
-            sourceEl?.closest('[data-vt-noscroll]') ||
-            document.querySelector('meta[name="vt-noscroll"], [data-vt-noscroll-page]')
-          );
-          savedScroll = isNoScroll ? { left: window.scrollX, top: window.scrollY } : null;
-
-          // Derive active card morphing intent directly from the source element
-          const card = sourceEl?.closest('[data-vt-card], .card.card--clickable, .card');
-          activeMorphCard = card && card.querySelector('.card-media, [data-vt-media]') ? card : null;
-
-          // Derive navigation direction (TurnSignal pattern):
-          // History traversal (popstate / back-forward buttons) uses router direction.
-          // Push / replace navigation (link clicks, form submissions, navigate) uses anchor override, then path depth.
-          let direction = 'forward';
-          const isHistoryTraversal = Boolean(
-            event && 'navigationType' in event && event.navigationType === 'traverse'
-          );
-
-          if (isHistoryTraversal) {
-            direction = (event && 'direction' in event && (event.direction === 'back' || event.direction === 'backward'))
-              ? 'back'
-              : 'forward';
-          } else {
-            const overrideDir = sourceEl?.closest('[data-vt-direction]')?.getAttribute('data-vt-direction');
-            if (overrideDir === 'back' || overrideDir === 'backward') {
-              direction = 'back';
-            } else if (overrideDir === 'forward') {
-              direction = 'forward';
-            } else {
-              const fromUrl = event && 'from' in event && event.from ? new URL(event.from, location.href) : location;
-              const toUrl = event && 'to' in event && event.to ? new URL(event.to, fromUrl.href || location.href) : null;
-              if (toUrl && toUrl.origin === fromUrl.origin) {
-                const fromDepth = fromUrl.pathname.replace(/\/+$/, '').split('/').filter(Boolean).length;
-                const toDepth = toUrl.pathname.replace(/\/+$/, '').split('/').filter(Boolean).length;
-                if (toDepth < fromDepth) {
-                  direction = 'back';
-                } else if (toDepth > fromDepth) {
-                  direction = 'forward';
-                } else {
-                  direction = 'forward';
-                }
-              } else {
-                direction = 'forward';
-              }
-            }
-          }
-          activeDirection = direction;
-          document.documentElement.setAttribute('data-vt-direction', direction);
-
-          const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          let leavingHero = false;
-
-          if (!reducedMotion) {
-            if (activeMorphCard) {
-              const media = activeMorphCard.querySelector('.card-media, [data-vt-media]');
-              const title = activeMorphCard.querySelector('.card-title, [data-vt-title]');
-              assignTransitionName(media, 'hero-media');
-              assignTransitionName(title, 'hero-title');
-            } else {
-              const heroMedia = document.querySelector('[data-vt-hero-media], [data-vt-media], .article-stack img, .content--feature img');
-              const heroTitle = document.querySelector('[data-vt-hero-title], [data-vt-title], #post-title');
-              if (heroMedia instanceof HTMLElement && !heroMedia.style.viewTransitionName) {
-                assignTransitionName(heroMedia, 'hero-media');
-                leavingHero = true;
-              }
-              if (heroTitle instanceof HTMLElement && !heroTitle.style.viewTransitionName) {
-                assignTransitionName(heroTitle, 'hero-title');
-                leavingHero = true;
-              }
-            }
-          }
-
-          if (event && 'loader' in event && typeof event.loader === 'function') {
-            const originalLoader = event.loader;
-            event.loader = async () => {
-              if (signal?.aborted || navToken !== activeNavToken) return;
-              try {
-                await originalLoader();
-                if (signal?.aborted || navToken !== activeNavToken) return;
-
-                if ('newDocument' in event && event.newDocument) {
-                  if (!reducedMotion) {
-                    if (activeMorphCard) {
-                      const destMedia = event.newDocument.querySelector('[data-vt-hero-media], [data-vt-media], .article-stack img, .content--feature img');
-                      const destTitle = event.newDocument.querySelector('[data-vt-hero-title], [data-vt-title], #post-title');
-                      if (destMedia instanceof HTMLElement && !destMedia.style.viewTransitionName) {
-                        destMedia.style.viewTransitionName = 'hero-media';
-                      }
-                      if (destTitle instanceof HTMLElement && !destTitle.style.viewTransitionName) {
-                        destTitle.style.viewTransitionName = 'hero-title';
-                      }
-                    } else if (leavingHero) {
-                      const sourceUrl = event && 'from' in event && event.from ? event.from : location;
-                      const fromPath = (sourceUrl.pathname || '').replace(/\/+$/, '') || '/';
-                      const targetCard = event.newDocument.querySelector(
-                        `[data-vt-card] a[href="${fromPath}"], [data-vt-card] a[href="${fromPath}/"], ` +
-                        `a[href="${fromPath}"].card-link, a[href="${fromPath}/"].card-link, ` +
-                        `a[href="${fromPath}"].clickable-parent, a[href="${fromPath}/"].clickable-parent`
-                      )?.closest('[data-vt-card], .card');
-                      if (targetCard) {
-                        const cardMedia = targetCard.querySelector('.card-media, [data-vt-media]');
-                        const cardTitle = targetCard.querySelector('.card-title, [data-vt-title]');
-                        if (cardMedia instanceof HTMLElement && !cardMedia.style.viewTransitionName) {
-                          cardMedia.style.viewTransitionName = 'hero-media';
-                        }
-                        if (cardTitle instanceof HTMLElement && !cardTitle.style.viewTransitionName) {
-                          cardTitle.style.viewTransitionName = 'hero-title';
-                        }
-                      }
-                    }
-                  }
-                  await Promise.race([
-                    warmDocumentImages(event.newDocument),
-                    new Promise((resolve) => setTimeout(resolve, 80)),
-                  ]);
-                  if (signal?.aborted || navToken !== activeNavToken) {
-                    if (typeof event.preventDefault === 'function') event.preventDefault();
-                    return;
-                  }
-                  activePreparedNavToken = navToken;
-                }
-              } catch (err) {
-                if (navToken === activeNavToken) {
-                  clearVtLoading();
-                  cleanupMorphNames();
-                  clearDirection();
-                  savedScroll = null;
-                }
-                throw err;
-              }
-            };
-          }
-        });
-        document.addEventListener('astro:after-preparation', () => {
-          if (activePreparedNavToken === activeNavToken) {
-            clearVtLoading();
-          }
-        });
-        document.addEventListener('astro:before-swap', (event) => {
-          if (event && 'newDocument' in event && event.newDocument) {
-            applySurface(event.newDocument.documentElement);
-            if (activeDirection) {
-              event.newDocument.documentElement.setAttribute('data-vt-direction', activeDirection);
-            }
-          }
-
-          // Targeted Replacement Swap & Connected-DOM Persistent Element Handling
-          const newDoc = event && 'newDocument' in event ? event.newDocument : null;
-          if (newDoc && typeof event.swap === 'function') {
-            // Synchronize data-astro-transition-persist from data-vt-persist so native Astro swap recognizes it
-            document.querySelectorAll('[data-vt-persist]').forEach((el) => {
-              if (!el.hasAttribute('data-astro-transition-persist')) {
-                const val = el.getAttribute('data-vt-persist') || el.id || '';
-                if (val) el.setAttribute('data-astro-transition-persist', val);
-              }
-            });
-            newDoc.querySelectorAll('[data-vt-persist]').forEach((el) => {
-              if (!el.hasAttribute('data-astro-transition-persist')) {
-                const val = el.getAttribute('data-vt-persist') || el.id || '';
-                if (val) el.setAttribute('data-astro-transition-persist', val);
-              }
-            });
-
-            const allTargets = Array.from(document.querySelectorAll('[data-vt-replace]'));
-
-            if (allTargets.length > 0) {
-              const defaultSwap = event.swap;
-
-              // Validate pairing before mutation: handle outermost targets only
-              const outermostTargets = allTargets.filter((target) =>
-                !allTargets.some((other) => other !== target && other.contains(target))
-              );
-
-              let isPairingValid = outermostTargets.length > 0;
-              const pairs = [];
-              const matchedIncomingElements = new Set();
-              const matchedCurrentSelectors = new Set();
-
-              for (const currentEl of outermostTargets) {
-                const rawKey = currentEl.getAttribute('data-vt-replace')?.trim();
-                let selector;
-                if (rawKey) {
-                  selector = `[data-vt-replace="${escapeSelector(rawKey)}"]`;
-                } else if (currentEl.id) {
-                  selector = `#${escapeSelector(currentEl.id)}`;
-                } else {
-                  selector = `${currentEl.tagName.toLowerCase()}[data-vt-replace]`;
-                }
-
-                if (matchedCurrentSelectors.has(selector) || document.querySelectorAll(selector).length !== 1) {
-                  isPairingValid = false;
-                  break;
-                }
-                matchedCurrentSelectors.add(selector);
-
-                const incomingMatches = newDoc.querySelectorAll(selector);
-                if (incomingMatches.length !== 1) {
-                  isPairingValid = false;
-                  break;
-                }
-
-                const incomingEl = incomingMatches[0];
-                if (matchedIncomingElements.has(incomingEl)) {
-                  isPairingValid = false;
-                  break;
-                }
-                matchedIncomingElements.add(incomingEl);
-
-                pairs.push({ currentEl, incomingEl });
-              }
-
-              // Distinct incoming matches must not overlap (topology / ancestry validation)
-              if (isPairingValid) {
-                const incomingElements = pairs.map((p) => p.incomingEl);
-                for (let i = 0; i < incomingElements.length; i++) {
-                  for (let j = 0; j < incomingElements.length; j++) {
-                    if (i !== j && incomingElements[i].contains(incomingElements[j])) {
-                      isPairingValid = false;
-                      break;
-                    }
-                  }
-                  if (!isPairingValid) break;
-                }
-              }
-
-              if (isPairingValid && pairs.length > 0) {
-                event.swap = () => {
-                  const swapApi = (typeof window !== 'undefined' && window.__astro_swap) || null;
-
-                  // 1. Deselect scripts that should not re-run
-                  if (swapApi && typeof swapApi.deselectScripts === 'function') {
-                    swapApi.deselectScripts(newDoc);
-                  } else {
-                    deselectScriptsFallback(newDoc);
-                  }
-
-                  // 2. Synchronize root attributes (lang, class, data-surface, dir, etc.)
-                  if (swapApi && typeof swapApi.swapRootAttributes === 'function') {
-                    swapApi.swapRootAttributes(newDoc);
-                  } else {
-                    swapRootAttributesFallback(newDoc);
-                  }
-                  if (activeDirection) {
-                    document.documentElement.setAttribute('data-vt-direction', activeDirection);
-                  }
-                  applySurface(document.documentElement);
-
-                  // 3. Synchronize head elements (metadata, title, styles, stylesheets, font preloads)
-                  if (swapApi && typeof swapApi.swapHeadElements === 'function') {
-                    swapApi.swapHeadElements(newDoc);
-                  } else {
-                    swapHeadElementsFallback(newDoc);
-                  }
-
-                  // 4. Save focus if focused element is persisted
-                  let restoreFocus = () => {};
-                  if (swapApi && typeof swapApi.saveFocus === 'function') {
-                    restoreFocus = swapApi.saveFocus();
-                  } else {
-                    restoreFocus = saveFocusFallback();
-                  }
-
-                  // 5. Track live media right now before any DOM detachment
-                  const liveMedia = new Set(document.querySelectorAll('video, audio'));
-
-                  // 6. Connected-DOM persistent element handling inside replaced containers
-                  const docEl = document.documentElement;
-                  const moveBefore = typeof docEl.moveBefore === 'function' ? (p, n, c) => p.moveBefore(n, c) : null;
-                  const persistPairs = [];
-
-                  for (const { currentEl, incomingEl } of pairs) {
-                    const persistentInside = Array.from(
-                      currentEl.querySelectorAll('[data-astro-transition-persist], [data-vt-persist]')
-                    );
-                    for (const persistEl of persistentInside) {
-                      const key = persistEl.getAttribute('data-astro-transition-persist') || persistEl.getAttribute('data-vt-persist');
-                      const selector = key
-                        ? `[data-astro-transition-persist="${escapeSelector(key)}"], [data-vt-persist="${escapeSelector(key)}"]`
-                        : (persistEl.id ? `#${escapeSelector(persistEl.id)}` : null);
-                      if (!selector) continue;
-                      const targetInIncoming = incomingEl.querySelector(selector);
-                      if (targetInIncoming) {
-                        persistPairs.push({ persistEl, targetInIncoming });
-                        // Lift to documentElement so it stays connected to document and does not pause/reset playback
-                        if (moveBefore) {
-                          moveBefore(docEl, persistEl, null);
-                        } else {
-                          docEl.appendChild(persistEl);
-                        }
-                      }
-                    }
-
-                    // Swap the container in the live document
-                    currentEl.replaceWith(incomingEl);
-                  }
-
-                  // Move lifted persistent elements into incoming container at the position of their targets
-                  for (const { persistEl, targetInIncoming } of persistPairs) {
-                    if (moveBefore) {
-                      moveBefore(targetInIncoming.parentNode, persistEl, targetInIncoming);
-                      targetInIncoming.remove();
-                    } else {
-                      targetInIncoming.replaceWith(persistEl);
-                    }
-                  }
-
-                  // 7. Upgrade declarative shadow DOM and reify newly introduced media in incoming containers
-                  for (const { incomingEl } of pairs) {
-                    attachShadowRoots(incomingEl);
-                    reifyMediaElements(incomingEl, liveMedia);
-                  }
-
-                  // 8. Restore focus
-                  if (typeof restoreFocus === 'function') {
-                    restoreFocus();
-                  }
-                };
-              } else {
-                // If pairing is ambiguous or unsupported, safely fall back to defaultSwap
-                event.swap = defaultSwap;
-              }
-            }
-          }
-
-          const currentNav = activeNavToken;
-          const vt = event && 'viewTransition' in event ? event['viewTransition'] : null;
-          if (vt && typeof vt.finished?.finally === 'function') {
-            currentViewTransition = vt;
-            activeTransitionPending = true;
-            vt.finished.finally(() => {
-              if (currentViewTransition === vt) {
-                currentViewTransition = null;
-                if (currentNav === activeNavToken) {
-                  activeTransitionPending = false;
-                  cleanupMorphNames();
-                  clearDirection();
-                }
-              }
-            });
-          } else {
-            currentViewTransition = null;
-            activeTransitionPending = false;
-            if (currentNav === activeNavToken) {
-              cleanupMorphNames();
-              clearDirection();
-            }
-          }
-        });
-        document.addEventListener('astro:after-swap', () => {
-          clearVtLoading();
-          applySurface(document.documentElement);
-          if (savedScroll) {
-            window.scrollTo({ left: savedScroll.left, top: savedScroll.top, behavior: 'instant' });
-            savedScroll = null;
-          }
-        });
+        // The client-router script below (written only when a site uses <ClientRouter />) restyles the
+        // incoming document with the same function.
+        window.__baseline_applySurface = applySurface;
 
         // Sticky header state. `data-scrolled` flips on one 16px threshold and is paint-only: a size
         // change keyed to it moves the content below, scroll anchoring pulls scrollY back across the
@@ -821,30 +188,12 @@ const transitionScript = transitionStyle && pageTransitions === 'cross-document'
 
         window.addEventListener('pageshow', (event) => {
           if (event.persisted) {
-            clearVtLoading();
-            currentViewTransition = null;
-            activeTransitionPending = false;
-            cleanupMorphNames();
-            clearDirection();
             applySurface(document.documentElement);
             syncStickyHeader();
           }
         });
 
-        window.addEventListener('pagehide', () => {
-          clearTimeout(hoverTimer);
-          clearVtLoading();
-          if (inFlightWarmAbort) {
-            inFlightWarmAbort.abort();
-            inFlightWarmAbort = null;
-          }
-        });
-
         const initPage = () => {
-          if (!activeTransitionPending && !currentViewTransition) {
-            cleanupMorphNames();
-            clearDirection();
-          }
           syncStickyHeader();
           const currentSurface = document.documentElement.getAttribute('data-surface');
           document.querySelectorAll('[data-surface-toggle]').forEach((btn) => {
@@ -922,6 +271,687 @@ const transitionScript = transitionStyle && pageTransitions === 'cross-document'
         });
       })();
     </script>
+    {routerSupport && (
+      <script is:inline>
+        // Client-router support: navigation warming, card morphs, direction, scroll and focus for sites
+        // that add <ClientRouter /> (pageTransitions "none"). Cross-document sites never load it.
+        (() => {
+          const applySurface = (root = document.documentElement) => window.__baseline_applySurface?.(root);
+          let vtTimer = 0;
+          let savedScroll = null;
+          let activeMorphCard = null;
+          let activeNavToken = 0;
+          let activePreparedNavToken = 0;
+          let activeTransitionPending = false;
+          let activeDirection = null;
+          let currentViewTransition = null;
+          let currentAssignedElements = [];
+          let inFlightWarmAbort = null;
+          let hoverTimer = 0;
+          const escapeSelector = (s) => (typeof CSS !== 'undefined' && typeof CSS.escape === 'function' ? CSS.escape(s) : s.replace(/([^\w-])/g, '\\$1'));
+          const clearDirection = () => {
+            document.documentElement.removeAttribute('data-vt-direction');
+            activeDirection = null;
+          };
+
+          // Swap fallback helpers & media reification
+          const reifyMediaElements = (root, liveMedia) => {
+            for (const media of root.querySelectorAll('video, audio')) {
+              if (liveMedia && liveMedia.has(media)) continue;
+              const fresh = document.createElement(media.localName);
+              for (const attr of media.attributes) {
+                fresh.setAttribute(attr.name, attr.value);
+              }
+              fresh.innerHTML = media.innerHTML;
+              if (fresh.hasAttribute('muted')) fresh.muted = true;
+              media.replaceWith(fresh);
+            }
+          };
+
+          const attachShadowRoots = (root) => {
+            root.querySelectorAll('template[shadowrootmode]').forEach((template) => {
+              const mode = template.getAttribute('shadowrootmode');
+              const parent = template.parentNode;
+              if ((mode === 'closed' || mode === 'open') && parent instanceof HTMLElement) {
+                if (parent.shadowRoot) {
+                  template.remove();
+                  return;
+                }
+                const shadowRoot = parent.attachShadow({ mode });
+                shadowRoot.appendChild(template.content);
+                template.remove();
+                attachShadowRoots(shadowRoot);
+              }
+            });
+          };
+
+          const deselectScriptsFallback = (doc) => {
+            for (const s of doc.scripts) {
+              if (!s.hasAttribute('data-astro-rerun')) {
+                s.dataset.astroExec = '';
+              }
+            }
+          };
+
+          const swapRootAttributesFallback = (newDoc) => {
+            const nonOverridable = ['data-astro-transition', 'data-astro-transition-fallback'];
+            const root = document.documentElement;
+            const preserved = [...root.attributes].filter(({ name }) => {
+              root.removeAttribute(name);
+              return nonOverridable.includes(name);
+            });
+            [...newDoc.documentElement.attributes, ...preserved].forEach(({ name, value }) => {
+              root.setAttribute(name, value);
+            });
+          };
+
+          const swapHeadElementsFallback = (newDoc) => {
+            if (newDoc.title) {
+              document.title = newDoc.title;
+            }
+            const PERSIST_ATTR = 'data-astro-transition-persist';
+            const isPersisted = (el) => {
+              const id = el.getAttribute(PERSIST_ATTR);
+              if (id && newDoc.head.querySelector(`[${PERSIST_ATTR}="${escapeSelector(id)}"]`)) return true;
+              if (el.matches('link[rel=stylesheet]')) {
+                const href = el.getAttribute('href');
+                return Boolean(href && newDoc.head.querySelector(`link[rel=stylesheet][href="${escapeSelector(href)}"]`));
+              }
+              if (el.tagName === 'STYLE' && el.textContent) {
+                for (const s of newDoc.head.querySelectorAll('style')) {
+                  if (s.textContent === el.textContent) return true;
+                }
+              }
+              if (el.matches('link[rel=preload][as=font]')) {
+                const href = el.getAttribute('href');
+                return Boolean(href && newDoc.head.querySelector(`link[rel=preload][as=font][href="${escapeSelector(href)}"]`));
+              }
+              return false;
+            };
+
+            for (const el of Array.from(document.head.children)) {
+              if (isPersisted(el)) {
+                const id = el.getAttribute(PERSIST_ATTR);
+                const match = id
+                  ? newDoc.head.querySelector(`[${PERSIST_ATTR}="${escapeSelector(id)}"]`)
+                  : (el.matches('link[rel=stylesheet]')
+                    ? newDoc.head.querySelector(`link[rel=stylesheet][href="${escapeSelector(el.getAttribute('href'))}"]`)
+                    : null);
+                match?.remove();
+              } else {
+                el.remove();
+              }
+            }
+
+            for (const child of Array.from(newDoc.head.childNodes)) {
+              if (child.nodeType === 1 || child.nodeType === 8) {
+                document.head.appendChild(document.adoptNode(child));
+              }
+            }
+          };
+
+          const saveFocusFallback = () => {
+            const activeEl = document.activeElement;
+            if (activeEl?.closest?.('[data-astro-transition-persist], [data-vt-persist]')) {
+              if (activeEl instanceof HTMLInputElement || activeEl instanceof HTMLTextAreaElement) {
+                const start = activeEl.selectionStart;
+                const end = activeEl.selectionEnd;
+                return () => {
+                  activeEl.focus();
+                  if (typeof start === 'number') activeEl.selectionStart = start;
+                  if (typeof end === 'number') activeEl.selectionEnd = end;
+                };
+              }
+              return () => activeEl.focus();
+            }
+            return () => {};
+          };
+          const MAX_WARMED = 30;
+          const warmedPages = new Map();
+          const warmedImages = new Map();
+          const warmImage = (src, srcset, sizes) => {
+            const key = srcset || src;
+            if (!key) return Promise.resolve();
+            const existing = warmedImages.get(key);
+            if (existing) return existing;
+            const promise = new Promise((resolve) => {
+              const img = new Image();
+              img.decoding = 'async';
+              if (sizes) img.sizes = sizes;
+              if (srcset) img.srcset = srcset;
+              if (src) img.src = src;
+              const done = () => resolve();
+              if (typeof img.decode === 'function') {
+                img.decode().then(done, done);
+              } else {
+                img.onload = done;
+                img.onerror = done;
+              }
+            });
+            if (warmedImages.size >= MAX_WARMED) {
+              const firstKey = warmedImages.keys().next().value;
+              if (firstKey) warmedImages.delete(firstKey);
+            }
+            warmedImages.set(key, promise);
+            return promise;
+          };
+          const warmDocumentImages = (doc) => {
+            const imgs = Array.from(doc.querySelectorAll('img[src], img[srcset]')).slice(0, 8);
+            return Promise.all(
+              imgs.map((img) =>
+                warmImage(
+                  img.getAttribute('src') || '',
+                  img.getAttribute('srcset') || '',
+                  img.getAttribute('sizes') || ''
+                )
+              )
+            );
+          };
+          const isPrefetchEligible = (target, url) => {
+            if (!target || !(target instanceof HTMLAnchorElement)) return false;
+            if (target.target && target.target !== '_self') return false;
+            if (target.hasAttribute('download') || target.hasAttribute('data-astro-reload')) return false;
+            if (target.getAttribute('data-astro-prefetch') === 'false' || target.closest('[data-astro-prefetch="false"]')) return false;
+            const conn = navigator['connection'];
+            if (conn && (conn.saveData === true || /2g/.test(conn.effectiveType || ''))) return false;
+            if (url.origin !== location.origin || url.search || url.hash) return false;
+            if (url.pathname.startsWith('/_') || url.pathname.startsWith('/api/') || url.pathname.startsWith('/admin')) return false;
+            if (url.pathname === location.pathname) return false;
+            return true;
+          };
+          const warmPage = (href) => {
+            if (!document.querySelector('meta[name="astro-view-transitions-enabled"]')) return;
+            if (new URLSearchParams(location.search).has('_edit') || document.getElementById('emdash-toolbar')) return;
+            if (warmedPages.has(href)) return;
+            if (inFlightWarmAbort) {
+              inFlightWarmAbort.abort();
+            }
+            const abortController = new AbortController();
+            inFlightWarmAbort = abortController;
+            const promise = fetch(href, { credentials: 'same-origin', signal: abortController.signal, priority: 'low' })
+              .then((res) => (res.ok ? res.text() : ''))
+              .then((html) => {
+                if (!html || abortController.signal.aborted) return;
+                const doc = new DOMParser().parseFromString(html, 'text/html');
+                return warmDocumentImages(doc);
+              })
+              .catch(() => {})
+              .finally(() => {
+                if (inFlightWarmAbort === abortController) {
+                  inFlightWarmAbort = null;
+                }
+              });
+            if (warmedPages.size >= MAX_WARMED) {
+              const firstKey = warmedPages.keys().next().value;
+              if (firstKey) warmedPages.delete(firstKey);
+            }
+            warmedPages.set(href, promise);
+          };
+          document.addEventListener('pointerover', (event) => {
+            const target = event.target instanceof Element ? event.target.closest('a[href]') : null;
+            if (!target || !(target instanceof HTMLAnchorElement)) return;
+            try {
+              const url = new URL(target.href, location.href);
+              if (!isPrefetchEligible(target, url)) return;
+              clearTimeout(hoverTimer);
+              hoverTimer = window.setTimeout(() => warmPage(url.href), 20);
+            } catch {}
+          }, { passive: true });
+          document.addEventListener('pointerout', (event) => {
+            const target = event.target instanceof Element ? event.target.closest('a[href]') : null;
+            if (target) {
+              clearTimeout(hoverTimer);
+            }
+          }, { passive: true });
+          const clearAssignedElements = () => {
+            for (const item of currentAssignedElements) {
+              if (item.element instanceof HTMLElement) {
+                item.element.style.viewTransitionName = item.prevValue;
+              }
+            }
+            currentAssignedElements = [];
+            activeMorphCard = null;
+          };
+          const assignTransitionName = (el, name) => {
+            if (el instanceof HTMLElement && !el.style.viewTransitionName) {
+              currentAssignedElements.push({ element: el, prevValue: el.style.viewTransitionName });
+              el.style.viewTransitionName = name;
+            }
+          };
+          const clearVtLoading = () => {
+            clearTimeout(vtTimer);
+            document.documentElement.removeAttribute('data-vt-loading');
+          };
+          const cleanupMorphNames = () => {
+            clearAssignedElements();
+            document.querySelectorAll('.card-media, [data-vt-media], .card-title, [data-vt-title], [data-vt-hero-media], [data-vt-hero-title], .article-stack img, .content--feature img, #post-title').forEach((el) => {
+              if (el instanceof HTMLElement && (el.style.viewTransitionName === 'hero-media' || el.style.viewTransitionName === 'hero-title')) {
+                el.style.viewTransitionName = '';
+              }
+            });
+          };
+          document.addEventListener('astro:before-preparation', (event) => {
+            const navToken = ++activeNavToken;
+            const signal = event && 'signal' in event ? event['signal'] : undefined;
+
+            // Cancel any pending hover warming or in-flight warmup fetches so the active navigation has full priority
+            clearTimeout(hoverTimer);
+            if (inFlightWarmAbort) {
+              inFlightWarmAbort.abort();
+              inFlightWarmAbort = null;
+            }
+
+            // Superseding preparation must release existing assignments immediately so two cards never collide
+            clearAssignedElements();
+
+            // Bind signal abort handler to cleanly tear down loading and morph state if navigation is aborted
+            if (signal) {
+              signal.addEventListener('abort', () => {
+                if (navToken === activeNavToken) {
+                  clearVtLoading();
+                  cleanupMorphNames();
+                  clearDirection();
+                  savedScroll = null;
+                }
+              }, { once: true });
+            }
+
+            clearTimeout(vtTimer);
+            vtTimer = window.setTimeout(() => {
+              if (navToken === activeNavToken) {
+                document.documentElement.setAttribute('data-vt-loading', '');
+              }
+            }, 600);
+
+            // Derive NoScroll intent directly from the event's sourceElement or page declaration
+            const sourceEl = event && 'sourceElement' in event && event['sourceElement'] instanceof Element ? event['sourceElement'] : null;
+            const isNoScroll = Boolean(
+              sourceEl?.hasAttribute('data-vt-noscroll') ||
+              sourceEl?.closest('[data-vt-noscroll]') ||
+              document.querySelector('meta[name="vt-noscroll"], [data-vt-noscroll-page]')
+            );
+            savedScroll = isNoScroll ? { left: window.scrollX, top: window.scrollY } : null;
+
+            // Derive active card morphing intent directly from the source element
+            const card = sourceEl?.closest('[data-vt-card], .card.card--clickable, .card');
+            activeMorphCard = card && card.querySelector('.card-media, [data-vt-media]') ? card : null;
+
+            // Derive navigation direction (TurnSignal pattern):
+            // History traversal (popstate / back-forward buttons) uses router direction.
+            // Push / replace navigation (link clicks, form submissions, navigate) uses anchor override, then path depth.
+            let direction = 'forward';
+            const isHistoryTraversal = Boolean(
+              event && 'navigationType' in event && event.navigationType === 'traverse'
+            );
+
+            if (isHistoryTraversal) {
+              direction = (event && 'direction' in event && (event.direction === 'back' || event.direction === 'backward'))
+                ? 'back'
+                : 'forward';
+            } else {
+              const overrideDir = sourceEl?.closest('[data-vt-direction]')?.getAttribute('data-vt-direction');
+              if (overrideDir === 'back' || overrideDir === 'backward') {
+                direction = 'back';
+              } else if (overrideDir === 'forward') {
+                direction = 'forward';
+              } else {
+                const fromUrl = event && 'from' in event && event.from ? new URL(event.from, location.href) : location;
+                const toUrl = event && 'to' in event && event.to ? new URL(event.to, fromUrl.href || location.href) : null;
+                if (toUrl && toUrl.origin === fromUrl.origin) {
+                  const fromDepth = fromUrl.pathname.replace(/\/+$/, '').split('/').filter(Boolean).length;
+                  const toDepth = toUrl.pathname.replace(/\/+$/, '').split('/').filter(Boolean).length;
+                  if (toDepth < fromDepth) {
+                    direction = 'back';
+                  } else if (toDepth > fromDepth) {
+                    direction = 'forward';
+                  } else {
+                    direction = 'forward';
+                  }
+                } else {
+                  direction = 'forward';
+                }
+              }
+            }
+            activeDirection = direction;
+            document.documentElement.setAttribute('data-vt-direction', direction);
+
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            let leavingHero = false;
+
+            if (!reducedMotion) {
+              if (activeMorphCard) {
+                const media = activeMorphCard.querySelector('.card-media, [data-vt-media]');
+                const title = activeMorphCard.querySelector('.card-title, [data-vt-title]');
+                assignTransitionName(media, 'hero-media');
+                assignTransitionName(title, 'hero-title');
+              } else {
+                const heroMedia = document.querySelector('[data-vt-hero-media], [data-vt-media], .article-stack img, .content--feature img');
+                const heroTitle = document.querySelector('[data-vt-hero-title], [data-vt-title], #post-title');
+                if (heroMedia instanceof HTMLElement && !heroMedia.style.viewTransitionName) {
+                  assignTransitionName(heroMedia, 'hero-media');
+                  leavingHero = true;
+                }
+                if (heroTitle instanceof HTMLElement && !heroTitle.style.viewTransitionName) {
+                  assignTransitionName(heroTitle, 'hero-title');
+                  leavingHero = true;
+                }
+              }
+            }
+
+            if (event && 'loader' in event && typeof event.loader === 'function') {
+              const originalLoader = event.loader;
+              event.loader = async () => {
+                if (signal?.aborted || navToken !== activeNavToken) return;
+                try {
+                  await originalLoader();
+                  if (signal?.aborted || navToken !== activeNavToken) return;
+
+                  if ('newDocument' in event && event.newDocument) {
+                    if (!reducedMotion) {
+                      if (activeMorphCard) {
+                        const destMedia = event.newDocument.querySelector('[data-vt-hero-media], [data-vt-media], .article-stack img, .content--feature img');
+                        const destTitle = event.newDocument.querySelector('[data-vt-hero-title], [data-vt-title], #post-title');
+                        if (destMedia instanceof HTMLElement && !destMedia.style.viewTransitionName) {
+                          destMedia.style.viewTransitionName = 'hero-media';
+                        }
+                        if (destTitle instanceof HTMLElement && !destTitle.style.viewTransitionName) {
+                          destTitle.style.viewTransitionName = 'hero-title';
+                        }
+                      } else if (leavingHero) {
+                        const sourceUrl = event && 'from' in event && event.from ? event.from : location;
+                        const fromPath = (sourceUrl.pathname || '').replace(/\/+$/, '') || '/';
+                        const targetCard = event.newDocument.querySelector(
+                          `[data-vt-card] a[href="${fromPath}"], [data-vt-card] a[href="${fromPath}/"], ` +
+                          `a[href="${fromPath}"].card-link, a[href="${fromPath}/"].card-link, ` +
+                          `a[href="${fromPath}"].clickable-parent, a[href="${fromPath}/"].clickable-parent`
+                        )?.closest('[data-vt-card], .card');
+                        if (targetCard) {
+                          const cardMedia = targetCard.querySelector('.card-media, [data-vt-media]');
+                          const cardTitle = targetCard.querySelector('.card-title, [data-vt-title]');
+                          if (cardMedia instanceof HTMLElement && !cardMedia.style.viewTransitionName) {
+                            cardMedia.style.viewTransitionName = 'hero-media';
+                          }
+                          if (cardTitle instanceof HTMLElement && !cardTitle.style.viewTransitionName) {
+                            cardTitle.style.viewTransitionName = 'hero-title';
+                          }
+                        }
+                      }
+                    }
+                    await Promise.race([
+                      warmDocumentImages(event.newDocument),
+                      new Promise((resolve) => setTimeout(resolve, 80)),
+                    ]);
+                    if (signal?.aborted || navToken !== activeNavToken) {
+                      if (typeof event.preventDefault === 'function') event.preventDefault();
+                      return;
+                    }
+                    activePreparedNavToken = navToken;
+                  }
+                } catch (err) {
+                  if (navToken === activeNavToken) {
+                    clearVtLoading();
+                    cleanupMorphNames();
+                    clearDirection();
+                    savedScroll = null;
+                  }
+                  throw err;
+                }
+              };
+            }
+          });
+          document.addEventListener('astro:after-preparation', () => {
+            if (activePreparedNavToken === activeNavToken) {
+              clearVtLoading();
+            }
+          });
+          document.addEventListener('astro:before-swap', (event) => {
+            if (event && 'newDocument' in event && event.newDocument) {
+              applySurface(event.newDocument.documentElement);
+              if (activeDirection) {
+                event.newDocument.documentElement.setAttribute('data-vt-direction', activeDirection);
+              }
+            }
+
+            // Targeted Replacement Swap & Connected-DOM Persistent Element Handling
+            const newDoc = event && 'newDocument' in event ? event.newDocument : null;
+            if (newDoc && typeof event.swap === 'function') {
+              // Synchronize data-astro-transition-persist from data-vt-persist so native Astro swap recognizes it
+              document.querySelectorAll('[data-vt-persist]').forEach((el) => {
+                if (!el.hasAttribute('data-astro-transition-persist')) {
+                  const val = el.getAttribute('data-vt-persist') || el.id || '';
+                  if (val) el.setAttribute('data-astro-transition-persist', val);
+                }
+              });
+              newDoc.querySelectorAll('[data-vt-persist]').forEach((el) => {
+                if (!el.hasAttribute('data-astro-transition-persist')) {
+                  const val = el.getAttribute('data-vt-persist') || el.id || '';
+                  if (val) el.setAttribute('data-astro-transition-persist', val);
+                }
+              });
+
+              const allTargets = Array.from(document.querySelectorAll('[data-vt-replace]'));
+
+              if (allTargets.length > 0) {
+                const defaultSwap = event.swap;
+
+                // Validate pairing before mutation: handle outermost targets only
+                const outermostTargets = allTargets.filter((target) =>
+                  !allTargets.some((other) => other !== target && other.contains(target))
+                );
+
+                let isPairingValid = outermostTargets.length > 0;
+                const pairs = [];
+                const matchedIncomingElements = new Set();
+                const matchedCurrentSelectors = new Set();
+
+                for (const currentEl of outermostTargets) {
+                  const rawKey = currentEl.getAttribute('data-vt-replace')?.trim();
+                  let selector;
+                  if (rawKey) {
+                    selector = `[data-vt-replace="${escapeSelector(rawKey)}"]`;
+                  } else if (currentEl.id) {
+                    selector = `#${escapeSelector(currentEl.id)}`;
+                  } else {
+                    selector = `${currentEl.tagName.toLowerCase()}[data-vt-replace]`;
+                  }
+
+                  if (matchedCurrentSelectors.has(selector) || document.querySelectorAll(selector).length !== 1) {
+                    isPairingValid = false;
+                    break;
+                  }
+                  matchedCurrentSelectors.add(selector);
+
+                  const incomingMatches = newDoc.querySelectorAll(selector);
+                  if (incomingMatches.length !== 1) {
+                    isPairingValid = false;
+                    break;
+                  }
+
+                  const incomingEl = incomingMatches[0];
+                  if (matchedIncomingElements.has(incomingEl)) {
+                    isPairingValid = false;
+                    break;
+                  }
+                  matchedIncomingElements.add(incomingEl);
+
+                  pairs.push({ currentEl, incomingEl });
+                }
+
+                // Distinct incoming matches must not overlap (topology / ancestry validation)
+                if (isPairingValid) {
+                  const incomingElements = pairs.map((p) => p.incomingEl);
+                  for (let i = 0; i < incomingElements.length; i++) {
+                    for (let j = 0; j < incomingElements.length; j++) {
+                      if (i !== j && incomingElements[i].contains(incomingElements[j])) {
+                        isPairingValid = false;
+                        break;
+                      }
+                    }
+                    if (!isPairingValid) break;
+                  }
+                }
+
+                if (isPairingValid && pairs.length > 0) {
+                  event.swap = () => {
+                    const swapApi = (typeof window !== 'undefined' && window.__astro_swap) || null;
+
+                    // 1. Deselect scripts that should not re-run
+                    if (swapApi && typeof swapApi.deselectScripts === 'function') {
+                      swapApi.deselectScripts(newDoc);
+                    } else {
+                      deselectScriptsFallback(newDoc);
+                    }
+
+                    // 2. Synchronize root attributes (lang, class, data-surface, dir, etc.)
+                    if (swapApi && typeof swapApi.swapRootAttributes === 'function') {
+                      swapApi.swapRootAttributes(newDoc);
+                    } else {
+                      swapRootAttributesFallback(newDoc);
+                    }
+                    if (activeDirection) {
+                      document.documentElement.setAttribute('data-vt-direction', activeDirection);
+                    }
+                    applySurface(document.documentElement);
+
+                    // 3. Synchronize head elements (metadata, title, styles, stylesheets, font preloads)
+                    if (swapApi && typeof swapApi.swapHeadElements === 'function') {
+                      swapApi.swapHeadElements(newDoc);
+                    } else {
+                      swapHeadElementsFallback(newDoc);
+                    }
+
+                    // 4. Save focus if focused element is persisted
+                    let restoreFocus = () => {};
+                    if (swapApi && typeof swapApi.saveFocus === 'function') {
+                      restoreFocus = swapApi.saveFocus();
+                    } else {
+                      restoreFocus = saveFocusFallback();
+                    }
+
+                    // 5. Track live media right now before any DOM detachment
+                    const liveMedia = new Set(document.querySelectorAll('video, audio'));
+
+                    // 6. Connected-DOM persistent element handling inside replaced containers
+                    const docEl = document.documentElement;
+                    const moveBefore = typeof docEl.moveBefore === 'function' ? (p, n, c) => p.moveBefore(n, c) : null;
+                    const persistPairs = [];
+
+                    for (const { currentEl, incomingEl } of pairs) {
+                      const persistentInside = Array.from(
+                        currentEl.querySelectorAll('[data-astro-transition-persist], [data-vt-persist]')
+                      );
+                      for (const persistEl of persistentInside) {
+                        const key = persistEl.getAttribute('data-astro-transition-persist') || persistEl.getAttribute('data-vt-persist');
+                        const selector = key
+                          ? `[data-astro-transition-persist="${escapeSelector(key)}"], [data-vt-persist="${escapeSelector(key)}"]`
+                          : (persistEl.id ? `#${escapeSelector(persistEl.id)}` : null);
+                        if (!selector) continue;
+                        const targetInIncoming = incomingEl.querySelector(selector);
+                        if (targetInIncoming) {
+                          persistPairs.push({ persistEl, targetInIncoming });
+                          // Lift to documentElement so it stays connected to document and does not pause/reset playback
+                          if (moveBefore) {
+                            moveBefore(docEl, persistEl, null);
+                          } else {
+                            docEl.appendChild(persistEl);
+                          }
+                        }
+                      }
+
+                      // Swap the container in the live document
+                      currentEl.replaceWith(incomingEl);
+                    }
+
+                    // Move lifted persistent elements into incoming container at the position of their targets
+                    for (const { persistEl, targetInIncoming } of persistPairs) {
+                      if (moveBefore) {
+                        moveBefore(targetInIncoming.parentNode, persistEl, targetInIncoming);
+                        targetInIncoming.remove();
+                      } else {
+                        targetInIncoming.replaceWith(persistEl);
+                      }
+                    }
+
+                    // 7. Upgrade declarative shadow DOM and reify newly introduced media in incoming containers
+                    for (const { incomingEl } of pairs) {
+                      attachShadowRoots(incomingEl);
+                      reifyMediaElements(incomingEl, liveMedia);
+                    }
+
+                    // 8. Restore focus
+                    if (typeof restoreFocus === 'function') {
+                      restoreFocus();
+                    }
+                  };
+                } else {
+                  // If pairing is ambiguous or unsupported, safely fall back to defaultSwap
+                  event.swap = defaultSwap;
+                }
+              }
+            }
+
+            const currentNav = activeNavToken;
+            const vt = event && 'viewTransition' in event ? event['viewTransition'] : null;
+            if (vt && typeof vt.finished?.finally === 'function') {
+              currentViewTransition = vt;
+              activeTransitionPending = true;
+              vt.finished.finally(() => {
+                if (currentViewTransition === vt) {
+                  currentViewTransition = null;
+                  if (currentNav === activeNavToken) {
+                    activeTransitionPending = false;
+                    cleanupMorphNames();
+                    clearDirection();
+                  }
+                }
+              });
+            } else {
+              currentViewTransition = null;
+              activeTransitionPending = false;
+              if (currentNav === activeNavToken) {
+                cleanupMorphNames();
+                clearDirection();
+              }
+            }
+          });
+          document.addEventListener('astro:after-swap', () => {
+            clearVtLoading();
+            applySurface(document.documentElement);
+            if (savedScroll) {
+              window.scrollTo({ left: savedScroll.left, top: savedScroll.top, behavior: 'instant' });
+              savedScroll = null;
+            }
+          });
+
+          window.addEventListener('pageshow', (event) => {
+            if (event.persisted) {
+              clearVtLoading();
+              currentViewTransition = null;
+              activeTransitionPending = false;
+              cleanupMorphNames();
+              clearDirection();
+            }
+          });
+
+          window.addEventListener('pagehide', () => {
+            clearTimeout(hoverTimer);
+            clearVtLoading();
+            if (inFlightWarmAbort) {
+              inFlightWarmAbort.abort();
+              inFlightWarmAbort = null;
+            }
+          });
+
+          const settle = () => {
+            if (!activeTransitionPending && !currentViewTransition) {
+              cleanupMorphNames();
+              clearDirection();
+            }
+          };
+          document.addEventListener('astro:page-load', settle);
+        })();
+      </script>
+    )}
     <slot name="head" />
   </head>
   <body>

@@ -43,9 +43,12 @@ test('the stylesheet ships the matching media group and held-header rules, with 
     '::view-transition-new(site-header) { animation: none; }',
     '::view-transition-old(*.vt-header) { display: none; }',
     '::view-transition-new(*.vt-header) { animation: none; }',
+    '::view-transition-group(site-header), ::view-transition-group(*.vt-header) { z-index: var(--z-raised); }',
+    '::view-transition-old(*.vt-part), ::view-transition-new(*.vt-part) { block-size: 100%; inline-size: auto; }',
   ]) assert.ok(css.includes(rule), `Missing rule: ${rule}`);
   assert.match(css, /::view-transition-group\(\*\.vt-media\) \{[^}]*overflow: clip;[^}]*\}/);
-  assert.match(css, /@media \(prefers-reduced-motion: reduce\) \{ ::view-transition-group\(site-header\), ::view-transition-group\(\*\.vt-header\), ::view-transition-group\(\*\.vt-media\), ::view-transition-old\(\*\.vt-media\), ::view-transition-new\(\*\.vt-media\) \{ animation: none !important; \} \}/);
+  assert.match(css, /::view-transition-group\(\*\.vt-part\) \{[^}]*overflow: clip;[^}]*\}/);
+  assert.match(css, /@media \(prefers-reduced-motion: reduce\) \{ ::view-transition-group\(site-header\), ::view-transition-group\(\*\.vt-header\), ::view-transition-group\(\*\.vt-media\), ::view-transition-old\(\*\.vt-media\), ::view-transition-new\(\*\.vt-media\), ::view-transition-group\(\*\.vt-part\), ::view-transition-old\(\*\.vt-part\), ::view-transition-new\(\*\.vt-part\) \{ animation: none !important; \} \}/);
   const card = readFileSync('src/components/Card.astro', 'utf8');
   assert.ok(card.includes("from '../lib/view-transition'") && card.includes("mediaTransition(rawTransitionName, 'media')"), 'Card must use the shared helper for its media name');
 });

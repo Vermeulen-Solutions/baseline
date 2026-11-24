@@ -319,6 +319,72 @@
 		animation-name: expressive-vt-wipe-back;
 	}
 
+	/* iris: the new page opens as a circle from the point the visitor clicked (--vt-x, --vt-y from the
+	   head script; the centre after Back or a keyboard press). Going back, the page left closes into
+	   the centre over the one arriving. Neither image fades: the old page stays whole under the circle. */
+	html[data-transition-style="iris"]::view-transition-old(root) {
+		animation: none;
+	}
+
+	html[data-transition-style="iris"]::view-transition-new(root) {
+		animation: expressive-vt-iris-open var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="iris"][data-vt-direction="back"]::view-transition-old(root) {
+		z-index: var(--z-raised);
+		animation: expressive-vt-iris-close var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="iris"][data-vt-direction="back"]::view-transition-new(root) {
+		animation: none;
+	}
+
+	/* blinds: the new page opens in six vertical strips, like shutters or slats turning. */
+	html[data-transition-style="blinds"]::view-transition-old(root) {
+		animation: expressive-vt-dim var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="blinds"]::view-transition-new(root) {
+		animation: expressive-vt-blinds var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	/* slide: the new page slides over the old one as a sheet from the side, the old one drifting the
+	   other way and dimming; going back, from the other side. */
+	html[data-transition-style="slide"]::view-transition-old(root) {
+		animation: expressive-vt-drift-out var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="slide"]::view-transition-new(root) {
+		animation: expressive-vt-slide-in var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="slide"][data-vt-direction="back"]::view-transition-old(root) {
+		animation-name: expressive-vt-drift-out-back;
+	}
+
+	html[data-transition-style="slide"][data-vt-direction="back"]::view-transition-new(root) {
+		animation-name: expressive-vt-slide-in-back;
+	}
+
+	/* stack: the old page sinks back and the new one rises over it from below, like a sheet laid on a
+	   pile; going back, the top sheet drops away and the one under it comes forward. */
+	html[data-transition-style="stack"]::view-transition-old(root) {
+		animation: expressive-vt-sink var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="stack"]::view-transition-new(root) {
+		animation: expressive-vt-rise-sheet var(--duration-stage) var(--ease-smooth) both;
+	}
+
+	html[data-transition-style="stack"][data-vt-direction="back"]::view-transition-old(root) {
+		z-index: var(--z-raised);
+		animation: expressive-vt-drop-sheet var(--duration-stage) var(--ease-exit) both;
+	}
+
+	html[data-transition-style="stack"][data-vt-direction="back"]::view-transition-new(root) {
+		animation: expressive-vt-surface var(--duration-stage) var(--ease-smooth) both;
+	}
+
 	/* Arrival: elements marked data-arrive come in after the page, in stages (data-arrive="1" to
 	   "3"), while the rest of the page is already there. They are named only during a transition. */
 	:where(html[data-transition-style]:active-view-transition) :where([data-arrive]) {
@@ -425,6 +491,86 @@
 		}
 		to {
 			clip-path: inset(0 0 0 0);
+		}
+	}
+
+	@keyframes expressive-vt-iris-open {
+		from {
+			clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 50%));
+		}
+		to {
+			clip-path: circle(150% at var(--vt-x, 50%) var(--vt-y, 50%));
+		}
+	}
+
+	@keyframes expressive-vt-iris-close {
+		from {
+			clip-path: circle(150% at 50% 50%);
+		}
+		to {
+			clip-path: circle(0 at 50% 50%);
+		}
+	}
+
+	/* Six strips, each five points of one polygon joined along the top edge, grow from their left side. */
+	@keyframes expressive-vt-blinds {
+		from {
+			clip-path: polygon(0% 0, 0% 0, 0% 100%, 0% 100%, 0% 0, 16.667% 0, 16.667% 0, 16.667% 100%, 16.667% 100%, 16.667% 0, 33.333% 0, 33.333% 0, 33.333% 100%, 33.333% 100%, 33.333% 0, 50% 0, 50% 0, 50% 100%, 50% 100%, 50% 0, 66.667% 0, 66.667% 0, 66.667% 100%, 66.667% 100%, 66.667% 0, 83.333% 0, 83.333% 0, 83.333% 100%, 83.333% 100%, 83.333% 0);
+		}
+		to {
+			clip-path: polygon(0% 0, 16.867% 0, 16.867% 100%, 0% 100%, 0% 0, 16.667% 0, 33.533% 0, 33.533% 100%, 16.667% 100%, 16.667% 0, 33.333% 0, 50.2% 0, 50.2% 100%, 33.333% 100%, 33.333% 0, 50% 0, 66.867% 0, 66.867% 100%, 50% 100%, 50% 0, 66.667% 0, 83.533% 0, 83.533% 100%, 66.667% 100%, 66.667% 0, 83.333% 0, 100% 0, 100% 100%, 83.333% 100%, 83.333% 0);
+		}
+	}
+
+	@keyframes expressive-vt-slide-in {
+		from {
+			translate: 100% 0;
+		}
+	}
+
+	@keyframes expressive-vt-slide-in-back {
+		from {
+			translate: -100% 0;
+		}
+	}
+
+	@keyframes expressive-vt-drift-out {
+		to {
+			opacity: 0.6;
+			translate: -20% 0;
+		}
+	}
+
+	@keyframes expressive-vt-drift-out-back {
+		to {
+			opacity: 0.6;
+			translate: 20% 0;
+		}
+	}
+
+	@keyframes expressive-vt-sink {
+		to {
+			opacity: 0.6;
+			scale: 0.94;
+		}
+	}
+
+	@keyframes expressive-vt-rise-sheet {
+		from {
+			translate: 0 100%;
+		}
+	}
+
+	@keyframes expressive-vt-drop-sheet {
+		to {
+			translate: 0 100%;
+		}
+	}
+
+	@keyframes expressive-vt-surface {
+		from {
+			opacity: 0.6;
+			scale: 0.94;
 		}
 	}
 

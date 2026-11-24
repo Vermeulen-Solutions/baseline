@@ -398,9 +398,12 @@ test('behavior directional transitions, targeted replacement, and persistent ele
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   const problems = observe(page);
 
-  // Navigate to built home route on the actual running visual server (renders SiteShell)
-  const homeRoute = contract.routes.find((r) => r.name === 'home');
-  await prepare(page, homeRoute, page.visualProblems);
+  // The client-router script ships only where a page can have <ClientRouter /> (pageTransitions other
+  // than cross-document): the expressive demo's ?router variant renders SiteShell that way.
+  const response = await page.goto(process.env.VISUAL_ORIGIN + '/_expressive?router', { waitUntil: 'load' });
+  expect(response.status()).toBe(200);
+  // Astro's swap helpers load on demand on a client-router page.
+  await page.waitForFunction(() => Boolean(window['__astro_swap']), null, { timeout: 10000 });
 
   const results = await page.evaluate(async () => {
     // 1. Verify that window.__astro_swap is installed on the built route and exposes swapFunctions
