@@ -141,3 +141,18 @@ test('excessive inputs and larger conversion candidates never silently become up
   assert.equal(entry.output.treatment, 'smaller-original-retained'); assert.equal(entry.output.sha256, imageHash(avif));
   assert.equal(entry.status, 'review'); assert.equal(fs.readdirSync(path.join(stage, 'upload')).length, 0);
 }));
+
+test('a refusal over how the command was written says the form that works', async () => {
+  const { usageForRefusal } = await import('../scripts/prepare-images.mjs');
+  const form = 'npm run media:prepare -- --source <folder or file> --out .baseline/backups/<stage name>';
+  // A folder given as a plain argument, a flag without its value, and no flags at all.
+  assert.equal(usageForRefusal('Unknown image option: C:/site/photos'), form);
+  assert.equal(usageForRefusal('Missing image option value: --out'), form);
+  assert.equal(usageForRefusal('Explicit --source and --out are required'), form);
+  // A refusal about the pictures themselves is not about the command.
+  assert.equal(usageForRefusal('Stage must be inside .baseline/backups'), null);
+  const { spawnSync } = await import('node:child_process');
+  const run = spawnSync(process.execPath, ['scripts/prepare-images.mjs', 'photos'], { encoding: 'utf8' });
+  assert.equal(run.status, 2);
+  assert.deepEqual(JSON.parse(run.stderr), { status: 'refused', error: 'Unknown image option: photos', usage: form });
+});
