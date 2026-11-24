@@ -270,13 +270,32 @@ test('a label above three headings and an italic word in the page heading are fl
   assert.deepEqual([...SOURCED_FLOOR], ['kicker-openings', 'accent-word', ...legibility]);
   assert.deepEqual(floorCodes(false), [...FLOOR]);
   assert.deepEqual(floorCodes(true), [...FLOOR, 'kicker-openings', 'accent-word', ...legibility]);
-  const accented = page([section()], { accentWord: 'Glycine' });
+  // An accented phrase in some headings and not others is the reflex.
+  const accented = page([section()], { accentWord: 'Glycine', accentHeadings: 2, headings: 6 });
   const finding = assessComposition(accented).find((f) => f.code === 'accent-word');
-  assert.match(finding.message, /one word or phrase in italics for emphasis \("Glycine"\)/);
-  assert.equal(assessComposition(page([section()], { accentWord: null })).some((f) => f.code === 'accent-word'), false);
+  assert.match(finding.message, /2 of 6 headings set a word or phrase in italics \("Glycine"\) and the rest are set in one style/);
+  assert.match(finding.message, /once, in the page heading, on the words the sentence turns on; or as the direction's way of setting every heading/);
+  // Earned: once, in the page heading; or as the way every heading is set. No accent at all is no finding either.
+  const accentCodes = (extra) => assessComposition(page([section()], extra)).some((f) => f.code === 'accent-word');
+  assert.equal(accentCodes({ accentWord: 'Glycine', accentHeadings: 1, headings: 6 }), false);
+  assert.equal(accentCodes({ accentWord: 'Glycine' }), false);
+  assert.equal(accentCodes({ accentWord: 'works', accentHeadings: 5, headings: 6 }), false);
+  assert.equal(accentCodes({ accentWord: 'works', accentHeadings: 2, headings: 2 }), false);
+  assert.equal(accentCodes({ accentWord: null }), false);
+  // Three labels that only name their section are the finding; a label that carries a fact is not counted.
   const labelled = page([section({ kicker: true }), section({ kicker: true }), section({ kicker: true })]);
-  assert.match(assessComposition(labelled).find((f) => f.code === 'kicker-openings').message, /Remove the labels: a heading says what its section is/);
+  assert.match(assessComposition(labelled).find((f) => f.code === 'kicker-openings').message, /3 sections open with a small label that only names the section\. A label above a heading is earned by a fact the visitor needs: a date, an hour, a price, a count, a distance/);
   assert.equal(assessComposition(page([section({ kicker: true }), section({ kicker: true }), section()])).some((f) => f.code === 'kicker-openings'), false);
+  const earned = page([section({ kicker: true, kickerFact: true }), section({ kicker: true, kickerFact: true }), section({ kicker: true, kickerFact: true }), section({ kicker: true })]);
+  assert.equal(assessComposition(earned).some((f) => f.code === 'kicker-openings'), false);
+  // In the page: a figure or a currency in the label earns it, once a bare index at its start is set aside.
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  const strip = /const said = before\.textContent\.trim\(\)\.replace\((\/.*\/i), ''\);/.exec(source)?.[1];
+  assert.ok(strip, 'the index-stripping expression is in the page code');
+  const index = new RegExp(strip.slice(1, strip.lastIndexOf('/')), 'i');
+  const fact = (label) => /\d|[€$£]|\bCHF\b/i.test(label.replace(index, ''));
+  for (const label of ['Jeudi 26 novembre', '26 novembre · 20h30', 'Depuis 1998', '01 // Forge Tower [392 m]', 'Entrée 15 CHF', '3 concerts ce mois', 'Samedi 8 h – 12 h']) assert.equal(fact(label), true, label);
+  for (const label of ['Nos services', '01 // Architecture', '[02] Projets', '03 · Hébergements', '01 Services', 'N° 4 — Atelier', 'La maison']) assert.equal(fact(label), false, label);
 });
 
 test('text lying over other text is found from the lines of the page, and a ghost word, a link in its paragraph and a neighbour are not', async () => {

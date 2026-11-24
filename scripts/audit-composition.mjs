@@ -10,7 +10,8 @@
 // a fleet of six sites that were accessible, fast and forgettable. For each route (at 1440px, and
 // the narrowest width for the first-screen checks) this reads the page's top-level sections and
 // reports:
-// - kicker-openings: three or more sections open with a small uppercase label above the heading;
+// - kicker-openings: three or more sections open with a small label above the heading that only names
+//   the section (a label that carries a fact, a date, an hour, a price, a count, is earned and not counted);
 // - split-openings: three or more sections open with the heading on one side and a lead beside it;
 // - card-grids: two or more sections are grids of three or more equal boxed items;
 // - repeated-run: four or more sections in a row are built the same way whatever their grounds, or four
@@ -35,7 +36,9 @@
 // - kicker-openings and accent-word are floor findings for a direction made with sources (a record
 //   with a World › Sources line) and advisories for older sites: on the same 95 pages no designer-made
 //   page had a small label above three section headings or one italic word in its headline, every one
-//   of the best-ranked generated pages had the first and a third had the second.
+//   of the best-ranked generated pages had the first and a third had the second. Both are counted only
+//   when unearned: a label that carries a fact is kept, and an accented phrase is kept once, in the page
+//   heading, or as the way every heading is set (accent-word reports it in some headings and not others).
 //   A label counts in capitals or tracked small type, and also as a line of a few words under half the
 //   heading's size in lower case or a handwritten face (found on a trial site: five chalk labels above
 //   five headings passed the first rule). The wider rule gives the same shares on the 95 pages.
@@ -162,9 +165,12 @@ export function assessComposition(model) {
   const findings = [];
   const sections = model.sections ?? [];
   const add = (code, message, detail = {}) => findings.push({ code, message, ...detail });
-  const kickers = sections.filter((s) => s.kicker).length;
-  if (kickers >= 3) add('kicker-openings', `${kickers} sections open with a small label above the heading. Remove the labels: a heading says what its section is. Keep a small line above a heading only where it is a fact the visitor needs (a date, a price, a count), on at most two sections.`, { count: kickers });
-  if (model.accentWord) add('accent-word', `The page heading sets one word or phrase in italics for emphasis ("${model.accentWord}"). Set the heading in one style, and let its words carry the emphasis.`);
+  // A label is earned by a fact; one that only names its section is the reflex. Three of those is the finding.
+  const kickers = sections.filter((s) => s.kicker && !s.kickerFact).length;
+  if (kickers >= 3) add('kicker-openings', `${kickers} sections open with a small label that only names the section. A label above a heading is earned by a fact the visitor needs: a date, an hour, a price, a count, a distance. Keep the labels that carry one. Remove the others, or give each the fact of its own section; a bare number (01, 02) is not a fact.`, { count: kickers });
+  // An accented phrase is earned once, in the page heading, or as the way every heading is set. In some headings and not others it is the reflex.
+  const [accented, headings] = [model.accentHeadings ?? (model.accentWord ? 1 : 0), model.headings ?? 0];
+  if (accented >= 2 && accented < Math.ceil(0.8 * headings)) add('accent-word', `${accented} of ${headings} headings set a word or phrase in italics ("${model.accentWord}") and the rest are set in one style. An accented phrase is earned in one of two ways: once, in the page heading, on the words the sentence turns on; or as the direction's way of setting every heading, written in the Art Direction Record. Choose one: keep the page heading's and set the others in one style, or carry it through every heading.`);
   const splits = sections.filter((s) => s.split).length;
   if (splits >= 3) add('split-openings', `${splits} sections open with the heading on one side and a lead beside it. Vary how sections open: a heading alone, a heading in the picture, or a list that explains itself.`, { count: splits });
   const grids = sections.filter((s) => s.cardGrid).length;
@@ -764,6 +770,7 @@ export function measurePage() {
     const s = getComputedStyle(section);
     const ground = (s.backgroundColor !== 'rgba(0, 0, 0, 0)' && s.backgroundColor !== 'transparent') || s.backgroundImage !== 'none' || Boolean(section.querySelector(':scope > .is-bg'));
     let kicker = false;
+    let kickerFact = false;
     let split = false;
     let centered = false;
     if (heading && visible(heading)) {
@@ -779,6 +786,10 @@ export function measurePage() {
         // or in a handwritten face. A sentence that leads into the heading is longer than this.
         const underline = chars > 0 && chars <= 32 && size <= px(heading, 'fontSize') * 0.5;
         kicker = short && ((small && label) || underline) && !before.querySelector('a, button, img');
+        // A label is earned by a fact the visitor needs: a date, an hour, a price, a count, a distance. It shows as a
+        // figure or a currency in the label once a bare index at its start ("01 //", "[02]", "03 ·") is set aside.
+        const said = before.textContent.trim().replace(/^[\s[(#]*(?:n[o°º]\.?\s*)?(?:\d{1,2}\s*[\])]?\s*(?:\/\/|[./·:|—–-])|0\d\b)\s*/i, '');
+        kickerFact = kicker && /\d|[€$£]|\bCHF\b/i.test(said);
       }
       const hr = heading.getBoundingClientRect();
       const lead = [...section.querySelectorAll('p')].filter(visible).find((p) => !heading.contains(p) && p !== before);
@@ -823,7 +834,7 @@ export function measurePage() {
     return {
       tag: section.tagName.toLowerCase(),
       heading: heading ? heading.textContent.trim().slice(0, 60) : null,
-      kicker, split, centered, ground,
+      kicker, kickerFact, split, centered, ground,
       action: Boolean(section.querySelector('a.btn, button, [class*="button"], [class*="btn"]')),
       cardGrid: cardGridIn(section),
       list,
@@ -843,10 +854,13 @@ export function measurePage() {
     if (r.width >= vw * 0.95) fullWidth++;
   }
   const h1 = main.querySelector('h1') ?? document.querySelector('h1');
-  // One word or phrase of the page heading in italics while the rest is upright.
-  const accent = h1 && getComputedStyle(h1).fontStyle !== 'italic'
-    ? [...h1.querySelectorAll('*')].find((el) => getComputedStyle(el).fontStyle === 'italic' && (el.textContent || '').trim() && (el.textContent || '').trim().length < (h1.textContent || '').trim().length)
-    : null;
+  // One word or phrase of a heading in italics while the rest is upright: in the page heading, and in how many of the headings.
+  const accentIn = (heading) => (getComputedStyle(heading).fontStyle !== 'italic'
+    ? [...heading.querySelectorAll('*')].find((el) => getComputedStyle(el).fontStyle === 'italic' && (el.textContent || '').trim() && (el.textContent || '').trim().length < (heading.textContent || '').trim().length)
+    : null) ?? null;
+  const headings = [...main.querySelectorAll('h1, h2')].filter((heading) => heading.getClientRects().length && (heading.textContent || '').trim());
+  const accents = headings.map(accentIn).filter(Boolean);
+  const accent = (h1 && accentIn(h1)) ?? accents[0] ?? null;
   // Split hero: the first section holds the h1 and its largest picture beside it, narrower than 60%.
   let splitHero = false;
   const first = sections[0];
@@ -884,6 +898,8 @@ export function measurePage() {
     bodySize,
     h1Size: h1 ? px(h1, 'fontSize') : 0,
     accentWord: accent ? (accent.textContent || '').trim().slice(0, 40) : null,
+    accentHeadings: accents.length,
+    headings: headings.length,
     h2Max: Math.max(0, ...sizes('h2')),
     imageCover: +(imageArea / (vw * document.documentElement.scrollHeight)).toFixed(2),
     fullWidthMedia: fullWidth,
