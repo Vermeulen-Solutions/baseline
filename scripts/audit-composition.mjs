@@ -646,6 +646,43 @@ export function softPhotos(images, dpr = 1) {
 // Through a scene that tells something, the screen changes: three trial scenes measured 0.2% (one clock hand
 // turning beside three lines of text), 35% (photographs changing in a band) and 58% (five full-screen photographs).
 export const SCENE_CHANGE = 0.25;
+// Screens of scrolling left, after the scene's last step is in place, before its stage scrolls away. A scene
+// that finishes at the end of its pinned range is gone the moment it is complete.
+export const SCENE_HOLD = 0.6;
+
+/**
+ * In the page: how many screens of scrolling are left, after the scene's scroll-driven animations stop
+ * changing, before its pinned stage scrolls away. It scrolls through the pinned range in small steps and
+ * notes the last step at which any animation on the track (the stage's parent) changed its progress.
+ * Null when the track has no scroll-driven animation (a scripted scene is not read).
+ */
+export async function sceneHold({ top, height, stage, inset }) {
+  const track = [...document.querySelectorAll('body *')].find((el) => {
+    if (getComputedStyle(el).position !== 'sticky' || !el.parentElement) return false;
+    return Math.abs(el.parentElement.getBoundingClientRect().top + scrollY - top) < 2;
+  })?.parentElement;
+  const start = top - inset;
+  const end = top + height - stage - inset;
+  if (!track || end - start < innerHeight * 0.5) return null;
+  const frame = () => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  const driven = () => track.getAnimations({ subtree: true }).filter((a) => a.timeline && !(a.timeline instanceof DocumentTimeline));
+  const steps = 40;
+  let last = null;
+  let settled = start;
+  let any = false;
+  for (let i = 0; i <= steps; i++) {
+    const y = Math.round(start + ((end - start) * i) / steps);
+    scrollTo(0, y);
+    await frame();
+    const animations = driven();
+    if (animations.length) any = true;
+    const state = animations.map((a) => { const p = a.effect?.getComputedTiming().progress; return p === null || p === undefined ? '-' : p.toFixed(3); }).join(',');
+    if (last !== null && state !== last) settled = y;
+    last = state;
+  }
+  if (!any) return null;
+  return Math.round(((end - settled) / innerHeight) * 100) / 100;
+}
 
 export function assessImpression(tier, routes) {
   if (tier !== 'impression' || !routes.length) return null;
@@ -657,6 +694,9 @@ export function assessImpression(tier, routes) {
     const changes = routes.map((r) => r.sceneChange).filter((value) => typeof value === 'number');
     const best = changes.length ? Math.max(...changes) : null;
     if (best !== null && best < SCENE_CHANGE) missing.push(`a pinned scene that carries the subject (impression-motion.md, "A pinned scene": through the scene only ${Math.round(best * 100)}% of the screen changes; show the site's photographs or content at stage size, so that at least ${Math.round(SCENE_CHANGE * 100)}% changes)`);
+    const holds = routes.map((r) => r.sceneHold).filter((value) => typeof value === 'number');
+    const longest = holds.length ? Math.max(...holds) : null;
+    if (longest !== null && longest < SCENE_HOLD) missing.push(`a pinned scene that holds its last step (impression-motion.md, "A pinned scene": the scene is complete only ${longest.toFixed(2)} of a screen before its stage scrolls away; end the last step's animation-range earlier, by contain 70% on a 300svh track, so that at least ${SCENE_HOLD} of a screen shows the finished scene)`);
   }
   if (!missing.length) return null;
   return { code: 'impression-motion', missing, message: `The record says Motion Tier: impression, and the built pages lack ${missing.join('; ')}. Build them, or correct the tier in the record with the client's words that decide it.` };
@@ -1071,7 +1111,12 @@ async function measureWide(browser, url, width, { declineConsent = false, scene 
       });
       const trackBox = firstStage?.parentElement.getBoundingClientRect();
       const impression = {
-        sceneTrack: trackBox ? { top: Math.round(trackBox.top + scrollY), height: Math.round(trackBox.height) } : null,
+        sceneTrack: trackBox ? {
+          top: Math.round(trackBox.top + scrollY),
+          height: Math.round(trackBox.height),
+          stage: Math.round(firstStage.getBoundingClientRect().height),
+          inset: Math.round(parseFloat(getComputedStyle(firstStage).top) || 0),
+        } : null,
         smoothScroll: document.documentElement.classList.contains('lenis'),
         pageTransitions: Boolean(document.querySelector("[data-interlude]")),
         pinnedScenes,
@@ -1090,6 +1135,7 @@ async function measureWide(browser, url, width, { declineConsent = false, scene 
         for (const pair of collidingText(await page.evaluate(textBoxes, { viewportOnly: true }))) over.set(`${pair.over}|${pair.under}`, pair);
       }
       motion.impression.sceneCollisions = [...over.values()];
+      motion.impression.sceneHold = await page.evaluate(sceneHold, motion.impression.sceneTrack).catch(() => null);
       await page.evaluate(() => scrollTo(0, 0));
       const differ = await browser.newPage();
       try { motion.impression.sceneChange = Math.max(await differ.evaluate(changedFraction, [frames[0], frames[1]]), await differ.evaluate(changedFraction, [frames[1], frames[2]]), await differ.evaluate(changedFraction, [frames[0], frames[2]])); }

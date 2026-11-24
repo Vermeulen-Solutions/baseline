@@ -42,7 +42,8 @@
 //   reads (code, quotations, hidden text and [data-copy-ignore] are skipped), for example
 //   { "pattern": "\\bwe\\b", "why": "the studio is one person: say I" } or a banned phrase.
 // - copy-tell: a tell of model-written copy on English or French pages (scripts/copy-tells.mjs): a
-//   word or stock line that stands in for a fact, template residue, a stale copyright year, or a
+//   word or stock line that stands in for a fact, template residue, a word of the design process
+//   printed for visitors (source object, pinned scene, premier écran), a stale copyright year, or a
 //   device used so often it is a habit (two-fragment headings, contrast frames, virtue words).
 //   `copyAllow` in the budget lists words the trade uses literally; `"copyTells": false` turns it off.
 // - axe (phone width): WCAG 2.x A/AA violations of serious or critical impact, from @axe-core/playwright

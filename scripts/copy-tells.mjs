@@ -36,6 +36,19 @@ const STOCK = {
     /où [\p{L} ]{2,25} rencontre [\p{L} ]{2,25}/giu, /alliant [\p{L} ]{2,30} et [\p{L} ]{2,30}/giu, /nous vous accompagnons/giu],
 };
 
+// The design process's own words, printed for visitors: the record's field names and the steps of the
+// workflow. A page built from a recorded world can end up naming its own machinery (a heading that is a rule
+// sentence, a caption that calls a photograph "the source object"); on another project an owner marked such a
+// page among the lowest of ten rounds. Two-word phrases only, so ordinary uses of "world" or "object" pass.
+const PROCESS = {
+  en: ['source object', 'signature moment', 'signature moments', 'governing idea', 'art direction record', 'aesthetic lane',
+    'narrative metaphor', 'token physics', 'motion tier', 'pinned scene', 'named motion', 'named motions', 'world motion',
+    'world motions', 'made world', "the world's objects", 'display treatment', 'working feature', 'page archetype',
+    'section object', 'easy version', 'first screen', 'reference research'],
+  fr: ['objet source', 'moment signature', 'moments signature', 'idée directrice', 'métaphore narrative', 'scène épinglée',
+    'mouvement nommé', 'mouvements nommés', 'monde construit', 'objets du monde', 'archétype de page', 'version facile', 'premier écran'],
+};
+
 // Left behind by a template or a conversation: the strongest single tell.
 const RESIDUE = [/lorem ipsum/giu, /\[(?:company|client|business|your) name\]/giu, /\[nom (?:de l'entreprise|du client)\]/giu, /\{\{[^}]{1,40}\}\}/gu,
   /\bcertainly!/giu, /i hope this helps/giu, /\bas an ai\b/giu, /\[NEED[^\]]*\]/gu, /\*\*[^*\n]{1,60}\*\*/gu, /^#{1,4} /gmu];
@@ -118,6 +131,7 @@ export function copyTells({ text: raw, headings: rawHeadings = [], lang, year = 
   if (language) {
     each('slop word', any(SLOP[language]), 'say the fact it stands in for (a figure, a step, a material)');
     for (const regex of STOCK[language]) each('stock line', regex, 'a line that fits any business: replace it with a fact from the brief');
+    each('process word', any(PROCESS[language]), "a word from the design notes, not the visitor's: name the thing as the client and their customers would");
   }
   const copyright = [...text.matchAll(/(?:©|\(c\)|copyright)\s*(?:\d{4}\s*[–-]\s*)?(\d{4})/giu)].map(m => Number(m[1]));
   if (copyright.length && Math.max(...copyright) < year) found.push({ tell: 'stale year', value: `© ${Math.max(...copyright)}`, count: 1, detail: `the copyright line is older than ${year}` });
