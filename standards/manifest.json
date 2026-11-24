@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "standardsVersion": "0.8.0",
+  "standardsVersion": "0.7.0",
   "status": "certified-scoped",
-  "reviewedAt": "2026-11-24",
-  "stableReleaseRef": "refs/tags/standards-v0.8.0",
+  "reviewedAt": "2026-11-20",
+  "stableReleaseRef": "refs/tags/standards-v0.7.0",
   "runtimeProfiles": {
     "node-sqlite": {
       "status": "certified-scoped",
@@ -11,7 +11,7 @@
       "nodeObserved": "24.22.3",
       "dependencies": {
         "astro": "7.4.12",
-        "emdash": "1.6.0",
+        "emdash": "1.5.0",
         "@astrojs/node": "11.1.13",
         "@astrojs/react": "7.1.9",
         "react": "19.3.1",
@@ -25,7 +25,6 @@
         "24.22.3"
       ],
       "additionalEvidence": [
-        "audit/certification-2026-11-18/verification-0.7.0.json",
         "audit/certification-2026-11-18/verification-0.5.0.json",
         "audit/certification-2026-11-18/verification-0.4.0.json",
         "audit/certification-2026-11-18/verification-0.3.1.json",
@@ -173,21 +172,21 @@
   },
   "certification": {
     "scope": "Node/SQLite/local storage and pinned Windows Chromium; representative starter CMS contracts only",
-    "sourceCommit": "e97252d453fe4b7df1653a0de43f214c4d5b4a31",
-    "sourceTree": "e007b306d26e8d4cd90d06874252a86859bf8687",
-    "receipt": "audit/certification-2026-11-18/verification-0.8.0.json",
-    "releaseNotes": "standards/releases/0.8.0.md",
+    "sourceCommit": "dcf4a99744685eecb98ca74c4e55750452aa1a3c",
+    "sourceTree": "96f47960faf2cf8f3a6f20850a6dc53963d72106",
+    "receipt": "audit/certification-2026-11-18/verification-0.7.0.json",
+    "releaseNotes": "standards/releases/0.7.0.md",
     "selectionPolicy": "Resolve the published immutable standards tag to a full commit and read/hash the manifest at that commit. Reject drafts, mutable main, changed refs or unsupported profiles.",
-    "frameworkEvidence": "audit/certification-2026-11-18/verification-0.8.0.json (0.8.0: EmDash 1.6.0 editor, cache, forms, metadata, importer, infrastructure and existing-database upgrade rehearsals); audit/certification-2026-11-16/README.md (0.2.0; Astro and adapters unchanged since)",
+    "frameworkEvidence": "audit/certification-2026-11-16/README.md (0.2.0; runtime dependencies, schema and editor code unchanged since)",
     "rendererEvidence": "audit/visual-renderer-2026-11-16/README.md",
     "sourceEvidence": "audit/certification-2026-11-18/README.md",
-    "patchEvidence": "audit/certification-2026-11-18/verification-0.8.0.json (0.8.0: EmDash 1.6.0; clean clones on Node 22.23.4 and 24.22.3 and the visual suite)"
+    "patchEvidence": "audit/certification-2026-11-18/verification-0.7.0.json (0.7.0: clean clones on Node 22.23.4 and 24.22.3 and the visual suite; runtime unchanged since 0.5.1)"
   },
   "distribution": {
     "skills": {
       "astro-site-design": {
-        "files": 20,
-        "sha256": "e0336bbadff3b3783eeeca7dd66cf3a72a20f4ab4dfdfbcddd36a3c0434f834f"
+        "files": 19,
+        "sha256": "1e1d485b8484135e6e53fc714a80cd5a02c87e6c50c356e3153b007c72ee9ea4"
       },
       "brilliant-site-design": {
         "files": 4,
@@ -195,15 +194,15 @@
       },
       "building-emdash-site": {
         "files": 5,
-        "sha256": "8729454d6f515bc24fea48247753e800e4cefebec84e84ebc32567411702cd6b"
+        "sha256": "d03265360e5bddcf95cb0b5a2ad653b10edfcfd202bac64fffc1bf8c4b9dc90b"
       },
       "creating-plugins": {
         "files": 13,
-        "sha256": "b1bad0f7e492dc4b9086aeb53782e2cc32ee7e1dd98356adf9e8cb8a3a8a46e7"
+        "sha256": "3889d4618cefda3e3cbb33a1b27040617deadab3cfdeb81a1da9015191746103"
       },
       "emdash-cli": {
         "files": 2,
-        "sha256": "b1abdc86ed35a5dafd64d7964871c8cf7919837b2617f5eddc6fad58ae9dc017"
+        "sha256": "09a89e923bfaad4fa687897a4d2ca57eb04c30a3eaaf9a4a04f0e7e5e8d96c45"
       },
       "emdash-content-modeling": {
         "files": 4,
@@ -215,15 +214,15 @@
       },
       "emdash-site-setup": {
         "files": 2,
-        "sha256": "1d1396604b5f46af34e0279c0259006cd3fcacb61b2519184aa519964c70d54f"
+        "sha256": "f663309088f5d59672b8557b4047545acdc3625b00b81f5a3ccf6c3ed3fbbe65"
       },
       "impeccable": {
         "files": 71,
-        "sha256": "9bff0e85312e79aad1295310cbeefa744647422c705fefac8e5f972c84e6cb51"
+        "sha256": "3b9572b018eb34c63674783d6be10dcbfcbe6d33f6524b7dc579b89e90bb560c"
       },
       "new-site-workflow": {
-        "files": 20,
-        "sha256": "415670cc2c68ead26c944d2b34dd576b5ba954ba0335d6e8b72531d5701deab1"
+        "files": 19,
+        "sha256": "4dead3b85e4ad108690efd78fe2cdcd539a6a2c20f9f746cd094ffa981481567"
       },
       "opendesign-site-design": {
         "files": 8,
@@ -238,8 +237,8 @@
         "sha256": "4b65fb7d915c2283172fdd6fc7500ed1be1ad73285e03f7c46fe9df3d3f30a94"
       },
       "site-art-direction": {
-        "files": 15,
-        "sha256": "ec0dbe7a31b1b307cce641770aaadeaac72007a870cd53573fbd2fc4dc2894de"
+        "files": 14,
+        "sha256": "7152548adf9a1af5a150d9c8014fb9d99950cfa2d49cb4bbba2066e867e6e80d"
       },
       "upgrading-emdash": {
         "files": 1,
@@ -272,493 +271,96 @@
       "scripts/sync-emdash-skills.mjs": "f8b8682a9a715440f4c05c418a86c716c9aae155c341b28b2cc63835f60f3f45",
       "scripts/sync-impeccable-skill.mjs": "30c26f51c0afeebdd66798bb2af75950872dde7cd25e6ae2a74b9ba386694cf7",
       "scripts/sync-baseline.mjs": "1928b61a2dfda67f360a396f6ecc6c777f0ca2e6a2fe5a24043bb3087d436e9b",
-      "scripts/audit-ui.mjs": "ffd90c5383aaebdb93c527b9de33d3d7fbdfd632ef256b3c219f82b8cdf23d73",
-      "scripts/check-quality.mjs": "eea14530e21652644641104847d3eeabe00835aa3f483f4e15bcee1c54db6525",
+      "scripts/audit-ui.mjs": "821caa70aaaa0e17e9433eb009f461c4313d5c82aba27c229a5631586049090b",
+      "scripts/check-quality.mjs": "e08e6fffb2c7f47610560882fc60e5fb6221e5ef91373ef85ee67453933c2557",
       "scripts/html-parity.mjs": "8c235c92cb93a7fa017feaf91822982f7e905745c5a23d9db9b0d84ff08d01ab",
-      "scripts/capture-routes.mjs": "5cac2b9c26b4b2a45198198d390de6dcba42d0d0fa10ff9d25057373632a5c07"
+      "scripts/capture-routes.mjs": "b17d27dfe6d2c77e62fb25e9e86b2f96c0bb445e7fc9f56291aa506942bf1901"
     },
     "impeccable": {
-      "skillVersion": "4.10.0",
-      "launcherVersion": "0.1.27",
-      "upstreamCommit": "b49177d32788f2dc585c42831d845dacf1ebed2c"
+      "skillVersion": "4.9.2",
+      "launcherVersion": "0.1.25",
+      "upstreamCommit": "d41d9860b0094dcb68030657da63461212835aaa"
     }
   },
   "changes": [
     {
-      "slug": "automation-gate-full-history",
-      "title": "The automation branch gate checks out full history",
-      "bump": "none",
+      "slug": "concept-built-rows",
+      "title": "Built pages are \"built\" rows in the concepts table",
+      "bump": "patch",
       "platforms": [
         "emdash",
         "static"
       ],
       "areas": [
+        "tooling",
+        "skills"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/check-art-direction.mjs",
+        "tests/reference-research.test.mjs",
+        ".agents/skills/site-art-direction/references/reference-research.md",
+        ".agents/skills/site-art-direction/SKILL.md"
+      ]
+    },
+    {
+      "slug": "drawing-treatments",
+      "title": "Drawn figures get the world's medium and a size; lane-default records no longer pass the gate",
+      "bump": "minor",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "skills",
+        "tooling"
+      ],
+      "adoption": "copy",
+      "visible": false,
+      "database": false,
+      "files": [
+        "scripts/design-icons.mjs",
+        "scripts/design-system.mjs",
+        "scripts/check-art-direction.mjs",
+        "scripts/audit-composition.mjs",
+        "tests/design-icons.test.mjs",
+        "tests/art-direction.test.mjs",
+        "tests/audit-composition.test.mjs"
+      ]
+    },
+    {
+      "slug": "record-heading-prose",
+      "title": "The record heading appears only as the heading in AGENTS.md",
+      "bump": "patch",
+      "platforms": [
+        "emdash",
+        "static"
+      ],
+      "areas": [
+        "docs"
+      ],
+      "adoption": "manual",
+      "visible": false,
+      "database": false,
+      "files": []
+    },
+    {
+      "slug": "visual-reference-check",
+      "title": "Visual reference images are checked against their manifest",
+      "bump": "none",
+      "platforms": [
+        "emdash"
+      ],
+      "areas": [
+        "tooling",
         "docs"
       ],
       "adoption": "none",
       "visible": false,
       "database": false,
       "files": []
-    },
-    {
-      "slug": "copy-guides-on-the-stage-path",
-      "title": "The copy guides and the pacing blueprint are on the path a new site follows",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills"
-      ],
-      "adoption": "sync",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "covered-letters",
-      "title": "A label struck through by a drawn part is found",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs"
-      ]
-    },
-    {
-      "slug": "craft-pass-as-run",
-      "title": "The craft pass can be followed as written, and the look tool reads its routes on Windows",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/design-look.mjs",
-        "tests/design-look.test.mjs"
-      ]
-    },
-    {
-      "slug": "design-checks-after-sprints",
-      "title": "Design checks: motion names, unloaded pictures, and the first-screen checks at Stage 5",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-art-direction.mjs",
-        "scripts/audit-composition.mjs",
-        "scripts/check-quality.mjs",
-        "tests/world-record.test.mjs",
-        "tests/audit-composition.test.mjs",
-        "tests/check-quality.test.mjs"
-      ]
-    },
-    {
-      "slug": "design-checks-round-3",
-      "title": "Impression scenes must carry the subject; faster audits; fixes from four more design sprints",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs",
-        "scripts/capture-routes.mjs",
-        "scripts/design-sheet.mjs",
-        "tests/audit-composition.test.mjs",
-        "tests/design-sheet.test.mjs"
-      ]
-    },
-    {
-      "slug": "designer-agreement",
-      "title": "The composition audit is checked against designers' votes",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs",
-        "scripts/check-art-direction.mjs",
-        "tests/audit-composition.test.mjs",
-        "tests/world-record.test.mjs"
-      ]
-    },
-    {
-      "slug": "earned-labels-and-accent",
-      "title": "A label above a heading and an accented phrase are allowed when earned",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs"
-      ]
-    },
-    {
-      "slug": "emdash-1-6",
-      "title": "EmDash 1.6.0",
-      "bump": "minor",
-      "platforms": [
-        "emdash"
-      ],
-      "areas": [
-        "dependencies",
-        "components",
-        "docs"
-      ],
-      "adoption": "manual",
-      "visible": false,
-      "database": true,
-      "files": []
-    },
-    {
-      "slug": "header-brand-clamp",
-      "title": "The phone header's two-line clamp applies to a plain text title only",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "styles"
-      ],
-      "adoption": "manual",
-      "visible": true,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "hidden-always-hides",
-      "title": "The `hidden` attribute always hides",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "styles"
-      ],
-      "adoption": "manual",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "legible-text",
-      "title": "The composition audit reads whether the text can be read",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs"
-      ]
-    },
-    {
-      "slug": "look-covers-long-pages",
-      "title": "The look covers a long page to its foot, the browser tools find a site under either local name, and Disclosure can be restyled",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "components"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/design-look.mjs",
-        "scripts/capture-routes.mjs",
-        "scripts/audit-composition.mjs",
-        "scripts/audit-ui.mjs",
-        "scripts/check-quality.mjs",
-        "scripts/record-motion.mjs",
-        "src/components/Disclosure.astro",
-        "tests/design-look.test.mjs",
-        "tests/capture-routes.test.mjs",
-        "tests/components-primitives.test.mjs",
-        "docs/native-composition.md"
-      ]
-    },
-    {
-      "slug": "look-pass",
-      "title": "A look pass: every screen, one line each, and a score",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/design-look.mjs",
-        "tests/design-look.test.mjs",
-        "scripts/audit-composition.mjs",
-        "tests/audit-composition.test.mjs",
-        "package.json"
-      ]
-    },
-    {
-      "slug": "look-stops-at-the-foot",
-      "title": "The look stops at a page's real foot, and composition advisories say which sections they mean",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/design-look.mjs",
-        "scripts/audit-composition.mjs",
-        "tests/design-look.test.mjs",
-        "tests/audit-composition.test.mjs"
-      ]
-    },
-    {
-      "slug": "media-prepare-says-how",
-      "title": "`media:prepare` says the form that works when it is written wrongly",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "tooling",
-        "skills"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/prepare-images.mjs",
-        "tests/media-preparation.test.mjs"
-      ]
-    },
-    {
-      "slug": "motion-tier",
-      "title": "A motion tier in the record; the impression tier requires scripted motion",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/check-art-direction.mjs",
-        "scripts/audit-composition.mjs",
-        "tests/world-record.test.mjs",
-        "tests/audit-composition.test.mjs"
-      ]
-    },
-    {
-      "slug": "photoset-any-count",
-      "title": "PhotoSet takes the arrangement that fits the photographs it is given",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "components",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "src/components/PhotoSet.astro"
-      ]
-    },
-    {
-      "slug": "prompt-library-stage-prompts",
-      "title": "Three prompts in the prompt library follow the workflow again",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "docs/prompt-library.md"
-      ]
-    },
-    {
-      "slug": "sourced-worlds",
-      "title": "A site's world comes from sources, not from a list of devices",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/design-world.mjs",
-        "tests/design-world.test.mjs",
-        "scripts/check-art-direction.mjs",
-        "scripts/design-icons.mjs",
-        "scripts/design-system.mjs",
-        "scripts/audit-composition.mjs",
-        "tests/world-record.test.mjs"
-      ]
-    },
-    {
-      "slug": "start-and-build-out",
-      "title": "A site can be started by one model and built out by another",
-      "bump": "minor",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "docs"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "README.md",
-        "docs/prompt-library.md",
-        "docs/site-delivery-workflow.md",
-        "docs/art-direction-workflow.md",
-        "docs/getting-started.md"
-      ]
-    },
-    {
-      "slug": "upstream-update",
-      "title": "Weekly upstream refresh (building-emdash-site, creating-plugins, emdash-cli, impeccable, Sveltia CMS 0.271.2)",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "dependencies",
-        "skills"
-      ],
-      "adoption": "manual",
-      "visible": false,
-      "database": false,
-      "files": []
-    },
-    {
-      "slug": "verify-in-customised-sites",
-      "title": "`npm run verify` stays green in a site with its own typeface, and a dark ground has a way through the token tool",
-      "bump": "patch",
-      "platforms": [
-        "emdash",
-        "static"
-      ],
-      "areas": [
-        "skills",
-        "tooling"
-      ],
-      "adoption": "copy",
-      "visible": false,
-      "database": false,
-      "files": [
-        "scripts/design-system.mjs",
-        "scripts/check-art-direction.mjs",
-        "tests/spacing-tokens.test.mjs",
-        "tests/world-record.test.mjs"
-      ]
     }
   ]
 }
