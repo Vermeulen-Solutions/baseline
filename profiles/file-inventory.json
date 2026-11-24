@@ -2034,6 +2034,16 @@
     "tests/design-look.test.mjs": {
       "disposition": "shared",
       "static": "copy"
+    },
+    "src/lib/media-edge-cache.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted",
+      "reason": "Bounded edge copy of media for the middleware and the Cloudflare cache provider; no static output runtime"
+    },
+    "tests/emdash-overlap.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted",
+      "reason": "Keeps the EmDash overlap register in docs/emdash-overlap.md complete for upgrade reviews"
     }
   }
 }

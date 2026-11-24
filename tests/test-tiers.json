@@ -450,5 +450,9 @@
   "design-sheet.test.mjs": {
     "tier": "unit",
     "reason": "Comparison sheet: the layout of page and references cut at the same number of screens, arguments, and a sheet written from two synthetic images"
+  },
+  "emdash-overlap.test.mjs": {
+    "tier": "unit",
+    "reason": "Source files that overlap EmDash behaviour are registered for upgrade reviews; reads files only"
   }
 }

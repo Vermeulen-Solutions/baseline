@@ -1,7 +1,7 @@
 // Upgrade rehearsal on a local copy of a Workers site's D1 database, from `npm run db:export-d1`.
 // Nothing here writes to Cloudflare: the remote side is only read (R2 objects are downloaded).
 //
-//   npm run db:rehearse -- --from <export.sql> --persist-to <empty dir> [--database <name>]
+//   npm run db:rehearse -- --from <export.sql> --persist-to <empty dir Git ignores, e.g. .emdash/backups/rehearse-<date>> [--database <name>]
 //        [--bucket <name>] [--port 8790] [--media-sample <n>] [--no-plugin-bundles]
 //   npm run db:rehearse -- --compare --persist-to <dir> [--port 8790]
 //
@@ -24,9 +24,17 @@ import { DatabaseSync } from 'node:sqlite';
 import { parse as parseJSONC } from 'jsonc-parser';
 import { execNpmSync } from './process-runner.mjs';
 import { argumentsOf, bytesOf, isMain } from './infrastructure-io.mjs';
-import { quoteIdentifier } from './d1-export.mjs';
+import { DEFAULT_BACKUP_DIR, gitIgnoreStatus, quoteIdentifier } from './d1-export.mjs';
 
 export const BEFORE_FILE = 'rehearsal-before.json';
+
+// The rehearsal copy holds the site's users, sessions and content, like the export it is loaded from.
+// Refuse a folder Git would track: on a live site a scratch folder under .emdash/ was staged for commit.
+export function assertRehearsalTarget(persistTo, run) {
+  if (gitIgnoreStatus(path.join(path.resolve(persistTo), BEFORE_FILE), run) === 'tracked') {
+    throw new Error(`${persistTo} is not ignored by Git, and the rehearsal copy holds users, sessions and content. Use a folder under ${DEFAULT_BACKUP_DIR}/ (for example ${DEFAULT_BACKUP_DIR}/rehearse-<date>) or outside the repository.`);
+  }
+}
 const wrangler = ['exec', '--', 'wrangler'];
 
 export function wranglerBindings(directory = '.') {
@@ -143,6 +151,7 @@ export async function prepareRehearsal({ from, persistTo, database, bucket, port
   const bucketName = bucket || bindings.bucket;
   if (!dbName) throw new Error('Database name required: specify --database <name> or configure it in wrangler.jsonc');
   const target = path.resolve(persistTo);
+  assertRehearsalTarget(target);
   if (fs.existsSync(target) && fs.readdirSync(target).length) throw new Error(`${target} is not empty. Use a fresh directory for each rehearsal so the copy starts unmigrated.`);
   fs.mkdirSync(target, { recursive: true });
 

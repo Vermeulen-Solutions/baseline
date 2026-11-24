@@ -6,7 +6,7 @@ import path from 'node:path';
 import { DatabaseSync } from 'node:sqlite';
 import { htmlCacheKeyedPerBuild, undeclaredEmDashImports, versionAtLeast, workersAdapterStatus } from '../scripts/workers-rules.mjs';
 import { assertSafeDestination, gitIgnoreStatus, oversizedStatements } from '../scripts/d1-export.mjs';
-import { compareCounts, databaseHealth, findD1File, loadExport, pluginBundlePrefixes, tableCounts } from '../scripts/d1-rehearse.mjs';
+import { assertRehearsalTarget, compareCounts, databaseHealth, findD1File, loadExport, pluginBundlePrefixes, tableCounts } from '../scripts/d1-rehearse.mjs';
 import { checkLive, coldUrl, measureTiming, median, parseSitemap, reroot, sitemapAlternates, stylesheetHrefs } from '../scripts/check-live.mjs';
 
 // Portable: throwaway folders, a stubbed `git` and a stubbed fetch; no network, Wrangler or CMS.
@@ -36,6 +36,10 @@ test('Workers rules: adapter minimum on EmDash 1.5, per-build HTML cache keys, d
     put(dir, 'src/plugins/staff/admin.tsx', "import { useCurrentUser } from '@emdash-cms/admin';\nimport { Button } from \"@emdash-cms/blocks/react\";\nimport x from 'emdash';");
     assert.deepEqual(undeclaredEmDashImports(dir, new Set(['emdash', '@emdash-cms/blocks'])), [{ name: '@emdash-cms/admin', file: 'src/plugins/staff/admin.tsx' }]);
     assert.deepEqual(undeclaredEmDashImports(dir, new Set(['emdash', '@emdash-cms/blocks', '@emdash-cms/admin'])), []);
+    // Kumo is pinned exactly by EmDash's admin and blocks; a plugin admin page that imports it declares it.
+    put(dir, 'src/plugins/order/admin.tsx', "import { Button } from '@cloudflare/kumo';");
+    assert.deepEqual(undeclaredEmDashImports(dir, new Set(['emdash', '@emdash-cms/blocks', '@emdash-cms/admin'])), [{ name: '@cloudflare/kumo', file: 'src/plugins/order/admin.tsx' }]);
+    assert.deepEqual(undeclaredEmDashImports(dir, new Set(['emdash', '@emdash-cms/blocks', '@emdash-cms/admin', '@cloudflare/kumo'])), []);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
 
@@ -46,6 +50,9 @@ test('D1 export refuses destinations Git would track and reports statements D1 c
   assert.equal(gitIgnoreStatus('x/backup.sql', git({ inside: false })), 'outside');
   assert.throws(() => assertSafeDestination('x/backup.sql', git({ inside: true, ignored: false })), /not ignored by Git/);
   assert.doesNotThrow(() => assertSafeDestination('x/backup.sql', git({ inside: false })));
+  // The rehearsal copy is the same data, so its folder follows the same rule.
+  assert.throws(() => assertRehearsalTarget('.emdash/rehearse-1.6', git({ inside: true, ignored: false })), /not ignored by Git/);
+  assert.doesNotThrow(() => assertRehearsalTarget('.emdash/backups/rehearse-1.6', git({ inside: true, ignored: true })));
   const big = `INSERT INTO "ec_galleries" VALUES ('${'x'.repeat(100_001)}');`;
   assert.deepEqual(oversizedStatements([big, 'INSERT INTO "small" VALUES (1);']), [{ table: 'ec_galleries', bytes: Buffer.byteLength(big) }]);
 });

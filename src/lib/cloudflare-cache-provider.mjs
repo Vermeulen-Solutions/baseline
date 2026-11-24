@@ -1,10 +1,5 @@
 import memoryFactory from 'astro/cache/memory';
-
-const IMMUTABLE_IMAGE_CACHE_CONTROL = 'public, max-age=31536000, immutable';
-
-function isImmutableMediaPath(pathname) {
-  return pathname === '/_image' || pathname.startsWith('/_emdash/api/media/file/');
-}
+import { isMediaPath, serveMedia } from './media-edge-cache.mjs';
 
 // HTML entries are keyed per build: a deploy must never serve the previous build's cached
 // pages for the rest of their max-age. Pass `config.buildId` from astro.config (computed once
@@ -23,7 +18,9 @@ function getEdgeCache(customCache) {
 /**
  * Cloudflare Worker + Node cache provider with pre-lookup private request bypass,
  * Workers Cache API (`caches.default`) storage for anonymous public HTML on `*.workers.dev`,
- * and immutable edge/browser caching for `/_image` and `/_emdash/api/media/file/*`.
+ * and a bounded edge copy of media (`/_image`, `/_emdash/api/media/file/*`) that keeps EmDash's own
+ * browser header, so a replaced image is not pinned for a year (src/lib/media-edge-cache.mjs). Media never
+ * reaches the in-isolate memory provider, although EmDash 1.6 asks the route cache to keep it.
  */
 export default function cloudflareCacheProvider(config = {}) {
   const baseFactory = typeof config.baseProviderFactory === 'function' ? config.baseProviderFactory : memoryFactory;
@@ -37,43 +34,7 @@ export default function cloudflareCacheProvider(config = {}) {
       const url = new URL(request.url);
       const edgeCache = resolveCache();
 
-      if ((request.method === 'GET' || request.method === 'HEAD') && isImmutableMediaPath(url.pathname)) {
-        const cacheKey = new Request(url.toString(), { method: 'GET' });
-        if (edgeCache) {
-          try {
-            const cached = await edgeCache.match(cacheKey);
-            if (cached) {
-              const headers = new Headers(cached.headers);
-              headers.set('Cache-Control', IMMUTABLE_IMAGE_CACHE_CONTROL);
-              headers.set('X-Astro-Cache', 'HIT');
-              return new Response(request.method === 'HEAD' ? null : cached.body, {
-                status: cached.status,
-                statusText: cached.statusText,
-                headers,
-              });
-            }
-          } catch {}
-        }
-        const response = await next();
-        if (response.status === 200) {
-          const headers = new Headers(response.headers);
-          headers.set('Cache-Control', IMMUTABLE_IMAGE_CACHE_CONTROL);
-          headers.delete('CDN-Cache-Control');
-          headers.delete('Cloudflare-CDN-Cache-Control');
-          const cacheable = new Response(response.body, {
-            status: response.status,
-            statusText: response.statusText,
-            headers,
-          });
-          if (edgeCache && request.method === 'GET') {
-            try {
-              await edgeCache.put(cacheKey, cacheable.clone());
-            } catch {}
-          }
-          return cacheable;
-        }
-        return response;
-      }
+      if (isMediaPath(url.pathname)) return serveMedia(request, next, { edgeCache });
 
       if (
         request.method !== 'GET' ||

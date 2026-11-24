@@ -168,6 +168,8 @@ Change notes for every change sites receive, `standards:check`, cutting a releas
 Using `npm run audit:site` to diagnose existing sites against the current certified standards release (`standards/baselines/<version>.json`, pinned in `scripts/audit-site.mjs`), and applying deterministic modernization recipes.
 - **[Starter Meta-Review Process](starter-meta-review.md)**  
 Methodology for recurring evaluation of upstream Astro, adapter, and EmDash releases.
+- **[Where Baseline Overlaps EmDash](emdash-overlap.md)**  
+The Baseline files that intercept or depend on EmDash behaviour, and what to re-check on each EmDash upgrade.
 - **[Site Registry Contract](site-registry.md)**  
 Private site registry conventions for agencies managing multiple client deployments.
 
