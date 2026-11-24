@@ -23,6 +23,7 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { loadPendingImages } from './audit-composition.mjs';
+import { restoreGitBashRoute } from './capture-routes.mjs';
 
 export const SCREENS = Object.freeze({ 390: { height: 844, step: 760, perSheet: 4 }, 1440: { height: 900, step: 810, perSheet: 2 } });
 export const MAX_SCREENS = 14;
@@ -36,7 +37,8 @@ export function parseArgs(argv) {
     if (arg === '--help' || arg === '-h') options.help = true;
     else if (arg === '--check') options.check = true;
     else if (arg === '--base') options.base = String(argv[++i] ?? '').replace(/\/+$/, '');
-    else if (arg === '--routes') options.routes = String(argv[++i] ?? '').split(',').map((r) => r.trim()).filter(Boolean);
+    // Git Bash turns "/" and "/about" into paths under its own install folder before Node sees them: put the route back.
+    else if (arg === '--routes') options.routes = String(argv[++i] ?? '').split(',').map((r) => restoreGitBashRoute(r.trim())).filter(Boolean);
     else if (arg === '--out') options.out = argv[++i];
     else if (arg === '--src') options.src = argv[++i];
     else if (arg === '--widths') options.widths = String(argv[++i] ?? '').split(',').map(Number).filter((n) => SCREENS[n]);
