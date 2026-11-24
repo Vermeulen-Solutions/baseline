@@ -221,7 +221,7 @@ test('tall items are compared by how they are laid out, not by their tag and cla
 test('a lazy picture that has not loaded is brought into view and waited for, never read from its fallback src', async () => {
   const { loadPendingImages } = await import('../scripts/audit-composition.mjs');
   assert.equal(typeof loadPendingImages, 'function');
-  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
   // Design trials got soft-photo for a full-width picture: the audit read the 800px src beside the srcset before the browser had chosen a file.
   assert.match(source, /await page\.evaluate\(loadPendingImages\);\s*const model = await page\.evaluate\(measurePage\);/);
   assert.match(source, /url: img\.currentSrc \|\| \(img\.srcset \? '' : img\.src\) \|\| ''/, 'a picture with a srcset counts only by the file the browser chose');
@@ -265,7 +265,7 @@ test('an impression scene must change the screen; references are measured once',
   // A scene that was not measured (another tier's run, an older report) is not judged on it.
   assert.equal(assessImpression('impression', [built]), null);
   assert.equal(parse(['--base', 'http://127.0.0.1:4321', '--routes', '/', '--references', 'audit/references/references.md', '--refresh-references']).refreshReferences, true);
-  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
   assert.match(source, /reference-measures\.json/);
   // An arrival that plays once at load has run: animation starts are recorded from the first paint.
   assert.match(source, /addInitScript\(\(\) => \{ window\.__animationsStarted = \[\]/);
@@ -297,7 +297,7 @@ test('a label above three headings and an italic word in the page heading are fl
   const earned = page([section({ kicker: true, kickerFact: true }), section({ kicker: true, kickerFact: true }), section({ kicker: true, kickerFact: true }), section({ kicker: true })]);
   assert.equal(assessComposition(earned).some((f) => f.code === 'kicker-openings'), false);
   // In the page: a figure or a currency in the label earns it, once a bare index at its start is set aside.
-  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
   const strip = /const said = before\.textContent\.trim\(\)\.replace\((\/.*\/i), ''\);/.exec(source)?.[1];
   assert.ok(strip, 'the index-stripping expression is in the page code');
   const index = new RegExp(strip.slice(1, strip.lastIndexOf('/')), 'i');
@@ -344,7 +344,7 @@ test('text-collision reports the places with the width or the scene they were se
 
 test('the collision measure reads the page from its top, skips unpainted text and leaves a sticky bar out of scene frames', async () => {
   const { readFileSync } = await import('node:fs');
-  const source = readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  const source = readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
   assert.ok(source.includes('await page.evaluate(() => scrollTo(0, 0));\n    await page.waitForTimeout(150);\n    Object.assign(model, legibility ? await readLegibility(browser, page) : { collisions: collidingText(await page.evaluate(textBoxes)) });'));
   assert.ok(source.includes('el.checkVisibility?.({ visibilityProperty: true }) === false'));
   assert.ok(source.includes('if (f.fixed || f.unknown || (viewportOnly && f.bar)) continue;'));
@@ -407,7 +407,7 @@ test('a letter gone from inside a line that otherwise shows is a candidate for b
   const box = { el: 0, node: 0, chars: 9, text: 'Entretien', x: 928, y: 1697, w: 69, h: 7, alpha: 1, lost: 0, upright: true, turned: false, rgb: [0, 0, 0], letters };
   assert.deepEqual(linesToSample([{ ...box, size: 11 }])[0].letters, letters);
   assert.equal(linesToSample([{ ...box, size: 96 }])[0].letters, undefined);
-  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
   assert.ok(source.includes('await page.evaluate(textBoxes, { letters: true })'));
   assert.ok(source.includes('const gone = (letter) => letter && letter[0] < 0.1 && letter[1] < 0.5 * depth;'));
 });
@@ -436,7 +436,7 @@ test('a line whose letters do not show at one end, or at all, is a candidate for
   ]);
   // Without the picture of the page as it is painted there is nothing to compare: no candidates.
   assert.deepEqual(coveredText(lines, [{ low: 0, spread: 3 }, null, null, null]), []);
-  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8');
+  const source = (await import('node:fs')).readFileSync(new URL('../scripts/audit-composition.mjs', import.meta.url), 'utf8').replaceAll('\r\n', '\n');
   // A candidate counts only when something else than its own element lies on top at that point, and a bar that rides over the page is not that.
   assert.match(source, /covered = hidden\.filter\(\(_, i\) => shown\[i\]\)/);
   assert.match(source, /position === 'fixed' \|\| position === 'sticky'\) return false/);
