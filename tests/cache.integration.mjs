@@ -56,13 +56,13 @@ try {
   const authProbe = await checkHostedAuth({ origin, version: REVIEWED_EMDASH, buildLog: await readFile(path.join(reportDir, 'build.log'), 'utf8') });
   assert.equal(authProbe.setupLocked, true);
   receipt.checks.push('native non-consuming hosted-auth contract reaches completed setup on built ' + REVIEWED_EMDASH);
-  const api = async (route, method = 'GET', body) => {
+  const api = async (route, method = 'GET', body, status) => {
     const response = await fetch(origin + '/_emdash/api/' + route, {
       method, headers: { Authorization: 'Bearer ' + token, ...(body ? { 'Content-Type': 'application/json' } : {}) },
       ...(body ? { body: JSON.stringify(body) } : {}), redirect: 'manual',
     });
     const result = await response.json();
-    assert.equal(response.status, method === 'POST' && route.split('/').length === 2 ? 201 : 200, route + ': ' + JSON.stringify(result.error));
+    assert.equal(response.status, status ?? (method === 'POST' && route.split('/').length === 2 ? 201 : 200), route + ': ' + JSON.stringify(result.error));
     assert.equal(result.success, true, route);
     assert.notEqual(response.headers.get('x-astro-cache'), 'HIT', 'admin responses are private');
     return result.data;
@@ -86,19 +86,26 @@ try {
   };
   await warm('/'); await warm('/posts/welcome'); await warm('/category/general');
 
-  // A missing entry renders the 404 page through a rewrite. The memory cache stores any response
-  // with a lifetime, whatever its status, so a cached 404 would hide the entry once it is published.
+  // A missing entry renders the 404 page through a rewrite. Since EmDash 1.6 the page sets the
+  // entry's (or the taxonomy's) cache hint before the miss, so the 404 may be cached, and the
+  // publish or term creation that fills the URL purges it: the new page is served at once.
   for (const route of ['/posts/cache-late-post', '/cache-late-page', '/tag/cache-late-tag']) {
     for (const attempt of [1, 2]) {
       const missing = await page(route);
       assert.equal(missing.status, 404, route + ' answers 404 (attempt ' + attempt + ')');
-      assert.notEqual(missing.cache, 'HIT', route + ' must never be served from the route cache');
     }
   }
   const late = (await api('content/posts', 'POST', { slug: 'cache-late-post', data: { title: 'Cache late post' } })).item;
   await api('content/posts/' + late.id + '/publish', 'POST', { _rev: late._rev });
   await fresh('/posts/cache-late-post', 'Cache late post');
-  receipt.checks.push('missing entries answer 404 without being cached, and a later publish under that slug is served at once');
+  const latePage = (await api('content/pages', 'POST', { slug: 'cache-late-page', data: { title: 'Cache late page' } })).item;
+  await api('content/pages/' + latePage.id + '/publish', 'POST', { _rev: latePage._rev });
+  // The rig route-caches only the routes in routeRules; /[slug] is not one, so the page is checked as served.
+  const servedPage = await page('/cache-late-page');
+  assert.equal(servedPage.status, 200); assert.ok(servedPage.html.includes('Cache late page'));
+  await api('taxonomies/tag/terms', 'POST', { slug: 'cache-late-tag', label: 'Cache late tag' }, 201);
+  await fresh('/tag/cache-late-tag', 'Cache late tag');
+  receipt.checks.push('a 404 for a missing post, page or term is purged by the publish or term creation that fills its URL');
 
   const original = (await api('content/posts/welcome')).item;
   await api('content/posts/' + original.id, 'PUT', { _rev: original._rev, data: { title: 'Welcome cache published title' } });
