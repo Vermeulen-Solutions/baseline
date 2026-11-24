@@ -178,8 +178,12 @@ export function displayFace(markdown) {
 /** The third voice the record names after Display and Body (Utility, Mono, Labels or Third), or null. */
 export function thirdFace(markdown) {
   const line = recordSection(markdown).find(entry => /^\s*- \*\*Typography Pairing:\*\*/.test(entry));
-  const family = line?.match(/(?:Utility|Mono|Labels?|Third(?: voice)?):\s*([^,(;\[]+)/i)?.[1].replace(/["'`*]/g, '').replace(/\s+Variable\s*$/i, '').trim();
-  return family && !/^(none|no|aucune?)\b/i.test(family) ? family : null;
+  // "No third voice: labels are set in the reading face" names no family: a role that is denied is not read.
+  const family = line?.match(/(?<!\b(?:no|without|pas de|sans|aucune?)\s+)\b(?:Utility|Mono|Labels?|Third(?: voice)?):\s*([^,(;\[]+)/i)?.[1].replace(/["'`*]/g, '').replace(/\s+Variable\s*$/i, '').trim();
+  if (!family || /^(none|no|aucune?)\b/i.test(family)) return null;
+  // The reading face used again for labels is not a third voice either.
+  const body = line.match(/Body:\s*([^,(;\[]+)/)?.[1].replace(/["'`*]/g, '').replace(/\s+Variable\s*$/i, '').trim();
+  return body && body.toLowerCase() === family.toLowerCase() ? null : family;
 }
 
 /** With required: a new direction has looked at a specimen sheet, and its display face and any third voice are on one. */

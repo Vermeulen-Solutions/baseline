@@ -32,6 +32,19 @@ Calibrate the affected native primitive and meaningful variants on `/_styleguide
 
 Record the requested change, source/target mapping, reviewed CSS diff, actual checks and remaining status in the existing evidence. A synthetic rehearsal must label its selection as a fixture decision and report the paths/conditions actually exercised; it does not establish user approval or cross-tool roundtrip fidelity. Continue the installed verification and agreed release endpoint after the representative proof succeeds.
 
+## A site whose ground is dark
+
+`--seed-accent` and `--seed-canvas` make a light palette, and refuse a dark canvas. A site that is dark from top to bottom sets its colours itself, in one command:
+
+```bash
+npm run design:tokens -- --set "--color-page=<ground>" --set "--color-surface=<raised ground>" --set "--color-text=<ink>" --set "--color-muted=<quiet ink>" --set "--color-border=<line>" --set "--color-action=<accent>" --set "--color-on-action=<ink on the accent>" --set "--color-focus=<focus ring>" --set "--root:--surface-light-bg=<pale ground>" --set "--root:--surface-light-link=<link on the pale ground>"
+```
+
+- Run it without `--write` first. It names every pair that fails with where its two colours come from; add `--write` when none is left.
+- A section that carries `data-surface="light"` or `data-surface="dark"` reads `--surface-light-*` and `--surface-dark-*` (`bg`, `text`, `muted`, `border`, `link`) from `:root`, with the starter's white and near-black as fallbacks. On a dark theme the light fallback pairs white with the accent, which usually fails. Give the light surface the site's pale ground and its ink; when no section is pale, give it the theme's own values. `--set "--root:--surface-light-link=<colour>"` adds a value the site has not set yet.
+- Change `color-scheme: light` to `dark` in `:root` in `global.css`, so form controls and scrollbars follow.
+- Pass `darkReaderLock` to `<SiteShell>` in `src/layouts/Base.astro`, as `astro-site-design/references/landing-page-archetypes.md` section 8 describes.
+
 ## Adding tokens and atmospheric grounds
 
 - **New colour tokens are styleguide specimens too.** A site that lists its colour tokens for the styleguide (for example `specimenTokens` in `src/dev/styleguide-fixtures.ts`) fails its tests until the new token is listed there; add it in the same change.

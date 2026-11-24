@@ -822,6 +822,17 @@ export function auditDesignTokens(css, { cssPath = 'src/styles/global.css' } = {
     }
   }
 
+  // Where a failing pair gets its two colours, and where to change them: the pair's name alone does not say
+  // that a light or dark section falls back to the starter's own ground, or that a link takes the action colour.
+  const contrastHint = (pair, defaults) => {
+    const scope = pair.id.split(':')[0];
+    const page = parseToOklchOrNull(resolveColorVar(defaults['--color-page'], defaults, defaults));
+    const darkTheme = page && page.L < 50;
+    if (scope === 'light') return ` A section with data-surface="light" takes its ground from --surface-light-bg (the starter's white while unset), its text from --surface-light-text, -muted and -border, and its link from --surface-light-link (--color-action while unset). Set them in :root in global.css, or with --set "--root:--surface-light-link=<colour>".${darkTheme ? ' This site\'s theme is dark: give them the site\'s pale ground and its ink, or the theme\'s own values when no section is pale.' : ''}`;
+    if (scope === 'dark') return ' A section with data-surface="dark" takes its ground from --surface-dark-bg, its text from --surface-dark-text, -muted and -border, and its link from --surface-dark-link (--color-focus-on-dark while unset). Set them in :root in global.css, or with --set "--root:--surface-dark-link=<colour>".';
+    if (pair.fg === '--color-link') return ' A link takes --color-action unless --color-link is set: it is declared in :root in the base layer of global.css, below the @theme block.';
+    return '';
+  };
   const allDefaults = { '--color-link': 'var(--color-action)', ...tokens.theme, ...tokens.root };
   const allDark = { ...allDefaults, ...tokens.dark };
   // A restored light surface must reset values inherited from its dark ancestor.
@@ -862,7 +873,7 @@ export function auditDesignTokens(css, { cssPath = 'src/styles/global.css' } = {
       status,
     });
     if (status === 'fail') {
-      errors.push(`Contrast failure (${pair.id}): ${pair.fg} (${fgValue}) on ${pair.bg} (${bgValue}) is ${ratio}:1 (minimum ${pair.min}:1).`);
+      errors.push(`Contrast failure (${pair.id}): ${pair.fg} (${fgValue}) on ${pair.bg} (${bgValue}) is ${ratio}:1 (minimum ${pair.min}:1).${contrastHint(pair, allDefaults)}`);
     } else if (status === 'unverified') {
       // A token that is simply absent is a contract gap, not a syntax problem (found in a real-site rehearsal).
       const absent = [[pair.fg, fgValue], [pair.bg, bgValue]].filter(([, value]) => !String(value ?? '').trim()).map(([name]) => name);
@@ -1008,6 +1019,10 @@ export function parseToOklch(rawValue) {
   throw new Error(`Unsupported color format '${value}'. Expected #hex or oklch(L% C H).`);
 }
 
+function parseToOklchOrNull(value) {
+  try { return parseToOklch(value); } catch { return null; }
+}
+
 function formatOklch(L, C, H) {
   return `oklch(${round4(L)}% ${round4(C)} ${round4(H)})`;
 }
@@ -1019,6 +1034,9 @@ export function generateSeededPalette({ accent, canvas = 'oklch(98.8% 0.005 250)
   if (!accent) throw new Error('generateSeededPalette requires an accent color (#hex or oklch).');
   const acc = parseToOklch(accent);
   const can = canvas ? parseToOklch(canvas) : { L: 98.8, C: Math.min(0.008, acc.C * 0.06), H: acc.H };
+  // The seeded palette is a light one: it keeps the page near white whatever the canvas. A dark canvas used to
+  // come back as a pale page with no word about it (found when two sites tried to seed a dark ground).
+  if (can.L < 60) throw new Error(`--seed-canvas makes a light ground and ${canvas} is dark. For a site whose ground is dark, set the colours themselves: npm run design:tokens -- --set "--color-page=<ground>" --set "--color-surface=<raised ground>" --set "--color-text=<ink>" --set "--color-muted=<quiet ink>" --set "--color-border=<line>" --set "--color-action=<accent>" --set "--color-on-action=<ink on the accent>" --set "--color-focus=<focus ring>" and, in the same command, the values of a section that carries data-surface, for example --set "--root:--surface-light-link=<link on the pale ground>" (preview first, then add --write; a pair that still fails is named with where its colours come from). Then change color-scheme: light to dark in :root in global.css (site-art-direction/references/token-handoff.md, "A site whose ground is dark").`);
 
   const pageColor = formatOklch(Math.max(96.5, Math.min(99.5, can.L)), Math.min(0.015, can.C), can.H);
   const surfaceColor = formatOklch(Math.min(100, Math.max(99, can.L + 0.8)), Math.min(0.006, can.C * 0.5), can.H);
@@ -1451,6 +1469,8 @@ export function pruneStarterExceptions(exceptionsPath = 'audit/design-gate-excep
  * Applies structured token overrides (`{ theme, root, dark }`) or a named Aesthetic Lane preset
  * directly to a `global.css` string while preserving comments and formatting.
  */
+const SURFACE_HOOKS = /^--surface-(?:light|dark)-(?:bg|text|muted|border|link)$/;
+
 export function applyTokenOverrides(css, presetOrOverrides) {
   const preset = typeof presetOrOverrides === 'string'
     ? laneOf(presetOrOverrides)
@@ -1465,6 +1485,13 @@ export function applyTokenOverrides(css, presetOrOverrides) {
   for (const scope of ['theme','root','dark','light']) {
     for (const [name,value] of Object.entries(preset[scope] || {})) {
       const decl = scopes[scope][0]?.nodes?.find(n=>n.type==='decl' && n.prop===name);
+      // The surface blocks read these with a fallback (var(--surface-light-link, var(--color-action))), so a
+      // site that has not set one has no declaration to change: it is added to :root instead of refused.
+      if (!decl && scope === 'root' && SURFACE_HOOKS.test(name) && scopes.root[0]) {
+        if (typeof value !== 'string' || !value.trim() || /[;{}]/.test(value)) throw new Error('Invalid token value for ' + scope + ':' + name);
+        scopes.root[0].append({ prop: name, value: value.trim() });
+        continue;
+      }
       if (!decl) {
         const required = REQUIRED_BY_SCOPE[scope]?.includes(name);
         throw new Error('Unknown token in ' + scope + ': ' + name + '; expected an existing declaration in that scope.' + (required ? ' It is a required contract token: add --add-missing to insert it first.' : ''));
