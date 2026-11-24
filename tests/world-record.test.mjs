@@ -128,6 +128,10 @@ test('a third voice is chosen from a specimen sheet too, or left out', async () 
   assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans; Mono: "Cutive Mono"')), 'Cutive Mono');
   assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans')), null);
   assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans, Utility: none')), null);
+  // A sentence that says there is none names no family, and the reading face used for labels is not a third voice.
+  assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans. No third voice: labels are set in the reading face')), null);
+  assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans; pas de Utility: les étiquettes restent en Work Sans')), null);
+  assert.equal(thirdFace(withType('Display: Tektur, Body: Work Sans, Labels: Work Sans')), null);
   assert.deepEqual(validateFaces(withType('Display: Tektur, Body: Work Sans, Utility: Cutive Mono'), { required: true, facesText: sheet }), []);
   // The display face used again for labels is not a third voice.
   assert.deepEqual(validateFaces(withType('Display: Tektur, Body: Work Sans, Utility: Tektur'), { required: true, facesText: sheet }), []);
