@@ -184,6 +184,7 @@ Use an adopted `PRODUCT.md` as brief evidence when present, and identify the sel
 - **References:** audit/references/references.md [Required for a new direction; once named, every check:art-direction run validates the file]
 - **World:** [Required with the references: the source object, sources, inventory, objects, surfaces, type, motion, photographs and feature, as nested items; see references/world-building.md]
 - **Decisions:** [Required with the references: at least three nested "Easy: … Ours: …" entries for the look, the feature and the content]
+- **Settled Treatments:** [Optional; added as the owner settles them: nested "<component>: <treatment> (owner, <date>)" entries, for example "Training evenings: day, time and venue as pills (owner, 2026-11-25)". Later work reuses them; another treatment for the same component needs the owner's say first]
 ```
 
 ### Agent-First Token Calibration Protocol (`npm run design:tokens` & `/_styleguide`)
