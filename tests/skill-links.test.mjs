@@ -24,7 +24,7 @@ test('Baseline-owned skills link only to files every receiving site has', () => 
       if (!entry.name.endsWith('.md')) continue;
       const skill = child.split('/')[0];
       // Upstream mirrors are byte-for-byte copies; their links are upstream's to fix.
-      if (sources.emdash.skills.includes(skill)) continue;
+      if (sources.emdash.skills.includes(skill) || child.includes('/references/upstream/')) continue;
       const text = fs.readFileSync(path.join(skillsRoot, child), 'utf8');
       for (const [, href] of text.matchAll(/\]\(([^)\s]+)\)/g)) {
         if (/^(?:https?:|#|mailto:)/.test(href)) continue;
