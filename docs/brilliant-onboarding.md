@@ -1,6 +1,6 @@
 # Brilliant onboarding
 
-Brilliant is Baseline's recommended editable prototyping canvas when the owner asks for a design surface and has no settled tool. Reuse an established choice and working connection first. HTML/browser concepts remain the default without a canvas request, and OpenPencil and Penpot remain explicit choices. Choosing Brilliant preserves the same two-or-three-direction comparison, selection, native calibration and representative Astro proof; it does not require another agent or a service in the deployed site. Author the prototype natively with shared components and layout; the recommendation does not imply a faithful HTML round trip or a measured token/speed advantage.
+Brilliant is the canvas for an owner who wants to edit designs by hand. An owner who wants to review by marking the design is pointed to OpenDesign (HTML concepts) or OpenPencil (vector boards), which both carry comments; Brilliant has none. Reuse an established choice and working connection first. HTML/browser concepts remain the default without a canvas request. Choosing Brilliant preserves the same two-or-three-direction comparison, selection, native calibration and representative Astro proof; it does not require another agent or a service in the deployed site. Author the prototype natively with shared components and layout; the recommendation does not imply a faithful HTML round trip or a measured token/speed advantage.
 
 ## What is verified
 

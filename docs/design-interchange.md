@@ -15,10 +15,10 @@ For new sites and substantial overhauls, reference discovery follows the shared 
 Choose a design iteration surface using the shared defaults:
 
 - **HTML/browser (default without a canvas request):** Agent-authored concept files under `audit/visual-concepts/`, with desktop/mobile comparison and real browser behavior.
-- **[Brilliant](brilliant-onboarding.md) (recommended when an editable canvas is requested and no tool is settled):** Native editable concepts with the `brilliant-site-design` skill; translate the selected direction into Astro.
-- **[OpenPencil](openpencil-onboarding.md):** Local desktop canvas (`openpencil-site-design`) using `.fig` files, vector nodes, and semantic variable bindings.
+- **[OpenDesign](opendesign-onboarding.md) (recommended for review by comments):** HTML/CSS concepts with comments tied to elements, read with `npm run design:comments`; reference research does not require it.
+- **[Brilliant](brilliant-onboarding.md):** Native editable concepts for an owner who edits by hand, with the `brilliant-site-design` skill; translate the selected direction into Astro.
+- **[OpenPencil](openpencil-onboarding.md):** Local desktop canvas (`openpencil-site-design`) using `.fig` files, vector nodes and variable bindings, reviewed by comments pinned on the boards.
 - **[Penpot](penpot-onboarding.md):** Shared cloud workspace (`penpot-site-design`) for multi-user browser review.
-- **[OpenDesign](opendesign-onboarding.md) (optional):** Its canvas/export workflow when explicitly chosen, or an existing project; reference research does not require it.
 - **Direct Astro:** Explore isolated concepts under `audit/visual-concepts/` in the browser; after saving and checking the Art Direction Record, translate the selected concept into native CSS, `/_styleguide` and production routes.
 
 Baseline supports two execution models across all surfaces:
@@ -45,7 +45,7 @@ Select sources that answer the design question rather than treating every extern
 | :--- | :--- | :--- |
 | **1. Reference research (shared)** | Supplied sites and real UX references (**Nicelydone**, **Refero**, **Kombai** where available), prompt libraries, community `DESIGN.md`, OpenDesign public/local systems and templates | A brief-led shortlist of flows, layouts, type/colour/surface rules and composition examples. Public/local files need no app, MCP, account or surface skill; a connected search tool is optional transport. |
 | **2. Adaptation** | `design:prompt-check` and the shared adaptation pass | Keep/change/refuse decisions, fixed brand commitments, role mapping and real proof before concepts and implementation. |
-| **3. Concept iteration & native translation** | **Brilliant** recommended for a requested editable canvas without a settled tool; **HTML/browser** default without a canvas request; explicit **OpenPencil**/**Penpot** choices; optional **OpenDesign**; `src/styles/global.css` | Two or three distinct concepts compared side by side on the selected surface, one selected direction, then a representative Astro proof.
+| **3. Concept iteration & native translation** | **HTML/browser** default without a canvas request; **OpenDesign** recommended for review by comments; explicit **OpenPencil**/**Brilliant**/**Penpot** choices; `src/styles/global.css` | Two or three distinct concepts compared side by side on the selected surface, one selected direction, then a representative Astro proof.
 | **4. Optional component blueprints** | **21st.dev MCP** (`@21st-dev/magic`) or another external registry | A candidate component pattern, sourced only after direction selection and transmuted to zero-JS Astro through quarantine. |
 | **5. Token calibration** | **`npm run design:tokens` + `/_styleguide`** | WCAG AA contrast, fluid typography and spacing verification, and visual proofing. |
 

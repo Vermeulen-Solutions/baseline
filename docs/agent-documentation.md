@@ -165,7 +165,7 @@ All of these are optional access paths to the same shared research step, not sep
 ```
 
 > [!TIP]
-> **Optional design tools:** At the Stage 4 checkpoint, recommend **Brilliant** for a requested editable prototyping canvas when no tool is settled; default to HTML/browser concepts when no canvas is requested. Explicitly offer **Brilliant** and **OpenPencil** for editable local canvases and **Penpot** for shared cloud review; keep **OpenDesign** optional for an explicitly selected canvas/export workflow or an existing project. Reuse settled choices. The same two-or-three-direction comparison and selection apply to HTML and canvases. Local lane/token tooling (`npm run design:tokens`) and `/_styleguide` remain available without external services. See [Art Direction Workflow](art-direction-workflow.md).
+> **Optional design tools:** At the Stage 4 checkpoint, default to HTML/browser concepts when no canvas is requested; when the owner wants to review designs by marking them and no tool is settled, recommend **OpenDesign** (HTML concepts, comments tied to elements). Explicitly offer **OpenDesign**, **OpenPencil** (vector canvas, also reviewed by comments), **Brilliant** (hand editing) and **Penpot** (shared cloud review). Reuse settled choices. The same two-or-three-direction comparison and selection apply to HTML and canvases. Local lane/token tooling (`npm run design:tokens`) and `/_styleguide` remain available without external services. See [Art Direction Workflow](art-direction-workflow.md).
 
 ---
 

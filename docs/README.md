@@ -59,7 +59,7 @@ Agent instructions require saving the art-direction record before visual impleme
 
 - **[Design Framework & Token Physics](design-framework.md)**  
 Bounded fluid scales, root-font/inline-axis assumptions and diagnostics, reading measures (`68ch`), and structural layout primitives.
-- **[Brilliant Onboarding](brilliant-onboarding.md)** Recommended canvas when editable prototyping is requested without a settled tool, with tested native components/modes, export/undo limits and native Astro proof.
+- **[Brilliant Onboarding](brilliant-onboarding.md)** Editable canvas for an owner who edits by hand, with tested native components/modes, export/undo limits and native Astro proof.
 - **[Canvas Kit](canvas-kit.md)** Source-derived tokens and semantic previews for an external design canvas.
 - **[HTML Artifact Preflight](artifact-lint.md)** `design:artifact-check` for HTML concepts and exports, without OpenDesign or a browser.
 - **Canvas onboarding:** [OpenPencil](openpencil-onboarding.md) (local `.fig` canvas), [Penpot](penpot-onboarding.md) (shared cloud review) and optional [OpenDesign](opendesign-onboarding.md).
