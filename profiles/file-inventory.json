@@ -1380,6 +1380,14 @@
       "disposition": "shared",
       "static": "copy"
     },
+    "scripts/opendesign-comments.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
+    "tests/opendesign-comments.test.mjs": {
+      "disposition": "shared",
+      "static": "copy"
+    },
     "scripts/check-design-prompt.mjs": {
       "disposition": "shared",
       "static": "copy"

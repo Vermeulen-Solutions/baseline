@@ -359,6 +359,10 @@
     "tier": "unit",
     "reason": "Watcher change detection, project resolution, platform paths and opener selection"
   },
+  "opendesign-comments.test.mjs": {
+    "tier": "unit",
+    "reason": "Comment reader arguments, daemon port discovery parsing and comment summaries; no daemon contacted"
+  },
   "design-prompt-check.test.mjs": {
     "tier": "unit",
     "reason": "Prompt preflight rules, severity thresholds, line reporting and CLI exit codes"
