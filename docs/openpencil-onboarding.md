@@ -1,36 +1,42 @@
-# Optional OpenPencil Desktop Path
+# OpenPencil: setup and comment review
 
-OpenPencil (`open-pencil/open-pencil`) provides a local desktop canvas for vector shapes, component nodes, and variable bindings saved in local `.fig` files. Brilliant is the recommended editable prototyping canvas when the owner asks for one and has no settled tool. HTML/browser concepts remain the default without a canvas request. Explicitly offer Brilliant, OpenPencil and Penpot, preserving a selected tool and working connection. Keep [OpenDesign](opendesign-onboarding.md) optional for an explicitly selected canvas/export workflow or an existing project. Use `openpencil-site-design` for the selected OpenPencil workflow and [the shared iteration loop](../.agents/skills/site-art-direction/references/design-iteration.md) for two-or-three-direction comparison followed by an Astro proof.
+OpenPencil (`open-pencil/open-pencil`) is a local desktop design canvas with an MCP server. In Baseline it is the canvas for owners who want to **review designs by pinning short notes on them**: the agent builds the boards, the owner presses **C** and clicks on what should change, and the agent reads each note, changes the design, replies with what changed and resolves the note. The owner never edits the canvas by hand. The `openpencil-site-design` skill holds the full workflow; this page is the setup an agent walks the owner through. Tested with OpenPencil 0.17.0 on Windows.
 
-Baseline supports two execution models: a single agent completing both design and implementation, or an **optional agent switch** where a design agent explores concepts in OpenPencil and an implementation agent translates the saved `.fig` design into Astro.
+## Setup (once per machine)
 
-## Setup
+1. **Install the app** from the [official releases](https://github.com/open-pencil/open-pencil/releases) and open it. Note its version.
+2. **Install the MCP bridge at the same version**, outside any site repository:
 
-Download OpenPencil Desktop from the [official releases](https://github.com/open-pencil/open-pencil/releases) and consult the [official MCP guide](https://openpencil.dev/programmable/mcp-server). Install the matching global MCP package outside the site runtime (e.g. `npm install -g @open-pencil/mcp@0.16.0`). Never add OpenPencil packages to a site's `package.json` or lockfile.
+   ```powershell
+   npm install -g @open-pencil/mcp@0.17.0
+   ```
 
-Open the desktop app with an active document. OpenPencil starts a local server on port 7600 when the matching global MCP package is installed. Register `openpencil-mcp` as a **stdio** server in your MCP client configuration using the path to the installed `dist/stdio.mjs`.
+Never add `@open-pencil/*` packages to a site's `package.json`.
+3. **Register the bridge with the agent.** Claude Code:
 
-## Authoring and Translating Concepts
+   ```powershell
+   claude mcp add --scope user open-pencil -- openpencil-mcp
+   ```
 
-The installed `openpencil-site-design` skill bundles mechanics references and recipes. See [the concrete JSX/token recipe](../.agents/skills/openpencil-site-design/references/baseline-jsx-recipe.md) and [scoped review loop](../.agents/skills/openpencil-site-design/references/scoped-review.md). Follow these practices when authoring concepts:
+Allow its tools in the user's Claude Code settings (`"permissions": { "allow": ["mcp__open-pencil__*"] }`) instead of approving each call, and restart the session. Other harnesses register a stdio server whose command is `openpencil-mcp`.
+4. **Switch on the app's server:** Settings › MCP › Local server on, and "Share only the selection" off (with it on the agent sees no comments and cannot edit).
+5. **Check:** the agent calls `list_documents`. A list, even an empty one, means it works; "OpenPencil app is not connected" means the app is closed or its server is off.
 
-1. **Tool Invocation & Schemas:** Use `get_codegen_prompt` when available. Note that OpenPencil's `render` tool accepts declarative scene JSX creating vector and component nodes, not browser DOM elements.
-2. **Document Identification:** Call `list_documents` and verify the active `document_id` and `page_id` before creating or updating nodes.
-3. **Layout Sizing:** Use native autolayout (flex/grid) with semantic variables. For wrapping headings, set width to Fill and height to auto-resize. Use fixed or max-width only where a strict measure is intentional.
-4. **Review Trees and Renders:** Inspect both the node tree and exported renders at `1440×900` and `390×844`. Check `get_font_status` to ensure requested font families are available.
-5. **Save Local Files:** Save concepts to a local `.fig` path. Reopen and verify that components, variables, and content load correctly.
+## Where the files go
 
-## The Agent Switch & Handoff Workflow
+The MCP server reads and writes only inside its root, which on Windows is the home folder by default: a path under `C:\dev\…` is refused. Keep each site's design file and its prepared photos in `<home>/Documents/OpenPencil/<site>/`, and record the path in the site's notes. `OPENPENCIL_MCP_ROOT` can narrow the root (see the skill's connection reference).
 
-When delegating design and coding to separate agents, use the shared [portable design brief](../.agents/skills/penpot-site-design/assets/design-brief.md) and [design handoff](../.agents/skills/penpot-site-design/assets/design-handoff.md):
+## How a review round goes
 
-1. **Design Agent Scope:** The design agent receives the brief and token rules, authors components in OpenPencil, iterates with visual feedback, and saves the verified `.fig` file.
-2. **Preparing the Handoff Packet:** The design agent exports high-resolution preview images (`1440×900` and `390×844`) and prepares a handoff summary containing:
-   - Target `.fig` file path and active page/node identifiers.
-   - Selected concept direction and rationale.
-   - Variable mappings to Baseline custom properties (`--color-*`, `--text-step-*`, `--spacing-*`).
-   - Component-to-primitive mapping (`<Section>`, `<Container>`, `<Grid>`, `<Card>`).
-   - Responsive layout behaviors across mobile and desktop.
-3. **Implementation Agent Scope:** The implementation agent reads the saved `.fig` file and handoff summary, records the Art Direction Record in `AGENTS.md`, synchronizes tokens in `src/styles/global.css`, calibrates primitives on `/_styleguide`, and implements the Astro routes.
+1. The agent builds two or three directions as boards (desktop and phone), each in one render, with every layer named, then runs OpenPencil's accessibility check and fixes what it finds.
+2. The owner opens the `.fig`, presses **C**, clicks on anything that should change and types a short note. Nothing has to be selected first: a note is pinned to the board at the point clicked, and the agent finds the layer under it.
+3. The owner tells the agent they are done. The agent reads the open notes, fixes each at its cause, sends before and after images, and replies in each thread before resolving it. A note it cannot act on gets a question and stays open.
 
-Single-agent workflows follow the same translation steps in a single continuous session.
+In Baseline's trial, two notes ("these cards should be the same height", "this button isn't aligned") took three and four minutes each from reading to resolving, and the accessibility check found ten real issues before the owner's review.
+
+## Limits worth knowing
+
+- There is no HTML import over MCP: boards are written in OpenPencil's design JSX. Author them there from the start; redrawing an existing HTML page in the canvas was the slow part of the trial.
+- The board is the picture of the decision, not code. The site is built afterwards with Baseline's Astro components and checked in the browser.
+- New versions change tool names and JSX (0.17 renamed every tool and changed component properties). Keep the app and bridge versions matched and read the live tool list after an update.
+- OpenPencil can also run Claude Code inside the app's AI chat (ACP). Baseline does not use that route: the comment loop works without it, and an agent started there does not follow Baseline's workflow unless pointed at it.

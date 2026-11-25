@@ -149,7 +149,8 @@ test('editable canvas guidance ships complete on every profile without a runtime
     for (const doc of onboardingDocs) assert.ok(manifest.files.includes(doc), `${profile}: missing ${doc}`);
     const packages = profilePackages(profile, pkg);
     assert.ok(!Object.keys({ ...packages.dependencies, ...packages.devDependencies }).some(name => /penpot|open-pencil|brilliant/.test(name)), profile);
-    for (const file of [...expectedPenpot.filter(file => file.endsWith('.md')), ...expectedOpenpencil.filter(file => file.endsWith('.md')), ...expectedOpendesign.filter(file => file.endsWith('.md')), ...expectedBrilliant.filter(file => file.endsWith('.md')), iterationReference, capabilityReference, ...focusedReferences, ...onboardingDocs]) {
+    // Upstream mirrors under references/upstream/ are byte-for-byte copies; their example links are upstream's.
+    for (const file of [...expectedPenpot.filter(file => file.endsWith('.md')), ...expectedOpenpencil.filter(file => file.endsWith('.md') && !file.includes('/references/upstream/')), ...expectedOpendesign.filter(file => file.endsWith('.md')), ...expectedBrilliant.filter(file => file.endsWith('.md')), iterationReference, capabilityReference, ...focusedReferences, ...onboardingDocs]) {
       for (const [, href] of fs.readFileSync(path.join(root, file), 'utf8').matchAll(/\]\(([^)]+)\)/g)) {
         if (/^https?:/.test(href) || href.startsWith('#')) continue;
         const target = path.posix.normalize(path.posix.join(path.posix.dirname(file), href.split('#')[0]));
