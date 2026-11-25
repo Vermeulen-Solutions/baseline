@@ -86,20 +86,6 @@
       "key": "763ac1046120"
     },
     {
-      "file": ".agents/skills/openpencil-site-design/SKILL.md",
-      "line": 19,
-      "rule": "judgment-branch",
-      "match": "when needed",
-      "key": "dff97acd4335"
-    },
-    {
-      "file": ".agents/skills/openpencil-site-design/references/scoped-review.md",
-      "line": 9,
-      "rule": "judgment-branch",
-      "match": "when helpful",
-      "key": "6c183051d96b"
-    },
-    {
       "file": ".agents/skills/penpot-site-design/references/baseline-recipes.md",
       "line": 39,
       "rule": "judgment-branch",
