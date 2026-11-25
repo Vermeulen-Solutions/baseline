@@ -40,16 +40,20 @@ EmDash's reference table (`_emdash_content_references`) links records using `par
 
 When you link a person (e.g., a coach) to a team in the French editor, EmDash records the relationship between their translation groups. As a result:
 - The French team page automatically resolves the French person entry.
-- The English team page automatically resolves the English person entry.
+- The English team page automatically resolves the English person entry, and the French one when no English entry exists, so a person entered only in the default locale still appears on every locale's team page.
 - Editors do not need to re-link relationships for every language translation.
 
 ---
 
 ## 3. Schema & Seed Configuration
 
-### Field Definitions
+### Field Definitions: facts are entered once (required)
 
-Fields in a collection schema should simply use `translatable: true` (the default). Invariant fields (such as numeric order, external identifiers, or boolean flags) can set `translatable: false`.
+Translations need maintenance. A site's maintainers will not keep two languages in step, so anything that can be entered once must be entered once: **only prose is translatable**. Every field that holds a fact sets `translatable: false` when it is created. EmDash then copies it to every translation when the entry is published, and links between entries (`reference` fields) are already shared by the translation group.
+
+| Translatable (prose) | Not translatable (facts) |
+| --- | --- |
+| Titles that are real text, descriptions, body copy, button labels, alt text written for a reader | Times, days, dates, numbers, prices and fees, phone numbers, email addresses, postal addresses, bank details, website links, photos and files, choice lists, switches, display order, references |
 
 ```json
 {
@@ -58,10 +62,37 @@ Fields in a collection schema should simply use `translatable: true` (the defaul
   "fields": [
     { "slug": "title", "label": "Title", "type": "string", "required": true },
     { "slug": "content", "label": "Content", "type": "portableText" },
-    { "slug": "featured_image", "label": "Featured Image", "type": "image" },
+    { "slug": "featured_image", "label": "Featured Image", "type": "image", "translatable": false },
     { "slug": "pinned", "label": "Pinned", "type": "boolean", "translatable": false }
   ]
 }
+```
+
+Decide this when the field is created. EmDash 1.5 refuses to switch an existing field to non-translatable (`FIELD_UPDATE_REQUIRES_MIGRATION`), even when every translation holds the same value; that needs a content migration (a new field, a copy, removing the old one).
+
+**A fact that reads differently per language is still entered once.** Store it in a language-neutral form and let the page write it in its own language: a weekday as one choice whose label the code prints (`Lundi` on French pages, `Monday` on English ones), a time in one notation the code reformats (`19h30` or `19:30`), a period derived from a season field, an amount as a number with the currency added in each locale's order (`600 CHF`, `CHF 600`). Never ask maintainers to type the English form of a fact.
+
+**A collection of facts is entered once, in the default locale.** When a collection translates nothing but its title (people, training sessions, sponsors, venues), create its entries in the default locale only. List pages in other locales show their own entries plus every default-locale entry without a twin, and single-entry lookups already follow the fallback chain:
+
+```ts
+export async function withDefaultLocaleFallback(name: string, locale: string, options = {}) {
+  const own = await getEmDashCollection(name, { ...options, locale });
+  if (locale === DEFAULT_LOCALE) return own.entries;
+  const fallback = await getEmDashCollection(name, { ...options, locale: DEFAULT_LOCALE });
+  const group = (entry) => entry.data.translationGroup || entry.data.id;
+  const present = new Set(own.entries.map(group));
+  return [...own.entries, ...fallback.entries.filter((entry) => !present.has(group(entry)))];
+}
+```
+
+Apply the same rule to taxonomy terms: on another locale, list a term that has no translation with its default-locale label rather than leaving the entries that use it out. And to a photo chosen per page slot: show the default locale's photo, keeping a translation's own alt text only while it still holds that same photo.
+
+**On a site already built with translated facts**, do not ask maintainers to keep both copies: read the fact from the default locale in code (as above), check that every page reads the same before and after, then move the other locales' copies to the trash.
+
+`npm run check:i18n-facts` enforces this on a multilingual site and is part of `verify` and `verify:fast`. It reads the field definitions from the local database (`--db <file>`; for a Workers site, the `data.db` that `db:local-copy` writes) and fails on each translatable field whose type holds a fact (number, date, switch, image, file, reference, choice list, link, email) or whose name says it does (time, day, phone, address, IBAN, price, fee, order…). It also advises which collections translate only their title. A deliberate exception, such as a link whose target differs per language or a per-locale form submission store, goes in `audit/i18n-facts-exceptions.json` with its reason:
+
+```json
+{ "editorial_sections.destination": "each language links to its own path" }
 ```
 
 ### Seed File (`seed/seed.json`)
@@ -203,13 +234,14 @@ EmDash provides built-in translation management in the Admin UI:
 
 [LinguaDash](https://plugins.emdashcms.com/plugins/@swiss.ky/linguadash) is an optional official registry plugin that enhances the EmDash admin for multilingual publishing teams:
 
-- **What it provides:**
-  - A translation overview dashboard showing coverage percentages and missing translations across all collections.
-  - Side-by-side editing views to compare source copy against translations.
-  - Integration with automated/AI translation providers (DeepL, OpenAI) to draft translations with a single click.
+- **What it provides** (v0.2.2, read on the registry and its README in November 2026):
+  - A status per entry and language (missing, draft, done, outdated), set automatically; "outdated" when the source's translatable fields change after the translation was made.
+  - A Translations admin page with missing, outdated and to-review lists (its missing-language scan covers the first 100 entries per collection).
+  - A **Translate** button that drafts a translation with a provider on the site owner's own account (DeepL, Google Cloud Translation, Azure Translator, OpenAI, or Cloudflare AI Gateway). Drafts only, made on request; it never overwrites a published translation and does nothing on save.
+  - Its docs mention content entries only: not taxonomy terms, and not reference fields.
 - **Architecture Compatibility:**
-  - LinguaDash is designed specifically **for** EmDash's native row-per-locale architecture.
+  - LinguaDash is designed specifically **for** EmDash's native row-per-locale architecture and needs a plugin sandbox runner.
   - It requires entries to be linked via `translation_group` and cannot function on field-per-language structures (`_en`, `_de`).
 - **Recommendation:**
   - The core EmDash CMS provides everything needed for standard multilingual websites without any plugin.
-  - Install LinguaDash when editorial teams need translation progress dashboards, automated translation drafting, or side-by-side comparison.
+  - It translates prose; it does not remove the need to enter facts once (above). Install it when editors maintain translated prose (news, pages) and want drafts and the "outdated" signal when the source changes, with a fluent reader reviewing each draft before it is published.

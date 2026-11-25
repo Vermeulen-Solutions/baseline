@@ -53,6 +53,7 @@ When an organization has multiple distinct variants, sub-teams, or cohorts withi
 - Cross-collection relations link parents and children via `translation_group`s so that referencing an item automatically resolves to the matching locale row in public queries.
 - Never duplicate fields with language suffixes (avoid `title_en`, `description_en` columns).
 - Loaded entries (`getEmDashCollection`, `getEmDashEntry`) expose the group as `data.translationGroup`, not `data.translation_group`. Code keyed on the snake-case name silently falls back to the entry id and shows one item twice across locales.
+- **Facts are entered once (required).** Translations need maintenance, and maintainers will not keep two languages in step. Only prose is translatable: every field that holds a fact (times, days, dates, numbers, prices, phones, emails, addresses, bank details, links, photos, files, choice lists, switches, order, references) is created with `translatable: false`; a fact that reads differently per language (a weekday, a time's notation, a currency's position) is stored once in a neutral form and written per locale by the code. A collection that translates only its title (people, sessions, sponsors, venues) is entered once in the default locale, and other locales list those entries as a fallback. EmDash refuses to make an existing field non-translatable without a migration, so decide it when the field is created; on an existing site, read the fact from the default locale in code and trash the copies. `npm run check:i18n-facts` (in `verify`) enforces it; see `docs/internationalization.md`, "Field Definitions".
 
 ### Editor-facing fields
 - Do not add a "display order" number when the order follows from the data (weekday and time, taxonomy order then name, category order then title): use `src/lib/derived-order.ts`. For a truly editorial order, keep a non-translatable number field owned by a drag-and-drop admin page (`src/plugins/editorial-order/`).
@@ -174,6 +175,7 @@ Once new structures are verified live:
 
 - [ ] `npm run typecheck` passes with 0 errors across all files.
 - [ ] All configured site locales render complete records without missing fields or broken links.
+- [ ] `npm run check:i18n-facts` passes on a multilingual site: no fact is entered in more than one language, and each exception has its reason.
 - [ ] Primary navigation and mobile disclosures display items in the correct designated order.
 - [ ] Remote D1 has all relational rows and junction references (`_emdash_content_references`).
 - [ ] `seed/seed.json` reflects the evolved schema and content items.
