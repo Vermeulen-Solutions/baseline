@@ -244,6 +244,10 @@
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/d1-local-copy.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/check-live.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -1672,6 +1676,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "tests/delivery-tools.test.mjs": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/d1-local-copy.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },

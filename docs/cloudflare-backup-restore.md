@@ -59,6 +59,19 @@ npm run db:rehearse -- --compare --persist-to .emdash/backups/rehearse-<date>
 
 The first request applies the pending migrations to the copy. Before trusting what you see, make sure the requests appear in that server's own log: stopping a background `wrangler dev` can leave its `workerd` child serving the port, and a new rehearsal then silently answers from the previous one. `db:rehearse` checks the port before printing the command, and `--compare` refuses to run while the port is still in use. The comparison reports the migrations applied, every table whose row count changed, new and dropped tables, `integrity_check` and `foreign_key_check`, and fails when a table lost rows. Also check public routes, media, the admin sign-in redirect and `/_emdash/api/health` on the rehearsal server.
 
+### Production content on the local dev server
+
+To preview or judge work locally against what the live site holds (an owner reviewing a design, content corrections made in production, a local copy that has drifted), serve the same export with `astro dev`. Nothing is written to Cloudflare or to the site's own `./data.db`:
+
+```sh
+npm run db:export-d1
+npm run db:local-copy -- --from .emdash/backups/<export.sql> --to .emdash/backups/local-<date> --origin https://<live-site>
+# then run the command it prints, for example in PowerShell:
+$env:EMDASH_SQLITE_URL = 'file:./.emdash/backups/local-<date>/data.db'; $env:EMDASH_LOCAL_MEDIA_DIR = './.emdash/backups/local-<date>/uploads'; npm.cmd run dev
+```
+
+`db:local-copy` loads the export into `<to>/data.db` (foreign keys checked after loading, as `db:rehearse` does) and refuses a copy that fails `integrity_check` or `foreign_key_check`. Media files are not in the database: with `--origin` it fetches every file from the live site's public media route, which takes seconds for a few hundred files; without it, from R2 one object at a time. It copies the code of active registry and marketplace plugins from R2 too (`--bucket <name>` when `wrangler.jsonc` does not name it). Astro runs one dev server per project, so stop the running one first (or pass `--force`). The dev server reads `EMDASH_SQLITE_URL` and `EMDASH_LOCAL_MEDIA_DIR` in `astro.config.mjs`; a site created before they existed adds the two `process.env` fallbacks there by hand. The copy holds users, sessions and content, so the command refuses a folder Git would track. Its settings keep the live address, so logging the CLI in to this local server needs the steps in `emdash-site-setup` ("The local dev server").
+
 After the production deploy, `npm run check:live -- --origin <https://site>` requests every sitemap page and every stylesheet those pages use. A page passes when it answers 200 or redirects to a page that does, and every stylesheet must answer 200; the sitemap's own host is ignored, so a workers.dev origin is checked even when the sitemap names the final domain.
 
 ## 2. Media and immutable releases

@@ -54,9 +54,11 @@ export default defineConfig({
               entrypoint: fileURLToPath(new URL('./src/plugins/baseline-metadata/index.ts', import.meta.url)).replaceAll('\\', '/'),
               options: { organizationPaths: ['/'] },
           }],
-          database: sqlite({ url: "file:./data.db" }),
+          // EMDASH_SQLITE_URL and EMDASH_LOCAL_MEDIA_DIR serve another copy, such as production content from
+          // `npm run db:local-copy`, without touching ./data.db and ./uploads.
+          database: sqlite({ url: process.env.EMDASH_SQLITE_URL || "file:./data.db" }),
           storage: local({
-              directory: "./uploads",
+              directory: process.env.EMDASH_LOCAL_MEDIA_DIR || "./uploads",
               baseUrl: "/_emdash/api/media/file",
           }),
       }),

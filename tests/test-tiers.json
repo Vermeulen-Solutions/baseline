@@ -315,6 +315,10 @@
     "tier": "unit",
     "reason": "Workers delivery rules, D1 export safeguards, rehearsal and live-check helpers with throwaway folders and stubbed git and fetch; no network"
   },
+  "d1-local-copy.test.mjs": {
+    "tier": "unit",
+    "reason": "Local copy of a D1 export for astro dev: Git guard, media key paths, media URLs, serve commands and the load/fetch/R2 flow with a stubbed git, fetch and Wrangler; no network"
+  },
   "update-plan.test.mjs": {
     "tier": "unit",
     "reason": "Read-only classification of upstream changes against a site using a throwaway Git repository"

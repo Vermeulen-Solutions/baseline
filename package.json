@@ -61,6 +61,7 @@
     "db:diff": "node scripts/db-diff.mjs",
     "db:export-seed": "node scripts/db-export-seed.mjs",
     "db:export-d1": "node scripts/d1-export.mjs",
+    "db:local-copy": "node scripts/d1-local-copy.mjs",
     "db:pull-remote": "node scripts/d1-snapshot.mjs",
     "db:rehearse": "node scripts/d1-rehearse.mjs",
     "media:prepare": "node scripts/prepare-images.mjs",
