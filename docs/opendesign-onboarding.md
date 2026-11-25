@@ -15,9 +15,10 @@ The comment loop needs only the running desktop app: `npm run design:comments` f
 
 ## How a review round goes
 
-1. The agent builds two or three directions as HTML artifacts in one OpenDesign project, with a `data-od-id` on every element the owner might point at, and checks them at 1440 and 390.
-2. The owner opens the project in the desktop app (`Ctrl + R` first if it was already open), opens a file, chooses **Comment** in the preview toolbar, clicks on what should change, types a short note and chooses **Comment** (not **Send to chat**, which hands it to OpenDesign's own agent).
-3. The owner tells the agent they are done. The agent lists the notes (`npm run design:comments -- --project <id>`), changes each element, checks before and after renders, marks each note resolved (`--resolve <comment-id>`) and reports in chat what changed, with the images. A note it cannot act on gets a question and stays open.
+1. For a page that already exists, the first round is a copy of the live page (one self-contained file) that the owner marks before any new direction is drawn.
+2. The agent builds two or three directions as HTML artifacts in one OpenDesign project, with a `data-od-id` on every element the owner might point at, and checks them at 1440 and 390.
+3. The agent gives the owner the steps in chat every round, with the real names: press `Ctrl + R` in the desktop app (the window does not pick up files written from outside), open the project and its **Design Files** tab, open the named file, choose **Comment** in the preview toolbar, click on what should change, type a short note and choose **Comment** (not **Send to chat**, which hands it to OpenDesign's own agent). Picking a version with no notes is a complete answer.
+4. The owner tells the agent they are done. The agent lists the notes (`npm run design:comments -- --project <id>`), changes each element, checks before and after renders, marks each note resolved (`--resolve <comment-id>`) and reports in chat what changed, with the images. A note it cannot act on gets a question and stays open.
 
 In Baseline's trial (0.27.2), reading two notes took 40 ms, and the round from reading to resolving, with both fixes checked at 1440 and 390, took about 30 seconds of tool time. Each note arrived with its element's selector and text, so no matching by position was needed.
 
