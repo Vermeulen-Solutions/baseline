@@ -111,7 +111,7 @@ When the site is already built and the owner wants a refinement (not a new direc
 
 Verification only counts for the artifact the owner actually opens. In every hand-off:
 
-- **Name one review surface** (app, project, exact file or URL, and the refresh step such as Ctrl+R) and check that exact artifact before claiming anything works. If a tool or editor auto-opens a different file, close it or tell the owner which one is current.
+- **Name one review surface** (app, project, exact file or URL, and the refresh step such as `Ctrl + R`, `Cmd + R` on a Mac) and check that exact artifact before claiming anything works. If a tool or editor auto-opens a different file, close it or tell the owner which one is current.
 - **Never leave an unbuildable template where a viewer can open it.** A source file with placeholders that a build step replaces (inlined images, fonts) gets a non-viewable extension such as `.src.html.tpl`, not `.html`.
 - **Ship a review shell with every round,** not a bare page: how to look (scroll inside frames, what to hover), what is real versus illustrative, a desktop/tablet/mobile switcher, specific feedback questions, and a motion toggle. Explain that visitors (and the owner's own machine) may ask for reduced motion, which freezes animation by design; the toggle lets the owner see both versions.
 - **Write it in the owner's working language** (recorded in discovery), which can differ from the site's locales. Show site copy in its locales, with the owner-language version beside it when approval is needed.
