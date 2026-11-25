@@ -152,6 +152,17 @@ export async function listComments(api, project) {
 }
 
 /** The fields an agent needs to act on a comment. */
+/**
+ * The element's box in the owner's preview, in CSS px. A full-width element's width is the width
+ * of the preview the owner looked at, which can be wider than the widths the agent checks.
+ */
+export function boxOf(position) {
+  const numbers = ['x', 'y', 'width', 'height'].map(key => Number(position?.[key]));
+  if (numbers.some(value => !Number.isFinite(value))) return undefined;
+  const [x, y, width, height] = numbers.map(Math.round);
+  return { x, y, width, height };
+}
+
 export function summarize(comment) {
   return {
     id: comment.id,
@@ -162,6 +173,7 @@ export function summarize(comment) {
     label: comment.label,
     elementText: comment.text || '',
     note: comment.note,
+    box: boxOf(comment.position),
     group: comment.selectionKind === 'pod' ? (comment.podMembers ?? []).map(member => member.elementId ?? member.selector).filter(Boolean) : undefined,
     attachments: (comment.attachments ?? []).length,
     author: comment.authorDisplayName || undefined,
@@ -176,6 +188,7 @@ export function formatText(comments, project) {
     `#${comment.pin ?? '?'} ${comment.id} [${comment.status}] ${comment.file}`,
     `  element: ${comment.selector}${comment.label ? ` (${comment.label})` : ''}`,
     comment.elementText ? `  text:    ${comment.elementText}` : null,
+    comment.box ? `  box:     ${comment.box.width}×${comment.box.height} at ${comment.box.x},${comment.box.y}` : null,
     comment.group?.length ? `  group:   ${comment.group.join(', ')}` : null,
     `  note:    ${comment.note}`,
     comment.attachments ? `  attachments: ${comment.attachments} (open the comment in OpenDesign to see them)` : null,

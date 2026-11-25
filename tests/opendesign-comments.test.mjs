@@ -1,6 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parseArgs, portsFromNetstat, portsFromLsof, listComments, summarize, formatText } from '../scripts/opendesign-comments.mjs';
+import { parseArgs, portsFromNetstat, portsFromLsof, listComments, summarize, formatText, boxOf } from '../scripts/opendesign-comments.mjs';
+
+test('a comment on empty space keeps the enclosing element and its box, which shows the preview width', () => {
+  assert.deepEqual(boxOf({ x: 0, y: 81.4, width: 1955, height: 784.2 }), { x: 0, y: 81, width: 1955, height: 784 });
+  assert.equal(boxOf(undefined), undefined);
+  assert.equal(boxOf({ x: 0, y: 0, width: 'wide' }), undefined);
+  const summary = summarize({
+    id: 'cmt_3', status: 'open', filePath: 'concept.html', elementId: 'dom:body > div:nth-of-type(1) > main:nth-of-type(1)',
+    selector: 'body > div:nth-of-type(1) > main:nth-of-type(1)', label: 'main', note: 'Too much empty space',
+    position: { x: 0, y: 81, width: 1955, height: 784 }, selectionKind: 'element', attachments: [], pinSeq: 3,
+  });
+  assert.match(formatText([summary], 'client-a'), /box: {5}1955×784 at 0,81/);
+});
 
 test('parseArgs requires a project and checks statuses', () => {
   assert.throws(() => parseArgs([]), /--project/);
