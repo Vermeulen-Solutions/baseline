@@ -17,7 +17,7 @@ Translations need maintenance, and a site's maintainers do not keep two language
 - A collection that translates only its title is entered once, in the default locale, with other locales listing it as a fallback; taxonomy terms and slot photos fall back the same way.
 - EmDash 1.5 refuses to switch an existing field (`FIELD_UPDATE_REQUIRES_MIGRATION`), so existing sites read the fact from the default locale in code and trash the copies.
 
-`npm run check:i18n-facts` reads the field definitions from the local database. It fails on each translatable field that holds a fact, by type or name, unless `audit/i18n-facts-exceptions.json` gives a reason. It also names collections that translate only their title. Single-language sites, and checkouts without a local database, pass with a note. It is part of `verify` and `verify:fast`.
+`npm run check:i18n-facts` reads the field definitions from the local database. It fails on each translatable field that holds a fact, by type or name, unless `audit/i18n-facts-exceptions.json` gives a reason. It also names collections that translate only their title. Single-language sites, and checkouts without a local database, pass with a note. It is part of `verify` and `verify:fast` on the EmDash profile; the static profiles keep their own `verify` without it.
 
 `docs/internationalization.md` and `emdash-content-modeling` carry the rule; the LinguaDash section is corrected (no side-by-side editing, more providers, translations only on request, content entries only) and positioned for prose.
 
