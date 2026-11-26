@@ -89,3 +89,15 @@ Certified source: commit `004e89bc15f7805b91cd335bd08a95a106798510`. Machine rec
 Clean clones on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3: doctor, `npm ci`, verify (274 s and 251 s), build, release artifact, schema budget, dev tools, seed, seeded build and `audit:html` all pass. `check:ci-fast` passed every check it runs but exceeded its 60 s local budget. The first runs shared the machine with site staging work (81 s and 66 s). Run alone, Node 24 took 60 s and passed, and Node 22 took 65 s, with unit tests at 44 s. Speeding up the fast tier is a follow-up.
 
 Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 111 passed. The gallery root-typecheck behavior test timed out under load (its child process was killed) and passed alone in 15.4 s, as in 0.4.0. The first run failed in setup: the visual stage did not copy the new `scripts/static-csp.mjs`. The harness now copies every module the config imports (PR 108), and the counts above are from that run. Not covered: the Workers/D1/R2 profile (unchanged scope), the editor rehearsal and restore drill (editor and schema unchanged), and repeated visual runs.
+
+## Standards 0.9.0 (2026-11-26)
+
+Certified source: commit `2e333091fe6bc61aea66db1f59d4a57f7c1aeee8` (tree `eca7b627ee442a56764dc0450bfad6c5d9c0f00a`). Machine record: [verification-0.9.0.json](verification-0.9.0.json). A minor release after 0.8.0 with the runtime unchanged (Astro 7.4.12, EmDash 1.6.0, the adapters): design guidance, multilingual facts entered once (`check:i18n-facts`), `db:local-copy`, page-change motion and fixes (PRs #180-#191).
+
+Clean clones from GitHub on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3, one at a time: doctor, `npm ci`, verify, build, release artifact, schema budget, dev tools, seed, seeded build and `audit:html` all pass; `check:ci-fast` passed every check but ran over its 60 s local budget (127 s and 100 s), as since 0.5.0. The certified commit was the first candidate.
+
+Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 130 passed, none failed, 50 skipped by design (each test runs in one viewport project), in 7.0 minutes; no reference image asked to be renewed.
+
+Version decision (`check:upstream`, 26 November): EmDash 1.6.0 is current; Astro 7.4.13 and `@astrojs/node` 11.1.14, the tooling updates, Kumo 2.19.1 (EmDash's admin pins 2.19.0 exactly), Impeccable 4.11.0 and Sveltia CMS 0.273.1 are left to the weekly upstream refresh.
+
+Not covered: the Workers/D1/R2 profile as a certified profile (the EmDash 1.6 site upgrades were rehearsed on local copies and recorded per site); the editor rehearsal, `check:emdash-current` and the restore drill were not rerun, since the runtime, schema and editor code are unchanged since 0.8.0.
