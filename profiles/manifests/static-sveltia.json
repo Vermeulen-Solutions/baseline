@@ -37,5 +37,8 @@
       "source": "profiles/static-sveltia/project/tests/sveltia-config.test.mjs",
       "target": "tests/sveltia-config.test.mjs"
     }
-  ]
+  ],
+  "scriptOverrides": {
+    "verify": "npm run lint && npm run check:css && npm run check:art-direction && npm run design:tokens && npm test && npm run typecheck"
+  }
 }

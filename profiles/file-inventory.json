@@ -216,6 +216,10 @@
       "disposition": "adapt-before-static",
       "static": "omit-until-explicitly-allowlisted"
     },
+    "scripts/check-i18n-facts.mjs": {
+      "disposition": "emdash-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
     "scripts/check-schema-budget.mjs": {
       "disposition": "emdash-only",
       "static": "omit-until-explicitly-allowlisted"
@@ -1672,6 +1676,10 @@
       "static": "omit-until-explicitly-allowlisted"
     },
     "standards/changes/README.md": {
+      "disposition": "maintainer-only",
+      "static": "omit-until-explicitly-allowlisted"
+    },
+    "tests/check-i18n-facts.test.mjs": {
       "disposition": "maintainer-only",
       "static": "omit-until-explicitly-allowlisted"
     },

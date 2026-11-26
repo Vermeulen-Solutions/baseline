@@ -92,6 +92,7 @@ These commands belong to the root EmDash tooling, not generated static sites.
 
 | Command | Purpose |
 | --- | --- |
+| `npm run check:i18n-facts [-- --db <file>] [--report]` | EmDash, multilingual | Facts are entered once: fails on each translatable field that holds a fact (by type or name), from the local database; exceptions with reasons in `audit/i18n-facts-exceptions.json` ([internationalization](internationalization.md#field-definitions-facts-are-entered-once-required)). Part of `verify` and `verify:fast` |
 | `npm run check:schema-budget` | Measure physical collection width before build/typecheck |
 | `npm run db:diff` | Compare offline SQLite/D1 schema parity and column budgets |
 | `npm run migration:check-library -- --help` | Compare supplied native media/folder/link readbacks with reviewed expectations |
