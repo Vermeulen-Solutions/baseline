@@ -68,7 +68,8 @@
 //   padding, a date against the side of its row. Eight scored sites give twenty places.
 // - placeholder-text (floor under the same rule): "à confirmer", a "bientôt" tag on its own, digits
 //   followed by a row of dashes. One trial site printed its call plate as "079 __ __ __".
-// - soft-photo: a photograph at least 40% of the screen wide is shown wider than its pixels (a phone
+// - soft-photo: a photograph at least 40% of the screen wide, or a smaller picture a transform enlarges
+//   (its srcset file was chosen for the width before the transform), is shown wider than its pixels (a phone
 //   photograph stretched across a desktop). Owners' photographs are often 600 to 1,500px wide; a
 //   trial home page opened on one at 1,440px and every reviewer named it as the design's ceiling;
 // - world-motion (once per run): an animation the Art Direction Record names in World › Motion
@@ -207,7 +208,10 @@ export function assessComposition(model) {
     const missing = bareIngredients(model.craft);
     if (missing.length >= 3) add('bare-page', `The page is made only of type, photographs and rules: no ${missing.join(', no ')}. Build each section as an object from the site's world, on a surface from its materials, with its type treatment and named motions (site-art-direction/references/world-building.md).`, { missing });
   }
-  for (const photo of model.softPhotos ?? []) add('soft-photo', `A photograph is shown ${photo.shown}px wide from ${photo.natural}px (${photo.src}). Show it at its own size or smaller in an object from the world (a plate, a frame, a detail crop), and let the world carry the width (site-art-direction/references/world-building.md).`, photo);
+  for (const photo of model.softPhotos ?? []) {
+    if (photo.zoom) add('soft-photo', `A picture enlarged ${photo.zoom} times by a transform is shown ${photo.shown}px wide from ${photo.natural}px (${photo.src}): the browser chose its file for the width before the transform. Lay it out at the size it is shown (a width above 100% inside an \`overflow: hidden\` frame) so the srcset sees that width (astro-site-design SKILL.md, "Enlarge a picture by its layout").`, photo);
+    else add('soft-photo', `A photograph is shown ${photo.shown}px wide from ${photo.natural}px (${photo.src}). Show it at its own size or smaller in an object from the world (a plate, a frame, a detail crop), and let the world carry the width (site-art-direction/references/world-building.md).`, photo);
+  }
   const places = [
     ...(model.collisions ?? []).map((p) => ({ ...p, where: `at ${model.width ?? 'the wide'}${model.width ? 'px' : ' width'}` })),
     ...(model.narrow?.collisions ?? []).map((p) => ({ ...p, where: `at ${model.narrow.width}px` })),
@@ -630,11 +634,28 @@ export function coveringShown(points) {
   return shown;
 }
 
-/** Wide photographs shown at more than their pixels: `natural` is the file's own width, `dpr` the device pixel ratio. */
+// A transform that enlarges a picture acts after the browser chose its file from the srcset, and
+// `sizes="auto"` (ResponsiveImage's lazy default) reads the width before the transform: a product
+// screenshot zoomed in a card loaded a file sized for the card and looked soft at a third of the screen.
+export const ZOOMED = 1.1;
+
+/**
+ * Pictures soft-photo measures: those at least 40% of the screen wide, and smaller ones (from 120px)
+ * that a transform shows at least ZOOMED times their laid-out width (`zoom` on those). `width` is the screen's.
+ */
+export function photoCandidates(pictures, width) {
+  return pictures.flatMap((p) => {
+    const zoom = p.laid > 0 && p.shown >= p.laid * ZOOMED ? Math.round((p.shown / p.laid) * 100) / 100 : 0;
+    if (p.shown < width * 0.4 && !(zoom && p.shown >= 120)) return [];
+    return [zoom ? { ...p, zoom } : p];
+  });
+}
+
+/** Photographs shown at more than their pixels: `natural` is the file's own width, `dpr` the device pixel ratio. */
 export function softPhotos(images, dpr = 1) {
   return images
     .filter((p) => p.natural > 0 && p.natural < p.shown * dpr * 0.9)
-    .map((p) => ({ shown: p.shown, natural: p.natural, src: p.url.split('?')[0].split('/').pop() }));
+    .map((p) => ({ shown: p.shown, natural: p.natural, src: p.url.split('?')[0].split('/').pop(), ...(p.zoom ? { zoom: p.zoom } : {}) }));
 }
 
 /**
@@ -923,16 +944,17 @@ export function measurePage() {
     const widths = boxes.map((r) => r.width);
     if (Math.max(...widths) - Math.min(...widths) <= Math.max(...widths) * 0.06 && Math.max(...areas) < 1.5 * Math.min(...areas)) uniformGallery = Math.max(uniformGallery, boxes.length);
   }
-  // Wide photographs; main() loads each chosen file on its own to read its real pixel width
+  // Pictures with the width they are shown at (after transforms) and laid out at (before them);
+  // main() keeps the photoCandidates() and loads each chosen file on its own to read its real pixel width
   // (with a srcset, naturalWidth is scaled by the candidate's density and hides the stretch).
   // Only the file the browser chose counts: a picture with a srcset that still has not loaded is
   // left out, because its src attribute is a fallback no visitor's browser shows.
-  const wideImages = [...main.querySelectorAll('img')].filter(visible)
-    .map((img) => ({ shown: Math.round(img.getBoundingClientRect().width), url: img.currentSrc || (img.srcset ? '' : img.src) || '' }))
-    .filter((p) => p.url && !/\.svg(\?|$)/i.test(p.url) && p.shown >= vw * 0.4);
+  const pictures = [...main.querySelectorAll('img')].filter(visible)
+    .map((img) => ({ shown: Math.round(img.getBoundingClientRect().width), laid: img.offsetWidth, url: img.currentSrc || (img.srcset ? '' : img.src) || '' }))
+    .filter((p) => p.url && !/\.svg(\?|$)/i.test(p.url) && p.shown >= 120);
   const h2Sizes = sizes('h2').sort((a, b) => a - b);
   return {
-    wideImages,
+    pictures,
     splitHero,
     uniformGallery,
     h2Median: h2Sizes.length ? h2Sizes[Math.floor(h2Sizes.length / 2)] : 0,
@@ -1157,7 +1179,8 @@ async function measureWide(browser, url, width, { declineConsent = false, scene 
       probe.onload = () => resolve({ ...p, natural: probe.naturalWidth });
       probe.onerror = () => resolve({ ...p, natural: 0 });
       probe.src = p.url;
-    }))), model.wideImages);
+    }))), photoCandidates(model.pictures, model.width));
+    delete model.pictures;
     model.softPhotos = softPhotos(measured, await page.evaluate(() => devicePixelRatio));
     return model;
   } finally {

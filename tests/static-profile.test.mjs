@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import devTools, { styleguidePath } from '../scripts/dev-tools-integration.mjs';
@@ -62,6 +62,31 @@ test('static developer tools inject only dev/fixture routes, prerender static fi
     }
   }
   assert.throws(() => devTools({ platform: 'unknown' }));
+});
+
+test('expressive review pages are injected only when the site has their files, so astro dev starts without the opt-in layer', async () => {
+  const stage = await fs.mkdtemp(path.join(os.tmpdir(), 'baseline-dev-tools-expressive-'));
+  const expressive = ['/_expressive', '/_expressive-detail', '/_expressive-before', '/_expressive-after'];
+  const injected = async projectRoot => {
+    const routes = [];
+    await devTools({ platform: 'static' }).hooks['astro:config:setup']({ config: { output: 'static', root: pathToFileURL(projectRoot + path.sep) }, command: 'dev', injectRoute: route => routes.push(route), injectScript: () => {}, updateConfig: () => {} });
+    return routes;
+  };
+  try {
+    const without = path.join(stage, 'without'), withLayer = path.join(stage, 'with');
+    await fs.mkdir(path.join(without, 'src', 'dev'), { recursive: true });
+    await fs.writeFile(path.join(without, 'src', 'dev', 'PrimitivesFixture.astro'), '---\n---\n');
+    assert.deepEqual((await injected(without)).map(route => route.pattern), ['/_styleguide', '/_primitives-fixture']);
+    await fs.mkdir(path.join(withLayer, 'src', 'dev'), { recursive: true });
+    for (const file of ['ExpressiveFixture', 'ExpressiveDetailFixture', 'ExpressiveCompareBefore', 'ExpressiveCompareAfter']) await fs.writeFile(path.join(withLayer, 'src', 'dev', `${file}.astro`), '---\n---\n');
+    const routes = (await injected(withLayer)).filter(route => expressive.includes(route.pattern));
+    assert.deepEqual(routes.map(route => route.pattern), expressive);
+    for (const route of routes) assert.match(route.entrypoint, /^\.\/src\/dev\/Expressive\w+\.astro$/);
+    await fs.rm(path.join(withLayer, 'src', 'dev', 'ExpressiveCompareAfter.astro'));
+    assert.ok(!(await injected(withLayer)).some(route => route.pattern === '/_expressive-after'));
+  } finally {
+    await fs.rm(stage, { recursive: true, force: true });
+  }
 });
 
 test('generator refuses unknown/unavailable profiles, overlapping roots, populated destinations and linked destinations before writing', async () => {

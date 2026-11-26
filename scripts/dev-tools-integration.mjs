@@ -1,8 +1,17 @@
 /** Underscore-prefixed pages are ignored by Astro's file-based router. */
+import { existsSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
 export function styleguidePath({ base = '/', trailingSlash = 'ignore' } = {}) {
   return base.replace(/\/$/, '') + '/_styleguide' + (trailingSlash === 'always' ? '/' : '');
 }
+/** The opt-in expressive layer's review pages. A site that never adopted the layer has none of these files. */
+export const expressiveRoutes = [
+  ['/_expressive', 'ExpressiveFixture.astro'],
+  ['/_expressive-detail', 'ExpressiveDetailFixture.astro'],
+  ['/_expressive-before', 'ExpressiveCompareBefore.astro'],
+  ['/_expressive-after', 'ExpressiveCompareAfter.astro'],
+];
 export default function devTools({ fixtures = false, platform = 'emdash' } = {}) {
   if (!['static', 'emdash'].includes(platform)) throw new Error('Unknown developer-tools platform');
   let artifactDir;
@@ -20,10 +29,11 @@ export default function devTools({ fixtures = false, platform = 'emdash' } = {})
           injectRoute({ pattern: '/_styleguide', entrypoint: './src/pages/_styleguide.astro', prerender: config.output !== 'server' });
           if (platform === 'emdash') injectRoute({ pattern: '/_form-recovery', entrypoint: './src/dev/FormRecoveryFixture.astro', prerender: false });
           injectRoute({ pattern: '/_primitives-fixture', entrypoint: './src/dev/PrimitivesFixture.astro', prerender: config.output !== 'server' });
-          injectRoute({ pattern: '/_expressive', entrypoint: './src/dev/ExpressiveFixture.astro', prerender: config.output !== 'server' });
-          injectRoute({ pattern: '/_expressive-detail', entrypoint: './src/dev/ExpressiveDetailFixture.astro', prerender: config.output !== 'server' });
-          injectRoute({ pattern: '/_expressive-before', entrypoint: './src/dev/ExpressiveCompareBefore.astro', prerender: config.output !== 'server' });
-          injectRoute({ pattern: '/_expressive-after', entrypoint: './src/dev/ExpressiveCompareAfter.astro', prerender: config.output !== 'server' });
+          // Only the expressive pages whose files exist: a missing entrypoint stops `astro dev` at once (ENOENT).
+          const root = config.root ?? pathToFileURL(process.cwd() + '/');
+          for (const [pattern, file] of expressiveRoutes) {
+            if (existsSync(new URL(`src/dev/${file}`, root))) injectRoute({ pattern, entrypoint: `./src/dev/${file}`, prerender: config.output !== 'server' });
+          }
         }
         if (command === 'build' && !fixtures && config.output === 'server') {
           addMiddleware({ entrypoint: new URL('./dev-tools-middleware.mjs', import.meta.url), order: 'pre' });

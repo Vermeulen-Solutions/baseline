@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { assessAgainst, assessComposition, assessWorldMotion, FLOOR, itemLayoutKey, longestItemRun, formatAgainst, GAP_MEASURES, parseArgs, sectionSignature, selectedSources, formatRoute, softPhotos, STUDIO_LEVEL } from '../scripts/audit-composition.mjs';
+import { assessAgainst, assessComposition, assessWorldMotion, FLOOR, itemLayoutKey, longestItemRun, formatAgainst, GAP_MEASURES, parseArgs, sectionSignature, selectedSources, formatRoute, photoCandidates, softPhotos, STUDIO_LEVEL } from '../scripts/audit-composition.mjs';
 
 const section = (overrides = {}) => ({ tag: 'section', heading: 'A heading', kicker: false, split: false, centered: false, ground: false, action: false, cardGrid: false, list: false, mediaCount: 0, fullBleedMedia: false, width: 1376, ...overrides });
 const page = (sections, overrides = {}) => ({ width: 1440, bodySize: 16, h1Size: 72, h2Max: 36, imageCover: 0.2, fullWidthMedia: 0, signature: false, sections, ...overrides });
@@ -109,6 +109,28 @@ test('a wide photograph shown wider than its file is soft; one at its own size, 
   assert.deepEqual(softPhotos(images, 2).map((p) => p.src), ['bench.abc.webp', 'plate.webp']);
   const model = page([section({ fullBleedMedia: true, mediaCount: 1 })], { signature: true, softPhotos: softPhotos(images) });
   assert.deepEqual(codes(model), ['soft-photo']);
+});
+
+test('a smaller picture enlarged by a transform is measured too: its srcset file was chosen for the width before the transform', () => {
+  const pictures = [
+    { shown: 1440, laid: 1440, url: '/_astro/hero.webp' },
+    { shown: 480, laid: 300, url: '/_astro/screen-zoomed.webp' },
+    { shown: 480, laid: 480, url: '/_astro/screen-laid-out-wide.webp' },
+    { shown: 320, laid: 300, url: '/_astro/hover-lift.webp' },
+    { shown: 100, laid: 60, url: '/_astro/icon.webp' },
+  ];
+  const candidates = photoCandidates(pictures, 1440);
+  assert.deepEqual(candidates.map((p) => p.url.split('/').pop()), ['hero.webp', 'screen-zoomed.webp']);
+  assert.equal(candidates[1].zoom, 1.6);
+  assert.equal(candidates[0].zoom, undefined);
+  // sizes="auto" picked a 400w file for the 300px layout box; shown at 480px it is soft.
+  const soft = softPhotos([{ ...candidates[1], natural: 400 }]);
+  assert.deepEqual(soft, [{ shown: 480, natural: 400, src: 'screen-zoomed.webp', zoom: 1.6 }]);
+  const model = page([section({ fullBleedMedia: true, mediaCount: 1 })], { signature: true, softPhotos: soft });
+  const finding = assessComposition(model).find((f) => f.code === 'soft-photo');
+  assert.match(finding.message, /enlarged 1\.6 times by a transform.*width above 100% inside an `overflow: hidden` frame/);
+  // Laid out at its shown width instead, the browser picks a file for 480px and nothing is reported.
+  assert.deepEqual(softPhotos([{ ...pictures[2], natural: 960 }]), []);
 });
 
 test('motions named in the record must run; the floor findings are the built world', () => {
