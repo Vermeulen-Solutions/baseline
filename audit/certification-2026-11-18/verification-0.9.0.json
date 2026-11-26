@@ -1,0 +1,126 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.9.0",
+  "recordedAt": "2026-11-26T01:39:14.999Z",
+  "sourceCommit": "2e333091fe6bc61aea66db1f59d4a57f7c1aeee8",
+  "scope": "Minor release after 0.8.0 with the runtime unchanged (Astro 7.4.12, EmDash 1.6.0, the adapters): design guidance (settle one section with the owner, then carry it across the site; review by comments in OpenDesign and OpenPencil 0.17), multilingual facts entered once (check:i18n-facts), db:local-copy, page-change motion and cross-document sites without router code, pinned scenes, upgrade safety checks and media cache fixes (PRs #180-#191).",
+  "cleanCheckout": {
+    "22.23.4": {
+      "node": "v22.23.4",
+      "commit": "2e33309",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 3
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 174
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 507
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 67
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 69
+        },
+        "ci-fast": {
+          "exit": 1,
+          "seconds": 127,
+          "note": "every check passed; 126.457s against the 60 s local budget"
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 13
+        },
+        "seeded-build": {
+          "exit": 0,
+          "seconds": 14
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 2
+        }
+      }
+    },
+    "24.22.3": {
+      "node": "v24.22.3",
+      "commit": "2e33309",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 3
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 138
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 291
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 12
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 51
+        },
+        "ci-fast": {
+          "exit": 1,
+          "seconds": 100,
+          "note": "every check passed; 99.797s against the 60 s local budget"
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 3
+        },
+        "seeded-build": {
+          "exit": 0,
+          "seconds": 11
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 2
+        }
+      }
+    }
+  },
+  "cleanCheckoutNote": "Fresh clones from GitHub of the certified commit with the machine's global core.autocrlf=true, one Node version at a time on an otherwise idle machine. Runner: the private fleet record's rollouts/certify-clean-clone.mjs.",
+  "visual": {
+    "node": "24.22.3",
+    "commit": "2e33309",
+    "result": "130 passed, 0 failed, 50 skipped by design (each test runs in one viewport project; the sensitivity specs run under their own command), 7.0 minutes, one run. No reference image asked to be renewed."
+  },
+  "versionDecision": "check:upstream on 26 November: EmDash 1.6.0 current. Deferred to the weekly upstream refresh: astro 7.4.13 and @astrojs/node 11.1.14 (patch), @cloudflare/workers-types, @types/node, @typescript-eslint/parser, typescript 7.0.2, parse5, @axe-core/playwright; @cloudflare/kumo 2.19.1 (EmDash admin pins 2.19.0 exactly); Impeccable 4.11.0 and Sveltia CMS 0.273.1.",
+  "findings": [
+    "check:ci-fast passed every check on both Node versions but exceeded its 60 s local budget (127 s and 100 s), as in 0.5.0-0.8.0.",
+    "No candidate failure: the certified commit is the first candidate."
+  ],
+  "notCovered": [
+    "The Workers/D1/R2 profile stays unverified as a certified profile; the EmDash 1.6 site upgrades were rehearsed on local copies and deployed one by one (each site's maintenance record).",
+    "The editor rehearsal, check:emdash-current and the existing-database restore drill were not rerun: the runtime, database schema and editor code are unchanged since 0.8.0, whose receipts stand."
+  ]
+}
