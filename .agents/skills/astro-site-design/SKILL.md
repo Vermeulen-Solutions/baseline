@@ -44,6 +44,18 @@ const ratio = Math.min(Math.max(image.width / image.height, 1), 1.5);
 
 Only the clamp crops, and only for photographs outside the allowed range. `audit:ui` reports `image-cover-cropped` when a frame hides more than 15% on one side; mark images that are meant to be cropped (backgrounds, textures) with `data-audit-crop-ok`.
 
+**Enlarge a picture by its layout, not a transform.** `scale` or `transform` enlarges an image after the browser has chosen a file from its `srcset`, and `ResponsiveImage` gives lazy images `sizes="auto"`, which reads the untransformed width: a static site's product screenshots, zoomed 1.6 times inside their frames, loaded files sized for the frames and looked soft. To show part of an image larger, lay the image out larger inside a window that crops it, so `sizes="auto"` and the `srcset` see the width actually shown; keep transforms for motion (a hover lift, a reveal), not for size. `audit:composition` reports `soft-photo` for a picture a transform shows wider than its file, at any width from 120px.
+
+```css
+@layer components {
+  .shot-window { aspect-ratio: 16 / 10; overflow: hidden; }
+  /* Width above 100% enlarges; the margins place the part that matters in the window. */
+  .shot-window img { inline-size: 160%; max-inline-size: none; block-size: auto; margin-inline-start: -30%; margin-block-start: -12%; }
+}
+```
+
+A screenshot of an interface shown under about two thirds of the size it was captured at has unreadable text however good the file is. Capture screenshots at 2x (device scale factor 2), crop to the part that matters and show that larger, rather than shrinking the whole screen into a card.
+
 For incoming imagery in a greenfield build or day-2 maintenance, follow the installed `docs/media-preparation.md` and `media:prepare` command before storing/uploading it. Inspect intended use and output quality, use eligible prepared copies, and keep full-size originals outside the library and Git. Static profiles add those copies to `src/assets/`; EmDash uses the selected instance and `media:upload` readback when installed. A prior WordPress migration is not required. Existing sites without these commands need the explicit adoption described in `docs/baseline-updates.md`; do not invent an installed capability.
 
 Calibrate tokens, typography, layout, cards, ticker and native images on the same common `/_styleguide` on both foundations. EmDash adds Portable Text/storage specimens separately. Static editor-proxy checks explicitly report inapplicable; this is not an editor verification pass. Production builds must exclude the route and fixture artifacts must remain nondeployable. Generated static sites support manual browser acceptance, not the EmDash-specific screenshot/registry harness. Follow the generated README's actual commands.
