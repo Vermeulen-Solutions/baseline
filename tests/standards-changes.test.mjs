@@ -5,8 +5,8 @@ import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync, existsSync
 import os from 'node:os';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { isShipped, largestBump, upstreamNote, nextVersion, noteTemplate, parseNote, readNotes, requireNote, validateNote } from '../scripts/standards-changes.mjs';
-import { changesSection, compareVersions, groupOf, prepareRelease, releaseNotesText } from '../scripts/standards-release.mjs';
+import { isShipped, largestBump, upstreamNote, nextVersion, noteTemplate, parseNote, pendingPackages, readNotes, requireNote, validateNote } from '../scripts/standards-changes.mjs';
+import { changesSection, compareVersions, groupOf, prepareRelease, releaseNotesText, staleRuntimePins } from '../scripts/standards-release.mjs';
 import { compareDistribution, distributionLags, distributionOf, skillTreeHash } from '../scripts/standards-distribution.mjs';
 import { dependencyNote, noteSlug, writeDependencyNote } from '../scripts/dependency-note.mjs';
 
@@ -163,7 +163,12 @@ const inventory = { packages: { astro: { profiles: ['static', 'static-sveltia', 
 test('Renovate branches get a valid change note that says how a site follows', () => {
   const single = parseNote(dependencyNote({ branch: 'renovate/astro-monorepo', upgrades: [upgrade('astro', '7.4.12', '7.4.13')] }, inventory));
   assert.deepEqual(validateNote(single), []);
-  assert.deepEqual(single.meta, { bump: 'patch', platforms: ['emdash', 'static'], areas: ['dependencies'], adoption: 'manual', visible: false, database: false });
+  assert.deepEqual(single.meta, { bump: 'patch', platforms: ['emdash', 'static'], areas: ['dependencies'], adoption: 'manual', visible: false, database: false, packages: ['astro@7.4.13'] });
+  assert.doesNotMatch(single.body, /runtime version/, 'without the certified list nothing is called a runtime version');
+  const runtime = parseNote(dependencyNote({ branch: 'renovate/astro-monorepo', upgrades: [upgrade('astro', '7.4.12', '7.4.13')] }, inventory, ['astro', 'emdash']));
+  assert.match(runtime.body, /`astro` is a runtime version that standards releases certify[\s\S]*take it with that release/);
+  assert.deepEqual(pendingPackages([runtime, parseNote(note({ ...valid, packages: ['@astrojs/node@11.1.14'] }))]), new Map([['astro', '7.4.13'], ['@astrojs/node', '11.1.14']]));
+  assert.ok(validateNote(parseNote(note({ ...valid, packages: ['astro@^7.5.0'] })), 'x.md').some(p => /packages must be a list of name@version pins/.test(p)));
   assert.equal(single.title, 'Dependency update: astro 7.4.12 to 7.4.13');
   assert.match(single.body, /run `npm install --save-exact astro@7\.4\.13` in the site/);
   const mixed = parseNote(dependencyNote({ branch: 'renovate/astro-monorepo', upgrades: [upgrade('astro', '7.4.12', '7.4.13'), upgrade('@astrojs/node', '11.1.13', '11.1.14')] }, { packages: { ...inventory.packages, '@astrojs/node': { profiles: ['emdash'] } } }));
@@ -199,6 +204,19 @@ test('Renovate branches get a valid change note that says how a site follows', (
   assert.equal(noteSlug('renovate/@types/node-26.x'), 'deps-types-node-26-x');
   assert.equal(noteSlug('', [{ depName: '@emdash-cms/auth' }]), 'deps-emdash-cms-auth');
   assert.ok(noteSlug(`renovate/${'x'.repeat(120)}`).length <= 80);
+});
+
+test('a release refuses certified runtime versions that differ from the pins', () => {
+  const dir = mkdtempSync(path.join(os.tmpdir(), 'stale-pins-'));
+  try {
+    const manifest = { runtimeProfiles: { 'node-sqlite': { dependencies: { astro: '7.4.12', tailwindcss: '^4.3.3', emdash: '1.6.0' } } } };
+    assert.deepEqual(staleRuntimePins(dir, manifest), [], 'no package.json, nothing to compare');
+    put(dir, 'package.json', { dependencies: { astro: '7.4.13', tailwindcss: '^4.3.5', emdash: '1.6.0' } });
+    assert.deepEqual(staleRuntimePins(dir, manifest), ['astro: manifest 7.4.12, package.json 7.4.13'], 'ranges and matching pins pass');
+    assert.deepEqual(staleRuntimePins(dir, { runtimeProfiles: { 'node-sqlite': { dependencies: { astro: '7.4.13' } } } }), []);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
 
 test('the dependency note writer runs from a data file without node_modules', () => {
