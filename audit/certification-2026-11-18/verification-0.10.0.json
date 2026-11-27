@@ -1,0 +1,129 @@
+{
+  "schemaVersion": 1,
+  "standardsVersion": "0.10.0",
+  "recordedAt": "2026-11-27T01:34:24.827Z",
+  "sourceCommit": "da877ac1c0e5a79aa73e62987c326553b42892cb",
+  "scope": "Minor release after 0.9.0 with the runtime unchanged (Astro 7.4.12, EmDash 1.6.0, the adapters) and nothing changed under src/, profiles/ or the package files: design guidance (which pages open on their content, a budget for the hero, lane presets as seeds, one home for each rule), advisory findings (hero-copy, hero-actions, hero-strip, text-stranded and three check:css habits), design:world layers for reading how a reference page is painted, and two fixes (astro dev on a site without the expressive layer, soft-photo for pictures enlarged by a transform) (PRs #193-#198).",
+  "cleanCheckout": {
+    "22.23.4": {
+      "node": "v22.23.4",
+      "commit": "da877ac",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 3
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 165
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 334
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 19
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 72
+        },
+        "ci-fast": {
+          "exit": 1,
+          "seconds": 123,
+          "note": "every check passed; 121.98s against the 60 s local budget"
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 3
+        },
+        "seeded-build": {
+          "exit": 0,
+          "seconds": 15
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 2
+        }
+      }
+    },
+    "24.22.3": {
+      "node": "v24.22.3",
+      "commit": "da877ac",
+      "steps": {
+        "doctor": {
+          "exit": 0,
+          "seconds": 3
+        },
+        "npm-ci": {
+          "exit": 0,
+          "seconds": 155
+        },
+        "verify": {
+          "exit": 0,
+          "seconds": 266
+        },
+        "build": {
+          "exit": 0,
+          "seconds": 36
+        },
+        "release-artifact": {
+          "exit": 0,
+          "seconds": 2
+        },
+        "schema-budget": {
+          "exit": 0,
+          "seconds": 1
+        },
+        "dev-tools": {
+          "exit": 0,
+          "seconds": 89
+        },
+        "ci-fast": {
+          "exit": 1,
+          "seconds": 115,
+          "note": "every check passed; 114.336s against the 60 s local budget"
+        },
+        "seed": {
+          "exit": 0,
+          "seconds": 11
+        },
+        "seeded-build": {
+          "exit": 0,
+          "seconds": 11
+        },
+        "audit-html": {
+          "exit": 0,
+          "seconds": 2
+        }
+      }
+    }
+  },
+  "cleanCheckoutNote": "Fresh clones from GitHub of the certified commit with the machine's global core.autocrlf=true, one Node version at a time on an otherwise idle machine. Runner: the private fleet record's rollouts/certify-clean-clone.mjs.",
+  "visual": {
+    "node": "24.22.3",
+    "commit": "da877ac",
+    "result": "129 passed, 1 failed, 50 skipped by design (each test runs in one viewport project; the sensitivity specs run under their own command), 8.1 minutes, one run. The failure was the gallery root typecheck (tests/visual/primitives.spec.mjs, \"a built gallery survives root typecheck\"), whose typecheck did not finish within its 90 s limit inside the full run: one of the two tests docs/standards-releases.md lists as timing out under load. Run alone it passed in 16 s. No picture comparison failed and no reference image asked to be renewed."
+  },
+  "versionDecision": "check:upstream on 27 November: EmDash 1.6.0 current. Deferred to the weekly upstream refresh: astro 7.4.13 and @astrojs/node 11.1.14 (patch), @cloudflare/workers-types, @types/node, @typescript-eslint/parser, typescript 7.0.2, parse5 8.1.1, @axe-core/playwright 4.14.1 and eslint-plugin-astro 3.2.2; @cloudflare/kumo 2.19.1 (EmDash admin pins 2.19.0 exactly); Impeccable 4.11.1. The check reported @sveltia/cms 5.0.0 against the pinned 0.271.2, a jump of several major versions in one day: not adopted, and to be read in the weekly refresh before any move.",
+  "findings": [
+    "check:ci-fast passed every check on both Node versions but exceeded its 60 s local budget (122 s and 114 s), as in 0.5.0-0.9.0.",
+    "The gallery root typecheck timed out inside the full visual run and passed alone, as described above.",
+    "No candidate failure: the certified commit is the first candidate.",
+    "One CI job on pull request #196 failed once in the build on a font download from the font host and passed when re-run."
+  ],
+  "notCovered": [
+    "The Workers/D1/R2 profile stays unverified as a certified profile.",
+    "The editor rehearsal, check:emdash-current and the existing-database restore drill were not rerun: the runtime, database schema and editor code are unchanged since 0.8.0, whose receipts stand.",
+    "The new guidance was not tried on a trial build: the opening format, the hero budget and the read of a reference page's layers have not been followed by an agent on a run, and the limits behind hero-copy, hero-actions, hero-strip and text-stranded were not measured on ranked pages or on a site."
+  ]
+}
