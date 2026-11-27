@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
-import { checkMarkdown, checkTree, DEBT_FILE } from '../scripts/check-skill-wording.mjs';
+import { checkMarkdown, checkRuleHomes, checkTree, DEBT_FILE, ruleHomeFindings, ruleHomeRows, RULE_HOMES_FILE } from '../scripts/check-skill-wording.mjs';
 
 const rules = (findings) => findings.map((f) => `${f.rule}:${f.match.toLowerCase()}`);
 
@@ -96,4 +96,48 @@ test('Baseline\'s own skills have no new findings and no stale debt', () => {
   const result = checkTree(process.cwd(), debt);
   assert.deepEqual(result.fresh.map((f) => `${f.file}:${f.line} ${f.match}`), []);
   assert.deepEqual(result.stale, []);
+});
+
+test('the rule-home table is read row by row, and a row that points at nothing is reported', () => {
+  const table = [
+    '## 6. Each rule has one home',
+    '',
+    'Each rule below has one home.',
+    '',
+    '| Rule | Home | Checked by |',
+    '| --- | --- | --- |',
+    '| A label is earned by a fact | `skills/world.md` › "A section heading stands alone" | `audit:composition` `kicker-openings` |',
+    '| A preset is a seed | `skills/lanes.md` › "A preset is a seed" | review only |',
+    '| A moved rule | `skills/world.md` › "Words that were reworded" | `audit:gone` `old-name` |',
+    '| A deleted file | `skills/removed.md` › "Anything" | `check:css` |',
+    '| No home written | somewhere in the skills | `check:css` |',
+    '',
+    'A table further down is not read.',
+    '',
+    '| Rule | Reports | Fix |',
+    '| --- | --- | --- |',
+    '| `shouting` | capitals | say it plainly |',
+    '',
+    '## The check',
+  ].join('\n');
+  const rows = ruleHomeRows(table);
+  assert.equal(rows.length, 5);
+  assert.deepEqual(rows[0], { line: 7, rule: 'A label is earned by a fact', file: 'skills/world.md', words: 'A section heading stands alone', names: ['audit:composition', 'kicker-openings'] });
+  const files = { 'skills/world.md': '**A section heading stands alone:** no small label above it.', 'skills/lanes.md': 'A preset is a seed that makes the contrast pairs pass.' };
+  const lookup = { text: (file) => files[file] ?? null, script: (name) => ['audit:composition', 'check:css'].includes(name), finding: (name) => name === 'kicker-openings' };
+  assert.deepEqual(ruleHomeFindings(table, lookup).map((f) => [f.line, f.rule, f.match]), [
+    [9, 'rule-home', 'skills/world.md no longer contains "Words that were reworded"'],
+    [9, 'rule-home', 'audit:gone is not a script in package.json'],
+    [9, 'rule-home', 'old-name is not a finding name in scripts/'],
+    [10, 'rule-home', 'skills/removed.md does not exist'],
+    [11, 'rule-home', 'No home written: no home given as `file` › "words"'],
+  ]);
+  assert.deepEqual(ruleHomeRows('# No such section\n\n| Rule | Home | Checked by |'), []);
+});
+
+test('every row of the rule-home table in this repository points at a rule that is there', () => {
+  const rows = ruleHomeRows(readFileSync(RULE_HOMES_FILE, 'utf8'));
+  assert.ok(rows.length >= 20, 'the table is found and read');
+  assert.ok(rows.every((row) => row.file && row.words), 'every row names a file and the words to find in it');
+  assert.deepEqual(checkRuleHomes(process.cwd()), []);
 });

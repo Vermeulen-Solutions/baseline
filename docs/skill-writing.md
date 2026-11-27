@@ -45,6 +45,43 @@ Write the rule in ordinary case with the reason in a clause: "Keep slugs ASCII: 
 
 A structural check does not show what an agent does with the words. A change to the new-site workflow or the design path is tried in a trial build from an average owner's brief before it is released. Read the transcript as well as the site: which files the agent opened, which steps it skipped or shortened, and how many model calls it made. A release that changes the workflow is also tried once on a smaller model than the one it was written with, since that is what many people run it on.
 
+## 6. Each rule has one home
+
+A rule stated in full in several files drifts: one copy is corrected and the others keep the old text. Two cases found in one review: a lane and the OpenDesign design-system file still prescribed a cream ground, a display serif and a terracotta accent after world building had named that look as the easy version; and the design-system file still described the accent voice as an italic on one or two focal words after `accent-word` had made that a finding.
+
+Each rule below has one home: the place that states it in full, with its reason and its evidence. A change to the rule is made there first.
+
+- Another file may name the rule in a clause where its own step needs it, since skills are read in parts. It gives the home's file name and leaves out the numbers, the reason and the exceptions.
+- Remove a restatement when its file is next edited for another reason. Rewriting the skills in one pass to remove them all is an untested change to what agents read (section 5).
+- A new rule gets a row here in the pull request that adds it.
+
+| Rule | Home | Checked by |
+| --- | --- | --- |
+| The Art Direction Record comes before visual work | `AGENTS.md` › "Before client-specific visual implementation" | `check:art-direction` |
+| Reference research and its bar | `.agents/skills/site-art-direction/references/reference-research.md` › "Select at least three above the bar" | `check:art-direction` |
+| Every device has a source | `.agents/skills/site-art-direction/references/world-building.md` › "Every device has a source" | `check:art-direction` |
+| Two type voices, a third only from a picture, the display face from a specimen sheet | `.agents/skills/site-art-direction/references/world-building.md` › "Type in two voices, and a third only when the world has one" | `check:art-direction` |
+| A label above a heading is earned by a fact | `.agents/skills/site-art-direction/references/world-building.md` › "A section heading stands alone" | `audit:composition` `kicker-openings` |
+| An italic word or phrase in a heading | `.agents/skills/site-art-direction/SKILL.md` › "Inline Editorial Contrast Accent" | `audit:composition` `accent-word` |
+| Which pages open on their content, and what a hero holds | `.agents/skills/site-art-direction/SKILL.md` › "Opening format (decide per page archetype, before the hero)" | `audit:composition` `hero-copy` `hero-actions` `hero-strip` |
+| The motion tier | `.agents/skills/site-art-direction/SKILL.md` › "Record the motion tier" | `check:art-direction` `impression-motion` |
+| A lane preset is a seed | `.agents/skills/site-art-direction/references/aesthetic-lanes.md` › "A preset is a seed" | review only |
+| Content set as the object it is | `.agents/skills/site-art-direction/references/distinctive-direction.md` › "Set content as the real object it is" | `audit:composition` `card-grids` `repeated-run` |
+| One signature moment per page archetype | `.agents/skills/site-art-direction/references/distinctive-direction.md` › "Give each page archetype one signature moment" | `audit:composition` `no-signature` |
+| A photograph is never shown wider than its pixels | `.agents/skills/site-art-direction/references/world-building.md` › "Photographs framed by the world, never stretched" | `audit:composition` `soft-photo` |
+| A framed photograph takes the photograph's shape | `.agents/skills/astro-site-design/SKILL.md` › "Framed photographs take the shape of the photograph" | `audit:ui` `image-cover-cropped` |
+| Code draws geometry; figures come from a drawn set or a photograph | `.agents/skills/site-art-direction/references/world-building.md` › "Drawings: code draws geometry; figures come from a drawn set or a photograph" | review only |
+| Every word can be read at both widths | `.agents/skills/site-art-direction/references/world-building.md` › "Every word can be read at 390px and at 1440px" | `audit:composition` `text-cut` `text-squeezed` `text-tiny` `text-unreadable` |
+| Nothing stands in for a fact the client has not given | `.agents/skills/site-art-direction/references/world-building.md` › "Nothing on the page stands in for a fact the client has not given" | `audit:composition` `placeholder-text` |
+| The patterns that read as a generated page | `.agents/skills/astro-site-design/SKILL.md` › "generic-fingerprint check" | `audit:composition` |
+| Settle one section with the owner, then carry it across | `.agents/skills/site-art-direction/references/design-iteration.md` › "Settle one section, then carry it across the site" | review only |
+| Interaction CSS: hover, focus, reduced motion, tokens | `AGENTS.md` › "Interaction CSS stays zero-JS and token-bound" | `check:css` |
+| Motion properties, easing and durations | `.agents/skills/astro-site-design/references/interaction-motion.md` › "Properties, easing and duration" | `check:css` |
+| Who owns which spacing | `docs/design-framework.md` › "Cascade and layout spacing contract" | `check:css` |
+| Copy devices and their budget | `.agents/skills/new-site-workflow/references/copy-voice.md` › "The device budget, per page" | `check:quality` `copy-tell` |
+
+`check:skills` reads this table as rule `rule-home`: the home file must exist and contain the quoted words, each name with a colon must be a script in `package.json`, and each finding name must appear in a script under `scripts/`. A heading that is reworded or a finding that is renamed fails until the row follows it. The check does not find restatements; that stays with review.
+
 ## The check
 
 `npm run check:skills` runs in `npm run lint`, `npm run verify` and CI. It reads every `SKILL.md` and `references/` file of the skills Baseline maintains, and the instruction files above. Code spans and fenced blocks are not read, so a phrase quoted as an example goes in backticks.
@@ -55,6 +92,7 @@ A structural check does not show what an agent does with the words. A change to 
 | `shouting` | MUST, NEVER, ALWAYS, CRITICAL, IMPORTANT, REQUIRED, DO NOT in capitals | say it plainly and give the reason |
 | `skill-length` | a `SKILL.md` over 500 lines | move detail into references |
 | `description` | a `SKILL.md` description that is missing, over 1024 characters, or in the first or second person | describe in the third person what the skill does and when to use it |
+| `rule-home` | a row of the table in section 6 whose home file, quoted words, script or finding name no longer exists | point the row at where the rule now lives, or at the new name |
 
 A line that has to keep a phrase (a quotation, a rule about the phrase itself) carries `<!-- wording-ok: <reason> -->`. Findings older than the check are listed in `audit/skill-wording-debt.json`. An entry matches its line's exact text, so editing that line brings the finding back and the rewrite is due then; a fixed line leaves a stale entry, which the check reports until it is deleted. Never add entries to the list: it only shrinks.
 
