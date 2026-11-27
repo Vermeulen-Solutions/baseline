@@ -142,6 +142,8 @@ The rubric checks that each pattern is a reasoned choice, not that it is present
 - gradient text;
 - a live-console hero for an offer that is not software;
 - a kicker, a heading on one side and a lead on the other opening most sections;
+- a hero on a page the visitor opens for its content (a list, a programme, an article, a search), pushing that content below the first screen;
+- an opening that holds a paragraph of copy, two or three buttons and a row of figures about the organisation (`audit:composition` reports `hero-copy`, `hero-actions` and `hero-strip`);
 - every list set as a grid of equal cards;
 - photographs only in boxes, none at full width, on a site whose subject photographs well;
 - a centred heading and button on a coloured band as the last section of every page.
