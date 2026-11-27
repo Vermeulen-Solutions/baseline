@@ -73,6 +73,9 @@
 //   padding, a date against the side of its row. Eight scored sites give twenty places.
 // - placeholder-text (floor under the same rule): "à confirmer", a "bientôt" tag on its own, digits
 //   followed by a row of dashes. One trial site printed its call plate as "079 __ __ __".
+// - text-stranded (advisory), at the wide and the narrow width: a ? ! : ; % or » on the line below the word
+//   before it, or a « on the line above its word. French sets a space there, and an ordinary space lets the
+//   line break at it. Not taken from a trial: no Baseline site or trial was measured for it before it was added.
 // - soft-photo: a photograph at least 40% of the screen wide, or a smaller picture a transform enlarges
 //   (its srcset file was chosen for the width before the transform), is shown wider than its pixels (a phone
 //   photograph stretched across a desktop). Owners' photographs are often 600 to 1,500px wide; a
@@ -250,6 +253,7 @@ const LEGIBILITY_EXAMPLE = {
   covered: (p) => `"${p.text}" (${p.hidden === 1 ? 'all of it' : p.letters ? `${p.letters} ${p.letters === 1 ? 'letter' : 'letters'} inside the line` : `${Math.round(p.hidden * 100)}% of the line`})`,
   edge: (p) => `"${p.text}" (${p.edge} edge)`,
   placeholder: (p) => `"${p.text}"`,
+  stranded: (p) => `"${p.text}" (${p.mark})`,
 };
 const plural = (count, one, many) => `${count} ${count === 1 ? one : many}`;
 const LEGIBILITY = [
@@ -260,6 +264,8 @@ const LEGIBILITY = [
   ['text-covered', 'covered', (count, where) => `${plural(count, 'line of text is', 'lines of text are')} hidden behind something laid over them: ${where}. Move what covers the words or move the words: a caption goes under its own photograph and clear of the one laid over it; an object set over a block overlaps its picture, not its text; a drawn part (a stem, a needle, a rule) passes beside a label, never through it.`],
   ['text-against-edge', 'edge', (count, where) => `${plural(count, 'line of text stands', 'lines of text stand')} against the edge of the ground they are on: ${where}. Give the ground an inner margin (padding of 16px or more on a phone, more on a wide screen), or move the words in from the edge; a heading at the top of a new ground needs room above it.`],
   ['placeholder-text', 'placeholder', (count, where) => `${plural(count, 'line stands', 'lines stand')} in for a fact nobody has given: ${where}. Leave the element out (the row, the tag, the link) and list the missing fact in the notes; when it is the page's main action, build it with the example the brief gives.`],
+  // Advisory: the words can be read. It is not in SOURCED_FLOOR.
+  ['text-stranded', 'stranded', (count, where) => `${plural(count, 'mark stands', 'marks stand')} on a line without the word it belongs to: ${where}. The space before ? ! : ; % and inside « » is an ordinary one, so the line breaks there. Make it a non-breaking space (U+00A0, or the narrow U+202F) in the copy; for text an editor types, replace it where the text is rendered.`],
 ];
 
 /**
@@ -518,6 +524,37 @@ const PLACEHOLDER = [
 export function placeholderText(boxes = [], { minAlpha = 0.6 } = {}) {
   return oncePerNode(solidLines(boxes, minAlpha).filter((b) => PLACEHOLDER.some((pattern) => pattern.test(b.text))))
     .map((b) => ({ text: b.text, y: b.y }));
+}
+
+/**
+ * In the page: marks left on a line without the word they belong to. French sets a space before ? ! : ; %
+ * and inside « »; when that space is an ordinary one the browser may break the line there, and the mark opens
+ * the next line alone (or « ends a line with its word below). A mark counts when it stands on a lower line
+ * than the character before the space; a non-breaking space never gives one. Read inside one text node, so a
+ * mark in a node of its own (after an emphasised word) is not seen. Code, preformatted text and drawings are left out.
+ */
+export function strandedMarks({ limit = 40 } = {}) {
+  const found = [];
+  const range = document.createRange();
+  const boxAt = (node, start, end) => { range.setStart(node, start); range.setEnd(node, end); return [...range.getClientRects()].find((r) => r.width > 0 && r.height > 0) ?? null; };
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let node = walker.nextNode(); node && found.length < limit; node = walker.nextNode()) {
+    if (!/[ \t\n\r][?!:;»%]|«[ \t\n\r]/.test(node.data)) continue;
+    const el = node.parentElement;
+    if (!el || el.closest('script, style, noscript, template, option, textarea, pre, code, svg')) continue;
+    if (getComputedStyle(el).visibility !== 'visible' || el.checkVisibility?.({ visibilityProperty: true }) === false) continue;
+    for (const match of node.data.matchAll(/([^\s«])[ \t\n\r]+([?!:;»%])|(«)[ \t\n\r]+(\S)/gu)) {
+      const before = match[1] ?? match[3];
+      const after = match[2] ?? match[4];
+      const end = match.index + match[0].length;
+      const first = boxAt(node, match.index, match.index + before.length);
+      const second = boxAt(node, end - after.length, end);
+      if (!first || !second || second.top < first.bottom - 1) continue;
+      const from = Math.max(0, node.data.lastIndexOf(' ', Math.max(0, match.index - 14)));
+      found.push({ text: node.data.slice(from, Math.min(node.data.length, end + (match[3] ? 14 : 0))).replace(/\s+/g, ' ').trim(), mark: match[2] ?? '«', y: Math.round(second.top + scrollY) });
+    }
+  }
+  return found;
 }
 
 /** The lines worth holding against what is behind them: solid, with a known colour, wide enough to sample. */
@@ -1138,7 +1175,8 @@ export async function readLegibility(browser, page) {
     const hidden = grounds.length === 2 ? coveredText(lines, lines.map((_, i) => (grounds[0][i] && grounds[1][i] ? least(grounds[0][i], grounds[1][i]) : null))) : [];
     if (hidden.length) { const shown = await page.evaluate(coveringShown, hidden); covered = hidden.filter((_, i) => shown[i]).map(({ text, hidden: share, letters, y }) => ({ text, hidden: share, ...(letters ? { letters } : {}), y })); }
   }
-  return { collisions: collidingText(boxes), legibility: { cut: cutText(boxes), squeezed: squeezedText(boxes), tiny: tinyText(boxes), unreadable, covered, edge, placeholder: placeholderText(boxes) } };
+  const stranded = await page.evaluate(strandedMarks).catch(() => []);
+  return { collisions: collidingText(boxes), legibility: { cut: cutText(boxes), squeezed: squeezedText(boxes), tiny: tinyText(boxes), unreadable, covered, edge, placeholder: placeholderText(boxes), stranded } };
 }
 
 /** Loads a page at the wide width, scrolls it with motion allowed, then measures it with motion reduced. */

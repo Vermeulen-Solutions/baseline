@@ -122,7 +122,8 @@ Every rule breeds a habit; check for it after fixing.
 ## 8. Check before handoff
 
 1. `npm run check:quality` and fix every `copy-tell`, or allow the word with the reason in the brief.
-2. **A rival's name:** put a competitor, or the same trade in another town, into the h1, the line under it and each heading. A line that still reads true says nothing about this client; rewrite it from the fact sheet.
-3. **Sameness across pages:** read the headings of every page side by side. A cadence or joke that repeats is a habit; break it.
-4. **Read it aloud as the owner** and cut what they would not say about themselves.
-5. **A fresh reader,** when a sub-agent is available: give it only the page text and ask what this is, who it is for, why this over the alternative, what it costs, what would make it hesitate, and which three lines sound like any other website. Fix what it finds.
+2. **French spacing:** in French copy, the space before `?`, `!`, `:`, `;` and `%` and the spaces inside `« »` are non-breaking ones (U+00A0, or the narrow U+202F), so a mark never opens a line without its word. Type them in copy written in the code; for text an editor types in the CMS or in Markdown, replace the ordinary space where the text is rendered. `npm run audit:composition` reports a mark that wrapped away from its word as `text-stranded`, at 390px and at 1440px.
+3. **A rival's name:** put a competitor, or the same trade in another town, into the h1, the line under it and each heading. A line that still reads true says nothing about this client; rewrite it from the fact sheet.
+4. **Sameness across pages:** read the headings of every page side by side. A cadence or joke that repeats is a habit; break it.
+5. **Read it aloud as the owner** and cut what they would not say about themselves.
+6. **A fresh reader,** when a sub-agent is available: give it only the page text and ask what this is, who it is for, why this over the alternative, what it costs, what would make it hesitate, and which three lines sound like any other website. Fix what it finds.

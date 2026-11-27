@@ -122,6 +122,35 @@ test('token guardrails report default Tailwind vocabulary, arbitrary values and 
   assert.deepEqual(inspectCssGuardrails(css).map(item => [item.line, item.rule]), [[2, 'raw-color'], [2, 'raw-spacing'], [2, 'raw-z-index'], [5, 'raw-color']]);
 });
 
+test('guardrails report transition all, a fixed line-height or tracking, and balance on a paragraph', async () => {
+  const { inspectCssGuardrails } = await import('../scripts/css-contracts.mjs');
+  const rules = css => inspectCssGuardrails(css).map(item => [item.line, item.rule]);
+  assert.deepEqual(rules([
+    '.a { transition: all 200ms var(--ease-smooth); }',
+    '.b { transition: opacity 200ms, all 1s; }',
+    '.c { transition-property: all; }',
+    '.d { transition: opacity var(--duration-fast), translate var(--duration-fast); transition-property: opacity, scale; }',
+    '.e { transition: var(--transition-all, opacity 1s); transition: none; }',
+    '.f { /* token-exempt: third-party widget animates its own properties */ transition: all 1s; }',
+  ].join('\n')), [[1, 'transition-all'], [2, 'transition-all'], [3, 'transition-all']]);
+  assert.deepEqual(rules([
+    '.a { line-height: 24px; letter-spacing: 1px; }',
+    '.b { line-height: 1.5rem; letter-spacing: -0.5px; }',
+    '.c { line-height: 1.5; letter-spacing: -0.02em; }',
+    '.d { line-height: calc(1em + 0.5rem); letter-spacing: 0; line-height: var(--leading-body); }',
+    '.e { line-height: 0; letter-spacing: 0px; line-height: normal; }',
+  ].join('\n')), [[1, 'fixed-text-metric'], [1, 'fixed-text-metric'], [2, 'fixed-text-metric'], [2, 'fixed-text-metric']]);
+  assert.match(inspectCssGuardrails('.a { line-height: 24px; }')[0].message, /use a unitless value/);
+  assert.match(inspectCssGuardrails('.a { letter-spacing: 1px; }')[0].message, /use em/);
+  assert.deepEqual(rules([
+    'p { text-wrap: balance; }',
+    '.prose p:first-child, .lead { text-wrap-style: balance; }',
+    'article > p { text-wrap: pretty; }',
+    'h2, .card__title { text-wrap: balance; }',
+    '.p-card, #p, .stamp { text-wrap: balance; }',
+  ].join('\n')), [[1, 'balance-on-paragraph'], [2, 'balance-on-paragraph']]);
+});
+
 test('an animation shorthand beside animation-timeline in one rule fails: the minifier folds it into a value browsers reject', () => {
   const broken = inspectAuthorCSS('@layer components { .plate { animation: plate-hangs linear both; animation-timeline: view(); animation-range: entry 0% entry 45%; } }');
   assert.equal(broken.length, 1);

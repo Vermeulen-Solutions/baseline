@@ -187,6 +187,10 @@ const GAP_NAMES = new Set(['none', 'content', 'grid', 'container', 'section', 's
 const SPACING_PROPERTY = /^(?:padding|margin|gap|row-gap|column-gap|inset|top|right|bottom|left)(?:-(?:block|inline|top|right|bottom|left)(?:-(?:start|end))?)?$/;
 const COLOR_LITERAL = /#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|oklch|oklab|lab|lch|hwb)\(\s*(?!from\b)/i;
 const EXEMPT = /token-exempt:\s*\S/;
+// A line-height or letter-spacing given as one fixed length (24px, 1.5rem). A calc() that adds to 1em is not one.
+const FIXED_LENGTH = /^-?\d*\.?\d+(?:px|rem)$/;
+// A selector that names the p element itself: `p`, `.prose p`, `article > p:first-child`. Not `.p-card` or `#top`.
+const PARAGRAPH_SELECTOR = /(?:^|[\s>+~,(])p(?=$|[\s.:#[>+~,)])/;
 
 /** Class names of one class attribute value or class:list expression, without variants or !. */
 export function classTokens(text) {
@@ -249,6 +253,11 @@ export function inspectCssGuardrails(css, { file = 'stylesheet.css', lineOffset 
       if (raw.length) findings.push({ ...at, rule: 'raw-spacing', message: `${decl.prop}: ${decl.value.slice(0, 60)}; use a spacing token (--spacing-s, --spacing-content …)` });
     }
     if (decl.prop === 'z-index' && /^-?\d+$/.test(decl.value.trim()) && decl.value.trim() !== '0') findings.push({ ...at, rule: 'raw-z-index', message: `z-index: ${decl.value}; use a layering token (--z-raised, --z-sticky …)` });
+    // Three habits the guidance names and nothing checked (astro-site-design/references/interaction-motion.md,
+    // docs/design-framework.md). They are not token rules, but they are read from the same declarations.
+    if ((decl.prop === 'transition' || decl.prop === 'transition-property') && /(?:^|,)\s*all(?![\w-])/.test(value)) findings.push({ ...at, rule: 'transition-all', message: `${decl.prop}: ${decl.value.slice(0, 60)}; name the properties that change, so a later change to another property does not start animating` });
+    if ((decl.prop === 'line-height' || decl.prop === 'letter-spacing') && FIXED_LENGTH.test(value.trim()) && parseFloat(value) !== 0) findings.push({ ...at, rule: 'fixed-text-metric', message: `${decl.prop}: ${decl.value}; ${decl.prop === 'line-height' ? 'use a unitless value, so it follows the font size' : 'use em, so the tracking follows the font size'}` });
+    if ((decl.prop === 'text-wrap' || decl.prop === 'text-wrap-style') && /\bbalance\b/.test(value) && PARAGRAPH_SELECTOR.test(decl.parent?.selector ?? '')) findings.push({ ...at, rule: 'balance-on-paragraph', message: `${decl.prop}: balance on a paragraph; use pretty: balance is for headings and short lines, and browsers stop balancing after a few lines` });
   });
   return findings;
 }
