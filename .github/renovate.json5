@@ -1,0 +1,74 @@
+// Renovate pilot for Baseline: exact-pinned npm packages, GitHub Actions and the Node version in
+// workflows. It runs self-hosted from .github/workflows/renovate.yml; the procedure and the GitHub App
+// setup are in docs/automated-upstream-updates.md.
+//
+// The weekly upstream workflow keeps what it already does well: in-range and transitive updates
+// (npm update), third-party skills and the Sveltia CMS pin. This config leaves those alone.
+{
+  $schema: 'https://docs.renovatebot.com/renovate-schema.json',
+  // Commit titles follow the repository's convention: chore(deps): update ...
+  extends: ['config:recommended', ':semanticCommits', ':semanticCommitTypeAll(chore)'],
+  // New proposals open on Monday mornings (UTC), the same rhythm as the weekly upstream review. Renovate
+  // still rebases open pull requests and acts on Dependency Dashboard ticks on its daily runs.
+  schedule: ['* 0-9 * * 1'],
+  labels: ['dependencies'],
+  prConcurrentLimit: 5,
+  // Wait three days after each release (npm can still unpublish it, and compromised releases are
+  // usually caught by then); with the strict filter the branch is not created until then.
+  minimumReleaseAge: '3 days',
+  internalChecksFilter: 'strict',
+  // CI requires a standards change note for anything sites receive; scripts/dependency-note.mjs
+  // writes one per branch from this data file. The command must also match RENOVATE_ALLOWED_COMMANDS
+  // in the workflow.
+  postUpgradeTasks: {
+    commands: ['node scripts/dependency-note.mjs'],
+    dataFileTemplate: '{"branch": "{{{branchName}}}", "groupName": "{{{groupName}}}", "upgrades": [{{#each upgrades}}{"depName": "{{{depName}}}", "manager": "{{{manager}}}", "depType": "{{{depType}}}", "packageFile": "{{{packageFile}}}", "currentValue": "{{{currentValue}}}", "newValue": "{{{newValue}}}", "updateType": "{{{updateType}}}"}{{#unless @last}},{{/unless}}{{/each}}]}',
+    fileFilters: ['standards/changes/*.md'],
+    executionMode: 'branch',
+  },
+  packageRules: [
+    {
+      description: 'The engines range is a support policy, not a version to chase.',
+      matchDepTypes: ['engines'],
+      enabled: false,
+    },
+    {
+      description: 'Overrides are reviewed security pins, removed once upstream ships a fix (docs/dependency-review-2026-10-25.md).',
+      matchDepTypes: ['overrides'],
+      enabled: false,
+    },
+    {
+      description: 'Ranged packages move with npm update in the weekly upstream workflow; only their majors come here.',
+      matchManagers: ['npm'],
+      matchCurrentValue: '/^[\\^~]/',
+      matchUpdateTypes: ['minor', 'patch'],
+      enabled: false,
+    },
+    {
+      description: 'Major updates wait for a tick on the Dependency Dashboard.',
+      matchUpdateTypes: ['major'],
+      dependencyDashboardApproval: true,
+    },
+    {
+      description: 'EmDash moves together, only on request, with a written upgrade guide and a database rehearsal.',
+      matchPackageNames: ['emdash', '@emdash-cms/**'],
+      groupName: 'EmDash',
+      dependencyDashboardApproval: true,
+      prBodyNotes: [
+        'EmDash runs database migrations on the first request after an upgrade. Before merging, write the upgrade guide for this version (like `docs/emdash-1.6-upgrade.md`), update the pin named in `docs/README.md`, and follow the framework upgrade checks in `docs/baseline-updates.md`.',
+      ],
+    },
+    {
+      description: 'Lint and type tooling moves in one pull request.',
+      matchPackageNames: ['eslint', 'eslint-plugin-*', '@typescript-eslint/**', 'astro-eslint-parser', '@types/**', '@cloudflare/workers-types'],
+      matchUpdateTypes: ['minor', 'patch'],
+      groupName: 'lint and type tooling',
+    },
+    {
+      description: 'GitHub Actions and the Node version in workflows move in one pull request.',
+      matchManagers: ['github-actions'],
+      matchUpdateTypes: ['minor', 'patch', 'digest'],
+      groupName: 'GitHub Actions',
+    },
+  ],
+}

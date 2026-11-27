@@ -1,6 +1,6 @@
 # Reviewed upstream maintenance
 
-Baseline maintenance workflows produce verified proposals for review. The root upstream review runs weekly; when dependency, third-party skill or Sveltia CMS pin updates pass verification, it opens or updates a Pull Request on `automation/upstream-update` (or an Issue if Pull Request creation is restricted by repository policy) pointing to review documentation, package changes, skill diffs and the pin change. Generated static profile maintenance workflows remain manual and read-only.
+Baseline maintenance workflows produce verified proposals for review. The root upstream review runs weekly; when dependency, third-party skill or Sveltia CMS pin updates pass verification, it opens or updates a Pull Request on `automation/upstream-update` (or an Issue if Pull Request creation is restricted by repository policy) pointing to review documentation, package changes, skill diffs and the pin change. A [Renovate pilot](#renovate-pilot-pinned-packages-and-github-actions) proposes the exact-pinned packages, GitHub Actions and workflow Node versions that the weekly review leaves alone. Generated static profile maintenance workflows remain manual and read-only.
 
 ## Root Baseline dependency and skill proposals
 
@@ -17,6 +17,30 @@ The candidate checkout runs `npm run verify`, `npm run build`, and `npm run test
 The final steps upload `upstream-dependency-review` containing `upstream-update.patch` from `git diff --binary`. When all verification checks pass and updates are proposed, the workflow stages the updates on `automation/upstream-update` and opens or updates a Pull Request with verification evidence and review guidelines. If GitHub Actions PR creation is restricted under repository settings, it opens an Issue instead. An unchanged candidate produces an empty patch and creates neither a branch nor a notification.
 
 Inspect the Pull Request (or download the artifact from the Actions run), review changelogs against [starter meta-review](starter-meta-review.md) and [skill synchronization](skill-synchronization.md), and merge when satisfied. Failed candidate runs remain proposals, upload diagnostic artifacts, and do not open a Pull Request.
+
+## Renovate pilot: pinned packages and GitHub Actions
+
+`npm update` moves only packages declared with a range. Most of Baseline's direct dependencies are exact pins, so before this pilot they moved only when someone ran `npm run check:upstream` and acted on it. The same was true of the action versions and the `node-version` in workflows.
+
+[Renovate](https://docs.renovatebot.com/) now proposes those. It runs self-hosted from [renovate.yml](../.github/workflows/renovate.yml) with the repository config in [renovate.json5](../.github/renovate.json5):
+
+- **What it proposes:** exact-pinned npm packages (patch and minor), GitHub Actions and the Node version in workflows, including the workflow templates under `profiles/`. Ranged packages, transitive updates, third-party skills and the Sveltia pin stay with the weekly review above; Renovate only reports the majors of ranged packages. The `engines` range and the reviewed `overrides` are left alone.
+- **When:** new pull requests open on Monday mornings (UTC), only for releases at least three days old. The workflow runs daily so open pull requests are rebased and Dependency Dashboard ticks are acted on.
+- **What waits for you:** major updates and every EmDash update (`emdash`, `@emdash-cms/*`) are listed on the **Dependency Dashboard** issue and open a pull request only when ticked there. An EmDash pull request carries a reminder to write the upgrade guide and rehearse the database migrations first.
+- **Grouping:** EmDash packages move together, the Astro packages move together, lint and type tooling share one pull request, and GitHub Actions share one.
+- **Change notes:** CI requires a standards change note for anything sites receive. After updating the files and before committing, Renovate runs `node scripts/dependency-note.mjs`, which writes `standards/changes/deps-<branch>.md`: what moved, the platforms from `profiles/dependency-inventory.json`, and the `npm install --save-exact` command a site runs to follow. Updates that touch only CI workflows get no note, because CI asks for none. The script uses Node built-ins only, because Renovate's clone has no `node_modules`.
+- **Checks:** Renovate pushes as a GitHub App, so its branches start the normal `Design and build checks`. Nothing merges automatically; review each pull request and its linked release notes as you would the weekly one.
+
+### One-time setup
+
+The workflow runs only in `Vermeulen-Solutions/baseline`, and only once a repository variable names the App, so merging it before the App exists does nothing. Sites created from the template copy the workflow and config, but neither runs there: the config is written for Baseline's maintainers, not for a site.
+
+1. Create a GitHub App owned by the organization (Settings > Developer settings > GitHub Apps > New GitHub App). Turn off its webhook. Repository permissions: **Contents**, **Pull requests**, **Issues**, **Workflows** and **Commit statuses** read and write; **Checks** and **Dependabot alerts** read; **Metadata** read (always on). Workflows write lets it update action versions; Issues write lets it keep the Dependency Dashboard.
+2. Install the App on the `baseline` repository only.
+3. Generate a private key. Add its full contents as the repository secret `RENOVATE_APP_PRIVATE_KEY`, and the App's client ID as the repository variable `RENOVATE_APP_CLIENT_ID` (Settings > Secrets and variables > Actions).
+4. Run the workflow once as a dry run (`gh workflow run renovate.yml -f dry_run=true`) and read the log for the updates it found. Then run it without `dry_run`, or wait for the next Monday. The first real run opens the Dependency Dashboard issue.
+
+To pause the pilot, disable the workflow (`gh workflow disable renovate.yml`); open pull requests stay until closed.
 
 ## Sveltia CMS pin
 

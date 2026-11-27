@@ -114,7 +114,7 @@ Root `npm run rehearse:tokens` is an explicit local Windows rehearsal of a synth
 
 Root `npm run check:ci-fast` measures the fast checks plus a normal build/release gate, enforces the 60-second budget and writes .emdash/checks/ci-fast.{json,log}. It includes the documentation format check, and when a step fails it prints the end of that step's output and names the steps that did not run. `npm run test:profiles` independently installs/verifies/builds/HTTP-checks both generated static profiles. These are maintainer tools rather than generated-site delivery prerequisites.
 
-For dependency proposals, `npm run check:upstream` reviews available framework, adapter, EmDash and Node updates. Source updates for static sites use sync:baseline with an immutable reference. Skill updates are deliberate staged operations, not routine new-clone setup. Follow [reviewed upstream maintenance](automated-upstream-updates.md), [Baseline updates](baseline-updates.md) and [skill synchronization](skill-synchronization.md).
+For dependency proposals, `npm run check:upstream` reviews available framework, adapter, EmDash and Node updates; the Renovate pilot opens pull requests for the pinned ones, and Renovate runs `node scripts/dependency-note.mjs` to write each one's change note. Source updates for static sites use sync:baseline with an immutable reference. Skill updates are deliberate staged operations, not routine new-clone setup. Follow [reviewed upstream maintenance](automated-upstream-updates.md), [Baseline updates](baseline-updates.md) and [skill synchronization](skill-synchronization.md).
 
 ## Further commands
 
