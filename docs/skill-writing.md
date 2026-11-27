@@ -76,9 +76,10 @@ Each rule below has one home: the place that states it in full, with its reason 
 | The patterns that read as a generated page | `.agents/skills/astro-site-design/SKILL.md` › "generic-fingerprint check" | `audit:composition` |
 | Settle one section with the owner, then carry it across | `.agents/skills/site-art-direction/references/design-iteration.md` › "Settle one section, then carry it across the site" | review only |
 | Interaction CSS: hover, focus, reduced motion, tokens | `AGENTS.md` › "Interaction CSS stays zero-JS and token-bound" | `check:css` |
-| Motion properties, easing and durations | `.agents/skills/astro-site-design/references/interaction-motion.md` › "Properties, easing and duration" | `check:css` |
+| Motion properties, easing and durations | `.agents/skills/astro-site-design/references/interaction-motion.md` › "Properties, easing and duration" | `check:css` `transition-all` |
 | Who owns which spacing | `docs/design-framework.md` › "Cascade and layout spacing contract" | `check:css` |
 | Copy devices and their budget | `.agents/skills/new-site-workflow/references/copy-voice.md` › "The device budget, per page" | `check:quality` `copy-tell` |
+| Non-breaking spaces in French copy | `.agents/skills/new-site-workflow/references/copy-voice.md` › "French spacing" | `audit:composition` `text-stranded` |
 
 `check:skills` reads this table as rule `rule-home`: the home file must exist and contain the quoted words, each name with a colon must be a script in `package.json`, and each finding name must appear in a script under `scripts/`. A heading that is reworded or a finding that is renamed fails until the row follows it. The check does not find restatements; that stays with review.
 
