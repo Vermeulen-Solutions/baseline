@@ -101,3 +101,15 @@ Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 130 passed, none failed
 Version decision (`check:upstream`, 26 November): EmDash 1.6.0 is current; Astro 7.4.13 and `@astrojs/node` 11.1.14, the tooling updates, Kumo 2.19.1 (EmDash's admin pins 2.19.0 exactly), Impeccable 4.11.0 and Sveltia CMS 0.273.1 are left to the weekly upstream refresh.
 
 Not covered: the Workers/D1/R2 profile as a certified profile (the EmDash 1.6 site upgrades were rehearsed on local copies and recorded per site); the editor rehearsal, `check:emdash-current` and the restore drill were not rerun, since the runtime, schema and editor code are unchanged since 0.8.0.
+
+## Standards 0.10.0 (2026-11-27)
+
+Certified source: commit `da877ac1c0e5a79aa73e62987c326553b42892cb` (tree `ab8fc29cddd5bf87b9a74d3a62c3f3fc928e06d4`). Machine record: [verification-0.10.0.json](verification-0.10.0.json). A minor release after 0.9.0 with the runtime unchanged (Astro 7.4.12, EmDash 1.6.0, the adapters) and nothing changed under `src/`, `profiles/` or the package files: design guidance, advisory findings in `audit:composition` and `check:css`, `design:world -- layers` and two fixes (PRs #193-#198).
+
+Clean clones from GitHub on Windows with `core.autocrlf=true`, Node 22.23.4 and 24.22.3, one at a time: doctor, `npm ci`, verify, build, release artifact, schema budget, dev tools, seed, seeded build and `audit:html` all pass; `check:ci-fast` passed every check but ran over its 60 s local budget (122 s and 114 s), as since 0.5.0. The certified commit was the first candidate.
+
+Visual suite (Windows, Node 24.22.3, Playwright 1.65.1): 129 passed, 1 failed, 50 skipped by design (each test runs in one viewport project), in 8.1 minutes. The failure was the gallery root typecheck, whose typecheck did not finish within its 90 s limit inside the full run; it is one of the two tests [standards releases](../../docs/standards-releases.md) lists as timing out under load, and it passed in 16 s when run alone. No picture comparison failed and no reference image asked to be renewed.
+
+Version decision (`check:upstream`, 27 November): EmDash 1.6.0 is current; Astro 7.4.13 and `@astrojs/node` 11.1.14, the tooling updates, Kumo 2.19.1 (EmDash's admin pins 2.19.0 exactly) and Impeccable 4.11.1 are left to the weekly upstream refresh. The check reported `@sveltia/cms` 5.0.0 against the pinned 0.271.2, a jump of several major versions in one day: not adopted, and to be read in the weekly refresh before any move.
+
+Not covered: the Workers/D1/R2 profile as a certified profile; the editor rehearsal, `check:emdash-current` and the restore drill were not rerun, since the runtime, schema and editor code are unchanged since 0.8.0. The new guidance (the opening format, the hero budget, the read of a reference page's layers) was not tried on a trial build, and the limits behind the new advisory findings were not measured on ranked pages or on a site.
