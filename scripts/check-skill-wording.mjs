@@ -13,6 +13,10 @@
 //   skill-length     a SKILL.md over 500 lines.
 //   description      a SKILL.md without a description, longer than 1024 characters, or written in the
 //                    first or second person.
+//   rule-home        a row of the rule-home table in docs/skill-writing.md (section 6) that points at
+//                    nothing: its file is gone, the quoted words are no longer in it, or a script or
+//                    finding it names does not exist. Each rule has one home, and the table is how a
+//                    reader finds it; a pointer that has rotted sends them to the wrong place.
 //
 // Text in code spans and fenced blocks is not read, so a phrase quoted as an example belongs in
 // backticks. A line that must keep a phrase carries `<!-- wording-ok: <reason> -->`. Findings that
@@ -135,7 +139,68 @@ export function checkTree(root, debtEntries = []) {
   return { findings, known, fresh, stale };
 }
 
+export const RULE_HOMES_FILE = 'docs/skill-writing.md';
+const RULE_HOMES_HEADING = /^## .*Each rule has one home/mu;
+
+/**
+ * The rows of the rule-home table: | rule | `file` › "quoted words" | `script:name` `finding-name` |.
+ * Reads the first table after the section heading; a row whose home cell has no file and quote is reported.
+ */
+export function ruleHomeRows(markdown) {
+  const lines = markdown.replaceAll('\r\n', '\n').split('\n');
+  const start = lines.findIndex((line) => RULE_HOMES_HEADING.test(line));
+  if (start === -1) return [];
+  const rows = [];
+  let inTable = false;
+  for (let index = start + 1; index < lines.length; index++) {
+    const line = lines[index];
+    if (/^## /u.test(line)) break;
+    if (!line.startsWith('|')) { if (inTable) break; continue; }
+    inTable = true;
+    const cells = line.split('|').slice(1, -1).map((cell) => cell.trim());
+    if (cells.length < 3 || /^-+$/u.test(cells[0].replaceAll(' ', '')) || cells[0] === 'Rule') continue;
+    const home = cells[1].match(/`([^`]+)`\s*›\s*"([^"]+)"/u);
+    rows.push({ line: index + 1, rule: cells[0], file: home?.[1] ?? null, words: home?.[2] ?? null, names: [...cells[2].matchAll(/`([^`]+)`/gu)].map((match) => match[1]) });
+  }
+  return rows;
+}
+
+/**
+ * Findings for rows that point at nothing: `lookup.text(file)` gives a file's text or null,
+ * `lookup.script(name)` says whether package.json has the script, `lookup.finding(name)` whether a
+ * script under scripts/ holds the finding name as a string.
+ */
+export function ruleHomeFindings(markdown, lookup, file = RULE_HOMES_FILE) {
+  const findings = [];
+  const add = (row, match) => findings.push({ file, line: row.line, rule: 'rule-home', match, key: 'rule-home' });
+  for (const row of ruleHomeRows(markdown)) {
+    if (!row.file) { add(row, `${row.rule}: no home given as \`file\` › "words"`); continue; }
+    const text = lookup.text(row.file);
+    if (text === null) add(row, `${row.file} does not exist`);
+    else if (!text.includes(row.words)) add(row, `${row.file} no longer contains "${row.words}"`);
+    for (const name of row.names) {
+      if (name.includes(':') ? !lookup.script(name) : !lookup.finding(name)) add(row, `${name} is not ${name.includes(':') ? 'a script in package.json' : 'a finding name in scripts/'}`);
+    }
+  }
+  return findings;
+}
+
+/** The rule-home findings of a checkout. */
+export function checkRuleHomes(root) {
+  const source = join(root, RULE_HOMES_FILE);
+  if (!existsSync(source)) return [];
+  const scripts = existsSync(join(root, 'package.json')) ? JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).scripts ?? {} : {};
+  const scriptDir = join(root, 'scripts');
+  const sources = existsSync(scriptDir) ? readdirSync(scriptDir).filter((name) => name.endsWith('.mjs')).map((name) => readFileSync(join(scriptDir, name), 'utf8')) : [];
+  return ruleHomeFindings(readFileSync(source, 'utf8'), {
+    text: (file) => (existsSync(join(root, file)) ? readFileSync(join(root, file), 'utf8') : null),
+    script: (name) => Object.hasOwn(scripts, name),
+    finding: (name) => sources.some((text) => text.includes(`'${name}'`) || text.includes(`"${name}"`)),
+  });
+}
+
 const ADVICE = {
+  'rule-home': 'point the row at where the rule now lives, or at the new name (docs/skill-writing.md, section 6)',
   'judgment-branch': 'name the fact that decides it, make the step required, or drop it',
   shouting: 'say it plainly and give the reason',
   'skill-length': 'move detail into references/ and keep SKILL.md under 500 lines',
@@ -148,6 +213,10 @@ function main() {
   const debtFile = join(root, DEBT_FILE);
   const debt = existsSync(debtFile) ? JSON.parse(readFileSync(debtFile, 'utf8')).entries ?? [] : [];
   const result = checkTree(root, debt);
+  // Rows of the rule-home table that point at nothing are new findings; they are never recorded as debt.
+  const homes = checkRuleHomes(root);
+  result.findings.push(...homes);
+  result.fresh.push(...homes);
   if (args.includes('--json')) { console.log(JSON.stringify(result, null, 2)); process.exitCode = result.fresh.length || result.stale.length ? 1 : 0; return; }
   const show = (finding) => `  ${finding.file}:${finding.line}  ${finding.rule}  "${finding.match}": ${ADVICE[finding.rule]}`;
   if (args.includes('--list') && result.known.length) console.log(`Known debt (${DEBT_FILE}):\n${result.known.map(show).join('\n')}`);
