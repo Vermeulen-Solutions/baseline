@@ -22,6 +22,11 @@
 // - no-full-width-media: photographs cover at least a tenth of the page but none spans the viewport;
 // - closing-band: the page ends on a centred heading and button on a ground of its own;
 // - split-hero: the page opens with its heading beside a photograph narrower than 60% of the screen;
+// - hero-copy, hero-actions, hero-strip: the opening (the first section when it holds the page heading, is
+//   at most 1.6 screens tall and is followed by others) holds more than its budget: over 25 words of copy
+//   under the heading beside a button, two filled buttons or three buttons in all, or a row of three to
+//   five figures with labels that holds no hour, price or date. These three limits are working ones: they
+//   were not measured on the ranked pages the label and accent findings were set on;
 // - uniform-gallery: six or more pictures in equal frames in one grid, none larger than the rest;
 // - no-signature: nothing on the page is larger or different in kind (no stage, fitted line or
 //   index with previews, and no heading markedly larger than the page's other headings, such as
@@ -97,6 +102,8 @@ export const FLOOR = Object.freeze(['bare-page', 'soft-photo', 'world-motion', '
 /** Floor findings for a direction made with sources (its record has a World › Sources line); advisories on older sites. */
 export const SOURCED_FLOOR = Object.freeze(['kicker-openings', 'accent-word', 'text-collision', 'text-cut', 'text-squeezed', 'text-tiny', 'text-unreadable', 'text-covered', 'text-against-edge', 'placeholder-text']);
 export const floorCodes = (sourced) => (sourced ? [...FLOOR, ...SOURCED_FLOOR] : [...FLOOR]);
+/** What an opening holds before it is reported: words of copy over this, filled buttons or buttons in all from these. */
+export const HERO_BUDGET = Object.freeze({ words: 25, filled: 2, actions: 3 });
 
 export function parseArgs(argv) {
   const out = { routes: [], widths: [1440, 390], json: false, strict: false, out: null, base: null, record: null };
@@ -199,6 +206,14 @@ export function assessComposition(model) {
   const last = sections.at(-1);
   if (last && last.centered && last.action && last.ground && sections.length >= 4) add('closing-band', 'The page ends on a centred heading and button on a band of its own: the most common template ending. End on something that belongs to the subject, or a quieter, specific next step.');
   if (model.splitHero) add('split-hero', 'The page opens with its heading beside a photograph: the opening of the template, however good the photograph. Put the words on the picture (MediaStage), let one line carry the first screen, or open with the content itself.');
+  // The opening's budget: the page heading, a line or two under it, one thing to do. More of any of the three
+  // and the heading stops carrying the first screen.
+  const hero = model.hero;
+  if (hero) {
+    if (hero.actions >= 1 && hero.words > HERO_BUDGET.words) add('hero-copy', `The opening sets ${hero.words} words of copy under the page heading. Keep one or two short lines (${HERO_BUDGET.words} words at most) and move the rest into the section it belongs to: the heading and the picture carry the first screen, and a paragraph there is read by few.`, { count: hero.words });
+    if (hero.filled >= HERO_BUDGET.filled || hero.actions >= HERO_BUDGET.actions) add('hero-actions', `The opening holds ${hero.actions} button${hero.actions === 1 ? '' : 's'}, ${hero.filled} of them filled. Ask the visitor for one thing: keep one filled button, and a second action only when it is a different job (call or book), set quieter as a link or an outline.`, { count: hero.actions, filled: hero.filled });
+    if (hero.strip) add('hero-strip', `The opening ends on a row of ${hero.strip} figures with labels. Keep such a row when it holds what the visitor came for (the next date, today's hours, a price); figures about the organisation (years, clients, a percentage) belong in the section that tells that story, or are left out.`, { count: hero.strip });
+  }
   if (model.uniformGallery) add('uniform-gallery', `${model.uniformGallery} photographs sit in a grid of equal frames with none larger: a card grid without the borders. Show a few large and the rest as an index (IndexList preview), or vary the sizes by importance.`, { count: model.uniformGallery });
   // A statement is a heading markedly larger than the page's other headings, not one of many large ones.
   const statement = (model.h2Max >= 2.5 * model.bodySize && model.h2Max >= 1.6 * (model.h2Median || model.h2Max))
@@ -933,6 +948,42 @@ export function measurePage() {
     const pic = pictures[0];
     if (pic && pic.width < vw * 0.6 && pic.width > vw * 0.2) splitHero = (pic.left >= hr.right - 8 || pic.right <= hr.left + 8) && pic.top < hr.bottom + 200 && pic.bottom > hr.top;
   }
+  // The opening as a hero: the first section when it holds the page heading, other sections follow and it is
+  // at most 1.6 screens tall (a taller first section is the page's reading text, not an opening). Its copy is
+  // the paragraphs outside lists, figures, forms and quotations, labels in capitals left out; its actions are
+  // the links and buttons dressed as buttons, controls (tabs, toggles, a form's own button) left out.
+  let hero = null;
+  if (first && h1 && first.contains(h1) && sections.length >= 2 && first.getBoundingClientRect().height <= innerHeight * 1.6) {
+    const said = (el) => (el.textContent || '').trim().replace(/\s+/g, ' ');
+    const copy = [...first.querySelectorAll('p')].filter(visible)
+      .filter((p) => !h1.contains(p) && !p.closest('li, figure, table, form, dl, address, details, blockquote, [aria-hidden="true"]') && getComputedStyle(p).textTransform !== 'uppercase');
+    const filledGround = (el) => {
+      const s = getComputedStyle(el);
+      if (s.backgroundImage !== 'none') return true;
+      const color = s.backgroundColor;
+      if (color === 'transparent') return false;
+      const alpha = /\/\s*([\d.]+%?)\s*\)/.exec(color)?.[1] ?? /^rgba\((?:[^,]+,){3}\s*([\d.]+)\)/.exec(color)?.[1] ?? '1';
+      return (alpha.endsWith('%') ? parseFloat(alpha) / 100 : parseFloat(alpha)) >= 0.5;
+    };
+    const actions = [...first.querySelectorAll('a.btn, a[class*="btn"], a[class*="button"], button, [role="button"]')].filter(visible)
+      .filter((el) => !el.matches('[role="tab"], [aria-pressed], [aria-expanded], [aria-controls], [type="submit"]') && !el.closest('form, nav, [role="tablist"]') && said(el).length >= 2);
+    // A row of three to five short items that each hold a figure and a word: years, clients, a percentage.
+    // A row that holds an hour, a price or a date is what the visitor came for and is not counted. A date is
+    // read with its year or its closing point (14.12.2026, 14/12/26, 14.12.), so a mark such as 4.9/5 is not one.
+    const earned = /\b\d{1,2}\s?[:h]\s?\d{2}\b|[€$£]|\b(?:CHF|EUR|USD|GBP)\b|\b\d{1,2}[./]\d{1,2}(?:[./]\d{2,4}\b|\.)/i;
+    let strip = 0;
+    for (const el of first.querySelectorAll('*')) {
+      if (el.closest('table, nav, form')) continue;
+      const kids = [...el.children].filter(visible);
+      if (kids.length < 3 || kids.length > 5) continue;
+      const tops = kids.map((k) => k.getBoundingClientRect().top);
+      if (tops.some((top) => Math.abs(top - tops[0]) >= 4)) continue;
+      const texts = kids.map(said);
+      if (kids.some((k) => k.querySelector('img, video, button, a[class*="btn"]')) || texts.some((t) => t.length > 40 || !/\d/.test(t) || !/\p{L}{2}/u.test(t) || earned.test(t))) continue;
+      strip = Math.max(strip, kids.length);
+    }
+    hero = { words: copy.reduce((sum, p) => sum + (said(p).match(/\S+/g) ?? []).length, 0), actions: actions.length, filled: actions.filter(filledGround).length, strip };
+  }
   // Uniform gallery: six or more pictures in equal frames in one grid, none at least 1.5 times larger.
   let uniformGallery = 0;
   for (const el of main.querySelectorAll('*')) {
@@ -956,6 +1007,7 @@ export function measurePage() {
   return {
     pictures,
     splitHero,
+    hero,
     uniformGallery,
     h2Median: h2Sizes.length ? h2Sizes[Math.floor(h2Sizes.length / 2)] : 0,
     width: vw,

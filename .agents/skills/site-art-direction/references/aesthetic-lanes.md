@@ -2,6 +2,8 @@
 
 When setting art direction for a site or landing page, choose a primary lane from the seven starting profiles below (four for software and product sites, three for organisations, places and makers), or **Custom / existing brand — rationale**. These profiles are hypotheses, not sector rules or universal coverage. Brief, real brand evidence, accessibility, language coverage, and user tasks override their sample fonts, palettes, radii, and anti-patterns.
 
+The four lanes below each have a `design:tokens` preset (`--lane <lane-id> --write`). A preset is a seed that makes the contrast pairs pass on the first run; it is not the site's palette or its type. [World building](world-building.md) applies to these lanes as it does to the three for organisations: set the ground and the accent from the colours `npm run design:world -- palette <folder>` reads off the client's own material, and choose the display face by looking, from a specimen sheet (`npm run design:world -- faces <kind> --text "<the site's display line>"`). Three of these seeds are looks that generated pages reach for whatever the client: Editorial Paper's warm paper with a display serif and a terracotta accent, and the near-black ground with one bright accent of Technical Systems and Luminous Futurism. World building's "Write the decisions down" names both as the easy version. A direction that still has its lane's seed ground, sample face and sample accent together is the preset, not a direction: the colours and faces each lane names below are examples of the kind of answer.
+
 ---
 
 ## 1. Technical Systems
@@ -47,16 +49,16 @@ Swiss editorial craftsmanship meets technical journalism. Rich typography, physi
 
 - **Narrative Anchors:** Broadside newspapers, unbleached cotton bond paper, letterpress ink bleed, bookbinding, archival library indices.
 - **Typography:**
-  - *Display:* High-contrast transitional or modern serifs (`Newsreader`, `Instrument Serif`, `Fraunces`, `Playfair Display`).
+  - *Display:* A face whose construction matches how this publication, firm or shop letters its own things (its masthead, its covers, its letterhead, its door plate), chosen from a specimen sheet by looking. A high-contrast transitional or modern serif is one answer, right when that lettering is one. `Newsreader`, `Instrument Serif`, `Fraunces` and `Playfair Display` are the faces generated editorial pages name from memory: put one on the sheet beside the others (`--include "<family>"`) before taking it.
   - *Body / UI:* Legible book serifs or clean contrasting grotesque/monospace (`DM Mono`, `Geist Mono`, `Inter`).
-  - *Details:* Generous line-height (`1.2` for headings, `1.7` for body), italic accents for emphasis.
+  - *Details:* Generous line-height (`1.2` for headings, `1.7` for body); an italic accent once, in the page heading, or as the recorded way of setting every heading.
 - **Color Physics:**
-  - *Canvas:* Warm unbleached paper or warm bone (`#F9F6F0` / `oklch(97% 0.01 85)`).
+  - *Canvas:* The paper this client prints on or the room it works in, read from its covers, pages and photographs. The preset seeds a warm unbleached paper (`#F9F6F0` / `oklch(97% 0.01 85)`); printed paper is white, grey, blue-white, coloured or dark as often as it is cream.
   - *Ink:* Deep carbon black (`#141414` / `oklch(18% 0.01 260)`).
-  - *Accents:* Archival spot colors — vermilion red (`oklch(58% 0.22 25)`), warm terracotta, or forest ink.
+  - *Accents:* One spot colour taken from the client's own printed matter or place (a cover, a spine, a door, the logo). The preset seeds a terracotta; vermilion red (`oklch(58% 0.22 25)`) and forest ink are other spot colours of the kind.
 - **Surfaces & Borders:** Hairline solid ink divider rules, sharp square corners (`0px` radius), optional subtle paper grain texture.
 - **Density:** Spacious / Reading-led (`--spacing-content: 1.5rem`, `--measure-reading: 65ch`).
-- **Anti-Patterns:** Floating glassmorphism cards, bright neon buttons, rounded cartoon pills, dark mode with neon gradients.
+- **Anti-Patterns:** Floating glassmorphism cards, bright neon buttons, rounded cartoon pills, dark mode with neon gradients; the preset's cream ground, display serif and terracotta accent kept together, which is the look generated pages give every editorial, craft and food brief.
 
 ---
 

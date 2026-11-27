@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { assessAgainst, assessComposition, assessWorldMotion, FLOOR, itemLayoutKey, longestItemRun, formatAgainst, GAP_MEASURES, parseArgs, sectionSignature, selectedSources, formatRoute, photoCandidates, softPhotos, STUDIO_LEVEL } from '../scripts/audit-composition.mjs';
+import { assessAgainst, assessComposition, assessWorldMotion, FLOOR, HERO_BUDGET, itemLayoutKey, longestItemRun, formatAgainst, GAP_MEASURES, parseArgs, sectionSignature, selectedSources, formatRoute, photoCandidates, softPhotos, STUDIO_LEVEL } from '../scripts/audit-composition.mjs';
 
 const section = (overrides = {}) => ({ tag: 'section', heading: 'A heading', kicker: false, split: false, centered: false, ground: false, action: false, cardGrid: false, list: false, mediaCount: 0, fullBleedMedia: false, width: 1376, ...overrides });
 const page = (sections, overrides = {}) => ({ width: 1440, bodySize: 16, h1Size: 72, h2Max: 36, imageCover: 0.2, fullWidthMedia: 0, signature: false, sections, ...overrides });
@@ -60,6 +60,27 @@ test('the split hero and a uniform gallery are reported', () => {
   const gallery = assessComposition(page([section()], { uniformGallery: 15, signature: true }));
   assert.equal(gallery[0].code, 'uniform-gallery');
   assert.match(gallery[0].message, /^15 photographs sit in a grid of equal frames/);
+});
+
+test('an opening over its budget is reported: copy beside a button, buttons, a row of figures', () => {
+  const stage = [section({ fullBleedMedia: true, mediaCount: 1 }), section()];
+  const opening = (hero) => codes(page(stage, { signature: true, hero }));
+  assert.deepEqual(opening({ words: 22, actions: 1, filled: 1, strip: 0 }), [], 'two short lines and one button');
+  assert.deepEqual(opening({ words: HERO_BUDGET.words, actions: 2, filled: 1, strip: 0 }), [], 'a second, quieter action is a choice');
+  assert.deepEqual(opening({ words: 48, actions: 1, filled: 1, strip: 0 }), ['hero-copy']);
+  // Without a button the first section may be the page's own text (an article, a notice): its length is not counted.
+  assert.deepEqual(opening({ words: 48, actions: 0, filled: 0, strip: 0 }), []);
+  assert.deepEqual(opening({ words: 10, actions: 2, filled: 2, strip: 0 }), ['hero-actions'], 'two filled buttons compete');
+  assert.deepEqual(opening({ words: 10, actions: 3, filled: 1, strip: 0 }), ['hero-actions']);
+  assert.deepEqual(opening({ words: 10, actions: 1, filled: 1, strip: 4 }), ['hero-strip']);
+  const all = assessComposition(page(stage, { signature: true, hero: { words: 60, actions: 3, filled: 2, strip: 3 } }));
+  assert.deepEqual(all.map((f) => f.code), ['hero-copy', 'hero-actions', 'hero-strip']);
+  assert.match(all[0].message, /^The opening sets 60 words of copy under the page heading\. Keep one or two short lines \(25 words at most\)/);
+  assert.match(all[1].message, /^The opening holds 3 buttons, 2 of them filled\./);
+  assert.match(all[2].message, /row of 3 figures with labels\. Keep such a row when it holds what the visitor came for/);
+  // A page that opens on its content has no hero to measure, and none of the three is a floor finding.
+  assert.deepEqual(codes(page(stage, { signature: true, hero: null })), []);
+  for (const code of ['hero-copy', 'hero-actions', 'hero-strip']) assert.ok(!FLOOR.includes(code));
 });
 
 test('the page heading must be on a phone first screen', () => {

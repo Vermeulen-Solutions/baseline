@@ -50,6 +50,7 @@ During Stage 3, select the representative route that exercises the most importan
 | Visitor and arrival context | Who arrives, what they already know, and the relevant entry point or search intent |
 | Page purpose | What they should understand or accomplish; the main next action, its route/destination and what follows; distinguish a planned page from any unresolved form-delivery endpoint |
 | Lead message | The specific promise or useful answer, within the available evidence |
+| Opening | `content` when the visitor opens the page to read, find or do something (a list, a programme, an article, a search, a form): the first screen holds the page heading and the first rows of that content. `hero` when the page introduces the subject (the home page, a product or service page, the about page). `site-art-direction` SKILL.md, "Opening format", has the rule and the hero's budget |
 | Question coverage | The important visitor questions/objections and where each is answered |
 | Section argument | Ordered visitor question → intended answer/message → supporting evidence → section purpose → next action where needed |
 | Copy and material | Draft headings/body/action labels, source links, content owner, assets and approved/draft/missing status |
