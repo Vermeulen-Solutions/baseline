@@ -90,7 +90,9 @@ and npx.cmd. These launchers avoid execution-policy friction.
 6. Add a change note for anything sites receive: `npm run standards:change -- --slug <name>`
    writes `standards/changes/<name>.md`; fill in what it affects and what a site does.
    CI refuses changes to shipped files without one (`bump: none` when sites are not
-   affected). Releases gather the notes; see [standards releases](docs/standards-releases.md).
+   affected). A change that moves an exact dependency pin also lists the new versions in
+   `packages:`; Renovate's notes do this for you. Releases gather the notes; see
+   [standards releases](docs/standards-releases.md).
 7. Author Markdown documentation in `docs/` with unwrapped paragraphs (soft-wrapped /
    one line per paragraph) or semantic line breaks rather than hard wrapping at
    80 columns. `npm run check:docs` verifies documentation formatting.

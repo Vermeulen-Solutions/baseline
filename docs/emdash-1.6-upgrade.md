@@ -1,6 +1,6 @@
 # EmDash 1.6 upgrade
 
-The EmDash foundation now pins `emdash` and its directly used `@emdash-cms/auth` to **1.6.0**. Core brings matching admin, blocks and Gutenberg conversion packages, and `@cloudflare/kumo` 2.19.0. Astro stays on 7.4.12. Static/Sveltia projects do not acquire CMS or forms dependencies. The [1.5 guide](emdash-1.5-upgrade.md) is retained as history; its rules still apply unless this page says otherwise.
+The EmDash foundation now pins `emdash` and its directly used `@emdash-cms/auth` to **1.6.0**. Core brings matching admin, blocks and Gutenberg conversion packages, and `@cloudflare/kumo` 2.19.0. Astro stays on the 7.4 line. Static/Sveltia projects do not acquire CMS or forms dependencies. The [1.5 guide](emdash-1.5-upgrade.md) is retained as history; its rules still apply unless this page says otherwise.
 
 ## Existing sites
 
