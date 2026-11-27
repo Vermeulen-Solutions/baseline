@@ -449,7 +449,7 @@
   },
   "design-world.test.mjs": {
     "tier": "unit",
-    "reason": "World sources: arguments, which archive licences may be shown on a site, the record line of a saved picture, colour conversion and the grouping of photograph colours; no network, no image files"
+    "reason": "World sources: arguments, which archive licences may be shown on a site, the record line of a saved picture, colour conversion, the grouping of photograph colours and the report of a reference page's layers; no network, no browser, no image files"
   },
   "design-icons.test.mjs": {
     "tier": "unit",
