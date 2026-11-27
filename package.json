@@ -139,11 +139,11 @@
     "design:canvas-check": "node scripts/canvas-board-check.mjs"
   },
   "dependencies": {
-    "@astrojs/node": "11.1.13",
+    "@astrojs/node": "11.1.14",
     "@astrojs/react": "7.1.9",
     "@cloudflare/kumo": "2.19.0",
     "@tailwindcss/vite": "^4.3.5",
-    "astro": "7.4.12",
+    "astro": "7.4.13",
     "emdash": "1.6.0",
     "photoswipe": "^5.4.4",
     "react": "19.3.1",
