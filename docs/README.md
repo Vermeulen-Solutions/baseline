@@ -142,7 +142,7 @@ Connecting coding assistants to official Astro/EmDash docs, optional design MCP 
 Managing staged updates for mirrored EmDash skills (`sync:emdash-skills`) and shared Vermeulen-maintained skills (`sync:site-skills`) while protecting local customizations.
 - **[Local Workflow Replays](workflow-replay.md)** `workflow:replay` fixtures for re-running recorded workflow briefs.
 - **[Automated Upstream Updates & CI Maintenance](automated-upstream-updates.md)**  
-Reviewed maintenance patches: weekly root dependency proposals, manual profile-filtered static source proposals, verification artifacts and explicit skill updates.
+Reviewed maintenance patches: weekly root dependency proposals, the Renovate pilot for pinned packages and GitHub Actions, manual profile-filtered static source proposals, verification artifacts and explicit skill updates.
 - **[Dependency Advisory Review — October 2026](dependency-review-2026-10-25.md)** Compatible Sharp/transitive patches, remaining Zod paths, profile audit results and existing-site adoption.
 
 ---

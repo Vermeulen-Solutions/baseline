@@ -16,9 +16,10 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { argumentsOf, isMain } from './infrastructure-io.mjs';
 import { parseSveltiaPin, SVELTIA_ADMIN_HTML } from './sveltia-pin.mjs';
+import { CHANGES_DIR, isShipped } from './standards-paths.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-export const CHANGES_DIR = 'standards/changes';
+export { CHANGES_DIR };
 
 export const FIELDS = Object.freeze({
   bump: ['major', 'minor', 'patch', 'none'],
@@ -34,10 +35,8 @@ export const ADOPTION_TEXT = Object.freeze({
   none: 'Nothing for sites to do',
 });
 
-// Paths whose changes reach sites: distributed source, skills, tools, profiles, dependencies and
-// guidance. Tests, audit evidence, plans, CI and the notes themselves do not.
-const SHIPPED = [/^\.agents\/skills\//, /^src\//, /^scripts\//, /^profiles\//, /^seed\//, /^public\//, /^docs\/(?!plans\/)/, /^package(-lock)?\.json$/, /^astro\.config\.mjs$/, /^AGENTS\.md$/, /^\.emdash\/(upstream-skills|impeccable-source|site-skills)\.json$/];
-export const isShipped = file => SHIPPED.some(rule => rule.test(file));
+// Which paths reach sites lives in standards-paths.mjs, so Renovate's dependency-note task can use it.
+export { isShipped };
 
 const SLUG = /^[a-z0-9][a-z0-9-]{1,79}$/;
 

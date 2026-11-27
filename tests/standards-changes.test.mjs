@@ -8,6 +8,7 @@ import { createHash } from 'node:crypto';
 import { isShipped, largestBump, upstreamNote, nextVersion, noteTemplate, parseNote, readNotes, requireNote, validateNote } from '../scripts/standards-changes.mjs';
 import { changesSection, compareVersions, groupOf, prepareRelease, releaseNotesText } from '../scripts/standards-release.mjs';
 import { compareDistribution, distributionLags, distributionOf, skillTreeHash } from '../scripts/standards-distribution.mjs';
+import { dependencyNote, noteSlug, writeDependencyNote } from '../scripts/dependency-note.mjs';
 
 // Portable: throwaway folders and one throwaway Git repository; no network.
 const put = (root, file, value) => { mkdirSync(path.dirname(path.join(root, file)), { recursive: true }); writeFileSync(path.join(root, file), typeof value === 'string' ? value : JSON.stringify(value, null, 2) + '\n'); };
@@ -153,4 +154,69 @@ test('the weekly upstream job writes a valid note only when something changed', 
   assert.deepEqual([sveltia.meta.platforms, sveltia.meta.areas, sveltia.meta.adoption], [['static'], ['dependencies'], 'manual']);
   assert.match(sveltia.title, /Sveltia CMS 0\.269\.0/);
   assert.match(sveltia.body, /moves from 0\.248\.0 to 0\.269\.0[\s\S]*public\/admin\/index\.html/);
+});
+
+// Renovate's post-upgrade task: one valid note per branch, only for updates that reach sites.
+const upgrade = (depName, currentValue, newValue, extra = {}) => ({ depName, currentValue, newValue, manager: 'npm', depType: 'dependencies', packageFile: 'package.json', updateType: 'patch', ...extra });
+const inventory = { packages: { astro: { profiles: ['static', 'static-sveltia', 'emdash'] }, emdash: { profiles: ['emdash'] } } };
+
+test('Renovate branches get a valid change note that says how a site follows', () => {
+  const single = parseNote(dependencyNote({ branch: 'renovate/astro-monorepo', upgrades: [upgrade('astro', '7.4.12', '7.4.13')] }, inventory));
+  assert.deepEqual(validateNote(single), []);
+  assert.deepEqual(single.meta, { bump: 'patch', platforms: ['emdash', 'static'], areas: ['dependencies'], adoption: 'manual', visible: false, database: false });
+  assert.equal(single.title, 'Dependency update: astro 7.4.12 to 7.4.13');
+  assert.match(single.body, /run `npm install --save-exact astro@7\.4\.13` in the site/);
+  const mixed = parseNote(dependencyNote({ branch: 'renovate/astro-monorepo', upgrades: [upgrade('astro', '7.4.12', '7.4.13'), upgrade('@astrojs/node', '11.1.13', '11.1.14')] }, { packages: { ...inventory.packages, '@astrojs/node': { profiles: ['emdash'] } } }));
+  assert.match(mixed.body, /`npm install --save-exact astro@7\.4\.13 @astrojs\/node@11\.1\.14` in EmDash sites, and `npm install --save-exact astro@7\.4\.13` in static sites/, 'static sites are not told to install EmDash-only packages');
+
+  const group = parseNote(dependencyNote({ branch: 'renovate/lint-and-type-tooling', groupName: 'lint and type tooling', upgrades: [
+    upgrade('eslint', '10.15.0', '10.16.0', { depType: 'devDependencies', updateType: 'minor' }),
+    upgrade('typescript', '6.0.3', '7.0.2', { depType: 'devDependencies', updateType: 'major' }),
+  ] }, inventory));
+  assert.deepEqual(validateNote(group), []);
+  assert.equal(group.meta.bump, 'minor', 'a major dependency update may break sites, so it raises the minor number');
+  assert.deepEqual(group.meta.platforms, ['emdash'], 'packages missing from the inventory belong to the EmDash starter');
+  assert.equal(group.title, 'Dependency update: lint and type tooling (2 packages)');
+  assert.match(group.body, /`npm install --save-dev --save-exact eslint@10\.16\.0 typescript@7\.0\.2`/);
+
+  const emdash = parseNote(dependencyNote({ branch: 'renovate/emdash', groupName: 'EmDash', upgrades: [upgrade('emdash', '1.6.0', '1.7.0'), upgrade('@emdash-cms/auth', '1.6.0', '1.7.0', { depType: 'devDependencies' })] }, inventory));
+  assert.deepEqual(validateNote(emdash), []);
+  assert.equal(emdash.meta.database, true);
+  assert.match(emdash.body, /db:rehearse[\s\S]*check:live/);
+
+  const ciOnly = upgrade('actions/checkout', 'v7', 'v7.1.0', { manager: 'github-actions', depType: 'action', packageFile: '.github/workflows/design-checks.yml' });
+  assert.equal(dependencyNote({ branch: 'renovate/github-actions', upgrades: [ciOnly] }), null, 'CI-only updates need no note');
+  const workflow = parseNote(dependencyNote({ branch: 'renovate/github-actions', groupName: 'GitHub Actions', upgrades: [
+    ciOnly,
+    upgrade('node', '24.22.3', '24.23.0', { manager: 'github-actions', depType: 'uses-with', packageFile: 'profiles/static/project/.github/workflows/upstream-update.yml', updateType: 'minor' }),
+  ] }));
+  assert.deepEqual(validateNote(workflow), []);
+  assert.deepEqual([workflow.meta.platforms, workflow.meta.areas], [['static'], ['tooling']]);
+  assert.doesNotMatch(workflow.body, /design-checks\.yml/, 'the CI-only workflow is left out');
+  assert.match(workflow.body, /profiles\/static\/project\/\.github\/workflows\/upstream-update\.yml/);
+
+  assert.equal(noteSlug('renovate/astro-monorepo'), 'deps-astro-monorepo');
+  assert.equal(noteSlug('renovate/@types/node-26.x'), 'deps-types-node-26-x');
+  assert.equal(noteSlug('', [{ depName: '@emdash-cms/auth' }]), 'deps-emdash-cms-auth');
+  assert.ok(noteSlug(`renovate/${'x'.repeat(120)}`).length <= 80);
+});
+
+test('the dependency note writer runs from a data file without node_modules', () => {
+  // Renovate runs it in its own clone, where only Node built-ins exist.
+  for (const file of ['scripts/dependency-note.mjs', 'scripts/standards-paths.mjs']) {
+    const imports = [...readFileSync(file, 'utf8').matchAll(/^import .* from '([^']+)';$/gm)].map(match => match[1]);
+    assert.deepEqual(imports.filter(name => !name.startsWith('node:') && !name.startsWith('./')), [], file);
+  }
+  const dir = mkdtempSync(path.join(os.tmpdir(), 'dependency-note-'));
+  try {
+    const dataFile = path.join(dir, 'data.json');
+    writeFileSync(dataFile, JSON.stringify({ branch: 'renovate/astro-monorepo', groupName: '', upgrades: [upgrade('astro', '7.4.12', '7.4.13')] }));
+    assert.equal(writeDependencyNote({ dataFile, dir: path.join(dir, 'changes'), inventoryFile: path.join(dir, 'missing.json') }), 'standards/changes/deps-astro-monorepo.md');
+    assert.deepEqual(readNotes(path.join(dir, 'changes')).map(item => [item.slug, item.problems]), [['deps-astro-monorepo', []]]);
+    // The command line never writes here: a missing data file stops it before any note is written.
+    assert.throws(() => execFileSync(process.execPath, ['scripts/dependency-note.mjs', '--data', path.join(dir, 'absent.json')], { stdio: ['ignore', 'pipe', 'pipe'] }), error => /\[dependency-note\] ENOENT/.test(String(error.stderr)));
+    assert.throws(() => execFileSync(process.execPath, ['scripts/dependency-note.mjs'], { env: { ...process.env, RENOVATE_POST_UPGRADE_COMMAND_DATA_FILE: '' }, stdio: ['ignore', 'pipe', 'pipe'] }), error => /No update data/.test(String(error.stderr)));
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
 });
