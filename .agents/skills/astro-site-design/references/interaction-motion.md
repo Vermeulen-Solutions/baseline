@@ -34,7 +34,7 @@ A menu, dialog, disclosure or toast is first a component with focus, keyboard an
 ## Properties, easing and duration
 
 - Animate `transform` and `opacity` by default. `clip-path` and `filter` are acceptable with a reason. Avoid `width`, `height`, `margin`, `padding`, `top` and `left`; the narrow exception is a disclosure with no transform equivalent, which should still be checked for jank.
-- Never write `transition: all`. List the exact properties, so a later layout change does not start animating by accident.
+- Never write `transition: all`. List the exact properties, so a later layout change does not start animating by accident. `npm run check:css -- --guardrails` reports it as `transition-all`.
 - Never grow from `scale(0)`. Start from `scale(0.95)`–`scale(0.97)` with `opacity: 0`.
 - Menus, popovers and tooltips grow from their trigger: set `transform-origin` toward the trigger. Centered dialogs keep a centered origin.
 - Use percentage translates (`translateY(100%)`) for elements of unknown size rather than fixed pixels.

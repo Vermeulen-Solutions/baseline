@@ -525,6 +525,24 @@ test('a line against the side of its ground is a candidate from the boxes, and w
   assert.deepEqual(placeholderText([line(0, 'Réservation en ligne bientôt disponible'), line(1, 'N° ______'), line(2, 'CHF 15.–'), line(3, '23h — 05h'), line(4, 'Les prochaines dates à venir')]), []);
 });
 
+test('a mark stranded from its word is an advisory that names the mark and the width', async () => {
+  const { SOURCED_FLOOR } = await import('../scripts/audit-composition.mjs');
+  const model = page([section({ fullBleedMedia: true, mediaCount: 1 })], {
+    signature: true,
+    width: 1440,
+    legibility: { stranded: [] },
+    narrow: { width: 390, viewportHeight: 844, h1Bottom: 200, collisions: [], legibility: { stranded: [{ text: 'rejoindre le club ?', mark: '?', y: 640 }, { text: '« Le lundi', mark: '«', y: 910 }] } },
+  });
+  const findings = assessComposition(model);
+  assert.deepEqual(findings.map((f) => f.code), ['text-stranded']);
+  assert.equal(findings[0].count, 2);
+  assert.match(findings[0].message, /^2 marks stand on a line without the word it belongs to: at 390px "rejoindre le club \?" \(\?\), "« Le lundi" \(«\)\. /);
+  assert.match(findings[0].message, /non-breaking space \(U\+00A0, or the narrow U\+202F\)/);
+  // The words can be read, so it never fails a run on its own.
+  assert.ok(!FLOOR.includes('text-stranded') && !SOURCED_FLOOR.includes('text-stranded'));
+  assert.deepEqual(codes(page([section({ fullBleedMedia: true, mediaCount: 1 })], { signature: true, legibility: { stranded: [] } })), []);
+});
+
 test('the legibility findings name the lines, the width they were seen at and what to do', () => {
   const model = page([section()], {
     width: 1440,
