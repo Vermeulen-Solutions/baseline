@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
 import { auditSite, strictFailure, writeReports, markdownReport, STANDARD, satisfiesCertified } from '../scripts/audit-site.mjs';
 import { validateReport } from '../scripts/audit-report.mjs';
+import { pendingPackages, readNotes } from '../scripts/standards-changes.mjs';
 const script = new URL('../scripts/audit-site.mjs', import.meta.url);
 const baselineFile = new URL(`../standards/baselines/${STANDARD.version}.json`, import.meta.url);
 
@@ -386,6 +387,10 @@ test('certified caret ranges accept later compatible versions and the starter pa
   assert.equal(satisfiesCertified('0.3.0', '^0.2.1'), false);
   assert.equal(satisfiesCertified('7.4.1', '7.4.0'), false);
   const report = auditSite({ root: fileURLToPath(new URL('../', import.meta.url)) });
-  const flagged = report.rules.filter(item => (item.id.startsWith('dependency:') || item.id === 'node-policy') && item.status !== 'pass');
-  assert.deepEqual(flagged.map(item => item.id), []);
+  // Between releases Baseline may run ahead of the versions its last release certified, but only to
+  // the exact version a pending change note names; the next release certifies it.
+  const ahead = pendingPackages(readNotes());
+  const flagged = report.rules.filter(item => (item.id.startsWith('dependency:') || item.id === 'node-policy') && item.status !== 'pass')
+    .filter(item => !(item.id.startsWith('dependency:') && ahead.get(item.id.slice('dependency:'.length)) === item.observed));
+  assert.deepEqual(flagged.map(item => `${item.id} ${item.observed}`), []);
 });

@@ -86,6 +86,19 @@ export function releaseNotesText(existing, section, { version, title, date }) {
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 const git = (cwd, args) => execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
 
+// Between releases Baseline may pin newer runtime versions than its last release certified (each named
+// by a pending note's `packages`). A release certifies exactly what package.json pins, so an exact
+// certified version that differs from the pin means the manifest was not brought up to date.
+export function staleRuntimePins(root, manifest) {
+  const file = path.join(root, 'package.json');
+  if (!fs.existsSync(file)) return [];
+  const pkg = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const pins = { ...pkg.devDependencies, ...pkg.dependencies };
+  return Object.entries(manifest.runtimeProfiles?.['node-sqlite']?.dependencies ?? {})
+    .filter(([name, certified]) => !certified.startsWith('^') && pins[name] && pins[name] !== certified)
+    .map(([name, certified]) => `${name}: manifest ${certified}, package.json ${pins[name]}`);
+}
+
 export function prepareRelease({ root = defaultRoot, version, sourceCommit, date = new Date().toISOString().slice(0, 10), title = null, dryRun = false, checkSource = true }) {
   if (!VERSION.test(version ?? '')) throw new Error('--version must look like 1.2.3');
   if (!/^[0-9a-f]{40}$/.test(sourceCommit ?? '')) throw new Error('--source-commit must be the full 40-character certified commit');
@@ -100,6 +113,8 @@ export function prepareRelease({ root = defaultRoot, version, sourceCommit, date
   const bump = largestBump(notes), minimum = nextVersion(manifest.standardsVersion, bump);
   if (compareVersions(version, minimum) < 0) throw new Error(`the notes ask for a ${bump} change, so the release is at least ${minimum}`);
   if (fs.existsSync(path.join(root, `standards/baselines/${version}.json`))) throw new Error(`standards/baselines/${version}.json already exists`);
+  const stale = staleRuntimePins(root, manifest);
+  if (stale.length) throw new Error(`standards/manifest.json certifies other runtime versions than package.json pins; record the versions you certified first:\n${stale.join('\n')}`);
 
   const sourceTree = git(root, ['rev-parse', `${sourceCommit}^{tree}`]);
   if (checkSource) {

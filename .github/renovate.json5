@@ -59,6 +59,13 @@
       ],
     },
     {
+      description: 'Certified runtime packages: Baseline runs ahead of its last release until the next one certifies them.',
+      matchPackageNames: ['astro', '@astrojs/node', '@astrojs/react', 'react', 'react-dom'],
+      prBodyNotes: [
+        'A standards release certifies this runtime version. Merging moves Baseline ahead of its last release; the change note names the exact version, the next release certifies it, and sites take it then (`docs/standards-releases.md`).',
+      ],
+    },
+    {
       description: 'Lint and type tooling moves in one pull request.',
       matchPackageNames: ['eslint', 'eslint-plugin-*', '@typescript-eslint/**', 'astro-eslint-parser', '@types/**', '@cloudflare/workers-types'],
       matchUpdateTypes: ['minor', 'patch'],

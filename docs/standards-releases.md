@@ -21,6 +21,7 @@ adoption: sync              # sync | copy | manual | none
 visible: no                 # does it change how pages look?
 database: no                # does it need a database step?
 files: [scripts/audit-ui.mjs] # optional; required with adoption: copy
+packages: [astro@7.4.13]    # optional; exact versions this change pins (Renovate notes write it)
 ---
 
 # One-line title
@@ -40,7 +41,7 @@ What a site does to take it.
 
 ## Cutting a release
 
-1. **Certify.** First run the Windows visual suite on the candidate and renew what it asks for (below). Then follow the [certification sequence](phase-3-certification.md) on the candidate commit and record the evidence. Update `standards/manifest.json` by hand for what certification decides: runtime profile versions, checks, pending items, certification scope, receipts and evidence paths.
+1. **Certify.** First run the Windows visual suite on the candidate and renew what it asks for (below). Then follow the [certification sequence](phase-3-certification.md) on the candidate commit and record the evidence. Update `standards/manifest.json` by hand for what certification decides: runtime profile versions, checks, pending items, certification scope, receipts and evidence paths. The runtime profile's exact versions must equal the pins in `package.json`, which may have moved ahead since the last release (`npm run standards:check -- --list` shows the pending notes that moved them); `standards:release` refuses a manifest that still names older versions.
 
 **Visual references before certifying.** Run `npm run test:visual` on the candidate. CI runs on Linux and only checks that every reference image is recorded in `tests/visual/baselines/win32/manifest.json` with its SHA-256; it cannot tell whether a starter change made the references outdated. When a comparison fails, open the diff in the Playwright report. If the change is intended, run `npm run test:visual:update`, review every renewed image, and commit the images with `manifest.json` before certifying; if it is not, fix the source. Certify only on a run with no failures and no reference left to renew. To catch this earlier, CI adds a notice to a pull request that changes `src/styles/`, `src/components/` or `src/layouts/` without touching `tests/visual/baselines/`; the author runs the suite on Windows before merging.
 
@@ -71,7 +72,7 @@ The notes file is `standards/releases/<version>.md` without its title line, with
 ## Lessons from past releases
 
 - **Name the version from the notes.** Run `npm run standards:check -- --list` before choosing the version: one `minor` note turns a planned patch into a minor release.
-- **A runtime pin bump ships with a release.** Raising the pinned framework or CMS version must come with a standards release in the same pull request: `tests/site-standards-audit.test.mjs` requires the starter to pass its own dependency comparison against the pinned `STANDARD`.
+- **Runtime pins may run ahead of a release, by name only.** Between releases Baseline may pin newer certified runtime versions (Astro, its adapters, React; EmDash only after its upgrade guide) than its last release, so routine patches merge as they come. `tests/site-standards-audit.test.mjs` accepts the difference only when a pending note names the exact version in `packages:`, which Renovate's notes do; a hand-made bump needs the same line. The next release certifies the pins, and sites take them with it. Until 2026-11-27 a runtime pin bump had to ship inside a release pull request.
 - **Pass the full commit.** `--source-commit` takes the full 40-character SHA.
 - **A fix found during certification goes before the release commit.** Force-push is blocked, so `git revert` the release commit, commit the fix with its note, and cut the release again. Save the hand-written parts of `standards/releases/<version>.md` first: the script regenerates the file.
 - **Certify on clean clones with Windows line endings.** With `core.autocrlf=true`, a test that looks for multi-line source with `\n` fails; normalise the source with `.replaceAll('\r\n', '\n')` first.

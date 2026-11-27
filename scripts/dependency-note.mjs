@@ -21,6 +21,7 @@ import { CHANGES_DIR, isShipped } from './standards-paths.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const INVENTORY = 'profiles/dependency-inventory.json';
+const MANIFEST = 'standards/manifest.json';
 const isEmDash = name => name === 'emdash' || name.startsWith('@emdash-cms/');
 
 export function noteSlug(branch, upgrades = []) {
@@ -37,7 +38,9 @@ function platformsOf(upgrade, inventory) {
 
 const describe = upgrade => `${upgrade.depName} ${upgrade.currentValue || '(unknown)'} to ${upgrade.newValue}`;
 
-export function dependencyNote(data, inventory = {}) {
+// `certified` names the runtime packages a standards release certifies (standards/manifest.json).
+// Baseline may pin newer versions of them between releases; sites take them with the release.
+export function dependencyNote(data, inventory = {}, certified = []) {
   const upgrades = (Array.isArray(data?.upgrades) ? data.upgrades : []).filter(upgrade => upgrade?.depName && upgrade.newValue && isShipped(upgrade.packageFile ?? ''));
   if (!upgrades.length) return null;
   const npm = upgrades.filter(upgrade => upgrade.manager === 'npm');
@@ -57,13 +60,17 @@ export function dependencyNote(data, inventory = {}) {
     ...install(list.filter(upgrade => upgrade.depType === 'devDependencies'), '--save-dev --save-exact'),
   ].join(' and ');
   const rootPackages = npm.filter(upgrade => upgrade.packageFile === 'package.json');
+  // Exact pins, machine-readable: the self-audit lets Baseline run ahead of its release only to these.
+  const pins = rootPackages.filter(upgrade => /^\d+\.\d+\.\d+[0-9A-Za-z.+-]*$/.test(upgrade.newValue)).map(upgrade => `${upgrade.depName}@${upgrade.newValue}`);
+  const runtime = rootPackages.filter(upgrade => certified.includes(upgrade.depName)).map(upgrade => `\`${upgrade.depName}\``);
   const byPlatform = platforms.map(platform => [platform, commandsFor(rootPackages.filter(upgrade => platformsOf(upgrade, inventory).includes(platform)))]).filter(([, commands]) => commands);
   const PLATFORM_SITES = { emdash: 'EmDash sites', static: 'static sites' };
   const follow = byPlatform.length === 1 || new Set(byPlatform.map(([, commands]) => commands)).size === 1
     ? `run ${byPlatform[0][1]} in the site`
     : `run ${byPlatform.map(([platform, commands]) => `${commands} in ${PLATFORM_SITES[platform]}`).join(', and ')}`;
   const forSites = [
-    ...(byPlatform.length ? [`Each site keeps its own lockfile and decides when to follow. To match Baseline, ${follow}, then \`npm run verify\` and \`npm run build\`.`] : []),
+    ...(runtime.length ? [`${runtime.join(' and ')} ${runtime.length === 1 ? 'is a runtime version' : 'are runtime versions'} that standards releases certify. Baseline runs ahead of its last release until the next one certifies ${runtime.length === 1 ? 'it' : 'them'}, so sites take ${runtime.length === 1 ? 'it' : 'them'} with that release, when the site audit expects ${runtime.length === 1 ? 'it' : 'them'}.`] : []),
+    ...(byPlatform.length ? [`${runtime.length ? 'When the site takes that release' : 'Each site keeps its own lockfile and decides when to follow. To match Baseline'}, ${follow}, then \`npm run verify\` and \`npm run build\`.`] : []),
     ...(database ? ['This moves EmDash, which runs database migrations on the first request after an upgrade. Read Baseline\'s upgrade guide for this version, rehearse on a local copy (`npm run db:export-d1`, then `npm run db:rehearse`), never on a preview version bound to the production database, and run `npm run check:live` after the deploy. See the framework upgrade checks in `docs/baseline-updates.md`.'] : []),
     ...(workflows.length ? [`Generated sites own their copy of the workflow. If the site's copy still matches the profile, copy the changed lines from ${[...new Set(workflows.map(upgrade => `\`${upgrade.packageFile}\``))].join(', ')}; otherwise nothing.`] : []),
   ];
@@ -74,7 +81,7 @@ platforms: [${platforms.join(', ')}]
 areas: [${areas.join(', ')}]
 adoption: manual
 visible: no
-database: ${database ? 'yes' : 'no'}
+database: ${database ? 'yes' : 'no'}${pins.length ? `\npackages: [${pins.join(', ')}]` : ''}
 ---
 
 # ${title}
@@ -89,11 +96,12 @@ ${forSites.join('\n\n')}
 `;
 }
 
-export function writeDependencyNote({ dataFile, dir = path.join(root, CHANGES_DIR), inventoryFile = path.join(root, INVENTORY) }) {
+export function writeDependencyNote({ dataFile, dir = path.join(root, CHANGES_DIR), inventoryFile = path.join(root, INVENTORY), manifestFile = path.join(root, MANIFEST) }) {
   if (!dataFile) throw new Error('No update data: pass --data <file>, or run from Renovate, which sets RENOVATE_POST_UPGRADE_COMMAND_DATA_FILE.');
   const data = JSON.parse(fs.readFileSync(dataFile, 'utf8'));
-  const inventory = fs.existsSync(inventoryFile) ? JSON.parse(fs.readFileSync(inventoryFile, 'utf8')) : {};
-  const text = dependencyNote(data, inventory);
+  const read = file => fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : {};
+  const certified = Object.keys(read(manifestFile).runtimeProfiles?.['node-sqlite']?.dependencies ?? {});
+  const text = dependencyNote(data, read(inventoryFile), certified);
   if (!text) return null;
   const slug = noteSlug(data.branch, data.upgrades);
   fs.mkdirSync(dir, { recursive: true });

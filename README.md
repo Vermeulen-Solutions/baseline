@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7.4.12-BC52EE" alt="Astro 7.4.12" /></a>
+  <a href="https://astro.build/"><img src="https://img.shields.io/badge/Astro-7-BC52EE" alt="Astro 7" /></a>
   <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind-v4-06B6D4" alt="Tailwind CSS v4" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue" alt="MIT license" /></a>
 </p>

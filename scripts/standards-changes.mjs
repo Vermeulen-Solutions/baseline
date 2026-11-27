@@ -63,7 +63,7 @@ export function parseNote(text, name = 'note') {
 export function validateNote(note, name = 'note') {
   const problems = [];
   const { meta } = note;
-  const known = ['bump', 'platforms', 'areas', 'adoption', 'visible', 'database', 'files'];
+  const known = ['bump', 'platforms', 'areas', 'adoption', 'visible', 'database', 'files', 'packages'];
   for (const key of Object.keys(meta)) if (!known.includes(key)) problems.push(`unknown field ${key}`);
   if (!FIELDS.bump.includes(meta.bump)) problems.push(`bump must be one of ${FIELDS.bump.join(', ')}`);
   if (!note.title) problems.push('needs a "# Title" line');
@@ -78,7 +78,19 @@ export function validateNote(note, name = 'note') {
     if (!note.body) problems.push('needs a body saying what changed and what a site does');
   }
   if (meta.files !== undefined && (!Array.isArray(meta.files) || meta.files.some(file => /\\|^\/|(^|\/)\.\.(\/|$)/.test(file)))) problems.push('files must be a list of repository-relative paths');
+  if (meta.packages !== undefined && (!Array.isArray(meta.packages) || meta.packages.some(entry => !PACKAGE_PIN.test(entry)))) problems.push('packages must be a list of name@version pins');
   return problems.map(problem => `${name}: ${problem}`);
+}
+
+// `packages: [astro@7.4.13, @astrojs/node@11.1.14]` names the exact versions a note moves Baseline to.
+const PACKAGE_PIN = /^(@[a-z0-9._-]+\/)?[a-z0-9._-]+@\d+\.\d+\.\d+[0-9A-Za-z.+-]*$/;
+export function pendingPackages(notes) {
+  const pins = new Map();
+  for (const note of notes) for (const entry of note.meta.packages ?? []) {
+    const at = entry.lastIndexOf('@');
+    pins.set(entry.slice(0, at), entry.slice(at + 1));
+  }
+  return pins;
 }
 
 export function readNotes(dir = path.join(root, CHANGES_DIR)) {
